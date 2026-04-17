@@ -77,20 +77,22 @@ if (!country) {
   const isFavorite = favorites.includes(country.name);
 
   async function handleSetGoal() {
-    if (!firebaseUser) {
-      router.push("/login");
-      return;
-    }
-
-    try {
-      setStatus("Saving your country goal...");
-      await setCountryGoal(country.name, country.mainGoal);
-      router.push("/dashboard");
-    } catch (error) {
-      console.error(error);
-      setStatus("Could not save your goal.");
-    }
+  if (!firebaseUser) {
+    router.push("/login");
+    return;
   }
+
+  if (!country) return;
+
+  try {
+    setStatus("Salvando sua meta de país...");
+    await setCountryGoal(country.name, country.mainGoal);
+    router.push("/dashboard");
+  } catch (error) {
+    console.error(error);
+    setStatus("Could not save your goal.");
+  }
+}
 
   async function handleFavoriteToggle() {
     if (!firebaseUser) {
