@@ -6,7 +6,8 @@ import { doc, getDoc } from "firebase/firestore";
 import Link from "next/link";
 import { auth, db } from "@/lib/firebase";
 import { defaultUserProfile, UserProfile } from "@/lib/profile";
-import { isPremium, getPlanLabel } from "@/lib/plan";
+import { getPlanLabel, isPremium } from "@/lib/plan";
+
 function getNextLevelXP(level: number) {
   return level * 100;
 }
@@ -48,8 +49,6 @@ export default function DashboardPage() {
 
     return () => unsubscribe();
   }, []);
-
-  const progressPercent = Math.min(profile.level * 10, 100);
 
   const currentLevelBaseXP = useMemo(
     () => getCurrentLevelBaseXP(profile.level),
@@ -114,22 +113,51 @@ export default function DashboardPage() {
           <h1 className="mb-4 text-4xl font-bold md:text-5xl">
             Your Global Journey
           </h1>
-<div className="mb-6 flex items-center gap-3">
-  <span className="rounded-full border border-white/10 bg-white/5 px-4 py-1 text-sm">
-    {getPlanLabel(profile.membershipPlan)}
-  </span>
 
-  {!isPremium(profile.membershipPlan) && (
-    <span className="rounded-full bg-yellow-500/20 px-3 py-1 text-xs text-yellow-300">
-      Upgrade available
-    </span>
-  )}
-</div>
+          <div className="mb-6 flex flex-wrap items-center gap-3">
+            <span className="rounded-full border border-white/10 bg-white/5 px-4 py-1 text-sm">
+              {getPlanLabel(profile.membershipPlan)}
+            </span>
+
+            {!isPremium(profile.membershipPlan) ? (
+              <span className="rounded-full bg-yellow-500/20 px-3 py-1 text-xs text-yellow-300">
+                Upgrade available
+              </span>
+            ) : (
+              <span className="rounded-full bg-green-500/20 px-3 py-1 text-xs text-green-300">
+                Premium active
+              </span>
+            )}
+          </div>
+
           <p className="max-w-3xl text-lg leading-8 text-slate-300">
             Track your country focus, progress, favorites, quests, and global
             learning activity from one premium dashboard.
           </p>
         </section>
+
+        {!isPremium(profile.membershipPlan) ? (
+          <section className="mb-10 rounded-3xl border border-yellow-500/20 bg-gradient-to-r from-yellow-500/10 to-white/5 p-6">
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div>
+                <h2 className="text-2xl font-bold text-white">
+                  Unlock Premium Features
+                </h2>
+                <p className="mt-2 max-w-2xl text-slate-300">
+                  Upgrade to save more countries, unlock deeper platform
+                  experiences, and prepare for future AI-driven global tools.
+                </p>
+              </div>
+
+              <Link
+                href="/upgrade"
+                className="inline-flex w-fit items-center justify-center rounded-xl bg-yellow-500 px-6 py-3 font-semibold text-black transition hover:bg-yellow-400"
+              >
+                Upgrade Plan
+              </Link>
+            </div>
+          </section>
+        ) : null}
 
         <section className="mb-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
           <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
@@ -364,6 +392,15 @@ export default function DashboardPage() {
             >
               Edit Profile
             </Link>
+
+            {!isPremium(profile.membershipPlan) ? (
+              <Link
+                href="/upgrade"
+                className="rounded-xl border border-yellow-500/30 bg-yellow-500/10 px-6 py-3 font-semibold text-yellow-300 transition hover:bg-yellow-500/20"
+              >
+                Upgrade Plan
+              </Link>
+            ) : null}
           </div>
         </section>
       </div>
