@@ -35,6 +35,11 @@ export default function CountryDynamicPage({ params }: CountryPageProps) {
 
   const country = countries.find((item) => item.slug === slug);
 
+if (!country) {
+  notFound();
+  return null; // 👈 ESSA LINHA RESOLVE O ERRO
+}
+
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       setFirebaseUser(user);
