@@ -35,10 +35,11 @@ export default function CountryDynamicPage({ params }: CountryPageProps) {
 
   const country = countries.find((item) => item.slug === slug);
 
-if (!country) {
-  notFound();
-  return null; // 👈 ESSA LINHA RESOLVE O ERRO
-}
+  // ✅ FIX 1: Early return with `return null` para o TypeScript estreitar o tipo
+  if (!country) {
+    notFound();
+    return null;
+  }
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -70,35 +71,38 @@ if (!country) {
     return () => unsubscribe();
   }, [country]);
 
-  if (!country) {
-    notFound();
-  }
+  // ✅ FIX 2: Removido o segundo `if (!country)` sem `return` que estava aqui
+  //    e que impedia o TypeScript de estreitar o tipo para as funções abaixo.
 
   const isFavorite = favorites.includes(country.name);
 
   async function handleSetGoal() {
-  if (!firebaseUser) {
-    router.push("/login");
-    return;
-  }
+    if (!firebaseUser) {
+      router.push("/login");
+      return;
+    }
 
-  if (!country) return;
+    if (!country) return;
 
-  try {
-    setStatus("Salvando sua meta de país...");
-    await setCountryGoal(country.name, country.mainGoal);
-    router.push("/dashboard");
-  } catch (error) {
-    console.error(error);
-    setStatus("Could not save your goal.");
+    try {
+      setStatus("Salvando sua meta de país...");
+      await setCountryGoal(country.name, country.mainGoal);
+      router.push("/dashboard");
+    } catch (error) {
+      console.error(error);
+      setStatus("Could not save your goal.");
+    }
   }
-}
 
   async function handleFavoriteToggle() {
     if (!firebaseUser) {
       router.push("/login");
       return;
     }
+
+    // ✅ FIX 3: Guard adicionado — `handleFavoriteToggle` usava `country.name`
+    //    sem verificação, causando o erro de tipo na build da Vercel.
+    if (!country) return;
 
     try {
       setStatus(isFavorite ? "Removing favorite..." : "Adding favorite...");
