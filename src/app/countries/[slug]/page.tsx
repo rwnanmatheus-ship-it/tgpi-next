@@ -16,6 +16,8 @@ import {
   saveLastVisitedCountry,
   toggleFavoriteCountry,
 } from "@/lib/user-profile-actions";
+import { defaultUserProfile, UserProfile } from "@/lib/profile";
+import { isPremium } from "@/lib/plan";
 
 type CountryPageProps = {
   params: Promise<{
@@ -34,6 +36,7 @@ export default function CountryDynamicPage({ params }: CountryPageProps) {
   const [currentTargetCurrency, setCurrentTargetCurrency] = useState("USD");
   const [favorites, setFavorites] = useState<string[]>([]);
   const [status, setStatus] = useState("");
+  const [profile, setProfile] = useState<UserProfile>(defaultUserProfile());
 
   const country = countries.find((item) => item.slug === slug);
 
@@ -44,6 +47,7 @@ export default function CountryDynamicPage({ params }: CountryPageProps) {
 
   const safeCountry = country;
   const isFavorite = favorites.includes(safeCountry.name);
+  const premiumActive = isPremium(profile.membershipPlan);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -56,7 +60,8 @@ export default function CountryDynamicPage({ params }: CountryPageProps) {
         const snap = await getDoc(doc(db, "users", user.uid));
 
         if (snap.exists()) {
-          const data = snap.data();
+          const data = snap.data() as UserProfile;
+          setProfile(data);
 
           if (data?.preferredCurrency) {
             setPreferredCurrency(data.preferredCurrency);
@@ -112,6 +117,29 @@ export default function CountryDynamicPage({ params }: CountryPageProps) {
   return (
     <main className="min-h-screen bg-[#0b0f19] px-6 py-14 text-white">
       <div className="mx-auto max-w-7xl">
+        {!premiumActive ? (
+          <section className="mb-8 rounded-3xl border border-yellow-500/20 bg-gradient-to-r from-yellow-500/10 to-white/5 p-6">
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div>
+                <h2 className="text-2xl font-bold text-white">
+                  Unlock Premium Global Access
+                </h2>
+                <p className="mt-2 max-w-2xl text-slate-300">
+                  Premium users get deeper platform access, future advanced
+                  pathways, and stronger global preparation tools.
+                </p>
+              </div>
+
+              <Link
+                href="/upgrade"
+                className="inline-flex w-fit items-center justify-center rounded-xl bg-yellow-500 px-6 py-3 font-semibold text-black transition hover:bg-yellow-400"
+              >
+                Upgrade Now
+              </Link>
+            </div>
+          </section>
+        ) : null}
+
         <section className="mb-10 rounded-3xl border border-yellow-500/20 bg-gradient-to-br from-yellow-500/10 to-white/5 p-8 md:p-10">
           <div className="mb-5 flex flex-wrap items-center gap-3">
             <span className="rounded-full border border-yellow-500/20 bg-yellow-500/10 px-4 py-2 text-sm text-yellow-300">
@@ -121,6 +149,16 @@ export default function CountryDynamicPage({ params }: CountryPageProps) {
             <span className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-300">
               {safeCountry.mainGoal}
             </span>
+
+            {premiumActive ? (
+              <span className="rounded-full bg-green-500/20 px-4 py-2 text-sm text-green-300">
+                Premium Active
+              </span>
+            ) : (
+              <span className="rounded-full bg-yellow-500/20 px-4 py-2 text-sm text-yellow-300">
+                Free Plan
+              </span>
+            )}
           </div>
 
           <div className="grid gap-10 lg:grid-cols-[1.25fr_.75fr] lg:items-start">
@@ -258,13 +296,36 @@ export default function CountryDynamicPage({ params }: CountryPageProps) {
           }}
         />
 
-        <CostOfLifeExplorer
-          countryName={safeCountry.name}
-          baseCurrency={safeCountry.currencyCode}
-          targetCurrency={currentTargetCurrency}
-          rate={currentRate}
-          items={safeCountry.costOfLife}
-        />
+        <div className="mt-8">
+          {premiumActive ? (
+            <CostOfLifeExplorer
+              countryName={safeCountry.name}
+              baseCurrency={safeCountry.currencyCode}
+              targetCurrency={currentTargetCurrency}
+              rate={currentRate}
+              items={safeCountry.costOfLife}
+            />
+          ) : (
+            <section className="rounded-3xl border border-yellow-500/20 bg-gradient-to-br from-yellow-500/10 to-white/5 p-8">
+              <h2 className="mb-4 text-2xl font-bold text-white">
+                Premium Feature Locked
+              </h2>
+
+              <p className="mb-6 max-w-3xl leading-8 text-slate-300">
+                Detailed cost-of-life intelligence is part of the Premium Global
+                Access experience. Upgrade to unlock deeper global planning
+                tools.
+              </p>
+
+              <Link
+                href="/upgrade"
+                className="inline-flex rounded-xl bg-yellow-500 px-6 py-3 font-semibold text-black transition hover:bg-yellow-400"
+              >
+                Upgrade to Unlock
+              </Link>
+            </section>
+          )}
+        </div>
       </div>
     </main>
   );

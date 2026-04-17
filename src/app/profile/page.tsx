@@ -7,6 +7,7 @@ import Link from "next/link";
 import { auth, db } from "@/lib/firebase";
 import { defaultUserProfile, UserProfile } from "@/lib/profile";
 import { awardXP } from "@/lib/xp-engine";
+import { isPremium } from "@/lib/plan";
 
 export default function ProfilePage() {
   const [uid, setUid] = useState("");
@@ -89,6 +90,29 @@ export default function ProfilePage() {
   return (
     <main className="min-h-screen bg-[#0b0f19] px-6 py-14 text-white">
       <div className="mx-auto max-w-7xl">
+        {!isPremium(profile.membershipPlan) ? (
+          <section className="mb-8 rounded-3xl border border-yellow-500/20 bg-gradient-to-r from-yellow-500/10 to-white/5 p-6">
+            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+              <div>
+                <h2 className="text-2xl font-bold text-white">
+                  Upgrade Your Account
+                </h2>
+                <p className="mt-2 max-w-2xl text-slate-300">
+                  Unlock stronger personalization, unlimited favorite countries,
+                  and future premium global readiness tools.
+                </p>
+              </div>
+
+              <Link
+                href="/upgrade"
+                className="inline-flex w-fit items-center justify-center rounded-xl bg-yellow-500 px-6 py-3 font-semibold text-black transition hover:bg-yellow-400"
+              >
+                Upgrade Now
+              </Link>
+            </div>
+          </section>
+        ) : null}
+
         <section className="mb-10 rounded-3xl border border-yellow-500/20 bg-gradient-to-br from-yellow-500/10 to-white/5 p-8">
           <div className="mb-4 inline-flex rounded-full border border-yellow-500/20 bg-yellow-500/10 px-4 py-2 text-sm text-yellow-300">
             Global User Profile
@@ -134,10 +158,10 @@ export default function ProfilePage() {
 
           <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
             <p className="mb-2 text-xs uppercase tracking-[0.18em] text-slate-400">
-              Preferred Currency
+              Membership Plan
             </p>
             <p className="text-2xl font-bold text-white">
-              {profile.preferredCurrency || "USD"}
+              {profile.membershipPlan}
             </p>
           </div>
         </section>
@@ -302,6 +326,15 @@ export default function ProfilePage() {
             >
               Go to Dashboard
             </Link>
+
+            {!isPremium(profile.membershipPlan) ? (
+              <Link
+                href="/upgrade"
+                className="rounded-xl border border-yellow-500/30 bg-yellow-500/10 px-6 py-3 font-semibold text-yellow-300 transition hover:bg-yellow-500/20"
+              >
+                Upgrade Plan
+              </Link>
+            ) : null}
           </div>
 
           {status ? (
