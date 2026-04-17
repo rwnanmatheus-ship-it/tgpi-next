@@ -170,12 +170,16 @@ export default function ProfilePage() {
               </label>
               <select
                 value={profile.membershipPlan}
-                onChange={(e) => updateField("membershipPlan", e.target.value)}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  if (value === "Free" || value === "Premium") {
+                    updateField("membershipPlan", value);
+                  }
+                }}
                 className="w-full rounded-xl border border-white/10 bg-black/10 px-4 py-3 text-white outline-none transition focus:border-yellow-500"
               >
-                <option>Global Access</option>
-                <option>Starter</option>
-                <option>Institutional</option>
+                <option value="Free">Free</option>
+                <option value="Premium">Premium</option>
               </select>
             </div>
 
@@ -263,7 +267,7 @@ export default function ProfilePage() {
                 onChange={(e) => updateField("weeklyFocus", e.target.value)}
                 className="w-full rounded-xl border border-white/10 bg-black/10 px-4 py-3 text-white outline-none transition focus:border-yellow-500"
               >
-                <option>Mixed Global Path</option>
+                <option>Global Path</option>
                 <option>Languages</option>
                 <option>Cultural Integration</option>
                 <option>Ancient Civilizations</option>
