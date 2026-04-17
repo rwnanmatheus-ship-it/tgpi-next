@@ -1,6 +1,7 @@
 import { auth, db } from "@/lib/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { defaultUserProfile } from "@/lib/profile";
+import { awardXP } from "@/lib/xp-engine";
 
 async function ensureUserDocument() {
   const user = auth.currentUser;
@@ -52,6 +53,8 @@ export async function saveCurrencyUsage(targetCurrency: string, amount: number) 
     },
     { merge: true }
   );
+
+  await awardXP("save_currency_usage");
 }
 
 export async function toggleFavoriteCountry(country: string) {
@@ -74,6 +77,8 @@ export async function toggleFavoriteCountry(country: string) {
     },
     { merge: true }
   );
+
+  await awardXP("toggle_favorite");
 
   return nextFavorites;
 }

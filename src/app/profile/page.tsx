@@ -6,6 +6,7 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import Link from "next/link";
 import { auth, db } from "@/lib/firebase";
 import { defaultUserProfile, UserProfile } from "@/lib/profile";
+import { awardXP } from "@/lib/xp-engine";
 
 export default function ProfilePage() {
   const [uid, setUid] = useState("");
@@ -68,6 +69,8 @@ export default function ProfilePage() {
         },
         { merge: true }
       );
+
+      await awardXP("save_profile");
 
       setStatus("Profile updated successfully.");
     } catch (error: any) {
