@@ -34,24 +34,35 @@ export async function awardXP(reason: AwardXPReason) {
     profile = snap.data() as UserProfile;
   }
 
+  const completed = profile.completedActions || [];
+
+  // 🚨 ANTI-EXPLOIT
+  if (completed.includes(reason)) {
+    return {
+      reward: 0,
+      xp: profile.xp,
+      level: profile.level,
+      alreadyCompleted: true,
+    };
+  }
+
   const reward = XP_REWARDS[reason] || 0;
+
   const nextXP = (profile.xp || 0) + reward;
   const nextLevel = calculateLevelFromXP(nextXP);
 
-  const nextProfile: Partial<UserProfile> & { updatedAt: string } = {
-    xp: nextXP,
-    level: nextLevel,
-    updatedAt: new Date().toISOString(),
-  };
+  const updatedCompleted = [...completed, reason];
 
   await setDoc(
     ref,
     {
       ...profile,
-      ...nextProfile,
+      xp: nextXP,
+      level: nextLevel,
+      completedActions: updatedCompleted,
+      updatedAt: new Date().toISOString(),
       createdAt:
-        (snap.exists() && (snap.data() as UserProfile)?.createdAt) ||
-        new Date().toISOString(),
+        (snap.exists() && profile.createdAt) || new Date().toISOString(),
     },
     { merge: true }
   );
@@ -60,5 +71,6 @@ export async function awardXP(reason: AwardXPReason) {
     reward,
     xp: nextXP,
     level: nextLevel,
+    alreadyCompleted: false,
   };
 }

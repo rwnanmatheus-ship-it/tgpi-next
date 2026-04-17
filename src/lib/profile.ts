@@ -16,6 +16,7 @@ export type UserProfile = {
   lastVisitedCountry: string;
   lastCurrencyTarget: string;
   lastConvertedAmount: number;
+  completedActions?: string[];
   createdAt?: string;
   updatedAt?: string;
 };
@@ -38,4 +39,5 @@ export const defaultUserProfile = (email = ""): UserProfile => ({
   lastVisitedCountry: "",
   lastCurrencyTarget: "USD",
   lastConvertedAmount: 100,
+  completedActions: [],
 });
