@@ -7,6 +7,7 @@ import {
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import Link from "next/link";
 import { auth, db } from "@/lib/firebase";
 import { defaultUserProfile } from "@/lib/profile";
 
@@ -71,65 +72,69 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#0b0f19] px-6 py-12">
-      <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1.1fr_.9fr]">
-        <section className="rounded-3xl border border-yellow-700/20 bg-gradient-to-br from-yellow-500/10 to-slate-900 p-8 lg:p-12">
-          <div className="mb-6 inline-block rounded-full border border-yellow-600/30 bg-yellow-500/5 px-4 py-2 text-sm text-yellow-200">
-            The Global Polymath Institute
+    <main className="min-h-screen bg-[#0b0f19] px-6 py-14 text-white">
+      <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[1.05fr_.95fr]">
+        <section className="rounded-3xl border border-yellow-500/20 bg-gradient-to-br from-yellow-500/10 to-white/5 p-8 lg:p-12">
+          <div className="mb-5 inline-flex rounded-full border border-yellow-500/20 bg-yellow-500/10 px-4 py-2 text-sm text-yellow-300">
+            TGPI Access
           </div>
 
-          <h1 className="mb-6 text-4xl font-bold leading-tight text-white md:text-5xl">
-            Enter Your Global Learning Journey
+          <h1 className="mb-5 text-4xl font-bold leading-tight md:text-5xl">
+            Enter Your Global Journey
           </h1>
 
-          <p className="mb-10 max-w-2xl text-slate-300">
-            Access a premium educational platform designed to help people live,
-            work, and integrate anywhere in the world through language, culture,
-            arts, and internationally oriented preparation.
+          <p className="mb-10 max-w-2xl text-lg leading-8 text-slate-300">
+            Access a premium platform designed to help people prepare for life,
+            work, study, and integration across countries through language,
+            culture, and global readiness.
           </p>
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-              <strong className="mb-1 block text-lg text-yellow-400">
-                195 Countries
-              </strong>
-              <p className="text-sm text-slate-300">
-                Country-based learning architecture for global readiness.
+            <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+              <h3 className="mb-3 text-xl font-semibold text-yellow-400">
+                Personalized
+              </h3>
+              <p className="text-sm leading-7 text-slate-300">
+                Your profile, goals, preferred country, and learning direction
+                shape the experience.
               </p>
             </div>
 
-            <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-              <strong className="mb-1 block text-lg text-yellow-400">
-                Personalized Onboarding
-              </strong>
-              <p className="text-sm text-slate-300">
-                Your profile, goals, and pathways shape the experience.
+            <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+              <h3 className="mb-3 text-xl font-semibold text-yellow-400">
+                Global
+              </h3>
+              <p className="text-sm leading-7 text-slate-300">
+                Country-based pathways connect preparation, language, and
+                practical international readiness.
               </p>
             </div>
 
-            <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-              <strong className="mb-1 block text-lg text-yellow-400">
-                Gamified Progress
-              </strong>
-              <p className="text-sm text-slate-300">
-                XP, streaks, quests, and premium motivation systems.
+            <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+              <h3 className="mb-3 text-xl font-semibold text-yellow-400">
+                Premium
+              </h3>
+              <p className="text-sm leading-7 text-slate-300">
+                A refined platform experience built for long-term expansion and
+                serious positioning.
               </p>
             </div>
 
-            <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-              <strong className="mb-1 block text-lg text-yellow-400">
-                Global Design
-              </strong>
-              <p className="text-sm text-slate-300">
-                A premium platform built for international scale.
+            <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+              <h3 className="mb-3 text-xl font-semibold text-yellow-400">
+                Real
+              </h3>
+              <p className="text-sm leading-7 text-slate-300">
+                More than education—an ecosystem for meaningful global
+                preparation.
               </p>
             </div>
           </div>
         </section>
 
-        <section className="rounded-3xl border border-slate-800 bg-slate-950 p-8 lg:p-10">
+        <section className="rounded-3xl border border-white/10 bg-white/5 p-8 lg:p-10">
           <div className="mb-8">
-            <h2 className="mb-2 text-3xl font-bold text-yellow-400">
+            <h2 className="mb-2 text-3xl font-bold text-white">
               {isRegister ? "Create Account" : "Welcome Back"}
             </h2>
             <p className="text-slate-400">
@@ -143,10 +148,10 @@ export default function LoginPage() {
             <button
               type="button"
               onClick={() => setIsRegister(false)}
-              className={`flex-1 rounded-xl px-4 py-3 font-semibold ${
+              className={`flex-1 rounded-xl px-4 py-3 font-semibold transition ${
                 !isRegister
                   ? "bg-yellow-500 text-black"
-                  : "border border-slate-700 bg-slate-900 text-slate-300"
+                  : "border border-white/10 bg-white/5 text-slate-300"
               }`}
             >
               Login
@@ -154,10 +159,10 @@ export default function LoginPage() {
             <button
               type="button"
               onClick={() => setIsRegister(true)}
-              className={`flex-1 rounded-xl px-4 py-3 font-semibold ${
+              className={`flex-1 rounded-xl px-4 py-3 font-semibold transition ${
                 isRegister
                   ? "bg-yellow-500 text-black"
-                  : "border border-slate-700 bg-slate-900 text-slate-300"
+                  : "border border-white/10 bg-white/5 text-slate-300"
               }`}
             >
               Create Account
@@ -174,7 +179,7 @@ export default function LoginPage() {
                 placeholder="your@email.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-white outline-none transition focus:border-yellow-500"
+                className="w-full rounded-xl border border-white/10 bg-black/10 px-4 py-3 text-white outline-none transition focus:border-yellow-500"
               />
             </div>
 
@@ -187,7 +192,7 @@ export default function LoginPage() {
                 placeholder="Enter your password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-white outline-none transition focus:border-yellow-500"
+                className="w-full rounded-xl border border-white/10 bg-black/10 px-4 py-3 text-white outline-none transition focus:border-yellow-500"
               />
             </div>
 
@@ -204,16 +209,27 @@ export default function LoginPage() {
             </button>
           </form>
 
-          <div className="mt-6 rounded-2xl border border-slate-800 bg-slate-900 p-4 text-sm text-slate-400">
-            Your account will connect your TGPI profile, country pathways,
-            personalized recommendations, and premium platform experience.
+          {status ? (
+            <p className="mt-5 text-sm text-yellow-300">{status}</p>
+          ) : null}
+
+          <div className="mt-8 rounded-3xl border border-white/10 bg-black/10 p-5">
+            <p className="text-sm leading-7 text-slate-300">
+              Your account connects your global profile, country goals,
+              personalized progress, favorites, and premium platform actions.
+            </p>
           </div>
 
-          {status ? (
-            <p className="mt-4 text-sm text-yellow-300">{status}</p>
-          ) : null}
+          <div className="mt-6">
+            <Link
+              href="/"
+              className="text-sm text-slate-400 transition hover:text-white"
+            >
+              ← Back to Home
+            </Link>
+          </div>
         </section>
       </div>
-    </div>
+    </main>
   );
 }
