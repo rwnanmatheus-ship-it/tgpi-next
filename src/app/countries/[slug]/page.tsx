@@ -125,8 +125,8 @@ export default function CountryDynamicPage({ params }: CountryPageProps) {
                   Unlock Premium Global Access
                 </h2>
                 <p className="mt-2 max-w-2xl text-slate-300">
-                  Premium users get deeper platform access, future advanced
-                  pathways, and stronger global preparation tools.
+                  Premium users unlock deeper country intelligence, stronger
+                  comparison tools, and richer long-term global preparation.
                 </p>
               </div>
 
@@ -148,6 +148,10 @@ export default function CountryDynamicPage({ params }: CountryPageProps) {
 
             <span className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-300">
               {safeCountry.mainGoal}
+            </span>
+
+            <span className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-300">
+              {safeCountry.difficultyLevel}
             </span>
 
             {premiumActive ? (
@@ -182,6 +186,23 @@ export default function CountryDynamicPage({ params }: CountryPageProps) {
                     {tag}
                   </span>
                 ))}
+              </div>
+
+              <div className="mb-8 rounded-3xl border border-white/10 bg-white/5 p-6">
+                <p className="mb-3 text-xs uppercase tracking-[0.18em] text-slate-400">
+                  Best For
+                </p>
+
+                <div className="flex flex-wrap gap-3">
+                  {safeCountry.bestFor.map((item) => (
+                    <span
+                      key={item}
+                      className="rounded-full border border-yellow-500/20 bg-yellow-500/10 px-4 py-2 text-sm text-yellow-300"
+                    >
+                      {item}
+                    </span>
+                  ))}
+                </div>
               </div>
 
               <div className="flex flex-wrap gap-4">
@@ -276,13 +297,20 @@ export default function CountryDynamicPage({ params }: CountryPageProps) {
 
           <div className="rounded-3xl border border-white/10 bg-white/5 p-8">
             <h2 className="mb-4 text-2xl font-bold text-yellow-400">
-              Who This Pathway Is For
+              Premium Insight
             </h2>
             <p className="leading-8 text-slate-300">
-              Ideal for learners, professionals, travelers, expats, and people
-              preparing for real life abroad with stronger country awareness and
-              practical global confidence.
+              {safeCountry.premiumInsight}
             </p>
+
+            {!premiumActive ? (
+              <Link
+                href="/upgrade"
+                className="mt-6 inline-flex rounded-xl border border-yellow-500/30 bg-yellow-500/10 px-5 py-3 font-semibold text-yellow-300 transition hover:bg-yellow-500/20"
+              >
+                Unlock Premium Insight
+              </Link>
+            ) : null}
           </div>
         </section>
 
@@ -312,9 +340,9 @@ export default function CountryDynamicPage({ params }: CountryPageProps) {
               </h2>
 
               <p className="mb-6 max-w-3xl leading-8 text-slate-300">
-                Detailed cost-of-life intelligence is part of the Premium Global
-                Access experience. Upgrade to unlock deeper global planning
-                tools.
+                Detailed cost-of-life intelligence is part of Premium Global
+                Access. Upgrade to unlock deeper planning tools and stronger
+                country comparison insights.
               </p>
 
               <Link

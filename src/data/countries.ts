@@ -16,6 +16,9 @@ export type Country = {
   longDescription: string;
   tags: string[];
   costOfLife: CostItem[];
+  difficultyLevel: "Beginner" | "Intermediate" | "Advanced";
+  bestFor: string[];
+  premiumInsight: string;
 };
 
 export const countries: Country[] = [
@@ -41,6 +44,10 @@ export const countries: Country[] = [
       { label: "Monthly Mobile Plan", amount: 4000 },
       { label: "Shared Rent Estimate", amount: 80000 },
     ],
+    difficultyLevel: "Advanced",
+    bestFor: ["Work abroad", "Language mastery", "Cultural discipline"],
+    premiumInsight:
+      "Premium users will unlock deeper guidance on integration standards, social etiquette, and long-term country adaptation strategy for Japan.",
   },
   {
     slug: "brazil",
@@ -64,6 +71,10 @@ export const countries: Country[] = [
       { label: "Monthly Mobile Plan", amount: 55 },
       { label: "Shared Rent Estimate", amount: 1800 },
     ],
+    difficultyLevel: "Beginner",
+    bestFor: ["Live abroad", "Cultural learning", "Portuguese fluency"],
+    premiumInsight:
+      "Premium users will unlock deeper practical guidance on regional differences, social adaptation, and long-term lifestyle preparation in Brazil.",
   },
   {
     slug: "egypt",
@@ -87,5 +98,9 @@ export const countries: Country[] = [
       { label: "Monthly Mobile Plan", amount: 250 },
       { label: "Shared Rent Estimate", amount: 5000 },
     ],
+    difficultyLevel: "Intermediate",
+    bestFor: ["Cultural learning", "Arabic foundations", "Civilization studies"],
+    premiumInsight:
+      "Premium users will unlock deeper country context on historical importance, practical adaptation, and how Egypt fits into a broader global readiness journey.",
   },
 ];
