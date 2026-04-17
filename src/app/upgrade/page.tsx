@@ -1,8 +1,32 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
+import { activatePremium } from "@/lib/subscription";
 
 export default function UpgradePage() {
+  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState("");
+
+  async function handleUpgrade() {
+    try {
+      setLoading(true);
+      setStatus("Processing upgrade...");
+
+      await activatePremium();
+
+      setStatus("Premium activated successfully!");
+
+      setTimeout(() => {
+        window.location.href = "/dashboard";
+      }, 1200);
+    } catch (error: any) {
+      setStatus(error?.message || "Upgrade failed.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <main className="min-h-screen bg-[#0b0f19] px-6 py-16 text-white">
       <div className="mx-auto max-w-6xl">
@@ -17,8 +41,8 @@ export default function UpgradePage() {
 
           <p className="mx-auto mt-4 max-w-3xl text-lg leading-8 text-slate-400">
             Upgrade your experience and unlock the premium version of TGPI with
-            more countries, stronger personalization, advanced progression, and
-            future AI-powered global readiness features.
+            more countries, deeper personalization, stronger progression, and
+            future AI-powered global readiness tools.
           </p>
         </section>
 
@@ -27,7 +51,7 @@ export default function UpgradePage() {
             <div className="mb-6">
               <h2 className="text-2xl font-bold text-white">Free Plan</h2>
               <p className="mt-2 text-slate-400">
-                A solid starting point for exploring the platform.
+                A strong starting point for exploring the platform.
               </p>
             </div>
 
@@ -64,7 +88,8 @@ export default function UpgradePage() {
                 Premium Global Access
               </h2>
               <p className="mt-2 text-slate-300">
-                Designed for users serious about global growth and platform depth.
+                Designed for users serious about global growth and platform
+                depth.
               </p>
             </div>
 
@@ -83,9 +108,17 @@ export default function UpgradePage() {
             </ul>
 
             <div className="mt-10">
-              <button className="inline-flex w-full items-center justify-center rounded-xl bg-yellow-500 px-6 py-3 font-semibold text-black transition hover:bg-yellow-400">
-                Upgrade Now
+              <button
+                onClick={handleUpgrade}
+                disabled={loading}
+                className="inline-flex w-full items-center justify-center rounded-xl bg-yellow-500 px-6 py-3 font-semibold text-black transition hover:bg-yellow-400 disabled:opacity-60"
+              >
+                {loading ? "Processing..." : "Upgrade Now"}
               </button>
+
+              {status ? (
+                <p className="mt-4 text-sm text-yellow-300">{status}</p>
+              ) : null}
             </div>
           </div>
         </section>
@@ -96,7 +129,7 @@ export default function UpgradePage() {
           </h3>
 
           <p className="max-w-4xl leading-8 text-slate-300">
-            TGPI is not just a learning platform. It is a global preparation
+            TGPI is more than a learning platform. It is a global preparation
             system designed to help people prepare for life, work, study, and
             integration across countries. Premium gives users deeper access,
             greater personalization, and the strongest future experience.

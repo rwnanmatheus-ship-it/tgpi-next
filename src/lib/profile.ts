@@ -1,43 +1,75 @@
+export type MembershipPlan = "Free" | "Premium";
+
+export type SubscriptionStatus =
+  | "inactive"
+  | "active"
+  | "canceled"
+  | "trial";
+
 export type UserProfile = {
   email: string;
   fullName: string;
-  membershipPlan: "Free" | "Premium";
+
+  membershipPlan: MembershipPlan;
+  subscriptionStatus?: SubscriptionStatus;
+
   countryInterest: string;
   mainGoal: string;
+
   preferredLanguage: string;
   preferredCurrency: string;
+
   weeklyFocus: string;
   bio: string;
+
   xp: number;
   level: number;
   streak: number;
-  onboardingCompleted: boolean;
+
   favorites: string[];
+
   lastVisitedCountry: string;
   lastCurrencyTarget: string;
   lastConvertedAmount: number;
+
+  onboardingCompleted: boolean;
   completedActions?: string[];
+
   createdAt?: string;
   updatedAt?: string;
 };
 
-export const defaultUserProfile = (email = ""): UserProfile => ({
-  email,
-  fullName: "",
-  membershipPlan: "Free",
-  countryInterest: "Japan",
-  mainGoal: "Work abroad",
-  preferredLanguage: "English",
-  preferredCurrency: "USD",
-  weeklyFocus: "Global Path",
-  bio: "",
-  xp: 0,
-  level: 1,
-  streak: 1,
-  onboardingCompleted: false,
-  favorites: [],
-  lastVisitedCountry: "",
-  lastCurrencyTarget: "USD",
-  lastConvertedAmount: 100,
-  completedActions: [],
-});
+export function defaultUserProfile(email = ""): UserProfile {
+  return {
+    email,
+    fullName: "",
+
+    membershipPlan: "Free",
+    subscriptionStatus: "inactive",
+
+    countryInterest: "Japan",
+    mainGoal: "Work abroad",
+
+    preferredLanguage: "English",
+    preferredCurrency: "USD",
+
+    weeklyFocus: "Global Path",
+    bio: "",
+
+    xp: 0,
+    level: 1,
+    streak: 1,
+
+    favorites: [],
+
+    lastVisitedCountry: "",
+    lastCurrencyTarget: "USD",
+    lastConvertedAmount: 100,
+
+    onboardingCompleted: false,
+    completedActions: [],
+
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  };
+}
