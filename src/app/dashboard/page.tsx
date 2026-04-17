@@ -15,6 +15,12 @@ function getCurrentLevelBaseXP(level: number) {
   return Math.max(0, (level - 1) * 100);
 }
 
+type Quest = {
+  title: string;
+  concluded: boolean;
+  reward: number;
+};
+
 export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<UserProfile>(defaultUserProfile());
@@ -62,30 +68,30 @@ export default function DashboardPage() {
     Math.round((xpInsideLevel / xpNeededInsideLevel) * 100)
   );
 
-  const quests = [
+  const quests: Quest[] = [
     {
-      title: "Complete your profile",
-      done: !!profile.completedActions?.includes("save_profile"),
+      title: "Complete seu perfil",
+      concluded: !!profile.completedActions?.includes("save_profile"),
       reward: 20,
     },
     {
-      title: "Choose your country focus",
-      done: !!profile.completedActions?.includes("set_country_goal"),
+      title: "Defina um país como meta",
+      concluded: !!profile.completedActions?.includes("set_country_goal"),
       reward: 15,
     },
     {
-      title: "Save at least one favorite country",
-      done: !!profile.completedActions?.includes("toggle_favorite"),
+      title: "Salve pelo menos um país favorito",
+      concluded: !!profile.completedActions?.includes("toggle_favorite"),
       reward: 10,
     },
     {
-      title: "Save a currency preference",
-      done: !!profile.completedActions?.includes("save_currency_usage"),
+      title: "Salve uma preferência de moeda",
+      concluded: !!profile.completedActions?.includes("save_currency_usage"),
       reward: 5,
     },
   ];
 
-  const completedQuestCount = quests.filter((quest) => quest.done).length;
+  const completedQuestCount = quests.filter((quest) => quest.concluded).length;
 
   if (loading) {
     return (
@@ -176,12 +182,8 @@ export default function DashboardPage() {
             </div>
 
             <div className="mb-8 flex flex-wrap items-center justify-between gap-3 text-sm text-slate-300">
-              <span>
-                {xpInsideLevel} XP in this level
-              </span>
-              <span>
-                {nextLevelXP - profile.xp} XP to next level
-              </span>
+              <span>{xpInsideLevel} XP in this level</span>
+              <span>{Math.max(0, nextLevelXP - profile.xp)} XP to next level</span>
             </div>
 
             <div className="grid gap-4 sm:grid-cols-3">
@@ -239,15 +241,17 @@ export default function DashboardPage() {
                     <p className="font-medium text-white">{quest.title}</p>
                     <span
                       className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                        quest.done
+                        quest.concluded
                           ? "bg-green-500/15 text-green-300"
                           : "bg-yellow-500/15 text-yellow-300"
                       }`}
                     >
-                      {quest.done ? "Completed" : "Pending"}
+                      {quest.concluded ? "Completed" : "Pending"}
                     </span>
                   </div>
-                  <p className="text-sm text-slate-400">Reward: +{quest.reward} XP</p>
+                  <p className="text-sm text-slate-400">
+                    Reward: +{quest.reward} XP
+                  </p>
                 </div>
               ))}
             </div>
