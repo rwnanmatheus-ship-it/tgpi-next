@@ -12,6 +12,10 @@ export type UserProfile = {
   level: number;
   streak: number;
   onboardingCompleted: boolean;
+  favorites: string[];
+  lastVisitedCountry: string;
+  lastCurrencyTarget: string;
+  lastConvertedAmount: number;
   createdAt?: string;
   updatedAt?: string;
 };
@@ -30,4 +34,8 @@ export const defaultUserProfile = (email = ""): UserProfile => ({
   level: 1,
   streak: 1,
   onboardingCompleted: false,
+  favorites: [],
+  lastVisitedCountry: "",
+  lastCurrencyTarget: "USD",
+  lastConvertedAmount: 100,
 });
