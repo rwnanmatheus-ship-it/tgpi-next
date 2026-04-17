@@ -1,7 +1,7 @@
 export type UserProfile = {
   email: string;
   fullName: string;
-  membershipPlan: string;
+  membershipPlan: "Free" | "Premium";
   countryInterest: string;
   mainGoal: string;
   preferredLanguage: string;
@@ -24,12 +24,12 @@ export type UserProfile = {
 export const defaultUserProfile = (email = ""): UserProfile => ({
   email,
   fullName: "",
-  membershipPlan: "Global Access",
+  membershipPlan: "Free",
   countryInterest: "Japan",
   mainGoal: "Work abroad",
   preferredLanguage: "English",
   preferredCurrency: "USD",
-  weeklyFocus: "Mixed Global Path",
+  weeklyFocus: "Global Path",
   bio: "",
   xp: 0,
   level: 1,

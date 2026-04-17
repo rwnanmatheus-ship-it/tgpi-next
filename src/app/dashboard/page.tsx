@@ -6,7 +6,7 @@ import { doc, getDoc } from "firebase/firestore";
 import Link from "next/link";
 import { auth, db } from "@/lib/firebase";
 import { defaultUserProfile, UserProfile } from "@/lib/profile";
-
+import { isPremium, getPlanLabel } from "@/lib/plan";
 function getNextLevelXP(level: number) {
   return level * 100;
 }
@@ -114,7 +114,17 @@ export default function DashboardPage() {
           <h1 className="mb-4 text-4xl font-bold md:text-5xl">
             Your Global Journey
           </h1>
+<div className="mb-6 flex items-center gap-3">
+  <span className="rounded-full border border-white/10 bg-white/5 px-4 py-1 text-sm">
+    {getPlanLabel(profile.membershipPlan)}
+  </span>
 
+  {!isPremium(profile.membershipPlan) && (
+    <span className="rounded-full bg-yellow-500/20 px-3 py-1 text-xs text-yellow-300">
+      Upgrade available
+    </span>
+  )}
+</div>
           <p className="max-w-3xl text-lg leading-8 text-slate-300">
             Track your country focus, progress, favorites, quests, and global
             learning activity from one premium dashboard.
