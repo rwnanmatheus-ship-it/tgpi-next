@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import Link from "next/link";
 import { auth, db } from "@/lib/firebase";
 import { defaultUserProfile, UserProfile } from "@/lib/profile";
 
@@ -10,7 +11,6 @@ export default function ProfilePage() {
   const [uid, setUid] = useState("");
   const [loading, setLoading] = useState(true);
   const [status, setStatus] = useState("");
-
   const [profile, setProfile] = useState<UserProfile>(defaultUserProfile());
 
   useEffect(() => {
@@ -43,7 +43,10 @@ export default function ProfilePage() {
     return () => unsubscribe();
   }, []);
 
-  function updateField<K extends keyof UserProfile>(key: K, value: UserProfile[K]) {
+  function updateField<K extends keyof UserProfile>(
+    key: K,
+    value: UserProfile[K]
+  ) {
     setProfile((prev) => ({
       ...prev,
       [key]: value,
@@ -74,72 +77,74 @@ export default function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen px-6 py-10">
-        <div className="mx-auto max-w-6xl text-slate-300">Loading profile...</div>
-      </div>
+      <main className="min-h-screen bg-[#0b0f19] px-6 py-14 text-white">
+        <div className="mx-auto max-w-7xl text-slate-300">Loading profile...</div>
+      </main>
     );
   }
 
   return (
-    <div className="min-h-screen px-6 py-10">
-      <div className="mx-auto max-w-6xl">
-        <div className="mb-10 rounded-3xl border border-yellow-700/20 bg-gradient-to-br from-yellow-500/10 to-slate-900 p-8">
-          <h1 className="mb-3 text-4xl font-bold text-yellow-400">
-            Your Global Profile
-          </h1>
-          <p className="max-w-3xl text-slate-300">
-            Define your international direction, preferred country pathways,
-            learning language, and preferred currency to personalize the TGPI
-            experience.
-          </p>
-        </div>
+    <main className="min-h-screen bg-[#0b0f19] px-6 py-14 text-white">
+      <div className="mx-auto max-w-7xl">
+        <section className="mb-10 rounded-3xl border border-yellow-500/20 bg-gradient-to-br from-yellow-500/10 to-white/5 p-8">
+          <div className="mb-4 inline-flex rounded-full border border-yellow-500/20 bg-yellow-500/10 px-4 py-2 text-sm text-yellow-300">
+            Global User Profile
+          </div>
 
-        <div className="mb-8 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-          <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-            <span className="mb-2 block text-xs uppercase tracking-wide text-slate-400">
+          <h1 className="mb-4 text-4xl font-bold md:text-5xl">
+            Shape Your Global Profile
+          </h1>
+
+          <p className="max-w-3xl text-lg leading-8 text-slate-300">
+            Define your country interests, learning preferences, and global
+            direction to personalize the TGPI experience.
+          </p>
+        </section>
+
+        <section className="mb-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+          <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+            <p className="mb-2 text-xs uppercase tracking-[0.18em] text-slate-400">
               Current Focus
-            </span>
-            <p className="font-semibold text-white">
+            </p>
+            <p className="text-2xl font-bold text-white">
               {profile.countryInterest || "Not set"}
             </p>
           </div>
 
-          <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-            <span className="mb-2 block text-xs uppercase tracking-wide text-slate-400">
+          <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+            <p className="mb-2 text-xs uppercase tracking-[0.18em] text-slate-400">
               Main Goal
-            </span>
-            <p className="font-semibold text-white">
+            </p>
+            <p className="text-2xl font-bold text-white">
               {profile.mainGoal || "Not set"}
             </p>
           </div>
 
-          <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-            <span className="mb-2 block text-xs uppercase tracking-wide text-slate-400">
+          <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+            <p className="mb-2 text-xs uppercase tracking-[0.18em] text-slate-400">
               Preferred Language
-            </span>
-            <p className="font-semibold text-white">
+            </p>
+            <p className="text-2xl font-bold text-white">
               {profile.preferredLanguage || "Not set"}
             </p>
           </div>
 
-          <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-            <span className="mb-2 block text-xs uppercase tracking-wide text-slate-400">
+          <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
+            <p className="mb-2 text-xs uppercase tracking-[0.18em] text-slate-400">
               Preferred Currency
-            </span>
-            <p className="font-semibold text-white">
+            </p>
+            <p className="text-2xl font-bold text-white">
               {profile.preferredCurrency || "USD"}
             </p>
           </div>
-        </div>
+        </section>
 
-        <div className="rounded-3xl border border-slate-800 bg-slate-950 p-8">
+        <section className="rounded-3xl border border-white/10 bg-white/5 p-8">
           <div className="mb-8">
-            <h2 className="mb-2 text-2xl font-bold text-yellow-400">
-              Edit Profile
-            </h2>
-            <p className="text-sm text-slate-400">
-              This information will shape future recommendations, pathways,
-              currency views, and personalization.
+            <h2 className="mb-2 text-2xl font-bold text-white">Edit Profile</h2>
+            <p className="text-slate-400">
+              Your data shapes recommendations, country pathways, currency
+              views, and future personalization.
             </p>
           </div>
 
@@ -152,7 +157,7 @@ export default function ProfilePage() {
                 type="text"
                 value={profile.fullName}
                 onChange={(e) => updateField("fullName", e.target.value)}
-                className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-white outline-none transition focus:border-yellow-500"
+                className="w-full rounded-xl border border-white/10 bg-black/10 px-4 py-3 text-white outline-none transition focus:border-yellow-500"
               />
             </div>
 
@@ -163,7 +168,7 @@ export default function ProfilePage() {
               <select
                 value={profile.membershipPlan}
                 onChange={(e) => updateField("membershipPlan", e.target.value)}
-                className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-white outline-none transition focus:border-yellow-500"
+                className="w-full rounded-xl border border-white/10 bg-black/10 px-4 py-3 text-white outline-none transition focus:border-yellow-500"
               >
                 <option>Global Access</option>
                 <option>Starter</option>
@@ -178,7 +183,7 @@ export default function ProfilePage() {
               <select
                 value={profile.countryInterest}
                 onChange={(e) => updateField("countryInterest", e.target.value)}
-                className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-white outline-none transition focus:border-yellow-500"
+                className="w-full rounded-xl border border-white/10 bg-black/10 px-4 py-3 text-white outline-none transition focus:border-yellow-500"
               >
                 <option>Japan</option>
                 <option>Brazil</option>
@@ -199,7 +204,7 @@ export default function ProfilePage() {
               <select
                 value={profile.mainGoal}
                 onChange={(e) => updateField("mainGoal", e.target.value)}
-                className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-white outline-none transition focus:border-yellow-500"
+                className="w-full rounded-xl border border-white/10 bg-black/10 px-4 py-3 text-white outline-none transition focus:border-yellow-500"
               >
                 <option>Work abroad</option>
                 <option>Live abroad</option>
@@ -217,7 +222,7 @@ export default function ProfilePage() {
               <select
                 value={profile.preferredLanguage}
                 onChange={(e) => updateField("preferredLanguage", e.target.value)}
-                className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-white outline-none transition focus:border-yellow-500"
+                className="w-full rounded-xl border border-white/10 bg-black/10 px-4 py-3 text-white outline-none transition focus:border-yellow-500"
               >
                 <option>English</option>
                 <option>Portuguese</option>
@@ -234,7 +239,7 @@ export default function ProfilePage() {
               <select
                 value={profile.preferredCurrency}
                 onChange={(e) => updateField("preferredCurrency", e.target.value)}
-                className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-white outline-none transition focus:border-yellow-500"
+                className="w-full rounded-xl border border-white/10 bg-black/10 px-4 py-3 text-white outline-none transition focus:border-yellow-500"
               >
                 <option value="USD">USD — US Dollar</option>
                 <option value="BRL">BRL — Brazilian Real</option>
@@ -253,7 +258,7 @@ export default function ProfilePage() {
               <select
                 value={profile.weeklyFocus}
                 onChange={(e) => updateField("weeklyFocus", e.target.value)}
-                className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-white outline-none transition focus:border-yellow-500"
+                className="w-full rounded-xl border border-white/10 bg-black/10 px-4 py-3 text-white outline-none transition focus:border-yellow-500"
               >
                 <option>Mixed Global Path</option>
                 <option>Languages</option>
@@ -270,44 +275,33 @@ export default function ProfilePage() {
               <textarea
                 value={profile.bio}
                 onChange={(e) => updateField("bio", e.target.value)}
-                className="min-h-[140px] w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-white outline-none transition focus:border-yellow-500"
+                className="min-h-[150px] w-full rounded-xl border border-white/10 bg-black/10 px-4 py-3 text-white outline-none transition focus:border-yellow-500"
               />
-            </div>
-
-            <div className="md:col-span-2 flex flex-wrap gap-4 pt-2">
-              <button
-                type="button"
-                onClick={saveProfile}
-                className="rounded-xl bg-yellow-500 px-6 py-3 font-semibold text-black transition hover:bg-yellow-400"
-              >
-                Save Profile
-              </button>
-
-              <a
-                href="/dashboard"
-                className="rounded-xl border border-yellow-500/60 bg-yellow-500/5 px-6 py-3 font-semibold text-yellow-300 transition hover:bg-yellow-500/10"
-              >
-                Go to Dashboard
-              </a>
             </div>
           </div>
 
-          {status ? (
-            <p className="mt-6 text-sm text-yellow-300">{status}</p>
-          ) : null}
-        </div>
+          <div className="mt-8 flex flex-wrap gap-4">
+            <button
+              type="button"
+              onClick={saveProfile}
+              className="rounded-xl bg-yellow-500 px-6 py-3 font-semibold text-black transition hover:bg-yellow-400"
+            >
+              Save Profile
+            </button>
 
-        <div className="mt-8 rounded-3xl border border-yellow-700/20 bg-gradient-to-b from-yellow-500/10 to-slate-950 p-8">
-          <h2 className="mb-3 text-2xl font-bold text-yellow-400">
-            Why this matters
-          </h2>
-          <p className="max-w-4xl text-slate-300">
-            Your profile shapes future recommendations, country routes, dynamic
-            currency display, personalized learning priorities, and premium
-            pathway suggestions across the TGPI platform.
-          </p>
-        </div>
+            <Link
+              href="/dashboard"
+              className="rounded-xl border border-white/15 bg-white/5 px-6 py-3 font-semibold text-white transition hover:bg-white/10"
+            >
+              Go to Dashboard
+            </Link>
+          </div>
+
+          {status ? (
+            <p className="mt-5 text-sm text-yellow-300">{status}</p>
+          ) : null}
+        </section>
       </div>
-    </div>
+    </main>
   );
 }
