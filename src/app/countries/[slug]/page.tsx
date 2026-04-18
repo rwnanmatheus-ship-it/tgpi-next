@@ -13,17 +13,13 @@ import { setCountryGoal } from "@/lib/set-country-goal";
 import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import Link from "next/link";
-import { notFound, useRouter } from "next/navigation";
+import { notFound, useParams, useRouter } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
-type CountryPageProps = {
-  params: Promise<{
-    slug: string;
-  }>;
-};
-
-export default function CountryDynamicPage({ params }: CountryPageProps) {
+export default function CountryDynamicPage() {
   const router = useRouter();
+  const params = useParams<{ slug: string }>();
+
   const [preferredCurrency, setPreferredCurrency] = useState("USD");
   const [currentRate, setCurrentRate] = useState<number | null>(null);
   const [currentTargetCurrency, setCurrentTargetCurrency] = useState("USD");
@@ -31,20 +27,10 @@ export default function CountryDynamicPage({ params }: CountryPageProps) {
   const [favoriteCountries, setFavoriteCountries] = useState<string[]>([]);
   const [favoriteLoading, setFavoriteLoading] = useState(false);
   const [favoriteMessage, setFavoriteMessage] = useState("");
-  const [slug, setSlug] = useState("");
-
-  useEffect(() => {
-    async function loadParams() {
-      const resolvedParams = await params;
-      setSlug(resolvedParams.slug);
-    }
-
-    loadParams();
-  }, [params]);
 
   const country = useMemo(() => {
-    return countries.find((item) => item.slug === slug);
-  }, [slug]);
+    return countries.find((item) => item.slug === params?.slug);
+  }, [params]);
 
   useEffect(() => {
     if (!country) return;
@@ -75,23 +61,12 @@ export default function CountryDynamicPage({ params }: CountryPageProps) {
     return () => unsubscribe();
   }, [country]);
 
-  if (!slug) {
-    return (
-      <div className="min-h-screen bg-slate-950 px-6 py-12 text-white">
-        <div className="mx-auto max-w-7xl">
-          <div className="rounded-3xl border border-slate-800 bg-slate-900 p-8">
-            Loading country...
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   if (!country) {
     notFound();
   }
 
   const safeCountry = country;
+  const isFavorite = favoriteCountries.includes(safeCountry.slug);
 
   async function handleSetGoal() {
     await setCountryGoal(safeCountry.name, safeCountry.mainGoal);
@@ -129,23 +104,29 @@ export default function CountryDynamicPage({ params }: CountryPageProps) {
     }
   }
 
-  const isFavorite = favoriteCountries.includes(safeCountry.slug);
-
   return (
-    <div className="min-h-screen px-6 py-12">
+    <main className="min-h-screen bg-slate-950 px-6 py-12 text-white">
       <div className="mx-auto max-w-7xl">
-        <section className="mb-8 rounded-3xl border border-yellow-700/20 bg-gradient-to-br from-yellow-500/10 to-slate-900 p-8">
-          <div className="grid gap-8 lg:grid-cols-[1.5fr_.9fr] lg:items-center">
+        <section className="mb-8 overflow-hidden rounded-3xl border border-yellow-700/20 bg-gradient-to-br from-yellow-500/10 via-slate-950 to-slate-900 p-8">
+          <div className="mb-6 flex flex-wrap items-center gap-3 text-sm text-slate-400">
+            <Link href="/" className="hover:text-yellow-300">Home</Link>
+            <span>•</span>
+            <Link href="/countries" className="hover:text-yellow-300">Countries</Link>
+            <span>•</span>
+            <span className="text-yellow-300">{safeCountry.name}</span>
+          </div>
+
+          <div className="grid gap-8 lg:grid-cols-[1.3fr_.7fr] lg:items-center">
             <div>
               <p className="mb-4 inline-block rounded-full border border-yellow-600/30 bg-yellow-500/5 px-4 py-2 text-sm text-yellow-200">
-                Country Pathway • {safeCountry.name} • {safeCountry.mainGoal}
+                {safeCountry.region} • {safeCountry.mainGoal}
               </p>
 
-              <h1 className="mb-4 text-4xl font-bold md:text-5xl">
-                {safeCountry.emoji} {safeCountry.name} Global Pathway
+              <h1 className="mb-4 text-4xl font-bold md:text-6xl">
+                {safeCountry.emoji} {safeCountry.name}
               </h1>
 
-              <p className="max-w-3xl text-slate-300">
+              <p className="max-w-3xl text-lg leading-8 text-slate-300">
                 {safeCountry.longDescription}
               </p>
 
@@ -154,7 +135,7 @@ export default function CountryDynamicPage({ params }: CountryPageProps) {
                   onClick={handleSetGoal}
                   className="rounded-xl bg-yellow-500 px-6 py-3 font-semibold text-black transition hover:bg-yellow-400"
                 >
-                  Set {safeCountry.name} as Your Goal
+                  Set as Goal
                 </button>
 
                 <button
@@ -178,47 +159,65 @@ export default function CountryDynamicPage({ params }: CountryPageProps) {
               ) : null}
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-                <strong className="mb-1 block text-lg text-yellow-400">
-                  Language
-                </strong>
-                <p className="text-sm text-slate-300">{safeCountry.language}</p>
-              </div>
+            <div className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
+              <h2 className="mb-4 text-2xl font-bold text-yellow-400">
+                Quick Overview
+              </h2>
 
-              <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-                <strong className="mb-1 block text-lg text-yellow-400">
-                  Currency
-                </strong>
-                <p className="text-sm text-slate-300">{safeCountry.currency}</p>
-              </div>
+              <div className="grid gap-4">
+                <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4">
+                  <p className="text-xs text-slate-400">Language</p>
+                  <p className="mt-1 text-white">{safeCountry.language}</p>
+                </div>
 
-              <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-                <strong className="mb-1 block text-lg text-yellow-400">
-                  Capital
-                </strong>
-                <p className="text-sm text-slate-300">{safeCountry.capital}</p>
-              </div>
+                <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4">
+                  <p className="text-xs text-slate-400">Currency</p>
+                  <p className="mt-1 text-white">{safeCountry.currency}</p>
+                </div>
 
-              <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-                <strong className="mb-1 block text-lg text-yellow-400">
-                  Main Goal
-                </strong>
-                <p className="text-sm text-slate-300">{safeCountry.mainGoal}</p>
+                <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4">
+                  <p className="text-xs text-slate-400">Capital</p>
+                  <p className="mt-1 text-white">{safeCountry.capital}</p>
+                </div>
+
+                <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4">
+                  <p className="text-xs text-slate-400">Main Goal</p>
+                  <p className="mt-1 text-white">{safeCountry.mainGoal}</p>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        <CurrencyExplorer
-          countryName={safeCountry.name}
-          baseCurrency={safeCountry.currencyCode}
-          userPreferredCurrency={preferredCurrency}
-          onRateLoaded={({ rate, targetCurrency }) => {
-            setCurrentRate(rate);
-            setCurrentTargetCurrency(targetCurrency);
-          }}
-        />
+        <section className="mb-8 grid gap-6 xl:grid-cols-[1fr_1fr]">
+          <CurrencyExplorer
+            countryName={safeCountry.name}
+            baseCurrency={safeCountry.currencyCode}
+            userPreferredCurrency={preferredCurrency}
+            onRateLoaded={({ rate, targetCurrency }) => {
+              setCurrentRate(rate);
+              setCurrentTargetCurrency(targetCurrency);
+            }}
+          />
+
+          <div className="rounded-3xl border border-slate-800 bg-slate-900 p-8">
+            <h2 className="text-3xl font-bold text-yellow-400">Country Themes</h2>
+            <p className="mt-2 text-slate-400">
+              Main dimensions of the {safeCountry.name} pathway.
+            </p>
+
+            <div className="mt-6 flex flex-wrap gap-3">
+              {safeCountry.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="rounded-full border border-slate-700 bg-slate-950 px-4 py-2 text-sm text-slate-300"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        </section>
 
         <CostOfLifeExplorer
           countryName={safeCountry.name}
@@ -227,35 +226,7 @@ export default function CountryDynamicPage({ params }: CountryPageProps) {
           rate={currentRate}
           items={safeCountry.costOfLife}
         />
-
-        <section className="mb-8 rounded-3xl border border-slate-800 bg-slate-950 p-8">
-          <div className="mb-5">
-            <h2 className="text-3xl font-bold text-yellow-400">
-              Country Highlights
-            </h2>
-            <p className="text-sm text-slate-400">
-              Key elements of the {safeCountry.name} pathway.
-            </p>
-          </div>
-
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-            {safeCountry.tags.map((tag) => (
-              <div
-                key={tag}
-                className="rounded-2xl border border-slate-800 bg-slate-900 p-6"
-              >
-                <h3 className="mb-3 text-xl font-semibold text-yellow-400">
-                  {tag}
-                </h3>
-                <p className="text-sm leading-6 text-slate-300">
-                  This learning dimension helps users understand and prepare for{" "}
-                  {safeCountry.name} through focused international readiness.
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
       </div>
-    </div>
+    </main>
   );
 }
