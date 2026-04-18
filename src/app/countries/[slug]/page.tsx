@@ -154,6 +154,10 @@ export default function CountryDynamicPage({ params }: CountryPageProps) {
               {safeCountry.difficultyLevel}
             </span>
 
+            <span className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-slate-300">
+              {safeCountry.continent}
+            </span>
+
             {premiumActive ? (
               <span className="rounded-full bg-green-500/20 px-4 py-2 text-sm text-green-300">
                 Premium Active
@@ -285,13 +289,28 @@ export default function CountryDynamicPage({ params }: CountryPageProps) {
         <section className="mb-10 grid gap-6 md:grid-cols-2">
           <div className="rounded-3xl border border-white/10 bg-white/5 p-8">
             <h2 className="mb-4 text-2xl font-bold text-yellow-400">
-              Why This Country Matters
+              Work Market Positioning
             </h2>
             <p className="leading-8 text-slate-300">
-              {safeCountry.name} offers a powerful pathway for international
-              growth, cultural learning, practical readiness, and stronger
-              long-term integration through structured country-specific
-              preparation.
+              {safeCountry.workMarket}
+            </p>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-white/5 p-8">
+            <h2 className="mb-4 text-2xl font-bold text-yellow-400">
+              Integration Style
+            </h2>
+            <p className="leading-8 text-slate-300">
+              {safeCountry.integrationStyle}
+            </p>
+          </div>
+
+          <div className="rounded-3xl border border-white/10 bg-white/5 p-8">
+            <h2 className="mb-4 text-2xl font-bold text-yellow-400">
+              Language Difficulty
+            </h2>
+            <p className="leading-8 text-slate-300">
+              {safeCountry.languageDifficulty}
             </p>
           </div>
 
@@ -311,6 +330,23 @@ export default function CountryDynamicPage({ params }: CountryPageProps) {
                 Unlock Premium Insight
               </Link>
             ) : null}
+          </div>
+        </section>
+
+        <section className="mb-10 rounded-3xl border border-white/10 bg-white/5 p-8">
+          <h2 className="mb-4 text-2xl font-bold text-white">
+            Why Users Choose {safeCountry.name}
+          </h2>
+
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            {safeCountry.topReasons.map((reason) => (
+              <div
+                key={reason}
+                className="rounded-2xl border border-white/10 bg-black/10 p-5"
+              >
+                <p className="font-medium text-white">{reason}</p>
+              </div>
+            ))}
           </div>
         </section>
 
