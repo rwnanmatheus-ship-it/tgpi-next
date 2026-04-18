@@ -79,6 +79,13 @@ export default function OnboardingPage() {
                 </Link>
 
                 <Link
+                  href="/compare"
+                  className="rounded-xl border border-slate-700 bg-slate-900 px-6 py-3 font-semibold text-white transition hover:border-yellow-500"
+                >
+                  Compare Countries
+                </Link>
+
+                <Link
                   href="/dashboard"
                   className="rounded-xl border border-yellow-500/50 bg-yellow-500/5 px-6 py-3 font-semibold text-yellow-300 transition hover:bg-yellow-500/10"
                 >

@@ -109,9 +109,13 @@ export default function CountryDynamicPage() {
       <div className="mx-auto max-w-7xl">
         <section className="mb-8 rounded-3xl border border-yellow-700/20 bg-gradient-to-br from-yellow-500/10 via-slate-950 to-slate-900 p-8">
           <div className="mb-6 flex flex-wrap items-center gap-3 text-sm text-slate-400">
-            <Link href="/" className="hover:text-yellow-300">Home</Link>
+            <Link href="/" className="hover:text-yellow-300">
+              Home
+            </Link>
             <span>•</span>
-            <Link href="/countries" className="hover:text-yellow-300">Countries</Link>
+            <Link href="/countries" className="hover:text-yellow-300">
+              Countries
+            </Link>
             <span>•</span>
             <span className="text-yellow-300">{safeCountry.name}</span>
           </div>
@@ -207,12 +211,15 @@ export default function CountryDynamicPage() {
 
         <section className="mb-8 grid gap-6 xl:grid-cols-2">
           <div className="rounded-3xl border border-slate-800 bg-slate-900 p-8">
-            <h2 className="text-3xl font-bold text-yellow-400">Why this country matters</h2>
+            <h2 className="text-3xl font-bold text-yellow-400">
+              Why this country matters
+            </h2>
             <p className="mt-4 leading-8 text-slate-300">
-              {safeCountry.name} is part of the TGPI global pathway system because it combines
-              culture, opportunity, and strategic international relevance. This page is designed
-              to help users understand not only basic facts, but also how the country fits into
-              a broader global journey.
+              {safeCountry.name} is part of the TGPI global pathway system because
+              it combines culture, opportunity, and strategic international
+              relevance. This page is designed to help users understand not only
+              basic facts, but also how the country fits into a broader global
+              journey.
             </p>
           </div>
 
@@ -247,6 +254,46 @@ export default function CountryDynamicPage() {
             rate={currentRate}
             items={safeCountry.costOfLife}
           />
+        </section>
+
+        <section className="mb-8 rounded-3xl border border-yellow-700/20 bg-gradient-to-br from-yellow-500/10 via-slate-950 to-slate-900 p-8">
+          <div className="grid gap-6 lg:grid-cols-[1.1fr_.9fr] lg:items-center">
+            <div>
+              <p className="mb-3 inline-flex rounded-full border border-yellow-600/30 bg-yellow-500/5 px-4 py-2 text-sm text-yellow-200">
+                TGPI Premium Preview
+              </p>
+
+              <h2 className="text-3xl font-bold text-yellow-400">
+                Go deeper into {safeCountry.name}
+              </h2>
+
+              <p className="mt-4 max-w-3xl text-slate-300">
+                Unlock a more advanced layer of country intelligence with deeper
+                pathway guidance, expanded comparisons, and a stronger strategic
+                shortlist experience.
+              </p>
+            </div>
+
+            <div className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
+              <h3 className="text-xl font-bold text-yellow-400">
+                Premium unlocks
+              </h3>
+
+              <ul className="mt-4 space-y-3 text-sm text-slate-300">
+                <li>• Expanded country comparison</li>
+                <li>• Stronger personalization</li>
+                <li>• More advanced pathway insights</li>
+                <li>• Premium shortlist evolution</li>
+              </ul>
+
+              <Link
+                href="/upgrade"
+                className="mt-6 inline-block rounded-xl bg-yellow-500 px-5 py-3 font-semibold text-black transition hover:bg-yellow-400"
+              >
+                Unlock Premium
+              </Link>
+            </div>
+          </div>
         </section>
       </div>
     </main>
