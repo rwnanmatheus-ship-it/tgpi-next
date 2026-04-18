@@ -1,3 +1,4 @@
+import BrandSeal from "@/components/BrandSeal";
 import type { Metadata } from "next";
 import Link from "next/link";
 import "./globals.css";
@@ -83,6 +84,9 @@ export default function RootLayout({
             </div>
           </div>
         </footer>
+<footer className="mt-20 border-t border-slate-800 py-10">
+  <BrandSeal />
+</footer>
       </body>
     </html>
   );

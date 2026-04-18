@@ -47,22 +47,30 @@ export default function HomePage() {
 
   return (
     <main className="min-h-screen bg-slate-950 text-white">
-      <section className="border-b border-slate-800 px-6 py-20">
-        <div className="mx-auto max-w-7xl">
-          <div className="grid gap-10 lg:grid-cols-[1.3fr_.7fr] lg:items-center">
+      <section className="relative overflow-hidden border-b border-slate-800 px-6 py-24">
+        <div className="absolute inset-0">
+          <img
+            src="/brand/identity.png"
+            alt="TGPI Identity"
+            className="h-full w-full object-cover opacity-20"
+          />
+          <div className="absolute inset-0 bg-slate-950/80" />
+        </div>
+
+        <div className="relative z-10 mx-auto max-w-7xl">
+          <div className="grid gap-10 lg:grid-cols-[1.25fr_.75fr] lg:items-center">
             <div>
               <p className="mb-4 inline-block rounded-full border border-yellow-600/30 bg-yellow-500/5 px-4 py-2 text-sm text-yellow-200">
                 The Global Polymath Institute
               </p>
 
               <h1 className="max-w-4xl text-4xl font-bold leading-tight md:text-6xl">
-                Build global readiness across countries, culture, currency, and
-                opportunity.
+                Explore countries. Build global intelligence. Transform your future.
               </h1>
 
               <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-300">
-                TGPI combines country discovery, practical comparison, and
-                premium global learning into one structured platform.
+                TGPI combines country discovery, practical comparison, and premium
+                global learning into one structured and scalable experience.
               </p>
 
               <div className="mt-8 flex flex-wrap gap-4">
@@ -74,34 +82,23 @@ export default function HomePage() {
                 </Link>
 
                 <Link
-                  href="/premium"
+                  href="/upgrade"
                   className="rounded-xl border border-yellow-500/60 bg-yellow-500/5 px-6 py-3 font-semibold text-yellow-300 transition hover:bg-yellow-500/10"
                 >
-                  View Premium
+                  Go Premium
                 </Link>
               </div>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-                <strong className="block text-3xl text-yellow-400">195</strong>
-                <p className="mt-2 text-sm text-slate-300">Country vision</p>
-              </div>
-
-              <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-                <strong className="block text-3xl text-yellow-400">Free + Premium</strong>
-                <p className="mt-2 text-sm text-slate-300">Clear product structure</p>
-              </div>
-
-              <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-                <strong className="block text-3xl text-yellow-400">Live</strong>
-                <p className="mt-2 text-sm text-slate-300">Currency and cost context</p>
-              </div>
-
-              <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-                <strong className="block text-3xl text-yellow-400">Global</strong>
-                <p className="mt-2 text-sm text-slate-300">Premium UX direction</p>
-              </div>
+            <div className="flex flex-col items-center rounded-3xl border border-yellow-700/20 bg-slate-950/70 p-8 text-center backdrop-blur-sm">
+              <img
+                src="/brand/logo.png"
+                alt="TGPI Seal"
+                className="mb-6 w-40 md:w-52"
+              />
+              <p className="max-w-sm text-sm leading-7 text-slate-300">
+                Where Knowledge Meets Global Recognition
+              </p>
             </div>
           </div>
         </div>
@@ -115,7 +112,7 @@ export default function HomePage() {
               { title: "Cost of Life", text: "See everyday reference prices", href: "/countries" },
               { title: "Currency", text: "Compare practical value", href: "/countries" },
               { title: "Dashboard", text: "Track your global journey", href: "/dashboard" },
-              { title: "Premium", text: "Unlock advanced access", href: "/premium" },
+              { title: "Premium", text: "Unlock advanced access", href: "/upgrade" },
             ].map((item) => (
               <Link
                 key={item.title}
@@ -125,35 +122,6 @@ export default function HomePage() {
                 <h2 className="text-lg font-semibold text-yellow-400">{item.title}</h2>
                 <p className="mt-2 text-sm text-slate-300">{item.text}</p>
               </Link>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="px-6 py-6">
-        <div className="mx-auto max-w-7xl">
-          <div className="mb-6">
-            <h2 className="text-3xl font-bold text-yellow-400">How TGPI Works</h2>
-            <p className="mt-2 text-slate-300">
-              Explore countries, compare practical realities, save your path, and
-              evolve into a premium global experience.
-            </p>
-          </div>
-
-          <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-            {[
-              "Choose a country",
-              "Understand language, culture, and costs",
-              "Save your favorites and continue later",
-              "Unlock premium depth and personalization",
-            ].map((step, index) => (
-              <div
-                key={step}
-                className="rounded-2xl border border-slate-800 bg-slate-900 p-6"
-              >
-                <p className="mb-3 text-sm text-yellow-300">Step {index + 1}</p>
-                <h3 className="text-lg font-semibold text-white">{step}</h3>
-              </div>
             ))}
           </div>
         </div>
@@ -279,40 +247,12 @@ export default function HomePage() {
                 <li>Expanded premium pathways</li>
               </ul>
               <Link
-                href="/premium"
+                href="/upgrade"
                 className="mt-6 inline-block rounded-xl bg-yellow-500 px-6 py-3 font-semibold text-black transition hover:bg-yellow-400"
               >
                 Unlock Premium
               </Link>
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="px-6 py-16">
-        <div className="mx-auto max-w-7xl rounded-3xl border border-yellow-700/20 bg-gradient-to-r from-yellow-500/10 to-slate-900 p-10 text-center">
-          <h2 className="text-3xl font-bold text-yellow-400 md:text-4xl">
-            A premium global platform in construction.
-          </h2>
-          <p className="mx-auto mt-4 max-w-3xl text-slate-300">
-            TGPI is being built to combine country intelligence, cultural depth,
-            and structured global readiness in one scalable experience.
-          </p>
-
-          <div className="mt-8 flex flex-wrap justify-center gap-4">
-            <Link
-              href="/countries"
-              className="rounded-xl bg-yellow-500 px-6 py-3 font-semibold text-black transition hover:bg-yellow-400"
-            >
-              Start Exploring
-            </Link>
-
-            <Link
-              href="/dashboard"
-              className="rounded-xl border border-yellow-500/60 bg-yellow-500/5 px-6 py-3 font-semibold text-yellow-300 transition hover:bg-yellow-500/10"
-            >
-              Open Dashboard
-            </Link>
           </div>
         </div>
       </section>

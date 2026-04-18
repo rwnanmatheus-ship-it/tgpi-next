@@ -1,48 +1,29 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { countries } from "@/data/countries";
+import { auth } from "@/lib/firebase";
+import { getUserMemory, type UserMemory } from "@/lib/user-memory";
 import { onAuthStateChanged } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
 import Link from "next/link";
-import { auth, db } from "@/lib/firebase";
-import { defaultUserProfile, UserProfile } from "@/lib/profile";
-import { getPlanLabel, isPremium } from "@/lib/plan";
-import { getUserBadges } from "@/lib/badges";
-
-function getNextLevelXP(level: number) {
-  return level * 100;
-}
-
-function getCurrentLevelBaseXP(level: number) {
-  return Math.max(0, (level - 1) * 100);
-}
-
-type Quest = {
-  title: string;
-  concluded: boolean;
-  reward: number;
-};
+import { useEffect, useMemo, useState } from "react";
 
 export default function DashboardPage() {
   const [loading, setLoading] = useState(true);
-  const [profile, setProfile] = useState<UserProfile>(defaultUserProfile());
+  const [memory, setMemory] = useState<UserMemory | null>(null);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (!user) {
-        window.location.href = "/login";
+        setMemory(null);
+        setLoading(false);
         return;
       }
 
       try {
-        const ref = doc(db, "users", user.uid);
-        const snap = await getDoc(ref);
-
-        if (snap.exists()) {
-          setProfile(snap.data() as UserProfile);
-        }
+        const data = await getUserMemory(user.uid);
+        setMemory(data);
       } catch (error) {
-        console.error("Error loading dashboard profile:", error);
+        console.error("Could not load dashboard memory:", error);
       } finally {
         setLoading(false);
       }
@@ -51,403 +32,212 @@ export default function DashboardPage() {
     return () => unsubscribe();
   }, []);
 
-  const currentLevelBaseXP = useMemo(
-    () => getCurrentLevelBaseXP(profile.level),
-    [profile.level]
-  );
-
-  const nextLevelXP = useMemo(
-    () => getNextLevelXP(profile.level),
-    [profile.level]
-  );
-
-  const xpInsideLevel = Math.max(0, profile.xp - currentLevelBaseXP);
-  const xpNeededInsideLevel = Math.max(1, nextLevelXP - currentLevelBaseXP);
-  const levelProgressPercent = Math.min(
-    100,
-    Math.round((xpInsideLevel / xpNeededInsideLevel) * 100)
-  );
-
-  const quests: Quest[] = [
-    {
-      title: "Complete seu perfil",
-      concluded: !!profile.completedActions?.includes("save_profile"),
-      reward: 20,
-    },
-    {
-      title: "Defina um país como meta",
-      concluded: !!profile.completedActions?.includes("set_country_goal"),
-      reward: 15,
-    },
-    {
-      title: "Salve pelo menos um país favorito",
-      concluded: !!profile.completedActions?.includes("toggle_favorite"),
-      reward: 10,
-    },
-    {
-      title: "Salve uma preferência de moeda",
-      concluded: !!profile.completedActions?.includes("save_currency_usage"),
-      reward: 5,
-    },
-  ];
-
-  const completedQuestCount = quests.filter((quest) => quest.concluded).length;
-  const badges = getUserBadges(profile);
-  const unlockedBadges = badges.filter((badge) => badge.unlocked);
-
-  if (loading) {
-    return (
-      <main className="min-h-screen bg-[#0b0f19] px-6 py-14 text-white">
-        <div className="mx-auto max-w-7xl text-slate-300">
-          Loading your dashboard...
-        </div>
-      </main>
+  const favoriteCountries = useMemo(() => {
+    if (!memory?.favoriteCountries?.length) return [];
+    return countries.filter((country) =>
+      memory.favoriteCountries?.includes(country.slug)
     );
-  }
+  }, [memory]);
+
+  const lastVisitedCountry = useMemo(() => {
+    if (!memory?.lastVisitedCountry) return null;
+    return countries.find((country) => country.slug === memory.lastVisitedCountry) || null;
+  }, [memory]);
+
+  const recentCountries = useMemo(() => {
+    if (!memory?.recentCountryViews?.length) return [];
+    return memory.recentCountryViews
+      .map((item) => countries.find((country) => country.slug === item.slug))
+      .filter(Boolean);
+  }, [memory]);
 
   return (
-    <main className="min-h-screen bg-[#0b0f19] px-6 py-14 text-white">
+    <main className="min-h-screen bg-slate-950 px-6 py-12 text-white">
       <div className="mx-auto max-w-7xl">
-        <section className="mb-10 rounded-3xl border border-yellow-500/20 bg-gradient-to-br from-yellow-500/10 to-white/5 p-8">
-          <div className="mb-4 inline-flex rounded-full border border-yellow-500/20 bg-yellow-500/10 px-4 py-2 text-sm text-yellow-300">
-            Global Progress Dashboard
-          </div>
+        <section className="mb-10 rounded-3xl border border-yellow-700/20 bg-gradient-to-br from-yellow-500/10 to-slate-900 p-8">
+          <p className="mb-4 inline-block rounded-full border border-yellow-600/30 bg-yellow-500/5 px-4 py-2 text-sm text-yellow-200">
+            TGPI Dashboard
+          </p>
 
-          <h1 className="mb-4 text-4xl font-bold md:text-5xl">
-            Your Global Journey
+          <h1 className="text-4xl font-bold md:text-5xl">
+            Your global journey, organized.
           </h1>
 
-          <div className="mb-6 flex flex-wrap items-center gap-3">
-            <span className="rounded-full border border-white/10 bg-white/5 px-4 py-1 text-sm">
-              {getPlanLabel(profile.membershipPlan)}
-            </span>
-
-            {!isPremium(profile.membershipPlan) ? (
-              <span className="rounded-full bg-yellow-500/20 px-3 py-1 text-xs text-yellow-300">
-                Upgrade available
-              </span>
-            ) : (
-              <span className="rounded-full bg-green-500/20 px-3 py-1 text-xs text-green-300">
-                Premium active
-              </span>
-            )}
-          </div>
-
-          <p className="max-w-3xl text-lg leading-8 text-slate-300">
-            Track your country focus, progress, favorites, quests, badges, and
-            global learning activity from one premium dashboard.
+          <p className="mt-4 max-w-3xl text-slate-300">
+            Continue your pathway, revisit countries, and build a more structured
+            TGPI experience.
           </p>
         </section>
 
-        {!isPremium(profile.membershipPlan) ? (
-          <section className="mb-10 rounded-3xl border border-yellow-500/20 bg-gradient-to-r from-yellow-500/10 to-white/5 p-6">
-            <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-              <div>
-                <h2 className="text-2xl font-bold text-white">
-                  Unlock Premium Features
+        <section className="mb-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+          <Link
+            href="/countries"
+            className="rounded-2xl border border-slate-800 bg-slate-900 p-6 transition hover:border-yellow-500"
+          >
+            <h2 className="text-xl font-semibold text-yellow-400">Explore Countries</h2>
+            <p className="mt-2 text-sm text-slate-300">
+              Open the country system and continue exploring.
+            </p>
+          </Link>
+
+          <Link
+            href="/upgrade"
+            className="rounded-2xl border border-slate-800 bg-slate-900 p-6 transition hover:border-yellow-500"
+          >
+            <h2 className="text-xl font-semibold text-yellow-400">Upgrade</h2>
+            <p className="mt-2 text-sm text-slate-300">
+              Unlock deeper personalization and premium pathways.
+            </p>
+          </Link>
+
+          <Link
+            href="/profile"
+            className="rounded-2xl border border-slate-800 bg-slate-900 p-6 transition hover:border-yellow-500"
+          >
+            <h2 className="text-xl font-semibold text-yellow-400">Profile</h2>
+            <p className="mt-2 text-sm text-slate-300">
+              Manage account preferences and personal data.
+            </p>
+          </Link>
+
+          <Link
+            href="/countries"
+            className="rounded-2xl border border-slate-800 bg-slate-900 p-6 transition hover:border-yellow-500"
+          >
+            <h2 className="text-xl font-semibold text-yellow-400">Compare Paths</h2>
+            <p className="mt-2 text-sm text-slate-300">
+              Explore new directions through the country interface.
+            </p>
+          </Link>
+        </section>
+
+        {loading ? (
+          <div className="rounded-3xl border border-slate-800 bg-slate-900 p-8">
+            Loading dashboard...
+          </div>
+        ) : !memory ? (
+          <div className="rounded-3xl border border-slate-800 bg-slate-900 p-8">
+            <h2 className="text-2xl font-bold text-yellow-400">Sign in required</h2>
+            <p className="mt-3 text-slate-300">
+              Sign in to access your personal TGPI dashboard.
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-10">
+            <section className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+              <div className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
+                <h2 className="mb-3 text-2xl font-bold text-yellow-400">
+                  Last Country
                 </h2>
-                <p className="mt-2 max-w-2xl text-slate-300">
-                  Upgrade to save more countries, unlock deeper platform
-                  experiences, and prepare for future AI-driven global tools.
-                </p>
-              </div>
-
-              <Link
-                href="/upgrade"
-                className="inline-flex w-fit items-center justify-center rounded-xl bg-yellow-500 px-6 py-3 font-semibold text-black transition hover:bg-yellow-400"
-              >
-                Upgrade Plan
-              </Link>
-            </div>
-          </section>
-        ) : null}
-
-        <section className="mb-10 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-            <p className="mb-2 text-xs uppercase tracking-[0.18em] text-slate-400">
-              Country Focus
-            </p>
-            <p className="text-2xl font-bold text-white">
-              {profile.countryInterest || "Not set"}
-            </p>
-          </div>
-
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-            <p className="mb-2 text-xs uppercase tracking-[0.18em] text-slate-400">
-              Main Goal
-            </p>
-            <p className="text-2xl font-bold text-white">
-              {profile.mainGoal || "Not set"}
-            </p>
-          </div>
-
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-            <p className="mb-2 text-xs uppercase tracking-[0.18em] text-slate-400">
-              Preferred Currency
-            </p>
-            <p className="text-2xl font-bold text-white">
-              {profile.preferredCurrency || "USD"}
-            </p>
-          </div>
-
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
-            <p className="mb-2 text-xs uppercase tracking-[0.18em] text-slate-400">
-              Preferred Language
-            </p>
-            <p className="text-2xl font-bold text-white">
-              {profile.preferredLanguage || "English"}
-            </p>
-          </div>
-        </section>
-
-        <section className="mb-10 grid gap-6 lg:grid-cols-[1.15fr_.85fr]">
-          <div className="rounded-3xl border border-yellow-500/20 bg-gradient-to-br from-yellow-500/10 to-white/5 p-8">
-            <div className="mb-5 flex flex-wrap items-center justify-between gap-4">
-              <div>
-                <h2 className="text-2xl font-bold text-white">XP Progress</h2>
-                <p className="mt-2 text-sm text-slate-400">
-                  Level up your global readiness with real actions.
-                </p>
-              </div>
-
-              <div className="rounded-full border border-yellow-500/20 bg-yellow-500/10 px-4 py-2 text-sm font-semibold text-yellow-300">
-                Level {profile.level}
-              </div>
-            </div>
-
-            <div className="mb-3 h-5 w-full rounded-full bg-white/10">
-              <div
-                className="h-5 rounded-full bg-yellow-500 transition-all"
-                style={{ width: `${levelProgressPercent}%` }}
-              />
-            </div>
-
-            <div className="mb-8 flex flex-wrap items-center justify-between gap-3 text-sm text-slate-300">
-              <span>{xpInsideLevel} XP in this level</span>
-              <span>{Math.max(0, nextLevelXP - profile.xp)} XP to next level</span>
-            </div>
-
-            <div className="grid gap-4 sm:grid-cols-3">
-              <div className="rounded-2xl border border-white/10 bg-black/10 p-5">
-                <p className="mb-2 text-xs uppercase tracking-wide text-slate-400">
-                  Total XP
-                </p>
-                <p className="text-3xl font-bold text-yellow-400">
-                  {profile.xp}
-                </p>
-              </div>
-
-              <div className="rounded-2xl border border-white/10 bg-black/10 p-5">
-                <p className="mb-2 text-xs uppercase tracking-wide text-slate-400">
-                  Level
-                </p>
-                <p className="text-3xl font-bold text-yellow-400">
-                  {profile.level}
-                </p>
-              </div>
-
-              <div className="rounded-2xl border border-white/10 bg-black/10 p-5">
-                <p className="mb-2 text-xs uppercase tracking-wide text-slate-400">
-                  Streak
-                </p>
-                <p className="text-3xl font-bold text-yellow-400">
-                  {profile.streak}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-8">
-            <h2 className="mb-2 text-2xl font-bold text-white">
-              Quest Status
-            </h2>
-            <p className="mb-6 text-sm text-slate-400">
-              Complete real actions to unlock your early progress.
-            </p>
-
-            <div className="mb-6 rounded-2xl border border-white/10 bg-black/10 p-4">
-              <p className="text-sm text-slate-400">Completed Quests</p>
-              <p className="mt-2 text-3xl font-bold text-yellow-400">
-                {completedQuestCount}/{quests.length}
-              </p>
-            </div>
-
-            <div className="space-y-4">
-              {quests.map((quest) => (
-                <div
-                  key={quest.title}
-                  className="rounded-2xl border border-white/10 bg-black/10 p-4"
-                >
-                  <div className="mb-2 flex items-center justify-between gap-3">
-                    <p className="font-medium text-white">{quest.title}</p>
-                    <span
-                      className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                        quest.concluded
-                          ? "bg-green-500/15 text-green-300"
-                          : "bg-yellow-500/15 text-yellow-300"
-                      }`}
-                    >
-                      {quest.concluded ? "Completed" : "Pending"}
-                    </span>
-                  </div>
-                  <p className="text-sm text-slate-400">
-                    Reward: +{quest.reward} XP
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="mb-10 rounded-3xl border border-white/10 bg-white/5 p-8">
-          <div className="mb-5 flex items-center justify-between">
-            <h2 className="text-2xl font-bold text-white">Badges & Achievements</h2>
-            <span className="rounded-full border border-yellow-500/20 bg-yellow-500/10 px-4 py-2 text-sm text-yellow-300">
-              {unlockedBadges.length}/{badges.length} unlocked
-            </span>
-          </div>
-
-          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {badges.map((badge) => (
-              <div
-                key={badge.id}
-                className={`rounded-3xl border p-6 ${
-                  badge.unlocked
-                    ? "border-yellow-500/30 bg-yellow-500/10"
-                    : "border-white/10 bg-black/10"
-                }`}
-              >
-                <div className="mb-3 flex items-center justify-between gap-3">
-                  <h3 className="text-lg font-semibold text-white">
-                    {badge.title}
-                  </h3>
-
-                  <span
-                    className={`rounded-full px-3 py-1 text-xs font-semibold ${
-                      badge.unlocked
-                        ? "bg-green-500/15 text-green-300"
-                        : "bg-white/10 text-slate-400"
-                    }`}
-                  >
-                    {badge.unlocked ? "Unlocked" : "Locked"}
-                  </span>
-                </div>
-
-                <p className="text-sm leading-7 text-slate-300">
-                  {badge.description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="mb-10 grid gap-6 lg:grid-cols-[1fr_1fr]">
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-8">
-            <h2 className="mb-5 text-2xl font-bold text-white">
-              Recent Signals
-            </h2>
-
-            <div className="space-y-4">
-              <div className="rounded-2xl border border-white/10 bg-black/10 p-4">
-                <p className="mb-2 text-xs uppercase tracking-wide text-slate-400">
-                  Last Visited Country
-                </p>
-                <p className="font-semibold text-white">
-                  {profile.lastVisitedCountry || "No country visited yet"}
-                </p>
-              </div>
-
-              <div className="rounded-2xl border border-white/10 bg-black/10 p-4">
-                <p className="mb-2 text-xs uppercase tracking-wide text-slate-400">
-                  Last Currency Target
-                </p>
-                <p className="font-semibold text-white">
-                  {profile.lastCurrencyTarget || "USD"}
-                </p>
-              </div>
-
-              <div className="rounded-2xl border border-white/10 bg-black/10 p-4">
-                <p className="mb-2 text-xs uppercase tracking-wide text-slate-400">
-                  Last Converted Amount
-                </p>
-                <p className="font-semibold text-white">
-                  {profile.lastConvertedAmount || 0}
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="rounded-3xl border border-white/10 bg-white/5 p-8">
-            <div className="mb-5 flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-white">
-                Favorite Countries
-              </h2>
-
-              <Link
-                href="/countries"
-                className="rounded-xl border border-yellow-500/20 bg-yellow-500/10 px-4 py-2 text-sm font-medium text-yellow-300 transition hover:bg-yellow-500/20"
-              >
-                Explore More
-              </Link>
-            </div>
-
-            <div className="grid gap-4 md:grid-cols-2">
-              {profile.favorites?.length ? (
-                profile.favorites.map((favorite) => (
-                  <div
-                    key={favorite}
-                    className="rounded-2xl border border-white/10 bg-black/10 p-5"
-                  >
-                    <p className="text-lg font-semibold text-white">
-                      {favorite}
+                {lastVisitedCountry ? (
+                  <>
+                    <p className="text-lg text-white">
+                      {lastVisitedCountry.emoji} {lastVisitedCountry.name}
                     </p>
+                    <p className="mt-2 text-sm text-slate-400">
+                      Continue from your latest country interaction.
+                    </p>
+                    <Link
+                      href={`/countries/${lastVisitedCountry.slug}`}
+                      className="mt-5 inline-block text-sm font-semibold text-yellow-300"
+                    >
+                      Open country →
+                    </Link>
+                  </>
+                ) : (
+                  <p className="text-slate-400">No recent country yet.</p>
+                )}
+              </div>
+
+              <div className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
+                <h2 className="mb-3 text-2xl font-bold text-yellow-400">
+                  Your Plan
+                </h2>
+                <p className="text-lg text-white">
+                  {memory.plan === "premium" ? "Premium Access" : "Free Access"}
+                </p>
+                <p className="mt-2 text-sm text-slate-400">
+                  Preferred currency: {memory.preferredCurrency || "USD"}
+                </p>
+                <Link
+                  href="/upgrade"
+                  className="mt-5 inline-block text-sm font-semibold text-yellow-300"
+                >
+                  Manage upgrade →
+                </Link>
+              </div>
+
+              <div className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
+                <h2 className="mb-3 text-2xl font-bold text-yellow-400">
+                  Saved Favorites
+                </h2>
+                <p className="text-lg text-white">
+                  {favoriteCountries.length} country saved
+                  {favoriteCountries.length === 1 ? "" : "ies"}
+                </p>
+                <p className="mt-2 text-sm text-slate-400">
+                  Build your own global shortlist.
+                </p>
+              </div>
+            </section>
+
+            <section className="grid gap-5 xl:grid-cols-2">
+              <div className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
+                <h2 className="mb-5 text-2xl font-bold text-yellow-400">
+                  Favorites
+                </h2>
+
+                {favoriteCountries.length ? (
+                  <div className="space-y-3">
+                    {favoriteCountries.map((country) => (
+                      <Link
+                        key={country.slug}
+                        href={`/countries/${country.slug}`}
+                        className="flex items-center justify-between rounded-2xl border border-slate-800 bg-slate-950 px-4 py-3 transition hover:border-yellow-500"
+                      >
+                        <span className="text-slate-200">
+                          {country.emoji} {country.name}
+                        </span>
+                        <span className="text-sm text-yellow-300">Open →</span>
+                      </Link>
+                    ))}
                   </div>
-                ))
-              ) : (
-                <div className="rounded-2xl border border-white/10 bg-black/10 p-5 text-slate-400">
-                  No favorite countries saved yet.
-                </div>
-              )}
-            </div>
+                ) : (
+                  <p className="text-slate-400">No favorites saved yet.</p>
+                )}
+              </div>
+
+              <div className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
+                <h2 className="mb-5 text-2xl font-bold text-yellow-400">
+                  Recent Countries
+                </h2>
+
+                {recentCountries.length ? (
+                  <div className="space-y-3">
+                    {recentCountries.map((country) => {
+                      if (!country) return null;
+
+                      return (
+                        <Link
+                          key={country.slug}
+                          href={`/countries/${country.slug}`}
+                          className="flex items-center justify-between rounded-2xl border border-slate-800 bg-slate-950 px-4 py-3 transition hover:border-yellow-500"
+                        >
+                          <span className="text-slate-200">
+                            {country.emoji} {country.name}
+                          </span>
+                          <span className="text-sm text-yellow-300">Return →</span>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                ) : (
+                  <p className="text-slate-400">No recent countries yet.</p>
+                )}
+              </div>
+            </section>
           </div>
-        </section>
-
-        <section className="rounded-3xl border border-yellow-500/20 bg-gradient-to-br from-yellow-500/10 to-white/5 p-8">
-          <h2 className="mb-4 text-2xl font-bold text-white">
-            Continue Your Global Path
-          </h2>
-
-          <p className="mb-6 max-w-3xl leading-8 text-slate-300">
-            Keep exploring countries, updating your profile, and using the
-            platform to unlock new progress and build a stronger global
-            readiness profile.
-          </p>
-
-          <div className="flex flex-wrap gap-4">
-            <Link
-              href="/countries"
-              className="rounded-xl bg-yellow-500 px-6 py-3 font-semibold text-black transition hover:bg-yellow-400"
-            >
-              Explore Countries
-            </Link>
-
-            <Link
-              href="/profile"
-              className="rounded-xl border border-white/15 bg-white/5 px-6 py-3 font-semibold text-white transition hover:bg-white/10"
-            >
-              Edit Profile
-            </Link>
-
-            {!isPremium(profile.membershipPlan) ? (
-              <Link
-                href="/upgrade"
-                className="rounded-xl border border-yellow-500/30 bg-yellow-500/10 px-6 py-3 font-semibold text-yellow-300 transition hover:bg-yellow-500/20"
-              >
-                Upgrade Plan
-              </Link>
-            ) : null}
-          </div>
-        </section>
+        )}
       </div>
     </main>
   );
