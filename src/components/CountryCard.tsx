@@ -9,7 +9,7 @@ export default function CountryCard({ country }: CountryCardProps) {
   return (
     <Link
       href={`/countries/${country.slug}`}
-      className="group block overflow-hidden rounded-3xl border border-slate-800 bg-gradient-to-b from-slate-900 to-slate-950 transition hover:-translate-y-1 hover:border-yellow-500"
+      className="group block overflow-hidden rounded-3xl border border-slate-800 bg-gradient-to-b from-slate-900 to-slate-950 transition duration-200 hover:-translate-y-1 hover:border-yellow-500"
     >
       <div className="border-b border-slate-800 p-6">
         <div className="mb-4 flex items-start justify-between gap-4">
@@ -22,7 +22,7 @@ export default function CountryCard({ country }: CountryCardProps) {
           </div>
 
           <span className="rounded-full border border-yellow-700/30 bg-yellow-500/5 px-3 py-1 text-xs text-yellow-300">
-            View Pathway
+            Open
           </span>
         </div>
 
@@ -48,24 +48,33 @@ export default function CountryCard({ country }: CountryCardProps) {
         </div>
 
         <div className="rounded-2xl border border-slate-800 bg-slate-900 p-4">
-          <p className="text-xs text-slate-400">Goal</p>
+          <p className="text-xs text-slate-400">Main Goal</p>
           <p className="mt-1 text-sm text-white">{country.mainGoal}</p>
         </div>
       </div>
 
-      <div className="flex flex-wrap gap-2 px-6 pb-4">
-        {country.tags.slice(0, 3).map((tag) => (
-          <span
-            key={tag}
-            className="rounded-full border border-slate-700 bg-slate-900 px-3 py-1 text-xs text-slate-300"
-          >
-            {tag}
-          </span>
-        ))}
+      <div className="px-6 pb-4">
+        <div className="mb-3 flex flex-wrap gap-2">
+          {country.tags.slice(0, 3).map((tag) => (
+            <span
+              key={tag}
+              className="rounded-full border border-slate-700 bg-slate-900 px-3 py-1 text-xs text-slate-300"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+
+        <div className="rounded-2xl border border-yellow-700/20 bg-yellow-500/5 p-4">
+          <p className="text-xs text-slate-400">Preview</p>
+          <p className="mt-1 text-sm text-slate-200">
+            Open this page to view detailed country context, cost of life, and currency exploration.
+          </p>
+        </div>
       </div>
 
       <div className="px-6 pb-6 text-sm font-semibold text-yellow-300 group-hover:text-yellow-200">
-        Open country page →
+        View detailed country page →
       </div>
     </Link>
   );

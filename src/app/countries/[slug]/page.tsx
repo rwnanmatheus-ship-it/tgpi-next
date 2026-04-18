@@ -107,7 +107,7 @@ export default function CountryDynamicPage() {
   return (
     <main className="min-h-screen bg-slate-950 px-6 py-12 text-white">
       <div className="mx-auto max-w-7xl">
-        <section className="mb-8 overflow-hidden rounded-3xl border border-yellow-700/20 bg-gradient-to-br from-yellow-500/10 via-slate-950 to-slate-900 p-8">
+        <section className="mb-8 rounded-3xl border border-yellow-700/20 bg-gradient-to-br from-yellow-500/10 via-slate-950 to-slate-900 p-8">
           <div className="mb-6 flex flex-wrap items-center gap-3 text-sm text-slate-400">
             <Link href="/" className="hover:text-yellow-300">Home</Link>
             <span>•</span>
@@ -116,7 +116,7 @@ export default function CountryDynamicPage() {
             <span className="text-yellow-300">{safeCountry.name}</span>
           </div>
 
-          <div className="grid gap-8 lg:grid-cols-[1.3fr_.7fr] lg:items-center">
+          <div className="grid gap-8 lg:grid-cols-[1.35fr_.65fr] lg:items-start">
             <div>
               <p className="mb-4 inline-block rounded-full border border-yellow-600/30 bg-yellow-500/5 px-4 py-2 text-sm text-yellow-200">
                 {safeCountry.region} • {safeCountry.mainGoal}
@@ -157,14 +157,25 @@ export default function CountryDynamicPage() {
               {favoriteMessage ? (
                 <p className="mt-4 text-sm text-yellow-300">{favoriteMessage}</p>
               ) : null}
+
+              <div className="mt-8 flex flex-wrap gap-3">
+                {safeCountry.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full border border-slate-700 bg-slate-900 px-4 py-2 text-sm text-slate-300"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
             </div>
 
             <div className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-              <h2 className="mb-4 text-2xl font-bold text-yellow-400">
-                Quick Overview
+              <h2 className="mb-5 text-2xl font-bold text-yellow-400">
+                Country Snapshot
               </h2>
 
-              <div className="grid gap-4">
+              <div className="space-y-4">
                 <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4">
                   <p className="text-xs text-slate-400">Language</p>
                   <p className="mt-1 text-white">{safeCountry.language}</p>
@@ -184,12 +195,39 @@ export default function CountryDynamicPage() {
                   <p className="text-xs text-slate-400">Main Goal</p>
                   <p className="mt-1 text-white">{safeCountry.mainGoal}</p>
                 </div>
+
+                <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4">
+                  <p className="text-xs text-slate-400">Region</p>
+                  <p className="mt-1 text-white">{safeCountry.region}</p>
+                </div>
               </div>
             </div>
           </div>
         </section>
 
-        <section className="mb-8 grid gap-6 xl:grid-cols-[1fr_1fr]">
+        <section className="mb-8 grid gap-6 xl:grid-cols-2">
+          <div className="rounded-3xl border border-slate-800 bg-slate-900 p-8">
+            <h2 className="text-3xl font-bold text-yellow-400">Why this country matters</h2>
+            <p className="mt-4 leading-8 text-slate-300">
+              {safeCountry.name} is part of the TGPI global pathway system because it combines
+              culture, opportunity, and strategic international relevance. This page is designed
+              to help users understand not only basic facts, but also how the country fits into
+              a broader global journey.
+            </p>
+          </div>
+
+          <div className="rounded-3xl border border-slate-800 bg-slate-900 p-8">
+            <h2 className="text-3xl font-bold text-yellow-400">Best for</h2>
+            <ul className="mt-4 space-y-3 text-slate-300">
+              <li>• Users exploring {safeCountry.mainGoal.toLowerCase()} opportunities</li>
+              <li>• Users who want stronger cultural and practical readiness</li>
+              <li>• People comparing cost, language, and everyday life</li>
+              <li>• Building a premium international shortlist</li>
+            </ul>
+          </div>
+        </section>
+
+        <section className="mb-8">
           <CurrencyExplorer
             countryName={safeCountry.name}
             baseCurrency={safeCountry.currencyCode}
@@ -199,33 +237,17 @@ export default function CountryDynamicPage() {
               setCurrentTargetCurrency(targetCurrency);
             }}
           />
-
-          <div className="rounded-3xl border border-slate-800 bg-slate-900 p-8">
-            <h2 className="text-3xl font-bold text-yellow-400">Country Themes</h2>
-            <p className="mt-2 text-slate-400">
-              Main dimensions of the {safeCountry.name} pathway.
-            </p>
-
-            <div className="mt-6 flex flex-wrap gap-3">
-              {safeCountry.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="rounded-full border border-slate-700 bg-slate-950 px-4 py-2 text-sm text-slate-300"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
         </section>
 
-        <CostOfLifeExplorer
-          countryName={safeCountry.name}
-          baseCurrency={safeCountry.currencyCode}
-          targetCurrency={currentTargetCurrency}
-          rate={currentRate}
-          items={safeCountry.costOfLife}
-        />
+        <section className="mb-8">
+          <CostOfLifeExplorer
+            countryName={safeCountry.name}
+            baseCurrency={safeCountry.currencyCode}
+            targetCurrency={currentTargetCurrency}
+            rate={currentRate}
+            items={safeCountry.costOfLife}
+          />
+        </section>
       </div>
     </main>
   );

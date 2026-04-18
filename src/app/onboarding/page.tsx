@@ -1,104 +1,173 @@
 "use client";
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { doc, updateDoc } from "firebase/firestore";
-import { auth, db } from "@/lib/firebase";
+import CountryCard from "@/components/CountryCard";
+import { countries } from "@/data/countries";
+import Link from "next/link";
+import { useMemo, useState } from "react";
+
+const goalOptions = [
+  "All",
+  "Work abroad",
+  "Live abroad",
+  "Cultural learning",
+  "Study abroad",
+  "Digital nomad",
+  "Business expansion",
+];
+
+const regionOptions = [
+  "All",
+  "Asia",
+  "Europe",
+  "North America",
+  "South America",
+  "Africa",
+  "Middle East",
+  "Oceania",
+];
 
 export default function OnboardingPage() {
-  const router = useRouter();
+  const [search, setSearch] = useState("");
+  const [goal, setGoal] = useState("All");
+  const [region, setRegion] = useState("All");
 
-  const [country, setCountry] = useState("Japan");
-  const [goal, setGoal] = useState("Work abroad");
-  const [language, setLanguage] = useState("English");
-  const [currency, setCurrency] = useState("USD");
-  const [loading, setLoading] = useState(false);
+  const filteredCountries = useMemo(() => {
+    const query = search.trim().toLowerCase();
 
-  async function handleSubmit() {
-    try {
-      setLoading(true);
+    return countries.filter((country) => {
+      const matchesSearch =
+        query === "" ||
+        country.name.toLowerCase().includes(query) ||
+        country.language.toLowerCase().includes(query) ||
+        country.currencyCode.toLowerCase().includes(query) ||
+        country.region.toLowerCase().includes(query) ||
+        country.capital.toLowerCase().includes(query);
 
-      const user = auth.currentUser;
-      if (!user) return;
+      const matchesGoal = goal === "All" || country.mainGoal === goal;
+      const matchesRegion = region === "All" || country.region === region;
 
-      const ref = doc(db, "users", user.uid);
-
-      await updateDoc(ref, {
-        countryInterest: country,
-        mainGoal: goal,
-        preferredLanguage: language,
-        preferredCurrency: currency,
-        onboardingCompleted: true,
-        updatedAt: new Date().toISOString(),
-      });
-
-      router.push("/dashboard");
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  }
+      return matchesSearch && matchesGoal && matchesRegion;
+    });
+  }, [search, goal, region]);
 
   return (
-    <main className="min-h-screen bg-[#0b0f19] px-6 py-14 text-white flex items-center justify-center">
-      <div className="max-w-xl w-full">
-        <h1 className="text-4xl font-bold mb-8 text-center">
-          Start Your Global Journey 🌍
-        </h1>
+    <main className="min-h-screen bg-slate-950 px-6 py-12 text-white">
+      <div className="mx-auto max-w-7xl">
+        <section className="mb-10 rounded-3xl border border-yellow-700/20 bg-gradient-to-br from-yellow-500/10 via-slate-950 to-slate-900 p-8">
+          <div className="grid gap-8 lg:grid-cols-[1.2fr_.8fr] lg:items-center">
+            <div>
+              <p className="mb-4 inline-block rounded-full border border-yellow-600/30 bg-yellow-500/5 px-4 py-2 text-sm text-yellow-200">
+                TGPI Onboarding
+              </p>
 
-        <div className="space-y-6">
-          <select
-            value={country}
-            onChange={(e) => setCountry(e.target.value)}
-            className="w-full p-4 rounded-xl bg-black/20 border border-white/10"
-          >
-            <option>Japan</option>
-            <option>Brazil</option>
-            <option>Egypt</option>
-          </select>
+              <h1 className="text-4xl font-bold md:text-5xl">
+                Start your global journey by exploring countries visually.
+              </h1>
 
-          <select
-            value={goal}
-            onChange={(e) => setGoal(e.target.value)}
-            className="w-full p-4 rounded-xl bg-black/20 border border-white/10"
-          >
-            <option>Work abroad</option>
-            <option>Live abroad</option>
-            <option>Study abroad</option>
-            <option>Cultural learning</option>
-          </select>
+              <p className="mt-4 max-w-3xl text-slate-300">
+                Browse countries through interactive cards, preview key details,
+                and open a dedicated page for deeper information.
+              </p>
 
-          <select
-            value={language}
-            onChange={(e) => setLanguage(e.target.value)}
-            className="w-full p-4 rounded-xl bg-black/20 border border-white/10"
-          >
-            <option>English</option>
-            <option>Japanese</option>
-            <option>Portuguese</option>
-            <option>Arabic</option>
-          </select>
+              <div className="mt-6 flex flex-wrap gap-4">
+                <Link
+                  href="/dashboard"
+                  className="rounded-xl border border-slate-700 bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:border-yellow-500"
+                >
+                  Open Dashboard
+                </Link>
 
-          <select
-            value={currency}
-            onChange={(e) => setCurrency(e.target.value)}
-            className="w-full p-4 rounded-xl bg-black/20 border border-white/10"
-          >
-            <option>USD</option>
-            <option>JPY</option>
-            <option>BRL</option>
-            <option>EGP</option>
-          </select>
+                <Link
+                  href="/countries"
+                  className="rounded-xl bg-yellow-500 px-5 py-3 text-sm font-semibold text-black transition hover:bg-yellow-400"
+                >
+                  Open Full Country System
+                </Link>
+              </div>
+            </div>
 
-          <button
-            onClick={handleSubmit}
-            disabled={loading}
-            className="w-full bg-yellow-500 py-4 rounded-xl font-bold text-black hover:bg-yellow-400"
-          >
-            {loading ? "Saving..." : "Start Experience"}
-          </button>
-        </div>
+            <div className="rounded-3xl border border-slate-800 bg-slate-900/80 p-6">
+              <h2 className="text-2xl font-bold text-yellow-400">Onboarding Flow</h2>
+              <div className="mt-4 space-y-3 text-sm text-slate-300">
+                <p>• Visual exploration first</p>
+                <p>• Country cards with direct access</p>
+                <p>• Filter by region and goal</p>
+                <p>• Open full detailed country pages</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="mb-10 grid gap-4 rounded-3xl border border-slate-800 bg-slate-900 p-6 lg:grid-cols-3">
+          <div>
+            <label className="mb-2 block text-sm text-slate-300">
+              Search
+            </label>
+            <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Country, capital, language, region or currency"
+              className="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none transition focus:border-yellow-500"
+            />
+          </div>
+
+          <div>
+            <label className="mb-2 block text-sm text-slate-300">
+              Goal
+            </label>
+            <select
+              value={goal}
+              onChange={(e) => setGoal(e.target.value)}
+              className="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none transition focus:border-yellow-500"
+            >
+              {goalOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="mb-2 block text-sm text-slate-300">
+              Region
+            </label>
+            <select
+              value={region}
+              onChange={(e) => setRegion(e.target.value)}
+              className="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none transition focus:border-yellow-500"
+            >
+              {regionOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+          </div>
+        </section>
+
+        <section>
+          <div className="mb-6 flex items-end justify-between gap-4">
+            <div>
+              <h2 className="text-3xl font-bold text-yellow-400">Choose Your Country Pathway</h2>
+              <p className="mt-2 text-sm text-slate-400">
+                {filteredCountries.length} countries available
+              </p>
+            </div>
+          </div>
+
+          {filteredCountries.length === 0 ? (
+            <div className="rounded-3xl border border-slate-800 bg-slate-900 p-10 text-center">
+              <p className="text-lg text-slate-300">No countries found.</p>
+            </div>
+          ) : (
+            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+              {filteredCountries.map((country) => (
+                <CountryCard key={country.slug} country={country} />
+              ))}
+            </div>
+          )}
+        </section>
       </div>
     </main>
   );
