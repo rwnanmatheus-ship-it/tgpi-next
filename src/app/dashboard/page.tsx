@@ -7,6 +7,7 @@ import Link from "next/link";
 import { auth, db } from "@/lib/firebase";
 import { defaultUserProfile, UserProfile } from "@/lib/profile";
 import { getPlanLabel, isPremium } from "@/lib/plan";
+import { getUserBadges } from "@/lib/badges";
 
 function getNextLevelXP(level: number) {
   return level * 100;
@@ -91,6 +92,8 @@ export default function DashboardPage() {
   ];
 
   const completedQuestCount = quests.filter((quest) => quest.concluded).length;
+  const badges = getUserBadges(profile);
+  const unlockedBadges = badges.filter((badge) => badge.unlocked);
 
   if (loading) {
     return (
@@ -131,8 +134,8 @@ export default function DashboardPage() {
           </div>
 
           <p className="max-w-3xl text-lg leading-8 text-slate-300">
-            Track your country focus, progress, favorites, quests, and global
-            learning activity from one premium dashboard.
+            Track your country focus, progress, favorites, quests, badges, and
+            global learning activity from one premium dashboard.
           </p>
         </section>
 
@@ -293,6 +296,48 @@ export default function DashboardPage() {
                 </div>
               ))}
             </div>
+          </div>
+        </section>
+
+        <section className="mb-10 rounded-3xl border border-white/10 bg-white/5 p-8">
+          <div className="mb-5 flex items-center justify-between">
+            <h2 className="text-2xl font-bold text-white">Badges & Achievements</h2>
+            <span className="rounded-full border border-yellow-500/20 bg-yellow-500/10 px-4 py-2 text-sm text-yellow-300">
+              {unlockedBadges.length}/{badges.length} unlocked
+            </span>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {badges.map((badge) => (
+              <div
+                key={badge.id}
+                className={`rounded-3xl border p-6 ${
+                  badge.unlocked
+                    ? "border-yellow-500/30 bg-yellow-500/10"
+                    : "border-white/10 bg-black/10"
+                }`}
+              >
+                <div className="mb-3 flex items-center justify-between gap-3">
+                  <h3 className="text-lg font-semibold text-white">
+                    {badge.title}
+                  </h3>
+
+                  <span
+                    className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                      badge.unlocked
+                        ? "bg-green-500/15 text-green-300"
+                        : "bg-white/10 text-slate-400"
+                    }`}
+                  >
+                    {badge.unlocked ? "Unlocked" : "Locked"}
+                  </span>
+                </div>
+
+                <p className="text-sm leading-7 text-slate-300">
+                  {badge.description}
+                </p>
+              </div>
+            ))}
           </div>
         </section>
 

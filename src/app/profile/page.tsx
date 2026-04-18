@@ -8,6 +8,7 @@ import { auth, db } from "@/lib/firebase";
 import { defaultUserProfile, UserProfile } from "@/lib/profile";
 import { awardXP } from "@/lib/xp-engine";
 import { isPremium } from "@/lib/plan";
+import { getUserBadges } from "@/lib/badges";
 
 export default function ProfilePage() {
   const [uid, setUid] = useState("");
@@ -78,6 +79,8 @@ export default function ProfilePage() {
       setStatus(error?.message || "Could not save profile.");
     }
   }
+
+  const badges = getUserBadges(profile);
 
   if (loading) {
     return (
@@ -166,6 +169,53 @@ export default function ProfilePage() {
           </div>
         </section>
 
+        <section className="mb-10 rounded-3xl border border-white/10 bg-white/5 p-8">
+          <div className="mb-5 flex items-center justify-between">
+            <h2 className="text-2xl font-bold text-white">
+              Badges & Achievements
+            </h2>
+            <Link
+              href="/dashboard"
+              className="rounded-xl border border-yellow-500/20 bg-yellow-500/10 px-4 py-2 text-sm font-medium text-yellow-300 transition hover:bg-yellow-500/20"
+            >
+              View Dashboard
+            </Link>
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+            {badges.map((badge) => (
+              <div
+                key={badge.id}
+                className={`rounded-3xl border p-6 ${
+                  badge.unlocked
+                    ? "border-yellow-500/30 bg-yellow-500/10"
+                    : "border-white/10 bg-black/10"
+                }`}
+              >
+                <div className="mb-3 flex items-center justify-between gap-3">
+                  <h3 className="text-lg font-semibold text-white">
+                    {badge.title}
+                  </h3>
+
+                  <span
+                    className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                      badge.unlocked
+                        ? "bg-green-500/15 text-green-300"
+                        : "bg-white/10 text-slate-400"
+                    }`}
+                  >
+                    {badge.unlocked ? "Unlocked" : "Locked"}
+                  </span>
+                </div>
+
+                <p className="text-sm leading-7 text-slate-300">
+                  {badge.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </section>
+
         <section className="rounded-3xl border border-white/10 bg-white/5 p-8">
           <div className="mb-8">
             <h2 className="mb-2 text-2xl font-bold text-white">Edit Profile</h2>
@@ -219,11 +269,7 @@ export default function ProfilePage() {
                 <option>Japan</option>
                 <option>Brazil</option>
                 <option>Egypt</option>
-                <option>Italy</option>
-                <option>France</option>
                 <option>Germany</option>
-                <option>United States</option>
-                <option>United Kingdom</option>
                 <option>Canada</option>
               </select>
             </div>
@@ -260,6 +306,7 @@ export default function ProfilePage() {
                 <option>Spanish</option>
                 <option>Arabic</option>
                 <option>Japanese</option>
+                <option>German</option>
               </select>
             </div>
 
@@ -277,7 +324,6 @@ export default function ProfilePage() {
                 <option value="EUR">EUR — Euro</option>
                 <option value="JPY">JPY — Japanese Yen</option>
                 <option value="EGP">EGP — Egyptian Pound</option>
-                <option value="GBP">GBP — British Pound</option>
                 <option value="CAD">CAD — Canadian Dollar</option>
               </select>
             </div>
