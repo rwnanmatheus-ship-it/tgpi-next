@@ -1,158 +1,108 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { onAuthStateChanged } from "firebase/auth";
-import { doc, getDoc, updateDoc } from "firebase/firestore";
-import Link from "next/link";
-import { auth, db } from "@/lib/firebase";
-import { canAddFavorite, getRemainingFavorites } from "@/lib/favorites";
-import { isPremium } from "@/lib/plan";
+import CountryCard from "@/components/CountryCard";
+import WorldMapExplorer from "@/components/WorldMapExplorer";
+import { countries } from "@/data/countries";
+import { useMemo, useState } from "react";
 
-const countries = [
-  { name: "Japan", slug: "japan", flag: "🇯🇵" },
-  { name: "United States", slug: "united-states", flag: "🇺🇸" },
-  { name: "Germany", slug: "germany", flag: "🇩🇪" },
-  { name: "Canada", slug: "canada", flag: "🇨🇦" },
-  { name: "France", slug: "france", flag: "🇫🇷" },
-  { name: "Portugal", slug: "portugal", flag: "🇵🇹" },
-  { name: "Egypt", slug: "egypt", flag: "🇪🇬" },
-  { name: "Brazil", slug: "brazil", flag: "🇧🇷" },
+const goalOptions = [
+  "All",
+  "Work abroad",
+  "Live abroad",
+  "Cultural learning",
 ];
 
 export default function CountriesPage() {
-  const [profile, setProfile] = useState<any>(null);
-  const [uid, setUid] = useState("");
+  const [search, setSearch] = useState("");
+  const [goal, setGoal] = useState("All");
 
-  useEffect(() => {
-    const unsub = onAuthStateChanged(auth, async (user) => {
-      if (!user) return;
+  const filteredCountries = useMemo(() => {
+    return countries.filter((country) => {
+      const matchesSearch =
+        country.name.toLowerCase().includes(search.toLowerCase()) ||
+        country.language.toLowerCase().includes(search.toLowerCase()) ||
+        country.currencyCode.toLowerCase().includes(search.toLowerCase()) ||
+        country.region.toLowerCase().includes(search.toLowerCase());
 
-      setUid(user.uid);
+      const matchesGoal = goal === "All" || country.mainGoal === goal;
 
-      const ref = doc(db, "users", user.uid);
-      const snap = await getDoc(ref);
-
-      if (snap.exists()) {
-        setProfile(snap.data());
-      }
+      return matchesSearch && matchesGoal;
     });
-
-    return () => unsub();
-  }, []);
-
-  async function toggleFavorite(country: string) {
-    if (!profile) return;
-
-    let favorites = profile.favorites || [];
-
-    const exists = favorites.includes(country);
-
-    if (!exists && !canAddFavorite(profile)) {
-      alert("Free plan limit reached. Upgrade to add more countries.");
-      return;
-    }
-
-    if (exists) {
-      favorites = favorites.filter((c: string) => c !== country);
-    } else {
-      favorites.push(country);
-    }
-
-    await updateDoc(doc(db, "users", uid), {
-      favorites,
-    });
-
-    setProfile({ ...profile, favorites });
-  }
-
-  if (!profile) {
-    return <div className="p-10 text-white">Loading...</div>;
-  }
+  }, [search, goal]);
 
   return (
-    <main className="min-h-screen bg-[#0b0f19] px-6 py-14 text-white">
+    <main className="min-h-screen bg-slate-950 px-6 py-12 text-white">
       <div className="mx-auto max-w-7xl">
-
-        {/* HEADER */}
-        <section className="mb-10 rounded-3xl border border-yellow-500/20 bg-gradient-to-br from-yellow-500/10 to-white/5 p-8">
-          <h1 className="text-4xl font-bold">
-            Explore Countries
-          </h1>
-
-          <p className="mt-4 max-w-2xl text-slate-300">
-            Select a country, explore culture, and build your global path.
-            Save favorites to track your journey.
+        <section className="mb-10 rounded-3xl border border-yellow-700/20 bg-gradient-to-br from-yellow-500/10 to-slate-900 p-8">
+          <p className="mb-4 inline-block rounded-full border border-yellow-600/30 bg-yellow-500/5 px-4 py-2 text-sm text-yellow-200">
+            TGPI Countries
           </p>
 
-          <div className="mt-4 text-sm text-yellow-300">
-            Remaining favorites: {getRemainingFavorites(profile)}
+          <h1 className="text-4xl font-bold md:text-5xl">
+            Explore countries through a premium global interface.
+          </h1>
+
+          <p className="mt-4 max-w-3xl text-slate-300">
+            Choose a country, understand its pathway, and open a richer page with
+            currency, cost of life, and global readiness context.
+          </p>
+        </section>
+
+        <section className="mb-10 grid gap-4 rounded-3xl border border-slate-800 bg-slate-900 p-6 md:grid-cols-[1fr_260px]">
+          <div>
+            <label className="mb-2 block text-sm text-slate-300">
+              Search country, language, region or currency
+            </label>
+            <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search..."
+              className="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none transition focus:border-yellow-500"
+            />
+          </div>
+
+          <div>
+            <label className="mb-2 block text-sm text-slate-300">
+              Filter by goal
+            </label>
+            <select
+              value={goal}
+              onChange={(e) => setGoal(e.target.value)}
+              className="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none transition focus:border-yellow-500"
+            >
+              {goalOptions.map((option) => (
+                <option key={option} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
           </div>
         </section>
 
-        {/* GRID */}
-        <section className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <section className="mb-8">
+          <div className="mb-6">
+            <h2 className="text-3xl font-bold text-yellow-400">
+              Available Countries
+            </h2>
+            <p className="mt-2 text-sm text-slate-400">
+              {filteredCountries.length} country pathways found
+            </p>
+          </div>
 
-          {countries.map((country) => {
-            const isFav = profile.favorites?.includes(country.name);
-
-            return (
-              <div
-                key={country.slug}
-                className="rounded-3xl border border-white/10 bg-white/5 p-6 transition hover:scale-[1.02]"
-              >
-                <div className="flex items-center justify-between">
-                  <h2 className="text-xl font-bold">
-                    {country.flag} {country.name}
-                  </h2>
-
-                  <button
-                    onClick={() => toggleFavorite(country.name)}
-                    className={`text-xl ${
-                      isFav ? "text-yellow-400" : "text-white/40"
-                    }`}
-                  >
-                    ★
-                  </button>
-                </div>
-
-                <p className="mt-3 text-sm text-slate-300">
-                  Discover opportunities, cost of living, culture and pathways
-                  to live and work in {country.name}.
-                </p>
-
-                <Link
-                  href={`/countries/${country.slug}`}
-                  className="mt-4 inline-block text-yellow-400 hover:underline"
-                >
-                  Explore →
-                </Link>
-              </div>
-            );
-          })}
-
+          {filteredCountries.length === 0 ? (
+            <div className="rounded-3xl border border-slate-800 bg-slate-900 p-10 text-center">
+              <p className="text-lg text-slate-300">No countries found.</p>
+            </div>
+          ) : (
+            <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+              {filteredCountries.map((country) => (
+                <CountryCard key={country.slug} country={country} />
+              ))}
+            </div>
+          )}
         </section>
 
-        {/* PREMIUM CTA */}
-        {!isPremium(profile.membershipPlan) && (
-          <section className="mt-12 rounded-3xl border border-yellow-500/20 bg-gradient-to-r from-yellow-500/10 to-white/5 p-8">
-            <h2 className="text-2xl font-bold">
-              Go Unlimited with Premium
-            </h2>
-
-            <p className="mt-3 text-slate-300">
-              Save unlimited countries, unlock deeper insights, and build your
-              global strategy without limits.
-            </p>
-
-            <Link
-              href="/upgrade"
-              className="mt-4 inline-block rounded-xl bg-yellow-500 px-6 py-3 font-semibold text-black hover:bg-yellow-400"
-            >
-              Upgrade Now
-            </Link>
-          </section>
-        )}
-
+        <WorldMapExplorer />
       </div>
     </main>
   );
