@@ -1,12 +1,19 @@
 "use client";
 
 import { courses } from "@/data/courses";
+import { auth } from "@/lib/firebase";
+import { markLessonComplete } from "@/lib/course-progress";
 import { useParams } from "next/navigation";
+import { useMemo, useState } from "react";
 
 export default function CoursePage() {
   const params = useParams<{ id: string }>();
 
-  const course = courses.find((c) => c.id === params.id);
+  const course = useMemo(() => {
+    return courses.find((c) => c.id === params.id);
+  }, [params]);
+
+  const [completed, setCompleted] = useState<string[]>([]);
 
   if (!course) {
     return (
@@ -16,19 +23,36 @@ export default function CoursePage() {
     );
   }
 
+  const safeCourse = course;
+
+  async function handleComplete(lessonId: string) {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    await markLessonComplete(user.uid, safeCourse.id, lessonId);
+
+    setCompleted((prev) =>
+      prev.includes(lessonId) ? prev : [...prev, lessonId]
+    );
+  }
+
   return (
     <main className="min-h-screen bg-slate-950 px-6 py-12 text-white">
       <div className="mx-auto max-w-5xl">
         <section className="mb-10">
+          <p className="mb-4 inline-flex rounded-full border border-yellow-600/30 bg-yellow-500/5 px-4 py-2 text-sm text-yellow-200">
+            TGPI Course
+          </p>
+
           <h1 className="text-4xl font-bold text-yellow-400">
-            {course.title}
+            {safeCourse.title}
           </h1>
 
-          <p className="mt-4 text-slate-300">{course.description}</p>
+          <p className="mt-4 text-slate-300">{safeCourse.description}</p>
         </section>
 
         <section className="space-y-8">
-          {course.modules.map((module) => (
+          {safeCourse.modules.map((module) => (
             <div
               key={module.id}
               className="rounded-3xl border border-slate-800 bg-slate-900 p-6"
@@ -43,10 +67,20 @@ export default function CoursePage() {
                     key={lesson.id}
                     className="rounded-2xl border border-slate-800 bg-slate-950 p-4"
                   >
-                    <h3 className="font-semibold">{lesson.title}</h3>
-                    <p className="mt-2 text-sm text-slate-400">
+                    <h3 className="font-semibold text-white">{lesson.title}</h3>
+
+                    <p className="mt-2 text-sm leading-7 text-slate-400">
                       {lesson.content}
                     </p>
+
+                    <button
+                      onClick={() => handleComplete(lesson.id)}
+                      className="mt-4 rounded-lg bg-yellow-500 px-4 py-2 font-semibold text-black transition hover:bg-yellow-400"
+                    >
+                      {completed.includes(lesson.id)
+                        ? "Completed"
+                        : "Mark as Complete"}
+                    </button>
                   </div>
                 ))}
               </div>
