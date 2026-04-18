@@ -41,9 +41,9 @@ export default function HomePage() {
 
             <div className="mt-10 grid max-w-2xl gap-4 sm:grid-cols-3">
               <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
-                <div className="text-2xl font-bold text-yellow-400">195</div>
+                <div className="text-2xl font-bold text-yellow-400">Global</div>
                 <div className="text-sm text-slate-300">
-                  Countries in long-term vision
+                  Country-based readiness ecosystem
                 </div>
               </div>
 
@@ -57,7 +57,7 @@ export default function HomePage() {
               <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
                 <div className="text-2xl font-bold text-yellow-400">Real</div>
                 <div className="text-sm text-slate-300">
-                  Preparation for life abroad
+                  Preparation for life beyond borders
                 </div>
               </div>
             </div>
@@ -66,12 +66,12 @@ export default function HomePage() {
           <div className="grid w-full max-w-xl gap-5">
             <div className="rounded-3xl border border-yellow-500/20 bg-gradient-to-br from-yellow-500/10 to-white/5 p-8">
               <h2 className="mb-4 text-2xl font-bold text-yellow-400">
-                TGPI Core Vision
+                Premium Global Preparation
               </h2>
               <p className="leading-7 text-slate-300">
-                A system for global preparation where language learning,
-                cultural intelligence, country readiness, recognition, and
-                international pathways come together in one premium ecosystem.
+                TGPI combines country pathways, language foundations, culture,
+                integration, and premium digital progression into one refined
+                experience designed to grow into a world-class platform.
               </p>
             </div>
 
@@ -99,16 +99,17 @@ export default function HomePage() {
                   Progress
                 </h3>
                 <p className="text-sm leading-7 text-slate-300">
-                  Track goals, countries, quests, and global development.
+                  Track goals, countries, quests, badges, and global growth.
                 </p>
               </div>
 
               <div className="rounded-3xl border border-white/10 bg-white/5 p-6">
                 <h3 className="mb-3 text-xl font-semibold text-white">
-                  Scale
+                  Upgrade
                 </h3>
                 <p className="text-sm leading-7 text-slate-300">
-                  Built to grow from a focused MVP to a global education company.
+                  Unlock premium experiences, deeper country intelligence, and
+                  future advanced tools.
                 </p>
               </div>
             </div>
@@ -154,7 +155,7 @@ export default function HomePage() {
 
           <div className="rounded-3xl border border-white/10 bg-white/5 p-7">
             <h3 className="mb-3 text-xl font-semibold text-yellow-400">
-              Future-Ready Vision
+              Premium Future
             </h3>
             <p className="text-sm leading-7 text-slate-300">
               Built to evolve into a globally recognized platform for readiness,

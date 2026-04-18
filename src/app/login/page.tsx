@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import {
   createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
@@ -19,6 +20,7 @@ export default function LoginPage() {
   const [isRegister, setIsRegister] = useState(false);
   const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(false);
+  const [sendingReset, setSendingReset] = useState(false);
 
   async function ensureUserProfile(uid: string, userEmail: string) {
     const ref = doc(db, "users", uid);
@@ -56,7 +58,7 @@ export default function LoginPage() {
 
         await ensureUserProfile(userCred.user.uid, email);
         setStatus("Account created successfully.");
-        router.push("/profile");
+        router.push("/onboarding");
       } else {
         const userCred = await signInWithEmailAndPassword(auth, email, password);
 
@@ -68,6 +70,24 @@ export default function LoginPage() {
       setStatus(error?.message || "Something went wrong.");
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function handlePasswordReset() {
+    if (!email) {
+      setStatus("Enter your email first to receive a reset link.");
+      return;
+    }
+
+    try {
+      setSendingReset(true);
+      setStatus("");
+      await sendPasswordResetEmail(auth, email);
+      setStatus("Password reset email sent successfully.");
+    } catch (error: any) {
+      setStatus(error?.message || "Could not send reset email.");
+    } finally {
+      setSendingReset(false);
     }
   }
 
@@ -208,6 +228,17 @@ export default function LoginPage() {
                 : "Access Platform"}
             </button>
           </form>
+
+          {!isRegister ? (
+            <button
+              type="button"
+              onClick={handlePasswordReset}
+              disabled={sendingReset}
+              className="mt-4 text-sm text-yellow-300 transition hover:text-yellow-200 disabled:opacity-60"
+            >
+              {sendingReset ? "Sending reset email..." : "Forgot password?"}
+            </button>
+          ) : null}
 
           {status ? (
             <p className="mt-5 text-sm text-yellow-300">{status}</p>

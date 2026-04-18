@@ -4,9 +4,42 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 
 export const metadata: Metadata = {
-  title: "The Global Polymath Institute",
+  title: {
+    default: "The Global Polymath Institute",
+    template: "%s | The Global Polymath Institute",
+  },
   description:
-    "A premium global platform for learning, cultural integration, and international preparation across countries.",
+    "A premium global platform for learning, cultural integration, country readiness, and international preparation across the world.",
+  applicationName: "The Global Polymath Institute",
+  keywords: [
+    "global education",
+    "country readiness",
+    "international preparation",
+    "travel learning",
+    "culture",
+    "language",
+    "premium learning platform",
+    "TGPI",
+  ],
+  authors: [{ name: "The Global Polymath Institute" }],
+  creator: "The Global Polymath Institute",
+  publisher: "The Global Polymath Institute",
+  metadataBase: new URL("https://theglobalpolymath.com"),
+  openGraph: {
+    title: "The Global Polymath Institute",
+    description:
+      "A premium global platform for learning, cultural integration, and international preparation across countries.",
+    url: "https://theglobalpolymath.com",
+    siteName: "The Global Polymath Institute",
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "The Global Polymath Institute",
+    description:
+      "A premium global platform for learning, cultural integration, and international preparation across countries.",
+  },
 };
 
 export default function RootLayout({
