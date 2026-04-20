@@ -1,12 +1,14 @@
 "use client";
 
+import ActivityFeed from "@/components/ActivityFeed";
 import BadgesGrid from "@/components/BadgesGrid";
 import ContinueJourney from "@/components/ContinueJourney";
+import Leaderboard from "@/components/Leaderboard";
 import PageContainer from "@/components/PageContainer";
 import ReferralCard from "@/components/ReferralCard";
 import SharePanel from "@/components/SharePanel";
 import { getUserBadges } from "@/lib/badges";
-import { calculateGamification } from "@/lib/gamification";
+import { calculateGamification, getXpActionTable } from "@/lib/gamification";
 import Link from "next/link";
 
 const recommendedCountries = [
@@ -30,24 +32,6 @@ const recommendedCountries = [
   },
 ];
 
-const recentActivity = [
-  {
-    title: "Visited Portugal country page",
-    detail: "You explored relocation context, culture, and cost of life.",
-    xp: "+10 XP",
-  },
-  {
-    title: "Started English for Living Abroad",
-    detail: "Your language preparation journey has already begun.",
-    xp: "+25 XP",
-  },
-  {
-    title: "Saved Germany to favorites",
-    detail: "You strengthened your global shortlist strategically.",
-    xp: "+15 XP",
-  },
-];
-
 export default function DashboardPage() {
   const stats = {
     countriesExplored: 5,
@@ -55,6 +39,7 @@ export default function DashboardPage() {
     certificatesEarned: 1,
     countriesSaved: 3,
     profileCompleted: true,
+    courseLessonsCompleted: 6,
   };
 
   const game = calculateGamification(stats);
@@ -66,6 +51,7 @@ export default function DashboardPage() {
   });
 
   const shareText = `I reached Level ${game.level} on TGPI with ${game.xp} XP and I am building my global journey on The Global Polymath Institute 🌍`;
+  const xpActions = getXpActionTable();
 
   return (
     <PageContainer
@@ -85,8 +71,8 @@ export default function DashboardPage() {
               </h2>
 
               <p className="mt-3 max-w-2xl text-slate-300">
-                Every country explored, course started, and achievement earned
-                increases your TGPI global progression.
+                Every country explored, lesson completed, and achievement earned
+                increases your TGPI progression.
               </p>
             </div>
 
@@ -144,22 +130,25 @@ export default function DashboardPage() {
 
         <div className="rounded-3xl border border-slate-800 bg-slate-900 p-8">
           <h2 className="text-2xl font-bold text-yellow-400">
-            Next Level Rewards
+            XP Actions
           </h2>
 
           <div className="mt-6 space-y-4">
-            <RewardCard
-              title="Unlock stronger country recommendations"
-              detail="The more you explore, the more relevant your global suggestions become."
-            />
-            <RewardCard
-              title="Build a premium-ready profile"
-              detail="A complete profile increases strategic personalization across the platform."
-            />
-            <RewardCard
-              title="Strengthen your TGPI identity"
-              detail="Higher levels reinforce your learning and international preparation path."
-            />
+            {xpActions.map((item) => (
+              <div
+                key={item.action}
+                className="rounded-2xl border border-slate-800 bg-slate-950 p-4"
+              >
+                <div className="flex items-center justify-between gap-4">
+                  <h3 className="text-lg font-semibold text-white">
+                    {item.action}
+                  </h3>
+                  <span className="text-sm font-semibold text-yellow-300">
+                    +{item.xp} XP
+                  </span>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -183,9 +172,9 @@ export default function DashboardPage() {
           detail="Recognition adds major XP value"
         />
         <StatCard
-          label="Countries saved"
-          value={String(stats.countriesSaved)}
-          detail="Your shortlist is part of your strategy"
+          label="Lessons completed"
+          value={String(stats.courseLessonsCompleted)}
+          detail="Every lesson pushes your growth forward"
         />
       </section>
 
@@ -197,7 +186,9 @@ export default function DashboardPage() {
       </section>
 
       <section className="grid gap-6 xl:grid-cols-2">
-        <div className="rounded-3xl border border-slate-800 bg-slate-900 p-8">
+        <Leaderboard />
+
+        <section className="rounded-3xl border border-slate-800 bg-slate-900 p-8">
           <h2 className="text-2xl font-bold text-yellow-400">
             Recommended Countries
           </h2>
@@ -219,33 +210,10 @@ export default function DashboardPage() {
               </Link>
             ))}
           </div>
-        </div>
-
-        <div className="rounded-3xl border border-slate-800 bg-slate-900 p-8">
-          <h2 className="text-2xl font-bold text-yellow-400">
-            Activity Timeline
-          </h2>
-
-          <div className="mt-6 space-y-4">
-            {recentActivity.map((item) => (
-              <div
-                key={item.title}
-                className="rounded-2xl border border-slate-800 bg-slate-950 p-4"
-              >
-                <div className="flex items-center justify-between gap-4">
-                  <h3 className="text-lg font-semibold text-white">
-                    {item.title}
-                  </h3>
-                  <span className="text-sm font-semibold text-yellow-300">
-                    {item.xp}
-                  </span>
-                </div>
-                <p className="mt-2 text-sm text-slate-400">{item.detail}</p>
-              </div>
-            ))}
-          </div>
-        </div>
+        </section>
       </section>
+
+      <ActivityFeed />
     </PageContainer>
   );
 }
@@ -264,21 +232,6 @@ function StatCard({
       <p className="text-sm text-slate-400">{label}</p>
       <p className="mt-3 text-4xl font-bold text-yellow-400">{value}</p>
       <p className="mt-2 text-sm text-slate-300">{detail}</p>
-    </div>
-  );
-}
-
-function RewardCard({
-  title,
-  detail,
-}: {
-  title: string;
-  detail: string;
-}) {
-  return (
-    <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4">
-      <h3 className="text-lg font-semibold text-white">{title}</h3>
-      <p className="mt-2 text-sm text-slate-400">{detail}</p>
     </div>
   );
 }

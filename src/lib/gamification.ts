@@ -4,6 +4,7 @@ export type UserGameStats = {
   certificatesEarned: number;
   countriesSaved: number;
   profileCompleted: boolean;
+  courseLessonsCompleted: number;
 };
 
 export type GamificationResult = {
@@ -58,6 +59,17 @@ export function updateStreak(lastLogin?: number) {
   return 1;
 }
 
+export function getXpActionTable() {
+  return [
+    { action: "Explore a country", xp: 40 },
+    { action: "Save a country", xp: 25 },
+    { action: "Start a course", xp: 80 },
+    { action: "Complete a lesson", xp: 20 },
+    { action: "Earn a certificate", xp: 200 },
+    { action: "Complete profile", xp: 100 },
+  ];
+}
+
 export function calculateGamification(
   stats: UserGameStats
 ): GamificationResult {
@@ -66,6 +78,7 @@ export function calculateGamification(
     stats.coursesInProgress * 80 +
     stats.certificatesEarned * 200 +
     stats.countriesSaved * 25 +
+    stats.courseLessonsCompleted * 20 +
     (stats.profileCompleted ? 100 : 0);
 
   const level = Math.max(1, Math.floor(xp / 200) + 1);
