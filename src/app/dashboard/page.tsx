@@ -9,6 +9,7 @@ import ReferralCard from "@/components/ReferralCard";
 import SharePanel from "@/components/SharePanel";
 import { getUserBadges } from "@/lib/badges";
 import { calculateGamification, getXpActionTable } from "@/lib/gamification";
+import { getUserStats } from "@/lib/user-stats";
 import Link from "next/link";
 
 const recommendedCountries = [
@@ -33,14 +34,7 @@ const recommendedCountries = [
 ];
 
 export default function DashboardPage() {
-  const stats = {
-    countriesExplored: 5,
-    coursesInProgress: 2,
-    certificatesEarned: 1,
-    countriesSaved: 3,
-    profileCompleted: true,
-    courseLessonsCompleted: 6,
-  };
+  const stats = getUserStats();
 
   const game = calculateGamification(stats);
   const badges = getUserBadges({
@@ -129,9 +123,7 @@ export default function DashboardPage() {
         </div>
 
         <div className="rounded-3xl border border-slate-800 bg-slate-900 p-8">
-          <h2 className="text-2xl font-bold text-yellow-400">
-            XP Actions
-          </h2>
+          <h2 className="text-2xl font-bold text-yellow-400">XP Actions</h2>
 
           <div className="mt-6 space-y-4">
             {xpActions.map((item) => (

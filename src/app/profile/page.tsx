@@ -1,13 +1,16 @@
 "use client";
 
+import AvatarUpload from "@/components/AvatarUpload";
 import PageContainer from "@/components/PageContainer";
 import { auth } from "@/lib/firebase";
+import { calculateGamification } from "@/lib/gamification";
 import {
   defaultUserProfile,
   getUserProfile,
   saveUserProfile,
   type UserProfileData,
 } from "@/lib/user-profile";
+import { getUserStats } from "@/lib/user-stats";
 import { onAuthStateChanged } from "firebase/auth";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
@@ -53,6 +56,7 @@ export default function ProfilePage() {
         setForm({
           ...profile,
           email: profile.email || user.email || "",
+          fullName: profile.fullName || user.displayName || "",
         });
       } catch (error) {
         console.error("Could not load profile:", error);
@@ -109,6 +113,9 @@ export default function ProfilePage() {
     []
   );
 
+  const statsData = getUserStats();
+  const game = calculateGamification(statsData);
+
   return (
     <PageContainer
       title="Your Global Profile"
@@ -135,6 +142,25 @@ export default function ProfilePage() {
         </section>
       ) : (
         <>
+          <section className="rounded-3xl border border-yellow-700/20 bg-slate-900 p-6">
+            <h2 className="text-xl font-bold text-yellow-400">
+              Your Global Level
+            </h2>
+
+            <p className="mt-2 text-slate-300">
+              Level {game.level} • {game.rankTitle}
+            </p>
+
+            <p className="mt-1 text-sm text-slate-400">{game.xp} XP</p>
+
+            <div className="mt-3 h-3 overflow-hidden rounded-full bg-slate-800">
+              <div
+                className="h-full bg-yellow-500"
+                style={{ width: `${game.progressPercent}%` }}
+              />
+            </div>
+          </section>
+
           <section className="grid gap-6 xl:grid-cols-[1.1fr_.9fr]">
             <div className="rounded-3xl border border-yellow-700/20 bg-gradient-to-br from-yellow-500/10 via-slate-950 to-slate-900 p-8">
               <p className="mb-3 inline-flex rounded-full border border-yellow-600/30 bg-yellow-500/5 px-4 py-2 text-sm text-yellow-200">
@@ -149,6 +175,17 @@ export default function ProfilePage() {
                 This page brings together your profile, preferences, certificates,
                 completed learning, and personal international direction.
               </p>
+
+              <div className="mb-6 mt-6 flex items-center gap-6">
+                <AvatarUpload />
+
+                <div>
+                  <p className="text-sm text-slate-400">Global Identity</p>
+                  <p className="text-lg font-semibold text-white">
+                    {form.fullName || "Unnamed User"}
+                  </p>
+                </div>
+              </div>
 
               <div className="mt-8 grid gap-4 md:grid-cols-2">
                 <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
