@@ -2,6 +2,7 @@
 
 import PageContainer from "@/components/PageContainer";
 import Link from "next/link";
+import { useState } from "react";
 
 const certificates = [
   {
@@ -22,10 +23,37 @@ const favoriteCountries = [
 ];
 
 export default function ProfilePage() {
+  const [form, setForm] = useState({
+    fullName: "Renan Matheus",
+    email: "theglobalpolymath@gmail.com",
+    phone: "+1 703-996-3146",
+    countryGoal: "Portugal",
+    focusRegion: "Europe",
+    primaryObjective: "Relocation + work abroad",
+    learningTrack: "Language + cultural integration",
+  });
+
+  const [message, setMessage] = useState("");
+
+  function updateField(
+    field: keyof typeof form,
+    value: string
+  ) {
+    setForm((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  }
+
+  function handleSave(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setMessage("Profile information updated successfully.");
+  }
+
   return (
     <PageContainer
       title="Your Global Profile"
-      subtitle="A premium identity layer that reflects your international progress and preparation."
+      subtitle="Manage your identity, preferences, and personal TGPI pathway."
     >
       <section className="grid gap-6 xl:grid-cols-[1.1fr_.9fr]">
         <div className="rounded-3xl border border-yellow-700/20 bg-gradient-to-br from-yellow-500/10 via-slate-950 to-slate-900 p-8">
@@ -34,12 +62,12 @@ export default function ProfilePage() {
           </p>
 
           <h2 className="text-3xl font-bold text-yellow-400">
-            You are building a global-ready profile.
+            Build a premium global profile.
           </h2>
 
           <p className="mt-4 max-w-2xl text-slate-300">
-            Your TGPI profile brings together your learning journey, country
-            exploration, certifications, and premium identity in one place.
+            Your profile connects learning, countries, certifications, and
+            personal preferences into one international identity layer.
           </p>
 
           <div className="mt-8 grid gap-4 md:grid-cols-2">
@@ -51,9 +79,9 @@ export default function ProfilePage() {
             </div>
 
             <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-              <p className="text-sm text-slate-400">Global Goal</p>
+              <p className="text-sm text-slate-400">Current goal</p>
               <p className="mt-2 text-2xl font-bold text-yellow-400">
-                Live and work in Europe
+                {form.countryGoal}
               </p>
             </div>
           </div>
@@ -81,11 +109,135 @@ export default function ProfilePage() {
             </div>
 
             <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4">
-              <p className="text-xs text-slate-400">Preferred language track</p>
-              <p className="mt-1 text-white">English + cultural integration</p>
+              <p className="text-xs text-slate-400">Focus region</p>
+              <p className="mt-1 text-white">{form.focusRegion}</p>
             </div>
           </div>
         </div>
+      </section>
+
+      <section className="rounded-3xl border border-slate-800 bg-slate-900 p-8">
+        <div className="mb-6">
+          <h2 className="text-2xl font-bold text-yellow-400">
+            Editable Profile Information
+          </h2>
+          <p className="mt-2 text-slate-400">
+            Update the information that powers your TGPI experience.
+          </p>
+        </div>
+
+        <form onSubmit={handleSave} className="grid gap-6 xl:grid-cols-2">
+          <div>
+            <label className="mb-2 block text-sm text-slate-300">
+              Full name
+            </label>
+            <input
+              value={form.fullName}
+              onChange={(e) => updateField("fullName", e.target.value)}
+              className="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none transition focus:border-yellow-500"
+            />
+          </div>
+
+          <div>
+            <label className="mb-2 block text-sm text-slate-300">
+              Email
+            </label>
+            <input
+              type="email"
+              value={form.email}
+              onChange={(e) => updateField("email", e.target.value)}
+              className="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none transition focus:border-yellow-500"
+            />
+          </div>
+
+          <div>
+            <label className="mb-2 block text-sm text-slate-300">
+              Phone number
+            </label>
+            <input
+              value={form.phone}
+              onChange={(e) => updateField("phone", e.target.value)}
+              className="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none transition focus:border-yellow-500"
+            />
+          </div>
+
+          <div>
+            <label className="mb-2 block text-sm text-slate-300">
+              Country goal
+            </label>
+            <input
+              value={form.countryGoal}
+              onChange={(e) => updateField("countryGoal", e.target.value)}
+              className="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none transition focus:border-yellow-500"
+            />
+          </div>
+
+          <div>
+            <label className="mb-2 block text-sm text-slate-300">
+              Focus region
+            </label>
+            <select
+              value={form.focusRegion}
+              onChange={(e) => updateField("focusRegion", e.target.value)}
+              className="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none transition focus:border-yellow-500"
+            >
+              <option>Europe</option>
+              <option>North America</option>
+              <option>South America</option>
+              <option>Asia</option>
+              <option>Africa</option>
+              <option>Middle East</option>
+              <option>Oceania</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="mb-2 block text-sm text-slate-300">
+              Primary objective
+            </label>
+            <select
+              value={form.primaryObjective}
+              onChange={(e) => updateField("primaryObjective", e.target.value)}
+              className="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none transition focus:border-yellow-500"
+            >
+              <option>Relocation + work abroad</option>
+              <option>Study abroad</option>
+              <option>Tourism preparation</option>
+              <option>Business expansion</option>
+              <option>Cultural learning</option>
+            </select>
+          </div>
+
+          <div className="xl:col-span-2">
+            <label className="mb-2 block text-sm text-slate-300">
+              Learning track
+            </label>
+            <select
+              value={form.learningTrack}
+              onChange={(e) => updateField("learningTrack", e.target.value)}
+              className="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none transition focus:border-yellow-500"
+            >
+              <option>Language + cultural integration</option>
+              <option>Travel preparation</option>
+              <option>Work abroad readiness</option>
+              <option>Study abroad readiness</option>
+              <option>Relocation preparation</option>
+            </select>
+          </div>
+
+          <div className="xl:col-span-2 flex flex-wrap items-center gap-4">
+            <button
+              type="submit"
+              className="rounded-xl bg-yellow-500 px-6 py-3 font-semibold text-black transition hover:bg-yellow-400"
+            >
+              Save Profile
+            </button>
+
+            {message ? (
+              <p className="text-sm text-yellow-300">{message}</p>
+            ) : null}
+          </div>
+        </form>
       </section>
 
       <section className="grid gap-6 xl:grid-cols-2">
@@ -163,28 +315,28 @@ export default function ProfilePage() {
 
         <div className="rounded-3xl border border-slate-800 bg-slate-900 p-8">
           <h2 className="text-2xl font-bold text-yellow-400">
-            Preferences
+            Active Preferences
           </h2>
 
           <div className="mt-6 space-y-4">
             <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4">
-              <p className="text-xs text-slate-400">Focus region</p>
-              <p className="mt-1 text-white">Europe</p>
+              <p className="text-xs text-slate-400">Full name</p>
+              <p className="mt-1 text-white">{form.fullName}</p>
             </div>
 
             <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4">
-              <p className="text-xs text-slate-400">Primary objective</p>
-              <p className="mt-1 text-white">Relocation + work abroad</p>
+              <p className="text-xs text-slate-400">Email</p>
+              <p className="mt-1 text-white">{form.email}</p>
             </div>
 
             <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4">
-              <p className="text-xs text-slate-400">Preferred learning track</p>
-              <p className="mt-1 text-white">Language + cultural integration</p>
+              <p className="text-xs text-slate-400">Phone</p>
+              <p className="mt-1 text-white">{form.phone}</p>
             </div>
 
             <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4">
-              <p className="text-xs text-slate-400">Current premium tier</p>
-              <p className="mt-1 text-white">Global Premium</p>
+              <p className="text-xs text-slate-400">Current track</p>
+              <p className="mt-1 text-white">{form.learningTrack}</p>
             </div>
           </div>
         </div>
