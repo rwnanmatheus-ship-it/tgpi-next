@@ -13,6 +13,7 @@ export type GamificationResult = {
   nextLevelXp: number;
   progressPercent: number;
   rankTitle: string;
+  streak: number;
 };
 
 const rankTitles = [
@@ -27,6 +28,35 @@ const rankTitles = [
   "Elite Pathfinder",
   "TGPI Polymath Elite",
 ];
+
+export function calculateLevel(xp: number) {
+  return Math.floor(xp / 100) + 1;
+}
+
+export function getProgressToNextLevel(xp: number) {
+  return xp % 100;
+}
+
+export function getNextLevelXP() {
+  return 100;
+}
+
+export function updateStreak(lastLogin?: number) {
+  const today = new Date().toDateString();
+  const last = lastLogin ? new Date(lastLogin).toDateString() : null;
+
+  if (!last) return 1;
+  if (last === today) return null;
+
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+
+  if (new Date(lastLogin!).toDateString() === yesterday.toDateString()) {
+    return "increment";
+  }
+
+  return 1;
+}
 
 export function calculateGamification(
   stats: UserGameStats
@@ -57,5 +87,6 @@ export function calculateGamification(
     nextLevelXp,
     progressPercent,
     rankTitle,
+    streak: 1,
   };
 }
