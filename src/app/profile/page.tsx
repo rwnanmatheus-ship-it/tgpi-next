@@ -10,7 +10,11 @@ import {
   saveUserProfile,
   type UserProfileData,
 } from "@/lib/user-profile";
-import { getUserStats } from "@/lib/user-stats";
+import {
+  defaultUserStats,
+  getUserStats,
+  type UserStats,
+} from "@/lib/user-stats";
 import { onAuthStateChanged } from "firebase/auth";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
@@ -40,6 +44,7 @@ export default function ProfilePage() {
   const [message, setMessage] = useState("");
   const [messageType, setMessageType] = useState<"success" | "error" | "">("");
   const [form, setForm] = useState<UserProfileData>(defaultUserProfile);
+  const [statsData, setStatsData] = useState<UserStats>(defaultUserStats);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
@@ -51,13 +56,19 @@ export default function ProfilePage() {
 
       try {
         setUserId(user.uid);
-        const profile = await getUserProfile(user.uid);
+
+        const [profile, stats] = await Promise.all([
+          getUserProfile(user.uid),
+          getUserStats(user.uid),
+        ]);
 
         setForm({
           ...profile,
           email: profile.email || user.email || "",
           fullName: profile.fullName || user.displayName || "",
         });
+
+        setStatsData(stats);
       } catch (error) {
         console.error("Could not load profile:", error);
         setMessage("Could not load profile information.");
@@ -93,6 +104,9 @@ export default function ProfilePage() {
 
       await saveUserProfile(userId, form);
 
+      const refreshedStats = await getUserStats(userId);
+      setStatsData(refreshedStats);
+
       setMessage("Profile saved successfully.");
       setMessageType("success");
     } catch (error) {
@@ -113,7 +127,6 @@ export default function ProfilePage() {
     []
   );
 
-  const statsData = getUserStats();
   const game = calculateGamification(statsData);
 
   return (

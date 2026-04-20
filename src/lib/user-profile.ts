@@ -53,6 +53,16 @@ export async function saveUserProfile(
 ) {
   const ref = doc(db, "users", uid);
 
+  const profileCompleted = Boolean(
+    profile.fullName.trim() &&
+      profile.email.trim() &&
+      profile.phone.trim() &&
+      profile.countryGoal.trim() &&
+      profile.focusRegion.trim() &&
+      profile.primaryObjective.trim() &&
+      profile.learningTrack.trim()
+  );
+
   await setDoc(
     ref,
     {
@@ -64,6 +74,7 @@ export async function saveUserProfile(
       primaryObjective: profile.primaryObjective,
       learningTrack: profile.learningTrack,
       plan: profile.membership.toLowerCase(),
+      profileCompleted,
       updatedAt: new Date().toISOString(),
     },
     { merge: true }
