@@ -4,15 +4,29 @@ import type { NextRequest } from "next/server";
 export function middleware(request: NextRequest) {
   const url = request.nextUrl;
 
-  const onboardingCompleted = request.cookies.get("onboarding")?.value;
+  const publicPaths = [
+    "/",
+    "/login",
+    "/onboarding",
+    "/countries",
+    "/compare",
+    "/courses",
+    "/premium",
+    "/upgrade",
+  ];
 
-  if (!onboardingCompleted && url.pathname !== "/onboarding") {
-    return NextResponse.redirect(new URL("/onboarding", request.url));
+  const isPublicPath =
+    publicPaths.includes(url.pathname) ||
+    url.pathname.startsWith("/countries/") ||
+    url.pathname.startsWith("/courses/");
+
+  if (isPublicPath) {
+    return NextResponse.next();
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/dashboard", "/countries/:path*"],
+  matcher: ["/((?!_next|favicon.ico|.*\\..*).*)"],
 };
