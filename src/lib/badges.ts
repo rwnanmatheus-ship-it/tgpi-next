@@ -1,44 +1,67 @@
-import { UserProfile } from "@/lib/profile";
-import { isPremium } from "@/lib/plan";
-
 export type Badge = {
   id: string;
   title: string;
   description: string;
-  unlocked: boolean;
+  icon: string;
 };
 
-export function getUserBadges(profile: UserProfile): Badge[] {
-  return [
-    {
-      id: "profile-complete",
-      title: "Profile Complete",
-      description: "Complete your profile and activate your global identity.",
-      unlocked: !!profile.completedActions?.includes("save_profile"),
-    },
-    {
-      id: "country-focused",
-      title: "Country Focused",
-      description: "Choose a country goal and define your direction.",
-      unlocked: !!profile.completedActions?.includes("set_country_goal"),
-    },
-    {
-      id: "favorite-collector",
-      title: "Favorite Collector",
-      description: "Save at least one country to your favorites.",
-      unlocked: !!profile.completedActions?.includes("toggle_favorite"),
-    },
-    {
-      id: "currency-strategist",
-      title: "Currency Strategist",
-      description: "Save a currency usage action and refine planning.",
-      unlocked: !!profile.completedActions?.includes("save_currency_usage"),
-    },
-    {
-      id: "premium-member",
-      title: "Premium Member",
-      description: "Unlock Premium Global Access.",
-      unlocked: isPremium(profile.membershipPlan),
-    },
-  ];
+export function getUserBadges({
+  countriesExplored,
+  coursesCompleted,
+  profileCompleted,
+  level,
+}: {
+  countriesExplored: number;
+  coursesCompleted: number;
+  profileCompleted: boolean;
+  level: number;
+}): Badge[] {
+  const badges: Badge[] = [];
+
+  if (countriesExplored >= 1) {
+    badges.push({
+      id: "first-country",
+      title: "First Country",
+      description: "Explored your first country inside TGPI.",
+      icon: "🌍",
+    });
+  }
+
+  if (countriesExplored >= 5) {
+    badges.push({
+      id: "country-explorer",
+      title: "Country Explorer",
+      description: "Explored 5 or more countries.",
+      icon: "🧭",
+    });
+  }
+
+  if (coursesCompleted >= 1) {
+    badges.push({
+      id: "first-course",
+      title: "First Course Completed",
+      description: "Completed your first TGPI course.",
+      icon: "🎓",
+    });
+  }
+
+  if (profileCompleted) {
+    badges.push({
+      id: "identity-built",
+      title: "Identity Built",
+      description: "Completed your global profile.",
+      icon: "👤",
+    });
+  }
+
+  if (level >= 3) {
+    badges.push({
+      id: "pathfinder",
+      title: "Global Pathfinder",
+      description: "Reached Level 3 or higher.",
+      icon: "🚀",
+    });
+  }
+
+  return badges;
 }

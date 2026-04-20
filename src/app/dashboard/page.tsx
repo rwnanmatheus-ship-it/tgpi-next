@@ -1,7 +1,11 @@
 "use client";
 
+import BadgesGrid from "@/components/BadgesGrid";
 import ContinueJourney from "@/components/ContinueJourney";
 import PageContainer from "@/components/PageContainer";
+import ReferralCard from "@/components/ReferralCard";
+import SharePanel from "@/components/SharePanel";
+import { getUserBadges } from "@/lib/badges";
 import { calculateGamification } from "@/lib/gamification";
 import Link from "next/link";
 
@@ -54,6 +58,14 @@ export default function DashboardPage() {
   };
 
   const game = calculateGamification(stats);
+  const badges = getUserBadges({
+    countriesExplored: stats.countriesExplored,
+    coursesCompleted: 1,
+    profileCompleted: stats.profileCompleted,
+    level: game.level,
+  });
+
+  const shareText = `I reached Level ${game.level} on TGPI with ${game.xp} XP and I am building my global journey on The Global Polymath Institute 🌍`;
 
   return (
     <PageContainer
@@ -175,6 +187,13 @@ export default function DashboardPage() {
           value={String(stats.countriesSaved)}
           detail="Your shortlist is part of your strategy"
         />
+      </section>
+
+      <BadgesGrid badges={badges} />
+
+      <section className="grid gap-6 xl:grid-cols-2">
+        <SharePanel text={shareText} />
+        <ReferralCard />
       </section>
 
       <section className="grid gap-6 xl:grid-cols-2">
