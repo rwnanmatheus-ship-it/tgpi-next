@@ -26,6 +26,10 @@ export default function Navbar() {
     }
   }
 
+  function closeMenu() {
+    setMenuOpen(false);
+  }
+
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-[#0b0f19]/90 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
@@ -34,7 +38,10 @@ export default function Navbar() {
         </Link>
 
         <nav className="hidden items-center gap-6 md:flex">
-          <Link href="/" className="text-sm text-slate-300 transition hover:text-white">
+          <Link
+            href="/"
+            className="text-sm text-slate-300 transition hover:text-white"
+          >
             Home
           </Link>
 
@@ -43,6 +50,13 @@ export default function Navbar() {
             className="text-sm text-slate-300 transition hover:text-white"
           >
             Countries
+          </Link>
+
+          <Link
+            href="/courses"
+            className="text-sm text-slate-300 transition hover:text-white"
+          >
+            Courses
           </Link>
 
           <Link
@@ -96,7 +110,7 @@ export default function Navbar() {
           <div className="flex flex-col gap-4">
             <Link
               href="/"
-              onClick={() => setMenuOpen(false)}
+              onClick={closeMenu}
               className="text-sm text-slate-300 transition hover:text-white"
             >
               Home
@@ -104,15 +118,23 @@ export default function Navbar() {
 
             <Link
               href="/countries"
-              onClick={() => setMenuOpen(false)}
+              onClick={closeMenu}
               className="text-sm text-slate-300 transition hover:text-white"
             >
               Countries
             </Link>
 
             <Link
+              href="/courses"
+              onClick={closeMenu}
+              className="text-sm text-slate-300 transition hover:text-white"
+            >
+              Courses
+            </Link>
+
+            <Link
               href="/dashboard"
-              onClick={() => setMenuOpen(false)}
+              onClick={closeMenu}
               className="text-sm text-slate-300 transition hover:text-white"
             >
               Dashboard
@@ -120,7 +142,7 @@ export default function Navbar() {
 
             <Link
               href="/profile"
-              onClick={() => setMenuOpen(false)}
+              onClick={closeMenu}
               className="text-sm text-slate-300 transition hover:text-white"
             >
               Profile
@@ -142,7 +164,7 @@ export default function Navbar() {
             ) : (
               <Link
                 href="/login"
-                onClick={() => setMenuOpen(false)}
+                onClick={closeMenu}
                 className="w-fit rounded-lg border border-yellow-500/30 bg-yellow-500/10 px-4 py-2 text-sm font-medium text-yellow-300 transition hover:bg-yellow-500/20"
               >
                 Login
