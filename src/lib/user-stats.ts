@@ -8,6 +8,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { courses } from "@/data/courses";
 
 export type UserStats = {
   xp: number;
@@ -17,6 +18,7 @@ export type UserStats = {
   countriesSaved: number;
   profileCompleted: boolean;
   courseLessonsCompleted: number;
+  referrals: number;
 };
 
 export const defaultUserStats: UserStats = {
@@ -27,6 +29,7 @@ export const defaultUserStats: UserStats = {
   countriesSaved: 0,
   profileCompleted: false,
   courseLessonsCompleted: 0,
+  referrals: 0,
 };
 
 export async function getUserStats(uid: string): Promise<UserStats> {
@@ -44,8 +47,10 @@ export async function getUserStats(uid: string): Promise<UserStats> {
         countriesSaved: 0,
         profileCompleted: false,
         courseLessonsCompleted: 0,
+        referrals: 0,
         visitedCountries: [],
         completedLessons: [],
+        earnedCertificates: [],
         createdAt: new Date().toISOString(),
       },
       { merge: true }
@@ -76,6 +81,7 @@ export async function getUserStats(uid: string): Promise<UserStats> {
       typeof data?.courseLessonsCompleted === "number"
         ? data.courseLessonsCompleted
         : 0,
+    referrals: typeof data?.referrals === "number" ? data.referrals : 0,
   };
 }
 
@@ -151,14 +157,23 @@ export async function trackLessonCompletion(
   const ref = doc(db, "users", uid);
   const snap = await getDoc(ref);
 
+  const course = courses.find((item) => item.id === courseId);
+  const totalLessons =
+    course?.modules.reduce((sum, module) => sum + module.lessons.length, 0) || 0;
+
   if (!snap.exists()) {
+    const initialCompletedLessons = [lessonKey];
+    const isCourseCompleted = totalLessons > 0 && initialCompletedLessons.length >= totalLessons;
+
     await setDoc(
       ref,
       {
-        completedLessons: [lessonKey],
+        completedLessons: initialCompletedLessons,
         courseLessonsCompleted: 1,
         coursesInProgress: 1,
-        xp: 20,
+        xp: isCourseCompleted ? 220 : 20,
+        certificatesEarned: isCourseCompleted ? 1 : 0,
+        earnedCertificates: isCourseCompleted ? [courseId] : [],
         updatedAt: new Date().toISOString(),
       },
       { merge: true }
@@ -170,20 +185,39 @@ export async function trackLessonCompletion(
   const completedLessons: string[] = Array.isArray(data?.completedLessons)
     ? data.completedLessons
     : [];
+  const earnedCertificates: string[] = Array.isArray(data?.earnedCertificates)
+    ? data.earnedCertificates
+    : [];
 
-  if (!completedLessons.includes(lessonKey)) {
-    const currentCoursesInProgress =
-      typeof data?.coursesInProgress === "number" ? data.coursesInProgress : 0;
-
-    await updateDoc(ref, {
-      completedLessons: [...completedLessons, lessonKey],
-      courseLessonsCompleted: increment(1),
-      coursesInProgress:
-        currentCoursesInProgress < 1 ? increment(1) : currentCoursesInProgress,
-      xp: increment(20),
-      updatedAt: new Date().toISOString(),
-    });
+  if (completedLessons.includes(lessonKey)) {
+    return;
   }
+
+  const nextCompletedLessons = [...completedLessons, lessonKey];
+  const currentCoursesInProgress =
+    typeof data?.coursesInProgress === "number" ? data.coursesInProgress : 0;
+
+  const completedInThisCourse = nextCompletedLessons.filter((item) =>
+    item.startsWith(`${courseId}:`)
+  ).length;
+
+  const justCompletedCourse =
+    totalLessons > 0 &&
+    completedInThisCourse >= totalLessons &&
+    !earnedCertificates.includes(courseId);
+
+  await updateDoc(ref, {
+    completedLessons: nextCompletedLessons,
+    courseLessonsCompleted: increment(1),
+    coursesInProgress:
+      currentCoursesInProgress < 1 ? increment(1) : currentCoursesInProgress,
+    xp: increment(justCompletedCourse ? 220 : 20),
+    certificatesEarned: justCompletedCourse ? increment(1) : increment(0),
+    earnedCertificates: justCompletedCourse
+      ? [...earnedCertificates, courseId]
+      : earnedCertificates,
+    updatedAt: new Date().toISOString(),
+  });
 }
 
 export type LeaderboardEntry = {

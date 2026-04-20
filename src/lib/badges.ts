@@ -10,11 +10,13 @@ export function getUserBadges({
   coursesCompleted,
   profileCompleted,
   level,
+  referrals = 0,
 }: {
   countriesExplored: number;
   coursesCompleted: number;
   profileCompleted: boolean;
   level: number;
+  referrals?: number;
 }): Badge[] {
   const badges: Badge[] = [];
 
@@ -60,6 +62,24 @@ export function getUserBadges({
       title: "Global Pathfinder",
       description: "Reached Level 3 or higher.",
       icon: "🚀",
+    });
+  }
+
+  if (referrals >= 1) {
+    badges.push({
+      id: "connector",
+      title: "Connector",
+      description: "Invited your first TGPI friend.",
+      icon: "🤝",
+    });
+  }
+
+  if (referrals >= 5) {
+    badges.push({
+      id: "community-builder",
+      title: "Community Builder",
+      description: "Brought 5 users into the TGPI ecosystem.",
+      icon: "🏆",
     });
   }
 

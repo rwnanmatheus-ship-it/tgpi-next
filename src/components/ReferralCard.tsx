@@ -1,15 +1,54 @@
 "use client";
 
+import { auth } from "@/lib/firebase";
+import {
+  ensureReferralIndex,
+  getOrCreateReferralCode,
+  getReferralCount,
+} from "@/lib/referral";
+import { onAuthStateChanged } from "firebase/auth";
+import { useEffect, useState } from "react";
+
 export default function ReferralCard() {
-  const referralLink = "https://theglobalpolymath.com?ref=tgpi-founder";
+  const [referralLink, setReferralLink] = useState("");
+  const [referrals, setReferrals] = useState(0);
+  const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        setReferralLink("");
+        setReferrals(0);
+        return;
+      }
+
+      try {
+        const code = await getOrCreateReferralCode(user.uid);
+        await ensureReferralIndex(user.uid, code);
+        const count = await getReferralCount(user.uid);
+
+        setReferralLink(`https://theglobalpolymath.com?ref=${code}`);
+        setReferrals(count);
+      } catch (error) {
+        console.error("Could not load referral data:", error);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
 
   async function copyLink() {
+    if (!referralLink) {
+      setMessage("Sign in to access your referral link.");
+      return;
+    }
+
     try {
       await navigator.clipboard.writeText(referralLink);
-      alert("Referral link copied.");
+      setMessage("Referral link copied.");
     } catch (error) {
       console.error(error);
-      alert("Could not copy referral link.");
+      setMessage("Could not copy referral link.");
     }
   }
 
@@ -20,17 +59,22 @@ export default function ReferralCard() {
         Bring other users to TGPI and grow your global network.
       </p>
 
+      <div className="mt-4 rounded-2xl border border-slate-800 bg-slate-900 p-4">
+        <p className="text-sm text-slate-400">Current referrals</p>
+        <p className="mt-2 text-3xl font-bold text-yellow-400">{referrals}</p>
+      </div>
+
       <div className="mt-6 rounded-2xl border border-slate-800 bg-slate-950 p-4">
         <p className="text-xs text-slate-400">Your referral link</p>
-        <p className="mt-2 break-all text-sm text-white">{referralLink}</p>
+        <p className="mt-2 break-all text-sm text-white">
+          {referralLink || "Sign in to generate your referral link."}
+        </p>
       </div>
 
       <div className="mt-6 grid gap-4 md:grid-cols-3">
         <div className="rounded-2xl border border-slate-800 bg-slate-900 p-4">
           <p className="text-sm text-slate-400">1 friend</p>
-          <p className="mt-2 text-lg font-semibold text-yellow-400">
-            +50 XP
-          </p>
+          <p className="mt-2 text-lg font-semibold text-yellow-400">+50 XP</p>
         </div>
 
         <div className="rounded-2xl border border-slate-800 bg-slate-900 p-4">
@@ -54,6 +98,10 @@ export default function ReferralCard() {
       >
         Copy Referral Link
       </button>
+
+      {message ? (
+        <p className="mt-4 text-sm text-yellow-300">{message}</p>
+      ) : null}
     </div>
   );
 }
