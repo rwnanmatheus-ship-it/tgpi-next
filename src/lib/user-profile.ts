@@ -1,4 +1,5 @@
 import { db } from "@/lib/firebase";
+import { completeProfileAndAwardXp } from "@/lib/user-stats";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 
 export type UserProfileData = {
@@ -79,4 +80,8 @@ export async function saveUserProfile(
     },
     { merge: true }
   );
+
+  if (profileCompleted) {
+    await completeProfileAndAwardXp(uid);
+  }
 }

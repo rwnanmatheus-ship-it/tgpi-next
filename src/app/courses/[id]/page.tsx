@@ -3,6 +3,7 @@
 import { courses } from "@/data/courses";
 import { auth } from "@/lib/firebase";
 import { markLessonComplete } from "@/lib/course-progress";
+import { trackLessonCompletion } from "@/lib/user-stats";
 import { useParams } from "next/navigation";
 import { useMemo, useState } from "react";
 
@@ -14,6 +15,7 @@ export default function CoursePage() {
   }, [params]);
 
   const [completed, setCompleted] = useState<string[]>([]);
+  const [message, setMessage] = useState("");
 
   if (!course) {
     return (
@@ -27,13 +29,24 @@ export default function CoursePage() {
 
   async function handleComplete(lessonId: string) {
     const user = auth.currentUser;
-    if (!user) return;
+    if (!user) {
+      setMessage("You must be signed in to track lesson progress.");
+      return;
+    }
 
-    await markLessonComplete(user.uid, safeCourse.id, lessonId);
+    try {
+      await markLessonComplete(user.uid, safeCourse.id, lessonId);
+      await trackLessonCompletion(user.uid, `${safeCourse.id}:${lessonId}`, safeCourse.id);
 
-    setCompleted((prev) =>
-      prev.includes(lessonId) ? prev : [...prev, lessonId]
-    );
+      setCompleted((prev) =>
+        prev.includes(lessonId) ? prev : [...prev, lessonId]
+      );
+
+      setMessage("Lesson completed. XP added.");
+    } catch (error) {
+      console.error(error);
+      setMessage("Could not complete lesson.");
+    }
   }
 
   return (
@@ -49,6 +62,10 @@ export default function CoursePage() {
           </h1>
 
           <p className="mt-4 text-slate-300">{safeCourse.description}</p>
+
+          {message ? (
+            <p className="mt-4 text-sm text-yellow-300">{message}</p>
+          ) : null}
         </section>
 
         <section className="space-y-8">
