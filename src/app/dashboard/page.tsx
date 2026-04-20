@@ -1,64 +1,48 @@
 "use client";
 
-import { countries } from "@/data/countries";
-import { recommendCountries } from "@/lib/recommendation";
+import PageContainer from "@/components/PageContainer";
+import ContinueJourney from "@/components/ContinueJourney";
 
 export default function DashboardPage() {
-  const recommended = recommendCountries(countries, {
-    goal: "Work abroad",
-    region: "Europe",
-    favorites: ["portugal"],
-  });
-
   return (
-    <main className="min-h-screen bg-slate-950 px-6 py-12 text-white">
-      <div className="mx-auto max-w-6xl space-y-10">
-        <h1 className="text-4xl font-bold text-yellow-400">
-          Your Global Dashboard 🌍
-        </h1>
+    <PageContainer
+      title="Your Global Dashboard 🌍"
+      subtitle="Track your progress and build your international journey"
+    >
+      {/* CONTINUE */}
+      <ContinueJourney />
 
-        {/* RECOMENDAÇÕES */}
-        <section>
-          <h2 className="mb-4 text-2xl font-bold text-yellow-300">
-            Recommended for You
-          </h2>
+      {/* STATS */}
+      <section className="grid gap-6 md:grid-cols-3">
 
-          <div className="grid gap-6 md:grid-cols-3">
-            {recommended.map((c) => (
-              <div
-                key={c.slug}
-                className="rounded-2xl border border-slate-800 bg-slate-900 p-5"
-              >
-                <h3 className="text-xl font-bold text-white">
-                  {c.emoji} {c.name}
-                </h3>
-                <p className="mt-2 text-sm text-slate-400">
-                  {c.shortDescription}
-                </p>
-              </div>
-            ))}
-          </div>
-        </section>
+        <div className="rounded-2xl bg-slate-900 p-6">
+          <p className="text-sm text-slate-400">Countries explored</p>
+          <p className="text-3xl font-bold text-yellow-400">5</p>
+        </div>
 
-        {/* PROGRESSO */}
-        <section>
-          <h2 className="text-2xl font-bold text-yellow-300">
-            Your Progress
-          </h2>
+        <div className="rounded-2xl bg-slate-900 p-6">
+          <p className="text-sm text-slate-400">Courses in progress</p>
+          <p className="text-3xl font-bold text-yellow-400">2</p>
+        </div>
 
-          <div className="mt-4 grid gap-6 md:grid-cols-2">
-            <div className="rounded-2xl bg-slate-900 p-6">
-              <p className="text-sm text-slate-400">Countries explored</p>
-              <p className="text-3xl font-bold text-yellow-400">5</p>
-            </div>
+        <div className="rounded-2xl bg-slate-900 p-6">
+          <p className="text-sm text-slate-400">Certificates</p>
+          <p className="text-3xl font-bold text-yellow-400">1</p>
+        </div>
 
-            <div className="rounded-2xl bg-slate-900 p-6">
-              <p className="text-sm text-slate-400">Courses completed</p>
-              <p className="text-3xl font-bold text-yellow-400">2</p>
-            </div>
-          </div>
-        </section>
-      </div>
-    </main>
+      </section>
+
+      {/* NEXT STEP */}
+      <section className="rounded-2xl bg-slate-900 p-6">
+        <h2 className="text-xl font-bold text-yellow-300">
+          Next Step
+        </h2>
+
+        <p className="mt-2 text-slate-400">
+          Explore new countries or continue your courses.
+        </p>
+      </section>
+
+    </PageContainer>
   );
 }
