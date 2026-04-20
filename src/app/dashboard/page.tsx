@@ -2,6 +2,7 @@
 
 import ContinueJourney from "@/components/ContinueJourney";
 import PageContainer from "@/components/PageContainer";
+import { calculateGamification } from "@/lib/gamification";
 import Link from "next/link";
 
 const recommendedCountries = [
@@ -29,46 +30,80 @@ const recentActivity = [
   {
     title: "Visited Portugal country page",
     detail: "You explored relocation context, culture, and cost of life.",
+    xp: "+10 XP",
   },
   {
     title: "Started English for Living Abroad",
     detail: "Your language preparation journey has already begun.",
+    xp: "+25 XP",
   },
   {
-    title: "Saved a country to favorites",
-    detail: "You are building your global shortlist strategically.",
+    title: "Saved Germany to favorites",
+    detail: "You strengthened your global shortlist strategically.",
+    xp: "+15 XP",
   },
 ];
 
 export default function DashboardPage() {
+  const stats = {
+    countriesExplored: 5,
+    coursesInProgress: 2,
+    certificatesEarned: 1,
+    countriesSaved: 3,
+    profileCompleted: true,
+  };
+
+  const game = calculateGamification(stats);
+
   return (
     <PageContainer
       title="Your Global Dashboard 🌍"
-      subtitle="Track your progress, continue your journey, and take the next step with clarity."
+      subtitle="Track your growth, level up your global intelligence, and keep moving forward."
     >
       <section className="grid gap-6 xl:grid-cols-[1.2fr_.8fr]">
         <div className="rounded-3xl border border-yellow-700/20 bg-gradient-to-br from-yellow-500/10 via-slate-950 to-slate-900 p-8">
-          <p className="mb-3 inline-flex rounded-full border border-yellow-600/30 bg-yellow-500/5 px-4 py-2 text-sm text-yellow-200">
-            Global Progress
-          </p>
+          <div className="mb-4 flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <p className="mb-3 inline-flex rounded-full border border-yellow-600/30 bg-yellow-500/5 px-4 py-2 text-sm text-yellow-200">
+                Global XP System
+              </p>
 
-          <h2 className="text-3xl font-bold text-yellow-400">
-            You are building a real international pathway.
-          </h2>
+              <h2 className="text-3xl font-bold text-yellow-400">
+                Level {game.level} • {game.rankTitle}
+              </h2>
 
-          <p className="mt-4 max-w-2xl text-slate-300">
-            Your TGPI activity is starting to form a structured global profile
-            through countries, courses, and strategic exploration.
-          </p>
+              <p className="mt-3 max-w-2xl text-slate-300">
+                Every country explored, course started, and achievement earned
+                increases your TGPI global progression.
+              </p>
+            </div>
 
-          <div className="mt-8 h-4 overflow-hidden rounded-full bg-slate-800">
-            <div className="h-full w-[32%] rounded-full bg-yellow-500" />
+            <div className="rounded-2xl border border-slate-800 bg-slate-900 px-5 py-4 text-center">
+              <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
+                Total XP
+              </p>
+              <p className="mt-2 text-3xl font-bold text-yellow-400">
+                {game.xp}
+              </p>
+            </div>
           </div>
 
-          <div className="mt-4 flex flex-wrap items-center gap-6 text-sm text-slate-300">
-            <span>32% pathway progress</span>
-            <span>5 countries explored</span>
-            <span>2 courses in progress</span>
+          <div className="mt-8">
+            <div className="mb-2 flex items-center justify-between text-sm text-slate-300">
+              <span>{game.currentLevelXp} XP</span>
+              <span>{game.nextLevelXp} XP</span>
+            </div>
+
+            <div className="h-4 overflow-hidden rounded-full bg-slate-800">
+              <div
+                className="h-full rounded-full bg-yellow-500 transition-all"
+                style={{ width: `${game.progressPercent}%` }}
+              />
+            </div>
+
+            <p className="mt-3 text-sm text-slate-400">
+              {game.progressPercent}% progress to Level {game.level + 1}
+            </p>
           </div>
 
           <div className="mt-8 flex flex-wrap gap-4">
@@ -85,70 +120,61 @@ export default function DashboardPage() {
             >
               Continue Learning
             </Link>
+
+            <Link
+              href="/profile"
+              className="rounded-xl border border-slate-700 bg-slate-900 px-6 py-3 font-semibold text-white transition hover:border-yellow-500"
+            >
+              Complete Profile
+            </Link>
           </div>
         </div>
 
         <div className="rounded-3xl border border-slate-800 bg-slate-900 p-8">
           <h2 className="text-2xl font-bold text-yellow-400">
-            Next Best Step
+            Next Level Rewards
           </h2>
 
-          <p className="mt-4 text-slate-300">
-            Your strongest next move is to compare your top countries and align
-            them with your learning pathway.
-          </p>
-
-          <div className="mt-6 space-y-3">
-            <Link
-              href="/compare"
-              className="block rounded-2xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm text-slate-200 transition hover:border-yellow-500"
-            >
-              Compare countries
-            </Link>
-
-            <Link
-              href="/premium"
-              className="block rounded-2xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm text-slate-200 transition hover:border-yellow-500"
-            >
-              Unlock premium path
-            </Link>
-
-            <Link
-              href="/profile"
-              className="block rounded-2xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm text-slate-200 transition hover:border-yellow-500"
-            >
-              Review your profile
-            </Link>
+          <div className="mt-6 space-y-4">
+            <RewardCard
+              title="Unlock stronger country recommendations"
+              detail="The more you explore, the more relevant your global suggestions become."
+            />
+            <RewardCard
+              title="Build a premium-ready profile"
+              detail="A complete profile increases strategic personalization across the platform."
+            />
+            <RewardCard
+              title="Strengthen your TGPI identity"
+              detail="Higher levels reinforce your learning and international preparation path."
+            />
           </div>
         </div>
       </section>
 
       <ContinueJourney />
 
-      <section className="grid gap-6 md:grid-cols-3">
-        <div className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-          <p className="text-sm text-slate-400">Countries explored</p>
-          <p className="mt-3 text-4xl font-bold text-yellow-400">5</p>
-          <p className="mt-2 text-sm text-slate-300">
-            Active exploration of your global options
-          </p>
-        </div>
-
-        <div className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-          <p className="text-sm text-slate-400">Courses in progress</p>
-          <p className="mt-3 text-4xl font-bold text-yellow-400">2</p>
-          <p className="mt-2 text-sm text-slate-300">
-            Education aligned with your international goals
-          </p>
-        </div>
-
-        <div className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-          <p className="text-sm text-slate-400">Certificates earned</p>
-          <p className="mt-3 text-4xl font-bold text-yellow-400">1</p>
-          <p className="mt-2 text-sm text-slate-300">
-            Recognition that reinforces your profile
-          </p>
-        </div>
+      <section className="grid gap-6 md:grid-cols-4">
+        <StatCard
+          label="Countries explored"
+          value={String(stats.countriesExplored)}
+          detail="Each country expands your global map"
+        />
+        <StatCard
+          label="Courses in progress"
+          value={String(stats.coursesInProgress)}
+          detail="Learning fuels your progression"
+        />
+        <StatCard
+          label="Certificates earned"
+          value={String(stats.certificatesEarned)}
+          detail="Recognition adds major XP value"
+        />
+        <StatCard
+          label="Countries saved"
+          value={String(stats.countriesSaved)}
+          detail="Your shortlist is part of your strategy"
+        />
       </section>
 
       <section className="grid gap-6 xl:grid-cols-2">
@@ -178,7 +204,7 @@ export default function DashboardPage() {
 
         <div className="rounded-3xl border border-slate-800 bg-slate-900 p-8">
           <h2 className="text-2xl font-bold text-yellow-400">
-            Recent Activity
+            Activity Timeline
           </h2>
 
           <div className="mt-6 space-y-4">
@@ -187,9 +213,14 @@ export default function DashboardPage() {
                 key={item.title}
                 className="rounded-2xl border border-slate-800 bg-slate-950 p-4"
               >
-                <h3 className="text-lg font-semibold text-white">
-                  {item.title}
-                </h3>
+                <div className="flex items-center justify-between gap-4">
+                  <h3 className="text-lg font-semibold text-white">
+                    {item.title}
+                  </h3>
+                  <span className="text-sm font-semibold text-yellow-300">
+                    {item.xp}
+                  </span>
+                </div>
                 <p className="mt-2 text-sm text-slate-400">{item.detail}</p>
               </div>
             ))}
@@ -197,5 +228,38 @@ export default function DashboardPage() {
         </div>
       </section>
     </PageContainer>
+  );
+}
+
+function StatCard({
+  label,
+  value,
+  detail,
+}: {
+  label: string;
+  value: string;
+  detail: string;
+}) {
+  return (
+    <div className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
+      <p className="text-sm text-slate-400">{label}</p>
+      <p className="mt-3 text-4xl font-bold text-yellow-400">{value}</p>
+      <p className="mt-2 text-sm text-slate-300">{detail}</p>
+    </div>
+  );
+}
+
+function RewardCard({
+  title,
+  detail,
+}: {
+  title: string;
+  detail: string;
+}) {
+  return (
+    <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4">
+      <h3 className="text-lg font-semibold text-white">{title}</h3>
+      <p className="mt-2 text-sm text-slate-400">{detail}</p>
+    </div>
   );
 }
