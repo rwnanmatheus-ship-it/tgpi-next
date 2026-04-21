@@ -8,6 +8,9 @@ import { calculateReputation } from "@/lib/calculate-reputation";
 import GlobalReadinessCard from "@/components/GlobalReadinessCard";
 import ShareActions from "@/components/ShareActions";
 import RecruiterSignals from "@/components/RecruiterSignals";
+import GlobalMomentum from "@/components/GlobalMomentum";
+import PremiumStatusBadge from "@/components/PremiumStatusBadge";
+import JourneyReasonsCard from "@/components/JourneyReasonsCard";
 import { maskDocumentNumber, prettifyIntent } from "@/lib/identity";
 
 export default function PublicProfilePage({ params }: any) {
@@ -45,6 +48,10 @@ export default function PublicProfilePage({ params }: any) {
     userData.documentType,
     userData.documentNumber
   );
+  const countriesExploredCount = Array.isArray(userData.countriesExplored)
+    ? userData.countriesExplored.length
+    : 0;
+  const certificatesCount = Number(userData.certificatesEarned || 0);
 
   return (
     <div className="min-h-screen p-8 text-white">
@@ -62,7 +69,14 @@ export default function PublicProfilePage({ params }: any) {
 
               <p className="mt-3 text-lg text-slate-300">{username}</p>
 
-              <p className="mt-4 max-w-3xl text-slate-300">
+              <div className="mt-5">
+                <PremiumStatusBadge
+                  plan={userData.plan}
+                  isVerified={userData.isVerified}
+                />
+              </div>
+
+              <p className="mt-5 max-w-3xl text-slate-300">
                 {userData.bio ||
                   "A globally minded TGPI member building international readiness and long-term global positioning."}
               </p>
@@ -78,6 +92,13 @@ export default function PublicProfilePage({ params }: any) {
         </section>
 
         <GlobalReadinessCard score={readiness} />
+
+        <GlobalMomentum
+          score={Number(userData.globalScore || 0)}
+          readiness={readiness}
+          countries={countriesExploredCount}
+          certificates={certificatesCount}
+        />
 
         <section className="grid gap-6 lg:grid-cols-2">
           <section className="rounded-3xl border border-slate-800 bg-slate-900 p-8">
@@ -100,10 +121,7 @@ export default function PublicProfilePage({ params }: any) {
                 label="Travel Intent"
                 value={prettifyIntent(userData.travelIntent)}
               />
-              <Card
-                label="Document Verification"
-                value={maskedDocument}
-              />
+              <Card label="Document Verification" value={maskedDocument} />
               <Card
                 label="Identity Status"
                 value={userData.isVerified ? "Verified Global Learner" : "Standard"}
@@ -113,6 +131,13 @@ export default function PublicProfilePage({ params }: any) {
 
           <RecruiterSignals user={userData} />
         </section>
+
+        <JourneyReasonsCard
+          targetCountry={userData.targetCountry}
+          travelIntent={userData.travelIntent}
+          readinessScore={readiness}
+          countriesExplored={countriesExploredCount}
+        />
 
         <ShareActions
           title={`${publicName} • TGPI Public Profile`}
