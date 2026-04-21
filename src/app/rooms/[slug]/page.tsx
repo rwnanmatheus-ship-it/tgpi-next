@@ -3,6 +3,7 @@
 import { useParams } from "next/navigation";
 import LiveChat from "@/components/LiveChat";
 import SocialFeed from "@/components/SocialFeed";
+import OnlineNow from "@/components/OnlineNow";
 
 export default function RoomPage() {
   const { slug } = useParams();
@@ -12,6 +13,10 @@ export default function RoomPage() {
       <h1 className="text-3xl text-yellow-400 font-bold capitalize">
         {slug} Room
       </h1>
+
+      <div className="mt-2">
+        <OnlineNow />
+      </div>
 
       <div className="mt-6 grid gap-6 md:grid-cols-2">
         <LiveChat />

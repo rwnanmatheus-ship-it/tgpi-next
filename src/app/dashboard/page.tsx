@@ -18,6 +18,8 @@ import PriorityMatrix from "@/components/PriorityMatrix";
 import GlobalRoomsList from "@/components/GlobalRoomsList";
 import SocialFeed from "@/components/SocialFeed";
 import ViralLoop from "@/components/ViralLoop";
+import OnlineNow from "@/components/OnlineNow";
+import ProfileCompletion from "@/components/ProfileCompletion";
 
 export default function DashboardPage() {
   const xp = 120;
@@ -26,16 +28,31 @@ export default function DashboardPage() {
   return (
     <main className="min-h-screen bg-black px-6 py-10 text-white">
       <div className="mx-auto max-w-6xl space-y-8">
-        <h1 className="text-4xl font-bold text-yellow-400">
-          Your Global Dashboard
-        </h1>
+        <section className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h1 className="text-4xl font-bold text-yellow-400">
+              Your Global Dashboard
+            </h1>
+            <p className="mt-2 text-sm text-slate-400">
+              Your movement, readiness, and global identity are evolving in real time.
+            </p>
+          </div>
+
+          <div className="flex flex-col gap-3 md:items-end">
+            <OnlineNow />
+            <ProfileCompletion />
+          </div>
+        </section>
 
         <DailyStreak />
         <XPProgress xp={xp} />
         <UserBadges />
 
-        <RecommendedCountries intent={intent} />
-        <GlobalAdvisor />
+        <div className="grid gap-6 xl:grid-cols-2">
+          <RecommendedCountries intent={intent} />
+          <GlobalAdvisor />
+        </div>
+
         <ActionPlan />
 
         <div className="grid gap-6 md:grid-cols-2">
