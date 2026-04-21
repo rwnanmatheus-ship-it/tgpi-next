@@ -4,52 +4,77 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { onAuthStateChanged, type User } from "firebase/auth";
 import { auth } from "@/lib/firebase";
-import { upgradeUserToPremium } from "@/lib/upgrade-user";
 
 const freeFeatures = [
   "Country exploration",
+  "Interactive readiness layers",
   "Basic community access",
-  "Profile creation",
-  "Dashboard and progression",
-  "Readiness visibility",
+  "Passport and profile foundation",
+  "Useful free global preparation",
 ];
 
 const premiumFeatures = [
-  "Full global ranking access",
-  "Elite passport layer",
-  "Advanced matching and deeper connections",
-  "Recruiter-facing credibility signals",
-  "Stronger certificate trust layer",
-  "Premium growth and visibility tools",
+  "Full global ranking visibility",
+  "Advanced social matching",
+  "Elite certificate trust layer",
+  "Stronger recruiter-facing signals",
+  "Premium passport layer",
+  "Higher-value identity and positioning",
 ];
 
 export default function PremiumPage() {
   const [user, setUser] = useState<User | null>(null);
-  const [upgrading, setUpgrading] = useState(false);
-  const [success, setSuccess] = useState(false);
+  const [loadingCheckout, setLoadingCheckout] = useState(false);
+  const [error, setError] = useState("");
+  const [canceled, setCanceled] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
     });
 
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("canceled") === "1") {
+      setCanceled(true);
+    }
+
     return () => unsubscribe();
   }, []);
 
-  async function handleUpgrade() {
+  async function handleCheckout() {
+    setError("");
+
     if (!user) {
       window.location.href = "/login";
       return;
     }
 
     try {
-      setUpgrading(true);
-      await upgradeUserToPremium(user.uid);
-      setSuccess(true);
-    } catch (error) {
-      console.error("Could not upgrade user:", error);
+      setLoadingCheckout(true);
+
+      const response = await fetch("/api/stripe/create-checkout-session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          uid: user.uid,
+          email: user.email || "",
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok || !data?.url) {
+        throw new Error(data?.error || "Could not start checkout.");
+      }
+
+      window.location.href = data.url;
+    } catch (err: any) {
+      console.error("Checkout start error:", err);
+      setError(err?.message || "Could not start checkout.");
     } finally {
-      setUpgrading(false);
+      setLoadingCheckout(false);
     }
   }
 
@@ -58,45 +83,51 @@ export default function PremiumPage() {
       <div className="mx-auto max-w-6xl space-y-10">
         <section className="rounded-3xl border border-yellow-700/20 bg-gradient-to-br from-yellow-500/10 via-slate-950 to-slate-900 p-10 text-center">
           <p className="mb-4 inline-flex rounded-full border border-yellow-600/30 bg-yellow-500/5 px-4 py-2 text-sm text-yellow-200">
-            TGPI Premium Access
+            TGPI Premium Subscription
           </p>
 
           <h1 className="text-5xl font-bold text-yellow-400">
-            Unlock the Next Level of Global Readiness
+            Unlock the Full TGPI Layer
           </h1>
 
           <p className="mx-auto mt-6 max-w-3xl text-slate-300">
-            The free experience is designed to be useful and valuable. Premium
-            is designed to give serious users deeper visibility, stronger
-            positioning, higher trust, and better international networking.
+            The free experience is intentionally strong, useful, and interactive.
+            Premium is for users who want stronger visibility, higher trust,
+            deeper access, and a more powerful international identity.
           </p>
 
           <div className="mt-8 flex flex-wrap justify-center gap-4">
             <button
-              onClick={handleUpgrade}
-              disabled={upgrading}
+              onClick={handleCheckout}
+              disabled={loadingCheckout}
               className="rounded-2xl bg-yellow-500 px-8 py-4 text-lg font-bold text-black transition hover:bg-yellow-400 disabled:cursor-not-allowed disabled:opacity-70"
             >
-              {upgrading ? "Unlocking..." : "Upgrade to Premium"}
+              {loadingCheckout ? "Redirecting..." : "Start Premium Subscription"}
             </button>
 
             <Link
               href="/dashboard"
               className="rounded-2xl border border-slate-700 bg-slate-900 px-8 py-4 text-lg font-bold text-white transition hover:border-yellow-500"
             >
-              Continue Free
+              Keep Exploring Free
             </Link>
           </div>
 
-          {success ? (
-            <div className="mx-auto mt-6 max-w-2xl rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-4">
-              <p className="font-semibold text-emerald-300">
-                Premium activated successfully.
+          {canceled ? (
+            <div className="mx-auto mt-6 max-w-2xl rounded-2xl border border-amber-500/20 bg-amber-500/10 p-4">
+              <p className="font-semibold text-amber-300">
+                Your checkout was canceled.
               </p>
               <p className="mt-2 text-sm text-slate-200">
-                Your account now has access to premium layers and advanced TGPI
-                features.
+                You can continue exploring TGPI for free and upgrade whenever you
+                are ready.
               </p>
+            </div>
+          ) : null}
+
+          {error ? (
+            <div className="mx-auto mt-6 max-w-2xl rounded-2xl border border-red-500/20 bg-red-500/10 p-4">
+              <p className="font-semibold text-red-300">{error}</p>
             </div>
           ) : null}
         </section>
@@ -104,14 +135,14 @@ export default function PremiumPage() {
         <section className="grid gap-6 lg:grid-cols-2">
           <PlanCard
             title="Free"
-            subtitle="Useful, informative, and intentionally valuable"
+            subtitle="High-value free experience that builds trust and momentum"
             features={freeFeatures}
             tone="free"
           />
 
           <PlanCard
             title="Premium"
-            subtitle="For users who want stronger growth, visibility, and trust"
+            subtitle="For serious users who want stronger positioning and access"
             features={premiumFeatures}
             tone="premium"
           />
@@ -119,16 +150,16 @@ export default function PremiumPage() {
 
         <section className="grid gap-6 xl:grid-cols-3">
           <ValueCard
-            title="Strong Free Experience"
-            text="Users can already explore countries, build readiness, and begin their global identity journey before paying."
+            title="Useful Before Payment"
+            text="Free users can already explore countries, build identity, and understand the value of TGPI before subscribing."
           />
           <ValueCard
-            title="Preview-Driven Upgrade Desire"
-            text="Premium features are introduced through previews and partial access so users understand the value before upgrading."
+            title="Premium Feels Like an Upgrade"
+            text="Instead of punishing the free user, TGPI lets them experience real value and then offers a more powerful next level."
           />
           <ValueCard
-            title="Positioning Upgrade"
-            text="Premium is not just extra content. It improves visibility, credibility, matching quality, and perceived status."
+            title="Subscription With Clear ROI"
+            text="Premium improves visibility, trust, social matching quality, and the strength of the user's global positioning."
           />
         </section>
       </div>
