@@ -8,6 +8,8 @@ import RealTimeChat from "@/components/RealTimeChat";
 import GlobalRooms from "@/components/GlobalRooms";
 import Missions from "@/components/Missions";
 import UserRank from "@/components/UserRank";
+import SocialProof from "@/components/SocialProof";
+import InviteCard from "@/components/InviteCard";
 
 export default function DashboardPage() {
   const user = useUserData();
@@ -19,7 +21,6 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen p-8 text-white">
       <div className="max-w-6xl mx-auto space-y-8">
-
         <div className="flex justify-between items-center">
           <h1 className="text-3xl font-bold text-yellow-400">
             Dashboard
@@ -32,6 +33,11 @@ export default function DashboardPage() {
 
         <SmartFeed user={user} />
 
+        <div className="grid gap-6 xl:grid-cols-2">
+          <SocialProof />
+          <InviteCard username={user.username || "user"} />
+        </div>
+
         <GlobalRooms />
 
         <Missions />
@@ -42,7 +48,6 @@ export default function DashboardPage() {
         />
 
         <RealTimeChat chatId={user.uid} />
-
       </div>
     </div>
   );
