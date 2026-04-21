@@ -59,6 +59,12 @@ export function useUserData() {
         targetCountry: String(baseData?.targetCountry || baseData?.countryGoal || ""),
         travelIntent: String(baseData?.travelIntent || ""),
         bio: String(baseData?.bio || ""),
+
+        plan:
+          baseData?.plan === "premium"
+            ? "premium"
+            : "free",
+        upgradedAt: String(baseData?.upgradedAt || ""),
       };
 
       data.globalScore = calculateGlobalScore(data);

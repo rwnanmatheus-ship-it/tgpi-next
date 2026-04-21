@@ -32,4 +32,7 @@ export type UserData = {
   targetCountry?: string;
   travelIntent?: string;
   bio?: string;
+
+  plan?: "free" | "premium";
+  upgradedAt?: string;
 };
