@@ -8,6 +8,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { db } from "@/lib/firebase";
+import { issueCertificate } from "@/lib/certificate";
 import { courses } from "@/data/courses";
 
 export type UserStats = {
@@ -51,6 +52,7 @@ export async function getUserStats(uid: string): Promise<UserStats> {
         visitedCountries: [],
         completedLessons: [],
         earnedCertificates: [],
+        certificates: [],
         createdAt: new Date().toISOString(),
       },
       { merge: true }
@@ -163,7 +165,8 @@ export async function trackLessonCompletion(
 
   if (!snap.exists()) {
     const initialCompletedLessons = [lessonKey];
-    const isCourseCompleted = totalLessons > 0 && initialCompletedLessons.length >= totalLessons;
+    const isCourseCompleted =
+      totalLessons > 0 && initialCompletedLessons.length >= totalLessons;
 
     await setDoc(
       ref,
@@ -178,6 +181,11 @@ export async function trackLessonCompletion(
       },
       { merge: true }
     );
+
+    if (isCourseCompleted) {
+      await issueCertificate(uid, courseId);
+    }
+
     return;
   }
 
@@ -218,6 +226,10 @@ export async function trackLessonCompletion(
       : earnedCertificates,
     updatedAt: new Date().toISOString(),
   });
+
+  if (justCompletedCourse) {
+    await issueCertificate(uid, courseId);
+  }
 }
 
 export type LeaderboardEntry = {
