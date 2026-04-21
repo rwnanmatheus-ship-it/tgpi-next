@@ -6,19 +6,16 @@ const showcaseUsers = [
     username: "globalbuilder",
     name: "Global Builder",
     destination: "Canada",
-    reason: "Building visible readiness and community presence",
   },
   {
     username: "portugalmove",
     name: "Portugal Move",
     destination: "Portugal",
-    reason: "Turning relocation into a structured path",
   },
   {
     username: "futureoperator",
     name: "Future Operator",
     destination: "Germany",
-    reason: "Growing international positioning through TGPI",
   },
 ];
 
@@ -32,33 +29,30 @@ export default function ShowcasePage() {
           </h1>
 
           <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-300">
-            This page highlights the type of public identity and visible global
-            journey TGPI is designed to create.
+            Real users. Real journeys. Real global movement.
           </p>
         </section>
 
         <PublicProofWall />
 
-        <section className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        <section className="grid gap-6 md:grid-cols-3">
           {showcaseUsers.map((user) => (
             <div
               key={user.username}
               className="rounded-3xl border border-slate-800 bg-slate-900 p-6"
             >
-              <h2 className="text-2xl font-bold text-yellow-400">{user.name}</h2>
-              <p className="mt-2 text-sm text-slate-400">@{user.username}</p>
-              <p className="mt-4 text-sm leading-7 text-slate-300">
+              <h2 className="text-xl font-bold text-yellow-400">{user.name}</h2>
+              <p className="text-sm text-slate-400">@{user.username}</p>
+
+              <p className="mt-3 text-sm text-slate-300">
                 Destination: {user.destination}
-              </p>
-              <p className="mt-2 text-sm leading-7 text-slate-300">
-                {user.reason}
               </p>
 
               <Link
                 href={`/user/${user.username}`}
-                className="mt-6 inline-block rounded-xl bg-yellow-500 px-5 py-3 text-sm font-bold text-black"
+                className="mt-5 inline-block rounded-xl bg-yellow-500 px-5 py-2 text-sm font-bold text-black"
               >
-                Open Public Profile
+                View Profile
               </Link>
             </div>
           ))}
