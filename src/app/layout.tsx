@@ -98,6 +98,13 @@ export default function RootLayout({
                   </Link>
 
                   <Link
+                    href="/ranking"
+                    className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-white transition hover:bg-white/10"
+                  >
+                    Ranking
+                  </Link>
+
+                  <Link
                     href="/profile"
                     className="rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-white transition hover:bg-white/10"
                   >

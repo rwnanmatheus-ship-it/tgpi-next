@@ -95,6 +95,13 @@ export default function Navbar() {
           </Link>
 
           <Link
+            href="/ranking"
+            className="text-sm text-slate-300 transition hover:text-white"
+          >
+            Ranking
+          </Link>
+
+          <Link
             href="/community"
             className="text-sm text-slate-300 transition hover:text-white"
           >
@@ -179,6 +186,14 @@ export default function Navbar() {
               className="text-sm text-slate-300 transition hover:text-white"
             >
               Dashboard
+            </Link>
+
+            <Link
+              href="/ranking"
+              onClick={closeMenu}
+              className="text-sm text-slate-300 transition hover:text-white"
+            >
+              Ranking
             </Link>
 
             <Link
