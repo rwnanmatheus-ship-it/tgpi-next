@@ -1,14 +1,17 @@
 "use client";
 
 import ActivityFeed from "@/components/ActivityFeed";
+import ActivityHighlights from "@/components/ActivityHighlights";
 import BadgesGrid from "@/components/BadgesGrid";
 import ContinueJourney from "@/components/ContinueJourney";
+import GlobalReadinessCard from "@/components/GlobalReadinessCard";
 import Leaderboard from "@/components/Leaderboard";
 import PageContainer from "@/components/PageContainer";
 import ReferralCard from "@/components/ReferralCard";
 import SharePanel from "@/components/SharePanel";
 import { auth } from "@/lib/firebase";
 import { getUserBadges } from "@/lib/badges";
+import { calculateGlobalReadiness } from "@/lib/calculate-global-readiness";
 import {
   calculateGamification,
   getXpActionTable,
@@ -83,6 +86,18 @@ export default function DashboardPage() {
         level: game.level,
       }),
     [stats, game.level]
+  );
+
+  const readinessScore = useMemo(
+    () =>
+      calculateGlobalReadiness({
+        xp: game.xp,
+        countriesExplored: stats.countriesExplored,
+        completedCourses: stats.certificatesEarned,
+        certificatesEarned: stats.certificatesEarned,
+        profileCompleted: stats.profileCompleted,
+      }),
+    [game.xp, stats]
   );
 
   const shareText = `I reached Level ${game.level} on TGPI with ${game.xp} XP and I am building my global journey on The Global Polymath Institute 🌍`;
@@ -176,10 +191,17 @@ export default function DashboardPage() {
                 </Link>
 
                 <Link
-                  href="/profile"
+                  href="/passport"
                   className="rounded-xl border border-slate-700 bg-slate-900 px-6 py-3 font-semibold text-white transition hover:border-yellow-500"
                 >
-                  Complete Profile
+                  Open Passport
+                </Link>
+
+                <Link
+                  href="/ranking"
+                  className="rounded-xl border border-slate-700 bg-slate-900 px-6 py-3 font-semibold text-white transition hover:border-yellow-500"
+                >
+                  View Ranking
                 </Link>
               </div>
             </div>
@@ -207,6 +229,8 @@ export default function DashboardPage() {
             </div>
           </section>
 
+          <GlobalReadinessCard score={readinessScore} />
+
           <ContinueJourney />
 
           <section className="grid gap-6 md:grid-cols-4">
@@ -231,6 +255,13 @@ export default function DashboardPage() {
               detail="Every lesson pushes your growth forward"
             />
           </section>
+
+          <ActivityHighlights
+            countriesExplored={stats.countriesExplored}
+            certificatesEarned={stats.certificatesEarned}
+            lessonsCompleted={stats.courseLessonsCompleted}
+            readinessScore={readinessScore}
+          />
 
           <BadgesGrid badges={badges} />
 

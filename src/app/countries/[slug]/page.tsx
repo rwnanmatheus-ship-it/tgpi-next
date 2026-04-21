@@ -7,9 +7,11 @@ import { doc, getDoc } from "firebase/firestore";
 import CostOfLifeExplorer from "@/components/CostOfLifeExplorer";
 import CurrencyExplorer from "@/components/CurrencyExplorer";
 import LifeSimulator from "@/components/LifeSimulator";
+import CountryDocumentChecklist from "@/components/CountryDocumentChecklist";
 import { getCountryBySlug } from "@/data/countries";
 import { auth, db } from "@/lib/firebase";
 import { setCountryGoal } from "@/lib/set-country-goal";
+import { getCountryChecklistBySlug } from "@/lib/country-document-checklists";
 
 type CountryPageProps = {
   params: {
@@ -42,6 +44,7 @@ export default function CountryDynamicPage({ params }: CountryPageProps) {
   }
 
   const safeCountry = country;
+  const checklist = getCountryChecklistBySlug(safeCountry.slug);
 
   useEffect(() => {
     async function loadPreferredCurrency() {
@@ -232,6 +235,8 @@ export default function CountryDynamicPage({ params }: CountryPageProps) {
           currencyCode={safeCountry.currencyCode}
           items={safeCountry.costOfLife}
         />
+
+        <CountryDocumentChecklist checklist={checklist} />
 
         <section className="mb-8 rounded-3xl border border-slate-800 bg-slate-950 p-8">
           <div className="mb-5">

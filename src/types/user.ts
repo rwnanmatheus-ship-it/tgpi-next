@@ -11,4 +11,11 @@ export type UserData = {
   isVerified?: boolean;
 
   countriesExplored?: string[];
+  completedCourses?: string[];
+
+  certificatesEarned?: number;
+  profileCompleted?: boolean;
+
+  globalScore?: number;
+  globalReadinessScore?: number;
 };
