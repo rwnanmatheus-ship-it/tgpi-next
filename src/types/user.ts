@@ -35,4 +35,7 @@ export type UserData = {
 
   plan?: "free" | "premium";
   upgradedAt?: string;
+
+  followers?: string[];
+  following?: string[];
 };

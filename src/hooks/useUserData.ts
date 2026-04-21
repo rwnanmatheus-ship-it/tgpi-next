@@ -60,11 +60,11 @@ export function useUserData() {
         travelIntent: String(baseData?.travelIntent || ""),
         bio: String(baseData?.bio || ""),
 
-        plan:
-          baseData?.plan === "premium"
-            ? "premium"
-            : "free",
+        plan: baseData?.plan === "premium" ? "premium" : "free",
         upgradedAt: String(baseData?.upgradedAt || ""),
+
+        followers: Array.isArray(baseData?.followers) ? baseData.followers : [],
+        following: Array.isArray(baseData?.following) ? baseData.following : [],
       };
 
       data.globalScore = calculateGlobalScore(data);
