@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { auth, db } from "@/lib/firebase";
 import { calculateGlobalReadiness } from "@/lib/calculate-global-readiness";
 import { calculateReputation } from "@/lib/calculate-reputation";
 import GlobalReadinessCard from "@/components/GlobalReadinessCard";
@@ -11,10 +11,15 @@ import RecruiterSignals from "@/components/RecruiterSignals";
 import GlobalMomentum from "@/components/GlobalMomentum";
 import PremiumStatusBadge from "@/components/PremiumStatusBadge";
 import JourneyReasonsCard from "@/components/JourneyReasonsCard";
+import MiniChat from "@/components/MiniChat";
 import { maskDocumentNumber, prettifyIntent } from "@/lib/identity";
+import { followUser } from "@/lib/follow-user";
+import { sendNotification } from "@/lib/send-notification";
 
 export default function PublicProfilePage({ params }: any) {
   const [userData, setUserData] = useState<any>(null);
+  const [following, setFollowing] = useState(false);
+  const [followLoading, setFollowLoading] = useState(false);
 
   useEffect(() => {
     async function loadUser() {
@@ -38,6 +43,29 @@ export default function PublicProfilePage({ params }: any) {
     [userData]
   );
 
+  async function handleFollow() {
+    const currentUser = auth.currentUser;
+    if (!currentUser || !params.uid || currentUser.uid === params.uid) return;
+
+    try {
+      setFollowLoading(true);
+
+      await followUser(currentUser.uid, params.uid);
+
+      await sendNotification(
+        params.uid,
+        "follow",
+        `${currentUser.email || "A TGPI user"} started following you.`
+      );
+
+      setFollowing(true);
+    } catch (error) {
+      console.error("Could not follow user:", error);
+    } finally {
+      setFollowLoading(false);
+    }
+  }
+
   if (!userData) {
     return <div className="p-10 text-white">Loading profile...</div>;
   }
@@ -52,6 +80,7 @@ export default function PublicProfilePage({ params }: any) {
     ? userData.countriesExplored.length
     : 0;
   const certificatesCount = Number(userData.certificatesEarned || 0);
+  const isOwnProfile = auth.currentUser?.uid === params.uid;
 
   return (
     <div className="min-h-screen p-8 text-white">
@@ -75,6 +104,22 @@ export default function PublicProfilePage({ params }: any) {
                   isVerified={userData.isVerified}
                 />
               </div>
+
+              {!isOwnProfile ? (
+                <div className="mt-5">
+                  <button
+                    onClick={handleFollow}
+                    disabled={followLoading || following}
+                    className="rounded-xl bg-yellow-500 px-6 py-3 font-bold text-black transition hover:bg-yellow-400 disabled:cursor-not-allowed disabled:opacity-70"
+                  >
+                    {followLoading
+                      ? "Connecting..."
+                      : following
+                      ? "Following ✓"
+                      : "Follow"}
+                  </button>
+                </div>
+              ) : null}
 
               <p className="mt-5 max-w-3xl text-slate-300">
                 {userData.bio ||
@@ -138,6 +183,10 @@ export default function PublicProfilePage({ params }: any) {
           readinessScore={readiness}
           countriesExplored={countriesExploredCount}
         />
+
+        {!isOwnProfile ? (
+          <MiniChat targetName={publicName} />
+        ) : null}
 
         <ShareActions
           title={`${publicName} • TGPI Public Profile`}
