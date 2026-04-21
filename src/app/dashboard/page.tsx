@@ -1,54 +1,79 @@
 "use client";
 
 import { useUserData } from "@/hooks/useUserData";
-import NotificationBell from "@/components/NotificationBell";
 import UserConnections from "@/components/UserConnections";
+import NotificationBell from "@/components/NotificationBell";
 import SmartFeed from "@/components/SmartFeed";
-import RealTimeChat from "@/components/RealTimeChat";
-import GlobalRooms from "@/components/GlobalRooms";
-import Missions from "@/components/Missions";
-import UserRank from "@/components/UserRank";
-import SocialProof from "@/components/SocialProof";
-import InviteCard from "@/components/InviteCard";
+import GlobalMomentum from "@/components/GlobalMomentum";
+import PremiumStatusBadge from "@/components/PremiumStatusBadge";
+import JourneyReasonsCard from "@/components/JourneyReasonsCard";
+import InviteSystem from "@/components/InviteSystem";
 
 export default function DashboardPage() {
   const user = useUserData();
 
   if (!user) {
-    return <div className="p-10 text-white">Loading...</div>;
+    return (
+      <main className="min-h-screen flex items-center justify-center bg-black text-white">
+        <p>Loading...</p>
+      </main>
+    );
   }
 
+  const countriesExploredCount = Array.isArray(user.countriesExplored)
+    ? user.countriesExplored.length
+    : 0;
+
+  const certificatesCount = Number(user.certificatesEarned || 0);
+  const readinessScore = Number(user.globalReadinessScore || 0);
+  const globalScore = Number(user.globalScore || 0);
+
   return (
-    <div className="min-h-screen p-8 text-white">
-      <div className="max-w-6xl mx-auto space-y-8">
-        <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-bold text-yellow-400">
-            Dashboard
-          </h1>
+    <main className="min-h-screen bg-black px-6 py-10 text-white">
+      <div className="mx-auto max-w-6xl space-y-8">
+        <section className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-yellow-400">
+              Welcome back, {user.name || "Explorer"}
+            </h1>
 
-          <NotificationBell />
-        </div>
+            <p className="text-sm text-slate-400">
+              Your global journey is in motion.
+            </p>
+          </div>
 
-        <UserRank xp={user.xp || 0} />
+          <div className="flex items-center gap-4">
+            <NotificationBell />
+            <PremiumStatusBadge
+              plan={user.plan}
+              isVerified={user.isVerified}
+            />
+          </div>
+        </section>
 
-        <SmartFeed user={user} />
-
-        <div className="grid gap-6 xl:grid-cols-2">
-          <SocialProof />
-          <InviteCard username={user.username || "user"} />
-        </div>
-
-        <GlobalRooms />
-
-        <Missions />
+        <GlobalMomentum
+          score={globalScore}
+          readiness={readinessScore}
+          countries={countriesExploredCount}
+          certificates={certificatesCount}
+        />
 
         <UserConnections
           followers={user.followers || []}
           following={user.following || []}
         />
 
-        <RealTimeChat chatId={user.uid} />
+        <JourneyReasonsCard
+          targetCountry={user.targetCountry}
+          travelIntent={user.travelIntent}
+          readinessScore={readinessScore}
+          countriesExplored={countriesExploredCount}
+        />
+
+        <SmartFeed user={user} />
+
+        <InviteSystem />
       </div>
-    </div>
+    </main>
   );
 }
