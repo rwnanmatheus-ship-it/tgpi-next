@@ -1,34 +1,21 @@
 "use client";
 
-import { useMemo } from "react";
-import RealTimeChat from "@/components/RealTimeChat";
+import { useParams } from "next/navigation";
+import LiveChat from "@/components/LiveChat";
+import SocialFeed from "@/components/SocialFeed";
 
-export default function RoomDetailPage({ params }: any) {
-  const roomSlug = String(params?.slug || "global");
-  const roomTitle = useMemo(() => {
-    const map: Record<string, string> = {
-      canada: "Canada Room",
-      portugal: "Portugal Room",
-      usa: "United States Room",
-      germany: "Germany Room",
-    };
-
-    return map[roomSlug] || "Global Room";
-  }, [roomSlug]);
+export default function RoomPage() {
+  const { slug } = useParams();
 
   return (
-    <main className="min-h-screen bg-black px-6 py-10 text-white">
-      <div className="mx-auto max-w-5xl space-y-8">
-        <section className="rounded-[2rem] border border-yellow-700/20 bg-gradient-to-br from-yellow-500/10 via-slate-950 to-slate-900 p-10">
-          <h1 className="text-4xl font-bold text-yellow-400">{roomTitle}</h1>
+    <main className="min-h-screen bg-black text-white p-6">
+      <h1 className="text-3xl text-yellow-400 font-bold capitalize">
+        {slug} Room
+      </h1>
 
-          <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-300">
-            Talk with users focused on the same destination. This room can be
-            used for readiness, questions, networking, and transition support.
-          </p>
-        </section>
-
-        <RealTimeChat chatId={`room_${roomSlug}`} />
+      <div className="mt-6 grid gap-6 md:grid-cols-2">
+        <LiveChat />
+        <SocialFeed />
       </div>
     </main>
   );
