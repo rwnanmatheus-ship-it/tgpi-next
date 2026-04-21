@@ -1,78 +1,97 @@
 "use client";
 
-import AvatarUpload from "@/components/AvatarUpload";
-import PageContainer from "@/components/PageContainer";
-import { auth } from "@/lib/firebase";
-import { calculateGamification } from "@/lib/gamification";
-import {
-  defaultUserProfile,
-  getUserProfile,
-  saveUserProfile,
-  type UserProfileData,
-} from "@/lib/user-profile";
-import {
-  defaultUserStats,
-  getUserStats,
-  type UserStats,
-} from "@/lib/user-stats";
-import { onAuthStateChanged } from "firebase/auth";
-import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import { onAuthStateChanged } from "firebase/auth";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  limit,
+  query,
+  setDoc,
+  where,
+} from "firebase/firestore";
+import { auth, db } from "@/lib/firebase";
+import {
+  normalizeUsername,
+  prettifySex,
+  validateUsername,
+} from "@/lib/identity";
 
-const certificates = [
-  {
-    title: "English for Living Abroad",
-    status: "Issued",
-  },
-];
+type ProfileForm = {
+  name: string;
+  legalName: string;
+  username: string;
+  dateOfBirth: string;
+  sex: string;
+  nationality: string;
+  documentType: string;
+  documentNumber: string;
+  currentCountry: string;
+  currentCity: string;
+  targetCountry: string;
+  travelIntent: string;
+  bio: string;
+};
 
-const completedCourses = [
-  "English for Living Abroad",
-  "Cultural Preparation Basics",
-];
-
-const favoriteCountries = [
-  { name: "Portugal", emoji: "🇵🇹", slug: "portugal" },
-  { name: "Canada", emoji: "🇨🇦", slug: "canada" },
-  { name: "Germany", emoji: "🇩🇪", slug: "germany" },
-];
+const defaultForm: ProfileForm = {
+  name: "",
+  legalName: "",
+  username: "",
+  dateOfBirth: "",
+  sex: "",
+  nationality: "",
+  documentType: "passport",
+  documentNumber: "",
+  currentCountry: "",
+  currentCity: "",
+  targetCountry: "",
+  travelIntent: "work",
+  bio: "",
+};
 
 export default function ProfilePage() {
-  const [userId, setUserId] = useState("");
+  const [uid, setUid] = useState("");
+  const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState("");
-  const [messageType, setMessageType] = useState<"success" | "error" | "">("");
-  const [form, setForm] = useState<UserProfileData>(defaultUserProfile);
-  const [statsData, setStatsData] = useState<UserStats>(defaultUserStats);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [form, setForm] = useState<ProfileForm>(defaultForm);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (!user) {
-        setUserId("");
         setLoading(false);
         return;
       }
 
-      try {
-        setUserId(user.uid);
+      setUid(user.uid);
+      setEmail(user.email || "");
 
-        const [profile, stats] = await Promise.all([
-          getUserProfile(user.uid),
-          getUserStats(user.uid),
-        ]);
+      try {
+        const ref = doc(db, "users", user.uid);
+        const snap = await getDoc(ref);
+        const data = snap.exists() ? snap.data() : {};
 
         setForm({
-          ...profile,
-          email: profile.email || user.email || "",
-          fullName: profile.fullName || user.displayName || "",
+          name: String(data?.name || user.displayName || ""),
+          legalName: String(data?.legalName || ""),
+          username: String(data?.username || ""),
+          dateOfBirth: String(data?.dateOfBirth || ""),
+          sex: String(data?.sex || ""),
+          nationality: String(data?.nationality || ""),
+          documentType: String(data?.documentType || "passport"),
+          documentNumber: String(data?.documentNumber || ""),
+          currentCountry: String(data?.currentCountry || ""),
+          currentCity: String(data?.currentCity || ""),
+          targetCountry: String(data?.targetCountry || data?.countryGoal || ""),
+          travelIntent: String(data?.travelIntent || "work"),
+          bio: String(data?.bio || ""),
         });
-
-        setStatsData(stats);
-      } catch (error) {
-        console.error("Could not load profile:", error);
-        setMessage("Could not load profile information.");
-        setMessageType("error");
+      } catch (err) {
+        console.error("Could not load profile:", err);
       } finally {
         setLoading(false);
       }
@@ -81,391 +100,311 @@ export default function ProfilePage() {
     return () => unsubscribe();
   }, []);
 
-  function updateField(field: keyof UserProfileData, value: string) {
-    setForm((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
+  const usernamePreview = useMemo(
+    () => normalizeUsername(form.username),
+    [form.username]
+  );
+
+  function updateField<K extends keyof ProfileForm>(key: K, value: ProfileForm[K]) {
+    setForm((prev) => ({ ...prev, [key]: value }));
   }
 
-  async function handleSave(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+  async function handleSave() {
+    setError("");
+    setSuccess("");
 
-    if (!userId) {
-      setMessage("You must be signed in to save your profile.");
-      setMessageType("error");
+    if (!uid) {
+      setError("You need to be logged in to save your profile.");
       return;
     }
 
+    const usernameError = validateUsername(form.username);
+    if (usernameError) {
+      setError(usernameError);
+      return;
+    }
+
+    const normalizedUsername = normalizeUsername(form.username);
+
     try {
       setSaving(true);
-      setMessage("");
-      setMessageType("");
 
-      await saveUserProfile(userId, form);
+      const usernameQuery = query(
+        collection(db, "users"),
+        where("usernameLower", "==", normalizedUsername),
+        limit(1)
+      );
 
-      const refreshedStats = await getUserStats(userId);
-      setStatsData(refreshedStats);
+      const usernameSnapshot = await getDocs(usernameQuery);
+      const takenByAnotherUser = usernameSnapshot.docs.some(
+        (item) => item.id !== uid
+      );
 
-      setMessage("Profile saved successfully.");
-      setMessageType("success");
-    } catch (error) {
-      console.error(error);
-      setMessage("Could not save profile information.");
-      setMessageType("error");
+      if (takenByAnotherUser) {
+        setError("This username is already in use.");
+        setSaving(false);
+        return;
+      }
+
+      const ref = doc(db, "users", uid);
+
+      await setDoc(
+        ref,
+        {
+          uid,
+          email,
+          name: form.name,
+          legalName: form.legalName,
+          username: normalizedUsername,
+          usernameLower: normalizedUsername,
+          dateOfBirth: form.dateOfBirth,
+          sex: form.sex,
+          nationality: form.nationality,
+          documentType: form.documentType,
+          documentNumber: form.documentNumber,
+          currentCountry: form.currentCountry,
+          currentCity: form.currentCity,
+          targetCountry: form.targetCountry,
+          travelIntent: form.travelIntent,
+          bio: form.bio,
+          profileCompleted: true,
+        },
+        { merge: true }
+      );
+
+      setSuccess("Profile identity saved successfully.");
+      setForm((prev) => ({ ...prev, username: normalizedUsername }));
+    } catch (err) {
+      console.error("Could not save profile:", err);
+      setError("Could not save profile right now.");
     } finally {
       setSaving(false);
     }
   }
 
-  const stats = useMemo(
-    () => ({
-      certificates: certificates.length,
-      completedCourses: completedCourses.length,
-      favoriteCountries: favoriteCountries.length,
-    }),
-    []
-  );
+  if (loading) {
+    return <div className="p-10 text-white">Loading profile...</div>;
+  }
 
-  const game = calculateGamification(statsData);
+  if (!uid) {
+    return (
+      <div className="p-10 text-white">
+        <h1 className="text-3xl font-bold text-yellow-400">Profile</h1>
+        <p className="mt-4 text-slate-300">
+          Sign in to edit your identity profile and certificate data.
+        </p>
+      </div>
+    );
+  }
 
   return (
-    <PageContainer
-      title="Your Global Profile"
-      subtitle="Manage your identity, preferences, and strategic TGPI path in one premium user hub."
-    >
-      {loading ? (
-        <section className="rounded-3xl border border-slate-800 bg-slate-900 p-8">
-          <p className="text-slate-300">Loading profile...</p>
-        </section>
-      ) : !userId ? (
-        <section className="rounded-3xl border border-slate-800 bg-slate-900 p-8">
-          <h2 className="text-2xl font-bold text-yellow-400">
-            Sign in required
-          </h2>
-          <p className="mt-3 text-slate-300">
-            Sign in to access and manage your TGPI profile.
+    <div className="min-h-screen p-8 text-white">
+      <div className="mx-auto max-w-6xl space-y-8">
+        <section className="rounded-3xl border border-yellow-700/20 bg-gradient-to-br from-yellow-500/10 to-slate-950 p-8">
+          <p className="mb-4 inline-flex rounded-full border border-yellow-600/30 bg-yellow-500/5 px-4 py-2 text-sm text-yellow-200">
+            Identity & Certificate Data
           </p>
-          <Link
-            href="/login"
-            className="mt-6 inline-block rounded-xl bg-yellow-500 px-6 py-3 font-semibold text-black transition hover:bg-yellow-400"
-          >
-            Go to Login
-          </Link>
+
+          <h1 className="text-4xl font-bold text-yellow-400">
+            Profile Identity Layer
+          </h1>
+
+          <p className="mt-4 max-w-3xl text-slate-300">
+            Add your personal identity, username, travel objective, and document
+            data to increase certificate credibility and strengthen your TGPI
+            public profile. Sensitive document values stay private in the system
+            and appear masked on public validation pages.
+          </p>
         </section>
-      ) : (
-        <>
-          <section className="rounded-3xl border border-yellow-700/20 bg-slate-900 p-6">
-            <h2 className="text-xl font-bold text-yellow-400">
-              Your Global Level
+
+        <section className="grid gap-8 lg:grid-cols-[1.2fr_.8fr]">
+          <div className="rounded-3xl border border-slate-800 bg-slate-900 p-8">
+            <h2 className="text-2xl font-bold text-yellow-400">
+              Core Identity
             </h2>
 
-            <p className="mt-2 text-slate-300">
-              Level {game.level} • {game.rankTitle}
-            </p>
+            <div className="mt-6 grid gap-4 md:grid-cols-2">
+              <Field
+                label="Public Name"
+                value={form.name}
+                onChange={(value) => updateField("name", value)}
+                placeholder="Your public display name"
+              />
 
-            <p className="mt-1 text-sm text-slate-400">{game.xp} XP</p>
+              <Field
+                label="Legal Full Name"
+                value={form.legalName}
+                onChange={(value) => updateField("legalName", value)}
+                placeholder="Your legal full name"
+              />
 
-            <div className="mt-3 h-3 overflow-hidden rounded-full bg-slate-800">
-              <div
-                className="h-full bg-yellow-500"
-                style={{ width: `${game.progressPercent}%` }}
+              <Field
+                label="Username"
+                value={form.username}
+                onChange={(value) => updateField("username", value)}
+                placeholder="username"
+              />
+
+              <Field
+                label="Date of Birth"
+                type="date"
+                value={form.dateOfBirth}
+                onChange={(value) => updateField("dateOfBirth", value)}
+              />
+
+              <SelectField
+                label="Sex"
+                value={form.sex}
+                onChange={(value) => updateField("sex", value)}
+                options={[
+                  { value: "", label: "Select" },
+                  { value: "male", label: "Male" },
+                  { value: "female", label: "Female" },
+                  { value: "non_binary", label: "Non-binary" },
+                  { value: "prefer_not_to_say", label: "Prefer not to say" },
+                ]}
+              />
+
+              <Field
+                label="Nationality"
+                value={form.nationality}
+                onChange={(value) => updateField("nationality", value)}
+                placeholder="Brazilian"
               />
             </div>
-          </section>
 
-          <section className="grid gap-6 xl:grid-cols-[1.1fr_.9fr]">
-            <div className="rounded-3xl border border-yellow-700/20 bg-gradient-to-br from-yellow-500/10 via-slate-950 to-slate-900 p-8">
-              <p className="mb-3 inline-flex rounded-full border border-yellow-600/30 bg-yellow-500/5 px-4 py-2 text-sm text-yellow-200">
-                TGPI Identity
-              </p>
+            <h2 className="mt-10 text-2xl font-bold text-yellow-400">
+              Document & Location
+            </h2>
 
-              <h2 className="text-3xl font-bold text-yellow-400">
-                Your international identity hub
-              </h2>
+            <div className="mt-6 grid gap-4 md:grid-cols-2">
+              <SelectField
+                label="Document Type"
+                value={form.documentType}
+                onChange={(value) => updateField("documentType", value)}
+                options={[
+                  { value: "passport", label: "Passport" },
+                  { value: "cpf", label: "CPF" },
+                  { value: "ssn", label: "Social Security Number" },
+                  { value: "national_id", label: "National ID" },
+                  { value: "other", label: "Other" },
+                ]}
+              />
 
-              <p className="mt-4 max-w-2xl text-slate-300">
-                This page brings together your profile, preferences, certificates,
-                completed learning, and personal international direction.
-              </p>
+              <Field
+                label="Document Number"
+                value={form.documentNumber}
+                onChange={(value) => updateField("documentNumber", value)}
+                placeholder="Private system record"
+              />
 
-              <div className="mb-6 mt-6 flex items-center gap-6">
-                <AvatarUpload />
+              <Field
+                label="Current Country"
+                value={form.currentCountry}
+                onChange={(value) => updateField("currentCountry", value)}
+                placeholder="Brazil"
+              />
 
-                <div>
-                  <p className="text-sm text-slate-400">Global Identity</p>
-                  <p className="text-lg font-semibold text-white">
-                    {form.fullName || "Unnamed User"}
-                  </p>
-                </div>
-              </div>
-
-              <div className="mt-8 grid gap-4 md:grid-cols-2">
-                <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-                  <p className="text-sm text-slate-400">Membership</p>
-                  <p className="mt-2 text-2xl font-bold text-yellow-400">
-                    {form.membership}
-                  </p>
-                </div>
-
-                <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-                  <p className="text-sm text-slate-400">Current goal</p>
-                  <p className="mt-2 text-2xl font-bold text-yellow-400">
-                    {form.countryGoal || "Not set yet"}
-                  </p>
-                </div>
-              </div>
+              <Field
+                label="Current City"
+                value={form.currentCity}
+                onChange={(value) => updateField("currentCity", value)}
+                placeholder="Campinas"
+              />
             </div>
 
-            <div className="rounded-3xl border border-slate-800 bg-slate-900 p-8">
-              <h2 className="text-2xl font-bold text-yellow-400">
-                Quick Status
-              </h2>
+            <h2 className="mt-10 text-2xl font-bold text-yellow-400">
+              International Goal
+            </h2>
 
-              <div className="mt-6 grid gap-4">
-                <StatusCard
-                  label="Certificates"
-                  value={`${stats.certificates} issued`}
-                />
-                <StatusCard
-                  label="Completed courses"
-                  value={`${stats.completedCourses} completed`}
-                />
-                <StatusCard
-                  label="Favorite countries"
-                  value={`${stats.favoriteCountries} saved`}
-                />
-                <StatusCard
-                  label="Focus region"
-                  value={form.focusRegion || "Not set yet"}
-                />
-              </div>
+            <div className="mt-6 grid gap-4 md:grid-cols-2">
+              <Field
+                label="Target Country"
+                value={form.targetCountry}
+                onChange={(value) => updateField("targetCountry", value)}
+                placeholder="Canada"
+              />
+
+              <SelectField
+                label="Travel Intent"
+                value={form.travelIntent}
+                onChange={(value) => updateField("travelIntent", value)}
+                options={[
+                  { value: "work", label: "Work" },
+                  { value: "relocation", label: "Relocation" },
+                  { value: "tourism", label: "Tourism" },
+                  { value: "study", label: "Study" },
+                  { value: "networking", label: "Networking" },
+                ]}
+              />
             </div>
-          </section>
 
-          <section className="rounded-3xl border border-slate-800 bg-slate-900 p-8">
-            <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
-              <div>
-                <h2 className="text-2xl font-bold text-yellow-400">
-                  Profile Information
-                </h2>
-                <p className="mt-2 text-slate-400">
-                  Keep your most important TGPI account details updated and accessible.
-                </p>
+            <div className="mt-6">
+              <label className="mb-2 block text-sm text-slate-300">Bio</label>
+              <textarea
+                value={form.bio}
+                onChange={(e) => updateField("bio", e.target.value)}
+                rows={5}
+                className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none transition focus:border-yellow-500"
+                placeholder="Tell the world about your global goals, professional interests, and international vision."
+              />
+            </div>
+
+            {error ? (
+              <div className="mt-6 rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-300">
+                {error}
               </div>
+            ) : null}
 
-              <Link
-                href="/dashboard"
-                className="rounded-xl border border-slate-700 bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:border-yellow-500"
+            {success ? (
+              <div className="mt-6 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-300">
+                {success}
+              </div>
+            ) : null}
+
+            <div className="mt-8">
+              <button
+                onClick={handleSave}
+                disabled={saving}
+                className="rounded-xl bg-yellow-500 px-6 py-3 font-semibold text-black transition hover:bg-yellow-400 disabled:cursor-not-allowed disabled:opacity-70"
               >
-                Open Dashboard
-              </Link>
+                {saving ? "Saving..." : "Save Identity Profile"}
+              </button>
             </div>
+          </div>
 
-            <form onSubmit={handleSave} className="grid gap-6 xl:grid-cols-2">
-              <Field
-                label="Full name"
-                value={form.fullName}
-                onChange={(value) => updateField("fullName", value)}
-                placeholder="Enter your full name"
-              />
-
-              <Field
-                label="Email"
-                type="email"
-                value={form.email}
-                onChange={(value) => updateField("email", value)}
-                placeholder="Enter your email"
-              />
-
-              <Field
-                label="Phone number"
-                value={form.phone}
-                onChange={(value) => updateField("phone", value)}
-                placeholder="Enter your phone number"
-              />
-
-              <Field
-                label="Country goal"
-                value={form.countryGoal}
-                onChange={(value) => updateField("countryGoal", value)}
-                placeholder="Ex: Portugal"
-              />
-
-              <SelectField
-                label="Focus region"
-                value={form.focusRegion}
-                onChange={(value) => updateField("focusRegion", value)}
-                options={[
-                  "Europe",
-                  "North America",
-                  "South America",
-                  "Asia",
-                  "Africa",
-                  "Middle East",
-                  "Oceania",
-                ]}
-              />
-
-              <SelectField
-                label="Primary objective"
-                value={form.primaryObjective}
-                onChange={(value) => updateField("primaryObjective", value)}
-                options={[
-                  "Relocation + work abroad",
-                  "Study abroad",
-                  "Tourism preparation",
-                  "Business expansion",
-                  "Cultural learning",
-                ]}
-              />
-
-              <div className="xl:col-span-2">
-                <SelectField
-                  label="Learning track"
-                  value={form.learningTrack}
-                  onChange={(value) => updateField("learningTrack", value)}
-                  options={[
-                    "Language + cultural integration",
-                    "Travel preparation",
-                    "Work abroad readiness",
-                    "Study abroad readiness",
-                    "Relocation preparation",
-                  ]}
-                />
-              </div>
-
-              <div className="xl:col-span-2 flex flex-wrap items-center gap-4">
-                <button
-                  type="submit"
-                  disabled={saving}
-                  className="rounded-xl bg-yellow-500 px-6 py-3 font-semibold text-black transition hover:bg-yellow-400 disabled:cursor-not-allowed disabled:opacity-70"
-                >
-                  {saving ? "Saving..." : "Save Profile"}
-                </button>
-
-                <Link
-                  href="/premium"
-                  className="rounded-xl border border-yellow-500/50 bg-yellow-500/5 px-6 py-3 font-semibold text-yellow-300 transition hover:bg-yellow-500/10"
-                >
-                  View Premium
-                </Link>
-
-                {message ? (
-                  <p
-                    className={`text-sm ${
-                      messageType === "success"
-                        ? "text-yellow-300"
-                        : "text-red-300"
-                    }`}
-                  >
-                    {message}
-                  </p>
-                ) : null}
-              </div>
-            </form>
-          </section>
-
-          <section className="grid gap-6 xl:grid-cols-2">
-            <div className="rounded-3xl border border-slate-800 bg-slate-900 p-8">
+          <div className="space-y-6">
+            <section className="rounded-3xl border border-slate-800 bg-slate-900 p-8">
               <h2 className="text-2xl font-bold text-yellow-400">
-                Certificates
+                Public Preview
               </h2>
 
               <div className="mt-6 space-y-4">
-                {certificates.map((certificate) => (
-                  <div
-                    key={certificate.title}
-                    className="rounded-2xl border border-slate-800 bg-slate-950 p-4"
-                  >
-                    <div className="flex items-center justify-between gap-4">
-                      <h3 className="text-lg font-semibold text-white">
-                        {certificate.title}
-                      </h3>
-                      <span className="text-sm text-yellow-300">
-                        {certificate.status}
-                      </span>
-                    </div>
-                    <p className="mt-2 text-sm text-slate-400">
-                      Stored as part of your TGPI premium profile.
-                    </p>
-                  </div>
-                ))}
+                <PreviewRow label="Email" value={email || "—"} />
+                <PreviewRow label="Username" value={usernamePreview ? `@${usernamePreview}` : "—"} />
+                <PreviewRow label="Public Name" value={form.name || "—"} />
+                <PreviewRow label="Legal Name" value={form.legalName || "—"} />
+                <PreviewRow label="Sex" value={prettifySex(form.sex)} />
+                <PreviewRow label="Nationality" value={form.nationality || "—"} />
+                <PreviewRow label="Target Country" value={form.targetCountry || "—"} />
+                <PreviewRow label="Travel Intent" value={form.travelIntent || "—"} />
               </div>
-            </div>
+            </section>
 
-            <div className="rounded-3xl border border-slate-800 bg-slate-900 p-8">
+            <section className="rounded-3xl border border-slate-800 bg-slate-900 p-8">
               <h2 className="text-2xl font-bold text-yellow-400">
-                Completed Courses
+                Certificate Trust Layer
               </h2>
 
-              <div className="mt-6 space-y-4">
-                {completedCourses.map((course) => (
-                  <div
-                    key={course}
-                    className="rounded-2xl border border-slate-800 bg-slate-950 p-4"
-                  >
-                    <h3 className="text-lg font-semibold text-white">{course}</h3>
-                    <p className="mt-2 text-sm text-slate-400">
-                      This course is part of your international preparation path.
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          <section className="grid gap-6 xl:grid-cols-2">
-            <div className="rounded-3xl border border-slate-800 bg-slate-900 p-8">
-              <h2 className="text-2xl font-bold text-yellow-400">
-                Favorite Countries
-              </h2>
-
-              <div className="mt-6 space-y-4">
-                {favoriteCountries.map((country) => (
-                  <Link
-                    key={country.slug}
-                    href={`/countries/${country.slug}`}
-                    className="block rounded-2xl border border-slate-800 bg-slate-950 p-4 transition hover:border-yellow-500"
-                  >
-                    <div className="flex items-center justify-between gap-4">
-                      <h3 className="text-lg font-semibold text-white">
-                        {country.emoji} {country.name}
-                      </h3>
-                      <span className="text-sm text-yellow-300">Open →</span>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            <div className="rounded-3xl border border-slate-800 bg-slate-900 p-8">
-              <h2 className="text-2xl font-bold text-yellow-400">
-                Active Snapshot
-              </h2>
-
-              <div className="mt-6 grid gap-4">
-                <StatusCard label="Full name" value={form.fullName || "Not set"} />
-                <StatusCard label="Email" value={form.email || "Not set"} />
-                <StatusCard label="Phone" value={form.phone || "Not set"} />
-                <StatusCard
-                  label="Learning track"
-                  value={form.learningTrack || "Not set"}
-                />
-              </div>
-            </div>
-          </section>
-        </>
-      )}
-    </PageContainer>
-  );
-}
-
-function StatusCard({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4">
-      <p className="text-xs text-slate-400">{label}</p>
-      <p className="mt-1 text-white">{value}</p>
+              <p className="mt-4 text-sm leading-7 text-slate-300">
+                TGPI can use your legal name, username, nationality, and a
+                masked version of your document to add credibility to issued
+                certificates while keeping raw sensitive values private.
+              </p>
+            </section>
+          </div>
+        </section>
+      </div>
     </div>
   );
 }
@@ -491,7 +430,7 @@ function Field({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none transition focus:border-yellow-500"
+        className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none transition focus:border-yellow-500"
       />
     </div>
   );
@@ -506,7 +445,7 @@ function SelectField({
   label: string;
   value: string;
   onChange: (value: string) => void;
-  options: string[];
+  options: { value: string; label: string }[];
 }) {
   return (
     <div>
@@ -514,14 +453,25 @@ function SelectField({
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none transition focus:border-yellow-500"
+        className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none transition focus:border-yellow-500"
       >
         {options.map((option) => (
-          <option key={option} value={option}>
-            {option}
+          <option key={`${label}-${option.value}`} value={option.value}>
+            {option.label}
           </option>
         ))}
       </select>
+    </div>
+  );
+}
+
+function PreviewRow({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4">
+      <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
+        {label}
+      </p>
+      <p className="mt-2 text-sm font-medium text-white">{value}</p>
     </div>
   );
 }

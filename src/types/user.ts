@@ -18,4 +18,18 @@ export type UserData = {
 
   globalScore?: number;
   globalReadinessScore?: number;
+
+  legalName?: string;
+  username?: string;
+  usernameLower?: string;
+  dateOfBirth?: string;
+  sex?: string;
+  nationality?: string;
+  documentType?: string;
+  documentNumber?: string;
+  currentCountry?: string;
+  currentCity?: string;
+  targetCountry?: string;
+  travelIntent?: string;
+  bio?: string;
 };

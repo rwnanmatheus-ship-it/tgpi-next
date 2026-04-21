@@ -45,6 +45,20 @@ export function useUserData() {
 
         globalScore: 0,
         globalReadinessScore: 0,
+
+        legalName: String(baseData?.legalName || ""),
+        username: String(baseData?.username || ""),
+        usernameLower: String(baseData?.usernameLower || ""),
+        dateOfBirth: String(baseData?.dateOfBirth || ""),
+        sex: String(baseData?.sex || ""),
+        nationality: String(baseData?.nationality || ""),
+        documentType: String(baseData?.documentType || ""),
+        documentNumber: String(baseData?.documentNumber || ""),
+        currentCountry: String(baseData?.currentCountry || ""),
+        currentCity: String(baseData?.currentCity || ""),
+        targetCountry: String(baseData?.targetCountry || baseData?.countryGoal || ""),
+        travelIntent: String(baseData?.travelIntent || ""),
+        bio: String(baseData?.bio || ""),
       };
 
       data.globalScore = calculateGlobalScore(data);
