@@ -2,12 +2,7 @@
 
 import Link from "next/link";
 
-type NavItem = {
-  label: string;
-  href: string;
-};
-
-const items: NavItem[] = [
+const items = [
   { label: "Profile", href: "/profile" },
   { label: "Dashboard", href: "/dashboard" },
   { label: "Countries", href: "/countries" },
@@ -21,7 +16,7 @@ export default function CommandCenterNav() {
     <nav className="rounded-2xl border border-slate-800 bg-slate-950 p-4">
       <div className="mb-3">
         <p className="text-xs uppercase tracking-[0.18em] text-slate-400">
-          Quick Navigation
+          Command Navigation
         </p>
       </div>
 

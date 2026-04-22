@@ -4,17 +4,15 @@ import { ChangeEvent, useRef, useState } from "react";
 import { auth, db } from "@/lib/firebase";
 import { doc, setDoc } from "firebase/firestore";
 
-type Props = {
-  currentAvatar?: string;
-  displayName?: string;
-  onAvatarSaved?: (url: string) => void;
-};
-
 export default function ProfileAvatarUploader({
   currentAvatar = "",
   displayName = "User",
   onAvatarSaved,
-}: Props) {
+}: {
+  currentAvatar?: string;
+  displayName?: string;
+  onAvatarSaved?: (url: string) => void;
+}) {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const [preview, setPreview] = useState(currentAvatar);
   const [loading, setLoading] = useState(false);
@@ -22,6 +20,11 @@ export default function ProfileAvatarUploader({
   async function handleFileChange(e: ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
+
+    if (file.size > 2 * 1024 * 1024) {
+      alert("Image too large. Use a file up to 2MB.");
+      return;
+    }
 
     const reader = new FileReader();
 
@@ -45,6 +48,7 @@ export default function ProfileAvatarUploader({
         );
 
         onAvatarSaved?.(base64);
+        alert("Profile photo updated successfully.");
       } catch (error) {
         console.error("Failed to save avatar:", error);
         alert("Could not save profile photo.");
@@ -57,9 +61,9 @@ export default function ProfileAvatarUploader({
   }
 
   return (
-    <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+    <section className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
       <p className="mb-4 text-xs uppercase tracking-[0.18em] text-slate-400">
-        Profile Photo
+        Avatar
       </p>
 
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
@@ -86,7 +90,7 @@ export default function ProfileAvatarUploader({
           </button>
 
           <p className="text-sm text-slate-400">
-            Upload a clear profile image to make your TGPI identity more complete.
+            Recommended: square image, clear face/logo, max 2MB.
           </p>
 
           <input
@@ -98,6 +102,6 @@ export default function ProfileAvatarUploader({
           />
         </div>
       </div>
-    </div>
+    </section>
   );
 }

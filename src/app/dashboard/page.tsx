@@ -1,5 +1,5 @@
-import ProfileCommandCenter from "@/components/ProfileCommandCenter";
+import UltraProfilePanel from "@/components/UltraProfilePanel";
 
 export default function DashboardPage() {
-  return <ProfileCommandCenter mode="dashboard" />;
+  return <UltraProfilePanel mode="dashboard" />;
 }
