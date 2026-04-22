@@ -1,6 +1,7 @@
 "use client";
 
 import TopbarUserIdentity from "@/components/TopbarUserIdentity";
+import TopbarNotifications from "@/components/TopbarNotifications";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged, signOut, User } from "firebase/auth";
@@ -90,6 +91,7 @@ export default function Navbar() {
 
           {user ? (
             <>
+              <TopbarNotifications />
               <TopbarUserIdentity />
 
               <button
@@ -180,7 +182,10 @@ export default function Navbar() {
 
             {user ? (
               <>
-                <TopbarUserIdentity />
+                <div className="flex items-center justify-between gap-3">
+                  <TopbarUserIdentity />
+                  <TopbarNotifications />
+                </div>
 
                 <button
                   type="button"
