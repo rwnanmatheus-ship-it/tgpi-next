@@ -1,17 +1,24 @@
-import { UserProfile } from "./profile";
-import { isPremium } from "./plan";
+import {
+  getUserMemory,
+  toggleFavoriteCountryInMemory,
+  appendUserActivity,
+} from "@/lib/user-memory";
 
-export function canAddFavorite(profile: UserProfile) {
-  if (isPremium(profile.membershipPlan)) return true;
-
-  const maxFree = 3;
-  return (profile.favorites?.length || 0) < maxFree;
+export async function getFavoriteCountries() {
+  const memory = await getUserMemory();
+  return memory?.favoriteCountries || [];
 }
 
-export function getRemainingFavorites(profile: UserProfile) {
-  if (isPremium(profile.membershipPlan)) return "Unlimited";
+export async function toggleFavoriteCountry(country: string) {
+  const updated = await toggleFavoriteCountryInMemory(country);
 
-  const maxFree = 3;
-  const current = profile.favorites?.length || 0;
-  return maxFree - current;
+  const isFavorite = updated.includes(country);
+
+  await appendUserActivity(
+    isFavorite
+      ? `Added ${country} to favorites`
+      : `Removed ${country} from favorites`
+  );
+
+  return updated;
 }

@@ -1,110 +1,107 @@
-import { db } from "@/lib/firebase";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { auth, db } from "@/lib/firebase";
+import {
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  arrayUnion,
+} from "firebase/firestore";
 
-export type RecentCountryView = {
-  slug: string;
-  viewedAt: string;
+export type RecentConversion = {
+  from: string;
+  to: string;
+  amount: number;
+  result?: number;
+  date: string;
+};
+
+export type UserActivityItem = {
+  action: string;
+  date: string;
 };
 
 export type UserMemory = {
   preferredCurrency?: string;
-  plan?: "free" | "premium";
   favoriteCountries?: string[];
   lastVisitedCountry?: string;
-  recentCountryViews?: RecentCountryView[];
+  recentConversions?: RecentConversion[];
+  countryGoals?: string[];
+  activity?: UserActivityItem[];
 };
 
-export async function getUserMemory(uid: string): Promise<UserMemory> {
+export async function getCurrentUserId() {
+  return auth.currentUser?.uid || null;
+}
+
+export async function getUserMemory(): Promise<UserMemory | null> {
+  const uid = await getCurrentUserId();
+  if (!uid) return null;
+
   const ref = doc(db, "users", uid);
   const snap = await getDoc(ref);
 
-  if (!snap.exists()) {
-    return {
-      plan: "free",
-      preferredCurrency: "USD",
-      favoriteCountries: [],
-      lastVisitedCountry: "",
-      recentCountryViews: [],
-    };
-  }
-
-  const data = snap.data() as UserMemory;
-
-  return {
-    plan: data.plan || "free",
-    preferredCurrency: data.preferredCurrency || "USD",
-    favoriteCountries: data.favoriteCountries || [],
-    lastVisitedCountry: data.lastVisitedCountry || "",
-    recentCountryViews: data.recentCountryViews || [],
-  };
+  if (!snap.exists()) return null;
+  return snap.data() as UserMemory;
 }
 
-export async function saveLastVisitedCountry(uid: string, slug: string) {
-  const ref = doc(db, "users", uid);
-  const current = await getUserMemory(uid);
+export async function updateUserMemory(data: Partial<UserMemory>) {
+  const uid = await getCurrentUserId();
+  if (!uid) return;
 
-  const nextRecent = [
-    { slug, viewedAt: new Date().toISOString() },
-    ...(current.recentCountryViews || []).filter((item) => item.slug !== slug),
-  ].slice(0, current.plan === "premium" ? 20 : 5);
+  const ref = doc(db, "users", uid);
+  await setDoc(ref, data, { merge: true });
+}
+
+export async function appendUserActivity(action: string) {
+  const uid = await getCurrentUserId();
+  if (!uid) return;
+
+  const ref = doc(db, "users", uid);
 
   await setDoc(
     ref,
     {
-      lastVisitedCountry: slug,
-      recentCountryViews: nextRecent,
+      activity: arrayUnion({
+        action,
+        date: new Date().toISOString(),
+      }),
     },
     { merge: true }
   );
 }
 
-export async function toggleFavoriteCountry(uid: string, slug: string) {
-  const ref = doc(db, "users", uid);
-  const current = await getUserMemory(uid);
+export async function setLastVisitedCountry(country: string) {
+  await updateUserMemory({ lastVisitedCountry: country });
+}
 
-  const favorites = current.favoriteCountries || [];
-  const isFavorite = favorites.includes(slug);
-  const limit = current.plan === "premium" ? 999 : 3;
+export async function addRecentConversion(conversion: RecentConversion) {
+  const memory = await getUserMemory();
+  const current = memory?.recentConversions || [];
+  const next = [conversion, ...current].slice(0, 10);
 
-  if (isFavorite) {
-    const next = favorites.filter((item) => item !== slug);
+  await updateUserMemory({ recentConversions: next });
+}
 
-    await setDoc(
-      ref,
-      {
-        favoriteCountries: next,
-      },
-      { merge: true }
-    );
+export async function toggleFavoriteCountryInMemory(country: string) {
+  const memory = await getUserMemory();
+  const favorites = memory?.favoriteCountries || [];
 
-    return {
-      isFavorite: false,
-      favorites: next,
-      limitReached: false,
-    };
-  }
+  const exists = favorites.includes(country);
+  const next = exists
+    ? favorites.filter((item) => item !== country)
+    : [...favorites, country];
 
-  if (favorites.length >= limit) {
-    return {
-      isFavorite: false,
-      favorites,
-      limitReached: true,
-    };
-  }
+  await updateUserMemory({ favoriteCountries: next });
+  return next;
+}
 
-  const next = [...favorites, slug];
+export async function addCountryGoal(country: string) {
+  const memory = await getUserMemory();
+  const currentGoals = memory?.countryGoals || [];
 
-  await setDoc(
-    ref,
-    {
-      favoriteCountries: next,
-    },
-    { merge: true }
-  );
+  if (currentGoals.includes(country)) return currentGoals;
 
-  return {
-    isFavorite: true,
-    favorites: next,
-    limitReached: false,
-  };
+  const next = [...currentGoals, country];
+  await updateUserMemory({ countryGoals: next });
+  return next;
 }

@@ -1,52 +1,62 @@
-import { getReadinessTier } from "@/lib/calculate-global-readiness";
+"use client";
+
+import { useEffect, useState } from "react";
+import { getUserMemory } from "@/lib/user-memory";
+import {
+  calculateGlobalReadinessScore,
+  getReadinessLevel,
+} from "@/lib/global-readiness-score";
 
 type GlobalReadinessCardProps = {
-  score: number;
+  score?: number;
 };
 
 export default function GlobalReadinessCard({
-  score,
+  score: externalScore,
 }: GlobalReadinessCardProps) {
-  const tier = getReadinessTier(score);
+  const [score, setScore] = useState(
+    typeof externalScore === "number" ? externalScore : 0
+  );
+  const [level, setLevel] = useState(
+    getReadinessLevel(typeof externalScore === "number" ? externalScore : 0)
+  );
+
+  useEffect(() => {
+    async function load() {
+      if (typeof externalScore === "number") {
+        setScore(externalScore);
+        setLevel(getReadinessLevel(externalScore));
+        return;
+      }
+
+      const memory = await getUserMemory();
+      const nextScore = calculateGlobalReadinessScore(memory);
+      setScore(nextScore);
+      setLevel(getReadinessLevel(nextScore));
+    }
+
+    load();
+  }, [externalScore]);
 
   return (
-    <section className="rounded-3xl border border-yellow-700/20 bg-gradient-to-br from-yellow-500/10 via-slate-950 to-slate-900 p-8">
-      <div className="flex flex-wrap items-start justify-between gap-6">
-        <div>
-          <p className="mb-3 inline-flex rounded-full border border-yellow-600/30 bg-yellow-500/5 px-4 py-2 text-sm text-yellow-200">
-            TGPI Global Readiness
-          </p>
+    <section className="rounded-2xl border border-yellow-700/20 bg-gradient-to-br from-yellow-500/10 to-slate-950 p-6">
+      <h2 className="mb-2 text-xl font-bold text-yellow-400">
+        Global Readiness Score
+      </h2>
 
-          <h2 className="text-3xl font-bold text-yellow-400">{score}/100</h2>
-          <p className="mt-2 text-slate-300">{tier}</p>
-        </div>
-
-        <div className="rounded-2xl border border-slate-800 bg-slate-900 px-5 py-4 text-center">
-          <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
-            Current Tier
-          </p>
-          <p className="mt-2 text-lg font-bold text-white">{tier}</p>
-        </div>
+      <div className="flex items-end gap-3">
+        <p className="text-5xl font-bold text-white">{score}</p>
+        <p className="pb-2 text-sm text-slate-400">/100</p>
       </div>
 
-      <div className="mt-8">
-        <div className="mb-2 flex items-center justify-between text-sm text-slate-300">
-          <span>0</span>
-          <span>100</span>
-        </div>
+      <p className="mt-3 inline-block rounded-full border border-yellow-500/30 bg-yellow-500/10 px-3 py-1 text-sm text-yellow-200">
+        {level} Level
+      </p>
 
-        <div className="h-4 overflow-hidden rounded-full bg-slate-800">
-          <div
-            className="h-full rounded-full bg-yellow-500 transition-all"
-            style={{ width: `${score}%` }}
-          />
-        </div>
-
-        <p className="mt-3 text-sm leading-7 text-slate-400">
-          Your readiness score reflects global progression across learning,
-          countries explored, profile quality, and completion signals.
-        </p>
-      </div>
+      <p className="mt-4 text-sm leading-6 text-slate-300">
+        This score reflects how prepared your TGPI journey is becoming based on
+        activity, goals, favorites, and international exploration signals.
+      </p>
     </section>
   );
 }
