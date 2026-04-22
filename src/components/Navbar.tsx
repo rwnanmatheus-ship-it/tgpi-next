@@ -31,34 +31,6 @@ export default function Navbar() {
     setMenuOpen(false);
   }
 
-  function renderAvatar() {
-    if (!user) return null;
-
-    if (user.photoURL) {
-      return (
-        <img
-          src={user.photoURL}
-          alt="User avatar"
-          className="h-9 w-9 rounded-full border border-slate-700 object-cover"
-        />
-      );
-    }
-
-    const base = user.displayName || user.email || "TGPI";
-    const initials = base
-      .split(" ")
-      .map((part) => part[0])
-      .join("")
-      .slice(0, 2)
-      .toUpperCase();
-
-    return (
-      <div className="flex h-9 w-9 items-center justify-center rounded-full bg-yellow-500 text-sm font-bold text-black">
-        {initials}
-      </div>
-    );
-  }
-
   return (
     <header className="sticky top-0 z-50 border-b border-white/10 bg-[#0b0f19]/90 backdrop-blur">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
@@ -118,27 +90,15 @@ export default function Navbar() {
 
           {user ? (
             <>
-              <Link
-                href="/profile"
-                className="flex items-center gap-3 rounded-xl border border-slate-800 bg-slate-950 px-3 py-2 transition hover:border-yellow-500"
+              <TopbarUserIdentity />
+
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm font-semibold text-red-200 transition hover:bg-red-500/20"
               >
-                {renderAvatar()}
-                <span className="max-w-[160px] truncate text-sm font-medium text-yellow-300">
-                  {user.email}
-                </span>
-              </Link>
-
-              <div className="flex items-center gap-3">
-  <TopbarUserIdentity />
-
-  <button
-    type="button"
-    onClick={handleLogout}
-    className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm font-semibold text-red-200 transition hover:bg-red-500/20"
-  >
-    Logout
-  </button>
-</div>
+                Logout
+              </button>
             </>
           ) : (
             <Link
@@ -220,24 +180,15 @@ export default function Navbar() {
 
             {user ? (
               <>
-                <div className="flex items-center gap-3">
-                  {renderAvatar()}
-                  <span className="text-sm font-medium text-yellow-400">
-                    {user.email}
-                  </span>
-                </div>
+                <TopbarUserIdentity />
 
-                <div className="flex flex-col gap-3">
-  <TopbarUserIdentity />
-
-  <button
-    type="button"
-    onClick={handleLogout}
-    className="w-full rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm font-semibold text-red-200 transition hover:bg-red-500/20"
-  >
-    Logout
-  </button>
-</div>
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="w-full rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm font-semibold text-red-200 transition hover:bg-red-500/20"
+                >
+                  Logout
+                </button>
               </>
             ) : (
               <Link
