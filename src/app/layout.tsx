@@ -1,5 +1,6 @@
 import "./globals.css";
 import type { Metadata } from "next";
+import Navbar from "@/components/Navbar";
 
 export const metadata: Metadata = {
   title: "TGPI — Build Your Global Identity",
@@ -16,6 +17,8 @@ export const metadata: Metadata = {
     "international life",
     "expat platform",
     "global identity",
+    "TGPI",
+    "The Global Polymath Institute",
   ],
   openGraph: {
     title: "TGPI — Build Your Global Identity",
@@ -43,6 +46,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-black text-white">
+        <Navbar />
         {children}
       </body>
     </html>
