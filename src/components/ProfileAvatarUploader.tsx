@@ -48,7 +48,6 @@ export default function ProfileAvatarUploader({
         );
 
         onAvatarSaved?.(base64);
-        alert("Profile photo updated successfully.");
       } catch (error) {
         console.error("Failed to save avatar:", error);
         alert("Could not save profile photo.");
@@ -61,13 +60,13 @@ export default function ProfileAvatarUploader({
   }
 
   return (
-    <section className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-      <p className="mb-4 text-xs uppercase tracking-[0.18em] text-slate-400">
-        Avatar
+    <section className="rounded-3xl border border-white/10 bg-gradient-to-br from-slate-950 to-slate-900 p-5 shadow-[0_0_40px_rgba(255,215,0,0.04)]">
+      <p className="mb-4 text-xs uppercase tracking-[0.2em] text-slate-400">
+        Profile Photo
       </p>
 
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-        <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-2xl border border-yellow-500/20 bg-slate-950 text-3xl font-bold text-yellow-400">
+        <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-3xl border border-yellow-500/20 bg-black text-3xl font-bold text-yellow-400 shadow-[0_0_30px_rgba(250,204,21,0.08)]">
           {preview ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
@@ -84,13 +83,13 @@ export default function ProfileAvatarUploader({
           <button
             type="button"
             onClick={() => inputRef.current?.click()}
-            className="rounded-xl bg-yellow-500 px-5 py-3 font-semibold text-black transition hover:bg-yellow-400"
+            className="rounded-2xl bg-gradient-to-r from-yellow-500 to-amber-400 px-5 py-3 font-semibold text-black transition hover:brightness-105"
           >
-            {loading ? "Saving..." : "Upload Photo"}
+            {loading ? "Saving..." : "Upload New Photo"}
           </button>
 
           <p className="text-sm text-slate-400">
-            Recommended: square image, clear face/logo, max 2MB.
+            Premium recommendation: square image, clear face/logo, max 2MB.
           </p>
 
           <input

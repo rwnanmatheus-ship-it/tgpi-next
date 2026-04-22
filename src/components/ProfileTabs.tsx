@@ -18,7 +18,7 @@ export default function ProfileTabs({
   onChange: (tab: TabKey) => void;
 }) {
   return (
-    <div className="rounded-2xl border border-slate-800 bg-slate-950 p-3">
+    <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-slate-950 to-slate-900 p-3 shadow-[0_0_40px_rgba(255,215,0,0.04)]">
       <div className="flex gap-2 overflow-x-auto">
         {tabs.map((tab) => {
           const active = activeTab === tab.key;
@@ -28,10 +28,10 @@ export default function ProfileTabs({
               key={tab.key}
               type="button"
               onClick={() => onChange(tab.key)}
-              className={`rounded-xl px-4 py-3 text-sm font-semibold transition ${
+              className={`rounded-2xl px-4 py-3 text-sm font-semibold transition ${
                 active
-                  ? "bg-yellow-500 text-black"
-                  : "border border-slate-800 bg-slate-900 text-white hover:border-yellow-500/40"
+                  ? "bg-gradient-to-r from-yellow-500 to-amber-400 text-black shadow-[0_10px_30px_rgba(250,204,21,0.18)]"
+                  : "border border-white/8 bg-white/[0.03] text-white hover:border-yellow-500/30 hover:text-yellow-300"
               }`}
             >
               {tab.label}

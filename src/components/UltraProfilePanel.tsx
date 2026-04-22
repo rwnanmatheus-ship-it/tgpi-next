@@ -4,10 +4,12 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { auth, db } from "@/lib/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
+import { onAuthStateChanged, User } from "firebase/auth";
 import { getUserMemory, updateUserMemory } from "@/lib/user-memory";
 import CommandCenterNav from "@/components/CommandCenterNav";
 import ProfileTabs from "@/components/ProfileTabs";
 import ProfileAvatarUploader from "@/components/ProfileAvatarUploader";
+import SaveSuccessCard from "@/components/SaveSuccessCard";
 import ShareProfile from "@/components/ShareProfile";
 import ProfileCompletion from "@/components/ProfileCompletion";
 import SmartAdvisor from "@/components/SmartAdvisor";
@@ -144,24 +146,6 @@ function readinessTier(score: number) {
   return "Starter";
 }
 
-function StatCard({
-  label,
-  value,
-  hint,
-}: {
-  label: string;
-  value: string | number;
-  hint?: string;
-}) {
-  return (
-    <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-      <p className="text-xs uppercase tracking-[0.18em] text-slate-400">{label}</p>
-      <p className="mt-3 text-2xl font-bold text-white">{value}</p>
-      {hint ? <p className="mt-2 text-sm text-slate-400">{hint}</p> : null}
-    </div>
-  );
-}
-
 function Section({
   title,
   subtitle,
@@ -172,13 +156,31 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-3xl border border-slate-800 bg-slate-950 p-6">
+    <section className="rounded-3xl border border-white/10 bg-gradient-to-br from-slate-950 to-slate-900 p-6 shadow-[0_0_40px_rgba(255,215,0,0.04)]">
       <div className="mb-5">
         <h2 className="text-2xl font-bold text-yellow-400">{title}</h2>
         {subtitle ? <p className="mt-2 text-sm text-slate-400">{subtitle}</p> : null}
       </div>
       {children}
     </section>
+  );
+}
+
+function StatCard({
+  label,
+  value,
+  hint,
+}: {
+  label: string;
+  value: string | number;
+  hint?: string;
+}) {
+  return (
+    <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-5 shadow-[0_0_25px_rgba(255,215,0,0.03)]">
+      <p className="text-xs uppercase tracking-[0.2em] text-slate-400">{label}</p>
+      <p className="mt-3 text-2xl font-bold text-white">{value}</p>
+      {hint ? <p className="mt-2 text-sm text-slate-400">{hint}</p> : null}
+    </div>
   );
 }
 
@@ -194,7 +196,7 @@ function SettingToggle({
   description: string;
 }) {
   return (
-    <div className="flex items-start justify-between gap-4 rounded-2xl border border-slate-800 bg-slate-900 p-4">
+    <div className="flex items-start justify-between gap-4 rounded-2xl border border-white/10 bg-white/[0.03] p-4">
       <div>
         <p className="font-medium text-white">{label}</p>
         <p className="mt-1 text-sm text-slate-400">{description}</p>
@@ -218,37 +220,37 @@ function SettingToggle({
 }
 
 export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
-  const [loading, setLoading] = useState(true);
+  const [authReady, setAuthReady] = useState(false);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [activeTab, setActiveTab] = useState<TabKey>("overview");
   const [profile, setProfile] = useState<UserDoc | null>(null);
   const [memory, setMemory] = useState<MemoryShape | null>(null);
   const [form, setForm] = useState<FormState>(initialForm);
   const [saving, setSaving] = useState(false);
+  const [saveVisible, setSaveVisible] = useState(false);
   const [saveMessage, setSaveMessage] = useState("");
-  const [email, setEmail] = useState("");
-  const [uid, setUid] = useState("");
   const [avatar, setAvatar] = useState("");
 
   useEffect(() => {
-    async function load() {
-      const user = auth.currentUser;
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      setCurrentUser(user);
+      setAuthReady(true);
 
       if (!user) {
-        setLoading(false);
+        setProfile(null);
+        setMemory(null);
         return;
       }
-
-      setEmail(user.email || "");
-      setUid(user.uid);
 
       try {
         const snap = await getDoc(doc(db, "users", user.uid));
         const userData = snap.exists() ? (snap.data() as UserDoc) : null;
-        setProfile(userData);
-        setAvatar(userData?.photoURL || "");
 
         const memoryData = (await getUserMemory()) as MemoryShape | null;
+
+        setProfile(userData);
         setMemory(memoryData);
+        setAvatar(userData?.photoURL || "");
 
         setForm({
           displayName: userData?.displayName || userData?.fullName || "",
@@ -273,20 +275,18 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
           profilePublic: userData?.profilePublic ?? true,
         });
       } catch (error) {
-        console.error("Failed to load command center:", error);
-      } finally {
-        setLoading(false);
+        console.error("Failed to load ultra profile:", error);
       }
-    }
+    });
 
-    load();
+    return () => unsubscribe();
   }, []);
 
   const displayName =
     form.displayName ||
     profile?.displayName ||
     profile?.fullName ||
-    (email ? email.split("@")[0] : "Global Member");
+    (currentUser?.email ? currentUser.email.split("@")[0] : "Global Member");
 
   const username =
     form.username ||
@@ -307,18 +307,18 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
   }
 
   async function handleSaveProfile() {
-    const user = auth.currentUser;
-    if (!user) {
+    if (!currentUser) {
       alert("You must be logged in.");
       return;
     }
 
     setSaving(true);
+    setSaveVisible(false);
     setSaveMessage("");
 
     try {
       await setDoc(
-        doc(db, "users", user.uid),
+        doc(db, "users", currentUser.uid),
         {
           displayName: form.displayName,
           username: form.username,
@@ -347,61 +347,48 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
         continentInterest: form.continentInterest || undefined,
       });
 
-      setProfile((prev) => ({
-        ...(prev || {}),
-        displayName: form.displayName,
-        username: form.username,
-        bio: form.bio,
-        city: form.city,
-        country: form.country,
-        preferredCurrency: form.preferredCurrency,
-        phone: form.phone,
-        website: form.website,
-        instagram: form.instagram,
-        linkedin: form.linkedin,
-        timezone: form.timezone,
-        languagePreference: form.languagePreference,
-        notificationsEmail: form.notificationsEmail,
-        notificationsPush: form.notificationsPush,
-        profilePublic: form.profilePublic,
-      }));
+      const refreshedSnap = await getDoc(doc(db, "users", currentUser.uid));
+      const refreshedProfile = refreshedSnap.exists()
+        ? (refreshedSnap.data() as UserDoc)
+        : null;
 
-      setMemory((prev) => ({
-        ...(prev || {}),
-        preferredCurrency: form.preferredCurrency,
-        goal: form.goal || undefined,
-        englishLevel: form.englishLevel || undefined,
-        budget: form.budget || undefined,
-        continentInterest: form.continentInterest || undefined,
-      }));
+      const refreshedMemory = (await getUserMemory()) as MemoryShape | null;
 
-      setSaveMessage("Profile saved successfully.");
-      setTimeout(() => setSaveMessage(""), 3000);
+      setProfile(refreshedProfile);
+      setMemory(refreshedMemory);
+
+      setSaveMessage("Your profile settings and preferences were saved successfully.");
+      setSaveVisible(true);
+
+      setTimeout(() => {
+        setSaveVisible(false);
+      }, 3200);
     } catch (error) {
       console.error("Failed to save profile:", error);
       setSaveMessage("Could not save profile.");
+      setSaveVisible(true);
     } finally {
       setSaving(false);
     }
   }
 
-  if (loading) {
+  if (!authReady) {
     return (
       <main className="min-h-screen bg-black px-4 py-6 text-white md:px-6 md:py-10">
         <div className="mx-auto max-w-7xl">
-          <div className="rounded-3xl border border-slate-800 bg-slate-950 p-10">
-            <p className="text-lg text-slate-300">Loading ultra profile command center...</p>
+          <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-slate-950 to-slate-900 p-10">
+            <p className="text-lg text-slate-300">Loading your premium command center...</p>
           </div>
         </div>
       </main>
     );
   }
 
-  if (!auth.currentUser) {
+  if (!currentUser) {
     return (
       <main className="min-h-screen bg-black px-4 py-6 text-white md:px-6 md:py-10">
         <div className="mx-auto max-w-4xl">
-          <section className="rounded-3xl border border-yellow-700/20 bg-gradient-to-br from-yellow-500/10 to-slate-950 p-10">
+          <section className="rounded-3xl border border-yellow-500/15 bg-gradient-to-br from-yellow-500/10 via-slate-950 to-slate-950 p-10">
             <p className="mb-3 inline-block rounded-full border border-yellow-500/30 bg-yellow-500/10 px-4 py-2 text-sm text-yellow-200">
               TGPI Identity Access
             </p>
@@ -409,12 +396,12 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
               Sign in to access your ultra profile
             </h1>
             <p className="mt-4 max-w-2xl text-slate-300">
-              Your profile is now a premium intelligence layer with editing, settings, goals, and global progress.
+              Your account was not found in the current session. Sign in to restore the full command center.
             </p>
             <div className="mt-8">
               <Link
                 href="/login"
-                className="rounded-xl bg-yellow-500 px-6 py-3 font-semibold text-black transition hover:bg-yellow-400"
+                className="rounded-2xl bg-gradient-to-r from-yellow-500 to-amber-400 px-6 py-3 font-semibold text-black transition hover:brightness-105"
               >
                 Go to Login
               </Link>
@@ -430,7 +417,7 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
       <div className="mx-auto max-w-7xl space-y-8">
         <CommandCenterNav />
 
-        <section className="rounded-3xl border border-yellow-700/20 bg-gradient-to-br from-yellow-500/10 via-slate-950 to-slate-950 p-6 md:p-8">
+        <section className="rounded-[28px] border border-yellow-500/15 bg-[radial-gradient(circle_at_top,rgba(250,204,21,0.08),transparent_30%),linear-gradient(135deg,#020617_0%,#0f172a_45%,#111827_100%)] p-6 shadow-[0_0_60px_rgba(250,204,21,0.05)] md:p-8">
           <div className="grid gap-8 xl:grid-cols-[1.2fr_.8fr]">
             <div>
               <p className="mb-4 inline-block rounded-full border border-yellow-500/30 bg-yellow-500/10 px-4 py-2 text-sm text-yellow-200">
@@ -441,17 +428,19 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
 
               <h1 className="text-4xl font-bold text-white md:text-5xl">{displayName}</h1>
               <p className="mt-2 text-slate-300">@{username}</p>
-              {email ? <p className="mt-1 text-sm text-slate-400">{email}</p> : null}
+              {currentUser.email ? (
+                <p className="mt-1 text-sm text-slate-400">{currentUser.email}</p>
+              ) : null}
 
               <p className="mt-5 max-w-3xl text-sm leading-7 text-slate-300">
                 {form.bio ||
-                  "This is your premium TGPI command layer: profile, strategy, progress, settings, and global readiness in one place."}
+                  "Your TGPI command center is now organized around identity, progress, goals, settings, and international readiness."}
               </p>
 
               <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                 <StatCard label="Readiness" value={`${readiness}/100`} hint={tier} />
                 <StatCard label="Favorites" value={favorites.length} hint="Saved countries" />
-                <StatCard label="Goals" value={goals.length} hint="Country goals" />
+                <StatCard label="Goals" value={goals.length} hint="Strategic goals" />
                 <StatCard label="Conversions" value={conversions.length} hint="Financial signals" />
               </div>
             </div>
@@ -463,34 +452,33 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
                 onAvatarSaved={(url) => {
                   setAvatar(url);
                   setProfile((prev) => ({ ...(prev || {}), photoURL: url }));
+                  setSaveMessage("Your new profile photo was saved successfully.");
+                  setSaveVisible(true);
+                  setTimeout(() => setSaveVisible(false), 3200);
                 }}
               />
 
-              <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-                <p className="mb-4 text-xs uppercase tracking-[0.18em] text-slate-400">
+              <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-5 shadow-[0_0_25px_rgba(255,215,0,0.03)]">
+                <p className="mb-4 text-xs uppercase tracking-[0.2em] text-slate-400">
                   Account Overview
                 </p>
 
                 <div className="space-y-3 text-sm">
-                  <div className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950 p-3">
+                  <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/30 p-3">
                     <span className="text-slate-400">Plan</span>
                     <span className="font-semibold text-white">{profile?.plan || "FREE"}</span>
                   </div>
-                  <div className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950 p-3">
+                  <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/30 p-3">
                     <span className="text-slate-400">XP</span>
                     <span className="font-semibold text-white">{profile?.xp ?? 0}</span>
                   </div>
-                  <div className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950 p-3">
+                  <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/30 p-3">
                     <span className="text-slate-400">Level</span>
                     <span className="font-semibold text-white">{profile?.level ?? 1}</span>
                   </div>
-                  <div className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950 p-3">
+                  <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/30 p-3">
                     <span className="text-slate-400">Streak</span>
                     <span className="font-semibold text-white">{profile?.streak ?? 0} days</span>
-                  </div>
-                  <div className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950 p-3">
-                    <span className="text-slate-400">UID</span>
-                    <span className="max-w-[180px] truncate font-mono text-xs text-slate-300">{uid}</span>
                   </div>
                 </div>
               </div>
@@ -498,49 +486,47 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
           </div>
         </section>
 
+        <SaveSuccessCard message={saveMessage} visible={saveVisible} />
+
         <ShareProfile username={username} />
         <ProfileTabs activeTab={activeTab} onChange={setActiveTab} />
 
-        <div className="grid gap-8 xl:grid-cols-[1.2fr_.8fr]">
+        <div className="grid gap-8 xl:grid-cols-[1.22fr_.78fr]">
           <div className="space-y-8">
             {activeTab === "overview" && (
               <>
                 <Section
-                  title="Identity Snapshot"
-                  subtitle="A full, useful view of the user's international identity layer."
+                  title="Identity Overview"
+                  subtitle="The most important information appears first, with strong visual hierarchy and practical clarity."
                 >
                   <div className="grid gap-4 md:grid-cols-2">
-                    <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+                    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
                       <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Display Name</p>
                       <p className="mt-3 text-lg font-semibold text-white">{form.displayName || "Not defined"}</p>
                     </div>
-                    <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+                    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
                       <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Username</p>
                       <p className="mt-3 text-lg font-semibold text-white">@{username}</p>
                     </div>
-                    <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+                    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
                       <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Location</p>
                       <p className="mt-3 text-lg font-semibold text-white">
                         {[form.city, form.country].filter(Boolean).join(", ") || "Not defined"}
                       </p>
                     </div>
-                    <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+                    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
                       <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Preferred Currency</p>
-                      <p className="mt-3 text-lg font-semibold text-white">
-                        {form.preferredCurrency || "Not defined"}
-                      </p>
+                      <p className="mt-3 text-lg font-semibold text-white">{form.preferredCurrency || "Not defined"}</p>
                     </div>
-                    <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-                      <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Goal</p>
+                    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+                      <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Main Goal</p>
                       <p className="mt-3 text-lg font-semibold text-white">{form.goal || "Not defined"}</p>
                     </div>
-                    <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
+                    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
                       <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Continent Interest</p>
-                      <p className="mt-3 text-lg font-semibold text-white">
-                        {form.continentInterest || "Not defined"}
-                      </p>
+                      <p className="mt-3 text-lg font-semibold text-white">{form.continentInterest || "Not defined"}</p>
                     </div>
-                    <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5 md:col-span-2">
+                    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 md:col-span-2">
                       <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Bio</p>
                       <p className="mt-3 text-sm leading-7 text-slate-300">
                         {form.bio || "No bio defined yet."}
@@ -550,11 +536,11 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
                 </Section>
 
                 <Section
-                  title="Global Signals"
-                  subtitle="These are the signals that make TGPI smarter for the user."
+                  title="Decision Signals"
+                  subtitle="The profile becomes more valuable as TGPI learns from behavior and preferences."
                 >
                   <div className="grid gap-4 md:grid-cols-2">
-                    <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5 md:col-span-2">
+                    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 md:col-span-2">
                       <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Favorite Countries</p>
                       <div className="mt-3 flex flex-wrap gap-3">
                         {favorites.length ? (
@@ -572,14 +558,14 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
                       </div>
                     </div>
 
-                    <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5 md:col-span-2">
+                    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 md:col-span-2">
                       <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Country Goals</p>
                       <div className="mt-3 flex flex-wrap gap-3">
                         {goals.length ? (
                           goals.map((goal) => (
                             <span
                               key={goal}
-                              className="rounded-full border border-slate-700 bg-slate-950 px-4 py-2 text-sm text-white"
+                              className="rounded-full border border-white/10 bg-black/30 px-4 py-2 text-sm text-white"
                             >
                               {goal}
                             </span>
@@ -597,7 +583,7 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
             {activeTab === "edit" && (
               <Section
                 title="Edit Full Profile"
-                subtitle="Everything important about the user in one premium editing experience."
+                subtitle="Everything important about the user, centralized and ordered by importance."
               >
                 <div className="grid gap-4 md:grid-cols-2">
                   <div>
@@ -605,7 +591,7 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
                     <input
                       value={form.displayName}
                       onChange={(e) => updateField("displayName", e.target.value)}
-                      className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-white outline-none focus:border-yellow-500"
+                      className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40"
                     />
                   </div>
 
@@ -614,7 +600,7 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
                     <input
                       value={form.username}
                       onChange={(e) => updateField("username", e.target.value)}
-                      className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-white outline-none focus:border-yellow-500"
+                      className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40"
                     />
                   </div>
 
@@ -624,7 +610,7 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
                       rows={4}
                       value={form.bio}
                       onChange={(e) => updateField("bio", e.target.value)}
-                      className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-white outline-none focus:border-yellow-500"
+                      className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40"
                     />
                   </div>
 
@@ -633,7 +619,7 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
                     <input
                       value={form.city}
                       onChange={(e) => updateField("city", e.target.value)}
-                      className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-white outline-none focus:border-yellow-500"
+                      className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40"
                     />
                   </div>
 
@@ -642,7 +628,7 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
                     <input
                       value={form.country}
                       onChange={(e) => updateField("country", e.target.value)}
-                      className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-white outline-none focus:border-yellow-500"
+                      className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40"
                     />
                   </div>
 
@@ -651,7 +637,7 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
                     <input
                       value={form.phone}
                       onChange={(e) => updateField("phone", e.target.value)}
-                      className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-white outline-none focus:border-yellow-500"
+                      className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40"
                     />
                   </div>
 
@@ -660,7 +646,7 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
                     <input
                       value={form.website}
                       onChange={(e) => updateField("website", e.target.value)}
-                      className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-white outline-none focus:border-yellow-500"
+                      className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40"
                     />
                   </div>
 
@@ -669,7 +655,7 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
                     <input
                       value={form.instagram}
                       onChange={(e) => updateField("instagram", e.target.value)}
-                      className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-white outline-none focus:border-yellow-500"
+                      className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40"
                     />
                   </div>
 
@@ -678,35 +664,25 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
                     <input
                       value={form.linkedin}
                       onChange={(e) => updateField("linkedin", e.target.value)}
-                      className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-white outline-none focus:border-yellow-500"
+                      className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40"
                     />
                   </div>
+                </div>
+              </Section>
+            )}
 
-                  <div>
-                    <label className="mb-2 block text-sm text-slate-300">Timezone</label>
-                    <input
-                      value={form.timezone}
-                      onChange={(e) => updateField("timezone", e.target.value)}
-                      className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-white outline-none focus:border-yellow-500"
-                      placeholder="America/Sao_Paulo"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="mb-2 block text-sm text-slate-300">Language Preference</label>
-                    <input
-                      value={form.languagePreference}
-                      onChange={(e) => updateField("languagePreference", e.target.value)}
-                      className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-white outline-none focus:border-yellow-500"
-                    />
-                  </div>
-
+            {activeTab === "goals" && (
+              <Section
+                title="Goals and Preferences"
+                subtitle="These fields are central to personalization and smart recommendations."
+              >
+                <div className="grid gap-4 md:grid-cols-2">
                   <div>
                     <label className="mb-2 block text-sm text-slate-300">Preferred Currency</label>
                     <select
                       value={form.preferredCurrency}
                       onChange={(e) => updateField("preferredCurrency", e.target.value)}
-                      className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-white outline-none focus:border-yellow-500"
+                      className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40"
                     >
                       <option value="USD">USD</option>
                       <option value="BRL">BRL</option>
@@ -717,22 +693,13 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
                       <option value="CAD">CAD</option>
                     </select>
                   </div>
-                </div>
-              </Section>
-            )}
 
-            {activeTab === "goals" && (
-              <Section
-                title="Goals and Readiness Settings"
-                subtitle="Settings that help TGPI personalize recommendations and guidance."
-              >
-                <div className="grid gap-4 md:grid-cols-2">
                   <div>
                     <label className="mb-2 block text-sm text-slate-300">Main Goal</label>
                     <select
                       value={form.goal}
                       onChange={(e) => updateField("goal", e.target.value as FormState["goal"])}
-                      className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-white outline-none focus:border-yellow-500"
+                      className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40"
                     >
                       <option value="">Select</option>
                       <option value="work">Work Abroad</option>
@@ -748,7 +715,7 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
                       onChange={(e) =>
                         updateField("englishLevel", e.target.value as FormState["englishLevel"])
                       }
-                      className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-white outline-none focus:border-yellow-500"
+                      className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40"
                     >
                       <option value="">Select</option>
                       <option value="basic">Basic</option>
@@ -762,7 +729,7 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
                     <select
                       value={form.budget}
                       onChange={(e) => updateField("budget", e.target.value as FormState["budget"])}
-                      className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-white outline-none focus:border-yellow-500"
+                      className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40"
                     >
                       <option value="">Select</option>
                       <option value="low">Low</option>
@@ -771,12 +738,12 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
                     </select>
                   </div>
 
-                  <div>
+                  <div className="md:col-span-2">
                     <label className="mb-2 block text-sm text-slate-300">Continent of Interest</label>
                     <input
                       value={form.continentInterest}
                       onChange={(e) => updateField("continentInterest", e.target.value)}
-                      className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-white outline-none focus:border-yellow-500"
+                      className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40"
                       placeholder="Europe, Asia, North America..."
                     />
                   </div>
@@ -787,7 +754,7 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
             {activeTab === "activity" && (
               <Section
                 title="Activity Timeline"
-                subtitle="An operational history of the user's movement inside TGPI."
+                subtitle="A clean operational history with the most recent behavior first."
               >
                 <div className="space-y-3">
                   {activity.length ? (
@@ -798,14 +765,14 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
                       .map((item, index) => (
                         <div
                           key={`${item.action}-${item.date}-${index}`}
-                          className="rounded-2xl border border-slate-800 bg-slate-900 p-4"
+                          className="rounded-2xl border border-white/10 bg-white/[0.03] p-4"
                         >
                           <p className="font-medium text-white">{item.action}</p>
                           <p className="mt-1 text-sm text-slate-400">{formatDate(item.date)}</p>
                         </div>
                       ))
                   ) : (
-                    <div className="rounded-2xl border border-slate-800 bg-slate-900 p-4 text-sm text-slate-400">
+                    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-sm text-slate-400">
                       No activity tracked yet.
                     </div>
                   )}
@@ -816,28 +783,49 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
             {activeTab === "settings" && (
               <Section
                 title="Settings"
-                subtitle="Preferences that control communication, privacy, and profile behavior."
+                subtitle="Real toggles for communication, privacy and account behavior."
               >
-                <div className="space-y-4">
+                <div className="grid gap-4">
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div>
+                      <label className="mb-2 block text-sm text-slate-300">Timezone</label>
+                      <input
+                        value={form.timezone}
+                        onChange={(e) => updateField("timezone", e.target.value)}
+                        className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40"
+                        placeholder="America/Sao_Paulo"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="mb-2 block text-sm text-slate-300">Language Preference</label>
+                      <input
+                        value={form.languagePreference}
+                        onChange={(e) => updateField("languagePreference", e.target.value)}
+                        className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40"
+                      />
+                    </div>
+                  </div>
+
                   <SettingToggle
                     checked={form.notificationsEmail}
                     onChange={(value) => updateField("notificationsEmail", value)}
                     label="Email Notifications"
-                    description="Receive updates and activity summaries by email."
+                    description="Receive important updates and account notifications by email."
                   />
 
                   <SettingToggle
                     checked={form.notificationsPush}
                     onChange={(value) => updateField("notificationsPush", value)}
-                    label="Push-Style Notifications"
-                    description="Keep the account ready for faster alerts and reminders."
+                    label="Platform Notifications"
+                    description="Enable faster alerts and activity prompts inside the product."
                   />
 
                   <SettingToggle
                     checked={form.profilePublic}
                     onChange={(value) => updateField("profilePublic", value)}
                     label="Public Profile"
-                    description="Allow your TGPI profile to be more visible in the ecosystem."
+                    description="Allow your profile to be more visible in TGPI experiences."
                   />
                 </div>
               </Section>
@@ -847,16 +835,17 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
               <button
                 type="button"
                 onClick={handleSaveProfile}
-                className="rounded-xl bg-yellow-500 px-6 py-3 font-semibold text-black transition hover:bg-yellow-400"
+                className="rounded-2xl bg-gradient-to-r from-yellow-500 to-amber-400 px-6 py-3 font-semibold text-black transition hover:brightness-105"
               >
                 {saving ? "Saving..." : "Save All Changes"}
               </button>
 
-              {saveMessage ? (
-                <span className="rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-sm text-white">
-                  {saveMessage}
-                </span>
-              ) : null}
+              <Link
+                href="/countries"
+                className="rounded-2xl border border-white/10 bg-white/[0.03] px-5 py-3 font-semibold text-white transition hover:border-yellow-500/30 hover:text-yellow-300"
+              >
+                Explore Countries
+              </Link>
             </div>
           </div>
 
@@ -868,46 +857,36 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
 
             <Section
               title="Fast Actions"
-              subtitle="Useful navigation shortcuts for users on both desktop and mobile."
+              subtitle="Smartly placed actions for both desktop and mobile usage."
             >
               <div className="space-y-3">
                 <Link
-                  href="/countries"
-                  className="block rounded-2xl border border-slate-800 bg-slate-900 p-4 transition hover:border-yellow-500/40"
-                >
-                  <p className="font-semibold text-white">Explore Countries</p>
-                  <p className="mt-1 text-sm text-slate-400">
-                    Expand profile signals and improve recommendations.
-                  </p>
-                </Link>
-
-                <Link
                   href="/premium"
-                  className="block rounded-2xl border border-slate-800 bg-slate-900 p-4 transition hover:border-yellow-500/40"
+                  className="block rounded-2xl border border-white/10 bg-white/[0.03] p-4 transition hover:border-yellow-500/30"
                 >
                   <p className="font-semibold text-white">Upgrade Plan</p>
                   <p className="mt-1 text-sm text-slate-400">
-                    Unlock a stronger product experience and deeper intelligence.
+                    Unlock more intelligence, control and premium value.
                   </p>
                 </Link>
 
                 <Link
                   href="/ranking"
-                  className="block rounded-2xl border border-slate-800 bg-slate-900 p-4 transition hover:border-yellow-500/40"
+                  className="block rounded-2xl border border-white/10 bg-white/[0.03] p-4 transition hover:border-yellow-500/30"
                 >
                   <p className="font-semibold text-white">Check Ranking</p>
                   <p className="mt-1 text-sm text-slate-400">
-                    View progression inside the TGPI ecosystem.
+                    View your positioning inside the TGPI ecosystem.
                   </p>
                 </Link>
 
                 <Link
                   href="/community"
-                  className="block rounded-2xl border border-slate-800 bg-slate-900 p-4 transition hover:border-yellow-500/40"
+                  className="block rounded-2xl border border-white/10 bg-white/[0.03] p-4 transition hover:border-yellow-500/30"
                 >
                   <p className="font-semibold text-white">Open Community</p>
                   <p className="mt-1 text-sm text-slate-400">
-                    Build interaction beyond solo usage.
+                    Connect your account to the broader social layer.
                   </p>
                 </Link>
               </div>
