@@ -2,14 +2,17 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { auth, db } from "@/lib/firebase";
-import { doc, setDoc } from "firebase/firestore";
+import { auth } from "@/lib/firebase";
 import { onAuthStateChanged, User } from "firebase/auth";
 import CommandCenterNav from "@/components/CommandCenterNav";
 import ProfileTabs from "@/components/ProfileTabs";
 import ProfileAvatarUploader from "@/components/ProfileAvatarUploader";
 import SaveStatusCard from "@/components/SaveStatusCard";
 import ProfileCompletionEngine from "@/components/ProfileCompletionEngine";
+import ProfilePublicPreview from "@/components/ProfilePublicPreview";
+import ProfileSmartActions from "@/components/ProfileSmartActions";
+import AccountSecurityPanel from "@/components/AccountSecurityPanel";
+import LaunchReadyChecklist from "@/components/LaunchReadyChecklist";
 import ShareProfile from "@/components/ShareProfile";
 import ProfileCompletion from "@/components/ProfileCompletion";
 import SmartAdvisor from "@/components/SmartAdvisor";
@@ -532,43 +535,59 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
             />
 
             {activeTab === "overview" && (
-              <Section
-                title="Vision Overview"
-                subtitle="The most important information appears first for a launch-ready profile."
-              >
-                <div className="grid gap-4 md:grid-cols-2">
-                  <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-                    <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Display Name</p>
-                    <p className="mt-3 text-lg font-semibold text-white">{form.displayName || "Not defined"}</p>
+              <>
+                <Section
+                  title="Vision Overview"
+                  subtitle="The most important information appears first for a launch-ready profile."
+                >
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+                      <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Display Name</p>
+                      <p className="mt-3 text-lg font-semibold text-white">{form.displayName || "Not defined"}</p>
+                    </div>
+                    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+                      <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Username</p>
+                      <p className="mt-3 text-lg font-semibold text-white">@{username}</p>
+                    </div>
+                    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+                      <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Location</p>
+                      <p className="mt-3 text-lg font-semibold text-white">
+                        {[form.city, form.country].filter(Boolean).join(", ") || "Not defined"}
+                      </p>
+                    </div>
+                    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+                      <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Preferred Currency</p>
+                      <p className="mt-3 text-lg font-semibold text-white">{form.preferredCurrency}</p>
+                    </div>
+                    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+                      <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Main Goal</p>
+                      <p className="mt-3 text-lg font-semibold text-white">{form.goal || "Not defined"}</p>
+                    </div>
+                    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+                      <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Continent Interest</p>
+                      <p className="mt-3 text-lg font-semibold text-white">{form.continentInterest || "Not defined"}</p>
+                    </div>
+                    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 md:col-span-2">
+                      <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Bio</p>
+                      <p className="mt-3 text-sm leading-7 text-slate-300">{form.bio || "No bio defined yet."}</p>
+                    </div>
                   </div>
-                  <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-                    <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Username</p>
-                    <p className="mt-3 text-lg font-semibold text-white">@{username}</p>
-                  </div>
-                  <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-                    <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Location</p>
-                    <p className="mt-3 text-lg font-semibold text-white">
-                      {[form.city, form.country].filter(Boolean).join(", ") || "Not defined"}
-                    </p>
-                  </div>
-                  <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-                    <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Preferred Currency</p>
-                    <p className="mt-3 text-lg font-semibold text-white">{form.preferredCurrency}</p>
-                  </div>
-                  <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-                    <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Main Goal</p>
-                    <p className="mt-3 text-lg font-semibold text-white">{form.goal || "Not defined"}</p>
-                  </div>
-                  <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-                    <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Continent Interest</p>
-                    <p className="mt-3 text-lg font-semibold text-white">{form.continentInterest || "Not defined"}</p>
-                  </div>
-                  <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 md:col-span-2">
-                    <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Bio</p>
-                    <p className="mt-3 text-sm leading-7 text-slate-300">{form.bio || "No bio defined yet."}</p>
-                  </div>
-                </div>
-              </Section>
+                </Section>
+
+                <ProfilePublicPreview
+                  displayName={displayName}
+                  username={username}
+                  bio={form.bio}
+                  avatar={avatar}
+                  city={form.city}
+                  country={form.country}
+                  showLocation={form.showLocation}
+                  showProgress={form.showProgress}
+                  showGoals={form.showGoals}
+                  goal={form.goal || ""}
+                  readinessLabel={tier}
+                />
+              </>
             )}
 
             {activeTab === "edit" && (
@@ -713,48 +732,13 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
                     </div>
                   </div>
 
-                  <SettingToggle
-                    checked={form.notificationsEmail}
-                    onChange={(value) => updateField("notificationsEmail", value)}
-                    label="Email Notifications"
-                    description="Receive important account and product updates by email."
-                  />
-                  <SettingToggle
-                    checked={form.notificationsPush}
-                    onChange={(value) => updateField("notificationsPush", value)}
-                    label="Platform Notifications"
-                    description="Receive in-product alerts and reminders."
-                  />
-                  <SettingToggle
-                    checked={form.marketingEmails}
-                    onChange={(value) => updateField("marketingEmails", value)}
-                    label="Product News and Releases"
-                    description="Receive curated updates about features and launches."
-                  />
-                  <SettingToggle
-                    checked={form.profilePublic}
-                    onChange={(value) => updateField("profilePublic", value)}
-                    label="Public Profile"
-                    description="Allow your profile to be discoverable across TGPI."
-                  />
-                  <SettingToggle
-                    checked={form.showLocation}
-                    onChange={(value) => updateField("showLocation", value)}
-                    label="Show Location"
-                    description="Display your city and country in the public-facing profile."
-                  />
-                  <SettingToggle
-                    checked={form.showProgress}
-                    onChange={(value) => updateField("showProgress", value)}
-                    label="Show Progress"
-                    description="Allow your TGPI progress signals to appear publicly."
-                  />
-                  <SettingToggle
-                    checked={form.showGoals}
-                    onChange={(value) => updateField("showGoals", value)}
-                    label="Show Goals"
-                    description="Display goal-related intent as part of your profile experience."
-                  />
+                  <SettingToggle checked={form.notificationsEmail} onChange={(value) => updateField("notificationsEmail", value)} label="Email Notifications" description="Receive important account and product updates by email." />
+                  <SettingToggle checked={form.notificationsPush} onChange={(value) => updateField("notificationsPush", value)} label="Platform Notifications" description="Receive in-product alerts and reminders." />
+                  <SettingToggle checked={form.marketingEmails} onChange={(value) => updateField("marketingEmails", value)} label="Product News and Releases" description="Receive curated updates about features and launches." />
+                  <SettingToggle checked={form.profilePublic} onChange={(value) => updateField("profilePublic", value)} label="Public Profile" description="Allow your profile to be discoverable across TGPI." />
+                  <SettingToggle checked={form.showLocation} onChange={(value) => updateField("showLocation", value)} label="Show Location" description="Display your city and country in the public-facing profile." />
+                  <SettingToggle checked={form.showProgress} onChange={(value) => updateField("showProgress", value)} label="Show Progress" description="Allow your TGPI progress signals to appear publicly." />
+                  <SettingToggle checked={form.showGoals} onChange={(value) => updateField("showGoals", value)} label="Show Goals" description="Display goal-related intent as part of your profile experience." />
                 </div>
               </Section>
             )}
@@ -783,41 +767,27 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
             <QuickStart />
             <OnlineNow />
 
-            <Section
-              title="Fast Actions"
-              subtitle="Final utility shortcuts placed where users naturally look."
-            >
-              <div className="space-y-3">
-                <Link href="/premium" className="block rounded-2xl border border-white/10 bg-white/[0.03] p-4 transition hover:border-yellow-500/30">
-                  <p className="font-semibold text-white">Upgrade Plan</p>
-                  <p className="mt-1 text-sm text-slate-400">Unlock stronger premium value and intelligence.</p>
-                </Link>
+            <ProfileSmartActions
+              hasAvatar={Boolean(avatar)}
+              hasGoal={Boolean(form.goal)}
+              hasBio={Boolean(form.bio)}
+              completionScore={readiness}
+            />
 
-                <Link href="/ranking" className="block rounded-2xl border border-white/10 bg-white/[0.03] p-4 transition hover:border-yellow-500/30">
-                  <p className="font-semibold text-white">Check Ranking</p>
-                  <p className="mt-1 text-sm text-slate-400">View your position inside TGPI progression.</p>
-                </Link>
+            <AccountSecurityPanel
+              email={currentUser.email || ""}
+              updatedAt={profile?.updatedAt || ""}
+            />
 
-                <Link href="/community" className="block rounded-2xl border border-white/10 bg-white/[0.03] p-4 transition hover:border-yellow-500/30">
-                  <p className="font-semibold text-white">Open Community</p>
-                  <p className="mt-1 text-sm text-slate-400">Connect your identity to the social layer.</p>
-                </Link>
-              </div>
-            </Section>
-
-            <Section
-              title="Launch QA Checklist"
-              subtitle="Quick manual validation before publishing."
-            >
-              <div className="space-y-2 text-sm text-slate-300">
-                <p>• Refresh the page and confirm the account stays loaded.</p>
-                <p>• Save profile data and confirm the green success card appears.</p>
-                <p>• Refresh again and confirm the saved values remain.</p>
-                <p>• Upload a profile photo and confirm it persists.</p>
-                <p>• Toggle privacy and notification settings, save, and verify persistence.</p>
-                <p>• Check mobile and desktop layout spacing.</p>
-              </div>
-            </Section>
+            <LaunchReadyChecklist
+              hasAvatar={Boolean(avatar)}
+              hasDisplayName={Boolean(form.displayName)}
+              hasUsername={Boolean(form.username)}
+              hasBio={Boolean(form.bio)}
+              hasGoal={Boolean(form.goal)}
+              hasCurrency={Boolean(form.preferredCurrency)}
+              hasTimezone={Boolean(form.timezone)}
+            />
           </div>
         </div>
       </div>
