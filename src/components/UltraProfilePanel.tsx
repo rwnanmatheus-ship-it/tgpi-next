@@ -9,6 +9,7 @@ import CommandCenterNav from "@/components/CommandCenterNav";
 import ProfileTabs from "@/components/ProfileTabs";
 import ProfileAvatarUploader from "@/components/ProfileAvatarUploader";
 import SaveStatusCard from "@/components/SaveStatusCard";
+import ProfileCompletionEngine from "@/components/ProfileCompletionEngine";
 import ShareProfile from "@/components/ShareProfile";
 import ProfileCompletion from "@/components/ProfileCompletion";
 import SmartAdvisor from "@/components/SmartAdvisor";
@@ -43,7 +44,11 @@ type FormState = {
   continentInterest: string;
   notificationsEmail: boolean;
   notificationsPush: boolean;
+  marketingEmails: boolean;
   profilePublic: boolean;
+  showLocation: boolean;
+  showProgress: boolean;
+  showGoals: boolean;
   favoriteCountries: string[];
   countryGoals: string[];
   recentConversions: {
@@ -76,7 +81,11 @@ const initialForm: FormState = {
   continentInterest: "",
   notificationsEmail: true,
   notificationsPush: true,
+  marketingEmails: false,
   profilePublic: true,
+  showLocation: true,
+  showProgress: true,
+  showGoals: true,
   favoriteCountries: [],
   countryGoals: [],
   recentConversions: [],
@@ -134,7 +143,7 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.015))] p-6 shadow-[0_0_35px_rgba(250,204,21,0.03)] backdrop-blur-sm">
+    <section className="rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.015))] p-6 shadow-[0_0_35px_rgba(250,204,21,0.03)]">
       <div className="mb-5">
         <h2 className="text-2xl font-bold text-yellow-400">{title}</h2>
         {subtitle ? <p className="mt-2 text-sm text-slate-400">{subtitle}</p> : null}
@@ -245,7 +254,11 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
           continentInterest: safe.continentInterest,
           notificationsEmail: safe.notificationsEmail,
           notificationsPush: safe.notificationsPush,
+          marketingEmails: safe.marketingEmails,
           profilePublic: safe.profilePublic,
+          showLocation: safe.showLocation,
+          showProgress: safe.showProgress,
+          showGoals: safe.showGoals,
           favoriteCountries: safe.favoriteCountries,
           countryGoals: safe.countryGoals,
           recentConversions: safe.recentConversions,
@@ -279,6 +292,45 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
     setForm((prev) => ({ ...prev, [key]: value }));
   }
 
+  async function refreshFromDatabase() {
+    const refreshed = await loadCommandCenterProfile();
+    const safe = buildSafeProfileDefaults(refreshed);
+
+    setProfile(refreshed);
+    setAvatar(safe.photoURL || "");
+
+    setForm({
+      displayName: safe.displayName,
+      username: safe.username,
+      bio: safe.bio,
+      city: safe.city,
+      country: safe.country,
+      preferredCurrency: safe.preferredCurrency,
+      phone: safe.phone,
+      website: safe.website,
+      instagram: safe.instagram,
+      linkedin: safe.linkedin,
+      timezone: safe.timezone,
+      languagePreference: safe.languagePreference,
+      goal: safe.goal as FormState["goal"],
+      englishLevel: safe.englishLevel as FormState["englishLevel"],
+      budget: safe.budget as FormState["budget"],
+      continentInterest: safe.continentInterest,
+      notificationsEmail: safe.notificationsEmail,
+      notificationsPush: safe.notificationsPush,
+      marketingEmails: safe.marketingEmails,
+      profilePublic: safe.profilePublic,
+      showLocation: safe.showLocation,
+      showProgress: safe.showProgress,
+      showGoals: safe.showGoals,
+      favoriteCountries: safe.favoriteCountries,
+      countryGoals: safe.countryGoals,
+      recentConversions: safe.recentConversions,
+      activity: safe.activity,
+      lastVisitedCountry: safe.lastVisitedCountry,
+    });
+  }
+
   async function handleSaveProfile() {
     if (!currentUser) {
       setSaveType("error");
@@ -310,42 +362,15 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
         continentInterest: form.continentInterest.trim() || undefined,
         notificationsEmail: form.notificationsEmail,
         notificationsPush: form.notificationsPush,
+        marketingEmails: form.marketingEmails,
         profilePublic: form.profilePublic,
+        showLocation: form.showLocation,
+        showProgress: form.showProgress,
+        showGoals: form.showGoals,
       };
 
       await saveCommandCenterProfile(payload);
-
-      const refreshed = await loadCommandCenterProfile();
-      const safe = buildSafeProfileDefaults(refreshed);
-
-      setProfile(refreshed);
-      setForm((prev) => ({
-        ...prev,
-        displayName: safe.displayName,
-        username: safe.username,
-        bio: safe.bio,
-        city: safe.city,
-        country: safe.country,
-        preferredCurrency: safe.preferredCurrency,
-        phone: safe.phone,
-        website: safe.website,
-        instagram: safe.instagram,
-        linkedin: safe.linkedin,
-        timezone: safe.timezone,
-        languagePreference: safe.languagePreference,
-        goal: safe.goal as FormState["goal"],
-        englishLevel: safe.englishLevel as FormState["englishLevel"],
-        budget: safe.budget as FormState["budget"],
-        continentInterest: safe.continentInterest,
-        notificationsEmail: safe.notificationsEmail,
-        notificationsPush: safe.notificationsPush,
-        profilePublic: safe.profilePublic,
-        favoriteCountries: safe.favoriteCountries,
-        countryGoals: safe.countryGoals,
-        recentConversions: safe.recentConversions,
-        activity: safe.activity,
-        lastVisitedCountry: safe.lastVisitedCountry,
-      }));
+      await refreshFromDatabase();
 
       setSaveType("success");
       setSaveMessage("Your profile, settings, and preferences were saved successfully.");
@@ -364,9 +389,8 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
   async function persistAvatar(url: string) {
     try {
       await saveCommandCenterProfile({ photoURL: url });
-      const refreshed = await loadCommandCenterProfile();
-      setProfile(refreshed);
-      setAvatar(url);
+      await refreshFromDatabase();
+
       setSaveType("success");
       setSaveMessage("Your new profile photo was saved successfully.");
       setSaveVisible(true);
@@ -425,28 +449,26 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
         <CommandCenterNav />
 
         <section className="rounded-[32px] border border-yellow-500/15 bg-[radial-gradient(circle_at_top,rgba(250,204,21,0.08),transparent_30%),linear-gradient(135deg,#020617_0%,#0f172a_45%,#111827_100%)] p-6 shadow-[0_0_60px_rgba(250,204,21,0.05)] md:p-8">
-          <div className="grid gap-8 xl:grid-cols-[1.2fr_.8fr]">
+          <div className="grid gap-8 xl:grid-cols-[1.24fr_.76fr]">
             <div>
               <p className="mb-4 inline-block rounded-full border border-yellow-500/30 bg-yellow-500/10 px-4 py-2 text-sm text-yellow-200">
-                {mode === "profile" ? "Ultra Intelligent Profile" : "Ultra Intelligent Dashboard"}
+                {mode === "profile" ? "Launch Profile Center" : "Launch Dashboard Center"}
               </p>
 
               <h1 className="text-4xl font-bold text-white md:text-5xl">{displayName}</h1>
               <p className="mt-2 text-slate-300">@{username}</p>
-              {currentUser.email ? (
-                <p className="mt-1 text-sm text-slate-400">{currentUser.email}</p>
-              ) : null}
+              {currentUser.email ? <p className="mt-1 text-sm text-slate-400">{currentUser.email}</p> : null}
 
               <p className="mt-5 max-w-3xl text-sm leading-7 text-slate-300">
                 {form.bio ||
-                  "Your TGPI command center now prioritizes identity, readiness, configuration, and action in a single premium environment."}
+                  "Your TGPI profile is now organized for launch: identity, readiness, preferences, privacy, and action in a single premium environment."}
               </p>
 
               <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                 <StatCard label="Readiness" value={`${readiness}/100`} hint={tier} />
                 <StatCard label="Favorites" value={form.favoriteCountries.length} hint="Saved countries" />
                 <StatCard label="Goals" value={form.countryGoals.length} hint="Strategic goals" />
-                <StatCard label="Conversions" value={form.recentConversions.length} hint="Financial signals" />
+                <StatCard label="Updated" value={profile?.updatedAt ? "Synced" : "Not yet"} hint="Persistence status" />
               </div>
             </div>
 
@@ -492,186 +514,104 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
 
         <div className="grid gap-8 xl:grid-cols-[1.24fr_.76fr]">
           <div className="space-y-8">
+            <ProfileCompletionEngine
+              profile={{
+                ...profile,
+                displayName: form.displayName,
+                username: form.username,
+                bio: form.bio,
+                city: form.city,
+                country: form.country,
+                preferredCurrency: form.preferredCurrency,
+                goal: form.goal || undefined,
+                englishLevel: form.englishLevel || undefined,
+                budget: form.budget || undefined,
+                continentInterest: form.continentInterest || undefined,
+              }}
+              onOpenTab={(tab) => setActiveTab(tab)}
+            />
+
             {activeTab === "overview" && (
-              <>
-                <Section
-                  title="Vision Overview"
-                  subtitle="The most important information first: identity, location, direction and readiness."
-                >
-                  <div className="grid gap-4 md:grid-cols-2">
-                    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-                      <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Display Name</p>
-                      <p className="mt-3 text-lg font-semibold text-white">{form.displayName || "Not defined"}</p>
-                    </div>
-                    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-                      <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Username</p>
-                      <p className="mt-3 text-lg font-semibold text-white">@{username}</p>
-                    </div>
-                    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-                      <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Location</p>
-                      <p className="mt-3 text-lg font-semibold text-white">
-                        {[form.city, form.country].filter(Boolean).join(", ") || "Not defined"}
-                      </p>
-                    </div>
-                    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-                      <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Preferred Currency</p>
-                      <p className="mt-3 text-lg font-semibold text-white">{form.preferredCurrency}</p>
-                    </div>
-                    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-                      <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Main Goal</p>
-                      <p className="mt-3 text-lg font-semibold text-white">{form.goal || "Not defined"}</p>
-                    </div>
-                    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-                      <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Continent Interest</p>
-                      <p className="mt-3 text-lg font-semibold text-white">{form.continentInterest || "Not defined"}</p>
-                    </div>
-                    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 md:col-span-2">
-                      <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Bio</p>
-                      <p className="mt-3 text-sm leading-7 text-slate-300">
-                        {form.bio || "No bio defined yet."}
-                      </p>
-                    </div>
+              <Section
+                title="Vision Overview"
+                subtitle="The most important information appears first for a launch-ready profile."
+              >
+                <div className="grid gap-4 md:grid-cols-2">
+                  <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+                    <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Display Name</p>
+                    <p className="mt-3 text-lg font-semibold text-white">{form.displayName || "Not defined"}</p>
                   </div>
-                </Section>
-
-                <Section
-                  title="Signals and Strategic Context"
-                  subtitle="Real signals that make the profile useful instead of decorative."
-                >
-                  <div className="grid gap-4 md:grid-cols-2">
-                    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 md:col-span-2">
-                      <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Favorite Countries</p>
-                      <div className="mt-3 flex flex-wrap gap-3">
-                        {form.favoriteCountries.length ? (
-                          form.favoriteCountries.map((country) => (
-                            <span
-                              key={country}
-                              className="rounded-full border border-yellow-500/30 bg-yellow-500/10 px-4 py-2 text-sm text-yellow-200"
-                            >
-                              {country}
-                            </span>
-                          ))
-                        ) : (
-                          <span className="text-sm text-slate-400">No favorites yet</span>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 md:col-span-2">
-                      <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Country Goals</p>
-                      <div className="mt-3 flex flex-wrap gap-3">
-                        {form.countryGoals.length ? (
-                          form.countryGoals.map((goal) => (
-                            <span
-                              key={goal}
-                              className="rounded-full border border-white/10 bg-black/30 px-4 py-2 text-sm text-white"
-                            >
-                              {goal}
-                            </span>
-                          ))
-                        ) : (
-                          <span className="text-sm text-slate-400">No goals yet</span>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 md:col-span-2">
-                      <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Last Visited Country</p>
-                      <p className="mt-3 text-lg font-semibold text-white">
-                        {form.lastVisitedCountry || "Not defined"}
-                      </p>
-                    </div>
+                  <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+                    <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Username</p>
+                    <p className="mt-3 text-lg font-semibold text-white">@{username}</p>
                   </div>
-                </Section>
-              </>
+                  <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+                    <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Location</p>
+                    <p className="mt-3 text-lg font-semibold text-white">
+                      {[form.city, form.country].filter(Boolean).join(", ") || "Not defined"}
+                    </p>
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+                    <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Preferred Currency</p>
+                    <p className="mt-3 text-lg font-semibold text-white">{form.preferredCurrency}</p>
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+                    <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Main Goal</p>
+                    <p className="mt-3 text-lg font-semibold text-white">{form.goal || "Not defined"}</p>
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
+                    <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Continent Interest</p>
+                    <p className="mt-3 text-lg font-semibold text-white">{form.continentInterest || "Not defined"}</p>
+                  </div>
+                  <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 md:col-span-2">
+                    <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Bio</p>
+                    <p className="mt-3 text-sm leading-7 text-slate-300">{form.bio || "No bio defined yet."}</p>
+                  </div>
+                </div>
+              </Section>
             )}
 
             {activeTab === "edit" && (
               <Section
-                title="Edit Full Profile"
-                subtitle="A more complete and premium editing layer, organized by importance."
+                title="Edit Profile"
+                subtitle="The core identity fields users expect to find and control in one place."
               >
                 <div className="grid gap-4 md:grid-cols-2">
                   <div>
                     <label className="mb-2 block text-sm text-slate-300">Display Name</label>
-                    <input
-                      value={form.displayName}
-                      onChange={(e) => updateField("displayName", e.target.value)}
-                      className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40"
-                    />
+                    <input value={form.displayName} onChange={(e) => updateField("displayName", e.target.value)} className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40" />
                   </div>
-
                   <div>
                     <label className="mb-2 block text-sm text-slate-300">Username</label>
-                    <input
-                      value={form.username}
-                      onChange={(e) => updateField("username", e.target.value)}
-                      className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40"
-                    />
+                    <input value={form.username} onChange={(e) => updateField("username", e.target.value)} className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40" />
                   </div>
-
                   <div className="md:col-span-2">
                     <label className="mb-2 block text-sm text-slate-300">Bio</label>
-                    <textarea
-                      rows={4}
-                      value={form.bio}
-                      onChange={(e) => updateField("bio", e.target.value)}
-                      className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40"
-                    />
+                    <textarea rows={4} value={form.bio} onChange={(e) => updateField("bio", e.target.value)} className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40" />
                   </div>
-
                   <div>
                     <label className="mb-2 block text-sm text-slate-300">City</label>
-                    <input
-                      value={form.city}
-                      onChange={(e) => updateField("city", e.target.value)}
-                      className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40"
-                    />
+                    <input value={form.city} onChange={(e) => updateField("city", e.target.value)} className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40" />
                   </div>
-
                   <div>
                     <label className="mb-2 block text-sm text-slate-300">Country</label>
-                    <input
-                      value={form.country}
-                      onChange={(e) => updateField("country", e.target.value)}
-                      className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40"
-                    />
+                    <input value={form.country} onChange={(e) => updateField("country", e.target.value)} className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40" />
                   </div>
-
                   <div>
                     <label className="mb-2 block text-sm text-slate-300">Phone</label>
-                    <input
-                      value={form.phone}
-                      onChange={(e) => updateField("phone", e.target.value)}
-                      className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40"
-                    />
+                    <input value={form.phone} onChange={(e) => updateField("phone", e.target.value)} className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40" />
                   </div>
-
                   <div>
                     <label className="mb-2 block text-sm text-slate-300">Website</label>
-                    <input
-                      value={form.website}
-                      onChange={(e) => updateField("website", e.target.value)}
-                      className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40"
-                    />
+                    <input value={form.website} onChange={(e) => updateField("website", e.target.value)} className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40" />
                   </div>
-
                   <div>
                     <label className="mb-2 block text-sm text-slate-300">Instagram</label>
-                    <input
-                      value={form.instagram}
-                      onChange={(e) => updateField("instagram", e.target.value)}
-                      className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40"
-                    />
+                    <input value={form.instagram} onChange={(e) => updateField("instagram", e.target.value)} className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40" />
                   </div>
-
                   <div>
                     <label className="mb-2 block text-sm text-slate-300">LinkedIn</label>
-                    <input
-                      value={form.linkedin}
-                      onChange={(e) => updateField("linkedin", e.target.value)}
-                      className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40"
-                    />
+                    <input value={form.linkedin} onChange={(e) => updateField("linkedin", e.target.value)} className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40" />
                   </div>
                 </div>
               </Section>
@@ -679,17 +619,13 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
 
             {activeTab === "goals" && (
               <Section
-                title="Goals and Intelligence Preferences"
-                subtitle="The profile becomes truly smart when these preference fields are completed well."
+                title="Goals and Preferences"
+                subtitle="Core personalization fields that power the usefulness of TGPI."
               >
                 <div className="grid gap-4 md:grid-cols-2">
                   <div>
                     <label className="mb-2 block text-sm text-slate-300">Preferred Currency</label>
-                    <select
-                      value={form.preferredCurrency}
-                      onChange={(e) => updateField("preferredCurrency", e.target.value)}
-                      className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40"
-                    >
+                    <select value={form.preferredCurrency} onChange={(e) => updateField("preferredCurrency", e.target.value)} className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40">
                       <option value="USD">USD</option>
                       <option value="BRL">BRL</option>
                       <option value="EUR">EUR</option>
@@ -699,59 +635,36 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
                       <option value="CAD">CAD</option>
                     </select>
                   </div>
-
                   <div>
                     <label className="mb-2 block text-sm text-slate-300">Main Goal</label>
-                    <select
-                      value={form.goal}
-                      onChange={(e) => updateField("goal", e.target.value as FormState["goal"])}
-                      className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40"
-                    >
+                    <select value={form.goal} onChange={(e) => updateField("goal", e.target.value as FormState["goal"])} className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40">
                       <option value="">Select</option>
                       <option value="work">Work Abroad</option>
                       <option value="study">Study Abroad</option>
                       <option value="live">Live Abroad</option>
                     </select>
                   </div>
-
                   <div>
                     <label className="mb-2 block text-sm text-slate-300">English Level</label>
-                    <select
-                      value={form.englishLevel}
-                      onChange={(e) =>
-                        updateField("englishLevel", e.target.value as FormState["englishLevel"])
-                      }
-                      className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40"
-                    >
+                    <select value={form.englishLevel} onChange={(e) => updateField("englishLevel", e.target.value as FormState["englishLevel"])} className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40">
                       <option value="">Select</option>
                       <option value="basic">Basic</option>
                       <option value="intermediate">Intermediate</option>
                       <option value="advanced">Advanced</option>
                     </select>
                   </div>
-
                   <div>
                     <label className="mb-2 block text-sm text-slate-300">Budget Level</label>
-                    <select
-                      value={form.budget}
-                      onChange={(e) => updateField("budget", e.target.value as FormState["budget"])}
-                      className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40"
-                    >
+                    <select value={form.budget} onChange={(e) => updateField("budget", e.target.value as FormState["budget"])} className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40">
                       <option value="">Select</option>
                       <option value="low">Low</option>
                       <option value="medium">Medium</option>
                       <option value="high">High</option>
                     </select>
                   </div>
-
                   <div className="md:col-span-2">
                     <label className="mb-2 block text-sm text-slate-300">Continent of Interest</label>
-                    <input
-                      value={form.continentInterest}
-                      onChange={(e) => updateField("continentInterest", e.target.value)}
-                      className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40"
-                      placeholder="Europe, Asia, North America..."
-                    />
+                    <input value={form.continentInterest} onChange={(e) => updateField("continentInterest", e.target.value)} className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40" placeholder="Europe, Asia, North America..." />
                   </div>
                 </div>
               </Section>
@@ -760,7 +673,7 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
             {activeTab === "activity" && (
               <Section
                 title="Activity Timeline"
-                subtitle="A stronger and more useful operational history with the newest actions first."
+                subtitle="A launch-ready operational history with clear ordering and states."
               >
                 <div className="space-y-3">
                   {form.activity.length ? (
@@ -769,10 +682,7 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
                       .reverse()
                       .slice(0, 10)
                       .map((item, index) => (
-                        <div
-                          key={`${item.action}-${item.date}-${index}`}
-                          className="rounded-2xl border border-white/10 bg-white/[0.03] p-4"
-                        >
+                        <div key={`${item.action}-${item.date}-${index}`} className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
                           <p className="font-medium text-white">{item.action}</p>
                           <p className="mt-1 text-sm text-slate-400">{formatDate(item.date)}</p>
                         </div>
@@ -788,28 +698,18 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
 
             {activeTab === "settings" && (
               <Section
-                title="Settings and Controls"
-                subtitle="A more complete and real settings layer inspired by top-tier products."
+                title="Settings and Privacy"
+                subtitle="Real controls for notifications, visibility and account experience."
               >
                 <div className="grid gap-4">
                   <div className="grid gap-4 md:grid-cols-2">
                     <div>
                       <label className="mb-2 block text-sm text-slate-300">Timezone</label>
-                      <input
-                        value={form.timezone}
-                        onChange={(e) => updateField("timezone", e.target.value)}
-                        className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40"
-                        placeholder="America/Sao_Paulo"
-                      />
+                      <input value={form.timezone} onChange={(e) => updateField("timezone", e.target.value)} className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40" placeholder="America/Sao_Paulo" />
                     </div>
-
                     <div>
                       <label className="mb-2 block text-sm text-slate-300">Language Preference</label>
-                      <input
-                        value={form.languagePreference}
-                        onChange={(e) => updateField("languagePreference", e.target.value)}
-                        className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40"
-                      />
+                      <input value={form.languagePreference} onChange={(e) => updateField("languagePreference", e.target.value)} className="w-full rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-3 text-white outline-none focus:border-yellow-500/40" />
                     </div>
                   </div>
 
@@ -817,21 +717,43 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
                     checked={form.notificationsEmail}
                     onChange={(value) => updateField("notificationsEmail", value)}
                     label="Email Notifications"
-                    description="Receive important updates and account communications by email."
+                    description="Receive important account and product updates by email."
                   />
-
                   <SettingToggle
                     checked={form.notificationsPush}
                     onChange={(value) => updateField("notificationsPush", value)}
                     label="Platform Notifications"
-                    description="Receive alerts and activity prompts inside the TGPI experience."
+                    description="Receive in-product alerts and reminders."
                   />
-
+                  <SettingToggle
+                    checked={form.marketingEmails}
+                    onChange={(value) => updateField("marketingEmails", value)}
+                    label="Product News and Releases"
+                    description="Receive curated updates about features and launches."
+                  />
                   <SettingToggle
                     checked={form.profilePublic}
                     onChange={(value) => updateField("profilePublic", value)}
                     label="Public Profile"
-                    description="Allow your profile to appear more openly in social and discovery features."
+                    description="Allow your profile to be discoverable across TGPI."
+                  />
+                  <SettingToggle
+                    checked={form.showLocation}
+                    onChange={(value) => updateField("showLocation", value)}
+                    label="Show Location"
+                    description="Display your city and country in the public-facing profile."
+                  />
+                  <SettingToggle
+                    checked={form.showProgress}
+                    onChange={(value) => updateField("showProgress", value)}
+                    label="Show Progress"
+                    description="Allow your TGPI progress signals to appear publicly."
+                  />
+                  <SettingToggle
+                    checked={form.showGoals}
+                    onChange={(value) => updateField("showGoals", value)}
+                    label="Show Goals"
+                    description="Display goal-related intent as part of your profile experience."
                   />
                 </div>
               </Section>
@@ -863,38 +785,37 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
 
             <Section
               title="Fast Actions"
-              subtitle="Strategically positioned shortcuts for both desktop and mobile."
+              subtitle="Final utility shortcuts placed where users naturally look."
             >
               <div className="space-y-3">
-                <Link
-                  href="/premium"
-                  className="block rounded-2xl border border-white/10 bg-white/[0.03] p-4 transition hover:border-yellow-500/30"
-                >
+                <Link href="/premium" className="block rounded-2xl border border-white/10 bg-white/[0.03] p-4 transition hover:border-yellow-500/30">
                   <p className="font-semibold text-white">Upgrade Plan</p>
-                  <p className="mt-1 text-sm text-slate-400">
-                    Unlock stronger premium value and advanced intelligence.
-                  </p>
+                  <p className="mt-1 text-sm text-slate-400">Unlock stronger premium value and intelligence.</p>
                 </Link>
 
-                <Link
-                  href="/ranking"
-                  className="block rounded-2xl border border-white/10 bg-white/[0.03] p-4 transition hover:border-yellow-500/30"
-                >
+                <Link href="/ranking" className="block rounded-2xl border border-white/10 bg-white/[0.03] p-4 transition hover:border-yellow-500/30">
                   <p className="font-semibold text-white">Check Ranking</p>
-                  <p className="mt-1 text-sm text-slate-400">
-                    View your position inside TGPI progression.
-                  </p>
+                  <p className="mt-1 text-sm text-slate-400">View your position inside TGPI progression.</p>
                 </Link>
 
-                <Link
-                  href="/community"
-                  className="block rounded-2xl border border-white/10 bg-white/[0.03] p-4 transition hover:border-yellow-500/30"
-                >
+                <Link href="/community" className="block rounded-2xl border border-white/10 bg-white/[0.03] p-4 transition hover:border-yellow-500/30">
                   <p className="font-semibold text-white">Open Community</p>
-                  <p className="mt-1 text-sm text-slate-400">
-                    Connect your identity to the social layer of the platform.
-                  </p>
+                  <p className="mt-1 text-sm text-slate-400">Connect your identity to the social layer.</p>
                 </Link>
+              </div>
+            </Section>
+
+            <Section
+              title="Launch QA Checklist"
+              subtitle="Quick manual validation before publishing."
+            >
+              <div className="space-y-2 text-sm text-slate-300">
+                <p>• Refresh the page and confirm the account stays loaded.</p>
+                <p>• Save profile data and confirm the green success card appears.</p>
+                <p>• Refresh again and confirm the saved values remain.</p>
+                <p>• Upload a profile photo and confirm it persists.</p>
+                <p>• Toggle privacy and notification settings, save, and verify persistence.</p>
+                <p>• Check mobile and desktop layout spacing.</p>
               </div>
             </Section>
           </div>

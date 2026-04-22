@@ -1,6 +1,19 @@
 import { auth, db } from "@/lib/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 
+export type RecentConversion = {
+  from: string;
+  to: string;
+  amount: number;
+  result?: number;
+  date: string;
+};
+
+export type UserActivityItem = {
+  action: string;
+  date: string;
+};
+
 export type CommandCenterProfile = {
   username?: string;
   displayName?: string;
@@ -20,21 +33,21 @@ export type CommandCenterProfile = {
   linkedin?: string;
   timezone?: string;
   languagePreference?: string;
+
   notificationsEmail?: boolean;
   notificationsPush?: boolean;
+  marketingEmails?: boolean;
   profilePublic?: boolean;
+  showLocation?: boolean;
+  showProgress?: boolean;
+  showGoals?: boolean;
 
   favoriteCountries?: string[];
   lastVisitedCountry?: string;
-  recentConversions?: {
-    from: string;
-    to: string;
-    amount: number;
-    result?: number;
-    date: string;
-  }[];
+  recentConversions?: RecentConversion[];
   countryGoals?: string[];
-  activity?: { action: string; date: string }[];
+  activity?: UserActivityItem[];
+
   goal?: "work" | "study" | "live";
   englishLevel?: "basic" | "intermediate" | "advanced";
   budget?: "low" | "medium" | "high";
@@ -95,18 +108,26 @@ export function buildSafeProfileDefaults(
     linkedin: data?.linkedin || "",
     timezone: data?.timezone || "",
     languagePreference: data?.languagePreference || "English",
+
+    notificationsEmail: data?.notificationsEmail ?? true,
+    notificationsPush: data?.notificationsPush ?? true,
+    marketingEmails: data?.marketingEmails ?? false,
+    profilePublic: data?.profilePublic ?? true,
+    showLocation: data?.showLocation ?? true,
+    showProgress: data?.showProgress ?? true,
+    showGoals: data?.showGoals ?? true,
+
+    favoriteCountries: data?.favoriteCountries || [],
+    lastVisitedCountry: data?.lastVisitedCountry || "",
+    recentConversions: data?.recentConversions || [],
+    countryGoals: data?.countryGoals || [],
+    activity: data?.activity || [],
+
     goal: data?.goal || "",
     englishLevel: data?.englishLevel || "",
     budget: data?.budget || "",
     continentInterest: data?.continentInterest || "",
-    notificationsEmail: data?.notificationsEmail ?? true,
-    notificationsPush: data?.notificationsPush ?? true,
-    profilePublic: data?.profilePublic ?? true,
-    favoriteCountries: data?.favoriteCountries || [],
-    countryGoals: data?.countryGoals || [],
-    recentConversions: data?.recentConversions || [],
-    activity: data?.activity || [],
-    lastVisitedCountry: data?.lastVisitedCountry || "",
+
     plan: data?.plan || "FREE",
     xp: data?.xp ?? 0,
     level: data?.level ?? 1,

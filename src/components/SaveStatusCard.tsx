@@ -17,7 +17,7 @@ export default function SaveStatusCard({
 
   return (
     <div
-      className={`rounded-2xl p-4 shadow-[0_0_30px_rgba(0,0,0,0.08)] ${
+      className={`rounded-3xl p-4 shadow-[0_0_30px_rgba(0,0,0,0.08)] ${
         isSuccess
           ? "border border-emerald-500/30 bg-emerald-500/10"
           : "border border-red-500/30 bg-red-500/10"
@@ -25,7 +25,7 @@ export default function SaveStatusCard({
     >
       <div className="flex items-start gap-3">
         <div
-          className={`mt-0.5 flex h-6 w-6 items-center justify-center rounded-full text-sm font-bold ${
+          className={`mt-0.5 flex h-7 w-7 items-center justify-center rounded-full text-sm font-bold ${
             isSuccess ? "bg-emerald-500 text-black" : "bg-red-500 text-white"
           }`}
         >
