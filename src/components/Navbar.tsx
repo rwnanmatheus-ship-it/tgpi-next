@@ -1,5 +1,6 @@
 "use client";
 
+import TopbarUserIdentity from "@/components/TopbarUserIdentity";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged, signOut, User } from "firebase/auth";
@@ -127,12 +128,17 @@ export default function Navbar() {
                 </span>
               </Link>
 
-              <button
-                onClick={handleLogout}
-                className="rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm font-medium text-red-300 transition hover:bg-red-500/20"
-              >
-                Logout
-              </button>
+              <div className="flex items-center gap-3">
+  <TopbarUserIdentity />
+
+  <button
+    type="button"
+    onClick={handleLogout}
+    className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm font-semibold text-red-200 transition hover:bg-red-500/20"
+  >
+    Logout
+  </button>
+</div>
             </>
           ) : (
             <Link
@@ -221,12 +227,17 @@ export default function Navbar() {
                   </span>
                 </div>
 
-                <button
-                  onClick={handleLogout}
-                  className="w-fit rounded-lg border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm font-medium text-red-300 transition hover:bg-red-500/20"
-                >
-                  Logout
-                </button>
+                <div className="flex flex-col gap-3">
+  <TopbarUserIdentity />
+
+  <button
+    type="button"
+    onClick={handleLogout}
+    className="w-full rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm font-semibold text-red-200 transition hover:bg-red-500/20"
+  >
+    Logout
+  </button>
+</div>
               </>
             ) : (
               <Link
