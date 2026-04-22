@@ -3,7 +3,6 @@ import {
   doc,
   getDoc,
   setDoc,
-  updateDoc,
   arrayUnion,
 } from "firebase/firestore";
 
@@ -20,6 +19,10 @@ export type UserActivityItem = {
   date: string;
 };
 
+export type GlobalGoal = "work" | "study" | "live";
+export type EnglishLevel = "basic" | "intermediate" | "advanced";
+export type BudgetLevel = "low" | "medium" | "high";
+
 export type UserMemory = {
   preferredCurrency?: string;
   favoriteCountries?: string[];
@@ -27,6 +30,12 @@ export type UserMemory = {
   recentConversions?: RecentConversion[];
   countryGoals?: string[];
   activity?: UserActivityItem[];
+
+  // Global profile layer
+  goal?: GlobalGoal;
+  englishLevel?: EnglishLevel;
+  budget?: BudgetLevel;
+  continentInterest?: string;
 };
 
 export async function getCurrentUserId() {
