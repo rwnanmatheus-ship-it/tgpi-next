@@ -30,6 +30,7 @@ import {
   buildProfileCompletionItems,
   getCompletionScore,
 } from "@/lib/profile-completion-engine";
+import { createUserNotification } from "@/lib/user-notifications";
 
 type TabKey = "overview" | "edit" | "goals" | "activity" | "settings";
 type ViewMode = "profile" | "dashboard";
@@ -444,10 +445,13 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
     setSaving(true);
     setSaveVisible(false);
 
+    const previousUsername = profile?.username || "";
+    const nextUsername = form.username.trim();
+
     try {
       await saveCommandCenterProfileWithRules({
         displayName: form.displayName.trim(),
-        username: form.username.trim(),
+        username: nextUsername,
         bio: form.bio.trim(),
         city: form.city.trim(),
         country: form.country.trim(),
@@ -474,6 +478,28 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
 
       await refreshFromDatabase();
 
+      await createUserNotification({
+        title: "Perfil salvo com sucesso",
+        description: "Suas últimas alterações de perfil foram sincronizadas na plataforma.",
+        href: "/profile",
+        unread: true,
+        timeLabel: "Agora mesmo",
+      });
+
+      if (
+        previousUsername &&
+        nextUsername &&
+        previousUsername.toLowerCase() !== nextUsername.toLowerCase()
+      ) {
+        await createUserNotification({
+          title: "Username atualizado",
+          description: `Seu username agora é @${nextUsername}.`,
+          href: "/profile",
+          unread: true,
+          timeLabel: "Agora mesmo",
+        });
+      }
+
       setSaveType("success");
       setSaveMessage("Your profile, settings, username, and preferences were saved successfully.");
       setSaveVisible(true);
@@ -494,6 +520,14 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
     try {
       await saveCommandCenterProfileWithRules({ photoURL: url });
       await refreshFromDatabase();
+
+      await createUserNotification({
+        title: "Foto de perfil atualizada",
+        description: "Sua nova foto de perfil foi salva com sucesso.",
+        href: "/profile",
+        unread: true,
+        timeLabel: "Agora mesmo",
+      });
 
       setSaveType("success");
       setSaveMessage("Your new profile photo was saved successfully.");
