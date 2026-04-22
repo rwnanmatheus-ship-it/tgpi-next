@@ -3,64 +3,26 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { auth, db } from "@/lib/firebase";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, setDoc } from "firebase/firestore";
 import { onAuthStateChanged, User } from "firebase/auth";
-import { getUserMemory, updateUserMemory } from "@/lib/user-memory";
 import CommandCenterNav from "@/components/CommandCenterNav";
 import ProfileTabs from "@/components/ProfileTabs";
 import ProfileAvatarUploader from "@/components/ProfileAvatarUploader";
-import SaveSuccessCard from "@/components/SaveSuccessCard";
+import SaveStatusCard from "@/components/SaveStatusCard";
 import ShareProfile from "@/components/ShareProfile";
 import ProfileCompletion from "@/components/ProfileCompletion";
 import SmartAdvisor from "@/components/SmartAdvisor";
 import QuickStart from "@/components/QuickStart";
 import OnlineNow from "@/components/OnlineNow";
+import {
+  buildSafeProfileDefaults,
+  loadCommandCenterProfile,
+  saveCommandCenterProfile,
+  CommandCenterProfile,
+} from "@/lib/profile-command-center";
 
 type TabKey = "overview" | "edit" | "goals" | "activity" | "settings";
 type ViewMode = "profile" | "dashboard";
-
-type UserDoc = {
-  username?: string;
-  displayName?: string;
-  fullName?: string;
-  bio?: string;
-  photoURL?: string;
-  city?: string;
-  country?: string;
-  preferredCurrency?: string;
-  plan?: string;
-  xp?: number;
-  level?: number;
-  streak?: number;
-  phone?: string;
-  website?: string;
-  instagram?: string;
-  linkedin?: string;
-  timezone?: string;
-  languagePreference?: string;
-  notificationsEmail?: boolean;
-  notificationsPush?: boolean;
-  profilePublic?: boolean;
-};
-
-type MemoryShape = {
-  preferredCurrency?: string;
-  favoriteCountries?: string[];
-  lastVisitedCountry?: string;
-  recentConversions?: {
-    from: string;
-    to: string;
-    amount: number;
-    result?: number;
-    date: string;
-  }[];
-  countryGoals?: string[];
-  activity?: { action: string; date: string }[];
-  goal?: "work" | "study" | "live";
-  englishLevel?: "basic" | "intermediate" | "advanced";
-  budget?: "low" | "medium" | "high";
-  continentInterest?: string;
-};
 
 type FormState = {
   displayName: string;
@@ -82,6 +44,17 @@ type FormState = {
   notificationsEmail: boolean;
   notificationsPush: boolean;
   profilePublic: boolean;
+  favoriteCountries: string[];
+  countryGoals: string[];
+  recentConversions: {
+    from: string;
+    to: string;
+    amount: number;
+    result?: number;
+    date: string;
+  }[];
+  activity: { action: string; date: string }[];
+  lastVisitedCountry: string;
 };
 
 const initialForm: FormState = {
@@ -104,6 +77,11 @@ const initialForm: FormState = {
   notificationsEmail: true,
   notificationsPush: true,
   profilePublic: true,
+  favoriteCountries: [],
+  countryGoals: [],
+  recentConversions: [],
+  activity: [],
+  lastVisitedCountry: "",
 };
 
 function formatDate(date?: string) {
@@ -118,7 +96,7 @@ function formatDate(date?: string) {
   }
 }
 
-function computeReadiness(memory: MemoryShape | null, profile: UserDoc | null) {
+function computeReadiness(profile: Partial<CommandCenterProfile> | null) {
   let score = 10;
 
   if (profile?.displayName || profile?.fullName) score += 8;
@@ -126,14 +104,14 @@ function computeReadiness(memory: MemoryShape | null, profile: UserDoc | null) {
   if (profile?.city) score += 6;
   if (profile?.country) score += 6;
   if (profile?.photoURL) score += 6;
-  if (memory?.goal) score += 10;
-  if (memory?.englishLevel) score += 10;
-  if (memory?.budget) score += 10;
-  if (memory?.continentInterest) score += 10;
-  if (memory?.favoriteCountries?.length) score += 8;
-  if (memory?.countryGoals?.length) score += 8;
-  if (memory?.recentConversions?.length) score += 8;
-  if (memory?.activity?.length) score += 8;
+  if (profile?.goal) score += 10;
+  if (profile?.englishLevel) score += 10;
+  if (profile?.budget) score += 10;
+  if (profile?.continentInterest) score += 10;
+  if (profile?.favoriteCountries?.length) score += 8;
+  if (profile?.countryGoals?.length) score += 8;
+  if (profile?.recentConversions?.length) score += 8;
+  if (profile?.activity?.length) score += 8;
 
   return Math.min(score, 100);
 }
@@ -156,7 +134,7 @@ function Section({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-3xl border border-white/10 bg-gradient-to-br from-slate-950 to-slate-900 p-6 shadow-[0_0_40px_rgba(255,215,0,0.04)]">
+    <section className="rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.015))] p-6 shadow-[0_0_35px_rgba(250,204,21,0.03)] backdrop-blur-sm">
       <div className="mb-5">
         <h2 className="text-2xl font-bold text-yellow-400">{title}</h2>
         {subtitle ? <p className="mt-2 text-sm text-slate-400">{subtitle}</p> : null}
@@ -176,7 +154,7 @@ function StatCard({
   hint?: string;
 }) {
   return (
-    <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-5 shadow-[0_0_25px_rgba(255,215,0,0.03)]">
+    <div className="rounded-[24px] border border-white/10 bg-white/[0.04] p-5 shadow-[0_0_20px_rgba(250,204,21,0.03)]">
       <p className="text-xs uppercase tracking-[0.2em] text-slate-400">{label}</p>
       <p className="mt-3 text-2xl font-bold text-white">{value}</p>
       {hint ? <p className="mt-2 text-sm text-slate-400">{hint}</p> : null}
@@ -223,11 +201,11 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
   const [authReady, setAuthReady] = useState(false);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [activeTab, setActiveTab] = useState<TabKey>("overview");
-  const [profile, setProfile] = useState<UserDoc | null>(null);
-  const [memory, setMemory] = useState<MemoryShape | null>(null);
+  const [profile, setProfile] = useState<CommandCenterProfile | null>(null);
   const [form, setForm] = useState<FormState>(initialForm);
   const [saving, setSaving] = useState(false);
   const [saveVisible, setSaveVisible] = useState(false);
+  const [saveType, setSaveType] = useState<"success" | "error">("success");
   const [saveMessage, setSaveMessage] = useState("");
   const [avatar, setAvatar] = useState("");
 
@@ -238,41 +216,41 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
 
       if (!user) {
         setProfile(null);
-        setMemory(null);
+        setForm(initialForm);
         return;
       }
 
       try {
-        const snap = await getDoc(doc(db, "users", user.uid));
-        const userData = snap.exists() ? (snap.data() as UserDoc) : null;
+        const loaded = await loadCommandCenterProfile();
+        const safe = buildSafeProfileDefaults(loaded);
 
-        const memoryData = (await getUserMemory()) as MemoryShape | null;
-
-        setProfile(userData);
-        setMemory(memoryData);
-        setAvatar(userData?.photoURL || "");
-
+        setProfile(loaded);
+        setAvatar(safe.photoURL || "");
         setForm({
-          displayName: userData?.displayName || userData?.fullName || "",
-          username: userData?.username || "",
-          bio: userData?.bio || "",
-          city: userData?.city || "",
-          country: userData?.country || "",
-          preferredCurrency:
-            userData?.preferredCurrency || memoryData?.preferredCurrency || "USD",
-          phone: userData?.phone || "",
-          website: userData?.website || "",
-          instagram: userData?.instagram || "",
-          linkedin: userData?.linkedin || "",
-          timezone: userData?.timezone || "",
-          languagePreference: userData?.languagePreference || "English",
-          goal: memoryData?.goal || "",
-          englishLevel: memoryData?.englishLevel || "",
-          budget: memoryData?.budget || "",
-          continentInterest: memoryData?.continentInterest || "",
-          notificationsEmail: userData?.notificationsEmail ?? true,
-          notificationsPush: userData?.notificationsPush ?? true,
-          profilePublic: userData?.profilePublic ?? true,
+          displayName: safe.displayName,
+          username: safe.username,
+          bio: safe.bio,
+          city: safe.city,
+          country: safe.country,
+          preferredCurrency: safe.preferredCurrency,
+          phone: safe.phone,
+          website: safe.website,
+          instagram: safe.instagram,
+          linkedin: safe.linkedin,
+          timezone: safe.timezone,
+          languagePreference: safe.languagePreference,
+          goal: safe.goal as FormState["goal"],
+          englishLevel: safe.englishLevel as FormState["englishLevel"],
+          budget: safe.budget as FormState["budget"],
+          continentInterest: safe.continentInterest,
+          notificationsEmail: safe.notificationsEmail,
+          notificationsPush: safe.notificationsPush,
+          profilePublic: safe.profilePublic,
+          favoriteCountries: safe.favoriteCountries,
+          countryGoals: safe.countryGoals,
+          recentConversions: safe.recentConversions,
+          activity: safe.activity,
+          lastVisitedCountry: safe.lastVisitedCountry,
         });
       } catch (error) {
         console.error("Failed to load ultra profile:", error);
@@ -294,13 +272,8 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
     displayName.toLowerCase().replace(/\s+/g, "") ||
     "globaluser";
 
-  const readiness = useMemo(() => computeReadiness(memory, profile), [memory, profile]);
+  const readiness = useMemo(() => computeReadiness(profile), [profile]);
   const tier = useMemo(() => readinessTier(readiness), [readiness]);
-
-  const favorites = memory?.favoriteCountries || [];
-  const goals = memory?.countryGoals || [];
-  const conversions = memory?.recentConversions || [];
-  const activity = memory?.activity || [];
 
   function updateField<K extends keyof FormState>(key: K, value: FormState[K]) {
     setForm((prev) => ({ ...prev, [key]: value }));
@@ -308,67 +281,101 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
 
   async function handleSaveProfile() {
     if (!currentUser) {
-      alert("You must be logged in.");
+      setSaveType("error");
+      setSaveMessage("You must be logged in to save changes.");
+      setSaveVisible(true);
       return;
     }
 
     setSaving(true);
     setSaveVisible(false);
-    setSaveMessage("");
 
     try {
-      await setDoc(
-        doc(db, "users", currentUser.uid),
-        {
-          displayName: form.displayName,
-          username: form.username,
-          bio: form.bio,
-          city: form.city,
-          country: form.country,
-          preferredCurrency: form.preferredCurrency,
-          phone: form.phone,
-          website: form.website,
-          instagram: form.instagram,
-          linkedin: form.linkedin,
-          timezone: form.timezone,
-          languagePreference: form.languagePreference,
-          notificationsEmail: form.notificationsEmail,
-          notificationsPush: form.notificationsPush,
-          profilePublic: form.profilePublic,
-        },
-        { merge: true }
-      );
-
-      await updateUserMemory({
+      const payload: Partial<CommandCenterProfile> = {
+        displayName: form.displayName.trim(),
+        username: form.username.trim(),
+        bio: form.bio.trim(),
+        city: form.city.trim(),
+        country: form.country.trim(),
         preferredCurrency: form.preferredCurrency,
+        phone: form.phone.trim(),
+        website: form.website.trim(),
+        instagram: form.instagram.trim(),
+        linkedin: form.linkedin.trim(),
+        timezone: form.timezone.trim(),
+        languagePreference: form.languagePreference.trim(),
         goal: form.goal || undefined,
         englishLevel: form.englishLevel || undefined,
         budget: form.budget || undefined,
-        continentInterest: form.continentInterest || undefined,
-      });
+        continentInterest: form.continentInterest.trim() || undefined,
+        notificationsEmail: form.notificationsEmail,
+        notificationsPush: form.notificationsPush,
+        profilePublic: form.profilePublic,
+      };
 
-      const refreshedSnap = await getDoc(doc(db, "users", currentUser.uid));
-      const refreshedProfile = refreshedSnap.exists()
-        ? (refreshedSnap.data() as UserDoc)
-        : null;
+      await saveCommandCenterProfile(payload);
 
-      const refreshedMemory = (await getUserMemory()) as MemoryShape | null;
+      const refreshed = await loadCommandCenterProfile();
+      const safe = buildSafeProfileDefaults(refreshed);
 
-      setProfile(refreshedProfile);
-      setMemory(refreshedMemory);
+      setProfile(refreshed);
+      setForm((prev) => ({
+        ...prev,
+        displayName: safe.displayName,
+        username: safe.username,
+        bio: safe.bio,
+        city: safe.city,
+        country: safe.country,
+        preferredCurrency: safe.preferredCurrency,
+        phone: safe.phone,
+        website: safe.website,
+        instagram: safe.instagram,
+        linkedin: safe.linkedin,
+        timezone: safe.timezone,
+        languagePreference: safe.languagePreference,
+        goal: safe.goal as FormState["goal"],
+        englishLevel: safe.englishLevel as FormState["englishLevel"],
+        budget: safe.budget as FormState["budget"],
+        continentInterest: safe.continentInterest,
+        notificationsEmail: safe.notificationsEmail,
+        notificationsPush: safe.notificationsPush,
+        profilePublic: safe.profilePublic,
+        favoriteCountries: safe.favoriteCountries,
+        countryGoals: safe.countryGoals,
+        recentConversions: safe.recentConversions,
+        activity: safe.activity,
+        lastVisitedCountry: safe.lastVisitedCountry,
+      }));
 
-      setSaveMessage("Your profile settings and preferences were saved successfully.");
+      setSaveType("success");
+      setSaveMessage("Your profile, settings, and preferences were saved successfully.");
       setSaveVisible(true);
-
-      setTimeout(() => {
-        setSaveVisible(false);
-      }, 3200);
+      setTimeout(() => setSaveVisible(false), 3200);
     } catch (error) {
       console.error("Failed to save profile:", error);
-      setSaveMessage("Could not save profile.");
+      setSaveType("error");
+      setSaveMessage("We could not save your changes. Please try again.");
       setSaveVisible(true);
     } finally {
       setSaving(false);
+    }
+  }
+
+  async function persistAvatar(url: string) {
+    try {
+      await saveCommandCenterProfile({ photoURL: url });
+      const refreshed = await loadCommandCenterProfile();
+      setProfile(refreshed);
+      setAvatar(url);
+      setSaveType("success");
+      setSaveMessage("Your new profile photo was saved successfully.");
+      setSaveVisible(true);
+      setTimeout(() => setSaveVisible(false), 3200);
+    } catch (error) {
+      console.error("Failed to persist avatar:", error);
+      setSaveType("error");
+      setSaveMessage("Your photo preview changed, but saving failed.");
+      setSaveVisible(true);
     }
   }
 
@@ -376,7 +383,7 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
     return (
       <main className="min-h-screen bg-black px-4 py-6 text-white md:px-6 md:py-10">
         <div className="mx-auto max-w-7xl">
-          <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-slate-950 to-slate-900 p-10">
+          <div className="rounded-[30px] border border-white/10 bg-[linear-gradient(135deg,#020617_0%,#0f172a_45%,#111827_100%)] p-10">
             <p className="text-lg text-slate-300">Loading your premium command center...</p>
           </div>
         </div>
@@ -388,7 +395,7 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
     return (
       <main className="min-h-screen bg-black px-4 py-6 text-white md:px-6 md:py-10">
         <div className="mx-auto max-w-4xl">
-          <section className="rounded-3xl border border-yellow-500/15 bg-gradient-to-br from-yellow-500/10 via-slate-950 to-slate-950 p-10">
+          <section className="rounded-[30px] border border-yellow-500/15 bg-[radial-gradient(circle_at_top,rgba(250,204,21,0.08),transparent_30%),linear-gradient(135deg,#020617_0%,#0f172a_45%,#111827_100%)] p-10">
             <p className="mb-3 inline-block rounded-full border border-yellow-500/30 bg-yellow-500/10 px-4 py-2 text-sm text-yellow-200">
               TGPI Identity Access
             </p>
@@ -396,7 +403,7 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
               Sign in to access your ultra profile
             </h1>
             <p className="mt-4 max-w-2xl text-slate-300">
-              Your account was not found in the current session. Sign in to restore the full command center.
+              Your account was not found in the active session. Sign in to restore the full command center.
             </p>
             <div className="mt-8">
               <Link
@@ -417,13 +424,11 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
       <div className="mx-auto max-w-7xl space-y-8">
         <CommandCenterNav />
 
-        <section className="rounded-[28px] border border-yellow-500/15 bg-[radial-gradient(circle_at_top,rgba(250,204,21,0.08),transparent_30%),linear-gradient(135deg,#020617_0%,#0f172a_45%,#111827_100%)] p-6 shadow-[0_0_60px_rgba(250,204,21,0.05)] md:p-8">
+        <section className="rounded-[32px] border border-yellow-500/15 bg-[radial-gradient(circle_at_top,rgba(250,204,21,0.08),transparent_30%),linear-gradient(135deg,#020617_0%,#0f172a_45%,#111827_100%)] p-6 shadow-[0_0_60px_rgba(250,204,21,0.05)] md:p-8">
           <div className="grid gap-8 xl:grid-cols-[1.2fr_.8fr]">
             <div>
               <p className="mb-4 inline-block rounded-full border border-yellow-500/30 bg-yellow-500/10 px-4 py-2 text-sm text-yellow-200">
-                {mode === "profile"
-                  ? "Ultra Intelligent Profile"
-                  : "Ultra Intelligent Dashboard"}
+                {mode === "profile" ? "Ultra Intelligent Profile" : "Ultra Intelligent Dashboard"}
               </p>
 
               <h1 className="text-4xl font-bold text-white md:text-5xl">{displayName}</h1>
@@ -434,14 +439,14 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
 
               <p className="mt-5 max-w-3xl text-sm leading-7 text-slate-300">
                 {form.bio ||
-                  "Your TGPI command center is now organized around identity, progress, goals, settings, and international readiness."}
+                  "Your TGPI command center now prioritizes identity, readiness, configuration, and action in a single premium environment."}
               </p>
 
               <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
                 <StatCard label="Readiness" value={`${readiness}/100`} hint={tier} />
-                <StatCard label="Favorites" value={favorites.length} hint="Saved countries" />
-                <StatCard label="Goals" value={goals.length} hint="Strategic goals" />
-                <StatCard label="Conversions" value={conversions.length} hint="Financial signals" />
+                <StatCard label="Favorites" value={form.favoriteCountries.length} hint="Saved countries" />
+                <StatCard label="Goals" value={form.countryGoals.length} hint="Strategic goals" />
+                <StatCard label="Conversions" value={form.recentConversions.length} hint="Financial signals" />
               </div>
             </div>
 
@@ -449,34 +454,28 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
               <ProfileAvatarUploader
                 currentAvatar={avatar}
                 displayName={displayName}
-                onAvatarSaved={(url) => {
-                  setAvatar(url);
-                  setProfile((prev) => ({ ...(prev || {}), photoURL: url }));
-                  setSaveMessage("Your new profile photo was saved successfully.");
-                  setSaveVisible(true);
-                  setTimeout(() => setSaveVisible(false), 3200);
-                }}
+                onAvatarSaved={persistAvatar}
               />
 
-              <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-5 shadow-[0_0_25px_rgba(255,215,0,0.03)]">
+              <div className="rounded-[28px] border border-white/10 bg-white/[0.04] p-5 shadow-[0_0_25px_rgba(250,204,21,0.03)]">
                 <p className="mb-4 text-xs uppercase tracking-[0.2em] text-slate-400">
                   Account Overview
                 </p>
 
                 <div className="space-y-3 text-sm">
-                  <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/30 p-3">
+                  <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/25 p-3">
                     <span className="text-slate-400">Plan</span>
                     <span className="font-semibold text-white">{profile?.plan || "FREE"}</span>
                   </div>
-                  <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/30 p-3">
+                  <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/25 p-3">
                     <span className="text-slate-400">XP</span>
                     <span className="font-semibold text-white">{profile?.xp ?? 0}</span>
                   </div>
-                  <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/30 p-3">
+                  <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/25 p-3">
                     <span className="text-slate-400">Level</span>
                     <span className="font-semibold text-white">{profile?.level ?? 1}</span>
                   </div>
-                  <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/30 p-3">
+                  <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/25 p-3">
                     <span className="text-slate-400">Streak</span>
                     <span className="font-semibold text-white">{profile?.streak ?? 0} days</span>
                   </div>
@@ -486,18 +485,18 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
           </div>
         </section>
 
-        <SaveSuccessCard message={saveMessage} visible={saveVisible} />
+        <SaveStatusCard message={saveMessage} visible={saveVisible} type={saveType} />
 
         <ShareProfile username={username} />
         <ProfileTabs activeTab={activeTab} onChange={setActiveTab} />
 
-        <div className="grid gap-8 xl:grid-cols-[1.22fr_.78fr]">
+        <div className="grid gap-8 xl:grid-cols-[1.24fr_.76fr]">
           <div className="space-y-8">
             {activeTab === "overview" && (
               <>
                 <Section
-                  title="Identity Overview"
-                  subtitle="The most important information appears first, with strong visual hierarchy and practical clarity."
+                  title="Vision Overview"
+                  subtitle="The most important information first: identity, location, direction and readiness."
                 >
                   <div className="grid gap-4 md:grid-cols-2">
                     <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
@@ -516,7 +515,7 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
                     </div>
                     <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
                       <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Preferred Currency</p>
-                      <p className="mt-3 text-lg font-semibold text-white">{form.preferredCurrency || "Not defined"}</p>
+                      <p className="mt-3 text-lg font-semibold text-white">{form.preferredCurrency}</p>
                     </div>
                     <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
                       <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Main Goal</p>
@@ -536,15 +535,15 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
                 </Section>
 
                 <Section
-                  title="Decision Signals"
-                  subtitle="The profile becomes more valuable as TGPI learns from behavior and preferences."
+                  title="Signals and Strategic Context"
+                  subtitle="Real signals that make the profile useful instead of decorative."
                 >
                   <div className="grid gap-4 md:grid-cols-2">
                     <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 md:col-span-2">
                       <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Favorite Countries</p>
                       <div className="mt-3 flex flex-wrap gap-3">
-                        {favorites.length ? (
-                          favorites.map((country) => (
+                        {form.favoriteCountries.length ? (
+                          form.favoriteCountries.map((country) => (
                             <span
                               key={country}
                               className="rounded-full border border-yellow-500/30 bg-yellow-500/10 px-4 py-2 text-sm text-yellow-200"
@@ -561,8 +560,8 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
                     <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 md:col-span-2">
                       <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Country Goals</p>
                       <div className="mt-3 flex flex-wrap gap-3">
-                        {goals.length ? (
-                          goals.map((goal) => (
+                        {form.countryGoals.length ? (
+                          form.countryGoals.map((goal) => (
                             <span
                               key={goal}
                               className="rounded-full border border-white/10 bg-black/30 px-4 py-2 text-sm text-white"
@@ -575,6 +574,13 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
                         )}
                       </div>
                     </div>
+
+                    <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5 md:col-span-2">
+                      <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Last Visited Country</p>
+                      <p className="mt-3 text-lg font-semibold text-white">
+                        {form.lastVisitedCountry || "Not defined"}
+                      </p>
+                    </div>
                   </div>
                 </Section>
               </>
@@ -583,7 +589,7 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
             {activeTab === "edit" && (
               <Section
                 title="Edit Full Profile"
-                subtitle="Everything important about the user, centralized and ordered by importance."
+                subtitle="A more complete and premium editing layer, organized by importance."
               >
                 <div className="grid gap-4 md:grid-cols-2">
                   <div>
@@ -673,8 +679,8 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
 
             {activeTab === "goals" && (
               <Section
-                title="Goals and Preferences"
-                subtitle="These fields are central to personalization and smart recommendations."
+                title="Goals and Intelligence Preferences"
+                subtitle="The profile becomes truly smart when these preference fields are completed well."
               >
                 <div className="grid gap-4 md:grid-cols-2">
                   <div>
@@ -754,11 +760,11 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
             {activeTab === "activity" && (
               <Section
                 title="Activity Timeline"
-                subtitle="A clean operational history with the most recent behavior first."
+                subtitle="A stronger and more useful operational history with the newest actions first."
               >
                 <div className="space-y-3">
-                  {activity.length ? (
-                    activity
+                  {form.activity.length ? (
+                    form.activity
                       .slice()
                       .reverse()
                       .slice(0, 10)
@@ -782,8 +788,8 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
 
             {activeTab === "settings" && (
               <Section
-                title="Settings"
-                subtitle="Real toggles for communication, privacy and account behavior."
+                title="Settings and Controls"
+                subtitle="A more complete and real settings layer inspired by top-tier products."
               >
                 <div className="grid gap-4">
                   <div className="grid gap-4 md:grid-cols-2">
@@ -811,21 +817,21 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
                     checked={form.notificationsEmail}
                     onChange={(value) => updateField("notificationsEmail", value)}
                     label="Email Notifications"
-                    description="Receive important updates and account notifications by email."
+                    description="Receive important updates and account communications by email."
                   />
 
                   <SettingToggle
                     checked={form.notificationsPush}
                     onChange={(value) => updateField("notificationsPush", value)}
                     label="Platform Notifications"
-                    description="Enable faster alerts and activity prompts inside the product."
+                    description="Receive alerts and activity prompts inside the TGPI experience."
                   />
 
                   <SettingToggle
                     checked={form.profilePublic}
                     onChange={(value) => updateField("profilePublic", value)}
                     label="Public Profile"
-                    description="Allow your profile to be more visible in TGPI experiences."
+                    description="Allow your profile to appear more openly in social and discovery features."
                   />
                 </div>
               </Section>
@@ -857,7 +863,7 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
 
             <Section
               title="Fast Actions"
-              subtitle="Smartly placed actions for both desktop and mobile usage."
+              subtitle="Strategically positioned shortcuts for both desktop and mobile."
             >
               <div className="space-y-3">
                 <Link
@@ -866,7 +872,7 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
                 >
                   <p className="font-semibold text-white">Upgrade Plan</p>
                   <p className="mt-1 text-sm text-slate-400">
-                    Unlock more intelligence, control and premium value.
+                    Unlock stronger premium value and advanced intelligence.
                   </p>
                 </Link>
 
@@ -876,7 +882,7 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
                 >
                   <p className="font-semibold text-white">Check Ranking</p>
                   <p className="mt-1 text-sm text-slate-400">
-                    View your positioning inside the TGPI ecosystem.
+                    View your position inside TGPI progression.
                   </p>
                 </Link>
 
@@ -886,7 +892,7 @@ export default function UltraProfilePanel({ mode }: { mode: ViewMode }) {
                 >
                   <p className="font-semibold text-white">Open Community</p>
                   <p className="mt-1 text-sm text-slate-400">
-                    Connect your account to the broader social layer.
+                    Connect your identity to the social layer of the platform.
                   </p>
                 </Link>
               </div>
