@@ -261,7 +261,7 @@ export default function ProfileCommandCenter({ mode }: { mode: ViewMode }) {
               <ProfileAvatarUploader
                 currentAvatar={avatar}
                 displayName={displayName}
-                onAvatarSaved={(url) => setAvatarOverride(url)}
+                onAvatarSelected={(url) => setAvatarOverride(url)}
               />
 
               <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
