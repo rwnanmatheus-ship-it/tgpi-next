@@ -1,44 +1,43 @@
 import { auth, db } from "@/lib/firebase";
-import { collection, deleteDoc, doc, getDoc, setDoc } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  setDoc,
+  deleteDoc,
+} from "firebase/firestore";
 
-export type RecentConversion = {
-  from: string;
-  to: string;
-  amount: number;
-  result?: number;
-  date: string;
-};
-
-export type UserActivityItem = {
-  action: string;
-  date: string;
-};
+import { generateTGPIId } from "@/lib/tgpi-credentials";
 
 export type CommandCenterProfile = {
-  username?: string;
-  usernameHistory?: string[];
-  usernameChangeCount?: number;
+  uid?: string;
+  email?: string;
 
   displayName?: string;
   fullName?: string;
-  bio?: string;
-  photoURL?: string;
+  username?: string;
 
+  tgpiId?: string;
+
+  usernameChangeCount?: number;
+  usernameHistory?: string[];
+
+  bio?: string;
   city?: string;
   country?: string;
   preferredCurrency?: string;
-
-  plan?: string;
-  xp?: number;
-  level?: number;
-  streak?: number;
 
   phone?: string;
   website?: string;
   instagram?: string;
   linkedin?: string;
+
   timezone?: string;
   languagePreference?: string;
+
+  goal?: string;
+  englishLevel?: string;
+  budget?: string;
+  continentInterest?: string;
 
   notificationsEmail?: boolean;
   notificationsPush?: boolean;
@@ -50,184 +49,68 @@ export type CommandCenterProfile = {
   showGoals?: boolean;
 
   favoriteCountries?: string[];
-  lastVisitedCountry?: string;
-  recentConversions?: RecentConversion[];
   countryGoals?: string[];
-  activity?: UserActivityItem[];
 
-  goal?: "work" | "study" | "live";
-  englishLevel?: "basic" | "intermediate" | "advanced";
-  budget?: "low" | "medium" | "high";
-  continentInterest?: string;
+  recentConversions?: any[];
+  activity?: any[];
+
+  lastVisitedCountry?: string;
+
+  photoURL?: string;
+
+  plan?: string;
+  xp?: number;
+  level?: number;
+  streak?: number;
 
   updatedAt?: string;
 };
 
-export function normalizeUsername(value: string) {
-  return value.trim().toLowerCase().replace(/\s+/g, "");
+async function getUid() {
+  const user = auth.currentUser;
+  return user?.uid || null;
 }
 
-export function isValidUsername(value: string) {
-  const normalized = normalizeUsername(value);
-  return /^[a-z0-9._]{3,20}$/.test(normalized);
-}
+// =========================
+// LOAD PROFILE
+// =========================
+export async function loadCommandCenterProfile() {
+  const uid = await getUid();
+  if (!uid) return null;
 
-export async function getCommandCenterUserId() {
-  return auth.currentUser?.uid || null;
-}
-
-export async function loadCommandCenterProfileByUid(uid: string) {
   const ref = doc(db, "users", uid);
   const snap = await getDoc(ref);
+
   if (!snap.exists()) return null;
+
   return snap.data() as CommandCenterProfile;
 }
 
-export async function loadCommandCenterProfile(): Promise<CommandCenterProfile | null> {
-  const uid = await getCommandCenterUserId();
-  if (!uid) return null;
-  return loadCommandCenterProfileByUid(uid);
-}
-
-export async function checkUsernameAvailability(
-  username: string,
-  currentUid?: string
-): Promise<{
-  available: boolean;
-  normalized: string;
-  reason?: string;
-}> {
-  const normalized = normalizeUsername(username);
-
-  if (!normalized) {
-    return { available: false, normalized, reason: "Username is required." };
-  }
-
-  if (!isValidUsername(normalized)) {
-    return {
-      available: false,
-      normalized,
-      reason: "Use 3–20 characters: letters, numbers, dot or underscore.",
-    };
-  }
-
-  const usernameRef = doc(db, "usernames", normalized);
-  const usernameSnap = await getDoc(usernameRef);
-
-  if (!usernameSnap.exists()) {
-    return { available: true, normalized };
-  }
-
-  const data = usernameSnap.data() as { uid?: string };
-
-  if (data?.uid && currentUid && data.uid === currentUid) {
-    return { available: true, normalized };
-  }
-
-  return {
-    available: false,
-    normalized,
-    reason: "This username is already in use.",
-  };
-}
-
-export async function saveCommandCenterProfile(
-  data: Partial<CommandCenterProfile>
-) {
-  const uid = await getCommandCenterUserId();
-  if (!uid) {
-    throw new Error("User is not authenticated.");
-  }
-
+// =========================
+// LOAD BY UID (FIX)
+// =========================
+export async function loadCommandCenterProfileByUid(uid: string) {
   const ref = doc(db, "users", uid);
+  const snap = await getDoc(ref);
 
-  await setDoc(
-    ref,
-    {
-      ...data,
-      updatedAt: new Date().toISOString(),
-    },
-    { merge: true }
-  );
+  if (!snap.exists()) return null;
+
+  return snap.data() as CommandCenterProfile;
 }
 
-export async function saveCommandCenterProfileWithRules(
-  data: Partial<CommandCenterProfile>
-) {
-  const uid = await getCommandCenterUserId();
-  if (!uid) throw new Error("User is not authenticated.");
-
-  const current = await loadCommandCenterProfileByUid(uid);
-  const currentUsername = normalizeUsername(current?.username || "");
-  const requestedUsername = normalizeUsername(data.username || current?.username || "");
-
-  let nextUsernameChangeCount = current?.usernameChangeCount ?? 0;
-  let nextUsernameHistory = current?.usernameHistory || [];
-
-  if (requestedUsername) {
-    const availability = await checkUsernameAvailability(requestedUsername, uid);
-    if (!availability.available) {
-      throw new Error(availability.reason || "Username unavailable.");
-    }
-
-    const usernameChanged =
-      currentUsername &&
-      requestedUsername &&
-      currentUsername !== requestedUsername;
-
-    if (usernameChanged) {
-      if (nextUsernameChangeCount >= 2) {
-        throw new Error(
-          "You have reached the lifetime limit of 2 username changes."
-        );
-      }
-
-      nextUsernameChangeCount += 1;
-
-      if (currentUsername && !nextUsernameHistory.includes(currentUsername)) {
-        nextUsernameHistory = [...nextUsernameHistory, currentUsername];
-      }
-
-      const oldUsernameRef = doc(db, "usernames", currentUsername);
-      try {
-        await deleteDoc(oldUsernameRef);
-      } catch {
-        // ignore old mapping cleanup failures
-      }
-    }
-
-    const newUsernameRef = doc(db, "usernames", requestedUsername);
-    await setDoc(
-      newUsernameRef,
-      {
-        uid,
-        username: requestedUsername,
-        updatedAt: new Date().toISOString(),
-      },
-      { merge: true }
-    );
-  }
-
-  await saveCommandCenterProfile({
-    ...data,
-    username: requestedUsername || "",
-    usernameChangeCount: nextUsernameChangeCount,
-    usernameHistory: nextUsernameHistory,
-  });
-}
-
+// =========================
+// SAFE DEFAULTS (FIX)
+// =========================
 export function buildSafeProfileDefaults(
-  data: CommandCenterProfile | null | undefined
-) {
+  data: Partial<CommandCenterProfile> | null
+): CommandCenterProfile {
   return {
+    displayName: data?.displayName || "",
+    fullName: data?.fullName || "",
     username: data?.username || "",
-    usernameHistory: data?.usernameHistory || [],
-    usernameChangeCount: data?.usernameChangeCount ?? 0,
+    tgpiId: data?.tgpiId || "",
 
-    displayName: data?.displayName || data?.fullName || "",
     bio: data?.bio || "",
-    photoURL: data?.photoURL || "",
-
     city: data?.city || "",
     country: data?.country || "",
     preferredCurrency: data?.preferredCurrency || "USD",
@@ -236,8 +119,14 @@ export function buildSafeProfileDefaults(
     website: data?.website || "",
     instagram: data?.instagram || "",
     linkedin: data?.linkedin || "",
+
     timezone: data?.timezone || "",
     languagePreference: data?.languagePreference || "English",
+
+    goal: data?.goal || "",
+    englishLevel: data?.englishLevel || "",
+    budget: data?.budget || "",
+    continentInterest: data?.continentInterest || "",
 
     notificationsEmail: data?.notificationsEmail ?? true,
     notificationsPush: data?.notificationsPush ?? true,
@@ -249,20 +138,75 @@ export function buildSafeProfileDefaults(
     showGoals: data?.showGoals ?? true,
 
     favoriteCountries: data?.favoriteCountries || [],
-    lastVisitedCountry: data?.lastVisitedCountry || "",
-    recentConversions: data?.recentConversions || [],
     countryGoals: data?.countryGoals || [],
+
+    recentConversions: data?.recentConversions || [],
     activity: data?.activity || [],
 
-    goal: data?.goal || "",
-    englishLevel: data?.englishLevel || "",
-    budget: data?.budget || "",
-    continentInterest: data?.continentInterest || "",
+    lastVisitedCountry: data?.lastVisitedCountry || "",
+
+    photoURL: data?.photoURL || "",
 
     plan: data?.plan || "FREE",
-    xp: data?.xp ?? 0,
-    level: data?.level ?? 1,
-    streak: data?.streak ?? 0,
+    xp: data?.xp || 0,
+    level: data?.level || 1,
+    streak: data?.streak || 0,
+
+    usernameChangeCount: data?.usernameChangeCount || 0,
+    usernameHistory: data?.usernameHistory || [],
+
     updatedAt: data?.updatedAt || "",
   };
+}
+
+// =========================
+// USERNAME CHECK
+// =========================
+export async function checkUsernameAvailability(
+  username: string,
+  currentUid?: string
+) {
+  if (!username || username.length < 3) {
+    return { available: false, reason: "Username muito curto" };
+  }
+
+  const ref = doc(db, "usernames", username.toLowerCase());
+  const snap = await getDoc(ref);
+
+  if (!snap.exists()) return { available: true };
+
+  const data = snap.data();
+
+  if (data.uid === currentUid) {
+    return { available: true };
+  }
+
+  return { available: false, reason: "Username já em uso" };
+}
+
+// =========================
+// SAVE WITH RULES (FIX)
+// =========================
+export async function saveCommandCenterProfileWithRules(
+  data: Partial<CommandCenterProfile>
+) {
+  const uid = await getUid();
+  if (!uid) throw new Error("Not authenticated");
+
+  const ref = doc(db, "users", uid);
+  const current = await loadCommandCenterProfile();
+
+  const tgpiId = current?.tgpiId || generateTGPIId(uid);
+
+  await setDoc(
+    ref,
+    {
+      ...current,
+      ...data,
+      tgpiId,
+      uid,
+      updatedAt: new Date().toISOString(),
+    },
+    { merge: true }
+  );
 }
