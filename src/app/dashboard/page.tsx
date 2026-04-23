@@ -1,5 +1,5 @@
-import UltraProfilePanel from "@/components/UltraProfilePanel";
+import { redirect } from "next/navigation";
 
 export default function DashboardPage() {
-  return <UltraProfilePanel />;
+  redirect("/profile");
 }
