@@ -1,5 +1,6 @@
 "use client";
 
+import TGPIIdentityCard from "@/components/TGPIIdentityCard";
 import { useEffect, useState } from "react";
 import { auth } from "@/lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
@@ -68,7 +69,7 @@ export default function UltraProfilePanel() {
 
         </div>
 
-        {/* TGPI CARD */}
+        <TGPIIdentityCard profile={profile} />
         <div className="p-6 rounded-3xl bg-gradient-to-br from-[#0a1a2f] to-black border border-yellow-500/20">
 
           <div className="grid md:grid-cols-2 gap-6">
