@@ -1,59 +1,41 @@
 "use client";
 
 import { useState } from "react";
-import { getCredentialById } from "@/lib/tgpi-credentials";
+import Link from "next/link";
 
 export default function VerifyPage() {
-  const [input, setInput] = useState("");
-  const [result, setResult] = useState<any>(null);
-  const [loading, setLoading] = useState(false);
-
-  async function handleVerify() {
-    setLoading(true);
-    const data = await getCredentialById(input);
-    setResult(data);
-    setLoading(false);
-  }
+  const [id, setId] = useState("");
 
   return (
-    <main className="min-h-screen bg-black text-white px-6 py-12">
-      <div className="max-w-3xl mx-auto space-y-8">
+    <main className="min-h-screen bg-black px-6 py-12 text-white">
+      <div className="mx-auto max-w-4xl space-y-8">
+        <section className="rounded-3xl border border-yellow-500/20 bg-gradient-to-br from-[#07111f] to-black p-10">
+          <p className="mb-3 text-sm uppercase tracking-[0.25em] text-yellow-400">
+            TGPI Verification System
+          </p>
 
-        <h1 className="text-4xl font-bold text-yellow-400">
-          TGPI Credential Verification
-        </h1>
+          <h1 className="text-4xl font-bold">Verificar Credencial TGPI</h1>
 
-        <div className="flex gap-3">
-          <input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Enter TGPI ID..."
-            className="flex-1 rounded-xl px-4 py-3 bg-white/5 border border-white/10"
-          />
-          <button
-            onClick={handleVerify}
-            className="bg-yellow-500 text-black px-6 py-3 rounded-xl font-bold"
-          >
-            Verify
-          </button>
-        </div>
+          <p className="mt-4 max-w-2xl text-slate-400">
+            Consulte a autenticidade de IDs, certificados e identidades digitais TGPI.
+          </p>
 
-        {loading && <p>Checking...</p>}
+          <div className="mt-8 flex flex-col gap-3 md:flex-row">
+            <input
+              value={id}
+              onChange={(e) => setId(e.target.value)}
+              placeholder="Digite o TGPI ID..."
+              className="flex-1 rounded-2xl border border-white/10 bg-white/5 px-5 py-4 outline-none focus:border-yellow-500/40"
+            />
 
-        {result && (
-          <div className="border border-white/10 rounded-2xl p-6 bg-white/5">
-            <p><strong>Name:</strong> {result.name}</p>
-            <p><strong>Program:</strong> {result.program}</p>
-            <p><strong>Score:</strong> {result.score}/100</p>
-            <p><strong>Level:</strong> {result.level}</p>
-            <p><strong>Status:</strong> ✅ Verified</p>
+            <Link
+              href={id ? `/verify/${id}` : "/verify"}
+              className="rounded-2xl bg-yellow-500 px-6 py-4 text-center font-bold text-black"
+            >
+              Verificar
+            </Link>
           </div>
-        )}
-
-        {result === null && !loading && input && (
-          <p className="text-red-400">Credential not found</p>
-        )}
-
+        </section>
       </div>
     </main>
   );

@@ -7,6 +7,8 @@ import WorldMapCard from "@/components/WorldMapCard";
 import AICard from "@/components/AICard";
 import CoursesRow from "@/components/CoursesRow";
 import GlobalIdentityCard from "@/components/GlobalIdentityCard";
+import UserCertificatesCard from "@/components/UserCertificatesCard";
+import PremiumEngineCard from "@/components/PremiumEngineCard";
 
 export default function ProfilePage() {
   return (
@@ -16,34 +18,34 @@ export default function ProfilePage() {
       <main className="flex-1">
         <TGPIHeader />
 
-        <div className="p-6 space-y-6">
-
+        <div className="space-y-6 p-6">
           <div>
-            <h1 className="text-2xl font-bold">
-              Bem-vindo de volta 👋
-            </h1>
+            <h1 className="text-2xl font-bold">Bem-vindo de volta 👋</h1>
+            <p className="text-slate-400">
+              Seu painel TGPI agora centraliza identidade, cursos, IA, certificados e progresso global.
+            </p>
           </div>
 
-          <div className="grid md:grid-cols-4 gap-4">
-            <TGPIStatCard title="Países" value="24" />
-            <TGPIStatCard title="Cursos" value="8" />
-            <TGPIStatCard title="Horas" value="184h" />
-            <TGPIStatCard title="Conquistas" value="17" />
+          <div className="grid gap-4 md:grid-cols-4">
+            <TGPIStatCard title="Países" value="24" subtitle="explorados" />
+            <TGPIStatCard title="Cursos" value="8" subtitle="em andamento" />
+            <TGPIStatCard title="Horas" value="184h" subtitle="estudadas" />
+            <TGPIStatCard title="Conquistas" value="17" subtitle="desbloqueadas" />
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="md:col-span-2">
+          <div className="grid gap-6 xl:grid-cols-[1.8fr_1fr]">
+            <div className="space-y-6">
               <WorldMapCard />
+              <CoursesRow />
+              <UserCertificatesCard />
             </div>
 
             <div className="space-y-6">
               <GlobalIdentityCard />
+              <PremiumEngineCard />
               <AICard />
             </div>
           </div>
-
-          <CoursesRow />
-
         </div>
       </main>
     </TGPIContainer>
