@@ -2,20 +2,20 @@
 
 export default function AICard() {
   return (
-    <div className="p-5 rounded-2xl border border-white/10 bg-white/5">
-      <h2 className="text-lg font-bold mb-4">IA Conselheira</h2>
+    <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
+      <h2 className="mb-4 text-lg font-bold">AI Advisor</h2>
 
       <div className="space-y-2 text-sm">
         <button className="block w-full text-left hover:text-yellow-400">
-          Qual país combina comigo?
+          Which country matches my profile?
         </button>
 
         <button className="block w-full text-left hover:text-yellow-400">
-          Quanto custa viver no Japão?
+          How much does it cost to live in Japan?
         </button>
 
         <button className="block w-full text-left hover:text-yellow-400">
-          Melhor visto para Europa?
+          What is the best visa path for Europe?
         </button>
       </div>
     </div>

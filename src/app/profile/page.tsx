@@ -19,10 +19,10 @@ export default function ProfilePage() {
         <div className="space-y-6 p-6">
           <section>
             <h1 className="text-3xl font-bold text-white">
-              Bem-vindo de volta 👋
+              Welcome back 👋
             </h1>
             <p className="mt-1 text-slate-400">
-              Continue sua jornada para se tornar um cidadão global do mundo.
+              Continue your journey to become a global citizen of the world.
             </p>
           </section>
 

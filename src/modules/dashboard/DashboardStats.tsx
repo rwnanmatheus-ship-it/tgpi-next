@@ -1,9 +1,9 @@
 const stats = [
-  { title: "Países Explorados", value: "24", subtitle: "de 195 países" },
-  { title: "Cursos em Andamento", value: "8", subtitle: "continue aprendendo" },
-  { title: "Horas de Estudo", value: "184h", subtitle: "+12h esta semana" },
-  { title: "Conquistas", value: "17", subtitle: "ver todas" },
-  { title: "Sequência", value: "21 dias", subtitle: "mantenha o ritmo 🔥" },
+  { title: "Countries Explored", value: "24", subtitle: "of 195 countries" },
+  { title: "Courses in Progress", value: "8", subtitle: "keep learning" },
+  { title: "Study Hours", value: "184h", subtitle: "+12h this week" },
+  { title: "Achievements", value: "17", subtitle: "view all" },
+  { title: "Streak", value: "21 days", subtitle: "keep the rhythm 🔥" },
 ];
 
 export default function DashboardStats() {

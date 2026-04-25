@@ -12,48 +12,48 @@ export function tgpiBrain(command: TGPICoreCommand | string) {
       return {
         action: "apply-layout",
         layout: "unicorn-premium-dashboard",
-        message: "Dashboard premium TGPI ativado.",
+        message: "TGPI premium dashboard activated.",
       };
 
     case "enable-ai":
       return {
         action: "activate-module",
         module: "AI Advisor",
-        message: "IA Conselheira TGPI ativada.",
+        message: "TGPI AI Advisor activated.",
       };
 
     case "fix-ui":
       return {
         action: "repair-interface",
         module: "Core UI",
-        message: "Sistema visual TGPI restaurado pelo Core.",
+        message: "TGPI visual system restored by Core.",
       };
 
     case "show-identity":
       return {
         action: "open-module",
         module: "Global Identity",
-        message: "Cartão de identidade global TGPI carregado.",
+        message: "TGPI Global Identity card loaded.",
       };
 
     case "show-certificates":
       return {
         action: "open-module",
         module: "Certificates",
-        message: "Central de certificados TGPI carregada.",
+        message: "TGPI Certificates Center loaded.",
       };
 
     case "premium-mode":
       return {
         action: "activate-premium",
         module: "Premium Engine",
-        message: "Modo Premium/Elite TGPI ativado.",
+        message: "TGPI Premium/Elite mode activated.",
       };
 
     default:
       return {
         action: "unknown",
-        message: "Comando não reconhecido pelo TGPI Brain.",
+        message: "Command not recognized by TGPI Brain.",
       };
   }
 }

@@ -1,17 +1,17 @@
 export default function CoursesRow() {
   return (
     <div className="space-y-3">
-      <h2 className="text-lg font-bold">Continue aprendendo</h2>
+      <h2 className="text-lg font-bold">Continue Learning</h2>
 
-      <div className="grid md:grid-cols-4 gap-4">
-        {["Japão", "Portugal", "Inglês", "Árabe"].map((c) => (
+      <div className="grid gap-4 md:grid-cols-4">
+        {["Japan", "Portugal", "English", "Arabic"].map((course) => (
           <div
-            key={c}
-            className="p-4 rounded-2xl bg-white/5 border border-white/10 hover:border-yellow-500 cursor-pointer"
+            key={course}
+            className="cursor-pointer rounded-2xl border border-white/10 bg-white/5 p-4 hover:border-yellow-500"
           >
-            <p className="font-semibold">{c}</p>
-            <div className="mt-2 h-2 bg-black rounded">
-              <div className="h-2 bg-yellow-400 w-1/2 rounded"></div>
+            <p className="font-semibold">{course}</p>
+            <div className="mt-2 h-2 rounded bg-black">
+              <div className="h-2 w-1/2 rounded bg-yellow-400" />
             </div>
           </div>
         ))}

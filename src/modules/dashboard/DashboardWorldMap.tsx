@@ -2,9 +2,9 @@ export default function DashboardWorldMap() {
   return (
     <section className="rounded-2xl border border-white/10 bg-white/5 p-5">
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-lg font-bold text-white">Mapa Mundial</h2>
+        <h2 className="text-lg font-bold text-white">World Map</h2>
         <button className="rounded-xl border border-yellow-500/30 px-4 py-2 text-sm text-yellow-300">
-          Explorar mapa
+          Explore map
         </button>
       </div>
 
@@ -15,7 +15,7 @@ export default function DashboardWorldMap() {
             Global Intelligence Map
           </p>
           <p className="mt-2 text-sm text-slate-400">
-            Base pronta para mapa interativo com países, favoritos e progresso.
+            Ready for interactive countries, favorites, and progress tracking.
           </p>
         </div>
       </div>

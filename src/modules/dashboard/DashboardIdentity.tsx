@@ -19,9 +19,9 @@ export default function DashboardIdentity() {
   return (
     <section className="rounded-2xl border border-yellow-500/20 bg-gradient-to-br from-[#07111f] to-black p-5">
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="font-bold text-white">Seu Perfil Global</h2>
+        <h2 className="font-bold text-white">Your Global Profile</h2>
         <a href="/profile" className="text-xs text-yellow-400">
-          Ver completo
+          View full profile
         </a>
       </div>
 
@@ -46,19 +46,19 @@ export default function DashboardIdentity() {
       <div className="mt-5 grid grid-cols-4 gap-2 text-center">
         <div className="rounded-xl border border-white/10 bg-white/5 p-3">
           <p className="text-lg font-bold">24</p>
-          <p className="text-xs text-slate-400">Países</p>
+          <p className="text-xs text-slate-400">Countries</p>
         </div>
         <div className="rounded-xl border border-white/10 bg-white/5 p-3">
           <p className="text-lg font-bold">8</p>
-          <p className="text-xs text-slate-400">Cursos</p>
+          <p className="text-xs text-slate-400">Courses</p>
         </div>
         <div className="rounded-xl border border-white/10 bg-white/5 p-3">
           <p className="text-lg font-bold">17</p>
-          <p className="text-xs text-slate-400">Conquistas</p>
+          <p className="text-xs text-slate-400">Achievements</p>
         </div>
         <div className="rounded-xl border border-white/10 bg-white/5 p-3">
           <p className="text-lg font-bold">184h</p>
-          <p className="text-xs text-slate-400">Horas</p>
+          <p className="text-xs text-slate-400">Hours</p>
         </div>
       </div>
     </section>

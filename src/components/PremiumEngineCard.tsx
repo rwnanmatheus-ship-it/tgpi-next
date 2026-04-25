@@ -8,18 +8,18 @@ export default function PremiumEngineCard() {
       </p>
 
       <h2 className="mt-3 text-2xl font-bold">
-        Desbloqueie o nível Elite TGPI
+        Unlock TGPI Elite Level
       </h2>
 
       <p className="mt-3 text-sm text-slate-400">
-        Acesse certificados premium, identidade verificada, recursos avançados e planejamento global.
+        Access premium certificates, verified identity, advanced resources, and global planning tools.
       </p>
 
       <Link
         href="/premium"
         className="mt-5 block rounded-xl bg-yellow-500 px-5 py-3 text-center font-bold text-black"
       >
-        Ver planos
+        View plans
       </Link>
     </section>
   );
