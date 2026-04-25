@@ -14,8 +14,7 @@ const links = [
   { label: "Dashboard", href: "/profile" },
   { label: "Ranking", href: "/ranking" },
   { label: "Community", href: "/community" },
-  { label: "Profile", href: "/profile" },
-];
+  ];
 
 export default function Navbar() {
   const [user, setUser] = useState<User | null>(null);
