@@ -1,15 +1,15 @@
 import TGPIPageShell from "@/components/TGPIPageShell";
 import Link from "next/link";
+import { tgpiImages } from "@/data/tgpi-images";
 
 const countries = [
-  { name: "Japan", slug: "japan", region: "Asia", flag: "🇯🇵", icon: "🏯" },
-  { name: "Brazil", slug: "brazil", region: "South America", flag: "🇧🇷", icon: "🌴" },
-  { name: "Egypt", slug: "egypt", region: "Africa", flag: "🇪🇬", icon: "🏜️" },
-  { name: "Canada", slug: "canada", region: "North America", flag: "🇨🇦", icon: "🏙️" },
-  { name: "France", slug: "france", region: "Europe", flag: "🇫🇷", icon: "🗼" },
-  { name: "India", slug: "india", region: "Asia", flag: "🇮🇳", icon: "🕌" },
-  { name: "South Africa", slug: "south-africa", region: "Africa", flag: "🇿🇦", icon: "🌍" },
-  { name: "Australia", slug: "australia", region: "Oceania", flag: "🇦🇺", icon: "🌊" },
+  { name: "Japan", slug: "japan", region: "Asia", flag: "🇯🇵", image: tgpiImages.japan },
+  { name: "Brazil", slug: "brazil", region: "South America", flag: "🇧🇷", image: tgpiImages.brazil },
+  { name: "Egypt", slug: "egypt", region: "Africa", flag: "🇪🇬", image: tgpiImages.egypt },
+  { name: "Canada", slug: "canada", region: "North America", flag: "🇨🇦", image: tgpiImages.canada },
+  { name: "France", slug: "france", region: "Europe", flag: "🇫🇷", image: tgpiImages.france },
+  { name: "India", slug: "india", region: "Asia", flag: "🇮🇳", image: tgpiImages.india },
+  { name: "Australia", slug: "australia", region: "Oceania", flag: "🇦🇺", image: tgpiImages.australia },
 ];
 
 export default function CountriesPage() {
@@ -23,36 +23,27 @@ export default function CountriesPage() {
         </h1>
 
         <p className="mt-4 text-slate-400">
-          Discover countries, languages, opportunities, and global pathways.
+          Discover destinations, languages, opportunities, and global pathways.
         </p>
-
-        <div className="mt-8 flex flex-wrap gap-3">
-          {["All", "America", "Europe", "Asia", "Africa", "Oceania"].map((filter) => (
-            <button
-              key={filter}
-              className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm hover:border-yellow-400 hover:text-yellow-400"
-            >
-              {filter}
-            </button>
-          ))}
-        </div>
       </section>
 
       <section className="mt-8 grid gap-5 md:grid-cols-4">
-        {countries.map((c) => (
+        {countries.map((country) => (
           <Link
-            key={c.slug}
-            href={`/countries/${c.slug}`}
-            className="group rounded-3xl border border-white/10 bg-[#07111f] p-5 transition hover:border-yellow-400"
+            key={country.slug}
+            href={`/countries/${country.slug}`}
+            className="group overflow-hidden rounded-3xl border border-white/10 bg-[#07111f] transition hover:border-yellow-400"
           >
-            <div className="flex h-40 items-center justify-center text-6xl">
-              {c.icon}
+            <div
+              className="h-44 bg-cover bg-center transition group-hover:scale-105"
+              style={{ backgroundImage: `url(${country.image})` }}
+            />
+
+            <div className="p-5">
+              <p className="text-3xl">{country.flag}</p>
+              <h2 className="mt-3 text-lg font-bold">{country.name}</h2>
+              <p className="text-sm text-slate-400">{country.region}</p>
             </div>
-
-            <h2 className="mt-4 text-lg font-bold">{c.name}</h2>
-            <p className="text-sm text-slate-400">{c.region}</p>
-
-            <p className="mt-2 text-2xl">{c.flag}</p>
           </Link>
         ))}
       </section>

@@ -1,4 +1,5 @@
 import TGPIPageShell from "@/components/TGPIPageShell";
+import { tgpiImages } from "@/data/tgpi-images";
 
 export default function AboutPage() {
   return (
@@ -30,9 +31,10 @@ export default function AboutPage() {
           </div>
         </div>
 
-        <div className="flex min-h-[420px] items-center justify-center rounded-3xl border border-yellow-500/20 bg-[radial-gradient(circle_at_center,rgba(250,204,21,0.25),transparent_45%),linear-gradient(135deg,#07111f,#020617)] text-8xl">
-          🌍
-        </div>
+        <div
+          className="min-h-[440px] rounded-3xl border border-yellow-500/20 bg-cover bg-center"
+          style={{ backgroundImage: `url(${tgpiImages.globe})` }}
+        />
       </section>
     </TGPIPageShell>
   );
