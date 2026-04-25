@@ -1,196 +1,114 @@
 "use client";
 
-import TopbarUserIdentity from "@/components/TopbarUserIdentity";
-import TopbarNotifications from "@/components/TopbarNotifications";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged, signOut, User } from "firebase/auth";
 import { auth } from "@/lib/firebase";
+import TopbarUserIdentity from "@/components/TopbarUserIdentity";
+import TopbarNotifications from "@/components/TopbarNotifications";
+
+const links = [
+  { label: "Home", href: "/" },
+  { label: "Countries", href: "/countries" },
+  { label: "Courses", href: "/courses" },
+  { label: "Dashboard", href: "/profile" },
+  { label: "Ranking", href: "/ranking" },
+  { label: "Community", href: "/community" },
+  { label: "Profile", href: "/profile" },
+];
 
 export default function Navbar() {
   const [user, setUser] = useState<User | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-      setUser(currentUser);
-    });
-
-    return () => unsubscribe();
+    return onAuthStateChanged(auth, setUser);
   }, []);
 
   async function handleLogout() {
-    try {
-      await signOut(auth);
-      window.location.href = "/";
-    } catch (error) {
-      console.error("Logout error:", error);
-    }
-  }
-
-  function closeMenu() {
-    setMenuOpen(false);
+    await signOut(auth);
+    window.location.href = "/";
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-[#0b0f19]/90 backdrop-blur">
+    <header className="sticky top-0 z-50 border-b border-white/10 bg-[#020617]/95 backdrop-blur-xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <Link href="/" className="text-lg font-bold tracking-wide text-white">
+        <Link href="/" className="font-bold text-white">
           TGPI
         </Link>
 
         <nav className="hidden items-center gap-6 md:flex">
-          <Link
-            href="/"
-            className="text-sm text-slate-300 transition hover:text-white"
-          >
-            Home
-          </Link>
+          {links.map((item) => (
+            <Link
+              key={item.href + item.label}
+              href={item.href}
+              className="text-sm font-medium text-slate-300 transition hover:text-yellow-400"
+            >
+              {item.label}
+            </Link>
+          ))}
+        </nav>
 
-          <Link
-            href="/countries"
-            className="text-sm text-slate-300 transition hover:text-white"
-          >
-            Countries
-          </Link>
-
-          <Link
-            href="/courses"
-            className="text-sm text-slate-300 transition hover:text-white"
-          >
-            Courses
-          </Link>
-
-          <Link
-            href="/dashboard"
-            className="text-sm text-slate-300 transition hover:text-white"
-          >
-            Dashboard
-          </Link>
-
-          <Link
-            href="/ranking"
-            className="text-sm text-slate-300 transition hover:text-white"
-          >
-            Ranking
-          </Link>
-
-          <Link
-            href="/community"
-            className="text-sm text-slate-300 transition hover:text-white"
-          >
-            Community
-          </Link>
-
-          <Link
-            href="/profile"
-            className="text-sm text-slate-300 transition hover:text-white"
-          >
-            Profile
-          </Link>
-
+        <div className="hidden items-center gap-3 md:flex">
           {user ? (
             <>
               <TopbarNotifications />
               <TopbarUserIdentity />
 
               <button
-                type="button"
                 onClick={handleLogout}
-                className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm font-semibold text-red-200 transition hover:bg-red-500/20"
+                className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm font-semibold text-red-200 hover:bg-red-500/20"
               >
                 Logout
               </button>
             </>
           ) : (
-            <Link
-              href="/login"
-              className="rounded-lg border border-yellow-500/30 bg-yellow-500/10 px-4 py-2 text-sm font-medium text-yellow-300 transition hover:bg-yellow-500/20"
-            >
-              Login
-            </Link>
+            <>
+              <Link
+                href="/login"
+                className="rounded-xl border border-yellow-500/30 px-4 py-2 text-sm font-semibold text-yellow-400 hover:bg-yellow-500/10"
+              >
+                Sign in
+              </Link>
+
+              <Link
+                href="/login"
+                className="rounded-xl border border-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/5"
+              >
+                Create account
+              </Link>
+            </>
           )}
-        </nav>
+        </div>
 
         <button
-          type="button"
           onClick={() => setMenuOpen((prev) => !prev)}
-          className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-white md:hidden"
+          className="rounded-xl border border-white/10 px-4 py-2 text-sm text-white md:hidden"
         >
           Menu
         </button>
       </div>
 
-      {menuOpen ? (
-        <div className="border-t border-white/10 bg-[#0b0f19] px-6 py-4 md:hidden">
+      {menuOpen && (
+        <div className="border-t border-white/10 bg-[#020617] px-6 py-4 md:hidden">
           <div className="flex flex-col gap-4">
-            <Link
-              href="/"
-              onClick={closeMenu}
-              className="text-sm text-slate-300 transition hover:text-white"
-            >
-              Home
-            </Link>
-
-            <Link
-              href="/countries"
-              onClick={closeMenu}
-              className="text-sm text-slate-300 transition hover:text-white"
-            >
-              Countries
-            </Link>
-
-            <Link
-              href="/courses"
-              onClick={closeMenu}
-              className="text-sm text-slate-300 transition hover:text-white"
-            >
-              Courses
-            </Link>
-
-            <Link
-              href="/dashboard"
-              onClick={closeMenu}
-              className="text-sm text-slate-300 transition hover:text-white"
-            >
-              Dashboard
-            </Link>
-
-            <Link
-              href="/ranking"
-              onClick={closeMenu}
-              className="text-sm text-slate-300 transition hover:text-white"
-            >
-              Ranking
-            </Link>
-
-            <Link
-              href="/community"
-              onClick={closeMenu}
-              className="text-sm text-slate-300 transition hover:text-white"
-            >
-              Community
-            </Link>
-
-            <Link
-              href="/profile"
-              onClick={closeMenu}
-              className="text-sm text-slate-300 transition hover:text-white"
-            >
-              Profile
-            </Link>
+            {links.map((item) => (
+              <Link
+                key={item.href + item.label}
+                href={item.href}
+                onClick={() => setMenuOpen(false)}
+                className="text-sm text-slate-300 hover:text-yellow-400"
+              >
+                {item.label}
+              </Link>
+            ))}
 
             {user ? (
               <>
-                <div className="flex items-center justify-between gap-3">
-                  <TopbarUserIdentity />
-                  <TopbarNotifications />
-                </div>
-
+                <TopbarUserIdentity />
                 <button
-                  type="button"
                   onClick={handleLogout}
-                  className="w-full rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm font-semibold text-red-200 transition hover:bg-red-500/20"
+                  className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm font-semibold text-red-200"
                 >
                   Logout
                 </button>
@@ -198,15 +116,15 @@ export default function Navbar() {
             ) : (
               <Link
                 href="/login"
-                onClick={closeMenu}
-                className="w-fit rounded-lg border border-yellow-500/30 bg-yellow-500/10 px-4 py-2 text-sm font-medium text-yellow-300 transition hover:bg-yellow-500/20"
+                onClick={() => setMenuOpen(false)}
+                className="rounded-xl border border-yellow-500/30 px-4 py-2 text-sm font-semibold text-yellow-400"
               >
-                Login
+                Sign in
               </Link>
             )}
           </div>
         </div>
-      ) : null}
+      )}
     </header>
   );
 }
