@@ -7,6 +7,10 @@ import DashboardWorldMap from "@/modules/dashboard/DashboardWorldMap";
 import DashboardAIAdvisor from "@/modules/dashboard/DashboardAIAdvisor";
 import DashboardCourses from "@/modules/dashboard/DashboardCourses";
 import DashboardIdentity from "@/modules/dashboard/DashboardIdentity";
+import MissionCard from "@/modules/dashboard/MissionCard";
+import CurrencySnapshotCard from "@/modules/dashboard/CurrencySnapshotCard";
+import CostOfLivingCard from "@/modules/dashboard/CostOfLivingCard";
+import RecentActivityCard from "@/modules/dashboard/RecentActivityCard";
 
 export default function ProfilePage() {
   return (
@@ -18,9 +22,7 @@ export default function ProfilePage() {
 
         <div className="space-y-6 p-6">
           <section>
-            <h1 className="text-3xl font-bold text-white">
-              Welcome back 👋
-            </h1>
+            <h1 className="text-3xl font-bold text-white">Welcome back 👋</h1>
             <p className="mt-1 text-slate-400">
               Continue your journey to become a global citizen of the world.
             </p>
@@ -31,12 +33,20 @@ export default function ProfilePage() {
           <section className="grid gap-6 xl:grid-cols-[1.7fr_1fr]">
             <div className="space-y-6">
               <DashboardWorldMap />
+
+              <div className="grid gap-6 lg:grid-cols-2">
+                <CurrencySnapshotCard />
+                <CostOfLivingCard />
+              </div>
+
               <DashboardCourses />
             </div>
 
             <div className="space-y-6">
               <DashboardIdentity />
+              <MissionCard />
               <DashboardAIAdvisor />
+              <RecentActivityCard />
             </div>
           </section>
         </div>
