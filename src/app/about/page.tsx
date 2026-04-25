@@ -1,16 +1,39 @@
+import TGPIPageShell from "@/components/TGPIPageShell";
+
 export default function AboutPage() {
   return (
-    <main className="min-h-screen bg-black px-6 py-12 text-white">
-      <div className="mx-auto max-w-4xl space-y-8">
-        <h1 className="text-4xl font-bold text-yellow-400">
-          About TGPI
-        </h1>
+    <TGPIPageShell>
+      <section className="grid gap-10 lg:grid-cols-[1.1fr_.9fr]">
+        <div>
+          <p className="text-sm text-slate-500">Home › About</p>
 
-        <p className="text-slate-300 leading-7">
-          TGPI is building a global readiness system for people who want to move,
-          grow, and expand beyond borders.
-        </p>
-      </div>
-    </main>
+          <h1 className="mt-4 max-w-2xl text-5xl font-bold leading-tight">
+            The knowledge that connects the <span className="text-yellow-400">world</span>.
+          </h1>
+
+          <p className="mt-6 max-w-2xl text-slate-400">
+            TGPI was created to offer global, accessible, and transformative education for people who want to live, study, work, and lead across borders.
+          </p>
+
+          <div className="mt-10 grid gap-4 md:grid-cols-4">
+            {[
+              ["195", "Countries"],
+              ["50K+", "Students"],
+              ["120+", "Courses"],
+              ["15", "Experts"],
+            ].map(([value, label]) => (
+              <div key={label} className="rounded-2xl border border-white/10 bg-white/5 p-5">
+                <p className="text-3xl font-bold text-yellow-400">{value}</p>
+                <p className="text-sm text-slate-400">{label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex min-h-[420px] items-center justify-center rounded-3xl border border-yellow-500/20 bg-[radial-gradient(circle_at_center,rgba(250,204,21,0.25),transparent_45%),linear-gradient(135deg,#07111f,#020617)] text-8xl">
+          🌍
+        </div>
+      </section>
+    </TGPIPageShell>
   );
 }
