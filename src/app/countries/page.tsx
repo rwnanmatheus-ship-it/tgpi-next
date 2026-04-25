@@ -1,41 +1,61 @@
-import CountryComparison from "@/components/CountryComparison";
-import { countries } from "@/data/countries";
+import TGPIPageShell from "@/components/TGPIPageShell";
 import Link from "next/link";
+
+const countries = [
+  { name: "Japan", slug: "japan", region: "Asia", flag: "🇯🇵", icon: "🏯" },
+  { name: "Brazil", slug: "brazil", region: "South America", flag: "🇧🇷", icon: "🌴" },
+  { name: "Egypt", slug: "egypt", region: "Africa", flag: "🇪🇬", icon: "🏜️" },
+  { name: "Canada", slug: "canada", region: "North America", flag: "🇨🇦", icon: "🏙️" },
+  { name: "France", slug: "france", region: "Europe", flag: "🇫🇷", icon: "🗼" },
+  { name: "India", slug: "india", region: "Asia", flag: "🇮🇳", icon: "🕌" },
+  { name: "South Africa", slug: "south-africa", region: "Africa", flag: "🇿🇦", icon: "🌍" },
+  { name: "Australia", slug: "australia", region: "Oceania", flag: "🇦🇺", icon: "🌊" },
+];
 
 export default function CountriesPage() {
   return (
-    <main className="min-h-screen bg-black px-6 py-10 text-white">
-      <div className="mx-auto max-w-6xl space-y-8">
-        <section className="rounded-3xl border border-yellow-700/20 bg-gradient-to-br from-yellow-500/10 to-slate-950 p-8">
-          <h1 className="text-4xl font-bold text-yellow-400">
-            Explore Countries
-          </h1>
-          <p className="mt-3 max-w-3xl text-slate-300">
-            Discover global pathways, compare countries, and choose your next
-            international direction with more clarity.
-          </p>
-        </section>
+    <TGPIPageShell>
+      <section>
+        <p className="text-sm text-slate-500">Home › Countries</p>
 
-        <CountryComparison />
+        <h1 className="mt-4 text-5xl font-bold">
+          Explore the world and its <span className="text-yellow-400">cultures</span>
+        </h1>
 
-        <section className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
-          {countries.map((country) => (
-            <Link
-              key={country.slug}
-              href={`/countries/${country.slug}`}
-              className="rounded-2xl border border-slate-800 bg-slate-900 p-6 transition hover:border-yellow-500/40 hover:bg-slate-950"
+        <p className="mt-4 text-slate-400">
+          Discover countries, languages, opportunities, and global pathways.
+        </p>
+
+        <div className="mt-8 flex flex-wrap gap-3">
+          {["All", "America", "Europe", "Asia", "Africa", "Oceania"].map((filter) => (
+            <button
+              key={filter}
+              className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm hover:border-yellow-400 hover:text-yellow-400"
             >
-              <div className="mb-3 text-3xl">{country.emoji}</div>
-              <h2 className="text-xl font-bold text-yellow-400">
-                {country.name}
-              </h2>
-              <p className="mt-2 text-sm text-slate-300">
-                {country.shortDescription}
-              </p>
-            </Link>
+              {filter}
+            </button>
           ))}
-        </section>
-      </div>
-    </main>
+        </div>
+      </section>
+
+      <section className="mt-8 grid gap-5 md:grid-cols-4">
+        {countries.map((c) => (
+          <Link
+            key={c.slug}
+            href={`/countries/${c.slug}`}
+            className="group rounded-3xl border border-white/10 bg-[#07111f] p-5 transition hover:border-yellow-400"
+          >
+            <div className="flex h-40 items-center justify-center text-6xl">
+              {c.icon}
+            </div>
+
+            <h2 className="mt-4 text-lg font-bold">{c.name}</h2>
+            <p className="text-sm text-slate-400">{c.region}</p>
+
+            <p className="mt-2 text-2xl">{c.flag}</p>
+          </Link>
+        ))}
+      </section>
+    </TGPIPageShell>
   );
 }
