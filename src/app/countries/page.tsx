@@ -1,16 +1,9 @@
 import TGPIPageShell from "@/components/TGPIPageShell";
 import Link from "next/link";
-import { tgpiImages } from "@/data/tgpi-images";
+// import { tgpiImages } from "@/data/tgpi-images";
 
-const countries = [
-  { name: "Japan", slug: "japan", region: "Asia", flag: "🇯🇵", image: tgpiImages.japan },
-  { name: "Brazil", slug: "brazil", region: "South America", flag: "🇧🇷", image: tgpiImages.brazil },
-  { name: "Egypt", slug: "egypt", region: "Africa", flag: "🇪🇬", image: tgpiImages.egypt },
-  { name: "Canada", slug: "canada", region: "North America", flag: "🇨🇦", image: tgpiImages.canada },
-  { name: "France", slug: "france", region: "Europe", flag: "🇫🇷", image: tgpiImages.france },
-  { name: "India", slug: "india", region: "Asia", flag: "🇮🇳", image: tgpiImages.india },
-  { name: "Australia", slug: "australia", region: "Oceania", flag: "🇦🇺", image: tgpiImages.australia },
-];
+
+import { countries } from "@/data/countries";
 
 export default function CountriesPage() {
   return (
