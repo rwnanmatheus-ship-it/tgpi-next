@@ -1,32 +1,8 @@
 import TGPIPageShell from "@/components/TGPIPageShell";
-import { tgpiImages } from "@/data/tgpi-images";
+import { coursesOverview } from "@/data/courses-overview";
+import type { CourseOverview } from "@/types/course-overview";
 
-const courses = [
-  {
-    title: "Leadership & Management",
-    desc: "Develop leadership, strategy, and execution skills.",
-    meta: "Global strategy · 6 weeks",
-    image: tgpiImages.leadership,
-  },
-  {
-    title: "Philosophy & Critical Thinking",
-    desc: "Analyze ideas, arguments, and decisions with clarity.",
-    meta: "Mindset · 4 weeks",
-    image: tgpiImages.philosophy,
-  },
-  {
-    title: "Technology & Future",
-    desc: "Explore AI, automation, and emerging industries.",
-    meta: "Technology · 8 weeks",
-    image: tgpiImages.technology,
-  },
-  {
-    title: "Global Economics",
-    desc: "Understand markets, currencies, and international systems.",
-    meta: "Economics · 8 weeks",
-    image: tgpiImages.globe,
-  },
-];
+const courses: CourseOverview[] = coursesOverview;
 
 export default function CoursesPage() {
   return (
