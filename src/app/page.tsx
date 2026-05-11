@@ -1,3 +1,4 @@
+import LeadCaptureForm from "@/components/LeadCaptureForm";
 import Link from "next/link";
 
 const stats = [
@@ -80,6 +81,10 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-    </main>
+    
+            <div className="mx-auto mt-12 flex justify-center">
+          <LeadCaptureForm />
+        </div>
+</main>
   );
 }
