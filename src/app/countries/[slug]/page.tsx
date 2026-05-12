@@ -34,8 +34,8 @@ export function generateMetadata({ params }: CountryPageProps) {
   }
 
   return {
-    title: `${country.name} | TGPI Country Intelligence`,
-    description: country.shortDescription,
+    title: `${country.name} | TGPI Country Intelligence Report`,
+    description: `${country.name} country intelligence report: cost, safety, language, adaptation, quality of life and TGPI strategic readiness.`,
   };
 }
 
@@ -44,139 +44,218 @@ export default function CountryPage({ params }: CountryPageProps) {
 
   if (!country) notFound();
 
+  const budget = `${formatCurrencyAmount(
+    country,
+    country.intelligence.averageMonthlyBudget,
+  )} ${country.currencyCode}`;
+
+  const scoreSignals = [
+    {
+      label: "TGPI score",
+      value: country.tgpiScore,
+      description: getCountryDecisionLabel(country),
+    },
+    {
+      label: "Quality of life",
+      value: country.intelligence.qualityOfLifeScore,
+      description: "Lifestyle, infrastructure and daily-life signal.",
+    },
+    {
+      label: "Safety",
+      value: country.intelligence.safetyScore,
+      description: "Risk awareness and general stability signal.",
+    },
+    {
+      label: "English access",
+      value: country.intelligence.englishFriendliness,
+      description: "Ease of navigation for English speakers.",
+    },
+  ];
+
+  const snapshot = [
+    { label: "Region", value: country.region },
+    { label: "Capital", value: country.capital },
+    { label: "Language", value: country.language },
+    { label: "Currency", value: country.currency },
+    { label: "Cost profile", value: getCountryCostLabel(country) },
+    { label: "Adaptation", value: getCountryRiskLabel(country) },
+  ];
+
   return (
     <main className="min-h-screen bg-[#050505] text-white">
       <section className="mx-auto max-w-7xl px-5 py-10 md:px-8 md:py-14">
-        <Link
-          href="/countries"
-          className="mb-6 inline-flex rounded-full border border-white/10 px-4 py-2 text-sm text-slate-300 transition hover:border-[#D4AF37]/60 hover:text-white"
-        >
-          ← Back to countries
-        </Link>
+        <div className="mb-6 flex flex-col justify-between gap-3 md:flex-row md:items-center">
+          <Link
+            href="/countries"
+            className="inline-flex w-fit rounded-full border border-white/10 px-4 py-2 text-sm text-slate-300 transition hover:border-[#D4AF37]/60 hover:text-white"
+          >
+            ← Back to countries
+          </Link>
 
-        <section className="overflow-hidden rounded-[2rem] border border-[#D4AF37]/25 bg-gradient-to-br from-[#111118] via-[#080B14] to-black">
-          <div className="grid lg:grid-cols-[1.1fr_0.9fr]">
+          <div className="flex flex-wrap gap-2">
+            <Link
+              href="/compare"
+              className="rounded-full border border-[#2563EB]/30 bg-[#2563EB]/10 px-4 py-2 text-sm font-bold text-[#BFDBFE] transition hover:border-[#38BDF8]/60"
+            >
+              Compare country
+            </Link>
+            <Link
+              href="/ranking"
+              className="rounded-full border border-[#D4AF37]/25 bg-[#D4AF37]/10 px-4 py-2 text-sm font-bold text-[#F5D76E] transition hover:border-[#F5D76E]/60"
+            >
+              View rankings
+            </Link>
+          </div>
+        </div>
+
+        <section className="overflow-hidden rounded-[2rem] border border-[#D4AF37]/25 bg-gradient-to-br from-[#111118] via-[#080B14] to-black shadow-2xl shadow-black/50">
+          <div className="relative grid lg:grid-cols-[1.05fr_0.95fr]">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(212,175,55,0.18),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(37,99,235,0.22),transparent_36%)]" />
+
             <div className="relative p-6 md:p-10">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(212,175,55,0.15),transparent_35%)]" />
+              <div className="mb-5 inline-flex rounded-full border border-[#D4AF37]/25 bg-[#D4AF37]/10 px-4 py-2 text-xs font-black uppercase tracking-[0.28em] text-[#F5D76E]">
+                TGPI Country Intelligence Report
+              </div>
 
-              <div className="relative">
-                <p className="mb-4 text-xs font-semibold uppercase tracking-[0.35em] text-[#D4AF37]">
-                  TGPI Country Profile
+              <div className="flex items-start gap-5">
+                <span className="text-6xl md:text-8xl">{country.emoji}</span>
+
+                <div className="min-w-0">
+                  <h1 className="text-4xl font-black tracking-tight md:text-6xl lg:text-7xl">
+                    {country.name}
+                  </h1>
+                  <p className="mt-3 text-sm font-semibold uppercase tracking-[0.22em] text-slate-400">
+                    {country.region} • {country.capital}
+                  </p>
+                </div>
+              </div>
+
+              <p className="mt-7 max-w-3xl text-base leading-8 text-slate-300">
+                {country.longDescription}
+              </p>
+
+              <div className="mt-8 grid gap-3 sm:grid-cols-3">
+                <SignalCard label="Main goal" value={country.mainGoal} />
+                <SignalCard label="Monthly budget" value={budget} />
+                <SignalCard label="Currency" value={country.currencyCode} />
+              </div>
+            </div>
+
+            <div className="relative border-t border-white/10 bg-black/25 p-6 lg:border-l lg:border-t-0 md:p-10">
+              <div className="rounded-[1.75rem] border border-[#D4AF37]/25 bg-[#D4AF37]/10 p-6">
+                <p className="text-xs uppercase tracking-[0.3em] text-[#F5D76E]">
+                  TGPI Verdict
                 </p>
 
-                <div className="flex items-center gap-4">
-                  <span className="text-6xl md:text-7xl">{country.emoji}</span>
-
+                <div className="mt-4 flex items-end justify-between gap-4">
                   <div>
-                    <h1 className="text-4xl font-black tracking-tight md:text-6xl">
-                      {country.name}
-                    </h1>
-                    <p className="mt-2 text-slate-400">
-                      {country.region} • {country.capital}
+                    <p className="text-6xl font-black text-[#D4AF37]">
+                      {country.tgpiScore}
+                    </p>
+                    <p className="mt-2 text-lg font-black text-white">
+                      {getCountryDecisionLabel(country)}
+                    </p>
+                  </div>
+
+                  <div className="rounded-2xl border border-white/10 bg-black/35 px-4 py-3 text-right">
+                    <p className="text-xs text-slate-500">Adaptation</p>
+                    <p className="mt-1 font-black text-white">
+                      {country.difficulty}
                     </p>
                   </div>
                 </div>
 
-                <p className="mt-6 max-w-3xl text-base leading-8 text-slate-300">
-                  {country.longDescription}
+                <p className="mt-5 text-sm leading-6 text-slate-300">
+                  {country.intelligence.summary}
                 </p>
-
-                <div className="mt-8 grid gap-3 sm:grid-cols-3">
-                  <SignalCard label="Language" value={country.language} />
-                  <SignalCard label="Currency" value={country.currencyCode} />
-                  <SignalCard label="Main goal" value={country.mainGoal} />
-                </div>
               </div>
-            </div>
 
-            <div className="relative min-h-[360px] border-t border-white/10 bg-[#080B14] p-6 lg:border-l lg:border-t-0 md:p-10">
-              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(212,175,55,0.25),transparent_35%),radial-gradient(circle_at_bottom_left,rgba(37,99,235,0.28),transparent_38%)]" />
-
-              <div className="relative grid gap-4">
-                <div className="rounded-2xl border border-[#D4AF37]/25 bg-[#D4AF37]/10 p-5">
-                  <p className="text-xs uppercase tracking-[0.25em] text-[#F5D76E]">
-                    TGPI Score
-                  </p>
-                  <p className="mt-2 text-5xl font-black text-[#D4AF37]">
-                    {country.tgpiScore}
-                  </p>
-                  <p className="mt-2 text-sm text-slate-300">
-                    {getCountryDecisionLabel(country)}
-                  </p>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <MetricCard
-                    label="Quality of life"
-                    value={`${country.intelligence.qualityOfLifeScore}/100`}
+              <div className="mt-4 grid gap-3">
+                {scoreSignals.slice(1).map((signal) => (
+                  <ScoreBar
+                    key={signal.label}
+                    label={signal.label}
+                    value={signal.value}
                   />
-                  <MetricCard
-                    label="Safety"
-                    value={`${country.intelligence.safetyScore}/100`}
-                  />
-                  <MetricCard
-                    label="English access"
-                    value={`${country.intelligence.englishFriendliness}/100`}
-                  />
-                  <MetricCard
-                    label="Monthly budget"
-                    value={`${formatCurrencyAmount(
-                      country,
-                      country.intelligence.averageMonthlyBudget,
-                    )} ${country.currencyCode}`}
-                  />
-                </div>
+                ))}
               </div>
             </div>
           </div>
         </section>
 
-        <section className="mt-8 grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+        <section className="mt-8 grid gap-6 lg:grid-cols-[0.78fr_1.22fr]">
           <div className="rounded-[1.5rem] border border-white/10 bg-[#111118] p-6">
-            <h2 className="text-2xl font-black text-[#D4AF37]">
-              Cost of life
-            </h2>
-
-            <p className="mt-2 text-sm leading-6 text-slate-400">
-              Local estimates in {country.currencyCode}. Values are educational
-              and should be validated before financial decisions.
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#D4AF37]">
+              Country snapshot
             </p>
+            <h2 className="mt-2 text-2xl font-black">Core facts</h2>
 
             <div className="mt-6 space-y-3">
-              {country.costOfLife.map((item) => (
+              {snapshot.map((item) => (
                 <div
                   key={item.label}
-                  className="flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-black/30 p-4"
+                  className="rounded-2xl border border-white/10 bg-black/30 p-4"
                 >
-                  <p className="text-sm font-bold text-slate-200">
-                    {item.label}
-                  </p>
-                  <p className="font-black text-white">
-                    {formatCurrencyAmount(country, item.amount)}{" "}
-                    {country.currencyCode}
+                  <p className="text-xs text-slate-500">{item.label}</p>
+                  <p className="mt-1 text-sm font-black text-white">
+                    {item.value}
                   </p>
                 </div>
               ))}
             </div>
           </div>
 
-          <div className="grid gap-6">
-            <div className="rounded-[1.5rem] border border-white/10 bg-[#111118] p-6">
-              <h2 className="text-2xl font-black text-[#D4AF37]">
-                Intelligence summary
-              </h2>
+          <div className="rounded-[1.5rem] border border-white/10 bg-[#111118] p-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#D4AF37]">
+              Score breakdown
+            </p>
+            <h2 className="mt-2 text-2xl font-black">
+              Decision signals
+            </h2>
 
-              <p className="mt-4 text-sm leading-7 text-slate-300">
-                {country.intelligence.summary}
-              </p>
-
-              <div className="mt-5 flex flex-wrap gap-2">
-                <Badge>{getCountryCostLabel(country)}</Badge>
-                <Badge>{getCountryRiskLabel(country)}</Badge>
-                <Badge>{country.currency}</Badge>
-              </div>
+            <div className="mt-6 grid gap-4 md:grid-cols-2">
+              {scoreSignals.map((signal) => (
+                <ScorePanel
+                  key={signal.label}
+                  label={signal.label}
+                  value={signal.value}
+                  description={signal.description}
+                />
+              ))}
             </div>
+          </div>
+        </section>
 
+        <section className="mt-8 grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+          <div className="rounded-[1.5rem] border border-white/10 bg-[#111118] p-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#D4AF37]">
+              Cost intelligence
+            </p>
+            <h2 className="mt-2 text-2xl font-black">Cost of life</h2>
+
+            <p className="mt-2 text-sm leading-6 text-slate-400">
+              Local estimates in {country.currencyCode}. Values are educational
+              and should be validated before financial decisions.
+            </p>
+
+            <div className="mt-6 space-y-4">
+              {country.costOfLife.map((item) => (
+                <CostRow
+                  key={item.label}
+                  label={item.label}
+                  value={`${formatCurrencyAmount(country, item.amount)} ${
+                    country.currencyCode
+                  }`}
+                  percentage={getCostPercentage(
+                    item.amount,
+                    country.intelligence.averageMonthlyBudget,
+                  )}
+                />
+              ))}
+            </div>
+          </div>
+
+          <div className="grid gap-6">
             <InsightGrid
               title="Strengths"
               items={country.intelligence.strengths}
@@ -199,8 +278,11 @@ export default function CountryPage({ params }: CountryPageProps) {
           />
 
           <div className="rounded-[1.5rem] border border-white/10 bg-[#111118] p-6">
-            <h2 className="text-2xl font-black text-[#D4AF37]">
-              Ideal goals
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#D4AF37]">
+              Fit profile
+            </p>
+            <h2 className="mt-2 text-2xl font-black">
+              Ideal goals and tags
             </h2>
 
             <div className="mt-5 flex flex-wrap gap-2">
@@ -219,11 +301,73 @@ export default function CountryPage({ params }: CountryPageProps) {
                 </span>
               ))}
             </div>
+
+            <div className="mt-6 rounded-2xl border border-[#2563EB]/25 bg-[#2563EB]/10 p-5">
+              <p className="text-xs uppercase tracking-[0.25em] text-[#93C5FD]">
+                TGPI Decision Rule
+              </p>
+              <p className="mt-2 text-sm leading-7 text-slate-200">
+                Do not choose {country.name} because it looks attractive. Choose
+                it only if cost, language, safety, adaptation and long-term
+                direction match your current profile.
+              </p>
+            </div>
           </div>
+        </section>
+
+        <section className="mt-8 rounded-[1.5rem] border border-[#D4AF37]/20 bg-[#D4AF37]/10 p-6">
+          <div className="grid gap-5 md:grid-cols-[1fr_auto] md:items-center">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#F5D76E]">
+                Strategic next step
+              </p>
+              <h2 className="mt-2 text-2xl font-black">
+                Compare {country.name} before making a decision.
+              </h2>
+              <p className="mt-2 text-sm leading-7 text-slate-200">
+                A country profile gives context. A comparison reveals trade-offs.
+                Use TGPI to compare this country against another destination by
+                cost, safety, language and strategic fit.
+              </p>
+            </div>
+
+            <div className="flex flex-col gap-3 sm:flex-row md:flex-col">
+              <Link
+                href="/compare"
+                className="rounded-2xl bg-[#D4AF37] px-5 py-3 text-center text-sm font-black text-black transition hover:bg-[#F5D76E]"
+              >
+                Compare now
+              </Link>
+
+              <Link
+                href="/countries"
+                className="rounded-2xl border border-white/15 px-5 py-3 text-center text-sm font-black text-white transition hover:border-[#D4AF37]/60"
+              >
+                Explore more countries
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-8 rounded-[1.5rem] border border-white/10 bg-[#0B0F19] p-6">
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
+            Data note
+          </p>
+          <p className="mt-2 text-sm leading-7 text-slate-400">
+            TGPI country intelligence is educational and strategic. Cost, safety,
+            immigration, tax, salary and local conditions vary by city, source
+            and time. Validate official sources before legal, financial or
+            relocation decisions.
+          </p>
         </section>
       </section>
     </main>
   );
+}
+
+function getCostPercentage(amount: number, total: number) {
+  if (!total || total <= 0) return 0;
+  return Math.min(Math.max(Math.round((amount / total) * 100), 4), 100);
 }
 
 type SignalCardProps = {
@@ -240,16 +384,81 @@ function SignalCard({ label, value }: SignalCardProps) {
   );
 }
 
-type MetricCardProps = {
+type ScoreBarProps = {
   label: string;
-  value: string;
+  value: number;
 };
 
-function MetricCard({ label, value }: MetricCardProps) {
+function ScoreBar({ label, value }: ScoreBarProps) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-black/35 p-5">
-      <p className="text-xs text-slate-400">{label}</p>
-      <p className="mt-2 text-xl font-black text-white">{value}</p>
+    <div className="rounded-2xl border border-white/10 bg-black/35 p-4">
+      <div className="mb-2 flex items-center justify-between gap-3">
+        <p className="text-sm font-bold text-slate-200">{label}</p>
+        <p className="text-sm font-black text-[#D4AF37]">{value}/100</p>
+      </div>
+
+      <div className="h-2 overflow-hidden rounded-full bg-white/10">
+        <div
+          className="h-full rounded-full bg-gradient-to-r from-[#D4AF37] to-[#38BDF8]"
+          style={{ width: `${Math.min(Math.max(value, 0), 100)}%` }}
+        />
+      </div>
+    </div>
+  );
+}
+
+type ScorePanelProps = {
+  label: string;
+  value: number;
+  description: string;
+};
+
+function ScorePanel({ label, value, description }: ScorePanelProps) {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-black/30 p-5">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="font-black text-white">{label}</p>
+          <p className="mt-2 text-sm leading-6 text-slate-400">
+            {description}
+          </p>
+        </div>
+
+        <p className="shrink-0 text-2xl font-black text-[#D4AF37]">
+          {value}
+        </p>
+      </div>
+
+      <div className="mt-4 h-2 overflow-hidden rounded-full bg-white/10">
+        <div
+          className="h-full rounded-full bg-gradient-to-r from-[#D4AF37] to-[#2563EB]"
+          style={{ width: `${Math.min(Math.max(value, 0), 100)}%` }}
+        />
+      </div>
+    </div>
+  );
+}
+
+type CostRowProps = {
+  label: string;
+  value: string;
+  percentage: number;
+};
+
+function CostRow({ label, value, percentage }: CostRowProps) {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
+      <div className="flex items-center justify-between gap-4">
+        <p className="text-sm font-bold text-slate-200">{label}</p>
+        <p className="text-sm font-black text-white">{value}</p>
+      </div>
+
+      <div className="mt-3 h-2 overflow-hidden rounded-full bg-white/10">
+        <div
+          className="h-full rounded-full bg-gradient-to-r from-[#D4AF37] to-[#38BDF8]"
+          style={{ width: `${percentage}%` }}
+        />
+      </div>
     </div>
   );
 }
