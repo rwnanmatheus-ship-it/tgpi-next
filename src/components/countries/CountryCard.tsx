@@ -70,22 +70,24 @@ export function CountryCard({ country }: CountryCardProps) {
       className="group relative block overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#070A12] transition duration-300 hover:-translate-y-1 hover:border-[#D4AF37]/60 hover:shadow-2xl hover:shadow-[#D4AF37]/10"
     >
       <div className="absolute inset-0 opacity-0 transition duration-300 group-hover:opacity-100">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(212,175,55,0.16),transparent_34%),radial-gradient(circle_at_bottom_left,rgba(37,99,235,0.18),transparent_38%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(212,175,55,0.12),transparent_34%),radial-gradient(circle_at_bottom_left,rgba(37,99,235,0.12),transparent_38%)]" />
       </div>
 
       <div className="relative h-48 overflow-hidden bg-gradient-to-br from-[#111118] via-[#0B1F4D]/70 to-black">
         <img
           src={imageUrl}
           alt={imageAlt}
-          className="absolute inset-0 h-full w-full object-cover opacity-45 transition duration-500 group-hover:scale-105 group-hover:opacity-60"
+          className="absolute inset-0 h-full w-full object-cover opacity-85 saturate-150 contrast-110 brightness-110 transition duration-500 group-hover:scale-105 group-hover:opacity-100 group-hover:saturate-150"
           loading="lazy"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-black/15" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(212,175,55,0.32),transparent_34%),radial-gradient(circle_at_bottom_left,rgba(37,99,235,0.3),transparent_38%)]" />
+
+        <div className="absolute inset-0 bg-gradient-to-t from-black/88 via-black/30 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[#050505]/25 via-transparent to-[#050505]/20" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(212,175,55,0.14),transparent_34%),radial-gradient(circle_at_bottom_left,rgba(37,99,235,0.12),transparent_38%)]" />
         <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#D4AF37]/50 to-transparent" />
 
         <div className="absolute left-5 top-5 flex flex-wrap items-center gap-2">
-          <span className="rounded-full border border-white/10 bg-black/50 px-3 py-1 text-xs font-semibold text-slate-200 backdrop-blur">
+          <span className="rounded-full border border-white/10 bg-black/45 px-3 py-1 text-xs font-semibold text-slate-100 backdrop-blur">
             {country.region}
           </span>
 
@@ -96,7 +98,7 @@ export function CountryCard({ country }: CountryCardProps) {
           </span>
         </div>
 
-        <div className="absolute right-5 top-5 rounded-2xl border border-[#D4AF37]/25 bg-black/50 px-3 py-2 text-center backdrop-blur">
+        <div className="absolute right-5 top-5 rounded-2xl border border-[#D4AF37]/25 bg-black/45 px-3 py-2 text-center backdrop-blur">
           <p className="text-[10px] uppercase tracking-[0.2em] text-[#F5D76E]">
             TGPI
           </p>
@@ -109,10 +111,10 @@ export function CountryCard({ country }: CountryCardProps) {
           <div className="mb-3 text-5xl drop-shadow-2xl">{country.emoji}</div>
 
           <div className="min-w-0">
-            <h3 className="truncate text-2xl font-black tracking-tight text-white">
+            <h3 className="truncate text-2xl font-black tracking-tight text-white drop-shadow-xl">
               {country.name}
             </h3>
-            <p className="mt-1 truncate text-xs font-semibold uppercase tracking-[0.2em] text-slate-300">
+            <p className="mt-1 truncate text-xs font-semibold uppercase tracking-[0.2em] text-slate-200 drop-shadow">
               {country.capital} • {country.currencyCode}
             </p>
           </div>

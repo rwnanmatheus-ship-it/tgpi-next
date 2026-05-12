@@ -124,30 +124,33 @@ export default async function CountryPage({ params }: CountryPageProps) {
             <img
               src={imageUrl}
               alt={imageAlt}
-              className="absolute inset-0 h-full w-full object-cover opacity-20"
+              className="absolute inset-0 h-full w-full object-cover opacity-60 saturate-150 contrast-110 brightness-110"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-black via-[#050505]/85 to-[#050505]/75" />
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(212,175,55,0.2),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(37,99,235,0.24),transparent_36%)]" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/92 via-[#050505]/62 to-[#050505]/38" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/10" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(212,175,55,0.12),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(37,99,235,0.12),transparent_36%)]" />
 
             <div className="relative p-6 md:p-10">
-              <div className="mb-5 inline-flex rounded-full border border-[#D4AF37]/25 bg-[#D4AF37]/10 px-4 py-2 text-xs font-black uppercase tracking-[0.28em] text-[#F5D76E]">
+              <div className="mb-5 inline-flex rounded-full border border-[#D4AF37]/25 bg-[#D4AF37]/10 px-4 py-2 text-xs font-black uppercase tracking-[0.28em] text-[#F5D76E] backdrop-blur">
                 TGPI Country Intelligence Report
               </div>
 
               <div className="flex items-start gap-5">
-                <span className="text-6xl md:text-8xl">{country.emoji}</span>
+                <span className="text-6xl drop-shadow-2xl md:text-8xl">
+                  {country.emoji}
+                </span>
 
                 <div className="min-w-0">
-                  <h1 className="text-4xl font-black tracking-tight md:text-6xl lg:text-7xl">
+                  <h1 className="text-4xl font-black tracking-tight text-white drop-shadow-2xl md:text-6xl lg:text-7xl">
                     {country.name}
                   </h1>
-                  <p className="mt-3 text-sm font-semibold uppercase tracking-[0.22em] text-slate-400">
+                  <p className="mt-3 text-sm font-semibold uppercase tracking-[0.22em] text-slate-200 drop-shadow">
                     {country.region} • {country.capital}
                   </p>
                 </div>
               </div>
 
-              <p className="mt-7 max-w-3xl text-base leading-8 text-slate-300">
+              <p className="mt-7 max-w-3xl text-base leading-8 text-slate-200 drop-shadow">
                 {country.longDescription}
               </p>
 
@@ -158,8 +161,8 @@ export default async function CountryPage({ params }: CountryPageProps) {
               </div>
             </div>
 
-            <div className="relative border-t border-white/10 bg-black/25 p-6 lg:border-l lg:border-t-0 md:p-10">
-              <div className="rounded-[1.75rem] border border-[#D4AF37]/25 bg-[#D4AF37]/10 p-6 backdrop-blur">
+            <div className="relative border-t border-white/10 bg-black/15 p-6 lg:border-l lg:border-t-0 md:p-10">
+              <div className="rounded-[1.75rem] border border-[#D4AF37]/25 bg-black/45 p-6 shadow-2xl shadow-black/30 backdrop-blur">
                 <p className="text-xs uppercase tracking-[0.3em] text-[#F5D76E]">
                   TGPI Verdict
                 </p>
@@ -182,7 +185,7 @@ export default async function CountryPage({ params }: CountryPageProps) {
                   </div>
                 </div>
 
-                <p className="mt-5 text-sm leading-6 text-slate-300">
+                <p className="mt-5 text-sm leading-6 text-slate-200">
                   {country.intelligence.summary}
                 </p>
               </div>
@@ -414,8 +417,8 @@ type SignalCardProps = {
 
 function SignalCard({ label, value }: SignalCardProps) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
-      <p className="text-xs text-slate-500">{label}</p>
+    <div className="rounded-2xl border border-white/10 bg-black/35 p-4 backdrop-blur">
+      <p className="text-xs text-slate-400">{label}</p>
       <p className="mt-1 truncate font-black text-white">{value}</p>
     </div>
   );
@@ -428,7 +431,7 @@ type ScoreBarProps = {
 
 function ScoreBar({ label, value }: ScoreBarProps) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-black/35 p-4 backdrop-blur">
+    <div className="rounded-2xl border border-white/10 bg-black/45 p-4 backdrop-blur">
       <div className="mb-2 flex items-center justify-between gap-3">
         <p className="text-sm font-bold text-slate-200">{label}</p>
         <p className="text-sm font-black text-[#D4AF37]">{value}/100</p>
