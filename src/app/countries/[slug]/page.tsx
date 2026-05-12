@@ -13,9 +13,9 @@ import {
 } from "@/lib/countries";
 
 type CountryPageProps = {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 };
 
 export function generateStaticParams() {
@@ -24,8 +24,9 @@ export function generateStaticParams() {
   }));
 }
 
-export function generateMetadata({ params }: CountryPageProps) {
-  const country = getCountry(params.slug);
+export async function generateMetadata({ params }: CountryPageProps) {
+  const { slug } = await params;
+  const country = getCountry(slug);
 
   if (!country) {
     return {
@@ -39,8 +40,9 @@ export function generateMetadata({ params }: CountryPageProps) {
   };
 }
 
-export default function CountryPage({ params }: CountryPageProps) {
-  const country = getCountry(params.slug);
+export default async function CountryPage({ params }: CountryPageProps) {
+  const { slug } = await params;
+  const country = getCountry(slug);
 
   if (!country) notFound();
 
