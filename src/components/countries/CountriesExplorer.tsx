@@ -12,6 +12,7 @@ import {
   getCountryCostLabel,
   getCountryDecisionLabel,
   getCountryGoalLabel,
+  getCountryRiskLabel,
   getCountrySearchText,
   type Country,
   type CountryGoal,
@@ -103,6 +104,7 @@ const NAV_ITEMS = [
   { label: "Presets", href: "#country-presets" },
   { label: "Filters", href: "#country-filters" },
   { label: "Intelligence", href: "#country-intelligence" },
+  { label: "Rankings", href: "#country-rankings" },
   { label: "Recommendations", href: "#country-recommendations" },
   { label: "Countries", href: "#country-list" },
 ];
@@ -273,6 +275,18 @@ export function CountriesExplorer({ countries }: CountriesExplorerProps) {
     )[0];
   }, [filteredCountries]);
 
+  const bestQualityCountry = useMemo(() => {
+    return [...filteredCountries].sort(
+      (a, b) =>
+        b.intelligence.qualityOfLifeScore -
+        a.intelligence.qualityOfLifeScore,
+    )[0];
+  }, [filteredCountries]);
+
+  const smartRankings = useMemo(() => {
+    return getSmartRankings(filteredCountries);
+  }, [filteredCountries]);
+
   const regionDistribution = useMemo(() => {
     return getDistribution(filteredCountries, (country) => country.region);
   }, [filteredCountries]);
@@ -422,16 +436,12 @@ export function CountriesExplorer({ countries }: CountriesExplorerProps) {
                       : "border-white/10 bg-black/25 hover:border-[#D4AF37]/40 hover:bg-white/[0.03]"
                   }`}
                 >
-                  <div className="flex items-start justify-between gap-2">
-                    <div>
-                      <p className="text-sm font-black text-white">
-                        {preset.title}
-                      </p>
-                      <p className="mt-1 line-clamp-2 text-xs leading-5 text-slate-400">
-                        {preset.description}
-                      </p>
-                    </div>
-                  </div>
+                  <p className="text-sm font-black text-white">
+                    {preset.title}
+                  </p>
+                  <p className="mt-1 line-clamp-2 text-xs leading-5 text-slate-400">
+                    {preset.description}
+                  </p>
 
                   <span
                     className={`mt-3 inline-flex rounded-full px-2.5 py-1 text-[11px] font-black ${
@@ -595,9 +605,13 @@ export function CountriesExplorer({ countries }: CountriesExplorerProps) {
         />
       </div>
 
+      <div id="country-rankings" className="scroll-mt-28">
+        <SmartRankingsPanel rankings={smartRankings} />
+      </div>
+
       <section
         id="country-recommendations"
-        className="mt-5 grid scroll-mt-28 gap-3 sm:grid-cols-2 xl:grid-cols-4"
+        className="mt-5 grid scroll-mt-28 gap-3 sm:grid-cols-2 xl:grid-cols-5"
       >
         <RecommendationCard
           label="Best current match"
@@ -618,6 +632,11 @@ export function CountriesExplorer({ countries }: CountriesExplorerProps) {
           label="Best English access"
           country={bestEnglishCountry}
           detail="Highest English-access signal in this filter set."
+        />
+        <RecommendationCard
+          label="Best quality of life"
+          country={bestQualityCountry}
+          detail="Highest quality-of-life signal in this filter set."
         />
       </section>
 
@@ -724,6 +743,96 @@ type DistributionItem = {
   count: number;
   percentage: number;
 };
+
+type SmartRanking = {
+  title: string;
+  description: string;
+  countries: Country[];
+  metricLabel: string;
+  getMetric: (country: Country) => string;
+};
+
+function getSmartRankings(countries: Country[]): SmartRanking[] {
+  const top = (sorter: (a: Country, b: Country) => number) =>
+    [...countries].sort(sorter).slice(0, 5);
+
+  return [
+    {
+      title: "Best overall",
+      description: "Highest TGPI strategic score in the current filter set.",
+      countries: top((a, b) => b.tgpiScore - a.tgpiScore),
+      metricLabel: "TGPI",
+      getMetric: (country) => `${country.tgpiScore}/100`,
+    },
+    {
+      title: "Lowest budget",
+      description: "Lowest estimated monthly budget in local currency.",
+      countries: top(
+        (a, b) =>
+          a.intelligence.averageMonthlyBudget -
+          b.intelligence.averageMonthlyBudget,
+      ),
+      metricLabel: "Budget",
+      getMetric: (country) =>
+        `${formatCurrencyAmount(
+          country,
+          country.intelligence.averageMonthlyBudget,
+        )} ${country.currencyCode}`,
+    },
+    {
+      title: "Safest",
+      description: "Highest safety signal for lower daily-life uncertainty.",
+      countries: top(
+        (a, b) => b.intelligence.safetyScore - a.intelligence.safetyScore,
+      ),
+      metricLabel: "Safety",
+      getMetric: (country) => `${country.intelligence.safetyScore}/100`,
+    },
+    {
+      title: "Best English access",
+      description: "Highest English friendliness for easier first navigation.",
+      countries: top(
+        (a, b) =>
+          b.intelligence.englishFriendliness -
+          a.intelligence.englishFriendliness,
+      ),
+      metricLabel: "English",
+      getMetric: (country) => `${country.intelligence.englishFriendliness}/100`,
+    },
+    {
+      title: "Best quality of life",
+      description: "Highest quality-of-life signal in the current filter set.",
+      countries: top(
+        (a, b) =>
+          b.intelligence.qualityOfLifeScore -
+          a.intelligence.qualityOfLifeScore,
+      ),
+      metricLabel: "Quality",
+      getMetric: (country) =>
+        `${country.intelligence.qualityOfLifeScore}/100`,
+    },
+    {
+      title: "Beginner-friendly",
+      description: "Balanced cost, easier adaptation and strong safety.",
+      countries: top((a, b) => {
+        const scoreA =
+          a.tgpiScore +
+          a.intelligence.safetyScore +
+          a.intelligence.englishFriendliness -
+          a.intelligence.averageMonthlyBudget / 100;
+        const scoreB =
+          b.tgpiScore +
+          b.intelligence.safetyScore +
+          b.intelligence.englishFriendliness -
+          b.intelligence.averageMonthlyBudget / 100;
+
+        return scoreB - scoreA;
+      }),
+      metricLabel: "Fit",
+      getMetric: (country) => getCountryRiskLabel(country),
+    },
+  ];
+}
 
 function getDistribution(
   countries: Country[],
@@ -917,7 +1026,10 @@ function CompactCountryCard({ country }: CompactCountryCardProps) {
       </div>
 
       <div className="mt-3 grid grid-cols-2 gap-2">
-        <CompactMetric label="Safety" value={`${country.intelligence.safetyScore}`} />
+        <CompactMetric
+          label="Safety"
+          value={`${country.intelligence.safetyScore}`}
+        />
         <CompactMetric
           label="English"
           value={`${country.intelligence.englishFriendliness}`}
@@ -1050,6 +1162,101 @@ function DecisionIntelligencePanel({
         <DistributionPanel title="Cost concentration" items={costDistribution} />
       </div>
     </section>
+  );
+}
+
+type SmartRankingsPanelProps = {
+  rankings: SmartRanking[];
+};
+
+function SmartRankingsPanel({ rankings }: SmartRankingsPanelProps) {
+  return (
+    <section className="mt-5 overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#111118]">
+      <div className="border-b border-white/10 bg-black/25 p-5">
+        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#D4AF37]">
+          Smart Rankings
+        </p>
+        <div className="mt-2 grid gap-3 lg:grid-cols-[1fr_auto] lg:items-end">
+          <div>
+            <h2 className="text-2xl font-black text-white">
+              Instant rankings from the current filter set.
+            </h2>
+            <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-400">
+              Use rankings to scan the country database faster. These lists
+              update automatically when you change filters.
+            </p>
+          </div>
+
+          <Link
+            href="/compare"
+            className="rounded-2xl border border-[#D4AF37]/25 bg-[#D4AF37]/10 px-4 py-3 text-center text-sm font-black text-[#F5D76E] transition hover:border-[#F5D76E]/60"
+          >
+            Open comparator
+          </Link>
+        </div>
+      </div>
+
+      <div className="grid gap-3 p-4 md:grid-cols-2 xl:grid-cols-3">
+        {rankings.map((ranking) => (
+          <RankingCard key={ranking.title} ranking={ranking} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+type RankingCardProps = {
+  ranking: SmartRanking;
+};
+
+function RankingCard({ ranking }: RankingCardProps) {
+  return (
+    <div className="rounded-[1.25rem] border border-white/10 bg-black/25 p-4">
+      <div className="mb-4">
+        <p className="text-lg font-black text-white">{ranking.title}</p>
+        <p className="mt-1 text-sm leading-6 text-slate-400">
+          {ranking.description}
+        </p>
+      </div>
+
+      <div className="space-y-2">
+        {ranking.countries.length > 0 ? (
+          ranking.countries.map((country, index) => (
+            <Link
+              key={country.slug}
+              href={`/countries/${country.slug}`}
+              className="group grid grid-cols-[auto_1fr_auto] items-center gap-3 rounded-2xl border border-white/10 bg-[#0B0F19] p-3 transition hover:border-[#D4AF37]/60 hover:bg-white/[0.03]"
+            >
+              <div className="flex h-7 w-7 items-center justify-center rounded-full border border-[#D4AF37]/20 bg-[#D4AF37]/10 text-xs font-black text-[#F5D76E]">
+                {index + 1}
+              </div>
+
+              <div className="min-w-0">
+                <p className="truncate text-sm font-black text-white">
+                  {country.emoji} {country.name}
+                </p>
+                <p className="mt-0.5 truncate text-[11px] text-slate-500">
+                  {country.region} • {country.capital}
+                </p>
+              </div>
+
+              <div className="text-right">
+                <p className="text-[10px] uppercase tracking-[0.18em] text-slate-500">
+                  {ranking.metricLabel}
+                </p>
+                <p className="max-w-[92px] truncate text-xs font-black text-[#D4AF37]">
+                  {ranking.getMetric(country)}
+                </p>
+              </div>
+            </Link>
+          ))
+        ) : (
+          <p className="rounded-2xl border border-white/10 bg-black/30 p-4 text-sm text-slate-500">
+            No ranking available with the current filters.
+          </p>
+        )}
+      </div>
+    </div>
   );
 }
 
