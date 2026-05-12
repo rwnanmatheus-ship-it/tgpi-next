@@ -63,4 +63,3 @@ export function recommendCountries(
   // Sort by descending score and return top recommendations (default 5)
   return scored.sort((a, b) => b.score - a.score).slice(0, 5);
 }
-}
