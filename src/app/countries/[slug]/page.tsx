@@ -9,7 +9,10 @@ import {
   getCountryCostLabel,
   getCountryDecisionLabel,
   getCountryGoalLabel,
+  getCountryPrimaryDecision,
   getCountryRiskLabel,
+  getRelatedCountries,
+  type Country,
 } from "@/lib/countries";
 
 type CountryPageProps = {
@@ -45,6 +48,8 @@ export default async function CountryPage({ params }: CountryPageProps) {
   const country = getCountry(slug);
 
   if (!country) notFound();
+
+  const relatedCountries = getRelatedCountries(country, 3);
 
   const budget = `${formatCurrencyAmount(
     country,
@@ -211,9 +216,7 @@ export default async function CountryPage({ params }: CountryPageProps) {
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#D4AF37]">
               Score breakdown
             </p>
-            <h2 className="mt-2 text-2xl font-black">
-              Decision signals
-            </h2>
+            <h2 className="mt-2 text-2xl font-black">Decision signals</h2>
 
             <div className="mt-6 grid gap-4 md:grid-cols-2">
               {scoreSignals.map((signal) => (
@@ -313,6 +316,28 @@ export default async function CountryPage({ params }: CountryPageProps) {
                 it only if cost, language, safety, adaptation and long-term
                 direction match your current profile.
               </p>
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-8 rounded-[1.5rem] border border-white/10 bg-[#111118] p-6">
+          <div className="grid gap-5 md:grid-cols-[0.85fr_1.15fr] md:items-start">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#D4AF37]">
+                Related countries
+              </p>
+              <h2 className="mt-2 text-2xl font-black">
+                Compare similar strategic environments.
+              </h2>
+              <p className="mt-3 text-sm leading-7 text-slate-400">
+                {getCountryPrimaryDecision(country)}
+              </p>
+            </div>
+
+            <div className="grid gap-3">
+              {relatedCountries.map((related) => (
+                <RelatedCountryCard key={related.slug} country={related} />
+              ))}
             </div>
           </div>
         </section>
@@ -506,5 +531,36 @@ function InsightGrid({ title, items, tone }: InsightGridProps) {
         ))}
       </div>
     </div>
+  );
+}
+
+type RelatedCountryCardProps = {
+  country: Country;
+};
+
+function RelatedCountryCard({ country }: RelatedCountryCardProps) {
+  return (
+    <Link
+      href={`/countries/${country.slug}`}
+      className="group flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-black/30 p-4 transition hover:border-[#D4AF37]/60"
+    >
+      <div className="flex min-w-0 items-center gap-4">
+        <span className="text-3xl">{country.emoji}</span>
+
+        <div className="min-w-0">
+          <p className="truncate font-black text-white">{country.name}</p>
+          <p className="mt-1 truncate text-xs text-slate-500">
+            {country.region} • {country.capital}
+          </p>
+        </div>
+      </div>
+
+      <div className="shrink-0 text-right">
+        <p className="text-xs text-slate-500">TGPI</p>
+        <p className="text-lg font-black text-[#D4AF37]">
+          {country.tgpiScore}
+        </p>
+      </div>
+    </Link>
   );
 }
