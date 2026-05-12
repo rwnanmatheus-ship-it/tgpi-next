@@ -170,81 +170,176 @@ export function getCountryPrimaryDecision(country: Country): string {
   return `${country.name} may be useful for a specific profile, but it requires deeper validation before becoming a primary option.`;
 }
 
-const COUNTRY_IMAGE_OVERRIDES: Record<string, string> = {
-  japan:
-    "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1200&q=80",
-  singapore:
-    "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=1200&q=80",
-  canada:
-    "https://images.unsplash.com/photo-1503614472-8c93d56e92ce?auto=format&fit=crop&w=1200&q=80",
-  portugal:
-    "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?auto=format&fit=crop&w=1200&q=80",
-  "united-states":
-    "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&fit=crop&w=1200&q=80",
-  "united-kingdom":
-    "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=1200&q=80",
-  france:
-    "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1200&q=80",
-  germany:
-    "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=1200&q=80",
-  italy:
-    "https://images.unsplash.com/photo-1529260830199-42c24126f198?auto=format&fit=crop&w=1200&q=80",
-  spain:
-    "https://images.unsplash.com/photo-1509840841025-9088ba78a826?auto=format&fit=crop&w=1200&q=80",
-  australia:
-    "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=1200&q=80",
-  brazil:
-    "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?auto=format&fit=crop&w=1200&q=80",
-  egypt:
-    "https://images.unsplash.com/photo-1539650116574-75c0c6d73f6e?auto=format&fit=crop&w=1200&q=80",
-  india:
-    "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=1200&q=80",
-  china:
-    "https://images.unsplash.com/photo-1508804185872-d7badad00f7d?auto=format&fit=crop&w=1200&q=80",
-  "south-korea":
-    "https://images.unsplash.com/photo-1538485399081-7191377e8241?auto=format&fit=crop&w=1200&q=80",
-  thailand:
-    "https://images.unsplash.com/photo-1508009603885-50cf7c579365?auto=format&fit=crop&w=1200&q=80",
-  mexico:
-    "https://images.unsplash.com/photo-1512813195386-6cf811ad3542?auto=format&fit=crop&w=1200&q=80",
+export type CountryImageProfile = {
+  url: string;
+  status: "verified" | "regional" | "generated";
+  credit: string;
 };
 
-const REGION_IMAGE_FALLBACKS: Record<string, string> = {
-  Europe:
-    "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=1200&q=80",
-  Asia:
-    "https://images.unsplash.com/photo-1508804185872-d7badad00f7d?auto=format&fit=crop&w=1200&q=80",
-  "Asia / Europe":
-    "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=1200&q=80",
-  "Europe / Asia":
-    "https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?auto=format&fit=crop&w=1200&q=80",
-  Africa:
-    "https://images.unsplash.com/photo-1489392191049-fc10c97e64b6?auto=format&fit=crop&w=1200&q=80",
-  "Africa / Middle East":
-    "https://images.unsplash.com/photo-1539650116574-75c0c6d73f6e?auto=format&fit=crop&w=1200&q=80",
-  "North America":
-    "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&fit=crop&w=1200&q=80",
-  "South America":
-    "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?auto=format&fit=crop&w=1200&q=80",
-  Oceania:
-    "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=1200&q=80",
+const VERIFIED_COUNTRY_IMAGES: Record<string, CountryImageProfile> = {
+  japan: {
+    url: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=1200&q=80",
+    status: "verified",
+    credit: "Japan landmark visual",
+  },
+  singapore: {
+    url: "https://images.unsplash.com/photo-1525625293386-3f8f99389edd?auto=format&fit=crop&w=1200&q=80",
+    status: "verified",
+    credit: "Singapore skyline visual",
+  },
+  canada: {
+    url: "https://images.unsplash.com/photo-1503614472-8c93d56e92ce?auto=format&fit=crop&w=1200&q=80",
+    status: "verified",
+    credit: "Canada landscape visual",
+  },
+  portugal: {
+    url: "https://images.unsplash.com/photo-1555881400-74d7acaacd8b?auto=format&fit=crop&w=1200&q=80",
+    status: "verified",
+    credit: "Portugal city visual",
+  },
+  "united-states": {
+    url: "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?auto=format&fit=crop&w=1200&q=80",
+    status: "verified",
+    credit: "United States city visual",
+  },
+  "united-kingdom": {
+    url: "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad?auto=format&fit=crop&w=1200&q=80",
+    status: "verified",
+    credit: "United Kingdom city visual",
+  },
+  france: {
+    url: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=1200&q=80",
+    status: "verified",
+    credit: "France landmark visual",
+  },
+  germany: {
+    url: "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=1200&q=80",
+    status: "verified",
+    credit: "Germany city visual",
+  },
+  italy: {
+    url: "https://images.unsplash.com/photo-1529260830199-42c24126f198?auto=format&fit=crop&w=1200&q=80",
+    status: "verified",
+    credit: "Italy city visual",
+  },
+  spain: {
+    url: "https://images.unsplash.com/photo-1509840841025-9088ba78a826?auto=format&fit=crop&w=1200&q=80",
+    status: "verified",
+    credit: "Spain city visual",
+  },
+  australia: {
+    url: "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=1200&q=80",
+    status: "verified",
+    credit: "Australia skyline visual",
+  },
+  brazil: {
+    url: "https://images.unsplash.com/photo-1483729558449-99ef09a8c325?auto=format&fit=crop&w=1200&q=80",
+    status: "verified",
+    credit: "Brazil city visual",
+  },
+  egypt: {
+    url: "https://images.unsplash.com/photo-1539650116574-75c0c6d73f6e?auto=format&fit=crop&w=1200&q=80",
+    status: "verified",
+    credit: "Egypt landmark visual",
+  },
+  india: {
+    url: "https://images.unsplash.com/photo-1524492412937-b28074a5d7da?auto=format&fit=crop&w=1200&q=80",
+    status: "verified",
+    credit: "India landmark visual",
+  },
+  china: {
+    url: "https://images.unsplash.com/photo-1508804185872-d7badad00f7d?auto=format&fit=crop&w=1200&q=80",
+    status: "verified",
+    credit: "China landmark visual",
+  },
+  "south-korea": {
+    url: "https://images.unsplash.com/photo-1538485399081-7191377e8241?auto=format&fit=crop&w=1200&q=80",
+    status: "verified",
+    credit: "South Korea city visual",
+  },
+  thailand: {
+    url: "https://images.unsplash.com/photo-1508009603885-50cf7c579365?auto=format&fit=crop&w=1200&q=80",
+    status: "verified",
+    credit: "Thailand city visual",
+  },
+  mexico: {
+    url: "https://images.unsplash.com/photo-1512813195386-6cf811ad3542?auto=format&fit=crop&w=1200&q=80",
+    status: "verified",
+    credit: "Mexico city visual",
+  },
 };
 
-const GLOBAL_COUNTRY_IMAGE_FALLBACK =
-  "https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&w=1200&q=80";
+const REGION_IMAGE_FALLBACKS: Record<string, CountryImageProfile> = {
+  Europe: {
+    url: "",
+    status: "regional",
+    credit: "TGPI regional visual placeholder",
+  },
+  Asia: {
+    url: "",
+    status: "regional",
+    credit: "TGPI regional visual placeholder",
+  },
+  "Asia / Europe": {
+    url: "",
+    status: "regional",
+    credit: "TGPI regional visual placeholder",
+  },
+  "Europe / Asia": {
+    url: "",
+    status: "regional",
+    credit: "TGPI regional visual placeholder",
+  },
+  Africa: {
+    url: "",
+    status: "regional",
+    credit: "TGPI regional visual placeholder",
+  },
+  "Africa / Middle East": {
+    url: "",
+    status: "regional",
+    credit: "TGPI regional visual placeholder",
+  },
+  "North America": {
+    url: "",
+    status: "regional",
+    credit: "TGPI regional visual placeholder",
+  },
+  "South America": {
+    url: "",
+    status: "regional",
+    credit: "TGPI regional visual placeholder",
+  },
+  Oceania: {
+    url: "",
+    status: "regional",
+    credit: "TGPI regional visual placeholder",
+  },
+};
+
+export function getCountryImageProfile(country: Country): CountryImageProfile {
+  return (
+    VERIFIED_COUNTRY_IMAGES[country.slug] ??
+    REGION_IMAGE_FALLBACKS[country.region] ?? {
+      url: "",
+      status: "generated",
+      credit: "TGPI generated visual placeholder",
+    }
+  );
+}
 
 export function getCountryImageQuery(country: Country): string {
   return `${country.name} ${country.capital} landmark skyline`;
 }
 
 export function getCountryImageAlt(country: Country): string {
-  return `Imagem de inteligência do país ${country.name} mostrando ${country.capital} ou um marco nacional reconhecível.`;
+  return `Country intelligence visual for ${country.name}, focused on ${country.capital}, culture, mobility and strategic context.`;
 }
 
 export function getCountryImageUrl(country: Country): string {
-  return (
-    COUNTRY_IMAGE_OVERRIDES[country.slug] ??
-    REGION_IMAGE_FALLBACKS[country.region] ??
-    GLOBAL_COUNTRY_IMAGE_FALLBACK
-  );
+  return getCountryImageProfile(country).url;
+}
+
+export function hasVerifiedCountryImage(country: Country): boolean {
+  return getCountryImageProfile(country).status === "verified";
 }

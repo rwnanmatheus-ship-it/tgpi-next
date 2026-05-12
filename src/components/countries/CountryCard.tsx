@@ -6,8 +6,10 @@ import {
   getCountryCostLabel,
   getCountryDecisionLabel,
   getCountryImageAlt,
+  getCountryImageProfile,
   getCountryImageUrl,
   getCountryRiskLabel,
+  hasVerifiedCountryImage,
   type Country,
 } from "@/lib/countries";
 
@@ -54,10 +56,16 @@ function getDifficultyTone(difficulty: Country["difficulty"]) {
   return "High discipline";
 }
 
+function getVisualBadgeLabel(country: Country) {
+  return hasVerifiedCountryImage(country) ? "Verified visual" : "TGPI visual";
+}
+
 export function CountryCard({ country }: CountryCardProps) {
   const scoreTone = getScoreTone(country.tgpiScore);
+  const imageProfile = getCountryImageProfile(country);
   const imageUrl = getCountryImageUrl(country);
   const imageAlt = getCountryImageAlt(country);
+  const hasImage = hasVerifiedCountryImage(country);
 
   const budget = `${formatCurrencyAmount(
     country,
@@ -74,12 +82,20 @@ export function CountryCard({ country }: CountryCardProps) {
       </div>
 
       <div className="relative h-48 overflow-hidden bg-gradient-to-br from-[#111118] via-[#0B1F4D]/70 to-black">
-        <img
-          src={imageUrl}
-          alt={imageAlt}
-          className="absolute inset-0 h-full w-full object-cover opacity-85 saturate-150 contrast-110 brightness-110 transition duration-500 group-hover:scale-105 group-hover:opacity-100 group-hover:saturate-150"
-          loading="lazy"
-        />
+        {hasImage ? (
+          <img
+            src={imageUrl}
+            alt={imageAlt}
+            className="absolute inset-0 h-full w-full object-cover opacity-85 saturate-150 contrast-110 brightness-110 transition duration-500 group-hover:scale-105 group-hover:opacity-100 group-hover:saturate-150"
+            loading="lazy"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(212,175,55,0.28),transparent_32%),radial-gradient(circle_at_bottom_left,rgba(37,99,235,0.28),transparent_38%),linear-gradient(135deg,#111118,#07111F_45%,#050505)]" />
+        )}
+
+        {!hasImage ? (
+          <div className="absolute inset-0 opacity-30 [background-image:linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] [background-size:34px_34px]" />
+        ) : null}
 
         <div className="absolute inset-0 bg-gradient-to-t from-black/88 via-black/30 to-transparent" />
         <div className="absolute inset-0 bg-gradient-to-r from-[#050505]/25 via-transparent to-[#050505]/20" />
@@ -89,6 +105,10 @@ export function CountryCard({ country }: CountryCardProps) {
         <div className="absolute left-5 top-5 flex flex-wrap items-center gap-2">
           <span className="rounded-full border border-white/10 bg-black/45 px-3 py-1 text-xs font-semibold text-slate-100 backdrop-blur">
             {country.region}
+          </span>
+
+          <span className="rounded-full border border-white/10 bg-black/45 px-3 py-1 text-xs font-semibold text-slate-100 backdrop-blur">
+            {getVisualBadgeLabel(country)}
           </span>
 
           <span
@@ -108,7 +128,24 @@ export function CountryCard({ country }: CountryCardProps) {
         </div>
 
         <div className="absolute bottom-5 left-5 right-5">
-          <div className="mb-3 text-5xl drop-shadow-2xl">{country.emoji}</div>
+          {!hasImage ? (
+            <div className="mb-4 flex items-center gap-3">
+              <div className="flex h-14 w-14 items-center justify-center rounded-2xl border border-[#D4AF37]/25 bg-[#D4AF37]/10 text-2xl font-black text-[#F5D76E] backdrop-blur">
+                {country.slug.slice(0, 2).toUpperCase()}
+              </div>
+
+              <div className="min-w-0">
+                <p className="text-xs uppercase tracking-[0.24em] text-[#F5D76E]">
+                  Curated image pending
+                </p>
+                <p className="mt-1 truncate text-xs text-slate-300">
+                  {imageProfile.credit}
+                </p>
+              </div>
+            </div>
+          ) : (
+            <div className="mb-3 text-5xl drop-shadow-2xl">{country.emoji}</div>
+          )}
 
           <div className="min-w-0">
             <h3 className="truncate text-2xl font-black tracking-tight text-white drop-shadow-xl">
