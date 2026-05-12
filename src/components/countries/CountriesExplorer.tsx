@@ -119,6 +119,7 @@ export function CountriesExplorer({ countries }: CountriesExplorerProps) {
 
   const compareHref = useMemo(() => {
     if (selectedSlugs.length === 0) return "/compare";
+
     const params = new URLSearchParams();
 
     selectedSlugs.forEach((slug) => {
@@ -223,6 +224,26 @@ export function CountriesExplorer({ countries }: CountriesExplorerProps) {
         )
       : 0;
 
+  const averageSafety =
+    filteredCountries.length > 0
+      ? Math.round(
+          filteredCountries.reduce(
+            (sum, country) => sum + country.intelligence.safetyScore,
+            0,
+          ) / filteredCountries.length,
+        )
+      : 0;
+
+  const averageEnglish =
+    filteredCountries.length > 0
+      ? Math.round(
+          filteredCountries.reduce(
+            (sum, country) => sum + country.intelligence.englishFriendliness,
+            0,
+          ) / filteredCountries.length,
+        )
+      : 0;
+
   const strongestCountry = filteredCountries[0];
 
   const safestCountry = useMemo(() => {
@@ -238,6 +259,34 @@ export function CountriesExplorer({ countries }: CountriesExplorerProps) {
         b.intelligence.averageMonthlyBudget,
     )[0];
   }, [filteredCountries]);
+
+  const bestEnglishCountry = useMemo(() => {
+    return [...filteredCountries].sort(
+      (a, b) =>
+        b.intelligence.englishFriendliness -
+        a.intelligence.englishFriendliness,
+    )[0];
+  }, [filteredCountries]);
+
+  const regionDistribution = useMemo(() => {
+    return getDistribution(filteredCountries, (country) => country.region);
+  }, [filteredCountries]);
+
+  const costDistribution = useMemo(() => {
+    return getDistribution(filteredCountries, (country) => country.costLevel);
+  }, [filteredCountries]);
+
+  const decisionSummary = getDecisionSummary({
+    count: filteredCountries.length,
+    averageScore,
+    averageSafety,
+    averageEnglish,
+    averageBudget,
+    activeIntent,
+    region,
+    cost,
+    goal,
+  });
 
   function markCustomFilters() {
     setActiveIntent("custom");
@@ -487,19 +536,30 @@ export function CountriesExplorer({ countries }: CountriesExplorerProps) {
             detail="current filter set"
           />
           <ExplorerMetric
-            label="Elite profiles"
-            value={String(eliteCount)}
-            detail="TGPI score 88+"
+            label="Avg safety"
+            value={`${averageSafety}/100`}
+            detail="stability signal"
           />
           <ExplorerMetric
-            label="Avg budget"
-            value={String(averageBudget)}
-            detail="local currency estimate"
+            label="Avg English"
+            value={`${averageEnglish}/100`}
+            detail="language-access signal"
           />
         </div>
       </div>
 
-      <section className="mt-6 grid gap-4 lg:grid-cols-3">
+      <DecisionIntelligencePanel
+        summary={decisionSummary}
+        strongestCountry={strongestCountry}
+        safestCountry={safestCountry}
+        bestBudgetCountry={bestBudgetCountry}
+        bestEnglishCountry={bestEnglishCountry}
+        regionDistribution={regionDistribution}
+        costDistribution={costDistribution}
+        totalResults={filteredCountries.length}
+      />
+
+      <section className="mt-6 grid gap-4 lg:grid-cols-4">
         <RecommendationCard
           label="Best current match"
           country={strongestCountry}
@@ -514,6 +574,11 @@ export function CountriesExplorer({ countries }: CountriesExplorerProps) {
           label="Lowest-cost current match"
           country={bestBudgetCountry}
           detail="Lowest estimated monthly budget in this filter set."
+        />
+        <RecommendationCard
+          label="Best English access"
+          country={bestEnglishCountry}
+          detail="Highest English-access signal in this filter set."
         />
       </section>
 
@@ -591,6 +656,93 @@ export function CountriesExplorer({ countries }: CountriesExplorerProps) {
   );
 }
 
+type DistributionItem = {
+  label: string;
+  count: number;
+  percentage: number;
+};
+
+function getDistribution(
+  countries: Country[],
+  getKey: (country: Country) => string,
+): DistributionItem[] {
+  if (countries.length === 0) return [];
+
+  const counts = countries.reduce<Record<string, number>>((acc, country) => {
+    const key = getKey(country);
+    acc[key] = (acc[key] ?? 0) + 1;
+    return acc;
+  }, {});
+
+  return Object.entries(counts)
+    .map(([label, count]) => ({
+      label,
+      count,
+      percentage: Math.round((count / countries.length) * 100),
+    }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, 5);
+}
+
+type DecisionSummaryInput = {
+  count: number;
+  averageScore: number;
+  averageSafety: number;
+  averageEnglish: number;
+  averageBudget: number;
+  activeIntent: IntentPresetId | "custom";
+  region: string;
+  cost: CostFilter;
+  goal: CountryGoal | "all";
+};
+
+function getDecisionSummary(input: DecisionSummaryInput) {
+  if (input.count === 0) {
+    return {
+      title: "No strategic match found.",
+      text: "The current filters are too restrictive. Reset filters or remove one constraint to reopen the country pool.",
+      risk: "High filtering pressure",
+    };
+  }
+
+  const intentLabel =
+    input.activeIntent === "custom"
+      ? "custom search"
+      : INTENT_PRESETS.find((preset) => preset.id === input.activeIntent)?.title;
+
+  const costSignal =
+    input.cost === "low"
+      ? "low-cost countries"
+      : input.cost === "medium"
+        ? "balanced-cost countries"
+        : input.cost === "high"
+          ? "premium-cost countries"
+          : "mixed-cost countries";
+
+  const regionSignal =
+    input.region === "all" ? "global pool" : `${input.region} pool`;
+
+  const scoreSignal =
+    input.averageScore >= 80
+      ? "strong"
+      : input.averageScore >= 70
+        ? "promising"
+        : "early-stage";
+
+  const risk =
+    input.averageSafety >= 85
+      ? "Low risk signal"
+      : input.averageSafety >= 70
+        ? "Moderate risk signal"
+        : "Requires deeper validation";
+
+  return {
+    title: `${scoreSignal} ${intentLabel ?? "country"} set`,
+    text: `This filter is currently showing ${input.count} ${costSignal} inside a ${regionSignal}. Average TGPI score is ${input.averageScore}/100, safety is ${input.averageSafety}/100, and English access is ${input.averageEnglish}/100. Use this as a shortlist, not a final decision.`,
+    risk,
+  };
+}
+
 type FieldLabelProps = {
   children: React.ReactNode;
 };
@@ -615,6 +767,155 @@ function ExplorerMetric({ label, value, detail }: ExplorerMetricProps) {
       <p className="text-xs text-slate-500">{label}</p>
       <p className="mt-1 text-2xl font-black text-[#D4AF37]">{value}</p>
       <p className="mt-1 text-xs text-slate-500">{detail}</p>
+    </div>
+  );
+}
+
+type DecisionIntelligencePanelProps = {
+  summary: {
+    title: string;
+    text: string;
+    risk: string;
+  };
+  strongestCountry?: Country;
+  safestCountry?: Country;
+  bestBudgetCountry?: Country;
+  bestEnglishCountry?: Country;
+  regionDistribution: DistributionItem[];
+  costDistribution: DistributionItem[];
+  totalResults: number;
+};
+
+function DecisionIntelligencePanel({
+  summary,
+  strongestCountry,
+  safestCountry,
+  bestBudgetCountry,
+  bestEnglishCountry,
+  regionDistribution,
+  costDistribution,
+  totalResults,
+}: DecisionIntelligencePanelProps) {
+  return (
+    <section className="mt-6 overflow-hidden rounded-[1.75rem] border border-[#D4AF37]/20 bg-gradient-to-br from-[#111118] via-[#080B14] to-black">
+      <div className="grid gap-0 lg:grid-cols-[1.05fr_0.95fr]">
+        <div className="border-b border-white/10 p-6 lg:border-b-0 lg:border-r">
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#D4AF37]">
+            Decision Intelligence
+          </p>
+          <h3 className="mt-2 text-2xl font-black text-white">
+            {summary.title}
+          </h3>
+          <p className="mt-3 text-sm leading-7 text-slate-400">
+            {summary.text}
+          </p>
+
+          <div className="mt-5 grid gap-3 sm:grid-cols-2">
+            <MiniSignal label="Risk signal" value={summary.risk} />
+            <MiniSignal label="Current pool" value={`${totalResults} countries`} />
+          </div>
+        </div>
+
+        <div className="grid gap-4 p-6">
+          <DecisionPick label="Best score" country={strongestCountry} />
+          <DecisionPick label="Safest" country={safestCountry} />
+          <DecisionPick label="Lowest cost" country={bestBudgetCountry} />
+          <DecisionPick label="Best English" country={bestEnglishCountry} />
+        </div>
+      </div>
+
+      <div className="grid gap-4 border-t border-white/10 p-6 lg:grid-cols-2">
+        <DistributionPanel title="Region concentration" items={regionDistribution} />
+        <DistributionPanel title="Cost concentration" items={costDistribution} />
+      </div>
+    </section>
+  );
+}
+
+type MiniSignalProps = {
+  label: string;
+  value: string;
+};
+
+function MiniSignal({ label, value }: MiniSignalProps) {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
+      <p className="text-xs text-slate-500">{label}</p>
+      <p className="mt-1 text-sm font-black text-white">{value}</p>
+    </div>
+  );
+}
+
+type DecisionPickProps = {
+  label: string;
+  country?: Country;
+};
+
+function DecisionPick({ label, country }: DecisionPickProps) {
+  if (!country) {
+    return (
+      <div className="rounded-2xl border border-white/10 bg-black/25 p-4">
+        <p className="text-xs text-slate-500">{label}</p>
+        <p className="mt-1 text-sm font-bold text-slate-400">No country</p>
+      </div>
+    );
+  }
+
+  return (
+    <Link
+      href={`/countries/${country.slug}`}
+      className="group flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-black/25 p-4 transition hover:border-[#D4AF37]/60"
+    >
+      <div className="min-w-0">
+        <p className="text-xs text-slate-500">{label}</p>
+        <p className="mt-1 truncate font-black text-white">{country.name}</p>
+      </div>
+
+      <div className="shrink-0 text-right">
+        <p className="text-xs text-slate-500">TGPI</p>
+        <p className="text-lg font-black text-[#D4AF37]">
+          {country.tgpiScore}
+        </p>
+      </div>
+    </Link>
+  );
+}
+
+type DistributionPanelProps = {
+  title: string;
+  items: DistributionItem[];
+};
+
+function DistributionPanel({ title, items }: DistributionPanelProps) {
+  return (
+    <div className="rounded-[1.5rem] border border-white/10 bg-black/25 p-5">
+      <p className="text-sm font-black text-white">{title}</p>
+
+      <div className="mt-4 space-y-3">
+        {items.length > 0 ? (
+          items.map((item) => (
+            <div key={item.label}>
+              <div className="mb-1 flex items-center justify-between gap-3">
+                <p className="text-xs font-semibold text-slate-400">
+                  {item.label}
+                </p>
+                <p className="text-xs font-black text-[#D4AF37]">
+                  {item.count} • {item.percentage}%
+                </p>
+              </div>
+
+              <div className="h-2 overflow-hidden rounded-full bg-white/10">
+                <div
+                  className="h-full rounded-full bg-gradient-to-r from-[#D4AF37] to-[#38BDF8]"
+                  style={{ width: `${item.percentage}%` }}
+                />
+              </div>
+            </div>
+          ))
+        ) : (
+          <p className="text-sm text-slate-500">No distribution available.</p>
+        )}
+      </div>
     </div>
   );
 }
