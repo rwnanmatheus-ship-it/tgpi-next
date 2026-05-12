@@ -128,3 +128,44 @@ export function getCountrySearchText(country: Country): string {
     .join(" ")
     .toLowerCase();
 }
+
+export function getRelatedCountries(country: Country, limit = 3): Country[] {
+  return countries
+    .filter((candidate) => candidate.slug !== country.slug)
+    .map((candidate) => {
+      let score = 0;
+
+      if (candidate.region === country.region) score += 35;
+      if (candidate.costLevel === country.costLevel) score += 20;
+      if (candidate.difficulty === country.difficulty) score += 15;
+
+      const sharedGoals = candidate.idealFor.filter((goal) =>
+        country.idealFor.includes(goal),
+      );
+
+      score += sharedGoals.length * 10;
+
+      const scoreDistance = Math.abs(candidate.tgpiScore - country.tgpiScore);
+      score += Math.max(0, 20 - scoreDistance);
+
+      return {
+        country: candidate,
+        score,
+      };
+    })
+    .sort((a, b) => b.score - a.score)
+    .slice(0, limit)
+    .map((item) => item.country);
+}
+
+export function getCountryPrimaryDecision(country: Country): string {
+  if (country.tgpiScore >= 88) {
+    return `${country.name} is a high-priority country to compare seriously, especially if your goals match its cost, language and adaptation profile.`;
+  }
+
+  if (country.tgpiScore >= 78) {
+    return `${country.name} is a strong option, but it should be compared against countries with similar cost and adaptation signals.`;
+  }
+
+  return `${country.name} may be useful for a specific profile, but it requires deeper validation before becoming a primary option.`;
+}
