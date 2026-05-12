@@ -169,3 +169,17 @@ export function getCountryPrimaryDecision(country: Country): string {
 
   return `${country.name} may be useful for a specific profile, but it requires deeper validation before becoming a primary option.`;
 }
+
+export function getCountryImageQuery(country: Country): string {
+  return `${country.name} ${country.capital} landmark skyline`;
+}
+
+export function getCountryImageAlt(country: Country): string {
+  return `${country.name} country intelligence visual showing ${country.capital} or a recognizable national landmark`;
+}
+
+export function getCountryImageUrl(country: Country): string {
+  const query = encodeURIComponent(getCountryImageQuery(country));
+
+  return `https://source.unsplash.com/1200x800/?${query}`;
+}

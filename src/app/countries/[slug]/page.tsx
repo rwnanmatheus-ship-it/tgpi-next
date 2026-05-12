@@ -9,6 +9,8 @@ import {
   getCountryCostLabel,
   getCountryDecisionLabel,
   getCountryGoalLabel,
+  getCountryImageAlt,
+  getCountryImageUrl,
   getCountryPrimaryDecision,
   getCountryRiskLabel,
   getRelatedCountries,
@@ -50,6 +52,8 @@ export default async function CountryPage({ params }: CountryPageProps) {
   if (!country) notFound();
 
   const relatedCountries = getRelatedCountries(country, 3);
+  const imageUrl = getCountryImageUrl(country);
+  const imageAlt = getCountryImageAlt(country);
 
   const budget = `${formatCurrencyAmount(
     country,
@@ -117,7 +121,13 @@ export default async function CountryPage({ params }: CountryPageProps) {
 
         <section className="overflow-hidden rounded-[2rem] border border-[#D4AF37]/25 bg-gradient-to-br from-[#111118] via-[#080B14] to-black shadow-2xl shadow-black/50">
           <div className="relative grid lg:grid-cols-[1.05fr_0.95fr]">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(212,175,55,0.18),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(37,99,235,0.22),transparent_36%)]" />
+            <img
+              src={imageUrl}
+              alt={imageAlt}
+              className="absolute inset-0 h-full w-full object-cover opacity-20"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-black via-[#050505]/85 to-[#050505]/75" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(212,175,55,0.2),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(37,99,235,0.24),transparent_36%)]" />
 
             <div className="relative p-6 md:p-10">
               <div className="mb-5 inline-flex rounded-full border border-[#D4AF37]/25 bg-[#D4AF37]/10 px-4 py-2 text-xs font-black uppercase tracking-[0.28em] text-[#F5D76E]">
@@ -149,7 +159,7 @@ export default async function CountryPage({ params }: CountryPageProps) {
             </div>
 
             <div className="relative border-t border-white/10 bg-black/25 p-6 lg:border-l lg:border-t-0 md:p-10">
-              <div className="rounded-[1.75rem] border border-[#D4AF37]/25 bg-[#D4AF37]/10 p-6">
+              <div className="rounded-[1.75rem] border border-[#D4AF37]/25 bg-[#D4AF37]/10 p-6 backdrop-blur">
                 <p className="text-xs uppercase tracking-[0.3em] text-[#F5D76E]">
                   TGPI Verdict
                 </p>
@@ -418,7 +428,7 @@ type ScoreBarProps = {
 
 function ScoreBar({ label, value }: ScoreBarProps) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-black/35 p-4">
+    <div className="rounded-2xl border border-white/10 bg-black/35 p-4 backdrop-blur">
       <div className="mb-2 flex items-center justify-between gap-3">
         <p className="text-sm font-bold text-slate-200">{label}</p>
         <p className="text-sm font-black text-[#D4AF37]">{value}/100</p>
