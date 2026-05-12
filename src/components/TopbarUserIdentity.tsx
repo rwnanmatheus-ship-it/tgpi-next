@@ -50,7 +50,7 @@ export default function TopbarUserIdentity() {
       </div>
 
       <div className="max-w-[180px]">
-        <p className="truncate text-sm font-semibold text-white">{name || "Usuário"}</p>
+        <p className="truncate text-sm font-semibold text-white">{name || "User"}</p>
         <p className="truncate text-xs text-slate-400">{email}</p>
       </div>
     </div>
