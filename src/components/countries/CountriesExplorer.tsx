@@ -94,6 +94,15 @@ const INTENT_PRESETS: IntentPreset[] = [
 
 const MAX_COMPARE_COUNTRIES = 3;
 
+const NAV_ITEMS = [
+  { label: "Overview", href: "#country-overview" },
+  { label: "Presets", href: "#country-presets" },
+  { label: "Filters", href: "#country-filters" },
+  { label: "Intelligence", href: "#country-intelligence" },
+  { label: "Recommendations", href: "#country-recommendations" },
+  { label: "Countries", href: "#country-list" },
+];
+
 export function CountriesExplorer({ countries }: CountriesExplorerProps) {
   const [query, setQuery] = useState("");
   const [region, setRegion] = useState("all");
@@ -107,6 +116,7 @@ export function CountriesExplorer({ countries }: CountriesExplorerProps) {
   const [minSafety, setMinSafety] = useState(0);
   const [minEnglish, setMinEnglish] = useState(0);
   const [selectedSlugs, setSelectedSlugs] = useState<string[]>([]);
+  const [filtersOpen, setFiltersOpen] = useState(true);
 
   const regions = useMemo(() => getAllRegions(), []);
   const goals = useMemo(() => getAllGoals(), []);
@@ -214,16 +224,6 @@ export function CountriesExplorer({ countries }: CountriesExplorerProps) {
         )
       : 0;
 
-  const averageBudget =
-    filteredCountries.length > 0
-      ? Math.round(
-          filteredCountries.reduce(
-            (sum, country) => sum + country.intelligence.averageMonthlyBudget,
-            0,
-          ) / filteredCountries.length,
-        )
-      : 0;
-
   const averageSafety =
     filteredCountries.length > 0
       ? Math.round(
@@ -281,11 +281,9 @@ export function CountriesExplorer({ countries }: CountriesExplorerProps) {
     averageScore,
     averageSafety,
     averageEnglish,
-    averageBudget,
     activeIntent,
     region,
     cost,
-    goal,
   });
 
   function markCustomFilters() {
@@ -336,7 +334,15 @@ export function CountriesExplorer({ countries }: CountriesExplorerProps) {
 
   return (
     <section className="mt-10 pb-28">
-      <div className="overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#111118]">
+      <div id="country-overview" className="scroll-mt-28">
+        <NavigationHub
+          resultCount={filteredCountries.length}
+          selectedCount={selectedCountries.length}
+          activeIntent={activeIntent === "custom" ? "Custom search" : "Preset active"}
+        />
+      </div>
+
+      <div className="mt-6 overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#111118]">
         <div className="border-b border-white/10 bg-black/25 p-5">
           <div className="grid gap-4 lg:grid-cols-[1fr_auto] lg:items-end">
             <div>
@@ -353,17 +359,27 @@ export function CountriesExplorer({ countries }: CountriesExplorerProps) {
               </p>
             </div>
 
-            <button
-              type="button"
-              onClick={clearFilters}
-              className="rounded-2xl border border-white/10 px-4 py-3 text-sm font-black text-slate-300 transition hover:border-[#D4AF37]/60 hover:text-white"
-            >
-              Reset filters
-            </button>
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <button
+                type="button"
+                onClick={() => setFiltersOpen((current) => !current)}
+                className="rounded-2xl border border-white/10 px-4 py-3 text-sm font-black text-slate-300 transition hover:border-[#38BDF8]/60 hover:text-white"
+              >
+                {filtersOpen ? "Hide filters" : "Show filters"}
+              </button>
+
+              <button
+                type="button"
+                onClick={clearFilters}
+                className="rounded-2xl border border-white/10 px-4 py-3 text-sm font-black text-slate-300 transition hover:border-[#D4AF37]/60 hover:text-white"
+              >
+                Reset filters
+              </button>
+            </div>
           </div>
         </div>
 
-        <div className="border-b border-white/10 bg-[#080B14] p-4 md:p-5">
+        <div id="country-presets" className="scroll-mt-28 border-b border-white/10 bg-[#080B14] p-4 md:p-5">
           <div className="mb-3 flex items-center justify-between gap-4">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#D4AF37]">
@@ -418,111 +434,115 @@ export function CountriesExplorer({ countries }: CountriesExplorerProps) {
           </div>
         </div>
 
-        <div className="grid gap-3 p-4 md:p-5 lg:grid-cols-[1.2fr_0.7fr_0.65fr_0.65fr_0.75fr_0.75fr]">
-          <label className="block">
-            <FieldLabel>Search</FieldLabel>
-            <input
-              value={query}
-              onChange={(event) => {
-                setQuery(event.target.value);
-                markCustomFilters();
-              }}
-              placeholder="Country, language, currency, capital..."
-              className="h-12 w-full rounded-2xl border border-white/10 bg-black/40 px-4 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-[#D4AF37]/70"
-            />
-          </label>
+        {filtersOpen ? (
+          <div id="country-filters" className="scroll-mt-28">
+            <div className="grid gap-3 p-4 md:p-5 lg:grid-cols-[1.2fr_0.7fr_0.65fr_0.65fr_0.75fr_0.75fr]">
+              <label className="block">
+                <FieldLabel>Search</FieldLabel>
+                <input
+                  value={query}
+                  onChange={(event) => {
+                    setQuery(event.target.value);
+                    markCustomFilters();
+                  }}
+                  placeholder="Country, language, currency, capital..."
+                  className="h-12 w-full rounded-2xl border border-white/10 bg-black/40 px-4 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-[#D4AF37]/70"
+                />
+              </label>
 
-          <label className="block">
-            <FieldLabel>Region</FieldLabel>
-            <select
-              value={region}
-              onChange={(event) => {
-                setRegion(event.target.value);
-                markCustomFilters();
-              }}
-              className="h-12 w-full rounded-2xl border border-white/10 bg-black/40 px-4 text-sm text-white outline-none transition focus:border-[#D4AF37]/70"
-            >
-              <option value="all">All regions</option>
-              {regions.map((item) => (
-                <option key={item} value={item}>
-                  {item}
-                </option>
-              ))}
-            </select>
-          </label>
+              <label className="block">
+                <FieldLabel>Region</FieldLabel>
+                <select
+                  value={region}
+                  onChange={(event) => {
+                    setRegion(event.target.value);
+                    markCustomFilters();
+                  }}
+                  className="h-12 w-full rounded-2xl border border-white/10 bg-black/40 px-4 text-sm text-white outline-none transition focus:border-[#D4AF37]/70"
+                >
+                  <option value="all">All regions</option>
+                  {regions.map((item) => (
+                    <option key={item} value={item}>
+                      {item}
+                    </option>
+                  ))}
+                </select>
+              </label>
 
-          <label className="block">
-            <FieldLabel>Goal</FieldLabel>
-            <select
-              value={goal}
-              onChange={(event) => {
-                setGoal(event.target.value as CountryGoal | "all");
-                markCustomFilters();
-              }}
-              className="h-12 w-full rounded-2xl border border-white/10 bg-black/40 px-4 text-sm text-white outline-none transition focus:border-[#D4AF37]/70"
-            >
-              <option value="all">All goals</option>
-              {goals.map((item) => (
-                <option key={item} value={item}>
-                  {getCountryGoalLabel(item)}
-                </option>
-              ))}
-            </select>
-          </label>
+              <label className="block">
+                <FieldLabel>Goal</FieldLabel>
+                <select
+                  value={goal}
+                  onChange={(event) => {
+                    setGoal(event.target.value as CountryGoal | "all");
+                    markCustomFilters();
+                  }}
+                  className="h-12 w-full rounded-2xl border border-white/10 bg-black/40 px-4 text-sm text-white outline-none transition focus:border-[#D4AF37]/70"
+                >
+                  <option value="all">All goals</option>
+                  {goals.map((item) => (
+                    <option key={item} value={item}>
+                      {getCountryGoalLabel(item)}
+                    </option>
+                  ))}
+                </select>
+              </label>
 
-          <label className="block">
-            <FieldLabel>Cost</FieldLabel>
-            <select
-              value={cost}
-              onChange={(event) => {
-                setCost(event.target.value as CostFilter);
-                markCustomFilters();
-              }}
-              className="h-12 w-full rounded-2xl border border-white/10 bg-black/40 px-4 text-sm text-white outline-none transition focus:border-[#D4AF37]/70"
-            >
-              <option value="all">All cost</option>
-              <option value="low">Low</option>
-              <option value="medium">Medium</option>
-              <option value="high">High</option>
-            </select>
-          </label>
+              <label className="block">
+                <FieldLabel>Cost</FieldLabel>
+                <select
+                  value={cost}
+                  onChange={(event) => {
+                    setCost(event.target.value as CostFilter);
+                    markCustomFilters();
+                  }}
+                  className="h-12 w-full rounded-2xl border border-white/10 bg-black/40 px-4 text-sm text-white outline-none transition focus:border-[#D4AF37]/70"
+                >
+                  <option value="all">All cost</option>
+                  <option value="low">Low</option>
+                  <option value="medium">Medium</option>
+                  <option value="high">High</option>
+                </select>
+              </label>
 
-          <label className="block">
-            <FieldLabel>Difficulty</FieldLabel>
-            <select
-              value={difficulty}
-              onChange={(event) => {
-                setDifficulty(event.target.value as DifficultyFilter);
-                markCustomFilters();
-              }}
-              className="h-12 w-full rounded-2xl border border-white/10 bg-black/40 px-4 text-sm text-white outline-none transition focus:border-[#D4AF37]/70"
-            >
-              <option value="all">All levels</option>
-              <option value="easy">Easy</option>
-              <option value="medium">Medium</option>
-              <option value="hard">Hard</option>
-            </select>
-          </label>
+              <label className="block">
+                <FieldLabel>Difficulty</FieldLabel>
+                <select
+                  value={difficulty}
+                  onChange={(event) => {
+                    setDifficulty(event.target.value as DifficultyFilter);
+                    markCustomFilters();
+                  }}
+                  className="h-12 w-full rounded-2xl border border-white/10 bg-black/40 px-4 text-sm text-white outline-none transition focus:border-[#D4AF37]/70"
+                >
+                  <option value="all">All levels</option>
+                  <option value="easy">Easy</option>
+                  <option value="medium">Medium</option>
+                  <option value="hard">Hard</option>
+                </select>
+              </label>
 
-          <label className="block">
-            <FieldLabel>Sort</FieldLabel>
-            <select
-              value={sort}
-              onChange={(event) => {
-                setSort(event.target.value as SortOption);
-                markCustomFilters();
-              }}
-              className="h-12 w-full rounded-2xl border border-white/10 bg-black/40 px-4 text-sm text-white outline-none transition focus:border-[#D4AF37]/70"
-            >
-              <option value="score">TGPI Score</option>
-              <option value="budget">Lowest budget</option>
-              <option value="safety">Safety</option>
-              <option value="english">English access</option>
-              <option value="quality">Quality of life</option>
-              <option value="name">Name</option>
-            </select>
-          </label>
-        </div>
+              <label className="block">
+                <FieldLabel>Sort</FieldLabel>
+                <select
+                  value={sort}
+                  onChange={(event) => {
+                    setSort(event.target.value as SortOption);
+                    markCustomFilters();
+                  }}
+                  className="h-12 w-full rounded-2xl border border-white/10 bg-black/40 px-4 text-sm text-white outline-none transition focus:border-[#D4AF37]/70"
+                >
+                  <option value="score">TGPI Score</option>
+                  <option value="budget">Lowest budget</option>
+                  <option value="safety">Safety</option>
+                  <option value="english">English access</option>
+                  <option value="quality">Quality of life</option>
+                  <option value="name">Name</option>
+                </select>
+              </label>
+            </div>
+          </div>
+        ) : null}
 
         <div className="grid gap-3 border-t border-white/10 bg-black/20 p-4 md:grid-cols-4 md:p-5">
           <ExplorerMetric
@@ -548,18 +568,20 @@ export function CountriesExplorer({ countries }: CountriesExplorerProps) {
         </div>
       </div>
 
-      <DecisionIntelligencePanel
-        summary={decisionSummary}
-        strongestCountry={strongestCountry}
-        safestCountry={safestCountry}
-        bestBudgetCountry={bestBudgetCountry}
-        bestEnglishCountry={bestEnglishCountry}
-        regionDistribution={regionDistribution}
-        costDistribution={costDistribution}
-        totalResults={filteredCountries.length}
-      />
+      <div id="country-intelligence" className="scroll-mt-28">
+        <DecisionIntelligencePanel
+          summary={decisionSummary}
+          strongestCountry={strongestCountry}
+          safestCountry={safestCountry}
+          bestBudgetCountry={bestBudgetCountry}
+          bestEnglishCountry={bestEnglishCountry}
+          regionDistribution={regionDistribution}
+          costDistribution={costDistribution}
+          totalResults={filteredCountries.length}
+        />
+      </div>
 
-      <section className="mt-6 grid gap-4 lg:grid-cols-4">
+      <section id="country-recommendations" className="mt-6 grid scroll-mt-28 gap-4 lg:grid-cols-4">
         <RecommendationCard
           label="Best current match"
           country={strongestCountry}
@@ -582,16 +604,22 @@ export function CountriesExplorer({ countries }: CountriesExplorerProps) {
         />
       </section>
 
-      <div className="mt-6 flex flex-col justify-between gap-3 md:flex-row md:items-center">
+      <div
+        id="country-list"
+        className="mt-6 flex scroll-mt-28 flex-col justify-between gap-3 md:flex-row md:items-center"
+      >
         <p className="text-sm text-slate-400">
           Showing{" "}
           <span className="font-bold text-white">{filteredCountries.length}</span>{" "}
           countries with the current filters.
         </p>
 
-        <p className="text-sm text-slate-500">
-          Select up to {MAX_COMPARE_COUNTRIES} countries to compare.
-        </p>
+        <a
+          href="#country-overview"
+          className="text-sm font-bold text-[#F5D76E] transition hover:text-[#D4AF37]"
+        >
+          Back to navigator ↑
+        </a>
       </div>
 
       <div className="mt-6 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
@@ -689,11 +717,9 @@ type DecisionSummaryInput = {
   averageScore: number;
   averageSafety: number;
   averageEnglish: number;
-  averageBudget: number;
   activeIntent: IntentPresetId | "custom";
   region: string;
   cost: CostFilter;
-  goal: CountryGoal | "all";
 };
 
 function getDecisionSummary(input: DecisionSummaryInput) {
@@ -741,6 +767,51 @@ function getDecisionSummary(input: DecisionSummaryInput) {
     text: `This filter is currently showing ${input.count} ${costSignal} inside a ${regionSignal}. Average TGPI score is ${input.averageScore}/100, safety is ${input.averageSafety}/100, and English access is ${input.averageEnglish}/100. Use this as a shortlist, not a final decision.`,
     risk,
   };
+}
+
+type NavigationHubProps = {
+  resultCount: number;
+  selectedCount: number;
+  activeIntent: string;
+};
+
+function NavigationHub({
+  resultCount,
+  selectedCount,
+  activeIntent,
+}: NavigationHubProps) {
+  return (
+    <nav className="sticky top-3 z-40 rounded-[1.5rem] border border-white/10 bg-[#050505]/88 p-3 shadow-2xl shadow-black/50 backdrop-blur-xl">
+      <div className="flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="rounded-full border border-[#D4AF37]/25 bg-[#D4AF37]/10 px-3 py-2 text-xs font-black uppercase tracking-[0.2em] text-[#F5D76E]">
+            TGPI Navigator
+          </span>
+          <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-xs font-bold text-slate-300">
+            {resultCount} results
+          </span>
+          <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-xs font-bold text-slate-300">
+            {selectedCount} selected
+          </span>
+          <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-xs font-bold text-slate-300">
+            {activeIntent}
+          </span>
+        </div>
+
+        <div className="flex gap-2 overflow-x-auto pb-1 xl:pb-0">
+          {NAV_ITEMS.map((item) => (
+            <a
+              key={item.href}
+              href={item.href}
+              className="shrink-0 rounded-full border border-white/10 px-3 py-2 text-xs font-black text-slate-300 transition hover:border-[#D4AF37]/60 hover:text-white"
+            >
+              {item.label}
+            </a>
+          ))}
+        </div>
+      </div>
+    </nav>
+  );
 }
 
 type FieldLabelProps = {
