@@ -6,8 +6,11 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { CountryCard } from "@/components/countries/CountryCard";
 import {
+  formatCurrencyAmount,
   getAllGoals,
   getAllRegions,
+  getCountryCostLabel,
+  getCountryDecisionLabel,
   getCountryGoalLabel,
   getCountrySearchText,
   type Country,
@@ -17,6 +20,7 @@ import {
 type SortOption = "score" | "budget" | "safety" | "english" | "quality" | "name";
 type CostFilter = "all" | "low" | "medium" | "high";
 type DifficultyFilter = "all" | "easy" | "medium" | "hard";
+type ViewMode = "compact" | "detailed";
 type IntentPresetId =
   | "study"
   | "work"
@@ -110,6 +114,7 @@ export function CountriesExplorer({ countries }: CountriesExplorerProps) {
   const [cost, setCost] = useState<CostFilter>("all");
   const [difficulty, setDifficulty] = useState<DifficultyFilter>("all");
   const [sort, setSort] = useState<SortOption>("score");
+  const [viewMode, setViewMode] = useState<ViewMode>("compact");
   const [activeIntent, setActiveIntent] = useState<IntentPresetId | "custom">(
     "custom",
   );
@@ -333,23 +338,27 @@ export function CountriesExplorer({ countries }: CountriesExplorerProps) {
   }
 
   return (
-    <section className="mt-10 pb-28">
+    <section className="mt-6 pb-28">
       <div id="country-overview" className="scroll-mt-28">
         <NavigationHub
           resultCount={filteredCountries.length}
           selectedCount={selectedCountries.length}
-          activeIntent={activeIntent === "custom" ? "Custom search" : "Preset active"}
+          activeIntent={
+            activeIntent === "custom" ? "Custom search" : "Preset active"
+          }
+          viewMode={viewMode}
+          onViewModeChange={setViewMode}
         />
       </div>
 
-      <div className="mt-6 overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#111118]">
-        <div className="border-b border-white/10 bg-black/25 p-5">
+      <div className="mt-5 overflow-hidden rounded-[1.5rem] border border-white/10 bg-[#111118]">
+        <div className="border-b border-white/10 bg-black/25 p-4 md:p-5">
           <div className="grid gap-4 lg:grid-cols-[1fr_auto] lg:items-end">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#D4AF37]">
                 Smart Country Navigator
               </p>
-              <h3 className="mt-2 text-2xl font-black text-white">
+              <h3 className="mt-2 text-xl font-black text-white md:text-2xl">
                 Start with your goal, then refine the country list.
               </h3>
               <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-400">
@@ -379,7 +388,10 @@ export function CountriesExplorer({ countries }: CountriesExplorerProps) {
           </div>
         </div>
 
-        <div id="country-presets" className="scroll-mt-28 border-b border-white/10 bg-[#080B14] p-4 md:p-5">
+        <div
+          id="country-presets"
+          className="scroll-mt-28 border-b border-white/10 bg-[#080B14] p-4"
+        >
           <div className="mb-3 flex items-center justify-between gap-4">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#D4AF37]">
@@ -395,7 +407,7 @@ export function CountriesExplorer({ countries }: CountriesExplorerProps) {
             </span>
           </div>
 
-          <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
+          <div className="grid gap-2 md:grid-cols-3 xl:grid-cols-6">
             {INTENT_PRESETS.map((preset) => {
               const isActive = activeIntent === preset.id;
 
@@ -404,30 +416,32 @@ export function CountriesExplorer({ countries }: CountriesExplorerProps) {
                   key={preset.id}
                   type="button"
                   onClick={() => applyIntentPreset(preset)}
-                  className={`rounded-2xl border p-4 text-left transition ${
+                  className={`rounded-2xl border p-3 text-left transition ${
                     isActive
                       ? "border-[#D4AF37]/70 bg-[#D4AF37]/10 shadow-lg shadow-[#D4AF37]/10"
                       : "border-white/10 bg-black/25 hover:border-[#D4AF37]/40 hover:bg-white/[0.03]"
                   }`}
                 >
-                  <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-start justify-between gap-2">
                     <div>
-                      <p className="font-black text-white">{preset.title}</p>
-                      <p className="mt-1 text-sm leading-6 text-slate-400">
+                      <p className="text-sm font-black text-white">
+                        {preset.title}
+                      </p>
+                      <p className="mt-1 line-clamp-2 text-xs leading-5 text-slate-400">
                         {preset.description}
                       </p>
                     </div>
-
-                    <span
-                      className={`rounded-full px-3 py-1 text-xs font-black ${
-                        isActive
-                          ? "bg-[#D4AF37] text-black"
-                          : "border border-white/10 text-slate-400"
-                      }`}
-                    >
-                      {isActive ? "Active" : "Apply"}
-                    </span>
                   </div>
+
+                  <span
+                    className={`mt-3 inline-flex rounded-full px-2.5 py-1 text-[11px] font-black ${
+                      isActive
+                        ? "bg-[#D4AF37] text-black"
+                        : "border border-white/10 text-slate-400"
+                    }`}
+                  >
+                    {isActive ? "Active" : "Apply"}
+                  </span>
                 </button>
               );
             })}
@@ -436,7 +450,7 @@ export function CountriesExplorer({ countries }: CountriesExplorerProps) {
 
         {filtersOpen ? (
           <div id="country-filters" className="scroll-mt-28">
-            <div className="grid gap-3 p-4 md:p-5 lg:grid-cols-[1.2fr_0.7fr_0.65fr_0.65fr_0.75fr_0.75fr]">
+            <div className="grid gap-3 p-4 lg:grid-cols-[1.2fr_0.7fr_0.65fr_0.65fr_0.75fr_0.75fr]">
               <label className="block">
                 <FieldLabel>Search</FieldLabel>
                 <input
@@ -446,7 +460,7 @@ export function CountriesExplorer({ countries }: CountriesExplorerProps) {
                     markCustomFilters();
                   }}
                   placeholder="Country, language, currency, capital..."
-                  className="h-12 w-full rounded-2xl border border-white/10 bg-black/40 px-4 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-[#D4AF37]/70"
+                  className="h-11 w-full rounded-2xl border border-white/10 bg-black/40 px-4 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-[#D4AF37]/70"
                 />
               </label>
 
@@ -458,7 +472,7 @@ export function CountriesExplorer({ countries }: CountriesExplorerProps) {
                     setRegion(event.target.value);
                     markCustomFilters();
                   }}
-                  className="h-12 w-full rounded-2xl border border-white/10 bg-black/40 px-4 text-sm text-white outline-none transition focus:border-[#D4AF37]/70"
+                  className="h-11 w-full rounded-2xl border border-white/10 bg-black/40 px-3 text-sm text-white outline-none transition focus:border-[#D4AF37]/70"
                 >
                   <option value="all">All regions</option>
                   {regions.map((item) => (
@@ -477,7 +491,7 @@ export function CountriesExplorer({ countries }: CountriesExplorerProps) {
                     setGoal(event.target.value as CountryGoal | "all");
                     markCustomFilters();
                   }}
-                  className="h-12 w-full rounded-2xl border border-white/10 bg-black/40 px-4 text-sm text-white outline-none transition focus:border-[#D4AF37]/70"
+                  className="h-11 w-full rounded-2xl border border-white/10 bg-black/40 px-3 text-sm text-white outline-none transition focus:border-[#D4AF37]/70"
                 >
                   <option value="all">All goals</option>
                   {goals.map((item) => (
@@ -496,7 +510,7 @@ export function CountriesExplorer({ countries }: CountriesExplorerProps) {
                     setCost(event.target.value as CostFilter);
                     markCustomFilters();
                   }}
-                  className="h-12 w-full rounded-2xl border border-white/10 bg-black/40 px-4 text-sm text-white outline-none transition focus:border-[#D4AF37]/70"
+                  className="h-11 w-full rounded-2xl border border-white/10 bg-black/40 px-3 text-sm text-white outline-none transition focus:border-[#D4AF37]/70"
                 >
                   <option value="all">All cost</option>
                   <option value="low">Low</option>
@@ -513,7 +527,7 @@ export function CountriesExplorer({ countries }: CountriesExplorerProps) {
                     setDifficulty(event.target.value as DifficultyFilter);
                     markCustomFilters();
                   }}
-                  className="h-12 w-full rounded-2xl border border-white/10 bg-black/40 px-4 text-sm text-white outline-none transition focus:border-[#D4AF37]/70"
+                  className="h-11 w-full rounded-2xl border border-white/10 bg-black/40 px-3 text-sm text-white outline-none transition focus:border-[#D4AF37]/70"
                 >
                   <option value="all">All levels</option>
                   <option value="easy">Easy</option>
@@ -530,7 +544,7 @@ export function CountriesExplorer({ countries }: CountriesExplorerProps) {
                     setSort(event.target.value as SortOption);
                     markCustomFilters();
                   }}
-                  className="h-12 w-full rounded-2xl border border-white/10 bg-black/40 px-4 text-sm text-white outline-none transition focus:border-[#D4AF37]/70"
+                  className="h-11 w-full rounded-2xl border border-white/10 bg-black/40 px-3 text-sm text-white outline-none transition focus:border-[#D4AF37]/70"
                 >
                   <option value="score">TGPI Score</option>
                   <option value="budget">Lowest budget</option>
@@ -544,7 +558,7 @@ export function CountriesExplorer({ countries }: CountriesExplorerProps) {
           </div>
         ) : null}
 
-        <div className="grid gap-3 border-t border-white/10 bg-black/20 p-4 md:grid-cols-4 md:p-5">
+        <div className="grid gap-2 border-t border-white/10 bg-black/20 p-4 sm:grid-cols-2 xl:grid-cols-4">
           <ExplorerMetric
             label="Results"
             value={String(filteredCountries.length)}
@@ -563,7 +577,7 @@ export function CountriesExplorer({ countries }: CountriesExplorerProps) {
           <ExplorerMetric
             label="Avg English"
             value={`${averageEnglish}/100`}
-            detail="language-access signal"
+            detail="language access"
           />
         </div>
       </div>
@@ -581,7 +595,10 @@ export function CountriesExplorer({ countries }: CountriesExplorerProps) {
         />
       </div>
 
-      <section id="country-recommendations" className="mt-6 grid scroll-mt-28 gap-4 lg:grid-cols-4">
+      <section
+        id="country-recommendations"
+        className="mt-5 grid scroll-mt-28 gap-3 sm:grid-cols-2 xl:grid-cols-4"
+      >
         <RecommendationCard
           label="Best current match"
           country={strongestCountry}
@@ -606,13 +623,21 @@ export function CountriesExplorer({ countries }: CountriesExplorerProps) {
 
       <div
         id="country-list"
-        className="mt-6 flex scroll-mt-28 flex-col justify-between gap-3 md:flex-row md:items-center"
+        className="mt-5 flex scroll-mt-28 flex-col justify-between gap-3 md:flex-row md:items-center"
       >
-        <p className="text-sm text-slate-400">
-          Showing{" "}
-          <span className="font-bold text-white">{filteredCountries.length}</span>{" "}
-          countries with the current filters.
-        </p>
+        <div>
+          <p className="text-sm text-slate-400">
+            Showing{" "}
+            <span className="font-bold text-white">
+              {filteredCountries.length}
+            </span>{" "}
+            countries with the current filters.
+          </p>
+          <p className="mt-1 text-xs text-slate-500">
+            Compact mode is optimized for fast scanning. Detailed mode is better
+            for deeper review.
+          </p>
+        </div>
 
         <a
           href="#country-overview"
@@ -622,24 +647,30 @@ export function CountriesExplorer({ countries }: CountriesExplorerProps) {
         </a>
       </div>
 
-      <div className="mt-6 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+      <div
+        className={
+          viewMode === "compact"
+            ? "mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5"
+            : "mt-6 grid gap-5 sm:grid-cols-2 xl:grid-cols-3"
+        }
+      >
         {filteredCountries.map((country) => {
           const isSelected = selectedSlugs.includes(country.slug);
 
           return (
             <div
               key={country.slug}
-              className={`relative rounded-[1.85rem] transition ${
+              className={`relative rounded-[1.25rem] transition ${
                 isSelected
                   ? "ring-2 ring-[#D4AF37] ring-offset-2 ring-offset-[#050505]"
                   : ""
               }`}
             >
-              <div className="absolute left-4 top-4 z-20">
+              <div className="absolute left-2 top-2 z-20">
                 <button
                   type="button"
                   onClick={() => toggleCountrySelection(country.slug)}
-                  className={`rounded-full border px-3 py-2 text-xs font-black shadow-xl backdrop-blur transition ${
+                  className={`rounded-full border px-2.5 py-1.5 text-[10px] font-black shadow-xl backdrop-blur transition md:px-3 md:py-2 md:text-xs ${
                     isSelected
                       ? "border-[#D4AF37] bg-[#D4AF37] text-black"
                       : "border-white/15 bg-black/55 text-white hover:border-[#D4AF37]/60"
@@ -649,7 +680,11 @@ export function CountriesExplorer({ countries }: CountriesExplorerProps) {
                 </button>
               </div>
 
-              <CountryCard country={country} />
+              {viewMode === "compact" ? (
+                <CompactCountryCard country={country} />
+              ) : (
+                <CountryCard country={country} />
+              )}
             </div>
           );
         })}
@@ -773,12 +808,16 @@ type NavigationHubProps = {
   resultCount: number;
   selectedCount: number;
   activeIntent: string;
+  viewMode: ViewMode;
+  onViewModeChange: (mode: ViewMode) => void;
 };
 
 function NavigationHub({
   resultCount,
   selectedCount,
   activeIntent,
+  viewMode,
+  onViewModeChange,
 }: NavigationHubProps) {
   return (
     <nav className="sticky top-3 z-40 rounded-[1.5rem] border border-white/10 bg-[#050505]/88 p-3 shadow-2xl shadow-black/50 backdrop-blur-xl">
@@ -798,19 +837,122 @@ function NavigationHub({
           </span>
         </div>
 
-        <div className="flex gap-2 overflow-x-auto pb-1 xl:pb-0">
-          {NAV_ITEMS.map((item) => (
-            <a
-              key={item.href}
-              href={item.href}
-              className="shrink-0 rounded-full border border-white/10 px-3 py-2 text-xs font-black text-slate-300 transition hover:border-[#D4AF37]/60 hover:text-white"
+        <div className="flex flex-col gap-2 xl:flex-row xl:items-center">
+          <div className="flex rounded-full border border-white/10 bg-black/30 p-1">
+            <button
+              type="button"
+              onClick={() => onViewModeChange("compact")}
+              className={`rounded-full px-3 py-1.5 text-xs font-black transition ${
+                viewMode === "compact"
+                  ? "bg-[#D4AF37] text-black"
+                  : "text-slate-400 hover:text-white"
+              }`}
             >
-              {item.label}
-            </a>
-          ))}
+              Compact
+            </button>
+            <button
+              type="button"
+              onClick={() => onViewModeChange("detailed")}
+              className={`rounded-full px-3 py-1.5 text-xs font-black transition ${
+                viewMode === "detailed"
+                  ? "bg-[#D4AF37] text-black"
+                  : "text-slate-400 hover:text-white"
+              }`}
+            >
+              Detailed
+            </button>
+          </div>
+
+          <div className="flex gap-2 overflow-x-auto pb-1 xl:pb-0">
+            {NAV_ITEMS.map((item) => (
+              <a
+                key={item.href}
+                href={item.href}
+                className="shrink-0 rounded-full border border-white/10 px-3 py-2 text-xs font-black text-slate-300 transition hover:border-[#D4AF37]/60 hover:text-white"
+              >
+                {item.label}
+              </a>
+            ))}
+          </div>
         </div>
       </div>
     </nav>
+  );
+}
+
+type CompactCountryCardProps = {
+  country: Country;
+};
+
+function CompactCountryCard({ country }: CompactCountryCardProps) {
+  const budget = `${formatCurrencyAmount(
+    country,
+    country.intelligence.averageMonthlyBudget,
+  )} ${country.currencyCode}`;
+
+  return (
+    <Link
+      href={`/countries/${country.slug}`}
+      className="group block min-h-[188px] rounded-[1.25rem] border border-white/10 bg-[#0B0F19] p-3 transition hover:-translate-y-0.5 hover:border-[#D4AF37]/60 hover:bg-white/[0.03] md:min-h-[204px] md:p-4"
+    >
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0 pt-8 md:pt-7">
+          <div className="text-2xl md:text-3xl">{country.emoji}</div>
+          <h3 className="mt-2 truncate text-base font-black text-white md:text-lg">
+            {country.name}
+          </h3>
+          <p className="mt-1 truncate text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500 md:text-xs">
+            {country.capital}
+          </p>
+        </div>
+
+        <div className="rounded-2xl border border-[#D4AF37]/20 bg-[#D4AF37]/10 px-2.5 py-2 text-center">
+          <p className="text-[9px] uppercase tracking-[0.18em] text-[#F5D76E]">
+            TGPI
+          </p>
+          <p className="text-lg font-black text-[#D4AF37]">
+            {country.tgpiScore}
+          </p>
+        </div>
+      </div>
+
+      <div className="mt-3 grid grid-cols-2 gap-2">
+        <CompactMetric label="Safety" value={`${country.intelligence.safetyScore}`} />
+        <CompactMetric
+          label="English"
+          value={`${country.intelligence.englishFriendliness}`}
+        />
+      </div>
+
+      <div className="mt-3 rounded-2xl border border-white/10 bg-black/30 p-2.5">
+        <p className="text-[10px] text-slate-500">Budget</p>
+        <p className="mt-0.5 truncate text-xs font-black text-[#D4AF37]">
+          {budget}
+        </p>
+      </div>
+
+      <p className="mt-3 line-clamp-1 text-[11px] font-semibold text-slate-400">
+        {getCountryDecisionLabel(country)}
+      </p>
+
+      <span className="sr-only">
+        {getCountryCostLabel(country)}. {country.shortDescription}
+      </span>
+    </Link>
+  );
+}
+
+type CompactMetricProps = {
+  label: string;
+  value: string;
+};
+
+function CompactMetric({ label, value }: CompactMetricProps) {
+  return (
+    <div className="rounded-xl border border-white/10 bg-black/30 px-2 py-2">
+      <p className="text-[10px] text-slate-500">{label}</p>
+      <p className="mt-0.5 text-sm font-black text-white">{value}/100</p>
+    </div>
   );
 }
 
@@ -834,9 +976,11 @@ type ExplorerMetricProps = {
 
 function ExplorerMetric({ label, value, detail }: ExplorerMetricProps) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
+    <div className="rounded-2xl border border-white/10 bg-black/30 p-3 md:p-4">
       <p className="text-xs text-slate-500">{label}</p>
-      <p className="mt-1 text-2xl font-black text-[#D4AF37]">{value}</p>
+      <p className="mt-1 text-xl font-black text-[#D4AF37] md:text-2xl">
+        {value}
+      </p>
       <p className="mt-1 text-xs text-slate-500">{detail}</p>
     </div>
   );
@@ -868,13 +1012,13 @@ function DecisionIntelligencePanel({
   totalResults,
 }: DecisionIntelligencePanelProps) {
   return (
-    <section className="mt-6 overflow-hidden rounded-[1.75rem] border border-[#D4AF37]/20 bg-gradient-to-br from-[#111118] via-[#080B14] to-black">
+    <section className="mt-5 overflow-hidden rounded-[1.5rem] border border-[#D4AF37]/20 bg-gradient-to-br from-[#111118] via-[#080B14] to-black">
       <div className="grid gap-0 lg:grid-cols-[1.05fr_0.95fr]">
-        <div className="border-b border-white/10 p-6 lg:border-b-0 lg:border-r">
+        <div className="border-b border-white/10 p-5 lg:border-b-0 lg:border-r">
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#D4AF37]">
             Decision Intelligence
           </p>
-          <h3 className="mt-2 text-2xl font-black text-white">
+          <h3 className="mt-2 text-xl font-black text-white md:text-2xl">
             {summary.title}
           </h3>
           <p className="mt-3 text-sm leading-7 text-slate-400">
@@ -883,11 +1027,14 @@ function DecisionIntelligencePanel({
 
           <div className="mt-5 grid gap-3 sm:grid-cols-2">
             <MiniSignal label="Risk signal" value={summary.risk} />
-            <MiniSignal label="Current pool" value={`${totalResults} countries`} />
+            <MiniSignal
+              label="Current pool"
+              value={`${totalResults} countries`}
+            />
           </div>
         </div>
 
-        <div className="grid gap-4 p-6">
+        <div className="grid gap-3 p-5 sm:grid-cols-2">
           <DecisionPick label="Best score" country={strongestCountry} />
           <DecisionPick label="Safest" country={safestCountry} />
           <DecisionPick label="Lowest cost" country={bestBudgetCountry} />
@@ -895,8 +1042,11 @@ function DecisionIntelligencePanel({
         </div>
       </div>
 
-      <div className="grid gap-4 border-t border-white/10 p-6 lg:grid-cols-2">
-        <DistributionPanel title="Region concentration" items={regionDistribution} />
+      <div className="grid gap-4 border-t border-white/10 p-5 lg:grid-cols-2">
+        <DistributionPanel
+          title="Region concentration"
+          items={regionDistribution}
+        />
         <DistributionPanel title="Cost concentration" items={costDistribution} />
       </div>
     </section>
@@ -959,7 +1109,7 @@ type DistributionPanelProps = {
 
 function DistributionPanel({ title, items }: DistributionPanelProps) {
   return (
-    <div className="rounded-[1.5rem] border border-white/10 bg-black/25 p-5">
+    <div className="rounded-[1.25rem] border border-white/10 bg-black/25 p-4">
       <p className="text-sm font-black text-white">{title}</p>
 
       <div className="mt-4 space-y-3">
@@ -1000,7 +1150,7 @@ type RecommendationCardProps = {
 function RecommendationCard({ label, country, detail }: RecommendationCardProps) {
   if (!country) {
     return (
-      <div className="rounded-[1.5rem] border border-white/10 bg-[#111118] p-5">
+      <div className="rounded-[1.25rem] border border-white/10 bg-[#111118] p-4">
         <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#D4AF37]">
           {label}
         </p>
@@ -1012,15 +1162,15 @@ function RecommendationCard({ label, country, detail }: RecommendationCardProps)
   return (
     <Link
       href={`/countries/${country.slug}`}
-      className="group rounded-[1.5rem] border border-white/10 bg-[#111118] p-5 transition hover:border-[#D4AF37]/60 hover:bg-white/[0.03]"
+      className="group rounded-[1.25rem] border border-white/10 bg-[#111118] p-4 transition hover:border-[#D4AF37]/60 hover:bg-white/[0.03]"
     >
-      <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#D4AF37]">
+      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#D4AF37]">
         {label}
       </p>
 
-      <div className="mt-4 flex items-center justify-between gap-4">
+      <div className="mt-3 flex items-center justify-between gap-4">
         <div className="min-w-0">
-          <p className="truncate text-xl font-black text-white">
+          <p className="truncate text-lg font-black text-white">
             {country.name}
           </p>
           <p className="mt-1 truncate text-xs text-slate-500">
@@ -1032,20 +1182,22 @@ function RecommendationCard({ label, country, detail }: RecommendationCardProps)
           <p className="text-[10px] uppercase tracking-[0.2em] text-[#F5D76E]">
             TGPI
           </p>
-          <p className="text-xl font-black text-[#D4AF37]">
+          <p className="text-lg font-black text-[#D4AF37]">
             {country.tgpiScore}
           </p>
         </div>
       </div>
 
-      <p className="mt-4 text-sm leading-6 text-slate-400">{detail}</p>
+      <p className="mt-3 line-clamp-2 text-sm leading-6 text-slate-400">
+        {detail}
+      </p>
 
-      <div className="mt-4 flex items-center justify-between border-t border-white/10 pt-4">
+      <div className="mt-3 flex items-center justify-between border-t border-white/10 pt-3">
         <p className="text-xs text-slate-500">
           Safety {country.intelligence.safetyScore}/100
         </p>
         <span className="text-xs font-black text-[#F5D76E] transition group-hover:text-[#D4AF37]">
-          View profile →
+          View →
         </span>
       </div>
     </Link>
