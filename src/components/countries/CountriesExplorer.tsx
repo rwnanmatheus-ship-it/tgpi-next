@@ -2,6 +2,7 @@
 
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { CountryCard } from "@/components/countries/CountryCard";
 import {
@@ -91,6 +92,8 @@ const INTENT_PRESETS: IntentPreset[] = [
   },
 ];
 
+const MAX_COMPARE_COUNTRIES = 3;
+
 export function CountriesExplorer({ countries }: CountriesExplorerProps) {
   const [query, setQuery] = useState("");
   const [region, setRegion] = useState("all");
@@ -103,9 +106,27 @@ export function CountriesExplorer({ countries }: CountriesExplorerProps) {
   );
   const [minSafety, setMinSafety] = useState(0);
   const [minEnglish, setMinEnglish] = useState(0);
+  const [selectedSlugs, setSelectedSlugs] = useState<string[]>([]);
 
   const regions = useMemo(() => getAllRegions(), []);
   const goals = useMemo(() => getAllGoals(), []);
+
+  const selectedCountries = useMemo(() => {
+    return selectedSlugs
+      .map((slug) => countries.find((country) => country.slug === slug))
+      .filter((country): country is Country => Boolean(country));
+  }, [countries, selectedSlugs]);
+
+  const compareHref = useMemo(() => {
+    if (selectedSlugs.length === 0) return "/compare";
+    const params = new URLSearchParams();
+
+    selectedSlugs.forEach((slug) => {
+      params.append("country", slug);
+    });
+
+    return `/compare?${params.toString()}`;
+  }, [selectedSlugs]);
 
   const filteredCountries = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -234,6 +255,24 @@ export function CountriesExplorer({ countries }: CountriesExplorerProps) {
     setActiveIntent("custom");
   }
 
+  function clearCompareSelection() {
+    setSelectedSlugs([]);
+  }
+
+  function toggleCountrySelection(slug: string) {
+    setSelectedSlugs((current) => {
+      if (current.includes(slug)) {
+        return current.filter((item) => item !== slug);
+      }
+
+      if (current.length >= MAX_COMPARE_COUNTRIES) {
+        return [...current.slice(1), slug];
+      }
+
+      return [...current, slug];
+    });
+  }
+
   function applyIntentPreset(preset: IntentPreset) {
     setQuery(preset.query ?? "");
     setRegion(preset.region ?? "all");
@@ -247,7 +286,7 @@ export function CountriesExplorer({ countries }: CountriesExplorerProps) {
   }
 
   return (
-    <section className="mt-10">
+    <section className="mt-10 pb-28">
       <div className="overflow-hidden rounded-[1.75rem] border border-white/10 bg-[#111118]">
         <div className="border-b border-white/10 bg-black/25 p-5">
           <div className="grid gap-4 lg:grid-cols-[1fr_auto] lg:items-end">
@@ -486,14 +525,41 @@ export function CountriesExplorer({ countries }: CountriesExplorerProps) {
         </p>
 
         <p className="text-sm text-slate-500">
-          Use filters as decision signals, not final answers.
+          Select up to {MAX_COMPARE_COUNTRIES} countries to compare.
         </p>
       </div>
 
       <div className="mt-6 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-        {filteredCountries.map((country) => (
-          <CountryCard key={country.slug} country={country} />
-        ))}
+        {filteredCountries.map((country) => {
+          const isSelected = selectedSlugs.includes(country.slug);
+
+          return (
+            <div
+              key={country.slug}
+              className={`relative rounded-[1.85rem] transition ${
+                isSelected
+                  ? "ring-2 ring-[#D4AF37] ring-offset-2 ring-offset-[#050505]"
+                  : ""
+              }`}
+            >
+              <div className="absolute left-4 top-4 z-20">
+                <button
+                  type="button"
+                  onClick={() => toggleCountrySelection(country.slug)}
+                  className={`rounded-full border px-3 py-2 text-xs font-black shadow-xl backdrop-blur transition ${
+                    isSelected
+                      ? "border-[#D4AF37] bg-[#D4AF37] text-black"
+                      : "border-white/15 bg-black/55 text-white hover:border-[#D4AF37]/60"
+                  }`}
+                >
+                  {isSelected ? "Selected" : "Compare"}
+                </button>
+              </div>
+
+              <CountryCard country={country} />
+            </div>
+          );
+        })}
       </div>
 
       {filteredCountries.length === 0 ? (
@@ -512,6 +578,15 @@ export function CountriesExplorer({ countries }: CountriesExplorerProps) {
           </button>
         </div>
       ) : null}
+
+      <CompareTray
+        selectedCountries={selectedCountries}
+        compareHref={compareHref}
+        onClear={clearCompareSelection}
+        onRemove={(slug) =>
+          setSelectedSlugs((current) => current.filter((item) => item !== slug))
+        }
+      />
     </section>
   );
 }
@@ -563,7 +638,7 @@ function RecommendationCard({ label, country, detail }: RecommendationCardProps)
   }
 
   return (
-    <a
+    <Link
       href={`/countries/${country.slug}`}
       className="group rounded-[1.5rem] border border-white/10 bg-[#111118] p-5 transition hover:border-[#D4AF37]/60 hover:bg-white/[0.03]"
     >
@@ -601,6 +676,64 @@ function RecommendationCard({ label, country, detail }: RecommendationCardProps)
           View profile →
         </span>
       </div>
-    </a>
+    </Link>
+  );
+}
+
+type CompareTrayProps = {
+  selectedCountries: Country[];
+  compareHref: string;
+  onClear: () => void;
+  onRemove: (slug: string) => void;
+};
+
+function CompareTray({
+  selectedCountries,
+  compareHref,
+  onClear,
+  onRemove,
+}: CompareTrayProps) {
+  if (selectedCountries.length === 0) return null;
+
+  return (
+    <div className="fixed inset-x-0 bottom-0 z-50 border-t border-[#D4AF37]/20 bg-[#050505]/92 px-4 py-4 shadow-2xl shadow-black/70 backdrop-blur-xl">
+      <div className="mx-auto flex max-w-7xl flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div className="min-w-0">
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-[#D4AF37]">
+            Compare tray
+          </p>
+
+          <div className="mt-2 flex flex-wrap gap-2">
+            {selectedCountries.map((country) => (
+              <button
+                key={country.slug}
+                type="button"
+                onClick={() => onRemove(country.slug)}
+                className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-2 text-xs font-bold text-white transition hover:border-red-500/50"
+              >
+                {country.name} ×
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <button
+            type="button"
+            onClick={onClear}
+            className="rounded-2xl border border-white/10 px-4 py-3 text-sm font-black text-slate-300 transition hover:border-white/30 hover:text-white"
+          >
+            Clear
+          </button>
+
+          <Link
+            href={compareHref}
+            className="rounded-2xl bg-[#D4AF37] px-5 py-3 text-center text-sm font-black text-black transition hover:bg-[#F5D76E]"
+          >
+            Compare {selectedCountries.length} countries
+          </Link>
+        </div>
+      </div>
+    </div>
   );
 }
