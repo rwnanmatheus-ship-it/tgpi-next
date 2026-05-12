@@ -14,6 +14,7 @@ import {
   getCountryPrimaryDecision,
   getCountryRiskLabel,
   getRelatedCountries,
+  hasVerifiedCountryImage,
   type Country,
 } from "@/lib/countries";
 
@@ -21,6 +22,11 @@ type CountryPageProps = {
   params: Promise<{
     slug: string;
   }>;
+};
+
+type ActionItem = {
+  title: string;
+  text: string;
 };
 
 export function generateStaticParams() {
@@ -41,7 +47,7 @@ export async function generateMetadata({ params }: CountryPageProps) {
 
   return {
     title: `${country.name} | TGPI Country Intelligence Report`,
-    description: `${country.name} country intelligence report: cost, safety, language, adaptation, quality of life and TGPI strategic readiness.`,
+    description: `${country.name} country intelligence report: cost, safety, language, adaptation, quality of life, first steps and TGPI strategic readiness.`,
   };
 }
 
@@ -54,6 +60,7 @@ export default async function CountryPage({ params }: CountryPageProps) {
   const relatedCountries = getRelatedCountries(country, 3);
   const imageUrl = getCountryImageUrl(country);
   const imageAlt = getCountryImageAlt(country);
+  const hasImage = hasVerifiedCountryImage(country);
 
   const budget = `${formatCurrencyAmount(
     country,
@@ -92,6 +99,8 @@ export default async function CountryPage({ params }: CountryPageProps) {
     { label: "Adaptation", value: getCountryRiskLabel(country) },
   ];
 
+  const countryPlan = getCountryActionPlan(country);
+
   return (
     <main className="min-h-screen bg-[#050505] text-white">
       <section className="mx-auto max-w-7xl px-5 py-10 md:px-8 md:py-14">
@@ -121,11 +130,16 @@ export default async function CountryPage({ params }: CountryPageProps) {
 
         <section className="overflow-hidden rounded-[2rem] border border-[#D4AF37]/25 bg-gradient-to-br from-[#111118] via-[#080B14] to-black shadow-2xl shadow-black/50">
           <div className="relative grid lg:grid-cols-[1.05fr_0.95fr]">
-            <img
-              src={imageUrl}
-              alt={imageAlt}
-              className="absolute inset-0 h-full w-full object-cover opacity-60 saturate-150 contrast-110 brightness-110"
-            />
+            {hasImage ? (
+              <img
+                src={imageUrl}
+                alt={imageAlt}
+                className="absolute inset-0 h-full w-full object-cover opacity-60 saturate-150 contrast-110 brightness-110"
+              />
+            ) : (
+              <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(212,175,55,0.22),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(37,99,235,0.22),transparent_36%),linear-gradient(135deg,#111118,#07111F_45%,#050505)]" />
+            )}
+
             <div className="absolute inset-0 bg-gradient-to-r from-black/92 via-[#050505]/62 to-[#050505]/38" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/10" />
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(212,175,55,0.12),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(37,99,235,0.12),transparent_36%)]" />
@@ -289,6 +303,48 @@ export default async function CountryPage({ params }: CountryPageProps) {
         </section>
 
         <section className="mt-8 grid gap-6 lg:grid-cols-2">
+          <DecisionFitPanel
+            title={`Who should choose ${country.name}`}
+            items={countryPlan.choose}
+            tone="positive"
+          />
+
+          <DecisionFitPanel
+            title={`Who should avoid ${country.name}`}
+            items={countryPlan.avoid}
+            tone="warning"
+          />
+        </section>
+
+        <section className="mt-8 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+          <ActionChecklist
+            title="First 30 days checklist"
+            subtitle={`A practical first layer for researching ${country.name}.`}
+            items={countryPlan.firstThirtyDays}
+          />
+
+          <ActionChecklist
+            title="Documents to verify"
+            subtitle="Use official sources before legal, visa, tax or relocation decisions."
+            items={countryPlan.documents}
+          />
+        </section>
+
+        <section className="mt-8 grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+          <ActionChecklist
+            title="Cities to research"
+            subtitle="Start with these city categories before choosing a final destination."
+            items={countryPlan.cities}
+          />
+
+          <ActionChecklist
+            title="Decision questions"
+            subtitle="Use these questions before treating this country as a serious option."
+            items={countryPlan.questions}
+          />
+        </section>
+
+        <section className="mt-8 grid gap-6 lg:grid-cols-2">
           <InsightGrid
             title="Best for"
             items={country.intelligence.bestFor}
@@ -408,6 +464,150 @@ export default async function CountryPage({ params }: CountryPageProps) {
 function getCostPercentage(amount: number, total: number) {
   if (!total || total <= 0) return 0;
   return Math.min(Math.max(Math.round((amount / total) * 100), 4), 100);
+}
+
+function getCountryActionPlan(country: Country) {
+  const safetyText =
+    country.intelligence.safetyScore >= 80
+      ? "You want a stronger safety baseline and lower daily-life uncertainty."
+      : "You are comfortable validating safety carefully by city, neighborhood and routine.";
+
+  const englishText =
+    country.intelligence.englishFriendliness >= 70
+      ? "You need easier English access while adapting locally."
+      : "You are willing to learn the local language and operate with more friction.";
+
+  const costText =
+    country.costLevel === "low"
+      ? "You are looking for lower cost pressure and more financial flexibility."
+      : country.costLevel === "medium"
+        ? "You want a balanced cost profile instead of the cheapest possible destination."
+        : "You can handle a premium cost profile and want stronger infrastructure or global access.";
+
+  return {
+    choose: [
+      {
+        title: "Your goal matches the environment",
+        text: `${country.name} is strongest when your main objective aligns with: ${country.mainGoal}.`,
+      },
+      {
+        title: "The cost profile fits your planning",
+        text: costText,
+      },
+      {
+        title: "The adaptation level is realistic",
+        text: getCountryRiskLabel(country),
+      },
+      {
+        title: "The safety-language trade-off makes sense",
+        text: `${safetyText} ${englishText}`,
+      },
+    ],
+    avoid: [
+      {
+        title: "You have not validated legal requirements",
+        text: "Do not rely on general content. Check visa, residence, tax and work authorization rules through official sources.",
+      },
+      {
+        title: "You are choosing based on aesthetics",
+        text: `${country.name} should be evaluated as a system: cost, safety, language, opportunities, documents and daily routine.`,
+      },
+      {
+        title: "Your budget has no margin",
+        text: `Estimated monthly budget is ${formatCurrencyAmount(
+          country,
+          country.intelligence.averageMonthlyBudget,
+        )} ${country.currencyCode}. Add emergency margin before planning.`,
+      },
+      {
+        title: "You are ignoring local language reality",
+        text: `Primary language signal: ${country.language}. English friendliness is ${country.intelligence.englishFriendliness}/100.`,
+      },
+    ],
+    firstThirtyDays: [
+      {
+        title: "Map the first city",
+        text: `Start with ${country.capital}, then compare at least two alternative cities before deciding.`,
+      },
+      {
+        title: "Validate monthly budget",
+        text: `Use the TGPI estimate of ${formatCurrencyAmount(
+          country,
+          country.intelligence.averageMonthlyBudget,
+        )} ${country.currencyCode} as a baseline, then validate housing, food, transport and insurance.`,
+      },
+      {
+        title: "Check safety by neighborhood",
+        text: "Do not use only national averages. Validate safety around housing, transport, nightlife and commute routes.",
+      },
+      {
+        title: "Create a language plan",
+        text: `Prepare basic local-language survival ability for ${country.language}, even if English works in some contexts.`,
+      },
+      {
+        title: "Compare against alternatives",
+        text: `Compare ${country.name} with at least two related countries before making a final decision.`,
+      },
+    ],
+    documents: [
+      {
+        title: "Passport validity",
+        text: "Check passport expiration rules, blank page requirements and entry conditions.",
+      },
+      {
+        title: "Visa or residence route",
+        text: "Validate the correct visa path for study, work, travel, business or relocation.",
+      },
+      {
+        title: "Proof of funds",
+        text: "Check whether bank statements, income proof or sponsor documents are required.",
+      },
+      {
+        title: "Health insurance",
+        text: "Confirm whether local, travel or international health coverage is required.",
+      },
+      {
+        title: "Tax and work rules",
+        text: "Verify whether remote work, employment, study or business activity is legally allowed.",
+      },
+    ],
+    cities: [
+      {
+        title: country.capital,
+        text: "Start with the capital for infrastructure, services, institutions and official access.",
+      },
+      {
+        title: "Lower-cost city",
+        text: "Research at least one smaller city with lower rent and calmer adaptation pressure.",
+      },
+      {
+        title: "Opportunity city",
+        text: "Identify where jobs, universities, communities or global networks are concentrated.",
+      },
+      {
+        title: "Lifestyle city",
+        text: "Compare climate, mobility, safety, housing and daily rhythm before choosing.",
+      },
+    ],
+    questions: [
+      {
+        title: "Can I legally stay there for my goal?",
+        text: "Your goal must match an official path: study, work, travel, residence or business.",
+      },
+      {
+        title: "Can I afford three months there?",
+        text: "Budget decisions should include emergency reserve, deposit, transport and unexpected costs.",
+      },
+      {
+        title: "Can I function without full English access?",
+        text: "Language determines housing, paperwork, social life, work options and confidence.",
+      },
+      {
+        title: "Is this country a step or the final destination?",
+        text: "Some countries are ideal as a first international step. Others require more preparation.",
+      },
+    ],
+  } satisfies Record<string, ActionItem[]>;
 }
 
 type SignalCardProps = {
@@ -543,6 +743,82 @@ function InsightGrid({ title, items, tone }: InsightGridProps) {
           </div>
         ))}
       </div>
+    </div>
+  );
+}
+
+type DecisionFitPanelProps = {
+  title: string;
+  items: ActionItem[];
+  tone: "positive" | "warning";
+};
+
+function DecisionFitPanel({ title, items, tone }: DecisionFitPanelProps) {
+  const toneClass =
+    tone === "warning"
+      ? "border-red-500/20 bg-red-500/5"
+      : "border-[#D4AF37]/20 bg-[#D4AF37]/10";
+
+  return (
+    <div className={`rounded-[1.5rem] border p-6 ${toneClass}`}>
+      <h2 className="text-2xl font-black text-white">{title}</h2>
+
+      <div className="mt-5 grid gap-3">
+        {items.map((item) => (
+          <ActionItemCard key={item.title} item={item} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+type ActionChecklistProps = {
+  title: string;
+  subtitle: string;
+  items: ActionItem[];
+};
+
+function ActionChecklist({ title, subtitle, items }: ActionChecklistProps) {
+  return (
+    <div className="rounded-[1.5rem] border border-white/10 bg-[#111118] p-6">
+      <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#D4AF37]">
+        Action layer
+      </p>
+      <h2 className="mt-2 text-2xl font-black text-white">{title}</h2>
+      <p className="mt-2 text-sm leading-6 text-slate-400">{subtitle}</p>
+
+      <div className="mt-5 space-y-3">
+        {items.map((item, index) => (
+          <div
+            key={item.title}
+            className="grid gap-3 rounded-2xl border border-white/10 bg-black/30 p-4 sm:grid-cols-[auto_1fr]"
+          >
+            <div className="flex h-8 w-8 items-center justify-center rounded-full border border-[#D4AF37]/25 bg-[#D4AF37]/10 text-xs font-black text-[#F5D76E]">
+              {index + 1}
+            </div>
+
+            <div>
+              <p className="font-black text-white">{item.title}</p>
+              <p className="mt-1 text-sm leading-6 text-slate-400">
+                {item.text}
+              </p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+type ActionItemCardProps = {
+  item: ActionItem;
+};
+
+function ActionItemCard({ item }: ActionItemCardProps) {
+  return (
+    <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
+      <p className="font-black text-white">{item.title}</p>
+      <p className="mt-1 text-sm leading-6 text-slate-400">{item.text}</p>
     </div>
   );
 }
