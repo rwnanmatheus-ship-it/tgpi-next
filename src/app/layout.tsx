@@ -5,25 +5,23 @@ import Navbar from "@/components/Navbar";
 export const metadata: Metadata = {
   title: "TGPI — Build Your Global Identity",
   description:
-    "Prepare, connect and move across countries with intelligence using TGPI. Explore destinations, build your global identity and join a worldwide community.",
+    "Prepare, compare and move globally with strategic clarity using TGPI — a premium education and decision system for international life.",
   keywords: [
     "move abroad",
-    "live abroad",
-    "study abroad",
-    "work abroad",
     "global mobility",
-    "immigration preparation",
-    "countries guide",
     "international life",
-    "expat platform",
-    "global identity",
+    "country comparison",
+    "cost of living",
+    "learn languages",
+    "global education",
+    "international planning",
     "TGPI",
     "The Global Polymath Institute",
   ],
   openGraph: {
     title: "TGPI — Build Your Global Identity",
     description:
-      "Explore countries, prepare your move and build your global identity.",
+      "Compare countries, build practical skills and prepare a global life with clarity.",
     url: "https://theglobalpolymath.com",
     siteName: "TGPI",
     images: [
@@ -45,7 +43,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-black text-white">
+      <body className="bg-[#F7F3EA] text-[#111827] antialiased">
         <Navbar />
         {children}
       </body>
