@@ -14,7 +14,7 @@ const links = [
   { label: "Dashboard", href: "/profile" },
   { label: "Ranking", href: "/ranking" },
   { label: "Community", href: "/community" },
-  ];
+];
 
 export default function Navbar() {
   const [user, setUser] = useState<User | null>(null);
@@ -30,18 +30,18 @@ export default function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-white/10 bg-[#020617]/95 backdrop-blur-xl">
+    <header className="sticky top-0 z-50 border-b border-[#E7E0D3] bg-[#FFFDF8]/90 backdrop-blur-2xl">
       <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <Link href="/" className="font-bold text-white">
+        <Link href="/" className="text-lg font-black tracking-[0.18em] text-[#111827]">
           TGPI
         </Link>
 
-        <nav className="hidden items-center gap-6 md:flex">
+        <nav className="hidden items-center gap-7 md:flex">
           {links.map((item) => (
             <Link
               key={item.href + item.label}
               href={item.href}
-              className="text-sm font-medium text-slate-300 transition hover:text-yellow-400"
+              className="text-sm font-semibold text-[#5B6472] transition hover:text-[#9A6A12]"
             >
               {item.label}
             </Link>
@@ -56,7 +56,7 @@ export default function Navbar() {
 
               <button
                 onClick={handleLogout}
-                className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm font-semibold text-red-200 hover:bg-red-500/20"
+                className="rounded-2xl border border-[#E7E0D3] bg-white px-4 py-2 text-sm font-bold text-[#7A1E1E] shadow-sm transition hover:border-[#D9BD70] hover:bg-[#FFF7DE]"
               >
                 Logout
               </button>
@@ -65,14 +65,14 @@ export default function Navbar() {
             <>
               <Link
                 href="/login"
-                className="rounded-xl border border-yellow-500/30 px-4 py-2 text-sm font-semibold text-yellow-400 hover:bg-yellow-500/10"
+                className="rounded-2xl border border-[#D9BD70] bg-[#FFF7DE] px-4 py-2 text-sm font-bold text-[#8A5B09] transition hover:bg-[#F8E7B4]"
               >
                 Sign in
               </Link>
 
               <Link
                 href="/login"
-                className="rounded-xl border border-white/10 px-4 py-2 text-sm font-semibold text-white hover:bg-white/5"
+                className="rounded-2xl border border-[#E7E0D3] bg-white px-4 py-2 text-sm font-bold text-[#111827] shadow-sm transition hover:border-[#123A6F]/20 hover:bg-[#EEF5FF]"
               >
                 Create account
               </Link>
@@ -82,21 +82,21 @@ export default function Navbar() {
 
         <button
           onClick={() => setMenuOpen((prev) => !prev)}
-          className="rounded-xl border border-white/10 px-4 py-2 text-sm text-white md:hidden"
+          className="rounded-2xl border border-[#E7E0D3] bg-white px-4 py-2 text-sm font-semibold text-[#111827] shadow-sm md:hidden"
         >
           Menu
         </button>
       </div>
 
       {menuOpen && (
-        <div className="border-t border-white/10 bg-[#020617] px-6 py-4 md:hidden">
+        <div className="border-t border-[#E7E0D3] bg-[#FFFDF8] px-6 py-4 md:hidden">
           <div className="flex flex-col gap-4">
             {links.map((item) => (
               <Link
                 key={item.href + item.label}
                 href={item.href}
                 onClick={() => setMenuOpen(false)}
-                className="text-sm text-slate-300 hover:text-yellow-400"
+                className="text-sm font-medium text-[#5B6472] hover:text-[#9A6A12]"
               >
                 {item.label}
               </Link>
@@ -107,7 +107,7 @@ export default function Navbar() {
                 <TopbarUserIdentity />
                 <button
                   onClick={handleLogout}
-                  className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-2 text-sm font-semibold text-red-200"
+                  className="rounded-2xl border border-[#E7E0D3] bg-white px-4 py-2 text-sm font-bold text-[#7A1E1E]"
                 >
                   Logout
                 </button>
@@ -116,7 +116,7 @@ export default function Navbar() {
               <Link
                 href="/login"
                 onClick={() => setMenuOpen(false)}
-                className="rounded-xl border border-yellow-500/30 px-4 py-2 text-sm font-semibold text-yellow-400"
+                className="rounded-2xl border border-[#D9BD70] bg-[#FFF7DE] px-4 py-2 text-sm font-bold text-[#8A5B09]"
               >
                 Sign in
               </Link>
