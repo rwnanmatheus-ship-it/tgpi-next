@@ -1,8 +1,16 @@
 @import "tailwindcss";
 
 :root {
-  --background: #0b0f19;
-  --foreground: #ffffff;
+  --background: #f7f3ea;
+  --foreground: #111827;
+  --tgpi-ivory: #fffdf8;
+  --tgpi-paper: #fbf8f1;
+  --tgpi-border: #e7e0d3;
+  --tgpi-gold: #c8a24a;
+  --tgpi-gold-strong: #9a6a12;
+  --tgpi-blue: #123a6f;
+  --tgpi-blue-soft: #eef5ff;
+  --tgpi-muted: #5b6472;
 }
 
 html,
@@ -29,4 +37,9 @@ input,
 select,
 textarea {
   font: inherit;
+}
+
+::selection {
+  background: rgba(200, 162, 74, 0.28);
+  color: #111827;
 }
