@@ -3,24 +3,25 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { onAuthStateChanged } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, getDoc } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
 
+const MAX_ATTEMPTS = 12;
+const RETRY_DELAY_MS = 2500;
+
+function wait(milliseconds: number) {
+  return new Promise((resolve) => setTimeout(resolve, milliseconds));
+}
+
 export default function UpgradeSuccessPage() {
-  const [status, setStatus] = useState("Checking your subscription...");
+  const [status, setStatus] = useState("Confirming your subscription securely...");
   const [done, setDone] = useState(false);
 
   useEffect(() => {
-    async function finalizeUpgrade() {
-      const params = new URLSearchParams(window.location.search);
-      const sessionId = params.get("session_id");
+    let cancelled = false;
 
-      if (!sessionId) {
-        setStatus("Missing Stripe session ID.");
-        return;
-      }
-
-      const currentUser = await new Promise<any>((resolve) => {
+    async function confirmUpgrade() {
+      const currentUser = await new Promise<typeof auth.currentUser>((resolve) => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
           unsubscribe();
           resolve(user);
@@ -28,48 +29,45 @@ export default function UpgradeSuccessPage() {
       });
 
       if (!currentUser) {
-        setStatus("You need to be logged in to finalize the upgrade.");
+        setStatus("Log in to check your subscription status.");
         return;
       }
 
-      try {
-        const response = await fetch(
-          `/api/stripe/checkout-session?session_id=${encodeURIComponent(sessionId)}`
-        );
-        const data = await response.json();
+      for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt += 1) {
+        if (cancelled) return;
 
-        if (!response.ok) {
-          throw new Error(data?.error || "Could not verify Stripe session.");
+        try {
+          const snapshot = await getDoc(doc(db, "users", currentUser.uid));
+          const userData = snapshot.exists() ? snapshot.data() : null;
+          const hasPremiumAccess =
+            userData?.plan === "premium" &&
+            ["active", "trialing"].includes(String(userData?.subscriptionStatus || "active"));
+
+          if (hasPremiumAccess) {
+            setStatus("Premium activated successfully.");
+            setDone(true);
+            return;
+          }
+        } catch (error) {
+          console.error("Subscription status check error:", error);
         }
 
-        const success =
-          data?.payment_status === "paid" || data?.status === "complete";
-
-        if (!success) {
-          setStatus("Your subscription is not confirmed yet.");
-          return;
+        if (attempt < MAX_ATTEMPTS - 1) {
+          setStatus("Payment received. Waiting for secure subscription synchronization...");
+          await wait(RETRY_DELAY_MS);
         }
-
-        await setDoc(
-          doc(db, "users", currentUser.uid),
-          {
-            plan: "premium",
-            upgradedAt: new Date().toISOString(),
-            stripeCustomerEmail: data?.customer_email || "",
-            stripeSubscriptionId: data?.subscriptionId || "",
-          },
-          { merge: true }
-        );
-
-        setStatus("Premium activated successfully.");
-        setDone(true);
-      } catch (error) {
-        console.error("Upgrade success error:", error);
-        setStatus("Could not confirm your premium activation.");
       }
+
+      setStatus(
+        "Your payment may still be synchronizing. Refresh this page shortly or open your dashboard."
+      );
     }
 
-    finalizeUpgrade();
+    confirmUpgrade();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   return (
