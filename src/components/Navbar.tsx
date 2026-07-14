@@ -10,10 +10,10 @@ import TopbarNotifications from "@/components/TopbarNotifications";
 const links = [
   { label: "Home", href: "/" },
   { label: "Countries", href: "/countries" },
+  { label: "Compare", href: "/compare" },
   { label: "Courses", href: "/courses" },
-  { label: "Dashboard", href: "/profile" },
-  { label: "Ranking", href: "/ranking" },
-  { label: "Community", href: "/community" },
+  { label: "Pricing", href: "/pricing" },
+  { label: "About", href: "/about" },
 ];
 
 export default function Navbar() {
