@@ -4,6 +4,18 @@ import { TGPI_PREMIUM_PRICE_ID, getBaseUrl, getStripeServer } from "@/lib/stripe
 
 export async function POST(request: Request) {
   try {
+    const billingEnabled = process.env.BILLING_ENABLED === "true";
+
+    if (!billingEnabled) {
+      return NextResponse.json(
+        {
+          error: "Billing is temporarily unavailable.",
+          code: "BILLING_DISABLED",
+        },
+        { status: 503 }
+      );
+    }
+
     const user = await requireFirebaseUser(request);
 
     if (!TGPI_PREMIUM_PRICE_ID) {
