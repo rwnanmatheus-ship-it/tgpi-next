@@ -1,18 +1,22 @@
 import { NextResponse } from "next/server";
+import { requireFirebaseUser } from "@/lib/firebase-auth-server";
 import { TGPI_PREMIUM_PRICE_ID, getBaseUrl, getStripeServer } from "@/lib/stripe";
 
 export async function POST(request: Request) {
   try {
-    const body = await request.json();
-    const uid = String(body?.uid || "");
-    const email = String(body?.email || "");
+    const billingEnabled = process.env.BILLING_ENABLED === "true";
 
-    if (!uid) {
+    if (!billingEnabled) {
       return NextResponse.json(
-        { error: "Missing user uid." },
-        { status: 400 }
+        {
+          error: "Billing is temporarily unavailable.",
+          code: "BILLING_DISABLED",
+        },
+        { status: 503 }
       );
     }
+
+    const user = await requireFirebaseUser(request);
 
     if (!TGPI_PREMIUM_PRICE_ID) {
       return NextResponse.json(
@@ -32,11 +36,18 @@ export async function POST(request: Request) {
           quantity: 1,
         },
       ],
-      customer_email: email || undefined,
+      customer_email: user.email || undefined,
+      client_reference_id: user.uid,
       metadata: {
-        uid,
+        uid: user.uid,
         plan: "premium",
         source: "tgpi_premium_page",
+      },
+      subscription_data: {
+        metadata: {
+          uid: user.uid,
+          plan: "premium",
+        },
       },
       success_url: `${baseUrl}/upgrade-success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${baseUrl}/premium?canceled=1`,
@@ -45,10 +56,16 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ url: session.url });
   } catch (error) {
+    const message =
+      error instanceof Error ? error.message : "Could not create checkout session.";
+    const status = message.includes("Firebase ID token") || message.includes("INVALID_ID_TOKEN")
+      ? 401
+      : 500;
+
     console.error("Stripe checkout session error:", error);
     return NextResponse.json(
-      { error: "Could not create checkout session." },
-      { status: 500 }
+      { error: status === 401 ? "Authentication required." : "Could not create checkout session." },
+      { status }
     );
   }
 }

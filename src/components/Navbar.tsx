@@ -8,12 +8,11 @@ import TopbarUserIdentity from "@/components/TopbarUserIdentity";
 import TopbarNotifications from "@/components/TopbarNotifications";
 
 const links = [
-  { label: "Home", href: "/" },
   { label: "Countries", href: "/countries" },
-  { label: "Courses", href: "/courses" },
-  { label: "Dashboard", href: "/profile" },
-  { label: "Ranking", href: "/ranking" },
-  { label: "Community", href: "/community" },
+  { label: "Compare", href: "/compare" },
+  { label: "Learn", href: "/courses" },
+  { label: "Documents", href: "/#global-documents" },
+  { label: "Pricing", href: "/pricing" },
 ];
 
 export default function Navbar() {
@@ -30,18 +29,28 @@ export default function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[#E7E0D3] bg-[#FFFDF8]/90 backdrop-blur-2xl">
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
-        <Link href="/" className="text-lg font-black tracking-[0.18em] text-[#111827]">
-          TGPI
+    <header className="sticky top-0 z-50 border-b border-[#D8D2C4] bg-[#FFFDF8]/92 backdrop-blur-2xl">
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-3.5 sm:px-6">
+        <Link href="/" className="group flex items-center gap-3">
+          <span className="grid h-10 w-10 place-items-center rounded-full border border-[#B58A2A] bg-[#0B1F3A] font-serif text-sm font-semibold tracking-[0.13em] text-[#F0D58C] shadow-sm">
+            TGPI
+          </span>
+          <span className="hidden lg:block">
+            <span className="block text-xs font-black uppercase tracking-[0.2em] text-[#0B1F3A]">
+              The Global Polymath
+            </span>
+            <span className="mt-0.5 block text-[10px] font-bold uppercase tracking-[0.23em] text-[#8A6A27]">
+              Institute
+            </span>
+          </span>
         </Link>
 
-        <nav className="hidden items-center gap-7 md:flex">
+        <nav className="hidden items-center gap-6 md:flex">
           {links.map((item) => (
             <Link
               key={item.href + item.label}
               href={item.href}
-              className="text-sm font-semibold text-[#5B6472] transition hover:text-[#9A6A12]"
+              className="text-sm font-semibold text-[#566070] transition hover:text-[#9A6A12]"
             >
               {item.label}
             </Link>
@@ -53,10 +62,9 @@ export default function Navbar() {
             <>
               <TopbarNotifications />
               <TopbarUserIdentity />
-
               <button
                 onClick={handleLogout}
-                className="rounded-2xl border border-[#E7E0D3] bg-white px-4 py-2 text-sm font-bold text-[#7A1E1E] shadow-sm transition hover:border-[#D9BD70] hover:bg-[#FFF7DE]"
+                className="rounded-xl border border-[#D8D2C4] bg-white px-4 py-2 text-sm font-bold text-[#7A1E1E] shadow-sm transition hover:border-[#D9BD70] hover:bg-[#FFF7DE]"
               >
                 Logout
               </button>
@@ -65,14 +73,13 @@ export default function Navbar() {
             <>
               <Link
                 href="/login"
-                className="rounded-2xl border border-[#D9BD70] bg-[#FFF7DE] px-4 py-2 text-sm font-bold text-[#8A5B09] transition hover:bg-[#F8E7B4]"
+                className="px-3 py-2 text-sm font-bold text-[#0B1F3A] transition hover:text-[#B58A2A]"
               >
                 Sign in
               </Link>
-
               <Link
                 href="/login"
-                className="rounded-2xl border border-[#E7E0D3] bg-white px-4 py-2 text-sm font-bold text-[#111827] shadow-sm transition hover:border-[#123A6F]/20 hover:bg-[#EEF5FF]"
+                className="rounded-xl bg-[#0B1F3A] px-4 py-2.5 text-sm font-black text-white shadow-sm transition hover:bg-[#132B4C]"
               >
                 Create account
               </Link>
@@ -81,46 +88,60 @@ export default function Navbar() {
         </div>
 
         <button
-          onClick={() => setMenuOpen((prev) => !prev)}
-          className="rounded-2xl border border-[#E7E0D3] bg-white px-4 py-2 text-sm font-semibold text-[#111827] shadow-sm md:hidden"
+          type="button"
+          aria-expanded={menuOpen}
+          aria-label="Toggle navigation menu"
+          onClick={() => setMenuOpen((previous) => !previous)}
+          className="rounded-xl border border-[#D8D2C4] bg-white px-4 py-2 text-sm font-semibold text-[#0B1F3A] shadow-sm md:hidden"
         >
           Menu
         </button>
       </div>
 
       {menuOpen && (
-        <div className="border-t border-[#E7E0D3] bg-[#FFFDF8] px-6 py-4 md:hidden">
+        <div className="border-t border-[#D8D2C4] bg-[#FFFDF8] px-6 py-5 md:hidden">
           <div className="flex flex-col gap-4">
             {links.map((item) => (
               <Link
                 key={item.href + item.label}
                 href={item.href}
                 onClick={() => setMenuOpen(false)}
-                className="text-sm font-medium text-[#5B6472] hover:text-[#9A6A12]"
+                className="text-sm font-bold text-[#566070] hover:text-[#9A6A12]"
               >
                 {item.label}
               </Link>
             ))}
 
-            {user ? (
-              <>
-                <TopbarUserIdentity />
-                <button
-                  onClick={handleLogout}
-                  className="rounded-2xl border border-[#E7E0D3] bg-white px-4 py-2 text-sm font-bold text-[#7A1E1E]"
-                >
-                  Logout
-                </button>
-              </>
-            ) : (
-              <Link
-                href="/login"
-                onClick={() => setMenuOpen(false)}
-                className="rounded-2xl border border-[#D9BD70] bg-[#FFF7DE] px-4 py-2 text-sm font-bold text-[#8A5B09]"
-              >
-                Sign in
-              </Link>
-            )}
+            <div className="mt-2 border-t border-[#D8D2C4] pt-4">
+              {user ? (
+                <div className="space-y-3">
+                  <TopbarUserIdentity />
+                  <button
+                    onClick={handleLogout}
+                    className="w-full rounded-xl border border-[#D8D2C4] bg-white px-4 py-3 text-sm font-bold text-[#7A1E1E]"
+                  >
+                    Logout
+                  </button>
+                </div>
+              ) : (
+                <div className="grid gap-3">
+                  <Link
+                    href="/login"
+                    onClick={() => setMenuOpen(false)}
+                    className="rounded-xl border border-[#D8D2C4] bg-white px-4 py-3 text-center text-sm font-bold text-[#0B1F3A]"
+                  >
+                    Sign in
+                  </Link>
+                  <Link
+                    href="/login"
+                    onClick={() => setMenuOpen(false)}
+                    className="rounded-xl bg-[#0B1F3A] px-4 py-3 text-center text-sm font-black text-white"
+                  >
+                    Create account
+                  </Link>
+                </div>
+              )}
+            </div>
           </div>
         </div>
       )}
