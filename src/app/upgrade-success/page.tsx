@@ -8,6 +8,7 @@ import { auth, db } from "@/lib/firebase";
 
 const MAX_ATTEMPTS = 12;
 const RETRY_DELAY_MS = 2500;
+const ACTIVE_SUBSCRIPTION_STATUSES = new Set(["active", "trialing"]);
 
 function wait(milliseconds: number) {
   return new Promise((resolve) => setTimeout(resolve, milliseconds));
@@ -39,9 +40,10 @@ export default function UpgradeSuccessPage() {
         try {
           const snapshot = await getDoc(doc(db, "users", currentUser.uid));
           const userData = snapshot.exists() ? snapshot.data() : null;
+          const subscriptionStatus = String(userData?.subscriptionStatus || "");
           const hasPremiumAccess =
             userData?.plan === "premium" &&
-            ["active", "trialing"].includes(String(userData?.subscriptionStatus || "active"));
+            ACTIVE_SUBSCRIPTION_STATUSES.has(subscriptionStatus);
 
           if (hasPremiumAccess) {
             setStatus("Premium activated successfully.");
