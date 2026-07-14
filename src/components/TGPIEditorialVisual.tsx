@@ -30,9 +30,9 @@ type VisualConfig = {
 
 const visualConfig: Record<TGPIVisualVariant, VisualConfig> = {
   hero: {
-    src: "https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?auto=format&fit=crop&w=2200&q=88",
-    alt: "International university architecture representing education, mobility and global decision-making",
-    objectPosition: "center",
+    src: "https://images.unsplash.com/photo-1680664841163-ce9936f231a5?auto=format&fit=crop&w=2200&q=88",
+    alt: "International traveler preparing luggage inside a real airport terminal",
+    objectPosition: "50% 42%",
     context: "International life is built before departure",
     pressure: "Country · Cost · Career · Documents",
   },
@@ -94,7 +94,7 @@ const visualConfig: Record<TGPIVisualVariant, VisualConfig> = {
   },
   premium: {
     src: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?auto=format&fit=crop&w=1800&q=88",
-    alt: "Professional working with a laptop while planning an international future",
+    alt: "Professional workspace used to plan an international future",
     objectPosition: "center",
     context: "Turn uncertainty into an executable plan",
     pressure: "Compare · Prepare · Progress",
@@ -115,14 +115,16 @@ export default function TGPIEditorialVisual({
   ariaLabel,
 }: TGPIEditorialVisualProps) {
   const visual = visualConfig[variant];
-  const labelledBy = `${id}-visual-label`;
+  const accessibleLabel = ariaLabel?.toLowerCase().includes("authorial")
+    ? visual.alt
+    : ariaLabel ?? visual.alt;
 
   return (
     <div
       className={`group relative isolate overflow-hidden bg-[#0B1F3A] ${className}`}
       role="img"
-      aria-label={ariaLabel ?? visual.alt}
-      aria-labelledby={ariaLabel ? undefined : labelledBy}
+      aria-label={accessibleLabel}
+      data-visual-id={id}
     >
       <Image
         src={visual.src}
@@ -140,10 +142,7 @@ export default function TGPIEditorialVisual({
 
       {variant !== "hero" && (
         <div className="absolute inset-x-5 bottom-5 z-10 rounded-[22px] border border-white/18 bg-[#071426]/72 px-5 py-4 text-white shadow-[0_18px_48px_rgba(0,0,0,0.24)] backdrop-blur-md md:inset-x-6 md:bottom-6">
-          <p
-            id={labelledBy}
-            className="text-[10px] font-black uppercase tracking-[0.22em] text-[#F0D58C]"
-          >
+          <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#F0D58C]">
             Real-world decision pressure
           </p>
           <p className="mt-2 font-serif text-xl font-semibold leading-tight md:text-2xl">
