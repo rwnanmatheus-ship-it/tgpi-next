@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
 
 /**
  * Next.js 16 proxy entrypoint.
@@ -8,7 +7,7 @@ import type { NextRequest } from "next/server";
  * entitlements continue to be enforced by the existing application guards and
  * server-side billing controls.
  */
-export function proxy(_request: NextRequest) {
+export function proxy() {
   return NextResponse.next();
 }
 
