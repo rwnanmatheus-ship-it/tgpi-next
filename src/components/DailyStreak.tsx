@@ -2,24 +2,30 @@
 
 import { useEffect, useState } from "react";
 
+function readAndUpdateStreak() {
+  const lastVisit = localStorage.getItem("tgpi-last-visit");
+  const today = new Date().toDateString();
+  const currentStreak = Number(localStorage.getItem("tgpi-streak") || 1);
+
+  if (lastVisit === today) {
+    return currentStreak;
+  }
+
+  const nextStreak = currentStreak + 1;
+  localStorage.setItem("tgpi-streak", String(nextStreak));
+  localStorage.setItem("tgpi-last-visit", today);
+  return nextStreak;
+}
+
 export default function DailyStreak() {
   const [streak, setStreak] = useState(1);
 
   useEffect(() => {
-    const last = localStorage.getItem("tgpi-last-visit");
-    const today = new Date().toDateString();
+    const frame = window.requestAnimationFrame(() => {
+      setStreak(readAndUpdateStreak());
+    });
 
-    if (last !== today) {
-      const prev = Number(localStorage.getItem("tgpi-streak") || 1);
-      const next = prev + 1;
-
-      localStorage.setItem("tgpi-streak", String(next));
-      localStorage.setItem("tgpi-last-visit", today);
-
-      setStreak(next);
-    } else {
-      setStreak(Number(localStorage.getItem("tgpi-streak") || 1));
-    }
+    return () => window.cancelAnimationFrame(frame);
   }, []);
 
   return (

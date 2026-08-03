@@ -4,15 +4,14 @@ import { useEffect, useState } from "react";
 import { getOnlineUsers } from "@/lib/online-users";
 
 export default function OnlineNow() {
-  const [count, setCount] = useState(0);
+  const [count, setCount] = useState(() => getOnlineUsers());
 
   useEffect(() => {
-    setCount(getOnlineUsers());
-    const i = setInterval(() => {
+    const intervalId = window.setInterval(() => {
       setCount(getOnlineUsers());
     }, 5000);
 
-    return () => clearInterval(i);
+    return () => window.clearInterval(intervalId);
   }, []);
 
   return (

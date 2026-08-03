@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function CountryNotFound() {
   return (
     <div className="min-h-screen px-6 py-16">
@@ -14,19 +16,19 @@ export default function CountryNotFound() {
         </p>
 
         <div className="flex flex-wrap justify-center gap-4">
-          <a
+          <Link
             href="/countries"
             className="rounded-xl bg-yellow-500 px-6 py-3 font-semibold text-black transition hover:bg-yellow-400"
           >
             Explore Countries
-          </a>
+          </Link>
 
-          <a
+          <Link
             href="/"
             className="rounded-xl border border-yellow-500/50 bg-yellow-500/5 px-6 py-3 font-semibold text-yellow-300 transition hover:bg-yellow-500/10"
           >
             Back Home
-          </a>
+          </Link>
         </div>
       </div>
     </div>
