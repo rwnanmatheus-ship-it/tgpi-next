@@ -2,15 +2,28 @@ import { db } from "@/lib/firebase";
 import { collection, getDocs } from "firebase/firestore";
 import Link from "next/link";
 
-export default async function VerifyIdPage({ params }: any) {
+type VerifyPageProps = {
+  params: Promise<{ id: string }>;
+};
+
+type VerifiedProfile = {
+  displayName?: string;
+  username?: string;
+  tgpiId?: string;
+  country?: string;
+  goal?: string;
+};
+
+export default async function VerifyIdPage({ params }: VerifyPageProps) {
+  const { id } = await params;
   const usersRef = collection(db, "users");
   const snapshot = await getDocs(usersRef);
 
-  let profile: any = null;
+  let profile: VerifiedProfile | null = null;
 
   snapshot.forEach((item) => {
-    const data = item.data();
-    if (data.tgpiId === params.id) {
+    const data = item.data() as VerifiedProfile;
+    if (data.tgpiId === id) {
       profile = data;
     }
   });
@@ -42,12 +55,14 @@ export default async function VerifyIdPage({ params }: any) {
           {profile.displayName || "TGPI Member"}
         </h1>
 
-        <p className="mt-2 text-slate-400">@{profile.username}</p>
+        <p className="mt-2 text-slate-400">
+          {profile.username ? `@${profile.username}` : "Public profile"}
+        </p>
 
         <div className="mt-8 grid gap-4 md:grid-cols-2">
           <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
             <p className="text-sm text-slate-400">TGPI ID</p>
-            <p className="mt-2 font-bold text-yellow-400">{profile.tgpiId}</p>
+            <p className="mt-2 font-bold text-yellow-400">{profile.tgpiId || id}</p>
           </div>
 
           <div className="rounded-2xl border border-white/10 bg-white/5 p-5">
