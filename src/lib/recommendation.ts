@@ -1,16 +1,14 @@
-import type { Country } from "@/data/countries";
-
-type UserPreferences = {
-  goal?: string;
-  region?: string;
-  favorites?: string[];
-};
+import type {
+  Country,
+  RecommendationPreferences,
+  ScoredCountry,
+} from "@/types";
 
 export function recommendCountries(
   countries: Country[],
-  prefs: UserPreferences
-) {
-  const scored = countries.map((country) => {
+  prefs: RecommendationPreferences
+): ScoredCountry[] {
+  const scored: ScoredCountry[] = countries.map((country) => {
     let score = 0;
 
     if (prefs.goal && country.mainGoal === prefs.goal) score += 3;

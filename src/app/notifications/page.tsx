@@ -13,16 +13,7 @@ import {
   updateDoc,
 } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
-
-type NotificationItem = {
-  id: string;
-  title: string;
-  description: string;
-  timeLabel?: string;
-  href?: string;
-  unread?: boolean;
-  createdAt?: string;
-};
+import type { NotificationDocument, NotificationItem } from "@/types";
 
 function formatTime(date?: string, fallback?: string) {
   if (fallback) return fallback;
@@ -61,7 +52,7 @@ export default function NotificationsPage() {
         notificationsQuery,
         (snapshot) => {
           const next = snapshot.docs.map((item) => {
-            const data = item.data() as Omit<NotificationItem, "id">;
+            const data = item.data() as NotificationDocument;
             return {
               id: item.id,
               ...data,
