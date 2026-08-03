@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 const courses = [
   { title: "Japanese for Beginners", level: "A2", progress: "30%" },
   { title: "Brazilian Portuguese", level: "B1", progress: "45%" },
@@ -10,9 +12,9 @@ export default function DashboardCourses() {
     <section className="rounded-2xl border border-white/10 bg-white/5 p-5">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-lg font-bold text-white">Continue Learning</h2>
-        <a href="/courses" className="text-sm text-yellow-400">
+        <Link href="/courses" className="text-sm text-yellow-400">
           View all
-        </a>
+        </Link>
       </div>
 
       <div className="grid gap-4 md:grid-cols-4">
