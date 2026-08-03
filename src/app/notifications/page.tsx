@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import {
@@ -38,6 +39,7 @@ function formatTime(date?: string, fallback?: string) {
 }
 
 export default function NotificationsPage() {
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
 
@@ -109,7 +111,7 @@ export default function NotificationsPage() {
     }
 
     if (item.href) {
-      window.location.href = item.href;
+      router.push(item.href);
     }
   }
 
