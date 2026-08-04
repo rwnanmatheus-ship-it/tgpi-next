@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import TGPIIdentityCard from "@/components/TGPIIdentityCard";
@@ -63,9 +64,12 @@ export default function UltraProfilePanel() {
     <div className="min-h-screen bg-black px-6 py-10 text-white">
       <div className="mx-auto max-w-7xl space-y-8">
         <div className="flex items-center gap-6 rounded-3xl border border-white/10 bg-gradient-to-r from-blue-900 to-black p-6">
-          <img
+          <Image
             src={profile?.photoURL || "/avatar.png"}
             alt="TGPI member avatar"
+            width={80}
+            height={80}
+            unoptimized
             className="h-20 w-20 rounded-full border-2 border-yellow-400 object-cover"
           />
           <div>
