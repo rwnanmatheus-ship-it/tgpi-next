@@ -3,34 +3,33 @@
 :root {
   color-scheme: light;
 
-  --tgpi-canvas: #f8f5ee;
+  --tgpi-canvas: #f8f4eb;
   --tgpi-surface: #fffdf8;
   --tgpi-surface-strong: #ffffff;
-  --tgpi-ink: #0b0b0b;
-  --tgpi-navy: #0b1f3a;
-  --tgpi-navy-soft: #123a6f;
-  --tgpi-gold: #b58a2a;
+  --tgpi-ink: #101010;
+  --tgpi-navy: #071a32;
+  --tgpi-navy-soft: #102d50;
+  --tgpi-gold: #c59632;
   --tgpi-gold-strong: #8a641f;
-  --tgpi-gold-soft: #f4e7bd;
-  --tgpi-border: #d8d2c4;
-  --tgpi-border-soft: #e9e3d8;
-  --tgpi-muted: #667085;
+  --tgpi-gold-soft: #f7e8b9;
+  --tgpi-border: #d8d0c0;
+  --tgpi-border-soft: #ece5d9;
+  --tgpi-muted: #5e6875;
   --tgpi-success: #1f7a55;
   --tgpi-danger: #9f2f2f;
 
-  --tgpi-font-display: "Iowan Old Style", "Palatino Linotype", Palatino,
-    Baskerville, "Times New Roman", serif;
-  --tgpi-font-sans: Inter, ui-sans-serif, system-ui, -apple-system,
-    BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --tgpi-font-display: var(--font-tgpi-display), Georgia, serif;
+  --tgpi-font-sans: var(--font-tgpi-sans), ui-sans-serif, system-ui, sans-serif;
 
   --tgpi-container: 80rem;
-  --tgpi-section-space: clamp(3.5rem, 8vw, 7rem);
+  --tgpi-section-space: clamp(4rem, 8vw, 7rem);
   --tgpi-radius-sm: 0.75rem;
   --tgpi-radius-md: 1.25rem;
   --tgpi-radius-lg: 1.75rem;
   --tgpi-radius-xl: 2rem;
-  --tgpi-shadow-soft: 0 18px 50px rgba(15, 23, 42, 0.08);
-  --tgpi-shadow-premium: 0 30px 90px rgba(15, 23, 42, 0.12);
+  --tgpi-shadow-sm: 0 8px 24px rgba(7, 26, 50, 0.08);
+  --tgpi-shadow-soft: 0 18px 50px rgba(7, 26, 50, 0.09);
+  --tgpi-shadow-premium: 0 30px 90px rgba(7, 26, 50, 0.14);
 
   --background: var(--tgpi-canvas);
   --foreground: var(--tgpi-ink);
@@ -40,17 +39,22 @@ html {
   min-height: 100%;
   scroll-behavior: smooth;
   background: var(--tgpi-canvas);
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
   min-height: 100%;
   margin: 0;
+  overflow-x: hidden;
   background:
-    radial-gradient(circle at 12% 0%, rgba(181, 138, 42, 0.07), transparent 30%),
+    radial-gradient(circle at 12% 0%, rgba(197, 150, 50, 0.08), transparent 30%),
     var(--tgpi-canvas);
   color: var(--tgpi-ink);
   font-family: var(--tgpi-font-sans);
+  font-size: 16px;
+  line-height: 1.6;
   text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 
 * {
@@ -65,7 +69,9 @@ h5,
 h6 {
   margin: 0;
   font-family: var(--tgpi-font-display);
+  font-weight: 600;
   color: var(--tgpi-ink);
+  letter-spacing: -0.025em;
   text-wrap: balance;
 }
 
@@ -76,6 +82,7 @@ p {
 a {
   color: inherit;
   text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 button,
@@ -94,12 +101,17 @@ textarea {
   outline-offset: 3px;
 }
 
+button,
+a {
+  touch-action: manipulation;
+}
+
 img {
   max-width: 100%;
 }
 
 ::selection {
-  background: rgba(181, 138, 42, 0.28);
+  background: rgba(197, 150, 50, 0.3);
   color: var(--tgpi-navy);
 }
 
@@ -112,19 +124,68 @@ img {
   margin-inline: auto;
 }
 
-@media (min-width: 640px) {
-  .tgpi-container {
-    width: min(100% - 3rem, var(--tgpi-container));
-  }
-}
-
 .tgpi-section {
   padding-block: var(--tgpi-section-space);
 }
 
 .tgpi-surface-grid {
   background-image:
-    linear-gradient(rgba(11, 31, 58, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(11, 31, 58, 0.035) 1px, transparent 1px);
+    linear-gradient(rgba(7, 26, 50, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(7, 26, 50, 0.035) 1px, transparent 1px);
   background-size: 32px 32px;
+}
+
+@media (min-width: 640px) {
+  .tgpi-container {
+    width: min(100% - 3rem, var(--tgpi-container));
+  }
+}
+
+@media (max-width: 639px) {
+  :root {
+    --tgpi-section-space: 4rem;
+    --tgpi-radius-lg: 1.35rem;
+    --tgpi-radius-xl: 1.5rem;
+  }
+
+  body {
+    font-size: 15px;
+  }
+
+  h1 {
+    font-size: clamp(3.15rem, 15vw, 4.5rem) !important;
+    line-height: 0.94 !important;
+  }
+
+  h2 {
+    font-size: clamp(2.3rem, 10vw, 3.25rem) !important;
+    line-height: 1 !important;
+  }
+
+  h3 {
+    line-height: 1.06;
+  }
+
+  main section {
+    scroll-margin-top: 5rem;
+  }
+
+  a,
+  button {
+    min-height: 44px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
