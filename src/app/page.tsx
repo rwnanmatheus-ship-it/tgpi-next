@@ -28,7 +28,7 @@ const decisionSignals = [
   ["Mobility", "Entry pathways, documents and movement"],
 ] as const;
 
-const countries: Array<{
+const featuredCountries: Array<{
   name: string;
   href: string;
   variant: TGPIVisualVariant;
@@ -62,14 +62,14 @@ const countries: Array<{
   },
 ];
 
-const process = [
+const journeySteps = [
   ["01", "Discover", "Start with your real objective, not with a famous destination."],
   ["02", "Compare", "Evaluate trade-offs through one consistent decision framework."],
   ["03", "Prepare", "Connect skills, budget, documents and timeline to your plan."],
   ["04", "Progress", "Build a repeatable international strategy inside your TGPI profile."],
 ] as const;
 
-const stories: Array<{
+const intelligenceStories: Array<{
   category: string;
   title: string;
   description: string;
@@ -155,37 +155,26 @@ export default function HomePage() {
     <main className="overflow-hidden bg-[var(--tgpi-canvas)] text-[var(--tgpi-ink)]">
       <section className="relative px-4 pb-16 pt-8 sm:px-6 lg:px-8">
         <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_12%_8%,rgba(181,138,42,0.16),transparent_28%),radial-gradient(circle_at_90%_10%,rgba(11,31,58,0.13),transparent_30%),linear-gradient(180deg,#FFFDF8_0%,#F8F5EE_74%,#EFE8DB_100%)]" />
-
         <div className="mx-auto max-w-[1280px] overflow-hidden rounded-[42px] border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] shadow-[0_42px_120px_rgba(11,31,58,0.13)]">
           <div className="grid min-h-[730px] lg:grid-cols-[0.94fr_1.06fr]">
             <div className="flex flex-col justify-center px-7 py-14 sm:px-10 lg:px-14 lg:py-20">
               <div className="w-fit rounded-full border border-[#D6B45D] bg-[var(--tgpi-gold-soft)] px-4 py-2 text-[11px] font-black uppercase tracking-[0.24em] text-[#765009]">
                 The Global Polymath Institute
               </div>
-
               <h1 className="mt-8 max-w-3xl font-serif text-6xl font-semibold leading-[0.91] tracking-[-0.068em] text-[var(--tgpi-ink)] sm:text-7xl lg:text-[5.8rem]">
                 Compare the world before you <span className="text-[var(--tgpi-gold)]">choose.</span>
               </h1>
-
               <p className="mt-8 max-w-xl text-lg leading-8 text-[var(--tgpi-muted)] md:text-xl">
                 TGPI organizes countries, costs, careers, education, culture and mobility into one practical decision system for international life.
               </p>
-
               <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-                <Link
-                  href="/countries"
-                  className="rounded-2xl bg-[var(--tgpi-navy)] px-7 py-4 text-center text-sm font-black text-white shadow-[0_18px_45px_rgba(11,31,58,0.24)] transition hover:-translate-y-0.5 hover:bg-[#16345D]"
-                >
+                <Link href="/countries" className="rounded-2xl bg-[var(--tgpi-navy)] px-7 py-4 text-center text-sm font-black text-white shadow-[0_18px_45px_rgba(11,31,58,0.24)] transition hover:-translate-y-0.5 hover:bg-[#16345D]">
                   Explore 195 countries
                 </Link>
-                <Link
-                  href="/compare"
-                  className="rounded-2xl border border-[var(--tgpi-gold)] bg-[var(--tgpi-gold-soft)] px-7 py-4 text-center text-sm font-black text-[#6F4908] transition hover:-translate-y-0.5 hover:bg-[#F4E2AC]"
-                >
+                <Link href="/compare" className="rounded-2xl border border-[var(--tgpi-gold)] bg-[var(--tgpi-gold-soft)] px-7 py-4 text-center text-sm font-black text-[#6F4908] transition hover:-translate-y-0.5 hover:bg-[#F4E2AC]">
                   Compare countries
                 </Link>
               </div>
-
               <div className="mt-9 flex flex-wrap items-center gap-x-4 gap-y-2 text-[11px] font-black uppercase tracking-[0.18em] text-[#667080]">
                 <span>Data</span><span className="text-[var(--tgpi-gold)]">•</span>
                 <span>Education</span><span className="text-[var(--tgpi-gold)]">•</span>
@@ -195,12 +184,7 @@ export default function HomePage() {
             </div>
 
             <div className="relative min-h-[590px] lg:min-h-full">
-              <TGPIEditorialVisual
-                variant="hero"
-                id="home-hero-v2"
-                ariaLabel="International traveler preparing for a strategic global decision"
-                className="absolute inset-0 h-full w-full"
-              />
+              <TGPIEditorialVisual variant="hero" id="home-hero-v2" ariaLabel="International traveler preparing for a strategic global decision" className="absolute inset-0 h-full w-full" />
               <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(11,31,58,0.02),rgba(11,31,58,0.58))]" />
               <div className="absolute right-6 top-6 rounded-full border border-white/30 bg-[#0B1F3A]/82 px-4 py-2 text-[10px] font-black uppercase tracking-[0.2em] text-[#F0D58C] backdrop-blur-xl lg:right-8 lg:top-8">
                 TGPI Decision System
@@ -239,12 +223,7 @@ export default function HomePage() {
       </section>
 
       <section className="px-4 py-24 sm:px-6 lg:px-8">
-        <Heading
-          label="The TGPI decision framework"
-          title="A country is not a dream. It is a system of trade-offs."
-          description="TGPI gives every destination the same strategic lens, so attractive signals never hide practical pressure."
-        />
-
+        <Heading label="The TGPI decision framework" title="A country is not a dream. It is a system of trade-offs." description="TGPI gives every destination the same strategic lens, so attractive signals never hide practical pressure." />
         <div className="mx-auto mt-14 grid max-w-[1280px] gap-4 md:grid-cols-5">
           {decisionSignals.map(([title, description], index) => (
             <article key={title} className="rounded-[26px] border border-[var(--tgpi-border)] bg-white p-6 shadow-[var(--tgpi-shadow-soft)]">
@@ -259,19 +238,9 @@ export default function HomePage() {
       <section className="bg-[var(--tgpi-navy)] px-4 py-24 text-white sm:px-6 lg:px-8">
         <div className="mx-auto max-w-[1280px]">
           <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
-            <Heading
-              label="Country intelligence"
-              title="Move from inspiration to evidence."
-              description="Explore a consistent base of country profiles, then narrow the world through your own priorities."
-              light
-              align="left"
-            />
+            <Heading label="Country intelligence" title="Move from inspiration to evidence." description="Explore a consistent base of country profiles, then narrow the world through your own priorities." light align="left" />
             <div className="grid gap-3 sm:grid-cols-3">
-              {[
-                ["195", "country profiles"],
-                ["100+", "decision signals"],
-                ["3", "countries per comparison"],
-              ].map(([value, label]) => (
+              {[["195", "country profiles"], ["100+", "decision signals"], ["3", "countries per comparison"]].map(([value, label]) => (
                 <div key={label} className="rounded-[24px] border border-white/15 bg-white/5 p-5 backdrop-blur">
                   <p className="font-serif text-4xl font-semibold text-[#F0D58C]">{value}</p>
                   <p className="mt-2 text-sm text-[#DCE4EE]">{label}</p>
@@ -281,14 +250,9 @@ export default function HomePage() {
           </div>
 
           <div className="mt-14 grid gap-6 lg:grid-cols-3">
-            {countries.map((country, index) => (
+            {featuredCountries.map((country, index) => (
               <Link key={country.name} href={country.href} className="group overflow-hidden rounded-[30px] border border-white/15 bg-white/5 transition hover:-translate-y-1 hover:border-[#D6B45D]">
-                <TGPIEditorialVisual
-                  variant={country.variant}
-                  id={`home-country-${index}`}
-                  ariaLabel={`${country.name} country intelligence`}
-                  className="aspect-[4/3] w-full"
-                />
+                <TGPIEditorialVisual variant={country.variant} id={`home-country-${index}`} ariaLabel={`${country.name} country intelligence`} className="aspect-[4/3] w-full" />
                 <div className="p-6">
                   <div className="flex items-center justify-between gap-4">
                     <h3 className="font-serif text-3xl font-semibold">{country.name}</h3>
@@ -310,22 +274,13 @@ export default function HomePage() {
 
       <section className="px-4 py-24 sm:px-6 lg:px-8">
         <div className="mx-auto grid max-w-[1280px] overflow-hidden rounded-[38px] border border-[var(--tgpi-border)] bg-white shadow-[var(--tgpi-shadow-card)] lg:grid-cols-2">
-          <TGPIEditorialVisual
-            variant="compare"
-            id="home-comparison"
-            ariaLabel="World map used for country comparison"
-            className="min-h-[460px] w-full"
-          />
+          <TGPIEditorialVisual variant="compare" id="home-comparison" ariaLabel="World map used for country comparison" className="min-h-[460px] w-full" />
           <div className="p-7 sm:p-10 lg:p-14">
             <Label>See the trade-offs</Label>
             <h2 className="mt-5 font-serif text-4xl font-semibold leading-[1] tracking-[-0.05em] text-[var(--tgpi-ink)] md:text-6xl">High salary does not automatically mean a better life.</h2>
             <p className="mt-6 text-base leading-8 text-[var(--tgpi-muted)]">Compare countries side by side and expose the relationship between salary, cost, safety, language, quality of life and adaptation.</p>
             <div className="mt-8 space-y-3">
-              {[
-                ["Portugal", "Lower adaptation pressure", "Lifestyle fit"],
-                ["Canada", "Stronger career pathways", "Housing pressure"],
-                ["England", "Academic and global leverage", "Premium cost"],
-              ].map(([country, strength, pressure]) => (
+              {[["Portugal", "Lower adaptation pressure", "Lifestyle fit"], ["Canada", "Stronger career pathways", "Housing pressure"], ["England", "Academic and global leverage", "Premium cost"]].map(([country, strength, pressure]) => (
                 <div key={country} className="grid gap-2 rounded-2xl border border-[var(--tgpi-border)] bg-[var(--tgpi-paper)] p-4 sm:grid-cols-[0.6fr_1fr_1fr]">
                   <p className="font-black text-[var(--tgpi-navy)]">{country}</p>
                   <p className="text-sm text-[var(--tgpi-muted)]">{strength}</p>
@@ -339,14 +294,10 @@ export default function HomePage() {
       </section>
 
       <section className="border-y border-[var(--tgpi-border)] bg-[#F1EBDD] px-4 py-24 sm:px-6 lg:px-8">
-        <Heading
-          label="How TGPI works"
-          title="A clear path from interest to action."
-          description="The platform is designed to help you reduce uncertainty in a practical sequence."
-        />
+        <Heading label="How TGPI works" title="A clear path from interest to action." description="The platform is designed to help you reduce uncertainty in a practical sequence." />
         <div className="mx-auto mt-14 grid max-w-[1280px] gap-5 lg:grid-cols-4">
-          {process.map(([number, title, description]) => (
-            <article key={number} className="relative rounded-[28px] border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] p-7 shadow-[var(--tgpi-shadow-soft)]">
+          {journeySteps.map(([number, title, description]) => (
+            <article key={number} className="rounded-[28px] border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] p-7 shadow-[var(--tgpi-shadow-soft)]">
               <p className="font-serif text-5xl font-semibold text-[#D5BE82]">{number}</p>
               <h3 className="mt-8 font-serif text-3xl font-semibold text-[var(--tgpi-navy)]">{title}</h3>
               <p className="mt-4 text-sm leading-7 text-[var(--tgpi-muted)]">{description}</p>
@@ -356,13 +307,9 @@ export default function HomePage() {
       </section>
 
       <section className="px-4 py-24 sm:px-6 lg:px-8">
-        <Heading
-          label="From the TGPI intelligence library"
-          title="The same editorial identity. Now interactive."
-          description="The ideas introduced on Instagram continue inside the platform as country reports, comparisons and action tools."
-        />
+        <Heading label="From the TGPI intelligence library" title="The same editorial identity. Now interactive." description="The ideas introduced on Instagram continue inside the platform as country reports, comparisons and action tools." />
         <div className="mx-auto mt-14 grid max-w-[1280px] gap-6 lg:grid-cols-3">
-          {stories.map((story, index) => (
+          {intelligenceStories.map((story, index) => (
             <Link key={story.title} href={story.href} className="group overflow-hidden rounded-[30px] border border-[var(--tgpi-border)] bg-white shadow-[var(--tgpi-shadow-soft)] transition hover:-translate-y-1 hover:shadow-[var(--tgpi-shadow-card)]">
               <TGPIEditorialVisual variant={story.variant} id={`home-story-${index}`} ariaLabel={story.title} className="aspect-[4/3] w-full" />
               <div className="p-6">
@@ -383,18 +330,11 @@ export default function HomePage() {
             <h2 className="mt-5 font-serif text-5xl font-semibold leading-[0.98] tracking-[-0.05em] md:text-7xl">Turn exploration into a personal global strategy.</h2>
             <p className="mt-6 max-w-2xl text-base leading-8 text-[#DCE4EE] md:text-lg">Premium connects your profile, readiness, country shortlist, recommendations and progress into one decision environment.</p>
             <div className="mt-8 grid gap-3 sm:grid-cols-2">
-              {[
-                "Personal country-fit recommendations",
-                "Advanced country comparison",
-                "Global readiness and progress tracking",
-                "Priority access to new TGPI tools",
-              ].map((item) => (
+              {["Personal country-fit recommendations", "Advanced country comparison", "Global readiness and progress tracking", "Priority access to new TGPI tools"].map((item) => (
                 <div key={item} className="rounded-2xl border border-white/15 bg-white/5 p-4 text-sm font-semibold text-[#E9EEF5]">✓ {item}</div>
               ))}
             </div>
-            <div className="mt-8 max-w-sm">
-              <PremiumActionButton billingEnabled={billingEnabled} />
-            </div>
+            <div className="mt-8 max-w-sm"><PremiumActionButton billingEnabled={billingEnabled} /></div>
             <p className="mt-4 text-xs text-[#AEBBCB]">Secure billing activates only when the official launch configuration is enabled.</p>
           </div>
           <TGPIEditorialVisual variant="premium" id="home-premium" ariaLabel="Professional workspace for international planning" className="min-h-[520px] w-full" />
@@ -408,20 +348,9 @@ export default function HomePage() {
             <p className="mt-4 max-w-md text-sm leading-7 text-[var(--tgpi-muted)]">Global education for people building life abroad. Compare countries with strategy, prepare with clarity and act with evidence.</p>
             <p className="mt-5 text-xs font-black uppercase tracking-[0.18em] text-[var(--tgpi-gold-strong)]">Data · Education · Mobility · Decision</p>
           </div>
-          {[
-            ["Explore", [["Countries", "/countries"], ["Compare", "/compare"], ["Ranking", "/ranking"]]],
-            ["Build", [["Dashboard", "/dashboard"], ["Passport", "/passport"], ["Courses", "/courses"]]],
-            ["Company", [["About", "/about"], ["Why TGPI", "/why"], ["Pricing", "/pricing"]]],
-          ].map(([title, links]) => (
-            <div key={title as string}>
-              <p className="text-xs font-black uppercase tracking-[0.18em] text-[var(--tgpi-navy)]">{title as string}</p>
-              <div className="mt-4 space-y-3">
-                {(links as string[][]).map(([label, href]) => (
-                  <Link key={href} href={href} className="block text-sm text-[var(--tgpi-muted)] transition hover:text-[var(--tgpi-gold-strong)]">{label}</Link>
-                ))}
-              </div>
-            </div>
-          ))}
+          <FooterColumn title="Explore" links={[["Countries", "/countries"], ["Compare", "/compare"], ["Ranking", "/ranking"]]} />
+          <FooterColumn title="Build" links={[["Dashboard", "/dashboard"], ["Passport", "/passport"], ["Courses", "/courses"]]} />
+          <FooterColumn title="Company" links={[["About", "/about"], ["Why TGPI", "/why"], ["Pricing", "/pricing"]]} />
         </div>
         <div className="mx-auto mt-12 flex max-w-[1280px] flex-col gap-3 border-t border-[var(--tgpi-border)] pt-6 text-xs text-[#737B87] sm:flex-row sm:items-center sm:justify-between">
           <p>© 2026 TGPI — The Global Polymath Institute.</p>
@@ -429,5 +358,18 @@ export default function HomePage() {
         </div>
       </footer>
     </main>
+  );
+}
+
+function FooterColumn({ title, links }: { title: string; links: ReadonlyArray<readonly [string, string]> }) {
+  return (
+    <div>
+      <p className="text-xs font-black uppercase tracking-[0.18em] text-[var(--tgpi-navy)]">{title}</p>
+      <div className="mt-4 space-y-3">
+        {links.map(([label, href]) => (
+          <Link key={href} href={href} className="block text-sm text-[var(--tgpi-muted)] transition hover:text-[var(--tgpi-gold-strong)]">{label}</Link>
+        ))}
+      </div>
+    </div>
   );
 }
