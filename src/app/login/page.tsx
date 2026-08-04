@@ -13,6 +13,10 @@ import TGPIEditorialVisual from "@/components/TGPIEditorialVisual";
 import { auth, db } from "@/lib/firebase";
 import { defaultUserProfile } from "@/lib/profile";
 
+function getErrorMessage(error: unknown, fallback: string) {
+  return error instanceof Error && error.message ? error.message : fallback;
+}
+
 export default function LoginPage() {
   const router = useRouter();
 
@@ -61,8 +65,8 @@ export default function LoginPage() {
         setStatus("Login successful.");
         router.push("/dashboard");
       }
-    } catch (error: any) {
-      setStatus(error?.message || "Something went wrong.");
+    } catch (error: unknown) {
+      setStatus(getErrorMessage(error, "Something went wrong."));
     } finally {
       setLoading(false);
     }
@@ -79,8 +83,8 @@ export default function LoginPage() {
       setStatus("");
       await sendPasswordResetEmail(auth, email);
       setStatus("Password reset email sent successfully.");
-    } catch (error: any) {
-      setStatus(error?.message || "Could not send reset email.");
+    } catch (error: unknown) {
+      setStatus(getErrorMessage(error, "Could not send reset email."));
     } finally {
       setSendingReset(false);
     }
