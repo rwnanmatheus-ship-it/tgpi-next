@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import type { User } from "firebase/auth";
 import { onAuthStateChanged } from "firebase/auth";
@@ -26,10 +27,13 @@ export default function TGPIHeader() {
         </div>
 
         <div className="flex items-center gap-2 rounded-xl bg-white/5 px-3 py-2">
-          <img
+          <Image
             src={user?.photoURL || "/avatar.png"}
             alt="TGPI account avatar"
-            className="h-8 w-8 rounded-full"
+            width={32}
+            height={32}
+            unoptimized
+            className="h-8 w-8 rounded-full object-cover"
           />
           <div>
             <p className="text-sm">{user?.displayName || "User"}</p>
