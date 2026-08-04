@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 
 export default function ProfileAvatarUploader({
@@ -47,12 +48,15 @@ export default function ProfileAvatarUploader({
       </p>
 
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
-        <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border border-yellow-500/25 bg-black text-3xl font-bold text-yellow-400 shadow-[0_0_30px_rgba(250,204,21,0.08)]">
+        <div className="relative flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border border-yellow-500/25 bg-black text-3xl font-bold text-yellow-400 shadow-[0_0_30px_rgba(250,204,21,0.08)]">
           {preview ? (
-            <img
+            <Image
               src={preview}
-              alt={displayName}
-              className="h-full w-full object-cover"
+              alt={`${displayName} profile photo`}
+              fill
+              unoptimized
+              sizes="96px"
+              className="object-cover"
             />
           ) : (
             <span>{displayName?.slice(0, 1)?.toUpperCase() || "U"}</span>

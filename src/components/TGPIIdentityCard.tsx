@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import TGPIQrCode from "@/components/TGPIQrCode";
 import type { UserData } from "@/types";
 
@@ -35,11 +36,14 @@ export default function TGPIIdentityCard({ profile }: TGPIIdentityCardProps) {
         </div>
 
         <div className="flex flex-col items-center justify-center gap-4">
-          <div className="h-24 w-24 overflow-hidden rounded-full border-2 border-yellow-400">
-            <img
+          <div className="relative h-24 w-24 overflow-hidden rounded-full border-2 border-yellow-400">
+            <Image
               src={profile?.photoURL || "/avatar.png"}
               alt="TGPI member avatar"
-              className="h-full w-full object-cover"
+              fill
+              unoptimized
+              sizes="96px"
+              className="object-cover"
             />
           </div>
 

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
@@ -37,9 +38,13 @@ export default function DashboardIdentity() {
       </div>
 
       <div className="flex items-center gap-4">
-        <img
+        <Image
           src={profile?.photoURL || "/avatar.png"}
           alt="TGPI member avatar"
+          width={80}
+          height={80}
+          sizes="80px"
+          unoptimized={Boolean(profile?.photoURL)}
           className="h-20 w-20 rounded-full border-2 border-yellow-400 object-cover"
         />
 

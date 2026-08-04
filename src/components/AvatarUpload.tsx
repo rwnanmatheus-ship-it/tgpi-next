@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { updateProfile } from "firebase/auth";
 import { auth } from "@/lib/firebase";
@@ -53,9 +54,12 @@ export default function AvatarUpload() {
     <div className="rounded-2xl border border-slate-800 bg-slate-950 p-4">
       <div className="flex items-center gap-4">
         {photoURL ? (
-          <img
+          <Image
             src={photoURL}
-            alt="Profile avatar"
+            alt={`${displayName || "TGPI member"} profile avatar`}
+            width={80}
+            height={80}
+            unoptimized
             className="h-20 w-20 rounded-full border border-slate-700 object-cover"
           />
         ) : (
