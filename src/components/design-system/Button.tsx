@@ -13,13 +13,9 @@ type SharedProps = {
 
 type LinkButtonProps = SharedProps & {
   href: string;
-  type?: never;
 };
 
-type NativeButtonProps = SharedProps &
-  ButtonHTMLAttributes<HTMLButtonElement> & {
-    href?: never;
-  };
+type NativeButtonProps = SharedProps & ButtonHTMLAttributes<HTMLButtonElement>;
 
 type ButtonProps = LinkButtonProps | NativeButtonProps;
 
@@ -50,7 +46,7 @@ export function Button(props: ButtonProps) {
   } = props;
   const classes = `${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`.trim();
 
-  if ("href" in props && props.href) {
+  if ("href" in props && typeof props.href === "string") {
     return (
       <Link href={props.href} className={classes}>
         {children}
@@ -58,10 +54,18 @@ export function Button(props: ButtonProps) {
     );
   }
 
-  const { href: _href, ...buttonProps } = props;
+  const buttonProps = props as NativeButtonProps;
 
   return (
-    <button className={classes} {...buttonProps}>
+    <button
+      className={classes}
+      disabled={buttonProps.disabled}
+      form={buttonProps.form}
+      name={buttonProps.name}
+      onClick={buttonProps.onClick}
+      type={buttonProps.type ?? "button"}
+      value={buttonProps.value}
+    >
       {children}
     </button>
   );
