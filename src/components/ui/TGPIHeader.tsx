@@ -1,41 +1,39 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { auth } from "@/lib/firebase";
+import type { User } from "firebase/auth";
 import { onAuthStateChanged } from "firebase/auth";
+import { auth } from "@/lib/firebase";
 
 export default function TGPIHeader() {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User | null>(null);
 
-  useEffect(() => {
-    return onAuthStateChanged(auth, setUser);
-  }, []);
+  useEffect(() => onAuthStateChanged(auth, setUser), []);
 
   return (
-    <header className="flex justify-between items-center p-4 border-b border-white/10 bg-[#050b18]">
+    <header className="flex items-center justify-between border-b border-white/10 bg-[#050b18] p-4">
       <input
         placeholder="Buscar países, cursos..."
-        className="bg-black border border-white/10 px-4 py-2 rounded-xl w-1/3"
+        className="w-1/3 rounded-xl border border-white/10 bg-black px-4 py-2"
       />
 
       <div className="flex items-center gap-4">
         <div className="relative">
           🔔
-          <span className="absolute -top-2 -right-2 bg-red-500 text-xs px-1 rounded-full">
+          <span className="absolute -right-2 -top-2 rounded-full bg-red-500 px-1 text-xs">
             3
           </span>
         </div>
 
-        <div className="flex items-center gap-2 bg-white/5 px-3 py-2 rounded-xl">
+        <div className="flex items-center gap-2 rounded-xl bg-white/5 px-3 py-2">
           <img
             src={user?.photoURL || "/avatar.png"}
-            className="w-8 h-8 rounded-full"
+            alt="TGPI account avatar"
+            className="h-8 w-8 rounded-full"
           />
           <div>
             <p className="text-sm">{user?.displayName || "User"}</p>
-            <p className="text-xs text-slate-400">
-              {user?.email}
-            </p>
+            <p className="text-xs text-slate-400">{user?.email}</p>
           </div>
         </div>
       </div>
