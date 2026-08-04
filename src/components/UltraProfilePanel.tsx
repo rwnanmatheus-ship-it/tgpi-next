@@ -1,185 +1,183 @@
 "use client";
 
-import TGPIIdentityCard from "@/components/TGPIIdentityCard";
 import { useEffect, useState } from "react";
-import { auth } from "@/lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
+import TGPIIdentityCard from "@/components/TGPIIdentityCard";
+import { auth } from "@/lib/firebase";
 import {
   loadCommandCenterProfile,
   saveCommandCenterProfileWithRules,
 } from "@/lib/profile-command-center";
+import type { UserData } from "@/types";
 
-// Define the available tabs for the profile panel. These values are used to switch
-// between different views (overview, edit, etc.) within the component.
 type Tab = "overview" | "edit" | "goals" | "activity" | "settings";
 
-/**
- * UltraProfilePanel renders a rich user profile experience. It displays core
- * information about the user, allows editing of personal details, and sets
- * the stage for future functionality such as strategic goals, activity feeds
- * and settings. All static strings have been translated to English to ensure
- * a premium and international feel.
- */
+type CommandCenterProfile = UserData & {
+  country?: string;
+  languagePreference?: string;
+  goal?: string;
+  streak?: number;
+};
+
 export default function UltraProfilePanel() {
-  const [profile, setProfile] = useState<any>(null);
+  const [profile, setProfile] = useState<CommandCenterProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<Tab>("overview");
-  const [form, setForm] = useState<any>({});
+  const [form, setForm] = useState<Partial<CommandCenterProfile>>({});
 
-  // Load the user's profile when authentication state changes. If the user is
-  // signed in, we fetch their command center profile and populate both the
-  // display state and the form state. Once data is fetched we mark loading
-  // false to render the UI.
   useEffect(() => {
-    const unsub = onAuthStateChanged(auth, async (user) => {
-      if (!user) return;
-      const data = await loadCommandCenterProfile();
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        setProfile(null);
+        setForm({});
+        setLoading(false);
+        return;
+      }
+
+      const data = (await loadCommandCenterProfile()) as CommandCenterProfile | null;
       setProfile(data);
       setForm(data || {});
       setLoading(false);
     });
-    return () => unsub();
+
+    return unsubscribe;
   }, []);
 
-  // Save the updated profile and refresh the view. Once the profile has been
-  // saved successfully, we re-fetch it to ensure our local state is in sync
-  // with the persisted data. A success message is shown to the user.
   async function handleSave() {
     await saveCommandCenterProfileWithRules(form);
-    const updated = await loadCommandCenterProfile();
+    const updated = (await loadCommandCenterProfile()) as CommandCenterProfile | null;
     setProfile(updated);
     alert("Saved successfully ✅");
   }
 
-  // While data is loading, show a simple loading indicator. This keeps the UI
-  // responsive and provides feedback to the user.
+  function updateForm<K extends keyof CommandCenterProfile>(
+    field: K,
+    value: CommandCenterProfile[K]
+  ) {
+    setForm((current) => ({ ...current, [field]: value }));
+  }
+
   if (loading) return <div className="p-10 text-white">Loading...</div>;
 
   return (
-    <div className="min-h-screen bg-black text-white px-6 py-10">
-      <div className="max-w-7xl mx-auto space-y-8">
-        {/* HEADER */}
-        <div className="flex items-center gap-6 bg-gradient-to-r from-blue-900 to-black p-6 rounded-3xl border border-white/10">
+    <div className="min-h-screen bg-black px-6 py-10 text-white">
+      <div className="mx-auto max-w-7xl space-y-8">
+        <div className="flex items-center gap-6 rounded-3xl border border-white/10 bg-gradient-to-r from-blue-900 to-black p-6">
           <img
             src={profile?.photoURL || "/avatar.png"}
-            className="w-20 h-20 rounded-full border-2 border-yellow-400 object-cover"
+            alt="TGPI member avatar"
+            className="h-20 w-20 rounded-full border-2 border-yellow-400 object-cover"
           />
           <div>
             <h1 className="text-3xl font-bold text-yellow-400">
-              {profile?.displayName}
+              {profile?.displayName || profile?.name || "TGPI Member"}
             </h1>
-            <p className="text-slate-400">@{profile?.username}</p>
-            <div className="text-xs mt-2">
+            <p className="text-slate-400">@{profile?.username || "username"}</p>
+            <div className="mt-2 text-xs">
               TGPI ID:{" "}
-              <span className="text-yellow-400 font-bold">
-                {profile?.tgpiId}
+              <span className="font-bold text-yellow-400">
+                {profile?.tgpiId || "TGPI-ID"}
               </span>
             </div>
           </div>
         </div>
-        {/* Identity card showing additional profile info */}
+
         <TGPIIdentityCard profile={profile} />
-        {/* Summary card with high-level details */}
-        <div className="p-6 rounded-3xl bg-gradient-to-br from-[#0a1a2f] to-black border border-yellow-500/20">
-          <div className="grid md:grid-cols-2 gap-6">
+
+        <div className="rounded-3xl border border-yellow-500/20 bg-gradient-to-br from-[#0a1a2f] to-black p-6">
+          <div className="grid gap-6 md:grid-cols-2">
             <div className="space-y-2 text-sm">
-              <p>🌎 Country: {profile?.country}</p>
+              <p>🌎 Country: {profile?.country || profile?.currentCountry}</p>
               <p>🌐 Languages: {profile?.languagePreference}</p>
-              <p>🎯 Goal: {profile?.goal}</p>
+              <p>🎯 Goal: {profile?.goal || profile?.travelIntent}</p>
               <p>⭐ Plan: {profile?.plan}</p>
             </div>
-            <div className="flex items-center justify-center text-6xl">
-              🌍
-            </div>
+            <div className="flex items-center justify-center text-6xl">🌍</div>
           </div>
         </div>
-        {/* Tab navigation */}
-        <div className="flex gap-3 flex-wrap">
-          {["overview", "edit", "goals", "activity", "settings"].map((t) => (
-            <button
-              key={t}
-              onClick={() => setTab(t as Tab)}
-              className={`px-4 py-2 rounded-xl ${
-                tab === t
-                  ? "bg-yellow-500 text-black"
-                  : "bg-white/5 border border-white/10"
-              }`}
-            >
-              {t}
-            </button>
-          ))}
+
+        <div className="flex flex-wrap gap-3">
+          {(["overview", "edit", "goals", "activity", "settings"] as const).map(
+            (item) => (
+              <button
+                key={item}
+                type="button"
+                onClick={() => setTab(item)}
+                className={`rounded-xl px-4 py-2 ${
+                  tab === item
+                    ? "bg-yellow-500 text-black"
+                    : "border border-white/10 bg-white/5"
+                }`}
+              >
+                {item}
+              </button>
+            )
+          )}
         </div>
-        {/* Overview tab content */}
+
         {tab === "overview" && (
-          <div className="grid md:grid-cols-3 gap-6">
-            <div className="p-6 border border-white/10 rounded-2xl">
-              XP: {profile?.xp || 0}
-            </div>
-            <div className="p-6 border border-white/10 rounded-2xl">
-              Level: {profile?.level || 1}
-            </div>
-            <div className="p-6 border border-white/10 rounded-2xl">
-              Streak: {profile?.streak || 0}
-            </div>
+          <div className="grid gap-6 md:grid-cols-3">
+            <div className="rounded-2xl border border-white/10 p-6">XP: {profile?.xp || 0}</div>
+            <div className="rounded-2xl border border-white/10 p-6">Level: {profile?.level || 1}</div>
+            <div className="rounded-2xl border border-white/10 p-6">Streak: {profile?.streak || 0}</div>
           </div>
         )}
-        {/* Edit tab content */}
+
         {tab === "edit" && (
-          <div className="grid md:grid-cols-2 gap-4">
+          <div className="grid gap-4 md:grid-cols-2">
             <input
               value={form.displayName || ""}
-              onChange={(e) => setForm({ ...form, displayName: e.target.value })}
+              onChange={(event) => updateForm("displayName", event.target.value)}
               placeholder="Name"
-              className="p-4 bg-black border border-white/20 rounded-xl"
+              className="rounded-xl border border-white/20 bg-black p-4"
             />
             <input
               value={form.username || ""}
-              onChange={(e) => setForm({ ...form, username: e.target.value })}
+              onChange={(event) => updateForm("username", event.target.value)}
               placeholder="Username"
-              className="p-4 bg-black border border-white/20 rounded-xl"
+              className="rounded-xl border border-white/20 bg-black p-4"
             />
             <input
               value={form.country || ""}
-              onChange={(e) => setForm({ ...form, country: e.target.value })}
+              onChange={(event) => updateForm("country", event.target.value)}
               placeholder="Country 🌎"
-              className="p-4 bg-black border border-white/20 rounded-xl"
+              className="rounded-xl border border-white/20 bg-black p-4"
             />
             <input
               value={form.languagePreference || ""}
-              onChange={(e) => setForm({ ...form, languagePreference: e.target.value })}
+              onChange={(event) => updateForm("languagePreference", event.target.value)}
               placeholder="Languages 🌐"
-              className="p-4 bg-black border border-white/20 rounded-xl"
+              className="rounded-xl border border-white/20 bg-black p-4"
             />
             <textarea
               value={form.bio || ""}
-              onChange={(e) => setForm({ ...form, bio: e.target.value })}
+              onChange={(event) => updateForm("bio", event.target.value)}
               placeholder="Bio ✍🏼"
-              className="p-4 bg-black border border-white/20 rounded-xl md:col-span-2"
+              className="rounded-xl border border-white/20 bg-black p-4 md:col-span-2"
             />
           </div>
         )}
-        {/* Goals tab content */}
+
         {tab === "goals" && (
-          <div className="p-6 border border-white/10 rounded-2xl">
+          <div className="rounded-2xl border border-white/10 p-6">
             🎯 Strategic goals coming soon
           </div>
         )}
-        {/* Activity tab content */}
         {tab === "activity" && (
-          <div className="p-6 border border-white/10 rounded-2xl">
+          <div className="rounded-2xl border border-white/10 p-6">
             📊 User activity coming soon
           </div>
         )}
-        {/* Settings tab content */}
         {tab === "settings" && (
-          <div className="p-6 border border-white/10 rounded-2xl">
+          <div className="rounded-2xl border border-white/10 p-6">
             ⚙️ Settings coming soon
           </div>
         )}
-        {/* Action button */}
+
         <button
+          type="button"
           onClick={handleSave}
-          className="bg-yellow-500 text-black px-6 py-3 rounded-xl font-bold"
+          className="rounded-xl bg-yellow-500 px-6 py-3 font-bold text-black"
         >
           Save
         </button>
