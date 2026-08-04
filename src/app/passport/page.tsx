@@ -7,6 +7,11 @@ import Link from "next/link";
 import { maskDocumentNumber, prettifyIntent } from "@/lib/identity";
 import { calculateReputation } from "@/lib/calculate-reputation";
 
+function getCollectionCount(value: number | string[] | undefined): number {
+  if (Array.isArray(value)) return value.length;
+  return Number(value || 0);
+}
+
 export default function PassportPage() {
   const user = useUserData();
 
@@ -14,8 +19,8 @@ export default function PassportPage() {
     return <div className="p-10 text-white">Loading passport...</div>;
   }
 
-  const countries = user.countriesExplored || [];
-  const completedCourses = user.completedCourses || [];
+  const countriesCount = getCollectionCount(user.countriesExplored);
+  const completedCoursesCount = getCollectionCount(user.completedCourses);
   const readinessScore = user.globalReadinessScore || 0;
   const reputation = calculateReputation(user);
   const profileUrl = user.uid ? `/u/${user.uid}` : "/profile";
@@ -105,11 +110,11 @@ export default function PassportPage() {
             <div className="mt-6 space-y-4">
               <Card
                 label="Countries Explored"
-                value={String(countries.length)}
+                value={String(countriesCount)}
               />
               <Card
                 label="Completed Courses"
-                value={String(completedCourses.length)}
+                value={String(completedCoursesCount)}
               />
               <Card
                 label="Certificates Earned"

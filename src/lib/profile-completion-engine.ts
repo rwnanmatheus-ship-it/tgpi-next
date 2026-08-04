@@ -1,4 +1,4 @@
-import { CommandCenterProfile } from "@/lib/profile-command-center";
+import type { CommandCenterProfile } from "@/types/profile";
 
 export type CompletionItem = {
   id: string;

@@ -39,3 +39,69 @@ export type ProfileFormValues = {
   targetCountry: string;
   travelIntent: string;
 };
+
+export type ProfileConversionRecord = {
+  baseCurrency?: string;
+  targetCurrency?: string;
+  amount?: number;
+  convertedAmount?: number;
+  rate?: number;
+  createdAt?: string;
+};
+
+export type ProfileActivityRecord = {
+  id?: string;
+  type?: string;
+  label?: string;
+  description?: string;
+  href?: string;
+  createdAt?: string;
+};
+
+export type CommandCenterProfile = {
+  uid?: string;
+  email?: string;
+  displayName?: string;
+  fullName?: string;
+  username?: string;
+  tgpiId?: string;
+  usernameChangeCount?: number;
+  usernameHistory?: string[];
+  bio?: string;
+  city?: string;
+  country?: string;
+  preferredCurrency?: string;
+  phone?: string;
+  website?: string;
+  instagram?: string;
+  linkedin?: string;
+  timezone?: string;
+  languagePreference?: string;
+  goal?: string;
+  englishLevel?: string;
+  budget?: string;
+  continentInterest?: string;
+  notificationsEmail?: boolean;
+  notificationsPush?: boolean;
+  marketingEmails?: boolean;
+  profilePublic?: boolean;
+  showLocation?: boolean;
+  showProgress?: boolean;
+  showGoals?: boolean;
+  favoriteCountries?: string[];
+  countryGoals?: string[];
+  recentConversions?: ProfileConversionRecord[];
+  activity?: ProfileActivityRecord[];
+  lastVisitedCountry?: string;
+  photoURL?: string;
+  plan?: UserPlan | "FREE" | "PREMIUM";
+  xp?: number;
+  level?: number;
+  streak?: number;
+  updatedAt?: string;
+};
+
+export type UsernameAvailability = {
+  available: boolean;
+  reason?: string;
+};

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useParams } from "next/navigation";
 import { doc, getDoc } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
 import { calculateGlobalReadiness } from "@/lib/calculate-global-readiness";
@@ -15,23 +16,26 @@ import MiniChat from "@/components/MiniChat";
 import { maskDocumentNumber, prettifyIntent } from "@/lib/identity";
 import { followUser } from "@/lib/follow-user";
 import { sendNotification } from "@/lib/send-notification";
+import type { UserData } from "@/types";
 
-export default function PublicProfilePage({ params }: any) {
-  const [userData, setUserData] = useState<any>(null);
+export default function PublicProfilePage() {
+  const params = useParams<{ uid: string }>();
+  const uid = params.uid;
+  const [userData, setUserData] = useState<UserData | null>(null);
   const [following, setFollowing] = useState(false);
   const [followLoading, setFollowLoading] = useState(false);
 
   useEffect(() => {
     async function loadUser() {
-      const ref = doc(db, "users", params.uid);
+      const ref = doc(db, "users", uid);
       const snap = await getDoc(ref);
       if (snap.exists()) {
-        setUserData(snap.data());
+        setUserData({ uid: snap.id, ...snap.data() } as UserData);
       }
     }
 
     loadUser();
-  }, [params.uid]);
+  }, [uid]);
 
   const readiness = useMemo(
     () => (userData ? calculateGlobalReadiness(userData) : 0),
@@ -45,19 +49,16 @@ export default function PublicProfilePage({ params }: any) {
 
   async function handleFollow() {
     const currentUser = auth.currentUser;
-    if (!currentUser || !params.uid || currentUser.uid === params.uid) return;
+    if (!currentUser || !uid || currentUser.uid === uid) return;
 
     try {
       setFollowLoading(true);
-
-      await followUser(currentUser.uid, params.uid);
-
+      await followUser(currentUser.uid, uid);
       await sendNotification(
-        params.uid,
+        uid,
         "follow",
         `${currentUser.email || "A TGPI user"} started following you.`
       );
-
       setFollowing(true);
     } catch (error) {
       console.error("Could not follow user:", error);
@@ -78,9 +79,9 @@ export default function PublicProfilePage({ params }: any) {
   );
   const countriesExploredCount = Array.isArray(userData.countriesExplored)
     ? userData.countriesExplored.length
-    : 0;
+    : Number(userData.countriesExplored || 0);
   const certificatesCount = Number(userData.certificatesEarned || 0);
-  const isOwnProfile = auth.currentUser?.uid === params.uid;
+  const isOwnProfile = auth.currentUser?.uid === uid;
 
   return (
     <div className="min-h-screen p-8 text-white">
@@ -92,10 +93,7 @@ export default function PublicProfilePage({ params }: any) {
                 TGPI Public Identity
               </p>
 
-              <h1 className="text-4xl font-bold text-yellow-400">
-                {publicName}
-              </h1>
-
+              <h1 className="text-4xl font-bold text-yellow-400">{publicName}</h1>
               <p className="mt-3 text-lg text-slate-300">{username}</p>
 
               <div className="mt-5">
@@ -112,11 +110,7 @@ export default function PublicProfilePage({ params }: any) {
                     disabled={followLoading || following}
                     className="rounded-xl bg-yellow-500 px-6 py-3 font-bold text-black transition hover:bg-yellow-400 disabled:cursor-not-allowed disabled:opacity-70"
                   >
-                    {followLoading
-                      ? "Connecting..."
-                      : following
-                      ? "Following ✓"
-                      : "Follow"}
+                    {followLoading ? "Connecting..." : following ? "Following ✓" : "Follow"}
                   </button>
                 </div>
               ) : null}
@@ -147,25 +141,17 @@ export default function PublicProfilePage({ params }: any) {
 
         <section className="grid gap-6 lg:grid-cols-2">
           <section className="rounded-3xl border border-slate-800 bg-slate-900 p-8">
-            <h2 className="text-2xl font-bold text-yellow-400">
-              Public Profile Signals
-            </h2>
-
+            <h2 className="text-2xl font-bold text-yellow-400">Public Profile Signals</h2>
             <div className="mt-6 grid gap-4 md:grid-cols-2">
               <Card label="Nationality" value={userData.nationality || "—"} />
               <Card
                 label="Current Location"
                 value={
-                  [userData.currentCity, userData.currentCountry]
-                    .filter(Boolean)
-                    .join(", ") || "—"
+                  [userData.currentCity, userData.currentCountry].filter(Boolean).join(", ") || "—"
                 }
               />
               <Card label="Target Country" value={userData.targetCountry || "—"} />
-              <Card
-                label="Travel Intent"
-                value={prettifyIntent(userData.travelIntent)}
-              />
+              <Card label="Travel Intent" value={prettifyIntent(userData.travelIntent)} />
               <Card label="Document Verification" value={maskedDocument} />
               <Card
                 label="Identity Status"
@@ -184,14 +170,12 @@ export default function PublicProfilePage({ params }: any) {
           countriesExplored={countriesExploredCount}
         />
 
-        {!isOwnProfile ? (
-          <MiniChat targetName={publicName} />
-        ) : null}
+        {!isOwnProfile ? <MiniChat targetName={publicName} /> : null}
 
         <ShareActions
           title={`${publicName} • TGPI Public Profile`}
           text={`Explore the TGPI public profile of ${publicName} and follow their international journey.`}
-          urlPath={`/u/${params.uid}`}
+          urlPath={`/u/${uid}`}
         />
       </div>
     </div>

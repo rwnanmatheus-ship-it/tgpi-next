@@ -55,14 +55,19 @@ export type UserData = {
   photoURL?: string;
   xp?: number;
   level?: number;
+  streak?: number;
   tgpiId?: string;
   isVerified?: boolean;
-  countriesExplored?: string[];
-  completedCourses?: string[];
+  countriesExplored?: string[] | number;
+  completedCourses?: string[] | number;
   certificatesEarned?: number;
   profileCompleted?: boolean;
+  completedProfile?: boolean;
   globalScore?: number;
   globalReadinessScore?: number;
+  reputationScore?: number;
+  referrals?: number;
+  badges?: string[];
   legalName?: string;
   username?: string;
   usernameLower?: string;
@@ -80,4 +85,5 @@ export type UserData = {
   upgradedAt?: string;
   followers?: string[];
   following?: string[];
+  favoriteCountries?: string[];
 };
