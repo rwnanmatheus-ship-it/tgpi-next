@@ -1,4 +1,4 @@
-export type TGPIPlan = "free" | "premium";
+import type { UserData, UserPlan } from "@/types";
 
 export type PremiumFeature =
   | "ranking_full"
@@ -8,18 +8,23 @@ export type PremiumFeature =
   | "community_pro"
   | "recruiter_visibility";
 
-export function getUserPlan(user: any): TGPIPlan {
-  if (user?.plan === "premium") return "premium";
-  return "free";
+type FeatureAccessUser = Pick<UserData, "plan">;
+
+export function getUserPlan(
+  user: FeatureAccessUser | null | undefined
+): UserPlan {
+  return user?.plan === "premium" ? "premium" : "free";
 }
 
-export function hasAccess(user: any, feature: PremiumFeature): boolean {
+export function hasAccess(
+  user: FeatureAccessUser | null | undefined,
+  feature: PremiumFeature
+): boolean {
   const plan = getUserPlan(user);
 
   if (plan === "premium") return true;
 
   const freeAllowedFeatures: PremiumFeature[] = [];
-
   return freeAllowedFeatures.includes(feature);
 }
 
