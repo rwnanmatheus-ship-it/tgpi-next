@@ -12,7 +12,7 @@ const eslintConfig = defineConfig([
     },
   },
   {
-    files: ["src/app/countries/[slug]/page.tsx"],
+    files: ["src/app/countries/**/page.tsx"],
     rules: {
       "@next/next/no-img-element": "off",
     },
