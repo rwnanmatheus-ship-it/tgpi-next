@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import { calculateGlobalReadiness } from "@/lib/calculate-global-readiness";
@@ -14,15 +15,18 @@ import RecruiterSignals from "@/components/RecruiterSignals";
 import ShareActions from "@/components/ShareActions";
 import UserPatentCard from "@/components/UserPatentCard";
 import TrustLayerCard from "@/components/TrustLayerCard";
+import type { UserData } from "@/types";
 
-export default function UsernamePublicProfilePage({ params }: any) {
-  const [userData, setUserData] = useState<any>(null);
+export default function UsernamePublicProfilePage() {
+  const params = useParams<{ username: string }>();
+  const routeUsername = params.username;
+  const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadByUsername() {
       try {
-        const username = String(params?.username || "").toLowerCase();
+        const username = String(routeUsername || "").toLowerCase();
         if (!username) {
           setLoading(false);
           return;
@@ -32,14 +36,14 @@ export default function UsernamePublicProfilePage({ params }: any) {
           collection(db, "users"),
           where("usernameLower", "==", username)
         );
-
         const snap = await getDocs(q);
 
         if (!snap.empty) {
+          const firstDocument = snap.docs[0];
           setUserData({
-            uid: snap.docs[0].id,
-            ...snap.docs[0].data(),
-          });
+            uid: firstDocument.id,
+            ...firstDocument.data(),
+          } as UserData);
         }
       } catch (error) {
         console.error("Could not load public username profile:", error);
@@ -49,7 +53,7 @@ export default function UsernamePublicProfilePage({ params }: any) {
     }
 
     loadByUsername();
-  }, [params?.username]);
+  }, [routeUsername]);
 
   const readiness = useMemo(
     () => (userData ? calculateGlobalReadiness(userData) : 0),
@@ -69,9 +73,7 @@ export default function UsernamePublicProfilePage({ params }: any) {
     return (
       <div className="p-10 text-white">
         <h1 className="text-3xl font-bold text-yellow-400">Profile not found</h1>
-        <p className="mt-4 text-slate-300">
-          This public profile does not exist yet.
-        </p>
+        <p className="mt-4 text-slate-300">This public profile does not exist yet.</p>
         <Link
           href="/community"
           className="mt-6 inline-block rounded-xl bg-yellow-500 px-6 py-3 font-semibold text-black"
@@ -86,7 +88,7 @@ export default function UsernamePublicProfilePage({ params }: any) {
   const username = userData.username ? `@${userData.username}` : "@tgpi_member";
   const countriesExplored = Array.isArray(userData.countriesExplored)
     ? userData.countriesExplored.length
-    : 0;
+    : Number(userData.countriesExplored || 0);
   const certificates = Number(userData.certificatesEarned || 0);
   const maskedDocument = maskDocumentNumber(
     userData.documentType,
@@ -103,10 +105,7 @@ export default function UsernamePublicProfilePage({ params }: any) {
                 TGPI Global Public Profile
               </p>
 
-              <h1 className="text-4xl font-bold text-yellow-400">
-                {publicName}
-              </h1>
-
+              <h1 className="text-4xl font-bold text-yellow-400">{publicName}</h1>
               <p className="mt-3 text-lg text-slate-300">{username}</p>
 
               <div className="mt-5">
@@ -182,7 +181,7 @@ export default function UsernamePublicProfilePage({ params }: any) {
         <ShareActions
           title={`${publicName} • TGPI Public Profile`}
           text={`Explore ${publicName}'s international profile on TGPI.`}
-          urlPath={`/user/${userData.username || params?.username}`}
+          urlPath={`/user/${userData.username || routeUsername}`}
         />
       </div>
     </main>
@@ -198,13 +197,7 @@ function Card({ label, value }: { label: string; value: string }) {
   );
 }
 
-function InfoPanel({
-  title,
-  lines,
-}: {
-  title: string;
-  lines: string[];
-}) {
+function InfoPanel({ title, lines }: { title: string; lines: string[] }) {
   return (
     <section className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
       <h2 className="text-xl font-bold text-yellow-400">{title}</h2>
