@@ -1,17 +1,26 @@
-export function calculateGlobalReadiness(user: any): number {
+import type { UserData } from "@/types";
+
+type ReadinessUser = Pick<
+  UserData,
+  | "xp"
+  | "countriesExplored"
+  | "completedCourses"
+  | "certificatesEarned"
+  | "profileCompleted"
+  | "completedProfile"
+>;
+
+function getCollectionCount(value: string[] | number | undefined): number {
+  return Array.isArray(value) ? value.length : Number(value || 0);
+}
+
+export function calculateGlobalReadiness(user: ReadinessUser | null | undefined): number {
   const xp = Number(user?.xp || 0);
-  const countries = Array.isArray(user?.countriesExplored)
-    ? user.countriesExplored.length
-    : Number(user?.countriesExplored || 0);
-
-  const completedCourses = Array.isArray(user?.completedCourses)
-    ? user.completedCourses.length
-    : Number(user?.completedCourses || 0);
-
+  const countries = getCollectionCount(user?.countriesExplored);
+  const completedCourses = getCollectionCount(user?.completedCourses);
   const certificatesEarned = Number(
     user?.certificatesEarned || completedCourses || 0
   );
-
   const profileCompleted = Boolean(
     user?.profileCompleted || user?.completedProfile
   );
