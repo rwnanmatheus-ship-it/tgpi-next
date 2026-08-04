@@ -1,6 +1,21 @@
 import "./globals.css";
 import type { Metadata } from "next";
+import { Cormorant_Garamond, Manrope } from "next/font/google";
 import Navbar from "@/components/Navbar";
+
+const displayFont = Cormorant_Garamond({
+  subsets: ["latin"],
+  variable: "--font-tgpi-display",
+  weight: ["500", "600", "700"],
+  display: "swap",
+});
+
+const interfaceFont = Manrope({
+  subsets: ["latin"],
+  variable: "--font-tgpi-sans",
+  weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "TGPI — Build Your Global Identity",
@@ -18,6 +33,11 @@ export const metadata: Metadata = {
     "TGPI",
     "The Global Polymath Institute",
   ],
+  icons: {
+    icon: "/brand/tgpi-crest.svg",
+    shortcut: "/brand/tgpi-crest.svg",
+    apple: "/brand/tgpi-crest.svg",
+  },
   openGraph: {
     title: "TGPI — Build Your Global Identity",
     description:
@@ -42,8 +62,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className="bg-[#F7F3EA] text-[#111827] antialiased">
+    <html lang="en" className={`${displayFont.variable} ${interfaceFont.variable}`}>
+      <body>
         <Navbar />
         {children}
       </body>
