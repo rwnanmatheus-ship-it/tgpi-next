@@ -5,16 +5,19 @@ import {
   getCompletionScore,
   getNextPriorityItems,
 } from "@/lib/profile-completion-engine";
+import type { UserData } from "@/types";
 
 type TabKey = "overview" | "edit" | "goals" | "settings";
+
+type ProfileCompletionEngineProps = {
+  profile: UserData;
+  onOpenTab: (tab: TabKey) => void;
+};
 
 export default function ProfileCompletionEngine({
   profile,
   onOpenTab,
-}: {
-  profile: any;
-  onOpenTab: (tab: TabKey) => void;
-}) {
+}: ProfileCompletionEngineProps) {
   const items = buildProfileCompletionItems(profile);
   const score = getCompletionScore(items);
   const nextItems = getNextPriorityItems(items, 4);

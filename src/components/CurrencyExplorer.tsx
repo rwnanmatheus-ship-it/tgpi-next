@@ -13,6 +13,11 @@ type CurrencyExplorerProps = {
   }) => void;
 };
 
+type CurrencyApiResponse = {
+  date?: string;
+  rates?: Record<string, number>;
+};
+
 const currencyOptions = [
   "USD",
   "BRL",
@@ -36,6 +41,10 @@ function formatAmount(value: number, currency: string) {
   } catch {
     return `${value.toFixed(2)} ${currency}`;
   }
+}
+
+function getErrorMessage(error: unknown) {
+  return error instanceof Error ? error.message : "Could not load exchange rate.";
 }
 
 export default function CurrencyExplorer({
@@ -79,25 +88,24 @@ export default function CurrencyExplorer({
           throw new Error("Could not load currency data.");
         }
 
-        const data = await response.json();
-        const nextRate = data?.rates?.[targetCurrency];
+        const data = (await response.json()) as CurrencyApiResponse;
+        const nextRate = data.rates?.[targetCurrency];
 
-        if (!nextRate) {
+        if (typeof nextRate !== "number") {
           throw new Error("Rate unavailable.");
         }
 
-        const safeRate = Number(nextRate);
-        const safeDate = data?.date || "";
+        const safeDate = data.date ?? "";
 
-        setRate(safeRate);
+        setRate(nextRate);
         setDate(safeDate);
         onRateLoaded?.({
-          rate: safeRate,
+          rate: nextRate,
           targetCurrency,
           date: safeDate,
         });
-      } catch (err: any) {
-        setError(err?.message || "Could not load exchange rate.");
+      } catch (loadError: unknown) {
+        setError(getErrorMessage(loadError));
         setRate(null);
         onRateLoaded?.({
           rate: null,
@@ -109,7 +117,7 @@ export default function CurrencyExplorer({
       }
     }
 
-    loadRate();
+    void loadRate();
   }, [baseCurrency, targetCurrency, onRateLoaded]);
 
   const numericAmount = useMemo(() => {
@@ -164,7 +172,7 @@ export default function CurrencyExplorer({
               </label>
               <select
                 value={targetCurrency}
-                onChange={(e) => setTargetCurrency(e.target.value)}
+                onChange={(event) => setTargetCurrency(event.target.value)}
                 className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-white outline-none transition focus:border-yellow-500"
               >
                 {currencyOptions.map((code) => (
@@ -184,7 +192,7 @@ export default function CurrencyExplorer({
                 min="0"
                 step="0.01"
                 value={amount}
-                onChange={(e) => setAmount(e.target.value)}
+                onChange={(event) => setAmount(event.target.value)}
                 className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-white outline-none transition focus:border-yellow-500"
               />
             </div>

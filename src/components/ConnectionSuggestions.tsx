@@ -1,8 +1,14 @@
+import type { UserData } from "@/types";
+
+type ConnectionSuggestion = Pick<UserData, "uid" | "name" | "targetCountry">;
+
+type ConnectionSuggestionsProps = {
+  users: ConnectionSuggestion[];
+};
+
 export default function ConnectionSuggestions({
   users,
-}: {
-  users: any[];
-}) {
+}: ConnectionSuggestionsProps) {
   const suggestions = users.slice(0, 5);
 
   return (
@@ -12,19 +18,19 @@ export default function ConnectionSuggestions({
       </h2>
 
       <div className="mt-4 space-y-3">
-        {suggestions.map((user, i) => (
+        {suggestions.map((user, index) => (
           <div
-            key={i}
+            key={user.uid ?? `${user.name ?? "user"}-${index}`}
             className="flex items-center justify-between rounded-xl border border-slate-800 p-4"
           >
             <div>
-              <p className="font-semibold">{user.name}</p>
+              <p className="font-semibold">{user.name ?? "TGPI Member"}</p>
               <p className="text-sm text-slate-400">
-                {user.targetCountry}
+                {user.targetCountry ?? "Target country not defined"}
               </p>
             </div>
 
-            <button className="rounded-lg bg-yellow-500 px-3 py-1 text-black text-sm font-bold">
+            <button className="rounded-lg bg-yellow-500 px-3 py-1 text-sm font-bold text-black">
               Connect
             </button>
           </div>

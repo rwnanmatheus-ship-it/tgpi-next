@@ -1,30 +1,34 @@
 import { calculateReputation } from "@/lib/calculate-reputation";
 import { prettifyIntent } from "@/lib/identity";
+import type { UserData } from "@/types";
 
-export default function RecruiterSignals({ user }: { user: any }) {
+type RecruiterSignalsProps = {
+  user: UserData;
+};
+
+export default function RecruiterSignals({ user }: RecruiterSignalsProps) {
   const reputation = calculateReputation(user);
-  const countries = Array.isArray(user?.countriesExplored)
+  const countries = Array.isArray(user.countriesExplored)
     ? user.countriesExplored.length
-    : Number(user?.countriesExplored || 0);
-
-  const completedCourses = Array.isArray(user?.completedCourses)
+    : 0;
+  const completedCourses = Array.isArray(user.completedCourses)
     ? user.completedCourses.length
-    : Number(user?.completedCourses || 0);
+    : 0;
 
   const signals = [
-    user?.isVerified ? "Verified TGPI identity layer" : "Standard TGPI identity layer",
+    user.isVerified ? "Verified TGPI identity layer" : "Standard TGPI identity layer",
     `${countries} countries explored`,
-    `${completedCourses || user?.certificatesEarned || 0} completed learning signals`,
-    `Travel intent: ${prettifyIntent(user?.travelIntent)}`,
+    `${completedCourses || user.certificatesEarned || 0} completed learning signals`,
+    `Travel intent: ${prettifyIntent(user.travelIntent)}`,
     `Reputation score: ${reputation}/100`,
-    user?.targetCountry ? `Target country: ${user.targetCountry}` : "Target country not defined",
+    user.targetCountry
+      ? `Target country: ${user.targetCountry}`
+      : "Target country not defined",
   ];
 
   return (
     <section className="rounded-3xl border border-slate-800 bg-slate-900 p-8">
-      <h2 className="text-2xl font-bold text-yellow-400">
-        Recruiter Signals
-      </h2>
+      <h2 className="text-2xl font-bold text-yellow-400">Recruiter Signals</h2>
 
       <div className="mt-6 grid gap-4 md:grid-cols-2">
         {signals.map((signal) => (

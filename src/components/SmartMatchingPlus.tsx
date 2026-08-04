@@ -1,27 +1,26 @@
 import Link from "next/link";
+import type { UserData } from "@/types";
 
-type MatchUser = {
-  uid?: string;
-  name?: string;
-  username?: string;
-  targetCountry?: string;
-  travelIntent?: string;
-  level?: number;
+type MatchUser = Pick<
+  UserData,
+  "uid" | "name" | "username" | "targetCountry" | "travelIntent" | "level"
+>;
+
+type SmartMatchingPlusProps = {
+  currentUser: MatchUser;
+  users: MatchUser[];
 };
 
 export default function SmartMatchingPlus({
   currentUser,
   users,
-}: {
-  currentUser: any;
-  users: MatchUser[];
-}) {
-  const target = String(currentUser?.targetCountry || "").toLowerCase();
-  const intent = String(currentUser?.travelIntent || "").toLowerCase();
-  const level = Number(currentUser?.level || 1);
+}: SmartMatchingPlusProps) {
+  const target = String(currentUser.targetCountry || "").toLowerCase();
+  const intent = String(currentUser.travelIntent || "").toLowerCase();
+  const level = Number(currentUser.level || 1);
 
   const matches = users
-    .filter((user) => user.uid && user.uid !== currentUser?.uid)
+    .filter((user) => user.uid && user.uid !== currentUser.uid)
     .map((user) => {
       let score = 0;
 
@@ -43,10 +42,7 @@ export default function SmartMatchingPlus({
         score += 20;
       }
 
-      return {
-        ...user,
-        score,
-      };
+      return { ...user, score };
     })
     .filter((user) => user.score > 0)
     .sort((a, b) => b.score - a.score)
@@ -54,9 +50,7 @@ export default function SmartMatchingPlus({
 
   return (
     <section className="rounded-3xl border border-slate-800 bg-slate-900 p-8">
-      <h2 className="text-2xl font-bold text-yellow-400">
-        Smart Matching 2.0
-      </h2>
+      <h2 className="text-2xl font-bold text-yellow-400">Smart Matching 2.0</h2>
 
       <p className="mt-3 text-sm leading-7 text-slate-300">
         TGPI compares destination, intent, and progression level to suggest
