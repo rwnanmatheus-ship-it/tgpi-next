@@ -1,5 +1,6 @@
 // src/components/countries/CountryCard.tsx
 
+import Image from "next/image";
 import Link from "next/link";
 import {
   formatCurrencyAmount,
@@ -48,7 +49,18 @@ export function CountryCard({ country }: CountryCardProps) {
   return (
     <Link href={`/countries/${country.slug}`} className="group relative block overflow-hidden rounded-[1.75rem] border border-[#E7E0D3] bg-white shadow-[0_24px_70px_rgba(17,24,39,0.07)] transition duration-300 hover:-translate-y-1 hover:border-[#C8A24A] hover:shadow-[0_30px_90px_rgba(17,24,39,0.12)]">
       <div className="relative h-48 overflow-hidden bg-gradient-to-br from-[#FFFDF8] via-[#EEF5FF] to-[#FFF7DE]">
-        {hasImage ? <img src={imageUrl} alt={imageAlt} className="absolute inset-0 h-full w-full object-cover opacity-90 saturate-110 contrast-105 transition duration-500 group-hover:scale-105 group-hover:opacity-100" loading="lazy" /> : <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(200,162,74,0.22),transparent_32%),radial-gradient(circle_at_bottom_left,rgba(18,58,111,0.14),transparent_38%),linear-gradient(135deg,#FFFDF8,#EEF5FF_45%,#FFF7DE)]" />}
+        {hasImage ? (
+          <Image
+            src={imageUrl}
+            alt={imageAlt}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
+            unoptimized
+            className="object-cover opacity-90 saturate-110 contrast-105 transition duration-500 group-hover:scale-105 group-hover:opacity-100"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(200,162,74,0.22),transparent_32%),radial-gradient(circle_at_bottom_left,rgba(18,58,111,0.14),transparent_38%),linear-gradient(135deg,#FFFDF8,#EEF5FF_45%,#FFF7DE)]" />
+        )}
         {!hasImage ? <div className="absolute inset-0 opacity-35 [background-image:linear-gradient(rgba(17,24,39,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(17,24,39,0.06)_1px,transparent_1px)] [background-size:34px_34px]" /> : null}
         <div className="absolute inset-0 bg-gradient-to-t from-[#111827]/70 via-[#111827]/10 to-transparent" />
         <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#C8A24A]/60 to-transparent" />
