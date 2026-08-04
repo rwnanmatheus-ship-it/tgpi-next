@@ -2,6 +2,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Manrope } from "next/font/google";
 import Navbar from "@/components/Navbar";
+import GlobalFooter from "@/components/GlobalFooter";
 
 const displayFont = Cormorant_Garamond({
   subsets: ["latin"],
@@ -18,6 +19,7 @@ const interfaceFont = Manrope({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://theglobalpolymath.com"),
   title: "TGPI — Build Your Global Identity",
   description:
     "Prepare, compare and move globally with strategic clarity using TGPI — a premium education and decision system for international life.",
@@ -46,7 +48,7 @@ export const metadata: Metadata = {
     siteName: "TGPI",
     images: [
       {
-        url: "https://theglobalpolymath.com/og-image.png",
+        url: "/og-image.png",
         width: 1200,
         height: 630,
       },
@@ -64,8 +66,15 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${displayFont.variable} ${interfaceFont.variable}`}>
       <body>
+        <a
+          href="#main-content"
+          className="fixed left-4 top-4 z-[100] -translate-y-24 rounded-xl bg-[var(--tgpi-gold)] px-4 py-3 text-sm font-extrabold text-[var(--tgpi-navy-deep)] shadow-lg transition focus:translate-y-0"
+        >
+          Skip to content
+        </a>
         <Navbar />
-        {children}
+        <div id="main-content">{children}</div>
+        <GlobalFooter />
       </body>
     </html>
   );
