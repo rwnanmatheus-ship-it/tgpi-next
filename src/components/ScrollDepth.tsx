@@ -1,13 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
-export default function ScrollDepth({ children }: any) {
+type ScrollDepthProps = {
+  children: ReactNode;
+};
+
+export default function ScrollDepth({ children }: ScrollDepthProps) {
   const [offset, setOffset] = useState(0);
 
   useEffect(() => {
     const onScroll = () => setOffset(window.scrollY);
-    window.addEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
