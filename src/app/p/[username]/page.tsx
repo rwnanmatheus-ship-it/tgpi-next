@@ -1,5 +1,11 @@
-export default function PublicProfile({ params }: any) {
-  const { username } = params;
+type PublicProfilePageProps = {
+  params: Promise<{
+    username: string;
+  }>;
+};
+
+export default async function PublicProfile({ params }: PublicProfilePageProps) {
+  const { username } = await params;
 
   return (
     <main className="min-h-screen bg-black text-white p-6">
