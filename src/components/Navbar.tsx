@@ -62,18 +62,20 @@ export default function Navbar() {
     };
   }, [menuOpen]);
 
-  useEffect(() => setMenuOpen(false), [pathname]);
-
   async function handleLogout() {
     await signOut(auth);
     window.location.href = "/";
+  }
+
+  function closeMenu() {
+    setMenuOpen(false);
   }
 
   return (
     <header className="sticky top-0 z-50 border-b border-[var(--tgpi-border-soft)] bg-[rgba(255,253,248,0.94)] backdrop-blur-2xl transition-all duration-300">
       <Container>
         <div className={`flex items-center justify-between transition-all duration-300 ${compact ? "min-h-16 py-2" : "min-h-[76px] py-3"}`}>
-          <Link href="/" className="group flex min-w-0 items-center gap-3" aria-label="TGPI home">
+          <Link href="/" onClick={closeMenu} className="group flex min-w-0 items-center gap-3" aria-label="TGPI home">
             <span className="relative h-12 w-11 shrink-0 transition group-hover:-translate-y-0.5">
               <Image src="/brand/tgpi-crest.svg" alt="TGPI crest" fill priority sizes="44px" className="object-contain drop-shadow-[0_6px_12px_rgba(7,26,50,0.18)]" />
             </span>
@@ -137,7 +139,7 @@ export default function Navbar() {
                   {group.links.map(([label, href], linkIndex) => {
                     const active = pathname === href || pathname.startsWith(`${href}/`);
                     return (
-                      <Link ref={groupIndex === 0 && linkIndex === 0 ? firstMenuLinkRef : undefined} key={href} href={href} aria-current={active ? "page" : undefined} className={`flex min-h-12 items-center justify-between border-b border-white/10 py-3 text-[1.05rem] font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--tgpi-gold)] ${active ? "text-[var(--tgpi-gold-light)]" : "text-white active:bg-white/5"}`}>
+                      <Link ref={groupIndex === 0 && linkIndex === 0 ? firstMenuLinkRef : undefined} key={href} href={href} onClick={closeMenu} aria-current={active ? "page" : undefined} className={`flex min-h-12 items-center justify-between border-b border-white/10 py-3 text-[1.05rem] font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--tgpi-gold)] ${active ? "text-[var(--tgpi-gold-light)]" : "text-white active:bg-white/5"}`}>
                         <span>{label}</span>
                         <span className="text-[var(--tgpi-gold-light)]">↗</span>
                       </Link>
@@ -156,15 +158,15 @@ export default function Navbar() {
               </div>
             ) : (
               <div className="grid gap-3">
-                <Link href="/onboarding" className="rounded-xl bg-[var(--tgpi-gold)] px-4 py-4 text-center text-sm font-extrabold text-[var(--tgpi-navy)]">Find your country fit</Link>
-                <Link href="/login" className="rounded-xl border border-white/20 px-4 py-4 text-center text-sm font-extrabold text-white">Sign in</Link>
+                <Link href="/onboarding" onClick={closeMenu} className="rounded-xl bg-[var(--tgpi-gold)] px-4 py-4 text-center text-sm font-extrabold text-[var(--tgpi-navy)]">Find your country fit</Link>
+                <Link href="/login" onClick={closeMenu} className="rounded-xl border border-white/20 px-4 py-4 text-center text-sm font-extrabold text-white">Sign in</Link>
               </div>
             )}
             <div className="mt-6 flex flex-wrap gap-x-5 gap-y-3 text-xs text-white/45">
-              <Link href="https://www.instagram.com/theglobalpolymath/">Instagram</Link>
-              <Link href="/about">About</Link>
-              <Link href="/privacy">Privacy</Link>
-              <Link href="/terms">Terms</Link>
+              <Link href="https://www.instagram.com/theglobalpolymath/" onClick={closeMenu}>Instagram</Link>
+              <Link href="/about" onClick={closeMenu}>About</Link>
+              <Link href="/privacy" onClick={closeMenu}>Privacy</Link>
+              <Link href="/terms" onClick={closeMenu}>Terms</Link>
             </div>
           </div>
         </Container>
