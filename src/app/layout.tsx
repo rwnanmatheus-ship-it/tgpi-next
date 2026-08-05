@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { Cormorant_Garamond, Manrope } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import GlobalFooter from "@/components/GlobalFooter";
+import HomeDecisionOS from "@/components/HomeDecisionOS";
 
 const displayFont = Cormorant_Garamond({
   subsets: ["latin"],
@@ -74,6 +75,7 @@ export default function RootLayout({
         </a>
         <Navbar />
         <div id="main-content">{children}</div>
+        <HomeDecisionOS />
         <GlobalFooter />
       </body>
     </html>
