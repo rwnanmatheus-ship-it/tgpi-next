@@ -135,6 +135,38 @@ img {
   background-size: 32px 32px;
 }
 
+.tgpi-reveal {
+  animation: tgpi-reveal 700ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.tgpi-float {
+  animation: tgpi-float 7s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes tgpi-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes tgpi-float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
 @media (min-width: 640px) {
   .tgpi-container {
     width: min(100% - 3rem, var(--tgpi-container));
@@ -173,6 +205,10 @@ img {
   a,
   button {
     min-height: 44px;
+  }
+
+  .tgpi-float {
+    animation-duration: 9s;
   }
 }
 
