@@ -69,7 +69,7 @@ export default function RootLayout({
       <body>
         <a
           href="#main-content"
-          className="fixed left-4 top-4 z-[100] -translate-y-24 rounded-xl bg-[var(--tgpi-gold)] px-4 py-3 text-sm font-extrabold text-[var(--tgpi-navy-deep)] shadow-lg transition focus:translate-y-0"
+          className="tgpi-skip-link sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-xl focus:bg-[var(--tgpi-gold)] focus:px-4 focus:py-3 focus:text-sm focus:font-extrabold focus:text-[var(--tgpi-navy-deep)] focus:shadow-lg"
         >
           Skip to content
         </a>
