@@ -8,9 +8,11 @@
   --tgpi-surface-strong: #ffffff;
   --tgpi-ink: #101010;
   --tgpi-navy: #071a32;
+  --tgpi-navy-deep: #041426;
   --tgpi-navy-soft: #102d50;
   --tgpi-gold: #c59632;
   --tgpi-gold-strong: #8a641f;
+  --tgpi-gold-light: #f0d58c;
   --tgpi-gold-soft: #f7e8b9;
   --tgpi-border: #d8d0c0;
   --tgpi-border-soft: #ece5d9;
@@ -70,7 +72,7 @@ h6 {
   margin: 0;
   font-family: var(--tgpi-font-display);
   font-weight: 600;
-  color: var(--tgpi-ink);
+  color: inherit;
   letter-spacing: -0.025em;
   text-wrap: balance;
 }
@@ -209,6 +211,12 @@ img {
 
   .tgpi-float {
     animation-duration: 9s;
+  }
+}
+
+@media print {
+  .tgpi-skip-link {
+    display: none !important;
   }
 }
 
