@@ -114,7 +114,7 @@ export default async function CountryPage({ params }: CountryPageProps) {
 
           <div className="flex flex-wrap gap-2">
             <Link
-              href="/compare"
+              href={`/compare?country=${country.slug}`}
               className="rounded-full border border-[#2563EB]/30 bg-[#2563EB]/10 px-4 py-2 text-sm font-bold text-[#BFDBFE] transition hover:border-[#38BDF8]/60"
             >
               Compare country
@@ -429,7 +429,7 @@ export default async function CountryPage({ params }: CountryPageProps) {
 
             <div className="flex flex-col gap-3 sm:flex-row md:flex-col">
               <Link
-                href="/compare"
+                href={`/compare?country=${country.slug}`}
                 className="rounded-2xl bg-[#D4AF37] px-5 py-3 text-center text-sm font-black text-black transition hover:bg-[#F5D76E]"
               >
                 Compare now

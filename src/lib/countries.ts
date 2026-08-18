@@ -17,6 +17,35 @@ export type {
   CountryGoal,
 };
 
+export type CountryExplorerItem = Pick<
+  Country,
+  | "slug"
+  | "name"
+  | "emoji"
+  | "region"
+  | "language"
+  | "currency"
+  | "currencyCode"
+  | "capital"
+  | "mainGoal"
+  | "shortDescription"
+  | "tags"
+  | "costLevel"
+  | "difficulty"
+  | "tgpiScore"
+  | "idealFor"
+> & {
+  intelligence: Pick<
+    Country["intelligence"],
+    "qualityOfLifeScore" | "englishFriendliness" | "safetyScore"
+  >;
+  visual: {
+    alt: string;
+    hasImage: boolean;
+    url: string;
+  };
+};
+
 export function getAllCountries(): Country[] {
   return countries;
 }
@@ -342,4 +371,34 @@ export function getCountryImageUrl(country: Country): string {
 
 export function hasVerifiedCountryImage(country: Country): boolean {
   return getCountryImageProfile(country).status === "verified";
+}
+
+export function getCountryExplorerItems(): CountryExplorerItem[] {
+  return countries.map((country) => ({
+    slug: country.slug,
+    name: country.name,
+    emoji: country.emoji,
+    region: country.region,
+    language: country.language,
+    currency: country.currency,
+    currencyCode: country.currencyCode,
+    capital: country.capital,
+    mainGoal: country.mainGoal,
+    shortDescription: country.shortDescription,
+    tags: country.tags,
+    costLevel: country.costLevel,
+    difficulty: country.difficulty,
+    tgpiScore: country.tgpiScore,
+    idealFor: country.idealFor,
+    intelligence: {
+      qualityOfLifeScore: country.intelligence.qualityOfLifeScore,
+      englishFriendliness: country.intelligence.englishFriendliness,
+      safetyScore: country.intelligence.safetyScore,
+    },
+    visual: {
+      alt: getCountryImageAlt(country),
+      hasImage: hasVerifiedCountryImage(country),
+      url: getCountryImageUrl(country),
+    },
+  }));
 }
