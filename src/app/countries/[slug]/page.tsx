@@ -1,5 +1,6 @@
 // src/app/countries/[slug]/page.tsx
 
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -45,9 +46,33 @@ export async function generateMetadata({ params }: CountryPageProps) {
     };
   }
 
+  const imageUrl = getCountryImageUrl(country);
+  const imageAlt = getCountryImageAlt(country);
+  const title = `${country.name} | TGPI Country Intelligence Report`;
+  const description = `${country.name} country intelligence report: cost, safety, language, adaptation, quality of life, first steps and TGPI strategic readiness.`;
+
   return {
-    title: `${country.name} | TGPI Country Intelligence Report`,
-    description: `${country.name} country intelligence report: cost, safety, language, adaptation, quality of life, first steps and TGPI strategic readiness.`,
+    title,
+    description,
+    openGraph: {
+      title,
+      description,
+      type: "article",
+      images: [
+        {
+          url: imageUrl,
+          width: 1600,
+          height: 900,
+          alt: imageAlt,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [imageUrl],
+    },
   };
 }
 
@@ -102,12 +127,12 @@ export default async function CountryPage({ params }: CountryPageProps) {
   const countryPlan = getCountryActionPlan(country);
 
   return (
-    <main className="min-h-screen bg-[#050505] text-white">
+    <main className="min-h-screen bg-[#03060B] text-white">
       <section className="mx-auto max-w-7xl px-5 py-10 md:px-8 md:py-14">
         <div className="mb-6 flex flex-col justify-between gap-3 md:flex-row md:items-center">
           <Link
             href="/countries"
-            className="inline-flex w-fit rounded-full border border-white/10 px-4 py-2 text-sm text-slate-300 transition hover:border-[#D4AF37]/60 hover:text-white"
+            className="inline-flex w-fit rounded-full border border-white/20 bg-white/[0.035] px-4 py-2 text-sm font-semibold text-slate-200 transition hover:border-[#D4AF37]/70 hover:bg-white/[0.07] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F5D76E]"
           >
             ← Back to countries
           </Link>
@@ -128,20 +153,23 @@ export default async function CountryPage({ params }: CountryPageProps) {
           </div>
         </div>
 
-        <section className="overflow-hidden rounded-[2rem] border border-[#D4AF37]/25 bg-gradient-to-br from-[#111118] via-[#080B14] to-black shadow-2xl shadow-black/50">
+        <section className="overflow-hidden rounded-[2rem] border border-[#D4AF37]/35 bg-gradient-to-br from-[#101722] via-[#07111F] to-[#03060B] shadow-2xl shadow-black/50">
           <div className="relative grid lg:grid-cols-[1.05fr_0.95fr]">
             {hasImage ? (
-              <img
+              <Image
                 src={imageUrl}
                 alt={imageAlt}
-                className="absolute inset-0 h-full w-full object-cover opacity-60 saturate-150 contrast-110 brightness-110"
+                fill
+                priority
+                sizes="(max-width: 1024px) 100vw, 1280px"
+                className="object-cover opacity-80 saturate-[1.18] contrast-[1.06]"
               />
             ) : (
               <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(212,175,55,0.22),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(37,99,235,0.22),transparent_36%),linear-gradient(135deg,#111118,#07111F_45%,#050505)]" />
             )}
 
-            <div className="absolute inset-0 bg-gradient-to-r from-black/92 via-[#050505]/62 to-[#050505]/38" />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-transparent to-black/10" />
+            <div className="absolute inset-0 bg-gradient-to-r from-[#02050A]/98 via-[#02050A]/76 to-[#02050A]/20" />
+            <div className="absolute inset-0 bg-gradient-to-t from-[#02050A]/88 via-transparent to-[#02050A]/18" />
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(212,175,55,0.12),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(37,99,235,0.12),transparent_36%)]" />
 
             <div className="relative p-6 md:p-10">
@@ -175,8 +203,8 @@ export default async function CountryPage({ params }: CountryPageProps) {
               </div>
             </div>
 
-            <div className="relative border-t border-white/10 bg-black/15 p-6 lg:border-l lg:border-t-0 md:p-10">
-              <div className="rounded-[1.75rem] border border-[#D4AF37]/25 bg-black/45 p-6 shadow-2xl shadow-black/30 backdrop-blur">
+            <div className="relative border-t border-white/15 bg-[#02050A]/32 p-6 lg:border-l lg:border-t-0 md:p-10">
+              <div className="rounded-[1.75rem] border border-[#D4AF37]/35 bg-[#05080F]/88 p-6 shadow-2xl shadow-black/30 backdrop-blur">
                 <p className="text-xs uppercase tracking-[0.3em] text-[#F5D76E]">
                   TGPI Verdict
                 </p>
@@ -191,8 +219,8 @@ export default async function CountryPage({ params }: CountryPageProps) {
                     </p>
                   </div>
 
-                  <div className="rounded-2xl border border-white/10 bg-black/35 px-4 py-3 text-right">
-                    <p className="text-xs text-slate-500">Adaptation</p>
+                  <div className="rounded-2xl border border-white/15 bg-[#05080F]/82 px-4 py-3 text-right">
+                    <p className="text-xs font-semibold text-slate-300">Adaptation</p>
                     <p className="mt-1 font-black text-white">
                       {country.difficulty}
                     </p>
@@ -218,7 +246,7 @@ export default async function CountryPage({ params }: CountryPageProps) {
         </section>
 
         <section className="mt-8 grid gap-6 lg:grid-cols-[0.78fr_1.22fr]">
-          <div className="rounded-[1.5rem] border border-white/10 bg-[#111118] p-6">
+          <div className="rounded-[1.5rem] border border-white/15 bg-[#101722] p-6">
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#D4AF37]">
               Country snapshot
             </p>
@@ -228,9 +256,9 @@ export default async function CountryPage({ params }: CountryPageProps) {
               {snapshot.map((item) => (
                 <div
                   key={item.label}
-                  className="rounded-2xl border border-white/10 bg-black/30 p-4"
+                  className="rounded-2xl border border-white/15 bg-[#05080F]/78 p-4"
                 >
-                  <p className="text-xs text-slate-500">{item.label}</p>
+                  <p className="text-xs font-semibold text-slate-300">{item.label}</p>
                   <p className="mt-1 text-sm font-black text-white">
                     {item.value}
                   </p>
@@ -239,7 +267,7 @@ export default async function CountryPage({ params }: CountryPageProps) {
             </div>
           </div>
 
-          <div className="rounded-[1.5rem] border border-white/10 bg-[#111118] p-6">
+          <div className="rounded-[1.5rem] border border-white/15 bg-[#101722] p-6">
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#D4AF37]">
               Score breakdown
             </p>
@@ -259,7 +287,7 @@ export default async function CountryPage({ params }: CountryPageProps) {
         </section>
 
         <section className="mt-8 grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
-          <div className="rounded-[1.5rem] border border-white/10 bg-[#111118] p-6">
+          <div className="rounded-[1.5rem] border border-white/15 bg-[#101722] p-6">
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#D4AF37]">
               Cost intelligence
             </p>
@@ -351,7 +379,7 @@ export default async function CountryPage({ params }: CountryPageProps) {
             tone="blue"
           />
 
-          <div className="rounded-[1.5rem] border border-white/10 bg-[#111118] p-6">
+          <div className="rounded-[1.5rem] border border-white/15 bg-[#101722] p-6">
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#D4AF37]">
               Fit profile
             </p>
@@ -369,7 +397,7 @@ export default async function CountryPage({ params }: CountryPageProps) {
               {country.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="rounded-full border border-white/10 bg-black/30 px-3 py-1 text-xs font-semibold text-slate-300"
+                  className="rounded-full border border-white/15 bg-[#05080F]/78 px-3 py-1 text-xs font-semibold text-slate-200"
                 >
                   {tag}
                 </span>
@@ -389,7 +417,7 @@ export default async function CountryPage({ params }: CountryPageProps) {
           </div>
         </section>
 
-        <section className="mt-8 rounded-[1.5rem] border border-white/10 bg-[#111118] p-6">
+        <section className="mt-8 rounded-[1.5rem] border border-white/15 bg-[#101722] p-6">
           <div className="grid gap-5 md:grid-cols-[0.85fr_1.15fr] md:items-start">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#D4AF37]">
@@ -445,8 +473,8 @@ export default async function CountryPage({ params }: CountryPageProps) {
           </div>
         </section>
 
-        <section className="mt-8 rounded-[1.5rem] border border-white/10 bg-[#0B0F19] p-6">
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-500">
+        <section className="mt-8 rounded-[1.5rem] border border-white/15 bg-[#0B111B] p-6">
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-slate-300">
             Data note
           </p>
           <p className="mt-2 text-sm leading-7 text-slate-400">
@@ -617,7 +645,7 @@ type SignalCardProps = {
 
 function SignalCard({ label, value }: SignalCardProps) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-black/35 p-4 backdrop-blur">
+    <div className="rounded-2xl border border-white/15 bg-[#05080F]/82 p-4 backdrop-blur">
       <p className="text-xs text-slate-400">{label}</p>
       <p className="mt-1 truncate font-black text-white">{value}</p>
     </div>
@@ -631,7 +659,7 @@ type ScoreBarProps = {
 
 function ScoreBar({ label, value }: ScoreBarProps) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-black/45 p-4 backdrop-blur">
+    <div className="rounded-2xl border border-white/15 bg-[#05080F]/88 p-4 backdrop-blur">
       <div className="mb-2 flex items-center justify-between gap-3">
         <p className="text-sm font-bold text-slate-200">{label}</p>
         <p className="text-sm font-black text-[#D4AF37]">{value}/100</p>
@@ -655,7 +683,7 @@ type ScorePanelProps = {
 
 function ScorePanel({ label, value, description }: ScorePanelProps) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-black/30 p-5">
+    <div className="rounded-2xl border border-white/15 bg-[#05080F]/78 p-5">
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="font-black text-white">{label}</p>
@@ -687,7 +715,7 @@ type CostRowProps = {
 
 function CostRow({ label, value, percentage }: CostRowProps) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
+    <div className="rounded-2xl border border-white/15 bg-[#05080F]/78 p-4">
       <div className="flex items-center justify-between gap-4">
         <p className="text-sm font-bold text-slate-200">{label}</p>
         <p className="text-sm font-black text-white">{value}</p>
@@ -737,7 +765,7 @@ function InsightGrid({ title, items, tone }: InsightGridProps) {
         {items.map((item) => (
           <div
             key={item}
-            className="rounded-2xl border border-white/10 bg-black/30 p-4 text-sm leading-6 text-slate-300"
+            className="rounded-2xl border border-white/15 bg-[#05080F]/78 p-4 text-sm leading-6 text-slate-200"
           >
             {item}
           </div>
@@ -780,7 +808,7 @@ type ActionChecklistProps = {
 
 function ActionChecklist({ title, subtitle, items }: ActionChecklistProps) {
   return (
-    <div className="rounded-[1.5rem] border border-white/10 bg-[#111118] p-6">
+    <div className="rounded-[1.5rem] border border-white/15 bg-[#101722] p-6">
       <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#D4AF37]">
         Action layer
       </p>
@@ -791,7 +819,7 @@ function ActionChecklist({ title, subtitle, items }: ActionChecklistProps) {
         {items.map((item, index) => (
           <div
             key={item.title}
-            className="grid gap-3 rounded-2xl border border-white/10 bg-black/30 p-4 sm:grid-cols-[auto_1fr]"
+            className="grid gap-3 rounded-2xl border border-white/15 bg-[#05080F]/78 p-4 sm:grid-cols-[auto_1fr]"
           >
             <div className="flex h-8 w-8 items-center justify-center rounded-full border border-[#D4AF37]/25 bg-[#D4AF37]/10 text-xs font-black text-[#F5D76E]">
               {index + 1}
@@ -816,7 +844,7 @@ type ActionItemCardProps = {
 
 function ActionItemCard({ item }: ActionItemCardProps) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-black/30 p-4">
+    <div className="rounded-2xl border border-white/15 bg-[#05080F]/78 p-4">
       <p className="font-black text-white">{item.title}</p>
       <p className="mt-1 text-sm leading-6 text-slate-400">{item.text}</p>
     </div>
@@ -831,21 +859,21 @@ function RelatedCountryCard({ country }: RelatedCountryCardProps) {
   return (
     <Link
       href={`/countries/${country.slug}`}
-      className="group flex items-center justify-between gap-4 rounded-2xl border border-white/10 bg-black/30 p-4 transition hover:border-[#D4AF37]/60"
+      className="group flex items-center justify-between gap-4 rounded-2xl border border-white/15 bg-[#05080F]/78 p-4 transition hover:border-[#D4AF37]/70"
     >
       <div className="flex min-w-0 items-center gap-4">
         <span className="text-3xl">{country.emoji}</span>
 
         <div className="min-w-0">
           <p className="truncate font-black text-white">{country.name}</p>
-          <p className="mt-1 truncate text-xs text-slate-500">
+          <p className="mt-1 truncate text-xs text-slate-300">
             {country.region} • {country.capital}
           </p>
         </div>
       </div>
 
       <div className="shrink-0 text-right">
-        <p className="text-xs text-slate-500">TGPI</p>
+        <p className="text-xs text-slate-300">TGPI</p>
         <p className="text-lg font-black text-[#D4AF37]">
           {country.tgpiScore}
         </p>

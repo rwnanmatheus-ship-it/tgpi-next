@@ -48,7 +48,7 @@ function getRiskLabel(country: CountryCardCountry) {
 }
 
 function getVisualBadgeLabel(country: CountryCardCountry) {
-  return country.visual?.hasImage ? "Curated image" : "TGPI country profile";
+  return country.visual?.hasImage ? "Original TGPI art" : "TGPI country profile";
 }
 
 export function CountryCard({ country }: CountryCardProps) {
@@ -71,7 +71,6 @@ export function CountryCard({ country }: CountryCardProps) {
               alt={imageAlt}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-              unoptimized
               className="object-cover opacity-90 saturate-110 contrast-105 transition duration-700 group-hover:scale-[1.035] group-hover:opacity-100"
             />
           ) : (
