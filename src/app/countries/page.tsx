@@ -2,6 +2,7 @@ import Link from "next/link";
 import CountriesExplorerV3 from "@/components/countries/CountriesExplorerV3";
 import CountriesHeroV3 from "@/components/countries/CountriesHeroV3";
 import CountriesLearningOS from "@/components/countries/CountriesLearningOS";
+import CountriesWorldJourney from "@/components/countries/CountriesWorldJourney";
 import {
   getAllGoals,
   getAllRegions,
@@ -26,6 +27,8 @@ export default function CountriesPage() {
           countryCount={countries.length}
           regionCount={regions.length}
         />
+
+        <CountriesWorldJourney countries={countries} />
 
         <CountriesLearningOS />
 
