@@ -53,7 +53,7 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
           </Link>
 
           <Link
-            href="/countries#country-list"
+            href="/countries#countries-results"
             className="inline-flex w-fit rounded-full border border-[#D4AF37]/25 bg-[#D4AF37]/10 px-4 py-2 text-sm font-bold text-[#F5D76E] transition hover:border-[#F5D76E]/60"
           >
             Select countries
@@ -270,14 +270,14 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
 
             <div className="mt-5 grid gap-3 sm:grid-cols-2">
               <Link
-                href="/countries#country-list"
+                href="/countries#country-explorer"
                 className="rounded-2xl bg-[#D4AF37] px-5 py-3 text-center text-sm font-black text-black transition hover:bg-[#F5D76E]"
               >
                 Open country explorer
               </Link>
 
               <Link
-                href="/countries#country-presets"
+                href="/countries#countries-results"
                 className="rounded-2xl border border-white/10 px-5 py-3 text-center text-sm font-black text-white transition hover:border-[#D4AF37]/60"
               >
                 Use guided presets

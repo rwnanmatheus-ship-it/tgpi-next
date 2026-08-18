@@ -15,8 +15,51 @@ function getCollectionCount(value: number | string[] | undefined): number {
 export default function PassportPage() {
   const user = useUserData();
 
-  if (!user) {
-    return <div className="p-10 text-white">Loading passport...</div>;
+  if (user === undefined) {
+    return (
+      <main className="min-h-[70vh] bg-[var(--tgpi-canvas)] px-4 py-16">
+        <div className="mx-auto max-w-3xl rounded-[30px] border border-[var(--tgpi-border)] bg-white p-8 text-center shadow-[var(--tgpi-shadow-soft)]">
+          <p className="text-sm font-bold text-[var(--tgpi-muted)]" role="status">Loading your TGPI Passport…</p>
+        </div>
+      </main>
+    );
+  }
+
+  if (user === null) {
+    return (
+      <main className="min-h-[70vh] bg-[var(--tgpi-canvas)] px-4 py-16 sm:px-6">
+        <section className="mx-auto max-w-4xl overflow-hidden rounded-[34px] border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] shadow-[var(--tgpi-shadow-premium)]">
+          <div className="grid lg:grid-cols-[1.1fr_.9fr]">
+            <div className="p-8 sm:p-12">
+              <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[var(--tgpi-gold-strong)]">TGPI Passport</p>
+              <h1 className="mt-4 font-[var(--tgpi-font-display)] text-5xl font-semibold leading-none text-[var(--tgpi-navy)] sm:text-6xl">Your global plan needs a home.</h1>
+              <p className="mt-5 max-w-xl text-base leading-8 text-[var(--tgpi-muted)]">
+                Sign in to organize your identity, readiness, learning progress and document checklist in one private workspace.
+              </p>
+              <div className="mt-8 grid gap-3 sm:flex">
+                <Link href="/login?next=/passport" className="inline-flex min-h-14 items-center justify-center rounded-2xl bg-[var(--tgpi-navy)] px-6 text-sm font-extrabold text-white transition hover:bg-[var(--tgpi-navy-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]">
+                  Sign in to continue
+                </Link>
+                <Link href="/countries" className="inline-flex min-h-14 items-center justify-center rounded-2xl border border-[var(--tgpi-border)] bg-white px-6 text-sm font-extrabold text-[var(--tgpi-navy)] transition hover:border-[var(--tgpi-gold)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]">
+                  Explore countries first
+                </Link>
+              </div>
+            </div>
+            <div className="bg-[var(--tgpi-navy)] p-8 text-white sm:p-10">
+              <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold-light)]">Private workspace</p>
+              <div className="mt-6 grid gap-3">
+                {["Identity and travel goal", "Country shortlist", "Readiness and learning", "Documents and next actions"].map((item, index) => (
+                  <div key={item} className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/5 p-4">
+                    <span className="grid h-8 w-8 place-items-center rounded-full bg-white/10 text-xs font-extrabold text-[var(--tgpi-gold-light)]">0{index + 1}</span>
+                    <span className="text-sm font-bold text-white">{item}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+    );
   }
 
   const countriesCount = getCollectionCount(user.countriesExplored);

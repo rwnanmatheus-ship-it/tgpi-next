@@ -20,7 +20,7 @@ const desktopLinks = [
 
 const mobileGroups = [
   { title: "Explore", links: [["Countries", "/countries"], ["Country Fit", "/onboarding"], ["Compare", "/compare"]] },
-  { title: "Build", links: [["Dashboard", "/dashboard"], ["Passport", "/passport"], ["Profile", "/profile"]] },
+  { title: "Build", links: [["My workspace", "/profile"], ["Passport", "/passport"], ["Start a plan", "/onboarding"]] },
   { title: "Learn", links: [["Courses", "/courses"], ["Resources", "/resources"], ["Authority", "/authority"]] },
   { title: "Premium", links: [["Pricing", "/pricing"], ["Premium", "/premium"], ["Waitlist", "/premium-waitlist"]] },
 ] as const;
@@ -121,7 +121,7 @@ export default function Navbar() {
         </div>
       </Container>
 
-      <div id="tgpi-mobile-menu" role="dialog" aria-modal="true" aria-label="TGPI mobile navigation" aria-hidden={!menuOpen} className={`fixed inset-0 top-[65px] z-40 overflow-y-auto overscroll-contain bg-[var(--tgpi-navy-deep)] text-white transition duration-300 lg:hidden ${menuOpen ? "pointer-events-auto translate-y-0 opacity-100" : "pointer-events-none -translate-y-3 opacity-0"}`}>
+      <div id="tgpi-mobile-menu" role="dialog" aria-modal="true" aria-label="TGPI mobile navigation" aria-hidden={!menuOpen} inert={!menuOpen ? true : undefined} className={`fixed inset-0 top-[65px] z-40 overflow-y-auto overscroll-contain bg-[var(--tgpi-navy-deep)] text-white transition duration-300 lg:hidden ${menuOpen ? "pointer-events-auto translate-y-0 opacity-100" : "pointer-events-none -translate-y-3 opacity-0"}`}>
         <Container className="flex min-h-[calc(100dvh-65px)] flex-col py-7">
           <div className="flex items-center justify-between border-b border-white/10 pb-6">
             <div>

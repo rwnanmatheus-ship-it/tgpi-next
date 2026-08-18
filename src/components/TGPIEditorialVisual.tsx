@@ -18,6 +18,7 @@ type TGPIEditorialVisualProps = {
   id: string;
   className?: string;
   ariaLabel?: string;
+  showContext?: boolean;
 };
 
 type VisualConfig = {
@@ -113,6 +114,7 @@ export default function TGPIEditorialVisual({
   id,
   className = "",
   ariaLabel,
+  showContext = true,
 }: TGPIEditorialVisualProps) {
   const visual = visualConfig[variant];
   const accessibleLabel = ariaLabel?.toLowerCase().includes("authorial")
@@ -140,7 +142,7 @@ export default function TGPIEditorialVisual({
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(11,31,58,0.05)_0%,rgba(11,31,58,0.14)_45%,rgba(7,20,38,0.78)_100%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_12%,rgba(255,255,255,0.2),transparent_34%)]" />
 
-      {variant !== "hero" && (
+      {variant !== "hero" && showContext && (
         <div className="absolute inset-x-5 bottom-5 z-10 rounded-[22px] border border-white/18 bg-[#071426]/72 px-5 py-4 text-white shadow-[0_18px_48px_rgba(0,0,0,0.24)] backdrop-blur-md md:inset-x-6 md:bottom-6">
           <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[#F0D58C]">
             Real-world decision pressure

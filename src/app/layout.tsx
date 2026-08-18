@@ -29,9 +29,13 @@ export const metadata: Metadata = {
     description: "Compare countries, build practical skills and prepare a global life with clarity.",
     url: "https://theglobalpolymath.com",
     siteName: "TGPI",
-    images: [{ url: "/og-image.png", width: 1200, height: 630 }],
     locale: "en_US",
     type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "TGPI — Build Your Global Identity",
+    description: "Compare countries, build practical skills and prepare a global life with clarity.",
   },
 };
 

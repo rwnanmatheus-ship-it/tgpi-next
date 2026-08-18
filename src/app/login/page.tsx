@@ -17,6 +17,13 @@ function getErrorMessage(error: unknown, fallback: string) {
   return error instanceof Error && error.message ? error.message : fallback;
 }
 
+function getNextPath(fallback: string) {
+  const requestedPath = new URLSearchParams(window.location.search).get("next");
+  return requestedPath?.startsWith("/") && !requestedPath.startsWith("//")
+    ? requestedPath
+    : fallback;
+}
+
 export default function LoginPage() {
   const router = useRouter();
 
@@ -58,12 +65,12 @@ export default function LoginPage() {
         const userCred = await createUserWithEmailAndPassword(auth, email, password);
         await ensureUserProfile(userCred.user.uid, email);
         setStatus("Account created successfully.");
-        router.push("/onboarding");
+        router.push(getNextPath("/onboarding"));
       } else {
         const userCred = await signInWithEmailAndPassword(auth, email, password);
         await ensureUserProfile(userCred.user.uid, userCred.user.email || email);
         setStatus("Login successful.");
-        router.push("/dashboard");
+        router.push(getNextPath("/dashboard"));
       }
     } catch (error: unknown) {
       setStatus(getErrorMessage(error, "Something went wrong."));

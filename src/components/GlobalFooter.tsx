@@ -25,8 +25,8 @@ const footerGroups = [
   {
     title: "Account",
     links: [
-      ["Dashboard", "/dashboard"],
-      ["Profile", "/profile"],
+      ["My workspace", "/profile"],
+      ["Start a plan", "/onboarding"],
       ["Passport", "/passport"],
       ["Certificates", "/certificates"],
       ["Sign in", "/login"],
@@ -68,7 +68,7 @@ export default function GlobalFooter() {
             </Link>
 
             <p className="mt-6 max-w-md text-sm leading-7 text-[#C8D2E0] sm:text-base">
-              A global decision system for comparing countries, preparing international moves and building a life abroad with evidence, clarity and strategy.
+              A global decision and learning platform for comparing countries, developing practical skills and preparing an international move with greater clarity.
             </p>
 
             <div className="mt-7 flex flex-wrap gap-2 text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-gold-light)]">

@@ -20,7 +20,7 @@ const countries: CountryCard[] = [
     href: "/countries/portugal",
     compareHref: "/compare?country=portugal&country=spain",
     variant: "portugal",
-    score: 82,
+    score: 88,
     fit: "European access and easier cultural adaptation",
     pressure: "Rent-to-income balance",
     signal: "Lifestyle fit",
@@ -30,13 +30,13 @@ const countries: CountryCard[] = [
     href: "/countries/canada",
     compareHref: "/compare?country=canada&country=united-kingdom",
     variant: "canada",
-    score: 86,
+    score: 91,
     fit: "Education, career pathways and long-term mobility",
     pressure: "Housing and entry planning",
     signal: "Career access",
   },
   {
-    name: "England",
+    name: "United Kingdom",
     href: "/countries/united-kingdom",
     compareHref: "/compare?country=united-kingdom&country=canada",
     variant: "england",
@@ -63,10 +63,10 @@ export default function HomeCountryCardsV2() {
               id="home-country-intelligence-title"
               className="mt-4 font-[var(--tgpi-font-display)] text-[clamp(2.8rem,5vw,4.8rem)] font-semibold leading-[0.95] text-white"
             >
-              Move from inspiration to evidence.
+              Move from inspiration to a structured comparison.
             </h2>
             <p className="mt-5 max-w-2xl text-base leading-8 text-[#dce4ee] sm:text-lg">
-              Compare fit, opportunity and pressure before committing to a destination.
+              Use TGPI scores as directional signals, then verify current costs, rules and local conditions before committing.
             </p>
           </div>
           <Link
@@ -95,11 +95,12 @@ export default function HomeCountryCardsV2() {
                     variant={country.variant}
                     id={`home-country-v2-${country.name.toLowerCase()}`}
                     ariaLabel={`${country.name} country intelligence`}
+                    showContext={false}
                     className="absolute inset-0 h-full w-full transition duration-700 group-hover:scale-[1.045]"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#071a32] via-[#071a32]/22 to-transparent" />
                   <div className="absolute left-4 top-4 flex items-center gap-2 rounded-full border border-white/15 bg-[#071a32]/82 px-3 py-2 text-[10px] font-extrabold uppercase tracking-[0.16em] text-white backdrop-blur-xl">
-                    <span className="text-[var(--tgpi-gold-light)]">TGPI {country.score}</span>
+                    <span className="text-[var(--tgpi-gold-light)]">TGPI model {country.score}</span>
                     <span className="text-white/35">•</span>
                     <span>{country.signal}</span>
                   </div>
@@ -146,15 +147,6 @@ export default function HomeCountryCardsV2() {
                 </Link>
               </div>
             </article>
-          ))}
-        </div>
-
-        <div className="mt-2 flex justify-center gap-2 lg:hidden" aria-hidden="true">
-          {countries.map((country, index) => (
-            <span
-              key={country.name}
-              className={`h-1.5 rounded-full ${index === 0 ? "w-8 bg-[var(--tgpi-gold-light)]" : "w-2 bg-white/25"}`}
-            />
           ))}
         </div>
 

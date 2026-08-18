@@ -1,10 +1,10 @@
 import Link from "next/link";
 
 const benefits = [
-  "Personal country-fit recommendations",
-  "Advanced comparison and readiness",
-  "Document and next-action tracking",
-  "Priority access to new intelligence tools",
+  "A personal country shortlist",
+  "Comparison and readiness in one place",
+  "Learning connected to your goal",
+  "Documents and next actions organized",
 ] as const;
 
 export default function HomeLaunchClose() {
@@ -42,13 +42,13 @@ export default function HomeLaunchClose() {
 
           <div className="border-t border-white/10 bg-[linear-gradient(145deg,#102d50,#071a32)] p-6 sm:p-8 lg:border-l lg:border-t-0 lg:p-10">
             <div className="h-full rounded-[28px] border border-white/15 bg-white/5 p-6 text-white backdrop-blur-xl">
-              <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-light)]">Your first strategic output</p>
+              <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-light)]">What your workspace connects</p>
               <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
                 {[
-                  ["Country fit", "84%"],
-                  ["Readiness", "70%"],
-                  ["Documents", "4/7"],
-                  ["Next action", "Prepare translation"],
+                  ["Explore", "Country shortlist"],
+                  ["Develop", "Skills and learning"],
+                  ["Prepare", "Document checklist"],
+                  ["Progress", "Next practical action"],
                 ].map(([label, value]) => (
                   <div key={label} className="rounded-2xl border border-white/10 bg-black/10 p-4">
                     <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-white/45">{label}</p>

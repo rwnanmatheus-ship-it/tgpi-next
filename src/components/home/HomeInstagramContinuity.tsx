@@ -86,6 +86,7 @@ export default function HomeInstagramContinuity() {
                   variant={story.variant}
                   id={`instagram-continuity-${story.variant}`}
                   ariaLabel={story.title}
+                  showContext={false}
                   className="absolute inset-0 h-full w-full transition duration-700 group-hover:scale-[1.045]"
                 />
                 <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,26,50,.03),rgba(7,26,50,.25)_44%,rgba(7,26,50,.96))]" />
@@ -114,15 +115,6 @@ export default function HomeInstagramContinuity() {
                 </div>
               </div>
             </Link>
-          ))}
-        </div>
-
-        <div className="mt-2 flex justify-center gap-2 lg:hidden" aria-hidden="true">
-          {stories.map((story, index) => (
-            <span
-              key={story.title}
-              className={`h-1.5 rounded-full ${index === 0 ? "w-8 bg-[var(--tgpi-gold)]" : "w-2 bg-[var(--tgpi-border)]"}`}
-            />
           ))}
         </div>
 

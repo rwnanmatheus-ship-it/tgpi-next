@@ -24,9 +24,13 @@ export default function CoursesPage() {
             <p className="mt-6 max-w-2xl text-lg leading-8 text-[#566070]">
               Build decision, language, career, technology and global-readiness capabilities through connected learning paths.
             </p>
+            <div className="mt-6 rounded-2xl border border-[#B58A2A]/35 bg-[#FFF7DE] p-4">
+              <p className="text-sm font-black text-[#6F4908]">Best learning experience on desktop</p>
+              <p className="mt-1 text-xs leading-6 text-[#6F5A31]">Browse from any device. Use a computer for long lessons, exercises and focused study.</p>
+            </div>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <Link
-                href="/login"
+                href="/login?next=/courses"
                 className="rounded-2xl bg-[#0B1F3A] px-6 py-4 text-center text-sm font-black text-white transition hover:bg-[#132B4C]"
               >
                 Create Free Account
@@ -83,7 +87,7 @@ export default function CoursesPage() {
                 <p className="mt-3 text-sm leading-7 text-[#566070]">{course.desc}</p>
 
                 <Link
-                  href="/login"
+                  href="/login?next=/courses"
                   className="mt-6 inline-flex rounded-2xl bg-[#0B1F3A] px-5 py-3 text-sm font-black text-white transition hover:bg-[#132B4C]"
                 >
                   Start learning
