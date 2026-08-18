@@ -209,7 +209,7 @@ export function getCountryImageProfile(country: Country): CountryImageProfile {
   return {
     url: `/images/countries/identity/${country.slug}.webp`,
     status: "generated",
-    credit: "Original TGPI country identity artwork",
+    credit: "TGPI Cinematic Country Series",
   };
 }
 
@@ -218,7 +218,7 @@ export function getCountryImageQuery(country: Country): string {
 }
 
 export function getCountryImageAlt(country: Country): string {
-  return `Original TGPI identity artwork for ${country.name}, using a vivid palette and the country's geographic silhouette.`;
+  return `Cinematic TGPI country visual of ${country.name}, highlighting its landscape, culture and contemporary identity.`;
 }
 
 export function getCountryImageUrl(country: Country): string {
