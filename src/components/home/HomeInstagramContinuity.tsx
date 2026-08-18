@@ -8,6 +8,7 @@ type Story = {
   title: string;
   description: string;
   href: string;
+  image: string;
   variant: TGPIVisualVariant;
   accent: string;
 };
@@ -18,6 +19,7 @@ const stories: Story[] = [
     title: "England is more than London.",
     description: "Evaluate cities, education, cost and opportunity beyond the capital.",
     href: "/countries/united-kingdom",
+    image: "/images/home/tgpi-uk-education-story.webp",
     variant: "england",
     accent: "England",
   },
@@ -26,6 +28,7 @@ const stories: Story[] = [
     title: "Portugal or Spain?",
     description: "Compare language, lifestyle, cost and long-term mobility through one framework.",
     href: "/compare?country=portugal&country=spain",
+    image: "/images/home/tgpi-portugal-spain-story.webp",
     variant: "spain",
     accent: "Comparison",
   },
@@ -34,6 +37,7 @@ const stories: Story[] = [
     title: "Documents are part of the strategy.",
     description: "Turn passports, translations and deadlines into an executable checklist.",
     href: "/passport",
+    image: "/images/home/tgpi-documents-story.webp",
     variant: "documents",
     accent: "Documents",
   },
@@ -86,6 +90,7 @@ export default function HomeInstagramContinuity() {
                   variant={story.variant}
                   id={`instagram-continuity-${story.variant}`}
                   ariaLabel={story.title}
+                  imageSrc={story.image}
                   showContext={false}
                   className="absolute inset-0 h-full w-full transition duration-700 group-hover:scale-[1.045]"
                 />

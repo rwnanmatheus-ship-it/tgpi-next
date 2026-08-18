@@ -18,6 +18,8 @@ type TGPIEditorialVisualProps = {
   id: string;
   className?: string;
   ariaLabel?: string;
+  imageSrc?: string;
+  imagePosition?: string;
   showContext?: boolean;
 };
 
@@ -114,6 +116,8 @@ export default function TGPIEditorialVisual({
   id,
   className = "",
   ariaLabel,
+  imageSrc,
+  imagePosition,
   showContext = true,
 }: TGPIEditorialVisualProps) {
   const visual = visualConfig[variant];
@@ -129,14 +133,14 @@ export default function TGPIEditorialVisual({
       data-visual-id={id}
     >
       <Image
-        src={visual.src}
+        src={imageSrc ?? visual.src}
         alt=""
         fill
         priority={variant === "hero"}
         quality={88}
         sizes="(max-width: 768px) 100vw, (max-width: 1280px) 70vw, 50vw"
         className="object-cover saturate-[0.82] contrast-[1.06] brightness-[0.93] transition duration-700 ease-out group-hover:scale-[1.025] group-hover:saturate-[0.92]"
-        style={{ objectPosition: visual.objectPosition }}
+        style={{ objectPosition: imagePosition ?? visual.objectPosition }}
       />
 
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(11,31,58,0.05)_0%,rgba(11,31,58,0.14)_45%,rgba(7,20,38,0.78)_100%)]" />

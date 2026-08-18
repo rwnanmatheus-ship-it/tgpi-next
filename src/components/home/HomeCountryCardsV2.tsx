@@ -7,6 +7,7 @@ type CountryCard = {
   name: string;
   href: string;
   compareHref: string;
+  image: string;
   variant: TGPIVisualVariant;
   score: number;
   fit: string;
@@ -19,6 +20,7 @@ const countries: CountryCard[] = [
     name: "Portugal",
     href: "/countries/portugal",
     compareHref: "/compare?country=portugal&country=spain",
+    image: "/images/home/tgpi-portugal-country.webp",
     variant: "portugal",
     score: 88,
     fit: "European access and easier cultural adaptation",
@@ -29,6 +31,7 @@ const countries: CountryCard[] = [
     name: "Canada",
     href: "/countries/canada",
     compareHref: "/compare?country=canada&country=united-kingdom",
+    image: "/images/home/tgpi-canada-country.webp",
     variant: "canada",
     score: 91,
     fit: "Education, career pathways and long-term mobility",
@@ -39,6 +42,7 @@ const countries: CountryCard[] = [
     name: "United Kingdom",
     href: "/countries/united-kingdom",
     compareHref: "/compare?country=united-kingdom&country=canada",
+    image: "/images/home/tgpi-united-kingdom-country.webp",
     variant: "england",
     score: 88,
     fit: "Academic leverage and global career exposure",
@@ -95,6 +99,7 @@ export default function HomeCountryCardsV2() {
                     variant={country.variant}
                     id={`home-country-v2-${country.name.toLowerCase()}`}
                     ariaLabel={`${country.name} country intelligence`}
+                    imageSrc={country.image}
                     showContext={false}
                     className="absolute inset-0 h-full w-full transition duration-700 group-hover:scale-[1.045]"
                   />
