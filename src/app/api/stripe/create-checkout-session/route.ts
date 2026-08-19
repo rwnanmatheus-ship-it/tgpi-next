@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { requireFirebaseUser } from "@/lib/firebase-auth-server";
+import { requireApiUser, TgpiAuthenticationError } from "@/lib/auth/guards";
 import { TGPI_PREMIUM_PRICE_ID, getBaseUrl, getStripeServer } from "@/lib/stripe";
 
-export async function POST(request: Request) {
+export async function POST() {
   try {
     const billingEnabled = process.env.BILLING_ENABLED === "true";
 
@@ -16,7 +16,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const user = await requireFirebaseUser(request);
+    const user = await requireApiUser();
 
     if (!TGPI_PREMIUM_PRICE_ID) {
       return NextResponse.json(
@@ -56,11 +56,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({ url: session.url });
   } catch (error) {
-    const message =
-      error instanceof Error ? error.message : "Could not create checkout session.";
-    const status = message.includes("Firebase ID token") || message.includes("INVALID_ID_TOKEN")
-      ? 401
-      : 500;
+    const status = error instanceof TgpiAuthenticationError ? 401 : 500;
 
     console.error("Stripe checkout session error:", error);
     return NextResponse.json(

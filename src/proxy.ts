@@ -1,16 +1,15 @@
-import { NextResponse } from "next/server";
+import { clerkMiddleware } from "@clerk/nextjs/server";
 
-/**
- * Next.js 16 proxy entrypoint.
- *
- * Route access remains unchanged for this release. Authentication and premium
- * entitlements continue to be enforced by the existing application guards and
- * server-side billing controls.
- */
-export function proxy() {
-  return NextResponse.next();
-}
+// Authentication context is attached here. Authorization is intentionally
+// enforced at each protected layout, page and route handler on the server.
+export default clerkMiddleware({
+  signInUrl: "/sign-in",
+  signUpUrl: "/sign-up",
+});
 
 export const config = {
-  matcher: ["/((?!_next|favicon.ico|.*\\..*).*)"],
+  matcher: [
+    "/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)",
+    "/(api|trpc)(.*)",
+  ],
 };

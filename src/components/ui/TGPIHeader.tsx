@@ -1,15 +1,10 @@
 "use client";
 
-import Image from "next/image";
-import { useEffect, useState } from "react";
-import type { User } from "firebase/auth";
-import { onAuthStateChanged } from "firebase/auth";
-import { auth } from "@/lib/firebase";
+import Link from "next/link";
+import { UserButton, useUser } from "@clerk/nextjs";
 
 export default function TGPIHeader() {
-  const [user, setUser] = useState<User | null>(null);
-
-  useEffect(() => onAuthStateChanged(auth, setUser), []);
+  const { user } = useUser();
 
   return (
     <header className="flex items-center justify-between border-b border-white/10 bg-[#050b18] p-4">
@@ -19,25 +14,13 @@ export default function TGPIHeader() {
       />
 
       <div className="flex items-center gap-4">
-        <div className="relative">
-          🔔
-          <span className="absolute -right-2 -top-2 rounded-full bg-red-500 px-1 text-xs">
-            3
-          </span>
-        </div>
+        <Link href="/notifications" className="grid h-10 w-10 place-items-center rounded-full border border-white/10" aria-label="Open notifications">◌</Link>
 
         <div className="flex items-center gap-2 rounded-xl bg-white/5 px-3 py-2">
-          <Image
-            src={user?.photoURL || "/avatar.png"}
-            alt="TGPI account avatar"
-            width={32}
-            height={32}
-            unoptimized
-            className="h-8 w-8 rounded-full object-cover"
-          />
+          <UserButton userProfileMode="navigation" userProfileUrl="/profile/security" />
           <div>
-            <p className="text-sm">{user?.displayName || "User"}</p>
-            <p className="text-xs text-slate-400">{user?.email}</p>
+            <p className="text-sm">{user?.fullName || user?.firstName || "TGPI member"}</p>
+            <p className="text-xs text-slate-400">{user?.primaryEmailAddress?.emailAddress}</p>
           </div>
         </div>
       </div>

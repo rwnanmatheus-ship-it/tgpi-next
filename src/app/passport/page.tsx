@@ -1,191 +1,70 @@
-"use client";
-
-import GlobalReadinessCard from "@/components/GlobalReadinessCard";
-import ShareActions from "@/components/ShareActions";
-import { useUserData } from "@/hooks/useUserData";
+import type { Metadata } from "next";
 import Link from "next/link";
-import { maskDocumentNumber, prettifyIntent } from "@/lib/identity";
-import { calculateReputation } from "@/lib/calculate-reputation";
+import { currentUser } from "@clerk/nextjs/server";
+import { formatTgpiGlobalId, requireUser } from "@/lib/auth/guards";
 
-function getCollectionCount(value: number | string[] | undefined): number {
-  if (Array.isArray(value)) return value.length;
-  return Number(value || 0);
-}
+export const metadata: Metadata = {
+  title: "Global Passport — TGPI",
+  robots: { index: false, follow: false },
+};
 
-export default function PassportPage() {
-  const user = useUserData();
-
-  if (user === undefined) {
-    return (
-      <main className="min-h-[70vh] bg-[var(--tgpi-canvas)] px-4 py-16">
-        <div className="mx-auto max-w-3xl rounded-[30px] border border-[var(--tgpi-border)] bg-white p-8 text-center shadow-[var(--tgpi-shadow-soft)]">
-          <p className="text-sm font-bold text-[var(--tgpi-muted)]" role="status">Loading your TGPI Passport…</p>
-        </div>
-      </main>
-    );
-  }
-
-  if (user === null) {
-    return (
-      <main className="min-h-[70vh] bg-[var(--tgpi-canvas)] px-4 py-16 sm:px-6">
-        <section className="mx-auto max-w-4xl overflow-hidden rounded-[34px] border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] shadow-[var(--tgpi-shadow-premium)]">
-          <div className="grid lg:grid-cols-[1.1fr_.9fr]">
-            <div className="p-8 sm:p-12">
-              <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[var(--tgpi-gold-strong)]">TGPI Passport</p>
-              <h1 className="mt-4 font-[var(--tgpi-font-display)] text-5xl font-semibold leading-none text-[var(--tgpi-navy)] sm:text-6xl">Your global plan needs a home.</h1>
-              <p className="mt-5 max-w-xl text-base leading-8 text-[var(--tgpi-muted)]">
-                Sign in to organize your identity, readiness, learning progress and document checklist in one private workspace.
-              </p>
-              <div className="mt-8 grid gap-3 sm:flex">
-                <Link href="/login?next=/passport" className="inline-flex min-h-14 items-center justify-center rounded-2xl bg-[var(--tgpi-navy)] px-6 text-sm font-extrabold text-white transition hover:bg-[var(--tgpi-navy-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]">
-                  Sign in to continue
-                </Link>
-                <Link href="/countries" className="inline-flex min-h-14 items-center justify-center rounded-2xl border border-[var(--tgpi-border)] bg-white px-6 text-sm font-extrabold text-[var(--tgpi-navy)] transition hover:border-[var(--tgpi-gold)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]">
-                  Explore countries first
-                </Link>
-              </div>
-            </div>
-            <div className="bg-[var(--tgpi-navy)] p-8 text-white sm:p-10">
-              <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold-light)]">Private workspace</p>
-              <div className="mt-6 grid gap-3">
-                {["Identity and travel goal", "Country shortlist", "Readiness and learning", "Documents and next actions"].map((item, index) => (
-                  <div key={item} className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/5 p-4">
-                    <span className="grid h-8 w-8 place-items-center rounded-full bg-white/10 text-xs font-extrabold text-[var(--tgpi-gold-light)]">0{index + 1}</span>
-                    <span className="text-sm font-bold text-white">{item}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-      </main>
-    );
-  }
-
-  const countriesCount = getCollectionCount(user.countriesExplored);
-  const completedCoursesCount = getCollectionCount(user.completedCourses);
-  const readinessScore = user.globalReadinessScore || 0;
-  const reputation = calculateReputation(user);
-  const profileUrl = user.uid ? `/u/${user.uid}` : "/profile";
-  const maskedDocument = maskDocumentNumber(
-    user.documentType,
-    user.documentNumber
-  );
+export default async function PassportPage() {
+  const session = await requireUser();
+  const user = await currentUser();
+  const name = user?.fullName || user?.firstName || "Global explorer";
+  const email = user?.primaryEmailAddress?.emailAddress || "Add a primary email";
+  const emailVerified = user?.primaryEmailAddress?.verification?.status === "verified";
+  const globalId = formatTgpiGlobalId(session.userId);
 
   return (
-    <div className="min-h-screen p-8">
-      <div className="mx-auto max-w-6xl space-y-8">
-        <section className="rounded-3xl border border-yellow-700/20 bg-gradient-to-br from-yellow-500/10 to-slate-950 p-8 text-white">
-          <div className="grid gap-6 lg:grid-cols-[1.2fr_.8fr] lg:items-start">
+    <main className="min-h-screen bg-[#F5F1E8] px-4 py-10 text-[#0B1F3A] sm:px-6 lg:py-16">
+      <div className="mx-auto max-w-6xl">
+        <section className="relative overflow-hidden rounded-[34px] bg-[#0B1F3A] p-8 text-white shadow-[0_32px_90px_rgba(11,31,58,0.2)] sm:p-12 lg:p-14">
+          <div className="pointer-events-none absolute -right-28 -top-28 h-96 w-96 rounded-full border border-[#E5BF5A]/25" />
+          <div className="pointer-events-none absolute right-12 top-20 h-56 w-56 rounded-full border border-[#E5BF5A]/15" />
+          <div className="relative grid gap-12 lg:grid-cols-[1.15fr_.85fr] lg:items-end">
             <div>
-              <p className="mb-4 inline-flex rounded-full border border-yellow-600/30 bg-yellow-500/5 px-4 py-2 text-sm text-yellow-200">
-                TGPI Global Passport
-              </p>
-
-              <h1 className="text-4xl font-bold text-yellow-400">
-                🌍 Your Verified Global Identity
-              </h1>
-
-              <p className="mt-4 max-w-3xl text-slate-300">
-                Your passport centralizes your TGPI readiness, identity signals,
-                travel objective, and high-value progress indicators in one
-                premium global profile.
-              </p>
-
-              <div className="mt-8 flex flex-wrap gap-4">
-                <Link
-                  href="/countries"
-                  className="rounded-xl bg-yellow-500 px-6 py-3 font-semibold text-black transition hover:bg-yellow-400"
-                >
-                  Explore Countries
-                </Link>
-
-                <Link
-                  href={profileUrl}
-                  className="rounded-xl border border-slate-700 bg-slate-900 px-6 py-3 font-semibold text-white transition hover:border-yellow-500"
-                >
-                  Open Public Profile
-                </Link>
+              <p className="text-[10px] font-extrabold uppercase tracking-[0.26em] text-[#F0D58C]">TGPI Global Passport</p>
+              <h1 className="mt-5 font-[var(--tgpi-font-display)] text-5xl font-semibold leading-none tracking-[-0.045em] sm:text-7xl">{name}</h1>
+              <p className="mt-6 max-w-2xl text-base leading-8 text-[#C7D0DC]">Your private command center for global identity, readiness, country goals, learning and future verified credentials.</p>
+              <div className="mt-8 flex flex-wrap gap-3">
+                <Link href="/onboarding" className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#E5BF5A] px-5 text-sm font-extrabold text-[#0B1F3A]">Build my global plan</Link>
+                <Link href="/profile/security" className="inline-flex min-h-12 items-center justify-center rounded-xl border border-white/20 px-5 text-sm font-extrabold text-white">Identity & security</Link>
               </div>
             </div>
-
-            <div className="grid gap-4 sm:grid-cols-2">
-              <Card label="TGPI ID" value={user.tgpiId || "—"} />
-              <Card
-                label="Username"
-                value={user.username ? `@${user.username}` : "—"}
-              />
-              <Card label="Global Score" value={String(user.globalScore || 0)} />
-              <Card label="Reputation" value={`${reputation}/100`} />
+            <div className="rounded-[26px] border border-white/12 bg-white/[0.055] p-6 backdrop-blur-sm">
+              <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#F0D58C]">Public reference</p>
+              <p className="mt-4 break-all font-[var(--tgpi-font-display)] text-3xl font-semibold">{globalId}</p>
+              <div className="mt-5 border-t border-white/10 pt-5">
+                <p className="text-xs text-[#AEB9C8]">Primary identity</p>
+                <p className="mt-2 break-all text-sm font-bold text-white">{email}</p>
+                <p className={`mt-2 text-xs font-bold ${emailVerified ? "text-[#A9E1C8]" : "text-[#F0D58C]"}`}>{emailVerified ? "Verified" : "Verification required"}</p>
+              </div>
             </div>
           </div>
         </section>
 
-        <GlobalReadinessCard score={readinessScore} />
-
-        <section className="grid gap-6 lg:grid-cols-2 text-white">
-          <section className="rounded-3xl border border-slate-800 bg-slate-900 p-8">
-            <h2 className="text-2xl font-bold text-yellow-400">
-              Identity & Travel Layer
-            </h2>
-
-            <div className="mt-6 grid gap-4 md:grid-cols-2">
-              <Card label="Legal Name" value={user.legalName || user.name || "—"} />
-              <Card label="Nationality" value={user.nationality || "—"} />
-              <Card label="Document Verification" value={maskedDocument} />
-              <Card label="Travel Intent" value={prettifyIntent(user.travelIntent)} />
-              <Card label="Target Country" value={user.targetCountry || "—"} />
-              <Card
-                label="Current Location"
-                value={
-                  [user.currentCity, user.currentCountry].filter(Boolean).join(", ") ||
-                  "—"
-                }
-              />
-            </div>
-          </section>
-
-          <section className="rounded-3xl border border-slate-800 bg-slate-900 p-8">
-            <h2 className="text-2xl font-bold text-yellow-400">
-              Learning Footprint
-            </h2>
-
-            <div className="mt-6 space-y-4">
-              <Card
-                label="Countries Explored"
-                value={String(countriesCount)}
-              />
-              <Card
-                label="Completed Courses"
-                value={String(completedCoursesCount)}
-              />
-              <Card
-                label="Certificates Earned"
-                value={String(user.certificatesEarned || 0)}
-              />
-              <Card
-                label="Verification Status"
-                value={user.isVerified ? "Verified Global Learner" : "Standard"}
-              />
-            </div>
-          </section>
+        <section className="mt-8 grid gap-5 lg:grid-cols-3">
+          {[
+            ["Identity layer", "Secure account identity is active. Add goals and profile context through onboarding.", "/onboarding", "Complete context"],
+            ["Learning layer", "Course activity and verified credentials will appear here only after real completion.", "/courses", "Explore courses"],
+            ["Country layer", "Research destinations and build comparisons before saving your personal shortlist.", "/countries", "Explore countries"],
+          ].map(([title, description, href, action]) => (
+            <article key={title} className="rounded-[26px] border border-[#D8D2C4] bg-[#FFFDF8] p-6">
+              <span className="inline-flex rounded-full bg-[#F0E7D4] px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.16em] text-[#956A13]">Ready to develop</span>
+              <h2 className="mt-5 font-[var(--tgpi-font-display)] text-3xl font-semibold">{title}</h2>
+              <p className="mt-3 text-sm leading-7 text-[#657082]">{description}</p>
+              <Link href={href} className="mt-6 inline-flex text-sm font-extrabold text-[#956A13]">{action} →</Link>
+            </article>
+          ))}
         </section>
 
-        <ShareActions
-          title="My TGPI Global Passport"
-          text="Explore my TGPI Global Passport, international goals, and readiness signals."
-          urlPath="/passport"
-        />
+        <section className="mt-8 rounded-[28px] border border-[#D8D2C4] bg-white p-7 sm:p-9">
+          <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#956A13]">Privacy boundary</p>
+          <h2 className="mt-3 font-[var(--tgpi-font-display)] text-4xl font-semibold">A passport is context — not a credential.</h2>
+          <p className="mt-4 max-w-4xl text-sm leading-7 text-[#657082]">TGPI will only request legal documents inside a clearly identified verification or documentation workflow. They will never be accepted as a password, recovery secret or general account identifier.</p>
+        </section>
       </div>
-    </div>
-  );
-}
-
-function Card({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="rounded-2xl border border-slate-800 bg-slate-950 p-5">
-      <p className="text-sm text-slate-400">{label}</p>
-      <p className="mt-2 text-lg font-bold text-white">{value}</p>
-    </div>
+    </main>
   );
 }

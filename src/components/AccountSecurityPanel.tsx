@@ -1,8 +1,7 @@
 "use client";
 
-import { auth } from "@/lib/firebase";
-import { signOut } from "firebase/auth";
-import { useState } from "react";
+import Link from "next/link";
+import { SignOutButton } from "@clerk/nextjs";
 
 type Props = {
   email?: string;
@@ -22,21 +21,6 @@ function formatDate(date?: string) {
 }
 
 export default function AccountSecurityPanel({ email = "", updatedAt = "" }: Props) {
-  const [loading, setLoading] = useState(false);
-
-  async function handleLogout() {
-    try {
-      setLoading(true);
-      await signOut(auth);
-      window.location.href = "/login";
-    } catch (error) {
-      console.error("Failed to logout:", error);
-      alert("Could not sign out.");
-    } finally {
-      setLoading(false);
-    }
-  }
-
   return (
     <section className="rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.015))] p-6 shadow-[0_0_35px_rgba(250,204,21,0.03)]">
       <div className="mb-5">
@@ -60,17 +44,14 @@ export default function AccountSecurityPanel({ email = "", updatedAt = "" }: Pro
         <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
           <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Password & Access</p>
           <p className="mt-2 text-sm leading-7 text-slate-300">
-            Password changes and advanced account security can be connected to your login flow later, but this launch version already includes session control and account status visibility.
+            Manage passwords, passkeys, connected accounts, multi-factor authentication and active devices through your TGPI Global Key.
           </p>
+          <Link href="/profile/security" className="mt-3 inline-flex text-sm font-bold text-yellow-300">Open security center</Link>
         </div>
 
-        <button
-          type="button"
-          onClick={handleLogout}
-          className="w-full rounded-2xl border border-red-500/25 bg-red-500/10 px-5 py-3 font-semibold text-red-200 transition hover:bg-red-500/15"
-        >
-          {loading ? "Signing out..." : "Sign Out"}
-        </button>
+        <SignOutButton redirectUrl="/">
+          <button type="button" className="w-full rounded-2xl border border-red-500/25 bg-red-500/10 px-5 py-3 font-semibold text-red-200 transition hover:bg-red-500/15">Sign out</button>
+        </SignOutButton>
       </div>
     </section>
   );

@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { Cormorant_Garamond, Manrope } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import GlobalFooter from "@/components/GlobalFooter";
+import { ClerkProvider } from "@clerk/nextjs";
+import { tgpiClerkAppearance } from "@/lib/auth/clerk-appearance";
 
 const displayFont = Cormorant_Garamond({
   subsets: ["latin"],
@@ -43,10 +45,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${displayFont.variable} ${interfaceFont.variable}`}>
       <body>
-        <a href="#main-content" className="sr-only fixed left-4 top-4 z-[100] rounded-xl bg-[var(--tgpi-gold)] px-4 py-3 text-sm font-extrabold text-[var(--tgpi-navy-deep)] shadow-lg transition focus:not-sr-only">Skip to content</a>
-        <Navbar />
-        <div id="main-content">{children}</div>
-        <GlobalFooter />
+        <ClerkProvider
+          signInUrl="/sign-in"
+          signUpUrl="/sign-up"
+          afterSignOutUrl="/"
+          appearance={tgpiClerkAppearance}
+        >
+          <a href="#main-content" className="sr-only fixed left-4 top-4 z-[100] rounded-xl bg-[var(--tgpi-gold)] px-4 py-3 text-sm font-extrabold text-[var(--tgpi-navy-deep)] shadow-lg transition focus:not-sr-only">Skip to content</a>
+          <Navbar />
+          <div id="main-content">{children}</div>
+          <GlobalFooter />
+        </ClerkProvider>
       </body>
     </html>
   );
