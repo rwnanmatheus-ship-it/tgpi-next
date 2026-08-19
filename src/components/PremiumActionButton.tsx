@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { auth } from "@/lib/firebase";
+import { useAuth } from "@clerk/nextjs";
 
 export default function PremiumActionButton({
   billingEnabled,
 }: {
   billingEnabled: boolean;
 }) {
+  const { isLoaded, isSignedIn } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -28,19 +29,13 @@ export default function PremiumActionButton({
     setError(null);
 
     try {
-      const user = auth.currentUser;
-
-      if (!user) {
-        window.location.href = "/login?next=/pricing";
+      if (!isLoaded || !isSignedIn) {
+        window.location.href = "/sign-in?redirect_url=%2Fpricing";
         return;
       }
 
-      const idToken = await user.getIdToken();
       const response = await fetch("/api/stripe/create-checkout-session", {
         method: "POST",
-        headers: {
-          Authorization: `Bearer ${idToken}`,
-        },
       });
 
       const data = (await response.json()) as {

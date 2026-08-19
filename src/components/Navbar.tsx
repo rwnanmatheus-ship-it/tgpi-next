@@ -4,10 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { onAuthStateChanged, signOut, User } from "firebase/auth";
-import { auth } from "@/lib/firebase";
-import TopbarUserIdentity from "@/components/TopbarUserIdentity";
-import TopbarNotifications from "@/components/TopbarNotifications";
+import { Show, SignOutButton, UserButton } from "@clerk/nextjs";
 import { Container } from "@/components/design-system";
 
 const desktopLinks = [
@@ -27,13 +24,10 @@ const mobileGroups = [
 
 export default function Navbar() {
   const pathname = usePathname();
-  const [user, setUser] = useState<User | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [compact, setCompact] = useState(false);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const firstMenuLinkRef = useRef<HTMLAnchorElement>(null);
-
-  useEffect(() => onAuthStateChanged(auth, setUser), []);
 
   useEffect(() => {
     const onScroll = () => setCompact(window.scrollY > 24);
@@ -61,11 +55,6 @@ export default function Navbar() {
       window.removeEventListener("keydown", onKeyDown);
     };
   }, [menuOpen]);
-
-  async function handleLogout() {
-    await signOut(auth);
-    window.location.href = "/";
-  }
 
   function closeMenu() {
     setMenuOpen(false);
@@ -97,18 +86,21 @@ export default function Navbar() {
           </nav>
 
           <div className="hidden items-center gap-3 lg:flex">
-            {user ? (
-              <>
-                <TopbarNotifications />
-                <TopbarUserIdentity />
-                <button onClick={handleLogout} className="rounded-xl border border-[var(--tgpi-border)] bg-white px-4 py-2 text-sm font-bold text-[#7A1E1E]">Logout</button>
-              </>
-            ) : (
-              <>
-                <Link href="/login" className="px-3 py-2 text-sm font-bold text-[var(--tgpi-navy)]">Log in</Link>
-                <Link href="/onboarding" className="rounded-xl bg-[var(--tgpi-gold)] px-5 py-3 text-sm font-extrabold text-[var(--tgpi-navy)] shadow-[var(--tgpi-shadow-sm)] transition hover:-translate-y-0.5">Find your fit</Link>
-              </>
-            )}
+            <Show when="signed-in">
+              <Link href="/notifications" aria-label="Open notifications" className="grid h-10 w-10 place-items-center rounded-full border border-[var(--tgpi-border)] bg-white text-[var(--tgpi-navy)] transition hover:border-[var(--tgpi-gold)]">
+                <span aria-hidden="true">◌</span>
+              </Link>
+              <Link href="/profile" className="px-2 py-2 text-sm font-bold text-[var(--tgpi-navy)]">Workspace</Link>
+              <UserButton
+                userProfileMode="navigation"
+                userProfileUrl="/profile/security"
+                appearance={{ elements: { avatarBox: "h-10 w-10 ring-2 ring-[#D8D2C4]" } }}
+              />
+            </Show>
+            <Show when="signed-out">
+              <Link href="/sign-in" className="px-3 py-2 text-sm font-bold text-[var(--tgpi-navy)]">Log in</Link>
+              <Link href="/sign-up" className="rounded-xl bg-[var(--tgpi-gold)] px-5 py-3 text-sm font-extrabold text-[var(--tgpi-navy)] shadow-[var(--tgpi-shadow-sm)] transition hover:-translate-y-0.5">Create Global Key</Link>
+            </Show>
           </div>
 
           <button ref={menuButtonRef} type="button" aria-expanded={menuOpen} aria-controls="tgpi-mobile-menu" aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"} onClick={() => setMenuOpen((value) => !value)} className="grid h-11 w-11 place-items-center rounded-full border border-[var(--tgpi-border)] bg-white text-[var(--tgpi-navy)] shadow-[var(--tgpi-shadow-sm)] transition active:scale-95 lg:hidden">
@@ -151,17 +143,26 @@ export default function Navbar() {
           </nav>
 
           <div className="mt-auto border-t border-white/10 pt-6">
-            {user ? (
+            <Show when="signed-in">
               <div className="space-y-4">
-                <TopbarUserIdentity />
-                <button onClick={handleLogout} className="w-full rounded-xl border border-white/20 px-4 py-3 text-sm font-extrabold text-white">Logout</button>
+                <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 p-4">
+                  <div>
+                    <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-light)]">TGPI Global Key</p>
+                    <Link href="/profile" onClick={closeMenu} className="mt-1 block text-sm font-bold text-white">Open workspace</Link>
+                  </div>
+                  <UserButton userProfileMode="navigation" userProfileUrl="/profile/security" />
+                </div>
+                <SignOutButton redirectUrl="/">
+                  <button onClick={closeMenu} className="w-full rounded-xl border border-white/20 px-4 py-3 text-sm font-extrabold text-white">Sign out</button>
+                </SignOutButton>
               </div>
-            ) : (
+            </Show>
+            <Show when="signed-out">
               <div className="grid gap-3">
-                <Link href="/onboarding" onClick={closeMenu} className="rounded-xl bg-[var(--tgpi-gold)] px-4 py-4 text-center text-sm font-extrabold text-[var(--tgpi-navy)]">Find your country fit</Link>
-                <Link href="/login" onClick={closeMenu} className="rounded-xl border border-white/20 px-4 py-4 text-center text-sm font-extrabold text-white">Sign in</Link>
+                <Link href="/sign-up" onClick={closeMenu} className="rounded-xl bg-[var(--tgpi-gold)] px-4 py-4 text-center text-sm font-extrabold text-[var(--tgpi-navy)]">Create your Global Key</Link>
+                <Link href="/sign-in" onClick={closeMenu} className="rounded-xl border border-white/20 px-4 py-4 text-center text-sm font-extrabold text-white">Sign in</Link>
               </div>
-            )}
+            </Show>
             <div className="mt-6 flex flex-wrap gap-x-5 gap-y-3 text-xs text-white/45">
               <Link href="https://www.instagram.com/theglobalpolymath/" onClick={closeMenu}>Instagram</Link>
               <Link href="/about" onClick={closeMenu}>About</Link>

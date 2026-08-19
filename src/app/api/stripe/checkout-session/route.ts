@@ -1,18 +1,10 @@
 import { NextResponse } from "next/server";
-import { requireFirebaseUser } from "@/lib/firebase-auth-server";
+import { requireApiUser, TgpiAuthenticationError } from "@/lib/auth/guards";
 import { getStripeServer } from "@/lib/stripe";
-
-function isAuthenticationError(message: string) {
-  return (
-    message.includes("Firebase ID token") ||
-    message.includes("INVALID_ID_TOKEN") ||
-    message.includes("Invalid Firebase ID token")
-  );
-}
 
 export async function GET(request: Request) {
   try {
-    const user = await requireFirebaseUser(request);
+    const user = await requireApiUser();
     const { searchParams } = new URL(request.url);
     const sessionId = searchParams.get("session_id")?.trim();
 
@@ -45,10 +37,7 @@ export async function GET(request: Request) {
           : session.subscription?.id || "",
     });
   } catch (error) {
-    const message =
-      error instanceof Error ? error.message : "Could not fetch checkout session.";
-
-    if (isAuthenticationError(message)) {
+    if (error instanceof TgpiAuthenticationError) {
       return NextResponse.json(
         { error: "Authentication required." },
         { status: 401 }
