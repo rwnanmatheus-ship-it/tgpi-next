@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { currentUser } from "@clerk/nextjs/server";
 import { formatTgpiGlobalId, requireUser } from "@/lib/auth/guards";
+import { normalizeOnboardingData } from "@/lib/onboarding";
 
 export const metadata: Metadata = {
   title: "My global workspace — TGPI",
@@ -32,13 +33,23 @@ const nextActions = [
   },
 ] as const;
 
-export default async function ProfilePage() {
-  const session = await requireUser();
-  const user = await currentUser();
+export default async function ProfilePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ onboarding?: string }>;
+}) {
+  const [session, user, params] = await Promise.all([
+    requireUser(),
+    currentUser(),
+    searchParams,
+  ]);
   const name = user?.fullName || user?.firstName || "Global explorer";
   const email = user?.primaryEmailAddress?.emailAddress || "No primary email";
   const emailVerified = user?.primaryEmailAddress?.verification?.status === "verified";
   const globalId = formatTgpiGlobalId(session.userId);
+  const onboarding = normalizeOnboardingData(
+    user?.unsafeMetadata.tgpiOnboarding,
+  );
 
   return (
     <main className="min-h-screen bg-[#F5F1E8] text-[#0B1F3A]">
@@ -75,6 +86,20 @@ export default async function ProfilePage() {
 
       <section className="px-4 py-12 sm:px-6 lg:py-16">
         <div className="mx-auto max-w-7xl">
+          {params.onboarding === "completed" ? (
+            <div
+              role="status"
+              className="mb-8 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[#D0B168] bg-[#FBF2D8] px-5 py-4 text-sm text-[#0B1F3A]"
+            >
+              <p>
+                <span className="font-extrabold">Your global plan is ready.</span>{" "}
+                TGPI will use your preferences to organize the next steps.
+              </p>
+              <Link href="/onboarding" className="font-extrabold text-[#8A641F]">
+                Review plan →
+              </Link>
+            </div>
+          ) : null}
           <div className="grid gap-8 xl:grid-cols-[1fr_320px]">
             <div>
               <div className="flex flex-wrap items-end justify-between gap-3">
@@ -82,7 +107,9 @@ export default async function ProfilePage() {
                   <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#956A13]">Continue your journey</p>
                   <h2 className="mt-3 font-[var(--tgpi-font-display)] text-4xl font-semibold tracking-[-0.035em]">Choose your next move.</h2>
                 </div>
-                <Link href="/onboarding" className="text-sm font-extrabold text-[#956A13]">Personalize my plan →</Link>
+                <Link href="/onboarding" className="text-sm font-extrabold text-[#956A13]">
+                  {onboarding.completed ? "Update my global plan" : "Personalize my plan"} →
+                </Link>
               </div>
 
               <div className="mt-7 grid gap-4 md:grid-cols-3">
