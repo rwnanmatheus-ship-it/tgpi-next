@@ -9,7 +9,7 @@ export async function PATCH(request: Request) {
 
   if (!session.userId) {
     return NextResponse.json(
-      { error: "Sua sessão expirou. Entre novamente para salvar o plano." },
+      { error: "Your session has expired. Sign in again to save your plan." },
       { status: 401 },
     );
   }
@@ -19,7 +19,7 @@ export async function PATCH(request: Request) {
 
     if (new TextEncoder().encode(body).byteLength > MAX_BODY_SIZE) {
       return NextResponse.json(
-        { error: "O plano enviado ultrapassa o limite permitido." },
+        { error: "The submitted plan exceeds the allowed size." },
         { status: 413 },
       );
     }
@@ -51,7 +51,7 @@ export async function PATCH(request: Request) {
   } catch (error) {
     if (error instanceof SyntaxError) {
       return NextResponse.json(
-        { error: "Os dados enviados não estão em um formato válido." },
+        { error: "The submitted data is not in a valid format." },
         { status: 400 },
       );
     }
@@ -59,7 +59,7 @@ export async function PATCH(request: Request) {
     console.error("Unable to save TGPI onboarding", error);
 
     return NextResponse.json(
-      { error: "Não foi possível salvar agora. Tente novamente." },
+      { error: "Unable to save right now. Please try again." },
       { status: 500 },
     );
   }

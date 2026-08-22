@@ -6,9 +6,9 @@ import { normalizeOnboardingData } from "@/lib/onboarding";
 import type { OnboardingCountry } from "@/types/onboarding";
 
 export const metadata: Metadata = {
-  title: "Construa seu plano global — TGPI",
+  title: "Build your global plan — TGPI",
   description:
-    "Personalize sua experiência TGPI com objetivos, países de interesse, contexto e prioridades globais.",
+    "Personalize your TGPI experience with your goals, countries of interest, context, and global priorities.",
   robots: { index: false, follow: false },
 };
 
@@ -25,7 +25,7 @@ function getFlagRegionCode(emoji: string) {
 
 export default async function OnboardingPage() {
   const user = await currentUser();
-  const displayNames = new Intl.DisplayNames(["pt-BR"], { type: "region" });
+  const displayNames = new Intl.DisplayNames(["en-US"], { type: "region" });
   const countries: OnboardingCountry[] = getAllCountries()
     .map((country) => {
       const regionCode = getFlagRegionCode(country.emoji);
@@ -37,7 +37,7 @@ export default async function OnboardingPage() {
         region: country.region,
       };
     })
-    .sort((a, b) => a.name.localeCompare(b.name, "pt-BR"));
+    .sort((a, b) => a.name.localeCompare(b.name, "en-US"));
   const initialData = normalizeOnboardingData(
     user?.unsafeMetadata.tgpiOnboarding,
   );
@@ -46,7 +46,7 @@ export default async function OnboardingPage() {
     <OnboardingFlow
       countries={countries}
       initialData={initialData}
-      firstName={user?.firstName || "explorador global"}
+      firstName={user?.firstName || "global explorer"}
     />
   );
 }

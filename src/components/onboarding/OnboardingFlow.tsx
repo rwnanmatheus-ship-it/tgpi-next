@@ -18,11 +18,11 @@ type OnboardingFlowProps = {
 };
 
 const steps = [
-  { number: 1, label: "Objetivo" },
-  { number: 2, label: "Países" },
-  { number: 3, label: "Prazo" },
-  { number: 4, label: "Contexto" },
-  { number: 5, label: "Prioridades" },
+  { number: 1, label: "Goal" },
+  { number: 2, label: "Countries" },
+  { number: 3, label: "Timeline" },
+  { number: 4, label: "Context" },
+  { number: 5, label: "Priorities" },
 ] as const;
 
 const goals: Array<{
@@ -33,85 +33,85 @@ const goals: Array<{
 }> = [
   {
     value: "live",
-    label: "Morar em outro país",
-    description: "Planejar uma mudança com mais clareza e segurança.",
+    label: "Live in another country",
+    description: "Plan your move with greater clarity and confidence.",
     icon: "home",
   },
   {
     value: "study",
-    label: "Estudar no exterior",
-    description: "Encontrar destinos, instituições e caminhos de preparação.",
+    label: "Study abroad",
+    description: "Discover destinations, institutions, and ways to prepare.",
     icon: "study",
   },
   {
     value: "work",
-    label: "Trabalhar globalmente",
-    description: "Explorar mercados, carreira internacional e adaptação.",
+    label: "Work globally",
+    description: "Explore job markets, international careers, and adaptation.",
     icon: "work",
   },
   {
     value: "travel",
-    label: "Viajar melhor",
-    description: "Tomar decisões práticas antes, durante e depois da viagem.",
+    label: "Travel smarter",
+    description: "Make practical decisions before, during, and after your trip.",
     icon: "compass",
   },
   {
     value: "learn",
-    label: "Ampliar meu repertório",
-    description: "Aprender sobre o mundo sem precisar ter uma mudança definida.",
+    label: "Expand my global knowledge",
+    description: "Learn about the world without having a move already planned.",
     icon: "globe",
   },
 ];
 
 const timeHorizons = [
-  { value: "now", label: "Agora", detail: "Nos próximos 30 dias" },
-  { value: "3-months", label: "Em até 3 meses", detail: "Plano de curto prazo" },
-  { value: "6-months", label: "Em até 6 meses", detail: "Tempo para me preparar" },
-  { value: "12-months", label: "Em até 12 meses", detail: "Projeto de médio prazo" },
-  { value: "exploring", label: "Ainda estou explorando", detail: "Sem data definida" },
+  { value: "now", label: "Now", detail: "Within the next 30 days" },
+  { value: "3-months", label: "Within 3 months", detail: "Short-term plan" },
+  { value: "6-months", label: "Within 6 months", detail: "Time to prepare" },
+  { value: "12-months", label: "Within 12 months", detail: "Medium-term plan" },
+  { value: "exploring", label: "Still exploring", detail: "No date set" },
 ] as const;
 
 const budgets = [
-  { value: "under-1500", label: "Até US$ 1.500", detail: "por mês" },
-  { value: "1500-3000", label: "US$ 1.500–3.000", detail: "por mês" },
-  { value: "3000-5000", label: "US$ 3.000–5.000", detail: "por mês" },
-  { value: "5000-plus", label: "Acima de US$ 5.000", detail: "por mês" },
-  { value: "undecided", label: "Ainda não defini", detail: "quero comparar cenários" },
+  { value: "under-1500", label: "Up to US$1,500", detail: "per month" },
+  { value: "1500-3000", label: "US$1,500–3,000", detail: "per month" },
+  { value: "3000-5000", label: "US$3,000–5,000", detail: "per month" },
+  { value: "5000-plus", label: "Over US$5,000", detail: "per month" },
+  { value: "undecided", label: "Not decided yet", detail: "I want to compare scenarios" },
 ] as const;
 
 const languageOptions = [
-  "Português",
-  "Inglês",
-  "Espanhol",
-  "Francês",
-  "Alemão",
-  "Italiano",
-  "Mandarim",
-  "Árabe",
-  "Japonês",
-  "Outro",
+  "English",
+  "Portuguese",
+  "Spanish",
+  "French",
+  "German",
+  "Italian",
+  "Mandarin Chinese",
+  "Arabic",
+  "Japanese",
+  "Other",
 ] as const;
 
 const experienceOptions = [
   {
     value: "first-step",
-    label: "Meu primeiro passo global",
-    detail: "Ainda não viajei ou morei fora.",
+    label: "My first global step",
+    detail: "I have not traveled or lived abroad yet.",
   },
   {
     value: "short-trips",
-    label: "Já fiz viagens internacionais",
-    detail: "Tenho alguma experiência de curta duração.",
+    label: "I have traveled internationally",
+    detail: "I have some short-term experience abroad.",
   },
   {
     value: "lived-abroad",
-    label: "Já morei ou estudei fora",
-    detail: "Conheço parte do processo de adaptação.",
+    label: "I have lived or studied abroad",
+    detail: "I am familiar with part of the adaptation process.",
   },
   {
     value: "global-citizen",
-    label: "Minha vida já é internacional",
-    detail: "Trabalho, estudo ou vivo entre países.",
+    label: "My life is already international",
+    detail: "I work, study, or live across countries.",
   },
 ] as const;
 
@@ -120,22 +120,22 @@ const priorities: Array<{
   label: string;
   description: string;
 }> = [
-  { value: "safety", label: "Segurança", description: "Riscos e estabilidade" },
-  { value: "cost", label: "Custo de vida", description: "Orçamento e poder de compra" },
-  { value: "career", label: "Carreira", description: "Mercado e oportunidades" },
+  { value: "safety", label: "Safety", description: "Risks and stability" },
+  { value: "cost", label: "Cost of living", description: "Budget and purchasing power" },
+  { value: "career", label: "Career", description: "Job market and opportunities" },
   {
     value: "quality-of-life",
-    label: "Qualidade de vida",
-    description: "Rotina, saúde e bem-estar",
+    label: "Quality of life",
+    description: "Daily life, health, and well-being",
   },
   {
     value: "documentation",
-    label: "Documentação",
-    description: "Vistos, regras e preparação",
+    label: "Documentation",
+    description: "Visas, rules, and preparation",
   },
-  { value: "education", label: "Educação", description: "Estudo e desenvolvimento" },
-  { value: "language", label: "Idioma", description: "Fluência e integração" },
-  { value: "culture", label: "Cultura", description: "Pertencimento e adaptação" },
+  { value: "education", label: "Education", description: "Study and development" },
+  { value: "language", label: "Language", description: "Fluency and integration" },
+  { value: "culture", label: "Culture", description: "Belonging and adaptation" },
 ];
 
 const goalLabels = Object.fromEntries(
@@ -151,11 +151,11 @@ const priorityLabels = Object.fromEntries(
 ) as Record<OnboardingPriority, string>;
 
 const regionLabels: Record<string, string> = {
-  Africa: "África",
-  Asia: "Ásia",
-  Europe: "Europa",
-  "North America": "América do Norte",
-  "South America": "América do Sul",
+  Africa: "Africa",
+  Asia: "Asia",
+  Europe: "Europe",
+  "North America": "North America",
+  "South America": "South America",
   Oceania: "Oceania",
 };
 
@@ -271,18 +271,18 @@ export default function OnboardingFlow({
         <div className="mx-auto max-w-7xl">
           <div className="max-w-3xl">
             <p className="text-[10px] font-extrabold uppercase tracking-[0.25em] text-[#956A13]">
-              Onboarding Global TGPI
+              TGPI Global Onboarding
             </p>
             <h1 className="mt-4 font-[var(--tgpi-font-display)] text-5xl font-semibold leading-[0.98] tracking-[-0.045em] sm:text-6xl">
-              Construa seu plano global.
+              Build your global plan.
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-8 text-[#657082]">
-              {firstName}, conte o que importa para você. A TGPI organizará sua
-              experiência para transformar curiosidade em próximos passos.
+              {firstName}, tell us what matters to you. TGPI will shape your
+              experience to turn curiosity into clear next steps.
             </p>
           </div>
 
-          <nav aria-label="Etapas do plano global" className="mt-9 overflow-x-auto pb-2">
+          <nav aria-label="Global plan steps" className="mt-9 overflow-x-auto pb-2">
             <ol className="grid min-w-[680px] grid-cols-5">
               {steps.map((item, index) => {
                 const isActive = item.number === step;
@@ -374,7 +374,7 @@ export default function OnboardingFlow({
               <div className="mt-4 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex items-center gap-3 text-xs text-[#657082]">
                   <SaveIndicator status={saveStatus} />
-                  <span>Somente preferências de experiência são salvas.</span>
+                  <span>Only experience preferences are saved.</span>
                 </div>
                 <div className="flex gap-3">
                   <button
@@ -382,7 +382,7 @@ export default function OnboardingFlow({
                     onClick={goBack}
                     className="inline-flex min-h-12 flex-1 items-center justify-center rounded-xl border border-[#CFC7B8] bg-white px-5 text-sm font-extrabold text-[#0B1F3A] transition hover:border-[#B58A2A] sm:flex-none"
                   >
-                    {step === 1 ? "Sair" : "Voltar"}
+                    {step === 1 ? "Exit" : "Back"}
                   </button>
                   <button
                     type="button"
@@ -392,11 +392,11 @@ export default function OnboardingFlow({
                   >
                     {step === 5
                       ? isCompleting
-                        ? "Salvando plano..."
+                        ? "Saving plan..."
                         : data.completed
-                          ? "Atualizar meu plano"
-                          : "Concluir meu plano"
-                      : "Continuar"}
+                          ? "Update my plan"
+                          : "Complete my plan"
+                      : "Continue"}
                     <span aria-hidden="true">→</span>
                   </button>
                 </div>
@@ -425,9 +425,9 @@ function GoalStep({
   return (
     <div>
       <StepHeading
-        eyebrow="Etapa 1 de 5"
-        title="O que você quer construir no mundo?"
-        description="Escolha o objetivo principal. Você poderá ajustar sua direção quando quiser."
+        eyebrow="Step 1 of 5"
+        title="What do you want to build in the world?"
+        description="Choose your primary goal. You can adjust your direction at any time."
       />
       <div className="mt-8 grid gap-3 md:grid-cols-2">
         {goals.map((goal) => {
@@ -516,7 +516,7 @@ function CountriesStep({
     const selected = data.targetCountries.includes(slug);
 
     if (!selected && data.targetCountries.length >= 5) {
-      setValidationMessage("Você pode selecionar no máximo cinco países.");
+      setValidationMessage("You can select up to five countries.");
       return;
     }
 
@@ -530,15 +530,15 @@ function CountriesStep({
   return (
     <div>
       <StepHeading
-        eyebrow="Etapa 2 de 5"
-        title="Quais países despertam seu interesse?"
-        description="Selecione até cinco países. A TGPI usará essas escolhas para organizar comparações e recomendações."
-        aside={`${data.targetCountries.length}/5 selecionados`}
+        eyebrow="Step 2 of 5"
+        title="Which countries interest you?"
+        description="Select up to five countries. TGPI will use your choices to organize comparisons and recommendations."
+        aside={`${data.targetCountries.length}/5 selected`}
       />
 
       <div className="mt-8 grid gap-3 sm:grid-cols-[1fr_210px]">
         <label className="relative block">
-          <span className="sr-only">Pesquisar país</span>
+          <span className="sr-only">Search for a country</span>
           <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#7A8390]">
             <OnboardingIcon name="search" />
           </span>
@@ -549,12 +549,12 @@ function CountriesStep({
               setQuery(event.target.value);
               setVisibleCount(24);
             }}
-            placeholder="Pesquise entre 195 países"
+            placeholder="Search across 195 countries"
             className="min-h-12 w-full rounded-xl border border-[#D8D2C4] bg-white py-3 pl-11 pr-4 text-sm text-[#0B1F3A] placeholder:text-[#8B929D] focus:border-[#B58A2A]"
           />
         </label>
         <label>
-          <span className="sr-only">Filtrar por continente</span>
+          <span className="sr-only">Filter by continent</span>
           <select
             value={region}
             onChange={(event) => {
@@ -563,7 +563,7 @@ function CountriesStep({
             }}
             className="min-h-12 w-full rounded-xl border border-[#D8D2C4] bg-white px-4 text-sm font-bold text-[#0B1F3A] focus:border-[#B58A2A]"
           >
-            <option value="all">Todos os continentes</option>
+            <option value="all">All continents</option>
             {regions.map((item) => (
               <option key={item} value={item}>
                 {regionLabels[item] || item}
@@ -574,7 +574,7 @@ function CountriesStep({
       </div>
 
       {data.targetCountries.length > 0 ? (
-        <div className="mt-5 flex flex-wrap gap-2" aria-label="Países selecionados">
+        <div className="mt-5 flex flex-wrap gap-2" aria-label="Selected countries">
           {data.targetCountries.map((slug) => {
             const country = countries.find((item) => item.slug === slug);
             if (!country) return null;
@@ -584,7 +584,7 @@ function CountriesStep({
                 type="button"
                 onClick={() => toggleCountry(slug)}
                 className="inline-flex min-h-10 items-center gap-2 rounded-full border border-[#D0B168] bg-[#FBF2D8] px-3 text-xs font-extrabold text-[#0B1F3A] transition hover:border-[#9A7119]"
-                aria-label={`Remover ${country.name}`}
+                aria-label={`Remove ${country.name}`}
               >
                 <span>{country.emoji}</span>
                 {country.name}
@@ -639,8 +639,8 @@ function CountriesStep({
 
       {filteredCountries.length === 0 ? (
         <div className="mt-6 rounded-2xl border border-dashed border-[#CFC7B8] bg-white px-5 py-10 text-center">
-          <p className="font-extrabold text-[#0B1F3A]">Nenhum país encontrado.</p>
-          <p className="mt-2 text-sm text-[#657082]">Tente outro nome ou continente.</p>
+          <p className="font-extrabold text-[#0B1F3A]">No countries found.</p>
+          <p className="mt-2 text-sm text-[#657082]">Try another name or continent.</p>
         </div>
       ) : null}
 
@@ -650,7 +650,7 @@ function CountriesStep({
           onClick={() => setVisibleCount((count) => count + 24)}
           className="mx-auto mt-6 flex min-h-11 items-center justify-center rounded-xl border border-[#CFC7B8] bg-white px-5 text-sm font-extrabold text-[#0B1F3A] transition hover:border-[#B58A2A]"
         >
-          Mostrar mais países
+          Show more countries
         </button>
       ) : null}
     </div>
@@ -667,13 +667,13 @@ function TimingStep({
   return (
     <div>
       <StepHeading
-        eyebrow="Etapa 3 de 5"
-        title="Qual é o horizonte do seu plano?"
-        description="Prazo e orçamento ajudam a TGPI a diferenciar curiosidade, preparação e decisão."
+        eyebrow="Step 3 of 5"
+        title="What is your plan's timeline?"
+        description="Your timeline and budget help TGPI distinguish exploration, preparation, and decision-making."
       />
 
       <fieldset className="mt-8">
-        <legend className="text-sm font-extrabold text-[#0B1F3A]">Quando você pretende agir?</legend>
+        <legend className="text-sm font-extrabold text-[#0B1F3A]">When do you plan to take action?</legend>
         <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {timeHorizons.map((item) => (
             <OptionCard
@@ -689,10 +689,10 @@ function TimingStep({
 
       <fieldset className="mt-9">
         <legend className="text-sm font-extrabold text-[#0B1F3A]">
-          Qual orçamento mensal você considera confortável?
+          What monthly budget feels comfortable to you?
         </legend>
         <p className="mt-1 text-xs leading-5 text-[#7A8390]">
-          Usamos dólar apenas como referência comparável entre países.
+          We use US dollars only as a consistent reference across countries.
         </p>
         <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {budgets.map((item) => (
@@ -728,13 +728,13 @@ function ContextStep({
   return (
     <div>
       <StepHeading
-        eyebrow="Etapa 4 de 5"
-        title="Qual é o seu contexto hoje?"
-        description="Essas informações tornam as recomendações mais úteis sem pedir documentos ou dados sensíveis."
+        eyebrow="Step 4 of 5"
+        title="What is your current context?"
+        description="This information makes recommendations more useful without asking for documents or sensitive data."
       />
 
       <fieldset className="mt-8">
-        <legend className="text-sm font-extrabold text-[#0B1F3A]">Quais idiomas você utiliza?</legend>
+        <legend className="text-sm font-extrabold text-[#0B1F3A]">Which languages do you use?</legend>
         <div className="mt-3 flex flex-wrap gap-2">
           {languageOptions.map((language) => {
             const selected = data.languages.includes(language);
@@ -760,38 +760,38 @@ function ContextStep({
 
       <div className="mt-9 grid gap-5 sm:grid-cols-2">
         <label className="block">
-          <span className="text-sm font-extrabold text-[#0B1F3A]">Profissão ou área de interesse</span>
-          <span className="mt-1 block text-xs text-[#7A8390]">Opcional</span>
+          <span className="text-sm font-extrabold text-[#0B1F3A]">Profession or field of interest</span>
+          <span className="mt-1 block text-xs text-[#7A8390]">Optional</span>
           <input
             type="text"
             value={data.profession}
             onChange={(event) => updateData({ profession: event.target.value })}
             maxLength={100}
-            placeholder="Ex.: tecnologia, saúde, design"
+            placeholder="E.g. technology, healthcare, design"
             className="mt-3 min-h-12 w-full rounded-xl border border-[#D8D2C4] bg-white px-4 text-sm text-[#0B1F3A] placeholder:text-[#8B929D] focus:border-[#B58A2A]"
           />
         </label>
         <label className="block">
-          <span className="text-sm font-extrabold text-[#0B1F3A]">Nível de formação</span>
-          <span className="mt-1 block text-xs text-[#7A8390]">Opcional</span>
+          <span className="text-sm font-extrabold text-[#0B1F3A]">Education level</span>
+          <span className="mt-1 block text-xs text-[#7A8390]">Optional</span>
           <select
             value={data.educationLevel}
             onChange={(event) => updateData({ educationLevel: event.target.value })}
             className="mt-3 min-h-12 w-full rounded-xl border border-[#D8D2C4] bg-white px-4 text-sm text-[#0B1F3A] focus:border-[#B58A2A]"
           >
-            <option value="">Selecione uma opção</option>
-            <option value="secondary">Ensino médio</option>
-            <option value="technical">Curso técnico</option>
-            <option value="undergraduate">Graduação em andamento</option>
-            <option value="graduated">Graduação concluída</option>
-            <option value="postgraduate">Pós-graduação, mestrado ou doutorado</option>
-            <option value="other">Outra trajetória</option>
+            <option value="">Select an option</option>
+            <option value="secondary">Secondary education</option>
+            <option value="technical">Technical or vocational training</option>
+            <option value="undergraduate">Undergraduate degree in progress</option>
+            <option value="graduated">Undergraduate degree completed</option>
+            <option value="postgraduate">Postgraduate, master&apos;s, or doctoral degree</option>
+            <option value="other">Another path</option>
           </select>
         </label>
       </div>
 
       <fieldset className="mt-9">
-        <legend className="text-sm font-extrabold text-[#0B1F3A]">Qual é a sua experiência internacional?</legend>
+        <legend className="text-sm font-extrabold text-[#0B1F3A]">What is your international experience?</legend>
         <div className="mt-3 grid gap-3 sm:grid-cols-2">
           {experienceOptions.map((item) => (
             <OptionCard
@@ -832,10 +832,10 @@ function PrioritiesStep({
   return (
     <div>
       <StepHeading
-        eyebrow="Etapa 5 de 5"
-        title="O que mais pesa nas suas decisões?"
-        description="Escolha de três a cinco prioridades. Elas definirão a ordem das informações e comparações na sua experiência TGPI."
-        aside={`${data.priorities.length}/5 selecionadas`}
+        eyebrow="Step 5 of 5"
+        title="What matters most in your decisions?"
+        description="Choose three to five priorities. They will shape the order of information and comparisons in your TGPI experience."
+        aside={`${data.priorities.length}/5 selected`}
       />
       <div className="mt-8 grid gap-3 sm:grid-cols-2">
         {priorities.map((priority, index) => {
@@ -909,14 +909,14 @@ function PlanSummary({
         <div aria-hidden="true" className="absolute -right-10 -top-14 h-36 w-36 rounded-full border border-[#E5BF5A]/25" />
         <div aria-hidden="true" className="absolute right-8 top-9 h-16 w-16 rounded-full border border-[#E5BF5A]/20" />
         <p className="relative text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#F0D58C]">
-          Seu plano global
+          Your global plan
         </p>
         <h2 className="relative mt-4 font-[var(--tgpi-font-display)] text-3xl font-semibold leading-tight">
-          Uma visão feita para você.
+          A view designed for you.
         </h2>
         <div className="relative mt-6">
           <div className="flex items-center justify-between text-xs font-bold text-[#C7D0DC]">
-            <span>Perfil de direção</span>
+            <span>Plan completion</span>
             <span>{completion}%</span>
           </div>
           <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/10">
@@ -930,27 +930,27 @@ function PlanSummary({
 
       <dl className="grid gap-0 p-7">
         <SummaryItem
-          label="Objetivo principal"
-          value={data.primaryGoal ? goalLabels[data.primaryGoal] : "Aguardando sua escolha"}
+          label="Primary goal"
+          value={data.primaryGoal ? goalLabels[data.primaryGoal] : "Waiting for your choice"}
         />
         <SummaryItem
-          label="Países de interesse"
+          label="Countries of interest"
           value={
             selectedCountries.length > 0
               ? selectedCountries.map((country) => `${country.emoji} ${country.name}`).join(", ")
-              : "Nenhum país selecionado"
+              : "No countries selected"
           }
         />
         <SummaryItem
-          label="Horizonte"
-          value={data.timeHorizon ? timeLabels[data.timeHorizon] : "Ainda não definido"}
+          label="Timeline"
+          value={data.timeHorizon ? timeLabels[data.timeHorizon] : "Not defined yet"}
         />
         <SummaryItem
-          label="Prioridades"
+          label="Priorities"
           value={
             data.priorities.length > 0
               ? data.priorities.map((priority) => priorityLabels[priority]).join(", ")
-              : "Serão definidas na etapa final"
+              : "Set in the final step"
           }
           last
         />
@@ -961,7 +961,7 @@ function PlanSummary({
           <span className="mt-0.5 text-[#E5BF5A]" aria-hidden="true">
             <OnboardingIcon name="lock" />
           </span>
-          Seu plano orienta a experiência. Ele não substitui aconselhamento jurídico, migratório ou financeiro.
+          Your plan guides your experience. It does not replace legal, immigration, or financial advice.
         </p>
       </div>
     </aside>
@@ -1058,9 +1058,9 @@ function SummaryItem({
 
 function SaveIndicator({ status }: { status: SaveStatus }) {
   const labels: Record<SaveStatus, string> = {
-    saved: "Progresso salvo",
-    saving: "Salvando...",
-    error: "Não foi possível salvar",
+    saved: "Progress saved",
+    saving: "Saving...",
+    error: "Unable to save",
   };
 
   return (
@@ -1086,11 +1086,11 @@ function SaveIndicator({ status }: { status: SaveStatus }) {
 }
 
 function getStepValidationMessage(step: number, data: TgpiOnboardingData) {
-  if (step === 1 && !data.primaryGoal) return "Escolha seu objetivo principal para continuar.";
-  if (step === 2 && data.targetCountries.length === 0) return "Selecione pelo menos um país de interesse.";
-  if (step === 3 && (!data.timeHorizon || !data.budgetRange)) return "Defina o prazo e a faixa de orçamento do seu plano.";
-  if (step === 4 && (data.languages.length === 0 || !data.internationalExperience)) return "Selecione pelo menos um idioma e sua experiência internacional.";
-  if (step === 5 && data.priorities.length < 3) return "Escolha pelo menos três prioridades para concluir seu plano.";
+  if (step === 1 && !data.primaryGoal) return "Choose your primary goal to continue.";
+  if (step === 2 && data.targetCountries.length === 0) return "Select at least one country of interest.";
+  if (step === 3 && (!data.timeHorizon || !data.budgetRange)) return "Choose a timeline and budget range for your plan.";
+  if (step === 4 && (data.languages.length === 0 || !data.internationalExperience)) return "Select at least one language and your international experience.";
+  if (step === 5 && data.priorities.length < 3) return "Choose at least three priorities to complete your plan.";
   return "";
 }
 

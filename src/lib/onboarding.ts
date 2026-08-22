@@ -16,6 +16,19 @@ const MAX_COUNTRIES = 5;
 const MAX_LANGUAGES = 8;
 const MAX_PRIORITIES = 5;
 
+const languageAliases: Record<string, string> = {
+  Português: "Portuguese",
+  Inglês: "English",
+  Espanhol: "Spanish",
+  Francês: "French",
+  Alemão: "German",
+  Italiano: "Italian",
+  Mandarim: "Mandarin Chinese",
+  Árabe: "Arabic",
+  Japonês: "Japanese",
+  Outro: "Other",
+};
+
 export const emptyOnboardingData: TgpiOnboardingData = {
   schemaVersion: 1,
   completed: false,
@@ -63,6 +76,16 @@ function cleanStringList(
   ).slice(0, maxItems);
 }
 
+function cleanLanguageList(value: unknown) {
+  return Array.from(
+    new Set(
+      cleanStringList(value, MAX_LANGUAGES, 40).map(
+        (language) => languageAliases[language] || language,
+      ),
+    ),
+  );
+}
+
 function cleanEnumList<T extends string>(
   value: unknown,
   allowedValues: readonly T[],
@@ -106,7 +129,7 @@ export function normalizeOnboardingData(value: unknown): TgpiOnboardingData {
     )
       ? value.budgetRange
       : "",
-    languages: cleanStringList(value.languages, MAX_LANGUAGES, 40),
+    languages: cleanLanguageList(value.languages),
     profession: cleanText(value.profession, 100),
     educationLevel: cleanText(value.educationLevel, 80),
     internationalExperience: isOneOf<OnboardingExperience>(
