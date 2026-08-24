@@ -53,9 +53,11 @@ export default function PremiumActionButton({
     };
   }, [isLoaded, isSignedIn]);
 
+  const hasFounderAccess = billing?.accessMode === "founder";
   const hasPreviewAccess = billing?.accessMode === "preview";
+  const hasControlledAccess = hasFounderAccess || hasPreviewAccess;
 
-  if (!billingEnabled && !hasPreviewAccess) {
+  if (!billingEnabled && !hasControlledAccess) {
     if (isLoaded && isSignedIn && checkingStatus) {
       return (
         <button
@@ -63,7 +65,7 @@ export default function PremiumActionButton({
           disabled
           className="w-full rounded-2xl bg-[#B58A2A] px-6 py-4 text-sm font-black text-[#0B0B0B] opacity-60"
         >
-          Checking Preview access...
+          Checking Premium access...
         </button>
       );
     }
@@ -101,7 +103,7 @@ export default function PremiumActionButton({
         return;
       }
 
-      if (hasPreviewAccess) {
+      if (hasControlledAccess) {
         window.location.href = "/premium";
         return;
       }
@@ -171,8 +173,10 @@ export default function PremiumActionButton({
             : "Opening secure checkout..."
           : checkingStatus
             ? "Checking membership..."
-            : hasPreviewAccess
-              ? "Open TGPI Premium Preview"
+            : hasFounderAccess
+              ? "Open TGPI Founder Access"
+              : hasPreviewAccess
+                ? "Open TGPI Premium Preview"
               : billing?.plan === "premium" || shouldManageBilling
               ? "Manage TGPI Premium"
               : "Start TGPI Premium"}

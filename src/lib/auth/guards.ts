@@ -7,7 +7,7 @@ import {
   normalizeSubscriptionRecord,
   TGPI_BILLING_METADATA_KEY,
 } from "@/lib/billing";
-import { hasPremiumPreviewAccess } from "@/lib/premium-preview.server";
+import { getControlledPremiumAccessMode } from "@/lib/premium-access.server";
 
 export type TgpiPlan = "free" | "premium";
 export type TgpiRole = "member" | "admin";
@@ -81,15 +81,17 @@ export async function requirePremium() {
     user.privateMetadata[TGPI_BILLING_METADATA_KEY],
     session.userId,
   );
-  const previewAccess = await hasPremiumPreviewAccess(session.userId);
+  const controlledAccessMode = await getControlledPremiumAccessMode(
+    session.userId,
+  );
 
-  if (billing.plan !== "premium" && !previewAccess) {
+  if (billing.plan !== "premium" && !controlledAccessMode) {
     redirect("/pricing");
   }
 
   return {
     ...session,
-    accessMode: previewAccess ? ("preview" as const) : ("subscription" as const),
+    accessMode: controlledAccessMode || ("subscription" as const),
     billing,
     plan: "premium" as const,
     user,

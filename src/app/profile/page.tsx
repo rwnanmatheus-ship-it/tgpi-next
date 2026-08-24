@@ -14,7 +14,7 @@ import {
 import { getAllCountries } from "@/lib/countries";
 import { buildGlobalWorkspaceModel } from "@/lib/global-workspace";
 import { normalizeOnboardingData } from "@/lib/onboarding";
-import { hasPremiumPreviewAccess } from "@/lib/premium-preview.server";
+import { getControlledPremiumAccessMode } from "@/lib/premium-access.server";
 
 export const metadata: Metadata = {
   title: "My global workspace — TGPI",
@@ -47,9 +47,11 @@ export default async function ProfilePage({
     user?.privateMetadata[TGPI_BILLING_METADATA_KEY],
     session.userId,
   );
-  const premiumPreviewAccess = await hasPremiumPreviewAccess(session.userId);
+  const controlledAccessMode = await getControlledPremiumAccessMode(
+    session.userId,
+  );
   const hasPremiumAccess =
-    billing.plan === "premium" || premiumPreviewAccess;
+    billing.plan === "premium" || Boolean(controlledAccessMode);
   const workspaceModel = buildGlobalWorkspaceModel(
     onboarding,
     getAllCountries(),
@@ -88,8 +90,10 @@ export default async function ProfilePage({
             <article className="rounded-[26px] border border-[#D8D2C4] bg-white p-6">
               <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#7A8390]">Membership</p>
               <p className="mt-4 text-lg font-extrabold text-[#0B1F3A]">
-                {premiumPreviewAccess
-                  ? "Premium Preview"
+                {controlledAccessMode === "founder"
+                  ? "TGPI Founder"
+                  : controlledAccessMode === "preview"
+                    ? "Premium Preview"
                   : billing.plan === "premium"
                     ? "TGPI Premium"
                     : "TGPI Free"}

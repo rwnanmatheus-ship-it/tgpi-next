@@ -13,10 +13,11 @@ import type {
   WorkspaceAction,
   WorkspaceActionStatus,
 } from "@/lib/global-workspace";
+import type { PremiumAccessMode } from "@/types";
 
 type PremiumCommandCenterV2Props = {
+  accessMode: Exclude<PremiumAccessMode, "none">;
   firstName: string;
-  isPreviewAccess: boolean;
   membershipStatus: string;
   model: PremiumCommandCenterModel;
   periodLabel: string;
@@ -183,12 +184,25 @@ function CountryCard({ country }: { country: PremiumCountryCard }) {
 }
 
 export default function PremiumCommandCenterV2({
+  accessMode,
   firstName,
-  isPreviewAccess,
   membershipStatus,
   model,
   periodLabel,
 }: PremiumCommandCenterV2Props) {
+  const isControlledAccess = accessMode !== "subscription";
+  const accessEyebrow =
+    accessMode === "founder"
+      ? "Founder access"
+      : accessMode === "preview"
+        ? "Controlled access"
+        : "Membership";
+  const accessTitle =
+    accessMode === "founder"
+      ? "TGPI Founder"
+      : accessMode === "preview"
+        ? "Premium Preview"
+        : "TGPI Premium";
   const comparisonTitle = formatList(
     model.comparison.countryNames,
     "Build your first comparison",
@@ -249,10 +263,10 @@ export default function PremiumCommandCenterV2({
 
               <aside className="border-t border-white/10 bg-[#102A4C] p-7 sm:p-10 lg:border-l lg:border-t-0 lg:p-12">
                 <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#F0D58C]">
-                  {isPreviewAccess ? "Controlled access" : "Membership"}
+                  {accessEyebrow}
                 </p>
                 <p className="mt-4 font-[var(--tgpi-font-display)] text-4xl font-semibold">
-                  {isPreviewAccess ? "Premium Preview" : "TGPI Premium"}
+                  {accessTitle}
                 </p>
                 <div className="mt-8 space-y-6 border-t border-white/15 pt-6">
                   <div className="flex items-center justify-between gap-4 text-sm">
@@ -267,9 +281,11 @@ export default function PremiumCommandCenterV2({
                 </div>
                 <Link
                   className="mt-8 inline-flex min-h-12 w-full items-center justify-center rounded-xl border border-white/20 bg-white/5 px-5 text-sm font-extrabold transition hover:border-[#D8AE49] hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#D8AE49]"
-                  href={isPreviewAccess ? "/profile/security" : "/pricing"}
+                  href={isControlledAccess ? "/profile/security" : "/pricing"}
                 >
-                  {isPreviewAccess ? "Review account security" : "Manage billing"}
+                  {isControlledAccess
+                    ? "Review account security"
+                    : "Manage billing"}
                 </Link>
               </aside>
             </div>

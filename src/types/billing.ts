@@ -1,6 +1,10 @@
 import type { UserPlan } from "./user";
 
-export type PremiumAccessMode = "none" | "subscription" | "preview";
+export type PremiumAccessMode =
+  | "none"
+  | "subscription"
+  | "preview"
+  | "founder";
 
 export type SubscriptionStatus =
   | "inactive"

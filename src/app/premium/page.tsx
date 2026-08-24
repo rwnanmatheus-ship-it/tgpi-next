@@ -40,6 +40,7 @@ function formatPeriodEnd(value: string) {
 
 export default async function PremiumPage() {
   const { accessMode, billing, user } = await requirePremium();
+  const isFounderAccess = accessMode === "founder";
   const isPreviewAccess = accessMode === "preview";
   const onboarding = normalizeOnboardingData(
     user.unsafeMetadata.tgpiOnboarding,
@@ -54,9 +55,11 @@ export default async function PremiumPage() {
     courses,
   );
   const name = user.firstName || user.fullName || "Global explorer";
-  const periodLabel = isPreviewAccess
-    ? "Temporary founder/test access for this Vercel Preview. No payment or subscription was created."
-    : billing.cancelAtPeriodEnd
+  const periodLabel = isFounderAccess
+    ? "Founder access authorized by TGPI. No payment or subscription was created."
+    : isPreviewAccess
+      ? "Temporary founder/test access for this Vercel Preview. No payment or subscription was created."
+      : billing.cancelAtPeriodEnd
       ? `Access available until ${formatPeriodEnd(billing.currentPeriodEnd)}.`
       : billing.currentPeriodEnd
         ? `Next renewal: ${formatPeriodEnd(billing.currentPeriodEnd)}.`
@@ -64,10 +67,14 @@ export default async function PremiumPage() {
 
   return (
     <PremiumCommandCenterV2
+      accessMode={accessMode}
       firstName={name}
-      isPreviewAccess={isPreviewAccess}
       membershipStatus={
-        isPreviewAccess ? "Preview" : formatStatus(billing.status)
+        isFounderAccess
+          ? "Founder"
+          : isPreviewAccess
+            ? "Preview"
+            : formatStatus(billing.status)
       }
       model={model}
       periodLabel={periodLabel}

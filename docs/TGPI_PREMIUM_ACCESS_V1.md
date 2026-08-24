@@ -49,6 +49,23 @@ all three conditions are true:
 The rule is evaluated on the server for every request. It does not write plan
 or billing metadata to Clerk and it is rejected on the official TGPI domain.
 
+## Founder Access
+
+`TGPI_FOUNDER_USER_IDS` grants controlled Premium access to approved founder
+accounts before Stripe is activated. It is a server-only, comma-separated
+allowlist of Clerk User IDs and must be configured only in Vercel Production.
+
+Founder Access is granted only when all three conditions are true:
+
+1. `VERCEL_ENV` is exactly `production`;
+2. the current request hostname is exactly `theglobalpolymath.com` or
+   `www.theglobalpolymath.com`;
+3. the authenticated Clerk User ID is in the allowlist.
+
+The permission is evaluated on every request, does not alter Clerk billing
+metadata and does not create a Stripe customer or subscription. Removing the
+user ID from the Production variable and redeploying revokes the permission.
+
 ## Required Vercel variables
 
 | Variable | Preview | Production |
@@ -59,6 +76,7 @@ or billing metadata to Clerk and it is rejected on the official TGPI domain.
 | `BILLING_ENABLED` | `true` only during controlled testing | `true` only after launch approval |
 | `NEXT_PUBLIC_APP_URL` | Preview URL | `https://www.theglobalpolymath.com` |
 | `TGPI_PREMIUM_PREVIEW_USER_IDS` | Founder/test Clerk IDs | Never configure |
+| `TGPI_FOUNDER_USER_IDS` | Never configure | Approved founder Clerk IDs |
 
 Never reuse test values in Production or live values in Preview.
 
