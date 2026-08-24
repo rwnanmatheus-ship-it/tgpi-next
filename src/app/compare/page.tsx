@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
+import ActivationProgressProvider from "@/components/activation/ActivationProgressProvider";
 import CompareCountryPicker from "@/components/compare/CompareCountryPicker";
 import {
   formatCurrencyAmount,
@@ -101,6 +102,7 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
   };
 
   return (
+    <ActivationProgressProvider>
     <main className="min-h-screen bg-[var(--tgpi-canvas)] text-[var(--tgpi-ink)]">
       <script
         type="application/ld+json"
@@ -305,6 +307,7 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
         </section>
       </div>
     </main>
+    </ActivationProgressProvider>
   );
 }
 

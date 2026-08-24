@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { currentUser } from "@clerk/nextjs/server";
 import GlobalWorkspaceV1 from "@/components/profile/GlobalWorkspaceV1";
+import {
+  normalizeActivationProgress,
+  TGPI_ACTIVATION_METADATA_KEY,
+} from "@/lib/activation-progress";
 import { formatTgpiGlobalId, requireUser } from "@/lib/auth/guards";
 import { getAllCountries } from "@/lib/countries";
 import { buildGlobalWorkspaceModel } from "@/lib/global-workspace";
@@ -31,9 +35,13 @@ export default async function ProfilePage({
   const onboarding = normalizeOnboardingData(
     user?.unsafeMetadata.tgpiOnboarding,
   );
+  const activation = normalizeActivationProgress(
+    user?.privateMetadata[TGPI_ACTIVATION_METADATA_KEY],
+  );
   const workspaceModel = buildGlobalWorkspaceModel(
     onboarding,
     getAllCountries(),
+    activation,
   );
 
   return (
