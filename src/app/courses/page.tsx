@@ -53,7 +53,7 @@ export default function CoursesPage() {
         </div>
       </section>
 
-      <section className="py-16">
+      <section id="learning-paths" className="scroll-mt-28 py-16">
         <div className="mx-auto max-w-3xl text-center">
           <p className="text-xs font-black uppercase tracking-[0.28em] text-[#9A6A12]">Learning paths</p>
           <h2 className="mt-5 font-serif text-4xl font-semibold tracking-[-0.04em] text-[#0B0B0B] md:text-6xl">
