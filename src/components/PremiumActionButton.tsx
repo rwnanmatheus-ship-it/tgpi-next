@@ -18,7 +18,7 @@ export default function PremiumActionButton({
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!billingEnabled || !isLoaded || !isSignedIn) {
+    if (!isLoaded || !isSignedIn) {
       setCheckingStatus(false);
       return;
     }
@@ -51,9 +51,23 @@ export default function PremiumActionButton({
     return () => {
       active = false;
     };
-  }, [billingEnabled, isLoaded, isSignedIn]);
+  }, [isLoaded, isSignedIn]);
 
-  if (!billingEnabled) {
+  const hasPreviewAccess = billing?.accessMode === "preview";
+
+  if (!billingEnabled && !hasPreviewAccess) {
+    if (isLoaded && isSignedIn && checkingStatus) {
+      return (
+        <button
+          type="button"
+          disabled
+          className="w-full rounded-2xl bg-[#B58A2A] px-6 py-4 text-sm font-black text-[#0B0B0B] opacity-60"
+        >
+          Checking Preview access...
+        </button>
+      );
+    }
+
     return (
       <Link
         href="/premium-waitlist"
@@ -84,6 +98,11 @@ export default function PremiumActionButton({
     try {
       if (!isLoaded || !isSignedIn) {
         window.location.href = "/sign-in?redirect_url=%2Fpricing";
+        return;
+      }
+
+      if (hasPreviewAccess) {
+        window.location.href = "/premium";
         return;
       }
 
@@ -152,7 +171,9 @@ export default function PremiumActionButton({
             : "Opening secure checkout..."
           : checkingStatus
             ? "Checking membership..."
-            : billing?.plan === "premium" || shouldManageBilling
+            : hasPreviewAccess
+              ? "Open TGPI Premium Preview"
+              : billing?.plan === "premium" || shouldManageBilling
               ? "Manage TGPI Premium"
               : "Start TGPI Premium"}
       </button>

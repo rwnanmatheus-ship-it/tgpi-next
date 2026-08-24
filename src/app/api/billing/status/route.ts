@@ -1,16 +1,25 @@
 import { NextResponse } from "next/server";
 import { requireApiUser, TgpiAuthenticationError } from "@/lib/auth/guards";
 import { getUserBillingRecord } from "@/lib/billing.server";
+import { hasPremiumPreviewAccess } from "@/lib/premium-preview.server";
 
 export async function GET() {
   try {
     const user = await requireApiUser();
-    const billing = await getUserBillingRecord(user.uid);
+    const [billing, previewAccess] = await Promise.all([
+      getUserBillingRecord(user.uid),
+      hasPremiumPreviewAccess(user.uid),
+    ]);
 
     return NextResponse.json(
       {
-        plan: billing.plan,
-        status: billing.status,
+        accessMode: previewAccess
+          ? "preview"
+          : billing.plan === "premium"
+            ? "subscription"
+            : "none",
+        plan: previewAccess ? "premium" : billing.plan,
+        status: previewAccess ? "active" : billing.status,
         portalAvailable: Boolean(billing.stripeCustomerId),
         cancelAtPeriodEnd: billing.cancelAtPeriodEnd,
         currentPeriodEnd: billing.currentPeriodEnd,

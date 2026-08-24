@@ -33,6 +33,22 @@ The record contains:
 component; it must never be used as the authorization boundary for sensitive
 Premium routes or data.
 
+## Premium Preview Mode
+
+While Stripe onboarding is unavailable, founder and test accounts can receive
+temporary Premium access without creating a payment or subscription.
+
+Set `TGPI_PREMIUM_PREVIEW_USER_IDS` only in the Vercel Preview environment. Its
+value is a comma-separated list of Clerk User IDs. Access is granted only when
+all three conditions are true:
+
+1. `VERCEL_ENV` is exactly `preview`;
+2. the current request hostname ends in `.vercel.app`;
+3. the authenticated Clerk User ID is in the allowlist.
+
+The rule is evaluated on the server for every request. It does not write plan
+or billing metadata to Clerk and it is rejected on the official TGPI domain.
+
 ## Required Vercel variables
 
 | Variable | Preview | Production |
@@ -42,6 +58,7 @@ Premium routes or data.
 | `STRIPE_PRICE_ID_PREMIUM` | Test recurring Price ID | Live recurring Price ID |
 | `BILLING_ENABLED` | `true` only during controlled testing | `true` only after launch approval |
 | `NEXT_PUBLIC_APP_URL` | Preview URL | `https://www.theglobalpolymath.com` |
+| `TGPI_PREMIUM_PREVIEW_USER_IDS` | Founder/test Clerk IDs | Never configure |
 
 Never reuse test values in Production or live values in Preview.
 

@@ -1,5 +1,7 @@
 import type { UserPlan } from "./user";
 
+export type PremiumAccessMode = "none" | "subscription" | "preview";
+
 export type SubscriptionStatus =
   | "inactive"
   | "trialing"
@@ -34,6 +36,7 @@ export type CheckoutSessionSummary = {
 };
 
 export type BillingStatusResponse = {
+  accessMode: PremiumAccessMode;
   plan: UserPlan;
   status: SubscriptionStatus;
   portalAvailable: boolean;

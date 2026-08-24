@@ -70,12 +70,15 @@ function formatPeriodEnd(value: string) {
 }
 
 export default async function PremiumPage() {
-  const { billing } = await requirePremium();
-  const periodLabel = billing.cancelAtPeriodEnd
-    ? `Access available until ${formatPeriodEnd(billing.currentPeriodEnd)}`
-    : billing.currentPeriodEnd
-      ? `Next renewal: ${formatPeriodEnd(billing.currentPeriodEnd)}`
-      : "Managed securely through Stripe";
+  const { accessMode, billing } = await requirePremium();
+  const isPreviewAccess = accessMode === "preview";
+  const periodLabel = isPreviewAccess
+    ? "Temporary founder/test access for this Vercel Preview. No payment or subscription was created."
+    : billing.cancelAtPeriodEnd
+      ? `Access available until ${formatPeriodEnd(billing.currentPeriodEnd)}`
+      : billing.currentPeriodEnd
+        ? `Next renewal: ${formatPeriodEnd(billing.currentPeriodEnd)}`
+        : "Managed securely through Stripe";
 
   return (
     <main className="min-h-screen bg-[#F5F1E8] text-[#0B1F3A]">
@@ -99,25 +102,25 @@ export default async function PremiumPage() {
 
               <aside className="border-t border-white/10 bg-[#102A4C] p-7 sm:p-10 lg:border-l lg:border-t-0 lg:p-12">
                 <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#F0D58C]">
-                  Membership
+                  {isPreviewAccess ? "Controlled access" : "Membership"}
                 </p>
                 <p className="mt-4 font-[var(--tgpi-font-display)] text-4xl font-semibold">
-                  TGPI Premium
+                  {isPreviewAccess ? "Premium Preview" : "TGPI Premium"}
                 </p>
                 <div className="mt-8 space-y-5 border-t border-white/15 pt-6 text-sm">
                   <div className="flex items-center justify-between gap-4">
                     <span className="text-[#AEBCCE]">Status</span>
                     <span className="rounded-full bg-[#D8AE49] px-3 py-1 text-xs font-extrabold text-[#0B1F3A]">
-                      {formatStatus(billing.status)}
+                      {isPreviewAccess ? "Preview" : formatStatus(billing.status)}
                     </span>
                   </div>
                   <p className="leading-6 text-[#D7DEE8]">{periodLabel}</p>
                 </div>
                 <Link
-                  href="/pricing"
+                  href={isPreviewAccess ? "/profile" : "/pricing"}
                   className="mt-8 inline-flex min-h-12 w-full items-center justify-center rounded-xl border border-white/20 bg-white/5 px-5 text-sm font-extrabold transition hover:border-[#D8AE49] hover:bg-white/10"
                 >
-                  Manage billing
+                  {isPreviewAccess ? "Return to workspace" : "Manage billing"}
                 </Link>
               </aside>
             </div>
@@ -171,7 +174,9 @@ export default async function PremiumPage() {
 
           <div className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[#D8D2C4] bg-white px-6 py-5 text-sm">
             <p className="text-[#657082]">
-              Your Premium access is linked to your authenticated TGPI Global Key.
+              {isPreviewAccess
+                ? "Preview access is temporary, server-controlled and unavailable on the official production domain."
+                : "Your Premium access is linked to your authenticated TGPI Global Key."}
             </p>
             <Link href="/profile/security" className="font-extrabold text-[#8A641F]">
               Review account security →
