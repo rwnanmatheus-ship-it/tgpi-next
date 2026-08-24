@@ -750,8 +750,15 @@ function ContextStep({
                     : "border-[#D8D2C4] bg-white text-[#0B1F3A] hover:border-[#B58A2A]"
                 }`}
               >
-                {selected ? "✓ " : ""}
-                {language}
+                <span
+                  aria-hidden="true"
+                  className={`mr-1 inline-flex w-3 shrink-0 justify-center transition-opacity ${
+                    selected ? "opacity-100" : "opacity-0"
+                  }`}
+                >
+                  ✓
+                </span>
+                <span>{language}</span>
               </button>
             );
           })}
@@ -1057,12 +1064,6 @@ function SummaryItem({
 }
 
 function SaveIndicator({ status }: { status: SaveStatus }) {
-  const labels: Record<SaveStatus, string> = {
-    saved: "Progress saved",
-    saving: "Saving...",
-    error: "Unable to save",
-  };
-
   return (
     <span
       aria-live="polite"
@@ -1078,9 +1079,17 @@ function SaveIndicator({ status }: { status: SaveStatus }) {
             : status === "saving"
               ? "animate-pulse bg-[#B58A2A]"
               : "bg-[#9F2F2F]"
-        }`}
+          }`}
       />
-      {labels[status]}
+      <span className={status === "saved" ? "inline" : "hidden"}>
+        Progress saved
+      </span>
+      <span className={status === "saving" ? "inline" : "hidden"}>
+        Saving...
+      </span>
+      <span className={status === "error" ? "inline" : "hidden"}>
+        Unable to save
+      </span>
     </span>
   );
 }
