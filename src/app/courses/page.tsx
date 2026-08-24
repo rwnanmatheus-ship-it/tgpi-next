@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { auth } from "@clerk/nextjs/server";
 import TGPIEditorialVisual, {
   type TGPIVisualVariant,
 } from "@/components/TGPIEditorialVisual";
@@ -9,7 +10,12 @@ import type { CourseOverview } from "@/types/course-overview";
 const courses: CourseOverview[] = coursesOverview;
 const courseVisuals: TGPIVisualVariant[] = ["learning", "readiness", "premium", "compare"];
 
-export default function CoursesPage() {
+export default async function CoursesPage() {
+  const { userId } = await auth();
+  const learningHref = userId
+    ? "/courses/english-abroad"
+    : "/sign-in?redirect_url=/courses/english-abroad";
+
   return (
     <TGPIPageShell>
       <section className="overflow-hidden rounded-[42px] border border-[#D8D2C4] bg-[#FFFDF8] shadow-[0_38px_100px_rgba(11,31,58,0.11)]">
@@ -30,10 +36,10 @@ export default function CoursesPage() {
             </div>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <Link
-                href="/login?next=/courses"
+                href={learningHref}
                 className="rounded-2xl bg-[#0B1F3A] px-6 py-4 text-center text-sm font-black text-white transition hover:bg-[#132B4C]"
               >
-                Create Free Account
+                {userId ? "Continue Learning" : "Create Free Account"}
               </Link>
               <Link
                 href="/pricing"
@@ -87,10 +93,10 @@ export default function CoursesPage() {
                 <p className="mt-3 text-sm leading-7 text-[#566070]">{course.desc}</p>
 
                 <Link
-                  href="/login?next=/courses"
+                  href={index === 0 ? learningHref : "/premium-waitlist"}
                   className="mt-6 inline-flex rounded-2xl bg-[#0B1F3A] px-5 py-3 text-sm font-black text-white transition hover:bg-[#132B4C]"
                 >
-                  Start learning
+                  {index === 0 ? "Start learning" : "Join path waitlist"}
                 </Link>
               </div>
             </article>

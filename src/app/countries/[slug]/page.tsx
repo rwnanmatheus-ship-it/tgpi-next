@@ -3,6 +3,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import ActivationProgressProvider from "@/components/activation/ActivationProgressProvider";
+import DocumentReviewChecklist from "@/components/activation/DocumentReviewChecklist";
+import MonthlyCostPlanner from "@/components/activation/MonthlyCostPlanner";
+import SavedCountryButton from "@/components/activation/SavedCountryButton";
 import {
   formatCurrencyAmount,
   getAllCountrySlugs,
@@ -227,6 +231,7 @@ export default async function CountryPage({ params }: CountryPageProps) {
   };
 
   return (
+    <ActivationProgressProvider>
     <main className="min-h-screen bg-[#F6F1E7] text-[#071A32]">
       <script
         type="application/ld+json"
@@ -244,6 +249,10 @@ export default async function CountryPage({ params }: CountryPageProps) {
           </Link>
 
           <div className="flex flex-wrap gap-2">
+            <SavedCountryButton
+              countryName={country.name}
+              countrySlug={country.slug}
+            />
             <Link
               href={`/compare?country=${country.slug}`}
               className="rounded-full border border-[#B8C9DF] bg-[#EEF5FF] px-4 py-2 text-sm font-bold text-[#123A6F] transition hover:border-[#315F98] hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315F98]"
@@ -422,6 +431,13 @@ export default async function CountryPage({ params }: CountryPageProps) {
                 />
               ))}
             </div>
+
+            <MonthlyCostPlanner
+              baseline={country.intelligence.averageMonthlyBudget}
+              countryName={country.name}
+              countrySlug={country.slug}
+              currency={country.currencyCode}
+            />
           </div>
 
           <div className="grid gap-6">
@@ -463,9 +479,9 @@ export default async function CountryPage({ params }: CountryPageProps) {
             items={countryPlan.firstThirtyDays}
           />
 
-          <ActionChecklist
-            title="Documents to verify"
-            subtitle="Use official sources before legal, visa, tax or relocation decisions."
+          <DocumentReviewChecklist
+            countryName={country.name}
+            countrySlug={country.slug}
             items={countryPlan.documents}
           />
         </section>
@@ -598,6 +614,7 @@ export default async function CountryPage({ params }: CountryPageProps) {
         </section>
       </section>
     </main>
+    </ActivationProgressProvider>
   );
 }
 

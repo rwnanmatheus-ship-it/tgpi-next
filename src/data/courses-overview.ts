@@ -3,9 +3,9 @@ import type { CourseOverview } from "@/types/course-overview";
 
 export const coursesOverview: CourseOverview[] = [
   {
-    title: "Leadership & Management",
-    desc: "Develop leadership, strategy, and execution skills.",
-    meta: "Global strategy \u00b7 6 weeks",
+    title: "English for Living Abroad",
+    desc: "Practice the English required for airports, housing, work and daily life abroad.",
+    meta: "Language \u00b7 3 practical lessons",
     image: tgpiImages.leadership,
   },
   {

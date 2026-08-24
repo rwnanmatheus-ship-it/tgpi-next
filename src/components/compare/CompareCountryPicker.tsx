@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
+import { useActivationProgress } from "@/components/activation/ActivationProgressProvider";
 import {
   COMPARISON_GOALS,
   getComparisonGoalConfig,
@@ -37,9 +38,11 @@ export default function CompareCountryPicker({
   hasExplicitSelection,
 }: CompareCountryPickerProps) {
   const router = useRouter();
+  const { isAuthenticated, mutate } = useActivationProgress();
   const [slots, setSlots] = useState<string[]>(() => createSlots(initialSlugs));
   const [goal, setGoal] = useState<ComparisonGoal>(initialGoal);
   const [notice, setNotice] = useState("");
+  const [isSavingComparison, setIsSavingComparison] = useState(false);
   const [isPending, startTransition] = useTransition();
   const restoredRef = useRef(false);
   const validSlugs = useMemo(
@@ -106,7 +109,7 @@ export default function CompareCountryPicker({
     window.localStorage.removeItem(STORAGE_KEY);
   }
 
-  function runComparison() {
+  async function runComparison() {
     if (selectedSlugs.length < 2) {
       setNotice("Choose at least two different countries before comparing.");
       return;
@@ -116,6 +119,24 @@ export default function CompareCountryPicker({
     const params = new URLSearchParams();
     selectedSlugs.forEach((slug) => params.append("country", slug));
     if (goal !== "overall") params.set("goal", goal);
+
+    if (isAuthenticated) {
+      setIsSavingComparison(true);
+      try {
+        await mutate({
+          countrySlugs: selectedSlugs,
+          goal,
+          type: "record_comparison",
+        });
+      } catch {
+        setNotice(
+          "The comparison is ready, but TGPI could not save it to your workspace.",
+        );
+      } finally {
+        setIsSavingComparison(false);
+      }
+    }
+
     startTransition(() => router.push(`/compare?${params.toString()}`));
   }
 
@@ -199,10 +220,16 @@ export default function CompareCountryPicker({
         <button
           type="button"
           onClick={runComparison}
-          disabled={isPending || selectedSlugs.length < 2}
+          disabled={
+            isPending || isSavingComparison || selectedSlugs.length < 2
+          }
           className="inline-flex h-12 items-center justify-center rounded-2xl bg-[var(--tgpi-navy)] px-6 text-sm font-extrabold text-white shadow-lg transition hover:-translate-y-0.5 hover:bg-[var(--tgpi-navy-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)] disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:translate-y-0"
         >
-          {isPending ? "Building…" : "Compare now"}
+          {isSavingComparison
+            ? "Saving…"
+            : isPending
+              ? "Building…"
+              : "Compare now"}
         </button>
       </div>
 

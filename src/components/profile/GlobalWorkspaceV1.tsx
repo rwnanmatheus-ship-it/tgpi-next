@@ -25,17 +25,21 @@ const actionNumbers: Record<WorkspaceAction["id"], string> = {
 };
 
 const statusLabels: Record<WorkspaceActionStatus, string> = {
-  available: "Available",
-  "needs-input": "Needs input",
-  ready: "Ready",
+  completed: "Completed",
+  in_progress: "In progress",
+  needs_attention: "Needs attention",
+  not_started: "Not started",
 };
 
 export default function GlobalWorkspaceV1({
   firstName,
   model,
 }: GlobalWorkspaceV1Props) {
-  const primaryAction = model.actions.find((action) => action.status === "ready")
-    ?? model.actions[0];
+  const primaryAction =
+    model.actions.find((action) => action.status === "in_progress") ??
+    model.actions.find((action) => action.status === "not_started") ??
+    model.actions.find((action) => action.status === "needs_attention") ??
+    model.actions[0];
 
   return (
     <div className="grid gap-8">
@@ -103,6 +107,95 @@ export default function GlobalWorkspaceV1({
                 </div>
               ))}
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        aria-labelledby="activation-progress-title"
+        className="overflow-hidden rounded-[30px] border border-[#D8D2C4] bg-white shadow-[0_20px_60px_rgba(11,31,58,0.07)]"
+      >
+        <div className="grid lg:grid-cols-[0.82fr_1.18fr]">
+          <div className="bg-[#0B1F3A] p-6 text-white sm:p-8">
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#F0D58C]">
+              Activation progress
+            </p>
+            <h2
+              id="activation-progress-title"
+              className="mt-3 font-[var(--tgpi-font-display)] text-4xl font-semibold"
+            >
+              {model.activationCompletion}% of your action system activated.
+            </h2>
+            <div className="mt-5 h-2 overflow-hidden rounded-full bg-white/10">
+              <div
+                className="h-full rounded-full bg-[#E5BF5A]"
+                style={{ width: `${model.activationCompletion}%` }}
+              />
+            </div>
+            <dl className="mt-6 grid grid-cols-2 gap-3">
+              {model.activationStats.map((item) => (
+                <div
+                  key={item.label}
+                  className="rounded-2xl border border-white/10 bg-white/[0.05] p-4"
+                >
+                  <dt className="text-[9px] font-extrabold uppercase tracking-[0.16em] text-[#C7D0DC]">
+                    {item.label}
+                  </dt>
+                  <dd className="mt-2 text-2xl font-extrabold text-white">
+                    {item.value}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+
+          <div className="p-6 sm:p-8">
+            <div className="flex items-end justify-between gap-4">
+              <div>
+                <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#956A13]">
+                  Recent activity
+                </p>
+                <h2 className="mt-2 font-[var(--tgpi-font-display)] text-3xl font-semibold">
+                  Your work continues across devices.
+                </h2>
+              </div>
+              <span className="rounded-full border border-[#D8D2C4] bg-[#F7F2E8] px-3 py-2 text-[9px] font-extrabold uppercase tracking-[0.14em] text-[#657082]">
+                Private
+              </span>
+            </div>
+
+            {model.recentActivities.length ? (
+              <div className="mt-5 grid gap-2">
+                {model.recentActivities.map((activity) => (
+                  <Link
+                    key={activity.id}
+                    href={activity.href}
+                    className="group flex items-center justify-between gap-4 rounded-2xl border border-[#E4DED2] bg-[#FFFDF8] px-4 py-3 transition hover:border-[#B58A2A]"
+                  >
+                    <span>
+                      <span className="block text-sm font-extrabold text-[#0B1F3A]">
+                        {activity.title}
+                      </span>
+                      <span className="mt-1 block text-[10px] font-bold uppercase tracking-[0.12em] text-[#7A8390]">
+                        {formatActivityDate(activity.occurredAt)}
+                      </span>
+                    </span>
+                    <span className="font-extrabold text-[#B58A2A] transition group-hover:translate-x-1">
+                      →
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <div className="mt-5 rounded-2xl border border-dashed border-[#CFC7B8] bg-[#FFFDF8] p-6">
+                <p className="text-sm font-extrabold text-[#0B1F3A]">
+                  Your activity timeline starts with one practical action.
+                </p>
+                <p className="mt-2 text-xs leading-6 text-[#657082]">
+                  Save a country, compare a shortlist, review documents, estimate costs or begin a learning path.
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -316,11 +409,13 @@ function ActionCard({ item }: { item: WorkspaceAction }) {
       </div>
       <span
         className={`mt-5 w-fit rounded-full px-3 py-1.5 text-[9px] font-extrabold uppercase tracking-[0.14em] ${
-          item.status === "ready"
+          item.status === "completed"
             ? "bg-[#E3F3EB] text-[#277352]"
-            : item.status === "needs-input"
+            : item.status === "needs_attention"
               ? "bg-[#FFF0D8] text-[#8A5A0A]"
-              : "bg-[#E8F1FC] text-[#315F98]"
+              : item.status === "in_progress"
+                ? "bg-[#E8F1FC] text-[#315F98]"
+                : "bg-[#F0EDE7] text-[#657082]"
         }`}
       >
         {statusLabels[item.status]}
@@ -347,4 +442,15 @@ function ActionCard({ item }: { item: WorkspaceAction }) {
       </span>
     </Link>
   );
+}
+
+function formatActivityDate(value: string) {
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return "Recent activity";
+
+  return new Intl.DateTimeFormat("en", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  }).format(date);
 }
