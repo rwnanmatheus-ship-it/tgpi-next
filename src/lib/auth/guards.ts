@@ -92,5 +92,6 @@ export async function requirePremium() {
     accessMode: previewAccess ? ("preview" as const) : ("subscription" as const),
     billing,
     plan: "premium" as const,
+    user,
   };
 }
