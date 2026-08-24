@@ -1,22 +1,31 @@
 import type { UserPlan } from "./user";
 
+export type PremiumAccessMode = "none" | "subscription" | "preview";
+
 export type SubscriptionStatus =
   | "inactive"
   | "trialing"
   | "active"
   | "past_due"
   | "canceled"
-  | "unpaid";
+  | "unpaid"
+  | "incomplete"
+  | "incomplete_expired"
+  | "paused";
 
 export type SubscriptionRecord = {
+  version: 1;
   uid: string;
   plan: UserPlan;
   status: SubscriptionStatus;
-  stripeCustomerId?: string;
-  stripeSubscriptionId?: string;
-  currentPeriodEnd?: string;
-  cancelAtPeriodEnd?: boolean;
-  updatedAt?: string;
+  stripeCustomerId: string;
+  stripeSubscriptionId: string;
+  stripePriceId: string;
+  currentPeriodEnd: string;
+  cancelAtPeriodEnd: boolean;
+  lastStripeEventId: string;
+  lastStripeEventCreated: number;
+  updatedAt: string;
 };
 
 export type CheckoutSessionSummary = {
@@ -24,4 +33,13 @@ export type CheckoutSessionSummary = {
   paymentStatus: string | null;
   status: string | null;
   subscriptionId: string;
+};
+
+export type BillingStatusResponse = {
+  accessMode: PremiumAccessMode;
+  plan: UserPlan;
+  status: SubscriptionStatus;
+  portalAvailable: boolean;
+  cancelAtPeriodEnd: boolean;
+  currentPeriodEnd: string;
 };

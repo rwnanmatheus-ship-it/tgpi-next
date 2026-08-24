@@ -1,5 +1,12 @@
 import type { Country, CountryDifficulty, CountryGoal } from "@/lib/countries";
 import {
+  createEmptyActivationProgress,
+  getCourseProgressStatus,
+  getDocumentReviewStatus,
+  type ActivationActivity,
+  type ActivationStatus,
+} from "@/lib/activation-progress";
+import {
   getCountryComparisonScore,
   getCountryCostBandScore,
   getComparisonGoalConfig,
@@ -11,7 +18,7 @@ import type {
   TgpiOnboardingData,
 } from "@/types/onboarding";
 
-export type WorkspaceActionStatus = "available" | "needs-input" | "ready";
+export type WorkspaceActionStatus = ActivationStatus;
 
 export type WorkspaceAction = {
   action: string;
@@ -36,6 +43,8 @@ export type WorkspaceProgressItem = {
 };
 
 export type GlobalWorkspaceModel = {
+  activationCompletion: number;
+  activationStats: Array<{ label: string; value: string }>;
   actions: WorkspaceAction[];
   compareHref: string;
   comparisonGoal: ComparisonGoal;
@@ -44,6 +53,7 @@ export type GlobalWorkspaceModel = {
   goalLabel: string;
   planSummary: Array<{ label: string; value: string }>;
   progress: WorkspaceProgressItem[];
+  recentActivities: ActivationActivity[];
   selectedCountryCount: number;
 };
 
@@ -201,6 +211,7 @@ function joinLabels(values: string[], fallback: string) {
 export function buildGlobalWorkspaceModel(
   onboarding: TgpiOnboardingData,
   allCountries: Country[],
+  activation = createEmptyActivationProgress(),
 ): GlobalWorkspaceModel {
   const comparisonGoal = getComparisonGoal(onboarding.primaryGoal);
   const selectedCountries = onboarding.targetCountries
@@ -223,6 +234,42 @@ export function buildGlobalWorkspaceModel(
   const compareHref = buildCompareHref(countriesForComparison, comparisonGoal);
   const canCompare = countriesForComparison.length >= 2;
   const hasCountry = Boolean(primaryCountry);
+  const documentEntries = Object.entries(activation.documentReviews).sort(
+    ([, first], [, second]) => second.updatedAt.localeCompare(first.updatedAt),
+  );
+  const latestDocumentEntry = documentEntries[0];
+  const documentStatuses = documentEntries.map(([, review]) =>
+    getDocumentReviewStatus(review),
+  );
+  const documentStatus: ActivationStatus = documentStatuses.includes("completed")
+    ? "completed"
+    : documentStatuses.includes("in_progress")
+      ? "in_progress"
+      : hasCountry
+        ? "not_started"
+        : "needs_attention";
+  const courseStatuses = Object.values(activation.courseProgress).map((course) =>
+    getCourseProgressStatus(course),
+  );
+  const learningStatus: ActivationStatus = courseStatuses.includes("completed")
+    ? "completed"
+    : courseStatuses.includes("in_progress")
+      ? "in_progress"
+      : "not_started";
+  const compareStatus: ActivationStatus = activation.comparisons.length
+    ? "completed"
+    : canCompare
+      ? "not_started"
+      : "needs_attention";
+  const costStatus: ActivationStatus = Object.keys(activation.costEstimates).length
+    ? "completed"
+    : hasCountry
+      ? "not_started"
+      : "needs_attention";
+  const latestComparison = activation.comparisons[0];
+  const latestCostCountry = Object.entries(activation.costEstimates).sort(
+    ([, first], [, second]) => second.updatedAt.localeCompare(first.updatedAt),
+  )[0]?.[0];
   const progress: WorkspaceProgressItem[] = [
     { complete: Boolean(onboarding.primaryGoal), label: "Primary goal" },
     {
@@ -244,12 +291,22 @@ export function buildGlobalWorkspaceModel(
       label: "Decision priorities",
     },
   ];
+  const profileStatus: ActivationStatus = onboarding.completed
+    ? "completed"
+    : progress.some((item) => item.complete)
+      ? "in_progress"
+      : "not_started";
   const completion = progress.filter((item) => item.complete).length * 20;
   const selectedNames = selectedCountries.map((country) => country.name);
 
   const actions: WorkspaceAction[] = [
     {
-      action: canCompare ? "Open personalized comparison" : "Add countries",
+      action:
+        compareStatus === "completed"
+          ? "Review saved comparison"
+          : canCompare
+            ? "Open personalized comparison"
+            : "Add countries",
       description: canCompare
         ? `Compare ${joinLabels(
             countriesForComparison.map((country) => country.name),
@@ -257,9 +314,18 @@ export function buildGlobalWorkspaceModel(
           )} through the ${getComparisonGoalConfig(comparisonGoal).shortLabel.toLowerCase()} lens.`
         : "Select at least two countries so TGPI can build a meaningful side-by-side decision.",
       eyebrow: "Decide",
-      href: canCompare ? compareHref : "/onboarding",
+      href: latestComparison
+        ? buildCompareHref(
+            latestComparison.countrySlugs
+              .map((slug) => allCountries.find((country) => country.slug === slug))
+              .filter((country): country is Country => Boolean(country)),
+            latestComparison.goal,
+          )
+        : canCompare
+          ? compareHref
+          : "/onboarding",
       id: "compare",
-      status: canCompare ? "ready" : "needs-input",
+      status: compareStatus,
       title: "Compare selected countries",
     },
     {
@@ -268,27 +334,42 @@ export function buildGlobalWorkspaceModel(
         ? `Open the documentation checklist for ${primaryCountry.name}, your strongest current fit.`
         : "Choose a country before reviewing visa and residence pathways.",
       eyebrow: "Prepare",
-      href: hasCountry
-        ? `/countries/${primaryCountry.slug}#documents-to-verify`
+      href: latestDocumentEntry
+        ? `/countries/${latestDocumentEntry[0]}#documents-to-verify`
+        : hasCountry
+          ? `/countries/${primaryCountry.slug}#documents-to-verify`
         : "/countries",
       id: "documents",
-      status: hasCountry ? "ready" : "needs-input",
+      status: documentStatus,
       title: "Review visa requirements",
     },
     {
-      action: "Explore learning paths",
+      action:
+        learningStatus === "completed"
+          ? "Review completed path"
+          : learningStatus === "in_progress"
+            ? "Continue learning"
+            : "Explore learning paths",
       description:
         onboarding.primaryGoal === "learn"
           ? "Turn your global curiosity into a structured practical learning path."
           : `Build the language, decision and readiness skills that support your ${getComparisonGoalConfig(comparisonGoal).shortLabel.toLowerCase()} goal.`,
       eyebrow: "Develop",
-      href: "/courses#learning-paths",
+      href:
+        learningStatus === "in_progress" || learningStatus === "completed"
+          ? "/courses/english-abroad"
+          : "/courses#learning-paths",
       id: "learning",
-      status: "available",
+      status: learningStatus,
       title: "Start a learning path",
     },
     {
-      action: hasCountry ? "Open cost intelligence" : "Explore country costs",
+      action:
+        costStatus === "completed"
+          ? "Review saved estimate"
+          : hasCountry
+            ? "Open cost intelligence"
+            : "Explore country costs",
       description: hasCountry
         ? canCompare
           ? `Review monthly budget references for ${joinLabels(
@@ -298,13 +379,15 @@ export function buildGlobalWorkspaceModel(
           : `Review the local monthly budget reference and cost breakdown for ${primaryCountry.name}.`
         : "Choose a country to unlock local monthly budget references.",
       eyebrow: "Plan",
-      href: canCompare
-        ? `${compareHref}#comparison-matrix`
-        : hasCountry
-          ? `/countries/${primaryCountry.slug}#cost-of-living`
-          : "/countries",
+      href: latestCostCountry
+        ? `/countries/${latestCostCountry}#cost-of-living`
+        : canCompare
+          ? `${compareHref}#comparison-matrix`
+          : hasCountry
+            ? `/countries/${primaryCountry.slug}#cost-of-living`
+            : "/countries",
       id: "cost",
-      status: hasCountry ? "ready" : "needs-input",
+      status: costStatus,
       title: "Estimate monthly costs",
     },
     {
@@ -315,12 +398,35 @@ export function buildGlobalWorkspaceModel(
       eyebrow: "Personalize",
       href: "/onboarding",
       id: "profile",
-      status: onboarding.completed ? "ready" : "needs-input",
+      status: profileStatus,
       title: "Complete your global profile",
     },
   ];
 
+  const completedActionCount = actions.filter(
+    (action) => action.status === "completed",
+  ).length;
+
   return {
+    activationCompletion: completedActionCount * 20,
+    activationStats: [
+      {
+        label: "Saved countries",
+        value: String(activation.savedCountries.length),
+      },
+      {
+        label: "Comparisons",
+        value: String(activation.comparisons.length),
+      },
+      {
+        label: "Document reviews",
+        value: String(documentEntries.length),
+      },
+      {
+        label: "Learning paths",
+        value: String(Object.keys(activation.courseProgress).length),
+      },
+    ],
     actions,
     compareHref,
     comparisonGoal,
@@ -361,6 +467,7 @@ export function buildGlobalWorkspaceModel(
       },
     ],
     progress,
+    recentActivities: activation.activities.slice(0, 5),
     selectedCountryCount: selectedCountries.length,
   };
 }
