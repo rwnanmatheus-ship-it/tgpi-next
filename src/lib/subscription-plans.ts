@@ -25,7 +25,7 @@ export const TGPI_FREE_PLAN: SubscriptionPlan = {
 export const TGPI_PREMIUM_PLAN: SubscriptionPlan = {
   name: "TGPI Premium",
   slug: "premium",
-  price: "$9.99",
+  price: "US$ 19.99",
   cadence: "/month",
   description: "A complete decision system for planning an international life with clarity.",
   features: [

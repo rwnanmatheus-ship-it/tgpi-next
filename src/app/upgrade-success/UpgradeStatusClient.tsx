@@ -3,12 +3,14 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
-const MAX_ATTEMPTS = 8;
+const MAX_ATTEMPTS = 15;
 const RETRY_DELAY_MS = 2000;
 
 type CheckoutStatus = {
   paymentStatus?: string;
+  plan?: "free" | "premium";
   status?: string | null;
+  subscriptionStatus?: string;
   error?: string;
 };
 
@@ -37,12 +39,26 @@ export default function UpgradeStatusClient({ sessionId }: { sessionId: string }
         );
         const data = (await response.json()) as CheckoutStatus;
 
-        if (response.ok && data.status === "complete") {
+        if (
+          response.ok &&
+          data.status === "complete" &&
+          data.plan === "premium"
+        ) {
           setConfirmed(true);
+          setStatus("TGPI Premium is active. Your access was confirmed securely.");
+          return;
+        }
+
+        if (
+          response.ok &&
+          data.status === "complete" &&
+          data.subscriptionStatus &&
+          ["incomplete", "past_due", "unpaid"].includes(
+            data.subscriptionStatus,
+          )
+        ) {
           setStatus(
-            data.paymentStatus === "paid" || data.paymentStatus === "no_payment_required"
-              ? "Checkout confirmed. Your payment was verified securely."
-              : "Checkout completed. Payment confirmation is still processing."
+            "Checkout was received, but Stripe still requires payment confirmation. Open billing management to continue.",
           );
           return;
         }
@@ -58,7 +74,11 @@ export default function UpgradeStatusClient({ sessionId }: { sessionId: string }
         }
 
         if (attempt < MAX_ATTEMPTS - 1) {
-          setStatus("Checkout received. Waiting for secure confirmation…");
+          setStatus(
+            data.status === "complete"
+              ? "Payment confirmed. Waiting for the secure entitlement webhook…"
+              : "Checkout received. Waiting for secure confirmation…",
+          );
           await wait(RETRY_DELAY_MS);
         } else {
           setStatus(data.error || "Confirmation is taking longer than expected. Try again shortly.");
@@ -83,11 +103,13 @@ export default function UpgradeStatusClient({ sessionId }: { sessionId: string }
         <div className="p-8 text-center sm:p-10">
           {confirmed ? (
             <p className="mx-auto max-w-2xl rounded-2xl border border-[#A7D8C2] bg-[#EEF8F3] p-4 text-sm font-bold leading-6 text-[#236147]">
-              The payment reference is tied to your authenticated TGPI Global Key. Access entitlements are granted only by the server.
+              Your Premium entitlement is tied to your authenticated TGPI Global Key and can only be changed by verified Stripe webhooks.
             </p>
           ) : null}
           <div className="mt-7 flex flex-wrap justify-center gap-3">
-            <Link href="/profile" className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#0B1F3A] px-6 text-sm font-extrabold text-white">Go to workspace</Link>
+            <Link href={confirmed ? "/premium" : "/profile"} className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#0B1F3A] px-6 text-sm font-extrabold text-white">
+              {confirmed ? "Open Premium workspace" : "Go to workspace"}
+            </Link>
             <Link href="/pricing" className="inline-flex min-h-12 items-center justify-center rounded-xl border border-[#D8D2C4] bg-white px-6 text-sm font-extrabold">Back to pricing</Link>
           </div>
         </div>

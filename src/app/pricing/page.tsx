@@ -136,8 +136,9 @@ export default function PricingPage() {
             </div>
 
             <p className="mt-4 text-center text-xs leading-5 text-[#B8C1CF]">
-              Payments remain disabled until TGPI billing is legally and technically
-              ready. No charge is created while early access is active.
+              {billingEnabled
+                ? "Secure recurring billing by Stripe. Manage or cancel your subscription through the customer portal."
+                : "Payments remain disabled until TGPI billing is legally and technically ready. No charge is created while early access is active."}
             </p>
           </div>
         </article>

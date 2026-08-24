@@ -1,8 +1,19 @@
 import { NextResponse } from "next/server";
 import { requireApiUser, TgpiAuthenticationError } from "@/lib/auth/guards";
-import { TGPI_PREMIUM_PRICE_ID, getBaseUrl, getStripeServer } from "@/lib/stripe";
+import {
+  findLatestStripeSubscription,
+  getOrCreateStripeCustomer,
+  syncUserBillingFromSubscription,
+} from "@/lib/billing.server";
+import { blocksNewCheckout } from "@/lib/billing";
+import {
+  TGPI_PREMIUM_PRICE_ID,
+  getBaseUrl,
+  getStripeServer,
+  isSameOriginRequest,
+} from "@/lib/stripe";
 
-export async function POST() {
+export async function POST(request: Request) {
   try {
     const billingEnabled = process.env.BILLING_ENABLED === "true";
 
@@ -16,6 +27,13 @@ export async function POST() {
       );
     }
 
+    if (!isSameOriginRequest(request)) {
+      return NextResponse.json(
+        { error: "Checkout request could not be verified." },
+        { status: 403 },
+      );
+    }
+
     const user = await requireApiUser();
 
     if (!TGPI_PREMIUM_PRICE_ID) {
@@ -26,7 +44,33 @@ export async function POST() {
     }
 
     const stripe = getStripeServer();
-    const baseUrl = getBaseUrl();
+    const baseUrl = getBaseUrl(request);
+    const customerId = await getOrCreateStripeCustomer(user.uid, user.email);
+    const existingSubscription =
+      await findLatestStripeSubscription(customerId);
+
+    if (existingSubscription) {
+      const billing = await syncUserBillingFromSubscription({
+        subscription: existingSubscription,
+        uid: user.uid,
+      });
+
+      if (blocksNewCheckout(billing.status)) {
+        return NextResponse.json(
+          {
+            error:
+              billing.plan === "premium"
+                ? "TGPI Premium is already active."
+                : "A subscription already exists. Open billing management to continue.",
+            code:
+              billing.plan === "premium"
+                ? "ALREADY_PREMIUM"
+                : "SUBSCRIPTION_EXISTS",
+          },
+          { status: 409 },
+        );
+      }
+    }
 
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
@@ -36,22 +80,23 @@ export async function POST() {
           quantity: 1,
         },
       ],
-      customer_email: user.email || undefined,
+      customer: customerId,
       client_reference_id: user.uid,
       metadata: {
-        uid: user.uid,
+        tgpiUserId: user.uid,
         plan: "premium",
         source: "tgpi_premium_page",
       },
       subscription_data: {
         metadata: {
-          uid: user.uid,
+          tgpiUserId: user.uid,
           plan: "premium",
         },
       },
       success_url: `${baseUrl}/upgrade-success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${baseUrl}/premium?canceled=1`,
+      cancel_url: `${baseUrl}/pricing?canceled=1`,
       allow_promotion_codes: true,
+      locale: "auto",
     });
 
     return NextResponse.json({ url: session.url });

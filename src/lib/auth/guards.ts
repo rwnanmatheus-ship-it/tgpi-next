@@ -3,6 +3,10 @@ import "server-only";
 import { auth, clerkClient, currentUser } from "@clerk/nextjs/server";
 import { createHash } from "node:crypto";
 import { notFound, redirect } from "next/navigation";
+import {
+  normalizeSubscriptionRecord,
+  TGPI_BILLING_METADATA_KEY,
+} from "@/lib/billing";
 
 export type TgpiPlan = "free" | "premium";
 export type TgpiRole = "member" | "admin";
@@ -72,10 +76,14 @@ export async function requirePremium() {
   const session = await requireUser();
   const client = await clerkClient();
   const user = await client.users.getUser(session.userId);
+  const billing = normalizeSubscriptionRecord(
+    user.privateMetadata[TGPI_BILLING_METADATA_KEY],
+    session.userId,
+  );
 
-  if (user.privateMetadata.plan !== "premium") {
+  if (billing.plan !== "premium") {
     redirect("/pricing");
   }
 
-  return { ...session, plan: "premium" as const };
+  return { ...session, billing, plan: "premium" as const };
 }

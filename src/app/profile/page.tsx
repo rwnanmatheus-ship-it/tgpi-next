@@ -7,6 +7,10 @@ import {
   TGPI_ACTIVATION_METADATA_KEY,
 } from "@/lib/activation-progress";
 import { formatTgpiGlobalId, requireUser } from "@/lib/auth/guards";
+import {
+  normalizeSubscriptionRecord,
+  TGPI_BILLING_METADATA_KEY,
+} from "@/lib/billing";
 import { getAllCountries } from "@/lib/countries";
 import { buildGlobalWorkspaceModel } from "@/lib/global-workspace";
 import { normalizeOnboardingData } from "@/lib/onboarding";
@@ -38,6 +42,10 @@ export default async function ProfilePage({
   const activation = normalizeActivationProgress(
     user?.privateMetadata[TGPI_ACTIVATION_METADATA_KEY],
   );
+  const billing = normalizeSubscriptionRecord(
+    user?.privateMetadata[TGPI_BILLING_METADATA_KEY],
+    session.userId,
+  );
   const workspaceModel = buildGlobalWorkspaceModel(
     onboarding,
     getAllCountries(),
@@ -57,7 +65,7 @@ export default async function ProfilePage({
             <Link href="/profile/security" className="inline-flex min-h-12 items-center justify-center rounded-xl border border-[#D8D2C4] bg-white px-5 text-sm font-extrabold text-[#0B1F3A] transition hover:border-[#B58A2A]">Manage Global Key</Link>
           </div>
 
-          <div className="mt-10 grid gap-4 lg:grid-cols-[1.4fr_.8fr_.8fr]">
+          <div className="mt-10 grid gap-4 lg:grid-cols-[1.35fr_.8fr_.8fr_.8fr]">
             <article className="rounded-[26px] bg-[#0B1F3A] p-6 text-white shadow-[0_22px_55px_rgba(11,31,58,0.17)] sm:p-7">
               <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#F0D58C]">TGPI Global ID</p>
               <p className="mt-4 break-all font-[var(--tgpi-font-display)] text-3xl font-semibold tracking-[0.02em]">{globalId}</p>
@@ -72,6 +80,15 @@ export default async function ProfilePage({
               <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#7A8390]">Account protection</p>
               <p className="mt-4 text-lg font-extrabold text-[#0B1F3A]">Session protected</p>
               <Link href="/profile/security" className="mt-3 inline-flex text-xs font-extrabold text-[#956A13]">Review devices & methods →</Link>
+            </article>
+            <article className="rounded-[26px] border border-[#D8D2C4] bg-white p-6">
+              <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#7A8390]">Membership</p>
+              <p className="mt-4 text-lg font-extrabold text-[#0B1F3A]">
+                {billing.plan === "premium" ? "TGPI Premium" : "TGPI Free"}
+              </p>
+              <Link href={billing.plan === "premium" ? "/premium" : "/pricing"} className="mt-3 inline-flex text-xs font-extrabold text-[#956A13]">
+                {billing.plan === "premium" ? "Open Premium →" : "View Premium →"}
+              </Link>
             </article>
           </div>
         </div>

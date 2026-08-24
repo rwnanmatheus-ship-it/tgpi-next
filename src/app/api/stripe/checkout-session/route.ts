@@ -1,6 +1,9 @@
 import { NextResponse } from "next/server";
 import { requireApiUser, TgpiAuthenticationError } from "@/lib/auth/guards";
+import { getUserBillingRecord } from "@/lib/billing.server";
 import { getStripeServer } from "@/lib/stripe";
+
+const CHECKOUT_SESSION_ID = /^cs_(?:test_|live_)?[A-Za-z0-9]+$/;
 
 export async function GET(request: Request) {
   try {
@@ -8,9 +11,13 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const sessionId = searchParams.get("session_id")?.trim();
 
-    if (!sessionId) {
+    if (
+      !sessionId ||
+      sessionId.length > 255 ||
+      !CHECKOUT_SESSION_ID.test(sessionId)
+    ) {
       return NextResponse.json(
-        { error: "Missing session_id." },
+        { error: "Invalid session_id." },
         { status: 400 }
       );
     }
@@ -27,10 +34,14 @@ export async function GET(request: Request) {
       );
     }
 
+    const billing = await getUserBillingRecord(user.uid);
+
     return NextResponse.json({
       id: session.id,
       paymentStatus: session.payment_status,
       status: session.status,
+      plan: billing.plan,
+      subscriptionStatus: billing.status,
       subscriptionId:
         typeof session.subscription === "string"
           ? session.subscription
