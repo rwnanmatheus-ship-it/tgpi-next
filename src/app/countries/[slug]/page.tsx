@@ -392,7 +392,10 @@ export default async function CountryPage({ params }: CountryPageProps) {
           </div>
         </section>
 
-        <section className="mt-8 grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
+        <section
+          id="cost-of-living"
+          className="mt-8 scroll-mt-28 grid gap-6 lg:grid-cols-[0.95fr_1.05fr]"
+        >
           <div className="rounded-[1.5rem] border border-[#D8D0C0] bg-white/90 p-6 shadow-[0_18px_55px_rgba(7,26,50,0.08)]">
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#8A641F]">
               Cost intelligence
@@ -450,7 +453,10 @@ export default async function CountryPage({ params }: CountryPageProps) {
           />
         </section>
 
-        <section className="mt-8 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]">
+        <section
+          id="documents-to-verify"
+          className="mt-8 scroll-mt-28 grid gap-6 lg:grid-cols-[1.1fr_0.9fr]"
+        >
           <ActionChecklist
             title="First 30 days checklist"
             subtitle={`A practical first layer for researching ${country.name}.`}
