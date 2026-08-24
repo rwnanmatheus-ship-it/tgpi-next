@@ -469,7 +469,10 @@ function ComparisonMatrix({ countries, goal, comparisonScores }: {
   comparisonScores: Record<string, number>;
 }) {
   return (
-    <section className="mt-6 overflow-hidden rounded-[30px] border border-[var(--tgpi-border)] bg-white shadow-[var(--tgpi-shadow-soft)]">
+    <section
+      id="comparison-matrix"
+      className="mt-6 scroll-mt-28 overflow-hidden rounded-[30px] border border-[var(--tgpi-border)] bg-white shadow-[var(--tgpi-shadow-soft)]"
+    >
       <div className="border-b border-[var(--tgpi-border-soft)] p-6">
         <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold-strong)]">
           Comparison matrix
