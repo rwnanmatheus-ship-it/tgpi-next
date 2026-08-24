@@ -48,7 +48,11 @@ export default async function ProfilePage({
     session.userId,
   );
   const controlledAccessMode = await getControlledPremiumAccessMode(
-    session.userId,
+    {
+      uid: session.userId,
+      email,
+      emailVerified,
+    },
   );
   const hasPremiumAccess =
     billing.plan === "premium" || Boolean(controlledAccessMode);

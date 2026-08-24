@@ -52,19 +52,23 @@ or billing metadata to Clerk and it is rejected on the official TGPI domain.
 ## Founder Access
 
 `TGPI_FOUNDER_USER_IDS` grants controlled Premium access to approved founder
-accounts before Stripe is activated. It is a server-only, comma-separated
-allowlist of Clerk User IDs and must be configured only in Vercel Production.
+accounts before Stripe is activated. `TGPI_FOUNDER_EMAILS` is an optional
+fallback for Clerk instances that assign different User IDs to the same person.
+Both variables are server-only, comma-separated allowlists and must be
+configured only in Vercel Production.
 
 Founder Access is granted only when all three conditions are true:
 
 1. `VERCEL_ENV` is exactly `production`;
 2. the current request hostname is exactly `theglobalpolymath.com` or
    `www.theglobalpolymath.com`;
-3. the authenticated Clerk User ID is in the allowlist.
+3. the authenticated Clerk User ID is in the ID allowlist, or the user's
+   verified primary email is in the email allowlist.
 
 The permission is evaluated on every request, does not alter Clerk billing
 metadata and does not create a Stripe customer or subscription. Removing the
-user ID from the Production variable and redeploying revokes the permission.
+matching ID and email from the Production variables and redeploying revokes the
+permission.
 
 ## Required Vercel variables
 
@@ -77,6 +81,7 @@ user ID from the Production variable and redeploying revokes the permission.
 | `NEXT_PUBLIC_APP_URL` | Preview URL | `https://www.theglobalpolymath.com` |
 | `TGPI_PREMIUM_PREVIEW_USER_IDS` | Founder/test Clerk IDs | Never configure |
 | `TGPI_FOUNDER_USER_IDS` | Never configure | Approved founder Clerk IDs |
+| `TGPI_FOUNDER_EMAILS` | Never configure | Approved verified founder emails |
 
 Never reuse test values in Production or live values in Preview.
 

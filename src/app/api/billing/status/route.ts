@@ -8,7 +8,7 @@ export async function GET() {
     const user = await requireApiUser();
     const [billing, controlledAccessMode] = await Promise.all([
       getUserBillingRecord(user.uid),
-      getControlledPremiumAccessMode(user.uid),
+      getControlledPremiumAccessMode(user),
     ]);
     const hasControlledAccess = Boolean(controlledAccessMode);
 

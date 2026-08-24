@@ -82,7 +82,12 @@ export async function requirePremium() {
     session.userId,
   );
   const controlledAccessMode = await getControlledPremiumAccessMode(
-    session.userId,
+    {
+      uid: session.userId,
+      email: user.primaryEmailAddress?.emailAddress,
+      emailVerified:
+        user.primaryEmailAddress?.verification?.status === "verified",
+    },
   );
 
   if (billing.plan !== "premium" && !controlledAccessMode) {

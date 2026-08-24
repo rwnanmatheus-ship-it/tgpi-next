@@ -1,6 +1,9 @@
 import "server-only";
 
-import { hasFounderAccess } from "@/lib/founder-access.server";
+import {
+  hasFounderAccess,
+  type FounderIdentity,
+} from "@/lib/founder-access.server";
 import { hasPremiumPreviewAccess } from "@/lib/premium-preview.server";
 import type { PremiumAccessMode } from "@/types";
 
@@ -10,10 +13,10 @@ export type ControlledPremiumAccessMode = Extract<
 >;
 
 export async function getControlledPremiumAccessMode(
-  uid: string,
+  identity: FounderIdentity,
 ): Promise<ControlledPremiumAccessMode | null> {
-  if (await hasFounderAccess(uid)) return "founder";
-  if (await hasPremiumPreviewAccess(uid)) return "preview";
+  if (await hasFounderAccess(identity)) return "founder";
+  if (await hasPremiumPreviewAccess(identity.uid)) return "preview";
 
   return null;
 }
