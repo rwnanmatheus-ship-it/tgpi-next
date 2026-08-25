@@ -52,8 +52,8 @@ export default async function CoursesPage() {
           className="pointer-events-none absolute -left-24 top-[-7rem] h-80 w-80 rounded-full bg-[var(--tgpi-gold)]/10 blur-3xl"
           aria-hidden="true"
         />
-        <div className="relative grid lg:min-h-[520px] lg:grid-cols-[0.92fr_1.08fr] xl:min-h-[540px]">
-          <div className="flex flex-col justify-center p-7 sm:p-9 lg:p-10 xl:p-12">
+        <div className="relative grid lg:h-[590px] lg:grid-cols-[1.12fr_.88fr] xl:h-[570px]">
+          <div className="flex flex-col justify-center p-7 sm:p-9 lg:p-9 xl:p-10">
             <div className="flex flex-wrap items-center gap-2">
               <span className="rounded-full border border-[var(--tgpi-gold)]/35 bg-[var(--tgpi-gold)]/10 px-3 py-2 text-[9px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-light)]">
                 TGPI Learning Intelligence
@@ -62,7 +62,7 @@ export default async function CoursesPage() {
                 Practical · Global · Connected
               </span>
             </div>
-            <h1 className="mt-6 max-w-2xl text-[clamp(2.8rem,5.2vw,4.9rem)] font-semibold leading-[0.94] tracking-[-0.048em]">
+            <h1 className="mt-5 max-w-2xl text-[clamp(2.65rem,4.5vw,4.2rem)] font-semibold leading-[0.96] tracking-[-0.045em]">
               Build the capabilities to move through the world.
             </h1>
             <p className="mt-5 max-w-xl text-sm leading-7 text-white/68 sm:text-base sm:leading-8">
@@ -71,10 +71,10 @@ export default async function CoursesPage() {
               passive consumption.
             </p>
 
-            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="#learning-paths"
-                className="inline-flex min-h-14 items-center justify-center rounded-2xl bg-[var(--tgpi-gold)] px-6 text-sm font-extrabold text-[var(--tgpi-navy-deep)] transition hover:-translate-y-0.5 hover:bg-[var(--tgpi-gold-light)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                className="inline-flex min-h-13 items-center justify-center rounded-2xl bg-[var(--tgpi-gold)] px-6 text-sm font-extrabold text-[var(--tgpi-navy-deep)] transition hover:-translate-y-0.5 hover:bg-[var(--tgpi-gold-light)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
               >
                 Find my learning path
                 <span className="ml-2" aria-hidden="true">
@@ -83,24 +83,20 @@ export default async function CoursesPage() {
               </Link>
               <Link
                 href={learningHref}
-                className="inline-flex min-h-14 items-center justify-center rounded-2xl border border-white/20 bg-white/5 px-6 text-sm font-extrabold text-white transition hover:-translate-y-0.5 hover:border-[var(--tgpi-gold)]/60 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
+                className="inline-flex min-h-13 items-center justify-center rounded-2xl border border-white/20 bg-white/5 px-6 text-sm font-extrabold text-white transition hover:-translate-y-0.5 hover:border-[var(--tgpi-gold)]/60 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
               >
                 {userId ? "Continue flagship course" : "Create a free Global Key"}
               </Link>
             </div>
 
-            <p className="mt-4 text-xs font-bold leading-6 text-white/45">
-              Built for mobile continuity. Designed for deeper work on desktop.
-            </p>
-
-            <dl className="mt-7 grid grid-cols-3 gap-2 border-t border-white/10 pt-6">
+            <dl className="mt-6 grid grid-cols-3 gap-2 border-t border-white/10 pt-5">
               {[
                 ["04", "Capability paths"],
                 ["18", "Live scenarios"],
                 ["01", "Global profile"],
               ].map(([value, label]) => (
                 <div key={label}>
-                  <dt className="text-2xl font-extrabold text-[var(--tgpi-gold-light)] sm:text-3xl">
+                  <dt className="text-2xl font-extrabold text-[var(--tgpi-gold-light)]">
                     {value}
                   </dt>
                   <dd className="mt-1 text-[9px] font-extrabold uppercase tracking-[0.15em] text-white/45">
@@ -111,7 +107,7 @@ export default async function CoursesPage() {
             </dl>
           </div>
 
-          <div className="relative min-h-[270px] overflow-hidden border-t border-white/10 bg-[var(--tgpi-navy-deep)] sm:min-h-[360px] lg:min-h-0 lg:border-l lg:border-t-0">
+          <div className="relative min-h-[240px] overflow-hidden border-t border-white/10 bg-[var(--tgpi-navy-deep)] sm:min-h-[320px] lg:min-h-0 lg:border-l lg:border-t-0">
             <Image
               src="/images/learning/tgpi-learning-hero-v2.webp"
               alt="TGPI global knowledge observatory with an illuminated world atlas"
