@@ -116,10 +116,27 @@ export function parseActivationMutation(value: unknown): ActivationMutation {
   if (value.type === "complete_lesson") {
     const course = requireCourse(value.courseId);
     const lessonId = requireSafeId(value.lessonId, "Lesson");
-    if (!getCourseLessonIds(course).includes(lessonId)) {
+    const lesson = course.modules
+      .flatMap((courseModule) => courseModule.lessons)
+      .find((courseLesson) => courseLesson.id === lessonId);
+    if (!lesson) {
       throw new ActivationInputError("Lesson was not found in this course.");
     }
-    return { courseId: course.id, lessonId, type: value.type };
+    const checkpointOptionId = requireSafeId(
+      value.checkpointOptionId,
+      "Checkpoint answer",
+    );
+    if (checkpointOptionId !== lesson.checkpoint.correctOptionId) {
+      throw new ActivationInputError(
+        "Pass the lesson checkpoint before completing it.",
+      );
+    }
+    return {
+      checkpointOptionId,
+      courseId: course.id,
+      lessonId,
+      type: value.type,
+    };
   }
 
   if (value.type === "save_cost_estimate") {
@@ -280,17 +297,26 @@ export function applyActivationMutation(
     const course = requireCourse(mutation.courseId);
     const lessonIds = getCourseLessonIds(course);
     const previous = next.courseProgress[course.id];
+    const isCurrentVersion = previous?.courseVersion === course.version;
+    const retainedLessonIds = (previous?.completedLessonIds || []).filter(
+      (lessonId) => lessonIds.includes(lessonId),
+    );
     const completedLessonIds =
       mutation.type === "complete_lesson"
         ? Array.from(
-            new Set([...(previous?.completedLessonIds || []), mutation.lessonId]),
+            new Set([...retainedLessonIds, mutation.lessonId]),
           ).filter((lessonId) => lessonIds.includes(lessonId))
-        : previous?.completedLessonIds || [];
+        : retainedLessonIds;
     const completed =
       lessonIds.length > 0 && completedLessonIds.length >= lessonIds.length;
     next.courseProgress[course.id] = {
-      completedAt: completed ? previous?.completedAt || now : undefined,
+      completedAt: completed
+        ? isCurrentVersion
+          ? previous?.completedAt || now
+          : now
+        : undefined,
       completedLessonIds,
+      courseVersion: course.version,
       startedAt: previous?.startedAt || now,
       totalLessons: lessonIds.length,
       updatedAt: now,

@@ -64,7 +64,7 @@ export default function HomeLearningPortal() {
 
               <div className="mt-5 grid gap-3">
                 {coursesOverview.slice(0, 3).map((course, index) => (
-                  <Link key={course.title} href="/courses" className="group grid grid-cols-[auto_1fr_auto] items-center gap-4 rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:-translate-y-0.5 hover:border-[var(--tgpi-gold)]/55 hover:bg-white/[0.08] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]">
+                  <Link key={course.id} href={course.status === "available" ? course.href : "/courses"} className="group grid grid-cols-[auto_1fr_auto] items-center gap-4 rounded-2xl border border-white/10 bg-white/5 p-4 transition hover:-translate-y-0.5 hover:border-[var(--tgpi-gold)]/55 hover:bg-white/[0.08] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]">
                     <span className="grid h-9 w-9 place-items-center rounded-full bg-white/10 text-xs font-extrabold text-[var(--tgpi-gold-light)]">0{index + 1}</span>
                     <span>
                       <span className="block text-sm font-extrabold text-white">{course.title}</span>

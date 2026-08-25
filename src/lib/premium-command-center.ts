@@ -175,12 +175,16 @@ export function buildPremiumCommandCenterModel(
     ? courses.find((course) => course.id === activeCourseEntry[0])
     : courses[0];
   const activeCourseProgress = activeCourseEntry?.[1];
-  const totalLessons = activeCourseProgress?.totalLessons ||
-    (activeCourse ? getCourseLessonCount(activeCourse) : 0);
-  const completedLessons = Math.min(
-    activeCourseProgress?.completedLessonIds.length || 0,
-    totalLessons,
+  const activeLessonIds = new Set(
+    activeCourse?.modules.flatMap((courseModule) =>
+      courseModule.lessons.map((lesson) => lesson.id),
+    ) || [],
   );
+  const totalLessons = activeCourse ? getCourseLessonCount(activeCourse) : 0;
+  const completedLessons =
+    activeCourseProgress?.completedLessonIds.filter((lessonId) =>
+      activeLessonIds.has(lessonId),
+    ).length || 0;
   const learning: PremiumLearningSummary = {
     completedLessons,
     href: activeCourse ? `/courses/${activeCourse.id}` : "/courses",

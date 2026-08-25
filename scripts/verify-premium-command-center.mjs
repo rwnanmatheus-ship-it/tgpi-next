@@ -49,7 +49,29 @@ const sourceContracts = [
   },
   {
     file: "src/data/courses.ts",
-    checks: [/id: "english-abroad"/],
+    checks: [/englishAbroadCourse/, /getCourseLesson/, /getCourseLessonCount/],
+  },
+  {
+    file: "src/data/courses/english-abroad/index.ts",
+    checks: [
+      /id: "english-abroad"/,
+      /version: "1\.0\.0"/,
+      /estimatedMinutes: 370/,
+      /arrivalModule/,
+      /housingModule/,
+      /dailyIndependenceModule/,
+      /careerModule/,
+      /safetyCultureModule/,
+      /globalActionModule/,
+    ],
+  },
+  {
+    file: "src/app/courses/[id]/lessons/[lessonId]/page.tsx",
+    checks: [/LessonExperience/, /generateMetadata/, /generateStaticParams/],
+  },
+  {
+    file: "src/lib/activation-store.server.ts",
+    checks: [/checkpointOptionId/, /lesson\.checkpoint\.correctOptionId/],
   },
   {
     file: "src/app/api/billing/status/route.ts",
@@ -74,6 +96,11 @@ const runtimeContracts = [
   {
     label: "Learning path signed-out protection",
     path: "/courses/english-abroad",
+    validate: validateSignInRedirect,
+  },
+  {
+    label: "Course lesson signed-out protection",
+    path: "/courses/english-abroad/lessons/intro",
     validate: validateSignInRedirect,
   },
   {

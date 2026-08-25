@@ -39,6 +39,7 @@ export type DocumentReviewProgress = {
 export type CourseProgress = {
   completedAt?: string;
   completedLessonIds: string[];
+  courseVersion: string;
   startedAt: string;
   totalLessons: number;
   updatedAt: string;
@@ -84,6 +85,7 @@ export type ActivationMutation =
       type: "start_course";
     }
   | {
+      checkpointOptionId: string;
       courseId: string;
       lessonId: string;
       type: "complete_lesson";
@@ -227,6 +229,7 @@ function normalizeCourseProgress(value: unknown) {
           {
             completedAt: safeDate(progress.completedAt) || undefined,
             completedLessonIds: safeStringArray(progress.completedLessonIds, 40),
+            courseVersion: safeString(progress.courseVersion, 24),
             startedAt: safeDate(progress.startedAt),
             totalLessons: Math.min(
               Math.max(Number(progress.totalLessons) || 0, 0),
@@ -313,7 +316,14 @@ export function getCourseProgressStatus(
   progress?: CourseProgress,
 ): ActivationStatus {
   if (!progress) return "not_started";
-  if (progress.completedAt) return "completed";
+  if (
+    progress.courseVersion &&
+    progress.completedAt &&
+    progress.totalLessons > 0 &&
+    progress.completedLessonIds.length >= progress.totalLessons
+  ) {
+    return "completed";
+  }
   return "in_progress";
 }
 

@@ -73,7 +73,7 @@ export default async function CoursesPage() {
         <div className="mt-12 grid gap-6 md:grid-cols-2">
           {courses.map((course, index) => (
             <article
-              key={course.title}
+              key={course.id}
               className="group overflow-hidden rounded-[30px] border border-[#D8D2C4] bg-white shadow-[0_24px_70px_rgba(11,31,58,0.08)] transition duration-300 hover:-translate-y-1 hover:shadow-[0_32px_90px_rgba(11,31,58,0.14)]"
             >
               <TGPIEditorialVisual
@@ -93,10 +93,10 @@ export default async function CoursesPage() {
                 <p className="mt-3 text-sm leading-7 text-[#566070]">{course.desc}</p>
 
                 <Link
-                  href={index === 0 ? learningHref : "/premium-waitlist"}
+                  href={course.status === "available" ? learningHref : course.href}
                   className="mt-6 inline-flex rounded-2xl bg-[#0B1F3A] px-5 py-3 text-sm font-black text-white transition hover:bg-[#132B4C]"
                 >
-                  {index === 0 ? "Start learning" : "Join path waitlist"}
+                  {course.status === "available" ? "Start learning" : "Join path waitlist"}
                 </Link>
               </div>
             </article>
