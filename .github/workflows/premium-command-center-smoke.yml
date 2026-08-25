@@ -1,0 +1,52 @@
+name: Premium Command Center smoke
+
+on:
+  workflow_dispatch:
+    inputs:
+      base_url:
+        description: Deployment URL to verify
+        required: true
+        default: https://www.theglobalpolymath.com
+        type: string
+  deployment_status:
+
+permissions:
+  contents: read
+
+jobs:
+  verify-premium:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.deployment_status.state == 'success' &&
+      (startsWith(github.event.deployment.environment, 'Production') ||
+      startsWith(github.event.deployment.environment, 'production')))
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Check out deployment source
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Resolve deployment URL
+        id: target
+        shell: bash
+        env:
+          DEPLOYMENT_URL: ${{ github.event.deployment_status.environment_url }}
+          MANUAL_URL: ${{ inputs.base_url }}
+        run: |
+          if [[ -n "$DEPLOYMENT_URL" ]]; then
+            echo "base_url=$DEPLOYMENT_URL" >> "$GITHUB_OUTPUT"
+          elif [[ -n "$MANUAL_URL" ]]; then
+            echo "base_url=$MANUAL_URL" >> "$GITHUB_OUTPUT"
+          else
+            echo "No deployment URL was provided." >&2
+            exit 1
+          fi
+
+      - name: Verify Premium Command Center
+        run: node scripts/verify-premium-command-center.mjs "${{ steps.target.outputs.base_url }}"

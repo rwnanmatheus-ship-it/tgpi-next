@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "generate:country-visuals": "node --experimental-strip-types scripts/generate-country-visuals.mjs",
+    "verify:premium": "node scripts/verify-premium-command-center.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"
