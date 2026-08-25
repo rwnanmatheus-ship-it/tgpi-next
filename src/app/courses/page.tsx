@@ -48,12 +48,22 @@ export default async function CoursesPage() {
   return (
     <TGPIPageShell>
       <section className="relative isolate overflow-hidden rounded-[30px] border border-white/10 bg-[var(--tgpi-navy)] text-white shadow-[var(--tgpi-shadow-premium)] sm:rounded-[36px]">
+        <Image
+          src="/images/learning/tgpi-learning-hero-v2.webp"
+          alt="TGPI global knowledge observatory with an illuminated world atlas"
+          fill
+          priority
+          quality={88}
+          sizes="100vw"
+          className="object-cover object-[68%_center] sm:object-[64%_center] lg:object-center"
+        />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(4,20,38,0.93)_0%,rgba(4,20,38,0.87)_68%,rgba(4,20,38,0.76)_100%)] lg:bg-[linear-gradient(90deg,rgba(4,20,38,0.98)_0%,rgba(4,20,38,0.92)_42%,rgba(4,20,38,0.34)_72%,rgba(4,20,38,0.14)_100%)]" />
         <div
           className="pointer-events-none absolute -left-24 top-[-7rem] h-80 w-80 rounded-full bg-[var(--tgpi-gold)]/10 blur-3xl"
           aria-hidden="true"
         />
-        <div className="relative grid lg:h-[590px] lg:grid-cols-[1.12fr_.88fr] xl:h-[570px]">
-          <div className="flex flex-col justify-center p-7 sm:p-9 lg:p-9 xl:p-10">
+        <div className="relative z-10 flex min-h-[620px] flex-col justify-center p-7 sm:min-h-[580px] sm:p-9 lg:h-[540px] lg:min-h-0 lg:p-10 xl:p-12">
+          <div className="max-w-[680px]">
             <div className="flex flex-wrap items-center gap-2">
               <span className="rounded-full border border-[var(--tgpi-gold)]/35 bg-[var(--tgpi-gold)]/10 px-3 py-2 text-[9px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-light)]">
                 TGPI Learning Intelligence
@@ -89,7 +99,7 @@ export default async function CoursesPage() {
               </Link>
             </div>
 
-            <dl className="mt-6 grid grid-cols-3 gap-2 border-t border-white/10 pt-5">
+            <dl className="mt-6 grid max-w-xl grid-cols-3 gap-2 border-t border-white/10 pt-5">
               {[
                 ["04", "Capability paths"],
                 ["18", "Live scenarios"],
@@ -106,34 +116,13 @@ export default async function CoursesPage() {
               ))}
             </dl>
           </div>
-
-          <div className="relative min-h-[240px] overflow-hidden border-t border-white/10 bg-[var(--tgpi-navy-deep)] sm:min-h-[320px] lg:min-h-0 lg:border-l lg:border-t-0">
-            <Image
-              src="/images/learning/tgpi-learning-hero-v2.webp"
-              alt="TGPI global knowledge observatory with an illuminated world atlas"
-              fill
-              priority
-              quality={88}
-              sizes="(max-width: 1024px) 100vw, 55vw"
-              className="object-cover object-[62%_center]"
-            />
-            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(4,20,38,0.02)_40%,rgba(4,20,38,0.82)_100%)] lg:bg-[linear-gradient(90deg,rgba(4,20,38,0.38)_0%,rgba(4,20,38,0.02)_34%,rgba(4,20,38,0.18)_100%)]" />
-            <div className="absolute inset-x-5 bottom-5 flex items-end justify-between gap-6 sm:inset-x-7 sm:bottom-7 lg:inset-x-8 lg:bottom-8">
-              <div>
-                <p className="text-[9px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-light)]">
-                  The TGPI Learning System
-                </p>
-                <p className="mt-2 max-w-sm text-sm font-bold leading-6 text-white sm:text-base">
-                  One connected capability profile for a life without borders.
-                </p>
-              </div>
-              <span
-                className="hidden h-12 w-12 shrink-0 place-items-center rounded-full border border-white/20 bg-[var(--tgpi-navy-deep)]/55 text-lg text-[var(--tgpi-gold-light)] backdrop-blur-md sm:grid"
-                aria-hidden="true"
-              >
-                ↗
-              </span>
-            </div>
+          <div className="absolute bottom-8 right-9 hidden max-w-[270px] rounded-[22px] border border-white/15 bg-[var(--tgpi-navy-deep)]/55 p-5 text-right backdrop-blur-md lg:block">
+            <p className="text-[9px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-light)]">
+              The TGPI Learning System
+            </p>
+            <p className="mt-2 text-sm font-bold leading-6 text-white/85">
+              One connected capability profile for a life without borders.
+            </p>
           </div>
         </div>
       </section>
