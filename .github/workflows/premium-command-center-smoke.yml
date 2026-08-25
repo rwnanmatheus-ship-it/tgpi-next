@@ -36,17 +36,22 @@ jobs:
         id: target
         shell: bash
         env:
-          DEPLOYMENT_URL: ${{ github.event.deployment_status.environment_url }}
+          EVENT_NAME: ${{ github.event_name }}
           MANUAL_URL: ${{ inputs.base_url }}
+          PRODUCTION_URL: https://www.theglobalpolymath.com
         run: |
-          if [[ -n "$DEPLOYMENT_URL" ]]; then
-            echo "base_url=$DEPLOYMENT_URL" >> "$GITHUB_OUTPUT"
-          elif [[ -n "$MANUAL_URL" ]]; then
-            echo "base_url=$MANUAL_URL" >> "$GITHUB_OUTPUT"
+          if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
+            target_url="$MANUAL_URL"
           else
+            target_url="$PRODUCTION_URL"
+          fi
+
+          if [[ -z "$target_url" ]]; then
             echo "No deployment URL was provided." >&2
             exit 1
           fi
+
+          echo "base_url=$target_url" >> "$GITHUB_OUTPUT"
 
       - name: Verify Premium Command Center
         run: node scripts/verify-premium-command-center.mjs "${{ steps.target.outputs.base_url }}"
