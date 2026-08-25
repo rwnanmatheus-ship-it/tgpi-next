@@ -2,6 +2,7 @@ import type { CourseModule } from "@/types/course";
 
 export const globalActionModule = {
   id: "global-action",
+  competencyIds: ["integrated-global-action"],
   title: "Global Action Lab",
   description:
     "Combine the course language into realistic tasks that require planning, listening and decisive follow-through.",

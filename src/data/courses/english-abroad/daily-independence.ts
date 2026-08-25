@@ -2,6 +2,7 @@ import type { CourseModule } from "@/types/course";
 
 export const dailyIndependenceModule = {
   id: "daily-independence",
+  competencyIds: ["everyday-independence"],
   title: "Everyday Independence",
   description:
     "Manage transport, purchases and healthcare without depending on another person to translate.",

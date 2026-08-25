@@ -2,6 +2,7 @@ import type { CourseModule } from "@/types/course";
 
 export const safetyCultureModule = {
   id: "safety-culture",
+  competencyIds: ["safety-cultural-confidence"],
   title: "Safety, Rights & Cultural Confidence",
   description:
     "Use calm, direct language when safety, boundaries or cultural differences raise the stakes.",

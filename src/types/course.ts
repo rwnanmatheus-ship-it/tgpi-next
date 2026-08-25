@@ -27,6 +27,76 @@ export type CoursePracticeTask = {
   title: string;
 };
 
+export type CourseDeliveryStatus = "live" | "planned";
+
+export type CourseCompetencyLevel =
+  | "foundation"
+  | "applied"
+  | "independent";
+
+export type CourseCompetency = {
+  canDoStatement: string;
+  description: string;
+  evidence: string[];
+  id: string;
+  level: CourseCompetencyLevel;
+  title: string;
+};
+
+export type CourseLearningPhase = {
+  description: string;
+  id: "orient" | "learn" | "rehearse" | "prove" | "reflect";
+  title: string;
+};
+
+export type CourseAssessmentComponent = {
+  count: number;
+  description: string;
+  id: string;
+  status: CourseDeliveryStatus;
+  title: string;
+  weight: number;
+};
+
+export type CourseRubricDimension = {
+  description: string;
+  id: string;
+  title: string;
+  weight: number;
+};
+
+export type CourseAssessmentStandard = {
+  components: CourseAssessmentComponent[];
+  masteryThreshold: number;
+  retakePolicy: string;
+  rubric: CourseRubricDimension[];
+};
+
+export type CourseFrameworkAlignment = {
+  disclaimer: string;
+  framework: string;
+  level: string;
+};
+
+export type CourseCredentialStandard = {
+  evidenceRequired: string[];
+  frameworkTargets: string[];
+  includes: string[];
+  issuer: "TGPI — The Global Polymath Institute";
+  status: CourseDeliveryStatus;
+  title: string;
+  type: "Professional Certificate";
+  verification: string;
+};
+
+export type CourseLearningStandard = {
+  description: string;
+  frameworkAlignments: CourseFrameworkAlignment[];
+  phases: CourseLearningPhase[];
+  title: string;
+  version: string;
+};
+
 export type CourseLesson = {
   checkpoint: CourseCheckpoint;
   coachNotes: string[];
@@ -47,6 +117,7 @@ export type CourseLesson = {
 };
 
 export type CourseModule = {
+  competencyIds: string[];
   description: string;
   id: string;
   lessons: CourseLesson[];
@@ -55,12 +126,16 @@ export type CourseModule = {
 };
 
 export type Course = {
+  assessment: CourseAssessmentStandard;
   audience: string;
   category: string;
   completionRequirements: string[];
+  competencies: CourseCompetency[];
+  credential: CourseCredentialStandard;
   description: string;
   estimatedMinutes: number;
   id: string;
+  learningStandard: CourseLearningStandard;
   level: string;
   modules: CourseModule[];
   outcomes: string[];

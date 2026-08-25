@@ -21,9 +21,9 @@ const learningPrinciples = [
   },
   {
     label: "Active proof",
-    title: "Progress requires a decision.",
+    title: "Mastery requires evidence.",
     description:
-      "Checkpoints validate understanding before a lesson can be completed and saved.",
+      "Formative checkpoints support learning; performance gates and a capstone determine credential eligibility.",
   },
   {
     label: "Connected growth",
@@ -36,6 +36,18 @@ const learningPrinciples = [
     title: "One identity across every device.",
     description:
       "Your progress follows your private TGPI Global Key so you can stop, return and continue with clarity.",
+  },
+  {
+    label: "Observable capability",
+    title: "The record names what you can do.",
+    description:
+      "Every module maps to a can-do statement, performance evidence and a transparent assessment rubric.",
+  },
+  {
+    label: "Credential integrity",
+    title: "A certificate must be verifiable.",
+    description:
+      "TGPI credentials release only after the mastery threshold and include a public status without exposing private data.",
   },
 ] as const;
 
@@ -148,8 +160,9 @@ export default async function CoursesPage() {
               Education becomes valuable when it changes what you can do next.
             </h2>
             <p className="mt-6 text-sm leading-7 text-white/65 sm:text-base">
-              Every TGPI path is designed to convert knowledge into capability,
-              and capability into better decisions across borders.
+              Every new path must pass the same publication gates: clear
+              capabilities, applied learning and evidence strong enough to
+              support a professional credential.
             </p>
           </div>
 
@@ -159,7 +172,7 @@ export default async function CoursesPage() {
                 key={principle.label}
                 className={`p-7 sm:p-8 ${
                   index % 2 === 0 ? "sm:border-r sm:border-[var(--tgpi-border-soft)]" : ""
-                } ${index < 2 ? "border-b border-[var(--tgpi-border-soft)]" : ""}`}
+                  } ${index < learningPrinciples.length - 2 ? "border-b border-[var(--tgpi-border-soft)]" : ""} ${index === learningPrinciples.length - 2 ? "border-b border-[var(--tgpi-border-soft)] sm:border-b-0" : ""}`}
               >
                 <p className="text-[9px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-strong)]">
                   {String(index + 1).padStart(2, "0")} · {principle.label}

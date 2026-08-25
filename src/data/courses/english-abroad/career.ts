@@ -2,6 +2,7 @@ import type { CourseModule } from "@/types/course";
 
 export const careerModule = {
   id: "career",
+  competencyIds: ["professional-communication"],
   title: "Work & Professional Life",
   description:
     "Present your value, interview with structure and participate in everyday workplace communication.",

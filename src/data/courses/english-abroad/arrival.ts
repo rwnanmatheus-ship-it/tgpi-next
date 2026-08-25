@@ -2,6 +2,7 @@ import type { CourseModule } from "@/types/course";
 
 export const arrivalModule = {
   id: "arrival",
+  competencyIds: ["first-contact-communication"],
   title: "Arrival & First Contact",
   description:
     "Communicate clearly from the moment you land and reduce uncertainty during your first hours abroad.",

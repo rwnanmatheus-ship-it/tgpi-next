@@ -2,6 +2,7 @@ import type { CourseModule } from "@/types/course";
 
 export const housingModule = {
   id: "housing",
+  competencyIds: ["housing-navigation"],
   title: "Housing & Daily Setup",
   description:
     "Find accommodation, understand essential terms and solve common problems in your new home.",

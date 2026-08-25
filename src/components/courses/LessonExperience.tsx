@@ -44,6 +44,7 @@ function Lesson({
   const [checkpointResult, setCheckpointResult] = useState<
     "idle" | "correct" | "incorrect"
   >("idle");
+  const [attemptCount, setAttemptCount] = useState(0);
   const [isSaving, setIsSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState("");
   const startRequested = useRef(false);
@@ -61,6 +62,9 @@ function Lesson({
     ? Math.round((completedLessonIds.length / lessons.length) * 100)
     : 0;
   const checkpointPassed = checkpointResult === "correct" || isCompleted;
+  const moduleCompetencies = course.competencies.filter((competency) =>
+    courseModule.competencyIds.includes(competency.id),
+  );
 
   useEffect(() => {
     const needsCurrentVersion =
@@ -76,6 +80,7 @@ function Lesson({
 
   function checkAnswer() {
     if (!selectedOptionId) return;
+    setAttemptCount((current) => current + 1);
     setCheckpointResult(
       selectedOptionId === lesson.checkpoint.correctOptionId
         ? "correct"
@@ -153,6 +158,9 @@ function Lesson({
               <span className="rounded-full border border-[var(--tgpi-border)] bg-white px-3 py-2 text-[10px] font-extrabold uppercase tracking-[0.16em] text-[var(--tgpi-muted)]">
                 {lesson.durationMinutes} minutes
               </span>
+              <span className="rounded-full border border-[var(--tgpi-gold)]/30 bg-[#FFF9E9] px-3 py-2 text-[10px] font-extrabold uppercase tracking-[0.16em] text-[var(--tgpi-gold-strong)]">
+                Applied mastery
+              </span>
               {isCompleted ? (
                 <span className="rounded-full bg-[#E4F3EB] px-3 py-2 text-[10px] font-extrabold uppercase tracking-[0.16em] text-[var(--tgpi-success)]">
                   ✓ Completed
@@ -169,24 +177,34 @@ function Lesson({
               {lesson.summary}
             </p>
 
-            <div className="mt-8 rounded-2xl border border-[var(--tgpi-gold)]/30 bg-[#FFF7DE] p-5">
-              <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-strong)]">
-                Lesson objective
-              </p>
-              <p className="mt-2 text-sm font-extrabold leading-7 text-[#6F5A31]">
-                {lesson.objective}
-              </p>
+            <div className="mt-8 grid overflow-hidden rounded-2xl border border-[var(--tgpi-gold)]/30 bg-[#FFF7DE] sm:grid-cols-2">
+              <div className="p-5">
+                <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-strong)]">
+                  Performance objective
+                </p>
+                <p className="mt-2 text-sm font-extrabold leading-7 text-[#6F5A31]">
+                  {lesson.objective}
+                </p>
+              </div>
+              <div className="border-t border-[var(--tgpi-gold)]/20 bg-white/35 p-5 sm:border-l sm:border-t-0">
+                <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-strong)]">
+                  Capability target
+                </p>
+                <p className="mt-2 text-sm font-extrabold leading-7 text-[var(--tgpi-navy)]">
+                  {moduleCompetencies.map((item) => item.title).join(" · ")}
+                </p>
+              </div>
             </div>
           </header>
 
           <div className="mt-7 grid gap-7">
-            <LessonSection eyebrow="The situation" title="Enter the scenario">
+            <LessonSection eyebrow="01 · Orient" title="Enter the scenario">
               <div className="rounded-2xl border-l-4 border-[var(--tgpi-gold)] bg-[var(--tgpi-navy)] p-6 text-base font-bold leading-8 text-white/80 sm:p-7">
                 {lesson.scenario}
               </div>
             </LessonSection>
 
-            <LessonSection eyebrow="Language toolkit" title="Four phrases to carry with you">
+            <LessonSection eyebrow="02 · Learn" title="Four phrases to carry with you">
               <div className="grid gap-4 sm:grid-cols-2">
                 {lesson.keyPhrases.map((item, index) => (
                   <div key={item.phrase} className="rounded-2xl border border-[var(--tgpi-border-soft)] bg-white p-5">
@@ -203,7 +221,7 @@ function Lesson({
               </div>
             </LessonSection>
 
-            <LessonSection eyebrow="Model conversation" title="See the language in motion">
+            <LessonSection eyebrow="02 · Learn" title="See the language in motion">
               <div className="grid gap-3">
                 {lesson.dialogue.map((line, index) => {
                   const isLearner = line.speaker === "You";
@@ -223,7 +241,7 @@ function Lesson({
               </div>
             </LessonSection>
 
-            <LessonSection eyebrow="Coach notes" title="Make it sound clear and natural">
+            <LessonSection eyebrow="02 · Learn" title="Make it sound clear and natural">
               <ul className="grid gap-3">
                 {lesson.coachNotes.map((note) => (
                   <li key={note} className="flex gap-4 rounded-2xl border border-[var(--tgpi-border-soft)] bg-white p-4 text-sm font-bold leading-7 text-[var(--tgpi-muted)]">
@@ -250,16 +268,35 @@ function Lesson({
               </div>
             </LessonSection>
 
-            <LessonSection eyebrow="Action rehearsal" title={lesson.practiceTask.title}>
+            <LessonSection eyebrow="03 · Rehearse" title={lesson.practiceTask.title}>
               <p className="text-sm leading-7 text-[var(--tgpi-muted)]">{lesson.practiceTask.instruction}</p>
               <div className="mt-5 rounded-2xl border border-dashed border-[var(--tgpi-gold)] bg-[#FFF9E9] p-5">
                 <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-gold-strong)]">Your rehearsal prompt</p>
                 <p className="mt-3 text-base font-extrabold leading-8 text-[var(--tgpi-navy)]">{lesson.practiceTask.prompt}</p>
               </div>
+              <div className="mt-5">
+                <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-gold-strong)]">Professional response rubric</p>
+                <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                  {course.assessment.rubric.map((dimension) => (
+                    <div key={dimension.id} className="rounded-2xl border border-[var(--tgpi-border-soft)] bg-white p-4">
+                      <div className="flex items-center justify-between gap-3">
+                        <p className="text-sm font-extrabold text-[var(--tgpi-navy)]">{dimension.title}</p>
+                        <span className="text-[10px] font-extrabold text-[var(--tgpi-gold-strong)]">{dimension.weight}%</span>
+                      </div>
+                      <p className="mt-2 text-xs leading-6 text-[var(--tgpi-muted)]">{dimension.description}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </LessonSection>
 
             <section id="checkpoint" className="scroll-mt-24 rounded-[28px] border border-[var(--tgpi-gold)]/35 bg-[#FFF7DE] p-6 shadow-[var(--tgpi-shadow-soft)] sm:p-8" aria-labelledby="checkpoint-title">
-              <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold-strong)]">Practical checkpoint</p>
+              <div className="flex flex-wrap items-center justify-between gap-3">
+                <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold-strong)]">04 · Prove</p>
+                <span className="rounded-full border border-[var(--tgpi-gold)]/30 bg-white/55 px-3 py-1.5 text-[9px] font-extrabold uppercase tracking-[0.14em] text-[#6F5A31]">
+                  Formative · not certificate-scored
+                </span>
+              </div>
               <h2 id="checkpoint-title" className="mt-3 text-3xl font-semibold sm:text-4xl">Prove the decision</h2>
               <fieldset className="mt-6">
                 <legend className="text-base font-extrabold leading-8 text-[var(--tgpi-navy)]">{lesson.checkpoint.prompt}</legend>
@@ -304,6 +341,12 @@ function Lesson({
                 ) : null}
               </div>
 
+              {attemptCount > 0 ? (
+                <p className="mt-3 text-xs font-bold text-[#7A6948]">
+                  Attempt {attemptCount}. Feedback is part of learning; certificate scoring begins only at the performance gates.
+                </p>
+              ) : null}
+
               <div className="mt-6 border-t border-[var(--tgpi-gold)]/25 pt-6">
                 <button
                   type="button"
@@ -319,6 +362,23 @@ function Lesson({
                 <p role="status" className="mt-3 min-h-5 text-xs font-bold text-[#6F4908]">{saveMessage || error}</p>
               </div>
             </section>
+
+            <LessonSection eyebrow="05 · Reflect" title="Transfer the skill to your real plan">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <div className="rounded-2xl border border-[var(--tgpi-border-soft)] bg-white p-5">
+                  <p className="text-[9px] font-extrabold uppercase tracking-[0.16em] text-[var(--tgpi-gold-strong)]">Context transfer</p>
+                  <p className="mt-3 text-sm font-extrabold leading-7 text-[var(--tgpi-navy)]">
+                    Where could this exact situation appear in your country, study or career plan?
+                  </p>
+                </div>
+                <div className="rounded-2xl border border-[var(--tgpi-border-soft)] bg-white p-5">
+                  <p className="text-[9px] font-extrabold uppercase tracking-[0.16em] text-[var(--tgpi-gold-strong)]">Retrieval target</p>
+                  <p className="mt-3 text-sm font-extrabold leading-7 text-[var(--tgpi-navy)]">
+                    Which phrase must you be able to produce tomorrow without looking?
+                  </p>
+                </div>
+              </div>
+            </LessonSection>
           </div>
 
           <nav className="mt-8 grid gap-3 sm:grid-cols-2" aria-label="Lesson navigation">
@@ -342,16 +402,10 @@ function Lesson({
           <div className="rounded-[26px] border border-[var(--tgpi-border)] bg-white p-6 shadow-[var(--tgpi-shadow-soft)]">
             <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-strong)]">Lesson rhythm</p>
             <ol className="mt-5 grid gap-4">
-              {[
-                ["01", "Enter the scenario"],
-                ["02", "Learn key phrases"],
-                ["03", "Study the dialogue"],
-                ["04", "Rehearse aloud"],
-                ["05", "Pass the checkpoint"],
-              ].map(([number, label]) => (
-                <li key={number} className="flex items-center gap-3 text-sm font-bold text-[var(--tgpi-muted)]">
-                  <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[var(--tgpi-canvas)] text-[10px] font-extrabold text-[var(--tgpi-gold-strong)]">{number}</span>
-                  {label}
+              {course.learningStandard.phases.map((phase, index) => (
+                <li key={phase.id} className="flex items-center gap-3 text-sm font-bold text-[var(--tgpi-muted)]">
+                  <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[var(--tgpi-canvas)] text-[10px] font-extrabold text-[var(--tgpi-gold-strong)]">{String(index + 1).padStart(2, "0")}</span>
+                  {phase.title}
                 </li>
               ))}
             </ol>
