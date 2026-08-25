@@ -47,13 +47,13 @@ export default async function CoursesPage() {
 
   return (
     <TGPIPageShell>
-      <section className="relative isolate overflow-hidden rounded-[34px] border border-white/10 bg-[var(--tgpi-navy)] text-white shadow-[var(--tgpi-shadow-premium)] sm:rounded-[42px]">
+      <section className="relative isolate overflow-hidden rounded-[30px] border border-white/10 bg-[var(--tgpi-navy)] text-white shadow-[var(--tgpi-shadow-premium)] sm:rounded-[36px]">
         <div
           className="pointer-events-none absolute -left-24 top-[-7rem] h-80 w-80 rounded-full bg-[var(--tgpi-gold)]/10 blur-3xl"
           aria-hidden="true"
         />
-        <div className="relative grid lg:grid-cols-[0.96fr_1.04fr]">
-          <div className="flex flex-col justify-center p-7 sm:p-10 lg:p-14">
+        <div className="relative grid lg:min-h-[520px] lg:grid-cols-[0.92fr_1.08fr] xl:min-h-[540px]">
+          <div className="flex flex-col justify-center p-7 sm:p-9 lg:p-10 xl:p-12">
             <div className="flex flex-wrap items-center gap-2">
               <span className="rounded-full border border-[var(--tgpi-gold)]/35 bg-[var(--tgpi-gold)]/10 px-3 py-2 text-[9px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-light)]">
                 TGPI Learning Intelligence
@@ -62,16 +62,16 @@ export default async function CoursesPage() {
                 Practical · Global · Connected
               </span>
             </div>
-            <h1 className="mt-7 max-w-3xl text-[clamp(3.4rem,7vw,6.6rem)] font-semibold leading-[0.88] tracking-[-0.055em]">
+            <h1 className="mt-6 max-w-2xl text-[clamp(2.8rem,5.2vw,4.9rem)] font-semibold leading-[0.94] tracking-[-0.048em]">
               Build the capabilities to move through the world.
             </h1>
-            <p className="mt-7 max-w-2xl text-base leading-8 text-white/68 sm:text-lg">
+            <p className="mt-5 max-w-xl text-sm leading-7 text-white/68 sm:text-base sm:leading-8">
               Learn to communicate, decide, adapt and understand global
               opportunity through paths designed for international life — not
               passive consumption.
             </p>
 
-            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="#learning-paths"
                 className="inline-flex min-h-14 items-center justify-center rounded-2xl bg-[var(--tgpi-gold)] px-6 text-sm font-extrabold text-[var(--tgpi-navy-deep)] transition hover:-translate-y-0.5 hover:bg-[var(--tgpi-gold-light)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
@@ -89,11 +89,11 @@ export default async function CoursesPage() {
               </Link>
             </div>
 
-            <p className="mt-5 text-xs font-bold leading-6 text-white/45">
+            <p className="mt-4 text-xs font-bold leading-6 text-white/45">
               Built for mobile continuity. Designed for deeper work on desktop.
             </p>
 
-            <dl className="mt-9 grid grid-cols-3 gap-2 border-t border-white/10 pt-7">
+            <dl className="mt-7 grid grid-cols-3 gap-2 border-t border-white/10 pt-6">
               {[
                 ["04", "Capability paths"],
                 ["18", "Live scenarios"],
@@ -111,33 +111,32 @@ export default async function CoursesPage() {
             </dl>
           </div>
 
-          <div className="border-t border-white/10 bg-[var(--tgpi-navy-deep)] p-3 sm:p-4 lg:border-l lg:border-t-0">
-            <div className="grid min-h-[520px] grid-cols-2 grid-rows-2 gap-3 lg:min-h-full">
-              {coursesOverview.map((course, index) => (
-                <div
-                  key={course.id}
-                  className="group relative isolate min-h-56 overflow-hidden rounded-[22px] border border-white/10"
-                >
-                  <Image
-                    src={course.image}
-                    alt={course.imageAlt}
-                    fill
-                    priority={index === 0}
-                    quality={88}
-                    sizes="(max-width: 1024px) 50vw, 26vw"
-                    className="object-cover transition duration-700 group-hover:scale-[1.04]"
-                  />
-                  <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(4,20,38,0.02)_30%,rgba(4,20,38,0.9)_100%)]" />
-                  <div className="absolute inset-x-4 bottom-4 sm:inset-x-5 sm:bottom-5">
-                    <p className="text-[8px] font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-gold-light)]">
-                      Path {String(index + 1).padStart(2, "0")}
-                    </p>
-                    <p className="mt-1 line-clamp-2 text-xs font-extrabold leading-5 text-white sm:text-sm">
-                      {course.title}
-                    </p>
-                  </div>
-                </div>
-              ))}
+          <div className="relative min-h-[270px] overflow-hidden border-t border-white/10 bg-[var(--tgpi-navy-deep)] sm:min-h-[360px] lg:min-h-0 lg:border-l lg:border-t-0">
+            <Image
+              src="/images/learning/tgpi-learning-hero-v2.webp"
+              alt="TGPI global knowledge observatory with an illuminated world atlas"
+              fill
+              priority
+              quality={88}
+              sizes="(max-width: 1024px) 100vw, 55vw"
+              className="object-cover object-[62%_center]"
+            />
+            <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(4,20,38,0.02)_40%,rgba(4,20,38,0.82)_100%)] lg:bg-[linear-gradient(90deg,rgba(4,20,38,0.38)_0%,rgba(4,20,38,0.02)_34%,rgba(4,20,38,0.18)_100%)]" />
+            <div className="absolute inset-x-5 bottom-5 flex items-end justify-between gap-6 sm:inset-x-7 sm:bottom-7 lg:inset-x-8 lg:bottom-8">
+              <div>
+                <p className="text-[9px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-light)]">
+                  The TGPI Learning System
+                </p>
+                <p className="mt-2 max-w-sm text-sm font-bold leading-6 text-white sm:text-base">
+                  One connected capability profile for a life without borders.
+                </p>
+              </div>
+              <span
+                className="hidden h-12 w-12 shrink-0 place-items-center rounded-full border border-white/20 bg-[var(--tgpi-navy-deep)]/55 text-lg text-[var(--tgpi-gold-light)] backdrop-blur-md sm:grid"
+                aria-hidden="true"
+              >
+                ↗
+              </span>
             </div>
           </div>
         </div>
@@ -149,17 +148,17 @@ export default async function CoursesPage() {
       />
 
       <section
-        className="mb-16 overflow-hidden rounded-[34px] border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] shadow-[var(--tgpi-shadow-soft)] sm:rounded-[38px]"
+        className="mb-14 overflow-hidden rounded-[30px] border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] shadow-[var(--tgpi-shadow-soft)] sm:rounded-[36px]"
         aria-labelledby="learning-standard-title"
       >
         <div className="grid border-b border-[var(--tgpi-border-soft)] lg:grid-cols-[0.82fr_1.18fr]">
-          <div className="bg-[var(--tgpi-navy)] p-7 text-white sm:p-10 lg:p-12">
+          <div className="bg-[var(--tgpi-navy)] p-7 text-white sm:p-9 lg:p-10">
             <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold-light)]">
               The TGPI Learning Standard
             </p>
             <h2
               id="learning-standard-title"
-              className="mt-5 text-4xl font-semibold leading-[0.98] sm:text-5xl"
+              className="mt-5 text-4xl font-semibold leading-[1.02] sm:text-[2.75rem]"
             >
               Education becomes valuable when it changes what you can do next.
             </h2>

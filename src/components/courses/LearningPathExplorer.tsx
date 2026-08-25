@@ -38,29 +38,29 @@ export default function LearningPathExplorer({
   return (
     <section
       id="learning-paths"
-      className="scroll-mt-28 py-16 sm:py-20"
+      className="scroll-mt-28 py-14 sm:py-16"
       aria-labelledby="learning-paths-title"
     >
-      <div className="grid gap-10 lg:grid-cols-[0.72fr_1.28fr] lg:items-end">
+      <div className="grid gap-7 lg:grid-cols-[0.82fr_1.18fr] lg:items-end">
         <div>
           <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[var(--tgpi-gold-strong)]">
             Find your starting point
           </p>
           <h2
             id="learning-paths-title"
-            className="mt-4 text-[clamp(2.8rem,6vw,5.3rem)] font-semibold leading-[0.93] tracking-[-0.05em] text-[var(--tgpi-navy)]"
+            className="mt-4 text-[clamp(2.5rem,4.6vw,4.35rem)] font-semibold leading-[0.97] tracking-[-0.045em] text-[var(--tgpi-navy)]"
           >
             Choose the capability your next chapter requires.
           </h2>
         </div>
-        <p className="max-w-2xl text-base leading-8 text-[var(--tgpi-muted)] lg:justify-self-end lg:text-lg">
+        <p className="max-w-2xl text-base leading-8 text-[var(--tgpi-muted)] lg:justify-self-end">
           TGPI does not organize learning around passive subjects. Every path is
           built around a real outcome: communicate, decide, adapt or understand
           the systems shaping your opportunities.
         </p>
       </div>
 
-      <div className="mt-10 rounded-[30px] border border-[var(--tgpi-border)] bg-white p-4 shadow-[var(--tgpi-shadow-soft)] sm:p-6">
+      <div className="mt-8 rounded-[28px] border border-[var(--tgpi-border)] bg-white p-4 shadow-[var(--tgpi-shadow-soft)] sm:p-5">
         <p className="px-2 text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-muted)]">
           What do you need to do better?
         </p>
@@ -97,7 +97,7 @@ export default function LearningPathExplorer({
         </div>
 
         <div
-          className="mt-4 grid gap-6 overflow-hidden rounded-[24px] border border-white/10 bg-[var(--tgpi-navy)] p-6 text-white sm:p-8 lg:grid-cols-[1fr_auto] lg:items-end"
+          className="mt-4 grid gap-6 overflow-hidden rounded-[22px] border border-white/10 bg-[var(--tgpi-navy)] p-6 text-white sm:p-7 lg:grid-cols-[1fr_auto] lg:items-end"
           aria-live="polite"
         >
           <div>
@@ -112,7 +112,7 @@ export default function LearningPathExplorer({
             <p className="mt-5 text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-gold-light)]">
               {selectedCourse.category}
             </p>
-            <h3 className="mt-2 max-w-3xl text-3xl font-semibold leading-tight sm:text-4xl">
+            <h3 className="mt-2 max-w-3xl text-3xl font-semibold leading-tight sm:text-[2.15rem]">
               {selectedCourse.title}
             </h3>
             <p className="mt-3 max-w-3xl text-sm leading-7 text-white/65">
@@ -140,7 +140,7 @@ export default function LearningPathExplorer({
         </div>
       </div>
 
-      <div className="mt-14">
+      <div className="mt-12">
         <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold-strong)]">
@@ -165,7 +165,7 @@ export default function LearningPathExplorer({
         </div>
       </div>
 
-      <div className="mt-14">
+      <div className="mt-12">
         <div className="max-w-3xl">
           <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold-strong)]">
             The capability roadmap
@@ -208,15 +208,15 @@ function CourseCard({
 }) {
   return (
     <article
-      className={`group overflow-hidden rounded-[30px] border bg-white shadow-[var(--tgpi-shadow-soft)] transition duration-300 hover:-translate-y-1 hover:shadow-[var(--tgpi-shadow-premium)] ${
+      className={`group overflow-hidden rounded-[28px] border bg-white shadow-[var(--tgpi-shadow-soft)] transition duration-300 hover:-translate-y-1 hover:shadow-[var(--tgpi-shadow-premium)] ${
         highlighted
           ? "border-[var(--tgpi-gold)] ring-4 ring-[var(--tgpi-gold)]/10"
           : "border-[var(--tgpi-border)]"
-      } ${featured ? "grid lg:grid-cols-[1.05fr_.95fr]" : "flex h-full flex-col"}`}
+      } ${featured ? "grid lg:grid-cols-[0.92fr_1.08fr]" : "flex h-full flex-col"}`}
     >
       <div
         className={`relative isolate overflow-hidden bg-[var(--tgpi-navy)] ${
-          featured ? "min-h-[330px] lg:min-h-[520px]" : "aspect-[16/10]"
+          featured ? "min-h-[300px] sm:min-h-[360px] lg:min-h-[460px]" : "aspect-[16/10]"
         }`}
       >
         <Image
@@ -252,7 +252,7 @@ function CourseCard({
 
       <div
         className={`flex flex-1 flex-col ${
-          featured ? "p-7 sm:p-9 lg:p-11" : "p-6 sm:p-7"
+          featured ? "p-7 sm:p-8 lg:p-9" : "p-6 sm:p-7"
         }`}
       >
         <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-strong)]">
@@ -260,7 +260,7 @@ function CourseCard({
         </p>
         <h3
           className={`mt-3 font-semibold leading-[1.03] text-[var(--tgpi-navy)] ${
-            featured ? "text-4xl sm:text-5xl" : "text-3xl"
+            featured ? "text-4xl sm:text-[2.75rem]" : "text-3xl"
           }`}
         >
           {course.title}
