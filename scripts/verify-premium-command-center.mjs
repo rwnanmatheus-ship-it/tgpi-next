@@ -45,7 +45,11 @@ const sourceContracts = [
   },
   {
     file: "src/app/courses/page.tsx",
-    checks: [/id="learning-paths"/, /\/courses\/english-abroad/],
+    checks: [/LearningPathExplorer/, /\/courses\/english-abroad/],
+  },
+  {
+    file: "src/components/courses/LearningPathExplorer.tsx",
+    checks: [/id="learning-paths"/, /CourseCard/, /aria-pressed/],
   },
   {
     file: "src/data/courses.ts",

@@ -30,16 +30,16 @@ function validateEnglishAbroadCourse(course: Course) {
 
   if (course.modules.length !== 6 || lessons.length !== 18) {
     throw new Error(
-      "English for Living Abroad must contain 6 modules and 18 lessons.",
+      "Global English must contain 6 modules and 18 lessons.",
     );
   }
   if (course.estimatedMinutes !== totalMinutes) {
     throw new Error(
-      "English for Living Abroad estimated time must match its lessons.",
+      "Global English estimated time must match its lessons.",
     );
   }
   if (uniqueLessonIds.size !== lessonIds.length) {
-    throw new Error("English for Living Abroad lesson IDs must be unique.");
+    throw new Error("Global English lesson IDs must be unique.");
   }
   if (invalidCheckpoint) {
     throw new Error(
@@ -58,7 +58,7 @@ function validateEnglishAbroadCourse(course: Course) {
 export const englishAbroadCourse = validateEnglishAbroadCourse({
   id: "english-abroad",
   version: "1.0.0",
-  title: "English for Living Abroad",
+  title: "Global English: Live, Work & Belong Abroad",
   description:
     "Build the practical English required to arrive, settle, work and act independently in another country through 18 real-world simulations.",
   category: "Language & Mobility",

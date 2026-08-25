@@ -3,7 +3,7 @@
 const certificates = [
   {
     id: "cert-english-abroad",
-    title: "English for Living Abroad",
+    title: "Global English: Live, Work & Belong Abroad",
     issuedAt: "2026-04-20",
   },
 ];
