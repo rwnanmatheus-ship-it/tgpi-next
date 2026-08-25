@@ -207,7 +207,7 @@ export const englishAbroadCourse = validateEnglishAbroadCourse({
         description:
           "Eighteen decision checks confirm understanding throughout the course.",
         count: 18,
-        status: "live",
+        status: "preview",
         weight: 20,
       },
       {
@@ -216,7 +216,7 @@ export const englishAbroadCourse = validateEnglishAbroadCourse({
         description:
           "Six applied responses demonstrate each capability beyond recognition.",
         count: 6,
-        status: "planned",
+        status: "preview",
         weight: 30,
       },
       {
@@ -225,7 +225,7 @@ export const englishAbroadCourse = validateEnglishAbroadCourse({
         description:
           "One multi-step performance task combines the six course capabilities.",
         count: 1,
-        status: "planned",
+        status: "preview",
         weight: 40,
       },
       {
@@ -234,7 +234,7 @@ export const englishAbroadCourse = validateEnglishAbroadCourse({
         description:
           "A concise action review connects demonstrated skill to the learner's real plan.",
         count: 1,
-        status: "planned",
+        status: "live",
         weight: 10,
       },
     ],
@@ -269,7 +269,7 @@ export const englishAbroadCourse = validateEnglishAbroadCourse({
     title: "TGPI Global English Applied Skills Certificate",
     type: "Professional Certificate",
     issuer: "TGPI — The Global Polymath Institute",
-    status: "planned",
+    status: "preview",
     verification:
       "Public verification URL with issuer, learner-approved identity, course version, status and evidence summary.",
     evidenceRequired: [

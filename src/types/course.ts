@@ -27,7 +27,7 @@ export type CoursePracticeTask = {
   title: string;
 };
 
-export type CourseDeliveryStatus = "live" | "planned";
+export type CourseDeliveryStatus = "live" | "planned" | "preview";
 
 export type CourseCompetencyLevel =
   | "foundation"

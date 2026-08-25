@@ -58,6 +58,7 @@ export async function requireApiUser() {
     email: user?.primaryEmailAddress?.emailAddress || "",
     emailVerified:
       user?.primaryEmailAddress?.verification?.status === "verified",
+    publicName: user?.fullName || user?.username || "TGPI Member",
   };
 }
 

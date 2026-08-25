@@ -1,104 +1,101 @@
-"use client";
+import type { Metadata } from "next";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { requireUser } from "@/lib/auth/guards";
+import { getUserLearningCredential } from "@/lib/learning-records.server";
 
-import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
-import { maskDocumentNumber } from "@/lib/identity";
-
-type CertificateDocument = {
-  ownerUid: string;
-  issuedAt?: string;
+export const metadata: Metadata = {
+  title: "Learning credential | TGPI",
+  robots: { follow: false, index: false },
 };
 
-type CertificateOwner = {
-  legalName?: string;
-  name?: string;
-  tgpiId?: string;
-  documentType?: string;
-  documentNumber?: string;
-};
-
-type CertificatePageData = {
-  cert: CertificateDocument;
-  user: CertificateOwner;
-};
-
-type CardProps = {
-  label: string;
-  value?: string;
-};
-
-export default function CertificatePage() {
-  const params = useParams<{ id: string }>();
-  const [data, setData] = useState<CertificatePageData | null>(null);
-
-  useEffect(() => {
-    async function load() {
-      const ref = doc(db, "certificates", params.id);
-      const snap = await getDoc(ref);
-
-      if (!snap.exists()) return;
-
-      const cert = snap.data() as CertificateDocument;
-      const userRef = doc(db, "users", cert.ownerUid);
-      const userSnap = await getDoc(userRef);
-
-      setData({
-        cert,
-        user: userSnap.exists() ? (userSnap.data() as CertificateOwner) : {},
-      });
-    }
-
-    void load();
-  }, [params.id]);
-
-  if (!data) return <div className="p-10 text-white">Loading...</div>;
-
-  const name = data.user.legalName || data.user.name || "TGPI Member";
-  const masked = maskDocumentNumber(
-    data.user.documentType,
-    data.user.documentNumber
-  );
-  const issuedAt = data.cert.issuedAt
-    ? new Date(data.cert.issuedAt).toDateString()
-    : "Not available";
-
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-[#0b0f19] p-6">
-      <div className="w-full max-w-4xl rounded-3xl border border-yellow-700/20 bg-gradient-to-br from-yellow-500/10 to-slate-950 p-10 text-center shadow-2xl">
-        <h1 className="text-5xl font-bold text-yellow-400">
-          Certificate of Completion
-        </h1>
-
-        <p className="mt-6 text-slate-300">This certifies that</p>
-
-        <h2 className="mt-4 text-3xl font-bold text-white">{name}</h2>
-
-        <p className="mt-4 text-slate-400">
-          has successfully completed a verified TGPI learning path
-        </p>
-
-        <div className="mt-10 grid gap-4 md:grid-cols-2">
-          <Card label="TGPI ID" value={data.user.tgpiId} />
-          <Card label="Certificate ID" value={params.id} />
-          <Card label="Document" value={masked} />
-          <Card label="Issued" value={issuedAt} />
-        </div>
-
-        <p className="mt-10 font-semibold text-green-400">
-          ✔ Verified by TGPI System
-        </p>
-      </div>
-    </div>
-  );
+function formatDate(value: string) {
+  return new Intl.DateTimeFormat("en", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(value));
 }
 
-function Card({ label, value }: CardProps) {
+export default async function CredentialPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const session = await requireUser();
+  const { id } = await params;
+  const credential = await getUserLearningCredential(session.userId, id);
+  if (!credential) notFound();
+
   return (
-    <div className="rounded-xl border border-slate-800 bg-slate-900 p-4">
-      <p className="text-sm text-slate-400">{label}</p>
-      <p className="font-bold text-white">{value || "—"}</p>
-    </div>
+    <main className="min-h-screen bg-[#F3EFE6] px-4 py-10 text-[#0B1F3A] sm:px-6 sm:py-16">
+      <article className="mx-auto max-w-5xl overflow-hidden rounded-[34px] border border-[#CDBA84] bg-[#FFFDF8] shadow-[0_30px_90px_rgba(11,31,58,.14)]">
+        <div className="grid lg:grid-cols-[1fr_330px]">
+          <div className="p-8 sm:p-12">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#956A13]">
+                TGPI Professional Certificate
+              </p>
+              <span className="rounded-full bg-[#DDF1E7] px-3 py-1.5 text-[9px] font-extrabold uppercase tracking-[0.14em] text-[#175D41]">
+                {credential.status}
+              </span>
+            </div>
+            <h1 className="mt-8 font-[var(--tgpi-font-display)] text-5xl font-semibold leading-[.98] tracking-[-0.04em] sm:text-7xl">
+              {credential.courseTitle}
+            </h1>
+            <p className="mt-7 text-sm uppercase tracking-[0.14em] text-[#6D7480]">Awarded to</p>
+            <p className="mt-2 text-3xl font-extrabold">{credential.publicName}</p>
+            <p className="mt-5 max-w-2xl text-sm leading-7 text-[#657082]">
+              This TGPI-issued professional learning credential records
+              demonstrated course capability. It is not a government degree,
+              professional license or third-party accreditation.
+            </p>
+
+            <div className="mt-9 grid gap-4 sm:grid-cols-3">
+              {[
+                ["Final score", `${credential.assessmentScore}%`],
+                ["Mastery threshold", `${credential.masteryThreshold}%`],
+                ["Learning volume", `${credential.learningHours} hours`],
+              ].map(([label, value]) => (
+                <div key={label} className="rounded-2xl border border-[#E0D9CB] bg-white p-5">
+                  <p className="text-2xl font-extrabold">{value}</p>
+                  <p className="mt-1 text-[9px] font-extrabold uppercase tracking-[0.13em] text-[#777E88]">{label}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-9 border-t border-[#E0D9CB] pt-7">
+              <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#956A13]">Evidence recorded</p>
+              <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+                {credential.evidenceSummary.map((item) => (
+                  <li key={item} className="flex gap-3 text-sm font-bold leading-6 text-[#505966]">
+                    <span aria-hidden="true" className="text-[#20815B]">✓</span>{item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+
+          <aside className="bg-[#0B1F3A] p-8 text-white sm:p-10">
+            <div className="grid h-full content-between gap-10">
+              <div>
+                <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#E8CC7B]">Credential record</p>
+                <dl className="mt-7 grid gap-6 text-sm">
+                  <div><dt className="text-xs text-[#9EABBC]">Credential ID</dt><dd className="mt-1 break-all font-extrabold">{credential.id}</dd></div>
+                  <div><dt className="text-xs text-[#9EABBC]">Issued</dt><dd className="mt-1 font-extrabold">{formatDate(credential.issuedAt)}</dd></div>
+                  <div><dt className="text-xs text-[#9EABBC]">Course version</dt><dd className="mt-1 font-extrabold">{credential.courseVersion}</dd></div>
+                  <div><dt className="text-xs text-[#9EABBC]">Issuer</dt><dd className="mt-1 font-extrabold leading-6">{credential.issuer}</dd></div>
+                </dl>
+              </div>
+              <div className="grid gap-3">
+                <Link href={`/verify/credentials/${credential.id}`} className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#E5BF5A] px-5 text-sm font-extrabold text-[#0B1F3A]">Open public verification</Link>
+                <Link href="/certificates" className="inline-flex min-h-12 items-center justify-center rounded-xl border border-white/15 px-5 text-sm font-extrabold">All credentials</Link>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </article>
+    </main>
   );
 }

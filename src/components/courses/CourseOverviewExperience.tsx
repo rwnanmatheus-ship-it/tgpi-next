@@ -332,7 +332,7 @@ function CourseOverview({ course }: { course: Course }) {
                     <div className="flex flex-wrap items-center gap-2">
                       <h3 className="text-base font-extrabold">{component.title}</h3>
                       <span className={`rounded-full px-2.5 py-1 text-[9px] font-extrabold uppercase tracking-[0.12em] ${component.status === "live" ? "bg-[#D8EFE4] text-[#175D41]" : "bg-[#FFF1C7] text-[#795712]"}`}>
-                        {component.status === "live" ? "Live now" : "Credential gate"}
+                        {component.status === "live" ? "Live now" : component.status === "preview" ? "Preview ready" : "Credential gate"}
                       </span>
                     </div>
                     <p className="mt-2 text-xs leading-6 text-[var(--tgpi-muted)]">{component.description}</p>
@@ -356,7 +356,7 @@ function CourseOverview({ course }: { course: Course }) {
                   Professional credential pathway
                 </p>
                 <span className="rounded-full bg-[var(--tgpi-navy)] px-3 py-1.5 text-[9px] font-extrabold uppercase tracking-[0.14em] text-[var(--tgpi-gold-light)]">
-                  In build
+                  Preview ready
                 </span>
               </div>
               <h2 className="mt-5 text-3xl font-semibold sm:text-4xl">{course.credential.title}</h2>
@@ -384,8 +384,11 @@ function CourseOverview({ course }: { course: Course }) {
               </div>
 
               <p className="mt-6 border-t border-[var(--tgpi-gold)]/25 pt-5 text-xs leading-6 text-[#7A6948]">
-                The course remains available now. Certificate issuance activates only after every assessment gate and public verification service pass the TGPI credential standard.
+                Every assessment is scored on TGPI servers and recorded privately. Public verification exposes only the evidence needed to trust the credential.
               </p>
+              <Link href={`/courses/${course.id}/certification`} className="mt-6 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[var(--tgpi-navy)] px-6 text-sm font-extrabold text-white">
+                Open certification path →
+              </Link>
             </div>
           </aside>
         </section>

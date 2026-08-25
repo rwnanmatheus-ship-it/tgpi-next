@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { requireUser } from "@/lib/auth/guards";
+import { isLearningStorageConfigured } from "@/lib/firestore-admin-rest.server";
+import { listUserLearningCredentials } from "@/lib/learning-records.server";
 
 export const metadata: Metadata = {
   title: "My credentials — TGPI",
@@ -8,33 +10,59 @@ export const metadata: Metadata = {
 };
 
 export default async function CertificatesPage() {
-  await requireUser();
+  const session = await requireUser();
+  const configured = isLearningStorageConfigured();
+  const credentials = configured
+    ? await listUserLearningCredentials(session.userId)
+    : [];
 
   return (
     <main className="min-h-[75vh] bg-[#F5F1E8] px-4 py-12 text-[#0B1F3A] sm:px-6">
-      <section className="mx-auto max-w-5xl overflow-hidden rounded-[32px] border border-[#D8D2C4] bg-[#FFFDF8] shadow-[0_28px_80px_rgba(11,31,58,0.11)]">
-        <div className="grid lg:grid-cols-[1.08fr_.92fr]">
-          <div className="p-8 sm:p-12">
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#956A13]">Verified learning</p>
-            <h1 className="mt-4 font-[var(--tgpi-font-display)] text-5xl font-semibold leading-none tracking-[-0.04em] sm:text-6xl">Your credentials will mean something.</h1>
-            <p className="mt-5 text-base leading-8 text-[#657082]">Certificates appear only after a real course completion has been validated. No sample or fictional credentials are displayed in your account.</p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Link href="/courses" className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#0B1F3A] px-6 text-sm font-extrabold text-white">Explore learning paths</Link>
-              <Link href="/profile" className="inline-flex min-h-12 items-center justify-center rounded-xl border border-[#D8D2C4] bg-white px-6 text-sm font-extrabold">Back to workspace</Link>
-            </div>
+      <section className="mx-auto max-w-5xl">
+        <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#956A13]">Verified learning</p>
+        <h1 className="mt-4 max-w-3xl font-[var(--tgpi-font-display)] text-5xl font-semibold leading-none tracking-[-0.04em] sm:text-6xl">Credentials backed by evidence.</h1>
+        <p className="mt-5 max-w-2xl text-base leading-8 text-[#657082]">Only credentials earned through authenticated completion and protected assessment appear here.</p>
+
+        {!configured ? (
+          <div className="mt-9 rounded-[26px] border border-[#D8B75D]/50 bg-[#FFF6D8] p-7">
+            <p className="font-extrabold">Secure credential storage is awaiting activation.</p>
+            <p className="mt-2 text-sm leading-7 text-[#6F5719]">The experience is installed, but TGPI will not create or display records until server-only credentials are configured.</p>
           </div>
-          <div className="bg-[#0B1F3A] p-8 text-white sm:p-10">
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#F0D58C]">Credential standard</p>
-            <div className="mt-7 grid gap-3">
-              {["Linked to one authenticated learner", "Issued only after verified completion", "Public reference without private data", "Revocable if integrity is compromised"].map((item, index) => (
-                <div key={item} className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[#E5BF5A] text-[10px] font-extrabold text-[#0B1F3A]">0{index + 1}</span>
-                  <span className="text-sm font-bold text-white">{item}</span>
+        ) : credentials.length ? (
+          <div className="mt-9 grid gap-5 sm:grid-cols-2">
+            {credentials.map((credential) => (
+              <Link key={credential.id} href={`/certificates/${credential.id}`} className="group rounded-[26px] border border-[#D8D2C4] bg-[#FFFDF8] p-7 shadow-[0_18px_50px_rgba(11,31,58,.07)] transition hover:-translate-y-1 hover:border-[#C9A84D]">
+                <div className="flex items-center justify-between gap-3">
+                  <span className="text-[9px] font-extrabold uppercase tracking-[0.16em] text-[#956A13]">TGPI Professional Certificate</span>
+                  <span className="rounded-full bg-[#DDF1E7] px-3 py-1 text-[9px] font-extrabold uppercase text-[#175D41]">{credential.status}</span>
                 </div>
-              ))}
+                <h2 className="mt-5 text-2xl font-semibold">{credential.courseTitle}</h2>
+                <p className="mt-3 text-sm text-[#657082]">Score {credential.assessmentScore}% · {credential.learningHours} learning hours</p>
+                <p className="mt-6 break-all text-xs font-extrabold text-[#4E5662]">{credential.id}</p>
+                <p className="mt-4 text-sm font-extrabold text-[#956A13]">Open credential →</p>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <div className="mt-9 overflow-hidden rounded-[30px] border border-[#D8D2C4] bg-[#FFFDF8] shadow-[0_24px_70px_rgba(11,31,58,.08)]">
+            <div className="grid lg:grid-cols-[1fr_330px]">
+              <div className="p-8 sm:p-10">
+                <h2 className="text-3xl font-semibold">Your first evidence record starts here.</h2>
+                <p className="mt-4 text-sm leading-7 text-[#657082]">Complete the course, pass six performance gates and the integrated capstone, then submit a transfer reflection.</p>
+                <Link href="/courses/english-abroad/certification" className="mt-7 inline-flex min-h-12 items-center rounded-xl bg-[#0B1F3A] px-6 text-sm font-extrabold text-white">Open certification path →</Link>
+              </div>
+              <div className="bg-[#0B1F3A] p-8 text-white">
+                <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#E8CC7B]">Trust standard</p>
+                <ul className="mt-5 grid gap-4 text-sm font-bold leading-6 text-[#D5DDE7]">
+                  <li>✓ One authenticated learner</li>
+                  <li>✓ Server-scored evidence</li>
+                  <li>✓ Integrity-protected public record</li>
+                  <li>✓ Revocable credential status</li>
+                </ul>
+              </div>
             </div>
           </div>
-        </div>
+        )}
       </section>
     </main>
   );
