@@ -1,11 +1,11 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Show, SignOutButton, UserButton } from "@clerk/nextjs";
 import { Container } from "@/components/design-system";
+import BrandCrest from "@/components/BrandCrest";
 
 const desktopLinks = [
   ["Countries", "/countries"],
@@ -65,8 +65,8 @@ export default function Navbar() {
       <Container>
         <div className={`flex items-center justify-between transition-all duration-300 ${compact ? "min-h-16 py-2" : "min-h-[76px] py-3"}`}>
           <Link href="/" onClick={closeMenu} className="group flex min-w-0 items-center gap-3" aria-label="TGPI home">
-            <span className="relative h-12 w-11 shrink-0 transition group-hover:-translate-y-0.5">
-              <Image src="/brand/tgpi-crest.svg" alt="TGPI crest" fill priority sizes="44px" className="object-contain drop-shadow-[0_6px_12px_rgba(7,26,50,0.18)]" />
+            <span className="relative h-12 w-10 shrink-0 transition group-hover:-translate-y-0.5">
+              <BrandCrest fill priority sizes="40px" className="object-contain drop-shadow-[0_6px_12px_rgba(7,26,50,0.2)]" />
             </span>
             <span className="min-w-0">
               <span className="block font-[var(--tgpi-font-display)] text-[1.4rem] font-bold leading-none tracking-[0.04em] text-[var(--tgpi-navy)]">TGPI</span>

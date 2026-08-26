@@ -25,7 +25,11 @@ export const metadata: Metadata = {
   title: "TGPI — Build Your Global Identity",
   description: "Prepare, compare and move globally with strategic clarity using TGPI — a premium education and decision system for international life.",
   keywords: ["move abroad", "global mobility", "international life", "country comparison", "cost of living", "learn languages", "global education", "international planning", "TGPI", "The Global Polymath Institute"],
-  icons: { icon: "/brand/tgpi-crest.svg", shortcut: "/brand/tgpi-crest.svg", apple: "/brand/tgpi-crest.svg" },
+  icons: {
+    icon: "/brand/tgpi-crest-v2-256.png",
+    shortcut: "/brand/tgpi-crest-v2-256.png",
+    apple: "/brand/tgpi-crest-v2-256.png",
+  },
   openGraph: {
     title: "TGPI — Build Your Global Identity",
     description: "Compare countries, build practical skills and prepare a global life with clarity.",

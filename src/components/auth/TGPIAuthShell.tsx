@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import BrandCrest from "@/components/BrandCrest";
 
 type TGPIAuthShellProps = {
   children: React.ReactNode;
@@ -26,7 +26,7 @@ export default function TGPIAuthShell({ children, mode }: TGPIAuthShellProps) {
           <div className="relative flex h-full flex-col">
             <Link href="/" className="flex w-fit items-center gap-3" aria-label="TGPI home">
               <span className="relative h-14 w-12">
-                <Image src="/brand/tgpi-crest.svg" alt="TGPI crest" fill priority sizes="48px" className="object-contain" />
+                <BrandCrest fill priority sizes="48px" className="object-contain drop-shadow-[0_10px_22px_rgba(0,0,0,0.28)]" />
               </span>
               <span>
                 <span className="block font-[var(--tgpi-font-display)] text-2xl font-bold tracking-[0.04em] text-white">TGPI</span>
@@ -67,7 +67,7 @@ export default function TGPIAuthShell({ children, mode }: TGPIAuthShellProps) {
             <div className="mb-8 lg:hidden">
               <Link href="/" className="flex w-fit items-center gap-3" aria-label="TGPI home">
                 <span className="relative h-12 w-11">
-                  <Image src="/brand/tgpi-crest.svg" alt="TGPI crest" fill priority sizes="44px" className="object-contain" />
+                  <BrandCrest fill priority sizes="44px" className="object-contain" />
                 </span>
                 <span className="font-[var(--tgpi-font-display)] text-2xl font-bold tracking-[0.04em]">TGPI</span>
               </Link>
