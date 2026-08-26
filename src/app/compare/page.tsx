@@ -1,9 +1,10 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import ActivationProgressProvider from "@/components/activation/ActivationProgressProvider";
 import CompareCountryPicker from "@/components/compare/CompareCountryPicker";
+import TGPIPageShell from "@/components/TGPIPageShell";
 import {
   formatCurrencyAmount,
   getAllCountries,
@@ -17,13 +18,17 @@ import {
   type Country,
 } from "@/lib/countries";
 import {
+  getComparisonDecisionBrief,
   getComparisonGoalConfig,
   getComparisonVerdict,
   getCountryComparisonScore,
+  getCountrySignalScore,
   getSignalLabel,
   isComparisonGoal,
+  type ComparisonDecisionBrief,
   type ComparisonGoal,
   type ComparisonSignal,
+  type ComparisonVerdict,
 } from "@/lib/tgpi-comparison";
 
 type ComparePageProps = {
@@ -34,24 +39,26 @@ type ComparePageProps = {
 };
 
 export const metadata: Metadata = {
-  title: "Compare Countries | TGPI Global Decision Workspace",
+  title: "TGPI Compare — Global Decision Intelligence",
   description:
-    "Compare countries through transparent TGPI decision lenses for cost, safety, language access, quality of life and international readiness.",
+    "Compare countries through the proprietary TGPI decision framework, with transparent weights, visible trade-offs and connected next actions.",
   alternates: { canonical: "/compare" },
   robots: { index: true, follow: true },
   openGraph: {
-    title: "Compare Countries | TGPI",
+    title: "TGPI Compare — Compare Futures, Not Just Countries",
     description:
-      "Build a transparent country shortlist around cost, safety, language, quality of life and your international objective.",
+      "Build an international decision set, apply a transparent lens and turn country trade-offs into a connected action path.",
     url: "/compare",
     siteName: "TGPI",
     type: "website",
+    images: ["/images/compare/tgpi-global-decision-observatory.webp"],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Compare Countries | TGPI",
+    title: "TGPI Compare — Global Decision Intelligence",
     description:
-      "Compare international options through one transparent TGPI decision workspace.",
+      "Compare international futures through one transparent TGPI decision system.",
+    images: ["/images/compare/tgpi-global-decision-observatory.webp"],
   },
 };
 
@@ -73,6 +80,7 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
   const goal = normalizeComparisonGoal(resolvedSearchParams?.goal);
   const goalConfig = getComparisonGoalConfig(goal);
   const verdict = getComparisonVerdict(countriesToCompare, goal);
+  const decisionBrief = getComparisonDecisionBrief(countriesToCompare, goal);
   const canCompare = countriesToCompare.length >= 2;
   const pickerCountries = getAllCountries()
     .map(({ slug, name, emoji, region }) => ({ slug, name, emoji, region }))
@@ -86,46 +94,53 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    name: "TGPI Country Comparator",
+    name: "TGPI Global Decision Intelligence",
     url: "https://theglobalpolymath.com/compare",
     applicationCategory: "EducationalApplication",
     operatingSystem: "Web",
     description:
-      "A transparent country comparison workspace for international education, mobility and life decisions.",
+      "A transparent international decision system for comparing country trade-offs and connecting them to readiness, documents and learning.",
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
     featureList: [
       "Compare up to three countries",
-      "Switch between international decision lenses",
-      "Review cost bands, safety, language and quality of life",
+      "Apply five transparent international decision lenses",
+      "Inspect weighted signals and decisive trade-offs",
       "Create shareable comparison URLs",
+      "Connect a shortlist to country intelligence, documents and learning",
     ],
   };
 
   return (
     <ActivationProgressProvider>
-    <main className="min-h-screen bg-[var(--tgpi-canvas)] text-[var(--tgpi-ink)]">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
-        }}
-      />
+      <TGPIPageShell>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
+          }}
+        />
 
-      <div className="mx-auto max-w-[1360px] px-4 py-6 sm:px-6 sm:py-10 lg:px-8 lg:py-12">
         <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
           <Link
             href="/countries"
             className="inline-flex min-h-11 items-center rounded-full border border-[var(--tgpi-border)] bg-white px-4 text-sm font-extrabold text-[var(--tgpi-navy)] shadow-sm transition hover:border-[var(--tgpi-gold)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
           >
-            ← Back to countries
+            ← Explore countries
           </Link>
           <Link
             href="/authority"
             className="inline-flex min-h-11 items-center text-sm font-extrabold text-[var(--tgpi-gold-strong)] underline decoration-[var(--tgpi-gold)]/40 underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
           >
-            Review TGPI methodology
+            Review the TGPI methodology
           </Link>
         </div>
+
+        <CompareHero
+          countryCount={countriesToCompare.length}
+          goalLabel={goalConfig.label}
+        />
+
+        <ComparisonProofStrip />
 
         <CompareCountryPicker
           key={`${goal}:${countriesToCompare.map((country) => country.slug).join(",")}`}
@@ -150,95 +165,41 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
           </ComparisonNotice>
         ) : null}
 
-        <section className="relative mt-6 overflow-hidden rounded-[36px] border border-[var(--tgpi-gold)]/55 bg-[var(--tgpi-navy)] text-white shadow-[var(--tgpi-shadow-premium)]">
-          <div className="grid lg:grid-cols-[0.88fr_1.12fr]">
-            <div className="relative z-10 flex flex-col justify-center p-7 sm:p-9 lg:p-12">
-              <p className="text-[10px] font-extrabold uppercase tracking-[0.25em] text-[var(--tgpi-gold-light)]">
-                TGPI Global Decision Workspace
-              </p>
-              <h1 className="mt-4 max-w-3xl font-[var(--tgpi-font-display)] text-[clamp(2.8rem,5vw,5.2rem)] font-semibold leading-[0.91]">
-                Compare trade-offs before committing to a country.
-              </h1>
-              <p className="mt-5 max-w-2xl text-sm leading-7 text-[#D7E0EB] sm:text-base sm:leading-8">
-                Use one transparent decision lens to compare readiness, safety,
-                language access, quality of life and relative cost context.
-              </p>
-              <div className="mt-6 flex flex-wrap gap-2">
-                <span className="rounded-full border border-[var(--tgpi-gold-light)]/35 bg-white/5 px-4 py-2 text-xs font-extrabold text-[var(--tgpi-gold-light)]">
-                  Lens · {goalConfig.label}
-                </span>
-                <span className="rounded-full border border-white/20 bg-white/5 px-4 py-2 text-xs font-extrabold text-white">
-                  {countriesToCompare.length} of 3 countries selected
-                </span>
-              </div>
-            </div>
-
-            <ComparisonHeroVisual countries={countriesToCompare} />
-          </div>
-        </section>
-
         {countriesToCompare.length > 0 ? (
           <section
-            aria-label="Selected country summaries"
-            className="mt-6 grid gap-5 md:grid-cols-2 xl:grid-cols-3"
+            aria-labelledby="decision-set-title"
+            className="mt-14 sm:mt-16"
           >
-            {countriesToCompare.map((country) => (
-              <CompareCountryCard
-                key={country.slug}
-                country={country}
-                comparisonScore={comparisonScores[country.slug]}
-                goal={goal}
-              />
-            ))}
+            <SectionHeading
+              eyebrow="Your active decision set"
+              title="Start with the countries. Then interrogate the differences."
+              text="Each profile keeps its original context while the TGPI lens applies one comparable framework across the complete shortlist."
+              id="decision-set-title"
+            />
+            <div className="mt-7 grid gap-5 md:grid-cols-2 xl:grid-cols-3">
+              {countriesToCompare.map((country) => (
+                <CompareCountryCard
+                  key={country.slug}
+                  country={country}
+                  comparisonScore={comparisonScores[country.slug]}
+                  goal={goal}
+                />
+              ))}
+            </div>
           </section>
         ) : null}
 
         {!canCompare ? (
           <IncompleteComparisonState hasCountry={countriesToCompare.length === 1} />
-        ) : verdict ? (
+        ) : verdict && decisionBrief ? (
           <>
-            <section className="mt-6 overflow-hidden rounded-[30px] border border-[var(--tgpi-gold)]/55 bg-white shadow-[var(--tgpi-shadow-soft)]">
-              <div className="grid gap-6 border-b border-[var(--tgpi-border-soft)] bg-[linear-gradient(135deg,#071A32,#102D50)] p-6 text-white lg:grid-cols-[1fr_0.56fr] lg:items-end lg:p-8">
-                <div>
-                  <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[var(--tgpi-gold-light)]">
-                    TGPI Verdict · {goalConfig.label}
-                  </p>
-                  <h2 className="mt-3 text-3xl font-semibold lg:text-4xl">
-                    {verdict.title}
-                  </h2>
-                  <p className="mt-4 max-w-4xl text-sm leading-7 text-[#D7E0EB]">
-                    {verdict.text}
-                  </p>
-                </div>
-                <div className="rounded-2xl border border-white/15 bg-white/10 p-5 backdrop-blur">
-                  <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-light)]">
-                    Decision lens confidence
-                  </p>
-                  <p className="mt-2 text-4xl font-extrabold">Transparent</p>
-                  <p className="mt-2 text-xs leading-6 text-[#D7E0EB]">
-                    Every weight used by this educational model is visible below.
-                  </p>
-                </div>
-              </div>
+            <ExecutiveDecisionBrief
+              brief={decisionBrief}
+              goal={goal}
+              verdict={verdict}
+            />
 
-              <div className="grid gap-4 p-5 md:grid-cols-3 lg:p-6">
-                <VerdictPick
-                  label="Strongest decision score"
-                  countries={verdict.bestOverall}
-                  value={`${verdict.topScore}/100 lens score`}
-                />
-                <VerdictPick
-                  label="Most accessible cost band"
-                  countries={verdict.lowestCostProfile}
-                  value={getCountryCostLabel(verdict.lowestCostProfile[0])}
-                />
-                <VerdictPick
-                  label="Strongest safety signal"
-                  countries={verdict.safest}
-                  value={`${verdict.safest[0].intelligence.safetyScore}/100 safety`}
-                />
-              </div>
-            </section>
+            <DecisionLandscape countries={countriesToCompare} goal={goal} />
 
             <ComparisonMatrix
               countries={countriesToCompare}
@@ -248,54 +209,18 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
 
             <DecisionLensPanel goal={goal} />
 
-            <section className="mt-6 grid gap-5 lg:grid-cols-[0.88fr_1.12fr]">
-              <div className="rounded-[28px] border border-[var(--tgpi-border)] bg-white p-6 shadow-[var(--tgpi-shadow-soft)]">
-                <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold-strong)]">
-                  Decision standard
-                </p>
-                <h2 className="mt-2 text-3xl font-semibold text-[var(--tgpi-navy)]">
-                  A score creates a shortlist. Evidence creates a decision.
-                </h2>
-                <div className="mt-5 grid gap-3">
-                  <RuleCard
-                    title="Cost must use comparable units"
-                    text="TGPI ranks cost bands, never nominal values from unrelated currencies. Local budgets remain reference estimates."
-                  />
-                  <RuleCard
-                    title="Safety must become local"
-                    text="Country averages are only the beginning. Validate city, neighborhood, time and personal profile."
-                  />
-                  <RuleCard
-                    title="Language is infrastructure"
-                    text="Language affects documents, housing, work, study, community and long-term integration."
-                  />
-                </div>
-              </div>
+            <ConnectedDecisionPath
+              country={decisionBrief.leaders[0]}
+              goal={goal}
+            />
 
-              <div className="rounded-[28px] border border-[var(--tgpi-gold)]/45 bg-[var(--tgpi-gold-soft)] p-6 shadow-[var(--tgpi-shadow-soft)]">
-                <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold-strong)]">
-                  Turn comparison into progress
-                </p>
-                <h2 className="mt-2 text-3xl font-semibold text-[var(--tgpi-navy)]">
-                  Move from country interest to practical readiness.
-                </h2>
-                <p className="mt-3 max-w-3xl text-sm leading-7 text-[#4A3B1B]">
-                  Connect the shortlist to your fit profile, document preparation and
-                  the skills required to perform well in the selected environment.
-                </p>
-                <div className="mt-6 grid gap-3 sm:grid-cols-3">
-                  <ActionLink href="/onboarding" label="Build my country fit" />
-                  <ActionLink href="/passport" label="Prepare documents" />
-                  <ActionLink href="/courses" label="Develop skills" />
-                </div>
-              </div>
-            </section>
+            <ComparisonStandard />
           </>
         ) : null}
 
-        <section className="mt-6 rounded-[24px] border border-[var(--tgpi-border)] bg-[#ECE6DA] p-5">
+        <section className="mb-8 mt-7 rounded-[24px] border border-[var(--tgpi-border)] bg-[#ECE6DA] p-5 sm:p-6">
           <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-muted)]">
-            Responsible data note
+            Responsible intelligence note
           </p>
           <p className="mt-2 max-w-5xl text-sm leading-7 text-[var(--tgpi-muted)]">
             TGPI comparison data is educational and strategic. Budgets are static
@@ -305,8 +230,7 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
             financial or mobility decisions.
           </p>
         </section>
-      </div>
-    </main>
+      </TGPIPageShell>
     </ActivationProgressProvider>
   );
 }
@@ -334,73 +258,162 @@ function getDefaultComparisonCountries(): Country[] {
   );
 }
 
-function ComparisonHeroVisual({ countries }: { countries: Country[] }) {
-  if (!countries.length) {
-    return (
-      <div className="relative min-h-[320px] overflow-hidden bg-[radial-gradient(circle_at_70%_20%,rgba(197,150,50,0.32),transparent_28%),linear-gradient(135deg,#102D50,#041426)] lg:min-h-[500px]">
-        <div className="absolute inset-0 grid place-items-center p-8 text-center">
-          <div>
-            <p className="font-[var(--tgpi-font-display)] text-5xl font-semibold text-white/90">
-              Your next decision starts here.
+function CompareHero({
+  countryCount,
+  goalLabel,
+}: {
+  countryCount: number;
+  goalLabel: string;
+}) {
+  return (
+    <section className="relative isolate min-h-[640px] overflow-hidden rounded-[30px] border border-white/10 bg-[var(--tgpi-navy)] text-white shadow-[var(--tgpi-shadow-premium)] sm:min-h-[600px] sm:rounded-[36px] lg:h-[540px] lg:min-h-0">
+      <Image
+        src="/images/compare/tgpi-global-decision-observatory.webp"
+        alt="TGPI global decision observatory comparing three international futures through an illuminated strategic atlas"
+        fill
+        priority
+        quality={88}
+        sizes="(max-width: 1024px) 100vw, 1280px"
+        className="object-cover object-[69%_center] sm:object-[66%_center] lg:object-center"
+      />
+      <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(3,15,30,0.94)_0%,rgba(3,15,30,0.84)_62%,rgba(3,15,30,0.9)_100%)] lg:bg-[linear-gradient(90deg,rgba(3,15,30,0.99)_0%,rgba(3,15,30,0.94)_43%,rgba(3,15,30,0.42)_70%,rgba(3,15,30,0.12)_100%)]" />
+
+      <div className="relative z-10 flex min-h-[640px] flex-col justify-between p-7 sm:min-h-[600px] sm:p-10 lg:h-full lg:min-h-0 lg:p-12">
+        <div className="max-w-[690px]">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="rounded-full border border-[var(--tgpi-gold)]/40 bg-[var(--tgpi-gold)]/10 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold-light)]">
+              TGPI Decision Intelligence
+            </span>
+            <span className="rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.18em] text-white/65">
+              Proprietary comparison framework
+            </span>
+          </div>
+
+          <h1 className="mt-5 max-w-[680px] font-[var(--tgpi-font-display)] text-[clamp(2.75rem,4.6vw,4.35rem)] font-semibold leading-[0.95] tracking-[-0.045em]">
+            Compare futures, not just countries.
+          </h1>
+          <p className="mt-5 max-w-[610px] text-[15px] leading-7 text-white/72 sm:text-base sm:leading-8">
+            Build an international decision set, apply one transparent lens and
+            expose the trade-offs that rankings, travel content and isolated data
+            cannot explain.
+          </p>
+
+          <div className="mt-7 flex flex-col gap-3 sm:flex-row">
+            <Link
+              href="#comparison-builder"
+              className="inline-flex min-h-14 items-center justify-center rounded-xl bg-[var(--tgpi-gold)] px-6 text-sm font-extrabold text-[var(--tgpi-navy-deep)] transition hover:-translate-y-0.5 hover:bg-[var(--tgpi-gold-light)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+            >
+              Build my comparison ↓
+            </Link>
+            <Link
+              href="#decision-standard"
+              className="inline-flex min-h-14 items-center justify-center rounded-xl border border-white/20 bg-white/5 px-6 text-sm font-extrabold text-white transition hover:border-[var(--tgpi-gold)]/60 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
+            >
+              See the TGPI standard
+            </Link>
+          </div>
+        </div>
+
+        <div className="mt-8 flex items-end justify-between gap-5">
+          <dl className="grid flex-1 grid-cols-3 gap-4 border-t border-white/12 pt-5 sm:max-w-[590px]">
+            {[
+              ["195", "Country profiles"],
+              ["05", "Decision lenses"],
+              ["03", "Countries at once"],
+            ].map(([value, label]) => (
+              <div key={label}>
+                <dt className="text-xl font-extrabold text-[var(--tgpi-gold-light)] sm:text-2xl">
+                  {value}
+                </dt>
+                <dd className="mt-1 text-[9px] font-extrabold uppercase tracking-[0.16em] text-white/45 sm:text-[10px]">
+                  {label}
+                </dd>
+              </div>
+            ))}
+          </dl>
+
+          <div className="hidden max-w-[275px] rounded-2xl border border-white/15 bg-[var(--tgpi-navy-deep)]/70 px-5 py-4 text-right backdrop-blur-xl xl:block">
+            <p className="text-[9px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold-light)]">
+              Active lens · {goalLabel}
             </p>
-            <p className="mx-auto mt-4 max-w-lg text-sm leading-7 text-[#D7E0EB]">
-              Choose at least two valid countries to reveal the comparison workspace.
+            <p className="mt-2 text-sm font-semibold leading-6 text-white/80">
+              {countryCount} of 3 countries in the current decision set.
             </p>
           </div>
         </div>
       </div>
-    );
-  }
+    </section>
+  );
+}
+
+function ComparisonProofStrip() {
+  const items = [
+    ["Transparent weights", "See exactly why a signal changes the decision"],
+    ["Shareable state", "Every country set and lens becomes a reusable URL"],
+    ["Connected action", "Continue into intelligence, documents and learning"],
+  ] as const;
 
   return (
-    <div
-      className={`grid min-h-[360px] gap-px bg-white/10 lg:min-h-[500px] ${
-        countries.length === 1 ? "grid-cols-1" : "grid-cols-2"
-      }`}
-    >
-      {countries.map((country, index) => (
-        <div
-          key={country.slug}
-          className={`relative min-h-[240px] overflow-hidden ${
-            countries.length === 3 && index === 0 ? "col-span-2" : ""
-          }`}
+    <section className="mt-7 overflow-hidden rounded-[28px] border border-[var(--tgpi-border)] bg-white shadow-[var(--tgpi-shadow-soft)]">
+      <div className="grid gap-px bg-[var(--tgpi-border)] sm:grid-cols-3">
+        {items.map(([title, text], index) => (
+          <article key={title} className="bg-white px-6 py-5">
+            <p className="text-[9px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-strong)]">
+              0{index + 1} · {title}
+            </p>
+            <p className="mt-2 text-sm font-bold leading-6 text-[var(--tgpi-navy)]">
+              {text}
+            </p>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function SectionHeading({
+  eyebrow,
+  id,
+  text,
+  title,
+}: {
+  eyebrow: string;
+  id: string;
+  text: string;
+  title: string;
+}) {
+  return (
+    <div className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
+      <div>
+        <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[var(--tgpi-gold-strong)]">
+          {eyebrow}
+        </p>
+        <h2
+          id={id}
+          className="mt-3 max-w-3xl font-[var(--tgpi-font-display)] text-4xl font-semibold leading-[1.02] tracking-[-0.035em] text-[var(--tgpi-navy)] sm:text-5xl"
         >
-          <Image
-            src={getCountryImageUrl(country)}
-            alt={getCountryImageAlt(country)}
-            fill
-            priority={index === 0}
-            sizes={
-              countries.length === 1
-                ? "(max-width: 1024px) 100vw, 56vw"
-                : "(max-width: 1024px) 50vw, 28vw"
-            }
-            className="object-cover saturate-[1.08] contrast-[1.03]"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[var(--tgpi-navy-deep)]/90 via-transparent to-black/5" />
-          <div className="absolute inset-x-0 bottom-0 p-5">
-            <p className="text-3xl">{country.emoji}</p>
-            <p className="mt-1 font-[var(--tgpi-font-display)] text-2xl font-semibold text-white">
-              {country.name}
-            </p>
-            <p className="text-xs font-bold text-[#D7E0EB]">
-              {country.region} · {country.capital}
-            </p>
-          </div>
-        </div>
-      ))}
+          {title}
+        </h2>
+      </div>
+      <p className="max-w-2xl text-sm leading-7 text-[var(--tgpi-muted)] sm:text-base sm:leading-8 lg:justify-self-end">
+        {text}
+      </p>
     </div>
   );
 }
 
-function CompareCountryCard({ country, comparisonScore, goal }: {
+function CompareCountryCard({
+  country,
+  comparisonScore,
+  goal,
+}: {
   country: Country;
   comparisonScore: number;
   goal: ComparisonGoal;
 }) {
   return (
     <article className="overflow-hidden rounded-[28px] border border-[var(--tgpi-border)] bg-white shadow-[var(--tgpi-shadow-soft)]">
-      <div className="relative h-44 overflow-hidden">
+      <div className="relative h-48 overflow-hidden">
         <Image
           src={getCountryImageUrl(country)}
           alt={getCountryImageAlt(country)}
@@ -408,11 +421,11 @@ function CompareCountryCard({ country, comparisonScore, goal }: {
           sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
           className="object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[var(--tgpi-navy-deep)]/85 via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--tgpi-navy-deep)]/90 via-transparent to-transparent" />
         <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-4 p-5 text-white">
           <div>
             <p className="text-3xl">{country.emoji}</p>
-            <h2 className="mt-1 text-3xl font-semibold">{country.name}</h2>
+            <h3 className="mt-1 text-3xl font-semibold">{country.name}</h3>
             <p className="text-xs font-bold text-[#D7E0EB]">
               {country.region} · {country.capital}
             </p>
@@ -432,9 +445,18 @@ function CompareCountryCard({ country, comparisonScore, goal }: {
         </p>
         <dl className="mt-5 grid grid-cols-2 gap-3">
           <MiniMetric label="Cost band" value={getCountryCostLabel(country)} />
-          <MiniMetric label="Safety" value={`${country.intelligence.safetyScore}/100`} />
-          <MiniMetric label="English access" value={`${country.intelligence.englishFriendliness}/100`} />
-          <MiniMetric label="Quality of life" value={`${country.intelligence.qualityOfLifeScore}/100`} />
+          <MiniMetric
+            label="Safety"
+            value={`${country.intelligence.safetyScore}/100`}
+          />
+          <MiniMetric
+            label="English access"
+            value={`${country.intelligence.englishFriendliness}/100`}
+          />
+          <MiniMetric
+            label="Quality of life"
+            value={`${country.intelligence.qualityOfLifeScore}/100`}
+          />
         </dl>
         <div className="mt-5 flex items-center justify-between gap-4 border-t border-[var(--tgpi-border-soft)] pt-4">
           <div>
@@ -466,7 +488,148 @@ function MiniMetric({ label, value }: { label: string; value: string }) {
   );
 }
 
-function ComparisonMatrix({ countries, goal, comparisonScores }: {
+function ExecutiveDecisionBrief({
+  brief,
+  goal,
+  verdict,
+}: {
+  brief: ComparisonDecisionBrief;
+  goal: ComparisonGoal;
+  verdict: ComparisonVerdict;
+}) {
+  return (
+    <section className="mt-14 overflow-hidden rounded-[32px] border border-[var(--tgpi-gold)]/50 bg-white shadow-[var(--tgpi-shadow-premium)] sm:mt-16">
+      <div className="grid gap-8 bg-[linear-gradient(135deg,#05162A,#102F52)] p-7 text-white lg:grid-cols-[1.12fr_0.88fr] lg:items-end lg:p-10">
+        <div>
+          <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[var(--tgpi-gold-light)]">
+            TGPI Executive Decision Brief · {getComparisonGoalConfig(goal).label}
+          </p>
+          <h2 className="mt-4 max-w-4xl font-[var(--tgpi-font-display)] text-4xl font-semibold leading-[1.02] sm:text-5xl">
+            {verdict.title}
+          </h2>
+          <p className="mt-5 max-w-4xl text-sm leading-7 text-white/68 sm:text-base sm:leading-8">
+            {brief.summary}
+          </p>
+        </div>
+        <dl className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-3">
+          <DecisionStat label="Decision state" value={brief.stateLabel} />
+          <DecisionStat
+            label="Lead margin"
+            value={brief.margin ? `${brief.margin} points` : "Level"}
+          />
+          <DecisionStat
+            label="Largest spread"
+            value={`${getSignalLabel(brief.decisiveSignal)} · ${brief.decisiveSignalSpread}`}
+          />
+        </dl>
+      </div>
+
+      <div className="grid gap-4 p-5 md:grid-cols-3 lg:p-6">
+        <VerdictPick
+          label="Strongest lens score"
+          countries={verdict.bestOverall}
+          value={`${verdict.topScore}/100 decision score`}
+        />
+        <VerdictPick
+          label="Most accessible cost band"
+          countries={verdict.lowestCostProfile}
+          value={getCountryCostLabel(verdict.lowestCostProfile[0])}
+        />
+        <VerdictPick
+          label="Strongest safety signal"
+          countries={verdict.safest}
+          value={`${verdict.safest[0].intelligence.safetyScore}/100 safety`}
+        />
+      </div>
+    </section>
+  );
+}
+
+function DecisionStat({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-2xl border border-white/15 bg-white/[0.07] p-4 backdrop-blur">
+      <dt className="text-[9px] font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-gold-light)]">
+        {label}
+      </dt>
+      <dd className="mt-2 text-sm font-extrabold leading-6 text-white">{value}</dd>
+    </div>
+  );
+}
+
+function DecisionLandscape({
+  countries,
+  goal,
+}: {
+  countries: Country[];
+  goal: ComparisonGoal;
+}) {
+  const config = getComparisonGoalConfig(goal);
+  const entries = Object.entries(config.weights) as [ComparisonSignal, number][];
+
+  return (
+    <section className="mt-7 rounded-[30px] border border-[var(--tgpi-border)] bg-white p-6 shadow-[var(--tgpi-shadow-soft)] sm:p-8">
+      <SectionHeading
+        eyebrow="TGPI Decision Landscape"
+        id="decision-landscape-title"
+        title="See where each country creates an advantage — and a compromise."
+        text="Every bar uses a comparable 0–100 TGPI signal. The percentage beside each signal shows its influence inside the active decision lens."
+      />
+
+      <div className="mt-8 grid gap-4 lg:grid-cols-5">
+        {entries.map(([signal, weight]) => {
+          const highest = Math.max(
+            ...countries.map((country) => getCountrySignalScore(country, signal)),
+          );
+          return (
+            <article
+              key={signal}
+              className="rounded-[24px] border border-[var(--tgpi-border-soft)] bg-[var(--tgpi-canvas)] p-5"
+            >
+              <div className="flex items-start justify-between gap-3">
+                <h3 className="text-sm font-extrabold leading-6 text-[var(--tgpi-navy)]">
+                  {getSignalLabel(signal)}
+                </h3>
+                <span className="rounded-full bg-[var(--tgpi-gold-soft)] px-2.5 py-1 text-[10px] font-extrabold text-[var(--tgpi-gold-strong)]">
+                  {weight}%
+                </span>
+              </div>
+              <div className="mt-5 space-y-4">
+                {countries.map((country) => {
+                  const value = getCountrySignalScore(country, signal);
+                  const strongest = value === highest;
+                  return (
+                    <div key={country.slug}>
+                      <div className="flex items-center justify-between gap-3 text-xs">
+                        <span className="truncate font-bold text-[var(--tgpi-muted)]">
+                          {country.emoji} {country.name}
+                        </span>
+                        <span className={strongest ? "font-extrabold text-[var(--tgpi-gold-strong)]" : "font-bold text-[var(--tgpi-navy)]"}>
+                          {value}
+                        </span>
+                      </div>
+                      <div className="mt-2 h-2 overflow-hidden rounded-full bg-[#DED8CC]">
+                        <div
+                          className={strongest ? "h-full rounded-full bg-[var(--tgpi-gold)]" : "h-full rounded-full bg-[var(--tgpi-navy)]"}
+                          style={{ width: `${value}%` }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </article>
+          );
+        })}
+      </div>
+    </section>
+  );
+}
+
+function ComparisonMatrix({
+  countries,
+  goal,
+  comparisonScores,
+}: {
   countries: Country[];
   goal: ComparisonGoal;
   comparisonScores: Record<string, number>;
@@ -474,50 +637,133 @@ function ComparisonMatrix({ countries, goal, comparisonScores }: {
   return (
     <section
       id="comparison-matrix"
-      className="mt-6 scroll-mt-28 overflow-hidden rounded-[30px] border border-[var(--tgpi-border)] bg-white shadow-[var(--tgpi-shadow-soft)]"
+      className="mt-7 scroll-mt-28 overflow-hidden rounded-[30px] border border-[var(--tgpi-border)] bg-white shadow-[var(--tgpi-shadow-soft)]"
     >
-      <div className="border-b border-[var(--tgpi-border-soft)] p-6">
+      <div className="border-b border-[var(--tgpi-border-soft)] p-6 sm:p-8">
         <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold-strong)]">
-          Comparison matrix
+          Evidence matrix
         </p>
-        <h2 className="mt-2 text-3xl font-semibold text-[var(--tgpi-navy)]">
-          Side-by-side decision signals
+        <h2 className="mt-2 font-[var(--tgpi-font-display)] text-3xl font-semibold text-[var(--tgpi-navy)] sm:text-4xl">
+          Inspect every decision signal side by side.
         </h2>
-        <p className="mt-2 text-sm leading-7 text-[var(--tgpi-muted)]">
+        <p className="mt-3 max-w-4xl text-sm leading-7 text-[var(--tgpi-muted)]">
           Gold cells mark the strongest comparable signal. Monthly budgets remain
           unranked because their currencies are different.
         </p>
       </div>
 
-      <div className="overflow-x-auto" tabIndex={0} aria-label="Scrollable country comparison table">
+      <div
+        className="overflow-x-auto"
+        tabIndex={0}
+        aria-label="Scrollable country comparison table"
+      >
         <table className="w-full min-w-[820px] border-collapse text-left text-sm">
           <caption className="sr-only">
-            Comparison of {countries.map((country) => country.name).join(", ")} for the {getComparisonGoalConfig(goal).label} lens.
+            Comparison of {countries.map((country) => country.name).join(", ")} for
+            the {getComparisonGoalConfig(goal).label} lens.
           </caption>
           <thead>
             <tr className="border-b border-[var(--tgpi-border)] bg-[var(--tgpi-navy)] text-white">
-              <th scope="col" className="sticky left-0 z-10 min-w-48 bg-[var(--tgpi-navy)] p-4 text-[11px] font-extrabold uppercase tracking-[0.16em] text-[var(--tgpi-gold-light)]">
+              <th
+                scope="col"
+                className="sticky left-0 z-10 min-w-48 bg-[var(--tgpi-navy)] p-4 text-[11px] font-extrabold uppercase tracking-[0.16em] text-[var(--tgpi-gold-light)]"
+              >
                 Signal
               </th>
               {countries.map((country) => (
-                <th key={country.slug} scope="col" className="min-w-52 p-4 text-sm font-extrabold">
+                <th
+                  key={country.slug}
+                  scope="col"
+                  className="min-w-52 p-4 text-sm font-extrabold"
+                >
                   {country.emoji} {country.name}
                 </th>
               ))}
             </tr>
           </thead>
           <tbody>
-            <ComparisonRow label={`${getComparisonGoalConfig(goal).shortLabel} lens score`} countries={countries} render={(country) => `${comparisonScores[country.slug]}/100`} winners={getWinnerSlugs(countries, (country) => comparisonScores[country.slug])} />
-            <ComparisonRow label="TGPI readiness" countries={countries} render={(country) => `${country.tgpiScore}/100`} winners={getWinnerSlugs(countries, (country) => country.tgpiScore)} />
-            <ComparisonRow label="Relative cost profile" countries={countries} render={getCountryCostLabel} winners={getWinnerSlugs(countries, (country) => ({ low: 3, medium: 2, high: 1 })[country.costLevel])} />
-            <ComparisonRow label="Monthly budget · local reference" countries={countries} render={(country) => `${formatCurrencyAmount(country, country.intelligence.averageMonthlyBudget)} ${country.currencyCode}`} />
-            <ComparisonRow label="Safety" countries={countries} render={(country) => `${country.intelligence.safetyScore}/100`} winners={getWinnerSlugs(countries, (country) => country.intelligence.safetyScore)} />
-            <ComparisonRow label="English access" countries={countries} render={(country) => `${country.intelligence.englishFriendliness}/100`} winners={getWinnerSlugs(countries, (country) => country.intelligence.englishFriendliness)} />
-            <ComparisonRow label="Quality of life" countries={countries} render={(country) => `${country.intelligence.qualityOfLifeScore}/100`} winners={getWinnerSlugs(countries, (country) => country.intelligence.qualityOfLifeScore)} />
-            <ComparisonRow label="Adaptation" countries={countries} render={getCountryRiskLabel} />
-            <ComparisonRow label="Language" countries={countries} render={(country) => country.language} />
-            <ComparisonRow label="Currency" countries={countries} render={(country) => country.currency} />
-            <ComparisonRow label="Best goals" countries={countries} render={(country) => country.idealFor.map(getCountryGoalLabel).join(", ")} />
+            <ComparisonRow
+              label={`${getComparisonGoalConfig(goal).shortLabel} lens score`}
+              countries={countries}
+              render={(country) => `${comparisonScores[country.slug]}/100`}
+              winners={getWinnerSlugs(
+                countries,
+                (country) => comparisonScores[country.slug],
+              )}
+            />
+            <ComparisonRow
+              label="TGPI readiness"
+              countries={countries}
+              render={(country) => `${country.tgpiScore}/100`}
+              winners={getWinnerSlugs(countries, (country) => country.tgpiScore)}
+            />
+            <ComparisonRow
+              label="Relative cost profile"
+              countries={countries}
+              render={getCountryCostLabel}
+              winners={getWinnerSlugs(
+                countries,
+                (country) => ({ low: 3, medium: 2, high: 1 })[country.costLevel],
+              )}
+            />
+            <ComparisonRow
+              label="Monthly budget · local reference"
+              countries={countries}
+              render={(country) =>
+                `${formatCurrencyAmount(country, country.intelligence.averageMonthlyBudget)} ${country.currencyCode}`
+              }
+            />
+            <ComparisonRow
+              label="Safety"
+              countries={countries}
+              render={(country) => `${country.intelligence.safetyScore}/100`}
+              winners={getWinnerSlugs(
+                countries,
+                (country) => country.intelligence.safetyScore,
+              )}
+            />
+            <ComparisonRow
+              label="English access"
+              countries={countries}
+              render={(country) =>
+                `${country.intelligence.englishFriendliness}/100`
+              }
+              winners={getWinnerSlugs(
+                countries,
+                (country) => country.intelligence.englishFriendliness,
+              )}
+            />
+            <ComparisonRow
+              label="Quality of life"
+              countries={countries}
+              render={(country) =>
+                `${country.intelligence.qualityOfLifeScore}/100`
+              }
+              winners={getWinnerSlugs(
+                countries,
+                (country) => country.intelligence.qualityOfLifeScore,
+              )}
+            />
+            <ComparisonRow
+              label="Adaptation"
+              countries={countries}
+              render={getCountryRiskLabel}
+            />
+            <ComparisonRow
+              label="Language"
+              countries={countries}
+              render={(country) => country.language}
+            />
+            <ComparisonRow
+              label="Currency"
+              countries={countries}
+              render={(country) => country.currency}
+            />
+            <ComparisonRow
+              label="Best goals"
+              countries={countries}
+              render={(country) => country.idealFor.map(getCountryGoalLabel).join(", ")}
+            />
           </tbody>
         </table>
       </div>
@@ -525,7 +771,12 @@ function ComparisonMatrix({ countries, goal, comparisonScores }: {
   );
 }
 
-function ComparisonRow({ label, countries, render, winners = new Set<string>() }: {
+function ComparisonRow({
+  label,
+  countries,
+  render,
+  winners = new Set<string>(),
+}: {
   label: string;
   countries: Country[];
   render: (country: Country) => string;
@@ -533,13 +784,19 @@ function ComparisonRow({ label, countries, render, winners = new Set<string>() }
 }) {
   return (
     <tr className="border-b border-[var(--tgpi-border-soft)] last:border-b-0">
-      <th scope="row" className="sticky left-0 z-10 bg-[#F4EFE5] p-4 font-extrabold text-[var(--tgpi-navy)]">
+      <th
+        scope="row"
+        className="sticky left-0 z-10 bg-[#F4EFE5] p-4 font-extrabold text-[var(--tgpi-navy)]"
+      >
         {label}
       </th>
       {countries.map((country) => {
         const winner = winners.has(country.slug);
         return (
-          <td key={country.slug} className={`p-4 font-semibold ${winner ? "bg-[var(--tgpi-gold-soft)] text-[#5C420F]" : "text-[var(--tgpi-muted)]"}`}>
+          <td
+            key={country.slug}
+            className={`p-4 font-semibold ${winner ? "bg-[var(--tgpi-gold-soft)] text-[#5C420F]" : "text-[var(--tgpi-muted)]"}`}
+          >
             <span>{render(country)}</span>
             {winner ? (
               <span className="ml-2 inline-flex rounded-full border border-[var(--tgpi-gold)]/45 bg-white/55 px-2 py-1 text-[9px] font-extrabold uppercase tracking-[0.12em] text-[var(--tgpi-gold-strong)]">
@@ -553,28 +810,46 @@ function ComparisonRow({ label, countries, render, winners = new Set<string>() }
   );
 }
 
-function getWinnerSlugs(countries: Country[], getValue: (country: Country) => number): Set<string> {
+function getWinnerSlugs(
+  countries: Country[],
+  getValue: (country: Country) => number,
+): Set<string> {
   const highestValue = Math.max(...countries.map(getValue));
-  return new Set(countries.filter((country) => getValue(country) === highestValue).map((country) => country.slug));
+  return new Set(
+    countries
+      .filter((country) => getValue(country) === highestValue)
+      .map((country) => country.slug),
+  );
 }
 
-function VerdictPick({ label, countries, value }: {
+function VerdictPick({
+  label,
+  countries,
+  value,
+}: {
   label: string;
   countries: Country[];
   value: string;
 }) {
   return (
     <article className="rounded-2xl border border-[var(--tgpi-border-soft)] bg-[var(--tgpi-canvas)] p-5">
-      <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-muted)]">{label}</p>
+      <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-muted)]">
+        {label}
+      </p>
       <div className="mt-3 flex flex-wrap gap-2">
         {countries.map((country) => (
-          <Link key={country.slug} href={`/countries/${country.slug}`} className="inline-flex min-h-10 items-center rounded-full border border-[var(--tgpi-border)] bg-white px-3 text-sm font-extrabold text-[var(--tgpi-navy)] transition hover:border-[var(--tgpi-gold)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]">
+          <Link
+            key={country.slug}
+            href={`/countries/${country.slug}`}
+            className="inline-flex min-h-10 items-center rounded-full border border-[var(--tgpi-border)] bg-white px-3 text-sm font-extrabold text-[var(--tgpi-navy)] transition hover:border-[var(--tgpi-gold)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
+          >
             {country.emoji} {country.name}
           </Link>
         ))}
       </div>
       <p className="mt-3 text-sm font-extrabold text-[var(--tgpi-gold-strong)]">
-        {countries.length > 1 ? "Shared · " : ""}{value}
+        {countries.length > 1 ? "Shared · " : ""}
+        {value}
       </p>
     </article>
   );
@@ -584,18 +859,34 @@ function DecisionLensPanel({ goal }: { goal: ComparisonGoal }) {
   const config = getComparisonGoalConfig(goal);
   const entries = Object.entries(config.weights) as [ComparisonSignal, number][];
   return (
-    <section className="mt-6 rounded-[28px] border border-[#B8C9DF] bg-[#EEF5FF] p-6 shadow-[var(--tgpi-shadow-soft)]">
+    <section
+      id="decision-lens"
+      className="mt-7 scroll-mt-28 rounded-[28px] border border-[#B8C9DF] bg-[#EEF5FF] p-6 shadow-[var(--tgpi-shadow-soft)] sm:p-8"
+    >
       <div className="grid gap-6 lg:grid-cols-[0.7fr_1.3fr] lg:items-end">
         <div>
-          <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#315F98]">Transparent scoring model</p>
-          <h2 className="mt-2 text-3xl font-semibold text-[var(--tgpi-navy)]">{config.label}</h2>
-          <p className="mt-3 text-sm leading-7 text-[#334A64]">{config.description}</p>
+          <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#315F98]">
+            Transparent scoring model
+          </p>
+          <h2 className="mt-2 font-[var(--tgpi-font-display)] text-3xl font-semibold text-[var(--tgpi-navy)] sm:text-4xl">
+            {config.label}
+          </h2>
+          <p className="mt-3 text-sm leading-7 text-[#334A64]">
+            {config.description}
+          </p>
         </div>
         <dl className="grid gap-3 sm:grid-cols-5">
           {entries.map(([signal, weight]) => (
-            <div key={signal} className="rounded-2xl border border-white/80 bg-white/75 p-4 shadow-sm">
-              <dt className="text-[11px] font-bold leading-5 text-[#52677E]">{getSignalLabel(signal)}</dt>
-              <dd className="mt-2 text-2xl font-extrabold text-[var(--tgpi-navy)]">{weight}%</dd>
+            <div
+              key={signal}
+              className="rounded-2xl border border-white/80 bg-white/75 p-4 shadow-sm"
+            >
+              <dt className="text-[11px] font-bold leading-5 text-[#52677E]">
+                {getSignalLabel(signal)}
+              </dt>
+              <dd className="mt-2 text-2xl font-extrabold text-[var(--tgpi-navy)]">
+                {weight}%
+              </dd>
             </div>
           ))}
         </dl>
@@ -604,41 +895,199 @@ function DecisionLensPanel({ goal }: { goal: ComparisonGoal }) {
   );
 }
 
+function ConnectedDecisionPath({
+  country,
+  goal,
+}: {
+  country: Country;
+  goal: ComparisonGoal;
+}) {
+  const actions = [
+    {
+      number: "01",
+      eyebrow: "Country Intelligence",
+      title: `Interrogate ${country.name}`,
+      text: "Open the full country profile and validate the national signals behind the shortlist.",
+      href: `/countries/${country.slug}`,
+      cta: "Open country intelligence",
+    },
+    {
+      number: "02",
+      eyebrow: "Documents OS",
+      title: "Prepare the evidence",
+      text: "Turn the selected direction into a country-aware review of documents and official requirements.",
+      href: `/countries/${country.slug}#documents-to-verify`,
+      cta: "Review document readiness",
+    },
+    {
+      number: "03",
+      eyebrow: "TGPI Learning",
+      title: "Build the capability",
+      text: `Develop the communication, judgment and adaptability that support the ${getComparisonGoalConfig(goal).shortLabel.toLowerCase()} objective.`,
+      href: "/courses#learning-paths",
+      cta: "Find a learning path",
+    },
+    {
+      number: "04",
+      eyebrow: "Global Key",
+      title: "Keep the decision connected",
+      text: "Return to one private workspace where comparisons, preparation and progress remain visible.",
+      href: "/profile",
+      cta: "Open my Global Key",
+    },
+  ] as const;
+
+  return (
+    <section className="mt-14 sm:mt-16">
+      <SectionHeading
+        eyebrow="From comparison to execution"
+        id="connected-decision-path-title"
+        title="A country decision should activate the rest of the TGPI system."
+        text={`${country.name} currently leads this lens. TGPI connects that direction to deeper intelligence, documents, capability and private continuity instead of ending at a score.`}
+      />
+      <div className="mt-7 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        {actions.map((action) => (
+          <article
+            key={action.number}
+            className="group flex min-h-[290px] flex-col rounded-[26px] border border-[var(--tgpi-border)] bg-white p-6 shadow-[var(--tgpi-shadow-soft)] transition hover:-translate-y-1 hover:border-[var(--tgpi-gold)]/60"
+          >
+            <div className="flex items-start justify-between gap-4">
+              <p className="text-[9px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-strong)]">
+                {action.eyebrow}
+              </p>
+              <span className="text-xl font-extrabold text-[var(--tgpi-gold)]/65">
+                {action.number}
+              </span>
+            </div>
+            <h3 className="mt-5 text-2xl font-semibold leading-tight text-[var(--tgpi-navy)]">
+              {action.title}
+            </h3>
+            <p className="mt-3 flex-1 text-sm leading-7 text-[var(--tgpi-muted)]">
+              {action.text}
+            </p>
+            <Link
+              href={action.href}
+              className="mt-6 inline-flex min-h-11 items-center border-t border-[var(--tgpi-border-soft)] pt-4 text-xs font-extrabold text-[var(--tgpi-navy)] transition group-hover:text-[var(--tgpi-gold-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
+            >
+              {action.cta} →
+            </Link>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function ComparisonStandard() {
+  return (
+    <section
+      id="decision-standard"
+      className="mt-14 scroll-mt-28 overflow-hidden rounded-[32px] border border-[var(--tgpi-gold)]/45 bg-white shadow-[var(--tgpi-shadow-soft)] sm:mt-16"
+    >
+      <div className="grid lg:grid-cols-[0.8fr_1.2fr]">
+        <div className="bg-[var(--tgpi-navy)] p-7 text-white sm:p-9 lg:p-10">
+          <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold-light)]">
+            The TGPI Comparison Standard
+          </p>
+          <h2 className="mt-5 font-[var(--tgpi-font-display)] text-4xl font-semibold leading-[1.02] sm:text-5xl">
+            A score creates direction. Evidence creates a decision.
+          </h2>
+          <p className="mt-6 text-sm leading-7 text-white/65 sm:text-base">
+            TGPI does not present one universal “best country.” The system exposes
+            how a result changes when the objective changes — and what must be
+            verified before acting.
+          </p>
+        </div>
+
+        <div className="grid sm:grid-cols-2">
+          <StandardCard
+            number="01"
+            title="Comparable signals"
+            text="Cost uses relative bands, scores share one scale and local currencies remain visibly separate."
+          />
+          <StandardCard
+            number="02"
+            title="Visible weights"
+            text="Every decision lens reveals how readiness, safety, language, quality and cost influence the result."
+          />
+          <StandardCard
+            number="03"
+            title="Context before certainty"
+            text="A country-level signal never replaces city, timeline, identity, legal or financial validation."
+          />
+          <StandardCard
+            number="04"
+            title="Connected execution"
+            text="The shortlist continues into country intelligence, document readiness, learning and the Global Key."
+          />
+        </div>
+      </div>
+    </section>
+  );
+}
+
+function StandardCard({
+  number,
+  text,
+  title,
+}: {
+  number: string;
+  text: string;
+  title: string;
+}) {
+  return (
+    <article className="border-b border-[var(--tgpi-border-soft)] p-7 sm:border-r sm:p-8 sm:odd:border-r sm:even:border-r-0 sm:[&:nth-last-child(-n+2)]:border-b-0">
+      <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-strong)]">
+        {number}
+      </p>
+      <h3 className="mt-4 text-2xl font-semibold text-[var(--tgpi-navy)]">{title}</h3>
+      <p className="mt-3 text-sm leading-7 text-[var(--tgpi-muted)]">{text}</p>
+    </article>
+  );
+}
+
 function IncompleteComparisonState({ hasCountry }: { hasCountry: boolean }) {
   return (
-    <section className="mt-6 rounded-[30px] border border-[var(--tgpi-gold)]/55 bg-white p-7 text-center shadow-[var(--tgpi-shadow-soft)] sm:p-10">
-      <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[var(--tgpi-gold-strong)]">Comparison incomplete</p>
-      <h2 className="mx-auto mt-3 max-w-3xl text-4xl font-semibold text-[var(--tgpi-navy)]">
-        {hasCountry ? "Keep this country and choose one alternative." : "Choose at least two valid countries to begin."}
+    <section className="mt-7 rounded-[30px] border border-[var(--tgpi-gold)]/55 bg-white p-7 text-center shadow-[var(--tgpi-shadow-soft)] sm:p-10">
+      <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[var(--tgpi-gold-strong)]">
+        Comparison incomplete
+      </p>
+      <h2 className="mx-auto mt-3 max-w-3xl font-[var(--tgpi-font-display)] text-4xl font-semibold text-[var(--tgpi-navy)]">
+        {hasCountry
+          ? "Keep this country and choose one credible alternative."
+          : "Choose at least two valid countries to begin."}
       </h2>
       <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-[var(--tgpi-muted)]">
-        TGPI will not declare a country the winner of a one-country comparison. Use the builder above to create a meaningful decision set.
+        TGPI will not declare a country the winner of a one-country comparison.
+        Build a meaningful decision set before interpreting any score.
       </p>
-      <Link href="#comparison-builder-title" className="mt-6 inline-flex min-h-12 items-center justify-center rounded-2xl bg-[var(--tgpi-navy)] px-6 text-sm font-extrabold text-white transition hover:bg-[var(--tgpi-navy-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]">
+      <Link
+        href="#comparison-builder"
+        className="mt-6 inline-flex min-h-12 items-center justify-center rounded-2xl bg-[var(--tgpi-navy)] px-6 text-sm font-extrabold text-white transition hover:bg-[var(--tgpi-navy-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
+      >
         Choose another country
       </Link>
     </section>
   );
 }
 
-function ComparisonNotice({ children, tone }: { children: ReactNode; tone: "warning" | "information" }) {
-  const classes = tone === "warning" ? "border-[#E7B8B0] bg-[#FFF1EF] text-[#7F2E28]" : "border-[#B8C9DF] bg-[#EEF5FF] text-[#274968]";
-  return <p role="status" className={`mt-4 rounded-2xl border px-5 py-4 text-sm font-bold leading-6 ${classes}`}>{children}</p>;
-}
-
-function RuleCard({ title, text }: { title: string; text: string }) {
+function ComparisonNotice({
+  children,
+  tone,
+}: {
+  children: ReactNode;
+  tone: "warning" | "information";
+}) {
+  const classes =
+    tone === "warning"
+      ? "border-[#E7B8B0] bg-[#FFF1EF] text-[#7F2E28]"
+      : "border-[#B8C9DF] bg-[#EEF5FF] text-[#274968]";
   return (
-    <article className="rounded-2xl border border-[var(--tgpi-border-soft)] bg-[var(--tgpi-canvas)] p-4">
-      <h3 className="text-lg font-semibold text-[var(--tgpi-navy)]">{title}</h3>
-      <p className="mt-1 text-sm leading-6 text-[var(--tgpi-muted)]">{text}</p>
-    </article>
-  );
-}
-
-function ActionLink({ href, label }: { href: string; label: string }) {
-  return (
-    <Link href={href} className="inline-flex min-h-12 items-center justify-center rounded-2xl bg-[var(--tgpi-navy)] px-4 text-center text-sm font-extrabold text-white transition hover:-translate-y-0.5 hover:bg-[var(--tgpi-navy-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]">
-      {label}
-    </Link>
+    <p
+      role="status"
+      className={`mt-4 rounded-2xl border px-5 py-4 text-sm font-bold leading-6 ${classes}`}
+    >
+      {children}
+    </p>
   );
 }

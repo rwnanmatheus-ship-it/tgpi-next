@@ -83,6 +83,17 @@ export type ComparisonVerdict = {
   topScore: number;
 };
 
+export type ComparisonDecisionBrief = {
+  alternative: Country | null;
+  decisiveSignal: ComparisonSignal;
+  decisiveSignalSpread: number;
+  leaders: Country[];
+  margin: number;
+  state: "close" | "directional" | "strong" | "tied";
+  stateLabel: string;
+  summary: string;
+};
+
 export function isComparisonGoal(value: string | undefined): value is ComparisonGoal {
   return COMPARISON_GOALS.includes(value as ComparisonGoal);
 }
@@ -93,6 +104,21 @@ export function getComparisonGoalConfig(goal: ComparisonGoal): ComparisonGoalCon
 
 export function getCountryCostBandScore(country: Country): number {
   return COST_BAND_SCORES[country.costLevel];
+}
+
+export function getCountrySignalScore(
+  country: Country,
+  signal: ComparisonSignal,
+): number {
+  const signalScores: Record<ComparisonSignal, number> = {
+    tgpi: country.tgpiScore,
+    safety: country.intelligence.safetyScore,
+    english: country.intelligence.englishFriendliness,
+    quality: country.intelligence.qualityOfLifeScore,
+    cost: getCountryCostBandScore(country),
+  };
+
+  return signalScores[signal];
 }
 
 export function getCountryComparisonScore(
@@ -149,6 +175,75 @@ export function getComparisonVerdict(
     lowestCostProfile,
     safest,
     topScore,
+  };
+}
+
+export function getComparisonDecisionBrief(
+  countries: Country[],
+  goal: ComparisonGoal,
+): ComparisonDecisionBrief | null {
+  if (countries.length < 2) return null;
+
+  const ranked = countries
+    .map((country) => ({
+      country,
+      score: getCountryComparisonScore(country, goal),
+    }))
+    .sort((first, second) => second.score - first.score);
+  const topScore = ranked[0]?.score ?? 0;
+  const leaders = ranked
+    .filter((item) => item.score === topScore)
+    .map((item) => item.country);
+  const alternative = ranked.find((item) => item.score < topScore)?.country ?? null;
+  const nextScore = ranked.find((item) => item.score < topScore)?.score ?? topScore;
+  const margin = topScore - nextScore;
+  const signals = Object.keys(
+    getComparisonGoalConfig(goal).weights,
+  ) as ComparisonSignal[];
+  const signalSpreads = signals.map((signal) => {
+    const values = countries.map((country) =>
+      getCountrySignalScore(country, signal),
+    );
+    return {
+      signal,
+      spread: Math.max(...values) - Math.min(...values),
+    };
+  });
+  const decisive = signalSpreads.sort(
+    (first, second) => second.spread - first.spread,
+  )[0] ?? { signal: "tgpi" as const, spread: 0 };
+  const state =
+    leaders.length > 1
+      ? "tied"
+      : margin >= 8
+        ? "strong"
+        : margin >= 4
+          ? "directional"
+          : "close";
+  const stateLabels: Record<ComparisonDecisionBrief["state"], string> = {
+    tied: "Shared lead",
+    strong: "Strong directional lead",
+    directional: "Meaningful directional lead",
+    close: "Close decision",
+  };
+  const leaderNames = formatCountryNames(leaders);
+  const signalLabel = getSignalLabel(decisive.signal).toLowerCase();
+  const summary =
+    state === "tied"
+      ? `${leaderNames} remain level under this lens. The comparison should now be resolved through city-level evidence, personal constraints and official requirements.`
+      : state === "close"
+        ? `${leaderNames} leads by only ${margin} points. Treat this as a shortlist signal, not a final answer; the largest separation appears in ${signalLabel}.`
+        : `${leaderNames} creates a ${margin}-point lead under this lens. The largest separation appears in ${signalLabel}, which should be validated against your personal constraints.`;
+
+  return {
+    alternative,
+    decisiveSignal: decisive.signal,
+    decisiveSignalSpread: decisive.spread,
+    leaders,
+    margin,
+    state,
+    stateLabel: stateLabels[state],
+    summary,
   };
 }
 
