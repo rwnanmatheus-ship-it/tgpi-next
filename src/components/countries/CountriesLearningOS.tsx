@@ -23,7 +23,7 @@ const journey = [
     title: "Turn knowledge into readiness",
     description: "Connect the country to documents, checklists, risks and practical next actions.",
     href: "/passport",
-    action: "Open TGPI Passport",
+    action: "Open Documents OS",
   },
   {
     number: "04",

@@ -100,7 +100,7 @@ export default function HomeDecisionOS() {
                     <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-white/45">Recommended action</p>
                     <p className="mt-3 font-[var(--tgpi-font-display)] text-3xl font-semibold text-white">Improve document readiness first.</p>
                     <p className="mt-4 text-sm leading-6 text-white/55">Your country options are strong. Translation and language proof are the main constraints reducing your readiness score.</p>
-                    <Link href="/passport" className="mt-6 inline-flex min-h-12 items-center justify-center rounded-2xl bg-[var(--tgpi-gold)] px-5 text-sm font-extrabold text-[var(--tgpi-navy)]">Open Passport</Link>
+                    <Link href="/passport" className="mt-6 inline-flex min-h-12 items-center justify-center rounded-2xl bg-[var(--tgpi-gold)] px-5 text-sm font-extrabold text-[var(--tgpi-navy)]">Open Documents OS</Link>
                   </div>
                 </div>
               )}

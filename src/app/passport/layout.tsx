@@ -1,1 +1,5 @@
-export { default } from "@/components/auth/ProtectedRouteLayout";
+import type { ReactNode } from "react";
+
+export default function PassportLayout({ children }: { children: ReactNode }) {
+  return children;
+}

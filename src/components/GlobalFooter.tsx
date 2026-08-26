@@ -27,7 +27,7 @@ const footerGroups = [
     links: [
       ["My workspace", "/profile"],
       ["Start a plan", "/onboarding"],
-      ["Passport", "/passport"],
+      ["Documents OS", "/passport"],
       ["Certificates", "/certificates"],
       ["Sign in", "/login"],
     ],
