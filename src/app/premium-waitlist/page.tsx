@@ -23,15 +23,15 @@ export default function PremiumWaitlistPage() {
               ← Back to pricing
             </Link>
             <p className="mt-10 text-xs font-black uppercase tracking-[0.3em] text-[#B58A2A]">
-              TGPI Premium Early Access
+              TGPI Premium Founding Access
             </p>
             <h1 className="mt-5 font-serif text-5xl font-semibold leading-[0.98] tracking-[-0.04em] text-[#0B0B0B] md:text-7xl">
-              Help shape the first TGPI membership.
+              Secure priority for the first TGPI Premium release.
             </h1>
             <p className="mt-6 text-lg leading-8 text-[#566070]">
-              Register your interest while payments remain disabled. Your answers help
-              TGPI validate demand, pricing and the tools that should be prioritized for
-              the first subscribers.
+              Join the founding list while payments remain disabled. Tell TGPI where
+              you are going and which outcome matters most so the first membership
+              experience begins around real global decisions.
             </p>
           </div>
 
@@ -55,7 +55,7 @@ export default function PremiumWaitlistPage() {
             />
             <div className="p-7">
               <p className="text-xs font-black uppercase tracking-[0.24em] text-[#F0D58C]">
-                Planned launch membership
+                Founding membership
               </p>
               <p className="mt-4 text-4xl font-black text-[#F0D58C]">
                 US$ 19.99

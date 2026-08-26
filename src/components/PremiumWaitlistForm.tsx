@@ -11,7 +11,6 @@ type FormState = {
   targetCountry: string;
   goal: string;
   timeline: string;
-  pricePreference: string;
   website: string;
 };
 
@@ -22,7 +21,6 @@ const initialState: FormState = {
   targetCountry: "",
   goal: "move",
   timeline: "6-12-months",
-  pricePreference: "19.99",
   website: "",
 };
 
@@ -74,7 +72,8 @@ export default function PremiumWaitlistForm() {
           targetCountry: form.targetCountry.trim(),
           primaryGoal: form.goal,
           expectedTimeline: form.timeline,
-          pricePreferenceUsd: form.pricePreference,
+          publishedPriceUsd: "19.99",
+          pricingVersion: "tgpi-premium-v2",
           source: "pricing",
           status: "interested",
           userUid: user?.uid ?? null,
@@ -188,19 +187,6 @@ export default function PremiumWaitlistForm() {
           </select>
         </label>
 
-        <label className="text-sm font-bold text-[#303846] md:col-span-2">
-          Reasonable monthly price for TGPI Premium
-          <select
-            value={form.pricePreference}
-            onChange={(event) => updateField("pricePreference", event.target.value)}
-            className="mt-2 w-full rounded-2xl border border-[#D8D2C4] bg-[#FFFDF8] px-4 py-3 font-normal outline-none transition focus:border-[#B58A2A]"
-          >
-            <option value="4.99">US$ 4.99</option>
-            <option value="9.99">US$ 9.99</option>
-            <option value="14.99">US$ 14.99</option>
-            <option value="19.99">US$ 19.99</option>
-          </select>
-        </label>
       </div>
 
       <label className="absolute -left-[10000px] top-auto h-px w-px overflow-hidden">
