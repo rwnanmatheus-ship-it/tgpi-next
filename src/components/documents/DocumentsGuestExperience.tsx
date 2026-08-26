@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import DocumentsPathfinder from "@/components/documents/DocumentsPathfinder";
 
@@ -51,73 +52,6 @@ const connectedSystem = [
   },
 ];
 
-function DocumentsHeroVisual() {
-  return (
-    <div
-      aria-label="Illustration of the TGPI document readiness system"
-      role="img"
-      className="relative min-h-[390px] overflow-hidden rounded-[30px] border border-white/12 bg-[#102B4C] p-5 shadow-[0_32px_90px_rgba(0,0,0,0.28)] sm:min-h-[440px] sm:p-7"
-    >
-      <div className="pointer-events-none absolute -right-28 -top-28 h-80 w-80 rounded-full border border-[var(--tgpi-gold)]/30" />
-      <div className="pointer-events-none absolute -bottom-20 left-10 h-56 w-56 rounded-full bg-[var(--tgpi-gold)]/10 blur-3xl" />
-
-      <div className="relative flex items-center justify-between gap-4">
-        <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-white/50">
-          Readiness architecture
-        </p>
-        <span className="rounded-full border border-[#9FE0C2]/25 bg-[#9FE0C2]/10 px-3 py-1 text-[9px] font-extrabold uppercase tracking-[0.16em] text-[#BDEBD5]">
-          Privacy first
-        </span>
-      </div>
-
-      <div className="relative mt-12 grid gap-3">
-        {[
-          ["Identity", "Foundation", "100%"],
-          ["Country research", "Destination intelligence", "78%"],
-          ["Document review", "Preparation progress", "58%"],
-          ["Verified evidence", "Skills & credentials", "32%"],
-        ].map(([label, detail, completion], index) => (
-          <div
-            key={label}
-            className={`rounded-2xl border p-4 backdrop-blur-sm ${
-              index === 0
-                ? "border-[var(--tgpi-gold)]/45 bg-[var(--tgpi-gold)]/10"
-                : "border-white/10 bg-white/[0.055]"
-            }`}
-          >
-            <div className="flex items-center justify-between gap-4">
-              <div>
-                <p className="text-sm font-extrabold text-white">{label}</p>
-                <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.14em] text-white/45">
-                  {detail}
-                </p>
-              </div>
-              <p className="font-[var(--tgpi-font-display)] text-xl font-semibold text-[var(--tgpi-gold)]">
-                {completion}
-              </p>
-            </div>
-            <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-white/10">
-              <div
-                className="h-full rounded-full bg-[var(--tgpi-gold)]"
-                style={{ width: completion }}
-              />
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div className="relative mt-5 flex items-center justify-between rounded-2xl border border-white/10 bg-[#081A30]/70 px-4 py-3">
-        <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-white/45">
-          TGPI Global ID
-        </p>
-        <p className="text-xs font-extrabold tracking-[0.12em] text-white">
-          ONE CONNECTED IDENTITY
-        </p>
-      </div>
-    </div>
-  );
-}
-
 export default function DocumentsGuestExperience({
   countryCount,
 }: {
@@ -126,60 +60,79 @@ export default function DocumentsGuestExperience({
   return (
     <main className="min-h-screen bg-[var(--tgpi-canvas)] text-[var(--tgpi-ink)]">
       <div className="mx-auto max-w-[1360px] px-4 py-6 sm:px-6 sm:py-10 lg:px-8 lg:py-14">
-        <section className="relative overflow-hidden rounded-[36px] bg-[var(--tgpi-navy)] px-5 py-7 text-white shadow-[0_36px_100px_rgba(11,31,58,0.24)] sm:px-8 sm:py-10 lg:px-12 lg:py-12">
-          <div className="pointer-events-none absolute -left-32 -top-32 h-96 w-96 rounded-full border border-white/[0.06]" />
-          <div className="relative grid gap-9 lg:grid-cols-[1.02fr_.98fr] lg:items-center">
-            <div>
-              <div className="flex flex-wrap items-center gap-3">
-                <p className="text-[10px] font-extrabold uppercase tracking-[0.26em] text-[var(--tgpi-gold)]">
+        <section className="relative isolate overflow-hidden rounded-[30px] border border-white/10 bg-[var(--tgpi-navy)] text-white shadow-[var(--tgpi-shadow-premium)] sm:rounded-[36px]">
+          <Image
+            src="/images/documents/tgpi-documents-hero-v2.webp"
+            alt="TGPI global evidence observatory connecting an illuminated world atlas with organized document research"
+            fill
+            priority
+            quality={88}
+            sizes="100vw"
+            className="object-cover object-[72%_center] sm:object-[68%_center] lg:object-center"
+          />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(4,20,38,0.94)_0%,rgba(4,20,38,0.89)_70%,rgba(4,20,38,0.78)_100%)] lg:bg-[linear-gradient(90deg,rgba(4,20,38,0.99)_0%,rgba(4,20,38,0.94)_43%,rgba(4,20,38,0.38)_72%,rgba(4,20,38,0.12)_100%)]" />
+          <div className="pointer-events-none absolute -left-24 top-[-7rem] h-80 w-80 rounded-full bg-[var(--tgpi-gold)]/10 blur-3xl" aria-hidden="true" />
+
+          <div className="relative z-10 flex min-h-[620px] flex-col justify-center p-7 sm:min-h-[580px] sm:p-9 lg:h-[540px] lg:min-h-0 lg:p-10 xl:p-12">
+            <div className="max-w-[680px]">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="rounded-full border border-[var(--tgpi-gold)]/35 bg-[var(--tgpi-gold)]/10 px-3 py-2 text-[9px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-light)]">
                   TGPI Documents OS
-                </p>
-                <span className="rounded-full border border-white/12 bg-white/[0.055] px-3 py-1 text-[9px] font-extrabold uppercase tracking-[0.16em] text-white/65">
+                </span>
+                <span className="rounded-full border border-white/15 bg-white/5 px-3 py-2 text-[9px] font-extrabold uppercase tracking-[0.16em] text-white/60">
                   Research · readiness · evidence
                 </span>
               </div>
-              <h1 className="mt-6 max-w-3xl font-[var(--tgpi-font-display)] text-[clamp(3.25rem,7vw,6.4rem)] font-semibold leading-[0.86] tracking-[-0.055em]">
+              <h1 className="mt-5 max-w-2xl font-[var(--tgpi-font-display)] text-[clamp(2.65rem,4.5vw,4.2rem)] font-semibold leading-[0.96] tracking-[-0.045em]">
                 Your global plans deserve more than a checklist.
               </h1>
-              <p className="mt-7 max-w-2xl text-base leading-8 text-white/70 sm:text-lg">
+              <p className="mt-5 max-w-xl text-sm leading-7 text-white/68 sm:text-base sm:leading-8">
                 Build a living preparation system around your identity, destination,
-                objective and evidence. TGPI helps you know what to research, what to
-                prepare and what comes next.
+                objective and evidence. Know what to research, what to prepare and
+                what comes next.
               </p>
-              <div className="mt-8 flex flex-wrap gap-3">
+
+              <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                 <Link
                   href="/sign-up?redirect_url=/passport"
-                  className="inline-flex min-h-12 items-center justify-center rounded-2xl bg-[var(--tgpi-gold)] px-6 text-sm font-extrabold text-[var(--tgpi-navy)] transition hover:-translate-y-0.5"
+                  className="inline-flex min-h-13 items-center justify-center rounded-2xl bg-[var(--tgpi-gold)] px-6 text-sm font-extrabold text-[var(--tgpi-navy-deep)] transition hover:-translate-y-0.5 hover:bg-[var(--tgpi-gold-light)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
                 >
                   Build my document strategy
                 </Link>
                 <Link
                   href="/sign-in?redirect_url=/passport"
-                  className="inline-flex min-h-12 items-center justify-center rounded-2xl border border-white/20 px-6 text-sm font-extrabold text-white transition hover:border-white/45"
+                  className="inline-flex min-h-13 items-center justify-center rounded-2xl border border-white/20 bg-white/5 px-6 text-sm font-extrabold text-white transition hover:-translate-y-0.5 hover:border-[var(--tgpi-gold)]/60 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
                 >
                   Open my workspace
                 </Link>
               </div>
 
-              <div className="mt-10 grid grid-cols-3 gap-3 border-t border-white/10 pt-7">
+              <dl className="mt-6 grid max-w-xl grid-cols-3 gap-2 border-t border-white/10 pt-5">
                 {[
-                  [String(countryCount), "country profiles"],
-                  ["4", "global objectives"],
-                  ["1", "connected identity"],
+                  [String(countryCount), "Country profiles"],
+                  ["04", "Global objectives"],
+                  ["01", "Connected identity"],
                 ].map(([value, label]) => (
                   <div key={label}>
-                    <p className="font-[var(--tgpi-font-display)] text-3xl font-semibold text-white sm:text-4xl">
+                    <dt className="text-2xl font-extrabold text-[var(--tgpi-gold-light)]">
                       {value}
-                    </p>
-                    <p className="mt-1 text-[9px] font-extrabold uppercase tracking-[0.16em] text-white/45 sm:text-[10px]">
+                    </dt>
+                    <dd className="mt-1 text-[9px] font-extrabold uppercase tracking-[0.15em] text-white/45">
                       {label}
-                    </p>
+                    </dd>
                   </div>
                 ))}
-              </div>
+              </dl>
             </div>
 
-            <DocumentsHeroVisual />
+            <div className="absolute bottom-8 right-9 hidden max-w-[270px] rounded-[22px] border border-white/15 bg-[var(--tgpi-navy-deep)]/55 p-5 text-right backdrop-blur-md lg:block">
+              <p className="text-[9px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-light)]">
+                The TGPI Documents System
+              </p>
+              <p className="mt-2 text-sm font-bold leading-6 text-white/85">
+                One connected readiness profile for global action.
+              </p>
+            </div>
           </div>
         </section>
 

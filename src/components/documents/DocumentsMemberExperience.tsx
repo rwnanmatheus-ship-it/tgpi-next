@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import type { DocumentsMemberModel } from "@/lib/documents-os";
 
@@ -27,77 +28,78 @@ export default function DocumentsMemberExperience({
   return (
     <main className="min-h-screen bg-[var(--tgpi-canvas)] text-[var(--tgpi-ink)]">
       <div className="mx-auto max-w-[1360px] px-4 py-6 sm:px-6 sm:py-10 lg:px-8 lg:py-14">
-        <section className="relative overflow-hidden rounded-[36px] bg-[var(--tgpi-navy)] px-5 py-7 text-white shadow-[0_36px_100px_rgba(11,31,58,0.24)] sm:px-8 sm:py-10 lg:px-12 lg:py-12">
-          <div className="pointer-events-none absolute -right-32 -top-32 h-96 w-96 rounded-full border border-[var(--tgpi-gold)]/20" />
-          <div className="pointer-events-none absolute -bottom-36 right-24 h-80 w-80 rounded-full bg-[var(--tgpi-gold)]/10 blur-3xl" />
+        <section className="relative isolate overflow-hidden rounded-[30px] border border-white/10 bg-[var(--tgpi-navy)] text-white shadow-[var(--tgpi-shadow-premium)] sm:rounded-[36px]">
+          <Image
+            src="/images/documents/tgpi-documents-hero-v2.webp"
+            alt="TGPI global evidence observatory connecting an illuminated world atlas with organized document research"
+            fill
+            priority
+            quality={88}
+            sizes="100vw"
+            className="object-cover object-[72%_center] sm:object-[68%_center] lg:object-center"
+          />
+          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(4,20,38,0.95)_0%,rgba(4,20,38,0.90)_70%,rgba(4,20,38,0.80)_100%)] lg:bg-[linear-gradient(90deg,rgba(4,20,38,0.99)_0%,rgba(4,20,38,0.94)_43%,rgba(4,20,38,0.40)_72%,rgba(4,20,38,0.14)_100%)]" />
+          <div className="pointer-events-none absolute -left-24 top-[-7rem] h-80 w-80 rounded-full bg-[var(--tgpi-gold)]/10 blur-3xl" aria-hidden="true" />
 
-          <div className="relative grid gap-10 lg:grid-cols-[1.08fr_.92fr] lg:items-end">
-            <div>
-              <div className="flex flex-wrap items-center gap-3">
-                <p className="text-[10px] font-extrabold uppercase tracking-[0.26em] text-[var(--tgpi-gold)]">
+          <div className="relative z-10 flex min-h-[620px] flex-col justify-center p-7 sm:min-h-[580px] sm:p-9 lg:h-[540px] lg:min-h-0 lg:p-10 xl:p-12">
+            <div className="max-w-[680px]">
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="rounded-full border border-[var(--tgpi-gold)]/35 bg-[var(--tgpi-gold)]/10 px-3 py-2 text-[9px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-light)]">
                   TGPI Documents OS
-                </p>
-                <span className="rounded-full border border-white/12 bg-white/[0.055] px-3 py-1 text-[9px] font-extrabold uppercase tracking-[0.16em] text-white/65">
+                </span>
+                <span className="rounded-full border border-white/15 bg-white/5 px-3 py-2 text-[9px] font-extrabold uppercase tracking-[0.16em] text-white/60">
                   Private command center
                 </span>
               </div>
-              <h1 className="mt-6 max-w-4xl font-[var(--tgpi-font-display)] text-[clamp(3.2rem,7vw,6.2rem)] font-semibold leading-[0.87] tracking-[-0.055em]">
+              <h1 className="mt-5 max-w-2xl font-[var(--tgpi-font-display)] text-[clamp(2.65rem,4.5vw,4.2rem)] font-semibold leading-[0.96] tracking-[-0.045em]">
                 {firstName}, turn preparation into progress.
               </h1>
-              <p className="mt-7 max-w-2xl text-base leading-8 text-white/70 sm:text-lg">
+              <p className="mt-5 max-w-xl text-sm leading-7 text-white/68 sm:text-base sm:leading-8">
                 Your destination research, readiness checks, learning evidence and
                 verified achievements now share one strategic view.
               </p>
-              <div className="mt-8 flex flex-wrap gap-3">
+
+              <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                 <Link
                   href={model.nextAction.href}
-                  className="inline-flex min-h-12 items-center justify-center rounded-2xl bg-[var(--tgpi-gold)] px-6 text-sm font-extrabold text-[var(--tgpi-navy)] transition hover:-translate-y-0.5"
+                  className="inline-flex min-h-13 items-center justify-center rounded-2xl bg-[var(--tgpi-gold)] px-6 text-sm font-extrabold text-[var(--tgpi-navy-deep)] transition hover:-translate-y-0.5 hover:bg-[var(--tgpi-gold-light)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
                 >
                   {model.nextAction.label}
                 </Link>
                 <Link
                   href="/profile"
-                  className="inline-flex min-h-12 items-center justify-center rounded-2xl border border-white/20 px-6 text-sm font-extrabold text-white transition hover:border-white/45"
+                  className="inline-flex min-h-13 items-center justify-center rounded-2xl border border-white/20 bg-white/5 px-6 text-sm font-extrabold text-white transition hover:-translate-y-0.5 hover:border-[var(--tgpi-gold)]/60 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
                 >
                   Open global workspace
                 </Link>
               </div>
+
+              <dl className="mt-6 grid max-w-xl grid-cols-3 gap-2 border-t border-white/10 pt-5">
+                {[
+                  [`${model.readinessScore}%`, "Document readiness"],
+                  [String(model.countries.length).padStart(2, "0"), "Target countries"],
+                  [String(model.completedItems).padStart(2, "0"), "Items reviewed"],
+                ].map(([value, label]) => (
+                  <div key={label}>
+                    <dt className="text-2xl font-extrabold text-[var(--tgpi-gold-light)]">
+                      {value}
+                    </dt>
+                    <dd className="mt-1 text-[9px] font-extrabold uppercase tracking-[0.15em] text-white/45">
+                      {label}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
             </div>
 
-            <div className="grid gap-4 sm:grid-cols-[.9fr_1.1fr]">
-              <article className="rounded-[28px] border border-[var(--tgpi-gold)]/35 bg-[var(--tgpi-gold)]/10 p-6 backdrop-blur-sm">
-                <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold)]">
-                  Document readiness
-                </p>
-                <p className="mt-5 font-[var(--tgpi-font-display)] text-7xl font-semibold leading-none tracking-[-0.06em]">
-                  {model.readinessScore}
-                  <span className="ml-1 text-2xl text-white/45">%</span>
-                </p>
-                <div className="mt-5 h-2 overflow-hidden rounded-full bg-white/10">
-                  <div
-                    className="h-full rounded-full bg-[var(--tgpi-gold)]"
-                    style={{ width: `${model.readinessScore}%` }}
-                  />
-                </div>
-                <p className="mt-4 text-xs leading-6 text-white/55">
-                  Preparation score, not legal approval or eligibility.
-                </p>
-              </article>
-
-              <article className="rounded-[28px] border border-white/12 bg-white/[0.055] p-6 backdrop-blur-sm">
-                <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-white/45">
-                  TGPI Global ID
-                </p>
-                <p className="mt-4 break-all font-[var(--tgpi-font-display)] text-2xl font-semibold text-white">
-                  {globalId}
-                </p>
-                <div className="mt-6 border-t border-white/10 pt-5">
-                  <p className="text-xs text-white/45">Current objective</p>
-                  <p className="mt-2 text-lg font-extrabold text-white">
-                    {model.goalLabel}
-                  </p>
-                </div>
-              </article>
+            <div className="absolute bottom-8 right-9 hidden max-w-[290px] rounded-[22px] border border-white/15 bg-[var(--tgpi-navy-deep)]/60 p-5 text-right backdrop-blur-md lg:block">
+              <p className="text-[9px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-light)]">
+                TGPI Global ID
+              </p>
+              <p className="mt-2 break-all text-sm font-bold leading-6 text-white/85">
+                {globalId}
+              </p>
+              <p className="mt-2 text-xs text-white/50">{model.goalLabel}</p>
             </div>
           </div>
         </section>
