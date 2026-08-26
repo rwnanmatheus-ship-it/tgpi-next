@@ -58,7 +58,7 @@ export default function PremiumWaitlistPage() {
                 Planned launch membership
               </p>
               <p className="mt-4 text-4xl font-black text-[#F0D58C]">
-                US$ 9.99
+                US$ 19.99
                 <span className="ml-2 text-sm font-semibold text-[#C8D0DC]">/month</span>
               </p>
               <ul className="mt-6 space-y-3 text-sm leading-6 text-[#E7EDF5]">

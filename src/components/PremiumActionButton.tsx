@@ -6,33 +6,54 @@ import { useAuth } from "@clerk/nextjs";
 import { blocksNewCheckout } from "@/lib/billing";
 import type { BillingStatusResponse } from "@/types";
 
+const billingStatusRequests = new Map<
+  string,
+  Promise<BillingStatusResponse>
+>();
+
+function getBillingStatus(userId: string) {
+  const existingRequest = billingStatusRequests.get(userId);
+  if (existingRequest) return existingRequest;
+
+  const request = fetch("/api/billing/status", {
+    cache: "no-store",
+  })
+    .then(async (response) => {
+      if (!response.ok) throw new Error("Could not verify membership status.");
+      return (await response.json()) as BillingStatusResponse;
+    })
+    .catch((error: unknown) => {
+      billingStatusRequests.delete(userId);
+      throw error;
+    });
+
+  billingStatusRequests.set(userId, request);
+  return request;
+}
+
 export default function PremiumActionButton({
   billingEnabled,
 }: {
   billingEnabled: boolean;
 }) {
-  const { isLoaded, isSignedIn } = useAuth();
+  const { isLoaded, isSignedIn, userId } = useAuth();
   const [loading, setLoading] = useState(false);
   const [checkingStatus, setCheckingStatus] = useState(true);
   const [billing, setBilling] = useState<BillingStatusResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!isLoaded || !isSignedIn) {
+    if (!isLoaded || !isSignedIn || !userId) {
       setCheckingStatus(false);
       return;
     }
 
+    const authenticatedUserId = userId;
     let active = true;
 
     async function loadBillingStatus() {
       try {
-        const response = await fetch("/api/billing/status", {
-          cache: "no-store",
-        });
-
-        if (!response.ok) throw new Error("Could not verify membership status.");
-        const data = (await response.json()) as BillingStatusResponse;
+        const data = await getBillingStatus(authenticatedUserId);
         if (active) setBilling(data);
       } catch (statusError) {
         if (active) {
@@ -51,7 +72,7 @@ export default function PremiumActionButton({
     return () => {
       active = false;
     };
-  }, [isLoaded, isSignedIn]);
+  }, [isLoaded, isSignedIn, userId]);
 
   const hasFounderAccess = billing?.accessMode === "founder";
   const hasPreviewAccess = billing?.accessMode === "preview";

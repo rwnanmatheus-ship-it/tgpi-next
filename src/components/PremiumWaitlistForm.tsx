@@ -22,7 +22,7 @@ const initialState: FormState = {
   targetCountry: "",
   goal: "move",
   timeline: "6-12-months",
-  pricePreference: "9.99",
+  pricePreference: "19.99",
   website: "",
 };
 
