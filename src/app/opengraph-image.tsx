@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "TGPI — Compare the world and build the skills to move through it";
+export const alt = "TGPI — Choose where to live, work or study with evidence";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -37,10 +37,10 @@ export default function OpenGraphImage() {
           </div>
           <div style={{ display: "flex", flexDirection: "column", maxWidth: 950 }}>
             <div style={{ display: "flex", fontSize: 76, lineHeight: 0.98 }}>
-              Explore the world. Build the skills to move through it.
+              Choose where to live, work or study—with evidence.
             </div>
             <div style={{ color: "#d7e0eb", display: "flex", fontFamily: "Arial, sans-serif", fontSize: 26, marginTop: 28 }}>
-              Country comparison, practical learning and global readiness in one connected platform.
+              Country intelligence, transparent comparison, documents and practical learning in one connected system.
             </div>
           </div>
         </div>
