@@ -64,12 +64,13 @@ export function CountryCard({ country }: CountryCardProps) {
         href={`/countries/${country.slug}`}
         className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--tgpi-gold)]"
       >
-        <div className="relative h-48 overflow-hidden bg-[linear-gradient(135deg,#FFFDF8,#EEF5FF_48%,#FFF7DE)]">
+        <div className="relative h-44 overflow-hidden bg-[linear-gradient(135deg,#FFFDF8,#EEF5FF_48%,#FFF7DE)]">
           {hasImage ? (
             <Image
               src={imageUrl}
               alt={imageAlt}
               fill
+              quality={82}
               sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
               className="object-cover opacity-90 saturate-110 contrast-105 transition duration-700 group-hover:scale-[1.035] group-hover:opacity-100"
             />
@@ -101,9 +102,9 @@ export function CountryCard({ country }: CountryCardProps) {
             <p className="mt-0.5 font-[var(--tgpi-font-display)] text-3xl font-semibold leading-none">{country.tgpiScore}</p>
           </div>
 
-          <div className="absolute inset-x-5 bottom-5">
-            <div className="mb-1 text-3xl drop-shadow-2xl">{country.emoji}</div>
-            <h3 className="truncate font-[var(--tgpi-font-display)] text-3xl font-semibold tracking-[-0.02em] text-white drop-shadow-xl">
+          <div className="absolute inset-x-5 bottom-4">
+            <div className="mb-1 text-2xl drop-shadow-2xl">{country.emoji}</div>
+            <h3 className="truncate font-[var(--tgpi-font-display)] text-[1.7rem] font-semibold tracking-[-0.02em] text-white drop-shadow-xl">
               {country.name}
             </h3>
             <p className="mt-1 truncate text-[10px] font-extrabold uppercase tracking-[0.2em] text-white/80">
@@ -112,11 +113,11 @@ export function CountryCard({ country }: CountryCardProps) {
           </div>
         </div>
 
-        <div className="space-y-4 p-5 sm:p-6">
+        <div className="space-y-3.5 p-5">
           <div className="flex items-start justify-between gap-4">
             <div className="min-w-0">
               <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-gold-strong)]">Best for</p>
-              <p className="mt-2 line-clamp-2 font-[var(--tgpi-font-display)] text-2xl font-semibold leading-tight text-[var(--tgpi-navy)]">
+              <p className="mt-1.5 line-clamp-2 font-[var(--tgpi-font-display)] text-xl font-semibold leading-tight text-[var(--tgpi-navy)]">
                 {country.mainGoal}
               </p>
             </div>
@@ -125,26 +126,18 @@ export function CountryCard({ country }: CountryCardProps) {
             </span>
           </div>
 
-          <p className="line-clamp-2 min-h-12 text-sm leading-6 text-[var(--tgpi-muted)]">
-            {country.shortDescription}
-          </p>
-
           <div className="grid grid-cols-3 gap-2">
             <MetricBox label="Cost profile" value={getCostTone(country.costLevel)} />
             <MetricBox label="Safety" value={`${country.intelligence.safetyScore}/100`} />
             <MetricBox label="English access" value={`${country.intelligence.englishFriendliness}/100`} />
           </div>
 
-          <div className="flex items-start justify-between gap-4 rounded-2xl border border-[var(--tgpi-border)] bg-[var(--tgpi-canvas)] p-4">
-            <div>
-              <p className="text-[10px] font-extrabold uppercase tracking-[0.16em] text-[var(--tgpi-gold-strong)]">Adaptation signal</p>
-              <p className="mt-1 text-sm font-bold leading-6 text-[var(--tgpi-navy)]">
-                {getRiskLabel(country)}
-              </p>
+          <div className="flex items-center justify-between gap-3 rounded-2xl border border-[var(--tgpi-border)] bg-[var(--tgpi-canvas)] px-4 py-3">
+            <div className="min-w-0">
+              <p className="text-[9px] font-extrabold uppercase tracking-[0.13em] text-[var(--tgpi-gold-strong)]">Adaptation signal</p>
+              <p className="mt-1 truncate text-xs font-bold text-[var(--tgpi-navy)]">{getRiskLabel(country)}</p>
             </div>
-            <span className="shrink-0 rounded-full border border-[var(--tgpi-border)] bg-white px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.1em] text-[var(--tgpi-navy)]">
-              {getDifficultyTone(country.difficulty)}
-            </span>
+            <span className="shrink-0 rounded-full border border-[var(--tgpi-border)] bg-white px-3 py-1 text-[9px] font-extrabold uppercase tracking-[0.08em] text-[var(--tgpi-navy)]">{getDifficultyTone(country.difficulty)}</span>
           </div>
 
           <div className="flex items-center justify-between gap-4 border-t border-[var(--tgpi-border)] pt-4">

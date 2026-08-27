@@ -3,12 +3,17 @@
 import Link from "next/link";
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import { CountryCard } from "@/components/countries/CountryCard";
+import {
+  COUNTRY_DECISION_PRESETS,
+  type CountryCostFilter,
+  type CountryDecisionPreset,
+  type CountryDifficultyFilter,
+  type CountryIntentId,
+  type CountrySortOption,
+} from "@/data/country-page-system";
 import type { CountryExplorerItem, CountryGoal } from "@/lib/countries";
 
-type SortOption = "score" | "cost" | "safety" | "english" | "quality" | "name";
-type CostFilter = "all" | "low" | "medium" | "high";
-type DifficultyFilter = "all" | "easy" | "medium" | "hard";
-type IntentId = "study" | "career" | "remote" | "cost" | "quality" | "mobility";
+type ExplorerView = "visual" | "index";
 
 type CountriesExplorerV3Props = {
   countries: CountryExplorerItem[];
@@ -16,29 +21,9 @@ type CountriesExplorerV3Props = {
   regions: string[];
 };
 
-type IntentPreset = {
-  id: IntentId;
-  label: string;
-  goal?: CountryGoal;
-  cost?: CostFilter;
-  difficulty?: DifficultyFilter;
-  sort: SortOption;
-  minSafety?: number;
-  minEnglish?: number;
-};
-
-const PRESETS: IntentPreset[] = [
-  { id: "study", label: "Study abroad", goal: "study", sort: "score", minSafety: 70 },
-  { id: "career", label: "Build a career", goal: "work", sort: "score", minSafety: 65 },
-  { id: "remote", label: "Remote work", goal: "work", sort: "quality", minEnglish: 60 },
-  { id: "cost", label: "Lower cost", cost: "low", sort: "cost" },
-  { id: "quality", label: "Quality of life", sort: "quality", minSafety: 75 },
-  { id: "mobility", label: "Long-term mobility", goal: "travel", sort: "score", difficulty: "easy" },
-];
-
 const MAX_COMPARE = 3;
-const INITIAL_RESULTS = 12;
-const RESULTS_INCREMENT = 12;
+const INITIAL_RESULTS = 9;
+const RESULTS_INCREMENT = 9;
 const COMPARE_STORAGE_KEY = "tgpi-country-comparison:v1";
 const COST_ORDER: Record<CountryExplorerItem["costLevel"], number> = {
   low: 0,
@@ -80,12 +65,13 @@ export default function CountriesExplorerV3({ countries, goals, regions }: Count
   const [query, setQuery] = useState("");
   const [region, setRegion] = useState("all");
   const [goal, setGoal] = useState<CountryGoal | "all">("all");
-  const [cost, setCost] = useState<CostFilter>("all");
-  const [difficulty, setDifficulty] = useState<DifficultyFilter>("all");
-  const [sort, setSort] = useState<SortOption>("score");
+  const [cost, setCost] = useState<CountryCostFilter>("all");
+  const [difficulty, setDifficulty] = useState<CountryDifficultyFilter>("all");
+  const [sort, setSort] = useState<CountrySortOption>("score");
   const [minSafety, setMinSafety] = useState(0);
   const [minEnglish, setMinEnglish] = useState(0);
-  const [activePreset, setActivePreset] = useState<IntentId | null>(null);
+  const [activePreset, setActivePreset] = useState<CountryIntentId | null>(null);
+  const [view, setView] = useState<ExplorerView>("visual");
   const [filtersOpen, setFiltersOpen] = useState(false);
   const [selectedSlugs, setSelectedSlugs] = useState<string[]>([]);
   const [visibleCount, setVisibleCount] = useState(INITIAL_RESULTS);
@@ -107,13 +93,13 @@ export default function CountriesExplorerV3({ countries, goals, regions }: Count
         setSelectedSlugs(validSlugs);
       }
     } catch {
-      window.localStorage.removeItem(COMPARE_STORAGE_KEY);
+      // Storage can be unavailable in private or restricted browsing contexts.
     } finally {
       comparisonRestoredRef.current = true;
     }
 
     const requestedIntent = new URLSearchParams(window.location.search).get("intent");
-    const preset = PRESETS.find((item) => item.id === requestedIntent);
+    const preset = COUNTRY_DECISION_PRESETS.find((item) => item.id === requestedIntent);
     if (!preset) return;
 
     setGoal(preset.goal ?? "all");
@@ -127,7 +113,11 @@ export default function CountriesExplorerV3({ countries, goals, regions }: Count
 
   useEffect(() => {
     if (!comparisonRestoredRef.current) return;
-    window.localStorage.setItem(COMPARE_STORAGE_KEY, JSON.stringify(selectedSlugs));
+    try {
+      window.localStorage.setItem(COMPARE_STORAGE_KEY, JSON.stringify(selectedSlugs));
+    } catch {
+      // Comparison remains available for this session when storage is restricted.
+    }
   }, [selectedSlugs]);
 
   useEffect(() => {
@@ -187,7 +177,7 @@ export default function CountriesExplorerV3({ countries, goals, regions }: Count
 
   const activeFilters = useMemo(() => {
     const items: string[] = [];
-    if (activePreset) items.push(PRESETS.find((preset) => preset.id === activePreset)?.label ?? "Preset");
+    if (activePreset) items.push(COUNTRY_DECISION_PRESETS.find((preset) => preset.id === activePreset)?.label ?? "Preset");
     if (region !== "all") items.push(region);
     if (goal !== "all") items.push(getCountryGoalLabel(goal));
     if (cost !== "all") items.push(`${cost} cost profile`);
@@ -206,6 +196,7 @@ export default function CountriesExplorerV3({ countries, goals, regions }: Count
   const hasActiveControls = Boolean(
     query || activeFilters.length || sort !== "score",
   );
+  const isFiltering = query !== deferredQuery;
 
   function clearFilters() {
     setQuery("");
@@ -220,7 +211,7 @@ export default function CountriesExplorerV3({ countries, goals, regions }: Count
     window.history.replaceState(null, "", "/countries#country-explorer");
   }
 
-  function applyPreset(preset: IntentPreset) {
+  function applyPreset(preset: CountryDecisionPreset) {
     setGoal(preset.goal ?? "all");
     setCost(preset.cost ?? "all");
     setDifficulty(preset.difficulty ?? "all");
@@ -249,27 +240,32 @@ export default function CountriesExplorerV3({ countries, goals, regions }: Count
   }
 
   return (
-    <section className="mt-8 pb-28">
-      <div className="sticky top-[72px] z-30 rounded-[24px] border border-[var(--tgpi-border)] bg-[rgba(255,253,248,0.94)] p-3 shadow-[var(--tgpi-shadow-soft)] backdrop-blur-2xl">
-        <div className="grid gap-3 md:grid-cols-[1fr_auto]">
+    <section className="mt-6 pb-28">
+      <div className="sticky top-[72px] z-30 rounded-[22px] border border-[var(--tgpi-border)] bg-[rgba(255,253,248,0.94)] p-3 shadow-[var(--tgpi-shadow-soft)] backdrop-blur-2xl">
+        <div className="grid gap-3 lg:grid-cols-[1fr_auto_auto]">
           <label className="relative block">
             <span className="sr-only">Search countries</span>
             <input value={query} onChange={(event) => { setQuery(event.target.value); setActivePreset(null); }} placeholder="Search countries, regions, languages or currencies" className="h-12 w-full rounded-2xl border border-[var(--tgpi-border)] bg-white px-4 pr-12 text-sm text-[var(--tgpi-navy)] outline-none transition placeholder:text-[var(--tgpi-muted)] focus:border-[var(--tgpi-gold)] focus:ring-2 focus:ring-[var(--tgpi-gold)]/20" />
             <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[var(--tgpi-gold-strong)]">⌕</span>
           </label>
+          <div role="group" aria-label="Country results view" className="grid grid-cols-2 rounded-2xl border border-[var(--tgpi-border)] bg-white p-1">
+            <button type="button" aria-pressed={view === "visual"} onClick={() => setView("visual")} className={`min-h-10 rounded-xl px-4 text-xs font-extrabold transition ${view === "visual" ? "bg-[var(--tgpi-blue-soft)] text-[var(--tgpi-blue)]" : "text-[var(--tgpi-muted)] hover:text-[var(--tgpi-navy)]"}`}>Visual</button>
+            <button type="button" aria-pressed={view === "index"} onClick={() => setView("index")} className={`min-h-10 rounded-xl px-4 text-xs font-extrabold transition ${view === "index" ? "bg-[var(--tgpi-teal-soft)] text-[var(--tgpi-teal)]" : "text-[var(--tgpi-muted)] hover:text-[var(--tgpi-navy)]"}`}>Index</button>
+          </div>
           <button type="button" onClick={() => setFiltersOpen(true)} className="inline-flex min-h-12 items-center justify-center rounded-2xl bg-[var(--tgpi-navy)] px-5 text-sm font-extrabold text-white transition hover:bg-[var(--tgpi-navy-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]">
             Filters{activeFilters.length ? ` ${activeFilters.length}` : ""}
           </button>
         </div>
       </div>
 
-      <div className="mt-6 -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-3 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 lg:grid-cols-3 xl:grid-cols-6">
-        {PRESETS.map((preset) => {
+      <div className="mt-5 -mx-4 flex snap-x snap-mandatory gap-2.5 overflow-x-auto px-4 pb-3 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 lg:grid-cols-3 xl:grid-cols-6">
+        {COUNTRY_DECISION_PRESETS.map((preset, index) => {
           const active = activePreset === preset.id;
           return (
-            <button key={preset.id} type="button" onClick={() => applyPreset(preset)} className={`min-w-[72vw] snap-center rounded-[20px] border p-4 text-left transition sm:min-w-0 ${active ? "border-[var(--tgpi-gold)] bg-[var(--tgpi-navy)] text-white shadow-[var(--tgpi-shadow-premium)]" : "border-[var(--tgpi-border)] bg-white text-[var(--tgpi-navy)] hover:-translate-y-0.5 hover:border-[var(--tgpi-gold)]"}`}>
-              <span className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-strong)]">Decision path</span>
-              <span className="mt-3 block font-[var(--tgpi-font-display)] text-xl font-semibold">{preset.label}</span>
+            <button key={preset.id} type="button" onClick={() => applyPreset(preset)} className={`min-w-[68vw] snap-center rounded-[18px] border p-4 text-left transition sm:min-w-0 ${active ? "border-[var(--tgpi-gold)] bg-[var(--tgpi-navy)] text-white shadow-[var(--tgpi-shadow-premium)]" : "border-[var(--tgpi-border)] bg-white text-[var(--tgpi-navy)] hover:-translate-y-0.5 hover:border-[var(--tgpi-gold)]"}`}>
+              <span className={`text-[9px] font-extrabold uppercase tracking-[0.14em] ${active ? "text-[var(--tgpi-gold-light)]" : "text-[var(--tgpi-gold-strong)]"}`}>Lens {String(index + 1).padStart(2, "0")}</span>
+              <span className="mt-2 block font-[var(--tgpi-font-display)] text-lg font-semibold leading-tight">{preset.label}</span>
+              <span className={`mt-2 hidden text-[11px] leading-5 xl:block ${active ? "text-white/65" : "text-[var(--tgpi-muted)]"}`}>{preset.summary}</span>
             </button>
           );
         })}
@@ -287,22 +283,35 @@ export default function CountriesExplorerV3({ countries, goals, regions }: Count
 
       {compareNotice ? <p role="status" className="mt-4 rounded-2xl border border-[#A23B32]/25 bg-[#FFF1EF] px-4 py-3 text-sm font-bold text-[#7F2E28]">{compareNotice}</p> : null}
 
-      <div id="countries-results" className="scroll-mt-40">
+      <div id="countries-results" aria-busy={isFiltering} className={`scroll-mt-40 transition-opacity ${isFiltering ? "opacity-65" : "opacity-100"}`}>
         {filteredCountries.length ? (
-          <div className="mt-6 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
-            {visibleCountries.map((country) => {
-              const selected = selectedSlugs.includes(country.slug);
-              return (
-                <div key={country.slug} className={`relative rounded-[28px] ${selected ? "ring-2 ring-[var(--tgpi-gold)] ring-offset-4 ring-offset-[var(--tgpi-canvas)]" : ""}`}>
-                  <div className="mb-3 flex items-center justify-between gap-3 px-1">
-                    <p className="text-xs font-bold text-[var(--tgpi-muted)]">Compare this profile</p>
-                    <button type="button" aria-pressed={selected} aria-label={`${selected ? "Remove" : "Add"} ${country.name} ${selected ? "from" : "to"} comparison`} onClick={() => toggleCountry(country.slug)} className={`min-h-10 rounded-full border px-4 text-xs font-extrabold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)] ${selected ? "border-[var(--tgpi-gold)] bg-[var(--tgpi-gold)] text-[var(--tgpi-navy)]" : "border-[var(--tgpi-border)] bg-white text-[var(--tgpi-navy)] hover:border-[var(--tgpi-gold)]"}`}>{selected ? "Added ✓" : "Add to compare"}</button>
+          view === "visual" ? (
+            <div className="mt-6 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+              {visibleCountries.map((country) => {
+                const selected = selectedSlugs.includes(country.slug);
+                return (
+                  <div key={country.slug} className={`relative rounded-[28px] [contain-intrinsic-size:0_520px] [content-visibility:auto] ${selected ? "ring-2 ring-[var(--tgpi-gold)] ring-offset-4 ring-offset-[var(--tgpi-canvas)]" : ""}`}>
+                    <div className="mb-3 flex items-center justify-between gap-3 px-1">
+                      <p className="text-[10px] font-extrabold uppercase tracking-[0.12em] text-[var(--tgpi-muted)]">Decision profile</p>
+                      <CompareButton country={country} selected={selected} onToggle={toggleCountry} />
+                    </div>
+                    <CountryCard country={country} />
                   </div>
-                  <CountryCard country={country} />
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="mt-6 grid gap-3 lg:grid-cols-2">
+              {visibleCountries.map((country) => (
+                <CountryIndexRow
+                  key={country.slug}
+                  country={country}
+                  selected={selectedSlugs.includes(country.slug)}
+                  onToggle={toggleCountry}
+                />
+              ))}
+            </div>
+          )
         ) : (
           <div className="mt-8 rounded-[28px] border border-[var(--tgpi-border)] bg-white p-8 text-center shadow-[var(--tgpi-shadow-soft)]">
             <p className="font-[var(--tgpi-font-display)] text-3xl font-semibold text-[var(--tgpi-navy)]">No country matches every selected filter.</p>
@@ -312,7 +321,7 @@ export default function CountriesExplorerV3({ countries, goals, regions }: Count
         )}
 
         {visibleCountries.length < filteredCountries.length ? (
-          <div className="mt-8 flex flex-col items-center rounded-[24px] border border-[var(--tgpi-border)] bg-white p-5 text-center">
+          <div className="mt-7 flex flex-col items-center rounded-[22px] border border-[var(--tgpi-border)] bg-white p-5 text-center">
             <p className="text-sm text-[var(--tgpi-muted)]">{filteredCountries.length - visibleCountries.length} more profiles match this view.</p>
             <button type="button" onClick={() => setVisibleCount((current) => current + RESULTS_INCREMENT)} className="mt-4 inline-flex min-h-12 items-center justify-center rounded-2xl bg-[var(--tgpi-navy)] px-6 text-sm font-extrabold text-white transition hover:-translate-y-0.5 hover:bg-[var(--tgpi-navy-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]">
               Load {Math.min(RESULTS_INCREMENT, filteredCountries.length - visibleCountries.length)} more countries
@@ -331,9 +340,9 @@ export default function CountriesExplorerV3({ countries, goals, regions }: Count
             <div className="grid gap-4 py-5">
               <SelectField label="Region" value={region} onChange={(value) => { setRegion(value); setActivePreset(null); }} options={["all", ...regions]} format={(value) => value === "all" ? "All regions" : value} />
               <SelectField label="Goal" value={goal} onChange={(value) => { setGoal(value as CountryGoal | "all"); setActivePreset(null); }} options={["all", ...goals]} format={(value) => value === "all" ? "All goals" : getCountryGoalLabel(value as CountryGoal)} />
-              <SelectField label="Cost profile" value={cost} onChange={(value) => { setCost(value as CostFilter); setActivePreset(null); }} options={["all", "low", "medium", "high"]} format={(value) => value === "all" ? "All cost profiles" : `${value} cost profile`} />
-              <SelectField label="Adaptation" value={difficulty} onChange={(value) => { setDifficulty(value as DifficultyFilter); setActivePreset(null); }} options={["all", "easy", "medium", "hard"]} format={(value) => value === "all" ? "All levels" : `${value} adaptation`} />
-              <SelectField label="Sort" value={sort} onChange={(value) => setSort(value as SortOption)} options={["score", "cost", "safety", "english", "quality", "name"]} format={(value) => ({ score: "TGPI score", cost: "Lowest cost profile", safety: "Safety", english: "English access", quality: "Quality of life", name: "Name" }[value] ?? value)} />
+              <SelectField label="Cost profile" value={cost} onChange={(value) => { setCost(value as CountryCostFilter); setActivePreset(null); }} options={["all", "low", "medium", "high"]} format={(value) => value === "all" ? "All cost profiles" : `${value} cost profile`} />
+              <SelectField label="Adaptation" value={difficulty} onChange={(value) => { setDifficulty(value as CountryDifficultyFilter); setActivePreset(null); }} options={["all", "easy", "medium", "hard"]} format={(value) => value === "all" ? "All levels" : `${value} adaptation`} />
+              <SelectField label="Sort" value={sort} onChange={(value) => setSort(value as CountrySortOption)} options={["score", "cost", "safety", "english", "quality", "name"]} format={(value) => ({ score: "TGPI score", cost: "Lowest cost profile", safety: "Safety", english: "English access", quality: "Quality of life", name: "Name" }[value] ?? value)} />
               <RangeField label="Minimum safety" value={minSafety} onChange={(value) => { setMinSafety(value); setActivePreset(null); }} />
               <RangeField label="Minimum English access" value={minEnglish} onChange={(value) => { setMinEnglish(value); setActivePreset(null); }} />
             </div>
@@ -357,6 +366,94 @@ export default function CountriesExplorerV3({ countries, goals, regions }: Count
         </div>
       ) : null}
     </section>
+  );
+}
+
+function CompareButton({
+  country,
+  selected,
+  onToggle,
+}: {
+  country: CountryExplorerItem;
+  selected: boolean;
+  onToggle: (slug: string) => void;
+}) {
+  return (
+    <button
+      type="button"
+      aria-pressed={selected}
+      aria-label={`${selected ? "Remove" : "Add"} ${country.name} ${selected ? "from" : "to"} comparison`}
+      onClick={() => onToggle(country.slug)}
+      className={`min-h-9 rounded-full border px-3 text-[10px] font-extrabold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)] ${
+        selected
+          ? "border-[var(--tgpi-gold)] bg-[var(--tgpi-gold)] text-[var(--tgpi-navy)]"
+          : "border-[var(--tgpi-border)] bg-white text-[var(--tgpi-navy)] hover:border-[var(--tgpi-gold)]"
+      }`}
+    >
+      {selected ? "Added ✓" : "+ Compare"}
+    </button>
+  );
+}
+
+function CountryIndexRow({
+  country,
+  selected,
+  onToggle,
+}: {
+  country: CountryExplorerItem;
+  selected: boolean;
+  onToggle: (slug: string) => void;
+}) {
+  const costLabel =
+    country.costLevel === "low"
+      ? "Accessible"
+      : country.costLevel === "medium"
+        ? "Balanced"
+        : "Premium";
+
+  return (
+    <article
+      className={`rounded-[20px] border bg-white p-4 transition [contain-intrinsic-size:0_220px] [content-visibility:auto] hover:border-[var(--tgpi-gold)] hover:shadow-[var(--tgpi-shadow-soft)] ${
+        selected ? "border-[var(--tgpi-gold)] ring-1 ring-[var(--tgpi-gold)]" : "border-[var(--tgpi-border)]"
+      }`}
+    >
+      <div className="flex items-start justify-between gap-4">
+        <div className="flex min-w-0 items-start gap-3">
+          <span aria-hidden="true" className="text-2xl">{country.emoji}</span>
+          <div className="min-w-0">
+            <p className="text-[9px] font-extrabold uppercase tracking-[0.12em] text-[var(--tgpi-gold-strong)]">{country.region} · {country.capital}</p>
+            <h3 className="mt-1 truncate font-[var(--tgpi-font-display)] text-2xl font-semibold text-[var(--tgpi-navy)]">{country.name}</h3>
+            <p className="mt-1 truncate text-xs font-semibold text-[var(--tgpi-muted)]">{country.language} · {country.currencyCode}</p>
+          </div>
+        </div>
+        <div className="shrink-0 rounded-xl bg-[var(--tgpi-navy)] px-3 py-2 text-center text-white">
+          <p className="text-[7px] font-extrabold uppercase tracking-[0.1em] text-[var(--tgpi-gold-light)]">Signal</p>
+          <p className="font-[var(--tgpi-font-display)] text-2xl font-semibold leading-none">{country.tgpiScore}</p>
+        </div>
+      </div>
+
+      <div className="mt-4 grid grid-cols-3 gap-2">
+        <IndexMetric label="Cost" value={costLabel} />
+        <IndexMetric label="Safety" value={`${country.intelligence.safetyScore}/100`} />
+        <IndexMetric label="English" value={`${country.intelligence.englishFriendliness}/100`} />
+      </div>
+
+      <div className="mt-4 flex items-center justify-between gap-3 border-t border-[var(--tgpi-border)] pt-3">
+        <CompareButton country={country} selected={selected} onToggle={onToggle} />
+        <Link href={`/countries/${country.slug}`} className="inline-flex min-h-9 items-center rounded-xl bg-[var(--tgpi-blue-soft)] px-4 text-[10px] font-extrabold text-[var(--tgpi-blue)] transition hover:bg-[var(--tgpi-navy)] hover:text-white">
+          Open dossier →
+        </Link>
+      </div>
+    </article>
+  );
+}
+
+function IndexMetric({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="min-w-0 rounded-xl border border-[var(--tgpi-border)] bg-[var(--tgpi-canvas)] p-2.5">
+      <p className="text-[7px] font-extrabold uppercase tracking-[0.1em] text-[var(--tgpi-muted)]">{label}</p>
+      <p className="mt-1 truncate text-[11px] font-extrabold text-[var(--tgpi-navy)]">{value}</p>
+    </div>
   );
 }
 
