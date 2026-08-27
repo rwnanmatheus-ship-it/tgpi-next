@@ -3,20 +3,24 @@
 :root {
   color-scheme: light;
 
-  --tgpi-canvas: #f8f4eb;
-  --tgpi-surface: #fffdf8;
+  --tgpi-canvas: #f7f3ea;
+  --tgpi-surface: #fffcf6;
   --tgpi-surface-strong: #ffffff;
-  --tgpi-ink: #101010;
-  --tgpi-navy: #071a32;
-  --tgpi-navy-deep: #041426;
-  --tgpi-navy-soft: #102d50;
-  --tgpi-gold: #c59632;
-  --tgpi-gold-strong: #8a641f;
-  --tgpi-gold-light: #f0d58c;
-  --tgpi-gold-soft: #f7e8b9;
-  --tgpi-border: #d8d0c0;
-  --tgpi-border-soft: #ece5d9;
-  --tgpi-muted: #5e6875;
+  --tgpi-ink: #12110f;
+  --tgpi-navy: #061b33;
+  --tgpi-navy-deep: #031426;
+  --tgpi-navy-soft: #123a60;
+  --tgpi-blue: #24577f;
+  --tgpi-blue-soft: #e7eff6;
+  --tgpi-teal: #2e6768;
+  --tgpi-teal-soft: #e5efec;
+  --tgpi-gold: #c49536;
+  --tgpi-gold-strong: #79571d;
+  --tgpi-gold-light: #f2d997;
+  --tgpi-gold-soft: #f5e7be;
+  --tgpi-border: #d7cdbd;
+  --tgpi-border-soft: #ebe3d7;
+  --tgpi-muted: #59636f;
   --tgpi-success: #1f7a55;
   --tgpi-danger: #9f2f2f;
 
@@ -49,7 +53,8 @@ body {
   margin: 0;
   overflow-x: hidden;
   background:
-    radial-gradient(circle at 12% 0%, rgba(197, 150, 50, 0.08), transparent 30%),
+    radial-gradient(circle at 12% 0%, rgba(196, 149, 54, 0.075), transparent 30%),
+    radial-gradient(circle at 92% 12%, rgba(36, 87, 127, 0.045), transparent 24%),
     var(--tgpi-canvas);
   color: var(--tgpi-ink);
   font-family: var(--tgpi-font-sans);
