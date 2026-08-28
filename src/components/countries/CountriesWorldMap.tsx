@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { startTransition, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { CountryExplorerItem } from "@/lib/countries";
@@ -10,8 +11,10 @@ import {
 
 type MapCountry = Pick<
   CountryExplorerItem,
-  "slug" | "name" | "emoji" | "region"
+  "slug" | "name" | "emoji" | "region" | "capital" | "visual" | "tgpiScore"
 >;
+
+type CinematicPhase = "idle" | "locking" | "resolving" | "entering";
 
 type WorldMapFeature = {
   name: string;
@@ -45,6 +48,12 @@ type CountriesWorldMapProps = {
 };
 
 const MAP_DATA_URL = "/maps/tgpi-world-countries-50m.json";
+
+const CINEMATIC_PHASE_COPY: Record<Exclude<CinematicPhase, "idle">, string> = {
+  locking: "Territory acquired",
+  resolving: "Synchronizing evidence layers",
+  entering: "Entering Country Intelligence",
+};
 
 const FEATURE_NAME_TO_SLUG: Readonly<Record<string, string>> = {
   "the bahamas": "bahamas",
@@ -106,8 +115,14 @@ export default function CountriesWorldMap({
 }: CountriesWorldMapProps) {
   const router = useRouter();
   const svgRef = useRef<SVGSVGElement>(null);
+  const navigationTimersRef = useRef<number[]>([]);
+  const prefetchedRoutesRef = useRef(new Set<string>());
   const [mapData, setMapData] = useState<WorldMapData | null>(null);
   const [mapError, setMapError] = useState("");
+  const [cinematic, setCinematic] = useState<{
+    phase: CinematicPhase;
+    targetSlug: string;
+  }>({ phase: "idle", targetSlug: "" });
 
   useEffect(() => {
     const controller = new AbortController();
@@ -133,6 +148,13 @@ export default function CountriesWorldMap({
     void loadMap();
     return () => controller.abort();
   }, []);
+
+  useEffect(
+    () => () => {
+      navigationTimersRef.current.forEach((timer) => window.clearTimeout(timer));
+    },
+    [],
+  );
 
   const countryBySlug = useMemo(
     () => new Map(countries.map((country) => [country.slug, country])),
@@ -185,15 +207,72 @@ export default function CountriesWorldMap({
   }, [activeRegionId, interactiveCountries]);
 
   const selectedCountry = countryBySlug.get(selectedSlug);
+  const selectedFeature = features.find(
+    (feature) => feature.country?.slug === selectedSlug,
+  );
   const zoom = getZoomTransform(activeRegionId);
+  const selectedFeatureX = selectedFeature
+    ? activeRegionId === "oceania" &&
+      selectedFeature.country?.region === "Oceania" &&
+      selectedFeature.label[0] < 150
+      ? selectedFeature.label[0] + 1000
+      : selectedFeature.label[0]
+    : 0;
+
+  const mapFocusPoint = useMemo(() => {
+    const targetSlug = cinematic.targetSlug || selectedSlug;
+    const feature = features.find(
+      (candidate) => candidate.country?.slug === targetSlug,
+    );
+    if (!feature) return { x: 50, y: 50 };
+
+    const labelX =
+      activeRegionId === "oceania" &&
+      feature.country?.region === "Oceania" &&
+      feature.label[0] < 150
+        ? feature.label[0] + 1000
+        : feature.label[0];
+    const screenX = labelX * zoom.scale + zoom.translateX;
+    const screenY = feature.label[1] * zoom.scale + zoom.translateY;
+
+    return {
+      x: Math.max(5, Math.min(95, screenX / 10)),
+      y: Math.max(8, Math.min(92, screenY / 5)),
+    };
+  }, [activeRegionId, cinematic.targetSlug, features, selectedSlug, zoom.scale, zoom.translateX, zoom.translateY]);
 
   function openCountry(slug: string) {
-    router.push(`/countries/${slug}`);
+    if (cinematic.phase !== "idle") return;
+    const route = `/countries/${slug}`;
+    router.prefetch(route);
+
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      router.push(route);
+      return;
+    }
+
+    onCountryPreview(slug);
+    setCinematic({ phase: "locking", targetSlug: slug });
+    navigationTimersRef.current = [
+      window.setTimeout(
+        () => setCinematic({ phase: "resolving", targetSlug: slug }),
+        290,
+      ),
+      window.setTimeout(
+        () => setCinematic({ phase: "entering", targetSlug: slug }),
+        610,
+      ),
+      window.setTimeout(() => router.push(route), 940),
+    ];
   }
 
   function previewCountry(slug: string) {
     onCountryPreview(slug);
-    router.prefetch(`/countries/${slug}`);
+    const route = `/countries/${slug}`;
+    if (!prefetchedRoutesRef.current.has(route)) {
+      prefetchedRoutesRef.current.add(route);
+      router.prefetch(route);
+    }
   }
 
   function focusCountryByOffset(currentSlug: string, offset: number) {
@@ -260,8 +339,9 @@ export default function CountriesWorldMap({
               key={region.id}
               type="button"
               aria-pressed={isActive}
+              disabled={cinematic.phase !== "idle"}
               onClick={() => onRegionChange(region.id)}
-              className={`min-h-10 shrink-0 rounded-full border px-4 text-[9px] font-extrabold uppercase tracking-[0.1em] backdrop-blur transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white ${
+              className={`min-h-10 shrink-0 rounded-full border px-4 text-[9px] font-extrabold uppercase tracking-[0.1em] backdrop-blur transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white disabled:cursor-wait disabled:opacity-50 ${
                 isActive
                   ? "border-[var(--tgpi-gold-light)] bg-[var(--tgpi-gold)] text-[var(--tgpi-navy)]"
                   : "border-white/15 bg-white/[0.055] text-white/70 hover:border-[var(--tgpi-gold-light)]/60 hover:text-white"
@@ -273,14 +353,23 @@ export default function CountriesWorldMap({
         })}
       </div>
 
-      <div className="relative mt-3 h-[340px] overflow-hidden rounded-[26px] border border-white/12 bg-[#06172B] shadow-[inset_0_0_110px_rgba(56,113,158,.18),0_24px_70px_rgba(0,0,0,.2)] sm:h-[440px] lg:h-[500px]">
-        <svg
-          ref={svgRef}
-          viewBox="0 0 1000 500"
-          preserveAspectRatio="xMidYMid meet"
-          aria-labelledby="tgpi-world-map-title tgpi-world-map-description"
-          className="h-full w-full"
-        >
+      <div
+        className="tgpi-map-cinematic-frame relative mt-3 h-[340px] overflow-hidden rounded-[26px] border border-white/12 bg-[#06172B] shadow-[inset_0_0_110px_rgba(56,113,158,.18),0_24px_70px_rgba(0,0,0,.2)] sm:h-[440px] lg:h-[500px]"
+        data-phase={cinematic.phase}
+        aria-busy={cinematic.phase !== "idle"}
+        style={{
+          "--tgpi-map-focus-x": `${mapFocusPoint.x}%`,
+          "--tgpi-map-focus-y": `${mapFocusPoint.y}%`,
+        } as React.CSSProperties}
+      >
+        <div className={`tgpi-map-canvas absolute inset-0 ${cinematic.phase === "idle" ? "" : "will-change-transform"}`}>
+          <svg
+            ref={svgRef}
+            viewBox="0 0 1000 500"
+            preserveAspectRatio="xMidYMid meet"
+            aria-labelledby="tgpi-world-map-title tgpi-world-map-description"
+            className="h-full w-full"
+          >
           <title id="tgpi-world-map-title">TGPI interactive country map</title>
           <desc id="tgpi-world-map-description">
             Real country boundaries. Hover or focus a territory to preview it, then
@@ -308,6 +397,18 @@ export default function CountriesWorldMap({
           <rect width="1000" height="500" fill="url(#tgpi-map-grid)" />
           <ellipse cx="500" cy="250" rx="485" ry="235" fill="none" stroke="#B7D5E8" strokeOpacity="0.08" />
           <ellipse cx="500" cy="250" rx="365" ry="176" fill="none" stroke="#B7D5E8" strokeOpacity="0.045" />
+          <g aria-hidden="true" fill="none" stroke="#F2D997" strokeOpacity="0.16" strokeWidth="1.1" strokeDasharray="5 9">
+            <path d="M176 196 Q356 60 525 191 T820 156" />
+            <path d="M122 318 Q322 215 500 300 T886 286" />
+            <path d="M300 90 Q488 215 714 88" />
+          </g>
+          <g aria-hidden="true" fill="#F2D997" opacity="0.55">
+            <circle cx="176" cy="196" r="2.1" />
+            <circle cx="525" cy="191" r="2.1" />
+            <circle cx="820" cy="156" r="2.1" />
+            <circle cx="500" cy="300" r="2.1" />
+            <circle cx="714" cy="88" r="2.1" />
+          </g>
 
           <g
             className="transition-transform duration-700 ease-out"
@@ -458,8 +559,33 @@ export default function CountriesWorldMap({
                     );
                   })
               : null}
+
+            {selectedFeature ? (
+              <g aria-hidden="true" pointerEvents="none">
+                <circle
+                  cx={selectedFeatureX}
+                  cy={selectedFeature.label[1]}
+                  r={8 / zoom.scale}
+                  fill="none"
+                  stroke="#F2D997"
+                  strokeOpacity="0.7"
+                  strokeWidth={0.8 / zoom.scale}
+                  strokeDasharray={`${2.5 / zoom.scale} ${2 / zoom.scale}`}
+                />
+                <circle
+                  cx={selectedFeatureX}
+                  cy={selectedFeature.label[1]}
+                  r={13 / zoom.scale}
+                  fill="none"
+                  stroke="#F2D997"
+                  strokeOpacity="0.24"
+                  strokeWidth={0.6 / zoom.scale}
+                />
+              </g>
+            ) : null}
           </g>
-        </svg>
+          </svg>
+        </div>
 
         {!mapData && !mapError ? (
           <div className="absolute inset-0 grid place-items-center bg-[#06172B]/70 backdrop-blur-sm" role="status">
@@ -476,10 +602,22 @@ export default function CountriesWorldMap({
           </div>
         ) : null}
 
-        {selectedCountry && mapData ? (
-          <div className="pointer-events-none absolute bottom-3 left-3 max-w-[75%] rounded-2xl border border-white/15 bg-[#041426]/88 px-4 py-3 text-white shadow-xl backdrop-blur-md">
-            <p className="text-[9px] font-extrabold uppercase tracking-[0.15em] text-[var(--tgpi-gold-light)]">Selected territory</p>
-            <p className="mt-1 truncate text-sm font-extrabold">{selectedCountry.emoji} {selectedCountry.name}</p>
+        {selectedCountry && mapData && cinematic.phase === "idle" ? (
+          <div key={selectedCountry.slug} className="tgpi-map-preview pointer-events-none absolute bottom-3 left-3 flex max-w-[calc(100%-1.5rem)] items-center gap-3 rounded-2xl border border-white/15 bg-[#041426]/90 p-2 pr-4 text-white shadow-2xl backdrop-blur-md sm:max-w-[330px]">
+            <div className="relative h-14 w-20 shrink-0 overflow-hidden rounded-xl border border-white/10">
+              <Image
+                src={selectedCountry.visual.url}
+                alt=""
+                fill
+                sizes="80px"
+                className="object-cover"
+              />
+            </div>
+            <div className="min-w-0">
+              <p className="text-[8px] font-extrabold uppercase tracking-[0.14em] text-[var(--tgpi-gold-light)]">Intelligence preview</p>
+              <p className="mt-0.5 truncate text-sm font-extrabold">{selectedCountry.emoji} {selectedCountry.name}</p>
+              <p className="truncate text-[9px] font-bold text-white/55">{selectedCountry.capital} · TGPI {selectedCountry.tgpiScore}</p>
+            </div>
           </div>
         ) : null}
 
@@ -488,10 +626,31 @@ export default function CountriesWorldMap({
             {interactiveCountries.length}/{countries.length} profiles mapped
           </div>
         ) : null}
+
+        {cinematic.phase !== "idle" ? (
+          <div className="tgpi-map-transition pointer-events-none absolute inset-0 z-20 overflow-hidden bg-[#020A14]/30" role="status" aria-live="polite">
+            <div className="tgpi-map-scan absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-[var(--tgpi-gold-light)] to-transparent shadow-[0_0_18px_rgba(242,217,151,.9)]" />
+            <div className="tgpi-map-reticle absolute h-28 w-28 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[var(--tgpi-gold-light)]/70" style={{ left: `${mapFocusPoint.x}%`, top: `${mapFocusPoint.y}%` }}>
+              <span className="absolute inset-3 rounded-full border border-dashed border-white/55" />
+              <span className="absolute left-1/2 top-[-18px] h-[148px] w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-[var(--tgpi-gold-light)]/70 to-transparent" />
+              <span className="absolute left-[-18px] top-1/2 h-px w-[148px] -translate-y-1/2 bg-gradient-to-r from-transparent via-[var(--tgpi-gold-light)]/70 to-transparent" />
+            </div>
+            <div className="absolute inset-x-4 bottom-4 rounded-2xl border border-[var(--tgpi-gold-light)]/30 bg-[#020A14]/86 p-4 text-white shadow-2xl backdrop-blur-md sm:inset-x-auto sm:bottom-5 sm:left-5 sm:w-[360px]">
+              <div className="flex items-center justify-between gap-3">
+                <p className="text-[9px] font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-gold-light)]">TGPI Geospatial Link</p>
+                <span className="font-mono text-[9px] text-white/45">{cinematic.phase === "locking" ? "01" : cinematic.phase === "resolving" ? "02" : "03"}/03</span>
+              </div>
+              <p className="mt-2 font-[var(--tgpi-font-display)] text-xl font-semibold">{CINEMATIC_PHASE_COPY[cinematic.phase]}</p>
+              <div className="mt-3 h-1 overflow-hidden rounded-full bg-white/10">
+                <div className="tgpi-map-progress h-full rounded-full bg-[var(--tgpi-gold-light)]" />
+              </div>
+            </div>
+          </div>
+        ) : null}
       </div>
 
       <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[9px] font-bold uppercase tracking-[0.12em] text-white/45">
-        <span>Hover to preview · Click to open</span>
+        <span>Hover to preview · Click to enter</span>
         <span>Keyboard: arrows + Enter</span>
       </div>
       <p className="mt-2 text-[9px] leading-4 text-white/35">

@@ -149,6 +149,99 @@ img {
   transform-origin: center;
 }
 
+.tgpi-map-canvas {
+  transform: scale(1);
+  transform-origin: var(--tgpi-map-focus-x) var(--tgpi-map-focus-y);
+  transition:
+    transform 360ms cubic-bezier(0.2, 0.82, 0.2, 1),
+    filter 360ms ease;
+}
+
+.tgpi-map-cinematic-frame[data-phase="locking"] .tgpi-map-canvas {
+  transform: scale(1.16);
+  filter: saturate(1.08) contrast(1.04);
+}
+
+.tgpi-map-cinematic-frame[data-phase="resolving"] .tgpi-map-canvas {
+  transform: scale(1.85);
+  filter: saturate(0.9) contrast(1.13) brightness(0.82);
+}
+
+.tgpi-map-cinematic-frame[data-phase="entering"] .tgpi-map-canvas {
+  transform: scale(3.8);
+  filter: saturate(0.65) contrast(1.2) brightness(0.55);
+}
+
+.tgpi-map-preview {
+  animation: tgpi-map-preview 260ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.tgpi-map-scan {
+  animation: tgpi-map-scan 720ms linear infinite;
+}
+
+.tgpi-map-reticle {
+  animation: tgpi-map-reticle 680ms ease-out both;
+  box-shadow:
+    0 0 0 8px rgba(242, 217, 151, 0.04),
+    0 0 46px rgba(242, 217, 151, 0.18);
+}
+
+.tgpi-map-progress {
+  animation: tgpi-map-progress 940ms linear both;
+}
+
+@keyframes tgpi-map-preview {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes tgpi-map-scan {
+  from {
+    top: -2%;
+    opacity: 0;
+  }
+
+  15%,
+  85% {
+    opacity: 0.75;
+  }
+
+  to {
+    top: 102%;
+    opacity: 0;
+  }
+}
+
+@keyframes tgpi-map-reticle {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.9) rotate(-28deg);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1) rotate(0);
+  }
+}
+
+@keyframes tgpi-map-progress {
+  from {
+    width: 4%;
+  }
+
+  to {
+    width: 100%;
+  }
+}
+
 @keyframes tgpi-reveal {
   from {
     opacity: 0;

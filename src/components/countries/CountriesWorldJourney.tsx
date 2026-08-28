@@ -124,11 +124,12 @@ export default function CountriesWorldJourney({ countries }: CountriesWorldJourn
         </div>
         <div>
           <p className="text-sm leading-7 text-[var(--tgpi-muted)]">
-            Inspect real country boundaries, zoom by region and open the evidence layer behind any destination.
+            Inspect real country boundaries, preview each destination and move from geography to an evidence-backed dossier in one continuous system.
           </p>
           <div className="mt-3 flex flex-wrap gap-2 text-[9px] font-extrabold uppercase tracking-[0.12em]">
             <span className="rounded-full bg-[var(--tgpi-blue-soft)] px-3 py-2 text-[var(--tgpi-blue)]">Natural Earth · 50m</span>
             <span className="rounded-full bg-[var(--tgpi-teal-soft)] px-3 py-2 text-[var(--tgpi-teal)]">{countries.length}/{countries.length} profiles mapped</span>
+            <span className="rounded-full bg-[var(--tgpi-gold-soft)] px-3 py-2 text-[var(--tgpi-gold-strong)]">Intent-aware preloading</span>
           </div>
         </div>
       </div>
@@ -139,9 +140,9 @@ export default function CountriesWorldJourney({ countries }: CountriesWorldJourn
           <div className="relative flex flex-wrap items-start justify-between gap-4">
             <div>
               <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-gold-light)]">Geographic intelligence layer</p>
-              <p className="mt-2 max-w-xl text-sm leading-6 text-white/65">Hover to preview. Click a territory to enter its full country dossier.</p>
+              <p className="mt-2 max-w-xl text-sm leading-6 text-white/65">Hover or focus to preview. Select a territory to activate the geospatial link and enter its full country dossier.</p>
             </div>
-            <span className="rounded-full border border-white/15 bg-white/[0.06] px-3 py-2 text-[9px] font-extrabold uppercase tracking-[0.12em] text-white/65">Real boundaries · Keyboard ready</span>
+            <span className="rounded-full border border-white/15 bg-white/[0.06] px-3 py-2 text-[9px] font-extrabold uppercase tracking-[0.12em] text-white/65">Real boundaries · Accessible motion</span>
           </div>
           <div className="relative">
             <CountriesWorldMap
