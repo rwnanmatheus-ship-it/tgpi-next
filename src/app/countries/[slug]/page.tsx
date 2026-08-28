@@ -8,6 +8,10 @@ import DocumentReviewChecklist from "@/components/activation/DocumentReviewCheck
 import MonthlyCostPlanner from "@/components/activation/MonthlyCostPlanner";
 import SavedCountryButton from "@/components/activation/SavedCountryButton";
 import {
+  CountryDossierNavigation,
+  CountrySystemPath,
+} from "@/components/countries/CountryDossierSystem";
+import {
   formatCurrencyAmount,
   getAllCountrySlugs,
   getCountry,
@@ -151,6 +155,14 @@ export default async function CountryPage({ params }: CountryPageProps) {
     },
   ];
 
+  const comparableSignals = scoreSignals.slice(1);
+  const strongestSignal = comparableSignals.reduce((strongest, signal) =>
+    signal.value > strongest.value ? signal : strongest,
+  );
+  const readinessPriority = comparableSignals.reduce((priority, signal) =>
+    signal.value < priority.value ? signal : priority,
+  );
+
   const snapshot = [
     { label: "Region", value: country.region },
     { label: "Capital", value: country.capital },
@@ -269,7 +281,7 @@ export default async function CountryPage({ params }: CountryPageProps) {
         </div>
 
         <section className="overflow-hidden rounded-[2rem] border border-[#D0B264]/70 bg-[#071A32] shadow-[0_30px_90px_rgba(7,26,50,0.22)]">
-          <div className="relative grid min-h-[620px] lg:grid-cols-[1.08fr_0.92fr]">
+          <div className="relative grid min-h-[580px] lg:min-h-[560px] lg:grid-cols-[1.08fr_0.92fr]">
             {hasImage ? (
               <Image
                 src={imageUrl}
@@ -289,7 +301,7 @@ export default async function CountryPage({ params }: CountryPageProps) {
 
             <div className="relative flex flex-col justify-end p-6 text-white md:p-10 lg:justify-center lg:p-12">
               <div className="mb-5 inline-flex w-fit rounded-full border border-[#F0D58C]/45 bg-[#071A32]/55 px-4 py-2 text-xs font-black uppercase tracking-[0.24em] text-[#F7E8B9] backdrop-blur-xl">
-                TGPI Country Intelligence Report
+                TGPI Country Intelligence Dossier
               </div>
 
               <div className="flex items-start gap-5">
@@ -298,7 +310,7 @@ export default async function CountryPage({ params }: CountryPageProps) {
                 </span>
 
                 <div className="min-w-0">
-                  <h1 className="text-4xl font-black tracking-tight text-white drop-shadow-2xl md:text-6xl lg:text-7xl">
+                  <h1 className="break-words font-[var(--tgpi-font-display)] text-[clamp(3.25rem,6vw,5.5rem)] font-semibold leading-[0.95] tracking-tight text-white drop-shadow-2xl">
                     {country.name}
                   </h1>
                   <p className="mt-3 text-sm font-semibold uppercase tracking-[0.22em] text-slate-200 drop-shadow">
@@ -310,6 +322,18 @@ export default async function CountryPage({ params }: CountryPageProps) {
               <p className="mt-7 max-w-2xl text-base leading-8 text-slate-100 drop-shadow-lg">
                 {country.longDescription}
               </p>
+
+              <div className="mt-5 flex flex-wrap gap-2 text-[9px] font-bold uppercase tracking-[0.18em] text-[#E8D89E]">
+                <span className="rounded-full border border-white/15 bg-[#041426]/55 px-3 py-2 backdrop-blur">
+                  Explainable scoring
+                </span>
+                <span className="rounded-full border border-white/15 bg-[#041426]/55 px-3 py-2 backdrop-blur">
+                  195-country standard
+                </span>
+                <span className="rounded-full border border-white/15 bg-[#041426]/55 px-3 py-2 backdrop-blur">
+                  Evidence before action
+                </span>
+              </div>
 
               <div className="mt-8 grid gap-3 sm:grid-cols-3">
                 <SignalCard label="Main goal" value={country.mainGoal} />
@@ -348,7 +372,7 @@ export default async function CountryPage({ params }: CountryPageProps) {
               </div>
 
               <div className="mt-4 grid gap-3">
-                {scoreSignals.slice(1).map((signal) => (
+                {comparableSignals.map((signal) => (
                   <ScoreBar
                     key={signal.label}
                     label={signal.label}
@@ -360,7 +384,73 @@ export default async function CountryPage({ params }: CountryPageProps) {
           </div>
         </section>
 
-        <section className="mt-8 grid gap-6 lg:grid-cols-[0.78fr_1.22fr]">
+        <CountryDossierNavigation countryName={country.name} />
+
+        <section
+          id="overview"
+          className="mt-8 scroll-mt-36 overflow-hidden rounded-[2rem] border border-[#D8D0C0] bg-white/90 shadow-[0_20px_65px_rgba(7,26,50,0.09)]"
+        >
+          <div className="grid lg:grid-cols-[0.78fr_1.22fr]">
+            <div className="border-b border-[#E7E0D3] bg-[#071A32] p-6 text-white md:p-8 lg:border-b-0 lg:border-r">
+              <div className="flex items-center justify-between gap-5">
+                <p className="text-[10px] font-extrabold uppercase tracking-[0.28em] text-[#E6C565]">
+                  Executive Decision Brief
+                </p>
+                <span className="rounded-full border border-white/15 px-3 py-1.5 font-mono text-[9px] tracking-[0.18em] text-[#B7C4D4]">
+                  TGPI / {country.currencyCode}
+                </span>
+              </div>
+              <h2 className="mt-5 font-[var(--tgpi-font-display)] text-3xl font-semibold leading-tight md:text-5xl">
+                Read the system before choosing the destination.
+              </h2>
+              <p className="mt-5 text-sm leading-7 text-[#B7C4D4]">
+                {getCountryPrimaryDecision(country)} This brief surfaces the
+                strongest signal, the main preparation gap and the cost position
+                before the deeper evidence layers.
+              </p>
+
+              <div className="mt-7 grid grid-cols-3 gap-2 border-t border-white/10 pt-5 text-center">
+                <DossierMetric label="TGPI" value={`${country.tgpiScore}`} />
+                <DossierMetric label="Safety" value={`${country.intelligence.safetyScore}`} />
+                <DossierMetric label="English" value={`${country.intelligence.englishFriendliness}`} />
+              </div>
+            </div>
+
+            <div className="grid gap-px bg-[#E7E0D3] sm:grid-cols-2">
+              <BriefSignal
+                index="01"
+                label="Strongest signal"
+                title={strongestSignal.label}
+                value={`${strongestSignal.value}/100`}
+                description={strongestSignal.description}
+              />
+              <BriefSignal
+                index="02"
+                label="Readiness priority"
+                title={readinessPriority.label}
+                value={`${readinessPriority.value}/100`}
+                description="The lowest current signal—not a verdict, but the first area to investigate and prepare."
+              />
+              <BriefSignal
+                index="03"
+                label="Strategic advantage"
+                title={country.intelligence.strengths[0] ?? getCountryDecisionLabel(country)}
+                description="A starting hypothesis from the TGPI country model. Validate it against your specific city and goal."
+              />
+              <BriefSignal
+                index="04"
+                label="Validation priority"
+                title={country.intelligence.warnings[0] ?? "Confirm official requirements"}
+                description="Conditions vary by city, route and time. Treat this as a research prompt, not an official determination."
+              />
+            </div>
+          </div>
+        </section>
+
+        <section
+          id="decision-signals"
+          className="mt-8 scroll-mt-36 grid gap-6 lg:grid-cols-[0.78fr_1.22fr]"
+        >
           <div className="rounded-[1.5rem] border border-[#D8D0C0] bg-white/90 p-6 shadow-[0_18px_55px_rgba(7,26,50,0.08)]">
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#8A641F]">
               Country snapshot
@@ -455,7 +545,10 @@ export default async function CountryPage({ params }: CountryPageProps) {
           </div>
         </section>
 
-        <section className="mt-8 grid gap-6 lg:grid-cols-2">
+        <section
+          id="strategic-fit"
+          className="mt-8 scroll-mt-36 grid gap-6 lg:grid-cols-2"
+        >
           <DecisionFitPanel
             title={`Who should choose ${country.name}`}
             items={countryPlan.choose}
@@ -567,39 +660,10 @@ export default async function CountryPage({ params }: CountryPageProps) {
           </div>
         </section>
 
-        <section className="mt-8 rounded-[1.5rem] border border-[#D9BD70] bg-[#FFF7DE] p-6 shadow-[0_18px_55px_rgba(138,100,31,0.1)]">
-          <div className="grid gap-5 md:grid-cols-[1fr_auto] md:items-center">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#765009]">
-                Strategic next step
-              </p>
-              <h2 className="mt-2 text-2xl font-black">
-                Compare {country.name} before making a decision.
-              </h2>
-              <p className="mt-2 text-sm leading-7 text-[#465366]">
-                A country profile gives context. A comparison reveals trade-offs.
-                Use TGPI to compare this country against another destination by
-                cost, safety, language and strategic fit.
-              </p>
-            </div>
-
-            <div className="flex flex-col gap-3 sm:flex-row md:flex-col">
-              <Link
-                href={`/compare?country=${country.slug}`}
-                className="rounded-2xl bg-[#071A32] px-5 py-3 text-center text-sm font-black text-white transition hover:bg-[#123A6F] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#315F98]"
-              >
-                Compare now
-              </Link>
-
-              <Link
-                href="/countries"
-                className="rounded-2xl border border-[#B99132] bg-white/65 px-5 py-3 text-center text-sm font-black text-[#765009] transition hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C59632]"
-              >
-                Explore more countries
-              </Link>
-            </div>
-          </div>
-        </section>
+        <CountrySystemPath
+          countryName={country.name}
+          countrySlug={country.slug}
+        />
 
         <section className="mt-8 rounded-[1.5rem] border border-[#D8D0C0] bg-[#ECE6DA] p-6">
           <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#465366]">
@@ -772,6 +836,64 @@ type SignalCardProps = {
   value: string;
 };
 
+type DossierMetricProps = {
+  label: string;
+  value: string;
+};
+
+function DossierMetric({ label, value }: DossierMetricProps) {
+  return (
+    <div>
+      <p className="font-mono text-xl font-semibold text-white md:text-2xl">
+        {value}
+      </p>
+      <p className="mt-1 text-[9px] font-bold uppercase tracking-[0.18em] text-[#91A9C2]">
+        {label}
+      </p>
+    </div>
+  );
+}
+
+type BriefSignalProps = {
+  index: string;
+  label: string;
+  title: string;
+  value?: string;
+  description: string;
+};
+
+function BriefSignal({
+  index,
+  label,
+  title,
+  value,
+  description,
+}: BriefSignalProps) {
+  return (
+    <article className="min-h-[230px] bg-[#FFFDF8] p-6 md:p-7">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="font-mono text-[9px] font-bold tracking-[0.2em] text-[#A07520]">
+            {index}/04
+          </p>
+          <p className="mt-3 text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#617083]">
+            {label}
+          </p>
+        </div>
+        {value ? (
+          <p className="font-mono text-sm font-semibold text-[#A07520]">
+            {value}
+          </p>
+        ) : null}
+      </div>
+      <h3 className="mt-7 text-lg font-extrabold leading-snug text-[#071A32]">
+        {title}
+      </h3>
+      <p className="mt-3 text-sm leading-6 text-[#5E6875]">{description}</p>
+    </article>
+  );
+}
+
 function SignalCard({ label, value }: SignalCardProps) {
   return (
     <div className="rounded-2xl border border-white/15 bg-[#05080F]/82 p-4 backdrop-blur">
@@ -794,7 +916,14 @@ function ScoreBar({ label, value }: ScoreBarProps) {
         <p className="text-sm font-black text-[#8A641F]">{value}/100</p>
       </div>
 
-      <div className="h-2 overflow-hidden rounded-full bg-[#E7E0D3]">
+      <div
+        role="progressbar"
+        aria-label={`${label} score`}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={value}
+        className="h-2 overflow-hidden rounded-full bg-[#E7E0D3]"
+      >
         <div
           className="h-full rounded-full bg-gradient-to-r from-[#C59632] to-[#315F98]"
           style={{ width: `${Math.min(Math.max(value, 0), 100)}%` }}
@@ -826,7 +955,14 @@ function ScorePanel({ label, value, description }: ScorePanelProps) {
         </p>
       </div>
 
-      <div className="mt-4 h-2 overflow-hidden rounded-full bg-[#E7E0D3]">
+      <div
+        role="progressbar"
+        aria-label={`${label} score`}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={value}
+        className="mt-4 h-2 overflow-hidden rounded-full bg-[#E7E0D3]"
+      >
         <div
           className="h-full rounded-full bg-gradient-to-r from-[#C59632] to-[#315F98]"
           style={{ width: `${Math.min(Math.max(value, 0), 100)}%` }}
@@ -850,7 +986,14 @@ function CostRow({ label, value, percentage }: CostRowProps) {
         <p className="text-sm font-black text-[#071A32]">{value}</p>
       </div>
 
-      <div className="mt-3 h-2 overflow-hidden rounded-full bg-[#E7E0D3]">
+      <div
+        role="progressbar"
+        aria-label={`${label} share of the monthly budget`}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={percentage}
+        className="mt-3 h-2 overflow-hidden rounded-full bg-[#E7E0D3]"
+      >
         <div
           className="h-full rounded-full bg-gradient-to-r from-[#C59632] to-[#315F98]"
           style={{ width: `${percentage}%` }}
@@ -985,20 +1128,34 @@ type RelatedCountryCardProps = {
 };
 
 function RelatedCountryCard({ country }: RelatedCountryCardProps) {
+  const relatedImage = getCountryImageUrl(country);
+
   return (
     <Link
       href={`/countries/${country.slug}`}
-      className="group flex items-center justify-between gap-4 rounded-2xl border border-[#E7E0D3] bg-[#FBF8F1] p-4 transition hover:border-[#C59632] hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C59632]"
+      className="group grid grid-cols-[88px_1fr_auto] items-center gap-4 overflow-hidden rounded-2xl border border-[#E7E0D3] bg-[#FBF8F1] p-2 pr-4 transition hover:border-[#C59632] hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C59632]"
     >
-      <div className="flex min-w-0 items-center gap-4">
-        <span className="text-3xl">{country.emoji}</span>
+      <div className="relative h-[72px] overflow-hidden rounded-xl bg-[#071A32]">
+        {hasVerifiedCountryImage(country) ? (
+          <Image
+            src={relatedImage}
+            alt=""
+            fill
+            sizes="88px"
+            className="object-cover transition duration-500 group-hover:scale-105"
+          />
+        ) : null}
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#071A32]/20" />
+        <span className="absolute bottom-2 left-2 text-lg drop-shadow-lg" aria-hidden="true">
+          {country.emoji}
+        </span>
+      </div>
 
-        <div className="min-w-0">
-          <p className="truncate font-black text-[#071A32]">{country.name}</p>
-          <p className="mt-1 truncate text-xs text-[#5E6875]">
-            {country.region} • {country.capital}
-          </p>
-        </div>
+      <div className="min-w-0">
+        <p className="truncate font-black text-[#071A32]">{country.name}</p>
+        <p className="mt-1 truncate text-xs text-[#5E6875]">
+          {country.region} • {country.capital}
+        </p>
       </div>
 
       <div className="shrink-0 text-right">
