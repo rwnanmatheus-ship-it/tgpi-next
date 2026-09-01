@@ -5,12 +5,18 @@ import Link from "next/link";
 import LearningPathExplorer from "@/components/courses/LearningPathExplorer";
 import TGPIPageShell from "@/components/TGPIPageShell";
 import { coursesOverview } from "@/data/courses-overview";
+import { buildMetadata } from "@/seo";
 
-export const metadata: Metadata = {
-  title: "TGPI Learning — Build Global Capabilities",
+export const metadata: Metadata = buildMetadata({
+  title: "Learn — Build Skills for an International Life",
   description:
-    "Build practical capabilities for international life through TGPI learning paths in global English, decision intelligence, AI and global economics.",
-};
+    "Build practical capabilities for international life through TGPI courses in language, decision intelligence, technology and global economics.",
+  path: "/courses",
+  image: {
+    url: "/images/learning/tgpi-learning-hero-v2.webp",
+    alt: "TGPI global learning system",
+  },
+});
 
 const learningPrinciples = [
   {

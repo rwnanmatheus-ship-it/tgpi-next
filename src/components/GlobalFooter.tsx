@@ -14,6 +14,7 @@ const footerGroups: ReadonlyArray<{
   {
     title: "Decision intelligence",
     links: [
+      { label: "Search TGPI", href: "/search" },
       { label: "Explore 195 countries", href: "/countries" },
       { label: "TGPI Compare", href: "/compare" },
       { label: "Country Fit", href: "/onboarding" },
@@ -33,6 +34,7 @@ const footerGroups: ReadonlyArray<{
     title: "Institute",
     links: [
       { label: "About TGPI", href: "/about" },
+      { label: "Founder", href: "/founder" },
       { label: "Why TGPI", href: "/why" },
       { label: "Resources", href: "/resources" },
       { label: "Community", href: "/community" },
@@ -45,7 +47,8 @@ const footerGroups: ReadonlyArray<{
       { label: "Sign in", href: "/sign-in" },
       { label: "Privacy", href: "/privacy" },
       { label: "Terms", href: "/terms" },
-      { label: "Contact", href: "mailto:contact@theglobalpolymath.com" },
+      { label: "Editorial policy", href: "/editorial-policy" },
+      { label: "Contact", href: "/contact" },
       {
         label: "Instagram ↗",
         href: "https://www.instagram.com/theglobalpolymath/",

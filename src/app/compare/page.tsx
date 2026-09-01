@@ -30,6 +30,8 @@ import {
   type ComparisonSignal,
   type ComparisonVerdict,
 } from "@/lib/tgpi-comparison";
+import { absoluteUrl, buildMetadata } from "@/seo";
+import JsonLd from "@/seo/json-ld";
 
 type ComparePageProps = {
   searchParams?: Promise<{
@@ -38,29 +40,16 @@ type ComparePageProps = {
   }>;
 };
 
-export const metadata: Metadata = {
-  title: "TGPI Compare — Global Decision Intelligence",
+export const metadata: Metadata = buildMetadata({
+  title: "Compare Countries — Cost, Lifestyle, Work and Study",
   description:
     "Compare countries through the proprietary TGPI decision framework, with transparent weights, visible trade-offs and connected next actions.",
-  alternates: { canonical: "/compare" },
-  robots: { index: true, follow: true },
-  openGraph: {
-    title: "TGPI Compare — Compare Futures, Not Just Countries",
-    description:
-      "Build an international decision set, apply a transparent lens and turn country trade-offs into a connected action path.",
-    url: "/compare",
-    siteName: "TGPI",
-    type: "website",
-    images: ["/images/compare/tgpi-global-decision-observatory.webp"],
+  path: "/compare",
+  image: {
+    url: "/images/compare/tgpi-global-decision-observatory.webp",
+    alt: "TGPI country comparison decision observatory",
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "TGPI Compare — Global Decision Intelligence",
-    description:
-      "Compare international futures through one transparent TGPI decision system.",
-    images: ["/images/compare/tgpi-global-decision-observatory.webp"],
-  },
-};
+});
 
 const MAX_COUNTRIES_TO_COMPARE = 3;
 const DEFAULT_COUNTRY_SLUGS = ["japan", "canada", "portugal"] as const;
@@ -95,7 +84,7 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
     "@context": "https://schema.org",
     "@type": "WebApplication",
     name: "TGPI Global Decision Intelligence",
-    url: "https://theglobalpolymath.com/compare",
+    url: absoluteUrl("/compare"),
     applicationCategory: "EducationalApplication",
     operatingSystem: "Web",
     description:
@@ -113,12 +102,7 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
   return (
     <ActivationProgressProvider>
       <TGPIPageShell>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
-          }}
-        />
+        <JsonLd data={structuredData} />
 
         <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
           <Link

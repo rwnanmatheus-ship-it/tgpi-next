@@ -11,30 +11,20 @@ import {
   getAllRegions,
   getCountryExplorerItems,
 } from "@/lib/countries";
+import { buildMetadata } from "@/seo";
 
-export const metadata: Metadata = {
-  title: "Country Intelligence — Compare 195 Countries | TGPI",
+export const metadata: Metadata = buildMetadata({
+  title: "Country Intelligence — Explore and Compare 195 Countries",
   description:
-    "Explore and compare 195 countries through cost, safety, language, education, careers, culture and mobility with TGPI Country Intelligence.",
-  alternates: {
-    canonical: "/countries",
+    "Explore 195 country profiles through cost, language, education, careers, culture, mobility and practical decision signals with TGPI.",
+  path: "/countries",
+  image: {
+    url: "/images/countries/tgpi-country-intelligence-observatory-v1.webp",
+    width: 1983,
+    height: 793,
+    alt: "TGPI Global Country Intelligence Observatory",
   },
-  openGraph: {
-    title: "TGPI Country Intelligence — Understand a Country Before You Choose",
-    description:
-      "Build a global shortlist through 195 connected country profiles, an interactive world atlas and a consistent decision framework.",
-    url: "/countries",
-    type: "website",
-    images: [
-      {
-        url: "/images/countries/tgpi-country-intelligence-observatory-v1.webp",
-        width: 1983,
-        height: 793,
-        alt: "TGPI Global Country Intelligence Observatory",
-      },
-    ],
-  },
-};
+});
 
 export default function CountriesPage() {
   const countries = getCountryExplorerItems();

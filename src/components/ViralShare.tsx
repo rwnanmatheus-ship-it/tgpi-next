@@ -1,5 +1,7 @@
+import { absoluteUrl } from "@/seo/config";
+
 export default function ViralShare() {
-  const url = "https://theglobalpolymath.com";
+  const url = absoluteUrl("/");
 
   return (
     <div className="flex gap-3">

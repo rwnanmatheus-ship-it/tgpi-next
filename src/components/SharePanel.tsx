@@ -1,5 +1,7 @@
 "use client";
 
+import { absoluteUrl } from "@/seo/config";
+
 type Props = {
   text: string;
 };
@@ -16,7 +18,7 @@ export default function SharePanel({ text }: Props) {
 
       <div className="mt-6 flex flex-wrap gap-3">
         <a
-          href={`https://www.linkedin.com/sharing/share-offsite/?url=https://theglobalpolymath.com`}
+          href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(absoluteUrl("/"))}`}
           target="_blank"
           className="rounded-xl border border-slate-700 bg-slate-950 px-5 py-3 text-sm font-semibold text-white transition hover:border-yellow-500"
         >

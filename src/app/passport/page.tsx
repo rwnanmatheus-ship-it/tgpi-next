@@ -10,13 +10,18 @@ import { formatTgpiGlobalId } from "@/lib/auth/guards";
 import { getAllCountries } from "@/lib/countries";
 import { buildDocumentsMemberModel } from "@/lib/documents-os";
 import { normalizeOnboardingData } from "@/lib/onboarding";
+import { buildMetadata } from "@/seo";
 
-export const metadata: Metadata = {
-  title: "Documents OS | TGPI Global Readiness",
+export const metadata: Metadata = buildMetadata({
+  title: "International Documents and Moving Checklist",
   description:
-    "Build a country-aware document readiness strategy connected to your TGPI identity, global goals, learning and verified achievements.",
-  robots: { index: true, follow: true },
-};
+    "Build a country-aware document readiness strategy for moving, studying or working abroad with TGPI Documents OS.",
+  path: "/passport",
+  image: {
+    url: "/images/documents/tgpi-documents-hero-v2.webp",
+    alt: "TGPI international documents and global readiness system",
+  },
+});
 
 export default async function PassportPage() {
   const countries = getAllCountries();

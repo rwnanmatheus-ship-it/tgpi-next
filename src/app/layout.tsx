@@ -5,6 +5,18 @@ import Navbar from "@/components/Navbar";
 import GlobalFooter from "@/components/GlobalFooter";
 import { ClerkProvider } from "@clerk/nextjs";
 import { tgpiClerkAppearance } from "@/lib/auth/clerk-appearance";
+import {
+  absoluteUrl,
+  publicRobots,
+  TGPI_BRAND,
+  TGPI_DEFAULT_TITLE,
+  TGPI_DESCRIPTION,
+  TGPI_SHORT_NAME,
+  TGPI_SITE_NAME,
+  TGPI_SITE_URL,
+  TGPI_TITLE_TEMPLATE,
+} from "@/seo";
+import { founderName } from "@/seo/schemas/founder";
 
 const displayFont = Cormorant_Garamond({
   subsets: ["latin"],
@@ -21,27 +33,44 @@ const interfaceFont = Manrope({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://theglobalpolymath.com"),
-  title: "TGPI — Build Your Global Identity",
-  description: "Prepare, compare and move globally with strategic clarity using TGPI — a premium education and decision system for international life.",
-  keywords: ["move abroad", "global mobility", "international life", "country comparison", "cost of living", "learn languages", "global education", "international planning", "TGPI", "The Global Polymath Institute"],
+  metadataBase: new URL(TGPI_SITE_URL),
+  title: {
+    default: TGPI_DEFAULT_TITLE,
+    template: TGPI_TITLE_TEMPLATE,
+  },
+  description: TGPI_DESCRIPTION,
+  applicationName: TGPI_SITE_NAME,
+  category: "education",
+  creator: founderName,
+  publisher: TGPI_SITE_NAME,
+  authors: [{ name: founderName, url: absoluteUrl("/founder") }],
+  robots: publicRobots,
   icons: {
-    icon: "/brand/tgpi-crest-v2-256.png",
-    shortcut: "/brand/tgpi-crest-v2-256.png",
-    apple: "/brand/tgpi-crest-v2-256.png",
+    icon: TGPI_BRAND.crest,
+    shortcut: TGPI_BRAND.crest,
+    apple: TGPI_BRAND.crest,
   },
   openGraph: {
-    title: "TGPI — Build Your Global Identity",
-    description: "Compare countries, build practical skills and prepare a global life with clarity.",
-    url: "https://theglobalpolymath.com",
-    siteName: "TGPI",
+    title: TGPI_DEFAULT_TITLE,
+    description: TGPI_DESCRIPTION,
+    url: TGPI_SITE_URL,
+    siteName: TGPI_SHORT_NAME,
     locale: "en_US",
     type: "website",
+    images: [
+      {
+        url: absoluteUrl(TGPI_BRAND.defaultOgImage),
+        width: 1200,
+        height: 630,
+        alt: "TGPI global education and country decision intelligence",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "TGPI — Build Your Global Identity",
-    description: "Compare countries, build practical skills and prepare a global life with clarity.",
+    title: TGPI_DEFAULT_TITLE,
+    description: TGPI_DESCRIPTION,
+    images: [absoluteUrl(TGPI_BRAND.defaultOgImage)],
   },
 };
 

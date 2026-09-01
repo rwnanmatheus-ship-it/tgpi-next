@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { absoluteUrl } from "@/seo/config";
 
 export default function ProfileShareCard({
   username,
@@ -9,8 +10,8 @@ export default function ProfileShareCard({
 }) {
   const [copied, setCopied] = useState(false);
   const link = username
-    ? `https://theglobalpolymath.com/user/${username}`
-    : "https://theglobalpolymath.com";
+    ? absoluteUrl(`/user/${username}`)
+    : absoluteUrl("/");
 
   async function handleCopy() {
     try {

@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import { buildMetadata } from "@/seo";
 
-export const metadata: Metadata = {
-  title: "Terms of Use | TGPI",
-  description: "Terms of use for The Global Polymath Institute.",
-};
+export const metadata: Metadata = buildMetadata({
+  title: "Terms of Use",
+  description: "Terms of use for TGPI — The Global Polymath Institute.",
+  path: "/terms",
+});
 
 export default function TermsPage() {
   return (

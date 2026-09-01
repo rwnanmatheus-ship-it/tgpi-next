@@ -1,5 +1,7 @@
+import { absoluteUrl } from "@/seo/config";
+
 export default function ReferralSystem() {
-  const link = "https://theglobalpolymath.com/invite";
+  const link = absoluteUrl("/sign-up");
 
   return (
     <section className="rounded-3xl border border-slate-800 bg-slate-900 p-6">

@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { absoluteUrl, TGPI_SITE_URL } from "@/seo";
 
 export default function robots(): MetadataRoute.Robots {
   return {
@@ -15,7 +16,7 @@ export default function robots(): MetadataRoute.Robots {
         "/profile",
       ],
     },
-    sitemap: "https://theglobalpolymath.com/sitemap.xml",
-    host: "https://theglobalpolymath.com",
+    sitemap: absoluteUrl("/sitemap.xml"),
+    host: TGPI_SITE_URL,
   };
 }

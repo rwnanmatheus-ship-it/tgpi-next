@@ -2,11 +2,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import ActivationProgressProvider from "@/components/activation/ActivationProgressProvider";
 import DocumentReviewChecklist from "@/components/activation/DocumentReviewChecklist";
 import MonthlyCostPlanner from "@/components/activation/MonthlyCostPlanner";
 import SavedCountryButton from "@/components/activation/SavedCountryButton";
+import Breadcrumbs from "@/components/seo/Breadcrumbs";
 import {
   CountryDossierNavigation,
   CountrySystemPath,
@@ -26,6 +28,13 @@ import {
   hasVerifiedCountryImage,
   type Country,
 } from "@/lib/countries";
+import {
+  buildCountryMetadata,
+  getCountrySeoDescription,
+  privateRobots,
+} from "@/seo";
+import JsonLd from "@/seo/json-ld";
+import { buildCountrySchema } from "@/seo/schemas/country";
 
 type CountryPageProps = {
   params: Promise<{
@@ -44,76 +53,26 @@ export function generateStaticParams() {
   }));
 }
 
-export async function generateMetadata({ params }: CountryPageProps) {
+export async function generateMetadata({
+  params,
+}: CountryPageProps): Promise<Metadata> {
   const { slug } = await params;
   const country = getCountry(slug);
 
   if (!country) {
     return {
-      title: "Country not found | TGPI",
+      title: "Country not found",
+      robots: privateRobots,
     };
   }
 
   const imageUrl = getCountryImageUrl(country);
   const imageAlt = getCountryImageAlt(country);
-  const title = `${country.name} Country Guide | TGPI`;
-  const description = `${country.name} country guide: compare cost of living, safety, language, culture and documents for travel, study, work or relocation with TGPI.`;
-  const canonicalUrl = `/countries/${country.slug}`;
 
-  return {
-    title,
-    description,
-    keywords: [
-      country.name,
-      `${country.name} country guide`,
-      `${country.name} cost of living`,
-      `${country.name} travel`,
-      `${country.name} study abroad`,
-      `${country.name} work abroad`,
-      `${country.name} relocation`,
-      country.capital,
-      country.language,
-      country.currencyCode,
-      "TGPI country intelligence",
-    ],
-    alternates: {
-      canonical: canonicalUrl,
-    },
-    category: "International education and country intelligence",
-    robots: {
-      index: true,
-      follow: true,
-      googleBot: {
-        index: true,
-        follow: true,
-        "max-image-preview": "large",
-        "max-snippet": -1,
-        "max-video-preview": -1,
-      },
-    },
-    openGraph: {
-      title,
-      description,
-      type: "article",
-      url: canonicalUrl,
-      siteName: "TGPI",
-      locale: "en_US",
-      images: [
-        {
-          url: imageUrl,
-          width: 1600,
-          height: 900,
-          alt: imageAlt,
-        },
-      ],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title,
-      description,
-      images: [imageUrl],
-    },
-  };
+  return buildCountryMetadata(country, {
+    alt: imageAlt,
+    url: imageUrl,
+  });
 }
 
 export default async function CountryPage({ params }: CountryPageProps) {
@@ -173,85 +132,25 @@ export default async function CountryPage({ params }: CountryPageProps) {
   ];
 
   const countryPlan = getCountryActionPlan(country);
-  const canonicalUrl = `https://theglobalpolymath.com/countries/${country.slug}`;
-  const absoluteImageUrl = `https://theglobalpolymath.com${imageUrl}`;
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebPage",
-        "@id": `${canonicalUrl}#webpage`,
-        url: canonicalUrl,
-        name: `${country.name}: Country Intelligence Report`,
-        description: country.longDescription,
-        isPartOf: {
-          "@type": "WebSite",
-          "@id": "https://theglobalpolymath.com/#website",
-          name: "TGPI",
-          url: "https://theglobalpolymath.com",
-        },
-        about: { "@id": `${canonicalUrl}#country` },
-        primaryImageOfPage: { "@id": `${canonicalUrl}#hero-image` },
-        breadcrumb: { "@id": `${canonicalUrl}#breadcrumb` },
-      },
-      {
-        "@type": "Country",
-        "@id": `${canonicalUrl}#country`,
-        name: country.name,
-        description: country.intelligence.summary,
-        containedInPlace: {
-          "@type": "Place",
-          name: country.region,
-        },
-        additionalProperty: [
-          { "@type": "PropertyValue", name: "Capital", value: country.capital },
-          { "@type": "PropertyValue", name: "Language", value: country.language },
-          { "@type": "PropertyValue", name: "Currency", value: country.currency },
-          { "@type": "PropertyValue", name: "TGPI score", value: country.tgpiScore },
-        ],
-      },
-      {
-        "@type": "ImageObject",
-        "@id": `${canonicalUrl}#hero-image`,
-        contentUrl: absoluteImageUrl,
-        url: absoluteImageUrl,
-        width: 1600,
-        height: 900,
-        caption: imageAlt,
-        representativeOfPage: true,
-        creditText: "TGPI Cinematic Country Series",
-      },
-      {
-        "@type": "BreadcrumbList",
-        "@id": `${canonicalUrl}#breadcrumb`,
-        itemListElement: [
-          {
-            "@type": "ListItem",
-            position: 1,
-            name: "Countries",
-            item: "https://theglobalpolymath.com/countries",
-          },
-          {
-            "@type": "ListItem",
-            position: 2,
-            name: country.name,
-            item: canonicalUrl,
-          },
-        ],
-      },
-    ],
-  };
+  const structuredData = buildCountrySchema({
+    country,
+    description: getCountrySeoDescription(country),
+    imageAlt,
+    imagePath: imageUrl,
+  });
 
   return (
     <ActivationProgressProvider>
     <main className="min-h-screen bg-[#F6F1E7] text-[#071A32]">
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(structuredData).replace(/</g, "\\u003c"),
-        }}
-      />
+      <JsonLd data={structuredData} />
       <section className="mx-auto max-w-7xl px-5 py-8 md:px-8 md:py-12">
+        <Breadcrumbs
+          items={[
+            { name: "TGPI", path: "/" },
+            { name: "Countries", path: "/countries" },
+            { name: country.name, path: `/countries/${country.slug}` },
+          ]}
+        />
         <div className="mb-6 flex flex-col justify-between gap-3 md:flex-row md:items-center">
           <Link
             href="/countries"

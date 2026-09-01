@@ -1,8 +1,17 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import TGPIEditorialVisual, {
   type TGPIVisualVariant,
 } from "@/components/TGPIEditorialVisual";
 import TGPIPageShell from "@/components/TGPIPageShell";
+import { buildMetadata } from "@/seo";
+
+export const metadata: Metadata = buildMetadata({
+  title: "Global Mobility Guides and Resources",
+  description:
+    "Explore TGPI frameworks for comparing countries, building global capabilities, preparing documents and making stronger international decisions.",
+  path: "/resources",
+});
 
 const resources: Array<{
   title: string;

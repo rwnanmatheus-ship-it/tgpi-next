@@ -8,11 +8,14 @@ import HomeLaunchClose from "@/components/home/HomeLaunchClose";
 import HomeLearningPortal from "@/components/home/HomeLearningPortal";
 import HomePortal from "@/components/home/HomePortal";
 import HomeStructuredData from "@/components/home/HomeStructuredData";
+import { buildMetadata } from "@/seo";
 
-export const metadata: Metadata = {
-  title: "TGPI — Compare Countries and Build a Global Life With Evidence",
+export const metadata: Metadata = buildMetadata({
+  absoluteTitle: true,
+  title: "TGPI — The Global Polymath Institute",
   description:
-    "Compare 195 country profiles, understand cost, career, lifestyle and mobility trade-offs, prepare documents and build practical skills for international life with TGPI.",
+    "Global education and decision intelligence for comparing countries and choosing where to live, work, study and build an international life.",
+  path: "/",
   keywords: [
     "compare countries",
     "best country to live",
@@ -22,23 +25,7 @@ export const metadata: Metadata = {
     "global readiness",
     "TGPI",
   ],
-  alternates: { canonical: "https://theglobalpolymath.com" },
-  openGraph: {
-    title: "TGPI — Choose Where to Live, Work or Study With Evidence",
-    description:
-      "Country intelligence, transparent comparison, document preparation and practical learning in one connected global decision system.",
-    url: "https://theglobalpolymath.com",
-    siteName: "TGPI — The Global Polymath Institute",
-    type: "website",
-    locale: "en_US",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "TGPI — Choose Where to Live, Work or Study With Evidence",
-    description:
-      "Compare countries, understand trade-offs and turn international ambition into a structured plan.",
-  },
-};
+});
 
 export default function HomePage() {
   return (

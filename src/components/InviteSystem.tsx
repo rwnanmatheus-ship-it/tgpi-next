@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { absoluteUrl } from "@/seo/config";
 
 export default function InviteSystem() {
   const [copied, setCopied] = useState(false);
 
-  const inviteLink = "https://theglobalpolymath.com/invite";
+  const inviteLink = absoluteUrl("/sign-up");
 
   function handleCopy() {
     navigator.clipboard.writeText(inviteLink);

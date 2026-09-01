@@ -8,6 +8,7 @@ import {
 } from "@/lib/referral";
 import { onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
+import { absoluteUrl } from "@/seo/config";
 
 export default function ReferralCard() {
   const [referralLink, setReferralLink] = useState("");
@@ -27,7 +28,7 @@ export default function ReferralCard() {
         await ensureReferralIndex(user.uid, code);
         const count = await getReferralCount(user.uid);
 
-        setReferralLink(`https://theglobalpolymath.com?ref=${code}`);
+        setReferralLink(absoluteUrl(`/?ref=${code}`));
         setReferrals(count);
       } catch (error) {
         console.error("Could not load referral data:", error);

@@ -3,12 +3,14 @@ import Link from "next/link";
 import PremiumWaitlistForm from "@/components/PremiumWaitlistForm";
 import TGPIEditorialVisual from "@/components/TGPIEditorialVisual";
 import TGPIPageShell from "@/components/TGPIPageShell";
+import { buildMetadata } from "@/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildMetadata({
   title: "TGPI Premium Early Access",
   description:
     "Join the TGPI Premium waitlist for launch priority and early access to the global decision system.",
-};
+  path: "/premium-waitlist",
+});
 
 export default function PremiumWaitlistPage() {
   return (

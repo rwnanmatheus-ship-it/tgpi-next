@@ -1,7 +1,9 @@
 "use client";
 
+import { absoluteUrl } from "@/seo/config";
+
 export default function InviteCard({ username }: { username: string }) {
-  const link = `https://theglobalpolymath.com/user/${username}`;
+  const link = absoluteUrl(`/user/${username}`);
 
   function copy() {
     navigator.clipboard.writeText(link);

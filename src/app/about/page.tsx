@@ -1,6 +1,15 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import TGPIEditorialVisual from "@/components/TGPIEditorialVisual";
 import TGPIPageShell from "@/components/TGPIPageShell";
+import { buildMetadata } from "@/seo";
+
+export const metadata: Metadata = buildMetadata({
+  title: "About The Global Polymath Institute",
+  description:
+    "Learn how TGPI combines country intelligence, practical education, global mobility and decision systems for people building an international life.",
+  path: "/about",
+});
 
 const pillars = [
   ["Data", "Organize relevant signals before a major international decision."],

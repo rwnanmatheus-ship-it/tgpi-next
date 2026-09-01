@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import CourseOverviewExperience from "@/components/courses/CourseOverviewExperience";
 import { courses, getCourse } from "@/data/courses";
+import { buildMetadata, privateRobots } from "@/seo";
+import JsonLd from "@/seo/json-ld";
+import { buildCourseSchema } from "@/seo/schemas/course";
 
 type CoursePageProps = {
   params: Promise<{ id: string }>;
@@ -17,12 +20,17 @@ export async function generateMetadata({
   const { id } = await params;
   const course = getCourse(id);
 
-  if (!course) return { title: "Course not found | TGPI" };
+  if (!course) return { title: "Course not found", robots: privateRobots };
 
-  return {
+  return buildMetadata({
     description: course.description,
-    title: `${course.title} | TGPI Learning`,
-  };
+    title: course.title,
+    path: `/courses/${course.id}`,
+    image: {
+      url: "/images/courses/global-english-abroad.webp",
+      alt: `${course.title} by TGPI`,
+    },
+  });
 }
 
 export default async function CoursePage({ params }: CoursePageProps) {
@@ -31,5 +39,10 @@ export default async function CoursePage({ params }: CoursePageProps) {
 
   if (!course) notFound();
 
-  return <CourseOverviewExperience course={course} />;
+  return (
+    <>
+      <JsonLd data={buildCourseSchema(course)} />
+      <CourseOverviewExperience course={course} />
+    </>
+  );
 }

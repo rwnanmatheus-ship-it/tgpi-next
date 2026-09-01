@@ -1,9 +1,10 @@
 "use client";
 
 import { QRCodeCanvas } from "qrcode.react";
+import { absoluteUrl } from "@/seo/config";
 
 export default function TGPIQrCode({ tgpiId }: { tgpiId: string }) {
-  const url = `https://theglobalpolymath.com/verify/${tgpiId}`;
+  const url = absoluteUrl(`/verify/${tgpiId}`);
 
   return (
     <div className="flex flex-col items-center gap-2">

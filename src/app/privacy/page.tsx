@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import { buildMetadata } from "@/seo";
 
-export const metadata: Metadata = {
-  title: "Privacy Policy | TGPI",
-  description: "Privacy information for The Global Polymath Institute.",
-};
+export const metadata: Metadata = buildMetadata({
+  title: "Privacy Policy",
+  description: "Privacy information for TGPI — The Global Polymath Institute.",
+  path: "/privacy",
+});
 
 export default function PrivacyPage() {
   return (
