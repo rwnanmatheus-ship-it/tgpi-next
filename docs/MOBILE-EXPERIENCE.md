@@ -38,6 +38,16 @@ Verify home, countries, Portugal, compare, courses, documents, pricing and sign-
 
 Before production: compare visible desktop content and geometry with the current public release; check the remote production branch has not advanced; use a fresh production build so Preview environment variables are not promoted into Production.
 
+### Browser verification — 2026-09-02
+
+- Desktop home at 1348 CSS pixels: visible heading geometry, typography and full main height matched production exactly (8990.203125px main height). Mobile UI is hidden.
+- Phone home: six goal presets; country and capital search; no-result state; modal close/Escape and focus restoration; complete three-scenario micro-lesson.
+- Countries: searched Portugal and Spain, selected both and opened the correct shared comparison URL. Small-screen toolbar and card overlaps were found and corrected with mobile-scoped CSS.
+- Portugal: chapter navigation and budget slider checked (one keyboard increment updated €1,600 to €1,680); guest saving remains behind sign-in.
+- Learn, Documents and Premium: public content and conversion routes inspected. Documents goal selection updates its preparation layers.
+- QA harness includes a read-only layout report for overflow, visible headers, images and input text sizes. It never reads authentication or member data.
+- Authenticated workspace changes, account creation and paid transactions are not simulated as passing tests; this release preserves those existing services.
+
 ## Out of scope
 
 No SEO release, editorial/factual corrections, pricing changes, new payment behavior, service worker/offline caching of private data or changes to Vercel configuration.

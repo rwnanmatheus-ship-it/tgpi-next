@@ -123,15 +123,25 @@ export default function CountriesExplorerV3({ countries, goals, regions }: Count
   useEffect(() => {
     if (!filtersOpen) return;
     const previousOverflow = document.body.style.overflow;
+    const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
     document.body.style.overflow = "hidden";
     window.requestAnimationFrame(() => closeButtonRef.current?.focus());
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") setFiltersOpen(false);
+      if (event.key !== "Tab" || !window.matchMedia("(max-width: 767px)").matches) return;
+      const panel = closeButtonRef.current?.closest("[role=dialog]");
+      const controls = panel?.querySelectorAll<HTMLElement>("button:not([disabled]),select:not([disabled]),input:not([disabled]),a[href],[tabindex='0']");
+      if (!controls?.length) return;
+      const first = controls[0];
+      const last = controls[controls.length - 1];
+      if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+      else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
     };
     window.addEventListener("keydown", onKeyDown);
     return () => {
       document.body.style.overflow = previousOverflow;
       window.removeEventListener("keydown", onKeyDown);
+      if (window.matchMedia("(max-width: 767px)").matches) previousFocus?.focus({ preventScroll: true });
     };
   }, [filtersOpen]);
 
@@ -241,7 +251,7 @@ export default function CountriesExplorerV3({ countries, goals, regions }: Count
 
   return (
     <section className="mt-6 pb-28">
-      <div className="sticky top-[72px] z-30 rounded-[22px] border border-[var(--tgpi-border)] bg-[rgba(255,253,248,0.94)] p-3 shadow-[var(--tgpi-shadow-soft)] backdrop-blur-2xl">
+      <div className="mobile-explorer-toolbar sticky top-[72px] z-30 rounded-[22px] border border-[var(--tgpi-border)] bg-[rgba(255,253,248,0.94)] p-3 shadow-[var(--tgpi-shadow-soft)] backdrop-blur-2xl">
         <div className="grid gap-3 lg:grid-cols-[1fr_auto_auto]">
           <label className="relative block">
             <span className="sr-only">Search countries</span>
@@ -258,7 +268,7 @@ export default function CountriesExplorerV3({ countries, goals, regions }: Count
         </div>
       </div>
 
-      <div className="mt-5 -mx-4 flex snap-x snap-mandatory gap-2.5 overflow-x-auto px-4 pb-3 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 lg:grid-cols-3 xl:grid-cols-6">
+      <div className="mobile-explorer-lenses mt-5 -mx-4 flex snap-x snap-mandatory gap-2.5 overflow-x-auto px-4 pb-3 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 lg:grid-cols-3 xl:grid-cols-6">
         {COUNTRY_DECISION_PRESETS.map((preset, index) => {
           const active = activePreset === preset.id;
           return (

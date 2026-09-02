@@ -36,3 +36,13 @@ test("QA preview cannot be accessed in production",()=>{
   const source=readFileSync(new URL("../src/app/mobile-preview/page.tsx",import.meta.url),"utf8");
   assert.match(source,/process\.env\.VERCEL_ENV !== "preview"\) notFound/); assert.match(source,/index: false/);
 });
+test("phone country lenses keep their own horizontal rail",()=>{
+  const css=readFileSync(new URL("../src/app/mobile.css",import.meta.url),"utf8");
+  assert.match(css,/\.mobile-explorer-lenses > button \{ flex: 0 0 72%/);
+  assert.match(css,/\.mobile-explorer-toolbar \{ position: relative; top: auto/);
+});
+test("country filter focus containment is mobile-only",()=>{
+  const source=readFileSync(new URL("../src/components/countries/CountriesExplorerV3.tsx",import.meta.url),"utf8");
+  assert.match(source,/event\.key !== "Tab" \|\| !window\.matchMedia\("\(max-width: 767px\)"\)/);
+  assert.match(source,/previousFocus\?\.focus\(\{ preventScroll: true \}\)/);
+});

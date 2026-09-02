@@ -143,7 +143,7 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
 
         <ComparisonProofStrip />
 
-        <MobilePageGuide label="COMPARE WITH CLARITY" title="One question. A clearer decision." links={[{ label: "Choose countries", href: "#comparison-builder" }, { label: "View evidence", href: "#comparison-matrix" }]}>
+        <MobilePageGuide label="COMPARE WITH CLARITY" title="One question. A clearer decision." links={[{ label: "Choose countries", href: "#comparison-builder" }, ...(countriesToCompare.length ? [{ label: "View evidence", href: "#comparison-matrix" }] : [])]}>
           Choose up to three destinations and one decision lens. Swipe the evidence table sideways to inspect each country; budgets use local currencies.
         </MobilePageGuide>
 

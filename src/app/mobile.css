@@ -157,6 +157,24 @@
   #country-explorer > div:first-child { padding: 0 5px 16px; gap: 12px; }
   #country-explorer > div:first-child h2 { font-size: 29px; }
   #country-explorer > div:first-child > div:last-child > p { font-size: 13px; line-height: 1.8; }
+  .mobile-explorer-toolbar { position: relative; top: auto; z-index: 1; }
+  .mobile-explorer-toolbar > div { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 8px; }
+  .mobile-explorer-toolbar label { grid-column: 1/-1; }
+  .mobile-explorer-toolbar button { padding-inline: 8px; font-size: 12px; }
+  #main-content .mobile-explorer-lenses { display: flex; overflow-x: auto; margin-inline: -4px; padding-inline: 4px; }
+  #main-content .mobile-explorer-lenses > button { flex: 0 0 72%; min-width: 0; max-width: 320px; }
+  .mobile-country-card > a > div:first-child { height: 230px; }
+  .mobile-country-card > a > div:first-child > .left-4 { max-width: calc(100% - 122px); gap: 6px; }
+  .mobile-country-card > a > div:first-child > .left-4 span { max-width: 100%; padding-inline: 8px; overflow-wrap: anywhere; }
+  .mobile-country-card > a > div:first-child > .right-4 { right: 12px; width: 92px; padding-inline: 6px; }
+  .mobile-country-card > a > div:last-child { padding: 16px 12px; }
+  .mobile-country-card > a > div:last-child > .flex { flex-wrap: wrap; gap: 10px; }
+  .mobile-country-card > a > div:last-child > .flex > .min-w-0 { flex: 1 1 100%; }
+  .mobile-country-card > a > div:last-child > .grid { gap: 5px; }
+  .mobile-country-card > a > div:last-child > .grid > div { border-radius: 12px; padding: 10px 6px; }
+  .mobile-country-card > a > div:last-child > .grid p { overflow-wrap: anywhere; }
+  .mobile-country-card > a > div:last-child > .grid p:last-child { font-size: 12px; white-space: normal; }
+  .mobile-country-card > a > div:last-child > .flex:last-child > span { width: 100%; justify-content: center; }
   .mobile-comparison-tray { bottom: calc(var(--mobile-dock) + var(--mobile-safe-bottom)); padding: 12px 14px; }
   .mobile-comparison-tray > div { gap: 10px; }
   .mobile-comparison-tray > div > div:first-child > p { display: none; }
@@ -189,8 +207,13 @@
   [data-mobile-page="pricing"] main :is(section, article) { border-radius: 22px; }
   [data-mobile-page="profile"] :is(table, pre) { max-width: 100%; overflow-x: auto; }
   [data-mobile-page="sign-in"] main, [data-mobile-page="sign-up"] main { padding: 16px; }
-  [data-mobile-page="sign-in"] main > div > aside, [data-mobile-page="sign-up"] main > div > aside { display: none; }
+  :is([data-mobile-page="sign-in"], [data-mobile-page="sign-up"]) main > div > section:first-child { display: none; }
+  :is([data-mobile-page="sign-in"], [data-mobile-page="sign-up"]) main > div > section:last-child { padding: 22px 16px; }
+  :is([data-mobile-page="sign-in"], [data-mobile-page="sign-up"]) main > div > section:last-child > div > div:first-child { margin-bottom: 22px; }
   .cl-rootBox, .cl-cardBox { max-width: 100%; }
+  #main-content .cl-card { padding: 20px 12px; box-shadow: none; }
+  #main-content .cl-headerTitle { font-size: 26px; line-height: 1.15; letter-spacing: -.025em; overflow-wrap: anywhere; }
+  #main-content .cl-footerAction { flex-wrap: wrap; gap: 8px; }
   .cl-formFieldInput { font-size: 16px; }
   body > :is(footer), footer { padding-bottom: 12px; }
   footer nav[aria-label="TGPI connected decision path"] { display: none; }
