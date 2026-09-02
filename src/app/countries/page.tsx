@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import MobilePageGuide from "@/components/mobile/MobilePageGuide";
 import Link from "next/link";
 import CountriesExplorerV3 from "@/components/countries/CountriesExplorerV3";
 import CountriesHero from "@/components/countries/CountriesHero";
@@ -45,11 +46,15 @@ export default function CountriesPage() {
     <main className="min-h-screen bg-[var(--tgpi-canvas)] text-[var(--tgpi-ink)]">
       <CountriesStructuredData countries={countries} />
 
-      <div className="mx-auto max-w-[1360px] px-4 py-5 sm:px-6 sm:py-8 lg:px-8 lg:py-10">
+      <div className="mobile-countries-layout mx-auto max-w-[1360px] px-4 py-5 sm:px-6 sm:py-8 lg:px-8 lg:py-10">
         <CountriesHero
           countryCount={countries.length}
           regionCount={regions.length}
         />
+
+        <MobilePageGuide label="YOUR COUNTRY WORKSPACE" title="Start with a shortlist." links={[{ label: "Search & filter", href: "#country-explorer" }, { label: "Open the atlas", href: "#world-journey" }]}>
+          Search a destination, choose a goal and add up to three countries to compare. Your research stays connected as you explore.
+        </MobilePageGuide>
 
         <CountriesSystemRail />
 

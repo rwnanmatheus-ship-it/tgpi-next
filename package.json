@@ -6,6 +6,8 @@
     "dev": "next dev",
     "generate:country-visuals": "node --experimental-strip-types scripts/generate-country-visuals.mjs",
     "verify:premium": "node scripts/verify-premium-command-center.mjs",
+    "test:mobile": "node --experimental-strip-types --test scripts/mobile-experience.test.mjs",
+    "typecheck": "tsc --noEmit",
     "build": "next build",
     "start": "next start",
     "lint": "eslint"

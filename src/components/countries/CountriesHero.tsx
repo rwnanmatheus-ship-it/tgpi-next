@@ -17,7 +17,7 @@ export default function CountriesHero({
   return (
     <section
       aria-labelledby="countries-hero-title"
-      className="relative min-h-[650px] overflow-hidden rounded-[34px] border border-white/10 bg-[var(--tgpi-navy-deep)] text-white shadow-[var(--tgpi-shadow-premium)] sm:min-h-[620px] lg:h-[540px] lg:min-h-0"
+      className="mobile-country-hero relative min-h-[650px] overflow-hidden rounded-[34px] border border-white/10 bg-[var(--tgpi-navy-deep)] text-white shadow-[var(--tgpi-shadow-premium)] sm:min-h-[620px] lg:h-[540px] lg:min-h-0"
     >
       <Image
         src={HERO_IMAGE}

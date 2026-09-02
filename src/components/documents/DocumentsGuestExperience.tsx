@@ -60,7 +60,7 @@ export default function DocumentsGuestExperience({
   return (
     <main className="min-h-screen bg-[var(--tgpi-canvas)] text-[var(--tgpi-ink)]">
       <div className="mx-auto max-w-[1360px] px-4 py-6 sm:px-6 sm:py-10 lg:px-8 lg:py-14">
-        <section className="relative isolate overflow-hidden rounded-[30px] border border-white/10 bg-[var(--tgpi-navy)] text-white shadow-[var(--tgpi-shadow-premium)] sm:rounded-[36px]">
+        <section className="mobile-compact-hero relative isolate overflow-hidden rounded-[30px] border border-white/10 bg-[var(--tgpi-navy)] text-white shadow-[var(--tgpi-shadow-premium)] sm:rounded-[36px]">
           <Image
             src="/images/documents/tgpi-documents-hero-v2.webp"
             alt="TGPI global evidence observatory connecting an illuminated world atlas with organized document research"
@@ -73,7 +73,7 @@ export default function DocumentsGuestExperience({
           <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(4,20,38,0.94)_0%,rgba(4,20,38,0.89)_70%,rgba(4,20,38,0.78)_100%)] lg:bg-[linear-gradient(90deg,rgba(4,20,38,0.99)_0%,rgba(4,20,38,0.94)_43%,rgba(4,20,38,0.38)_72%,rgba(4,20,38,0.12)_100%)]" />
           <div className="pointer-events-none absolute -left-24 top-[-7rem] h-80 w-80 rounded-full bg-[var(--tgpi-gold)]/10 blur-3xl" aria-hidden="true" />
 
-          <div className="relative z-10 flex min-h-[620px] flex-col justify-center p-7 sm:min-h-[580px] sm:p-9 lg:h-[540px] lg:min-h-0 lg:p-10 xl:p-12">
+          <div className="mobile-compact-hero-content relative z-10 flex min-h-[620px] flex-col justify-center p-7 sm:min-h-[580px] sm:p-9 lg:h-[540px] lg:min-h-0 lg:p-10 xl:p-12">
             <div className="max-w-[680px]">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="rounded-full border border-[var(--tgpi-gold)]/35 bg-[var(--tgpi-gold)]/10 px-3 py-2 text-[9px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-light)]">

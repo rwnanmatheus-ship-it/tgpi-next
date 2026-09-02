@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import MobileHome from "@/components/mobile/MobileHome";
 import HomeDecisionOS from "@/components/HomeDecisionOS";
 import HomeAuthorityLayer from "@/components/home/HomeAuthorityLayer";
 import HomeCountryCardsV2 from "@/components/home/HomeCountryCardsV2";
@@ -45,6 +46,8 @@ export default function HomePage() {
     <>
       <HomeStructuredData />
       <main className="overflow-hidden bg-[var(--tgpi-canvas)] text-[var(--tgpi-ink)]">
+        <MobileHome />
+        <div className="mobile-desktop-home">
         <HomeHeroV3 />
         <HomePortal />
         <HomeDecisionOS />
@@ -53,6 +56,7 @@ export default function HomePage() {
         <HomeInstagramContinuity />
         <HomeAuthorityLayer />
         <HomeLaunchClose />
+        </div>
       </main>
     </>
   );

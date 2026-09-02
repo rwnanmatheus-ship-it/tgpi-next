@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import MobilePageGuide from "@/components/mobile/MobilePageGuide";
 import Image from "next/image";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -142,6 +143,10 @@ export default async function ComparePage({ searchParams }: ComparePageProps) {
 
         <ComparisonProofStrip />
 
+        <MobilePageGuide label="COMPARE WITH CLARITY" title="One question. A clearer decision." links={[{ label: "Choose countries", href: "#comparison-builder" }, { label: "View evidence", href: "#comparison-matrix" }]}>
+          Choose up to three destinations and one decision lens. Swipe the evidence table sideways to inspect each country; budgets use local currencies.
+        </MobilePageGuide>
+
         <CompareCountryPicker
           key={`${goal}:${countriesToCompare.map((country) => country.slug).join(",")}`}
           countries={pickerCountries}
@@ -266,7 +271,7 @@ function CompareHero({
   goalLabel: string;
 }) {
   return (
-    <section className="relative isolate min-h-[640px] overflow-hidden rounded-[30px] border border-white/10 bg-[var(--tgpi-navy)] text-white shadow-[var(--tgpi-shadow-premium)] sm:min-h-[600px] sm:rounded-[36px] lg:h-[540px] lg:min-h-0">
+    <section className="mobile-compact-hero relative isolate min-h-[640px] overflow-hidden rounded-[30px] border border-white/10 bg-[var(--tgpi-navy)] text-white shadow-[var(--tgpi-shadow-premium)] sm:min-h-[600px] sm:rounded-[36px] lg:h-[540px] lg:min-h-0">
       <Image
         src="/images/compare/tgpi-global-decision-observatory.webp"
         alt="TGPI global decision observatory comparing three international futures through an illuminated strategic atlas"
@@ -278,7 +283,7 @@ function CompareHero({
       />
       <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(3,15,30,0.94)_0%,rgba(3,15,30,0.84)_62%,rgba(3,15,30,0.9)_100%)] lg:bg-[linear-gradient(90deg,rgba(3,15,30,0.99)_0%,rgba(3,15,30,0.94)_43%,rgba(3,15,30,0.42)_70%,rgba(3,15,30,0.12)_100%)]" />
 
-      <div className="relative z-10 flex min-h-[640px] flex-col justify-between p-7 sm:min-h-[600px] sm:p-10 lg:h-full lg:min-h-0 lg:p-12">
+      <div className="mobile-compact-hero-content relative z-10 flex min-h-[640px] flex-col justify-between p-7 sm:min-h-[600px] sm:p-10 lg:h-full lg:min-h-0 lg:p-12">
         <div className="max-w-[690px]">
           <div className="flex flex-wrap items-center gap-2">
             <span className="rounded-full border border-[var(--tgpi-gold)]/40 bg-[var(--tgpi-gold)]/10 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold-light)]">

@@ -1,5 +1,6 @@
 import { auth } from "@clerk/nextjs/server";
 import type { Metadata } from "next";
+import MobileMicroLesson from "@/components/mobile/MobileMicroLesson";
 import Image from "next/image";
 import Link from "next/link";
 import LearningPathExplorer from "@/components/courses/LearningPathExplorer";
@@ -59,7 +60,7 @@ export default async function CoursesPage() {
 
   return (
     <TGPIPageShell>
-      <section className="relative isolate overflow-hidden rounded-[30px] border border-white/10 bg-[var(--tgpi-navy)] text-white shadow-[var(--tgpi-shadow-premium)] sm:rounded-[36px]">
+      <section className="mobile-compact-hero relative isolate overflow-hidden rounded-[30px] border border-white/10 bg-[var(--tgpi-navy)] text-white shadow-[var(--tgpi-shadow-premium)] sm:rounded-[36px]">
         <Image
           src="/images/learning/tgpi-learning-hero-v2.webp"
           alt="TGPI global knowledge observatory with an illuminated world atlas"
@@ -74,7 +75,7 @@ export default async function CoursesPage() {
           className="pointer-events-none absolute -left-24 top-[-7rem] h-80 w-80 rounded-full bg-[var(--tgpi-gold)]/10 blur-3xl"
           aria-hidden="true"
         />
-        <div className="relative z-10 flex min-h-[620px] flex-col justify-center p-7 sm:min-h-[580px] sm:p-9 lg:h-[540px] lg:min-h-0 lg:p-10 xl:p-12">
+        <div className="mobile-compact-hero-content relative z-10 flex min-h-[620px] flex-col justify-center p-7 sm:min-h-[580px] sm:p-9 lg:h-[540px] lg:min-h-0 lg:p-10 xl:p-12">
           <div className="max-w-[680px]">
             <div className="flex flex-wrap items-center gap-2">
               <span className="rounded-full border border-[var(--tgpi-gold)]/35 bg-[var(--tgpi-gold)]/10 px-3 py-2 text-[9px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-light)]">
@@ -138,6 +139,8 @@ export default async function CoursesPage() {
           </div>
         </div>
       </section>
+
+      <MobileMicroLesson />
 
       <LearningPathExplorer
         courses={coursesOverview}

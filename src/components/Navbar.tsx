@@ -61,7 +61,7 @@ export default function Navbar() {
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-[var(--tgpi-border-soft)] bg-[rgba(255,253,248,0.94)] backdrop-blur-2xl transition-all duration-300">
+    <header className="tgpi-legacy-navbar sticky top-0 z-50 border-b border-[var(--tgpi-border-soft)] bg-[rgba(255,253,248,0.94)] backdrop-blur-2xl transition-all duration-300">
       <Container>
         <div className={`flex items-center justify-between transition-all duration-300 ${compact ? "min-h-16 py-2" : "min-h-[76px] py-3"}`}>
           <Link href="/" onClick={closeMenu} className="group flex min-w-0 items-center gap-3" aria-label="TGPI home">
