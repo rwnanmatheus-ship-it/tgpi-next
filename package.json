@@ -7,6 +7,7 @@
     "generate:country-visuals": "node --experimental-strip-types scripts/generate-country-visuals.mjs",
     "verify:premium": "node scripts/verify-premium-command-center.mjs",
     "verify:seo": "node scripts/verify-seo.mjs",
+    "test:search": "node --experimental-strip-types --test scripts/tgpi-search.test.mjs",
     "typecheck": "tsc --noEmit",
     "build": "next build",
     "start": "next start",

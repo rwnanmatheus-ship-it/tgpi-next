@@ -22,7 +22,9 @@ The reusable SEO foundation lives in `src/seo/`:
 - `json-ld.tsx`: safe JSON-LD renderer.
 - `urls.ts`: canonical route builders.
 
-Internal search uses `src/lib/tgpi-search.ts`. It shares country, course and platform entities with the public product instead of maintaining a disconnected list.
+Internal search uses `src/lib/tgpi-search.ts`. It shares country, course and platform entities with the public product instead of maintaining a disconnected list. Its dependency-free ranking logic lives in `src/lib/tgpi-search-ranking.ts` and is covered by `scripts/tgpi-search.test.mjs`.
+
+Named countries and capital aliases take priority over generic intent matches. When a query names a destination, unrelated country profiles are excluded while relevant product tools remain available. Stop words do not boost results, general living-cost queries do not imply affordability, and unmatched queries return an empty result set. Index eligibility must never create relevance by itself.
 
 ## Index policy
 
@@ -63,6 +65,7 @@ Before adding a slug to the indexable set:
 ## Required checks
 
 ```bash
+npm run test:search
 npm run typecheck
 npm run lint
 npm run verify:seo

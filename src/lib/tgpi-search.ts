@@ -1,26 +1,16 @@
 import { coursesOverview } from "@/data/courses-overview";
 import { getAllCountries, type Country } from "@/lib/countries";
-import { isCountryIndexable } from "@/seo/countries";
+import {
+  rankTgpiSearchDocuments,
+  type TgpiSearchDocument,
+  type TgpiSearchResult,
+} from "@/lib/tgpi-search-ranking";
 
-export type TgpiSearchDocumentType =
-  | "compare"
-  | "country"
-  | "documents"
-  | "institute"
-  | "learn"
-  | "methodology";
-
-export type TgpiSearchDocument = {
-  description: string;
-  keywords: readonly string[];
-  title: string;
-  type: TgpiSearchDocumentType;
-  url: string;
-};
-
-export type TgpiSearchResult = TgpiSearchDocument & {
-  score: number;
-};
+export type {
+  TgpiSearchDocument,
+  TgpiSearchDocumentType,
+  TgpiSearchResult,
+} from "@/lib/tgpi-search-ranking";
 
 let searchDocumentCache: TgpiSearchDocument[] | undefined;
 
@@ -67,36 +57,11 @@ const staticDocuments: readonly TgpiSearchDocument[] = [
   },
 ] as const;
 
-const synonymGroups = [
-  ["cheap", "affordable", "low cost", "cost of living", "budget"],
-  ["work", "job", "jobs", "career", "employment"],
-  ["study", "student", "university", "education", "school"],
-  ["move", "moving", "relocate", "relocation", "immigration"],
-  ["documents", "document", "visa", "passport", "requirements"],
-  ["compare", "comparison", "versus", "vs"],
-] as const;
-
-function normalize(value: string): string {
-  return value
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, " ")
-    .trim();
-}
-
-function expandQuery(query: string): string[] {
-  const normalizedQuery = normalize(query);
-  const terms = new Set(normalizedQuery.split(" ").filter(Boolean));
-
-  for (const group of synonymGroups) {
-    if (group.some((synonym) => normalizedQuery.includes(normalize(synonym)))) {
-      group.forEach((synonym) => terms.add(normalize(synonym)));
-    }
-  }
-
-  return Array.from(terms);
-}
+const countryAliases: Readonly<Record<string, readonly string[]>> = {
+  "united-states": ["USA", "US", "United States of America"],
+  "united-kingdom": ["UK", "Britain", "Great Britain"],
+  "united-arab-emirates": ["UAE"],
+};
 
 function buildCountryDocument(country: Country): TgpiSearchDocument {
   const costKeywords =
@@ -109,6 +74,7 @@ function buildCountryDocument(country: Country): TgpiSearchDocument {
   return {
     type: "country",
     title: country.name,
+    aliases: [country.slug, country.capital, ...(countryAliases[country.slug] ?? [])],
     description: `${country.name} country intelligence for cost, life in ${country.capital}, ${country.language}, work, study, documents and relocation.`,
     url: `/countries/${country.slug}`,
     keywords: [
@@ -156,52 +122,6 @@ export function getTgpiSearchDocuments(): TgpiSearchDocument[] {
   return searchDocumentCache;
 }
 
-function scoreDocument(
-  document: TgpiSearchDocument,
-  normalizedQuery: string,
-  terms: readonly string[],
-): number {
-  const title = normalize(document.title);
-  const description = normalize(document.description);
-  const keywords = normalize(document.keywords.join(" "));
-  let score = 0;
-
-  if (title === normalizedQuery) score += 160;
-  if (title.startsWith(normalizedQuery)) score += 90;
-  if (title.includes(normalizedQuery)) score += 65;
-  if (keywords.includes(normalizedQuery)) score += 35;
-  if (description.includes(normalizedQuery)) score += 22;
-
-  for (const term of terms) {
-    if (title.split(" ").includes(term)) score += 20;
-    else if (title.includes(term)) score += 12;
-    if (keywords.includes(term)) score += 8;
-    if (description.includes(term)) score += 4;
-  }
-
-  if (document.type === "country") {
-    const slug = document.url.split("/").pop() ?? "";
-    if (isCountryIndexable({ slug })) score += 3;
-  }
-
-  return score;
-}
-
 export function searchTgpi(query: string, limit = 24): TgpiSearchResult[] {
-  const normalizedQuery = normalize(query);
-  if (!normalizedQuery) return [];
-
-  const terms = expandQuery(query);
-
-  return getTgpiSearchDocuments()
-    .map((document) => ({
-      ...document,
-      score: scoreDocument(document, normalizedQuery, terms),
-    }))
-    .filter((document) => document.score > 0)
-    .sort((first, second) => {
-      if (second.score !== first.score) return second.score - first.score;
-      return first.title.localeCompare(second.title);
-    })
-    .slice(0, limit);
+  return rankTgpiSearchDocuments(getTgpiSearchDocuments(), query, limit);
 }
