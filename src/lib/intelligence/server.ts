@@ -74,6 +74,7 @@ export async function getIntelligence(): Promise<IntelligenceState> {
     return { snapshot, status: stale ? "degraded" : "available", message: stale ? "The source refresh is overdue. Previously collected observations remain visible with their original dates." : null };
   } catch (error) {
     console.warn("TGPI intelligence collection rejected", error instanceof Error ? error.message.slice(0, 180) : "Unknown collection error");
-    return { snapshot: fallback, status: fallback.observations.length ? "degraded" : "unavailable", message: "The statistical source could not be validated. No values have been invented. Any retained observations show their original collection dates." };
+    const retained = lastValidated.observations.length ? lastValidated : fallback;
+    return { snapshot: retained, status: retained.observations.length ? "degraded" : "unavailable", message: "The statistical source could not be validated. No values have been invented. Any retained observations show their original collection dates." };
   }
 }

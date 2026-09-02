@@ -58,3 +58,9 @@ Run `npm run test:intelligence`, `npm run test:mobile`, `npm run typecheck`, `np
 - 47 automated tests passed: 32 data/plan tests and 15 mobile tests. The plan handler tests use a mocked identity provider and assert 401/403, size/schema rejection, shortlist preservation, account isolation and upstream failure handling. No real member record was changed during QA.
 - TypeScript, ESLint, premium source contracts and production build passed. Preview runtime error/fatal query returned no entries in the inspected window.
 - The app connector returned an SSO redirect for the protected Preview JSON endpoint; browser-rendered source collection and Vercel runtime logs were used instead. This is a verification-tool limitation, not evidence that the public site is down. Public production API verification remains a publication gate.
+
+### Public production verification
+
+Production `f7aa6ea` served the new core with HTTP 200 on Home, Countries, Compare, Country Fit, Intelligence, Learn and `/api/intelligence`. The public API returned `available`, 195 identities, 194-country statistical coverage and 757 observations. Collection timestamp: `2026-09-02T23:41:18.833Z`; revision: `3dec04a58fd8f5fd`. That exact public snapshot is bundled as a cold-start fallback, retaining its original timestamps and source digests. A test recalculates its content revision and validates country/indicator uniqueness and series counts.
+
+Runtime error/fatal inspection found no entries in the production window checked. Repeated public API requests were observed with HTTP 200. The daily workflow is configured; its archived-artifact completion was not independently observable through the available connector, which only lists pull-request-triggered workflow runs. Do not claim a verified archive solely from the workflow configuration.

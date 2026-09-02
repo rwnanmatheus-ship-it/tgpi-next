@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import { createHash } from "node:crypto";
 import { INDICATOR_IDS, parseWorldBankResponse, evidenceStatus, comparisonCaveat, personalResearchPlan, sourceApiUrl, formatObservation } from "../src/lib/intelligence/core.ts";
 const identities = JSON.parse(readFileSync(new URL("../src/data/intelligence/identities.json", import.meta.url), "utf8")).countries;
 const legacy = readFileSync(new URL("../src/data/countries.ts", import.meta.url), "utf8");
@@ -19,6 +20,21 @@ test("195 country IDs map uniquely to all existing country slugs", () => {
 test("registered query URLs are fixed HTTPS World Bank requests", () => {
   for (const id of INDICATOR_IDS) { const url = new URL(sourceApiUrl(id)); assert.equal(url.origin, "https://api.worldbank.org"); assert.equal(url.searchParams.get("source"), "2"); }
   assert.throws(() => sourceApiUrl("https://127.0.0.1/secret"));
+});
+test("bundled fallback is complete, source-linked and matches its content revision", () => {
+  const snapshot = JSON.parse(readFileSync(new URL("../src/data/intelligence/snapshot.json", import.meta.url), "utf8"));
+  assert.equal(snapshot.schemaVersion, 1); assert.equal(snapshot.methodologyVersion, "1.0.0"); assert.equal(snapshot.series.length, 4);
+  assert.ok(snapshot.observations.length >= 700);
+  const slugs = new Set(identities.map(c => c.slug)); const keys = new Set();
+  for (const row of snapshot.observations) {
+    assert.ok(slugs.has(row.country)); assert.ok(INDICATOR_IDS.includes(row.indicator));
+    assert.ok(Number.isFinite(row.value) && row.value >= 0); assert.ok(row.year >= 1960 && row.year <= new Date(row.retrievedAt).getUTCFullYear());
+    assert.ok(Number.isFinite(Date.parse(row.retrievedAt))); assert.ok(row.retrievedAt <= snapshot.retrievedAt);
+    const key = `${row.country}:${row.indicator}`; assert.ok(!keys.has(key)); keys.add(key);
+  }
+  for (const series of snapshot.series) { assert.equal(series.url, sourceApiUrl(series.indicator)); assert.match(series.responseSha256, /^[a-f0-9]{64}$/); assert.equal(series.observations, snapshot.observations.filter(o => o.indicator === series.indicator).length); }
+  const signature = JSON.stringify(snapshot.observations.map(({country,indicator,value,year}) => ({country,indicator,value,year})));
+  assert.equal(snapshot.revision, createHash("sha256").update(signature).digest("hex").slice(0,16));
 });
 test("valid observations retain reference year and collection date separately", () => {
   const result = parseWorldBankResponse(fixture(), "IT.NET.USER.ZS", identities, NOW);
@@ -77,4 +93,12 @@ test("saving a plan is authenticated, same-origin, bounded and preserves unrelat
   assert.match(source, /targetCountries.length >= 5/);
   assert.match(source, /updateUserMetadata\(session.userId/);
   assert.doesNotMatch(source, /payload\.userId|payload\.uid|privateMetadata/);
+});
+test("atlas keyboard regions use cartography instead of the statistical Americas grouping", () => {
+  const source = readFileSync(new URL("../src/components/countries/CountriesWorldMap.tsx", import.meta.url), "utf8");
+  assert.match(source, /continents.get\(country.slug\) \?\? country.region/);
+  const map = JSON.parse(readFileSync(new URL("../public/maps/tgpi-world-countries-50m.json", import.meta.url), "utf8"));
+  assert.equal(map.features.find(f => f.isoA3 === "CAN").continent, "North America");
+  assert.equal(map.features.find(f => f.isoA3 === "BRA").continent, "South America");
+  assert.equal(identities.find(c => c.iso3 === "CAN").region, "Americas");
 });

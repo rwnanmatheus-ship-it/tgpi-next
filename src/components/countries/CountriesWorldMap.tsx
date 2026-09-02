@@ -201,10 +201,12 @@ export default function CountriesWorldMap({
     );
     if (!region) return interactiveCountries;
 
+    // Map navigation follows the cartographic dataset, not UNSD's broader "Americas" region.
+    const continents = new Map(features.map(feature => [feature.country?.slug, feature.continent]));
     return interactiveCountries.filter((country) =>
-      region.sourceRegions.includes(country.region),
+      region.sourceRegions.includes(continents.get(country.slug) ?? country.region),
     );
-  }, [activeRegionId, interactiveCountries]);
+  }, [activeRegionId, interactiveCountries, features]);
 
   const selectedCountry = countryBySlug.get(selectedSlug);
   const selectedFeature = features.find(
