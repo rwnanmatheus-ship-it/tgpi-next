@@ -16,7 +16,7 @@ const desktopLinks = [
 ] as const;
 
 const mobileGroups = [
-  { title: "Explore", links: [["Countries", "/countries"], ["Country Fit", "/onboarding"], ["Compare", "/compare"]] },
+  { title: "Explore", links: [["Countries", "/countries"], ["Country Fit", "/country-fit"], ["Compare", "/compare"]] },
   { title: "Build", links: [["My workspace", "/profile"], ["Documents OS", "/passport"], ["Start a plan", "/onboarding"]] },
   { title: "Learn", links: [["Courses", "/courses"], ["Resources", "/resources"], ["Authority", "/authority"]] },
   { title: "Premium", links: [["Pricing", "/pricing"], ["Premium", "/premium"], ["Waitlist", "/premium-waitlist"]] },

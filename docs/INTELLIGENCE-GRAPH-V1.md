@@ -34,7 +34,7 @@ Labels are not truth probabilities. No artificial 0–100 confidence or fit scor
 - `/countries`: alphabetical research directory, search, regions, optional lazy-loaded atlas, compare shortlist.
 - `/countries/[slug]`: identity, four evidence cards with source/date/limitations, explicit missing layers, user-entered USD budget, reviewed portal where present, existing private checklist/save flow.
 - `/compare`: existing share/save builder with evidence matrix; goal lenses now organize questions rather than weighted synthetic ratings.
-- `/country-fit`: goal, budget, timeline, profession and languages inform transparent research tasks. Page-local edits are explicitly not saved automatically.
+- `/country-fit`: goal, budget, timeline, profession and languages inform transparent research tasks. Page-local edits are not saved automatically. Members explicitly save through an authenticated same-origin PATCH; existing unrelated profile fields and shortlist entries are preserved. A full shortlist requires manual management before adding a new country. Guests can explore without saving.
 - `/profile`: existing saved onboarding context feeds the same planner, with existing activation persistence preserved. Shortlist order follows user selection. Progress is not legal approval.
 - `/intelligence`: published methodology, real coverage, confidence semantics, updates, licensing links and interactive evidence-literacy practice.
 - Home, Learning, footer and mobile goal entry connect to this core. Authentication and payment settings are unchanged.
@@ -48,3 +48,13 @@ Budget migration: historical saved estimates are never silently relabeled into U
 ## Release gates
 
 Run `npm run test:intelligence`, `npm run test:mobile`, `npm run typecheck`, `npm run lint`, `npm run verify:premium` and `npm run build`. Validate an actual Preview API collection, observations and all critical public routes. Confirm 320px/390px/desktop layouts, empty states, source links, context-sensitive plan, country search, comparison, budget input and learning interaction. Do not access private member records in QA. Verify the production branch has not advanced and perform a fresh Production build; never promote Preview environment credentials. Preserve previous production SHA for rollback.
+
+## Verification recorded before production
+
+- Preview `f0ba4b9`: live WDI collection revision `3dec04a58fd8f5fd`, collected 2026-09-02 23:24 UTC. Rendered coverage: 757 observations across 194 countries (population 194, internet 194, unemployment 179, tertiary enrollment 190). Holy See has identity mapping but no WDI observations in this snapshot.
+- 15 layout combinations: Countries, Portugal, Compare, Country Fit and Intelligence at 320, 390 and 1280 CSS pixels; no horizontal overflow or broken images. Checkbox font sizes are not text-entry zoom issues.
+- Public planner responds to a synthetic work goal, budget, near-term deadline, profession and languages without sending those inputs to suppliers.
+- Portugal + Spain selection produces the correct shared comparison URL. Evidence-literacy feedback was verified in the browser.
+- 47 automated tests passed: 32 data/plan tests and 15 mobile tests. The plan handler tests use a mocked identity provider and assert 401/403, size/schema rejection, shortlist preservation, account isolation and upstream failure handling. No real member record was changed during QA.
+- TypeScript, ESLint, premium source contracts and production build passed. Preview runtime error/fatal query returned no entries in the inspected window.
+- The app connector returned an SSO redirect for the protected Preview JSON endpoint; browser-rendered source collection and Vercel runtime logs were used instead. This is a verification-tool limitation, not evidence that the public site is down. Public production API verification remains a publication gate.

@@ -8,6 +8,12 @@ export const INDICATORS = {
 } as const;
 export type IndicatorId = keyof typeof INDICATORS;
 export const INDICATOR_IDS = Object.keys(INDICATORS) as IndicatorId[];
+export const INDICATOR_PRODUCERS: Record<IndicatorId, string> = {
+  "SP.POP.TOTL": "UN Population Division, national statistical offices, Eurostat and UN Statistics Division",
+  "IT.NET.USER.ZS": "International Telecommunication Union (ITU), World Telecommunication/ICT Indicators Database",
+  "SL.UEM.TOTL.ZS": "International Labour Organization (ILO), ILOSTAT modeled estimates",
+  "SE.TER.ENRR": "UNESCO Institute for Statistics (UIS)",
+};
 export type CountryIdentity = { slug: string; name: string; iso2: string; iso3: string; m49: string; region: string; subregion: string };
 export type Observation = { country: string; indicator: IndicatorId; value: number; year: number; retrievedAt: string; sourceUpdatedAt: string | null };
 export type SeriesAudit = { indicator: IndicatorId; url: string; retrievedAt: string; sourceUpdatedAt: string | null; responseSha256: string; observations: number };

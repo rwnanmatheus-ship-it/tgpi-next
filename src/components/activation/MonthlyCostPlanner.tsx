@@ -95,7 +95,7 @@ export default function MonthlyCostPlanner({
         >
           {isSaving
             ? "Saving…"
-            : saved || savedEstimate?.amount === amount
+            : saved || (savedEstimate?.amount === amount && savedEstimate?.currency === currency)
               ? "✓ Estimate saved"
               : "Save monthly estimate"}
         </button>

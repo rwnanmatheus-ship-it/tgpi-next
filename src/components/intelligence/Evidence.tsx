@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { INDICATORS, evidenceLabel, evidenceStatus, formatObservation, indicatorUrl, type IndicatorId, type IntelligenceState, type Observation } from "@/lib/intelligence/core";
+import { INDICATORS, INDICATOR_PRODUCERS, evidenceLabel, evidenceStatus, formatObservation, indicatorUrl, type IndicatorId, type IntelligenceState, type Observation } from "@/lib/intelligence/core";
 
 export function EvidenceCard({ observation, indicator, countryCode }: { observation?: Observation; indicator: IndicatorId; countryCode: string }) {
   const definition = INDICATORS[indicator];
@@ -10,7 +10,7 @@ export function EvidenceCard({ observation, indicator, countryCode }: { observat
     <p className="ig-meta">{definition.unit}{observation ? ` · Reference year ${observation.year}` : " · No observation supplied"}</p>
     <p className="ig-small">{definition.explanation}</p>
     <details className="ig-details"><summary>Source & confidence</summary>
-      <p className="ig-small">Publisher: World Bank, World Development Indicators. Upstream producers and methods are identified in the indicator metadata. Confidence here describes traceability and freshness, not a probability of truth.</p>
+      <p className="ig-small">Source: {INDICATOR_PRODUCERS[indicator]}, via World Bank, World Development Indicators. Indicator license: CC BY 4.0 (registry reviewed 2026-09-02). Values are rounded for display; no missing observations are imputed. Confidence here describes traceability and freshness, not a probability of truth.</p>
       <p className="ig-small">{observation ? `Collected ${observation.retrievedAt.slice(0, 10)}. Source dataset update: ${observation.sourceUpdatedAt ?? "not supplied"}.` : "No verified observation is currently available in TGPI for this indicator and country. No value is inferred."}</p>
       <p className="ig-small">{status === "current" ? "Registered source, valid schema and acceptable reference-year age under methodology v1." : status === "historical" ? "The observation is older than the indicator's reference-year threshold. Use only as historical context." : status === "stale" ? "The source has not been successfully checked within seven days; validate directly before use." : "Insufficient evidence for a quantitative conclusion."}</p>
       <a href={indicatorUrl(indicator, countryCode)} target="_blank" rel="noreferrer" className="ig-link">Open source and indicator metadata ↗</a>

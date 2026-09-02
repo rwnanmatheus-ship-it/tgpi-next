@@ -6,7 +6,7 @@
     "dev": "next dev",
     "generate:country-visuals": "node --experimental-strip-types scripts/generate-country-visuals.mjs",
     "verify:premium": "node scripts/verify-premium-command-center.mjs",
-    "test:intelligence": "node --experimental-strip-types --test scripts/intelligence.test.mjs",
+    "test:intelligence": "node --experimental-strip-types --test scripts/intelligence.test.mjs scripts/intelligence-plan.test.mjs",
     "test:mobile": "node --experimental-strip-types --test scripts/mobile-experience.test.mjs",
     "typecheck": "tsc --noEmit",
     "build": "next build",

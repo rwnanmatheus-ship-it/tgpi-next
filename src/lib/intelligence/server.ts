@@ -9,6 +9,9 @@ export const identities = identityData.countries;
 export const identitySource = { url: identityData.source, retrievedAt: identityData.retrievedAt };
 const fallback = bundledSnapshot as IntelligenceSnapshot;
 const sha256 = (text: string) => createHash("sha256").update(text).digest("hex");
+let inFlight: Promise<IntelligenceSnapshot> | null = null;
+let retryAfter = 0;
+let lastValidated = fallback;
 
 // Fixed URLs only: no user parameters, redirects, credentials, HTML scraping or arbitrary fetch proxy.
 async function fetchSeries(indicator: (typeof INDICATOR_IDS)[number]) {
@@ -47,16 +50,26 @@ async function fetchSeries(indicator: (typeof INDICATOR_IDS)[number]) {
 
 // A successful, validated collection is cached as a unit. Throwing preserves Next's last successful
 // entry during background revalidation. Bundled last-known-good snapshot survives cold starts.
-const collect = unstable_cache(async (): Promise<IntelligenceSnapshot> => {
+async function collectFresh(): Promise<IntelligenceSnapshot> {
   const results = await Promise.all(INDICATOR_IDS.map(fetchSeries));
+  for (const result of results) {
+    const previousCount = lastValidated.series.find(s => s.indicator === result.audit.indicator)?.observations ?? 0;
+    if (previousCount && result.observations.length < previousCount * 0.9) throw new Error("Source coverage regression requires review");
+  }
   const observations = results.flatMap(result => result.observations);
   const signature = JSON.stringify(observations.map(({ country, indicator, value, year }) => ({ country, indicator, value, year })));
   return { schemaVersion: 1, methodologyVersion: METHODOLOGY_VERSION, revision: sha256(signature).slice(0, 16), retrievedAt: new Date().toISOString(), observations, series: results.map(result => result.audit) };
+}
+const collect = unstable_cache(async (): Promise<IntelligenceSnapshot> => {
+  if (Date.now() < retryAfter) throw new Error("Source retry cooldown is active");
+  if (!inFlight) inFlight = collectFresh().catch(error => { retryAfter = Date.now() + 5 * 60_000; throw error; }).finally(() => { inFlight = null; });
+  return inFlight;
 }, ["tgpi-intelligence-graph", METHODOLOGY_VERSION], { revalidate: 3600 });
 
 export async function getIntelligence(): Promise<IntelligenceState> {
   try {
     const snapshot = await collect();
+    lastValidated = snapshot;
     const stale = !snapshot.retrievedAt || Date.now() - Date.parse(snapshot.retrievedAt) > 7 * 86_400_000;
     return { snapshot, status: stale ? "degraded" : "available", message: stale ? "The source refresh is overdue. Previously collected observations remain visible with their original dates." : null };
   } catch (error) {

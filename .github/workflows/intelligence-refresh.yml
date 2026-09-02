@@ -3,6 +3,7 @@ on:
   schedule:
     - cron: '17 6 * * *'
   workflow_dispatch:
+  deployment_status:
 permissions:
   contents: read
 concurrency:
@@ -10,6 +11,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   verify:
+    if: github.event_name != 'deployment_status' || (github.event.deployment_status.state == 'success' && (startsWith(github.event.deployment.environment, 'Production') || startsWith(github.event.deployment.environment, 'production')))
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:

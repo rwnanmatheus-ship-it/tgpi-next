@@ -68,3 +68,13 @@ test("source retrieval forbids redirects and does not accept user URLs", () => {
   const source = readFileSync(new URL("../src/lib/intelligence/server.ts", import.meta.url), "utf8");
   assert.match(source, /redirect: "error"/); assert.match(source, /AbortSignal.timeout/); assert.match(source, /bytes > 1_000_000/); assert.doesNotMatch(source, /request\.url|searchParams/);
 });
+test("saving a plan is authenticated, same-origin, bounded and preserves unrelated profile fields", () => {
+  const source = readFileSync(new URL("../src/app/api/intelligence/plan/route.ts", import.meta.url), "utf8");
+  assert.match(source, /if \(!session\.userId\)/);
+  assert.match(source, /origin !== new URL\(request.url\).origin/);
+  assert.match(source, /length > 8000/);
+  assert.match(source, /\.\.\.previous, primaryGoal/);
+  assert.match(source, /targetCountries.length >= 5/);
+  assert.match(source, /updateUserMetadata\(session.userId/);
+  assert.doesNotMatch(source, /payload\.userId|payload\.uid|privateMetadata/);
+});
