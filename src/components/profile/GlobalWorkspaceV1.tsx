@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import {
-  formatCurrencyAmount,
   getCountryImageAlt,
   getCountryImageUrl,
 } from "@/lib/countries";
@@ -286,23 +285,19 @@ export default function GlobalWorkspaceV1({
                     </div>
                     <div className="rounded-2xl border border-[#F0D58C]/40 bg-[#071A32]/75 px-4 py-3 text-right backdrop-blur">
                       <p className="text-[9px] font-extrabold uppercase tracking-[0.17em] text-[#F0D58C]">
-                        Fit score
+                        Fit status
                       </p>
-                      <p className="mt-1 text-2xl font-extrabold">{fit.score}</p>
+                      <p className="mt-1 text-2xl font-extrabold">{fit.score ?? "Review"}</p>
                     </div>
                   </div>
                 </Link>
                 <div className="p-5">
                   <div className="flex items-center justify-between gap-4">
                     <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#956A13]">
-                      Match 0{index + 1}
+                      Shortlist 0{index + 1}
                     </p>
                     <p className="text-xs font-bold text-[#657082]">
-                      {formatCurrencyAmount(
-                        fit.country,
-                        fit.country.intelligence.averageMonthlyBudget,
-                      )}{" "}
-                      {fit.country.currencyCode} / month
+                      Personal budget needed
                     </p>
                   </div>
                   <div className="mt-4 flex flex-wrap gap-2">
@@ -351,9 +346,7 @@ export default function GlobalWorkspaceV1({
           </div>
         )}
         <p className="mt-4 text-xs leading-6 text-[#7A8390]">
-          Fit scores are educational planning signals based on your declared goal,
-          priorities and TGPI country data. They do not replace legal, immigration,
-          financial or safety advice.
+          Shortlist order follows your saved preferences, not a country ranking. No fit percentage is published until the required evidence is available.
         </p>
       </section>
 

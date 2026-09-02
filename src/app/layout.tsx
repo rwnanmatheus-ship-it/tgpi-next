@@ -1,5 +1,6 @@
 import "./globals.css";
 import "./mobile.css";
+import "./intelligence.css";
 import type { Metadata } from "next";
 import { Cormorant_Garamond, Manrope } from "next/font/google";
 import Navbar from "@/components/Navbar";

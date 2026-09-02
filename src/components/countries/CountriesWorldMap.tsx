@@ -11,7 +11,7 @@ import {
 
 type MapCountry = Pick<
   CountryExplorerItem,
-  "slug" | "name" | "emoji" | "region" | "capital" | "visual" | "tgpiScore"
+  "slug" | "name" | "emoji" | "region" | "visual"
 >;
 
 type CinematicPhase = "idle" | "locking" | "resolving" | "entering";
@@ -616,7 +616,7 @@ export default function CountriesWorldMap({
             <div className="min-w-0">
               <p className="text-[8px] font-extrabold uppercase tracking-[0.14em] text-[var(--tgpi-gold-light)]">Intelligence preview</p>
               <p className="mt-0.5 truncate text-sm font-extrabold">{selectedCountry.emoji} {selectedCountry.name}</p>
-              <p className="truncate text-[9px] font-bold text-white/55">{selectedCountry.capital} · TGPI {selectedCountry.tgpiScore}</p>
+              <p className="truncate text-[9px] font-bold text-white/55">Open source-linked country research</p>
             </div>
           </div>
         ) : null}

@@ -1,0 +1,31 @@
+name: Intelligence source refresh and evidence archive
+on:
+  schedule:
+    - cron: '17 6 * * *'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: intelligence-refresh
+  cancel-in-progress: false
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Collect current published graph and validate freshness
+        env:
+          GRAPH_URL: https://www.theglobalpolymath.com/api/intelligence
+        run: |
+          curl --fail --silent --show-error --max-time 75 "$GRAPH_URL" --output first.json
+          sleep 30
+          curl --fail --silent --show-error --max-time 75 "$GRAPH_URL" --output intelligence.json
+          node -e 'const fs=require("node:fs"); const d=JSON.parse(fs.readFileSync("intelligence.json","utf8")); if(d.status!=="available" || d.countryCount!==195 || d.countryCoverage<180 || d.snapshot.series.length!==4 || Date.now()-Date.parse(d.snapshot.retrievedAt)>48*3600000) throw Error("Intelligence refresh or coverage requires investigation"); console.log(JSON.stringify({revision:d.snapshot.revision,collected:d.snapshot.retrievedAt,coverage:d.countryCoverage}));'
+      - name: Archive public observations and provenance
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: intelligence-evidence-${{ github.run_id }}
+          path: intelligence.json
+          retention-days: 90
+          if-no-files-found: warn

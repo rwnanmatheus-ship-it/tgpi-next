@@ -144,7 +144,7 @@ function CountryCard({ country }: { country: PremiumCountryCard }) {
             </h3>
           </div>
           <span className="rounded-full border border-white/25 bg-[#081A31]/70 px-3 py-1 text-xs font-extrabold backdrop-blur-sm">
-            {country.fitScore}% fit
+            {country.fitScore === null ? "Evidence review" : `${country.fitScore}% fit`}
           </span>
         </div>
       </div>
@@ -275,7 +275,7 @@ export default function PremiumCommandCenterV2({
                       {membershipStatus}
                     </span>
                   </div>
-                  <ProgressBar label="Strategy readiness" value={model.readiness} />
+                  <ProgressBar label="Workspace progress" value={model.readiness} />
                   <ProgressBar label="Global profile" value={model.planCompletion} />
                   <p className="text-xs leading-6 text-[#D7DEE8]">{periodLabel}</p>
                 </div>
@@ -393,7 +393,7 @@ export default function PremiumCommandCenterV2({
                 Monthly cost plan
               </p>
               <p className="mt-5 font-[var(--tgpi-font-display)] text-5xl font-semibold tracking-[-0.035em]">
-                {formatMoney(model.cost.amount, model.cost.currency)}
+                {model.cost.isPersonalEstimate ? formatMoney(model.cost.amount, model.cost.currency) : "Not set"}
               </p>
               <p className="mt-3 text-sm font-extrabold text-[#0B1F3A]">
                 {model.cost.countryName}
@@ -401,7 +401,7 @@ export default function PremiumCommandCenterV2({
               <p className="mt-4 text-sm leading-7 text-[#657082]">
                 {model.cost.isPersonalEstimate
                   ? "Your saved monthly estimate. Revisit it when housing, city or lifestyle assumptions change."
-                  : "TGPI reference budget. Create a personal estimate to make this figure useful for your real plan."}
+                  : "No verified local budget is connected. Create your own estimate using dated local quotes."}
               </p>
               <Link
                 className="mt-auto inline-flex min-h-12 items-center pt-7 text-sm font-extrabold text-[#79550F]"
@@ -413,7 +413,7 @@ export default function PremiumCommandCenterV2({
 
             <article className="flex min-h-80 flex-col rounded-[28px] border border-[#D8D2C4] bg-[#F7F2E8] p-7 sm:p-8">
               <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#79550F]">
-                Document readiness
+                Document review progress
               </p>
               <div className="mt-5 flex items-end justify-between gap-4">
                 <p className="font-[var(--tgpi-font-display)] text-5xl font-semibold">
@@ -426,7 +426,7 @@ export default function PremiumCommandCenterV2({
                 </p>
               </div>
               <div
-                aria-label={`Document readiness: ${model.documents.percent}%`}
+                aria-label={`Document review progress: ${model.documents.percent}%`}
                 aria-valuemax={100}
                 aria-valuemin={0}
                 aria-valuenow={model.documents.percent}

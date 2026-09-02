@@ -18,7 +18,7 @@ export type PremiumCountryCard = {
     total: number;
   };
   emoji: string;
-  fitScore: number;
+  fitScore: number | null;
   isSaved: boolean;
   name: string;
   region: string;
@@ -139,7 +139,7 @@ export function buildPremiumCommandCenterModel(
           }
         : undefined,
       emoji: country.emoji,
-      fitScore: fitScoreBySlug.get(slug) ?? country.tgpiScore,
+      fitScore: fitScoreBySlug.get(slug) ?? null,
       isSaved: activation.savedCountries.includes(slug),
       name: country.name,
       region: country.region,
@@ -227,7 +227,6 @@ export function buildPremiumCommandCenterModel(
   const cost: PremiumCostSummary = {
     amount:
       costEntry?.[1].amount ||
-      costCountry?.intelligence.averageMonthlyBudget ||
       0,
     countryName: costCountry?.name || "your priority country",
     currency: costEntry?.[1].currency || "USD",
@@ -255,7 +254,7 @@ export function buildPremiumCommandCenterModel(
     recentActivities: workspace.recentActivities,
     shortlist,
     stats: [
-      { label: "Strategy readiness", value: `${readiness}%` },
+      { label: "Workspace progress", value: `${readiness}%` },
       { label: "Countries in focus", value: String(shortlist.length) },
       {
         label: "Saved comparisons",

@@ -9,7 +9,7 @@ type CountryCard = {
   compareHref: string;
   image: string;
   variant: TGPIVisualVariant;
-  score: number;
+  score: string;
   fit: string;
   pressure: string;
   signal: string;
@@ -22,8 +22,8 @@ const countries: CountryCard[] = [
     compareHref: "/compare?country=portugal&country=spain",
     image: "/images/home/tgpi-portugal-country.webp",
     variant: "portugal",
-    score: 88,
-    fit: "European access and easier cultural adaptation",
+    score: "PRT",
+    fit: "Explore the evidence, then investigate your legal route, local budget and language requirements.",
     pressure: "Rent-to-income balance",
     signal: "Lifestyle fit",
   },
@@ -33,8 +33,8 @@ const countries: CountryCard[] = [
     compareHref: "/compare?country=canada&country=united-kingdom",
     image: "/images/home/tgpi-canada-country.webp",
     variant: "canada",
-    score: 91,
-    fit: "Education, career pathways and long-term mobility",
+    score: "CAN",
+    fit: "Compare national context with your intended institution, profession and personal constraints.",
     pressure: "Housing and entry planning",
     signal: "Career access",
   },
@@ -44,8 +44,8 @@ const countries: CountryCard[] = [
     compareHref: "/compare?country=united-kingdom&country=canada",
     image: "/images/home/tgpi-united-kingdom-country.webp",
     variant: "england",
-    score: 88,
-    fit: "Academic leverage and global career exposure",
+    score: "GBR",
+    fit: "Start with an accredited program or employer, then verify eligibility and city-level costs.",
     pressure: "High cost and competition",
     signal: "Academic leverage",
   },
@@ -70,7 +70,7 @@ export default function HomeCountryCardsV2() {
               Move from inspiration to a structured comparison.
             </h2>
             <p className="mt-5 max-w-2xl text-base leading-8 text-[#dce4ee] sm:text-lg">
-              Use TGPI scores as directional signals, then verify current costs, rules and local conditions before committing.
+              Inspect source-linked observations, their reference years and their limitations before building your personal plan.
             </p>
           </div>
           <Link
@@ -105,7 +105,7 @@ export default function HomeCountryCardsV2() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#071a32] via-[#071a32]/22 to-transparent" />
                   <div className="absolute left-4 top-4 flex items-center gap-2 rounded-full border border-white/15 bg-[#071a32]/82 px-3 py-2 text-[10px] font-extrabold uppercase tracking-[0.16em] text-white backdrop-blur-xl">
-                    <span className="text-[var(--tgpi-gold-light)]">TGPI model {country.score}</span>
+                    <span className="text-[var(--tgpi-gold-light)]">Country {country.score}</span>
                     <span className="text-white/35">•</span>
                     <span>{country.signal}</span>
                   </div>

@@ -1,3 +1,4 @@
+import LinkToEvidence from "@/components/intelligence/LearningConnection";
 import { auth } from "@clerk/nextjs/server";
 import type { Metadata } from "next";
 import MobileMicroLesson from "@/components/mobile/MobileMicroLesson";
@@ -60,6 +61,7 @@ export default async function CoursesPage() {
 
   return (
     <TGPIPageShell>
+      <LinkToEvidence />
       <section className="mobile-compact-hero relative isolate overflow-hidden rounded-[30px] border border-white/10 bg-[var(--tgpi-navy)] text-white shadow-[var(--tgpi-shadow-premium)] sm:rounded-[36px]">
         <Image
           src="/images/learning/tgpi-learning-hero-v2.webp"

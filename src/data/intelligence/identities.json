@@ -1,0 +1,1762 @@
+{
+  "source": "https://unstats.un.org/unsd/methodology/m49/overview/",
+  "retrievedAt": "2026-09-02T22:58:19.808Z",
+  "scope": "Existing TGPI 195-country catalog mapped to UNSD M49. Country names are TGPI display aliases; identifiers and statistical regions follow UNSD. Not an endorsement or a position on sovereignty.",
+  "countries": [
+    {
+      "iso2": "AF",
+      "iso3": "AFG",
+      "m49": "004",
+      "name": "Afghanistan",
+      "region": "Asia",
+      "slug": "afghanistan",
+      "subregion": "Southern Asia"
+    },
+    {
+      "iso2": "AL",
+      "iso3": "ALB",
+      "m49": "008",
+      "name": "Albania",
+      "region": "Europe",
+      "slug": "albania",
+      "subregion": "Southern Europe"
+    },
+    {
+      "iso2": "DZ",
+      "iso3": "DZA",
+      "m49": "012",
+      "name": "Algeria",
+      "region": "Africa",
+      "slug": "algeria",
+      "subregion": "Northern Africa"
+    },
+    {
+      "iso2": "AD",
+      "iso3": "AND",
+      "m49": "020",
+      "name": "Andorra",
+      "region": "Europe",
+      "slug": "andorra",
+      "subregion": "Southern Europe"
+    },
+    {
+      "iso2": "AO",
+      "iso3": "AGO",
+      "m49": "024",
+      "name": "Angola",
+      "region": "Africa",
+      "slug": "angola",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "AG",
+      "iso3": "ATG",
+      "m49": "028",
+      "name": "Antigua and Barbuda",
+      "region": "Americas",
+      "slug": "antigua-and-barbuda",
+      "subregion": "Latin America and the Caribbean"
+    },
+    {
+      "iso2": "AR",
+      "iso3": "ARG",
+      "m49": "032",
+      "name": "Argentina",
+      "region": "Americas",
+      "slug": "argentina",
+      "subregion": "Latin America and the Caribbean"
+    },
+    {
+      "iso2": "AM",
+      "iso3": "ARM",
+      "m49": "051",
+      "name": "Armenia",
+      "region": "Asia",
+      "slug": "armenia",
+      "subregion": "Western Asia"
+    },
+    {
+      "iso2": "AU",
+      "iso3": "AUS",
+      "m49": "036",
+      "name": "Australia",
+      "region": "Oceania",
+      "slug": "australia",
+      "subregion": "Australia and New Zealand"
+    },
+    {
+      "iso2": "AT",
+      "iso3": "AUT",
+      "m49": "040",
+      "name": "Austria",
+      "region": "Europe",
+      "slug": "austria",
+      "subregion": "Western Europe"
+    },
+    {
+      "iso2": "AZ",
+      "iso3": "AZE",
+      "m49": "031",
+      "name": "Azerbaijan",
+      "region": "Asia",
+      "slug": "azerbaijan",
+      "subregion": "Western Asia"
+    },
+    {
+      "iso2": "BS",
+      "iso3": "BHS",
+      "m49": "044",
+      "name": "Bahamas",
+      "region": "Americas",
+      "slug": "bahamas",
+      "subregion": "Latin America and the Caribbean"
+    },
+    {
+      "iso2": "BH",
+      "iso3": "BHR",
+      "m49": "048",
+      "name": "Bahrain",
+      "region": "Asia",
+      "slug": "bahrain",
+      "subregion": "Western Asia"
+    },
+    {
+      "iso2": "BD",
+      "iso3": "BGD",
+      "m49": "050",
+      "name": "Bangladesh",
+      "region": "Asia",
+      "slug": "bangladesh",
+      "subregion": "Southern Asia"
+    },
+    {
+      "iso2": "BB",
+      "iso3": "BRB",
+      "m49": "052",
+      "name": "Barbados",
+      "region": "Americas",
+      "slug": "barbados",
+      "subregion": "Latin America and the Caribbean"
+    },
+    {
+      "iso2": "BY",
+      "iso3": "BLR",
+      "m49": "112",
+      "name": "Belarus",
+      "region": "Europe",
+      "slug": "belarus",
+      "subregion": "Eastern Europe"
+    },
+    {
+      "iso2": "BE",
+      "iso3": "BEL",
+      "m49": "056",
+      "name": "Belgium",
+      "region": "Europe",
+      "slug": "belgium",
+      "subregion": "Western Europe"
+    },
+    {
+      "iso2": "BZ",
+      "iso3": "BLZ",
+      "m49": "084",
+      "name": "Belize",
+      "region": "Americas",
+      "slug": "belize",
+      "subregion": "Latin America and the Caribbean"
+    },
+    {
+      "iso2": "BJ",
+      "iso3": "BEN",
+      "m49": "204",
+      "name": "Benin",
+      "region": "Africa",
+      "slug": "benin",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "BT",
+      "iso3": "BTN",
+      "m49": "064",
+      "name": "Bhutan",
+      "region": "Asia",
+      "slug": "bhutan",
+      "subregion": "Southern Asia"
+    },
+    {
+      "iso2": "BO",
+      "iso3": "BOL",
+      "m49": "068",
+      "name": "Bolivia (Plurinational State of)",
+      "region": "Americas",
+      "slug": "bolivia",
+      "subregion": "Latin America and the Caribbean"
+    },
+    {
+      "iso2": "BA",
+      "iso3": "BIH",
+      "m49": "070",
+      "name": "Bosnia and Herzegovina",
+      "region": "Europe",
+      "slug": "bosnia-and-herzegovina",
+      "subregion": "Southern Europe"
+    },
+    {
+      "iso2": "BW",
+      "iso3": "BWA",
+      "m49": "072",
+      "name": "Botswana",
+      "region": "Africa",
+      "slug": "botswana",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "BR",
+      "iso3": "BRA",
+      "m49": "076",
+      "name": "Brazil",
+      "region": "Americas",
+      "slug": "brazil",
+      "subregion": "Latin America and the Caribbean"
+    },
+    {
+      "iso2": "BN",
+      "iso3": "BRN",
+      "m49": "096",
+      "name": "Brunei Darussalam",
+      "region": "Asia",
+      "slug": "brunei",
+      "subregion": "South-eastern Asia"
+    },
+    {
+      "iso2": "BG",
+      "iso3": "BGR",
+      "m49": "100",
+      "name": "Bulgaria",
+      "region": "Europe",
+      "slug": "bulgaria",
+      "subregion": "Eastern Europe"
+    },
+    {
+      "iso2": "BF",
+      "iso3": "BFA",
+      "m49": "854",
+      "name": "Burkina Faso",
+      "region": "Africa",
+      "slug": "burkina-faso",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "BI",
+      "iso3": "BDI",
+      "m49": "108",
+      "name": "Burundi",
+      "region": "Africa",
+      "slug": "burundi",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "CV",
+      "iso3": "CPV",
+      "m49": "132",
+      "name": "Cabo Verde",
+      "region": "Africa",
+      "slug": "cabo-verde",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "KH",
+      "iso3": "KHM",
+      "m49": "116",
+      "name": "Cambodia",
+      "region": "Asia",
+      "slug": "cambodia",
+      "subregion": "South-eastern Asia"
+    },
+    {
+      "iso2": "CM",
+      "iso3": "CMR",
+      "m49": "120",
+      "name": "Cameroon",
+      "region": "Africa",
+      "slug": "cameroon",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "CA",
+      "iso3": "CAN",
+      "m49": "124",
+      "name": "Canada",
+      "region": "Americas",
+      "slug": "canada",
+      "subregion": "Northern America"
+    },
+    {
+      "iso2": "CF",
+      "iso3": "CAF",
+      "m49": "140",
+      "name": "Central African Republic",
+      "region": "Africa",
+      "slug": "central-african-republic",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "TD",
+      "iso3": "TCD",
+      "m49": "148",
+      "name": "Chad",
+      "region": "Africa",
+      "slug": "chad",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "CL",
+      "iso3": "CHL",
+      "m49": "152",
+      "name": "Chile",
+      "region": "Americas",
+      "slug": "chile",
+      "subregion": "Latin America and the Caribbean"
+    },
+    {
+      "iso2": "CN",
+      "iso3": "CHN",
+      "m49": "156",
+      "name": "China",
+      "region": "Asia",
+      "slug": "china",
+      "subregion": "Eastern Asia"
+    },
+    {
+      "iso2": "CO",
+      "iso3": "COL",
+      "m49": "170",
+      "name": "Colombia",
+      "region": "Americas",
+      "slug": "colombia",
+      "subregion": "Latin America and the Caribbean"
+    },
+    {
+      "iso2": "KM",
+      "iso3": "COM",
+      "m49": "174",
+      "name": "Comoros",
+      "region": "Africa",
+      "slug": "comoros",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "CG",
+      "iso3": "COG",
+      "m49": "178",
+      "name": "Congo",
+      "region": "Africa",
+      "slug": "congo",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "CR",
+      "iso3": "CRI",
+      "m49": "188",
+      "name": "Costa Rica",
+      "region": "Americas",
+      "slug": "costa-rica",
+      "subregion": "Latin America and the Caribbean"
+    },
+    {
+      "iso2": "HR",
+      "iso3": "HRV",
+      "m49": "191",
+      "name": "Croatia",
+      "region": "Europe",
+      "slug": "croatia",
+      "subregion": "Southern Europe"
+    },
+    {
+      "iso2": "CU",
+      "iso3": "CUB",
+      "m49": "192",
+      "name": "Cuba",
+      "region": "Americas",
+      "slug": "cuba",
+      "subregion": "Latin America and the Caribbean"
+    },
+    {
+      "iso2": "CY",
+      "iso3": "CYP",
+      "m49": "196",
+      "name": "Cyprus",
+      "region": "Asia",
+      "slug": "cyprus",
+      "subregion": "Western Asia"
+    },
+    {
+      "iso2": "CZ",
+      "iso3": "CZE",
+      "m49": "203",
+      "name": "Czechia",
+      "region": "Europe",
+      "slug": "czechia",
+      "subregion": "Eastern Europe"
+    },
+    {
+      "iso2": "CD",
+      "iso3": "COD",
+      "m49": "180",
+      "name": "Democratic Republic of the Congo",
+      "region": "Africa",
+      "slug": "democratic-republic-of-the-congo",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "DK",
+      "iso3": "DNK",
+      "m49": "208",
+      "name": "Denmark",
+      "region": "Europe",
+      "slug": "denmark",
+      "subregion": "Northern Europe"
+    },
+    {
+      "iso2": "DJ",
+      "iso3": "DJI",
+      "m49": "262",
+      "name": "Djibouti",
+      "region": "Africa",
+      "slug": "djibouti",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "DM",
+      "iso3": "DMA",
+      "m49": "212",
+      "name": "Dominica",
+      "region": "Americas",
+      "slug": "dominica",
+      "subregion": "Latin America and the Caribbean"
+    },
+    {
+      "iso2": "DO",
+      "iso3": "DOM",
+      "m49": "214",
+      "name": "Dominican Republic",
+      "region": "Americas",
+      "slug": "dominican-republic",
+      "subregion": "Latin America and the Caribbean"
+    },
+    {
+      "iso2": "EC",
+      "iso3": "ECU",
+      "m49": "218",
+      "name": "Ecuador",
+      "region": "Americas",
+      "slug": "ecuador",
+      "subregion": "Latin America and the Caribbean"
+    },
+    {
+      "iso2": "EG",
+      "iso3": "EGY",
+      "m49": "818",
+      "name": "Egypt",
+      "region": "Africa",
+      "slug": "egypt",
+      "subregion": "Northern Africa"
+    },
+    {
+      "iso2": "SV",
+      "iso3": "SLV",
+      "m49": "222",
+      "name": "El Salvador",
+      "region": "Americas",
+      "slug": "el-salvador",
+      "subregion": "Latin America and the Caribbean"
+    },
+    {
+      "iso2": "GQ",
+      "iso3": "GNQ",
+      "m49": "226",
+      "name": "Equatorial Guinea",
+      "region": "Africa",
+      "slug": "equatorial-guinea",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "ER",
+      "iso3": "ERI",
+      "m49": "232",
+      "name": "Eritrea",
+      "region": "Africa",
+      "slug": "eritrea",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "EE",
+      "iso3": "EST",
+      "m49": "233",
+      "name": "Estonia",
+      "region": "Europe",
+      "slug": "estonia",
+      "subregion": "Northern Europe"
+    },
+    {
+      "iso2": "SZ",
+      "iso3": "SWZ",
+      "m49": "748",
+      "name": "Eswatini",
+      "region": "Africa",
+      "slug": "eswatini",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "ET",
+      "iso3": "ETH",
+      "m49": "231",
+      "name": "Ethiopia",
+      "region": "Africa",
+      "slug": "ethiopia",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "FJ",
+      "iso3": "FJI",
+      "m49": "242",
+      "name": "Fiji",
+      "region": "Oceania",
+      "slug": "fiji",
+      "subregion": "Melanesia"
+    },
+    {
+      "iso2": "FI",
+      "iso3": "FIN",
+      "m49": "246",
+      "name": "Finland",
+      "region": "Europe",
+      "slug": "finland",
+      "subregion": "Northern Europe"
+    },
+    {
+      "iso2": "FR",
+      "iso3": "FRA",
+      "m49": "250",
+      "name": "France",
+      "region": "Europe",
+      "slug": "france",
+      "subregion": "Western Europe"
+    },
+    {
+      "iso2": "GA",
+      "iso3": "GAB",
+      "m49": "266",
+      "name": "Gabon",
+      "region": "Africa",
+      "slug": "gabon",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "GM",
+      "iso3": "GMB",
+      "m49": "270",
+      "name": "Gambia",
+      "region": "Africa",
+      "slug": "gambia",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "GE",
+      "iso3": "GEO",
+      "m49": "268",
+      "name": "Georgia",
+      "region": "Asia",
+      "slug": "georgia",
+      "subregion": "Western Asia"
+    },
+    {
+      "iso2": "DE",
+      "iso3": "DEU",
+      "m49": "276",
+      "name": "Germany",
+      "region": "Europe",
+      "slug": "germany",
+      "subregion": "Western Europe"
+    },
+    {
+      "iso2": "GH",
+      "iso3": "GHA",
+      "m49": "288",
+      "name": "Ghana",
+      "region": "Africa",
+      "slug": "ghana",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "GR",
+      "iso3": "GRC",
+      "m49": "300",
+      "name": "Greece",
+      "region": "Europe",
+      "slug": "greece",
+      "subregion": "Southern Europe"
+    },
+    {
+      "iso2": "GD",
+      "iso3": "GRD",
+      "m49": "308",
+      "name": "Grenada",
+      "region": "Americas",
+      "slug": "grenada",
+      "subregion": "Latin America and the Caribbean"
+    },
+    {
+      "iso2": "GT",
+      "iso3": "GTM",
+      "m49": "320",
+      "name": "Guatemala",
+      "region": "Americas",
+      "slug": "guatemala",
+      "subregion": "Latin America and the Caribbean"
+    },
+    {
+      "iso2": "GN",
+      "iso3": "GIN",
+      "m49": "324",
+      "name": "Guinea",
+      "region": "Africa",
+      "slug": "guinea",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "GW",
+      "iso3": "GNB",
+      "m49": "624",
+      "name": "Guinea-Bissau",
+      "region": "Africa",
+      "slug": "guinea-bissau",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "GY",
+      "iso3": "GUY",
+      "m49": "328",
+      "name": "Guyana",
+      "region": "Americas",
+      "slug": "guyana",
+      "subregion": "Latin America and the Caribbean"
+    },
+    {
+      "iso2": "HT",
+      "iso3": "HTI",
+      "m49": "332",
+      "name": "Haiti",
+      "region": "Americas",
+      "slug": "haiti",
+      "subregion": "Latin America and the Caribbean"
+    },
+    {
+      "iso2": "HN",
+      "iso3": "HND",
+      "m49": "340",
+      "name": "Honduras",
+      "region": "Americas",
+      "slug": "honduras",
+      "subregion": "Latin America and the Caribbean"
+    },
+    {
+      "iso2": "HU",
+      "iso3": "HUN",
+      "m49": "348",
+      "name": "Hungary",
+      "region": "Europe",
+      "slug": "hungary",
+      "subregion": "Eastern Europe"
+    },
+    {
+      "iso2": "IS",
+      "iso3": "ISL",
+      "m49": "352",
+      "name": "Iceland",
+      "region": "Europe",
+      "slug": "iceland",
+      "subregion": "Northern Europe"
+    },
+    {
+      "iso2": "IN",
+      "iso3": "IND",
+      "m49": "356",
+      "name": "India",
+      "region": "Asia",
+      "slug": "india",
+      "subregion": "Southern Asia"
+    },
+    {
+      "iso2": "ID",
+      "iso3": "IDN",
+      "m49": "360",
+      "name": "Indonesia",
+      "region": "Asia",
+      "slug": "indonesia",
+      "subregion": "South-eastern Asia"
+    },
+    {
+      "iso2": "IR",
+      "iso3": "IRN",
+      "m49": "364",
+      "name": "Iran (Islamic Republic of)",
+      "region": "Asia",
+      "slug": "iran",
+      "subregion": "Southern Asia"
+    },
+    {
+      "iso2": "IQ",
+      "iso3": "IRQ",
+      "m49": "368",
+      "name": "Iraq",
+      "region": "Asia",
+      "slug": "iraq",
+      "subregion": "Western Asia"
+    },
+    {
+      "iso2": "IE",
+      "iso3": "IRL",
+      "m49": "372",
+      "name": "Ireland",
+      "region": "Europe",
+      "slug": "ireland",
+      "subregion": "Northern Europe"
+    },
+    {
+      "iso2": "IL",
+      "iso3": "ISR",
+      "m49": "376",
+      "name": "Israel",
+      "region": "Asia",
+      "slug": "israel",
+      "subregion": "Western Asia"
+    },
+    {
+      "iso2": "IT",
+      "iso3": "ITA",
+      "m49": "380",
+      "name": "Italy",
+      "region": "Europe",
+      "slug": "italy",
+      "subregion": "Southern Europe"
+    },
+    {
+      "iso2": "CI",
+      "iso3": "CIV",
+      "m49": "384",
+      "name": "Côte d’Ivoire",
+      "region": "Africa",
+      "slug": "ivory-coast",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "JM",
+      "iso3": "JAM",
+      "m49": "388",
+      "name": "Jamaica",
+      "region": "Americas",
+      "slug": "jamaica",
+      "subregion": "Latin America and the Caribbean"
+    },
+    {
+      "iso2": "JP",
+      "iso3": "JPN",
+      "m49": "392",
+      "name": "Japan",
+      "region": "Asia",
+      "slug": "japan",
+      "subregion": "Eastern Asia"
+    },
+    {
+      "iso2": "JO",
+      "iso3": "JOR",
+      "m49": "400",
+      "name": "Jordan",
+      "region": "Asia",
+      "slug": "jordan",
+      "subregion": "Western Asia"
+    },
+    {
+      "iso2": "KZ",
+      "iso3": "KAZ",
+      "m49": "398",
+      "name": "Kazakhstan",
+      "region": "Asia",
+      "slug": "kazakhstan",
+      "subregion": "Central Asia"
+    },
+    {
+      "iso2": "KE",
+      "iso3": "KEN",
+      "m49": "404",
+      "name": "Kenya",
+      "region": "Africa",
+      "slug": "kenya",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "KI",
+      "iso3": "KIR",
+      "m49": "296",
+      "name": "Kiribati",
+      "region": "Oceania",
+      "slug": "kiribati",
+      "subregion": "Micronesia"
+    },
+    {
+      "iso2": "KW",
+      "iso3": "KWT",
+      "m49": "414",
+      "name": "Kuwait",
+      "region": "Asia",
+      "slug": "kuwait",
+      "subregion": "Western Asia"
+    },
+    {
+      "iso2": "KG",
+      "iso3": "KGZ",
+      "m49": "417",
+      "name": "Kyrgyzstan",
+      "region": "Asia",
+      "slug": "kyrgyzstan",
+      "subregion": "Central Asia"
+    },
+    {
+      "iso2": "LA",
+      "iso3": "LAO",
+      "m49": "418",
+      "name": "Lao People's Democratic Republic",
+      "region": "Asia",
+      "slug": "laos",
+      "subregion": "South-eastern Asia"
+    },
+    {
+      "iso2": "LV",
+      "iso3": "LVA",
+      "m49": "428",
+      "name": "Latvia",
+      "region": "Europe",
+      "slug": "latvia",
+      "subregion": "Northern Europe"
+    },
+    {
+      "iso2": "LB",
+      "iso3": "LBN",
+      "m49": "422",
+      "name": "Lebanon",
+      "region": "Asia",
+      "slug": "lebanon",
+      "subregion": "Western Asia"
+    },
+    {
+      "iso2": "LS",
+      "iso3": "LSO",
+      "m49": "426",
+      "name": "Lesotho",
+      "region": "Africa",
+      "slug": "lesotho",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "LR",
+      "iso3": "LBR",
+      "m49": "430",
+      "name": "Liberia",
+      "region": "Africa",
+      "slug": "liberia",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "LY",
+      "iso3": "LBY",
+      "m49": "434",
+      "name": "Libya",
+      "region": "Africa",
+      "slug": "libya",
+      "subregion": "Northern Africa"
+    },
+    {
+      "iso2": "LI",
+      "iso3": "LIE",
+      "m49": "438",
+      "name": "Liechtenstein",
+      "region": "Europe",
+      "slug": "liechtenstein",
+      "subregion": "Western Europe"
+    },
+    {
+      "iso2": "LT",
+      "iso3": "LTU",
+      "m49": "440",
+      "name": "Lithuania",
+      "region": "Europe",
+      "slug": "lithuania",
+      "subregion": "Northern Europe"
+    },
+    {
+      "iso2": "LU",
+      "iso3": "LUX",
+      "m49": "442",
+      "name": "Luxembourg",
+      "region": "Europe",
+      "slug": "luxembourg",
+      "subregion": "Western Europe"
+    },
+    {
+      "iso2": "MG",
+      "iso3": "MDG",
+      "m49": "450",
+      "name": "Madagascar",
+      "region": "Africa",
+      "slug": "madagascar",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "MW",
+      "iso3": "MWI",
+      "m49": "454",
+      "name": "Malawi",
+      "region": "Africa",
+      "slug": "malawi",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "MY",
+      "iso3": "MYS",
+      "m49": "458",
+      "name": "Malaysia",
+      "region": "Asia",
+      "slug": "malaysia",
+      "subregion": "South-eastern Asia"
+    },
+    {
+      "iso2": "MV",
+      "iso3": "MDV",
+      "m49": "462",
+      "name": "Maldives",
+      "region": "Asia",
+      "slug": "maldives",
+      "subregion": "Southern Asia"
+    },
+    {
+      "iso2": "ML",
+      "iso3": "MLI",
+      "m49": "466",
+      "name": "Mali",
+      "region": "Africa",
+      "slug": "mali",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "MT",
+      "iso3": "MLT",
+      "m49": "470",
+      "name": "Malta",
+      "region": "Europe",
+      "slug": "malta",
+      "subregion": "Southern Europe"
+    },
+    {
+      "iso2": "MH",
+      "iso3": "MHL",
+      "m49": "584",
+      "name": "Marshall Islands",
+      "region": "Oceania",
+      "slug": "marshall-islands",
+      "subregion": "Micronesia"
+    },
+    {
+      "iso2": "MR",
+      "iso3": "MRT",
+      "m49": "478",
+      "name": "Mauritania",
+      "region": "Africa",
+      "slug": "mauritania",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "MU",
+      "iso3": "MUS",
+      "m49": "480",
+      "name": "Mauritius",
+      "region": "Africa",
+      "slug": "mauritius",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "MX",
+      "iso3": "MEX",
+      "m49": "484",
+      "name": "Mexico",
+      "region": "Americas",
+      "slug": "mexico",
+      "subregion": "Latin America and the Caribbean"
+    },
+    {
+      "iso2": "FM",
+      "iso3": "FSM",
+      "m49": "583",
+      "name": "Micronesia (Federated States of)",
+      "region": "Oceania",
+      "slug": "micronesia",
+      "subregion": "Micronesia"
+    },
+    {
+      "iso2": "MD",
+      "iso3": "MDA",
+      "m49": "498",
+      "name": "Republic of Moldova",
+      "region": "Europe",
+      "slug": "moldova",
+      "subregion": "Eastern Europe"
+    },
+    {
+      "iso2": "MC",
+      "iso3": "MCO",
+      "m49": "492",
+      "name": "Monaco",
+      "region": "Europe",
+      "slug": "monaco",
+      "subregion": "Western Europe"
+    },
+    {
+      "iso2": "MN",
+      "iso3": "MNG",
+      "m49": "496",
+      "name": "Mongolia",
+      "region": "Asia",
+      "slug": "mongolia",
+      "subregion": "Eastern Asia"
+    },
+    {
+      "iso2": "ME",
+      "iso3": "MNE",
+      "m49": "499",
+      "name": "Montenegro",
+      "region": "Europe",
+      "slug": "montenegro",
+      "subregion": "Southern Europe"
+    },
+    {
+      "iso2": "MA",
+      "iso3": "MAR",
+      "m49": "504",
+      "name": "Morocco",
+      "region": "Africa",
+      "slug": "morocco",
+      "subregion": "Northern Africa"
+    },
+    {
+      "iso2": "MZ",
+      "iso3": "MOZ",
+      "m49": "508",
+      "name": "Mozambique",
+      "region": "Africa",
+      "slug": "mozambique",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "MM",
+      "iso3": "MMR",
+      "m49": "104",
+      "name": "Myanmar",
+      "region": "Asia",
+      "slug": "myanmar",
+      "subregion": "South-eastern Asia"
+    },
+    {
+      "iso2": "NA",
+      "iso3": "NAM",
+      "m49": "516",
+      "name": "Namibia",
+      "region": "Africa",
+      "slug": "namibia",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "NR",
+      "iso3": "NRU",
+      "m49": "520",
+      "name": "Naoero",
+      "region": "Oceania",
+      "slug": "nauru",
+      "subregion": "Micronesia"
+    },
+    {
+      "iso2": "NP",
+      "iso3": "NPL",
+      "m49": "524",
+      "name": "Nepal",
+      "region": "Asia",
+      "slug": "nepal",
+      "subregion": "Southern Asia"
+    },
+    {
+      "iso2": "NL",
+      "iso3": "NLD",
+      "m49": "528",
+      "name": "Netherlands (Kingdom of the)",
+      "region": "Europe",
+      "slug": "netherlands",
+      "subregion": "Western Europe"
+    },
+    {
+      "iso2": "NZ",
+      "iso3": "NZL",
+      "m49": "554",
+      "name": "New Zealand",
+      "region": "Oceania",
+      "slug": "new-zealand",
+      "subregion": "Australia and New Zealand"
+    },
+    {
+      "iso2": "NI",
+      "iso3": "NIC",
+      "m49": "558",
+      "name": "Nicaragua",
+      "region": "Americas",
+      "slug": "nicaragua",
+      "subregion": "Latin America and the Caribbean"
+    },
+    {
+      "iso2": "NE",
+      "iso3": "NER",
+      "m49": "562",
+      "name": "Niger",
+      "region": "Africa",
+      "slug": "niger",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "NG",
+      "iso3": "NGA",
+      "m49": "566",
+      "name": "Nigeria",
+      "region": "Africa",
+      "slug": "nigeria",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "KP",
+      "iso3": "PRK",
+      "m49": "408",
+      "name": "Democratic People's Republic of Korea",
+      "region": "Asia",
+      "slug": "north-korea",
+      "subregion": "Eastern Asia"
+    },
+    {
+      "iso2": "MK",
+      "iso3": "MKD",
+      "m49": "807",
+      "name": "North Macedonia",
+      "region": "Europe",
+      "slug": "north-macedonia",
+      "subregion": "Southern Europe"
+    },
+    {
+      "iso2": "NO",
+      "iso3": "NOR",
+      "m49": "578",
+      "name": "Norway",
+      "region": "Europe",
+      "slug": "norway",
+      "subregion": "Northern Europe"
+    },
+    {
+      "iso2": "OM",
+      "iso3": "OMN",
+      "m49": "512",
+      "name": "Oman",
+      "region": "Asia",
+      "slug": "oman",
+      "subregion": "Western Asia"
+    },
+    {
+      "iso2": "PK",
+      "iso3": "PAK",
+      "m49": "586",
+      "name": "Pakistan",
+      "region": "Asia",
+      "slug": "pakistan",
+      "subregion": "Southern Asia"
+    },
+    {
+      "iso2": "PW",
+      "iso3": "PLW",
+      "m49": "585",
+      "name": "Palau",
+      "region": "Oceania",
+      "slug": "palau",
+      "subregion": "Micronesia"
+    },
+    {
+      "iso2": "PS",
+      "iso3": "PSE",
+      "m49": "275",
+      "name": "State of Palestine",
+      "region": "Asia",
+      "slug": "palestine",
+      "subregion": "Western Asia"
+    },
+    {
+      "iso2": "PA",
+      "iso3": "PAN",
+      "m49": "591",
+      "name": "Panama",
+      "region": "Americas",
+      "slug": "panama",
+      "subregion": "Latin America and the Caribbean"
+    },
+    {
+      "iso2": "PG",
+      "iso3": "PNG",
+      "m49": "598",
+      "name": "Papua New Guinea",
+      "region": "Oceania",
+      "slug": "papua-new-guinea",
+      "subregion": "Melanesia"
+    },
+    {
+      "iso2": "PY",
+      "iso3": "PRY",
+      "m49": "600",
+      "name": "Paraguay",
+      "region": "Americas",
+      "slug": "paraguay",
+      "subregion": "Latin America and the Caribbean"
+    },
+    {
+      "iso2": "PE",
+      "iso3": "PER",
+      "m49": "604",
+      "name": "Peru",
+      "region": "Americas",
+      "slug": "peru",
+      "subregion": "Latin America and the Caribbean"
+    },
+    {
+      "iso2": "PH",
+      "iso3": "PHL",
+      "m49": "608",
+      "name": "Philippines",
+      "region": "Asia",
+      "slug": "philippines",
+      "subregion": "South-eastern Asia"
+    },
+    {
+      "iso2": "PL",
+      "iso3": "POL",
+      "m49": "616",
+      "name": "Poland",
+      "region": "Europe",
+      "slug": "poland",
+      "subregion": "Eastern Europe"
+    },
+    {
+      "iso2": "PT",
+      "iso3": "PRT",
+      "m49": "620",
+      "name": "Portugal",
+      "region": "Europe",
+      "slug": "portugal",
+      "subregion": "Southern Europe"
+    },
+    {
+      "iso2": "QA",
+      "iso3": "QAT",
+      "m49": "634",
+      "name": "Qatar",
+      "region": "Asia",
+      "slug": "qatar",
+      "subregion": "Western Asia"
+    },
+    {
+      "iso2": "RO",
+      "iso3": "ROU",
+      "m49": "642",
+      "name": "Romania",
+      "region": "Europe",
+      "slug": "romania",
+      "subregion": "Eastern Europe"
+    },
+    {
+      "iso2": "RU",
+      "iso3": "RUS",
+      "m49": "643",
+      "name": "Russian Federation",
+      "region": "Europe",
+      "slug": "russia",
+      "subregion": "Eastern Europe"
+    },
+    {
+      "iso2": "RW",
+      "iso3": "RWA",
+      "m49": "646",
+      "name": "Rwanda",
+      "region": "Africa",
+      "slug": "rwanda",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "KN",
+      "iso3": "KNA",
+      "m49": "659",
+      "name": "Saint Kitts and Nevis",
+      "region": "Americas",
+      "slug": "saint-kitts-and-nevis",
+      "subregion": "Latin America and the Caribbean"
+    },
+    {
+      "iso2": "LC",
+      "iso3": "LCA",
+      "m49": "662",
+      "name": "Saint Lucia",
+      "region": "Americas",
+      "slug": "saint-lucia",
+      "subregion": "Latin America and the Caribbean"
+    },
+    {
+      "iso2": "VC",
+      "iso3": "VCT",
+      "m49": "670",
+      "name": "Saint Vincent and the Grenadines",
+      "region": "Americas",
+      "slug": "saint-vincent-and-the-grenadines",
+      "subregion": "Latin America and the Caribbean"
+    },
+    {
+      "iso2": "WS",
+      "iso3": "WSM",
+      "m49": "882",
+      "name": "Samoa",
+      "region": "Oceania",
+      "slug": "samoa",
+      "subregion": "Polynesia"
+    },
+    {
+      "iso2": "SM",
+      "iso3": "SMR",
+      "m49": "674",
+      "name": "San Marino",
+      "region": "Europe",
+      "slug": "san-marino",
+      "subregion": "Southern Europe"
+    },
+    {
+      "iso2": "ST",
+      "iso3": "STP",
+      "m49": "678",
+      "name": "Sao Tome and Principe",
+      "region": "Africa",
+      "slug": "sao-tome-and-principe",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "SA",
+      "iso3": "SAU",
+      "m49": "682",
+      "name": "Saudi Arabia",
+      "region": "Asia",
+      "slug": "saudi-arabia",
+      "subregion": "Western Asia"
+    },
+    {
+      "iso2": "SN",
+      "iso3": "SEN",
+      "m49": "686",
+      "name": "Senegal",
+      "region": "Africa",
+      "slug": "senegal",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "RS",
+      "iso3": "SRB",
+      "m49": "688",
+      "name": "Serbia",
+      "region": "Europe",
+      "slug": "serbia",
+      "subregion": "Southern Europe"
+    },
+    {
+      "iso2": "SC",
+      "iso3": "SYC",
+      "m49": "690",
+      "name": "Seychelles",
+      "region": "Africa",
+      "slug": "seychelles",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "SL",
+      "iso3": "SLE",
+      "m49": "694",
+      "name": "Sierra Leone",
+      "region": "Africa",
+      "slug": "sierra-leone",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "SG",
+      "iso3": "SGP",
+      "m49": "702",
+      "name": "Singapore",
+      "region": "Asia",
+      "slug": "singapore",
+      "subregion": "South-eastern Asia"
+    },
+    {
+      "iso2": "SK",
+      "iso3": "SVK",
+      "m49": "703",
+      "name": "Slovakia",
+      "region": "Europe",
+      "slug": "slovakia",
+      "subregion": "Eastern Europe"
+    },
+    {
+      "iso2": "SI",
+      "iso3": "SVN",
+      "m49": "705",
+      "name": "Slovenia",
+      "region": "Europe",
+      "slug": "slovenia",
+      "subregion": "Southern Europe"
+    },
+    {
+      "iso2": "SB",
+      "iso3": "SLB",
+      "m49": "090",
+      "name": "Solomon Islands",
+      "region": "Oceania",
+      "slug": "solomon-islands",
+      "subregion": "Melanesia"
+    },
+    {
+      "iso2": "SO",
+      "iso3": "SOM",
+      "m49": "706",
+      "name": "Somalia",
+      "region": "Africa",
+      "slug": "somalia",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "ZA",
+      "iso3": "ZAF",
+      "m49": "710",
+      "name": "South Africa",
+      "region": "Africa",
+      "slug": "south-africa",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "KR",
+      "iso3": "KOR",
+      "m49": "410",
+      "name": "Republic of Korea",
+      "region": "Asia",
+      "slug": "south-korea",
+      "subregion": "Eastern Asia"
+    },
+    {
+      "iso2": "SS",
+      "iso3": "SSD",
+      "m49": "728",
+      "name": "South Sudan",
+      "region": "Africa",
+      "slug": "south-sudan",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "ES",
+      "iso3": "ESP",
+      "m49": "724",
+      "name": "Spain",
+      "region": "Europe",
+      "slug": "spain",
+      "subregion": "Southern Europe"
+    },
+    {
+      "iso2": "LK",
+      "iso3": "LKA",
+      "m49": "144",
+      "name": "Sri Lanka",
+      "region": "Asia",
+      "slug": "sri-lanka",
+      "subregion": "Southern Asia"
+    },
+    {
+      "iso2": "SD",
+      "iso3": "SDN",
+      "m49": "729",
+      "name": "Sudan",
+      "region": "Africa",
+      "slug": "sudan",
+      "subregion": "Northern Africa"
+    },
+    {
+      "iso2": "SR",
+      "iso3": "SUR",
+      "m49": "740",
+      "name": "Suriname",
+      "region": "Americas",
+      "slug": "suriname",
+      "subregion": "Latin America and the Caribbean"
+    },
+    {
+      "iso2": "SE",
+      "iso3": "SWE",
+      "m49": "752",
+      "name": "Sweden",
+      "region": "Europe",
+      "slug": "sweden",
+      "subregion": "Northern Europe"
+    },
+    {
+      "iso2": "CH",
+      "iso3": "CHE",
+      "m49": "756",
+      "name": "Switzerland",
+      "region": "Europe",
+      "slug": "switzerland",
+      "subregion": "Western Europe"
+    },
+    {
+      "iso2": "SY",
+      "iso3": "SYR",
+      "m49": "760",
+      "name": "Syrian Arab Republic",
+      "region": "Asia",
+      "slug": "syria",
+      "subregion": "Western Asia"
+    },
+    {
+      "iso2": "TJ",
+      "iso3": "TJK",
+      "m49": "762",
+      "name": "Tajikistan",
+      "region": "Asia",
+      "slug": "tajikistan",
+      "subregion": "Central Asia"
+    },
+    {
+      "iso2": "TZ",
+      "iso3": "TZA",
+      "m49": "834",
+      "name": "United Republic of Tanzania",
+      "region": "Africa",
+      "slug": "tanzania",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "TH",
+      "iso3": "THA",
+      "m49": "764",
+      "name": "Thailand",
+      "region": "Asia",
+      "slug": "thailand",
+      "subregion": "South-eastern Asia"
+    },
+    {
+      "iso2": "TL",
+      "iso3": "TLS",
+      "m49": "626",
+      "name": "Timor-Leste",
+      "region": "Asia",
+      "slug": "timor-leste",
+      "subregion": "South-eastern Asia"
+    },
+    {
+      "iso2": "TG",
+      "iso3": "TGO",
+      "m49": "768",
+      "name": "Togo",
+      "region": "Africa",
+      "slug": "togo",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "TO",
+      "iso3": "TON",
+      "m49": "776",
+      "name": "Tonga",
+      "region": "Oceania",
+      "slug": "tonga",
+      "subregion": "Polynesia"
+    },
+    {
+      "iso2": "TT",
+      "iso3": "TTO",
+      "m49": "780",
+      "name": "Trinidad and Tobago",
+      "region": "Americas",
+      "slug": "trinidad-and-tobago",
+      "subregion": "Latin America and the Caribbean"
+    },
+    {
+      "iso2": "TN",
+      "iso3": "TUN",
+      "m49": "788",
+      "name": "Tunisia",
+      "region": "Africa",
+      "slug": "tunisia",
+      "subregion": "Northern Africa"
+    },
+    {
+      "iso2": "TR",
+      "iso3": "TUR",
+      "m49": "792",
+      "name": "Türkiye",
+      "region": "Asia",
+      "slug": "turkey",
+      "subregion": "Western Asia"
+    },
+    {
+      "iso2": "TM",
+      "iso3": "TKM",
+      "m49": "795",
+      "name": "Turkmenistan",
+      "region": "Asia",
+      "slug": "turkmenistan",
+      "subregion": "Central Asia"
+    },
+    {
+      "iso2": "TV",
+      "iso3": "TUV",
+      "m49": "798",
+      "name": "Tuvalu",
+      "region": "Oceania",
+      "slug": "tuvalu",
+      "subregion": "Polynesia"
+    },
+    {
+      "iso2": "UG",
+      "iso3": "UGA",
+      "m49": "800",
+      "name": "Uganda",
+      "region": "Africa",
+      "slug": "uganda",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "UA",
+      "iso3": "UKR",
+      "m49": "804",
+      "name": "Ukraine",
+      "region": "Europe",
+      "slug": "ukraine",
+      "subregion": "Eastern Europe"
+    },
+    {
+      "iso2": "AE",
+      "iso3": "ARE",
+      "m49": "784",
+      "name": "United Arab Emirates",
+      "region": "Asia",
+      "slug": "united-arab-emirates",
+      "subregion": "Western Asia"
+    },
+    {
+      "iso2": "GB",
+      "iso3": "GBR",
+      "m49": "826",
+      "name": "United Kingdom of Great Britain and Northern Ireland",
+      "region": "Europe",
+      "slug": "united-kingdom",
+      "subregion": "Northern Europe"
+    },
+    {
+      "iso2": "US",
+      "iso3": "USA",
+      "m49": "840",
+      "name": "United States of America",
+      "region": "Americas",
+      "slug": "united-states",
+      "subregion": "Northern America"
+    },
+    {
+      "iso2": "UY",
+      "iso3": "URY",
+      "m49": "858",
+      "name": "Uruguay",
+      "region": "Americas",
+      "slug": "uruguay",
+      "subregion": "Latin America and the Caribbean"
+    },
+    {
+      "iso2": "UZ",
+      "iso3": "UZB",
+      "m49": "860",
+      "name": "Uzbekistan",
+      "region": "Asia",
+      "slug": "uzbekistan",
+      "subregion": "Central Asia"
+    },
+    {
+      "iso2": "VU",
+      "iso3": "VUT",
+      "m49": "548",
+      "name": "Vanuatu",
+      "region": "Oceania",
+      "slug": "vanuatu",
+      "subregion": "Melanesia"
+    },
+    {
+      "iso2": "VA",
+      "iso3": "VAT",
+      "m49": "336",
+      "name": "Holy See",
+      "region": "Europe",
+      "slug": "vatican-city",
+      "subregion": "Southern Europe"
+    },
+    {
+      "iso2": "VE",
+      "iso3": "VEN",
+      "m49": "862",
+      "name": "Venezuela (Bolivarian Republic of)",
+      "region": "Americas",
+      "slug": "venezuela",
+      "subregion": "Latin America and the Caribbean"
+    },
+    {
+      "iso2": "VN",
+      "iso3": "VNM",
+      "m49": "704",
+      "name": "Viet Nam",
+      "region": "Asia",
+      "slug": "vietnam",
+      "subregion": "South-eastern Asia"
+    },
+    {
+      "iso2": "YE",
+      "iso3": "YEM",
+      "m49": "887",
+      "name": "Yemen",
+      "region": "Asia",
+      "slug": "yemen",
+      "subregion": "Western Asia"
+    },
+    {
+      "iso2": "ZM",
+      "iso3": "ZMB",
+      "m49": "894",
+      "name": "Zambia",
+      "region": "Africa",
+      "slug": "zambia",
+      "subregion": "Sub-Saharan Africa"
+    },
+    {
+      "iso2": "ZW",
+      "iso3": "ZWE",
+      "m49": "716",
+      "name": "Zimbabwe",
+      "region": "Africa",
+      "slug": "zimbabwe",
+      "subregion": "Sub-Saharan Africa"
+    }
+  ]
+}

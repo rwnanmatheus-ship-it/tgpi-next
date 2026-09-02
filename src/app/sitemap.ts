@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { getAllCountrySlugs } from "@/lib/countries";
 
-const siteUrl = "https://theglobalpolymath.com";
+const siteUrl = "https://www.theglobalpolymath.com";
 
 const publicRoutes = [
   { path: "", priority: 1, changeFrequency: "weekly" },
@@ -9,7 +9,7 @@ const publicRoutes = [
   { path: "/compare", priority: 0.9, changeFrequency: "weekly" },
   { path: "/courses", priority: 0.85, changeFrequency: "weekly" },
   { path: "/certificates", priority: 0.8, changeFrequency: "weekly" },
-  { path: "/authority", priority: 0.75, changeFrequency: "monthly" },
+  { path: "/intelligence", priority: 0.75, changeFrequency: "weekly" },
   { path: "/ranking", priority: 0.75, changeFrequency: "weekly" },
   { path: "/resources", priority: 0.7, changeFrequency: "weekly" },
   { path: "/community", priority: 0.65, changeFrequency: "weekly" },

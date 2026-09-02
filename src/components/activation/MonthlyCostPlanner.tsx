@@ -31,8 +31,8 @@ export default function MonthlyCostPlanner({
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
-    if (savedEstimate?.amount) setAmount(savedEstimate.amount);
-  }, [savedEstimate?.amount]);
+    if (savedEstimate?.amount && savedEstimate.currency === currency) setAmount(savedEstimate.amount);
+  }, [savedEstimate?.amount, savedEstimate?.currency, currency]);
 
   async function saveEstimate() {
     setIsSaving(true);
@@ -60,41 +60,37 @@ export default function MonthlyCostPlanner({
             My monthly estimate
           </p>
           <p className="mt-2 text-sm leading-6 text-[#334A64]">
-            Adjust TGPI&apos;s reference budget to match your intended lifestyle in {countryName}.
+            Enter your own monthly estimate for {countryName} in {currency}. Use dated local quotes; no reference budget is supplied by TGPI.
           </p>
         </div>
         <p className="text-2xl font-black text-[#071A32]">
-          {formatAmount(amount, currency)}
+          {amount > 0 ? formatAmount(amount, currency) : "Not set"}
         </p>
       </div>
 
       <label className="mt-5 block">
         <span className="sr-only">Monthly cost estimate</span>
         <input
-          type="range"
-          min={Math.max(Math.round(baseline * 0.6), 1)}
-          max={Math.round(baseline * 1.8)}
-          step={Math.max(Math.round(baseline * 0.05), 1)}
-          value={amount}
+          type="number"
+          min={1}
+          max={1000000}
+          step={1}
+          value={amount || ""}
           onChange={(event) => {
             setAmount(Number(event.target.value));
             setSaved(false);
           }}
-          className="w-full accent-[#0B1F3A]"
+          className="w-full rounded-xl border border-[#B8C9DF] bg-white p-3 text-base text-[#0B1F3A]"
         />
       </label>
 
-      <div className="mt-3 flex items-center justify-between text-[10px] font-bold text-[#657082]">
-        <span>Lean · {formatAmount(Math.round(baseline * 0.6), currency)}</span>
-        <span>Reference · {formatAmount(baseline, currency)}</span>
-        <span>Flexible · {formatAmount(Math.round(baseline * 1.8), currency)}</span>
-      </div>
+      <p className="mt-3 text-xs text-[#657082]">Your estimate is stored in its stated currency. Older estimates in another currency are not converted or relabeled.</p>
 
       {isAuthenticated ? (
         <button
           type="button"
           onClick={saveEstimate}
-          disabled={isLoading || isSaving}
+          disabled={isLoading || isSaving || !Number.isFinite(amount) || amount <= 0 || amount > 1000000}
           className="mt-5 inline-flex min-h-11 items-center justify-center rounded-xl bg-[#0B1F3A] px-5 text-sm font-black text-white transition hover:bg-[#143454] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C59632] disabled:cursor-wait disabled:opacity-60"
         >
           {isSaving

@@ -16,8 +16,8 @@ const footerGroups: ReadonlyArray<{
     links: [
       { label: "Explore 195 countries", href: "/countries" },
       { label: "TGPI Compare", href: "/compare" },
-      { label: "Country Fit", href: "/onboarding" },
-      { label: "Decision methodology", href: "/authority" },
+      { label: "Country Fit & personal plan", href: "/country-fit" },
+      { label: "Sources & methodology", href: "/intelligence" },
     ],
   },
   {

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import MobileHome from "@/components/mobile/MobileHome";
-import HomeDecisionOS from "@/components/HomeDecisionOS";
+import { IntelligenceBanner } from "@/components/intelligence/Evidence";
 import HomeAuthorityLayer from "@/components/home/HomeAuthorityLayer";
 import HomeCountryCardsV2 from "@/components/home/HomeCountryCardsV2";
 import HomeHeroV3 from "@/components/home/HomeHeroV3";
@@ -47,10 +47,11 @@ export default function HomePage() {
       <HomeStructuredData />
       <main className="overflow-hidden bg-[var(--tgpi-canvas)] text-[var(--tgpi-ink)]">
         <MobileHome />
+        <div className="md:hidden"><IntelligenceBanner /></div>
         <div className="mobile-desktop-home">
         <HomeHeroV3 />
         <HomePortal />
-        <HomeDecisionOS />
+        <IntelligenceBanner />
         <HomeCountryCardsV2 />
         <HomeLearningPortal />
         <HomeInstagramContinuity />

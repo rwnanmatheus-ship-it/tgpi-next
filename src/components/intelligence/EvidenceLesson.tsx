@@ -1,0 +1,13 @@
+"use client";
+import { useState } from "react";
+const QUESTIONS = [
+  { question: "A country has 120% gross tertiary enrollment. What is the responsible interpretation?", answers: ["The data must be wrong because every percentage is capped at 100.", "Students outside the official age group can make the gross ratio exceed 100%.", "You have a 120% chance of university admission."], correct: 1, explanation: "Always inspect the denominator and indicator definition. Gross enrollment is a population ratio, not an admission rate." },
+  { question: "A source was checked today, but its observation is from four years ago. Is the value current?", answers: ["Yes, checking a page makes the number current.", "No: the retrieval date and reference year answer different questions.", "It is safe to replace the year with this year."], correct: 1, explanation: "The retrieval date records when TGPI obtained the value. The reference year records when the measured situation applied. Neither implies real-time knowledge." },
+  { question: "One country has no published value for an indicator. How should you compare it?", answers: ["Treat the missing value as zero.", "Copy the regional average and call it verified.", "Show the gap and withhold conclusions that depend on it."], correct: 2, explanation: "Missing evidence is not bad performance. Substitution without disclosure creates false certainty and can unfairly rank countries." },
+];
+export default function EvidenceLesson() {
+  const [index, setIndex] = useState(0);
+  const [answer, setAnswer] = useState<number | null>(null);
+  const q = QUESTIONS[index];
+  return <section id="learning" className="ig-section ig-panel"><p className="ig-eyebrow">TGPI Learning / Evidence literacy / {index + 1} of {QUESTIONS.length}</p><h2>Learn to challenge a number.</h2><p className="ig-small">A short practice in interpretation, dates and missing evidence. Completion is a learning exercise, not an accredited qualification.</p><h3>{q.question}</h3><div className="grid gap-3 my-5" role="group" aria-label="Answer options">{q.answers.map((option, n) => <button type="button" className="ig-select text-left" aria-pressed={answer === n} key={option} onClick={() => setAnswer(n)}>{option}</button>)}</div>{answer !== null ? <div role="status" className="ig-status"><strong>{answer === q.correct ? "Correct interpretation." : "Revisit the evidence."}</strong><p className="ig-small">{q.explanation}</p><button type="button" className="ig-button" onClick={() => { setIndex((index + 1) % QUESTIONS.length); setAnswer(null); }}>{index === QUESTIONS.length - 1 ? "Practice again" : "Next question →"}</button></div> : null}</section>;
+}

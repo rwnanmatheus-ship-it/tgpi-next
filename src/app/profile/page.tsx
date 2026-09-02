@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { currentUser } from "@clerk/nextjs/server";
+import CountryFitWorkspace from "@/components/intelligence/CountryFitWorkspace";
+import { getIntelligence, identities } from "@/lib/intelligence/server";
 import GlobalWorkspaceV1 from "@/components/profile/GlobalWorkspaceV1";
 import {
   normalizeActivationProgress,
@@ -61,6 +63,8 @@ export default async function ProfilePage({
     getAllCountries(),
     activation,
   );
+
+  const intelligence = await getIntelligence();
 
   return (
     <main className="min-h-screen bg-[#F5F1E8] text-[#0B1F3A]">
@@ -126,6 +130,7 @@ export default async function ProfilePage({
               </Link>
             </div>
           ) : null}
+          <div className="ig-section mb-8"><CountryFitWorkspace countries={identities} snapshot={intelligence.snapshot} initialContext={onboarding} initialCountry={onboarding.targetCountries[0]} /></div>
           <GlobalWorkspaceV1
             firstName={user?.firstName || name}
             model={workspaceModel}

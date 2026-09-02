@@ -34,7 +34,7 @@ export const COUNTRY_DECISION_PRESETS: readonly CountryDecisionPreset[] = [
   {
     id: "study",
     label: "Study abroad",
-    summary: "Education access with a stronger safety baseline.",
+    summary: "Research programs, accreditation, language requirements and study authorization.",
     goal: "study",
     sort: "score",
     minSafety: 70,
@@ -42,7 +42,7 @@ export const COUNTRY_DECISION_PRESETS: readonly CountryDecisionPreset[] = [
   {
     id: "career",
     label: "Build a career",
-    summary: "Professional fit, adaptation and long-term opportunity.",
+    summary: "Research work authorization, licensing and actual opportunities.",
     goal: "work",
     sort: "score",
     minSafety: 65,
@@ -50,7 +50,7 @@ export const COUNTRY_DECISION_PRESETS: readonly CountryDecisionPreset[] = [
   {
     id: "remote",
     label: "Remote work",
-    summary: "Quality of life with practical English access.",
+    summary: "Verify permitted remote activities, tax obligations and local connectivity.",
     goal: "work",
     sort: "quality",
     minEnglish: 60,
@@ -58,21 +58,21 @@ export const COUNTRY_DECISION_PRESETS: readonly CountryDecisionPreset[] = [
   {
     id: "cost",
     label: "Lower cost",
-    summary: "Start with accessible cost profiles and compare trade-offs.",
+    summary: "Build a city-level budget using your own dated housing and living-cost quotes.",
     cost: "low",
     sort: "cost",
   },
   {
     id: "quality",
     label: "Quality of life",
-    summary: "Prioritize daily systems and a higher safety baseline.",
+    summary: "Research housing, healthcare access, language and current local conditions.",
     sort: "quality",
     minSafety: 75,
   },
   {
     id: "mobility",
     label: "Long-term mobility",
-    summary: "Lower adaptation friction for a durable global plan.",
+    summary: "Verify the legal route, duration of stay and requirements for your nationality.",
     goal: "travel",
     sort: "score",
     difficulty: "easy",
