@@ -28,7 +28,7 @@ jobs:
           key: dossier-sources-v2-${{ github.run_id }}
           restore-keys: dossier-sources-v2-
       - name: Inspect public sources and compare available fingerprints
-        run: node scripts/watch-dossier-sources.mjs
+        run: node --experimental-strip-types scripts/watch-dossier-sources.mjs
       - uses: actions/upload-artifact@v4
         if: always()
         with:

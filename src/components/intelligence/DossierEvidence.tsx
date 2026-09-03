@@ -10,6 +10,7 @@ export function ClaimCard({ claim }: { claim: DossierClaim }) {
     <div className="ig-spread"><span className="ig-eyebrow">{LAYERS[claim.layer]} / {claim.kind}</span><span className={`ig-badge ${state === "reviewed" && source.status === "reviewed" ? "ig-current" : "ig-historical"}`}>{label}</span></div>
     <h3>{claim.title}</h3><p className="ig-small">{claim.summary}</p>
     {state !== "reviewed" ? <p className="ig-caution">Do not rely on this as current guidance. Open the official source and obtain a new review.</p> : null}
+    {source.reviewIssue ? <p className="ig-caution">Open source-review issue, observed {source.reviewIssue.observedAt}: {source.reviewIssue.observation} <Link className="ig-link" href="/intelligence/research#source-review">Review action and deadline →</Link></p> : null}
     <p className="ig-meta"><strong>Applies to:</strong> {claim.audience}</p>
     <p className="ig-meta"><strong>Reference:</strong> {claim.referencePeriod}{claim.effectiveFrom ? ` · Effective from ${claim.effectiveFrom}` : ""}</p>
     <details className="ig-details"><summary>Limits, questions and provenance</summary><p className="ig-small">{claim.limits}</p><ul className="ig-question-list">{claim.questions.map(q => <li key={q}>{q}</li>)}</ul><p className="ig-meta">Source reviewed {claim.reviewedAt} · Review interval {claim.reviewDays} days · Claim {claim.id}. Review means a source-content check, not a personal eligibility determination.</p></details>

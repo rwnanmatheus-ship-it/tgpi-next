@@ -1,5 +1,5 @@
 export const COST_CATEGORIES = ["housing", "food", "transport", "health", "other"] as const;
-export const PLAN_CURRENCIES = ["EUR", "GBP", "CAD", "USD", "JPY"] as const;
+export const PLAN_CURRENCIES = ["EUR", "GBP", "CAD", "USD", "JPY", "AUD", "NZD"] as const;
 export type PlanningCurrency = (typeof PLAN_CURRENCIES)[number];
 export type CostCategory = (typeof COST_CATEGORIES)[number];
 export type ResearchWorksheet = {
