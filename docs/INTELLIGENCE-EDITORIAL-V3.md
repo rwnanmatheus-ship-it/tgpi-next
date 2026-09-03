@@ -1,4 +1,4 @@
-# Editorial coverage V3 — source registry 2.1.0
+# Editorial coverage V3 — source registry 2.1.1
 
 Reviewed 2026-09-03. This expands the existing production intelligence layer; the independent SEO branch is not merged.
 
@@ -24,13 +24,15 @@ Initial queue, observed 2026-09-03:
 
 The initial operational review deadline is 2026-09-10. This is a maintainer review target, not a promise that the sources will become accessible.
 
+Preview QA added four explicit issues: IND returned 200 with 1/2 markers; Irish immigration returned 200 but exceeded 1.5 MB; TEQSA retrieval was inconclusive after one transient retry; the French ministerial bulletin returned 403 and is now manual-only. These operational signals do not invalidate the independently read source content. The registry exposes all eleven issues and seven manual-only sources. The Irish source alone now has a bounded 3 MB allowance. Other sources retain the original cap. Missing-marker names and common Unicode hyphen normalization improve diagnostics without rewriting claims.
+
 ## Bounded checks and API contract
 
 Preferred endpoint: `/api/intelligence/sources/[country]`. The path accepts only a country in the fixed registry; query strings cannot set a URL or affect source retrieval. The strict legacy `?country=` endpoint remains supported.
 
 The endpoint avoids relying on query transport through connectors. Earlier connector calls to the query endpoint returned 400 although the same-origin browser flow worked; the exact connector behaviour was not established.
 
-At most three source connections per country batch; exact registered HTTPS URLs only; no credentials or profile data; manual redirects (not followed), 8-second timeout, 1.5 MB streamed cap, one transient retry, no retry on 401/403. Six-hour cache and in-flight deduplication are retained. Endpoint maximum duration is 60 seconds for bounded batches.
+At most three source connections per country batch; exact registered HTTPS URLs only; no credentials or profile data; manual redirects (not followed), 8-second timeout, 1.5 MB default streamed cap (3 MB for the registered Irish immigration page), one transient retry, no retry on 401/403. Six-hour cache and in-flight deduplication are retained. Endpoint maximum duration is 60 seconds for bounded batches.
 
 The transport function is dependency-injected for offline tests. A normalized-text SHA-256 is a change signal, not proof of a policy change. HTML entities are normalized, scripts are excluded and empty/challenge bodies are not accepted. Content review dates, claims and unresolved issues are never rewritten automatically.
 

@@ -67,7 +67,7 @@ test("invalid, old and future timestamps are not treated as fresh evidence", () 
   assert.equal(sourceCheckIsStale({ status: "not-checked", checkedAt: null }, NOW.getTime()), false);
 });
 test("all open gaps retain explicit observation, action and deadline", () => {
-  const issues = DOSSIER_SOURCES.filter(s => s.reviewIssue); assert.equal(issues.length, 7); assert.equal(DOSSIER_SOURCES.filter(s => !s.automaticCheck).length, 6);
+  const issues = DOSSIER_SOURCES.filter(s => s.reviewIssue); assert.equal(issues.length, 11); assert.equal(DOSSIER_SOURCES.filter(s => !s.automaticCheck).length, 7);
   for (const source of issues) { const issue = source.reviewIssue; assert.ok(issue.action); assert.ok(issue.observation); assert.ok(issue.reviewBy > issue.observedAt); if (issue.reason === "access-restricted") { assert.equal(source.automaticCheck, false); assert.ok(source.reviewedAt); } }
   assert.equal(DOSSIER_SOURCES.find(s => s.id === "de-visa").automaticCheck, true);
 });
@@ -80,4 +80,10 @@ test("expanded coverage uses real layer-specific guidance without inventing loca
 test("AUD and NZD scenarios use exact cents and keep the version-2 worksheet contract", () => {
   for (const country of ["australia", "new-zealand"]) { const p = emptyWorksheet(country, COUNTRY_CURRENCIES[country]); p.monthly.housing = 1234.56; assert.ok(validateWorksheet(p, slugs, tasks, NOW)); assert.equal(p.version, 2); assert.equal(worksheetTotals(p).base, 14814.72); assert.equal(validateWorksheet({ ...p, tuition: 1.001 }, slugs, tasks, NOW), null); }
 });
-test("hex entities and typographic separators preserve markers without exposing scripts", () => { assert.equal(normalizeSourceText('<main>&#x31;1,904\u200b&nbsp;2026<script>fake</script>&#x110000;</main>'), "11,904 2026"); });
+test("hex entities and typographic separators preserve markers without exposing scripts", () => { assert.equal(normalizeSourceText('<main>&#x31;1,904\u200b&nbsp;2026<script>fake</script>&#x110000;</main>'), "11,904 2026"); assert.equal(normalizeSourceText("full‑time full‐time"), "full-time full-time"); });
+test("larger registered pages remain bounded and diagnostics identify missing markers", async () => {
+  const source = { ...fixtureSource, maxResponseBytes: 3_000_000 };
+  assert.equal((await retrieveRegisteredSource("fixture", [source], async () => htmlResponse(fixtureHtml + " ".repeat(1_600_000)))).status, "markers-present");
+  assert.equal((await retrieveRegisteredSource("fixture", [source], async () => htmlResponse("x".repeat(3_000_001)))).status, "review-needed");
+  assert.match(inspectSourceText(fixtureSource, "other text ".repeat(30)).message, /Missing selected markers: verified fixture/);
+});

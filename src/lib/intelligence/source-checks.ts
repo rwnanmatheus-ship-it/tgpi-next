@@ -9,7 +9,7 @@ export function normalizeSourceText(html: string): string {
   const main = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)?.[1] ?? html;
   return main.replace(/<(script|style|noscript)\b[^>]*>[\s\S]*?<\/\1>/gi, " ")
     .replace(/<[^>]+>/g, " ").replace(/&#(x[0-9a-f]+|\d+);/gi, (_, n: string) => { const value = n.toLowerCase().startsWith("x") ? parseInt(n.slice(1), 16) : Number(n); return value > 0 && value <= 0x10ffff && !(value >= 0xd800 && value <= 0xdfff) ? String.fromCodePoint(value) : " "; })
-    .replace(/&(?:nbsp|amp|quot|apos|pound|yen|euro);/gi, " ").normalize("NFKC").replace(/[\u200b-\u200d\ufeff]/g, "").replace(/[–—]/g, "-").replace(/\s+/g, " ").trim().toLowerCase();
+    .replace(/&(?:nbsp|amp|quot|apos|pound|yen|euro);/gi, " ").normalize("NFKC").replace(/[\u200b-\u200d\ufeff]/g, "").replace(/[‐‑‒–—−]/g, "-").replace(/\s+/g, " ").trim().toLowerCase();
 }
 
 /** Server calls supply the fixed registry. The caller can select an ID, never a URL. */
@@ -18,6 +18,7 @@ export async function retrieveRegisteredSource(id: string, registry: readonly Re
   if (!source) throw new Error("Unknown source identifier");
   const base: SourceCheck = { sourceId: id, checkedAt: null, httpStatus: null, status: "not-checked", matchedMarkers: 0, expectedMarkers: source.markers.length, contentSha256: null, message: source.reviewIssue ? `Manual queue — observed ${source.reviewIssue.observedAt}: ${source.reviewIssue.observation} Review by ${source.reviewIssue.reviewBy}. ${source.reviewIssue.action}` : "Automatic retrieval is disabled. Check the public source directly." };
   if (!source.automaticCheck) return base;
+  const byteLimit = Math.min(source.maxResponseBytes ?? 1_500_000, 3_000_000);
   const checkedAt = new Date().toISOString();
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
@@ -27,11 +28,11 @@ export async function retrieveRegisteredSource(id: string, registry: readonly Re
       if (response.status >= 300 && response.status < 400) { await response.body?.cancel(); return { ...result, status: "redirect", message: "The registered address redirects. Review the public destination before updating the registry; no redirect was followed automatically." }; }
       if (!response.ok) { await response.body?.cancel(); if (attempt === 0 && (response.status >= 500 || response.status === 429)) continue; return { ...result, status: "unreachable", message: `The checker received HTTP ${response.status}. The editorial review date has not changed.` }; }
       if (!response.headers.get("content-type")?.toLowerCase().includes("html")) { await response.body?.cancel(); return { ...result, status: "review-needed", message: "Unexpected content type. No source text was accepted." }; }
-      if (Number(response.headers.get("content-length")) > 1_500_000) { await response.body?.cancel(); return { ...result, status: "review-needed", message: "Response exceeds the source-check size limit." }; }
+      if (Number(response.headers.get("content-length")) > byteLimit) { await response.body?.cancel(); return { ...result, status: "review-needed", message: `Response exceeds this source’s ${byteLimit} byte limit.` }; }
       const reader = response.body?.getReader();
       if (!reader) return { ...result, status: "review-needed", message: "The source returned an empty body." };
       const chunks: Uint8Array[] = []; let size = 0;
-      while (true) { const part = await reader.read(); if (part.done) break; size += part.value.byteLength; if (size > 1_500_000) { await reader.cancel(); return { ...result, status: "review-needed", message: "Response exceeds the source-check size limit." }; } chunks.push(part.value); }
+      while (true) { const part = await reader.read(); if (part.done) break; size += part.value.byteLength; if (size > byteLimit) { await reader.cancel(); return { ...result, status: "review-needed", message: `Response exceeds this source’s ${byteLimit} byte limit.` }; } chunks.push(part.value); }
       const bytes = new Uint8Array(size); let offset = 0;
       for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.byteLength; }
       const html = new TextDecoder().decode(bytes);
@@ -67,5 +68,6 @@ export function inspectSourceText(source: RegisteredSource, html: string): Pick<
   const text = normalizeSourceText(html);
   if (text.length < 100 || /^(?:.{0,100})(?:just a moment|access denied|verify you are human|robot check)/i.test(text)) return { status: "review-needed", matchedMarkers: 0, message: "The response may be empty or an access-challenge page. It was not accepted as evidence." };
   const matchedMarkers = source.markers.filter(marker => text.includes(normalizeSourceText(marker))).length;
-  return { status: source.markers.length > 0 && matchedMarkers === source.markers.length ? "markers-present" : "review-needed", matchedMarkers, message: matchedMarkers === source.markers.length && source.markers.length > 0 ? "Selected reference markers are present. This is an automated content check, not a legal or factual re-review." : "One or more selected reference markers are absent. Review the source; no claim has been automatically rewritten." };
+  const missing = source.markers.filter(marker => !text.includes(normalizeSourceText(marker)));
+  return { status: source.markers.length > 0 && matchedMarkers === source.markers.length ? "markers-present" : "review-needed", matchedMarkers, message: matchedMarkers === source.markers.length && source.markers.length > 0 ? "Selected reference markers are present. This is an automated content check, not a legal or factual re-review." : `Missing selected markers: ${missing.join("; ") || "No markers registered"}. Review the source; no claim has been automatically rewritten.` };
 }
