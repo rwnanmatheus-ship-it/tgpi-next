@@ -37,7 +37,7 @@ export default function ResponsivePreview() {
     <h1 style={{ fontSize: 24 }}>TGPI responsive verification</h1>
     <div style={{ display: "flex", gap: 16, padding: "12px 0", flexWrap: "wrap" }}>
       <label>Viewport <select aria-label="Viewport" value={width} onChange={(event) => { setWidth(Number(event.target.value)); setReport(""); }}>{[320, 375, 390, 430, 768, 1280, 1440].map((value) => <option key={value}>{value}</option>)}</select></label>
-      <label>Page <select aria-label="Page" value={route} onChange={(event) => { setRoute(event.target.value); setReport(""); }}>{["/", "/countries", "/countries/portugal", "/countries/vatican-city", "/country-fit", "/intelligence", "/compare", "/courses", "/passport", "/pricing", "/sign-in", "/profile"].map((value) => <option key={value}>{value}</option>)}</select></label>
+      <label>Page <select aria-label="Page" value={route} onChange={(event) => { setRoute(event.target.value); setReport(""); }}>{["/", "/countries", "/countries/portugal", "/countries/united-kingdom", "/countries/canada", "/countries/vatican-city", "/country-fit", "/intelligence", "/intelligence/research", "/compare", "/courses", "/passport", "/pricing", "/sign-in", "/profile"].map((value) => <option key={value}>{value}</option>)}</select></label>
       <button type="button" onClick={inspectLayout}>Inspect layout</button>
     </div>
     {report && <pre aria-label="Layout report" style={{ padding: 16, background: "white", overflowX: "auto", fontSize: 13 }}>{report}</pre>}

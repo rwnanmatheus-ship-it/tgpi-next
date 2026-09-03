@@ -4,6 +4,8 @@ import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import { INDICATOR_IDS, findObservation, personalResearchPlan, type CountryIdentity, type IntelligenceSnapshot, type ResearchContext } from "@/lib/intelligence/core";
 import { EvidenceCard } from "./Evidence";
+import ResearchWorkbench from "./ResearchWorkbench";
+import { dossierFor, sourceFor } from "@/lib/intelligence/dossiers";
 
 const EMPTY: ResearchContext = { primaryGoal: "study", budgetRange: "undecided", timeHorizon: "exploring", languages: [], profession: "", priorities: [] };
 export default function CountryFitWorkspace({ countries, snapshot, initialContext = EMPTY, initialCountry = "portugal" }: { countries: CountryIdentity[]; snapshot: IntelligenceSnapshot; initialContext?: ResearchContext; initialCountry?: string }) {
@@ -16,6 +18,7 @@ export default function CountryFitWorkspace({ countries, snapshot, initialContex
   const tasks = personalResearchPlan(context, country.name);
   const relevant = context.primaryGoal === "work" ? "SL.UEM.TOTL.ZS" : context.primaryGoal === "study" ? "SE.TER.ENRR" : "IT.NET.USER.ZS";
   const available = INDICATOR_IDS.filter(id => findObservation(snapshot, slug, id)).length;
+  const dossier = dossierFor(slug);
   async function savePlan() {
     if (!isSignedIn || isSaving) return;
     setIsSaving(true);
@@ -40,7 +43,8 @@ export default function CountryFitWorkspace({ countries, snapshot, initialContex
         <label>Languages, separated by commas<input value={context.languages.join(",")} maxLength={160} onChange={e => setContext({ ...context, languages: e.target.value.split(",").slice(0, 8) })} placeholder="e.g. Portuguese, English" /></label>
       </div>{isSignedIn ? <button type="button" className="ig-button" disabled={isSaving} onClick={savePlan}>{isSaving ? "Saving…" : "Save this research plan"}</button> : <Link href={`/sign-in?redirect_url=/country-fit%3Fcountry%3D${slug}`} className="ig-button">Sign in to save a plan</Link>}<p className="ig-small" role="status">{saveNotice}</p><Link href="/onboarding" className="ig-link">Review my full global profile →</Link>
     </div>
-    <div className="ig-panel"><p className="ig-eyebrow">02 / Evidence, not a promise</p><h2>{country.name}: what can we support?</h2><p className="ig-small">{available}/4 national indicators available. Visa eligibility, safety, affordability, language fit and institutional quality are not established by these indicators.</p><EvidenceCard indicator={relevant} observation={findObservation(snapshot, slug, relevant)} countryCode={country.iso2} /><Link className="ig-link" href={`/countries/${slug}`}>Inspect all country sources →</Link></div>
+    <div className="ig-panel"><p className="ig-eyebrow">02 / Evidence, not a promise</p><h2>{country.name}: what can we support?</h2><p className="ig-small">{available}/4 national indicators available. Visa eligibility, safety, affordability, language fit and institutional quality are not established by these indicators.</p><EvidenceCard indicator={relevant} observation={findObservation(snapshot, slug, relevant)} countryCode={country.iso2} /><p className="ig-small">{dossier.claims.length} detailed evidence summaries available. The first dossiers focus on study; they do not establish permission to work or personal eligibility.</p>{dossier.claims.slice(0, 2).map(c => <a key={c.id} className="ig-link ig-source-action" href={sourceFor(c.sourceId)!.url} target="_blank" rel="noreferrer">{c.title} ↗</a>)}<Link className="ig-link" href={`/countries/${slug}#research-dossier`}>Inspect the full dossier and source limits →</Link></div>
     <div className="ig-panel ig-wide"><p className="ig-eyebrow">03 / Your next decisions</p><h2>Turn uncertainty into useful work.</h2><p className="ig-small">{context.priorities.length ? `Your profile priorities: ${context.priorities.join(", ")}. These need supporting evidence, not inferred fit scores.` : "Prioritize the questions that could change your decision."}</p><div className="ig-task-grid">{tasks.map((task, index) => <article key={task.id} className="ig-task"><span className="ig-step">0{index + 1}</span><h3>{task.title}</h3><p className="ig-small">{task.detail}</p><Link className="ig-link" href={task.href.startsWith("#") ? `/countries/${slug}${task.href}` : task.href}>Take the next step →</Link></article>)}</div><div className="ig-actions"><Link href={`/compare?country=${slug}`} className="ig-button">Compare an alternative →</Link><Link href="/profile" className="ig-button ig-secondary">Open my saved workspace</Link></div></div>
+    <ResearchWorkbench country={slug} countryName={country.name} />
   </section>;
 }

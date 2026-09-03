@@ -47,6 +47,17 @@
 .ig-compare-row { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
 .ig-banner { max-width:1280px; margin:32px auto; padding:32px; border:1px solid #d8d2c4; border-radius:22px; background:#fffdf8; color:#0b1f3a; }
 .ig-banner p:not(.ig-eyebrow) { color:#526273; line-height:1.7; }
+.ig-stack { display:grid; gap:18px; }
+.ig-claim h3 { font-family:var(--tgpi-font-display); font-size:25px; line-height:1.2; margin:18px 0 12px; }
+.ig-caution { border-left:3px solid #ac812b; padding:10px 14px; margin:14px 0; color:#6e4c12; background:#fff5df; font-size:13px; line-height:1.75; }
+.ig-question-list { padding-left:22px; list-style:revert; color:#526273; font-size:14px; line-height:1.85; margin:16px 0; }
+.ig-question-list li { margin:8px 0; }
+.ig-source-action { display:block; line-height:1.65; }
+.ig-watch-row { border-top:1px solid #ded8cc; padding-top:16px; min-width:0; }
+.ig-budget-result { border:1px solid #c5d7d1; background:#f0f7f3; border-radius:18px; padding:24px; }
+.ig-check-label { display:flex; gap:12px; align-items:flex-start; font-size:15px; font-weight:700; line-height:1.6; cursor:pointer; }
+.ig-check-label input { width:20px; height:20px; flex:0 0 20px; margin-top:3px; accent-color:#0b1f3a; }
+.ig-coverage-list p { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; padding:12px 0; border-bottom:1px solid #ded8cc; font-size:13px; }
 @media(max-width:900px) { .ig-country-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .ig-compare-row { grid-template-columns:1fr; } }
 @media(max-width:640px) { .ig-shell { padding:16px 16px 90px; } .ig-hero { padding:28px 22px; border-radius:22px; } .ig-hero h1 { font-size:2.65rem; } .ig-fit,.ig-evidence-grid,.ig-country-grid,.ig-form-grid,.ig-task-grid { grid-template-columns:1fr; } .ig-panel,.ig-evidence { padding:20px; } .ig-banner { margin:20px 16px; padding:24px; } .ig-spread { align-items:flex-start; } }
 @media print { .ig-actions,.ig-form-grid { display:none; } .ig-shell { padding:0; } .ig-panel { break-inside:avoid; } }

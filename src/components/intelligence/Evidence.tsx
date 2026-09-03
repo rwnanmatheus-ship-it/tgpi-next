@@ -20,12 +20,12 @@ export function EvidenceCard({ observation, indicator, countryCode }: { observat
 
 export function GraphStatus({ state }: { state: IntelligenceState }) {
   return <aside className="ig-status" aria-label="Intelligence data status">
-    <div className="ig-spread"><span className="ig-eyebrow">TGPI Intelligence Graph · v1</span><Link className="ig-link" href="/intelligence">Methodology & coverage →</Link></div>
+    <div className="ig-spread"><span className="ig-eyebrow">TGPI Intelligence Graph · Statistical layer v1</span><Link className="ig-link" href="/intelligence">Methodology & coverage →</Link></div>
     <p className="ig-small">{state.message ?? "Source-linked observations. National context, not a personal recommendation or a real-time world feed."}</p>
     <p className="ig-meta">{state.snapshot.retrievedAt ? `Collection: ${state.snapshot.retrievedAt.slice(0, 16).replace("T", " ")} UTC · Revision ${state.snapshot.revision}` : "Statistical collection pending validation. Official country identities remain available."}</p>
   </aside>;
 }
 
 export function IntelligenceBanner() {
-  return <section className="ig-banner"><div><p className="ig-eyebrow">A stronger foundation for your decisions</p><h2>Know the evidence. Understand the limits.</h2><p>Explore source-linked country research, compare context and build your next steps.</p></div><div className="ig-actions"><Link href="/country-fit" className="ig-button">Build my Country Fit →</Link><Link href="/intelligence" className="ig-button ig-secondary">Explore the methodology</Link></div></section>;
+  return <section className="ig-banner"><div><p className="ig-eyebrow">Decision dossiers + Your personal scenario</p><h2>Know the evidence. Build your next move.</h2><p>Explore official study pathways, institution checks and scoped cost references. Compare the questions that matter, then build a personal plan.</p></div><div className="ig-actions"><Link href="/country-fit" className="ig-button">Build my Country Fit →</Link><Link href="/intelligence/research" className="ig-button ig-secondary">Explore decision dossiers</Link><Link href="/intelligence" className="ig-link">Sources & methodology</Link></div></section>;
 }

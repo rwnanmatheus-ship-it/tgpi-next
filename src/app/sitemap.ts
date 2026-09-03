@@ -10,6 +10,7 @@ const publicRoutes = [
   { path: "/courses", priority: 0.85, changeFrequency: "weekly" },
   { path: "/certificates", priority: 0.8, changeFrequency: "weekly" },
   { path: "/intelligence", priority: 0.75, changeFrequency: "weekly" },
+  { path: "/intelligence/research", priority: 0.75, changeFrequency: "weekly" },
   { path: "/ranking", priority: 0.75, changeFrequency: "weekly" },
   { path: "/resources", priority: 0.7, changeFrequency: "weekly" },
   { path: "/community", priority: 0.65, changeFrequency: "weekly" },

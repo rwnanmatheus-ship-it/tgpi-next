@@ -1,0 +1,43 @@
+name: Dossier source review signals
+on:
+  schedule:
+    - cron: '47 6 * * *'
+  workflow_dispatch:
+  deployment_status:
+permissions:
+  contents: read
+concurrency:
+  group: dossier-source-watch
+  cancel-in-progress: false
+jobs:
+  inspect:
+    if: github.event_name != 'deployment_status' || (github.event.deployment_status.state == 'success' && (startsWith(github.event.deployment.environment, 'Production') || startsWith(github.event.deployment.environment, 'production')))
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix-deploy-hoje
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/cache/restore@v4
+        with:
+          path: evidence-history/previous.json
+          key: dossier-sources-v2-${{ github.run_id }}
+          restore-keys: dossier-sources-v2-
+      - name: Inspect public sources and compare available fingerprints
+        run: node scripts/watch-dossier-sources.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: dossier-source-report-${{ github.run_id }}
+          path: dossier-source-report.json
+          retention-days: 90
+          if-no-files-found: warn
+      - uses: actions/cache/save@v4
+        if: always()
+        with:
+          path: evidence-history/previous.json
+          key: dossier-sources-v2-${{ github.run_id }}
