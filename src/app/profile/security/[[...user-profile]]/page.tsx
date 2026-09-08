@@ -73,10 +73,12 @@ export default async function SecurityPage() {
     <main className="min-h-screen bg-[#F5F1E8] px-4 py-6 text-[#0B1F3A] sm:px-6 sm:py-10 lg:py-14">
       <TgpiAccountCenter
         account={{
+          avatarUrl: user?.imageUrl || "",
           email,
           emailVerified,
           globalId: formatTgpiGlobalId(session.userId),
           membership,
+          publicProfileUrl: `/member/${session.userId}`,
         }}
         countries={countries
           .map((country) => ({ name: country.name, slug: country.slug }))

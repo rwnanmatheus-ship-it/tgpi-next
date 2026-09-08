@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
+import PublicProfileShareButton from "@/components/profile/PublicProfileShareButton";
+import TgpiAvatarEditor from "@/components/profile/TgpiAvatarEditor";
 import {
   getAccountProfileCompletion,
   type AccountIdentityInput,
@@ -18,10 +20,12 @@ type DecisionContext = {
   progress: number;
 };
 type AccountSummary = {
+  avatarUrl: string;
   email: string;
   emailVerified: boolean;
   globalId: string;
   membership: string;
+  publicProfileUrl: string;
 };
 type TgpiAccountCenterProps = {
   account: AccountSummary;
@@ -36,6 +40,7 @@ type SettingsSection =
   | "overview"
   | "identity"
   | "global"
+  | "public-profile"
   | "preferences"
   | "notifications"
   | "privacy"
@@ -107,6 +112,12 @@ const settingsSections: readonly SettingsSectionDefinition[] = [
     label: "Global profile",
   },
   {
+    description: "Preview and share your member identity",
+    key: "public-profile",
+    keywords: "public profile share card preview link community identity",
+    label: "Public profile",
+  },
+  {
     description: "Language, currency and public links",
     key: "preferences",
     keywords: "currency units website linkedin instagram preferences",
@@ -152,6 +163,7 @@ const iconPaths: Record<SettingsSection, string> = {
   overview: "M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z",
   identity: "M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM4.5 21a7.5 7.5 0 0 1 15 0",
   global: "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18ZM3.5 9h17M3.5 15h17M12 3c4.8 5.1 4.8 12.9 0 18M12 3c-4.8 5.1-4.8 12.9 0 18",
+  "public-profile": "M4 19.5c2-3.1 4.7-4.5 8-4.5s6 1.4 8 4.5M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8M18 8h3M19.5 6.5v3",
   preferences: "M4 6h10M18 6h2M4 12h2M10 12h10M4 18h7M15 18h5M16 4v4M8 10v4M13 16v4",
   notifications: "M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9ZM10 21h4",
   privacy: "M12 3 4.5 6v5.3c0 4.8 3.1 8.3 7.5 9.7 4.4-1.4 7.5-4.9 7.5-9.7V6L12 3Zm-3 9 2 2 4-4",
@@ -172,6 +184,30 @@ function SettingsIcon({ section }: { section: SettingsSection }) {
     >
       <path d={iconPaths[section]} />
     </svg>
+  );
+}
+
+function AccountAvatar({
+  imageUrl,
+  initials,
+  label,
+  size = "large",
+}: {
+  imageUrl: string;
+  initials: string;
+  label: string;
+  size?: "large" | "small";
+}) {
+  const sizeClass = size === "large" ? "h-20 w-20 text-3xl" : "h-12 w-12 text-lg";
+  return (
+    <span
+      aria-label={`${label} profile image`}
+      className={`flex shrink-0 items-center justify-center rounded-full border-2 border-[#E5BF5A]/60 bg-[#163452] bg-cover bg-center font-[var(--tgpi-font-display)] font-semibold text-[#F0D58C] ${sizeClass}`}
+      role="img"
+      style={imageUrl ? { backgroundImage: `url(${imageUrl})` } : undefined}
+    >
+      {!imageUrl ? initials : <span className="sr-only">{label}</span>}
+    </span>
   );
 }
 
@@ -282,11 +318,13 @@ export default function TgpiAccountCenter({
   const activeDefinition = settingsSections.find((section) => section.key === activeSection) ?? settingsSections[0];
   const initials = `${identity.firstName.at(0) ?? ""}${identity.lastName.at(0) ?? ""}`.toUpperCase() || "TG";
   const fullName = [identity.firstName, identity.lastName].filter(Boolean).join(" ") || "TGPI member";
+  const currentCountryName = countries.find((country) => country.slug === profile.currentCountry)?.name || profile.currentCountry;
   const sectionSummaries: Record<Exclude<SettingsSection, "overview">, string> = {
     global: profile.profession || (profile.languages.length ? `${profile.languages.length} languages` : "Add your global context"),
     identity: profile.currentCity || profile.currentCountry || "Add personal information",
     notifications: `${Object.values(profile.notifications).filter(Boolean).length} enabled`,
     preferences: `${profile.preferredLanguage} · ${profile.preferredCurrency}`,
+    "public-profile": profile.privacy.visibility === "private" ? "Only you can view it" : "Ready to preview and share",
     privacy: profile.privacy.visibility.charAt(0).toUpperCase() + profile.privacy.visibility.slice(1),
     security: "Password, devices and login methods",
   };
@@ -381,7 +419,7 @@ export default function TgpiAccountCenter({
       <ScreenHeading description="See your identity, plan and connected TGPI systems in one place." section="overview" title="Account overview" />
       <article className="mt-6 overflow-hidden rounded-[26px] bg-[#0B1F3A] p-5 text-white sm:p-7">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
-          <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-full border-2 border-[#E5BF5A]/60 bg-[#163452] font-[var(--tgpi-font-display)] text-3xl font-semibold text-[#F0D58C]">{initials}</div>
+          <AccountAvatar imageUrl={account.avatarUrl} initials={initials} label={fullName} />
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-2">
               <h3 className="truncate font-[var(--tgpi-font-display)] text-3xl font-semibold">{fullName}</h3>
@@ -390,7 +428,10 @@ export default function TgpiAccountCenter({
             <p className="mt-1 text-sm text-[#C8D2DE]">{profile.headline || "Add a professional headline"}</p>
             <p className="mt-3 break-all text-xs text-[#9FAFC0]">{account.email}</p>
           </div>
-          <button className="min-h-11 rounded-xl bg-white px-5 text-xs font-extrabold text-[#0B1F3A] transition hover:bg-[#F4E7BE]" onClick={() => selectSection("identity")} type="button">Edit profile</button>
+          <div className="flex flex-wrap gap-2">
+            <button className="min-h-11 rounded-xl bg-white px-5 text-xs font-extrabold text-[#0B1F3A] transition hover:bg-[#F4E7BE]" onClick={() => selectSection("identity")} type="button">Edit profile</button>
+            <button className="min-h-11 rounded-xl border border-white/15 bg-white/5 px-5 text-xs font-extrabold text-white transition hover:bg-white/10" onClick={() => selectSection("public-profile")} type="button">View public profile</button>
+          </div>
         </div>
         <div className="mt-6 grid gap-3 border-t border-white/10 pt-5 sm:grid-cols-[1fr_auto] sm:items-center">
           <div>
@@ -453,6 +494,13 @@ export default function TgpiAccountCenter({
     activeScreen = (
       <div>
         <ScreenHeading description="Keep your TGPI identity useful, current and safe without storing sensitive documents." section="identity" title="Personal information" />
+        <div className="mt-6">
+          <TgpiAvatarEditor
+            displayName={fullName}
+            initialImageUrl={account.avatarUrl}
+            initials={initials}
+          />
+        </div>
         <div className="mt-6 rounded-[22px] border border-[#DDD7CB] bg-white p-5 sm:p-7">
           <div className="grid gap-5 sm:grid-cols-2">
             <Field label="First name"><input className="tgpi-account-input" maxLength={60} onChange={(event) => updateIdentity({ firstName: event.target.value })} required value={identity.firstName} /></Field>
@@ -480,6 +528,57 @@ export default function TgpiAccountCenter({
             <div className="sm:col-span-2"><p className="text-sm font-extrabold text-[#0B1F3A]">Languages</p><p className="mt-1 text-xs leading-5 text-[#6B7280]">Choose up to eight. The same list updates your personal plan.</p><div className="mt-3 flex flex-wrap gap-2">{languageOptions.map((language) => { const selected = profile.languages.includes(language); return <button aria-pressed={selected} className={`rounded-full border px-3.5 py-2 text-xs font-extrabold transition ${selected ? "border-[#0B1F3A] bg-[#0B1F3A] text-white" : "border-[#D8D2C4] bg-white text-[#566173] hover:border-[#B58A2A]"}`} key={language} onClick={() => toggleLanguage(language)} type="button">{selected ? "✓ " : ""}{language}</button>; })}</div></div>
           </div>
           <div className="mt-7 rounded-2xl border border-[#D9C78D] bg-[#FBF4DE] p-5"><p className="text-sm font-extrabold text-[#0B1F3A]">One canonical personal plan</p><p className="mt-1 text-xs leading-5 text-[#6F6241]">Goals, shortlist, budget, timeline and priorities remain in the plan editor to prevent conflicting recommendations.</p><Link className="mt-4 inline-flex text-xs font-extrabold text-[#76520C]" href="/onboarding">Edit personal plan →</Link></div>
+        </div>
+      </div>
+    );
+  }
+
+  if (activeSection === "public-profile") {
+    activeScreen = (
+      <div>
+        <ScreenHeading description="Control how your global identity appears, preview every shared field and open the exact page other people will see." section="public-profile" title="Public profile" />
+        <div className="mt-6 grid gap-5 xl:grid-cols-[1.15fr_.85fr]">
+          <article className="relative overflow-hidden rounded-[28px] border border-[#173754] bg-[#07182D] p-6 text-white shadow-[0_24px_65px_rgba(11,31,58,0.2)] sm:p-8">
+            <div className="pointer-events-none absolute -right-20 -top-20 h-52 w-52 rounded-full bg-[#B58A2A]/15 blur-3xl" />
+            <div className="relative flex flex-col gap-5 sm:flex-row sm:items-center">
+              <AccountAvatar imageUrl={account.avatarUrl} initials={initials} label={fullName} />
+              <div className="min-w-0 flex-1">
+                <p className="text-[9px] font-extrabold uppercase tracking-[0.18em] text-[#F0D58C]">TGPI Global Profile</p>
+                <h3 className="mt-2 truncate font-[var(--tgpi-font-display)] text-3xl font-semibold">{fullName}</h3>
+                <p className="mt-1 text-sm font-bold text-[#CFD8E3]">{profile.headline || "Add a professional headline"}</p>
+                {profile.privacy.showLocation && (profile.currentCity || currentCountryName) ? <p className="mt-2 text-xs text-[#8FA0B3]">{[profile.currentCity, currentCountryName].filter(Boolean).join(", ")}</p> : null}
+              </div>
+            </div>
+            <p className="relative mt-6 max-w-2xl text-sm leading-7 text-[#AEBBC9]">{profile.bio || "Add a concise biography so people understand your experience, interests and global direction."}</p>
+            <div className="relative mt-6 flex flex-wrap gap-2">
+              {profile.profession ? <span className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-[10px] font-extrabold text-[#D8E1EB]">{profile.profession}</span> : null}
+              {profile.educationLevel ? <span className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-[10px] font-extrabold text-[#D8E1EB]">{profile.educationLevel}</span> : null}
+              {profile.languages.slice(0, 4).map((language) => <span className="rounded-full border border-[#E5B94B]/20 bg-[#E5B94B]/10 px-3 py-2 text-[10px] font-extrabold text-[#F0D58C]" key={language}>{language}</span>)}
+            </div>
+            <div className="relative mt-7 flex flex-wrap items-start gap-3 border-t border-white/10 pt-6">
+              <Link className="inline-flex min-h-11 items-center justify-center rounded-xl border border-white/15 bg-white/5 px-5 text-xs font-extrabold text-white transition hover:bg-white/10" href={account.publicProfileUrl}>Open full profile</Link>
+              {profile.privacy.visibility !== "private" ? <PublicProfileShareButton title={`${fullName} — TGPI Global Profile`} url={account.publicProfileUrl} /> : null}
+            </div>
+          </article>
+
+          <div className="grid content-start gap-4">
+            <article className={`rounded-[24px] border p-5 ${profile.privacy.visibility === "private" ? "border-[#E0CDA0] bg-[#FBF4DE]" : "border-[#B9DDCA] bg-[#ECF7F1]"}`}>
+              <p className="text-[9px] font-extrabold uppercase tracking-[0.18em] text-[#73520F]">Sharing status</p>
+              <h3 className="mt-2 text-lg font-extrabold text-[#0B1F3A]">{profile.privacy.visibility === "public" ? "Anyone with the link" : profile.privacy.visibility === "members" ? "Signed-in TGPI members" : "Visible only to you"}</h3>
+              <p className="mt-2 text-xs leading-5 text-[#686556]">Your email, login methods, billing details and private activities never appear on this profile.</p>
+              <button className="mt-4 text-xs font-extrabold text-[#76520C] underline decoration-[#B58A2A]/40 underline-offset-4" onClick={() => selectSection("privacy")} type="button">Change privacy controls →</button>
+            </article>
+            <article className="rounded-[24px] border border-[#DDD7CB] bg-white p-5">
+              <p className="text-[9px] font-extrabold uppercase tracking-[0.18em] text-[#7A8390]">Shared fields</p>
+              <ul className="mt-4 grid gap-3 text-xs font-bold text-[#0B1F3A]">
+                <li className="flex items-center justify-between gap-4"><span>Name, image, headline and biography</span><span className="text-[#277352]">Included</span></li>
+                <li className="flex items-center justify-between gap-4"><span>Location</span><span>{profile.privacy.showLocation ? "Included" : "Hidden"}</span></li>
+                <li className="flex items-center justify-between gap-4"><span>Global goals</span><span>{profile.privacy.showGoals ? "Included" : "Hidden"}</span></li>
+                <li className="flex items-center justify-between gap-4"><span>Profile progress</span><span>{profile.privacy.showProgress ? "Included" : "Hidden"}</span></li>
+              </ul>
+            </article>
+            {isDirty ? <p className="rounded-2xl border border-[#E0CDA0] bg-[#FFF9E9] px-4 py-3 text-xs font-bold leading-5 text-[#76520C]">Save your pending changes before opening the full public profile so the preview and shared page stay synchronized.</p> : null}
+          </div>
         </div>
       </div>
     );
@@ -550,7 +649,7 @@ export default function TgpiAccountCenter({
 
       <div className="overflow-hidden rounded-[30px] border border-[#D8D2C4] bg-white shadow-[0_28px_80px_rgba(11,31,58,0.1)] lg:grid lg:min-h-[760px] lg:grid-cols-[290px_minmax(0,1fr)]">
         <aside className="hidden border-r border-[#E1DCD2] bg-[#FCFAF5] p-4 lg:flex lg:flex-col">
-          <button className="flex items-center gap-3 rounded-2xl p-3 text-left transition hover:bg-white" onClick={() => selectSection("overview")} type="button"><span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#0B1F3A] font-[var(--tgpi-font-display)] text-lg font-semibold text-[#F0D58C]">{initials}</span><span className="min-w-0"><span className="block truncate text-sm font-extrabold text-[#0B1F3A]">{fullName}</span><span className="mt-0.5 block truncate text-[11px] text-[#727B88]">{account.membership}</span></span></button>
+          <button className="flex items-center gap-3 rounded-2xl p-3 text-left transition hover:bg-white" onClick={() => selectSection("overview")} type="button"><AccountAvatar imageUrl={account.avatarUrl} initials={initials} label={fullName} size="small" /><span className="min-w-0"><span className="block truncate text-sm font-extrabold text-[#0B1F3A]">{fullName}</span><span className="mt-0.5 block truncate text-[11px] text-[#727B88]">{account.membership}</span></span></button>
           <label className="relative mt-3 block"><span className="sr-only">Search settings</span><svg aria-hidden="true" className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#7A8390]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4" /></svg><input className="h-11 w-full rounded-xl border border-[#DDD7CB] bg-white pl-9 pr-3 text-xs text-[#0B1F3A] outline-none transition placeholder:text-[#959CA6] focus:border-[#B58A2A] focus:ring-4 focus:ring-[#B58A2A]/10" onChange={(event) => setQuery(event.target.value)} placeholder="Search settings" value={query} /></label>
           <nav aria-label="Account settings" className="mt-4 space-y-1">
             {filteredSections.map((section) => { const active = section.key === activeSection; return <button aria-current={active ? "page" : undefined} className={`flex w-full items-center gap-3 rounded-xl px-3 py-3 text-left transition ${active ? "bg-[#0B1F3A] text-white shadow-[0_10px_24px_rgba(11,31,58,0.16)]" : "text-[#4F5B6A] hover:bg-white hover:text-[#0B1F3A]"}`} key={section.key} onClick={() => selectSection(section.key)} type="button"><span className={active ? "text-[#F0D58C]" : "text-[#6D7784]"}><SettingsIcon section={section.key} /></span><span className="text-xs font-extrabold">{section.label}</span></button>; })}
@@ -561,7 +660,7 @@ export default function TgpiAccountCenter({
 
         <div className="min-w-0 bg-[#F8F5EE]">
           <div className="sticky top-0 z-30 border-b border-[#DDD7CB] bg-[#FFFDFA]/95 p-3 backdrop-blur lg:hidden">
-            <div className="flex items-center gap-3"><span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#0B1F3A] font-[var(--tgpi-font-display)] font-semibold text-[#F0D58C]">{initials}</span><div className="min-w-0 flex-1"><p className="truncate text-sm font-extrabold text-[#0B1F3A]">{activeDefinition.label}</p><p className="truncate text-[11px] text-[#737C89]">{activeDefinition.description}</p></div>{isDirty ? <span className="h-2.5 w-2.5 rounded-full bg-[#B58A2A]" title="Unsaved changes" /> : null}</div>
+            <div className="flex items-center gap-3"><AccountAvatar imageUrl={account.avatarUrl} initials={initials} label={fullName} size="small" /><div className="min-w-0 flex-1"><p className="truncate text-sm font-extrabold text-[#0B1F3A]">{activeDefinition.label}</p><p className="truncate text-[11px] text-[#737C89]">{activeDefinition.description}</p></div>{isDirty ? <span className="h-2.5 w-2.5 rounded-full bg-[#B58A2A]" title="Unsaved changes" /> : null}</div>
             <nav aria-label="Account settings" className="-mx-3 mt-3 flex gap-2 overflow-x-auto px-3 pb-1">
               {settingsSections.map((section) => { const active = section.key === activeSection; return <button aria-current={active ? "page" : undefined} className={`flex min-w-max items-center gap-2 rounded-full border px-3 py-2 text-[11px] font-extrabold transition ${active ? "border-[#0B1F3A] bg-[#0B1F3A] text-white" : "border-[#DDD7CB] bg-white text-[#596473]"}`} key={section.key} onClick={() => selectSection(section.key)} type="button"><SettingsIcon section={section.key} />{section.label}</button>; })}
             </nav>

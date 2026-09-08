@@ -1,11 +1,35 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import {
+  canViewTgpiProfile,
   getAccountProfileCompletion,
   mergeAccountProfileWithOnboarding,
   normalizeAccountIdentity,
   normalizeTgpiAccountProfile,
 } from "../src/lib/account-profile.ts";
+
+test("enforces public profile visibility for owners, members and visitors", () => {
+  assert.equal(
+    canViewTgpiProfile({ ownerId: "owner", viewerId: "owner", visibility: "private" }),
+    true,
+  );
+  assert.equal(
+    canViewTgpiProfile({ ownerId: "owner", viewerId: "member", visibility: "private" }),
+    false,
+  );
+  assert.equal(
+    canViewTgpiProfile({ ownerId: "owner", viewerId: "member", visibility: "members" }),
+    true,
+  );
+  assert.equal(
+    canViewTgpiProfile({ ownerId: "owner", viewerId: null, visibility: "members" }),
+    false,
+  );
+  assert.equal(
+    canViewTgpiProfile({ ownerId: "owner", viewerId: null, visibility: "public" }),
+    true,
+  );
+});
 
 test("normalizes account identity and profile fields", () => {
   const identity = normalizeAccountIdentity({

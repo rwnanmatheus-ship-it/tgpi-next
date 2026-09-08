@@ -216,3 +216,17 @@ export function getAccountProfileCompletion(
     (signals.filter(Boolean).length / signals.length) * 100,
   );
 }
+
+export function canViewTgpiProfile({
+  ownerId,
+  viewerId,
+  visibility,
+}: {
+  ownerId: string;
+  viewerId?: string | null;
+  visibility: AccountVisibility;
+}) {
+  if (viewerId === ownerId) return true;
+  if (visibility === "public") return true;
+  return visibility === "members" && Boolean(viewerId);
+}
