@@ -22,9 +22,9 @@ import { normalizeOnboardingData } from "@/lib/onboarding";
 import { getControlledPremiumAccessMode } from "@/lib/premium-access.server";
 
 export const metadata: Metadata = {
-  title: "My global workspace — TGPI",
+  title: "Workspace Intelligence Home — TGPI",
   description:
-    "Turn your TGPI global profile into country comparisons, cost planning, documentation research and practical learning actions.",
+    "See your global decision journey, prioritized actions, country shortlist, private progress and connected TGPI identity in one workspace.",
   robots: { index: false, follow: false },
 };
 

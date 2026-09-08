@@ -1,20 +1,20 @@
-import type { Country } from "@/lib/countries";
+import type { Country } from "./countries.ts";
 import {
   createEmptyActivationProgress,
   getCourseProgressStatus,
   getDocumentReviewStatus,
   type ActivationActivity,
   type ActivationStatus,
-} from "@/lib/activation-progress";
+} from "./activation-progress.ts";
 import {
   getComparisonGoalConfig,
   type ComparisonGoal,
-} from "@/lib/tgpi-comparison";
+} from "./tgpi-comparison.ts";
 import type {
   OnboardingGoal,
   OnboardingPriority,
   TgpiOnboardingData,
-} from "@/types/onboarding";
+} from "../types/onboarding.ts";
 
 export type WorkspaceActionStatus = ActivationStatus;
 
@@ -40,18 +40,44 @@ export type WorkspaceProgressItem = {
   label: string;
 };
 
+export type WorkspaceJourneyStageId =
+  | "discover"
+  | "decide"
+  | "prepare"
+  | "develop";
+
+export type WorkspaceJourneyStage = {
+  description: string;
+  href: string;
+  icon: string;
+  id: WorkspaceJourneyStageId;
+  label: string;
+  progress: number;
+  status: WorkspaceActionStatus;
+};
+
 export type GlobalWorkspaceModel = {
+  actionSummary: {
+    completed: number;
+    inProgress: number;
+    needsContext: number;
+    ready: number;
+  };
   activationCompletion: number;
   activationStats: Array<{ label: string; value: string }>;
   actions: WorkspaceAction[];
   compareHref: string;
   comparisonGoal: ComparisonGoal;
   completion: number;
+  currentStageId: WorkspaceJourneyStageId;
   countryFits: WorkspaceCountryFit[];
   goalLabel: string;
+  journey: WorkspaceJourneyStage[];
+  lastSyncedAt?: string;
   planSummary: Array<{ label: string; value: string }>;
   progress: WorkspaceProgressItem[];
   recentActivities: ActivationActivity[];
+  savedCountries: Country[];
   selectedCountryCount: number;
 };
 
@@ -121,6 +147,34 @@ function joinLabels(values: string[], fallback: string) {
   }).format(values);
 }
 
+function boundedPercentage(completed: number, total: number) {
+  if (total <= 0) return 0;
+  return Math.min(100, Math.max(0, Math.round((completed / total) * 100)));
+}
+
+function decisionSignalProgress(status: WorkspaceActionStatus) {
+  if (status === "completed") return 50;
+  if (status === "in_progress") return 25;
+  return 0;
+}
+
+function combineStatuses(
+  statuses: WorkspaceActionStatus[],
+): WorkspaceActionStatus {
+  if (statuses.every((status) => status === "completed")) return "completed";
+  if (
+    statuses.some(
+      (status) => status === "completed" || status === "in_progress",
+    )
+  ) {
+    return "in_progress";
+  }
+  if (statuses.every((status) => status === "needs_attention")) {
+    return "needs_attention";
+  }
+  return "not_started";
+}
+
 export function buildGlobalWorkspaceModel(
   onboarding: TgpiOnboardingData,
   allCountries: Country[],
@@ -128,6 +182,9 @@ export function buildGlobalWorkspaceModel(
 ): GlobalWorkspaceModel {
   const comparisonGoal = getComparisonGoal(onboarding.primaryGoal);
   const selectedCountries = onboarding.targetCountries
+    .map((slug) => allCountries.find((country) => country.slug === slug))
+    .filter((country): country is Country => Boolean(country));
+  const savedCountries = activation.savedCountries
     .map((slug) => allCountries.find((country) => country.slug === slug))
     .filter((country): country is Country => Boolean(country));
   const countryFits = selectedCountries
@@ -318,8 +375,75 @@ export function buildGlobalWorkspaceModel(
   const completedActionCount = actions.filter(
     (action) => action.status === "completed",
   ).length;
+  const documentTotals = documentEntries.reduce(
+    (totals, [, review]) => ({
+      completed: totals.completed + review.completedItemIds.length,
+      total: totals.total + review.totalItems,
+    }),
+    { completed: 0, total: 0 },
+  );
+  const courseTotals = Object.values(activation.courseProgress).reduce(
+    (totals, course) => ({
+      completed: totals.completed + course.completedLessonIds.length,
+      total: totals.total + course.totalLessons,
+    }),
+    { completed: 0, total: 0 },
+  );
+  const decisionProgress =
+    decisionSignalProgress(compareStatus) + decisionSignalProgress(costStatus);
+  const journey: WorkspaceJourneyStage[] = [
+    {
+      description: "Define your goal, shortlist, timing and priorities.",
+      href: "/onboarding",
+      icon: "🧭",
+      id: "discover",
+      label: "Discover",
+      progress: completion,
+      status: profileStatus,
+    },
+    {
+      description: "Compare trade-offs and test the real monthly budget.",
+      href: canCompare ? compareHref : "/country-fit",
+      icon: "⚖️",
+      id: "decide",
+      label: "Decide",
+      progress: decisionProgress,
+      status: combineStatuses([compareStatus, costStatus]),
+    },
+    {
+      description: "Review official pathways and build a document checklist.",
+      href: hasCountry
+        ? `/countries/${primaryCountry.slug}#documents-to-verify`
+        : "/passport",
+      icon: "🛂",
+      id: "prepare",
+      label: "Prepare",
+      progress: boundedPercentage(documentTotals.completed, documentTotals.total),
+      status: documentStatus,
+    },
+    {
+      description: "Develop the practical capabilities your objective needs.",
+      href: "/courses",
+      icon: "🎓",
+      id: "develop",
+      label: "Develop",
+      progress: boundedPercentage(courseTotals.completed, courseTotals.total),
+      status: learningStatus,
+    },
+  ];
+  const currentStage =
+    journey.find((stage) => stage.status !== "completed") ?? journey.at(-1)!;
 
   return {
+    actionSummary: {
+      completed: completedActionCount,
+      inProgress: actions.filter((action) => action.status === "in_progress")
+        .length,
+      needsContext: actions.filter(
+        (action) => action.status === "needs_attention",
+      ).length,
+      ready: actions.filter((action) => action.status === "not_started").length,
+    },
     activationCompletion: completedActionCount * 20,
     activationStats: [
       {
@@ -343,10 +467,13 @@ export function buildGlobalWorkspaceModel(
     compareHref,
     comparisonGoal,
     completion,
+    currentStageId: currentStage.id,
     countryFits,
     goalLabel: onboarding.primaryGoal
       ? goalLabels[onboarding.primaryGoal]
       : "Goal not defined",
+    journey,
+    lastSyncedAt: activation.updatedAt,
     planSummary: [
       {
         label: "Primary goal",
@@ -380,6 +507,7 @@ export function buildGlobalWorkspaceModel(
     ],
     progress,
     recentActivities: activation.activities.slice(0, 5),
+    savedCountries,
     selectedCountryCount: selectedCountries.length,
   };
 }
