@@ -315,3 +315,27 @@ img {
     transition-duration: 0.01ms !important;
   }
 }
+
+.tgpi-account-input {
+  min-height: 3rem;
+  width: 100%;
+  border: 1px solid #d8d2c4;
+  border-radius: 0.8rem;
+  background: #ffffff;
+  padding-inline: 0.9rem;
+  color: #0b1f3a;
+  font-size: 0.875rem;
+  outline: none;
+  transition:
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.tgpi-account-input::placeholder {
+  color: #9aa1ac;
+}
+
+.tgpi-account-input:focus {
+  border-color: #b58a2a;
+  box-shadow: 0 0 0 4px rgb(181 138 42 / 12%);
+}
