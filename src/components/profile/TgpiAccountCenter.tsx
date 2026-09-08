@@ -45,6 +45,7 @@ type TgpiAccountCenterProps = {
 type SaveState = "idle" | "saving" | "saved" | "error";
 type SettingsSection =
   | "overview"
+  | "global-key"
   | "identity"
   | "global"
   | "progress"
@@ -110,6 +111,14 @@ const settingsSections: readonly SettingsSectionDefinition[] = [
     label: "Overview",
     group: "Account center",
     sticker: "⌂",
+  },
+  {
+    description: "Cryptographic identity, fingerprint and verification",
+    key: "global-key",
+    keywords: "global key id cryptographic fingerprint proof blockchain integrity chain verify",
+    label: "Global Key",
+    group: "Account center",
+    sticker: "🗝️",
   },
   {
     description: "Name, biography and location",
@@ -202,6 +211,7 @@ const goalLabels: Record<string, string> = {
 
 const iconPaths: Record<SettingsSection, string> = {
   overview: "M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z",
+  "global-key": "M14.5 9.5a4.5 4.5 0 1 0-4 4L13 16h2v2h2v2h3v-3l-6.5-6.5M7 9.5h.01",
   identity: "M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM4.5 21a7.5 7.5 0 0 1 15 0",
   global: "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18ZM3.5 9h17M3.5 15h17M12 3c4.8 5.1 4.8 12.9 0 18M12 3c-4.8 5.1-4.8 12.9 0 18",
   progress: "M12 3 14.4 8l5.6.8-4 3.9.9 5.5-4.9-2.6-4.9 2.6.9-5.5-4-3.9 5.6-.8L12 3Z",
@@ -363,6 +373,7 @@ export default function TgpiAccountCenter({
   const fullName = [identity.firstName, identity.lastName].filter(Boolean).join(" ") || "TGPI member";
   const currentCountryName = countries.find((country) => country.slug === profile.currentCountry)?.name || profile.currentCountry;
   const sectionSummaries: Record<Exclude<SettingsSection, "overview">, string> = {
+    "global-key": "Integrity chain and encrypted proof",
     global: profile.profession || (profile.languages.length ? `${profile.languages.length} languages` : "Add your global context"),
     identity: profile.currentCity || profile.currentCountry || "Add personal information",
     progress: `${rank.name} · ${rank.points} points`,
@@ -515,11 +526,12 @@ export default function TgpiAccountCenter({
           <GlobalRankBadge rank={rank} size="medium" />
           <span className="ml-4 min-w-0"><span className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#325E83]">Global rank</span><span className="mt-2 block font-[var(--tgpi-font-display)] text-2xl font-semibold text-[#0B1F3A]">{rank.name}</span><span className="mt-2 block text-xs leading-5 text-[#52677A]">{rank.points} points · {rank.nextRank ? `${rank.pointsToNext} to ${rank.nextRank.name}` : "highest rank reached"}</span><span className="mt-3 block text-xs font-extrabold text-[#234D70]">Open rank journey <span aria-hidden="true" className="transition group-hover:translate-x-0.5">→</span></span></span>
         </button>
-        <article className="rounded-[24px] border border-[#DDD7CB] bg-[#F4E7BE] p-5 sm:p-6">
+        <Link className="group rounded-[24px] border border-[#DDD7CB] bg-[#F4E7BE] p-5 transition hover:-translate-y-0.5 hover:border-[#B58A2A] sm:p-6" href="/global-key">
           <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#73520F]">TGPI Global ID</p>
           <p className="mt-3 break-all font-[var(--tgpi-font-display)] text-xl font-semibold text-[#0B1F3A]">{account.globalId}</p>
           <p className="mt-3 text-xs leading-5 text-[#665A38]">Your stable reference across TGPI. It is never a password, recovery code or travel document.</p>
-        </article>
+          <span className="mt-4 inline-flex text-xs font-extrabold text-[#76520C]">Open Integrity Chain <span aria-hidden="true" className="ml-1 transition group-hover:translate-x-0.5">→</span></span>
+        </Link>
       </div>
 
       <div className="mt-6">
@@ -537,6 +549,32 @@ export default function TgpiAccountCenter({
   );
 
   let activeScreen: React.ReactNode = overviewScreen;
+
+  if (activeSection === "global-key") {
+    activeScreen = (
+      <div>
+        <ScreenHeading description="Manage the cryptographic identity, encrypted proof and linked integrity history behind your stable TGPI Global ID." section="global-key" title="Global Key" />
+        <article className="relative mt-6 overflow-hidden rounded-[28px] border border-[#173754] bg-[radial-gradient(circle_at_top_right,rgba(43,112,168,0.34),transparent_42%),#07182D] p-6 text-white shadow-[0_24px_65px_rgba(11,31,58,0.2)] sm:p-8">
+          <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
+            <span aria-hidden="true" className="grid h-16 w-16 shrink-0 place-items-center rounded-[22px] border border-[#E5B94B]/35 bg-[#E5B94B]/10 text-3xl">🗝️</span>
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-wrap items-center gap-2"><p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#F0D58C]">TGPI Integrity Chain V1</p><span className="rounded-full border border-[#72C79D]/30 bg-[#72C79D]/10 px-2.5 py-1 text-[9px] font-extrabold uppercase tracking-[0.12em] text-[#AFE3C7]">Cryptographically protected</span></div>
+              <p className="mt-3 break-all font-mono text-lg font-bold tracking-[0.06em] text-white sm:text-2xl">{account.globalId}</p>
+              <p className="mt-3 max-w-2xl text-xs leading-6 text-[#AEBBC9]">Your existing Global ID remains stable. The Integrity Chain adds signed blocks, an encrypted verification proof and safe rotation without changing login credentials.</p>
+            </div>
+          </div>
+          <div className="mt-7 grid gap-3 border-t border-white/10 pt-6 sm:grid-cols-3">
+            {["Tamper-evident linked history", "Live public proof verification", "No email or private progress exposed"].map((item) => <p className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-xs font-bold text-[#D7E0E8]" key={item}>✓ {item}</p>)}
+          </div>
+          <Link className="mt-6 inline-flex min-h-11 items-center rounded-xl bg-[#E5B94B] px-5 text-xs font-extrabold text-[#07182D] transition hover:bg-[#F0C95F]" href="/global-key">Open Global Key Command Center →</Link>
+        </article>
+        <div className="mt-6 grid gap-4 sm:grid-cols-2">
+          <article className="rounded-[22px] border border-[#DDD7CB] bg-white p-5 sm:p-6"><p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#86621A]">Authentication boundary</p><h3 className="mt-2 text-lg font-extrabold text-[#0B1F3A]">Clerk remains the security authority.</h3><p className="mt-3 text-xs leading-6 text-[#667085]">Passwords, MFA, passkeys, recovery and active sessions never enter the TGPI cryptographic proof.</p><button className="mt-4 text-xs font-extrabold text-[#76520C]" onClick={() => selectSection("security")} type="button">Open login security →</button></article>
+          <article className="rounded-[22px] border border-[#D7C68F] bg-[#FBF4DE] p-5 sm:p-6"><p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#73520F]">Transparent technology</p><h3 className="mt-2 text-lg font-extrabold text-[#0B1F3A]">Blockchain-style, not a public blockchain.</h3><p className="mt-3 text-xs leading-6 text-[#665A38]">V1 uses authenticated encryption and linked cryptographic hashes. It is not a token, wallet, NFT or government credential.</p></article>
+        </div>
+      </div>
+    );
+  }
 
   if (activeSection === "identity") {
     activeScreen = (

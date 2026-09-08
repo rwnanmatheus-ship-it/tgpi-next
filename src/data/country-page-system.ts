@@ -112,8 +112,8 @@ export const COUNTRY_SYSTEM_PATH = [
     number: "05",
     label: "Prove",
     title: "Global Key",
-    description: "Keep goals, progress and evidence in one global identity.",
-    href: "/profile",
+    description: "Connect goals, progress and evidence to a verifiable cryptographic identity.",
+    href: "/global-key",
   },
 ] as const;
 

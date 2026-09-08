@@ -101,10 +101,10 @@ export const homeSystemStages: ReadonlyArray<HomeSystemStage> = [
     number: "05",
     title: "Prove",
     product: "Global Key",
-    description: "Keep progress, learning records and next actions connected to one global identity.",
-    outcome: "Portable evidence of progress",
-    href: "/profile",
-    action: "Create a Global Key",
+    description: "Connect progress and learning to a cryptographic identity with an encrypted proof and tamper-evident integrity chain.",
+    outcome: "Verifiable identity continuity",
+    href: "/global-key",
+    action: "Open Global Key",
   },
 ];
 

@@ -501,6 +501,7 @@ export default function GlobalWorkspaceOS({
                 <div className="mt-3"><ProgressBar label="Global profile completeness" value={identity.profileCompletion} /></div>
                 <p className="mt-4 break-all text-[11px] text-[#7C8EA2]">{identity.globalId}</p>
                 <div className="mt-4 grid gap-2 sm:grid-cols-2 2xl:grid-cols-1">
+                  <Link className="rounded-xl border border-[#E5B94B]/30 bg-[#E5B94B]/10 px-3 py-3 text-center text-xs font-extrabold text-[#F0D58C] transition hover:border-[#E5B94B]/55" href="/global-key">Open Global Key</Link>
                   <Link className="rounded-xl border border-white/10 px-3 py-3 text-center text-xs font-extrabold text-white transition hover:border-[#E5B94B]/35" href="/profile/security">Edit profile</Link>
                   <Link className="rounded-xl bg-[#E5B94B] px-3 py-3 text-center text-xs font-extrabold text-[#07182D] transition hover:bg-[#F0C95F]" href={identity.publicProfileUrl}>View profile</Link>
                 </div>

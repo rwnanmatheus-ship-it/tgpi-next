@@ -1,5 +1,6 @@
 export type SuperAppModuleId =
   | "workspace"
+  | "global-key"
   | "country-fit"
   | "countries"
   | "compare"
@@ -32,6 +33,16 @@ export const SUPER_APP_MODULES: readonly SuperAppModule[] = [
     description: "Your decisions, progress and global identity.",
     keywords: ["dashboard", "profile", "progress", "identity", "rank"],
     matchPrefixes: ["/profile"],
+  },
+  {
+    id: "global-key",
+    href: "/global-key",
+    icon: "🗝️",
+    label: "Global Key",
+    shortLabel: "Global Key",
+    description: "Verify your cryptographic identity and integrity chain.",
+    keywords: ["identity", "cryptographic", "proof", "fingerprint", "verify"],
+    matchPrefixes: ["/global-key"],
   },
   {
     id: "country-fit",
@@ -116,7 +127,8 @@ export const SUPER_APP_MODULES: readonly SuperAppModule[] = [
 ] as const;
 
 const NEXT_MODULE: Record<SuperAppModuleId, SuperAppModuleId> = {
-  workspace: "country-fit",
+  workspace: "global-key",
+  "global-key": "country-fit",
   "country-fit": "compare",
   countries: "country-fit",
   compare: "plan",

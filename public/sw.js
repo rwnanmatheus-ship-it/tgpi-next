@@ -80,6 +80,7 @@ self.addEventListener("fetch", (event) => {
     url.pathname.startsWith("/sign-in") ||
     url.pathname.startsWith("/sign-up") ||
     url.pathname.startsWith("/profile") ||
+    url.pathname.startsWith("/global-key") ||
     url.pathname.startsWith("/member/") ||
     url.pathname.startsWith("/onboarding") ||
     url.pathname.startsWith("/upgrade") ||

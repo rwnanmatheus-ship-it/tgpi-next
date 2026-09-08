@@ -59,6 +59,7 @@ test("service worker caches only the public shell and hashed build assets", () =
   assert.match(source, /fetch\(request\)\.catch/);
   assert.match(source, /url\.pathname\.startsWith\("\/api\/"\)/);
   assert.match(source, /url\.pathname\.startsWith\("\/profile"\)/);
+  assert.match(source, /url\.pathname\.startsWith\("\/global-key"\)/);
   assert.match(source, /url\.pathname\.startsWith\("\/_next\/image"\)/);
   assert.match(source, /url\.pathname\.startsWith\("\/_next\/static\/"\)/);
   assert.doesNotMatch(source, /cache\.put\([^)]*\/api\//);

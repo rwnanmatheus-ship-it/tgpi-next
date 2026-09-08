@@ -26,7 +26,7 @@ const footerGroups: ReadonlyArray<{
       { label: "TGPI Learning", href: "/courses" },
       { label: "Documents OS", href: "/passport" },
       { label: "Certificates", href: "/certificates" },
-      { label: "Global Key", href: "/profile" },
+      { label: "Global Key", href: "/global-key" },
     ],
   },
   {
