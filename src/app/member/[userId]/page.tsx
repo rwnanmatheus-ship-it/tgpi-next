@@ -4,14 +4,21 @@ import { auth, clerkClient } from "@clerk/nextjs/server";
 import { notFound } from "next/navigation";
 import { cache } from "react";
 import PublicProfileShareButton from "@/components/profile/PublicProfileShareButton";
+import GlobalRankBadge from "@/components/profile/GlobalRankBadge";
 import {
   canViewTgpiProfile,
   getAccountProfileCompletion,
   mergeAccountProfileWithOnboarding,
   normalizeAccountIdentity,
 } from "@/lib/account-profile";
+import {
+  normalizeActivationProgress,
+  TGPI_ACTIVATION_METADATA_KEY,
+} from "@/lib/activation-progress";
 import { formatTgpiGlobalId } from "@/lib/auth/guards";
 import { getAllCountries } from "@/lib/countries";
+import { GLOBAL_RANK_DISCLAIMER, getGlobalRank } from "@/lib/global-ranks";
+import { buildGlobalWorkspaceModel } from "@/lib/global-workspace";
 import { normalizeOnboardingData } from "@/lib/onboarding";
 
 type PublicProfilePageProps = {
@@ -92,6 +99,9 @@ export default async function PublicProfilePage({ params }: PublicProfilePagePro
     firstName: user.firstName,
     lastName: user.lastName,
   });
+  const activation = normalizeActivationProgress(
+    user.privateMetadata[TGPI_ACTIVATION_METADATA_KEY],
+  );
 
   const canView = canViewTgpiProfile({
     ownerId: user.id,
@@ -103,12 +113,26 @@ export default async function PublicProfilePage({ params }: PublicProfilePagePro
   const membersOnly = !canView && profile.privacy.visibility === "members";
   const fullName = [identity.firstName, identity.lastName].filter(Boolean).join(" ") || "TGPI member";
   const initials = `${identity.firstName.at(0) ?? ""}${identity.lastName.at(0) ?? ""}`.toUpperCase() || "TG";
-  const countryMap = new Map(getAllCountries().map((country) => [country.slug, country.name]));
-  const currentCountry = countryMap.get(profile.currentCountry) || profile.currentCountry;
+  const countries = getAllCountries();
+  const countryMap = new Map(countries.map((country) => [country.slug, country]));
+  const currentCountry = countryMap.get(profile.currentCountry);
   const targetCountries = onboarding.targetCountries
-    .map((slug) => countryMap.get(slug) || slug)
+    .flatMap((slug) => {
+      const country = countryMap.get(slug);
+      return country ? [country] : [];
+    })
     .slice(0, 5);
   const profileCompletion = getAccountProfileCompletion(identity, profile);
+  const workspaceModel = buildGlobalWorkspaceModel(onboarding, countries, activation);
+  const rank = getGlobalRank({
+    activationCompletion: workspaceModel.activationCompletion,
+    comparisons: activation.comparisons.length,
+    documentReviews: Object.keys(activation.documentReviews).length,
+    learningPaths: Object.keys(activation.courseProgress).length,
+    planCompletion: workspaceModel.completion,
+    profileCompletion,
+    savedCountries: activation.savedCountries.length,
+  });
   const publicPath = `/member/${user.id}`;
   const publicDetails = [
     profile.profession ? { label: "Field", value: profile.profession } : null,
@@ -145,7 +169,7 @@ export default async function PublicProfilePage({ params }: PublicProfilePagePro
             </div>
             <h1 className="mt-5 font-[var(--tgpi-font-display)] text-4xl font-semibold leading-none tracking-[-0.035em] sm:text-6xl">{fullName}</h1>
             <p className="mt-4 max-w-2xl text-base font-bold text-[#D6DFE9] sm:text-lg">{profile.headline || "Global learner and decision-maker"}</p>
-            {profile.privacy.showLocation && (profile.currentCity || currentCountry) ? <p className="mt-3 text-sm text-[#96A7BA]">{[profile.currentCity, currentCountry].filter(Boolean).join(", ")}</p> : null}
+            {profile.privacy.showLocation && (profile.currentCity || currentCountry) ? <p className="mt-3 text-sm text-[#96A7BA]">{[profile.currentCity, currentCountry ? `${currentCountry.emoji} ${currentCountry.name}` : profile.currentCountry].filter(Boolean).join(", ")}</p> : null}
             <p className="mt-5 max-w-3xl text-sm leading-7 text-[#AEBBC9]">{profile.bio || "This member is building a connected global identity through learning, verified research and informed international decisions."}</p>
           </div>
           <div className="flex flex-col gap-2 lg:items-end">
@@ -172,7 +196,8 @@ export default async function PublicProfilePage({ params }: PublicProfilePagePro
               <article className="rounded-[28px] border border-[#E5B94B]/20 bg-[#0D1D30] p-6 sm:p-8">
                 <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#E5B94B]">International direction</p>
                 <h2 className="mt-3 font-[var(--tgpi-font-display)] text-3xl font-semibold">{goalLabels[onboarding.primaryGoal] || "Exploring global possibilities"}</h2>
-                <p className="mt-4 text-sm leading-7 text-[#AEBBC9]">{targetCountries.length ? `Current country shortlist: ${targetCountries.join(", ")}.` : "A country shortlist has not been shared yet."}</p>
+                <p className="mt-4 text-sm leading-7 text-[#AEBBC9]">{targetCountries.length ? "Current country shortlist:" : "A country shortlist has not been shared yet."}</p>
+                {targetCountries.length ? <div className="mt-4 flex flex-wrap gap-2">{targetCountries.map((country) => <Link className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-xs font-extrabold text-[#E5ECF3] transition hover:border-[#E5B94B]/40" href={`/countries/${country.slug}`} key={country.slug}>{country.emoji} {country.name}</Link>)}</div> : null}
                 <Link className="mt-6 inline-flex text-xs font-extrabold text-[#F0D58C]" href="/countries">Explore country intelligence →</Link>
               </article>
             ) : null}
@@ -186,9 +211,11 @@ export default async function PublicProfilePage({ params }: PublicProfilePagePro
             </article>
 
             {profile.privacy.showProgress ? (
-              <article className="rounded-[28px] border border-white/10 bg-[#0A1726] p-6">
-                <div className="flex items-end justify-between gap-3"><div><p className="text-[9px] font-extrabold uppercase tracking-[0.18em] text-[#8091A4]">Profile readiness</p><p className="mt-2 text-3xl font-extrabold">{profileCompletion}%</p></div><span className="text-xs font-extrabold text-[#9FD5BD]">Member controlled</span></div>
+              <article className="overflow-hidden rounded-[28px] border border-[#E5B94B]/20 bg-[radial-gradient(circle_at_top_right,rgba(42,105,157,0.3),transparent_45%),#0A1726] p-6">
+                <div className="flex items-center gap-4"><GlobalRankBadge rank={rank} size="medium" /><div><p className="text-[9px] font-extrabold uppercase tracking-[0.18em] text-[#E5B94B]">TGPI Global Rank</p><p className="mt-1 font-[var(--tgpi-font-display)] text-2xl font-semibold">{rank.name}</p><p className="mt-1 text-xs text-[#96A7BA]">{rank.points} / 1,000 points</p></div></div>
+                <div className="mt-5 flex items-end justify-between gap-3"><div><p className="text-[9px] font-extrabold uppercase tracking-[0.18em] text-[#8091A4]">Profile readiness</p><p className="mt-2 text-2xl font-extrabold">{profileCompletion}%</p></div><span className="text-xs font-extrabold text-[#9FD5BD]">Member controlled</span></div>
                 <div className="mt-4 h-2 overflow-hidden rounded-full bg-white/10"><div className="h-full rounded-full bg-[#E5B94B]" style={{ width: `${profileCompletion}%` }} /></div>
+                <p className="mt-4 text-[10px] leading-5 text-[#7F91A4]">{GLOBAL_RANK_DISCLAIMER}</p>
               </article>
             ) : null}
 

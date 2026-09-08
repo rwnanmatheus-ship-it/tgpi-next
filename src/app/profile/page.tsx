@@ -16,6 +16,7 @@ import {
   TGPI_BILLING_METADATA_KEY,
 } from "@/lib/billing";
 import { getAllCountries } from "@/lib/countries";
+import { getGlobalRank } from "@/lib/global-ranks";
 import { buildGlobalWorkspaceModel } from "@/lib/global-workspace";
 import { normalizeOnboardingData } from "@/lib/onboarding";
 import { getControlledPremiumAccessMode } from "@/lib/premium-access.server";
@@ -80,6 +81,15 @@ export default async function ProfilePage({
     onboarding,
   );
   const profileCompletion = getAccountProfileCompletion(identity, accountProfile);
+  const rank = getGlobalRank({
+    activationCompletion: workspaceModel.activationCompletion,
+    comparisons: activation.comparisons.length,
+    documentReviews: Object.keys(activation.documentReviews).length,
+    learningPaths: Object.keys(activation.courseProgress).length,
+    planCompletion: workspaceModel.completion,
+    profileCompletion,
+    savedCountries: activation.savedCountries.length,
+  });
 
   return (
     <GlobalWorkspaceOS
@@ -95,6 +105,7 @@ export default async function ProfilePage({
       }}
       model={workspaceModel}
       onboardingCompleted={params.onboarding === "completed"}
+      rank={rank}
     />
   );
 }
