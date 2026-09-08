@@ -87,10 +87,10 @@ export default function Navbar() {
 
           <div className="hidden items-center gap-3 lg:flex">
             <Show when="signed-in">
-              <Link href="/notifications" aria-label="Open notifications" className="grid h-10 w-10 place-items-center rounded-full border border-[var(--tgpi-border)] bg-white text-[var(--tgpi-navy)] transition hover:border-[var(--tgpi-gold)]">
-                <span aria-hidden="true">◌</span>
+              <Link href="/notifications" aria-label="Open notifications" title="Notifications" className="grid h-11 w-11 place-items-center rounded-2xl border border-[var(--tgpi-border)] bg-white text-[var(--tgpi-navy)] shadow-[var(--tgpi-shadow-sm)] transition hover:-translate-y-0.5 hover:border-[var(--tgpi-gold)] hover:bg-[var(--tgpi-gold-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]">
+                <span aria-hidden="true">🔔</span>
               </Link>
-              <Link href="/profile" className="px-2 py-2 text-sm font-bold text-[var(--tgpi-navy)]">Workspace</Link>
+              <Link href="/profile" className="inline-flex min-h-11 items-center gap-2 rounded-2xl border border-[var(--tgpi-border)] bg-white px-4 py-2 text-sm font-extrabold text-[var(--tgpi-navy)] shadow-[var(--tgpi-shadow-sm)] transition hover:-translate-y-0.5 hover:border-[var(--tgpi-gold)] hover:bg-[var(--tgpi-gold-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"><span aria-hidden="true">✦</span> Workspace</Link>
               <UserButton
                 userProfileMode="navigation"
                 userProfileUrl="/profile/security"

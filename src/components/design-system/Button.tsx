@@ -35,7 +35,7 @@ const sizeClasses: Record<ButtonSize, string> = {
 };
 
 const baseClasses =
-  "inline-flex items-center justify-center rounded-[var(--tgpi-radius-sm)] border font-black transition duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--tgpi-gold)] disabled:cursor-not-allowed disabled:opacity-50";
+  "inline-flex items-center justify-center gap-2 rounded-[var(--tgpi-radius-sm)] border font-black shadow-[var(--tgpi-shadow-sm)] transition duration-200 hover:-translate-y-0.5 active:translate-y-0 active:shadow-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--tgpi-gold)] disabled:transform-none disabled:cursor-not-allowed disabled:opacity-50";
 
 export function Button(props: ButtonProps) {
   const {

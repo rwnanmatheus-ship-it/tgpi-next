@@ -9,6 +9,7 @@
     "test:intelligence": "node --experimental-strip-types --test scripts/intelligence.test.mjs scripts/intelligence-plan.test.mjs scripts/intelligence-dossiers.test.mjs scripts/intelligence-worksheet.test.mjs",
     "test:account": "node --experimental-strip-types --test scripts/account-profile.test.mjs scripts/global-ranks.test.mjs",
     "test:mobile": "node --experimental-strip-types --test scripts/mobile-experience.test.mjs",
+    "test:super-app": "node --experimental-strip-types --test scripts/super-app.test.mjs",
     "typecheck": "tsc --noEmit",
     "build": "next build",
     "start": "next start",

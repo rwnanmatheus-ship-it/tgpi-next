@@ -1,28 +1,21 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Show } from "@clerk/nextjs";
 import BrandCrest from "@/components/BrandCrest";
-import MobileIcon, { type MobileIconName } from "./MobileIcon";
+import MobileIcon from "./MobileIcon";
 import { isFocusedMobileRoute, isMobileRouteActive, searchMobileCountries, type MobileCountry } from "@/lib/mobile-experience";
+import { isSuperAppRouteActive, SUPER_APP_MODULES } from "@/lib/super-app";
 
-const destinations: ReadonlyArray<{ href: string; label: string; icon: MobileIconName }> = [
-  { href: "/", label: "Home", icon: "home" },
-  { href: "/countries", label: "Explore", icon: "globe" },
-  { href: "/compare", label: "Compare", icon: "compare" },
-  { href: "/courses", label: "Learn", icon: "book" },
-  { href: "/profile", label: "My Key", icon: "key" },
-];
-
-const menuLinks: ReadonlyArray<{ href: string; title: string; detail: string; icon: MobileIconName }> = [
-  { href: "/countries", title: "Explore the world", detail: "195 country profiles", icon: "globe" },
-  { href: "/compare", title: "Compare your options", detail: "Understand the trade-offs", icon: "compare" },
-  { href: "/passport", title: "Prepare your documents", detail: "Build your evidence checklist", icon: "file" },
-  { href: "/courses", title: "Build your capabilities", detail: "Practical learning for life abroad", icon: "book" },
-  { href: "/onboarding", title: "Find your starting point", detail: "Connect your goal to a plan", icon: "spark" },
-  { href: "/pricing", title: "Explore Premium", detail: "See what each plan includes", icon: "key" },
+const destinations: ReadonlyArray<{ href: string; label: string; emoji: string }> = [
+  { href: "/countries", label: "Countries", emoji: "🌍" },
+  { href: "/country-fit", label: "Country Fit", emoji: "🧭" },
+  { href: "/compare", label: "Compare", emoji: "⚖️" },
+  { href: "/courses", label: "Learning", emoji: "🎓" },
+  { href: "/profile", label: "My TGPI", emoji: "✦" },
 ];
 
 export default function MobileNavigation() {
@@ -115,12 +108,12 @@ function MobileNavigationContent({ pathname }: { pathname: string }) {
       </header>
 
       {!focused && <nav className="tgpi-mobile mobile-dock" aria-label="Mobile primary navigation" data-keyboard={keyboardOpen ? "open" : "closed"}>
-        {destinations.map(({ href, label, icon }) => <Link key={href} href={href} prefetch={false} aria-current={isMobileRouteActive(pathname, href) ? "page" : undefined}><span><MobileIcon name={icon} /></span><span>{label}</span></Link>)}
+        {destinations.map(({ href, label, emoji }) => <Link key={href} href={href} prefetch={false} aria-current={isMobileRouteActive(pathname, href) ? "page" : undefined}><span className="mobile-dock-emoji" aria-hidden="true">{emoji}</span><span>{label}</span></Link>)}
       </nav>}
 
       <dialog ref={dialog} className="mobile-sheet" aria-labelledby="mobile-sheet-title" onCancel={() => setMode(null)} onClick={(event) => { if (event.target === event.currentTarget) setMode(null); }}>
         <div className="mobile-sheet-content">
-          <div className="mobile-sheet-heading"><div><p className="mobile-eyebrow">THE GLOBAL POLYMATH INSTITUTE</p><h2 id="mobile-sheet-title">{mode === "search" ? "Where will you go?" : "Your next move."}</h2></div><button type="button" className="mobile-icon-button" aria-label="Close mobile panel" onClick={() => setMode(null)}><MobileIcon name="close" /></button></div>
+          <div className="mobile-sheet-heading"><div><p className="mobile-eyebrow">TGPI INTELLIGENCE OPERATING SYSTEM</p><h2 id="mobile-sheet-title">{mode === "search" ? "Where will you go?" : "Your Super App."}</h2></div><button type="button" className="mobile-icon-button" aria-label="Close mobile panel" onClick={() => setMode(null)}><MobileIcon name="close" /></button></div>
           {mode === "search" ? <div className="mobile-search-panel">
             <label htmlFor="mobile-country-search">Find a country or capital</label>
             <div className="mobile-search-field"><MobileIcon name="search" /><input id="mobile-country-search" type="search" value={query} placeholder="Try Portugal, Tokyo or Europe" autoComplete="off" enterKeyHint="search" onChange={(event) => setQuery(event.target.value)} /></div>
@@ -129,9 +122,19 @@ function MobileNavigationContent({ pathname }: { pathname: string }) {
             {query.trim() && loadState === "ready" ? <div className="mobile-search-results">{results.map((country) => <Link key={country.slug} href={`/countries/${country.slug}`} onClick={() => setMode(null)} prefetch={false}><span aria-hidden="true">{country.emoji}</span><span><strong>{country.name}</strong><small>{country.capital} · {country.region}</small></span><MobileIcon name="chevron" /></Link>)}{results.length === 0 && <p>No matches yet. Try a country name, capital or region.</p>}</div> : <div className="mobile-suggestion-list">{["Portugal", "Canada", "Japan", "Spain"].map((name) => <button key={name} type="button" onClick={() => setQuery(name)}>{name}<MobileIcon name="arrow" /></button>)}</div>}
             <Link href="/countries#country-explorer" className="mobile-text-link" onClick={() => setMode(null)}>Browse all 195 country profiles <MobileIcon name="arrow" /></Link>
           </div> : <>
-            <nav className="mobile-menu-links" aria-label="Explore TGPI">{menuLinks.map(({ href, title, detail, icon }) => <Link key={href} href={href} onClick={() => setMode(null)} prefetch={false}><span className="mobile-menu-icon"><MobileIcon name={icon} /></span><span><strong>{title}</strong><small>{detail}</small></span><MobileIcon name="chevron" /></Link>)}</nav>
+            <section className="mobile-super-app-visual" aria-label="TGPI connected intelligence">
+              <Image src="/images/super-app/tgpi-intelligence-network-v1.webp" alt="" fill sizes="100vw" className="mobile-super-app-visual-image" />
+              <div className="mobile-super-app-visual-shade" />
+              <div className="mobile-super-app-visual-content"><span>ONE CONNECTED SYSTEM</span><strong>From evidence to action.</strong><small>Your identity, decisions and learning stay connected.</small></div>
+            </section>
+            <nav className="mobile-super-app-grid" aria-label="TGPI Super App modules">
+              {SUPER_APP_MODULES.map((module) => {
+                const active = isSuperAppRouteActive(pathname, module);
+                return <Link key={module.id} href={module.href} onClick={() => setMode(null)} prefetch={false} aria-current={active ? "page" : undefined}><span aria-hidden="true">{module.icon}</span><strong>{module.shortLabel}</strong><small>{active ? "Open now" : module.description}</small></Link>;
+              })}
+            </nav>
             <div className="mobile-member-card"><MobileIcon name="key" /><div><strong>One Global Key. Every next step.</strong><p>Connect your learning, countries and preparation.</p></div><Show when="signed-out"><Link className="mobile-primary-button" href="/sign-up" onClick={() => setMode(null)}>Create your free Global Key <MobileIcon name="arrow" /></Link><Link className="mobile-text-link" href="/sign-in" onClick={() => setMode(null)}>Already a member? Sign in</Link></Show><Show when="signed-in"><Link href="/profile" className="mobile-primary-button" onClick={() => setMode(null)}>Continue to your workspace <MobileIcon name="arrow" /></Link></Show></div>
-            <div className="mobile-menu-footer"><Link href="/about" onClick={() => setMode(null)}>About TGPI</Link><Link href="/authority" onClick={() => setMode(null)}>Methodology</Link><Link href="/privacy" onClick={() => setMode(null)}>Privacy</Link></div>
+            <div className="mobile-menu-footer"><Link href="/pricing" onClick={() => setMode(null)}>Premium</Link><Link href="/about" onClick={() => setMode(null)}>About TGPI</Link><Link href="/authority" onClick={() => setMode(null)}>Methodology</Link><Link href="/privacy" onClick={() => setMode(null)}>Privacy</Link></div>
           </>}
         </div>
       </dialog>

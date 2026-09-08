@@ -9,6 +9,7 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { tgpiClerkAppearance } from "@/lib/auth/clerk-appearance";
 import MobileNavigation from "@/components/mobile/MobileNavigation";
 import MobileContentFrame from "@/components/mobile/MobileContentFrame";
+import SuperAppLauncher from "@/components/super-app/SuperAppLauncher";
 
 const displayFont = Cormorant_Garamond({
   subsets: ["latin"],
@@ -62,6 +63,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <a href="#main-content" className="sr-only fixed left-4 top-4 z-[100] rounded-xl bg-[var(--tgpi-gold)] px-4 py-3 text-sm font-extrabold text-[var(--tgpi-navy-deep)] shadow-lg transition focus:not-sr-only">Skip to content</a>
           <Navbar />
           <MobileNavigation />
+          <SuperAppLauncher />
           <MobileContentFrame>{children}</MobileContentFrame>
           <GlobalFooter />
         </ClerkProvider>
