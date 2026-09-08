@@ -14,37 +14,29 @@ import {
   verifyGlobalKeyChain,
 } from "@/lib/global-key-crypto";
 import {
+  createBaseAnchorExplorerUrl,
+  createGlobalKeyAnchorLeaf,
+  normalizeGlobalKeyAnchorRecord,
+} from "@/lib/global-key-anchor";
+import {
+  isBaseMainnetAnchorConfigured,
+  verifyGlobalKeyBaseAnchor,
+} from "@/lib/global-key-anchor.server";
+import {
+  getGlobalKeySecretForSlot,
+  getPrimaryGlobalKeyMaterial,
+} from "@/lib/global-key-secrets.server";
+import {
+  TGPI_GLOBAL_KEY_ANCHOR_METADATA_KEY,
   TGPI_GLOBAL_KEY_METADATA_KEY,
-  type GlobalKeySlot,
   type GlobalKeyVerification,
+  type TgpiGlobalKeyAnchorView,
   type TgpiGlobalKeyRecord,
   type TgpiGlobalKeyView,
 } from "@/lib/global-key";
 
 const MAX_GLOBAL_KEY_METADATA_BYTES = 4_000;
 const MAX_PRIVATE_METADATA_BYTES = 7_500;
-
-function getSecretForSlot(slot: GlobalKeySlot) {
-  const secret =
-    slot === "a"
-      ? process.env.TGPI_GLOBAL_KEY_SECRET?.trim()
-      : process.env.CLERK_SECRET_KEY?.trim();
-
-  if (!secret) {
-    throw new GlobalKeyIntegrityError(
-      "Global Key signing material is unavailable.",
-    );
-  }
-  return secret;
-}
-
-function getPrimaryKeyMaterial() {
-  const dedicatedSecret = process.env.TGPI_GLOBAL_KEY_SECRET?.trim();
-  if (dedicatedSecret) {
-    return { secret: dedicatedSecret, slot: "a" as const };
-  }
-  return { secret: getSecretForSlot("b"), slot: "b" as const };
-}
 
 function ensureMetadataLimit(record: TgpiGlobalKeyRecord) {
   if (
@@ -79,17 +71,32 @@ function withGlobalKeyMetadata(
 
 function buildView(
   record: TgpiGlobalKeyRecord,
+  anchorValue: unknown,
   userId: string,
 ): TgpiGlobalKeyView {
-  const secret = getSecretForSlot(record.keySlot);
+  const secret = getGlobalKeySecretForSlot(record.keySlot);
   if (!verifyGlobalKeyChain({ expectedKeyId: record.keyId, record, secret })) {
     throw new GlobalKeyIntegrityError(
       "The Global Key integrity chain requires review.",
     );
   }
-  const proof = createGlobalKeyProof({ record, secret, userId });
+  const currentAnchorRecord = getCurrentGlobalKeyAnchorRecord({
+    anchorValue,
+    record,
+  });
+  const proof = createGlobalKeyProof({
+    ...(currentAnchorRecord ? { anchor: currentAnchorRecord } : {}),
+    record,
+    secret,
+    userId,
+  });
+  const anchor = getGlobalKeyAnchorView({
+    anchorRecord: currentAnchorRecord,
+    configured: isBaseMainnetAnchorConfigured(),
+  });
 
   return {
+    anchor,
     blocks: record.events.map((event) => ({
       hash: event.hash,
       previousHash: event.previousHash,
@@ -106,6 +113,63 @@ function buildView(
     status: "active",
     verifyPath: `/verify/global-key?proof=${encodeURIComponent(proof)}`,
   };
+}
+
+function getGlobalKeyAnchorView({
+  anchorRecord,
+  configured,
+}: {
+  anchorRecord: ReturnType<typeof normalizeGlobalKeyAnchorRecord>;
+  configured: boolean;
+}): TgpiGlobalKeyAnchorView {
+  if (!anchorRecord) {
+    return { status: configured ? "awaiting_anchor" : "activation_pending" };
+  }
+  const explorerUrl = createBaseAnchorExplorerUrl(anchorRecord.transactionHash);
+  if (!explorerUrl) {
+    return { status: configured ? "awaiting_anchor" : "activation_pending" };
+  }
+
+  return {
+    anchoredAt: anchorRecord.anchoredAt,
+    batchId: anchorRecord.batchId,
+    blockNumber: anchorRecord.blockNumber,
+    chainId: anchorRecord.chainId,
+    explorerUrl,
+    leaf: anchorRecord.leaf,
+    memberCount: anchorRecord.memberCount,
+    merkleProof: anchorRecord.merkleProof,
+    network: anchorRecord.network,
+    root: anchorRecord.root,
+    signerAddress: anchorRecord.signerAddress,
+    status: "confirmed",
+    transactionHash: anchorRecord.transactionHash,
+  };
+}
+
+function getCurrentGlobalKeyAnchorRecord({
+  anchorValue,
+  record,
+}: {
+  anchorValue: unknown;
+  record: TgpiGlobalKeyRecord;
+}) {
+  const anchor = normalizeGlobalKeyAnchorRecord(anchorValue);
+  const currentHash = record.events.at(-1)?.hash;
+  if (
+    !anchor ||
+    anchor.revision !== record.revision ||
+    anchor.eventHash !== currentHash
+  ) {
+    return null;
+  }
+  const expectedLeaf = createGlobalKeyAnchorLeaf({
+    batchId: anchor.batchId,
+    eventHash: anchor.eventHash,
+    keyId: record.keyId,
+    revision: anchor.revision,
+  });
+  return expectedLeaf === anchor.leaf ? anchor : null;
 }
 
 export async function getOrCreateGlobalKey(userId: string) {
@@ -126,10 +190,14 @@ export async function getOrCreateGlobalKey(userId: string) {
         "The existing Global Key identity requires an integrity review.",
       );
     }
-    return buildView(existing, userId);
+    return buildView(
+      existing,
+      user.privateMetadata[TGPI_GLOBAL_KEY_ANCHOR_METADATA_KEY],
+      userId,
+    );
   }
 
-  const keyMaterial = getPrimaryKeyMaterial();
+  const keyMaterial = getPrimaryGlobalKeyMaterial();
   const record = ensureMetadataLimit(
     issueGlobalKey({
       keyId,
@@ -142,7 +210,11 @@ export async function getOrCreateGlobalKey(userId: string) {
     privateMetadata: withGlobalKeyMetadata(user.privateMetadata, record),
   });
 
-  return buildView(record, userId);
+  return buildView(
+    record,
+    user.privateMetadata[TGPI_GLOBAL_KEY_ANCHOR_METADATA_KEY],
+    userId,
+  );
 }
 
 export async function rotateUserGlobalKey(userId: string) {
@@ -157,14 +229,18 @@ export async function rotateUserGlobalKey(userId: string) {
     );
   }
 
-  const secret = getSecretForSlot(record.keySlot);
+  const secret = getGlobalKeySecretForSlot(record.keySlot);
   const rotated = ensureMetadataLimit(rotateGlobalKey({ record, secret }));
 
   await client.users.updateUserMetadata(userId, {
     privateMetadata: withGlobalKeyMetadata(user.privateMetadata, rotated),
   });
 
-  return buildView(rotated, userId);
+  return buildView(
+    rotated,
+    user.privateMetadata[TGPI_GLOBAL_KEY_ANCHOR_METADATA_KEY],
+    userId,
+  );
 }
 
 export async function verifyPublicGlobalKey(
@@ -175,7 +251,7 @@ export async function verifyPublicGlobalKey(
 
   let secret: string;
   try {
-    secret = getSecretForSlot(slot);
+    secret = getGlobalKeySecretForSlot(slot);
   } catch {
     return { status: "invalid" };
   }
@@ -206,8 +282,18 @@ export async function verifyPublicGlobalKey(
       record.revision === payload.revision && currentHash === payload.currentHash
         ? "verified"
         : "historical";
+    const embeddedAnchor = normalizeGlobalKeyAnchorRecord(payload.anchor);
+    const anchor = await verifyGlobalKeyBaseAnchor({
+      anchorValue:
+        embeddedAnchor ||
+        user.privateMetadata[TGPI_GLOBAL_KEY_ANCHOR_METADATA_KEY],
+      eventHash: payload.currentHash,
+      keyId: payload.keyId,
+      revision: payload.revision,
+    });
 
     return {
+      anchor,
       fingerprint: getGlobalKeyFingerprint(record),
       issuedAt: record.issuedAt,
       keyId: record.keyId,

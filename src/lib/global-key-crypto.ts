@@ -11,6 +11,7 @@ import {
   TGPI_GLOBAL_KEY_SCHEMA_VERSION,
   type GlobalKeyEventType,
   type GlobalKeySlot,
+  type TgpiGlobalKeyAnchorRecord,
   type TgpiGlobalKeyEvent,
   type TgpiGlobalKeyRecord,
 } from "./global-key.ts";
@@ -25,6 +26,7 @@ const SAFE_HASH = /^[A-Za-z0-9_-]{43}$/;
 const SAFE_NONCE = /^[A-Za-z0-9_-]{11}$/;
 
 type ProofPayload = {
+  anchor?: TgpiGlobalKeyAnchorRecord;
   currentHash: string;
   issuedAt: string;
   keyId: string;
@@ -346,10 +348,12 @@ export function getGlobalKeyFingerprint(record: TgpiGlobalKeyRecord) {
 }
 
 export function createGlobalKeyProof({
+  anchor,
   record,
   secret,
   userId,
 }: {
+  anchor?: TgpiGlobalKeyAnchorRecord;
   record: TgpiGlobalKeyRecord;
   secret: string;
   userId: string;
@@ -364,6 +368,7 @@ export function createGlobalKeyProof({
   }
 
   const payload: ProofPayload = {
+    ...(anchor ? { anchor } : {}),
     currentHash,
     issuedAt: record.issuedAt,
     keyId: record.keyId,
@@ -386,7 +391,13 @@ export function createGlobalKeyProof({
     "base64url",
   );
 
-  return `${PROOF_PREFIX}.${record.keySlot.toUpperCase()}.${token}`;
+  const proof = `${PROOF_PREFIX}.${record.keySlot.toUpperCase()}.${token}`;
+  if (proof.length > 2_048) {
+    throw new GlobalKeyIntegrityError(
+      "The portable Global Key proof exceeds its safe size limit.",
+    );
+  }
+  return proof;
 }
 
 export function readGlobalKeyProof({
@@ -444,6 +455,9 @@ export function readGlobalKeyProof({
     }
 
     return {
+      ...(isRecord(value.anchor)
+        ? { anchor: value.anchor as TgpiGlobalKeyAnchorRecord }
+        : {}),
       currentHash: value.currentHash,
       issuedAt: value.issuedAt,
       keyId: value.keyId,

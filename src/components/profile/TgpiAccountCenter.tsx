@@ -553,24 +553,24 @@ export default function TgpiAccountCenter({
   if (activeSection === "global-key") {
     activeScreen = (
       <div>
-        <ScreenHeading description="Manage the cryptographic identity, encrypted proof and linked integrity history behind your stable TGPI Global ID." section="global-key" title="Global Key" />
+        <ScreenHeading description="Manage the cryptographic identity, encrypted proof, Base Mainnet anchor and linked integrity history behind your stable TGPI Global ID." section="global-key" title="Global Key" />
         <article className="relative mt-6 overflow-hidden rounded-[28px] border border-[#173754] bg-[radial-gradient(circle_at_top_right,rgba(43,112,168,0.34),transparent_42%),#07182D] p-6 text-white shadow-[0_24px_65px_rgba(11,31,58,0.2)] sm:p-8">
           <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
             <span aria-hidden="true" className="grid h-16 w-16 shrink-0 place-items-center rounded-[22px] border border-[#E5B94B]/35 bg-[#E5B94B]/10 text-3xl">🗝️</span>
             <div className="min-w-0 flex-1">
-              <div className="flex flex-wrap items-center gap-2"><p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#F0D58C]">TGPI Integrity Chain V1</p><span className="rounded-full border border-[#72C79D]/30 bg-[#72C79D]/10 px-2.5 py-1 text-[9px] font-extrabold uppercase tracking-[0.12em] text-[#AFE3C7]">Cryptographically protected</span></div>
+              <div className="flex flex-wrap items-center gap-2"><p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#F0D58C]">TGPI Integrity Chain V2</p><span className="rounded-full border border-[#72C79D]/30 bg-[#72C79D]/10 px-2.5 py-1 text-[9px] font-extrabold uppercase tracking-[0.12em] text-[#AFE3C7]">Base Mainnet ready</span></div>
               <p className="mt-3 break-all font-mono text-lg font-bold tracking-[0.06em] text-white sm:text-2xl">{account.globalId}</p>
-              <p className="mt-3 max-w-2xl text-xs leading-6 text-[#AEBBC9]">Your existing Global ID remains stable. The Integrity Chain adds signed blocks, an encrypted verification proof and safe rotation without changing login credentials.</p>
+              <p className="mt-3 max-w-2xl text-xs leading-6 text-[#AEBBC9]">Your existing Global ID remains stable. The Integrity Chain adds signed blocks, an encrypted verification proof, safe rotation and an external Merkle receipt without changing login credentials.</p>
             </div>
           </div>
           <div className="mt-7 grid gap-3 border-t border-white/10 pt-6 sm:grid-cols-3">
-            {["Tamper-evident linked history", "Live public proof verification", "No email or private progress exposed"].map((item) => <p className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-xs font-bold text-[#D7E0E8]" key={item}>✓ {item}</p>)}
+            {["Tamper-evident linked history", "Base Mainnet Merkle receipt", "No identity or private progress on-chain"].map((item) => <p className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-xs font-bold text-[#D7E0E8]" key={item}>✓ {item}</p>)}
           </div>
           <Link className="mt-6 inline-flex min-h-11 items-center rounded-xl bg-[#E5B94B] px-5 text-xs font-extrabold text-[#07182D] transition hover:bg-[#F0C95F]" href="/global-key">Open Global Key Command Center →</Link>
         </article>
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
           <article className="rounded-[22px] border border-[#DDD7CB] bg-white p-5 sm:p-6"><p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#86621A]">Authentication boundary</p><h3 className="mt-2 text-lg font-extrabold text-[#0B1F3A]">Clerk remains the security authority.</h3><p className="mt-3 text-xs leading-6 text-[#667085]">Passwords, MFA, passkeys, recovery and active sessions never enter the TGPI cryptographic proof.</p><button className="mt-4 text-xs font-extrabold text-[#76520C]" onClick={() => selectSection("security")} type="button">Open login security →</button></article>
-          <article className="rounded-[22px] border border-[#D7C68F] bg-[#FBF4DE] p-5 sm:p-6"><p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#73520F]">Transparent technology</p><h3 className="mt-2 text-lg font-extrabold text-[#0B1F3A]">Blockchain-style, not a public blockchain.</h3><p className="mt-3 text-xs leading-6 text-[#665A38]">V1 uses authenticated encryption and linked cryptographic hashes. It is not a token, wallet, NFT or government credential.</p></article>
+          <article className="rounded-[22px] border border-[#D7C68F] bg-[#FBF4DE] p-5 sm:p-6"><p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#73520F]">Transparent technology</p><h3 className="mt-2 text-lg font-extrabold text-[#0B1F3A]">Publicly anchored, never tokenized.</h3><p className="mt-3 text-xs leading-6 text-[#665A38]">V2 periodically writes a privacy-safe Merkle root to Base Mainnet. The Global Key is not a cryptocurrency, wallet, NFT or government credential.</p></article>
         </div>
       </div>
     );

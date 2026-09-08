@@ -5,9 +5,9 @@ import { requireUser } from "@/lib/auth/guards";
 import { getOrCreateGlobalKey } from "@/lib/global-key.server";
 
 export const metadata: Metadata = {
-  title: "Global Key Integrity Chain — TGPI",
+  title: "Global Key Public Anchor — TGPI",
   description:
-    "Manage the cryptographic proof, fingerprint and integrity history connected to your TGPI Global Key.",
+    "Manage the cryptographic proof, Base Mainnet anchor and integrity history connected to your TGPI Global Key.",
   robots: { follow: false, index: false },
 };
 

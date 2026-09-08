@@ -33,6 +33,7 @@ export default async function VerifyGlobalKeyPage({
   const verified = result.status === "verified";
   const historical = result.status === "historical";
   const unavailable = result.status === "unavailable";
+  const anchor = verified || historical ? result.anchor : null;
 
   return (
     <main className="min-h-screen bg-[#050C14] px-4 py-8 text-white sm:px-6 sm:py-14">
@@ -99,6 +100,131 @@ export default async function VerifyGlobalKeyPage({
             </dl>
           ) : null}
 
+          {anchor ? (
+            <section
+              aria-labelledby="base-proof-title"
+              className={`mt-5 rounded-[24px] border p-5 sm:p-6 ${
+                anchor.status === "confirmed"
+                  ? "border-[#72C79D]/30 bg-[#72C79D]/[0.07]"
+                  : anchor.status === "invalid"
+                    ? "border-[#D66B6B]/30 bg-[#D66B6B]/[0.07]"
+                    : "border-white/10 bg-black/20"
+              }`}
+            >
+              <div className="flex flex-wrap items-start justify-between gap-4">
+                <div>
+                  <p className="text-[9px] font-extrabold uppercase tracking-[0.18em] text-[#89A1B5]">
+                    Base Mainnet external receipt
+                  </p>
+                  <h2
+                    className="mt-2 text-xl font-extrabold"
+                    id="base-proof-title"
+                  >
+                    {anchor.status === "confirmed"
+                      ? "On-chain anchor independently matched"
+                      : anchor.status === "invalid"
+                        ? "Public anchor did not match"
+                        : anchor.status === "unavailable"
+                          ? "Base verification is temporarily unavailable"
+                          : anchor.status === "activation_pending"
+                            ? "Public anchoring is awaiting activation"
+                            : "This revision is awaiting its public batch"}
+                  </h2>
+                </div>
+                <span
+                  className={`rounded-full border px-3 py-1.5 text-[9px] font-extrabold uppercase tracking-[0.13em] ${
+                    anchor.status === "confirmed"
+                      ? "border-[#72C79D]/30 bg-[#72C79D]/10 text-[#BDE9D2]"
+                      : anchor.status === "invalid"
+                        ? "border-[#D66B6B]/30 bg-[#D66B6B]/10 text-[#F4B0B0]"
+                        : "border-white/10 bg-white/5 text-[#A5B5C4]"
+                  }`}
+                >
+                  {anchor.status === "confirmed"
+                    ? "● Base confirmed"
+                    : anchor.status === "invalid"
+                      ? "Mismatch"
+                      : "Internal proof only"}
+                </span>
+              </div>
+
+              {anchor.status === "confirmed" ? (
+                <>
+                  <p className="mt-4 text-xs leading-6 text-[#AFC0CE]">
+                    The encrypted TGPI proof produced the expected Merkle leaf,
+                    the inclusion path rebuilt the published root, and the Base
+                    transaction was signed by an authorized TGPI anchor signer.
+                  </p>
+                  <dl className="mt-5 grid gap-3 sm:grid-cols-2">
+                    <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                      <dt className="text-[9px] font-extrabold uppercase tracking-[0.15em] text-[#7890A3]">
+                        Batch
+                      </dt>
+                      <dd className="mt-2 break-all font-mono text-[11px] font-bold text-[#DCE6ED]">
+                        {anchor.batchId}
+                      </dd>
+                    </div>
+                    <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+                      <dt className="text-[9px] font-extrabold uppercase tracking-[0.15em] text-[#7890A3]">
+                        Base block
+                      </dt>
+                      <dd className="mt-2 font-mono text-sm font-bold">
+                        #{anchor.blockNumber}
+                      </dd>
+                    </div>
+                    <div className="rounded-2xl border border-white/10 bg-black/20 p-4 sm:col-span-2">
+                      <dt className="text-[9px] font-extrabold uppercase tracking-[0.15em] text-[#7890A3]">
+                        Published Merkle root
+                      </dt>
+                      <dd className="mt-2 break-all font-mono text-[10px] font-bold leading-5 text-[#BFE9D3]">
+                        {anchor.root}
+                      </dd>
+                    </div>
+                  </dl>
+                  <details className="mt-4 rounded-2xl border border-white/10 bg-black/15 p-4">
+                    <summary className="cursor-pointer text-xs font-extrabold text-[#D8E2EA]">
+                      Inspect privacy-safe Merkle inclusion proof
+                    </summary>
+                    <div className="mt-4 grid gap-3 text-[10px]">
+                      <p className="break-all font-mono leading-5 text-[#9EB1C1]">
+                        Leaf: {anchor.leaf}
+                      </p>
+                      <ol className="grid gap-2">
+                        {anchor.merkleProof.map((step, index) => (
+                          <li
+                            className="break-all font-mono leading-5 text-[#8298AA]"
+                            key={`${step.hash}-${index}`}
+                          >
+                            Path {index + 1}: {step.hash}
+                          </li>
+                        ))}
+                      </ol>
+                      {anchor.merkleProof.length === 0 ? (
+                        <p className="text-[#8298AA]">
+                          Single-member batch: the leaf is the root.
+                        </p>
+                      ) : null}
+                    </div>
+                  </details>
+                  <a
+                    className="mt-4 inline-flex min-h-11 items-center rounded-xl bg-[#E5B94B] px-5 text-xs font-extrabold text-[#07182D] transition hover:bg-[#F0C95F]"
+                    href={anchor.explorerUrl}
+                    rel="noreferrer"
+                    target="_blank"
+                  >
+                    Inspect transaction on Base ↗
+                  </a>
+                </>
+              ) : (
+                <p className="mt-4 text-xs leading-6 text-[#9FAFC0]">
+                  The TGPI identity result above remains separate from the
+                  external receipt. No blockchain confirmation is claimed until
+                  the Merkle proof and Base transaction both validate.
+                </p>
+              )}
+            </section>
+          ) : null}
+
           <div className="mt-8 flex flex-wrap gap-3">
             <Link className="inline-flex min-h-11 items-center rounded-xl bg-[#E5B94B] px-5 text-xs font-extrabold text-[#07182D] transition hover:bg-[#F0C95F]" href="/">
               Explore TGPI
@@ -112,7 +238,7 @@ export default async function VerifyGlobalKeyPage({
         <section className="mt-6 rounded-[24px] border border-white/10 bg-[#0A1521] p-5 sm:p-7">
           <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#E5B94B]">Technology disclosure</p>
           <p className="mt-3 text-xs leading-6 text-[#9FAFC0]">
-            TGPI Integrity Chain is a cryptographic registry operated by TGPI. It uses authenticated encryption and linked hashes inspired by distributed-ledger architecture, but it is not a public blockchain, cryptocurrency, NFT, passport, academic accreditation or government identity.
+            TGPI Integrity Chain combines an authenticated TGPI identity record with privacy-safe Merkle roots periodically written to Base Mainnet. The public chain never receives names, email addresses, Global IDs, documents or private progress. This remains a verification record—not a cryptocurrency, NFT, wallet, passport, academic accreditation or government identity.
           </p>
         </section>
       </div>

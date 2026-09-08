@@ -8,6 +8,7 @@ import {
   type RotateGlobalKeyResult,
 } from "@/app/global-key/actions";
 import type {
+  TgpiGlobalKeyAnchorView,
   TgpiGlobalKeyBlockView,
   TgpiGlobalKeyView,
 } from "@/lib/global-key";
@@ -129,6 +130,147 @@ function ChainBlock({
     </li>
   );
 }
+
+function PublicAnchorPanel({
+  anchor,
+  onCopy,
+}: {
+  anchor: TgpiGlobalKeyAnchorView;
+  onCopy: (value: string, label: string) => Promise<void>;
+}) {
+  if (anchor.status !== "confirmed") {
+    const activating = anchor.status === "activation_pending";
+    return (
+      <section
+        aria-labelledby="public-anchor-title"
+        className="mt-6 overflow-hidden rounded-[28px] border border-[#4D7190]/35 bg-[radial-gradient(circle_at_top_right,rgba(52,125,184,0.2),transparent_32%),#0A1724] p-5 sm:p-7"
+      >
+        <div className="flex flex-wrap items-start justify-between gap-5">
+          <div className="max-w-3xl">
+            <div className="flex items-center gap-3">
+              <span
+                aria-hidden="true"
+                className="grid h-11 w-11 place-items-center rounded-2xl border border-[#7FB5DC]/25 bg-[#7FB5DC]/10 text-xl"
+              >
+                ◈
+              </span>
+              <div>
+                <p className="text-[9px] font-extrabold uppercase tracking-[0.2em] text-[#8DC4EB]">
+                  Base Mainnet · Public Anchor V2
+                </p>
+                <h2
+                  className="mt-1 text-xl font-extrabold text-white"
+                  id="public-anchor-title"
+                >
+                  {activating
+                    ? "External anchoring is ready for activation"
+                    : "Current revision is queued for anchoring"}
+                </h2>
+              </div>
+            </div>
+            <p className="mt-4 text-xs leading-6 text-[#A6B8C8] sm:text-sm">
+              {activating
+                ? "The cryptographic foundation is installed. The first production batch will begin only after the dedicated TGPI signer, RPC and operational kill switch are securely configured."
+                : "Your Integrity Chain remains verified now. Its current fingerprint will join the next daily Merkle batch; earlier on-chain receipts remain historically valid after a rotation."}
+            </p>
+          </div>
+          <span className="rounded-full border border-[#8DC4EB]/25 bg-[#8DC4EB]/10 px-3 py-2 text-[9px] font-extrabold uppercase tracking-[0.14em] text-[#B9DDF6]">
+            {activating ? "Activation pending" : "Queued · daily"}
+          </span>
+        </div>
+      </section>
+    );
+  }
+
+  return (
+    <section
+      aria-labelledby="public-anchor-title"
+      className="mt-6 overflow-hidden rounded-[28px] border border-[#72C79D]/30 bg-[radial-gradient(circle_at_top_right,rgba(50,157,105,0.19),transparent_34%),radial-gradient(circle_at_bottom_left,rgba(38,99,154,0.2),transparent_36%),#091A25] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.24)] sm:p-7"
+    >
+      <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(320px,.6fr)] xl:items-end">
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-center gap-3">
+            <span
+              aria-hidden="true"
+              className="grid h-12 w-12 place-items-center rounded-2xl border border-[#72C79D]/30 bg-[#72C79D]/10 text-2xl"
+            >
+              ⛓️
+            </span>
+            <div>
+              <p className="text-[9px] font-extrabold uppercase tracking-[0.2em] text-[#8FD8B4]">
+                Base Mainnet · Chain ID {anchor.chainId}
+              </p>
+              <h2
+                className="mt-1 font-[var(--tgpi-font-display)] text-2xl font-semibold sm:text-3xl"
+                id="public-anchor-title"
+              >
+                Public anchor confirmed
+              </h2>
+            </div>
+            <span className="rounded-full border border-[#72C79D]/30 bg-[#72C79D]/10 px-3 py-1.5 text-[9px] font-extrabold uppercase tracking-[0.14em] text-[#BCE8D1]">
+              ● On-chain
+            </span>
+          </div>
+          <p className="mt-4 max-w-3xl text-xs leading-6 text-[#A8BAC9] sm:text-sm">
+            This revision belongs to a Merkle batch recorded outside TGPI infrastructure. Base stores only the irreversible root and batch metadata—never your Global ID, name, email, documents or private progress.
+          </p>
+          <dl className="mt-5 grid gap-3 sm:grid-cols-3">
+            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+              <dt className="text-[9px] font-extrabold uppercase tracking-[0.15em] text-[#7890A3]">
+                Batch
+              </dt>
+              <dd className="mt-2 break-all font-mono text-[11px] font-bold text-[#E2EAF0]">
+                {anchor.batchId}
+              </dd>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+              <dt className="text-[9px] font-extrabold uppercase tracking-[0.15em] text-[#7890A3]">
+                Base block
+              </dt>
+              <dd className="mt-2 font-mono text-sm font-bold text-white">
+                #{anchor.blockNumber}
+              </dd>
+            </div>
+            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+              <dt className="text-[9px] font-extrabold uppercase tracking-[0.15em] text-[#7890A3]">
+                Batch members
+              </dt>
+              <dd className="mt-2 text-sm font-extrabold text-white">
+                {anchor.memberCount}
+              </dd>
+            </div>
+          </dl>
+        </div>
+        <div className="rounded-[22px] border border-white/10 bg-black/20 p-4 sm:p-5">
+          <p className="text-[9px] font-extrabold uppercase tracking-[0.16em] text-[#7890A3]">
+            Merkle root
+          </p>
+          <p className="mt-3 break-all font-mono text-[11px] font-bold leading-5 text-[#BFE9D3]">
+            {anchor.root}
+          </p>
+          <div className="mt-4 grid gap-2 sm:grid-cols-2 xl:grid-cols-1 2xl:grid-cols-2">
+            <a
+              className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[#E5B94B] px-4 text-xs font-extrabold text-[#07182D] transition hover:bg-[#F0C95F]"
+              href={anchor.explorerUrl}
+              rel="noreferrer"
+              target="_blank"
+            >
+              Open Base receipt ↗
+            </a>
+            <button
+              className="min-h-11 rounded-xl border border-white/15 px-4 text-xs font-extrabold transition hover:border-[#72C79D]/45"
+              onClick={() => onCopy(anchor.root, "Merkle root")}
+              type="button"
+            >
+              Copy root
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export default function GlobalKeyCenter({
   initialKey,
   verifyOrigin,
@@ -217,7 +359,7 @@ export default function GlobalKeyCenter({
                 </span>
                 <div>
                   <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#E5B94B]">
-                    TGPI Integrity Chain V1
+                    TGPI Integrity Chain V2
                   </p>
                   <p className="mt-1 text-xs font-bold text-[#91A4B7]">
                     Cryptographic global identity
@@ -232,7 +374,7 @@ export default function GlobalKeyCenter({
                 One identity. A verifiable chain of trust.
               </h1>
               <p className="mt-4 max-w-3xl text-sm leading-7 text-[#AFBECC] sm:text-base">
-                Your stable TGPI identity now carries an encrypted proof and a tamper-evident history. It connects your workspace without becoming a password, wallet or public data source.
+                Your stable TGPI identity carries an encrypted proof, a tamper-evident history and an external Base Mainnet receipt—without becoming a password, wallet or public data source.
               </p>
 
               <div className="mt-8 rounded-[24px] border border-white/10 bg-black/20 p-4 sm:p-6">
@@ -276,7 +418,7 @@ export default function GlobalKeyCenter({
                 Live verification
               </p>
               <p className="mt-2 text-center text-xs leading-5 text-[#9FAFC0]">
-                The QR contains an encrypted proof. It contains no visible email, password or document data.
+                The QR contains an encrypted proof. The verifier also checks its public Base receipt when available, without exposing personal data.
               </p>
             </aside>
           </div>
@@ -286,7 +428,7 @@ export default function GlobalKeyCenter({
           {[
             ["Integrity", "Verified", "Cryptographic chain is intact"],
             ["Revision", String(keyView.revision).padStart(2, "0"), "Current signed state"],
-            ["Blocks", String(keyView.blocks.length).padStart(2, "0"), "Append-only V1 history"],
+            ["Blocks", String(keyView.blocks.length).padStart(2, "0"), "Append-only integrity history"],
             ["Status", "Active", `Issued ${formatDate(keyView.issuedAt)} UTC`],
           ].map(([label, value, detail]) => (
             <article className="rounded-[22px] border border-white/10 bg-[#0A1521] p-5" key={label}>
@@ -297,6 +439,8 @@ export default function GlobalKeyCenter({
           ))}
         </div>
 
+        <PublicAnchorPanel anchor={keyView.anchor} onCopy={copyValue} />
+
         <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1.2fr)_minmax(360px,.8fr)]">
           <section aria-labelledby="chain-title" className="rounded-[28px] border border-white/10 bg-[#08131F] p-5 sm:p-7">
             <div className="flex flex-wrap items-end justify-between gap-4 border-b border-white/10 pb-5">
@@ -305,7 +449,7 @@ export default function GlobalKeyCenter({
                 <h2 id="chain-title" className="mt-2 font-[var(--tgpi-font-display)] text-3xl font-semibold">Cryptographic block history</h2>
               </div>
               <span className="rounded-full border border-white/10 bg-white/5 px-3 py-2 font-mono text-[10px] text-[#A8B7C5]">
-                chain:v1
+                chain:v2
               </span>
             </div>
             <ol className="mt-6 grid gap-6">
@@ -335,7 +479,7 @@ export default function GlobalKeyCenter({
               <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#7F92A5]">Proof control</p>
               <h2 id="rotate-title" className="mt-2 text-xl font-extrabold">Rotate cryptographic proof</h2>
               <p className="mt-3 text-xs leading-6 text-[#95A5B5]">
-                Rotation appends a new signed block and invalidates the previous link as a current proof. Your Global ID and account login do not change.
+                Rotation appends a new signed block and queues it for the next public batch. Your previous Base receipt remains a valid historical proof; your Global ID and account login do not change.
               </p>
               <button
                 className={`mt-5 min-h-11 w-full rounded-xl px-4 text-xs font-extrabold transition disabled:cursor-wait disabled:opacity-60 ${
@@ -371,6 +515,7 @@ export default function GlobalKeyCenter({
               <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#E5B94B]">Security boundary</p>
               <ul className="mt-4 grid gap-3 text-xs leading-5 text-[#B8C5D1]">
                 <li>✓ Clerk remains responsible for login, MFA, sessions and recovery.</li>
+                <li>✓ Base receives only a Merkle root and non-personal batch metadata.</li>
                 <li>✓ Private TGPI progress never enters the public proof.</li>
                 <li>✓ The key is not a password, wallet, cryptocurrency or NFT.</li>
                 <li>✓ No government, migration or academic credential is implied.</li>
@@ -394,7 +539,7 @@ export default function GlobalKeyCenter({
         </section>
 
         <p className="mt-6 rounded-2xl border border-[#E5B94B]/20 bg-[#E5B94B]/[0.06] px-5 py-4 text-xs leading-6 text-[#B8C5D1]">
-          <strong className="text-[#F0D58C]">Technology disclosure:</strong> TGPI Integrity Chain uses cryptographic hashing, authenticated encryption and linked records inspired by ledger architecture. V1 is operated by TGPI and is not a decentralized public blockchain.
+          <strong className="text-[#F0D58C]">Technology disclosure:</strong> TGPI Integrity Chain V2 combines a TGPI-operated authenticated identity record with periodic Merkle-root anchoring on Base Mainnet. The receipt is publicly auditable, but the Global Key is not a cryptocurrency, NFT, wallet, passport or government credential.
         </p>
 
         <div
