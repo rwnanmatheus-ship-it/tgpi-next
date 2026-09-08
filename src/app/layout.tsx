@@ -1,7 +1,7 @@
 import "./globals.css";
 import "./mobile.css";
 import "./intelligence.css";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Manrope } from "next/font/google";
 import Navbar from "@/components/Navbar";
 import GlobalFooter from "@/components/GlobalFooter";
@@ -10,6 +10,7 @@ import { tgpiClerkAppearance } from "@/lib/auth/clerk-appearance";
 import MobileNavigation from "@/components/mobile/MobileNavigation";
 import MobileContentFrame from "@/components/mobile/MobileContentFrame";
 import SuperAppLauncher from "@/components/super-app/SuperAppLauncher";
+import TgpiAppRuntime from "@/components/app-runtime/TgpiAppRuntime";
 
 const displayFont = Cormorant_Garamond({
   subsets: ["latin"],
@@ -27,13 +28,28 @@ const interfaceFont = Manrope({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://theglobalpolymath.com"),
+  applicationName: "TGPI",
   title: "TGPI — Build Your Global Identity",
   description: "Prepare, compare and move globally with strategic clarity using TGPI — a premium education and decision system for international life.",
   keywords: ["move abroad", "global mobility", "international life", "country comparison", "cost of living", "learn languages", "global education", "international planning", "TGPI", "The Global Polymath Institute"],
   icons: {
     icon: "/brand/tgpi-crest-v2-256.png",
     shortcut: "/brand/tgpi-crest-v2-256.png",
-    apple: "/brand/tgpi-crest-v2-256.png",
+    apple: "/pwa/apple-touch-icon.png",
+  },
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "TGPI",
+  },
+  formatDetection: {
+    address: false,
+    email: false,
+    telephone: false,
+  },
+  other: {
+    "mobile-web-app-capable": "yes",
   },
   openGraph: {
     title: "TGPI — Build Your Global Identity",
@@ -48,6 +64,13 @@ export const metadata: Metadata = {
     title: "TGPI — Build Your Global Identity",
     description: "Compare countries, build practical skills and prepare a global life with clarity.",
   },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#04101B",
+  colorScheme: "light",
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -66,6 +89,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <SuperAppLauncher />
           <MobileContentFrame>{children}</MobileContentFrame>
           <GlobalFooter />
+          <TgpiAppRuntime />
         </ClerkProvider>
       </body>
     </html>
