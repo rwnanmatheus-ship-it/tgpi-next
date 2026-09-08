@@ -103,7 +103,7 @@ function MobileNavigationContent({ pathname }: { pathname: string }) {
         </Link>
         <div className="mobile-header-actions">
           <button type="button" className="mobile-icon-button" aria-label="Search countries" aria-haspopup="dialog" onClick={(event) => open("search", event.currentTarget)}><MobileIcon name="search" /></button>
-          <button type="button" className="mobile-icon-button" aria-label="Open TGPI menu" aria-haspopup="dialog" onClick={(event) => open("menu", event.currentTarget)}><MobileIcon name="menu" /></button>
+          <button type="button" className="mobile-icon-button" aria-label="Open TGPI Super App" aria-haspopup="dialog" onClick={(event) => open("menu", event.currentTarget)}><MobileIcon name="menu" /></button>
         </div>
       </header>
 

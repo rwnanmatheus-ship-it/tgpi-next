@@ -8,16 +8,43 @@ import {
   getNextSuperAppModule,
   getSuperAppModule,
   isSuperAppRouteActive,
+  searchSuperAppModules,
   SUPER_APP_MODULES,
+  SUPER_APP_OPEN_EVENT,
 } from "@/lib/super-app";
 
 export default function SuperAppLauncher() {
   const pathname = usePathname();
   const currentModule = getSuperAppModule(pathname);
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const triggerRef = useRef<HTMLButtonElement>(null);
-  const firstModuleRef = useRef<HTMLAnchorElement>(null);
+  const restoreFocusRef = useRef<HTMLElement | null>(null);
+  const searchRef = useRef<HTMLInputElement>(null);
   const [open, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
+
+  useEffect(() => {
+    function openLauncher() {
+      restoreFocusRef.current =
+        document.activeElement instanceof HTMLElement
+          ? document.activeElement
+          : null;
+      setOpen(true);
+    }
+
+    function onKeyDown(event: KeyboardEvent) {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+        event.preventDefault();
+        openLauncher();
+      }
+    }
+
+    window.addEventListener(SUPER_APP_OPEN_EVENT, openLauncher);
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      window.removeEventListener(SUPER_APP_OPEN_EVENT, openLauncher);
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, []);
 
   useEffect(() => {
     const dialog = dialogRef.current;
@@ -25,7 +52,7 @@ export default function SuperAppLauncher() {
 
     if (open && !dialog.open) {
       dialog.showModal();
-      window.requestAnimationFrame(() => firstModuleRef.current?.focus());
+      window.requestAnimationFrame(() => searchRef.current?.focus());
     } else if (!open && dialog.open) {
       dialog.close();
     }
@@ -35,42 +62,19 @@ export default function SuperAppLauncher() {
     };
   }, [open]);
 
-  if (!currentModule) return null;
-
-  const nextModule = getNextSuperAppModule(currentModule.id);
+  const nextModule = currentModule
+    ? getNextSuperAppModule(currentModule.id)
+    : SUPER_APP_MODULES[0];
+  const visibleModules = searchSuperAppModules(query);
 
   function closeLauncher() {
     setOpen(false);
-    window.requestAnimationFrame(() => triggerRef.current?.focus());
+    setQuery("");
+    window.requestAnimationFrame(() => restoreFocusRef.current?.focus());
   }
 
   return (
     <>
-      <button
-        ref={triggerRef}
-        type="button"
-        aria-controls="tgpi-super-app-launcher"
-        aria-expanded={open}
-        aria-haspopup="dialog"
-        className="fixed bottom-6 left-6 z-40 hidden min-h-14 items-center gap-3 rounded-2xl border border-[#E5B94B]/35 bg-[#06172B]/95 px-3.5 pr-5 text-left text-white shadow-[0_18px_55px_rgba(3,20,38,0.34)] backdrop-blur-xl transition hover:-translate-y-1 hover:border-[#E5B94B]/70 hover:bg-[#0A223D] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E5B94B] md:flex"
-        onClick={() => setOpen(true)}
-      >
-        <span
-          aria-hidden="true"
-          className="grid h-10 w-10 place-items-center rounded-xl border border-[#E5B94B]/20 bg-[#E5B94B]/10 text-xl"
-        >
-          {currentModule.icon}
-        </span>
-        <span>
-          <span className="block text-[9px] font-extrabold uppercase tracking-[0.2em] text-[#F0D58C]">
-            TGPI Super App
-          </span>
-          <span className="mt-0.5 block text-xs font-extrabold">
-            {currentModule.shortLabel} · Open apps
-          </span>
-        </span>
-      </button>
-
       <dialog
         ref={dialogRef}
         id="tgpi-super-app-launcher"
@@ -123,15 +127,33 @@ export default function SuperAppLauncher() {
           </header>
 
           <div className="p-5 sm:p-7">
+            <label
+              htmlFor="tgpi-super-app-search"
+              className="flex min-h-14 items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.055] px-4 text-[#C8D4E0] transition focus-within:border-[#E5B94B]/55 focus-within:bg-white/[0.075]"
+            >
+              <span aria-hidden="true" className="text-lg">⌕</span>
+              <span className="sr-only">Find a TGPI app</span>
+              <input
+                ref={searchRef}
+                id="tgpi-super-app-search"
+                type="search"
+                value={query}
+                onChange={(event) => setQuery(event.target.value)}
+                placeholder="Find an app, action or destination…"
+                autoComplete="off"
+                className="min-w-0 flex-1 bg-transparent py-3 text-base font-semibold text-white outline-none placeholder:text-[#73869B]"
+              />
+              <kbd className="hidden rounded-lg border border-white/10 bg-black/20 px-2 py-1 text-[10px] font-bold text-[#91A2B5] sm:inline">⌘ K</kbd>
+            </label>
+
             <nav
               aria-label="TGPI Super App modules"
-              className="grid grid-cols-2 gap-3 sm:grid-cols-3"
+              className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3"
             >
-              {SUPER_APP_MODULES.map((module, index) => {
+              {visibleModules.map((module) => {
                 const active = isSuperAppRouteActive(pathname, module);
                 return (
                   <Link
-                    ref={index === 0 ? firstModuleRef : undefined}
                     key={module.id}
                     href={module.href}
                     aria-current={active ? "page" : undefined}
@@ -163,6 +185,13 @@ export default function SuperAppLauncher() {
                 );
               })}
             </nav>
+
+            {visibleModules.length === 0 ? (
+              <div className="mt-5 rounded-2xl border border-dashed border-white/15 px-5 py-8 text-center">
+                <p className="text-sm font-extrabold text-white">No TGPI app matches “{query.trim()}”.</p>
+                <p className="mt-2 text-xs leading-5 text-[#8799AC]">Try countries, documents, plan, learning or security.</p>
+              </div>
+            ) : null}
 
             <section className="mt-5 grid gap-4 rounded-2xl border border-[#E5B94B]/25 bg-gradient-to-r from-[#102A46] to-[#0A1828] p-5 sm:grid-cols-[1fr_auto] sm:items-center">
               <div className="min-w-0">

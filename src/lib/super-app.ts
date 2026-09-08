@@ -14,10 +14,13 @@ export type SuperAppModule = {
   href: string;
   icon: string;
   id: SuperAppModuleId;
+  keywords: readonly string[];
   label: string;
   matchPrefixes: readonly string[];
   shortLabel: string;
 };
+
+export const SUPER_APP_OPEN_EVENT = "tgpi:open-super-app";
 
 export const SUPER_APP_MODULES: readonly SuperAppModule[] = [
   {
@@ -27,6 +30,7 @@ export const SUPER_APP_MODULES: readonly SuperAppModule[] = [
     label: "Global Workspace",
     shortLabel: "Workspace",
     description: "Your decisions, progress and global identity.",
+    keywords: ["dashboard", "profile", "progress", "identity", "rank"],
     matchPrefixes: ["/profile"],
   },
   {
@@ -36,6 +40,7 @@ export const SUPER_APP_MODULES: readonly SuperAppModule[] = [
     label: "Country Fit",
     shortLabel: "Country Fit",
     description: "Connect destinations to your real priorities.",
+    keywords: ["match", "recommendation", "priorities", "shortlist"],
     matchPrefixes: ["/country-fit"],
   },
   {
@@ -45,6 +50,7 @@ export const SUPER_APP_MODULES: readonly SuperAppModule[] = [
     label: "Country Intelligence",
     shortLabel: "Countries",
     description: "Explore 195 countries with evidence attached.",
+    keywords: ["world", "destinations", "map", "research", "country"],
     matchPrefixes: ["/countries"],
   },
   {
@@ -54,6 +60,7 @@ export const SUPER_APP_MODULES: readonly SuperAppModule[] = [
     label: "Compare",
     shortLabel: "Compare",
     description: "Expose trade-offs before choosing a path.",
+    keywords: ["comparison", "cost", "trade-offs", "decision"],
     matchPrefixes: ["/compare"],
   },
   {
@@ -63,6 +70,7 @@ export const SUPER_APP_MODULES: readonly SuperAppModule[] = [
     label: "Personal Plan",
     shortLabel: "My Plan",
     description: "Turn your context into an actionable sequence.",
+    keywords: ["goal", "onboarding", "timeline", "budget", "actions"],
     matchPrefixes: ["/onboarding"],
   },
   {
@@ -72,6 +80,7 @@ export const SUPER_APP_MODULES: readonly SuperAppModule[] = [
     label: "Documents OS",
     shortLabel: "Documents",
     description: "Organize research and preparation signals.",
+    keywords: ["passport", "visa", "checklist", "preparation"],
     matchPrefixes: ["/passport"],
   },
   {
@@ -81,6 +90,7 @@ export const SUPER_APP_MODULES: readonly SuperAppModule[] = [
     label: "TGPI Learning",
     shortLabel: "Learning",
     description: "Build the capabilities your objective requires.",
+    keywords: ["courses", "lessons", "certificate", "education"],
     matchPrefixes: ["/courses"],
   },
   {
@@ -90,6 +100,7 @@ export const SUPER_APP_MODULES: readonly SuperAppModule[] = [
     label: "Intelligence Graph",
     shortLabel: "Evidence",
     description: "Inspect sources, coverage and confidence.",
+    keywords: ["sources", "confidence", "methodology", "research"],
     matchPrefixes: ["/intelligence"],
   },
   {
@@ -99,6 +110,7 @@ export const SUPER_APP_MODULES: readonly SuperAppModule[] = [
     label: "Account & Privacy",
     shortLabel: "Settings",
     description: "Control identity, preferences and security.",
+    keywords: ["account", "privacy", "notifications", "login", "security"],
     matchPrefixes: ["/profile/security", "/notifications"],
   },
 ] as const;
@@ -135,4 +147,16 @@ export function getNextSuperAppModule(moduleId: SuperAppModuleId) {
 
 export function isSuperAppRouteActive(pathname: string, module: SuperAppModule) {
   return module.matchPrefixes.some((prefix) => routeMatches(pathname, prefix));
+}
+
+export function searchSuperAppModules(query: string) {
+  const normalizedQuery = query.trim().toLocaleLowerCase("en");
+  if (!normalizedQuery) return SUPER_APP_MODULES;
+
+  return SUPER_APP_MODULES.filter((module) =>
+    [module.label, module.shortLabel, module.description, ...module.keywords]
+      .join(" ")
+      .toLocaleLowerCase("en")
+      .includes(normalizedQuery),
+  );
 }

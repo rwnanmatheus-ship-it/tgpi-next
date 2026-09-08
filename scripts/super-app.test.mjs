@@ -5,6 +5,7 @@ import {
   getNextSuperAppModule,
   getSuperAppModule,
   isSuperAppRouteActive,
+  searchSuperAppModules,
   SUPER_APP_MODULES,
 } from "../src/lib/super-app.ts";
 
@@ -38,12 +39,28 @@ test("recommended flow keeps the decision journey connected", () => {
   assert.equal(getNextSuperAppModule("documents").id, "learning");
 });
 
-test("desktop launcher uses a native modal dialog and restores a visible system entry point", () => {
+test("module search resolves labels, descriptions and action keywords", () => {
+  assert.deepEqual(searchSuperAppModules("visa").map(({ id }) => id), ["documents"]);
+  assert.deepEqual(searchSuperAppModules("privacy").map(({ id }) => id), ["settings"]);
+  assert.deepEqual(searchSuperAppModules("shortlist").map(({ id }) => id), ["country-fit"]);
+  assert.equal(searchSuperAppModules("  ").length, SUPER_APP_MODULES.length);
+});
+
+test("desktop launcher uses a native modal dialog with global keyboard access", () => {
   const source = readFileSync(new URL("../src/components/super-app/SuperAppLauncher.tsx", import.meta.url), "utf8");
   assert.match(source, /showModal\(\)/);
-  assert.match(source, /aria-haspopup="dialog"/);
   assert.match(source, /TGPI Super App modules/);
+  assert.match(source, /SUPER_APP_OPEN_EVENT/);
+  assert.match(source, /event\.metaKey \|\| event\.ctrlKey/);
+  assert.match(source, /Find an app, action or destination/);
   assert.match(source, /tgpi-intelligence-network-v1\.webp/);
+});
+
+test("desktop navbar exposes the same global app launcher", () => {
+  const source = readFileSync(new URL("../src/components/Navbar.tsx", import.meta.url), "utf8");
+  assert.match(source, /aria-label="Open TGPI apps"/);
+  assert.match(source, /aria-keyshortcuts="Control\+K Meta\+K"/);
+  assert.match(source, /SUPER_APP_OPEN_EVENT/);
 });
 
 test("mobile navigation consumes the same shared module registry", () => {

@@ -6,6 +6,7 @@ import { useEffect, useRef, useState } from "react";
 import { Show, SignOutButton, UserButton } from "@clerk/nextjs";
 import { Container } from "@/components/design-system";
 import BrandCrest from "@/components/BrandCrest";
+import { SUPER_APP_OPEN_EVENT } from "@/lib/super-app";
 
 const desktopLinks = [
   ["Countries", "/countries"],
@@ -86,6 +87,24 @@ export default function Navbar() {
           </nav>
 
           <div className="hidden items-center gap-3 lg:flex">
+            <button
+              type="button"
+              aria-label="Open TGPI apps"
+              aria-haspopup="dialog"
+              aria-controls="tgpi-super-app-launcher"
+              aria-keyshortcuts="Control+K Meta+K"
+              title="Open TGPI apps (Ctrl/⌘ K)"
+              onClick={() => window.dispatchEvent(new Event(SUPER_APP_OPEN_EVENT))}
+              className="inline-flex h-11 min-w-11 items-center justify-center gap-2 rounded-2xl border border-[var(--tgpi-border)] bg-white px-3 text-[var(--tgpi-navy)] shadow-[var(--tgpi-shadow-sm)] transition hover:-translate-y-0.5 hover:border-[var(--tgpi-gold)] hover:bg-[var(--tgpi-gold-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
+            >
+              <span aria-hidden="true" className="grid grid-cols-2 gap-[3px]">
+                <span className="h-1.5 w-1.5 rounded-[2px] bg-current" />
+                <span className="h-1.5 w-1.5 rounded-[2px] bg-current" />
+                <span className="h-1.5 w-1.5 rounded-[2px] bg-current" />
+                <span className="h-1.5 w-1.5 rounded-[2px] bg-current" />
+              </span>
+              <span className="hidden text-xs font-extrabold xl:inline">Apps</span>
+            </button>
             <Show when="signed-in">
               <Link href="/notifications" aria-label="Open notifications" title="Notifications" className="grid h-11 w-11 place-items-center rounded-2xl border border-[var(--tgpi-border)] bg-white text-[var(--tgpi-navy)] shadow-[var(--tgpi-shadow-sm)] transition hover:-translate-y-0.5 hover:border-[var(--tgpi-gold)] hover:bg-[var(--tgpi-gold-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]">
                 <span aria-hidden="true">🔔</span>
