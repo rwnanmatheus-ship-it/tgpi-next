@@ -46,3 +46,12 @@ test("country filter focus containment is mobile-only",()=>{
   assert.match(source,/event\.key !== "Tab" \|\| !window\.matchMedia\("\(max-width: 767px\)"\)/);
   assert.match(source,/previousFocus\?\.focus\(\{ preventScroll: true \}\)/);
 });
+test("workspace framing prevents horizontal clipping and exposes notifications",()=>{
+  const workspace=readFileSync(new URL("../src/components/profile/GlobalWorkspaceOS.tsx",import.meta.url),"utf8");
+  const settings=readFileSync(new URL("../src/components/profile/TgpiAccountCenter.tsx",import.meta.url),"utf8");
+  assert.match(workspace,/overflow-x-clip/);
+  assert.match(workspace,/2xl:grid-cols-\[minmax\(0,1fr\)_minmax\(300px,340px\)\]/);
+  assert.doesNotMatch(workspace,/xl:grid-cols-\[minmax\(0,1fr\)_370px\]/);
+  assert.match(workspace,/href="\/notifications"[\s\S]*?🔔/);
+  assert.match(settings,/key: "notifications"[\s\S]*?sticker: "🔔"/);
+});

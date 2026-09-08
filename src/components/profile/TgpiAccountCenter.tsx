@@ -157,7 +157,7 @@ const settingsSections: readonly SettingsSectionDefinition[] = [
     keywords: "alerts email reminders research learning news",
     label: "Notifications",
     group: "Experience",
-    sticker: "◔",
+    sticker: "🔔",
   },
   {
     description: "Visibility and profile controls",
