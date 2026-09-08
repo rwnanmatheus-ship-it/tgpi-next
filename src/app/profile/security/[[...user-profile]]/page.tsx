@@ -96,33 +96,13 @@ export default async function SecurityPage() {
           lastName: user?.lastName,
         })}
         initialProfile={profile}
-      />
-
-      <section
-        className="mx-auto mt-6 max-w-7xl scroll-mt-24 rounded-[30px] border border-[#D8D2C4] bg-[#FFFDF8] p-4 shadow-[0_24px_70px_rgba(11,31,58,0.08)] sm:p-8"
-        id="security-center"
       >
-        <div className="mb-7 border-b border-[#E2DDD2] pb-5">
-          <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#956A13]">
-            05 · Clerk protected
-          </p>
-          <h2 className="mt-2 font-[var(--tgpi-font-display)] text-3xl font-semibold tracking-[-0.035em] text-[#0B1F3A] sm:text-4xl">
-            Login and security
-          </h2>
-          <p className="mt-3 max-w-2xl text-sm leading-7 text-[#667085]">
-            Manage verified emails, passwords, connected login methods, passkeys,
-            multi-factor authentication and active devices through your protected
-            TGPI Global Key.
-          </p>
-        </div>
-        <div className="overflow-hidden rounded-[24px] border border-[#E2DDD2] bg-white p-3 sm:p-5">
-          <UserProfile
-            appearance={tgpiClerkAppearance}
-            path="/profile/security"
-            routing="path"
-          />
-        </div>
-      </section>
+        <UserProfile
+          appearance={tgpiClerkAppearance}
+          path="/profile/security"
+          routing="path"
+        />
+      </TgpiAccountCenter>
     </main>
   );
 }
