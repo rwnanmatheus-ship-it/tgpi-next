@@ -6,3 +6,4 @@ export type * from "./profile";
 export type * from "./ranking";
 export type * from "./recommendation";
 export type * from "./user";
+export * from "./learning";

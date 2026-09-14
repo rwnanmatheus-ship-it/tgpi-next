@@ -16,7 +16,8 @@
     "typecheck": "tsc --noEmit",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test:learning-credentials": "node --experimental-strip-types --test scripts/learning-credentials.test.mjs"
   },
   "dependencies": {
     "@clerk/nextjs": "^7.7.7",
