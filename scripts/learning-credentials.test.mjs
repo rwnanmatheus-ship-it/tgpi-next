@@ -66,7 +66,8 @@ test("exposes standards as targets without claiming external certification", () 
     ),
     true,
   );
-  assert.match(record.disclaimer, /not a claim of 1EdTech\/W3C product certification/);
+  assert.match(record.disclaimer, /1EdTech\/W3C product certification/);
+  assert.match(record.disclaimer, /not a government degree/);
 });
 
 test("trust state never presents revoked or altered records as verified", () => {
