@@ -6,6 +6,7 @@ import {
   toPublicLearningAssessment,
 } from "@/data/courses/english-abroad/assessment-bank.server";
 import { getCourse } from "@/data/courses";
+import { requireUser } from "@/lib/auth/guards";
 
 export const metadata: Metadata = {
   title: "Certification path | TGPI Learning",
@@ -17,6 +18,7 @@ export default async function CertificationPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  await requireUser();
   const { id } = await params;
   const course = getCourse(id);
   if (!course || id !== "english-abroad") notFound();

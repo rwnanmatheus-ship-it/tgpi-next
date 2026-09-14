@@ -76,6 +76,11 @@ export class LearningInputError extends Error {
 const COURSE_ID = "english-abroad";
 const MIN_REFLECTION_LENGTH = 120;
 
+function hasIssuablePublicName(value: string) {
+  const normalized = value.trim();
+  return normalized.length >= 2 && normalized !== "TGPI Member";
+}
+
 function courseRecordPath(userId: string, courseId: string) {
   return `tgpiLearningUsers/${userId}/courses/${courseId}`;
 }
@@ -439,7 +444,7 @@ export async function getLearningCertificationStatus(
       record,
       progress.completedLessonIds.length,
       progress.totalLessons,
-      identity.emailVerified,
+      identity.emailVerified && hasIssuablePublicName(identity.publicName),
     ),
     publicName: identity.publicName,
     storageConfigured,
@@ -513,7 +518,7 @@ export async function submitLearningAssessment(
       nextRecord,
       progress.completedLessonIds.length,
       progress.totalLessons,
-      identity.emailVerified,
+      identity.emailVerified && hasIssuablePublicName(identity.publicName),
     );
     const writes = [];
     const attemptId = `${assessmentId}-${crypto.randomUUID()}`;
@@ -582,7 +587,7 @@ export async function issueLearningCredential(
       record,
       progress.completedLessonIds.length,
       progress.totalLessons,
-      identity.emailVerified,
+      identity.emailVerified && hasIssuablePublicName(identity.publicName),
     );
     if (record.credentialId) return { result: record.credentialId, writes: [] };
     if (!eligibility.eligible) {

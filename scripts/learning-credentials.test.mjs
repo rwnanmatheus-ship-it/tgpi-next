@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import test from "node:test";
 import {
   createPortableLearningRecord,
@@ -83,4 +84,39 @@ test("trust state never presents revoked or altered records as verified", () => 
     getCredentialTrustState({ integrityVerified: false, status: "active" }),
     "integrity_review",
   );
+});
+
+const legacyCertificateSource = readFileSync(
+  new URL("../src/app/certificate/[id]/page.tsx", import.meta.url),
+  "utf8",
+);
+const legacyVerificationSource = readFileSync(
+  new URL("../src/app/verify/[id]/page.tsx", import.meta.url),
+  "utf8",
+);
+const certificationPageSource = readFileSync(
+  new URL(
+    "../src/app/courses/[id]/certification/[assessmentId]/page.tsx",
+    import.meta.url,
+  ),
+  "utf8",
+);
+const learningRecordsSource = readFileSync(
+  new URL("../src/lib/learning-records.server.ts", import.meta.url),
+  "utf8",
+);
+
+test("removes client-side legacy credential trust paths", () => {
+  assert.doesNotMatch(legacyCertificateSource, /firebase\/firestore/);
+  assert.doesNotMatch(legacyVerificationSource, /getDocs|collection\(/);
+  assert.match(legacyCertificateSource, /redirect\("\/certificates\//);
+});
+
+test("protects assessment access and failed-answer feedback", () => {
+  assert.match(certificationPageSource, /await requireUser\(\)/);
+  assert.match(
+    learningRecordsSource,
+    /result\.passed \? result : \{ \.\.\.result, feedback: \[\] \}/,
+  );
+  assert.match(learningRecordsSource, /Wait 30 seconds/);
 });
