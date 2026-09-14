@@ -18,9 +18,10 @@ remain resolution-independent and avoid a WebGL or large-raster dependency.
 - `gold`: authority surface for gates, trust and credential milestones.
 - `glass`: restrained translucent layer used only over navy environments.
 
-All materials consume semantic variables from `src/app/globals.css`. Product
-components must not create a new shadow, highlight or depth scale when the
-system already supplies one.
+Core brand tokens remain in `src/app/globals.css`; spatial depth, materials and
+motion live in the independently versioned `src/app/spatial-surfaces.css`.
+Product components must not create a new shadow, highlight or depth scale when
+the system already supplies one.
 
 ## Depth scale
 

@@ -1,4 +1,5 @@
 import "./globals.css";
+import "./spatial-surfaces.css";
 import "./mobile.css";
 import "./intelligence.css";
 import type { Metadata, Viewport } from "next";
