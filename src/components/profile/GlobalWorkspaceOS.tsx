@@ -257,7 +257,11 @@ export default function GlobalWorkspaceOS({
           </nav>
 
           <div className="mt-7 hidden lg:grid lg:gap-3">
-            <article className="rounded-3xl border border-[#E5B94B]/20 bg-gradient-to-br from-[#E5B94B]/12 to-transparent p-4">
+            <article
+              className="tgpi-card-3d rounded-3xl border border-[#E5B94B]/20 bg-gradient-to-br from-[#E5B94B]/12 to-transparent p-4"
+              data-tgpi-depth="subtle"
+              data-tgpi-tone="glass"
+            >
               <div className="flex items-center gap-3">
                 <GlobalRankBadge rank={rank} size="small" />
                 <div className="min-w-0">
@@ -310,7 +314,12 @@ export default function GlobalWorkspaceOS({
 
           <section aria-label="Workspace indicators" className="mt-6 grid grid-cols-2 gap-3 xl:grid-cols-4">
             {dashboardStats.map((stat) => (
-              <article className="rounded-2xl border border-white/10 bg-[#0A1521] p-4 shadow-[0_18px_40px_rgba(0,0,0,0.16)]" key={stat.label}>
+              <article
+                className="tgpi-card-3d rounded-2xl border border-white/10 bg-[#0A1521] p-4"
+                data-tgpi-depth="subtle"
+                data-tgpi-tone="navy"
+                key={stat.label}
+              >
                 <div className="flex items-start justify-between gap-2">
                   <p className="text-[10px] font-extrabold uppercase tracking-[0.13em] text-[#8798AA]">{stat.label}</p>
                   <span aria-hidden="true" className="text-sm text-[#E5B94B]">{stat.icon}</span>
@@ -323,7 +332,12 @@ export default function GlobalWorkspaceOS({
 
           <div className="mt-5 grid min-w-0 gap-5 2xl:grid-cols-[minmax(0,1fr)_minmax(300px,340px)]">
             <div className="grid min-w-0 content-start gap-5">
-              <section aria-labelledby="mission-title" className="relative overflow-hidden rounded-[30px] border border-white/10 bg-[#0A1521] shadow-[0_24px_70px_rgba(0,0,0,0.24)]">
+              <section
+                aria-labelledby="mission-title"
+                className="tgpi-card-3d relative overflow-hidden rounded-[30px] border border-white/10 bg-[#0A1521]"
+                data-tgpi-depth="hero"
+                data-tgpi-tone="navy"
+              >
                 <Image
                   alt={primaryCountry ? getCountryImageAlt(primaryCountry) : "TGPI global intelligence network"}
                   className="absolute inset-0 h-full w-full object-cover object-center opacity-50"
@@ -366,7 +380,7 @@ export default function GlobalWorkspaceOS({
                 </div>
               </section>
 
-              <section aria-labelledby="journey-title" className="rounded-[30px] border border-white/10 bg-[#08131F] p-5 sm:p-6">
+              <section aria-labelledby="journey-title" className="tgpi-card-3d rounded-[30px] border border-white/10 bg-[#08131F] p-5 sm:p-6" data-tgpi-depth="raised" data-tgpi-tone="navy">
                 <div className="flex flex-wrap items-end justify-between gap-3">
                   <div>
                     <p className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-[#E5B94B]">Global decision journey</p>
@@ -379,7 +393,7 @@ export default function GlobalWorkspaceOS({
                 </div>
               </section>
 
-              <section aria-labelledby="next-actions-title" className="rounded-[30px] border border-white/10 bg-[#08131F] p-5 sm:p-7">
+              <section aria-labelledby="next-actions-title" className="tgpi-card-3d rounded-[30px] border border-white/10 bg-[#08131F] p-5 sm:p-7" data-tgpi-depth="raised" data-tgpi-tone="navy">
                 <div className="flex flex-wrap items-end justify-between gap-3">
                   <div>
                     <p className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-[#E5B94B]">Intelligent action queue</p>
@@ -390,7 +404,7 @@ export default function GlobalWorkspaceOS({
                 <div className="mt-6 grid gap-3 lg:grid-cols-2">{prioritizedActions.map((action) => <ActionItem action={action} key={action.id} />)}</div>
               </section>
 
-              <section aria-labelledby="shortlist-title" className="rounded-[30px] border border-white/10 bg-[#08131F] p-5 sm:p-7">
+              <section aria-labelledby="shortlist-title" className="tgpi-card-3d rounded-[30px] border border-white/10 bg-[#08131F] p-5 sm:p-7" data-tgpi-depth="raised" data-tgpi-tone="navy">
                 <div className="flex flex-wrap items-end justify-between gap-3">
                   <div>
                     <p className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-[#E5B94B]">Country intelligence</p>
@@ -401,7 +415,7 @@ export default function GlobalWorkspaceOS({
                 {model.countryFits.length ? (
                   <div className="mt-6 grid gap-4 lg:grid-cols-3">
                     {model.countryFits.slice(0, 3).map((fit, index) => (
-                      <article className="group overflow-hidden rounded-2xl border border-white/10 bg-[#0A1726]" key={fit.country.slug}>
+                      <article className="tgpi-card-3d group overflow-hidden rounded-2xl border border-white/10 bg-[#0A1726]" data-tgpi-depth="subtle" data-tgpi-interactive="true" data-tgpi-tone="glass" key={fit.country.slug}>
                         <Link aria-label={`Open ${fit.country.name} intelligence`} className="relative block aspect-[16/9] overflow-hidden" href={`/countries/${fit.country.slug}`}>
                           <Image alt={getCountryImageAlt(fit.country)} className="object-cover transition duration-700 group-hover:scale-105" fill sizes="(min-width:1280px) 22vw, 100vw" src={getCountryImageUrl(fit.country)} />
                           <span className="absolute inset-0 bg-gradient-to-t from-[#06101B] via-transparent to-transparent" />
@@ -437,7 +451,7 @@ export default function GlobalWorkspaceOS({
             </div>
 
             <aside className="grid min-w-0 content-start gap-5">
-              <section aria-labelledby="pulse-title" className="rounded-[28px] border border-[#E5B94B]/25 bg-gradient-to-br from-[#10243A] to-[#08131F] p-5 shadow-[0_24px_65px_rgba(0,0,0,0.24)] sm:p-6">
+              <section aria-labelledby="pulse-title" className="tgpi-card-3d rounded-[28px] border border-[#E5B94B]/25 bg-gradient-to-br from-[#10243A] to-[#08131F] p-5 sm:p-6" data-tgpi-depth="floating" data-tgpi-tone="navy">
                 <div className="flex items-start justify-between gap-3">
                   <div>
                     <p className="text-[10px] font-extrabold uppercase tracking-[0.17em] text-[#E5B94B]">Decision pulse</p>
@@ -461,7 +475,7 @@ export default function GlobalWorkspaceOS({
                 <p className="mt-4 text-xs leading-6 text-[#B1BECC]">Calculated from your saved plan and private activity. No simulated score or approval probability.</p>
               </section>
 
-              <section aria-labelledby="rank-card-title" className="overflow-hidden rounded-[28px] border border-[#E5B94B]/20 bg-[radial-gradient(circle_at_top_right,rgba(34,99,156,0.32),transparent_45%),#0A1521] p-5 sm:p-6">
+              <section aria-labelledby="rank-card-title" className="tgpi-card-3d overflow-hidden rounded-[28px] border border-[#E5B94B]/20 bg-[radial-gradient(circle_at_top_right,rgba(34,99,156,0.32),transparent_45%),#0A1521] p-5 sm:p-6" data-tgpi-depth="raised" data-tgpi-tone="navy">
                 <div className="flex items-center gap-4">
                   <GlobalRankBadge rank={rank} size="medium" />
                   <div className="min-w-0">
@@ -482,7 +496,7 @@ export default function GlobalWorkspaceOS({
                 <Link className="mt-4 inline-flex text-xs font-extrabold text-[#F0D58C]" href="/profile/security#settings-progress">View rank journey →</Link>
               </section>
 
-              <section aria-labelledby="identity-card-title" className="min-w-0 overflow-hidden rounded-[28px] border border-white/10 bg-[#0A1521] p-5 sm:p-6">
+              <section aria-labelledby="identity-card-title" className="tgpi-card-3d min-w-0 overflow-hidden rounded-[28px] border border-white/10 bg-[#0A1521] p-5 sm:p-6" data-tgpi-depth="raised" data-tgpi-tone="navy">
                 <div className="flex min-w-0 items-center gap-4">
                   <WorkspaceAvatar identity={identity} large />
                   <div className="min-w-0 flex-1">
@@ -507,7 +521,7 @@ export default function GlobalWorkspaceOS({
                 </div>
               </section>
 
-              <section aria-labelledby="plan-summary-title" className="rounded-[28px] border border-white/10 bg-[#0A1521] p-5 sm:p-6">
+              <section aria-labelledby="plan-summary-title" className="tgpi-card-3d rounded-[28px] border border-white/10 bg-[#0A1521] p-5 sm:p-6" data-tgpi-depth="raised" data-tgpi-tone="navy">
                 <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#8798AA]">Connected plan</p>
                 <h2 id="plan-summary-title" className="mt-2 font-[var(--tgpi-font-display)] text-2xl font-semibold">Your direction at a glance.</h2>
                 <dl className="mt-4 grid gap-3">
@@ -520,7 +534,7 @@ export default function GlobalWorkspaceOS({
                 </dl>
               </section>
 
-              <section aria-labelledby="activity-title" className="rounded-[28px] border border-white/10 bg-[#0A1521] p-5 sm:p-6">
+              <section aria-labelledby="activity-title" className="tgpi-card-3d rounded-[28px] border border-white/10 bg-[#0A1521] p-5 sm:p-6" data-tgpi-depth="raised" data-tgpi-tone="navy">
                 <div className="flex items-center justify-between gap-3">
                   <div>
                     <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#8798AA]">Recent activity</p>

@@ -23,7 +23,9 @@ export function EditorialCard({
 }: EditorialCardProps) {
   return (
     <article
-      className={`rounded-[var(--tgpi-radius-lg)] border p-5 shadow-[var(--tgpi-shadow-soft)] md:p-7 ${toneClasses[tone]} ${className}`.trim()}
+      className={`tgpi-card-3d rounded-[var(--tgpi-radius-lg)] border p-5 shadow-[var(--tgpi-shadow-soft)] md:p-7 ${toneClasses[tone]} ${className}`.trim()}
+      data-tgpi-depth="raised"
+      data-tgpi-tone={tone}
     >
       {children}
     </article>

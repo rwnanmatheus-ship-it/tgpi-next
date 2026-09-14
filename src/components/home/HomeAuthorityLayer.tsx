@@ -39,7 +39,12 @@ export default function HomeAuthorityLayer() {
 
           <div className="grid gap-4 sm:grid-cols-2">
             {decisionPrinciples.map(([number, title, description]) => (
-              <article key={number} className="rounded-[24px] border border-[var(--tgpi-border)] bg-white p-6 shadow-[var(--tgpi-shadow-sm)]">
+              <article
+                key={number}
+                className="tgpi-card-3d rounded-[24px] border border-[var(--tgpi-border)] bg-white p-6"
+                data-tgpi-depth="subtle"
+                data-tgpi-tone="white"
+              >
                 <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-gold-strong)]">
                   Principle {number}
                 </p>

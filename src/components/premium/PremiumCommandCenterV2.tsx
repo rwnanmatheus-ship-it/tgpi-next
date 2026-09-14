@@ -120,7 +120,12 @@ function CountryCard({ country }: { country: PremiumCountryCard }) {
   if (!countryData) return null;
 
   return (
-    <article className="group overflow-hidden rounded-[24px] border border-[#D8D2C4] bg-[#FFFDF8] transition hover:-translate-y-1 hover:border-[#B58A2A] hover:shadow-[0_18px_40px_rgba(11,31,58,0.1)]">
+    <article
+      className="tgpi-card-3d group overflow-hidden rounded-[24px] border border-[#D8D2C4] bg-[#FFFDF8]"
+      data-tgpi-depth="raised"
+      data-tgpi-interactive="true"
+      data-tgpi-tone="paper"
+    >
       <div className="relative aspect-[16/9] overflow-hidden bg-[#D9D2C4]">
         <Image
           alt={getCountryImageAlt(countryData)}
@@ -212,7 +217,11 @@ export default function PremiumCommandCenterV2({
     <main className="min-h-screen bg-[#F5F1E8] text-[#0B1F3A]">
       <section className="border-b border-[#D8D2C4] bg-[#FFFDF8] px-4 py-8 sm:px-6 lg:py-12">
         <div className="mx-auto max-w-7xl">
-          <div className="overflow-hidden rounded-[32px] bg-[#0B1F3A] text-white shadow-[0_28px_80px_rgba(11,31,58,0.2)]">
+          <div
+            className="tgpi-card-3d overflow-hidden rounded-[32px] bg-[#0B1F3A] text-white"
+            data-tgpi-depth="hero"
+            data-tgpi-tone="navy"
+          >
             <div className="grid lg:grid-cols-[1.3fr_.7fr]">
               <div className="relative overflow-hidden p-7 sm:p-10 lg:p-14">
                 <div
@@ -291,7 +300,11 @@ export default function PremiumCommandCenterV2({
             </div>
           </div>
 
-          <dl className="mt-4 grid overflow-hidden rounded-[24px] border border-[#D8D2C4] bg-white sm:grid-cols-2 lg:grid-cols-4">
+          <dl
+            className="tgpi-card-3d mt-4 grid overflow-hidden rounded-[24px] border border-[#D8D2C4] bg-white sm:grid-cols-2 lg:grid-cols-4"
+            data-tgpi-depth="subtle"
+            data-tgpi-tone="white"
+          >
             {model.stats.map((stat) => (
               <div
                 className="border-b border-[#E4DED2] p-5 last:border-b-0 sm:[&:nth-child(odd)]:border-r lg:border-b-0 lg:border-r lg:last:border-r-0"
@@ -363,7 +376,11 @@ export default function PremiumCommandCenterV2({
       <section className="border-y border-[#D8D2C4] bg-[#FFFDF8] px-4 py-12 sm:px-6 lg:py-16">
         <div className="mx-auto max-w-7xl">
           <div className="grid gap-5 lg:grid-cols-3">
-            <article className="flex min-h-80 flex-col rounded-[28px] bg-[#0B1F3A] p-7 text-white shadow-[0_18px_50px_rgba(11,31,58,0.14)] sm:p-8">
+            <article
+              className="tgpi-card-3d flex min-h-80 flex-col rounded-[28px] bg-[#0B1F3A] p-7 text-white sm:p-8"
+              data-tgpi-depth="floating"
+              data-tgpi-tone="navy"
+            >
               <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#F0D58C]">
                 Latest comparison
               </p>
@@ -388,7 +405,11 @@ export default function PremiumCommandCenterV2({
               </Link>
             </article>
 
-            <article className="flex min-h-80 flex-col rounded-[28px] border border-[#D8D2C4] bg-white p-7 sm:p-8">
+            <article
+              className="tgpi-card-3d flex min-h-80 flex-col rounded-[28px] border border-[#D8D2C4] bg-white p-7 sm:p-8"
+              data-tgpi-depth="raised"
+              data-tgpi-tone="white"
+            >
               <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#79550F]">
                 Monthly cost plan
               </p>
@@ -411,7 +432,11 @@ export default function PremiumCommandCenterV2({
               </Link>
             </article>
 
-            <article className="flex min-h-80 flex-col rounded-[28px] border border-[#D8D2C4] bg-[#F7F2E8] p-7 sm:p-8">
+            <article
+              className="tgpi-card-3d flex min-h-80 flex-col rounded-[28px] border border-[#D8D2C4] bg-[#F7F2E8] p-7 sm:p-8"
+              data-tgpi-depth="raised"
+              data-tgpi-tone="paper"
+            >
               <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#79550F]">
                 Document review progress
               </p>

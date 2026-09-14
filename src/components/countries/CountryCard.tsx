@@ -58,7 +58,12 @@ export function CountryCard({ country }: CountryCardProps) {
   const hasImage = country.visual?.hasImage ?? false;
 
   return (
-    <article className="mobile-country-card group overflow-hidden rounded-[1.75rem] border border-[var(--tgpi-border)] bg-white shadow-[var(--tgpi-shadow-soft)] transition duration-300 hover:-translate-y-1 hover:border-[var(--tgpi-gold)] hover:shadow-[var(--tgpi-shadow-premium)]">
+    <article
+      className="tgpi-card-3d mobile-country-card group overflow-hidden rounded-[1.75rem] border border-[var(--tgpi-border)] bg-white shadow-[var(--tgpi-shadow-soft)] transition duration-300 hover:border-[var(--tgpi-gold)]"
+      data-tgpi-depth="raised"
+      data-tgpi-interactive="true"
+      data-tgpi-tone="white"
+    >
       <Link
         aria-label={`Open ${country.name} country intelligence profile`}
         href={`/countries/${country.slug}`}

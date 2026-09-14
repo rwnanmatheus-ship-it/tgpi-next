@@ -98,7 +98,10 @@ export default function HomeInstagramContinuity() {
                 key={topic.title}
                 href={topic.href}
                 data-tgpi-editorial-topic={topic.eyebrow}
-                className="group min-w-[88vw] snap-center overflow-hidden rounded-[30px] border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] shadow-[var(--tgpi-shadow-soft)] transition duration-300 hover:-translate-y-1 hover:border-[var(--tgpi-gold)]/60 hover:shadow-[var(--tgpi-shadow-premium)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)] sm:min-w-[66vw] lg:min-w-0"
+                className="tgpi-card-3d group min-w-[88vw] snap-center overflow-hidden rounded-[30px] border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)] sm:min-w-[66vw] lg:min-w-0"
+                data-tgpi-depth="raised"
+                data-tgpi-interactive="true"
+                data-tgpi-tone="paper"
               >
                 <article className="grid min-h-full md:grid-cols-[0.92fr_1.08fr]">
                   <div className="relative min-h-[230px] overflow-hidden md:min-h-[330px]">

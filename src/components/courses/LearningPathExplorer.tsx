@@ -60,7 +60,11 @@ export default function LearningPathExplorer({
         </p>
       </div>
 
-      <div className="mt-8 rounded-[28px] border border-[var(--tgpi-border)] bg-white p-4 shadow-[var(--tgpi-shadow-soft)] sm:p-5">
+      <div
+        className="tgpi-card-3d mt-8 rounded-[28px] border border-[var(--tgpi-border)] bg-white p-4 sm:p-5"
+        data-tgpi-depth="raised"
+        data-tgpi-tone="white"
+      >
         <p className="px-2 text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-muted)]">
           What do you need to do better?
         </p>
@@ -97,7 +101,9 @@ export default function LearningPathExplorer({
         </div>
 
         <div
-          className="mt-4 grid gap-6 overflow-hidden rounded-[22px] border border-white/10 bg-[var(--tgpi-navy)] p-6 text-white sm:p-7 lg:grid-cols-[1fr_auto] lg:items-end"
+          className="tgpi-card-3d mt-4 grid gap-6 overflow-hidden rounded-[22px] border border-white/10 bg-[var(--tgpi-navy)] p-6 text-white sm:p-7 lg:grid-cols-[1fr_auto] lg:items-end"
+          data-tgpi-depth="subtle"
+          data-tgpi-tone="navy"
           aria-live="polite"
         >
           <div>
@@ -208,11 +214,14 @@ function CourseCard({
 }) {
   return (
     <article
-      className={`group overflow-hidden rounded-[28px] border bg-white shadow-[var(--tgpi-shadow-soft)] transition duration-300 hover:-translate-y-1 hover:shadow-[var(--tgpi-shadow-premium)] ${
+      className={`tgpi-card-3d group overflow-hidden rounded-[28px] border bg-white ${
         highlighted
           ? "border-[var(--tgpi-gold)] ring-4 ring-[var(--tgpi-gold)]/10"
           : "border-[var(--tgpi-border)]"
       } ${featured ? "grid lg:grid-cols-[0.92fr_1.08fr]" : "flex h-full flex-col"}`}
+      data-tgpi-depth={featured ? "floating" : "raised"}
+      data-tgpi-interactive="true"
+      data-tgpi-tone="white"
     >
       <div
         className={`relative isolate overflow-hidden bg-[var(--tgpi-navy)] ${

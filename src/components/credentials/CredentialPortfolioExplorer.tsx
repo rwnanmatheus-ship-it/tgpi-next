@@ -92,7 +92,11 @@ export default function CredentialPortfolioExplorer({
         </p>
       </div>
 
-      <div className="mt-7 rounded-[26px] border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] p-4 shadow-[var(--tgpi-shadow-sm)] sm:p-5">
+      <div
+        className="tgpi-card-3d mt-7 rounded-[26px] border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] p-4 sm:p-5"
+        data-tgpi-depth="subtle"
+        data-tgpi-tone="paper"
+      >
         <div className="grid gap-4 lg:grid-cols-[1fr_auto] lg:items-end">
           <label className="block">
             <span className="text-[10px] font-extrabold uppercase tracking-[0.16em] text-[var(--tgpi-gold-strong)]">
@@ -171,7 +175,10 @@ export default function CredentialPortfolioExplorer({
             return (
               <article
                 key={credential.id}
-                className="group overflow-hidden rounded-[28px] border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] shadow-[var(--tgpi-shadow-soft)] transition duration-300 hover:-translate-y-1 hover:border-[var(--tgpi-gold)]"
+                className="tgpi-card-3d group overflow-hidden rounded-[28px] border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)]"
+                data-tgpi-depth="raised"
+                data-tgpi-interactive="true"
+                data-tgpi-tone="paper"
               >
                 <div
                   className={

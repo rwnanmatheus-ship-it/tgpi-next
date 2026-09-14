@@ -1,6 +1,6 @@
 .ig-shell { background: var(--tgpi-canvas,#f7f3ea); color: var(--tgpi-navy,#0b1f3a); min-height:70vh; padding:clamp(20px,4vw,56px) 20px 64px; }
 .ig-container { max-width:1280px; margin:0 auto; }
-.ig-hero { isolation:isolate; padding:clamp(26px,5vw,64px); border:1px solid #d8b65f4a; border-radius:28px; background-color:#071a2d; background-image:linear-gradient(90deg,#06172bfa 0%,#06172be8 48%,#06172b70 100%),linear-gradient(0deg,#06172bd9,transparent 70%),url("/images/super-app/tgpi-intelligence-network-v1.webp"); background-position:center; background-size:cover; color:#fff; position:relative; overflow:hidden; box-shadow:0 28px 70px #03142624; }
+.ig-hero { isolation:isolate; padding:clamp(26px,5vw,64px); border:1px solid #d8b65f4a; border-radius:28px; background-color:#071a2d; background-image:linear-gradient(90deg,#06172bfa 0%,#06172be8 48%,#06172b70 100%),linear-gradient(0deg,#06172bd9,transparent 70%),url("/images/super-app/tgpi-intelligence-network-v1.webp"); background-position:center; background-size:cover; color:#fff; position:relative; overflow:hidden; box-shadow:var(--tgpi-depth-dark); transform:translateZ(0); }
 .ig-hero > * { position:relative; z-index:1; }
 .ig-hero h1 { font-family:var(--tgpi-font-display); font-size:clamp(2.5rem,5vw,4.8rem); line-height:1.06; max-width:900px; margin:18px 0; letter-spacing:-.035em; }
 .ig-hero p:not(.ig-eyebrow) { max-width:720px; line-height:1.8; color:#d9e3ed; }
@@ -19,12 +19,12 @@
 .ig-section { margin-top:32px; scroll-margin-top:100px; }
 .ig-section h2,.ig-panel h2,.ig-banner h2 { font-family:var(--tgpi-font-display); font-weight:600; font-size:clamp(1.9rem,3vw,2.7rem); line-height:1.15; margin:12px 0 20px; letter-spacing:-.025em; }
 .ig-panel h3,.ig-task h3,.ig-country-card h3 { font-family:var(--tgpi-font-display); font-size:25px; line-height:1.2; margin:10px 0; }
-.ig-panel,.ig-evidence { border:1px solid #d8d2c4; border-radius:22px; background:#fffdf8; padding:24px; min-width:0; box-shadow:0 18px 48px #06172b0b; }
+.ig-panel,.ig-evidence { border:1px solid color-mix(in srgb,var(--tgpi-border) 86%,white); border-radius:22px; background:radial-gradient(circle at 0 0,#fff 0,transparent 38%),linear-gradient(145deg,#fffdf8,#f9f5ec); padding:24px; min-width:0; box-shadow:var(--tgpi-depth-2); transform:translateZ(0); }
 .ig-status { margin:24px 0; padding:20px 24px; border:1px solid #c5d7d1; border-radius:18px; background:#f0f7f3; }
 .ig-small { font-size:14px; line-height:1.85; color:#526273; margin:12px 0; }
 .ig-meta { font-size:12px; line-height:1.7; color:#596879; margin:6px 0; overflow-wrap:anywhere; }
 .ig-value { font-size:clamp(1.65rem,2.6vw,2.4rem); line-height:1.2; letter-spacing:-.035em; font-weight:700; margin:24px 0 8px; overflow-wrap:anywhere; }
-.ig-evidence-grid,.ig-fit { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px; }
+.ig-evidence-grid,.ig-fit { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:20px; perspective:1400px; perspective-origin:50% 42%; }
 .ig-wide { grid-column:1/-1; }
 .ig-badge { font-size:10px; font-weight:800; padding:5px 8px; background:#eef1f3; color:#455463; border-radius:8px; }
 .ig-current { background:#e4f2e9; color:#246044; }
@@ -35,8 +35,8 @@
 .ig-form-grid label { display:flex; flex-direction:column; gap:8px; font-size:12px; font-weight:800; min-width:0; }
 .ig-form-grid input,.ig-form-grid select { padding:12px; width:100%; min-width:0; min-height:48px; border:1px solid #c8c5bc; border-radius:10px; background:white; font-size:16px; font-weight:400; color:#0b1f3a; }
 .ig-shell a:focus-visible,.ig-shell button:focus-visible,.ig-shell summary:focus-visible,.ig-shell input:focus-visible,.ig-shell select:focus-visible { outline:3px solid #a77b25; outline-offset:3px; }
-.ig-country-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:20px; margin:20px 0; }
-.ig-country-card { background:#fffdf8; border:1px solid #d8d2c4; border-radius:20px; overflow:hidden; box-shadow:0 16px 42px #06172b0d; }
+.ig-country-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:20px; margin:20px 0; perspective:1400px; perspective-origin:50% 42%; }
+.ig-country-card { background:radial-gradient(circle at 0 0,#fff 0,transparent 38%),linear-gradient(145deg,#fffdf8,#f9f5ec); border:1px solid color-mix(in srgb,var(--tgpi-border) 86%,white); border-radius:20px; overflow:hidden; box-shadow:var(--tgpi-depth-2); transform:translateZ(0); transform-style:preserve-3d; transition:transform .36s cubic-bezier(.2,.82,.2,1),border-color .24s ease,box-shadow .36s ease; }
 .ig-country-image { position:relative; display:block; aspect-ratio:16/10; background:#0b1f3a; }
 .ig-image-label { position:absolute; bottom:12px; left:12px; padding:5px 8px; background:#0b1f3add; color:white; font-size:9px; border-radius:6px; }
 .ig-card-body { padding:22px; }
@@ -44,11 +44,11 @@
 .ig-select[aria-pressed=true] { background:#0b1f3a; color:white; }
 .ig-selection { padding:18px; border:1px solid #b59a5c; background:#fff6de; border-radius:16px; }
 .ig-selection .ig-actions { margin-top:10px; }
-.ig-task-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; margin:24px 0; }
-.ig-task { padding:22px; border:1px solid #ded8cc; border-radius:18px; background:linear-gradient(145deg,#fffdf8,#f7f3ea); box-shadow:0 14px 36px #06172b0a; }
+.ig-task-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:24px; margin:24px 0; perspective:1400px; }
+.ig-task { padding:22px; border:1px solid #ded8cc; border-radius:18px; background:radial-gradient(circle at 0 0,#fff 0,transparent 40%),linear-gradient(145deg,#fffdf8,#f7f3ea); box-shadow:var(--tgpi-depth-1); transform:translateZ(0); }
 .ig-step { display:inline-flex; align-items:center; justify-content:center; width:34px; height:34px; border-radius:50%; background:#e9ddc3; font-size:12px; font-weight:800; }
-.ig-compare-row { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; }
-.ig-banner { max-width:1280px; margin:32px auto; padding:32px; border:1px solid #d8d2c4; border-radius:22px; background:#fffdf8; color:#0b1f3a; }
+.ig-compare-row { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:16px; perspective:1400px; }
+.ig-banner { max-width:1280px; margin:32px auto; padding:32px; border:1px solid color-mix(in srgb,var(--tgpi-border) 86%,white); border-radius:22px; background:radial-gradient(circle at 0 0,#fff 0,transparent 38%),linear-gradient(145deg,#fffdf8,#f9f5ec); color:#0b1f3a; box-shadow:var(--tgpi-depth-2); transform:translateZ(0); }
 .ig-banner p:not(.ig-eyebrow) { color:#526273; line-height:1.7; }
 .ig-stack { display:grid; gap:18px; }
 .ig-claim h3 { font-family:var(--tgpi-font-display); font-size:25px; line-height:1.2; margin:18px 0 12px; }
@@ -57,11 +57,12 @@
 .ig-question-list li { margin:8px 0; }
 .ig-source-action { display:block; line-height:1.65; }
 .ig-watch-row { border-top:1px solid #ded8cc; padding-top:16px; min-width:0; }
-.ig-budget-result { border:1px solid #c5d7d1; background:#f0f7f3; border-radius:18px; padding:24px; }
+.ig-budget-result { border:1px solid #c5d7d1; background:linear-gradient(145deg,#f7fcf9,#e8f4ed); border-radius:18px; padding:24px; box-shadow:var(--tgpi-depth-1); }
 .ig-check-label { display:flex; gap:12px; align-items:flex-start; font-size:15px; font-weight:700; line-height:1.6; cursor:pointer; }
 .ig-check-label input { width:20px; height:20px; flex:0 0 20px; margin-top:3px; accent-color:#0b1f3a; }
 .ig-coverage-list p { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:8px; padding:12px 0; border-bottom:1px solid #ded8cc; font-size:13px; }
+@media(hover:hover) and (pointer:fine) { .ig-country-card:hover,.ig-country-card:focus-within { border-color:var(--tgpi-gold); box-shadow:var(--tgpi-depth-3); transform:perspective(1400px) translate3d(0,-7px,0) rotateX(.55deg) rotateY(-.55deg) scale(1.004); } }
 @media(max-width:900px) { .ig-country-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .ig-compare-row { grid-template-columns:1fr; } }
 @media(max-width:640px) { .ig-shell { padding:16px 16px 90px; } .ig-hero { padding:28px 22px; border-radius:22px; background-position:64% center; } .ig-hero h1 { font-size:2.65rem; } .ig-fit,.ig-evidence-grid,.ig-country-grid,.ig-form-grid,.ig-task-grid { grid-template-columns:1fr; } .ig-panel,.ig-evidence { padding:20px; } .ig-task { padding:20px; } .ig-banner { margin:20px 16px; padding:24px; } .ig-spread { align-items:flex-start; } }
-@media(prefers-reduced-motion:reduce) { .ig-button { transition:none; } .ig-button:not(:disabled):hover { transform:none; } }
+@media(prefers-reduced-motion:reduce) { .ig-button,.ig-country-card { transition:none; } .ig-button:not(:disabled):hover,.ig-country-card:hover,.ig-country-card:focus-within { transform:none; } }
 @media print { .ig-actions,.ig-form-grid { display:none; } .ig-shell { padding:0; } .ig-panel { break-inside:avoid; } }

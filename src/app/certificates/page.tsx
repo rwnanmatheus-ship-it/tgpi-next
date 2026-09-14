@@ -119,7 +119,11 @@ export default async function CertificatesPage() {
             <span className="text-[var(--tgpi-gold-light)]">Credentials</span>
           </nav>
 
-          <div className="overflow-hidden rounded-[34px] border border-white/10 bg-white/[0.045] shadow-[0_34px_110px_rgba(0,0,0,.3)] backdrop-blur-sm">
+          <div
+            className="tgpi-card-3d overflow-hidden rounded-[34px] border border-white/10 bg-white/[0.045] backdrop-blur-sm"
+            data-tgpi-depth="hero"
+            data-tgpi-tone="glass"
+          >
             <div className="grid lg:grid-cols-[1fr_390px]">
               <div className="relative p-7 sm:p-11 lg:p-14">
                 <div
@@ -224,7 +228,9 @@ export default async function CertificatesPage() {
 
           <nav
             aria-label="Evidence journey"
-            className="mt-5 grid overflow-hidden rounded-[24px] border border-white/10 bg-white/[0.035] sm:grid-cols-2 lg:grid-cols-4"
+            className="tgpi-card-3d mt-5 grid overflow-hidden rounded-[24px] border border-white/10 bg-white/[0.035] sm:grid-cols-2 lg:grid-cols-4"
+            data-tgpi-depth="subtle"
+            data-tgpi-tone="glass"
           >
             {EVIDENCE_PATH.map((item, index) => (
               <Link
@@ -259,7 +265,11 @@ export default async function CertificatesPage() {
 
       <div className="mx-auto max-w-[1240px] px-4 py-10 sm:px-6 sm:py-14 lg:py-16">
         {!configured ? (
-          <section className="rounded-[28px] border border-[#D8B75D]/50 bg-[#FFF6D8] p-7 sm:p-9">
+          <section
+            className="tgpi-card-3d rounded-[28px] border border-[#D8B75D]/50 bg-[#FFF6D8] p-7 sm:p-9"
+            data-tgpi-depth="raised"
+            data-tgpi-tone="gold"
+          >
             <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#7A5A14]">
               Protected activation gate
             </p>
@@ -275,7 +285,11 @@ export default async function CertificatesPage() {
         ) : credentials.length ? (
           <CredentialPortfolioExplorer items={portfolioItems} />
         ) : (
-          <section className="overflow-hidden rounded-[30px] border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] shadow-[var(--tgpi-shadow-soft)]">
+          <section
+            className="tgpi-card-3d overflow-hidden rounded-[30px] border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)]"
+            data-tgpi-depth="raised"
+            data-tgpi-tone="paper"
+          >
             <div className="grid lg:grid-cols-[1fr_390px]">
               <div className="p-8 sm:p-10">
                 <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-strong)]">
@@ -322,7 +336,9 @@ export default async function CertificatesPage() {
 
         <section
           aria-labelledby="trust-system-title"
-          className="mt-12 overflow-hidden rounded-[30px] border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] shadow-[var(--tgpi-shadow-soft)] sm:mt-16"
+          className="tgpi-card-3d mt-12 overflow-hidden rounded-[30px] border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] sm:mt-16"
+          data-tgpi-depth="floating"
+          data-tgpi-tone="paper"
         >
           <div className="grid lg:grid-cols-[.75fr_1.25fr]">
             <div className="bg-[var(--tgpi-navy)] p-8 text-white sm:p-10">
@@ -403,7 +419,10 @@ export default async function CertificatesPage() {
             <Link
               key={item.title}
               href={item.href}
-              className="group rounded-[24px] border border-[var(--tgpi-border)] bg-white p-6 shadow-[var(--tgpi-shadow-sm)] transition hover:-translate-y-1 hover:border-[var(--tgpi-gold)]"
+              className="tgpi-card-3d group rounded-[24px] border border-[var(--tgpi-border)] bg-white p-6"
+              data-tgpi-depth="subtle"
+              data-tgpi-interactive="true"
+              data-tgpi-tone="white"
             >
               <p className="text-[9px] font-extrabold uppercase tracking-[0.16em] text-[var(--tgpi-gold-strong)]">
                 {item.label}
