@@ -120,3 +120,48 @@ test("protects assessment access and failed-answer feedback", () => {
   );
   assert.match(learningRecordsSource, /Wait 30 seconds/);
 });
+
+const credentialPortfolioPageSource = readFileSync(
+  new URL("../src/app/certificates/page.tsx", import.meta.url),
+  "utf8",
+);
+const credentialPortfolioExplorerSource = readFileSync(
+  new URL(
+    "../src/components/credentials/CredentialPortfolioExplorer.tsx",
+    import.meta.url,
+  ),
+  "utf8",
+);
+const credentialOwnerPageSource = readFileSync(
+  new URL("../src/app/certificates/[id]/page.tsx", import.meta.url),
+  "utf8",
+);
+const credentialActionsSource = readFileSync(
+  new URL(
+    "../src/components/credentials/CredentialActions.tsx",
+    import.meta.url,
+  ),
+  "utf8",
+);
+
+test("portfolio exposes complete lifecycle history without leaking private trust data", () => {
+  assert.match(credentialPortfolioPageSource, /credentials\.length/);
+  assert.doesNotMatch(
+    credentialPortfolioPageSource + credentialPortfolioExplorerSource,
+    /ownerUid|verificationHash/,
+  );
+  assert.match(credentialPortfolioExplorerSource, /Revoked · retained record/);
+  assert.match(credentialPortfolioExplorerSource, /Export JSON/);
+});
+
+test("owner credential view distinguishes revoked and integrity-review states", () => {
+  assert.match(credentialOwnerPageSource, /Credential revoked/);
+  assert.match(credentialOwnerPageSource, /Integrity review required/);
+  assert.match(credentialOwnerPageSource, /Current lifecycle status/);
+});
+
+test("printable credentials retain the verification QR", () => {
+  assert.match(credentialActionsSource, /QRCodeSVG/);
+  assert.match(credentialActionsSource, /print:border/);
+  assert.match(credentialActionsSource, /Open live verification/);
+});
