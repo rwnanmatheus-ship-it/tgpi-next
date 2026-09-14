@@ -17,7 +17,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test:learning-credentials": "node --experimental-strip-types --test scripts/learning-credentials.test.mjs"
+    "test:learning-credentials": "node --experimental-strip-types --test scripts/learning-credentials.test.mjs",
+    "prebuild": "npm run test:learning-credentials"
   },
   "dependencies": {
     "@clerk/nextjs": "^7.7.7",
