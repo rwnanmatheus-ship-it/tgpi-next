@@ -62,7 +62,11 @@ export default async function CoursesPage() {
   return (
     <TGPIPageShell>
       <LinkToEvidence />
-      <section className="mobile-compact-hero relative isolate overflow-hidden rounded-[30px] border border-white/10 bg-[var(--tgpi-navy)] text-white shadow-[var(--tgpi-shadow-premium)] sm:rounded-[36px]">
+      <section
+        className="tgpi-card-3d mobile-compact-hero relative isolate overflow-hidden rounded-[30px] border border-white/10 bg-[var(--tgpi-navy)] text-white sm:rounded-[36px]"
+        data-tgpi-depth="hero"
+        data-tgpi-tone="navy"
+      >
         <Image
           src="/images/learning/tgpi-learning-hero-v2.webp"
           alt="TGPI global knowledge observatory with an illuminated world atlas"
@@ -150,7 +154,9 @@ export default async function CoursesPage() {
       />
 
       <section
-        className="mb-14 overflow-hidden rounded-[30px] border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] shadow-[var(--tgpi-shadow-soft)] sm:rounded-[36px]"
+        className="tgpi-card-3d mb-14 overflow-hidden rounded-[30px] border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] sm:rounded-[36px]"
+        data-tgpi-depth="raised"
+        data-tgpi-tone="paper"
         aria-labelledby="learning-standard-title"
       >
         <div className="grid border-b border-[var(--tgpi-border-soft)] lg:grid-cols-[0.82fr_1.18fr]">

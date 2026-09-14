@@ -88,7 +88,10 @@ export default function HomeCountryCardsV2() {
           {countries.map((country) => (
             <article
               key={country.name}
-              className="group min-w-[86vw] snap-center overflow-hidden rounded-[28px] border border-white/15 bg-white/5 shadow-[0_24px_70px_rgba(0,0,0,.2)] transition duration-300 hover:-translate-y-1.5 hover:border-[var(--tgpi-gold-light)] sm:min-w-[62vw] lg:min-w-0"
+              className="tgpi-card-3d group min-w-[86vw] snap-center overflow-hidden rounded-[28px] border border-white/15 bg-white/5 sm:min-w-[62vw] lg:min-w-0"
+              data-tgpi-depth="floating"
+              data-tgpi-interactive="true"
+              data-tgpi-tone="glass"
             >
               <Link
                 href={country.href}

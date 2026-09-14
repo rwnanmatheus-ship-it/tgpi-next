@@ -35,7 +35,10 @@ export default function HomePortal() {
               key={intent.label}
               href={intent.href}
               data-tgpi-home-entry={intent.label}
-              className="group relative overflow-hidden rounded-[28px] border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] p-6 shadow-[var(--tgpi-shadow-soft)] transition duration-300 hover:-translate-y-1 hover:border-[var(--tgpi-gold)] hover:shadow-[var(--tgpi-shadow-premium)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)] sm:p-8"
+              className="tgpi-card-3d group relative overflow-hidden rounded-[28px] border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] p-6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)] sm:p-8"
+              data-tgpi-depth="raised"
+              data-tgpi-interactive="true"
+              data-tgpi-tone="paper"
             >
               <div className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full border border-[var(--tgpi-gold)]/18 bg-[var(--tgpi-gold-soft)]/40 transition duration-500 group-hover:scale-125" />
               <div className="relative">
@@ -94,7 +97,10 @@ export default function HomePortal() {
                   key={stage.number}
                   href={stage.href}
                   data-tgpi-system-stage={stage.title}
-                  className="group min-w-[78vw] snap-center rounded-[24px] border border-white/12 bg-white/[0.045] p-5 transition duration-300 hover:-translate-y-1 hover:border-[var(--tgpi-gold)]/60 hover:bg-white/[0.075] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold-light)] sm:min-w-[46vw] lg:min-w-0"
+                  className="tgpi-card-3d group min-w-[78vw] snap-center rounded-[24px] border border-white/12 bg-white/[0.045] p-5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold-light)] sm:min-w-[46vw] lg:min-w-0"
+                  data-tgpi-depth="subtle"
+                  data-tgpi-interactive="true"
+                  data-tgpi-tone="glass"
                 >
                   <div className="flex items-center justify-between gap-3">
                     <span className="text-[10px] font-extrabold tracking-[0.2em] text-[var(--tgpi-gold-light)]">
