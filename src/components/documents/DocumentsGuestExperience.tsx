@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import DocumentsPathfinder from "@/components/documents/DocumentsPathfinder";
+import CapabilitySystemRail from "@/components/capability/CapabilitySystemRail";
 
 const method = [
   {
@@ -58,9 +59,17 @@ export default function DocumentsGuestExperience({
   countryCount: number;
 }) {
   return (
-    <main className="min-h-screen bg-[var(--tgpi-canvas)] text-[var(--tgpi-ink)]">
-      <div className="mx-auto max-w-[1360px] px-4 py-6 sm:px-6 sm:py-10 lg:px-8 lg:py-14">
-        <section className="mobile-compact-hero relative isolate overflow-hidden rounded-[30px] border border-white/10 bg-[var(--tgpi-navy)] text-white shadow-[var(--tgpi-shadow-premium)] sm:rounded-[36px]">
+    <main id="main-content" className="min-h-screen overflow-x-clip bg-[var(--tgpi-canvas)] text-[var(--tgpi-ink)]">
+      <div className="tgpi-capability-frame py-6 sm:py-10 lg:py-14">
+        <CapabilitySystemRail
+          active="documents"
+          metric={{
+            detail: "Country-aware research paths without uploading sensitive legal files.",
+            label: "Intelligence coverage",
+            value: `${countryCount} countries`,
+          }}
+        />
+        <section className="mobile-compact-hero relative isolate mt-6 overflow-hidden rounded-[30px] border border-white/10 bg-[var(--tgpi-navy)] text-white shadow-[var(--tgpi-shadow-premium)] sm:rounded-[36px]">
           <Image
             src="/images/documents/tgpi-documents-hero-v2.webp"
             alt="TGPI global evidence observatory connecting an illuminated world atlas with organized document research"

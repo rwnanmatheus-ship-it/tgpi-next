@@ -7,6 +7,7 @@ import Link from "next/link";
 import LearningPathExplorer from "@/components/courses/LearningPathExplorer";
 import TGPIPageShell from "@/components/TGPIPageShell";
 import { coursesOverview } from "@/data/courses-overview";
+import CapabilitySystemRail from "@/components/capability/CapabilitySystemRail";
 
 export const metadata: Metadata = {
   title: "TGPI Learning — Build Global Capabilities",
@@ -60,10 +61,19 @@ export default async function CoursesPage() {
     : "/sign-in?redirect_url=/courses/english-abroad";
 
   return (
-    <TGPIPageShell>
-      <LinkToEvidence />
+    <TGPIPageShell width="capability">
+      <CapabilitySystemRail
+        active="learning"
+        metric={{
+          detail: userId
+            ? "Your progress remains connected to this authenticated identity."
+            : "Explore the system before creating your private learning record.",
+          label: userId ? "Identity continuity" : "Capability roadmap",
+          value: userId ? "Active" : "04 paths",
+        }}
+      />
       <section
-        className="tgpi-card-3d mobile-compact-hero relative isolate overflow-hidden rounded-[30px] border border-white/10 bg-[var(--tgpi-navy)] text-white sm:rounded-[36px]"
+        className="tgpi-card-3d mobile-compact-hero relative isolate mt-6 overflow-hidden rounded-[30px] border border-white/10 bg-[var(--tgpi-navy)] text-white sm:rounded-[36px]"
         data-tgpi-depth="hero"
         data-tgpi-tone="navy"
       >
@@ -147,6 +157,8 @@ export default async function CoursesPage() {
       </section>
 
       <MobileMicroLesson />
+
+      <LinkToEvidence />
 
       <LearningPathExplorer
         courses={coursesOverview}

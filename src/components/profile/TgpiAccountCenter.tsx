@@ -197,7 +197,7 @@ const connectedSystems = [
   { href: "/country-fit", icon: "◎", label: "Country Fit", text: "Match destinations to your real priorities." },
   { href: "/compare", icon: "⚖", label: "Compare", text: "Compare your shortlist through one decision lens." },
   { href: "/onboarding", icon: "◫", label: "Personal plan", text: "Turn context into your next practical actions." },
-  { href: "/documents", icon: "🛂", label: "Documents", text: "Connect evidence and preparation requirements." },
+  { href: "/passport", icon: "🛂", label: "Documents", text: "Connect evidence and preparation requirements." },
   { href: "/courses", icon: "🎓", label: "Learning", text: "Build capabilities linked to your global objective." },
 ] as const;
 

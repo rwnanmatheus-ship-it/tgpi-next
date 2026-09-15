@@ -12,6 +12,7 @@ import type {
   TgpiGlobalKeyBlockView,
   TgpiGlobalKeyView,
 } from "@/lib/global-key";
+import CapabilitySystemRail from "@/components/capability/CapabilitySystemRail";
 
 type GlobalKeyCenterProps = {
   initialKey: TgpiGlobalKeyView;
@@ -35,7 +36,7 @@ const connectedSystems = [
   },
   {
     description: "Preparation records stay private and account-bound.",
-    href: "/documents",
+    href: "/passport",
     icon: "🛂",
     label: "Documents",
   },
@@ -44,6 +45,12 @@ const connectedSystems = [
     href: "/courses",
     icon: "🎓",
     label: "Learning",
+  },
+  {
+    description: "Verified learning records bind to this same integrity layer.",
+    href: "/certificates",
+    icon: "◇",
+    label: "Certificates",
   },
 ] as const;
 
@@ -322,7 +329,7 @@ export default function GlobalKeyCenter({
   return (
     <div className="min-h-screen bg-[#050C14] text-white">
       <header className="border-b border-white/10 bg-[#071421]/95 px-4 py-4 backdrop-blur sm:px-6 lg:px-10">
-        <div className="mx-auto flex max-w-[1500px] flex-wrap items-center justify-between gap-3">
+        <div className="mx-auto flex max-w-[1360px] flex-wrap items-center justify-between gap-3">
           <Link
             className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 text-xs font-extrabold text-[#D5DEE7] transition hover:border-[#E5B94B]/35 hover:text-white"
             href="/profile"
@@ -348,8 +355,17 @@ export default function GlobalKeyCenter({
         </div>
       </header>
 
-      <main className="mx-auto max-w-[1500px] px-4 py-6 sm:px-6 sm:py-10 lg:px-10 lg:py-14">
-        <section className="relative overflow-hidden rounded-[32px] border border-[#E5B94B]/25 bg-[radial-gradient(circle_at_82%_18%,rgba(43,112,168,0.32),transparent_30%),radial-gradient(circle_at_10%_100%,rgba(181,138,42,0.18),transparent_32%),#081727] p-5 shadow-[0_32px_100px_rgba(0,0,0,0.38)] sm:p-8 lg:p-10">
+      <main id="main-content" className="tgpi-capability-frame py-6 sm:py-10 lg:py-14">
+        <CapabilitySystemRail
+          active="global-key"
+          theme="dark"
+          metric={{
+            detail: "Private identity with a tamper-evident history and optional public anchor.",
+            label: "Integrity revision",
+            value: String(keyView.revision).padStart(2, "0"),
+          }}
+        />
+        <section className="relative mt-6 overflow-hidden rounded-[32px] border border-[#E5B94B]/25 bg-[radial-gradient(circle_at_82%_18%,rgba(43,112,168,0.32),transparent_30%),radial-gradient(circle_at_10%_100%,rgba(181,138,42,0.18),transparent_32%),#081727] p-5 shadow-[0_32px_100px_rgba(0,0,0,0.38)] sm:p-8 lg:p-10">
           <div className="pointer-events-none absolute inset-0 opacity-20 [background-image:linear-gradient(rgba(255,255,255,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.08)_1px,transparent_1px)] [background-size:42px_42px]" />
           <div className="relative grid gap-8 xl:grid-cols-[minmax(0,1fr)_300px] xl:items-center">
             <div className="min-w-0">
@@ -527,7 +543,7 @@ export default function GlobalKeyCenter({
         <section aria-labelledby="connections-title" className="mt-6 rounded-[28px] border border-white/10 bg-[#08131F] p-5 sm:p-7">
           <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#E5B94B]">One connected identity</p>
           <h2 id="connections-title" className="mt-2 font-[var(--tgpi-font-display)] text-3xl font-semibold">Synchronized across the TGPI Super App</h2>
-          <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+          <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
             {connectedSystems.map((system) => (
               <Link className="group rounded-2xl border border-white/10 bg-white/[0.035] p-4 transition hover:-translate-y-0.5 hover:border-[#E5B94B]/35" href={system.href} key={system.label}>
                 <div className="flex items-center justify-between"><span aria-hidden="true" className="text-xl">{system.icon}</span><span aria-hidden="true" className="text-[#E5B94B] transition group-hover:translate-x-0.5">→</span></div>

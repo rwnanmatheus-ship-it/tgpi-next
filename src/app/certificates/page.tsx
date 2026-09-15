@@ -7,6 +7,7 @@ import CredentialPortfolioExplorer, {
 import { requireUser } from "@/lib/auth/guards";
 import { isLearningStorageConfigured } from "@/lib/firestore-admin-rest.server";
 import { listUserLearningCredentials } from "@/lib/learning-records.server";
+import CapabilitySystemRail from "@/components/capability/CapabilitySystemRail";
 
 export const metadata: Metadata = {
   title: "Credential Intelligence Center — TGPI",
@@ -119,8 +120,18 @@ export default async function CertificatesPage() {
             <span className="text-[var(--tgpi-gold-light)]">Credentials</span>
           </nav>
 
+          <CapabilitySystemRail
+            active="credentials"
+            theme="dark"
+            metric={{
+              detail: "Signed learning evidence with a transparent lifecycle and public verifier.",
+              label: "Active records",
+              value: String(activeCredentials.length).padStart(2, "0"),
+            }}
+          />
+
           <div
-            className="tgpi-card-3d overflow-hidden rounded-[34px] border border-white/10 bg-white/[0.045] backdrop-blur-sm"
+            className="tgpi-card-3d mt-6 overflow-hidden rounded-[34px] border border-white/10 bg-white/[0.045] backdrop-blur-sm"
             data-tgpi-depth="hero"
             data-tgpi-tone="glass"
           >
