@@ -7,6 +7,7 @@ export type SuperAppModuleId =
   | "plan"
   | "documents"
   | "learning"
+  | "credentials"
   | "intelligence"
   | "settings";
 
@@ -42,7 +43,7 @@ export const SUPER_APP_MODULES: readonly SuperAppModule[] = [
     shortLabel: "Global Key",
     description: "Verify your cryptographic identity and integrity chain.",
     keywords: ["identity", "cryptographic", "proof", "fingerprint", "verify"],
-    matchPrefixes: ["/global-key"],
+    matchPrefixes: ["/global-key", "/verify/global-key"],
   },
   {
     id: "country-fit",
@@ -105,6 +106,16 @@ export const SUPER_APP_MODULES: readonly SuperAppModule[] = [
     matchPrefixes: ["/courses"],
   },
   {
+    id: "credentials",
+    href: "/certificates",
+    icon: "◇",
+    label: "Credential Intelligence",
+    shortLabel: "Certificates",
+    description: "Inspect, share and verify assessed learning evidence.",
+    keywords: ["certificate", "credential", "skills", "mastery", "verification"],
+    matchPrefixes: ["/certificates", "/certificate", "/verify"],
+  },
+  {
     id: "intelligence",
     href: "/intelligence",
     icon: "🔎",
@@ -134,7 +145,8 @@ const NEXT_MODULE: Record<SuperAppModuleId, SuperAppModuleId> = {
   compare: "plan",
   plan: "documents",
   documents: "learning",
-  learning: "workspace",
+  learning: "credentials",
+  credentials: "workspace",
   intelligence: "countries",
   settings: "workspace",
 };

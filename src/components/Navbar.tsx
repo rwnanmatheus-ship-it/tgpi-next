@@ -19,7 +19,7 @@ const desktopLinks = [
 const mobileGroups = [
   { title: "Explore", links: [["Countries", "/countries"], ["Country Fit", "/country-fit"], ["Compare", "/compare"]] },
   { title: "Build", links: [["My workspace", "/profile"], ["Documents OS", "/passport"], ["Start a plan", "/onboarding"]] },
-  { title: "Learn", links: [["Courses", "/courses"], ["Resources", "/resources"], ["Authority", "/authority"]] },
+  { title: "Learn", links: [["Courses", "/courses"], ["Certificates", "/certificates"], ["Resources", "/resources"], ["Authority", "/authority"]] },
   { title: "Premium", links: [["Pricing", "/pricing"], ["Premium", "/premium"], ["Waitlist", "/premium-waitlist"]] },
 ] as const;
 
