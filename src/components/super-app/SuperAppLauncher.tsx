@@ -4,6 +4,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import NavigationIcon from "@/components/navigation/NavigationIcon";
+import { getSuperAppIconName } from "@/lib/navigation-system";
 import {
   getNextSuperAppModule,
   getSuperAppModule,
@@ -51,15 +53,17 @@ export default function SuperAppLauncher() {
     if (!dialog) return;
 
     if (open && !dialog.open) {
+      const previousOverflow = document.body.style.overflow;
       dialog.showModal();
+      document.body.style.overflow = "hidden";
       window.requestAnimationFrame(() => searchRef.current?.focus());
+      return () => {
+        document.body.style.overflow = previousOverflow;
+        if (dialog.open) dialog.close();
+      };
     } else if (!open && dialog.open) {
       dialog.close();
     }
-
-    return () => {
-      if (dialog.open) dialog.close();
-    };
   }, [open]);
 
   const nextModule = currentModule
@@ -79,7 +83,7 @@ export default function SuperAppLauncher() {
         ref={dialogRef}
         id="tgpi-super-app-launcher"
         aria-labelledby="tgpi-super-app-title"
-        className="m-auto max-h-[92dvh] w-[min(760px,calc(100vw-32px))] overflow-hidden rounded-[32px] border border-white/10 bg-[#06111F] p-0 text-white shadow-[0_35px_120px_rgba(0,0,0,0.55)] backdrop:bg-[#020811]/80 backdrop:backdrop-blur-sm"
+        className="tgpi-app-launcher m-auto max-h-[92dvh] w-[min(760px,calc(100vw-32px))] overflow-hidden rounded-[32px] border border-white/10 bg-[#06111F] p-0 text-white shadow-[0_35px_120px_rgba(0,0,0,0.55)] backdrop:bg-[#020811]/80 backdrop:backdrop-blur-sm"
         onCancel={(event) => {
           event.preventDefault();
           closeLauncher();
@@ -169,7 +173,7 @@ export default function SuperAppLauncher() {
                         aria-hidden="true"
                         className="grid h-11 w-11 place-items-center rounded-2xl bg-white/[0.065] text-xl transition group-hover:scale-105"
                       >
-                        {module.icon}
+                        <NavigationIcon name={getSuperAppIconName(module.id)} />
                       </span>
                       <span className="text-sm text-[#E5B94B]" aria-hidden="true">
                         {active ? "●" : "↗"}
@@ -199,7 +203,10 @@ export default function SuperAppLauncher() {
                   Recommended next
                 </p>
                 <p className="mt-2 text-sm font-extrabold">
-                  {nextModule.icon} Continue in {nextModule.label}
+                  <span className="inline-flex items-center gap-2">
+                    <NavigationIcon name={getSuperAppIconName(nextModule.id)} width={18} height={18} />
+                    Continue in {nextModule.label}
+                  </span>
                 </p>
                 <p className="mt-1 text-xs leading-5 text-[#9FB0C2]">
                   {nextModule.description}
@@ -215,8 +222,11 @@ export default function SuperAppLauncher() {
             </section>
 
             <p className="mt-4 text-[10px] leading-5 text-[#71859B]">
-              🔒 Your private identity and progress remain protected. TGPI does
-              not turn incomplete evidence into eligibility or approval claims.
+              <span className="inline-flex items-start gap-2">
+                <NavigationIcon name="shield" width={15} height={15} className="mt-0.5 shrink-0" />
+                <span>Your private identity and progress remain protected. TGPI does
+                not turn incomplete evidence into eligibility or approval claims.</span>
+              </span>
             </p>
           </div>
         </div>

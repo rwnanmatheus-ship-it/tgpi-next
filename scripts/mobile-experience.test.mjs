@@ -30,7 +30,7 @@ test("all visual overrides are scoped below 768px", () => {
 });
 test("mobile directory is requested on demand, without shipping full country data",()=>{
   const component=readFileSync(new URL("../src/components/mobile/MobileNavigation.tsx",import.meta.url),"utf8");
-  assert.match(component,/mode !== "search"/); assert.match(component,/AbortController/); assert.doesNotMatch(component,/from ["']@\/data\/countries/);
+  assert.match(component,/if \(!searchOpen\) return/); assert.match(component,/AbortController/); assert.doesNotMatch(component,/from ["']@\/data\/countries/);
 });
 test("QA preview cannot be accessed in production",()=>{
   const source=readFileSync(new URL("../src/app/mobile-preview/page.tsx",import.meta.url),"utf8");

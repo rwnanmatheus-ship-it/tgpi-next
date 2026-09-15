@@ -74,7 +74,8 @@ test("desktop navbar exposes the same global app launcher", () => {
 
 test("mobile navigation consumes the same shared module registry", () => {
   const source = readFileSync(new URL("../src/components/mobile/MobileNavigation.tsx", import.meta.url), "utf8");
-  assert.match(source, /SUPER_APP_MODULES\.map/);
-  assert.match(source, /mobile-super-app-grid/);
-  assert.match(source, /mobile-dock-emoji/);
+  assert.match(source, /searchSuperAppModules/);
+  assert.match(source, /SUPER_APP_OPEN_EVENT/);
+  assert.match(source, /COMPACT_NAVIGATION\.map/);
+  assert.doesNotMatch(source, /mobile-dock-emoji/);
 });
