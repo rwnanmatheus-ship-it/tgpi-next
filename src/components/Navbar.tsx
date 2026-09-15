@@ -1,196 +1,112 @@
 "use client";
 
+import { Show, UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import { Show, SignOutButton, UserButton } from "@clerk/nextjs";
-import { Container } from "@/components/design-system";
 import BrandCrest from "@/components/BrandCrest";
-import { SUPER_APP_OPEN_EVENT } from "@/lib/super-app";
-
-const desktopLinks = [
-  ["Countries", "/countries"],
-  ["Compare", "/compare"],
-  ["Learn", "/courses"],
-  ["Documents", "/passport"],
-  ["Pricing", "/pricing"],
-] as const;
-
-const mobileGroups = [
-  { title: "Explore", links: [["Countries", "/countries"], ["Country Fit", "/country-fit"], ["Compare", "/compare"]] },
-  { title: "Build", links: [["My workspace", "/profile"], ["Documents OS", "/passport"], ["Start a plan", "/onboarding"]] },
-  { title: "Learn", links: [["Courses", "/courses"], ["Certificates", "/certificates"], ["Resources", "/resources"], ["Authority", "/authority"]] },
-  { title: "Premium", links: [["Pricing", "/pricing"], ["Premium", "/premium"], ["Waitlist", "/premium-waitlist"]] },
-] as const;
+import { Container } from "@/components/design-system";
+import NavigationIcon from "@/components/navigation/NavigationIcon";
+import {
+  isNavigationDestinationActive,
+  PRIMARY_NAVIGATION,
+} from "@/lib/navigation-system";
+import { getSuperAppModule, SUPER_APP_OPEN_EVENT } from "@/lib/super-app";
 
 export default function Navbar() {
   const pathname = usePathname();
-  const [menuOpen, setMenuOpen] = useState(false);
-  const [compact, setCompact] = useState(false);
-  const menuButtonRef = useRef<HTMLButtonElement>(null);
-  const firstMenuLinkRef = useRef<HTMLAnchorElement>(null);
-
-  useEffect(() => {
-    const onScroll = () => setCompact(window.scrollY > 24);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  useEffect(() => {
-    if (!menuOpen) return;
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    window.requestAnimationFrame(() => firstMenuLinkRef.current?.focus());
-
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") {
-        setMenuOpen(false);
-        menuButtonRef.current?.focus();
-      }
-    };
-
-    window.addEventListener("keydown", onKeyDown);
-    return () => {
-      document.body.style.overflow = previousOverflow;
-      window.removeEventListener("keydown", onKeyDown);
-    };
-  }, [menuOpen]);
-
-  function closeMenu() {
-    setMenuOpen(false);
-  }
+  const currentModule = getSuperAppModule(pathname);
 
   return (
-    <header className="tgpi-legacy-navbar sticky top-0 z-50 border-b border-[var(--tgpi-border-soft)] bg-[rgba(255,253,248,0.94)] backdrop-blur-2xl transition-all duration-300">
-      <Container>
-        <div className={`flex items-center justify-between transition-all duration-300 ${compact ? "min-h-16 py-2" : "min-h-[76px] py-3"}`}>
-          <Link href="/" onClick={closeMenu} className="group flex min-w-0 items-center gap-3" aria-label="TGPI home">
-            <span className="relative h-12 w-10 shrink-0 transition group-hover:-translate-y-0.5">
-              <BrandCrest fill priority sizes="40px" className="object-contain drop-shadow-[0_6px_12px_rgba(7,26,50,0.2)]" />
+    <header
+      className="tgpi-desktop-navigation sticky top-0 z-50 border-b border-[var(--tgpi-border-soft)] bg-[rgba(255,253,248,0.92)] backdrop-blur-2xl"
+      data-navigation-version="2"
+    >
+      <Container className="tgpi-desktop-navigation-frame">
+        <Link href="/" className="tgpi-desktop-brand" aria-label="TGPI home">
+          <span className="tgpi-desktop-brand-crest">
+            <BrandCrest
+              fill
+              priority
+              sizes="42px"
+              className="object-contain drop-shadow-[0_7px_15px_rgba(7,26,50,0.2)]"
+            />
+          </span>
+          <span className="min-w-0">
+            <span className="block font-[var(--tgpi-font-display)] text-[1.45rem] font-bold leading-none tracking-[0.055em] text-[var(--tgpi-navy)]">
+              TGPI
             </span>
-            <span className="min-w-0">
-              <span className="block font-[var(--tgpi-font-display)] text-[1.4rem] font-bold leading-none tracking-[0.04em] text-[var(--tgpi-navy)]">TGPI</span>
-              <span className="mt-1 hidden text-[8px] font-extrabold uppercase tracking-[0.23em] text-[var(--tgpi-muted)] sm:block">The Global Polymath Institute</span>
-            </span>
-          </Link>
+            <span className="tgpi-desktop-brand-line">Global Intelligence OS</span>
+          </span>
+        </Link>
 
-          <nav className="hidden items-center gap-7 lg:flex" aria-label="Primary navigation">
-            {desktopLinks.map(([label, href]) => {
-              const active = pathname === href || pathname.startsWith(`${href}/`);
-              return (
-                <Link key={href} href={href} aria-current={active ? "page" : undefined} className={`relative py-2 text-[13px] font-bold transition after:absolute after:inset-x-0 after:-bottom-0.5 after:h-px after:origin-left after:bg-[var(--tgpi-gold)] after:transition-transform ${active ? "text-[var(--tgpi-gold-strong)] after:scale-x-100" : "text-[var(--tgpi-navy)] after:scale-x-0 hover:text-[var(--tgpi-gold-strong)] hover:after:scale-x-100"}`}>
-                  {label}
-                </Link>
-              );
-            })}
-          </nav>
-
-          <div className="hidden items-center gap-3 lg:flex">
-            <button
-              type="button"
-              aria-label="Open TGPI apps"
-              aria-haspopup="dialog"
-              aria-controls="tgpi-super-app-launcher"
-              aria-keyshortcuts="Control+K Meta+K"
-              title="Open TGPI apps (Ctrl/⌘ K)"
-              onClick={() => window.dispatchEvent(new Event(SUPER_APP_OPEN_EVENT))}
-              className="inline-flex h-11 min-w-11 items-center justify-center gap-2 rounded-2xl border border-[var(--tgpi-border)] bg-white px-3 text-[var(--tgpi-navy)] shadow-[var(--tgpi-shadow-sm)] transition hover:-translate-y-0.5 hover:border-[var(--tgpi-gold)] hover:bg-[var(--tgpi-gold-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
-            >
-              <span aria-hidden="true" className="grid grid-cols-2 gap-[3px]">
-                <span className="h-1.5 w-1.5 rounded-[2px] bg-current" />
-                <span className="h-1.5 w-1.5 rounded-[2px] bg-current" />
-                <span className="h-1.5 w-1.5 rounded-[2px] bg-current" />
-                <span className="h-1.5 w-1.5 rounded-[2px] bg-current" />
-              </span>
-              <span className="hidden text-xs font-extrabold xl:inline">Apps</span>
-            </button>
-            <Show when="signed-in">
-              <Link href="/notifications" aria-label="Open notifications" title="Notifications" className="grid h-11 w-11 place-items-center rounded-2xl border border-[var(--tgpi-border)] bg-white text-[var(--tgpi-navy)] shadow-[var(--tgpi-shadow-sm)] transition hover:-translate-y-0.5 hover:border-[var(--tgpi-gold)] hover:bg-[var(--tgpi-gold-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]">
-                <span aria-hidden="true">🔔</span>
+        <nav className="tgpi-desktop-primary" aria-label="Primary navigation">
+          {PRIMARY_NAVIGATION.map((destination) => {
+            const active = isNavigationDestinationActive(pathname, destination);
+            return (
+              <Link
+                key={destination.id}
+                href={destination.href}
+                aria-current={active ? "page" : undefined}
+                className="tgpi-desktop-primary-link"
+              >
+                <NavigationIcon name={destination.icon} width={17} height={17} />
+                <span>{destination.label}</span>
               </Link>
-              <Link href="/profile" className="inline-flex min-h-11 items-center gap-2 rounded-2xl border border-[var(--tgpi-border)] bg-white px-4 py-2 text-sm font-extrabold text-[var(--tgpi-navy)] shadow-[var(--tgpi-shadow-sm)] transition hover:-translate-y-0.5 hover:border-[var(--tgpi-gold)] hover:bg-[var(--tgpi-gold-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"><span aria-hidden="true">✦</span> Workspace</Link>
-              <UserButton
-                userProfileMode="navigation"
-                userProfileUrl="/profile/security"
-                appearance={{ elements: { avatarBox: "h-10 w-10 ring-2 ring-[#D8D2C4]" } }}
-              />
-            </Show>
-            <Show when="signed-out">
-              <Link href="/sign-in" className="px-3 py-2 text-sm font-bold text-[var(--tgpi-navy)]">Log in</Link>
-              <Link href="/sign-up" className="rounded-xl bg-[var(--tgpi-gold)] px-5 py-3 text-sm font-extrabold text-[var(--tgpi-navy)] shadow-[var(--tgpi-shadow-sm)] transition hover:-translate-y-0.5">Create Global Key</Link>
-            </Show>
-          </div>
+            );
+          })}
+        </nav>
 
-          <button ref={menuButtonRef} type="button" aria-expanded={menuOpen} aria-controls="tgpi-mobile-menu" aria-label={menuOpen ? "Close navigation menu" : "Open navigation menu"} onClick={() => setMenuOpen((value) => !value)} className="grid h-11 w-11 place-items-center rounded-full border border-[var(--tgpi-border)] bg-white text-[var(--tgpi-navy)] shadow-[var(--tgpi-shadow-sm)] transition active:scale-95 lg:hidden">
-            <span className="relative block h-4 w-5" aria-hidden="true">
-              <span className={`absolute left-0 top-0 h-[2px] w-5 bg-current transition ${menuOpen ? "translate-y-[7px] rotate-45" : ""}`} />
-              <span className={`absolute left-0 top-[7px] h-[2px] w-5 bg-current transition ${menuOpen ? "opacity-0" : ""}`} />
-              <span className={`absolute left-0 top-[14px] h-[2px] w-5 bg-current transition ${menuOpen ? "-translate-y-[7px] -rotate-45" : ""}`} />
+        <div className="tgpi-desktop-actions">
+          {currentModule ? (
+            <span className="tgpi-desktop-context" title={currentModule.description}>
+              <span aria-hidden="true" />
+              {currentModule.shortLabel}
             </span>
+          ) : null}
+
+          <button
+            type="button"
+            aria-label="Open TGPI apps"
+            aria-haspopup="dialog"
+            aria-controls="tgpi-super-app-launcher"
+            aria-keyshortcuts="Control+K Meta+K"
+            title="Open TGPI apps (Ctrl/⌘ K)"
+            onClick={() => window.dispatchEvent(new Event(SUPER_APP_OPEN_EVENT))}
+            className="tgpi-navigation-icon-button"
+          >
+            <NavigationIcon name="apps" />
+            <span className="tgpi-apps-label">Apps</span>
           </button>
+
+          <Show when="signed-in">
+            <Link
+              href="/notifications"
+              aria-label="Open notifications"
+              title="Notifications"
+              className="tgpi-navigation-square-button"
+            >
+              <NavigationIcon name="bell" />
+            </Link>
+            <Link href="/profile" className="tgpi-navigation-workspace-button">
+              <NavigationIcon name="key" width={18} height={18} />
+              <span className="tgpi-workspace-label">Workspace</span>
+            </Link>
+            <UserButton
+              userProfileMode="navigation"
+              userProfileUrl="/profile/security"
+              appearance={{ elements: { avatarBox: "h-10 w-10 ring-2 ring-[#D8D2C4]" } }}
+            />
+          </Show>
+
+          <Show when="signed-out">
+            <Link href="/sign-in" className="tgpi-navigation-login">Log in</Link>
+            <Link href="/sign-up" className="tgpi-navigation-key-button">
+              <NavigationIcon name="key" width={18} height={18} />
+              <span>Create Global Key</span>
+            </Link>
+          </Show>
         </div>
       </Container>
-
-      <div id="tgpi-mobile-menu" role="dialog" aria-modal="true" aria-label="TGPI mobile navigation" aria-hidden={!menuOpen} inert={!menuOpen ? true : undefined} className={`fixed inset-0 top-[65px] z-40 overflow-y-auto overscroll-contain bg-[var(--tgpi-navy-deep)] text-white transition duration-300 lg:hidden ${menuOpen ? "pointer-events-auto translate-y-0 opacity-100" : "pointer-events-none -translate-y-3 opacity-0"}`}>
-        <Container className="flex min-h-[calc(100dvh-65px)] flex-col py-7">
-          <div className="flex items-center justify-between border-b border-white/10 pb-6">
-            <div>
-              <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[var(--tgpi-gold-light)]">Global Decision Intelligence</p>
-              <p className="mt-2 font-[var(--tgpi-font-display)] text-3xl font-semibold text-white">Navigate TGPI</p>
-            </div>
-            <span className="rounded-full border border-white/10 px-3 py-2 text-[10px] uppercase tracking-[0.18em] text-white/45">Mobile OS</span>
-          </div>
-
-          <nav className="grid gap-7 py-7" aria-label="Mobile navigation">
-            {mobileGroups.map((group, groupIndex) => (
-              <div key={group.title}>
-                <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold-light)]">{group.title}</p>
-                <div className="mt-2 grid">
-                  {group.links.map(([label, href], linkIndex) => {
-                    const active = pathname === href || pathname.startsWith(`${href}/`);
-                    return (
-                      <Link ref={groupIndex === 0 && linkIndex === 0 ? firstMenuLinkRef : undefined} key={href} href={href} onClick={closeMenu} aria-current={active ? "page" : undefined} className={`flex min-h-12 items-center justify-between border-b border-white/10 py-3 text-[1.05rem] font-semibold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--tgpi-gold)] ${active ? "text-[var(--tgpi-gold-light)]" : "text-white active:bg-white/5"}`}>
-                        <span>{label}</span>
-                        <span className="text-[var(--tgpi-gold-light)]">↗</span>
-                      </Link>
-                    );
-                  })}
-                </div>
-              </div>
-            ))}
-          </nav>
-
-          <div className="mt-auto border-t border-white/10 pt-6">
-            <Show when="signed-in">
-              <div className="space-y-4">
-                <div className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 p-4">
-                  <div>
-                    <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-light)]">TGPI Global Key</p>
-                    <Link href="/profile" onClick={closeMenu} className="mt-1 block text-sm font-bold text-white">Open workspace</Link>
-                  </div>
-                  <UserButton userProfileMode="navigation" userProfileUrl="/profile/security" />
-                </div>
-                <SignOutButton redirectUrl="/">
-                  <button onClick={closeMenu} className="w-full rounded-xl border border-white/20 px-4 py-3 text-sm font-extrabold text-white">Sign out</button>
-                </SignOutButton>
-              </div>
-            </Show>
-            <Show when="signed-out">
-              <div className="grid gap-3">
-                <Link href="/sign-up" onClick={closeMenu} className="rounded-xl bg-[var(--tgpi-gold)] px-4 py-4 text-center text-sm font-extrabold text-[var(--tgpi-navy)]">Create your Global Key</Link>
-                <Link href="/sign-in" onClick={closeMenu} className="rounded-xl border border-white/20 px-4 py-4 text-center text-sm font-extrabold text-white">Sign in</Link>
-              </div>
-            </Show>
-            <div className="mt-6 flex flex-wrap gap-x-5 gap-y-3 text-xs text-white/45">
-              <Link href="https://www.instagram.com/theglobalpolymath/" onClick={closeMenu}>Instagram</Link>
-              <Link href="/about" onClick={closeMenu}>About</Link>
-              <Link href="/privacy" onClick={closeMenu}>Privacy</Link>
-              <Link href="/terms" onClick={closeMenu}>Terms</Link>
-            </div>
-          </div>
-        </Container>
-      </div>
     </header>
   );
 }

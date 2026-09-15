@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import NavigationIcon from "@/components/navigation/NavigationIcon";
 import GlobalRankBadge from "@/components/profile/GlobalRankBadge";
 import WorkspaceCommandButton from "@/components/profile/WorkspaceCommandButton";
 import { getCountryImageAlt, getCountryImageUrl } from "@/lib/countries";
@@ -11,6 +12,7 @@ import type {
   WorkspaceJourneyStage,
 } from "@/lib/global-workspace";
 import { SUPER_APP_MODULES } from "@/lib/super-app";
+import { getSuperAppIconName } from "@/lib/navigation-system";
 
 type WorkspaceIdentity = {
   avatarUrl: string;
@@ -249,7 +251,9 @@ export default function GlobalWorkspaceOS({
                   key={item.id}
                   title={item.description}
                 >
-                  <span aria-hidden="true" className={`grid h-8 w-8 place-items-center rounded-xl text-sm ${active ? "bg-[#E5B94B]/15" : "bg-white/5"}`}>{item.icon}</span>
+                  <span aria-hidden="true" className={`grid h-8 w-8 place-items-center rounded-xl text-sm ${active ? "bg-[#E5B94B]/15" : "bg-white/5"}`}>
+                    <NavigationIcon name={getSuperAppIconName(item.id)} width={17} height={17} />
+                  </span>
                   {item.shortLabel}
                 </Link>
               );
