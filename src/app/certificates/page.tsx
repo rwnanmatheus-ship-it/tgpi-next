@@ -100,7 +100,6 @@ export default async function CertificatesPage() {
 
   return (
     <main
-      id="main-content"
       className="min-h-screen bg-[var(--tgpi-canvas)] text-[var(--tgpi-navy)]"
     >
       <section className="relative overflow-hidden bg-[var(--tgpi-navy-deep)] px-4 pb-12 pt-7 text-white sm:px-6 sm:pb-16 sm:pt-10 lg:pb-20">

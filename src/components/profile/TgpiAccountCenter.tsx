@@ -769,16 +769,16 @@ export default function TgpiAccountCenter({
         </aside>
 
         <div className="min-w-0 bg-[#F8F5EE]">
-          <div className="sticky top-0 z-30 border-b border-[#DDD7CB] bg-[#FFFDFA]/95 p-3 backdrop-blur lg:hidden">
+          <div className="tgpi-account-mobile-nav sticky top-0 z-30 border-b border-[#DDD7CB] bg-[#FFFDFA]/95 p-3 backdrop-blur lg:hidden">
             <div className="flex items-center gap-3"><AccountAvatar imageUrl={account.avatarUrl} initials={initials} label={fullName} size="small" /><div className="min-w-0 flex-1"><p className="truncate text-sm font-extrabold text-[#0B1F3A]">{activeDefinition.label}</p><p className="truncate text-[11px] text-[#737C89]">{activeDefinition.description}</p></div>{isDirty ? <span className="h-2.5 w-2.5 rounded-full bg-[#B58A2A]" title="Unsaved changes" /> : null}</div>
-            <nav aria-label="Account settings" className="-mx-3 mt-3 flex gap-2 overflow-x-auto px-3 pb-1">
-              {settingsSections.map((section) => { const active = section.key === activeSection; return <button aria-current={active ? "page" : undefined} className={`flex min-w-max items-center gap-2 rounded-full border px-3 py-2 text-[11px] font-extrabold transition ${active ? "border-[#0B1F3A] bg-[#0B1F3A] text-white" : "border-[#DDD7CB] bg-white text-[#596473]"}`} key={section.key} onClick={() => selectSection(section.key)} type="button"><span aria-hidden="true">{section.sticker}</span>{section.label}</button>; })}
+            <nav aria-label="Account settings" className="tgpi-smart-rail tgpi-account-tabs -mx-3 mt-3 flex gap-2 overflow-x-auto px-3 pb-1">
+              {settingsSections.map((section) => { const active = section.key === activeSection; return <button aria-current={active ? "page" : undefined} className={`tgpi-account-tab flex min-w-max items-center gap-2 rounded-full border px-3 py-2 text-[11px] font-extrabold transition ${active ? "border-[#0B1F3A] bg-[#0B1F3A] text-white" : "border-[#DDD7CB] bg-white text-[#596473]"}`} key={section.key} onClick={() => selectSection(section.key)} type="button"><span aria-hidden="true">{section.sticker}</span>{section.label}</button>; })}
             </nav>
           </div>
 
-          <div className="scroll-mt-36 p-4 pb-28 sm:p-7 sm:pb-28 lg:p-10 lg:pb-28 xl:p-12 xl:pb-28" id={`settings-${activeSection}`} ref={contentRef}>{activeScreen}</div>
+          <div className="tgpi-account-content scroll-mt-36 p-4 pb-28 sm:p-7 sm:pb-28 lg:p-10 lg:pb-28 xl:p-12 xl:pb-28" id={`settings-${activeSection}`} ref={contentRef}>{activeScreen}</div>
 
-          <div className="sticky bottom-0 z-30 border-t border-[#DDD7CB] bg-white/95 px-4 py-3 backdrop-blur sm:px-7 lg:px-10">
+          <div className="tgpi-account-save-bar sticky bottom-0 z-30 border-t border-[#DDD7CB] bg-white/95 px-4 py-3 backdrop-blur sm:px-7 lg:px-10">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div aria-live="polite" role="status"><p className={`text-xs font-extrabold ${saveState === "error" ? "text-[#A32626]" : isDirty ? "text-[#8B6416]" : "text-[#277352]"}`}>{saveState === "saving" ? "Synchronizing your account…" : message || (isDirty ? "You have unsaved changes" : "All changes are synchronized")}</p><p className="mt-0.5 text-[10px] text-[#7A8390]">Connected to Country Fit, Compare, Personal Plan and Learning</p></div>
               <button className="min-h-11 rounded-xl bg-[#0B1F3A] px-6 text-xs font-extrabold text-white shadow-[0_10px_24px_rgba(11,31,58,0.18)] transition hover:bg-[#173554] disabled:cursor-not-allowed disabled:opacity-50" disabled={!isDirty || saveState === "saving"} onClick={saveAccount} type="button">{saveState === "saving" ? "Saving…" : "Save changes"}</button>

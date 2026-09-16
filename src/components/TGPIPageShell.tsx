@@ -7,7 +7,6 @@ export default function TGPIPageShell({
 }) {
   return (
     <main
-      id="main-content"
       className="min-h-screen overflow-x-clip bg-[#F7F3EA] text-[#111827]"
     >
       <div

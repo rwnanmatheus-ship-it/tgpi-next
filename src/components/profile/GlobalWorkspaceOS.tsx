@@ -153,7 +153,7 @@ function JourneyStage({
   return (
     <Link
       aria-current={active ? "step" : undefined}
-      className={`group relative flex min-w-[230px] flex-1 gap-3 rounded-2xl border p-4 transition hover:-translate-y-0.5 hover:border-[#E5B94B]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E5B94B] lg:min-w-0 ${active ? "border-[#E5B94B]/40 bg-[#E5B94B]/[0.08]" : "border-white/10 bg-white/[0.025]"}`}
+      className={`tgpi-journey-card group relative flex min-w-[230px] flex-1 gap-3 rounded-2xl border p-4 transition hover:-translate-y-0.5 hover:border-[#E5B94B]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E5B94B] lg:min-w-0 ${active ? "border-[#E5B94B]/40 bg-[#E5B94B]/[0.08]" : "border-white/10 bg-white/[0.025]"}`}
       href={stage.href}
     >
       <span
@@ -232,9 +232,9 @@ export default function GlobalWorkspaceOS({
   ];
 
   return (
-    <main id="main-content" className="min-h-screen overflow-x-clip bg-[#040B13] text-white">
+    <main className="min-h-screen overflow-x-clip bg-[#040B13] text-white">
       <div className="mx-auto max-w-[1800px] lg:grid lg:grid-cols-[228px_minmax(0,1fr)] 2xl:grid-cols-[244px_minmax(0,1fr)]">
-        <aside className="min-w-0 border-b border-white/10 bg-[#06101B] px-4 py-4 lg:min-h-screen lg:border-b-0 lg:border-r lg:px-4 lg:py-7">
+        <aside className="hidden min-w-0 border-b border-white/10 bg-[#06101B] px-4 py-4 lg:block lg:min-h-screen lg:border-b-0 lg:border-r lg:px-4 lg:py-7">
           <div className="hidden lg:block">
             <p className="px-2 text-[11px] font-extrabold uppercase tracking-[0.22em] text-[#E5B94B]">TGPI Intelligence OS</p>
             <p className="mt-3 px-2 font-[var(--tgpi-font-display)] text-[1.65rem] font-semibold leading-[1.08]">One system for your global life.</p>
@@ -390,9 +390,12 @@ export default function GlobalWorkspaceOS({
                     <p className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-[#E5B94B]">Global decision journey</p>
                     <h2 id="journey-title" className="mt-2 font-[var(--tgpi-font-display)] text-3xl font-semibold">Know where you are. See what comes next.</h2>
                   </div>
-                  <span className="rounded-full border border-white/10 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.12em] text-[#9FAEBC]">Private progress</span>
+                  <span className="rounded-full border border-white/10 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.12em] text-[#9FAEBC]">
+                    <span className="lg:hidden">Swipe stages →</span>
+                    <span className="hidden lg:inline">Private progress</span>
+                  </span>
                 </div>
-                <div className="mt-5 flex gap-3 overflow-x-auto pb-2 lg:grid lg:grid-cols-2 xl:grid-cols-4 lg:overflow-visible">
+                <div className="tgpi-smart-rail tgpi-journey-rail mt-5 flex gap-3 overflow-x-auto pb-2 lg:grid lg:grid-cols-2 lg:overflow-visible xl:grid-cols-4">
                   {model.journey.map((stage, index) => <JourneyStage active={stage.id === model.currentStageId} index={index} key={stage.id} stage={stage} />)}
                 </div>
               </section>

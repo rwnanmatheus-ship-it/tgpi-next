@@ -15,7 +15,7 @@ export default function ErrorBoundary({
   }, [error]);
 
   return (
-    <main className="bg-[var(--tgpi-canvas)] px-4 py-20 sm:px-6" id="main-content">
+    <main className="bg-[var(--tgpi-canvas)] px-4 py-20 sm:px-6">
       <section className="mx-auto max-w-xl rounded-[2rem] border border-[var(--tgpi-border)] bg-white p-7 text-center shadow-[var(--tgpi-shadow-premium)] sm:p-10">
         <span aria-hidden="true" className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-[var(--tgpi-gold-soft)] text-2xl text-[var(--tgpi-navy)]">↻</span>
         <p className="mt-6 text-xs font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-gold-strong)]">Runtime recovery</p>

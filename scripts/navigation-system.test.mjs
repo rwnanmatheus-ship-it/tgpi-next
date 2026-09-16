@@ -50,6 +50,8 @@ test("navigation CSS bridges phone, tablet and desktop without overlap", () => {
   assert.match(css, /@media \(max-width: 1023px\)/);
   assert.match(css, /@media \(max-width: 1220px\) and \(min-width: 1024px\)/);
   assert.match(css, /body:has\(\.tgpi-compact-dock\)/);
+  assert.match(css, /--tgpi-compact-content-end:/);
+  assert.match(css, /#main-content > :last-child/);
   assert.match(css, /env\(safe-area-inset-bottom/);
   assert.match(css, /prefers-reduced-motion: reduce/);
 });

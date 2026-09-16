@@ -96,7 +96,6 @@ export default async function CredentialPage({
 
   return (
     <main
-      id="main-content"
       className="min-h-screen bg-[#EDE8DE] px-4 py-7 text-[#0B1F3A] print:bg-white print:p-0 sm:px-6 sm:py-12"
     >
       <div className="mx-auto mb-5 flex max-w-[1220px] flex-wrap items-center justify-between gap-3 print:hidden">

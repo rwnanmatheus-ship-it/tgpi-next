@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
+import { fileURLToPath } from "node:url";
 import postcss from "postcss";
 import { MOBILE_MAX_WIDTH, normalizeMobileSearch, searchMobileCountries, isMobileRouteActive, isFocusedMobileRoute } from "../src/lib/mobile-experience.ts";
 
@@ -9,6 +10,15 @@ const countries = [
   { slug: "japan", name: "Japan", capital: "Tokyo", region: "Asia", emoji: "🇯🇵" },
   { slug: "spain", name: "Spain", capital: "Madrid", region: "Europe", emoji: "🇪🇸" },
 ];
+
+function findMainContentOwners(directory) {
+  return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const path = `${directory}/${entry.name}`;
+    if (entry.isDirectory()) return findMainContentOwners(path);
+    if (!entry.name.endsWith(".tsx")) return [];
+    return readFileSync(path, "utf8").includes('id="main-content"') ? [path] : [];
+  });
+}
 
 test("mobile breakpoint does not include tablets or desktop", () => assert.equal(MOBILE_MAX_WIDTH, 767));
 test("search handles accents, case and whitespace", () => assert.equal(normalizeMobileSearch("  TÓKYO  "), "tokyo"));
@@ -54,4 +64,27 @@ test("workspace framing prevents horizontal clipping and exposes notifications",
   assert.doesNotMatch(workspace,/xl:grid-cols-\[minmax\(0,1fr\)_370px\]/);
   assert.match(workspace,/href="\/notifications"[\s\S]*?🔔/);
   assert.match(settings,/key: "notifications"[\s\S]*?sticker: "🔔"/);
+});
+test("intentional mobile rails keep readable card widths",()=>{
+  const css=readFileSync(new URL("../src/app/navigation-system.css",import.meta.url),"utf8");
+  const workspace=readFileSync(new URL("../src/components/profile/GlobalWorkspaceOS.tsx",import.meta.url),"utf8");
+  assert.match(css,/:not\(\.tgpi-smart-rail\):not\(\[class\*="overflow-x-auto"\]\)/);
+  assert.match(css,/\.tgpi-smart-rail > \* \{[\s\S]*?flex-shrink: 0;[\s\S]*?scroll-snap-align: start;/);
+  assert.match(css,/\.tgpi-journey-rail > \.tgpi-journey-card \{[\s\S]*?flex: 0 0 clamp\(15\.5rem, 78vw, 19rem\);/);
+  assert.match(workspace,/tgpi-smart-rail tgpi-journey-rail/);
+});
+test("compact workspace and settings do not compete with global navigation",()=>{
+  const css=readFileSync(new URL("../src/app/navigation-system.css",import.meta.url),"utf8");
+  const workspace=readFileSync(new URL("../src/components/profile/GlobalWorkspaceOS.tsx",import.meta.url),"utf8");
+  const settings=readFileSync(new URL("../src/components/profile/TgpiAccountCenter.tsx",import.meta.url),"utf8");
+  assert.match(workspace,/<aside className="hidden[\s\S]*?lg:block/);
+  assert.match(settings,/tgpi-account-tabs/);
+  assert.match(settings,/tgpi-account-save-bar/);
+  assert.match(css,/\.tgpi-account-tabs > \.tgpi-account-tab \{[\s\S]*?min-width: max-content;[\s\S]*?white-space: nowrap;/);
+  assert.match(css,/\.tgpi-account-save-bar \{[\s\S]*?position: static;/);
+});
+test("the app shell owns one skip-link target",()=>{
+  const sourceRoot=fileURLToPath(new URL("../src",import.meta.url));
+  const owners=findMainContentOwners(sourceRoot).map((path)=>path.slice(sourceRoot.length));
+  assert.deepEqual(owners,["/components/mobile/MobileContentFrame.tsx"]);
 });

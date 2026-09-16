@@ -5,6 +5,9 @@
   --tgpi-compact-dock: 78px;
   --tgpi-safe-top: env(safe-area-inset-top, 0px);
   --tgpi-safe-bottom: env(safe-area-inset-bottom, 0px);
+  --tgpi-touch-target: 44px;
+  --tgpi-compact-content-end: calc(var(--tgpi-compact-dock) + var(--tgpi-safe-bottom) + 2rem);
+  --tgpi-compact-section-gap: clamp(1rem, 3.8vw, 1.5rem);
 }
 
 body {
@@ -242,7 +245,16 @@ body {
   }
 
   body:has(.tgpi-compact-dock) {
-    padding-bottom: calc(var(--tgpi-compact-dock) + var(--tgpi-safe-bottom) + 24px);
+    padding-bottom: 0;
+    scroll-padding-bottom: var(--tgpi-compact-content-end);
+  }
+
+  body:has(.tgpi-compact-dock) #main-content > :last-child {
+    padding-bottom: var(--tgpi-compact-content-end);
+  }
+
+  body:has(.tgpi-compact-dock) footer {
+    padding-bottom: var(--tgpi-compact-content-end);
   }
 
   .tgpi-desktop-navigation,
@@ -259,7 +271,7 @@ body {
     scroll-margin-top: calc(var(--tgpi-compact-header) + var(--tgpi-safe-top) + 18px);
   }
 
-  #main-content :is(.grid, .flex) > * {
+  #main-content :is(.grid, .flex):not(.tgpi-smart-rail):not([class*="overflow-x-auto"]) > * {
     min-width: 0;
   }
 
@@ -275,6 +287,50 @@ body {
   #main-content :is(.overflow-x-auto, [class*="overflow-x-auto"]) {
     overscroll-behavior-x: contain;
     -webkit-overflow-scrolling: touch;
+  }
+
+  #main-content .tgpi-smart-rail {
+    scroll-padding-inline: var(--tgpi-app-gutter);
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+  }
+
+  #main-content .tgpi-smart-rail::-webkit-scrollbar {
+    display: none;
+  }
+
+  #main-content .tgpi-smart-rail > * {
+    flex-shrink: 0;
+    scroll-snap-align: start;
+  }
+
+  #main-content .tgpi-journey-rail > .tgpi-journey-card {
+    flex: 0 0 clamp(15.5rem, 78vw, 19rem);
+    min-width: clamp(15.5rem, 78vw, 19rem);
+  }
+
+  #main-content .tgpi-account-mobile-nav {
+    top: calc(var(--tgpi-compact-header) + var(--tgpi-safe-top));
+  }
+
+  #main-content .tgpi-account-tabs {
+    scroll-padding-inline: 0.75rem;
+  }
+
+  #main-content .tgpi-account-tabs > .tgpi-account-tab {
+    flex: 0 0 auto;
+    min-width: max-content;
+    max-width: min(78vw, 18rem);
+    overflow-wrap: normal;
+    white-space: nowrap;
+  }
+
+  #main-content .tgpi-account-content {
+    padding-bottom: var(--tgpi-compact-section-gap);
+  }
+
+  #main-content .tgpi-account-save-bar {
+    position: static;
   }
 
   .tgpi-compact-topbar {
