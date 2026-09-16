@@ -20,6 +20,7 @@
     "test:learning-credentials": "node --experimental-strip-types --test scripts/learning-credentials.test.mjs",
     "test:capability-system": "node --experimental-strip-types --test scripts/capability-system.test.mjs",
     "test:navigation-system": "node --experimental-strip-types --test scripts/navigation-system.test.mjs",
+    "test:home": "node --experimental-strip-types --test scripts/home-conversion.test.mjs",
     "prebuild": "npm run test:learning-credentials"
   },
   "dependencies": {

@@ -35,8 +35,9 @@ const homeStructuredData = {
       operatingSystem: "Web",
       browserRequirements: "Requires a modern web browser",
       description:
-        "A connected system for country intelligence, transparent comparison, document preparation, practical learning and personal progress.",
+        "A connected system for Country Fit, country intelligence, transparent comparison, document preparation, practical learning and personal progress.",
       featureList: [
+        "Personal Country Fit research plan",
         "Country intelligence profiles",
         "Transparent country comparison",
         "International document preparation",
