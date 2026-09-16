@@ -27,7 +27,7 @@ export default function DocumentsMemberExperience({
   model: DocumentsMemberModel;
 }) {
   return (
-    <main id="main-content" className="min-h-screen overflow-x-clip bg-[var(--tgpi-canvas)] text-[var(--tgpi-ink)]">
+    <main className="min-h-screen overflow-x-clip bg-[var(--tgpi-canvas)] text-[var(--tgpi-ink)]">
       <div className="tgpi-capability-frame py-6 sm:py-10 lg:py-14">
         <CapabilitySystemRail
           active="documents"

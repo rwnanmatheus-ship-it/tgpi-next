@@ -355,7 +355,7 @@ export default function GlobalKeyCenter({
         </div>
       </header>
 
-      <main id="main-content" className="tgpi-capability-frame py-6 sm:py-10 lg:py-14">
+      <main className="tgpi-capability-frame py-6 sm:py-10 lg:py-14">
         <CapabilitySystemRail
           active="global-key"
           theme="dark"

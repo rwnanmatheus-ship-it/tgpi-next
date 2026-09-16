@@ -4,7 +4,6 @@ export default function Loading() {
       aria-busy="true"
       aria-label="Loading TGPI"
       className="min-h-[62vh] bg-[var(--tgpi-canvas)] px-4 py-12 sm:px-6"
-      id="main-content"
       role="status"
     >
       <div className="mx-auto max-w-6xl animate-pulse">

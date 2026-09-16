@@ -143,7 +143,7 @@ export default async function PublicProfilePage({ params }: PublicProfilePagePro
 
   if (membersOnly) {
     return (
-      <main id="main-content" className="min-h-[75vh] bg-[#050D17] px-4 py-20 text-white sm:px-6">
+      <main className="min-h-[75vh] bg-[#050D17] px-4 py-20 text-white sm:px-6">
         <section className="mx-auto max-w-2xl rounded-[32px] border border-white/10 bg-[#0A1726] p-7 text-center shadow-[0_30px_90px_rgba(0,0,0,0.35)] sm:p-12">
           <span className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-[#E5B94B]/10 text-2xl text-[#F0D58C]">◎</span>
           <p className="mt-6 text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#E5B94B]">TGPI members profile</p>
@@ -156,7 +156,7 @@ export default async function PublicProfilePage({ params }: PublicProfilePagePro
   }
 
   return (
-    <main id="main-content" className="min-h-screen bg-[#050D17] text-white">
+    <main className="min-h-screen bg-[#050D17] text-white">
       <section className="relative overflow-hidden border-b border-white/10 px-4 py-12 sm:px-6 sm:py-16 lg:py-20">
         <div className="pointer-events-none absolute -right-40 -top-44 h-[520px] w-[520px] rounded-full bg-[#B58A2A]/10 blur-3xl" />
         <div className="pointer-events-none absolute -bottom-48 -left-32 h-[420px] w-[420px] rounded-full bg-[#184C72]/25 blur-3xl" />
