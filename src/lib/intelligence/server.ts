@@ -13,6 +13,15 @@ let inFlight: Promise<IntelligenceSnapshot> | null = null;
 let retryAfter = 0;
 let lastValidated = fallback;
 
+type CachedCollection = {
+  attemptedAt: string;
+  message: string | null;
+  snapshot: IntelligenceSnapshot;
+  sourceStatus: "fresh" | "retained";
+};
+
+const RETAINED_MESSAGE = "The statistical source refresh was deferred. TGPI is serving the last validated snapshot with its original collection date.";
+
 // Fixed URLs only: no user parameters, redirects, credentials, HTML scraping or arbitrary fetch proxy.
 async function fetchSeries(indicator: (typeof INDICATOR_IDS)[number]) {
   const url = sourceApiUrl(indicator);
@@ -60,20 +69,52 @@ async function collectFresh(): Promise<IntelligenceSnapshot> {
   const signature = JSON.stringify(observations.map(({ country, indicator, value, year }) => ({ country, indicator, value, year })));
   return { schemaVersion: 1, methodologyVersion: METHODOLOGY_VERSION, revision: sha256(signature).slice(0, 16), retrievedAt: new Date().toISOString(), observations, series: results.map(result => result.audit) };
 }
-const collect = unstable_cache(async (): Promise<IntelligenceSnapshot> => {
-  if (Date.now() < retryAfter) throw new Error("Source retry cooldown is active");
-  if (!inFlight) inFlight = collectFresh().catch(error => { retryAfter = Date.now() + 5 * 60_000; throw error; }).finally(() => { inFlight = null; });
-  return inFlight;
-}, ["tgpi-intelligence-graph", METHODOLOGY_VERSION], { revalidate: 3600 });
+function retainedCollection(attemptedAt: string): CachedCollection {
+  const retained = lastValidated.observations.length ? lastValidated : fallback;
+  return { attemptedAt, message: RETAINED_MESSAGE, snapshot: retained, sourceStatus: "retained" };
+}
+
+async function collectWithResilience(): Promise<CachedCollection> {
+  const attemptedAt = new Date().toISOString();
+  if (Date.now() < retryAfter) return retainedCollection(attemptedAt);
+
+  try {
+    if (!inFlight) inFlight = collectFresh().finally(() => { inFlight = null; });
+    const snapshot = await inFlight;
+    lastValidated = snapshot;
+    retryAfter = 0;
+    return { attemptedAt, message: null, snapshot, sourceStatus: "fresh" };
+  } catch (error) {
+    retryAfter = Date.now() + 5 * 60_000;
+    console.warn("TGPI intelligence refresh deferred", error instanceof Error ? error.message.slice(0, 180) : "Unknown source error");
+    return retainedCollection(attemptedAt);
+  }
+}
+
+// World Bank observations are historical rather than real-time. A six-hour refresh window
+// keeps requests bounded, while a failed refresh becomes a degraded cached result instead of
+// an exception. This preserves the last validated snapshot and prevents user requests from
+// being reported as runtime failures when the upstream source is temporarily slow.
+const collect = unstable_cache(collectWithResilience, ["tgpi-intelligence-graph", METHODOLOGY_VERSION, "resilient-v2"], {
+  revalidate: 21_600,
+  tags: ["tgpi-intelligence-graph"],
+});
 
 export async function getIntelligence(): Promise<IntelligenceState> {
   try {
-    const snapshot = await collect();
-    lastValidated = snapshot;
-    const stale = !snapshot.retrievedAt || Date.now() - Date.parse(snapshot.retrievedAt) > 7 * 86_400_000;
-    return { snapshot, status: stale ? "degraded" : "available", message: stale ? "The source refresh is overdue. Previously collected observations remain visible with their original dates." : null };
+    const collection = await collect();
+    lastValidated = collection.snapshot;
+    const stale = !collection.snapshot.retrievedAt || Date.now() - Date.parse(collection.snapshot.retrievedAt) > 7 * 86_400_000;
+    const unavailable = collection.snapshot.observations.length === 0;
+    return {
+      snapshot: collection.snapshot,
+      status: unavailable ? "unavailable" : collection.sourceStatus === "retained" || stale ? "degraded" : "available",
+      message: unavailable
+        ? "The statistical source is temporarily unavailable and no validated observations are stored."
+        : collection.message ?? (stale ? "The source refresh is overdue. Previously collected observations remain visible with their original dates." : null),
+    };
   } catch (error) {
-    console.warn("TGPI intelligence collection rejected", error instanceof Error ? error.message.slice(0, 180) : "Unknown collection error");
+    console.warn("TGPI intelligence cache unavailable", error instanceof Error ? error.message.slice(0, 180) : "Unknown cache error");
     const retained = lastValidated.observations.length ? lastValidated : fallback;
     return { snapshot: retained, status: retained.observations.length ? "degraded" : "unavailable", message: "The statistical source could not be validated. No values have been invented. Any retained observations show their original collection dates." };
   }

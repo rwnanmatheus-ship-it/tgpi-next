@@ -12,6 +12,7 @@ export default function robots(): MetadataRoute.Robots {
         "/login",
         "/notifications",
         "/onboarding",
+        "/plan",
         "/profile",
       ],
     },

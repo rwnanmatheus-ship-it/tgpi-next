@@ -13,6 +13,7 @@
     "test:pwa": "node --experimental-strip-types --test scripts/pwa-runtime.test.mjs",
     "test:super-app": "node --experimental-strip-types --test scripts/super-app.test.mjs",
     "test:workspace": "node --experimental-strip-types --test scripts/workspace-home.test.mjs",
+    "test:personal-plan": "node --experimental-strip-types --test scripts/personal-plan.test.mjs",
     "typecheck": "tsc --noEmit",
     "build": "next build",
     "start": "next start",
@@ -21,7 +22,7 @@
     "test:capability-system": "node --experimental-strip-types --test scripts/capability-system.test.mjs",
     "test:navigation-system": "node --experimental-strip-types --test scripts/navigation-system.test.mjs",
     "test:home": "node --experimental-strip-types --test scripts/home-conversion.test.mjs",
-    "prebuild": "npm run test:learning-credentials"
+    "prebuild": "npm run test:learning-credentials && npm run test:intelligence && npm run test:workspace && npm run test:personal-plan"
   },
   "dependencies": {
     "@clerk/nextjs": "^7.7.7",

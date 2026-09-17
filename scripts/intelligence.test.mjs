@@ -84,6 +84,14 @@ test("source retrieval forbids redirects and does not accept user URLs", () => {
   const source = readFileSync(new URL("../src/lib/intelligence/server.ts", import.meta.url), "utf8");
   assert.match(source, /redirect: "error"/); assert.match(source, /AbortSignal.timeout/); assert.match(source, /bytes > 1_000_000/); assert.doesNotMatch(source, /request\.url|searchParams/);
 });
+test("source refresh retains validated evidence instead of throwing cache revalidation errors", () => {
+  const source = readFileSync(new URL("../src/lib/intelligence/server.ts", import.meta.url), "utf8");
+  assert.match(source, /collectWithResilience/);
+  assert.match(source, /sourceStatus: "fresh" \| "retained"/);
+  assert.match(source, /return retainedCollection\(attemptedAt\)/);
+  assert.match(source, /revalidate: 21_600/);
+  assert.doesNotMatch(source, /throw new Error\("Source retry cooldown is active"\)/);
+});
 test("saving a plan is authenticated, same-origin, bounded and preserves unrelated profile fields", () => {
   const source = readFileSync(new URL("../src/app/api/intelligence/plan/route.ts", import.meta.url), "utf8");
   assert.match(source, /if \(!session\.userId\)/);

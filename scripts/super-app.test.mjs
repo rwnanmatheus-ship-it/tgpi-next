@@ -21,6 +21,8 @@ test("route matching gives specific settings routes priority over workspace", ()
   assert.equal(getSuperAppModule("/global-key")?.id, "global-key");
   assert.equal(getSuperAppModule("/verify/global-key")?.id, "global-key");
   assert.equal(getSuperAppModule("/profile/security")?.id, "settings");
+  assert.equal(getSuperAppModule("/plan")?.id, "plan");
+  assert.equal(getSuperAppModule("/onboarding")?.id, "plan");
   assert.equal(getSuperAppModule("/notifications")?.id, "settings");
   assert.equal(getSuperAppModule("/countries/portugal")?.id, "countries");
   assert.equal(getSuperAppModule("/certificates")?.id, "credentials");

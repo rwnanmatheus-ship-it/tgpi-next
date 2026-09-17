@@ -32,7 +32,7 @@ export function searchMobileCountries(countries: readonly MobileCountry[], query
 
 export function isMobileRouteActive(pathname: string, href: string): boolean {
   if (href === "/") return pathname === "/";
-  if (href === "/profile") return ["/profile", "/dashboard", "/onboarding"].some((route) => pathname === route || pathname.startsWith(`${route}/`));
+  if (href === "/profile") return ["/profile", "/dashboard", "/plan", "/onboarding"].some((route) => pathname === route || pathname.startsWith(`${route}/`));
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
