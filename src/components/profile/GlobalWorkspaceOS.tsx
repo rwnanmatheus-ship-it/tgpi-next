@@ -290,7 +290,7 @@ export default function GlobalWorkspaceOS({
           {onboardingCompleted ? (
             <div className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#68BF96]/25 bg-[#68BF96]/10 px-4 py-3 text-xs text-[#CFEADB]" role="status">
               <p><span className="font-extrabold">Your global plan is ready.</span> Workspace Intelligence has synchronized your decision context.</p>
-              <Link className="font-extrabold text-white" href="/onboarding">Review plan →</Link>
+              <Link className="font-extrabold text-white" href="/plan">Open plan →</Link>
             </div>
           ) : null}
 
@@ -406,7 +406,7 @@ export default function GlobalWorkspaceOS({
                     <p className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-[#E5B94B]">Intelligent action queue</p>
                     <h2 id="next-actions-title" className="mt-2 font-[var(--tgpi-font-display)] text-3xl font-semibold sm:text-4xl">Move the plan forward.</h2>
                   </div>
-                  <Link className="text-xs font-extrabold text-[#F0D58C]" href="/onboarding">Review full plan →</Link>
+                  <Link className="text-xs font-extrabold text-[#F0D58C]" href="/plan">Open full plan →</Link>
                 </div>
                 <div className="mt-6 grid gap-3 lg:grid-cols-2">{prioritizedActions.map((action) => <ActionItem action={action} key={action.id} />)}</div>
               </section>

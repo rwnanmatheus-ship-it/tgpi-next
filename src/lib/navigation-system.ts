@@ -91,6 +91,7 @@ export const COMPACT_NAVIGATION: readonly NavigationDestination[] = [
     matchPrefixes: [
       "/profile",
       "/dashboard",
+      "/plan",
       "/onboarding",
       "/global-key",
       "/notifications",

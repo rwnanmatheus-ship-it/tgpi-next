@@ -28,7 +28,7 @@ test("region search filters countries", () => assert.equal(searchMobileCountries
 test("empty and unknown searches do not invent results", () => { assert.deepEqual(searchMobileCountries(countries,""), []); assert.deepEqual(searchMobileCountries(countries,"unmatchedzzz"), []); });
 test("search leaves the shared dataset unchanged", () => { const before=JSON.stringify(countries); searchMobileCountries(countries,"Europe"); assert.equal(JSON.stringify(countries),before); });
 test("active navigation respects route boundaries", () => { assert.equal(isMobileRouteActive("/countries/portugal", "/countries"),true); assert.equal(isMobileRouteActive("/countries", "/"),false); assert.equal(isMobileRouteActive("/courses-other", "/courses"),false); });
-test("workspace includes onboarding and nested profile routes", () => { assert.equal(isMobileRouteActive("/onboarding", "/profile"),true); assert.equal(isMobileRouteActive("/profile/security", "/profile"),true); });
+test("workspace includes plan, onboarding and nested profile routes", () => { assert.equal(isMobileRouteActive("/plan", "/profile"),true); assert.equal(isMobileRouteActive("/onboarding", "/profile"),true); assert.equal(isMobileRouteActive("/profile/security", "/profile"),true); });
 test("auth, checkout and lessons have focused navigation", () => { for (const path of ["/sign-in","/sign-up","/login","/upgrade","/courses/english-abroad/lessons/arrival"]) assert.equal(isFocusedMobileRoute(path),true); assert.equal(isFocusedMobileRoute("/courses"),false); });
 test("all visual overrides are scoped below 768px", () => {
   const root=postcss.parse(readFileSync(new URL("../src/app/mobile.css",import.meta.url),"utf8"));

@@ -77,13 +77,13 @@ export const SUPER_APP_MODULES: readonly SuperAppModule[] = [
   },
   {
     id: "plan",
-    href: "/onboarding",
+    href: "/plan",
     icon: "🎯",
     label: "Personal Plan",
     shortLabel: "My Plan",
     description: "Turn your context into an actionable sequence.",
     keywords: ["goal", "onboarding", "timeline", "budget", "actions"],
-    matchPrefixes: ["/onboarding"],
+    matchPrefixes: ["/plan", "/onboarding"],
   },
   {
     id: "documents",
