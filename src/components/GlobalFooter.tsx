@@ -45,6 +45,10 @@ const footerGroups: ReadonlyArray<{
       { label: "Sign in", href: "/sign-in" },
       { label: "Privacy", href: "/privacy" },
       { label: "Terms", href: "/terms" },
+      { label: "Billing terms", href: "/billing-terms" },
+      { label: "Refunds & cancellation", href: "/refunds" },
+      { label: "Cookie policy", href: "/cookies" },
+      { label: "Company & legal", href: "/legal" },
       { label: "Contact", href: "mailto:contact@theglobalpolymath.com" },
       {
         label: "Instagram ↗",
@@ -226,6 +230,8 @@ export default function GlobalFooter() {
           </div>
           <div className="flex flex-wrap gap-x-5 gap-y-2 font-bold text-[#BBC7D6] lg:justify-end">
             <Link href="/authority" className="transition hover:text-white">Methodology</Link>
+            <Link href="/legal" className="transition hover:text-white">Company</Link>
+            <Link href="/refunds" className="transition hover:text-white">Refunds</Link>
             <Link href="/privacy" className="transition hover:text-white">Privacy</Link>
             <Link href="/terms" className="transition hover:text-white">Terms</Link>
           </div>
