@@ -79,7 +79,7 @@ const standards = [
   {
     title: "Transparent billing",
     description:
-      "When billing opens, price and renewal terms will be shown before checkout and managed through the secure portal.",
+      "US$ 19.90/month recurring billing is shown before checkout, with renewal and cancellation managed through the secure customer portal.",
   },
   {
     title: "Responsible intelligence",
@@ -97,17 +97,17 @@ const faqs = [
   {
     question: "Is payment active today?",
     answer:
-      "Not while early access is active. Joining the waitlist registers your interest and launch priority; it does not create a payment or subscription.",
+      "Yes. TGPI Premium billing is active at US$ 19.90 per month through secure Stripe Checkout. The subscription renews monthly until cancelled.",
   },
   {
-    question: "How much will TGPI Premium cost?",
+    question: "How much does TGPI Premium cost?",
     answer:
-      "The official planned membership is US$ 19.90 per month. Final checkout terms will always be presented transparently before any charge is created.",
+      "The standard TGPI Premium membership is US$ 19.90 per month. Checkout displays the current price and recurring terms before any charge is created.",
   },
   {
     question: "Can I manage or cancel the membership?",
     answer:
-      "Yes. When billing is officially enabled, active subscribers will manage renewal and cancellation through the secure customer portal.",
+      "Yes. Active subscribers can manage renewal, payment methods and cancellation through the secure customer portal.",
   },
   {
     question: "Does TGPI replace legal or immigration advice?",
