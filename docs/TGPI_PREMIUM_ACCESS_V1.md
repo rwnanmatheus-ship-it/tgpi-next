@@ -9,8 +9,8 @@ Turn TGPI Premium into a secure recurring subscription flow:
 The success page never grants access. It only reports the status written by a
 verified Stripe webhook.
 
-The approved launch price displayed by TGPI is **US$ 19.99/month**. The Stripe
-Price configured through `STRIPE_PRICE_ID_PREMIUM` must use USD 19.99 with a
+The approved launch price displayed by TGPI is **US$ 19.90/month**. The Stripe
+Price configured through `STRIPE_PRICE_ID_PREMIUM` must use USD 19.90 with a
 monthly recurring interval before billing is enabled.
 
 ## Source of truth

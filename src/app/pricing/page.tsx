@@ -102,7 +102,7 @@ const faqs = [
   {
     question: "How much will TGPI Premium cost?",
     answer:
-      "The official planned membership is US$ 19.99 per month. Final checkout terms will always be presented transparently before any charge is created.",
+      "The official planned membership is US$ 19.90 per month. Final checkout terms will always be presented transparently before any charge is created.",
   },
   {
     question: "Can I manage or cancel the membership?",
@@ -173,7 +173,7 @@ export default function PricingPage() {
             <p className="mt-4 text-xs leading-5 text-white/50">
               {billingEnabled
                 ? "Secure recurring billing. Manage or cancel through the customer portal."
-                : "Founding access · US$ 19.99/month at launch · No payment collected today"}
+                : "Founding access · US$ 19.90/month at launch · No payment collected today"}
             </p>
           </div>
 
@@ -211,13 +211,13 @@ export default function PricingPage() {
         <div className="grid gap-px bg-[#D8D2C4] sm:grid-cols-3">
           {(billingEnabled
             ? [
-                ["Membership", "US$ 19.99 per month"],
+                ["Membership", "US$ 19.90 per month"],
                 ["Billing", "Secure recurring checkout"],
                 ["Control", "Manage or cancel online"],
               ]
             : [
                 ["Founding membership", "Launch priority for early members"],
-                ["Published price", "US$ 19.99 per month"],
+                ["Published price", "US$ 19.90 per month"],
                 ["No payment today", "Joining only reserves early access"],
               ]
           ).map(([label, value]) => (
