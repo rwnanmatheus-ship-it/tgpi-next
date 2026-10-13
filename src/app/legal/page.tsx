@@ -68,8 +68,26 @@ export default function LegalPage() {
             <dd className="mt-1 font-bold text-[#0B1F3A]">theglobalpolymath.com</dd>
           </div>
           <div>
-            <dt className="text-xs font-extrabold uppercase tracking-[0.14em] text-[#956A13]">Contact</dt>
-            <dd className="mt-1 font-bold text-[#0B1F3A]">contact@theglobalpolymath.com</dd>
+            <dt className="text-xs font-extrabold uppercase tracking-[0.14em] text-[#956A13]">Official electronic address</dt>
+            <dd className="mt-1 font-bold text-[#0B1F3A]">
+              <a
+                href="mailto:corporate@theglobalpolymath.com"
+                className="underline-offset-4 hover:underline"
+              >
+                corporate@theglobalpolymath.com
+              </a>
+            </dd>
+          </div>
+          <div>
+            <dt className="text-xs font-extrabold uppercase tracking-[0.14em] text-[#956A13]">Customer & billing support</dt>
+            <dd className="mt-1 font-bold text-[#0B1F3A]">
+              <a
+                href="mailto:contact@theglobalpolymath.com"
+                className="underline-offset-4 hover:underline"
+              >
+                contact@theglobalpolymath.com
+              </a>
+            </dd>
           </div>
         </dl>
       </section>
@@ -110,9 +128,15 @@ export default function LegalPage() {
       </section>
 
       <section>
-        <h2 className="text-2xl font-semibold text-[var(--tgpi-navy)]">Support and legal contact</h2>
+        <h2 className="text-2xl font-semibold text-[var(--tgpi-navy)]">Official and support contacts</h2>
         <p className="mt-3">
-          For account, billing, cancellation, privacy or legal matters, contact{" "}
+          The official electronic address registered for TGPI GLOBAL EDUCATION LTDA is{" "}
+          <a href="mailto:corporate@theglobalpolymath.com" className="font-bold text-[#956A13] hover:underline">
+            corporate@theglobalpolymath.com
+          </a>.
+        </p>
+        <p className="mt-3">
+          For customer accounts, subscriptions, billing, cancellation, privacy requests or general support, use{" "}
           <a href="mailto:contact@theglobalpolymath.com" className="font-bold text-[#956A13] hover:underline">
             contact@theglobalpolymath.com
           </a>.
