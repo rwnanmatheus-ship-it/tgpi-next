@@ -68,7 +68,16 @@ export default function LegalDocument({
             <p className="font-extrabold text-[#0B1F3A]">TGPI GLOBAL EDUCATION LTDA</p>
             <p>CNPJ 49.709.438/0001-32 · Campinas, São Paulo, Brazil</p>
             <p>
-              Legal and support contact:{" "}
+              Official electronic address:{" "}
+              <a
+                href="mailto:corporate@theglobalpolymath.com"
+                className="font-bold text-[#956A13] underline-offset-4 hover:underline"
+              >
+                corporate@theglobalpolymath.com
+              </a>
+            </p>
+            <p>
+              Customer and billing support:{" "}
               <a
                 href="mailto:contact@theglobalpolymath.com"
                 className="font-bold text-[#956A13] underline-offset-4 hover:underline"
