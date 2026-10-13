@@ -25,7 +25,6 @@ export default function LegalDocument({
 }) {
   return (
     <main
-      id="main-content"
       className="bg-[var(--tgpi-canvas)] px-4 py-12 sm:px-6 sm:py-16 lg:px-8 lg:py-20"
     >
       <article className="mx-auto max-w-5xl overflow-hidden rounded-[32px] border border-[var(--tgpi-border)] bg-white shadow-[var(--tgpi-shadow-soft)]">

@@ -28,6 +28,7 @@ export default function UpgradeStatusClient({ sessionId }: { sessionId: string }
     if (!sessionId) return;
 
     let cancelled = false;
+    const controller = new AbortController();
 
     async function confirmCheckout() {
       for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt += 1) {
@@ -35,9 +36,10 @@ export default function UpgradeStatusClient({ sessionId }: { sessionId: string }
 
         const response = await fetch(
           `/api/stripe/checkout-session?session_id=${encodeURIComponent(sessionId)}`,
-          { cache: "no-store" }
+          { cache: "no-store", signal: controller.signal }
         );
         const data = (await response.json()) as CheckoutStatus;
+        if (cancelled) return;
 
         if (
           response.ok &&
@@ -73,6 +75,11 @@ export default function UpgradeStatusClient({ sessionId }: { sessionId: string }
           return;
         }
 
+        if (response.status === 400) {
+          setStatus("This checkout link is invalid. Return to pricing to continue.");
+          return;
+        }
+
         if (attempt < MAX_ATTEMPTS - 1) {
           setStatus(
             data.status === "complete"
@@ -86,9 +93,14 @@ export default function UpgradeStatusClient({ sessionId }: { sessionId: string }
       }
     }
 
-    void confirmCheckout();
+    void confirmCheckout().catch(() => {
+      if (!cancelled) {
+        setStatus("Could not verify checkout. Check your connection and reload this page to try again.");
+      }
+    });
     return () => {
       cancelled = true;
+      controller.abort();
     };
   }, [sessionId]);
 

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { TGPI_PREMIUM_PLAN } from "@/lib/subscription-plans";
 
 const benefits = [
   "A living country shortlist",
@@ -66,7 +67,7 @@ export default function HomeLaunchClose() {
                 ))}
               </div>
               <p className="mt-6 text-sm leading-7 text-white/60">
-                Start free. Premium Founding Access is currently collected without activating a charge.
+                Start free. TGPI Premium is {TGPI_PREMIUM_PLAN.price}{TGPI_PREMIUM_PLAN.cadence}, billed monthly. Review the terms before checkout.
               </p>
             </div>
           </div>

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 import { blocksNewCheckout } from "@/lib/billing";
 import type { BillingStatusResponse } from "@/types";
 
@@ -22,9 +23,8 @@ function getBillingStatus(userId: string) {
       if (!response.ok) throw new Error("Could not verify membership status.");
       return (await response.json()) as BillingStatusResponse;
     })
-    .catch((error: unknown) => {
+    .finally(() => {
       billingStatusRequests.delete(userId);
-      throw error;
     });
 
   billingStatusRequests.set(userId, request);
@@ -37,13 +37,18 @@ export default function PremiumActionButton({
   billingEnabled: boolean;
 }) {
   const { isLoaded, isSignedIn, userId } = useAuth();
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [checkingStatus, setCheckingStatus] = useState(true);
   const [billing, setBilling] = useState<BillingStatusResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!isLoaded || !isSignedIn || !userId) {
+    setBilling(null);
+    setError(null);
+    setCheckingStatus(true);
+    if (!isLoaded) return;
+    if (!isSignedIn || !userId) {
       setCheckingStatus(false);
       return;
     }
@@ -120,12 +125,12 @@ export default function PremiumActionButton({
 
     try {
       if (!isLoaded || !isSignedIn) {
-        window.location.href = "/sign-in?redirect_url=%2Fpricing";
+        router.push("/sign-in?redirect_url=%2Fpricing");
         return;
       }
 
       if (hasControlledAccess) {
-        window.location.href = "/premium";
+        router.push("/premium");
         return;
       }
 
@@ -148,7 +153,7 @@ export default function PremiumActionButton({
       };
 
       if (response.status === 503 || data.code === "BILLING_DISABLED") {
-        window.location.href = "/premium-waitlist";
+        router.push("/premium-waitlist");
         return;
       }
 
