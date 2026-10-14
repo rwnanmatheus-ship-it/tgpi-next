@@ -1,4 +1,3 @@
-import { unstable_cache, revalidateTag } from "next/cache";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import {
@@ -35,11 +34,7 @@ export async function GET() {
   }
 
   try {
-    const progress = await unstable_cache(
-      () => getUserActivationProgress(session.userId!),
-      ["tgpi-progress", session.userId],
-      { revalidate: 15, tags: [`tgpi-progress:${session.userId}`] },
-    )();
+    const progress = await getUserActivationProgress(session.userId);
     return json({ progress });
   } catch (error) {
     console.error("Unable to load TGPI activation progress", error);
@@ -68,7 +63,6 @@ export async function PATCH(request: Request) {
       session.userId,
       mutation,
     );
-    revalidateTag(`tgpi-progress:${session.userId}`, { expire: 0 });
     return json({ progress });
   } catch (error) {
     if (error instanceof SyntaxError) {
