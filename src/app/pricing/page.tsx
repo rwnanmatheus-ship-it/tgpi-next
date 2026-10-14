@@ -7,491 +7,473 @@ import TGPIPageShell from "@/components/TGPIPageShell";
 import { TGPI_FREE_PLAN, TGPI_PREMIUM_PLAN } from "@/lib/subscription-plans";
 
 export const metadata: Metadata = {
-  title: "TGPI Premium — Global Decision Intelligence",
+  title: "TGPI Premium — Choose your country. Build your plan.",
   description:
-    "Connect country intelligence, comparisons, readiness, documents and practical learning in one premium TGPI command center.",
+    "Country Fit, unlimited comparisons, personal planning and practical learning. TGPI Premium: US$ 19.90/month. Subscribe securely or access your membership.",
   alternates: { canonical: "/pricing" },
   openGraph: {
-    title: "TGPI Premium — One System for Your Global Life",
+    title: "TGPI Premium — Your global next step, connected.",
     description:
-      "Turn global ambition into an executable plan with connected intelligence, readiness and learning.",
+      "Choose with evidence. Compare your options. Prepare your next move.",
     url: "/pricing",
-    images: ["/images/pricing/tgpi-premium-command-center.webp"],
+    images: [
+      {
+        url: "/images/pricing/tgpi-premium-global-library-v1.webp",
+        width: 1536,
+        height: 1024,
+        alt: "TGPI global education and international decision intelligence",
+      },
+    ],
   },
 };
 
-const premiumSystems = [
+const systems = [
   {
     number: "01",
-    eyebrow: "Country Intelligence",
-    title: "Choose with evidence.",
+    label: "COUNTRY FIT",
+    title: "Find where you fit.",
     description:
-      "Move beyond rankings. Build a country shortlist around your goals, priorities, costs and real-life constraints.",
-    href: "/countries",
+      "Evaluate destinations around your priorities, budget and international goals. Build a shortlist you can explain.",
+    href: "/country-fit",
+    action: "Explore Country Fit",
   },
   {
     number: "02",
-    eyebrow: "Decision Intelligence",
-    title: "Compare what matters.",
+    label: "COMPARE",
+    title: "See the trade-offs.",
     description:
-      "Evaluate countries through one consistent framework and keep the reasoning behind every important decision visible.",
+      "Compare countries in one consistent framework. Save your decisions and return to the evidence behind them.",
     href: "/compare",
+    action: "Explore comparisons",
   },
   {
     number: "03",
-    eyebrow: "Documents OS",
-    title: "Prepare the evidence.",
+    label: "PERSONAL PLAN",
+    title: "Know your next step.",
     description:
-      "Turn scattered requirements into a destination-aware readiness path connected to your identity and objective.",
-    href: "/passport",
+      "Connect readiness, destination documents and personal goals in a private workspace. Turn research into preparation.",
+    href: "/plan",
+    action: "Explore personal planning",
   },
   {
     number: "04",
-    eyebrow: "TGPI Learning",
-    title: "Build the capability.",
+    label: "LEARNING",
+    title: "Build your capability.",
     description:
-      "Develop the language, judgment and adaptability required to act with confidence in an international environment.",
+      "Develop practical international skills. Track learning progress and keep your TGPI completion records connected to your profile.",
     href: "/courses",
+    action: "Explore learning",
   },
 ] as const;
 
-const comparisonRows = [
-  ["Country exploration", "Explore global profiles", "Unlimited shortlist + deeper Country Fit"],
-  ["Country comparison", "1 starting comparison", "Unlimited saved decision comparisons"],
-  ["Global readiness", "Preliminary orientation", "Readiness score + prioritized next actions"],
-  ["Document strategy", "Country-level research", "Connected, objective-aware preparation system"],
-  ["Learning", "Introductory access", "Full learning paths, progress and credentials"],
-  ["Workspace", "TGPI Global Key", "Private Premium Command Center"],
-  ["Product evolution", "Core platform updates", "New premium intelligence tools as released"],
-] as const;
-
-const standards = [
-  {
-    title: "One clear membership",
-    description:
-      "No artificial tier maze. Free supports discovery; Premium connects the complete decision system.",
-  },
-  {
-    title: "Private continuity",
-    description:
-      "Your Global Key keeps countries, comparisons, readiness and learning connected across the TGPI journey.",
-  },
-  {
-    title: "Transparent billing",
-    description:
-      "US$ 19.90/month recurring billing is shown before checkout, with renewal and cancellation managed through the secure customer portal.",
-  },
-  {
-    title: "Responsible intelligence",
-    description:
-      "TGPI structures research and decisions without presenting itself as a government, university or legal adviser.",
-  },
+const comparisons = [
+  ["Country Fit", "Preliminary analysis", "Complete analysis"],
+  ["Country comparisons", "1 comparison", "Unlimited comparisons"],
+  ["Saved countries", "Up to 3", "Unlimited"],
+  ["Readiness", "Starting orientation", "Score and prioritized actions"],
+  ["Documents", "Country research", "Connected preparation checklists"],
+  ["Learning", "Introductory access", "Premium library and progress history"],
+  ["Workspace", "Global Profile", "Private Premium Command Center"],
 ] as const;
 
 const faqs = [
-  {
-    question: "What makes TGPI Premium different from a content subscription?",
-    answer:
-      "Premium is designed as a connected operating system. Country research, comparisons, readiness, documents and learning inform one another instead of living in separate tools or disconnected notes.",
-  },
-  {
-    question: "Is payment active today?",
-    answer:
-      "Yes. TGPI Premium billing is active at US$ 19.90 per month through secure Stripe Checkout. The subscription renews monthly until cancelled.",
-  },
-  {
-    question: "How much does TGPI Premium cost?",
-    answer:
-      "The standard TGPI Premium membership is US$ 19.90 per month. Checkout displays the current price and recurring terms before any charge is created.",
-  },
-  {
-    question: "Can I manage or cancel the membership?",
-    answer:
-      "Yes. Active subscribers can manage renewal, payment methods and cancellation through the secure customer portal.",
-  },
-  {
-    question: "Does TGPI replace legal or immigration advice?",
-    answer:
-      "No. TGPI organizes research, readiness and evidence. Critical requirements must still be verified with the relevant government, institution or qualified professional.",
-  },
-  {
-    question: "Are TGPI learning credentials externally accredited?",
-    answer:
-      "TGPI can issue professional records of completed learning and verified evidence. External accreditation is only claimed when a formal accrediting partnership exists.",
-  },
+  [
+    "What happens after I subscribe?",
+    "After Stripe confirms your subscription, TGPI verifies the payment and activates Premium on your account. Your Premium Command Center connects country decisions, readiness and learning. If confirmation is still processing, the confirmation page shows the current status.",
+  ],
+  [
+    "Can I cancel my subscription?",
+    "Yes. Use Manage subscription to open the secure Stripe customer portal, update your payment method, view invoices or cancel. When cancellation is scheduled for the end of the billing period, your account shows the date through which access remains available.",
+  ],
+  [
+    "How does billing work?",
+    "TGPI Premium costs US$ 19.90 per month and renews monthly until cancelled. Stripe Checkout displays the payment amount and recurring terms before you confirm. Your bank may apply currency conversion or other fees.",
+  ],
+  [
+    "I already have Premium. Do I need to pay again?",
+    "No. Sign in with the account used for your subscription. This page checks your membership and shows Open Premium workspace when access is active. Billing management is a separate action.",
+  ],
+  [
+    "Does TGPI guarantee a visa, admission or a job?",
+    "No. TGPI supports research, education and preparation. Verify official requirements with the relevant authorities and consult qualified professionals when needed.",
+  ],
+  [
+    "Are TGPI certificates externally accredited?",
+    "TGPI records learning completion and evidence. External accreditation is only claimed when an established accrediting partnership exists.",
+  ],
 ] as const;
 
-export default function PricingPage() {
+const eyebrow =
+  "text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#956A13]";
+const heading =
+  "font-[var(--tgpi-font-display)] font-semibold leading-[1.02] tracking-[-0.035em] text-[#0B1F3A]";
+
+export default async function PricingPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ canceled?: string }>;
+}) {
   const billingEnabled = process.env.BILLING_ENABLED === "true";
+  const { canceled } = await searchParams;
 
   return (
     <TGPIPageShell>
-      <section className="relative isolate min-h-[620px] overflow-hidden rounded-[30px] border border-white/10 bg-[#06162A] text-white shadow-[0_32px_90px_rgba(5,22,42,0.24)] sm:min-h-[580px] sm:rounded-[36px] lg:h-[540px] lg:min-h-0">
-        <Image
-          src="/images/pricing/tgpi-premium-command-center.webp"
-          alt="TGPI global decision command center connecting country intelligence, readiness, documents and learning"
-          fill
-          priority
-          quality={88}
-          sizes="(max-width: 1024px) 100vw, 1280px"
-          className="object-cover object-[70%_center] sm:object-[68%_center] lg:object-center"
-        />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(3,15,30,0.9)_0%,rgba(3,15,30,0.77)_54%,rgba(3,15,30,0.93)_100%)] lg:bg-[linear-gradient(90deg,rgba(3,15,30,0.98)_0%,rgba(3,15,30,0.91)_44%,rgba(3,15,30,0.38)_72%,rgba(3,15,30,0.12)_100%)]" />
-
-        <div className="relative z-10 flex min-h-[620px] flex-col justify-between p-7 sm:min-h-[580px] sm:p-10 lg:h-full lg:min-h-0 lg:p-12">
-          <div className="max-w-[690px]">
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="rounded-full border border-[#D7B45D]/35 bg-[#D7B45D]/10 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#F0D58C]">
-                TGPI Premium
-              </span>
-              <span className="rounded-full border border-white/15 bg-white/5 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.2em] text-white/65">
-                One Global Decision System
-              </span>
-            </div>
-
-            <h1 className="mt-5 max-w-[680px] font-[var(--tgpi-font-display)] text-[clamp(2.65rem,4.5vw,4.2rem)] font-semibold leading-[0.96] tracking-[-0.045em] text-white">
-              Turn global ambition into an executable system.
-            </h1>
-            <p className="mt-5 max-w-[620px] text-[15px] leading-7 text-white/72 sm:text-base sm:leading-8">
-              Connect countries, comparisons, readiness, documents and practical
-              learning in one private command center built for decisions with real
-              consequences.
-            </p>
-
-            <div className="mt-7 flex max-w-[660px] flex-col gap-3 sm:flex-row sm:items-center">
-              <div className="w-full sm:max-w-[300px] [&_a]:min-h-14 [&_a]:content-center [&_a]:rounded-xl [&_button]:min-h-14 [&_button]:rounded-xl">
-                <PremiumActionButton billingEnabled={billingEnabled} />
-              </div>
-              <Link
-                href="#premium-system"
-                className="inline-flex min-h-14 items-center justify-center rounded-xl border border-white/20 bg-white/5 px-6 text-sm font-extrabold text-white transition hover:border-[#D7B45D]/60 hover:bg-white/10"
-              >
-                Explore what Premium unlocks
-              </Link>
-            </div>
-
-            <p className="mt-4 text-xs leading-5 text-white/50">
-              {billingEnabled
-                ? "Secure recurring billing. Manage or cancel through the customer portal."
-                : "Founding access · US$ 19.90/month at launch · No payment collected today"}
-            </p>
-          </div>
-
-          <div className="mt-8 flex items-end justify-between gap-5">
-            <dl className="grid flex-1 grid-cols-3 gap-4 border-t border-white/12 pt-5 sm:max-w-[570px]">
-              {[
-                ["195", "Country profiles"],
-                ["04", "Connected systems"],
-                ["01", "Global Key"],
-              ].map(([value, label]) => (
-                <div key={label}>
-                  <dt className="text-xl font-extrabold text-[#F0D58C] sm:text-2xl">
-                    {value}
-                  </dt>
-                  <dd className="mt-1 text-[9px] font-extrabold uppercase tracking-[0.17em] text-white/45 sm:text-[10px]">
-                    {label}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-
-            <div className="hidden max-w-[265px] rounded-2xl border border-white/15 bg-[#07172B]/75 px-5 py-4 text-right backdrop-blur-xl xl:block">
-              <p className="text-[9px] font-extrabold uppercase tracking-[0.22em] text-[#F0D58C]">
-                The Premium advantage
-              </p>
-              <p className="mt-2 text-sm font-semibold leading-6 text-white/80">
-                One decision system. Every global next step connected.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="mt-7 overflow-hidden rounded-[28px] border border-[#D8D2C4] bg-[#FFFDF8] shadow-[0_20px_60px_rgba(11,31,58,0.07)]">
-        <div className="grid gap-px bg-[#D8D2C4] sm:grid-cols-3">
-          {(billingEnabled
-            ? [
-                ["Membership", "US$ 19.90 per month"],
-                ["Billing", "Secure recurring checkout"],
-                ["Control", "Manage or cancel online"],
-              ]
-            : [
-                ["Founding membership", "Launch priority for early members"],
-                ["Published price", "US$ 19.90 per month"],
-                ["No payment today", "Joining only reserves early access"],
-              ]
-          ).map(([label, value]) => (
-            <div key={label} className="bg-[#FFFDF8] px-6 py-5 text-center">
-              <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#956A13]">{label}</p>
-              <p className="mt-2 text-sm font-bold text-[#0B1F3A]">{value}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <PricingOutcomeSelector />
-
-      <section id="premium-system" className="scroll-mt-28 py-16 sm:py-20">
-        <div className="grid gap-7 lg:grid-cols-[0.78fr_1.22fr] lg:items-end">
-          <div>
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.25em] text-[#956A13]">
-              More than access
-            </p>
-            <h2 className="mt-4 max-w-[650px] font-[var(--tgpi-font-display)] text-4xl font-semibold leading-[1.02] tracking-[-0.035em] text-[#071A31] sm:text-6xl">
-              Premium is where TGPI becomes one operating system.
-            </h2>
-          </div>
-          <p className="max-w-[680px] text-base leading-8 text-[#596576] lg:justify-self-end">
-            Information becomes valuable when it changes the next decision. Premium
-            connects the four TGPI intelligence layers so every action builds on the
-            evidence, progress and priorities already inside your Global Key.
+      <div className="pb-8">
+        {canceled === "1" && (
+          <p
+            role="status"
+            className="mb-5 rounded-2xl border border-[#D8D2C4] bg-white p-4 text-sm text-[#0B1F3A]"
+          >
+            Checkout was closed. You can review the membership and try again
+            when you are ready.
           </p>
-        </div>
-
-        <div className="mt-10 grid gap-4 md:grid-cols-2">
-          {premiumSystems.map((system) => (
-            <article
-              key={system.number}
-              className="group rounded-[28px] border border-[#D8D2C4] bg-[#FFFDF8] p-7 transition duration-300 hover:-translate-y-1 hover:border-[#B58A2A]/60 hover:shadow-[0_20px_55px_rgba(11,31,58,0.09)] sm:p-8"
-            >
-              <div className="flex items-start justify-between gap-5">
-                <div>
-                  <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#956A13]">
-                    {system.eyebrow}
-                  </p>
-                  <h3 className="mt-3 font-[var(--tgpi-font-display)] text-3xl font-semibold text-[#071A31] sm:text-4xl">
-                    {system.title}
-                  </h3>
-                </div>
-                <span className="font-[var(--tgpi-font-display)] text-4xl font-semibold text-[#D8C28A]">
-                  {system.number}
-                </span>
-              </div>
-              <p className="mt-5 max-w-[560px] text-sm leading-7 text-[#596576]">
-                {system.description}
-              </p>
-              <Link
-                href={system.href}
-                className="mt-6 inline-flex items-center gap-2 text-sm font-extrabold text-[#0B1F3A] transition group-hover:text-[#956A13]"
-              >
-                Explore this TGPI layer <span aria-hidden="true">→</span>
-              </Link>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section id="membership" className="scroll-mt-28 py-8 sm:py-12">
-        <div className="mx-auto max-w-3xl text-center">
-          <p className="text-[10px] font-extrabold uppercase tracking-[0.25em] text-[#956A13]">
-            Choose your operating level
-          </p>
-          <h2 className="mt-4 font-[var(--tgpi-font-display)] text-4xl font-semibold leading-[1.02] tracking-[-0.035em] text-[#071A31] sm:text-6xl">
-            Start free. Upgrade when the decision becomes real.
-          </h2>
-          <p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-[#596576]">
-            Free helps you discover TGPI. Premium connects the intelligence,
-            preparation and capability required to move forward with confidence.
-          </p>
-        </div>
-
-        <div className="mx-auto mt-10 grid max-w-6xl gap-6 lg:grid-cols-[0.82fr_1.18fr] lg:items-stretch">
-          <article className="rounded-[30px] border border-[#D8D2C4] bg-[#FFFDF8] p-7 shadow-[0_18px_50px_rgba(11,31,58,0.06)] sm:p-9">
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#687486]">
-              Explore the system
-            </p>
-            <h3 className="mt-4 font-[var(--tgpi-font-display)] text-4xl font-semibold text-[#071A31]">
-              {TGPI_FREE_PLAN.name}
-            </h3>
-            <div className="mt-5 flex items-end gap-2">
-              <p className="text-5xl font-extrabold tracking-[-0.04em] text-[#071A31]">
-                {TGPI_FREE_PLAN.price}
-              </p>
-              <span className="pb-1 text-sm font-semibold text-[#687486]">forever</span>
-            </div>
-            <p className="mt-5 min-h-14 text-sm leading-7 text-[#596576]">
-              {TGPI_FREE_PLAN.description}
-            </p>
-
-            <ul className="mt-7 space-y-3 text-sm leading-6 text-[#303846]">
-              {TGPI_FREE_PLAN.features.map((feature) => (
-                <li key={feature} className="flex gap-3">
-                  <span className="font-extrabold text-[#956A13]" aria-hidden="true">✓</span>
-                  <span>{feature}</span>
-                </li>
-              ))}
-            </ul>
-
-            <Link
-              href="/sign-up"
-              className="mt-8 inline-flex min-h-14 w-full items-center justify-center rounded-xl border border-[#0B1F3A] bg-white px-6 text-sm font-extrabold text-[#0B1F3A] transition hover:bg-[#F3F6FA]"
-            >
-              Create my free Global Key
-            </Link>
-            <p className="mt-4 text-center text-xs leading-5 text-[#778293]">
-              No credit card required.
-            </p>
-          </article>
-
-          <article className="relative overflow-hidden rounded-[30px] border border-[#B58A2A] bg-[#071A31] p-7 text-white shadow-[0_28px_85px_rgba(7,26,49,0.22)] sm:p-9">
-            <div className="absolute right-0 top-0 h-48 w-48 rounded-full bg-[#D7B45D]/10 blur-3xl" />
-            <div className="relative">
-              <div className="flex flex-wrap items-start justify-between gap-4">
-                <div>
-                  <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#F0D58C]">
-                    Complete global decision system
-                  </p>
-                  <h3 className="mt-4 font-[var(--tgpi-font-display)] text-4xl font-semibold">
-                    {TGPI_PREMIUM_PLAN.name}
-                  </h3>
-                </div>
-                <span className="rounded-full border border-[#D7B45D]/35 bg-[#D7B45D]/10 px-4 py-2 text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#F0D58C]">
-                  Recommended
-                </span>
-              </div>
-
-              <div className="mt-5 flex items-end gap-2">
-                <p className="text-5xl font-extrabold tracking-[-0.04em] text-[#F0D58C] sm:text-6xl">
-                  {TGPI_PREMIUM_PLAN.price}
+        )}
+        <section
+          className="grid gap-8 lg:grid-cols-[1.08fr_0.92fr] lg:items-start lg:gap-10"
+          aria-labelledby="premium-title"
+        >
+          <div className="min-w-0">
+            <div className="flex items-center gap-3">
+              <Image
+                src="/brand/tgpi-crest-v2-256.png"
+                alt="TGPI crest"
+                width={48}
+                height={48}
+                className="h-12 w-12 object-contain"
+              />
+              <div>
+                <p className={eyebrow}>The Global Polymath Institute</p>
+                <p className="mt-1 text-xs font-semibold text-[#0B1F3A]">
+                  Data · Education · Mobility · Decision
                 </p>
-                <span className="pb-2 text-sm font-semibold text-white/55">
-                  {TGPI_PREMIUM_PLAN.cadence}
-                </span>
               </div>
-              <p className="mt-5 max-w-2xl text-sm leading-7 text-white/68">
-                {TGPI_PREMIUM_PLAN.description}
-              </p>
-
-              <div className="mt-7 grid gap-3 sm:grid-cols-2">
-                {TGPI_PREMIUM_PLAN.features.map((feature) => (
-                  <div key={feature} className="flex gap-3 rounded-xl border border-white/10 bg-white/[0.035] px-4 py-3 text-sm leading-6 text-white/85">
-                    <span className="font-extrabold text-[#F0D58C]" aria-hidden="true">✓</span>
-                    <span>{feature}</span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-8 [&_a]:min-h-14 [&_a]:content-center [&_a]:rounded-xl [&_button]:min-h-14 [&_button]:rounded-xl">
-                <PremiumActionButton billingEnabled={billingEnabled} />
-              </div>
-              <p className="mt-4 text-center text-xs leading-5 text-white/48">
-                {billingEnabled
-                  ? "Secure recurring billing. Manage or cancel through the customer portal."
-                  : "Join the founding list today. No payment or subscription is created."}
+            </div>
+            <p className={`${eyebrow} mt-8`}>
+              TGPI Premium / Global decision intelligence
+            </p>
+            <h1
+              id="premium-title"
+              className={`${heading} mt-4 max-w-2xl text-[clamp(2.8rem,5.6vw,5.4rem)]`}
+            >
+              Choose your country.
+              <br />
+              <span className="text-[#956A13]">Build your plan.</span>
+            </h1>
+            <p className="mt-5 max-w-xl text-base leading-8 text-[#596576]">
+              Your next chapter deserves more than scattered research. Connect
+              Country Fit, comparisons and personal preparation in one Premium
+              workspace.
+            </p>
+            <a
+              href="#membership"
+              className="mt-5 inline-flex min-h-11 items-center gap-3 text-sm font-bold text-[#0B1F3A] underline decoration-[#B58A2A] underline-offset-8"
+            >
+              View membership options <span aria-hidden="true">↓</span>
+            </a>
+            <div className="relative mt-6 hidden aspect-[3/2] lg:block overflow-hidden rounded-[24px] bg-[#0B1F3A]">
+              <Image
+                src="/images/pricing/tgpi-premium-global-library-v1.webp"
+                alt="International research library overlooking a waterfront city, with a brass globe and warm academic lighting"
+                fill
+                priority
+                sizes="(max-width: 1024px) 100vw, 640px"
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#06162A]/95 via-transparent to-transparent" />
+              <p className="absolute bottom-6 left-6 right-6 font-[var(--tgpi-font-display)] text-2xl font-semibold text-white sm:text-3xl">
+                A global life. A clearer decision.
               </p>
             </div>
-          </article>
-        </div>
-      </section>
-
-      <section className="py-16 sm:py-20">
-        <div className="overflow-hidden rounded-[30px] border border-[#D8D2C4] bg-[#FFFDF8] shadow-[0_20px_60px_rgba(11,31,58,0.07)]">
-          <div className="border-b border-[#D8D2C4] px-6 py-8 sm:px-9">
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#956A13]">
-              Clear comparison
-            </p>
-            <h2 className="mt-3 font-[var(--tgpi-font-display)] text-4xl font-semibold text-[#071A31]">
-              See exactly what changes with Premium.
-            </h2>
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full min-w-[720px] border-collapse text-left">
-              <thead>
-                <tr className="border-b border-[#D8D2C4] bg-[#F4EFE4]">
-                  <th className="px-6 py-4 text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#687486] sm:px-9">Capability</th>
-                  <th className="px-6 py-4 text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#687486]">Free</th>
-                  <th className="bg-[#071A31] px-6 py-4 text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#F0D58C] sm:px-9">Premium</th>
-                </tr>
-              </thead>
-              <tbody>
-                {comparisonRows.map(([capability, free, premium]) => (
-                  <tr key={capability} className="border-b border-[#E5DED1] last:border-b-0">
-                    <th scope="row" className="px-6 py-5 text-sm font-extrabold text-[#071A31] sm:px-9">{capability}</th>
-                    <td className="px-6 py-5 text-sm leading-6 text-[#687486]">{free}</td>
-                    <td className="bg-[#071A31] px-6 py-5 text-sm font-semibold leading-6 text-white/82 sm:px-9">
-                      <span className="mr-2 text-[#F0D58C]" aria-hidden="true">✓</span>
-                      {premium}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-6 sm:py-10">
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {standards.map((standard) => (
-            <article key={standard.title} className="rounded-[24px] border border-[#D8D2C4] bg-[#FFFDF8] p-6">
-              <div className="h-px w-10 bg-[#B58A2A]" />
-              <h3 className="mt-5 font-[var(--tgpi-font-display)] text-2xl font-semibold text-[#071A31]">
-                {standard.title}
-              </h3>
-              <p className="mt-3 text-sm leading-7 text-[#596576]">
-                {standard.description}
+          <aside
+            id="membership"
+            className="scroll-mt-28 overflow-hidden rounded-[28px] border border-[#B58A2A]/40 bg-[#0B1F3A] text-white shadow-[0_24px_70px_rgba(11,31,58,0.16)] lg:sticky lg:top-28"
+            aria-label="Premium membership"
+          >
+            <div className="flex items-center justify-between gap-3 border-b border-white/15 px-6 py-4 sm:px-8">
+              <span className="text-xs font-extrabold uppercase tracking-[0.18em] text-[#F0D58C]">
+                One complete membership
+              </span>
+              <span className="text-xs text-white/80">Monthly</span>
+            </div>
+            <div className="p-6 sm:p-8">
+              <h2 className="font-[var(--tgpi-font-display)] text-4xl font-semibold">
+                {TGPI_PREMIUM_PLAN.name}
+              </h2>
+              <div className="mt-5 flex flex-wrap items-baseline gap-2">
+                <span className="text-[clamp(2.8rem,5vw,3.8rem)] font-extrabold tracking-[-0.05em]">
+                  {TGPI_PREMIUM_PLAN.price}
+                </span>
+                <span className="text-sm text-white/80">/ month</span>
+              </div>
+              <p className="mt-2 text-sm leading-6 text-white/80">
+                Billed in USD. Renews monthly until cancelled.
               </p>
-            </article>
+              <div className="mt-6">
+                <PremiumActionButton
+                  billingEnabled={billingEnabled}
+                  showMembershipStatus
+                />
+              </div>
+              <p className="mt-4 text-center text-xs leading-6 text-white/80">
+                {billingEnabled
+                  ? "Secure payment through Stripe. Cancel online."
+                  : "Payments are temporarily unavailable. Join the early-access list."}
+              </p>
+              <div className="mt-7 border-t border-white/15 pt-6">
+                <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#F0D58C]">
+                  Included in your membership
+                </p>
+                <ul className="mt-4 space-y-3">
+                  {TGPI_PREMIUM_PLAN.features.map((feature) => (
+                    <li
+                      key={feature}
+                      className="flex gap-3 text-sm leading-6 text-white/90"
+                    >
+                      <span aria-hidden="true" className="text-[#F0D58C]">
+                        ✓
+                      </span>
+                      <span>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 border-t border-white/15 pt-5 text-xs text-white/80">
+                <Link href="/terms" className="underline underline-offset-4">
+                  Terms
+                </Link>
+                <Link href="/privacy" className="underline underline-offset-4">
+                  Privacy
+                </Link>
+                <Link href="/refunds" className="underline underline-offset-4">
+                  Refund policy
+                </Link>
+              </div>
+            </div>
+          </aside>
+        </section>
+        <section
+          className="mt-10 grid gap-5 rounded-[24px] border border-[#D8D2C4] bg-white p-6 sm:grid-cols-3 sm:p-8"
+          aria-label="Your first steps"
+        >
+          {[
+            [
+              "01",
+              "Choose your focus",
+              "Start with the country or international goal that matters to you.",
+            ],
+            [
+              "02",
+              "Compare your options",
+              "Review the trade-offs and save the reasoning behind your choice.",
+            ],
+            [
+              "03",
+              "Prepare your next move",
+              "Use your readiness, documents and learning to guide your next action.",
+            ],
+          ].map(([n, title, description]) => (
+            <div key={n}>
+              <p className={eyebrow}>Start here / {n}</p>
+              <h2 className="mt-3 text-base font-bold text-[#0B1F3A]">
+                {title}
+              </h2>
+              <p className="mt-2 text-sm leading-7 text-[#596576]">
+                {description}
+              </p>
+            </div>
           ))}
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-5xl py-16 sm:py-20">
-        <div className="grid gap-8 lg:grid-cols-[0.7fr_1.3fr]">
-          <div>
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#956A13]">
-              Membership questions
-            </p>
-            <h2 className="mt-4 font-[var(--tgpi-font-display)] text-4xl font-semibold leading-[1.02] tracking-[-0.03em] text-[#071A31] sm:text-5xl">
-              Clarity before commitment.
+        </section>
+        <section id="premium-system" className="scroll-mt-28 py-16 sm:py-20">
+          <p className={eyebrow}>The connected TGPI system</p>
+          <h2 className={`${heading} mt-4 max-w-3xl text-4xl sm:text-6xl`}>
+            From “where should I go?”
+            <br />
+            to “what do I do next?”
+          </h2>
+          <div className="mt-9 grid gap-4 sm:grid-cols-2">
+            {systems.map((system) => (
+              <article
+                key={system.number}
+                className="rounded-[24px] border border-[#D8D2C4] bg-white p-6 sm:p-8"
+              >
+                <div className="flex justify-between gap-4">
+                  <p className={eyebrow}>{system.label}</p>
+                  <span className="text-sm font-semibold text-[#956A13]">
+                    {system.number}
+                  </span>
+                </div>
+                <h3 className={`${heading} mt-4 text-3xl sm:text-4xl`}>
+                  {system.title}
+                </h3>
+                <p className="mt-4 text-sm leading-7 text-[#596576]">
+                  {system.description}
+                </p>
+                <Link
+                  href={system.href}
+                  className="mt-5 inline-flex min-h-11 items-center gap-3 text-sm font-bold text-[#0B1F3A]"
+                >
+                  {system.action}
+                  <span aria-hidden="true">→</span>
+                </Link>
+              </article>
+            ))}
+          </div>
+        </section>
+        <section
+          className="grid overflow-hidden rounded-[28px] border border-[#D8D2C4] bg-white md:grid-cols-2"
+          aria-labelledby="preparation-title"
+        >
+          <div className="relative min-h-64 md:min-h-96">
+            <Image
+              src="/images/pricing/tgpi-premium-preparation-v1.webp"
+              alt="Sunlit international study space with a notebook and globe overlooking a European city"
+              fill
+              sizes="(max-width: 768px) 100vw, 640px"
+              className="object-cover"
+            />
+          </div>
+          <div className="flex flex-col justify-center p-7 sm:p-10">
+            <p className={eyebrow}>Research becomes preparation</p>
+            <h2
+              id="preparation-title"
+              className={`${heading} mt-4 text-4xl sm:text-5xl`}
+            >
+              Keep your next step in view.
             </h2>
             <p className="mt-5 text-sm leading-7 text-[#596576]">
-              TGPI should earn trust before asking for a subscription. These are the
-              boundaries, controls and expectations behind Premium.
+              Your country shortlist is the beginning. Bring your comparisons,
+              readiness and learning into one place, then return with a clearer
+              sense of what to do next.
+            </p>
+            <a
+              href="#membership"
+              className="mt-6 inline-flex min-h-11 items-center gap-3 text-sm font-bold text-[#0B1F3A]"
+            >
+              View your membership options <span aria-hidden="true">↑</span>
+            </a>
+          </div>
+        </section>
+        <PricingOutcomeSelector />
+        <section className="py-10 sm:py-14" aria-labelledby="comparison-title">
+          <p className={eyebrow}>A clear upgrade</p>
+          <h2
+            id="comparison-title"
+            className={`${heading} mt-4 text-4xl sm:text-5xl`}
+          >
+            Explore free. Prepare with Premium.
+          </h2>
+          <div className="mt-8 overflow-hidden rounded-[24px] border border-[#D8D2C4] bg-white">
+            <div
+              className="overflow-x-auto"
+              role="region"
+              aria-label="Free and Premium comparison"
+              tabIndex={0}
+            >
+              <table className="w-full min-w-[540px] text-left text-sm">
+                <caption className="sr-only">
+                  TGPI Free and Premium membership features
+                </caption>
+                <thead>
+                  <tr className="bg-[#F1EBDD]">
+                    <th scope="col" className="p-5">
+                      Capability
+                    </th>
+                    <th scope="col" className="p-5">
+                      Free
+                    </th>
+                    <th scope="col" className="bg-[#0B1F3A] p-5 text-[#F0D58C]">
+                      Premium
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {comparisons.map(([feature, free, premium]) => (
+                    <tr key={feature} className="border-t border-[#D8D2C4]">
+                      <th
+                        scope="row"
+                        className="p-5 font-semibold text-[#0B1F3A]"
+                      >
+                        {feature}
+                      </th>
+                      <td className="p-5 text-[#596576]">{free}</td>
+                      <td className="bg-[#0B1F3A] p-5 font-semibold text-white">
+                        {premium}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div className="mt-5 flex flex-col justify-between gap-4 rounded-2xl border border-[#D8D2C4] p-5 sm:flex-row sm:items-center">
+            <p className="text-sm leading-6 text-[#596576]">
+              Still exploring? {TGPI_FREE_PLAN.description}
+            </p>
+            <Link
+              href="/sign-up"
+              className="inline-flex min-h-11 shrink-0 items-center font-bold text-[#0B1F3A] underline underline-offset-4"
+            >
+              Create a free account →
+            </Link>
+          </div>
+        </section>
+        <section
+          className="grid gap-8 py-14 lg:grid-cols-[0.8fr_1.2fr]"
+          aria-labelledby="faq-title"
+        >
+          <div>
+            <p className={eyebrow}>Before you subscribe</p>
+            <h2
+              id="faq-title"
+              className={`${heading} mt-4 text-4xl sm:text-5xl`}
+            >
+              Clear terms.
+              <br />
+              Confident next steps.
+            </h2>
+            <p className="mt-5 text-sm leading-7 text-[#596576]">
+              Understand your access, billing and the role of TGPI before making
+              your decision.
             </p>
           </div>
-
           <div className="divide-y divide-[#D8D2C4] border-y border-[#D8D2C4]">
-            {faqs.map((faq) => (
-              <details key={faq.question} className="group py-5">
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-5 text-sm font-extrabold text-[#071A31] marker:hidden sm:text-base">
-                  {faq.question}
-                  <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full border border-[#D8D2C4] text-[#956A13] transition group-open:rotate-45" aria-hidden="true">+</span>
+            {faqs.map(([question, answer]) => (
+              <details key={question} className="group py-5">
+                <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-4 font-bold text-[#0B1F3A]">
+                  {question}
+                  <span
+                    aria-hidden="true"
+                    className="text-xl text-[#956A13] group-open:rotate-45"
+                  >
+                    +
+                  </span>
                 </summary>
-                <p className="max-w-3xl pr-12 pt-4 text-sm leading-7 text-[#596576]">
-                  {faq.answer}
+                <p className="pt-4 text-sm leading-7 text-[#596576]">
+                  {answer}
                 </p>
               </details>
             ))}
           </div>
-        </div>
-      </section>
-
-      <section className="relative mb-10 overflow-hidden rounded-[30px] bg-[#06162A] px-7 py-12 text-white shadow-[0_28px_80px_rgba(5,22,42,0.2)] sm:px-10 sm:py-14 lg:px-14">
-        <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-[#B58A2A]/15 blur-3xl" />
-        <div className="relative grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
-          <div className="max-w-3xl">
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.25em] text-[#F0D58C]">
-              Your next chapter needs a system
-            </p>
-            <h2 className="mt-4 font-[var(--tgpi-font-display)] text-4xl font-semibold leading-[0.98] tracking-[-0.035em] sm:text-6xl">
-              Build a global life with every decision connected.
-            </h2>
-            <p className="mt-5 max-w-2xl text-sm leading-7 text-white/62 sm:text-base">
-              Begin with a free Global Key or join the founding Premium list for
-              launch priority. TGPI will never create a charge without presenting
-              the terms first.
-            </p>
-          </div>
-
-          <div className="w-full lg:w-[300px] [&_a]:min-h-14 [&_a]:content-center [&_a]:rounded-xl [&_button]:min-h-14 [&_button]:rounded-xl">
+        </section>
+        <section className="rounded-[28px] bg-[#0B1F3A] p-7 text-white sm:p-10">
+          <div className="grid gap-7 lg:grid-cols-[1fr_340px] lg:items-center">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#F0D58C]">
+                Your next chapter starts with clarity
+              </p>
+              <h2 className="mt-4 font-[var(--tgpi-font-display)] text-4xl font-semibold leading-tight sm:text-5xl">
+                Make your next global decision count.
+              </h2>
+              <p className="mt-4 text-sm leading-7 text-white/80">
+                {TGPI_PREMIUM_PLAN.price}/month. Country Fit, comparisons and
+                personal preparation, connected.
+              </p>
+            </div>
             <PremiumActionButton billingEnabled={billingEnabled} />
-            <Link href="/sign-up" className="mt-3 inline-flex min-h-12 w-full items-center justify-center rounded-xl border border-white/18 px-5 text-sm font-extrabold text-white transition hover:bg-white/5">
-              Start free instead
-            </Link>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
     </TGPIPageShell>
   );
 }
