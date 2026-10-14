@@ -392,6 +392,9 @@ export async function updateUserActivationProgress(
   const current = normalizeActivationProgress(
     user.privateMetadata[TGPI_ACTIVATION_METADATA_KEY],
   );
+  if (mutation.type === "visit_lesson" &&
+    current.courseProgress[mutation.courseId]?.lastLessonId === mutation.lessonId &&
+    current.courseProgress[mutation.courseId]?.courseVersion === requireCourse(mutation.courseId).version) return current;
   const progress = applyActivationMutation(current, mutation);
 
   await client.users.updateUserMetadata(userId, {

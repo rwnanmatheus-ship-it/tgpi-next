@@ -57,8 +57,8 @@ function validateEnglishAbroadCourse(course: Course) {
 }
 
 export const englishAbroadCourse = validateEnglishAbroadCourse({
-  id: "english-abroad",
-  version: "1.0.0",
+  id: "global-english-2026",
+  version: "2.0.0",
   title: "Global English: Live, Work & Belong Abroad",
   description:
     "Build the practical English required to arrive, settle, work and act independently in another country through 18 real-world simulations.",

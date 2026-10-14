@@ -57,8 +57,8 @@ const learningPrinciples = [
 export default async function CoursesPage() {
   const { userId } = await auth();
   const learningHref = userId
-    ? "/courses/english-abroad"
-    : "/sign-in?redirect_url=/courses/english-abroad";
+    ? "/courses/global-english-2026"
+    : "/sign-in?redirect_url=/courses/global-english-2026";
 
   return (
     <TGPIPageShell width="capability">

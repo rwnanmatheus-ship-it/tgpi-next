@@ -73,7 +73,7 @@ export class LearningInputError extends Error {
   }
 }
 
-const COURSE_ID = "english-abroad";
+const COURSE_ID = "global-english-2026";
 const MIN_REFLECTION_LENGTH = 120;
 
 function hasIssuablePublicName(value: string) {
@@ -99,7 +99,7 @@ function userCredentialPath(userId: string, credentialId: string) {
 
 function supportedCourse(courseId: string) {
   const course = getCourse(courseId);
-  if (!course || course.id !== COURSE_ID) {
+  if (!course || course.id !== COURSE_ID || courseId !== course.id) {
     throw new LearningInputError("This certification path is not available.", 404);
   }
   return course;

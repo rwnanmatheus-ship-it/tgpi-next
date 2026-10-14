@@ -31,7 +31,17 @@ async function readResponse(response: Response) {
   return payload.progress;
 }
 
-export async function fetchActivationProgress() {
+const pendingReads = new Map<string, Promise<TgpiActivationProgress>>();
+
+export function fetchActivationProgress(userId: string) {
+  const existing = pendingReads.get(userId);
+  if (existing) return existing;
+  const request = loadActivationProgress().finally(() => { pendingReads.delete(userId); });
+  pendingReads.set(userId, request);
+  return request;
+}
+
+async function loadActivationProgress() {
   const response = await fetch("/api/progress", {
     cache: "no-store",
     credentials: "same-origin",

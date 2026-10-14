@@ -15,8 +15,8 @@ export const coursesOverview: CourseOverview[] = [
     format: "18 scenario-based lessons",
     goal: "global-mobility",
     goalLabel: "Live abroad with confidence",
-    href: "/courses/english-abroad",
-    id: "english-abroad",
+    href: "/courses/global-english-2026",
+    id: "global-english-2026",
     image: "/images/courses/global-english-abroad.webp",
     imageAlt:
       "International professional arriving in a global city at sunrise",

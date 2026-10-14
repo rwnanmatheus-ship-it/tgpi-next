@@ -6,7 +6,7 @@ export type { Course, CourseLesson, CourseModule } from "@/types/course";
 export const courses: Course[] = [englishAbroadCourse];
 
 export function getCourse(courseId: string) {
-  return courses.find((course) => course.id === courseId);
+  return courses.find((course) => course.id === (courseId === "english-abroad" ? "global-english-2026" : courseId));
 }
 
 export function getCourseLessonCount(course: Course) {
