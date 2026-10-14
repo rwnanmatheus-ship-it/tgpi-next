@@ -60,7 +60,7 @@ function CourseOverview({ course }: { course: Course }) {
   }, [course.id, course.version, courseProgress, isAuthenticated, isLoading, mutate]);
 
   return (
-    <main className="min-h-screen bg-[var(--tgpi-canvas)] px-4 py-8 text-[var(--tgpi-navy)] sm:px-6 sm:py-12 lg:px-8">
+    <main translate="no" lang="en" className="min-h-screen bg-[var(--tgpi-canvas)] px-4 py-8 text-[var(--tgpi-navy)] sm:px-6 sm:py-12 lg:px-8">
       <div className="mx-auto max-w-[1280px]">
         <Link
           href="/courses#learning-paths"

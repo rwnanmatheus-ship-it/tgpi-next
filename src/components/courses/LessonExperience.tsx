@@ -114,7 +114,7 @@ function Lesson({
   }
 
   return (
-    <main className="min-h-screen bg-[var(--tgpi-canvas)] text-[var(--tgpi-navy)]">
+    <main translate="no" lang="en" className="min-h-screen bg-[var(--tgpi-canvas)] text-[var(--tgpi-navy)]">
       <div className="sticky top-0 z-20 border-b border-white/10 bg-[var(--tgpi-navy)] text-white shadow-lg">
         <div className="mx-auto max-w-[1280px] px-4 py-5 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
