@@ -1,16 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { blocksNewCheckout } from "@/lib/billing";
 import type { BillingStatusResponse } from "@/types";
 
-const billingStatusRequests = new Map<
-  string,
-  Promise<BillingStatusResponse>
->();
+const billingStatusRequests = new Map<string, Promise<BillingStatusResponse>>();
 
 function getBillingStatus(userId: string) {
   const existingRequest = billingStatusRequests.get(userId);
@@ -33,11 +30,15 @@ function getBillingStatus(userId: string) {
 
 export default function PremiumActionButton({
   billingEnabled,
+  showMembershipStatus = false,
 }: {
   billingEnabled: boolean;
+  showMembershipStatus?: boolean;
 }) {
   const { isLoaded, isSignedIn, userId } = useAuth();
   const router = useRouter();
+  const requestInFlight = useRef(false);
+  const [retryCount, setRetryCount] = useState(0);
   const [loading, setLoading] = useState(false);
   const [checkingStatus, setCheckingStatus] = useState(true);
   const [billing, setBilling] = useState<BillingStatusResponse | null>(null);
@@ -77,13 +78,15 @@ export default function PremiumActionButton({
     return () => {
       active = false;
     };
-  }, [isLoaded, isSignedIn, userId]);
+  }, [isLoaded, isSignedIn, userId, retryCount]);
 
   const hasFounderAccess = billing?.accessMode === "founder";
   const hasPreviewAccess = billing?.accessMode === "preview";
   const hasControlledAccess = hasFounderAccess || hasPreviewAccess;
 
-  if (!billingEnabled && !hasControlledAccess) {
+  const hasPremiumAccess = billing?.plan === "premium";
+
+  if (!billingEnabled && !hasControlledAccess && !hasPremiumAccess) {
     if (isLoaded && isSignedIn && checkingStatus) {
       return (
         <button
@@ -120,24 +123,23 @@ export default function PremiumActionButton({
   }
 
   async function startCheckout() {
+    if (requestInFlight.current) return;
+    requestInFlight.current = true;
     setLoading(true);
     setError(null);
 
     try {
       if (!isLoaded || !isSignedIn) {
-        router.push("/sign-in?redirect_url=%2Fpricing");
+        router.push("/sign-in?redirect_url=%2Fpricing%23membership");
         return;
       }
 
-      if (hasControlledAccess) {
+      if (hasControlledAccess || hasPremiumAccess) {
         router.push("/premium");
         return;
       }
 
-      if (
-        billing?.portalAvailable &&
-        blocksNewCheckout(billing.status)
-      ) {
+      if (billing?.portalAvailable && blocksNewCheckout(billing.status)) {
         await openBillingPortal();
         return;
       }
@@ -157,11 +159,17 @@ export default function PremiumActionButton({
         return;
       }
 
-      if (
-        response.status === 409 &&
-        (data.code === "ALREADY_PREMIUM" ||
-          data.code === "SUBSCRIPTION_EXISTS")
-      ) {
+      if (response.status === 401) {
+        router.push("/sign-in?redirect_url=%2Fpricing%23membership");
+        return;
+      }
+
+      if (response.status === 409 && data.code === "ALREADY_PREMIUM") {
+        router.push("/premium");
+        return;
+      }
+
+      if (response.status === 409 && data.code === "SUBSCRIPTION_EXISTS") {
         await openBillingPortal();
         return;
       }
@@ -175,8 +183,30 @@ export default function PremiumActionButton({
       setError(
         checkoutError instanceof Error
           ? checkoutError.message
-          : "Could not start checkout."
+          : "Could not start checkout.",
       );
+      setLoading(false);
+    } finally {
+      requestInFlight.current = false;
+      setLoading(false);
+    }
+  }
+
+  async function manageSubscription() {
+    if (requestInFlight.current) return;
+    requestInFlight.current = true;
+    setLoading(true);
+    setError(null);
+    try {
+      await openBillingPortal();
+    } catch (portalError) {
+      setError(
+        portalError instanceof Error
+          ? portalError.message
+          : "Could not open billing management.",
+      );
+    } finally {
+      requestInFlight.current = false;
       setLoading(false);
     }
   }
@@ -186,12 +216,51 @@ export default function PremiumActionButton({
   );
 
   return (
-    <div>
+    <div className="text-white">
+      {showMembershipStatus && !checkingStatus && billing && (
+        <div
+          role="status"
+          className="mb-4 rounded-xl border border-white/20 bg-[#07172B] p-4 text-sm leading-6 text-white"
+        >
+          <p className="font-bold text-[#F0D58C]">
+            {hasFounderAccess
+              ? "Founder access enabled"
+              : hasPreviewAccess
+                ? "Preview access enabled"
+                : hasPremiumAccess
+                  ? "Your Premium membership is active"
+                  : shouldManageBilling
+                    ? "Your subscription needs attention"
+                    : "Ready for your Premium next step"}
+          </p>
+          {hasPremiumAccess &&
+            billing.accessMode === "subscription" &&
+            billing.currentPeriodEnd &&
+            !Number.isNaN(Date.parse(billing.currentPeriodEnd)) && (
+              <p className="mt-1 text-xs text-white/80">
+                {billing.cancelAtPeriodEnd ? "Access until" : "Next renewal"}:{" "}
+                {new Intl.DateTimeFormat("en-US", {
+                  dateStyle: "medium",
+                  timeZone: "UTC",
+                }).format(new Date(billing.currentPeriodEnd))}
+              </p>
+            )}
+          {hasControlledAccess && (
+            <p className="mt-1 text-xs text-white/80">
+              Authorized access. No paid subscription is implied.
+            </p>
+          )}
+        </div>
+      )}
       <button
         type="button"
-        onClick={startCheckout}
+        onClick={
+          isSignedIn && !billing
+            ? () => setRetryCount((count) => count + 1)
+            : startCheckout
+        }
         disabled={loading || checkingStatus}
-        className="w-full rounded-2xl bg-[#B58A2A] px-6 py-4 text-sm font-black text-[#0B0B0B] transition hover:bg-[#C79B36] disabled:cursor-not-allowed disabled:opacity-60"
+        className="w-full rounded-2xl bg-[#B58A2A] px-6 py-4 text-sm font-black text-[#0B0B0B] transition hover:bg-[#C79B36] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#F0D58C] disabled:cursor-not-allowed disabled:opacity-60"
       >
         {loading
           ? shouldManageBilling
@@ -203,13 +272,32 @@ export default function PremiumActionButton({
               ? "Open TGPI Founder Access"
               : hasPreviewAccess
                 ? "Open TGPI Premium Preview"
-              : billing?.plan === "premium" || shouldManageBilling
-              ? "Manage TGPI Premium"
-              : "Start TGPI Premium"}
+                : hasPremiumAccess
+                  ? "Open Premium workspace"
+                  : isSignedIn && !billing
+                    ? "Retry membership check"
+                    : shouldManageBilling
+                      ? "Manage subscription"
+                      : isSignedIn
+                        ? "Continue to secure checkout"
+                        : "Sign in to subscribe"}
       </button>
 
+      {hasPremiumAccess && billing?.portalAvailable && !hasControlledAccess && (
+        <button
+          type="button"
+          onClick={manageSubscription}
+          disabled={loading || checkingStatus}
+          className="mt-3 min-h-11 w-full rounded-xl border border-white/30 bg-[#07172B] px-4 py-3 text-sm font-bold text-white transition hover:bg-[#142D4C] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#F0D58C] disabled:opacity-60"
+        >
+          Manage subscription
+        </button>
+      )}
       {error && (
-        <p className="mt-3 text-sm font-semibold text-[#8B1E1E]" role="alert">
+        <p
+          className="mt-3 rounded-xl border border-[#D8D2C4] bg-[#FFFDF8] p-3 text-sm font-semibold text-[#8B1E1E]"
+          role="alert"
+        >
           {error}
         </p>
       )}
