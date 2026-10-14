@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useUser } from "@clerk/nextjs";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import PublicProfileShareButton from "@/components/profile/PublicProfileShareButton";
@@ -34,6 +35,7 @@ type AccountSummary = {
   publicProfileUrl: string;
 };
 type TgpiAccountCenterProps = {
+  usernameEnabled: boolean;
   account: AccountSummary;
   children: React.ReactNode;
   countries: CountryOption[];
@@ -340,6 +342,7 @@ function isSettingsSection(value: string): value is SettingsSection {
 }
 
 export default function TgpiAccountCenter({
+  usernameEnabled,
   account,
   children,
   countries,
@@ -348,6 +351,7 @@ export default function TgpiAccountCenter({
   initialProfile,
   rank,
 }: TgpiAccountCenterProps) {
+  const { user } = useUser();
   const pathname = usePathname();
   const router = useRouter();
   const contentRef = useRef<HTMLDivElement>(null);
@@ -393,6 +397,23 @@ export default function TgpiAccountCenter({
     const hashSection = window.location.hash.replace("#settings-", "");
     if (isSettingsSection(hashSection)) setActiveSection(hashSection);
   }, [pathname]);
+
+  useEffect(() => {
+    function syncHash() {
+      const section = window.location.hash.replace("#settings-", "");
+      if (isSettingsSection(section)) setActiveSection(section);
+    }
+    window.addEventListener("hashchange", syncHash);
+    return () => window.removeEventListener("hashchange", syncHash);
+  }, []);
+
+  useEffect(() => {
+    function protectChanges(event: BeforeUnloadEvent) {
+      if (isDirty) event.preventDefault();
+    }
+    window.addEventListener("beforeunload", protectChanges);
+    return () => window.removeEventListener("beforeunload", protectChanges);
+  }, [isDirty]);
 
   function selectSection(section: SettingsSection) {
     setActiveSection(section);
@@ -462,6 +483,7 @@ export default function TgpiAccountCenter({
       savedSnapshot.current = JSON.stringify({ identity: result.identity, profile: result.profile });
       setSaveState("saved");
       setMessage("Saved across your TGPI account and decision tools.");
+      await user?.reload();
       router.refresh();
     } catch (error) {
       setSaveState("error");
@@ -481,7 +503,7 @@ export default function TgpiAccountCenter({
               <span className="rounded-full border border-[#E5BF5A]/30 bg-[#E5BF5A]/10 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.15em] text-[#F0D58C]">{account.membership}</span>
             </div>
             <p className="mt-1 text-sm text-[#C8D2DE]">{profile.headline || "Add a professional headline"}</p>
-            <p className="mt-3 break-all text-xs text-[#9FAFC0]">{account.email}</p>
+            <p className="mt-3 break-all text-xs text-[#9FAFC0]">{identity.username ? `@${identity.username}` : "Create your unique @ID in Personal information"}</p>
           </div>
           <div className="flex flex-wrap gap-2">
             <button className="min-h-11 rounded-xl bg-white px-5 text-xs font-extrabold text-[#0B1F3A] transition hover:bg-[#F4E7BE]" onClick={() => selectSection("identity")} type="button">Edit profile</button>
@@ -499,9 +521,9 @@ export default function TgpiAccountCenter({
 
       <div className="mt-6">
         <p className="px-1 text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#86621A]">Account settings</p>
-        <div className="mt-3 overflow-hidden rounded-[22px] border border-[#DDD7CB] bg-white">
+        <div className="tgpi-account-grid mt-3 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
           {settingsSections.slice(1).map((section) => (
-            <button className="group flex w-full items-center gap-4 border-b border-[#ECE7DE] px-4 py-4 text-left transition last:border-0 hover:bg-[#FBF8F1] sm:px-5" key={section.key} onClick={() => selectSection(section.key)} type="button">
+            <button className="tgpi-account-tile group flex w-full items-center gap-4 rounded-[22px] border border-[#DDD7CB] px-4 py-5 text-left sm:px-5" key={section.key} onClick={() => selectSection(section.key)} type="button">
               <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#EEF1F4] text-[#0B1F3A] transition group-hover:bg-[#0B1F3A] group-hover:text-[#F0D58C]"><SettingsIcon section={section.key} /></span>
               <span className="min-w-0 flex-1"><span className="block text-sm font-extrabold text-[#0B1F3A]">{section.label}</span><span className="mt-0.5 block truncate text-xs text-[#707987]">{sectionSummaries[section.key as Exclude<SettingsSection, "overview">]}</span></span>
               <span aria-hidden="true" className="text-xl text-[#A0A7B0] transition group-hover:translate-x-0.5 group-hover:text-[#956A13]">›</span>
@@ -589,8 +611,9 @@ export default function TgpiAccountCenter({
         </div>
         <div className="mt-6 rounded-[22px] border border-[#DDD7CB] bg-white p-5 sm:p-7">
           <div className="grid gap-5 sm:grid-cols-2">
-            <Field label="First name"><input className="tgpi-account-input" maxLength={60} onChange={(event) => updateIdentity({ firstName: event.target.value })} required value={identity.firstName} /></Field>
-            <Field label="Last name"><input className="tgpi-account-input" maxLength={60} onChange={(event) => updateIdentity({ lastName: event.target.value })} value={identity.lastName} /></Field>
+            <Field label="First name"><input autoComplete="given-name" className="tgpi-account-input" maxLength={60} onChange={(event) => updateIdentity({ firstName: event.target.value })} required value={identity.firstName} /></Field>
+            <Field label="Last name"><input autoComplete="family-name" className="tgpi-account-input" maxLength={60} onChange={(event) => updateIdentity({ lastName: event.target.value })} value={identity.lastName} /></Field>
+            <div className="sm:col-span-2"><Field label="Unique TGPI @ID" description={usernameEnabled ? "3–30 characters. Start with a letter; use letters, numbers and underscores. Uniqueness is checked securely when you save. Your Global Key remains unchanged." : "TGPI @IDs are awaiting activation. Your name, photo and all other settings can be updated now."}><input className="tgpi-account-input" disabled={!usernameEnabled} autoComplete="username" autoCapitalize="none" spellCheck={false} maxLength={30} pattern="[a-z][a-z0-9_]{2,29}" onChange={(event) => updateIdentity({ username: event.target.value.replace(/^@/, "").toLowerCase() })} placeholder="renan_matheus" value={identity.username || ""} /></Field></div>
             <div className="sm:col-span-2"><Field description="A concise line used in future profile and collaboration surfaces." label="Professional headline"><input className="tgpi-account-input" maxLength={120} onChange={(event) => updateProfile({ headline: event.target.value })} placeholder="Product designer building a global career" value={profile.headline} /></Field></div>
             <div className="sm:col-span-2"><Field description={`${profile.bio.length}/500 characters`} label="About you"><textarea className="tgpi-account-input min-h-32 resize-y py-3" maxLength={500} onChange={(event) => updateProfile({ bio: event.target.value })} placeholder="Share the context that helps TGPI understand your goals and experience." value={profile.bio} /></Field></div>
             <Field label="Current country"><select className="tgpi-account-input" onChange={(event) => updateProfile({ currentCountry: event.target.value })} value={profile.currentCountry}><option value="">Select a country</option>{countries.map((country) => <option key={country.slug} value={country.slug}>{country.emoji} {country.name}</option>)}</select></Field>

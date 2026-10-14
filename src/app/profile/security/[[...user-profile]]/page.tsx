@@ -1,3 +1,4 @@
+import { isUsernameEnabled } from "@/lib/auth/username-settings.server";
 import type { Metadata } from "next";
 import { currentUser } from "@clerk/nextjs/server";
 import { UserProfile } from "@clerk/nextjs";
@@ -43,7 +44,7 @@ function getDecisionProgress(onboarding: ReturnType<typeof normalizeOnboardingDa
 }
 
 export default async function SecurityPage() {
-  const [session, user] = await Promise.all([requireUser(), currentUser()]);
+  const [session, user, usernameEnabled] = await Promise.all([requireUser(), currentUser(), isUsernameEnabled()]);
   const email = user?.primaryEmailAddress?.emailAddress || "No primary email";
   const emailVerified =
     user?.primaryEmailAddress?.verification?.status === "verified";
@@ -57,6 +58,7 @@ export default async function SecurityPage() {
   const identity = normalizeAccountIdentity({
     firstName: user?.firstName,
     lastName: user?.lastName,
+    username: user?.username || "",
   });
   const activation = normalizeActivationProgress(
     user?.privateMetadata[TGPI_ACTIVATION_METADATA_KEY],
@@ -96,6 +98,7 @@ export default async function SecurityPage() {
   return (
     <main className="min-h-screen bg-[#F5F1E8] px-4 py-6 text-[#0B1F3A] sm:px-6 sm:py-10 lg:py-14">
       <TgpiAccountCenter
+        usernameEnabled={usernameEnabled}
         account={{
           avatarUrl: user?.imageUrl || "",
           email,

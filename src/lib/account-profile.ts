@@ -39,6 +39,7 @@ export type TgpiAccountProfile = {
 export type AccountIdentityInput = {
   firstName: string;
   lastName: string;
+  username?: string;
 };
 
 export type TgpiAccountUpdate = {
@@ -96,7 +97,7 @@ function cleanUrl(value: unknown, host?: string) {
   try {
     const url = new URL(withProtocol);
     if (!/^https?:$/.test(url.protocol)) return "";
-    if (host && !url.hostname.endsWith(host)) return "";
+    if (host && !(url.hostname === host || url.hostname.endsWith(`.${host}`))) return "";
     return url.toString().slice(0, 240);
   } catch {
     return "";
@@ -130,6 +131,7 @@ export function normalizeAccountIdentity(value: unknown): AccountIdentityInput {
   return {
     firstName: cleanText(input.firstName, 60),
     lastName: cleanText(input.lastName, 60),
+    ...(typeof input.username === "string" ? { username: input.username.trim().replace(/^@/, "").toLowerCase() } : {}),
   };
 }
 

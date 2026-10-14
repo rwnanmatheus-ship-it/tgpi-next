@@ -1,7 +1,8 @@
 "use client";
 
+import TgpiAccountMenu from "@/components/profile/TgpiAccountMenu";
 import Link from "next/link";
-import { UserButton, useUser } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 
 export default function TGPIHeader() {
   const { user } = useUser();
@@ -17,10 +18,10 @@ export default function TGPIHeader() {
         <Link href="/notifications" className="grid h-10 w-10 place-items-center rounded-full border border-white/10" aria-label="Open notifications">◌</Link>
 
         <div className="flex items-center gap-2 rounded-xl bg-white/5 px-3 py-2">
-          <UserButton userProfileMode="navigation" userProfileUrl="/profile/security" />
+          <TgpiAccountMenu />
           <div>
             <p className="text-sm">{user?.fullName || user?.firstName || "TGPI member"}</p>
-            <p className="text-xs text-slate-400">{user?.primaryEmailAddress?.emailAddress}</p>
+            <p className="text-xs text-slate-400">{user?.username ? `@${user.username}` : "Create your @ID"}</p>
           </div>
         </div>
       </div>

@@ -1,3 +1,4 @@
+import { isUsernameEnabled } from "@/lib/auth/username-settings.server";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import {
@@ -17,6 +18,11 @@ export async function PATCH(request: Request) {
       { error: "Your session has expired. Sign in again to save your account." },
       { status: 401 },
     );
+  }
+
+  const origin = request.headers.get("origin");
+  if (origin && origin !== new URL(request.url).origin) {
+    return NextResponse.json({ error: "This request is not allowed." }, { status: 403 });
   }
 
   try {
@@ -44,11 +50,19 @@ export async function PATCH(request: Request) {
       );
     }
 
+    if (identity.username && (!/^[a-z][a-z0-9_]{2,29}$/.test(identity.username) ||
+      ["admin", "support", "tgpi", "security", "billing", "official", "system"].includes(identity.username))) {
+      return NextResponse.json({ error: "Choose an ID with 3–30 characters: start with a letter and use letters, numbers or underscores. This ID may be reserved." }, { status: 400 });
+    }
+
     const client = await clerkClient();
     const user = await client.users.getUser(session.userId);
     const onboarding = normalizeOnboardingData(
       user.unsafeMetadata.tgpiOnboarding,
     );
+    if (identity.username && identity.username !== user.username && !(await isUsernameEnabled())) {
+      return NextResponse.json({ error: "TGPI @IDs are awaiting activation. Save your other settings without changing your ID." }, { status: 409 });
+    }
     const now = new Date().toISOString();
     const savedProfile = { ...profile, updatedAt: now };
     const syncedOnboarding = {
@@ -59,21 +73,19 @@ export async function PATCH(request: Request) {
       updatedAt: now,
     };
 
-    await Promise.all([
-      client.users.updateUser(session.userId, {
-        firstName: identity.firstName,
-        lastName: identity.lastName,
-      }),
-      client.users.updateUserMetadata(session.userId, {
-        unsafeMetadata: {
-          tgpiAccountProfile: savedProfile,
-          tgpiOnboarding: syncedOnboarding,
-        },
-      }),
-    ]);
+    const updatedUser = await client.users.updateUser(session.userId, {
+      firstName: identity.firstName,
+      lastName: identity.lastName,
+      ...(identity.username && identity.username !== user.username ? { username: identity.username } : {}),
+      unsafeMetadata: {
+        ...user.unsafeMetadata,
+        tgpiAccountProfile: savedProfile,
+        tgpiOnboarding: syncedOnboarding,
+      },
+    });
 
     return NextResponse.json({
-      identity,
+      identity: { ...identity, username: updatedUser.username || "" },
       profile: savedProfile,
       synchronized: [
         "country-fit",
@@ -92,7 +104,15 @@ export async function PATCH(request: Request) {
       );
     }
 
-    console.error("Unable to save TGPI account profile", error);
+    const clerkErrors = typeof error === "object" && error !== null && "errors" in error
+      ? (error as { errors?: { code?: string }[] }).errors : undefined;
+    if (clerkErrors?.some((item) => item.code === "form_identifier_exists")) {
+      return NextResponse.json({ error: "This @ID is already taken. Choose another one." }, { status: 409 });
+    }
+    if (clerkErrors?.some((item) => item.code?.startsWith("form_"))) {
+      return NextResponse.json({ error: "Your identity could not be saved. Check your name and @ID. If IDs are unavailable, contact TGPI support." }, { status: 400 });
+    }
+    console.error("Unable to save TGPI account profile");
 
     return NextResponse.json(
       { error: "Unable to save your account right now. Please try again." },

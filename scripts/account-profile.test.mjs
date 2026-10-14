@@ -106,3 +106,15 @@ test("does not carry document or credential fields into account metadata", () =>
   assert.equal("password" in profile, false);
   assert.equal("passportNumber" in profile, false);
 });
+
+
+test("normalizes member IDs without deriving them from private emails", () => {
+  assert.equal(normalizeAccountIdentity({ username: " @Renan_Matheus " }).username, "renan_matheus");
+  assert.equal(normalizeAccountIdentity({ email: "private@example.com" }).username, undefined);
+});
+
+test("rejects lookalike social domains and allows genuine subdomains", () => {
+  assert.equal(normalizeTgpiAccountProfile({ linkedin: "https://evillinkedin.com/me" }).linkedin, "");
+  assert.equal(normalizeTgpiAccountProfile({ instagram: "https://fakeinstagram.com/me" }).instagram, "");
+  assert.equal(normalizeTgpiAccountProfile({ linkedin: "https://www.linkedin.com/in/me" }).linkedin, "https://www.linkedin.com/in/me");
+});

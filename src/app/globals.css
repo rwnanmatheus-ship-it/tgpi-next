@@ -338,3 +338,15 @@ img {
   border-color: #b58a2a;
   box-shadow: 0 0 0 4px rgb(181 138 42 / 12%);
 }
+
+/* Account surfaces: vector-sharp depth at every screen density. */
+.tgpi-account-grid { perspective: 1200px; }
+.tgpi-account-tile {
+  background: linear-gradient(145deg, #fff 0%, #fffdf8 65%, #f2eddf 100%);
+  box-shadow: inset 0 1px 0 #fff, 0 8px 18px rgba(11,31,58,.06), 0 2px 2px rgba(11,31,58,.04);
+  transition: transform 180ms ease, box-shadow 180ms ease, border-color 180ms ease;
+}
+.tgpi-account-tile:focus-visible { outline: 2px solid #B58A2A; outline-offset: 3px; }
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .tgpi-account-tile:hover { transform: translateY(-3px) rotateX(2deg); border-color: #B58A2A; box-shadow: 0 16px 28px rgba(11,31,58,.12), inset 0 1px 0 #fff; }
+}

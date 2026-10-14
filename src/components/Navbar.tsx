@@ -1,6 +1,7 @@
 "use client";
 
-import { Show, UserButton } from "@clerk/nextjs";
+import { Show } from "@clerk/nextjs";
+import TgpiAccountMenu from "@/components/profile/TgpiAccountMenu";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import BrandCrest from "@/components/BrandCrest";
@@ -91,11 +92,7 @@ export default function Navbar() {
               <NavigationIcon name="key" width={18} height={18} />
               <span className="tgpi-workspace-label">Workspace</span>
             </Link>
-            <UserButton
-              userProfileMode="navigation"
-              userProfileUrl="/profile/security"
-              appearance={{ elements: { avatarBox: "h-10 w-10 ring-2 ring-[#D8D2C4]" } }}
-            />
+            <TgpiAccountMenu />
           </Show>
 
           <Show when="signed-out">
