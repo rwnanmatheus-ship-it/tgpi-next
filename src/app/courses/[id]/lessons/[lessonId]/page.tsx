@@ -1,5 +1,6 @@
+import { requireUser } from "@/lib/auth/guards";
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import LessonExperience from "@/components/courses/LessonExperience";
 import {
   courses,
@@ -38,11 +39,14 @@ export async function generateMetadata({
 }
 
 export default async function LessonPage({ params }: LessonPageProps) {
+  await requireUser();
   const { id, lessonId } = await params;
   const course = getCourse(id);
   const lesson = course ? getCourseLesson(course, lessonId) : undefined;
 
   if (!course || !lesson) notFound();
+
+  if (id !== course.id) redirect(`/courses/${course.id}/lessons/${lessonId}`);
 
   const lessons = getCourseLessons(course);
   const lessonIndex = getCourseLessonPosition(course, lesson.id);

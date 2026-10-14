@@ -59,7 +59,7 @@ export default function ActivationProgressProvider({
     }
 
     const requestRevision = revision.current;
-    fetchActivationProgress()
+    fetchActivationProgress(userId)
       .then((next) => {
         if (!active) return;
         if (revision.current !== requestRevision) return;

@@ -6,7 +6,7 @@ import { createEmptyActivationProgress, normalizeActivationProgress } from "../s
 import * as activation from "../src/lib/activation-progress.ts";
 
 // Exercise the real server reducer and parser, replacing only infrastructure/data imports.
-const fixture = { id: "english-abroad", version: "1.0.0", title: "Global English", modules: [{ lessons: [{ id: "arrival", checkpoint: { correctOptionId: "a" } }, { id: "housing", checkpoint: { correctOptionId: "b" } }] }] };
+const fixture = { id: "global-english-2026", version: "2.0.0", title: "Global English", modules: [{ lessons: [{ id: "arrival", checkpoint: { correctOptionId: "a" } }, { id: "housing", checkpoint: { correctOptionId: "b" } }] }] };
 const exports = {};
 const compiled = ts.transpileModule(readFileSync(new URL("../src/lib/activation-store.server.ts", import.meta.url), "utf8"), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
 new Function("require", "exports", compiled)((id) => {
@@ -50,4 +50,18 @@ test("opening and starting a completed course preserves earned completion", () =
   progress = mutate(progress, { type: "start_course", courseId: fixture.id });
   assert.equal(progress.courseProgress[fixture.id].completedAt, completedAt);
   assert.equal(progress.courseProgress[fixture.id].lastLessonId, "arrival");
+});
+
+
+test("the new edition starts at zero without deleting the legacy record", () => {
+  const progress = createEmptyActivationProgress();
+  progress.courseProgress["english-abroad"] = {
+    completedAt: "2026-10-01T00:00:00Z", completedLessonIds: ["arrival", "housing"],
+    courseVersion: "1.0.0", startedAt: "2026-09-01T00:00:00Z", totalLessons: 2,
+    updatedAt: "2026-10-01T00:00:00Z",
+  };
+  const next = mutate(progress, { type: "start_course", courseId: fixture.id });
+  assert.deepEqual(next.courseProgress[fixture.id].completedLessonIds, []);
+  assert.equal(next.courseProgress[fixture.id].completedAt, undefined);
+  assert.equal(next.courseProgress["english-abroad"].completedLessonIds.length, 2);
 });

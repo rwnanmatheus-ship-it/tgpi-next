@@ -27,7 +27,7 @@ const EVIDENCE_PATH = [
   },
   {
     detail: "Pass protected performance gates and capstones.",
-    href: "/courses/english-abroad/certification",
+    href: "/courses/global-english-2026/certification",
     number: "02",
     title: "Prove",
   },
@@ -170,7 +170,7 @@ export default async function CertificatesPage() {
 
                 <div className="relative mt-8 flex flex-col gap-3 sm:flex-row">
                   <Link
-                    href="/courses/english-abroad/certification"
+                    href="/courses/global-english-2026/certification"
                     className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[var(--tgpi-gold)] px-6 text-sm font-extrabold text-[var(--tgpi-navy-deep)] shadow-[0_14px_36px_rgba(196,149,54,.22)] transition hover:-translate-y-0.5 hover:bg-[var(--tgpi-gold-light)]"
                   >
                     Continue certification path →
@@ -315,7 +315,7 @@ export default async function CertificatesPage() {
                 </p>
                 <div className="mt-7 flex flex-col gap-3 sm:flex-row">
                   <Link
-                    href="/courses/english-abroad/certification"
+                    href="/courses/global-english-2026/certification"
                     className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[var(--tgpi-navy)] px-6 text-sm font-extrabold text-white"
                   >
                     Start the evidence path →

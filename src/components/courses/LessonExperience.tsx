@@ -40,7 +40,7 @@ function Lesson({
   nextLesson,
   previousLesson,
 }: LessonExperienceProps) {
-  const { error, isLoading, mutate, progress } = useActivationProgress();
+  const { error, isAuthenticated, isLoading, mutate, progress } = useActivationProgress();
   const [selectedOptionId, setSelectedOptionId] = useState("");
   const [checkpointResult, setCheckpointResult] = useState<
     "idle" | "correct" | "incorrect"
@@ -68,13 +68,13 @@ function Lesson({
   );
 
   useEffect(() => {
-    if (!isLoading && !startRequested.current) {
+    if (isAuthenticated && !isLoading && !startRequested.current) {
       startRequested.current = true;
       mutate({ courseId: course.id, lessonId: lesson.id, type: "visit_lesson" }).catch(() => {
         startRequested.current = false;
       });
     }
-  }, [course.id, lesson.id, isLoading, mutate]);
+  }, [course.id, lesson.id, isAuthenticated, isLoading, mutate]);
 
   async function checkAnswer() {
     if (!selectedOptionId) return;

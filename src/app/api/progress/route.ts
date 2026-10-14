@@ -1,3 +1,4 @@
+import { unstable_cache, revalidateTag } from "next/cache";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import {
@@ -34,7 +35,11 @@ export async function GET() {
   }
 
   try {
-    const progress = await getUserActivationProgress(session.userId);
+    const progress = await unstable_cache(
+      () => getUserActivationProgress(session.userId!),
+      ["tgpi-progress", session.userId],
+      { revalidate: 15, tags: [`tgpi-progress:${session.userId}`] },
+    )();
     return json({ progress });
   } catch (error) {
     console.error("Unable to load TGPI activation progress", error);
@@ -63,6 +68,7 @@ export async function PATCH(request: Request) {
       session.userId,
       mutation,
     );
+    revalidateTag(`tgpi-progress:${session.userId}`, { expire: 0 });
     return json({ progress });
   } catch (error) {
     if (error instanceof SyntaxError) {
@@ -72,6 +78,9 @@ export async function PATCH(request: Request) {
       return json({ error: error.message }, error.status);
     }
 
+    if (typeof error === "object" && error !== null && "status" in error && error.status === 429) {
+      return json({ error: "Progress sync is temporarily busy. Wait a moment, then retry saving your checkpoint." }, 429);
+    }
     console.error("Unable to update TGPI activation progress", error);
     return json({ error: "Unable to save your TGPI progress right now." }, 500);
   }

@@ -55,7 +55,7 @@ export default function HomeLearningPortal() {
                 Explore TGPI Learning
               </Link>
               <Link
-                href="/courses/english-abroad"
+                href="/courses/global-english-2026"
                 className="inline-flex min-h-14 items-center justify-center rounded-2xl border border-[var(--tgpi-gold)] bg-white px-6 text-sm font-extrabold text-[var(--tgpi-navy)] transition hover:-translate-y-0.5 hover:bg-[var(--tgpi-gold-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
               >
                 Start English for Life Abroad
@@ -88,7 +88,7 @@ export default function HomeLearningPortal() {
                     </p>
                   </div>
                   <Link
-                    href="/courses/english-abroad"
+                    href="/courses/global-english-2026"
                     className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-xl bg-[var(--tgpi-gold)] px-4 text-xs font-extrabold text-[var(--tgpi-navy)]"
                   >
                     Open course

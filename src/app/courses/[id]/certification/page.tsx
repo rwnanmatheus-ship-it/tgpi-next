@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import CertificationExperience from "@/components/courses/CertificationExperience";
 import {
   getEnglishAbroadAssessmentBank,
@@ -21,7 +21,9 @@ export default async function CertificationPage({
   await requireUser();
   const { id } = await params;
   const course = getCourse(id);
-  if (!course || id !== "english-abroad") notFound();
+  if (!course || course.id !== "global-english-2026") notFound();
+  if (id !== course.id) redirect(`/courses/${course.id}/certification`);
+
   const assessments = getEnglishAbroadAssessmentBank().map(
     toPublicLearningAssessment,
   );

@@ -326,7 +326,7 @@ export function buildGlobalWorkspaceModel(
       eyebrow: "Develop",
       href:
         learningStatus === "in_progress" || learningStatus === "completed"
-          ? "/courses/english-abroad"
+          ? "/courses/global-english-2026"
           : "/courses#learning-paths",
       id: "learning",
       status: learningStatus,

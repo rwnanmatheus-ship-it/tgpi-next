@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import CourseOverviewExperience from "@/components/courses/CourseOverviewExperience";
 import { courses, getCourse } from "@/data/courses";
 
@@ -30,6 +30,8 @@ export default async function CoursePage({ params }: CoursePageProps) {
   const course = getCourse(id);
 
   if (!course) notFound();
+
+  if (id !== course.id) redirect(`/courses/${course.id}`);
 
   return <CourseOverviewExperience course={course} />;
 }

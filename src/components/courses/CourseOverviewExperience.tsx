@@ -24,7 +24,7 @@ export default function CourseOverviewExperience({ course }: { course: Course })
 }
 
 function CourseOverview({ course }: { course: Course }) {
-  const { error, isLoading, mutate, progress } = useActivationProgress();
+  const { error, isAuthenticated, isLoading, mutate, progress } = useActivationProgress();
   const startRequested = useRef(false);
   const lessons = useMemo(() => getCourseLessons(course), [course]);
   const standardAudit = useMemo(() => getCourseStandardAudit(course), [course]);
@@ -51,13 +51,13 @@ function CourseOverview({ course }: { course: Course }) {
     const needsCurrentVersion =
       !courseProgress || courseProgress.courseVersion !== course.version;
 
-    if (!isLoading && needsCurrentVersion && !startRequested.current) {
+    if (isAuthenticated && !isLoading && needsCurrentVersion && !startRequested.current) {
       startRequested.current = true;
       mutate({ courseId: course.id, type: "start_course" }).catch(() => {
         startRequested.current = false;
       });
     }
-  }, [course.id, course.version, courseProgress, isLoading, mutate]);
+  }, [course.id, course.version, courseProgress, isAuthenticated, isLoading, mutate]);
 
   return (
     <main className="min-h-screen bg-[var(--tgpi-canvas)] px-4 py-8 text-[var(--tgpi-navy)] sm:px-6 sm:py-12 lg:px-8">
@@ -82,7 +82,7 @@ function CourseOverview({ course }: { course: Course }) {
             <div className="p-7 sm:p-10 lg:p-14">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="rounded-full border border-[var(--tgpi-gold)]/35 bg-[var(--tgpi-gold)]/10 px-3 py-2 text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-light)]">
-                  TGPI applied mastery course
+                  New edition 2026 · Applied mastery
                 </span>
                 <span className="rounded-full border border-white/15 bg-white/5 px-3 py-2 text-[10px] font-extrabold uppercase tracking-[0.16em] text-white/70">
                   Version {course.version}

@@ -131,7 +131,7 @@ export const homeSearchTopics: ReadonlyArray<HomeSearchTopic> = [
     eyebrow: "Practical education",
     title: "How to build capability for international life",
     description: "Develop communication, daily independence, cultural safety and career action through applied learning.",
-    href: "/courses/english-abroad",
+    href: "/courses/global-english-2026",
   },
 ];
 
