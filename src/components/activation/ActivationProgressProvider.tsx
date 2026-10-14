@@ -44,6 +44,9 @@ export default function ActivationProgressProvider({
   const [progress, setProgress] = useState(createEmptyActivationProgress);
   const [loadedUserId, setLoadedUserId] = useState("");
   const [error, setError] = useState("");
+  const activeUserId = useRef(userId);
+  useEffect(() => { activeUserId.current = userId; }, [userId]);
+  const revision = useRef(0);
   const mutationQueue = useRef<Promise<unknown>>(Promise.resolve());
 
   useEffect(() => {
@@ -55,9 +58,11 @@ export default function ActivationProgressProvider({
       return () => undefined;
     }
 
+    const requestRevision = revision.current;
     fetchActivationProgress()
       .then((next) => {
         if (!active) return;
+        if (revision.current !== requestRevision) return;
         setProgress(next);
         setError("");
       })
@@ -79,12 +84,21 @@ export default function ActivationProgressProvider({
   }, [isLoaded, userId]);
 
   const mutate = useCallback((mutation: ActivationMutation) => {
+    const requestUserId = userId;
+    if (!requestUserId) return Promise.reject(new ActivationApiError("Sign in to save your learning progress.", 401));
+    revision.current += 1;
+    const execute = () => {
+      if (activeUserId.current !== requestUserId) throw new ActivationApiError("Your session changed. Reload before saving.", 401);
+      return mutateActivationProgress(mutation);
+    };
     const request = mutationQueue.current.then(
-      () => mutateActivationProgress(mutation),
-      () => mutateActivationProgress(mutation),
+      execute,
+      execute,
     );
     const handledRequest = request.then(
       (next) => {
+        if (activeUserId.current !== requestUserId) throw new ActivationApiError("Your session changed. Reload before saving.", 401);
+        setLoadedUserId(requestUserId);
         setProgress(next);
         setError("");
         return next;
@@ -94,14 +108,14 @@ export default function ActivationProgressProvider({
           caught instanceof ActivationApiError
             ? caught.message
             : "Unable to update your TGPI progress.";
-        setError(message);
+        if (activeUserId.current === requestUserId) setError(message);
         throw caught;
       },
     );
 
     mutationQueue.current = handledRequest.catch(() => undefined);
     return handledRequest;
-  }, []);
+  }, [userId]);
 
   const value = useMemo(
     () => ({
@@ -109,7 +123,7 @@ export default function ActivationProgressProvider({
       isAuthenticated: Boolean(userId),
       isLoading: !isLoaded || Boolean(userId && loadedUserId !== userId),
       mutate,
-      progress: userId ? progress : EMPTY_PROGRESS,
+      progress: userId && loadedUserId === userId ? progress : EMPTY_PROGRESS,
     }),
     [error, isLoaded, loadedUserId, mutate, progress, userId],
   );

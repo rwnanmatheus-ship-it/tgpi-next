@@ -37,6 +37,7 @@ export type DocumentReviewProgress = {
 };
 
 export type CourseProgress = {
+  lastLessonId?: string;
   completedAt?: string;
   completedLessonIds: string[];
   courseVersion: string;
@@ -83,6 +84,11 @@ export type ActivationMutation =
   | {
       courseId: string;
       type: "start_course";
+    }
+  | {
+      courseId: string;
+      lessonId: string;
+      type: "visit_lesson";
     }
   | {
       checkpointOptionId: string;
@@ -227,6 +233,7 @@ function normalizeCourseProgress(value: unknown) {
         return [
           courseId.slice(0, 80),
           {
+            lastLessonId: safeString(progress.lastLessonId, 80) || undefined,
             completedAt: safeDate(progress.completedAt) || undefined,
             completedLessonIds: safeStringArray(progress.completedLessonIds, 40),
             courseVersion: safeString(progress.courseVersion, 24),

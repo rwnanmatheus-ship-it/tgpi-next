@@ -41,6 +41,7 @@ function CourseOverview({ course }: { course: Course }) {
     : 0;
   const isComplete = completedLessonIds.length === lessons.length;
   const nextLesson =
+    lessons.find((lesson) => lesson.id === courseProgress?.lastLessonId && !completedLessonIds.includes(lesson.id)) ||
     lessons.find((lesson) => !completedLessonIds.includes(lesson.id)) || lessons[0];
   const nextLessonIndex = nextLesson
     ? lessons.findIndex((lesson) => lesson.id === nextLesson.id)
@@ -90,7 +91,7 @@ function CourseOverview({ course }: { course: Course }) {
                   Standard {course.learningStandard.version}
                 </span>
               </div>
-              <h1 className="mt-6 max-w-4xl font-[var(--tgpi-font-display)] text-[clamp(3rem,7vw,5.8rem)] font-semibold leading-[0.91] tracking-[-0.05em]">
+              <h1 className="mt-6 max-w-4xl font-[var(--tgpi-font-display)] text-[clamp(2.3rem,4.5vw,4.2rem)] font-semibold leading-[0.91] tracking-[-0.05em]">
                 {course.title}
               </h1>
               <p className="mt-6 max-w-3xl text-base leading-8 text-white/70 sm:text-lg">
@@ -154,8 +155,8 @@ function CourseOverview({ course }: { course: Course }) {
                   >
                     {isComplete
                       ? "Review course"
-                      : completedLessonIds.length
-                        ? "Continue course"
+                      : courseProgress
+                        ? "Resume your studies"
                         : "Start first lesson"}
                     <span className="ml-2" aria-hidden="true">→</span>
                   </Link>
