@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import ActiveRecallPractice from "@/components/courses/ActiveRecallPractice";
 import {
   useEffect,
   useMemo,
@@ -26,7 +27,7 @@ type LessonExperienceProps = {
 export default function LessonExperience(props: LessonExperienceProps) {
   return (
     <ActivationProgressProvider>
-      <Lesson {...props} />
+      <Lesson key={props.lesson.id} {...props} />
     </ActivationProgressProvider>
   );
 }
@@ -67,20 +68,20 @@ function Lesson({
   );
 
   useEffect(() => {
-    const needsCurrentVersion =
-      !courseProgress || courseProgress.courseVersion !== course.version;
-
-    if (!isLoading && needsCurrentVersion && !startRequested.current) {
+    if (!isLoading && !startRequested.current) {
       startRequested.current = true;
-      mutate({ courseId: course.id, type: "start_course" }).catch(() => {
+      mutate({ courseId: course.id, lessonId: lesson.id, type: "visit_lesson" }).catch(() => {
         startRequested.current = false;
       });
     }
-  }, [course.id, course.version, courseProgress, isLoading, mutate]);
+  }, [course.id, lesson.id, isLoading, mutate]);
 
-  function checkAnswer() {
+  async function checkAnswer() {
     if (!selectedOptionId) return;
     setAttemptCount((current) => current + 1);
+    if (selectedOptionId === lesson.checkpoint.correctOptionId && !isCompleted) {
+      await completeLesson(true);
+    }
     setCheckpointResult(
       selectedOptionId === lesson.checkpoint.correctOptionId
         ? "correct"
@@ -88,8 +89,8 @@ function Lesson({
     );
   }
 
-  async function completeLesson() {
-    if (!checkpointPassed || isCompleted || isSaving) return;
+  async function completeLesson(passedNow = false) {
+    if ((!checkpointPassed && !passedNow) || isCompleted || isSaving) return;
 
     setIsSaving(true);
     setSaveMessage("");
@@ -114,7 +115,7 @@ function Lesson({
 
   return (
     <main className="min-h-screen bg-[var(--tgpi-canvas)] text-[var(--tgpi-navy)]">
-      <div className="border-b border-white/10 bg-[var(--tgpi-navy)] text-white">
+      <div className="sticky top-0 z-20 border-b border-white/10 bg-[var(--tgpi-navy)] text-white shadow-lg">
         <div className="mx-auto max-w-[1280px] px-4 py-5 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <Link
@@ -150,6 +151,9 @@ function Lesson({
 
       <div className="mx-auto grid max-w-[1280px] gap-8 px-4 py-8 sm:px-6 sm:py-12 lg:grid-cols-[minmax(0,1fr)_310px] lg:px-8">
         <article className="min-w-0">
+          <div role="status" className="mb-5 rounded-2xl border border-[var(--tgpi-border)] bg-white px-5 py-4 text-sm leading-6">
+            {isLoading ? "Loading your saved learning record…" : error ? `Sync needs attention: ${error}` : isSaving ? "Saving to your TGPI account…" : `${completedLessonIds.length} of ${lessons.length} lessons completed · Learning record synced`}
+          </div>
           <header className="rounded-[30px] border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] p-7 shadow-[var(--tgpi-shadow-soft)] sm:p-10">
             <div className="flex flex-wrap items-center gap-2">
               <span className="rounded-full bg-[var(--tgpi-navy)] px-3 py-2 text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-gold-light)]">
@@ -170,7 +174,7 @@ function Lesson({
             <p className="mt-6 text-xs font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-strong)]">
               {courseModule.title}
             </p>
-            <h1 className="mt-3 max-w-4xl text-[clamp(2.8rem,6vw,5.2rem)] font-semibold leading-[0.94] tracking-[-0.05em]">
+            <h1 className="mt-3 max-w-4xl text-[clamp(2.2rem,4vw,3.8rem)] font-semibold leading-[0.94] tracking-[-0.05em]">
               {lesson.title}
             </h1>
             <p className="mt-5 max-w-3xl text-base leading-8 text-[var(--tgpi-muted)] sm:text-lg">
@@ -290,6 +294,8 @@ function Lesson({
               </div>
             </LessonSection>
 
+            <ActiveRecallPractice key={lesson.id} lesson={lesson} />
+
             <section id="checkpoint" className="scroll-mt-24 rounded-[28px] border border-[var(--tgpi-gold)]/35 bg-[#FFF7DE] p-6 shadow-[var(--tgpi-shadow-soft)] sm:p-8" aria-labelledby="checkpoint-title">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold-strong)]">04 · Prove</p>
@@ -326,10 +332,10 @@ function Lesson({
               <button
                 type="button"
                 onClick={checkAnswer}
-                disabled={!selectedOptionId}
+                disabled={!selectedOptionId || isSaving || isLoading}
                 className="mt-5 inline-flex min-h-12 items-center justify-center rounded-xl bg-[var(--tgpi-navy)] px-6 text-sm font-extrabold text-white transition hover:bg-[var(--tgpi-navy-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)] disabled:cursor-not-allowed disabled:opacity-45"
               >
-                Check answer
+                {isSaving ? "Saving your progress…" : "Check answer & save progress"}
               </button>
 
               <div aria-live="polite" className="mt-5 min-h-6">
@@ -350,8 +356,8 @@ function Lesson({
               <div className="mt-6 border-t border-[var(--tgpi-gold)]/25 pt-6">
                 <button
                   type="button"
-                  onClick={completeLesson}
-                  disabled={!checkpointPassed || isCompleted || isSaving}
+                  onClick={() => completeLesson()}
+                  disabled={!checkpointPassed || isCompleted || isSaving || isLoading}
                   className={`inline-flex min-h-14 w-full items-center justify-center rounded-2xl px-6 text-sm font-extrabold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)] sm:w-auto ${isCompleted ? "bg-[#D8EFE4] text-[#175D41]" : "bg-[var(--tgpi-gold)] text-[var(--tgpi-navy-deep)] hover:-translate-y-0.5 hover:bg-[var(--tgpi-gold-light)] disabled:cursor-not-allowed disabled:opacity-45"}`}
                 >
                   {isSaving ? "Saving…" : isCompleted ? "✓ Lesson completed" : "Complete lesson"}
@@ -387,11 +393,16 @@ function Lesson({
             ) : (
               <div />
             )}
-            {nextLesson ? (
+            {nextLesson && !isCompleted ? (
+              <a href="#checkpoint" className="rounded-2xl border border-[var(--tgpi-gold)] bg-[#FFF7DE] p-5 text-right focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]">
+                <span className="block text-xs font-bold">Complete the checkpoint to continue</span>
+                <span className="mt-2 block text-sm">Your next lesson: {nextLesson.title} ↑</span>
+              </a>
+            ) : nextLesson ? (
               <LessonNavigationLink courseId={course.id} direction="next" lesson={nextLesson} />
             ) : (
               <Link href={`/courses/${course.id}`} className="rounded-2xl bg-[var(--tgpi-navy)] p-5 text-right text-white transition hover:-translate-y-0.5 hover:bg-[var(--tgpi-navy-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]">
-                <span className="block text-[9px] font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-gold-light)]">Course complete</span>
+                <span className="block text-[9px] font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-gold-light)]">Learning review</span>
                 <span className="mt-2 block text-sm font-extrabold">Return to course overview →</span>
               </Link>
             )}
@@ -410,8 +421,16 @@ function Lesson({
               ))}
             </ol>
             <a href="#checkpoint" className="mt-6 inline-flex min-h-12 w-full items-center justify-center rounded-xl border border-[var(--tgpi-gold)] bg-[#FFF7DE] px-4 text-sm font-extrabold text-[var(--tgpi-navy)] transition hover:bg-[var(--tgpi-gold-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]">
-              Go to checkpoint ↓
+              Practice & checkpoint ↓
             </a>
+            <nav aria-label="Course syllabus" className="mt-6 max-h-72 overflow-y-auto border-t border-[var(--tgpi-border)] pt-4">
+              {course.modules.map((module) => <div key={module.id} className="mb-4">
+                <p className="mb-2 text-xs font-bold">{module.title}</p>
+                {module.lessons.map((item) => <Link key={item.id} href={`/courses/${course.id}/lessons/${item.id}`} aria-current={item.id === lesson.id ? "page" : undefined} className={`mb-1 block rounded-lg px-3 py-2 text-xs leading-5 focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)] ${item.id === lesson.id ? "bg-[var(--tgpi-navy)] text-white" : "hover:bg-[var(--tgpi-canvas)]"}`}>
+                  {completedLessonIds.includes(item.id) ? "✓ " : ""}{item.title}
+                </Link>)}
+              </div>)}
+            </nav>
             <p className="mt-4 text-xs leading-6 text-[var(--tgpi-muted)]">Say every model phrase aloud. Recognition is useful; retrieval is what you need in the real world.</p>
           </div>
         </aside>

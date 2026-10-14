@@ -113,6 +113,15 @@ export function parseActivationMutation(value: unknown): ActivationMutation {
     return { courseId: course.id, type: value.type };
   }
 
+  if (value.type === "visit_lesson") {
+    const course = requireCourse(value.courseId);
+    const lessonId = requireSafeId(value.lessonId, "Lesson");
+    if (!getCourseLessonIds(course).includes(lessonId)) {
+      throw new ActivationInputError("Lesson was not found in this course.");
+    }
+    return { courseId: course.id, lessonId, type: value.type };
+  }
+
   if (value.type === "complete_lesson") {
     const course = requireCourse(value.courseId);
     const lessonId = requireSafeId(value.lessonId, "Lesson");
@@ -293,7 +302,7 @@ export function applyActivationMutation(
     );
   }
 
-  if (mutation.type === "start_course" || mutation.type === "complete_lesson") {
+  if (mutation.type === "start_course" || mutation.type === "complete_lesson" || mutation.type === "visit_lesson") {
     const course = requireCourse(mutation.courseId);
     const lessonIds = getCourseLessonIds(course);
     const previous = next.courseProgress[course.id];
@@ -310,6 +319,7 @@ export function applyActivationMutation(
     const completed =
       lessonIds.length > 0 && completedLessonIds.length >= lessonIds.length;
     next.courseProgress[course.id] = {
+      lastLessonId: mutation.type === "visit_lesson" ? mutation.lessonId : previous?.lastLessonId,
       completedAt: completed
         ? isCurrentVersion
           ? previous?.completedAt || now
