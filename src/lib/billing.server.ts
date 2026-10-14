@@ -1,4 +1,6 @@
 import "server-only";
+import { tryPublishNotification } from "@/lib/notifications/store.server";
+import { billingEvent } from "@/lib/notifications/model";
 
 import { clerkClient } from "@clerk/nextjs/server";
 import type Stripe from "stripe";
@@ -147,7 +149,7 @@ export async function syncUserBillingFromSubscription({
       ? "premium"
       : "free";
 
-  return writeBillingRecord({
+  const record = await writeBillingRecord({
     ...createFreeSubscriptionRecord(uid),
     plan,
     status,
@@ -161,4 +163,6 @@ export async function syncUserBillingFromSubscription({
       event?.created || current.lastStripeEventCreated,
     updatedAt: new Date().toISOString(),
   });
+  if (hasConfiguredPremiumPrice(stripePriceId)) await tryPublishNotification(uid, billingEvent(subscription.id, status, subscription.cancel_at_period_end, record.currentPeriodEnd));
+  return record;
 }

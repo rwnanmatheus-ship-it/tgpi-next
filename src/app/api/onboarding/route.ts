@@ -1,3 +1,4 @@
+import { scheduleNotificationReconciliation } from "@/lib/notifications/schedule.server";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { normalizeOnboardingData } from "@/lib/onboarding";
@@ -47,6 +48,7 @@ export async function PATCH(request: Request) {
       },
     });
 
+    scheduleNotificationReconciliation(session.userId);
     return NextResponse.json({ onboarding: savedOnboarding });
   } catch (error) {
     if (error instanceof SyntaxError) {
