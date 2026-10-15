@@ -6,6 +6,7 @@ import "./intelligence.css";
 import "./navigation-system.css";
 import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Manrope } from "next/font/google";
+import NotificationProvider from "@/components/notifications/NotificationProvider";
 import Navbar from "@/components/Navbar";
 import GlobalFooter from "@/components/GlobalFooter";
 import { ClerkProvider } from "@clerk/nextjs";
@@ -90,6 +91,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
           appearance={tgpiClerkAppearance}
         >
+          <NotificationProvider>
           <a href="#main-content" className="sr-only fixed left-4 top-4 z-[100] rounded-xl bg-[var(--tgpi-gold)] px-4 py-3 text-sm font-extrabold text-[var(--tgpi-navy-deep)] shadow-lg transition focus:not-sr-only">Skip to content</a>
           <Navbar />
           <MobileNavigation />
@@ -97,6 +99,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <MobileContentFrame>{children}</MobileContentFrame>
           <GlobalFooter />
           <TgpiAppRuntime />
+          </NotificationProvider>
         </ClerkProvider>
       </body>
     </html>

@@ -1,4 +1,6 @@
 "use client";
+import { Show } from "@clerk/nextjs";
+import NotificationBell from "@/components/NotificationBell";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -139,6 +141,7 @@ function MobileNavigationContent({ pathname }: { pathname: string }) {
           </span>
         </Link>
         <div className="tgpi-compact-actions">
+          <Show when="signed-in"><NotificationBell /></Show>
           <button
             ref={searchButtonRef}
             type="button"

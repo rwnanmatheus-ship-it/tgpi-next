@@ -1,37 +1,29 @@
 "use client";
-
-import { useEffect, useState } from "react";
-import { collection, query, where, onSnapshot } from "firebase/firestore";
-import { db, auth } from "@/lib/firebase";
-
+import Link from "next/link";
+import NavigationIcon from "@/components/navigation/NavigationIcon";
+import { useNotifications } from "@/components/notifications/NotificationProvider";
 export default function NotificationBell() {
-  const [count, setCount] = useState(0);
-
-  useEffect(() => {
-    if (!auth.currentUser) return;
-
-    const q = query(
-      collection(db, "notifications"),
-      where("toUid", "==", auth.currentUser.uid),
-      where("read", "==", false)
-    );
-
-    const unsub = onSnapshot(q, (snap) => {
-      setCount(snap.size);
-    });
-
-    return () => unsub();
-  }, []);
-
+  const { items } = useNotifications();
+  const unread = items.filter(
+    (item) => !item.readAt && !item.archivedAt,
+  ).length;
   return (
-    <div className="relative">
-      <span className="text-white">🔔</span>
-
-      {count > 0 && (
-        <span className="absolute -top-2 -right-2 bg-yellow-500 text-black text-xs px-2 py-1 rounded-full">
-          {count}
+    <Link
+      href="/notifications"
+      className="tgpi-navigation-square-button relative"
+      aria-label={
+        unread
+          ? `Notifications, ${unread} unread in recent history`
+          : "Open notifications"
+      }
+      title="Notifications"
+    >
+      <NavigationIcon name="bell" />
+      {unread > 0 && (
+        <span className="absolute -right-1 -top-1 min-w-4 rounded-full bg-[#B58A2A] px-1 text-center text-[10px] font-extrabold text-white">
+          {unread > 9 ? "9+" : unread}
         </span>
       )}
-    </div>
+    </Link>
   );
 }

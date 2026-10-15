@@ -4,6 +4,7 @@ import { Show } from "@clerk/nextjs";
 import TgpiAccountMenu from "@/components/profile/TgpiAccountMenu";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import NotificationBell from "@/components/NotificationBell";
 import BrandCrest from "@/components/BrandCrest";
 import { Container } from "@/components/design-system";
 import NavigationIcon from "@/components/navigation/NavigationIcon";
@@ -80,14 +81,7 @@ export default function Navbar() {
           </button>
 
           <Show when="signed-in">
-            <Link
-              href="/notifications"
-              aria-label="Open notifications"
-              title="Notifications"
-              className="tgpi-navigation-square-button"
-            >
-              <NavigationIcon name="bell" />
-            </Link>
+            <NotificationBell />
             <Link href="/profile" className="tgpi-navigation-workspace-button">
               <NavigationIcon name="key" width={18} height={18} />
               <span className="tgpi-workspace-label">Workspace</span>

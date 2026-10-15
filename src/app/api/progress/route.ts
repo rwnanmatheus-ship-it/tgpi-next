@@ -1,3 +1,4 @@
+import { scheduleNotificationReconciliation } from "@/lib/notifications/schedule.server";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import {
@@ -63,6 +64,7 @@ export async function PATCH(request: Request) {
       session.userId,
       mutation,
     );
+    scheduleNotificationReconciliation(session.userId);
     return json({ progress });
   } catch (error) {
     if (error instanceof SyntaxError) {
