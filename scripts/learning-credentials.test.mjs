@@ -157,14 +157,49 @@ test("portfolio exposes complete lifecycle history without leaking private trust
   assert.match(credentialPortfolioExplorerSource, /CertificateDownloadButton/);
 });
 
-test("owner credential view distinguishes revoked and integrity-review states", () => {
-  assert.match(credentialOwnerPageSource, /Credential revoked/);
-  assert.match(credentialOwnerPageSource, /Integrity review required/);
-  assert.match(credentialOwnerPageSource, /Current lifecycle status/);
+const recordViewSource = readFileSync(
+  new URL(
+    "../src/components/credentials/CredentialRecordView.tsx",
+    import.meta.url,
+  ),
+  "utf8",
+);
+const certificateDocumentSource = readFileSync(
+  new URL(
+    "../src/components/credentials/CertificateDocument.tsx",
+    import.meta.url,
+  ),
+  "utf8",
+);
+const certificateQrSource = readFileSync(
+  new URL("../src/components/credentials/CertificateQr.tsx", import.meta.url),
+  "utf8",
+);
+
+test("owner and public certificate views distinguish revoked and integrity-review states", () => {
+  assert.match(credentialOwnerPageSource, /getUserLearningCredential/);
+  assert.match(recordViewSource, /getCredentialTrustState/);
+  assert.match(recordViewSource, /Credential revoked/);
+  assert.match(recordViewSource, /Integrity review required/);
+  assert.match(recordViewSource, /Current lifecycle status/);
 });
 
-test("printable credentials retain the verification QR", () => {
-  assert.match(credentialActionsSource, /QRCodeSVG/);
-  assert.match(credentialActionsSource, /print:border/);
+test("certificate carries a verification QR, signed learner name and Global ID", () => {
+  assert.match(certificateQrSource, /QRCodeSVG/);
+  assert.match(certificateDocumentSource, /CertificateQr/);
+  assert.match(certificateDocumentSource, /credential.publicName/);
+  assert.match(
+    certificateDocumentSource,
+    /credential.identityEvidence.globalKeyId/,
+  );
   assert.match(credentialActionsSource, /Open live verification/);
+});
+
+test("document refresh preserves achievements and does not resubmit assessments or issuance", () => {
+  assert.match(recordViewSource, /No course retake\s+is required/);
+  assert.doesNotMatch(
+    recordViewSource,
+    /issueLearningCredential|submitLearningAssessment|POST/,
+  );
+  assert.match(recordViewSource, /implementation alignment targets/i);
 });

@@ -10,6 +10,10 @@ const credential = {
   assessmentScore: 93,
   learningHours: 12.5,
   issuedAt: "2026-10-17T12:00:00Z",
+  identityEvidence: { globalKeyId: "TGPI-AAAA-BBBB-CCCC" },
+  skills: [{ name: "Practical English" }],
+  status: "active",
+  integrityVerified: true,
 };
 
 test("generates a valid single-page A4 landscape certificate with embedded assets", async () => {
@@ -132,4 +136,30 @@ test("verified owner receives an uncached PDF attachment; service failure is rec
   assert.match(response.headers.get("Cache-Control"), /private, no-store/);
   assert.match(await response.text(), /^%PDF/);
   assert.equal((await routeFixture({ fail: true }).get()).status, 500);
+});
+
+test("renderer rejects revoked or unverified records even outside the download route", async () => {
+  await assert.rejects(() =>
+    createCertificatePdf({ ...credential, status: "revoked" }),
+  );
+  await assert.rejects(() =>
+    createCertificatePdf({ ...credential, integrityVerified: false }),
+  );
+});
+
+test("PDF contains a clickable QR verification target and preserves the original issuance snapshot", async () => {
+  const bytes = await createCertificatePdf(credential);
+  const pdf = await PDFDocument.load(bytes);
+  assert.match(pdf.getSubject(), /document design 2026\.2/);
+  const annotations = pdf.getPage(0).node.Annots();
+  assert.equal(annotations.size(), 1);
+  const { PDFDict, PDFName, PDFString } = await import("pdf-lib");
+  const annotation = annotations.lookup(0, PDFDict);
+  const action = annotation.lookup(PDFName.of("A"), PDFDict);
+  assert.equal(
+    action.lookup(PDFName.of("URI"), PDFString).decodeText(),
+    `https://www.theglobalpolymath.com/verify/credentials/${credential.id}`,
+  );
+  assert.equal(credential.issuedAt, "2026-10-17T12:00:00Z");
+  assert.equal(credential.identityEvidence.globalKeyId, "TGPI-AAAA-BBBB-CCCC");
 });

@@ -6,10 +6,12 @@ export default function CertificateDownloadButton({
   credentialId,
   className,
   disabled = false,
+  label = "Download PDF",
 }: {
   credentialId: string;
   className: string;
   disabled?: boolean;
+  label?: string;
 }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -57,7 +59,7 @@ export default function CertificateDownloadButton({
           className + " w-full disabled:cursor-not-allowed disabled:opacity-60"
         }
       >
-        {busy ? "Preparing PDF…" : "Download PDF"}
+        {busy ? "Preparing PDF…" : label}
       </button>
       {error ? (
         <p role="alert" className="mt-3 text-sm leading-6">

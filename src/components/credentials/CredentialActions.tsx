@@ -3,10 +3,10 @@
 import Link from "next/link";
 import CertificateDownloadButton from "@/components/credentials/CertificateDownloadButton";
 import { useState } from "react";
-import { QRCodeSVG } from "qrcode.react";
 
 type CredentialActionsProps = {
   canDownload?: boolean;
+  owner?: boolean;
   credentialId: string;
   courseTitle: string;
   downloadUrl: string;
@@ -15,6 +15,7 @@ type CredentialActionsProps = {
 
 export default function CredentialActions({
   canDownload = true,
+  owner = true,
   credentialId,
   courseTitle,
   downloadUrl,
@@ -55,90 +56,44 @@ export default function CredentialActions({
   }
 
   return (
-    <section
-      aria-labelledby="credential-actions-title"
-      className="rounded-[26px] border border-white/10 bg-white/[0.055] p-6 print:border-[#D8D2C4] print:bg-white print:p-4 print:text-[#0B1F3A]"
-    >
-      <p
-        id="credential-actions-title"
-        className="text-xs font-extrabold uppercase tracking-[0.14em] text-[#E8CC7B] print:text-[#79571D]"
-      >
-        Share & download
-      </p>
-      <p className="mt-2 text-sm leading-6 text-[#9EABBC] print:text-[#59636F]">
-        Scan to inspect the current issuer record, integrity and lifecycle
-        status.
-      </p>
-
-      <Link
-        href={verificationUrl}
-        aria-label={"Open public verification for " + credentialId}
-        className="mt-5 grid place-items-center rounded-2xl bg-white p-4 transition hover:-translate-y-0.5"
-      >
-        <QRCodeSVG
-          value={verificationUrl}
-          size={168}
-          bgColor="#FFFFFF"
-          fgColor="#0B1F3A"
-          level="M"
-          marginSize={1}
-          title={"Verify " + credentialId}
-        />
-      </Link>
-
-      <button
-        type="button"
-        onClick={() => void copyValue(credentialId, "Credential ID copied.")}
-        className="mt-4 min-h-11 w-full break-all rounded-xl border border-white/10 bg-white/[0.035] px-3 py-2 text-center font-mono text-[10px] font-bold leading-5 text-[#D5DDE7] transition hover:border-[#E5BF5A]/50 print:min-h-0 print:border-[#D8D2C4] print:bg-white print:text-[#0B1F3A]"
-      >
-        {credentialId}
-      </button>
-
-      <div className="mt-5 grid gap-3 print:hidden">
-        <CertificateDownloadButton
-          credentialId={credentialId}
-          disabled={!canDownload}
-          className="inline-flex min-h-12 items-center justify-center rounded-xl bg-white px-5 text-sm font-extrabold text-[#0B1F3A] transition hover:bg-[#F8F5EE]"
-        />
+    <section className="credential-actions" aria-label="Certificate actions">
+      <div className="credential-action-buttons print:hidden">
+        {owner && (
+          <CertificateDownloadButton
+            credentialId={credentialId}
+            disabled={!canDownload}
+            label="Download latest PDF"
+            className="credential-button primary"
+          />
+        )}
         <button
           type="button"
           onClick={() => void shareCredential()}
-          className="min-h-12 rounded-xl bg-[#E5BF5A] px-5 text-sm font-extrabold text-[#0B1F3A] transition hover:-translate-y-0.5 hover:bg-[#F0D58C]"
+          className="credential-button"
         >
-          Share credential
+          Share certificate ↗
         </button>
-        <Link
-          href={verificationUrl}
-          className="inline-flex min-h-12 items-center justify-center rounded-xl border border-white/15 px-5 text-sm font-extrabold text-white transition hover:border-[#E5BF5A]/50 hover:bg-white/5"
-        >
-          Open live verification
-        </Link>
+        {owner && (
+          <Link href={verificationUrl} className="credential-button">
+            Open live verification
+          </Link>
+        )}
+      </div>
+      <div className="credential-secondary-actions print:hidden">
         <button
           type="button"
           onClick={() =>
             void copyValue(verificationUrl, "Verification link copied.")
           }
-          className="min-h-12 rounded-xl border border-white/15 px-5 text-sm font-extrabold text-white transition hover:border-[#E5BF5A]/50 hover:bg-white/5"
         >
           Copy verification link
         </button>
-        <a
-          href={downloadUrl}
-          className="inline-flex min-h-12 items-center justify-center rounded-xl border border-white/15 px-5 text-sm font-extrabold text-white transition hover:border-[#E5BF5A]/50 hover:bg-white/5"
-        >
-          Download evidence JSON
-        </a>
-        <button
-          type="button"
-          onClick={() => window.print()}
-          className="min-h-12 rounded-xl border border-white/15 px-5 text-sm font-extrabold text-white transition hover:border-[#E5BF5A]/50 hover:bg-white/5"
-        >
-          Print credential record
-        </button>
+        <a href={downloadUrl}>Export evidence JSON</a>
       </div>
       <p
+        role="status"
         aria-live="polite"
-        className="mt-3 min-h-5 text-center text-xs font-bold text-[#E8CC7B] print:hidden"
+        className="credential-action-message print:hidden"
       >
         {message}
       </p>
