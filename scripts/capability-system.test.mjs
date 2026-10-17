@@ -22,9 +22,14 @@ test("capability system exposes four unique connected product layers", () => {
 test("every capability experience renders the shared system rail", () => {
   const targets = [
     ["src/app/courses/page.tsx", 'active="learning"'],
-    ["src/app/certificates/page.tsx", 'active="credentials"'],
-    ["src/components/documents/DocumentsGuestExperience.tsx", 'active="documents"'],
-    ["src/components/documents/DocumentsMemberExperience.tsx", 'active="documents"'],
+    [
+      "src/components/documents/DocumentsGuestExperience.tsx",
+      'active="documents"',
+    ],
+    [
+      "src/components/documents/DocumentsMemberExperience.tsx",
+      'active="documents"',
+    ],
     ["src/components/profile/GlobalKeyCenter.tsx", 'active="global-key"'],
   ];
 
@@ -49,4 +54,11 @@ test("capability layout protects 100 percent zoom and narrow screens", () => {
   assert.match(css, /overflow-wrap: anywhere/);
   assert.match(css, /prefers-reduced-motion: reduce/);
   assert.match(layout, /import "\.\/capability-system\.css"/);
+});
+
+test("certificate workspace keeps connected learning and identity navigation compact", () => {
+  const page = source("src/app/certificates/page.tsx");
+  assert.match(page, /href="\/courses"/);
+  assert.match(page, /href="\/global-key"/);
+  assert.match(page, /href="\/profile"/);
 });

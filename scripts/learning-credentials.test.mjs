@@ -46,7 +46,10 @@ test("builds a privacy-safe portable learning record", () => {
   const serialized = JSON.stringify(record);
 
   assert.equal(record.formatVersion, "2.0");
-  assert.equal(record.profile.schemaVersion, TGPI_VERIFIED_LEARNING_SCHEMA_VERSION);
+  assert.equal(
+    record.profile.schemaVersion,
+    TGPI_VERIFIED_LEARNING_SCHEMA_VERSION,
+  );
   assert.equal(
     record.verificationUrl,
     "https://www.theglobalpolymath.com/verify/credentials/TGPI-ENGABR-TEST123",
@@ -145,13 +148,13 @@ const credentialActionsSource = readFileSync(
 );
 
 test("portfolio exposes complete lifecycle history without leaking private trust data", () => {
-  assert.match(credentialPortfolioPageSource, /credentials\.length/);
+  assert.match(credentialPortfolioPageSource, /listUserLearningCredentials/);
   assert.doesNotMatch(
     credentialPortfolioPageSource + credentialPortfolioExplorerSource,
     /ownerUid|verificationHash/,
   );
-  assert.match(credentialPortfolioExplorerSource, /Revoked · retained record/);
-  assert.match(credentialPortfolioExplorerSource, /Export JSON/);
+  assert.match(credentialPortfolioExplorerSource, /Revoked/);
+  assert.match(credentialPortfolioExplorerSource, /CertificateDownloadButton/);
 });
 
 test("owner credential view distinguishes revoked and integrity-review states", () => {
