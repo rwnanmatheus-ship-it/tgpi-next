@@ -1,0 +1,80 @@
+.root {
+  --inbox-navy: #0b1f3a;
+  --inbox-gold: #b58a2a;
+  font-family: var(--font-tgpi-sans), Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.65;
+  color: var(--inbox-navy);
+  background: radial-gradient(ellipse at 95% 0%, #e8edf2 0, transparent 42%), #f8f5ee;
+}
+.root :is(h1,h2,h3,h4,h5,h6,button,input,select,a,label,time) {
+  font-family: var(--font-tgpi-sans), Arial, sans-serif;
+  letter-spacing: normal;
+}
+.root h1 { font-size: clamp(30px, 3vw, 42px); font-weight: 800; line-height: 1.2; letter-spacing: -.035em; }
+.root h2 { font-size: 19px; font-weight: 800; line-height: 1.45; }
+.root h3 { font-size: 13px; font-weight: 800; letter-spacing: .07em; }
+.root h4 { font-size: 18px; line-height: 1.5; font-weight: 750; }
+.root input[type="search"] { font-size: 16px; min-height: 28px; }
+.root button { font-weight: 650; }
+.root nav { scrollbar-width: thin; scroll-padding-inline: 8px; overscroll-behavior-inline: contain; }
+.root nav button { font-size: 14px; min-height: 48px; flex-shrink: 0; }
+.root article p { font-size: 15.5px; line-height: 1.8; color: #42526a; }
+.root article time { font-size: 13px; line-height: 1.6; }
+.root article a:not(:has(h4)), .root article button { font-size: 13px; min-height: 38px; }
+.root aside p, .root aside label { font-size: 14px; line-height: 1.8; }
+.root aside a { font-size: 14px; min-height: 44px; }
+.root aside > p { font-size: 12px; }
+.root article :global(.inbox-category) { font-size: 12px; line-height: 1.5; }
+.root :global(.inbox-time-note) { font-size: 12px; }
+.hero {
+  padding: 26px 28px;
+  border: 1px solid #d8d2c4;
+  border-radius: 24px;
+  background: linear-gradient(135deg, #fff, #fffdf8);
+  box-shadow: 0 8px 30px -22px #0b1f3a40, inset 0 1px 0 #fff;
+}
+.hero p:last-child { font-size: 16px; color: #536078; }
+.stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; margin: 20px 0; perspective: 1000px; }
+.stat {
+  position: relative; display: flex; align-items: center; gap: 16px; min-width: 0;
+  padding: 20px; border: 1px solid #d8d2c4b3; border-radius: 20px;
+  background: linear-gradient(145deg, #fff, #f5f3ee);
+  box-shadow: 0 9px 0 -6px #d8d2c4, 0 16px 30px -24px #0b1f3a80, inset 0 1px 0 #fff;
+  transform: translateZ(0); transition: transform 220ms ease, box-shadow 220ms ease;
+  text-align: left; color: #0b1f3a; min-height: 104px;
+}
+.stat strong { display: block; font-size: 30px; font-weight: 800; line-height: 1.2; }
+.stat span { display: block; margin-top: 4px; font-size: 14px; font-weight: 650; }
+.statIcon { display:flex; width:48px; height:48px; flex-shrink:0; align-items:center; justify-content:center; border-radius:16px; background:linear-gradient(145deg,#193759,#0b1f3a); color:#e3c57b; box-shadow:inset 0 1px 0 #ffffff40,0 5px 10px -6px #0b1f3a; }
+.stat[aria-pressed="true"] { border-color: #b58a2a; background: linear-gradient(145deg, #fffdf5, #f5edd9); }
+.feed { box-shadow:0 16px 40px -32px #0b1f3a90,inset 0 1px 0 #fff; }
+.root .row { margin: 8px 12px; border: 1px solid #e7e4db; border-radius: 18px; overflow: hidden; transition: background-color 180ms ease, border-color 180ms ease, box-shadow 180ms ease; }
+.root .row article { padding: 20px; }
+.root .row[data-unread="true"] { border-left: 3px solid #b58a2a; background:linear-gradient(110deg,#f4f6f9,#fffdf8); }
+.root .row[data-unread="false"] { background: #fff; }
+.root .row a:focus-visible,.stat:focus-visible { outline:2px solid #b58a2a; outline-offset:3px; }
+.entrance { animation: inbox-arrive 350ms ease-out both; }
+@keyframes inbox-arrive { from { opacity:.6; transform:translateY(6px); } to {opacity:1;transform:translateY(0);} }
+@media (hover:hover) and (prefers-reduced-motion:no-preference) {
+  .stat:hover { transform:translateY(-3px) rotateX(2deg); box-shadow:0 12px 0 -8px #d8d2c4,0 22px 32px -24px #0b1f3a90; }
+  .root .row:hover { border-color:#c8c5b8; box-shadow:0 6px 18px -14px #0b1f3a80; }
+}
+@media (max-width:640px) {
+  .hero { padding:22px 18px; border-radius:20px; }
+  .stats { gap:8px; margin:16px 0; }
+  .stat { padding:14px 10px; min-height:104px; display:block; border-radius:16px; }
+  .stat strong { font-size:25px; }
+  .stat span { font-size:12px; line-height:1.5; }
+  .statIcon { display:none; }
+  .root h4 {font-size:17px;line-height:1.5;}
+  .root article p {font-size:15px;line-height:1.75;}
+  .root .row {margin:8px; border-radius:16px;}
+  .root .row article {padding:16px 12px;gap:12px;}
+  .root article time {font-size:12px;}
+  .root button { font-weight: 650; }
+.root nav { scrollbar-width: thin; scroll-padding-inline: 8px; overscroll-behavior-inline: contain; }
+.root nav button {font-size:14px;}
+  .root article a:not(:has(h4)), .root article button {min-height:44px;}
+}
+@media (prefers-reduced-motion:reduce) { .entrance {animation:none;} .stat,.root .row {transition:none;transform:none;} }
