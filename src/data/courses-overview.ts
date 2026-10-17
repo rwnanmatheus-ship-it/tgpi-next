@@ -1,6 +1,72 @@
 import type { CourseOverview } from "@/types/course-overview";
 
 export const coursesOverview: CourseOverview[] = [
+{
+  "id": "country-fit",
+  "title": "Country Fit: Choose Where You Can Thrive",
+  "category": "Decision Intelligence",
+  "desc": "Compare countries against your constraints, evidence and priorities before committing to a move.",
+  "audience": "People preparing a realistic international life or career plan.",
+  "benefits": [
+    "Separate legal feasibility from lifestyle preferences.",
+    "Use consistent measures to compare three destinations.",
+    "Identify what would change your preferred option."
+  ],
+  "duration": "1h",
+  "format": "3 applied lessons",
+  "goal": "decision-intelligence",
+  "goalLabel": "Make stronger decisions",
+  "href": "/courses/country-fit",
+  "image": "/images/courses/country-fit.webp",
+  "imageAlt": "Gold globe and comparison panels overlooking an international city",
+  "level": "Practical Foundation",
+  "releaseLabel": "Available now",
+  "status": "available"
+},
+{
+  "id": "relocation-budget",
+  "title": "Move Abroad: Build Your Financial Runway",
+  "category": "Economics & Opportunity",
+  "desc": "Build a relocation budget, test your runway and create a practical financial go/no-go plan.",
+  "audience": "People preparing a realistic international life or career plan.",
+  "benefits": [
+    "Separate one-time cash needs from recurring living costs.",
+    "Calculate how long liquid funds cover a monthly shortfall.",
+    "Set thresholds and safeguards before paying non-refundable costs."
+  ],
+  "duration": "1h",
+  "format": "3 applied lessons",
+  "goal": "global-economics",
+  "goalLabel": "Understand global opportunity",
+  "href": "/courses/relocation-budget",
+  "image": "/images/courses/relocation-budget.webp",
+  "imageAlt": "Relocation planning desk with budget notebook and apartment keys",
+  "level": "Practical Foundation",
+  "releaseLabel": "Available now",
+  "status": "available"
+},
+{
+  "id": "international-career",
+  "title": "International Career: Prove Your Value",
+  "category": "Technology & Adaptability",
+  "desc": "Turn experience into credible evidence, targeted applications and clear international interview answers.",
+  "audience": "People preparing a realistic international life or career plan.",
+  "benefits": [
+    "Compare role requirements with evidence you can show.",
+    "Write outcome-led experience without exaggeration.",
+    "Give a concise evidence-based answer and evaluate mutual fit."
+  ],
+  "duration": "1h",
+  "format": "3 applied lessons",
+  "goal": "future-of-work",
+  "goalLabel": "Future-proof my career",
+  "href": "/courses/international-career",
+  "image": "/images/courses/international-career.webp",
+  "imageAlt": "International professionals reviewing a career portfolio",
+  "level": "Practical Foundation",
+  "releaseLabel": "Available now",
+  "status": "available"
+},
   {
     audience:
       "For people preparing to study, work or build a life in another country.",
