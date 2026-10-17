@@ -1,10 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import CertificateDownloadButton from "@/components/credentials/CertificateDownloadButton";
 import { useState } from "react";
 import { QRCodeSVG } from "qrcode.react";
 
 type CredentialActionsProps = {
+  canDownload?: boolean;
   credentialId: string;
   courseTitle: string;
   downloadUrl: string;
@@ -12,6 +14,7 @@ type CredentialActionsProps = {
 };
 
 export default function CredentialActions({
+  canDownload = true,
   credentialId,
   courseTitle,
   downloadUrl,
@@ -44,10 +47,7 @@ export default function CredentialActions({
         setMessage("Credential shared.");
         return;
       }
-      await copyValue(
-        verificationUrl,
-        "Verification link copied for sharing.",
-      );
+      await copyValue(verificationUrl, "Verification link copied for sharing.");
     } catch (error) {
       if (error instanceof DOMException && error.name === "AbortError") return;
       setMessage("Sharing is unavailable on this device.");
@@ -61,11 +61,11 @@ export default function CredentialActions({
     >
       <p
         id="credential-actions-title"
-        className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#E8CC7B] print:text-[#79571D]"
+        className="text-xs font-extrabold uppercase tracking-[0.14em] text-[#E8CC7B] print:text-[#79571D]"
       >
-        Portable verification
+        Share & download
       </p>
-      <p className="mt-2 text-xs leading-6 text-[#9EABBC] print:text-[#59636F]">
+      <p className="mt-2 text-sm leading-6 text-[#9EABBC] print:text-[#59636F]">
         Scan to inspect the current issuer record, integrity and lifecycle
         status.
       </p>
@@ -88,15 +88,18 @@ export default function CredentialActions({
 
       <button
         type="button"
-        onClick={() =>
-          void copyValue(credentialId, "Credential ID copied.")
-        }
+        onClick={() => void copyValue(credentialId, "Credential ID copied.")}
         className="mt-4 min-h-11 w-full break-all rounded-xl border border-white/10 bg-white/[0.035] px-3 py-2 text-center font-mono text-[10px] font-bold leading-5 text-[#D5DDE7] transition hover:border-[#E5BF5A]/50 print:min-h-0 print:border-[#D8D2C4] print:bg-white print:text-[#0B1F3A]"
       >
         {credentialId}
       </button>
 
       <div className="mt-5 grid gap-3 print:hidden">
+        <CertificateDownloadButton
+          credentialId={credentialId}
+          disabled={!canDownload}
+          className="inline-flex min-h-12 items-center justify-center rounded-xl bg-white px-5 text-sm font-extrabold text-[#0B1F3A] transition hover:bg-[#F8F5EE]"
+        />
         <button
           type="button"
           onClick={() => void shareCredential()}
@@ -113,10 +116,7 @@ export default function CredentialActions({
         <button
           type="button"
           onClick={() =>
-            void copyValue(
-              verificationUrl,
-              "Verification link copied.",
-            )
+            void copyValue(verificationUrl, "Verification link copied.")
           }
           className="min-h-12 rounded-xl border border-white/15 px-5 text-sm font-extrabold text-white transition hover:border-[#E5BF5A]/50 hover:bg-white/5"
         >

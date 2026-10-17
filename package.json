@@ -18,18 +18,21 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "test:learning-credentials": "node --experimental-strip-types --test scripts/learning-credentials.test.mjs",
+    "test:learning-credentials": "node --experimental-strip-types --test scripts/learning-credentials.test.mjs scripts/certificate-pdf.test.mjs",
     "test:capability-system": "node --experimental-strip-types --test scripts/capability-system.test.mjs",
     "test:navigation-system": "node --experimental-strip-types --test scripts/navigation-system.test.mjs",
     "test:home": "node --experimental-strip-types --test scripts/home-conversion.test.mjs",
     "prebuild": "npm run test:learning-credentials && npm run test:intelligence && npm run test:workspace && npm run test:personal-plan",
-    "test:notifications": "node --experimental-strip-types --test scripts/notifications.test.mjs scripts/notification-account.test.mjs scripts/notification-timeline.test.mjs"
+    "test:notifications": "node --experimental-strip-types --test scripts/notifications.test.mjs scripts/notification-account.test.mjs scripts/notification-timeline.test.mjs",
+    "test:certificate-pdf": "node --experimental-strip-types --test scripts/certificate-pdf.test.mjs"
   },
   "dependencies": {
     "@clerk/nextjs": "^7.7.7",
+    "@pdf-lib/fontkit": "^1.1.1",
     "@stripe/stripe-js": "^9.2.0",
     "firebase": "^12.18.0",
     "next": "16.3.4",
+    "pdf-lib": "^1.17.1",
     "qrcode.react": "^4.2.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",

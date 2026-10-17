@@ -90,14 +90,10 @@ export default async function CredentialPage({
     "https://www.theglobalpolymath.com/verify/credentials/" +
     encodeURIComponent(credential.id);
   const downloadUrl =
-    "/api/credentials/" +
-    encodeURIComponent(credential.id) +
-    "?download=1";
+    "/api/credentials/" + encodeURIComponent(credential.id) + "?download=1";
 
   return (
-    <main
-      className="min-h-screen bg-[#EDE8DE] px-4 py-7 text-[#0B1F3A] print:bg-white print:p-0 sm:px-6 sm:py-12"
-    >
+    <main className="min-h-screen bg-[#EDE8DE] px-4 py-7 text-[#0B1F3A] print:bg-white print:p-0 sm:px-6 sm:py-12">
       <div className="mx-auto mb-5 flex max-w-[1220px] flex-wrap items-center justify-between gap-3 print:hidden">
         <nav
           aria-label="Credential navigation"
@@ -107,7 +103,10 @@ export default async function CredentialPage({
             Workspace
           </Link>
           <span aria-hidden="true">/</span>
-          <Link href="/certificates" className="transition hover:text-[#0B1F3A]">
+          <Link
+            href="/certificates"
+            className="transition hover:text-[#0B1F3A]"
+          >
             Credentials
           </Link>
           <span aria-hidden="true">/</span>
@@ -164,7 +163,8 @@ export default async function CredentialPage({
                       TGPI Verified Learning Credential
                     </p>
                     <p className="mt-1 text-xs font-bold text-[#6D7480]">
-                      Schema {credential.credentialSchemaVersion} · Evidence-backed
+                      Schema {credential.credentialSchemaVersion} ·
+                      Evidence-backed
                     </p>
                   </div>
                 </div>
@@ -181,7 +181,7 @@ export default async function CredentialPage({
               <p className="mt-11 text-xs font-extrabold uppercase tracking-[0.16em] text-[#6D7480]">
                 {credential.achievementType}
               </p>
-              <h1 className="mt-4 max-w-4xl font-[var(--tgpi-font-display)] text-[clamp(3.3rem,7vw,6.7rem)] font-semibold leading-[0.88] tracking-[-0.055em] print:text-6xl">
+              <h1 className="mt-4 max-w-4xl font-[var(--tgpi-font-display)] text-[clamp(1.9rem,4vw,3.4rem)] font-semibold leading-[1.12] tracking-[-0.055em] print:text-6xl">
                 {credential.courseTitle}
               </h1>
 
@@ -189,7 +189,7 @@ export default async function CredentialPage({
                 <p className="text-[10px] font-extrabold uppercase tracking-[0.16em] text-[#956A13]">
                   Awarded to
                 </p>
-                <p className="mt-2 font-[var(--tgpi-font-display)] text-4xl font-semibold sm:text-5xl">
+                <p className="mt-2 font-[var(--tgpi-font-display)] break-words text-3xl font-semibold sm:text-4xl">
                   {credential.publicName}
                 </p>
                 <p className="mt-3 max-w-3xl text-sm leading-7 text-[#657082]">
@@ -262,10 +262,7 @@ export default async function CredentialPage({
                       key={item}
                       className="flex gap-3 rounded-xl border border-[#E7E1D5] bg-white/65 p-4 text-sm font-bold leading-6 text-[#505966]"
                     >
-                      <span
-                        aria-hidden="true"
-                        className="text-[#20815B]"
-                      >
+                      <span aria-hidden="true" className="text-[#20815B]">
                         ✓
                       </span>
                       {item}
@@ -293,6 +290,7 @@ export default async function CredentialPage({
           <aside className="border-t border-white/10 bg-[#07172D] p-7 text-white print:border-l print:border-t-0 print:border-[#D8D2C4] print:bg-white print:p-5 print:text-[#0B1F3A] lg:border-l lg:border-t-0 sm:p-9">
             <div className="grid gap-6">
               <CredentialActions
+                canDownload={trustState === "active_verified"}
                 credentialId={credential.id}
                 courseTitle={credential.courseTitle}
                 downloadUrl={downloadUrl}
