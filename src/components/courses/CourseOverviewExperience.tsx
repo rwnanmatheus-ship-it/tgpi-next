@@ -12,7 +12,7 @@ import type { Course } from "@/types/course";
 function formatDuration(totalMinutes: number) {
   const hours = Math.floor(totalMinutes / 60);
   const minutes = totalMinutes % 60;
-  return minutes ? `${hours}h ${minutes}m` : `${hours} hours`;
+  return hours ? (minutes ? `${hours}h ${minutes}m` : `${hours}h`) : `${minutes}m`;
 }
 
 export default function CourseOverviewExperience({ course }: { course: Course }) {
@@ -282,10 +282,10 @@ function CourseOverview({ course }: { course: Course }) {
               Capability map
             </p>
             <h2 id="capability-map-title" className="mt-4 text-4xl font-semibold sm:text-6xl">
-              The certificate will name what you can actually do.
+              {course.id === "global-english-2026" ? "The certificate will name what you can actually do." : "Build capabilities you can put to work."}
             </h2>
             <p className="mt-5 text-base leading-8 text-[var(--tgpi-muted)]">
-              Every module builds one observable capability. Evidence is attached to the skill — not only to time spent watching content.
+              Every module builds one observable capability. Create the practical output and review your reasoning before moving to the next step.
             </p>
           </div>
 
@@ -318,7 +318,7 @@ function CourseOverview({ course }: { course: Course }) {
             </p>
             <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
               <h2 id="assessment-standard-title" className="max-w-xl text-4xl font-semibold sm:text-5xl">
-                Evidence before certification.
+                {course.id === "global-english-2026" ? "Evidence before certification." : "Practice before commitment."}
               </h2>
               <div className="rounded-2xl bg-[var(--tgpi-navy)] px-4 py-3 text-center text-white">
                 <p className="text-[9px] font-extrabold uppercase tracking-[0.16em] text-[var(--tgpi-gold-light)]">Mastery threshold</p>
@@ -350,6 +350,7 @@ function CourseOverview({ course }: { course: Course }) {
             </p>
           </div>
 
+          {course.id === "global-english-2026" ? (
           <aside className="overflow-hidden rounded-[30px] border border-[var(--tgpi-gold)]/30 bg-[#FFF7DE] shadow-[var(--tgpi-shadow-soft)]" aria-label="Professional credential pathway">
             <div className="p-7 sm:p-9">
               <div className="flex items-center justify-between gap-3">
@@ -392,6 +393,7 @@ function CourseOverview({ course }: { course: Course }) {
               </Link>
             </div>
           </aside>
+          ) : <aside className="self-start rounded-[26px] border border-[var(--tgpi-border)] bg-white p-7 sm:p-9"><p className="text-sm font-bold text-[var(--tgpi-gold-strong)]">Applied short course</p><h2 className="mt-3 text-3xl font-semibold">Make something you can use.</h2><p className="mt-4 text-base leading-7 text-[var(--tgpi-muted)]">Complete the lessons and formative checkpoints, then self-review your practical outputs. Lesson progress is saved to your account. This course does not issue a professional certificate.</p><Link href="/dashboard" className="mt-5 inline-flex min-h-12 items-center rounded-xl bg-[var(--tgpi-navy)] px-5 text-sm font-bold text-white">Open my workspace →</Link></aside>}
         </section>
 
         <section className="pb-16" aria-labelledby="curriculum-title">

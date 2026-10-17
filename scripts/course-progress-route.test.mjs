@@ -9,6 +9,7 @@ function route(userId) {
   const expected = { courseProgress: {} };
   new Function("require", "exports", code)((id) => {
     if (id === "@clerk/nextjs/server") return { auth: async () => ({ userId }) };
+    if (id === "@/lib/notifications/schedule.server") return { scheduleNotificationReconciliation: () => undefined };
     if (id === "next/cache") return { unstable_cache: () => { throw new Error("Request-scoped Clerk client cannot run in a cache scope"); } };
     if (id === "next/server") return { NextResponse: { json: (body, init) => Response.json(body, init) } };
     if (id === "@/lib/activation-store.server") return { getUserActivationProgress: async (uid) => { assert.equal(uid, userId); return expected; } };

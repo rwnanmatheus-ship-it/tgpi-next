@@ -208,7 +208,7 @@ function Lesson({
               </div>
             </LessonSection>
 
-            <LessonSection eyebrow="02 · Learn" title="Four phrases to carry with you">
+            <LessonSection eyebrow="02 · Learn" title={course.id === "global-english-2026" ? "Four phrases to carry with you" : "Four principles to apply"}>
               <div className="grid gap-4 sm:grid-cols-2">
                 {lesson.keyPhrases.map((item, index) => (
                   <div key={item.phrase} className="rounded-2xl border border-[var(--tgpi-border-soft)] bg-white p-5">
@@ -225,10 +225,10 @@ function Lesson({
               </div>
             </LessonSection>
 
-            <LessonSection eyebrow="02 · Learn" title="See the language in motion">
+            <LessonSection eyebrow="02 · Learn" title={course.id === "global-english-2026" ? "See the language in motion" : "Work through the decision"}>
               <div className="grid gap-3">
                 {lesson.dialogue.map((line, index) => {
-                  const isLearner = line.speaker === "You";
+                  const isLearner = line.speaker === "You" || line.speaker === "Learner";
                   return (
                     <div key={`${line.speaker}-${index}`} className={`flex ${isLearner ? "justify-end" : "justify-start"}`}>
                       <div className={`max-w-[88%] rounded-2xl p-4 sm:max-w-[75%] ${isLearner ? "rounded-br-sm bg-[var(--tgpi-navy)] text-white" : "rounded-bl-sm border border-[var(--tgpi-border-soft)] bg-white"}`}>
@@ -349,7 +349,7 @@ function Lesson({
 
               {attemptCount > 0 ? (
                 <p className="mt-3 text-xs font-bold text-[#7A6948]">
-                  Attempt {attemptCount}. Feedback is part of learning; certificate scoring begins only at the performance gates.
+                  Attempt {attemptCount}. {course.id === "global-english-2026" ? "Feedback is part of learning; certificate scoring begins only at the performance gates." : "Review the feedback and apply the decision rule to your practical output."}
                 </p>
               ) : null}
 
@@ -380,7 +380,7 @@ function Lesson({
                 <div className="rounded-2xl border border-[var(--tgpi-border-soft)] bg-white p-5">
                   <p className="text-[9px] font-extrabold uppercase tracking-[0.16em] text-[var(--tgpi-gold-strong)]">Retrieval target</p>
                   <p className="mt-3 text-sm font-extrabold leading-7 text-[var(--tgpi-navy)]">
-                    Which phrase must you be able to produce tomorrow without looking?
+                    {course.id === "global-english-2026" ? "Which phrase must you be able to produce tomorrow without looking?" : "Which decision rule can you apply tomorrow, and what evidence would change your conclusion?"}
                   </p>
                 </div>
               </div>
@@ -431,7 +431,7 @@ function Lesson({
                 </Link>)}
               </div>)}
             </nav>
-            <p className="mt-4 text-xs leading-6 text-[var(--tgpi-muted)]">Say every model phrase aloud. Recognition is useful; retrieval is what you need in the real world.</p>
+            <p className="mt-4 text-xs leading-6 text-[var(--tgpi-muted)]">{course.id === "global-english-2026" ? "Say every model phrase aloud. Recognition is useful; retrieval is what you need in the real world." : "Create the practical output, check its assumptions and use it to choose your next action."}</p>
           </div>
         </aside>
       </div>
