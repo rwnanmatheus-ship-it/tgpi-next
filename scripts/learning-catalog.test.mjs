@@ -78,6 +78,8 @@ test('all fourteen courses retain completion after compact storage and normaliza
   let progress = activation.createEmptyActivationProgress();
   for (const course of courses) {
     for (const lesson of course.modules.flatMap(module => module.lessons)) {
+      const visit = exports.parseActivationMutation({ type: 'visit_lesson', courseId: course.id, lessonId: lesson.id });
+      progress = exports.applyActivationMutation(progress, visit, '2026-10-17T15:00:00Z');
       const mutation = exports.parseActivationMutation({ type: 'complete_lesson', courseId: course.id, lessonId: lesson.id, checkpointOptionId: lesson.checkpoint.correctOptionId });
       progress = exports.applyActivationMutation(progress, mutation, '2026-10-17T15:00:00Z');
       // Exercise the real write/read representation after every completion.
