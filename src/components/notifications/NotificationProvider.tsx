@@ -24,6 +24,7 @@ type InboxContext = {
   refresh: () => Promise<void>;
   loadMore: () => Promise<void>;
   mutate: (id: string, action: "read" | "unread" | "archive") => Promise<void>;
+  markAllRead: () => Promise<void>;
   savePreferences: (value: NotificationPreferences) => Promise<void>;
 };
 const Context = createContext<InboxContext | null>(null);
@@ -177,6 +178,19 @@ function NotificationSession({
       setPending(false);
     }
   }
+  async function markAllRead() {
+    setPending(true);
+    const requestGeneration = generation.current;
+    try {
+      await patch({ action: "read_all" });
+      if (requestGeneration === generation.current) {
+        const now = new Date().toISOString();
+        setItems(previous => previous.map(item => item.archivedAt ? item : ({ ...item, readAt: item.readAt || now })));
+        setError("");
+      }
+    } catch (err) { if (requestGeneration === generation.current) setError(err instanceof Error ? err.message : "Unable to save."); }
+    finally { setPending(false); }
+  }
   async function savePreferences(value: NotificationPreferences) {
     setPending(true);
     const requestGeneration = generation.current;
@@ -207,6 +221,7 @@ function NotificationSession({
         loadMore: () => load(nextCursor || undefined),
         mutate,
         savePreferences,
+        markAllRead,
       }}
     >
       {children}

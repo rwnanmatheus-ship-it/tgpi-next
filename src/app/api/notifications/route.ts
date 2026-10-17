@@ -52,10 +52,15 @@ export async function PATCH(request: Request) {
       return json({ error: "Invalid notification action." }, 400);
     const input = parsed as Record<string, unknown>;
     if (!notificationsConfigured()) {
-      if (!["preferences", "read", "unread", "archive"].includes(String(input.action)))
+      if (!["preferences", "read", "unread", "archive", "read_all"].includes(String(input.action)))
         return json({ error: "Invalid notification action." }, 400);
       const found = await updateAccountInbox(userId, input);
       return found ? json({ ok: true, ...(input.action === "preferences" ? { preferences: parsePreferences(input.preferences) } : {}) }) : json({ error: "Notification not found." }, 404);
+    }
+    if (input.action === "read_all") {
+      const { items } = await listNotifications(userId);
+      await Promise.all(items.filter(item => !item.readAt && !item.archivedAt).map(item => mutateNotification(userId, item.id, "read")));
+      return json({ ok: true });
     }
     if (input.action === "preferences")
       return json({

@@ -26,11 +26,13 @@ export type NotificationEvent = {
   href: string;
   actionLabel: string;
   important?: boolean;
+  occurredAt?: string;
 };
 export type InboxNotification = NotificationEvent & {
   id: string;
   uid: string;
   createdAt: string;
+  timestampKind?: "event" | "observed";
   readAt: string | null;
   archivedAt: string | null;
 };
