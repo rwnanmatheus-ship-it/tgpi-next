@@ -126,6 +126,7 @@ export type CourseModule = {
 };
 
 export type Course = {
+  series?: { name: string; chapter: number; totalChapters: number; nextCourseId?: string };
   assessment: CourseAssessmentStandard;
   audience: string;
   category: string;

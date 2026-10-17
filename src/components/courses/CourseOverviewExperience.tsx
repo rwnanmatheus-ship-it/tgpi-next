@@ -69,6 +69,11 @@ function CourseOverview({ course }: { course: Course }) {
           <span aria-hidden="true">←</span>&nbsp; All learning paths
         </Link>
 
+        {course.series && <nav aria-label="Course series" className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[var(--tgpi-border)] bg-white px-5 py-4 text-sm">
+          <p className="font-bold">{course.series.name} <span className="font-normal text-[var(--tgpi-muted)]">· Chapter {course.series.chapter} of {course.series.totalChapters}</span></p>
+          {course.series.nextCourseId && <Link href={`/courses/${course.series.nextCourseId}`} className="inline-flex min-h-11 items-center font-bold underline underline-offset-4">Next in this series →</Link>}
+        </nav>}
+
         <section className="relative mt-6 overflow-hidden rounded-[32px] border border-white/10 bg-[var(--tgpi-navy)] text-white shadow-[var(--tgpi-shadow-premium)] sm:rounded-[40px]">
           <div
             className="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full border border-[var(--tgpi-gold)]/20"

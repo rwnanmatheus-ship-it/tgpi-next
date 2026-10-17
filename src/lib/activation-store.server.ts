@@ -5,6 +5,7 @@ import {
   activationLimits,
   addActivationActivity,
   normalizeActivationProgress,
+  serializeActivationProgressForStorage,
   TGPI_ACTIVATION_METADATA_KEY,
   type ActivationMutation,
   type TgpiActivationProgress,
@@ -185,7 +186,7 @@ function trimRecord<T extends { updatedAt: string }>(
 }
 
 function ensureStorageLimit(progress: TgpiActivationProgress) {
-  const size = Buffer.byteLength(JSON.stringify(progress), "utf8");
+  const size = Buffer.byteLength(JSON.stringify(serializeActivationProgressForStorage(progress)), "utf8");
 
   if (size > MAX_ACTIVATION_METADATA_BYTES) {
     throw new ActivationInputError(
@@ -400,7 +401,7 @@ export async function updateUserActivationProgress(
   await client.users.updateUserMetadata(userId, {
     privateMetadata: {
       ...user.privateMetadata,
-      [TGPI_ACTIVATION_METADATA_KEY]: progress,
+      [TGPI_ACTIVATION_METADATA_KEY]: serializeActivationProgressForStorage(progress),
     },
   });
 

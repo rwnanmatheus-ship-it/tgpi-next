@@ -1,6 +1,8 @@
+import { seriesOverview } from "@/data/courses/series-courses";
 import type { CourseOverview } from "@/types/course-overview";
 
 export const coursesOverview: CourseOverview[] = [
+  ...seriesOverview,
 {
   "id": "country-fit",
   "title": "Country Fit: Choose Where You Can Thrive",
