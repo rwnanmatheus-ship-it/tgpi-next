@@ -10,7 +10,7 @@ function harness() {
   const users = new Map(['A','B'].map(id => [id, { createdAt: Date.now(), privateMetadata: { existing: 'preserved' } }]));
   const module = { exports: {} };
   const mockClient = { users: { updateUserMetadata: async (uid, input) => { const user = users.get(uid); Object.assign(user.privateMetadata, input.privateMetadata); } } };
-  vm.runInNewContext(ts.transpileModule(readFileSync(new URL('../src/lib/notifications/account-inbox.server.ts', import.meta.url), 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText, { module, exports: module.exports, Buffer, Date, console, require: name => name === 'server-only' ? {} : name.includes('clerk') ? { clerkClient: async () => mockClient } : name.includes('reconcile') ? { collectNotificationEvents: async uid => ({ events: [welcomeEvent], user: users.get(uid) }) } : name === './model' ? { parsePreferences } : require(name) });
+  vm.runInNewContext(ts.transpileModule(readFileSync(new URL('../src/lib/notifications/account-inbox.server.ts', import.meta.url), 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText, { module, exports: module.exports, Buffer, Date, console, require: name => name === 'server-only' ? {} : name.includes('clerk') ? { clerkClient: async () => mockClient } : name.includes('reconcile') ? { collectNotificationEvents: async uid => ({ events: [welcomeEvent, { ...welcomeEvent, key: "next:sample", category: "planning" }], user: users.get(uid) }) } : name === './model' ? { parsePreferences } : require(name) });
   return { api: module.exports, users };
 }
 test('account mode persists read and preferences without modifying other private metadata', async () => {
@@ -24,4 +24,15 @@ test('account mode persists read and preferences without modifying other private
   assert.equal((await api.accountInbox('A')).preferences.emailImportant, false);
   assert.equal(users.get('A').privateMetadata.existing, 'preserved');
   assert.equal((await api.accountInbox('A')).emailDelivery, 'not_connected');
+});
+test('observed timestamps survive reloads, bulk read and archive changes', async () => {
+  const { api } = harness();
+  const first = await api.accountInbox('A');
+  const again = await api.accountInbox('A');
+  assert.equal(first.items[0].createdAt, again.items[0].createdAt);
+  assert.equal(first.items.find(item => item.key === 'account:welcome:v1').timestampKind, 'event');
+  assert.equal(first.items.find(item => item.key === 'next:sample').timestampKind, 'observed');
+  assert.equal(first.items.find(item => item.key === 'next:sample').createdAt, again.items.find(item => item.key === 'next:sample').createdAt);
+  await api.updateAccountInbox('A', { action: 'read_all' });
+  assert.ok((await api.accountInbox('A')).items.every(item => item.readAt));
 });

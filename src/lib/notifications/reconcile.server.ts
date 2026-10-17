@@ -28,7 +28,7 @@ export async function collectNotificationEvents(uid: string) {
     user.privateMetadata[TGPI_BILLING_METADATA_KEY],
     uid,
   );
-  const events: NotificationEvent[] = [welcomeEvent, {
+  const events: NotificationEvent[] = [{ ...welcomeEvent, occurredAt: new Date(user.createdAt).toISOString() }, {
     key: "product:intelligence-inbox:v2",
     category: "product",
     title: "Your TGPI intelligence inbox is here",
@@ -70,6 +70,7 @@ export async function collectNotificationEvents(uid: string) {
     if (course.completedAt)
       events.push({
         key: `course:complete:${id}`,
+        occurredAt: course.completedAt,
         category: "learning",
         title: "Course checkpoints completed",
         body: "Review the assessment and identity requirements for your verified credential.",
@@ -103,6 +104,7 @@ export async function collectNotificationEvents(uid: string) {
   for (const credential of credentials)
     events.push({
       key: `credential:${credential.id}`,
+      occurredAt: credential.issuedAt,
       category: "learning",
       title: "Your verified credential is ready",
       body: `${credential.courseTitle}: your issued credential is available in your private certificate workspace.`,

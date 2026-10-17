@@ -1,248 +1,64 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import NavigationIcon from "@/components/navigation/NavigationIcon";
+import type { NavigationIconName } from "@/lib/navigation-system";
+import { notificationCategories, type NotificationCategory, type NotificationPreferences } from "@/lib/notifications/model";
+import { notificationGroup, notificationRelativeTime, sortNotifications } from "@/lib/notifications/presentation";
 import { useNotifications } from "./NotificationProvider";
-import {
-  notificationCategories,
-  type NotificationPreferences,
-} from "@/lib/notifications/model";
-const labels: Record<keyof NotificationPreferences, string> = {
-  emailImportant: "Important account and billing updates",
-  emailLearning: "Learning and credential milestones",
-  emailPlanning: "Personal planning suggestions",
-  emailProduct: "TGPI product announcements",
+const channels: Record<NotificationCategory, { label: string; icon: NavigationIconName }> = {
+  account: { label: "Account", icon: "shield" }, billing: { label: "Membership", icon: "key" },
+  learning: { label: "Learning", icon: "book" }, planning: { label: "My plan", icon: "compass" },
+  product: { label: "TGPI updates", icon: "spark" },
 };
+const preferences: Record<keyof NotificationPreferences, string> = {
+  emailImportant: "Account & membership", emailLearning: "Learning & credentials",
+  emailPlanning: "Planning suggestions", emailProduct: "Product news",
+};
+const control = "inline-flex min-h-10 items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold transition hover:bg-[#0B1F3A]/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#B58A2A] disabled:cursor-wait disabled:opacity-40";
 export default function NotificationInbox() {
   const inbox = useNotifications();
   const [filter, setFilter] = useState("all");
   const [query, setQuery] = useState("");
-  const unread = inbox.items.filter(item => !item.readAt && !item.archivedAt).length;
-  const important = inbox.items.filter(item => item.important && !item.archivedAt).length;
-  const nextStep = inbox.items.find(item => item.key.startsWith("next:") && !item.archivedAt);
-  const visible = inbox.items.filter(item => `${item.title} ${item.body} ${item.category}`.toLowerCase().includes(query.toLowerCase())).filter((item) =>
-    filter === "archived"
-      ? Boolean(item.archivedAt)
-      : !item.archivedAt &&
-        (filter === "all" ||
-          (filter === "unread" && !item.readAt) ||
-          item.category === filter),
-  );
+  const [showPreferences, setShowPreferences] = useState(false);
+  const [now, setNow] = useState<Date | null>(null);
+  useEffect(() => {
+    setNow(new Date());
+    const timer = window.setInterval(() => setNow(new Date()), 60_000);
+    return () => clearInterval(timer);
+  }, []);
+  const active = inbox.items.filter(item => !item.archivedAt);
+  const unread = active.filter(item => !item.readAt).length;
+  const nextStep = active.find(item => item.key.startsWith("next:"));
+  const visible = sortNotifications(inbox.items).filter(item =>
+    (filter === "archived" ? Boolean(item.archivedAt) : !item.archivedAt && (filter === "all" || (filter === "unread" && !item.readAt) || (filter === "important" && item.important) || item.category === filter)) &&
+    `${item.title} ${item.body} ${channels[item.category].label}`.toLowerCase().includes(query.trim().toLowerCase()));
+  const groups = ["Today", "Yesterday", "Earlier"].map(label => ({ label, items: visible.filter(item => notificationGroup(item.createdAt, now || new Date(0)) === label) }));
+  const timezone = now ? Intl.DateTimeFormat().resolvedOptions().timeZone : "your local timezone";
   return (
-    <main
-      id="main-content"
-      className="min-h-[80vh] bg-[#F8F5EE] px-4 py-8 text-[#0B1F3A] sm:px-6 sm:py-12"
-    >
+    <main id="main-content" className="min-h-[80vh] bg-[#F8F5EE] px-3 py-6 text-[#0B1F3A] [font-family:var(--tgpi-font-sans)] sm:px-6 sm:py-10">
       <div className="mx-auto max-w-6xl">
-        <header className="relative overflow-hidden rounded-[32px] border border-[#B58A2A]/30 bg-[radial-gradient(ellipse_at_top_right,#244867_0%,#0B1F3A_60%)] p-6 text-white shadow-[0_24px_70px_-30px_#0B1F3A] sm:p-10">
-          <p className="text-xs font-extrabold uppercase tracking-[.22em] text-[#E3C57B]">
-            TGPI · Your private intelligence channel
-          </p>
-          <h1 className="mt-3 font-serif text-4xl sm:text-6xl">
-            Your intelligence inbox.
-          </h1>
-          <p className="mt-4 max-w-2xl text-sm leading-7 text-slate-200">
-            Account updates, learning milestones and practical next steps,
-            connected to your global journey.
-          </p>
-          <Link
-            href="/profile"
-            className="mt-5 inline-block text-sm font-bold text-[#E3C57B]"
-          >
-            Open my workspace →
-          </Link>
+        <header className="mb-6 flex flex-wrap items-center justify-between gap-4">
+          <div><p className="text-[10px] font-bold uppercase tracking-[.2em] text-[#805D19]">TGPI / Your activity</p><h1 className="mt-2 text-[30px] font-extrabold tracking-tight [font-family:var(--tgpi-font-sans)] sm:text-4xl">Notifications<span className="ml-3 inline-flex translate-y-[-3px] rounded-full bg-[#0B1F3A] px-2.5 py-1 align-middle text-xs font-bold text-white">{unread}</span></h1><p className="mt-2 text-sm text-slate-600">Your updates. Your progress. Your next move.</p></div>
+          <div className="flex gap-1"><button type="button" className={control} onClick={() => { setShowPreferences(!showPreferences); if (!showPreferences && window.innerWidth < 1024) window.setTimeout(() => document.getElementById("notification-preferences")?.scrollIntoView({ block: "center" }), 0); }} aria-expanded={showPreferences} aria-controls="notification-preferences"><NavigationIcon name="settings" width={18} height={18} />Preferences</button><button type="button" className={control} disabled={inbox.loading || inbox.pending} onClick={() => void inbox.refresh()}><NavigationIcon name="bell" width={18} height={18} />Refresh</button></div>
         </header>
-        <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3">
-          {[{ label: "Unread updates", value: unread }, { label: "Priority updates", value: important }, { label: "Connected channels", value: "5" }].map(stat => <div key={stat.label} className="rounded-2xl border border-[#D8D2C4] bg-white p-5 shadow-[0_8px_24px_-18px_#0B1F3A]"><p className="text-[11px] font-bold uppercase tracking-widest text-slate-500">{stat.label}</p><p className="mt-2 font-serif text-3xl">{inbox.loading ? "—" : stat.value}</p></div>)}
-        </div>
-        <div className="mt-6 grid gap-6 lg:grid-cols-[1fr_320px]">
-          <section
-            aria-label="Notification inbox"
-            className="min-w-0 rounded-[24px] border border-[#D8D2C4] bg-white p-4 sm:p-6"
-          >
-            <div className="flex items-center justify-between gap-3">
-              <h2 className="text-xl font-bold">Your inbox</h2>
-              <button
-                type="button"
-                disabled={inbox.pending}
-                onClick={() => void inbox.refresh()}
-                className="rounded-lg border border-[#D8D2C4] px-3 py-2 text-sm font-bold"
-              >
-                Refresh
-              </button>
-            </div>
-            <label className="mt-5 block"><span className="sr-only">Search your updates</span><input type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder="Search updates, milestones and next steps…" className="w-full rounded-xl border border-[#D8D2C4] bg-[#F8F5EE]/60 px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-[#B58A2A]" /></label>
-            <div
-              aria-label="Filter notifications"
-              className="mt-5 flex flex-wrap gap-2"
-            >
-              {["all", "unread", ...notificationCategories, "archived"].map(
-                (value) => (
-                  <button
-                    type="button"
-                    key={value}
-                    aria-pressed={filter === value}
-                    onClick={() => setFilter(value)}
-                    className={`rounded-full border px-3 py-2 text-xs font-bold capitalize ${filter === value ? "border-[#0B1F3A] bg-[#0B1F3A] text-white" : "border-[#D8D2C4] text-[#0B1F3A]"}`}
-                  >
-                    {value}
-                  </button>
-                ),
-              )}
-            </div>
-            {inbox.error && (
-              <div
-                role="alert"
-                className="mt-5 rounded-xl border border-[#B58A2A] bg-[#F8F5EE] p-4 text-sm"
-              >
-                {inbox.error}
-                <button
-                  type="button"
-                  onClick={() => void inbox.refresh()}
-                  className="ml-2 underline"
-                >
-                  Retry
-                </button>
-              </div>
-            )}
-            {inbox.loading ? (
-              <p role="status" className="py-12 text-center">
-                Loading your private updates…
-              </p>
-            ) : !visible.length && !inbox.error ? (
-              <div className="py-12 text-center">
-                <h3 className="font-serif text-2xl">No updates in this view.</h3>
-                <p className="mt-3 text-sm text-slate-600">
-                  Try another category or continue your journey. Your updates stay connected to your account.
-                </p>
-              </div>
-            ) : null}
-            <div className="mt-5 space-y-3">
-              {visible.map((item) => (
-                <article
-                  key={item.id}
-                  className={`rounded-2xl border p-5 ${item.readAt ? "border-[#D8D2C4] bg-white" : "border-[#B58A2A]/50 bg-[#F8F5EE]"}`}
-                >
-                  <div className="flex flex-wrap items-center gap-2 text-[10px] font-extrabold uppercase tracking-wider">
-                    <span>{item.category}</span>
-                    {!item.readAt && (
-                      <span className="rounded-full bg-[#0B1F3A] px-2 py-1 text-white">
-                        New
-                      </span>
-                    )}
-                    {item.important && (
-                      <span className="text-[#805D19]">Important</span>
-                    )}
-
-                  </div>
-                  <h3 className="mt-3 text-lg font-extrabold">{item.title}</h3>
-                  <p className="mt-2 text-sm leading-6 text-slate-600">
-                    {item.body}
-                  </p>
-                  <div className="mt-4 flex flex-wrap items-center gap-3">
-                    <Link
-                      href={item.href}
-                      onClick={() => {
-                        if (!item.readAt) void inbox.mutate(item.id, "read");
-                      }}
-                      className="rounded-xl bg-[#0B1F3A] px-4 py-2.5 text-xs font-bold text-white"
-                    >
-                      {item.actionLabel} →
-                    </Link>
-                    <button
-                      type="button"
-                      disabled={inbox.pending}
-                      onClick={() =>
-                        void inbox.mutate(
-                          item.id,
-                          item.readAt ? "unread" : "read",
-                        )
-                      }
-                      className="p-2 text-xs font-bold underline disabled:opacity-50"
-                    >
-                      Mark {item.readAt ? "unread" : "read"}
-                    </button>
-                    {!item.archivedAt && (
-                      <button
-                        type="button"
-                        disabled={inbox.pending}
-                        onClick={() => void inbox.mutate(item.id, "archive")}
-                        className="p-2 text-xs text-slate-600 underline disabled:opacity-50"
-                      >
-                        Archive
-                      </button>
-                    )}
-                  </div>
-                </article>
-              ))}
-            </div>
-            {inbox.nextCursor && (
-              <button
-                type="button"
-                disabled={inbox.pending}
-                onClick={() => void inbox.loadMore()}
-                className="mt-5 w-full rounded-xl border border-[#D8D2C4] p-3 text-sm font-bold"
-              >
-                Load older updates
-              </button>
-            )}
+        <div className="grid items-start gap-5 lg:grid-cols-[210px_minmax(0,1fr)_260px]">
+          <nav aria-label="Notification categories" className="flex gap-1 overflow-x-auto rounded-2xl border border-[#D8D2C4]/70 bg-white p-2 lg:sticky lg:top-24 lg:flex-col">
+            {[{ key: "all", label: "All notifications", icon: "bell" as NavigationIconName }, { key: "unread", label: "Unread", icon: "file" as NavigationIconName }, { key: "important", label: "Priority", icon: "target" as NavigationIconName }, ...notificationCategories.map(key => ({ key, ...channels[key] })), { key: "archived", label: "Archived", icon: "check" as NavigationIconName }].map(tab => <button key={tab.key} type="button" onClick={() => setFilter(tab.key)} aria-pressed={filter === tab.key} className={`${control} shrink-0 justify-start whitespace-nowrap ${filter === tab.key ? "bg-[#0B1F3A] text-white hover:bg-[#0B1F3A]" : "text-slate-600"}`}><NavigationIcon name={tab.icon} width={18} height={18} />{tab.label}{tab.key === "unread" && unread > 0 && <span className="ml-auto rounded-md bg-[#B58A2A]/15 px-1.5 text-xs">{unread}</span>}</button>)}
+          </nav>
+          <section aria-label="Your notification timeline" className="min-w-0 overflow-hidden rounded-2xl border border-[#D8D2C4]/70 bg-white shadow-[0_8px_32px_-24px_#0B1F3A]">
+            <div className="border-b border-[#D8D2C4]/60 p-4 sm:p-5"><div className="mb-4 flex flex-wrap items-center justify-between gap-2"><h2 className="text-base font-bold [font-family:var(--tgpi-font-sans)]">{filter === "all" ? "Your activity" : filter === "important" ? "Priority updates" : filter === "archived" ? "Archive" : filter === "unread" ? "Unread updates" : channels[filter as NotificationCategory].label}</h2><button type="button" disabled={!unread || inbox.pending || inbox.loading} onClick={() => void inbox.markAllRead()} className="rounded-lg px-2 py-2 text-xs font-bold text-[#805D19] hover:bg-[#F8F5EE] disabled:opacity-40">Mark recent updates as read</button></div><label className="flex items-center gap-3 rounded-xl border border-[#D8D2C4]/70 bg-[#F8F5EE]/65 px-3 py-2.5 text-slate-500"><NavigationIcon name="search" width={18} height={18} /><span className="sr-only">Search notifications</span><input type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder="Search your notifications" className="min-w-0 flex-1 bg-transparent text-sm text-[#0B1F3A] outline-none focus-visible:ring-2 focus-visible:ring-[#B58A2A]" /></label></div>
+            {inbox.error && <div role="alert" className="m-4 rounded-xl border border-[#B58A2A]/40 bg-[#F8F5EE] p-4 text-sm">{inbox.error}<button type="button" onClick={() => void inbox.refresh()} className="ml-2 font-bold underline">Retry</button></div>}
+            {inbox.loading ? <div role="status" className="space-y-5 p-6">{[1,2,3].map(n => <div key={n} className="flex gap-4 motion-safe:animate-pulse"><div className="h-12 w-12 shrink-0 rounded-full bg-[#F8F5EE]"/><div className="flex-1 space-y-3"><div className="h-3 w-3/4 rounded bg-[#F8F5EE]"/><div className="h-3 w-1/2 rounded bg-[#F8F5EE]"/></div></div>)}<span className="sr-only">Loading notifications</span></div> : !visible.length && !inbox.error ? <div className="px-6 py-16 text-center"><NavigationIcon name="check" className="mx-auto mb-4 text-[#B58A2A]" width={36} height={36}/><h3 className="font-bold [font-family:var(--tgpi-font-sans)]">{query ? "No matching updates" : "You’re all caught up"}</h3><p className="mt-2 text-sm leading-6 text-slate-500">{query ? "Try a different search or category." : "New account and progress updates will appear here."}</p></div> : null}
+            {!inbox.loading && groups.map(group => group.items.length > 0 && <section key={group.label} aria-label={group.label}><h3 className="px-5 pb-2 pt-5 text-xs font-bold uppercase tracking-wider text-slate-500 [font-family:var(--tgpi-font-sans)]">{group.label}</h3><ul>{group.items.map(item => <li key={item.id} className={`group border-b border-[#D8D2C4]/30 last:border-0 ${!item.readAt ? "bg-[#0B1F3A]/[.035]" : "bg-white"}`}><article className="flex gap-3 px-4 py-4 transition hover:bg-[#F8F5EE]/65 sm:gap-4 sm:px-5"><div className={`relative mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-full ${item.important ? "bg-[#B58A2A]/15 text-[#805D19]" : "bg-[#0B1F3A]/[.07] text-[#0B1F3A]"}`}><NavigationIcon name={channels[item.category].icon} width={21} height={21}/></div><div className="min-w-0 flex-1"><div className="mb-1 flex items-center gap-2 text-[10px] font-bold uppercase tracking-wide text-slate-500"><span>{channels[item.category].label}</span>{item.important && <span className="text-[#805D19]">Priority</span>}{!item.readAt && <span aria-label="Unread" className="ml-auto h-2 w-2 rounded-full bg-[#B58A2A]"/>}</div><Link href={item.href} onClick={() => { if (!item.readAt) void inbox.mutate(item.id,"read"); }} className="block rounded focus-visible:outline-2 focus-visible:outline-[#B58A2A]"><h4 className={`text-sm leading-6 [font-family:var(--tgpi-font-sans)] ${item.readAt ? "font-semibold" : "font-extrabold"}`}>{item.title}</h4><p className="mt-1 text-[13px] leading-[1.65] text-slate-600">{item.body}</p></Link><div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px]"><time suppressHydrationWarning dateTime={item.createdAt} title={now ? `${new Date(item.createdAt).toLocaleString(undefined,{dateStyle:"full",timeStyle:"long"})} · ${timezone}` : item.createdAt} className="font-semibold text-[#805D19]">{now ? `${notificationRelativeTime(item.createdAt,now)} · ${new Date(item.createdAt).toLocaleString(undefined,{month:"short",day:"numeric",year:"numeric",hour:"2-digit",minute:"2-digit"})}` : "Loading local time…"}</time>{item.timestampKind === "observed" && <span className="text-slate-500" title="The time this update was first identified by your inbox, not the original event time.">· First identified</span>}</div><div className="mt-2 flex flex-wrap items-center gap-2"><Link href={item.href} onClick={() => { if (!item.readAt) void inbox.mutate(item.id,"read"); }} className="rounded-lg py-1 text-xs font-bold hover:underline">{item.actionLabel} →</Link><span className="text-[#D8D2C4]" aria-hidden="true">·</span><button type="button" disabled={inbox.pending} onClick={() => void inbox.mutate(item.id,item.readAt ? "unread" : "read")} className="rounded-lg px-1 py-1 text-[11px] text-slate-500 hover:text-[#0B1F3A] disabled:opacity-40">Mark {item.readAt ? "unread" : "read"}</button>{!item.archivedAt && <button type="button" disabled={inbox.pending} onClick={() => void inbox.mutate(item.id,"archive")} className="rounded-lg px-1 py-1 text-[11px] text-slate-500 hover:text-[#0B1F3A] disabled:opacity-40">Archive</button>}</div></div></article></li>)}</ul></section>)}
+            {inbox.nextCursor && <button type="button" disabled={inbox.pending} onClick={() => void inbox.loadMore()} className={`${control} my-3 w-full`}>Load earlier updates</button>}
+            <p className="border-t border-[#D8D2C4]/50 px-5 py-3 text-[10px] leading-5 text-slate-500">Times shown in {timezone}. Older updates without an event timestamp show when they were first identified.</p>
           </section>
-          <aside className="space-y-5">
-            {nextStep && <section className="rounded-[24px] border border-[#B58A2A]/40 bg-[#0B1F3A] p-6 text-white shadow-xl"><p className="text-[10px] font-bold uppercase tracking-[.2em] text-[#E3C57B]">Your next best step</p><h2 className="mt-4 font-serif text-2xl">{nextStep.title}</h2><p className="mt-3 text-sm leading-6 text-slate-200">{nextStep.body}</p><Link href={nextStep.href} className="mt-5 inline-flex rounded-xl bg-[#E3C57B] px-4 py-3 text-sm font-bold text-[#0B1F3A]">{nextStep.actionLabel} →</Link></section>}
-            <section className="rounded-[24px] border border-[#D8D2C4] bg-white p-6"><p className="text-[10px] font-bold uppercase tracking-widest text-[#805D19]">Channel status</p><h2 className="mt-3 text-lg font-bold">Connected to your journey</h2><p className="mt-3 text-sm leading-6 text-slate-600">Account · Membership · Learning · Planning · Product</p><p className="mt-3 text-xs leading-5 text-slate-500">Updates refresh while you use TGPI. Security sign-in alerts require the verified webhook. Email delivery is awaiting connection.</p></section>
-            <section className="rounded-[24px] border border-[#D8D2C4] bg-white p-6">
-              <h2 className="text-lg font-bold">You control your inbox.</h2>
-              <p className="mt-2 text-sm leading-6 text-slate-600">
-                Choose which updates you would like by email. Your in-app
-                history stays available here.
-              </p>
-              <p className="mt-4 rounded-xl bg-[#F8F5EE] p-3 text-xs leading-5 text-[#805D19]">
-                Email delivery is not connected yet. Saving a preference does
-                not send an email.
-              </p>
-              <fieldset
-                disabled={
-                  inbox.pending || inbox.loading || Boolean(inbox.error)
-                }
-                className="mt-5 space-y-4"
-              >
-                <legend className="sr-only">Email preferences</legend>
-                {Object.entries(labels).map(([key, label]) => (
-                  <label
-                    key={key}
-                    className="flex items-start gap-3 text-sm leading-5"
-                  >
-                    <input
-                      type="checkbox"
-                      className="mt-1 h-4 w-4 accent-[#0B1F3A]"
-                      checked={
-                        inbox.preferences[key as keyof NotificationPreferences]
-                      }
-                      onChange={(event) =>
-                        void inbox.savePreferences({
-                          ...inbox.preferences,
-                          [key]: event.target.checked,
-                        })
-                      }
-                    />
-                    <span>{label}</span>
-                  </label>
-                ))}
-              </fieldset>
-            </section>
-            <section className="rounded-[24px] bg-[#0B1F3A] p-6 text-white">
-              <p className="text-xs font-bold uppercase tracking-widest text-[#E3C57B]">
-                Built around trust
-              </p>
-              <p className="mt-3 text-sm leading-7 text-slate-200">
-                Updates reflect your recorded account and progress. Read status and preferences are saved to your account. Optional product and planning emails start disabled.
-              </p>
-              <Link
-                href="/privacy"
-                className="mt-4 inline-block text-sm font-bold text-[#E3C57B]"
-              >
-                Privacy and your data →
-              </Link>
-            </section>
+          <aside className="space-y-4 lg:sticky lg:top-24">
+            {nextStep && <section className="rounded-2xl border border-[#B58A2A]/25 bg-[#0B1F3A] p-5 text-white"><div className="flex items-center gap-2 text-[#E3C57B]"><NavigationIcon name="compass" width={18} height={18}/><p className="text-[10px] font-bold uppercase tracking-widest">Recommended for you</p></div><h2 className="mt-4 text-lg font-bold leading-7 [font-family:var(--tgpi-font-sans)]">{nextStep.title}</h2><p className="mt-2 text-xs leading-6 text-slate-300">{nextStep.body}</p><Link href={nextStep.href} className="mt-4 inline-flex rounded-xl bg-[#E3C57B] px-4 py-2.5 text-xs font-bold text-[#0B1F3A]">{nextStep.actionLabel} →</Link></section>}
+            <section className="rounded-2xl border border-[#D8D2C4]/70 bg-white p-5"><h2 className="text-sm font-bold [font-family:var(--tgpi-font-sans)]">Your private activity</h2><p className="mt-2 text-xs leading-6 text-slate-500">Updates follow your account, membership, learning and personal plan.</p><Link href="/profile" className="mt-3 inline-block text-xs font-bold text-[#805D19]">Open my workspace →</Link></section>
+            <section id="notification-preferences" hidden={!showPreferences} className="rounded-2xl border border-[#D8D2C4]/70 bg-white p-5"><h2 className="text-sm font-bold [font-family:var(--tgpi-font-sans)]">Email preferences</h2><p className="mt-2 text-xs leading-6 text-slate-500">Email delivery is not connected. Your choices are saved for future activation.</p><fieldset disabled={inbox.pending || inbox.loading || Boolean(inbox.error)} className="mt-4 space-y-4"><legend className="sr-only">Email categories</legend>{Object.entries(preferences).map(([key,label]) => <label key={key} className="flex items-start gap-3 text-xs leading-5"><input type="checkbox" checked={inbox.preferences[key as keyof NotificationPreferences]} onChange={event => void inbox.savePreferences({...inbox.preferences,[key]:event.target.checked})} className="mt-0.5 h-4 w-4 accent-[#0B1F3A]"/>{label}</label>)}</fieldset></section>
+            <p className="px-2 text-[10px] leading-5 text-slate-500">Private to your account. <Link href="/privacy" className="underline">Privacy</Link><br/>Email and security sign-in delivery await their external integrations.</p>
           </aside>
         </div>
       </div>
