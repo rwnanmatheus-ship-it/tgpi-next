@@ -17,6 +17,8 @@ export default function SignInPage() {
         routing="path"
         signUpUrl="/sign-up"
         fallbackRedirectUrl="/profile"
+        signUpForceRedirectUrl="/welcome"
+        fallback={<p role="status">Loading secure sign in…</p>}
         appearance={tgpiClerkAppearance}
       />
     </TGPIAuthShell>
