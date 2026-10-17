@@ -1,10 +1,11 @@
+import { seriesCourses } from "@/data/courses/series-courses";
 import { appliedCourses } from "@/data/courses/applied-paths";
 import { englishAbroadCourse } from "@/data/courses/english-abroad";
 import type { Course, CourseLesson } from "@/types/course";
 
 export type { Course, CourseLesson, CourseModule } from "@/types/course";
 
-export const courses: Course[] = [englishAbroadCourse, ...appliedCourses];
+export const courses: Course[] = [englishAbroadCourse, ...appliedCourses, ...seriesCourses];
 
 export function getCourse(courseId: string) {
   return courses.find((course) => course.id === (courseId === "english-abroad" ? "global-english-2026" : courseId));

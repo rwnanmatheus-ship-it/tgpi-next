@@ -106,7 +106,8 @@ export type ActivationMutation =
 const MAX_ACTIVITIES = 6;
 const MAX_COMPARISONS = 4;
 const MAX_COUNTRY_RECORDS = 4;
-const MAX_COURSES = 4;
+// Keep a bounded record while supporting the expanded TGPI learning library.
+const MAX_COURSES = 64;
 const MAX_SAVED_COUNTRIES = 8;
 
 export function createEmptyActivationProgress(): TgpiActivationProgress {
@@ -227,9 +228,13 @@ function normalizeCourseProgress(value: unknown) {
 
   return Object.fromEntries(
     Object.entries(value)
-      .filter(([, item]) => isRecord(item))
+      .filter(([, item]) => isRecord(item) || (Array.isArray(item) && item.length === 7))
       .map(([courseId, item]) => {
-        const progress = item as Record<string, unknown>;
+        // Storage tuples preserve all fields while avoiding repeated property names.
+        // Legacy object records remain readable for existing accounts.
+        const progress: Record<string, unknown> = Array.isArray(item)
+          ? { courseVersion: item[0], totalLessons: item[1], startedAt: item[2], updatedAt: item[3], lastLessonId: item[4], completedAt: item[5], completedLessonIds: item[6] }
+          : item as Record<string, unknown>;
         return [
           courseId.slice(0, 80),
           {
@@ -296,6 +301,18 @@ export function normalizeActivationProgress(
     ),
     updatedAt: safeDate(value.updatedAt) || undefined,
     version: 1,
+  };
+}
+
+
+/** Compact persistence format; the API and UI continue to use named fields. */
+export function serializeActivationProgressForStorage(progress: TgpiActivationProgress) {
+  return {
+    ...progress,
+    courseProgress: Object.fromEntries(Object.entries(progress.courseProgress).map(([id, record]) => [id, [
+      record.courseVersion, record.totalLessons, record.startedAt, record.updatedAt,
+      record.lastLessonId ?? null, record.completedAt ?? null, record.completedLessonIds,
+    ]])),
   };
 }
 
