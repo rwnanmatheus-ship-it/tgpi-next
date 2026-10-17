@@ -402,10 +402,10 @@ function CourseOverview({ course }: { course: Course }) {
               Full curriculum
             </p>
             <h2 id="curriculum-title" className="mt-4 text-4xl font-semibold sm:text-6xl">
-              Six stages from arrival to independence.
+              {course.id === "global-english-2026" ? "Six stages from arrival to independence." : `${course.modules.length} modules. One practical outcome at a time.`}
             </h2>
             <p className="mt-5 text-base leading-8 text-[var(--tgpi-muted)]">
-              Each lesson combines a real situation, language patterns, a model dialogue, coaching and a practical checkpoint.
+              {course.id === "global-english-2026" ? "Each lesson combines a real situation, language patterns, a model dialogue, coaching and a practical checkpoint." : "Each lesson combines a realistic scenario, a worked example, a practical output and a formative checkpoint."}
             </p>
           </div>
 
@@ -464,7 +464,7 @@ function CourseOverview({ course }: { course: Course }) {
                           </span>
                           <span>
                             <span className="block text-base font-extrabold text-[var(--tgpi-navy)]">{lesson.title}</span>
-                            <span className="mt-1 block text-sm leading-6 text-[var(--tgpi-muted)]">{lesson.summary}</span>
+                            <span className="mt-1 block text-sm leading-6 text-[var(--tgpi-muted)]">{course.id === "global-english-2026" ? lesson.summary : lesson.objective}</span>
                           </span>
                           <span className="flex items-center justify-between gap-4 sm:justify-end">
                             <span className="text-xs font-bold text-[var(--tgpi-muted)]">{lesson.durationMinutes} min</span>
