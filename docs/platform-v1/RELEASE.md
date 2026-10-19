@@ -61,3 +61,11 @@ Next verification work, when test access is available: five-width browser matrix
 ### Post-publication correction
 
 Browser verification reproduced an explorer return bug: the address retained the query and selection after Comparison → Back, while a cached client subtree initialized its local filters from stale props. The correction derives filters directly from a subscribed location snapshot (`useSyncExternalStore`) with a deterministic server snapshot. Added a URL restoration regression test. Hero layers use explicit positive stacking to keep artwork above its base surface. Recheck the public comparison-and-return journey after this correction is deployed.
+
+### Production smoke verification — 2026-10-19
+
+Corrected the existing deployment smoke script to reflect the current course catalogue, data-driven learning continuation and public course overview. It now recognizes Next.js streamed sign-in redirects as well as HTTP redirects, while still requiring an explicit sign-in destination. This updates verification only; authorization rules are unchanged.
+
+`node scripts/verify-premium-command-center.mjs https://www.theglobalpolymath.com` passed all 11 source contracts and 10 live runtime contracts: Premium and profile protection, public course curriculum, lesson protection, comparison/document/cost/catalogue destinations, and private/no-store 401 responses from progress and billing APIs. Targeted ESLint passed. The legacy English course URL was separately confirmed to redirect to its canonical course URL.
+
+Authenticated validation remains blocked on a dedicated test identity. The secure browser credential form could not validate its password control; no credentials were entered and no account was modified. Stripe is discoverable as an optional connector but is not connected in this session; no sandbox checkout, live payment or certificate issuance is claimed.
