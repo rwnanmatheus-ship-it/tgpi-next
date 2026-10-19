@@ -18,7 +18,6 @@ import {
   type MobileCountry,
 } from "@/lib/mobile-experience";
 import {
-  getSuperAppModule,
   searchSuperAppModules,
   SUPER_APP_OPEN_EVENT,
 } from "@/lib/super-app";
@@ -41,7 +40,6 @@ function MobileNavigationContent({ pathname }: { pathname: string }) {
   const [retry, setRetry] = useState(0);
   const [keyboardOpen, setKeyboardOpen] = useState(false);
   const focused = isFocusedMobileRoute(pathname);
-  const currentModule = getSuperAppModule(pathname);
   const countryResults = searchMobileCountries(countries, query);
   const moduleResults = query.trim() ? searchSuperAppModules(query).slice(0, 4) : [];
 
@@ -133,11 +131,11 @@ function MobileNavigationContent({ pathname }: { pathname: string }) {
         aria-label="TGPI compact navigation"
         data-navigation-version="2"
       >
-        <Link href="/" className="tgpi-compact-brand" aria-label="TGPI home">
-          <BrandCrest width={32} height={40} sizes="32px" className="object-contain" />
+        <Link href="/" className="tgpi-compact-brand" aria-label="TGPI — The Global Polymath Institute home">
+          <BrandCrest width={38} height={46} sizes="38px" className="object-contain" />
           <span>
             <strong>TGPI</strong>
-            <small>{currentModule?.shortLabel ?? "Global Intelligence"}</small>
+            <small title="The Global Polymath Institute">Global Polymath Institute</small>
           </span>
         </Link>
         <div className="tgpi-compact-actions">

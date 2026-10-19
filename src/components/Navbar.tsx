@@ -24,12 +24,12 @@ export default function Navbar() {
       data-navigation-version="2"
     >
       <Container className="tgpi-desktop-navigation-frame">
-        <Link href="/" className="tgpi-desktop-brand" aria-label="TGPI home">
+        <Link href="/" className="tgpi-desktop-brand" aria-label="TGPI — The Global Polymath Institute home">
           <span className="tgpi-desktop-brand-crest">
             <BrandCrest
               fill
               priority
-              sizes="42px"
+              sizes="48px"
               className="object-contain drop-shadow-[0_7px_15px_rgba(7,26,50,0.2)]"
             />
           </span>
@@ -37,7 +37,7 @@ export default function Navbar() {
             <span className="block font-[var(--tgpi-font-display)] text-[1.45rem] font-bold leading-none tracking-[0.055em] text-[var(--tgpi-navy)]">
               TGPI
             </span>
-            <span className="tgpi-desktop-brand-line">Global Intelligence OS</span>
+            <span className="tgpi-desktop-brand-line">The Global Polymath Institute</span>
           </span>
         </Link>
 
@@ -82,7 +82,7 @@ export default function Navbar() {
 
           <Show when="signed-in">
             <NotificationBell />
-            <Link href="/profile" className="tgpi-navigation-workspace-button">
+            <Link href="/profile" aria-label="Open your TGPI workspace" title="Your personal workspace" className="tgpi-navigation-workspace-button">
               <NavigationIcon name="key" width={18} height={18} />
               <span className="tgpi-workspace-label">Workspace</span>
             </Link>
