@@ -1,0 +1,44 @@
+.workspace {
+  background: radial-gradient(ellipse at 75% 0, #12315355, transparent 38%), #040b13;
+  font-size: 15px;
+  container-type: inline-size;
+}
+.workspace *, .workspace *::before, .workspace *::after { box-sizing: border-box; }
+.workspace :is(section,article,nav,aside,header,dl,div) { min-width: 0; }
+.workspace :is(h1,h2,h3,p,dt,dd,a) { overflow-wrap: anywhere; }
+.workspace :global(.tgpi-card-3d) {
+  background-image: linear-gradient(145deg, #14283a, #0b1928 48%, #09121d);
+  box-shadow: inset 0 1px 0 #ffffff14, 0 12px 28px #00000029;
+  transform: none;
+  isolation: isolate;
+}
+.workspace :global(.tgpi-card-3d)::before,
+.workspace :global(.tgpi-card-3d)::after { display: none; }
+.workspace :is(a,button) { -webkit-tap-highlight-color: transparent; }
+.workspace :is(a,button):focus-visible { outline: 2px solid #e5b94b; outline-offset: 4px; }
+.workspace :is(p,span,dt)[class*="text-[10px]"],
+.workspace :is(p,span,dt)[class*="text-[11px]"] { font-size: 0.75rem; line-height: 1.6; }
+.header { display: grid; gap: 20px; }
+.mainGrid { grid-template-columns: minmax(0,1fr); }
+.missionGrid { grid-template-columns: minmax(0,1fr); }
+.journey { grid-template-columns: repeat(2,minmax(0,1fr)); }
+.milestonePanel {
+  border: 1px solid #ffffff17;
+  border-radius: 26px;
+  padding: clamp(20px,2.5vw,28px);
+  background: radial-gradient(ellipse at top right,#1a426155,transparent 65%),linear-gradient(135deg,#101e2d,#09131f);
+  box-shadow: inset 0 1px #ffffff10,0 16px 40px #00000020;
+}
+.milestones { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; margin-top: 22px; }
+.milestone { display: flex; align-items: flex-start; gap: 12px; border: 1px solid #ffffff14; border-radius: 16px; padding: 16px; background: #ffffff03; transition: border-color .2s,background .2s; }
+.step { display: grid; place-items: center; flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%; border: 1px solid #8fa0b255; color: #aebccc; font-size: 12px; }
+.milestone[data-complete="true"] .step { color: #f1d383; border-color: #e5b94b66; background: #e5b94b15; box-shadow: 0 0 20px #e5b94b0a; }
+.modules { display: grid; gap: 12px; margin-top: 24px; grid-template-columns: repeat(2,minmax(0,1fr)); }
+.module { display: flex; align-items: flex-start; gap: 12px; padding: 18px; border: 1px solid #ffffff17; border-radius: 18px; background: linear-gradient(135deg,#1d35474d,#08121e); box-shadow: inset 0 1px #ffffff10,0 6px 15px #00000020; transition: transform .2s,border-color .2s; }
+.moduleIcon { display: grid; place-items: center; flex-shrink: 0; width: 44px; height: 44px; border-radius: 14px; color: #f0d58c; border: 1px solid #e5b94b33; background: linear-gradient(135deg,#e5b94b19,#e5b94b05); box-shadow: inset 0 1px #ffffff18,0 4px 8px #00000020; }
+@media (hover:hover) { .module:hover { transform: translateY(-3px); border-color: #e5b94b66; } .milestone:hover { background: #e5b94b09; border-color: #e5b94b55; } }
+@container (min-width: 1350px) { .mainGrid { grid-template-columns: minmax(0,1fr) minmax(280px,320px); } }
+@container (min-width: 1650px) { .header { grid-template-columns: minmax(0,1fr) minmax(300px,430px); align-items: center; } .missionGrid { grid-template-columns: minmax(0,1fr) minmax(210px,250px); align-items: end; } }
+@media (min-width: 1200px) { .milestones { grid-template-columns: repeat(5,minmax(0,1fr)); } .milestone { flex-direction: column; } }
+@media (max-width: 600px) { .journey,.modules { grid-template-columns: minmax(0,1fr); } .milestones { grid-template-columns: minmax(0,1fr); } .module { padding: 16px; } }
+@media (prefers-reduced-motion:reduce) { .workspace *, .workspace *::before,.workspace *::after { transition: none !important; animation: none !important; } .module:hover { transform: none; } }
