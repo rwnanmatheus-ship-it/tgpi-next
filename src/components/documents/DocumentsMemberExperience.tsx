@@ -1,267 +1,67 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import type { DocumentsMemberModel } from "@/lib/documents-os";
 import CapabilitySystemRail from "@/components/capability/CapabilitySystemRail";
+import WorkspaceSyncButton from "@/components/profile/WorkspaceSyncButton";
 
-const statusLabels = {
-  completed: "Ready",
-  in_progress: "In progress",
-  needs_attention: "Needs attention",
-  not_started: "Not started",
-} as const;
+const statusLabels = { completed: "Reviewed", in_progress: "In progress", needs_attention: "Check required", not_started: "Not started" } as const;
+type Filter = "all" | "pending" | "completed";
 
-const statusStyles = {
-  completed: "border-[#83C9A9]/45 bg-[#EAF7F0] text-[#176646]",
-  in_progress: "border-[#D6B65F]/45 bg-[#FBF2D8] text-[#7B5818]",
-  needs_attention: "border-[#D98B72]/45 bg-[#FFF0EA] text-[#91452E]",
-  not_started: "border-[#D8D2C4] bg-[#F4F1EA] text-[#657082]",
-} as const;
-
-export default function DocumentsMemberExperience({
-  firstName,
-  globalId,
-  model,
-}: {
-  firstName: string;
-  globalId: string;
-  model: DocumentsMemberModel;
+export default function DocumentsMemberExperience({ firstName, globalId, model }: {
+  firstName: string; globalId: string; model: DocumentsMemberModel;
 }) {
+  const [filter, setFilter] = useState<Filter>("all");
+  const [search, setSearch] = useState("");
+  const countries = model.countries.filter(country =>
+    country.name.toLowerCase().includes(search.trim().toLowerCase()) &&
+    (filter === "all" || (filter === "completed" ? country.status === "completed" : country.status !== "completed")),
+  );
+  const remaining = Math.max(0, model.totalItems - model.completedItems);
   return (
-    <main className="min-h-screen overflow-x-clip bg-[var(--tgpi-canvas)] text-[var(--tgpi-ink)]">
-      <div className="tgpi-capability-frame py-6 sm:py-10 lg:py-14">
-        <CapabilitySystemRail
-          active="documents"
-          metric={{
-            detail: "A preparation signal—not a visa, admission or legal eligibility decision.",
-            label: "Document readiness",
-            value: `${model.readinessScore}%`,
-          }}
-        />
-        <section className="relative isolate mt-6 overflow-hidden rounded-[30px] border border-white/10 bg-[var(--tgpi-navy)] text-white shadow-[var(--tgpi-shadow-premium)] sm:rounded-[36px]">
-          <Image
-            src="/images/documents/tgpi-documents-hero-v2.webp"
-            alt="TGPI global evidence observatory connecting an illuminated world atlas with organized document research"
-            fill
-            priority
-            quality={88}
-            sizes="100vw"
-            className="object-cover object-[72%_center] sm:object-[68%_center] lg:object-center"
-          />
-          <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(4,20,38,0.95)_0%,rgba(4,20,38,0.90)_70%,rgba(4,20,38,0.80)_100%)] lg:bg-[linear-gradient(90deg,rgba(4,20,38,0.99)_0%,rgba(4,20,38,0.94)_43%,rgba(4,20,38,0.40)_72%,rgba(4,20,38,0.14)_100%)]" />
-          <div className="pointer-events-none absolute -left-24 top-[-7rem] h-80 w-80 rounded-full bg-[var(--tgpi-gold)]/10 blur-3xl" aria-hidden="true" />
-
-          <div className="relative z-10 flex min-h-[620px] flex-col justify-center p-7 sm:min-h-[580px] sm:p-9 lg:h-[540px] lg:min-h-0 lg:p-10 xl:p-12">
-            <div className="max-w-[680px]">
-              <div className="flex flex-wrap items-center gap-2">
-                <span className="rounded-full border border-[var(--tgpi-gold)]/35 bg-[var(--tgpi-gold)]/10 px-3 py-2 text-[9px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-light)]">
-                  TGPI Documents OS
-                </span>
-                <span className="rounded-full border border-white/15 bg-white/5 px-3 py-2 text-[9px] font-extrabold uppercase tracking-[0.16em] text-white/60">
-                  Private command center
-                </span>
-              </div>
-              <h1 className="mt-5 max-w-2xl font-[var(--tgpi-font-display)] text-[clamp(2.65rem,4.5vw,4.2rem)] font-semibold leading-[0.96] tracking-[-0.045em]">
-                {firstName}, turn preparation into progress.
-              </h1>
-              <p className="mt-5 max-w-xl text-sm leading-7 text-white/68 sm:text-base sm:leading-8">
-                Your destination research, readiness checks, learning evidence and
-                verified achievements now share one strategic view.
-              </p>
-
-              <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-                <Link
-                  href={model.nextAction.href}
-                  className="inline-flex min-h-13 items-center justify-center rounded-2xl bg-[var(--tgpi-gold)] px-6 text-sm font-extrabold text-[var(--tgpi-navy-deep)] transition hover:-translate-y-0.5 hover:bg-[var(--tgpi-gold-light)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
-                >
-                  {model.nextAction.label}
-                </Link>
-                <Link
-                  href="/profile"
-                  className="inline-flex min-h-13 items-center justify-center rounded-2xl border border-white/20 bg-white/5 px-6 text-sm font-extrabold text-white transition hover:-translate-y-0.5 hover:border-[var(--tgpi-gold)]/60 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
-                >
-                  Open global workspace
-                </Link>
-              </div>
-
-              <dl className="mt-6 grid max-w-xl grid-cols-3 gap-2 border-t border-white/10 pt-5">
-                {[
-                  [`${model.readinessScore}%`, "Document readiness"],
-                  [String(model.countries.length).padStart(2, "0"), "Target countries"],
-                  [String(model.completedItems).padStart(2, "0"), "Items reviewed"],
-                ].map(([value, label]) => (
-                  <div key={label}>
-                    <dt className="text-2xl font-extrabold text-[var(--tgpi-gold-light)]">
-                      {value}
-                    </dt>
-                    <dd className="mt-1 text-[9px] font-extrabold uppercase tracking-[0.15em] text-white/45">
-                      {label}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
-            </div>
-
-            <div className="absolute bottom-8 right-9 hidden max-w-[290px] rounded-[22px] border border-white/15 bg-[var(--tgpi-navy-deep)]/60 p-5 text-right backdrop-blur-md lg:block">
-              <p className="text-[9px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-light)]">
-                TGPI Global ID
-              </p>
-              <p className="mt-2 break-all text-sm font-bold leading-6 text-white/85">
-                {globalId}
-              </p>
-              <p className="mt-2 text-xs text-white/50">{model.goalLabel}</p>
-            </div>
+    <main className="documents-os">
+      <div className="tgpi-capability-frame documents-shell">
+        <nav className="documents-breadcrumb" aria-label="Breadcrumb"><Link href="/profile">Workspace</Link><span aria-hidden="true">/</span><span>Documents</span></nav>
+        <header className="documents-hero">
+          <Image src="/images/documents/tgpi-documents-hero-v2.webp" alt="" fill priority sizes="(max-width: 900px) 100vw, 85rem" quality={85} className="documents-hero-image" />
+          <div className="documents-hero-copy">
+            <p className="documents-eyebrow">TGPI · Preparation intelligence</p>
+            <h1>{firstName}, make your next move a prepared one.</h1>
+            <p className="documents-intro">Your destination files, planning context and learning evidence. Connected to one identity, with a clear next step.</p>
+            <div className="documents-actions"><Link className="documents-button" href={model.nextAction.href}>{model.nextAction.label} <span aria-hidden="true">↗</span></Link><a className="documents-button secondary" href="#destination-files">View my files ↓</a></div>
+            <div className="documents-identity"><Link href="/global-key">{globalId}</Link><span>{model.goalLabel}</span></div>
           </div>
-        </section>
-
-        <section aria-label="Document readiness metrics" className="mt-5 grid grid-cols-2 gap-3 lg:grid-cols-4">
-          {[
-            [String(model.countries.length), "Target countries"],
-            [String(model.startedCountryReviews), "Reviews started"],
-            [String(model.completedItems), "Items reviewed"],
-            [model.goalLabel, "Primary objective"],
-          ].map(([value, label]) => (
-            <article key={label} className="rounded-[22px] border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] p-5">
-              <p className="font-[var(--tgpi-font-display)] text-3xl font-semibold leading-none text-[var(--tgpi-navy)]">
-                {value}
-              </p>
-              <p className="mt-3 text-[9px] font-extrabold uppercase tracking-[0.17em] text-[var(--tgpi-muted)]">
-                {label}
-              </p>
-            </article>
-          ))}
-        </section>
-
-        <section className="mt-8 grid gap-5 lg:grid-cols-[1.2fr_.8fr]">
-          <div className="rounded-[32px] border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] p-5 shadow-[var(--tgpi-shadow-premium)] sm:p-8">
-            <div className="flex flex-wrap items-end justify-between gap-4">
-              <div>
-                <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[var(--tgpi-gold-strong)]">
-                  Destination files
-                </p>
-                <h2 className="mt-3 font-[var(--tgpi-font-display)] text-4xl font-semibold leading-none tracking-[-0.035em] text-[var(--tgpi-navy)]">
-                  Country-aware preparation
-                </h2>
-              </div>
-              <Link href="/countries" className="text-sm font-extrabold text-[var(--tgpi-gold-strong)]">
-                Manage countries →
-              </Link>
-            </div>
-
-            {model.countries.length > 0 ? (
-              <div className="mt-7 grid gap-3 sm:grid-cols-2">
-                {model.countries.map((country) => (
-                  <article key={country.slug} className="rounded-[24px] border border-[var(--tgpi-border)] bg-[var(--tgpi-canvas)] p-5">
-                    <div className="flex items-start justify-between gap-4">
-                      <div className="flex min-w-0 items-center gap-3">
-                        <span aria-hidden="true" className="text-3xl">{country.emoji}</span>
-                        <div className="min-w-0">
-                          <h3 className="truncate text-lg font-extrabold text-[var(--tgpi-navy)]">{country.name}</h3>
-                          <p className="mt-1 text-xs text-[var(--tgpi-muted)]">
-                            {country.totalItems > 0
-                              ? `${country.completedItems}/${country.totalItems} research items`
-                              : "Review not started"}
-                          </p>
-                        </div>
-                      </div>
-                      <span className={`shrink-0 rounded-full border px-3 py-1 text-[9px] font-extrabold uppercase tracking-[0.14em] ${statusStyles[country.status]}`}>
-                        {statusLabels[country.status]}
-                      </span>
-                    </div>
-                    <div className="mt-5 h-2 overflow-hidden rounded-full bg-[#E7E2D8]">
-                      <div className="h-full rounded-full bg-[var(--tgpi-gold)]" style={{ width: `${country.percentage}%` }} />
-                    </div>
-                    <Link href={country.href} className="mt-5 inline-flex text-sm font-extrabold text-[var(--tgpi-gold-strong)]">
-                      {country.status === "not_started" ? "Start document review" : "Continue document review"} →
-                    </Link>
-                  </article>
-                ))}
-              </div>
-            ) : (
-              <div className="mt-7 rounded-[24px] border border-dashed border-[var(--tgpi-gold)]/55 bg-[var(--tgpi-gold-soft)] p-6 sm:p-8">
-                <p className="text-lg font-extrabold text-[var(--tgpi-navy)]">No destination file yet.</p>
-                <p className="mt-2 max-w-2xl text-sm leading-7 text-[#4A3B1B]">
-                  Choose a country and TGPI will connect its research checklist to this command center.
-                </p>
-                <Link href="/countries" className="mt-5 inline-flex min-h-12 items-center justify-center rounded-2xl bg-[var(--tgpi-navy)] px-5 text-sm font-extrabold text-white">
-                  Choose my first country
-                </Link>
-              </div>
-            )}
-          </div>
-
-          <aside className="rounded-[32px] bg-[#102B4C] p-6 text-white shadow-[0_28px_70px_rgba(11,31,58,0.18)] sm:p-8">
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[var(--tgpi-gold)]">
-              Next best action
-            </p>
-            <h2 className="mt-5 font-[var(--tgpi-font-display)] text-4xl font-semibold leading-none tracking-[-0.035em]">
-              {model.nextAction.title}
-            </h2>
-            <p className="mt-5 text-sm leading-7 text-white/65">
-              {model.nextAction.description}
-            </p>
-            <Link href={model.nextAction.href} className="mt-8 inline-flex min-h-12 w-full items-center justify-center rounded-2xl bg-[var(--tgpi-gold)] px-5 text-sm font-extrabold text-[var(--tgpi-navy)]">
-              {model.nextAction.label}
-            </Link>
-            <div className="mt-8 border-t border-white/10 pt-6">
-              <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-white/40">System principle</p>
-              <p className="mt-3 text-sm leading-7 text-white/65">
-                TGPI measures preparation signals. It never presents a readiness score as a visa, admission or employment decision.
-              </p>
-            </div>
+          <aside className="documents-score" aria-label="Preparation score">
+            <p className="documents-eyebrow">Preparation signals</p><strong>{model.readinessScore}<small>/100</small></strong>
+            <progress max={100} value={model.readinessScore} aria-label="Preparation signals achieved" />
+            <p>A planning indicator based on your profile and checklist activity. Review the breakdown below.</p>
+            <WorkspaceSyncButton />
           </aside>
+        </header>
+        <nav className="documents-jump" aria-label="Documents sections"><a href="#destination-files">Destination files</a><a href="#readiness-architecture">Readiness architecture</a><a href="#preparation-signals">Score breakdown</a><Link href="/profile/settings">Planning settings ↗</Link></nav>
+        <section className="documents-stats" aria-label="Your preparation overview">
+          {[[model.countries.length, "Connected destinations"], [remaining, "Research items remaining"], [model.completedCourses, "Courses completed"], [model.credentialCount ?? "—", "Active certificates"]].map(([value, label]) => <div key={label}><strong>{value}</strong><span>{label}</span></div>)}
         </section>
-
-        <section className="mt-8 rounded-[32px] border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] p-5 sm:p-8 lg:p-10">
-          <div className="grid gap-5 lg:grid-cols-[.72fr_1.28fr] lg:items-end">
-            <div>
-              <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[var(--tgpi-gold-strong)]">Readiness architecture</p>
-              <h2 className="mt-3 font-[var(--tgpi-font-display)] text-4xl font-semibold leading-none tracking-[-0.035em] text-[var(--tgpi-navy)] sm:text-5xl">
-                Six layers. One global strategy.
-              </h2>
-            </div>
-            <p className="text-sm leading-7 text-[var(--tgpi-muted)]">
-              Every layer has a distinct role. Identity and credentials remain separate from legal documents, while TGPI connects the evidence needed for better decisions.
-            </p>
-          </div>
-
-          <div className="mt-8 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-            {model.layers.map((layer, index) => (
-              <Link key={layer.label} href={layer.href} className="group rounded-[24px] border border-[var(--tgpi-border)] bg-[var(--tgpi-canvas)] p-5 transition hover:-translate-y-1 hover:border-[var(--tgpi-gold)]">
-                <div className="flex items-center justify-between gap-4">
-                  <span className="font-[var(--tgpi-font-display)] text-2xl font-semibold text-[var(--tgpi-gold-strong)]">0{index + 1}</span>
-                  <span className={`rounded-full border px-3 py-1 text-[9px] font-extrabold uppercase tracking-[0.14em] ${statusStyles[layer.status]}`}>
-                    {statusLabels[layer.status]}
-                  </span>
-                </div>
-                <h3 className="mt-6 text-xl font-extrabold text-[var(--tgpi-navy)]">{layer.label}</h3>
-                <p className="mt-3 text-sm leading-7 text-[var(--tgpi-muted)]">{layer.description}</p>
-              </Link>
-            ))}
-          </div>
+        <section className="documents-next" aria-labelledby="next-step-title"><div><p className="documents-eyebrow">Recommended next step</p><h2 id="next-step-title">{model.nextAction.title}</h2><p>{model.nextAction.description}</p></div><Link className="documents-button" href={model.nextAction.href}>{model.nextAction.label} →</Link></section>
+        <section id="destination-files" className="documents-section">
+          <div className="documents-section-heading"><div><p className="documents-eyebrow">Your research portfolio</p><h2>Destination files</h2><p>See what you have reviewed and where preparation still needs attention.</p></div><Link className="documents-text-link" href="/countries">Add a destination ↗</Link></div>
+          <div className="documents-toolbar"><div className="documents-filters" role="group" aria-label="Filter destination files">{([ ["all", "All files"], ["pending", "To review"], ["completed", "Reviewed"] ] as const).map(([value, label]) => <button type="button" aria-pressed={filter === value} key={value} onClick={() => setFilter(value)}>{label}</button>)}</div><label className="documents-search"><span className="sr-only">Search your destinations</span><input type="search" value={search} onChange={event => setSearch(event.target.value)} placeholder="Search destinations…" /></label></div>
+          <p className="documents-result-count" role="status">{countries.length} of {model.countries.length} destination files · {model.completedItems}/{model.totalItems} research items reviewed</p>
+          <div className="documents-country-grid">{countries.map(country => <article className="documents-country" key={country.slug}>
+            <div className="documents-country-heading"><span aria-hidden="true" className="documents-flag">{country.emoji}</span><span className="documents-status" data-status={country.status}>{statusLabels[country.status]}</span></div>
+            <h3>{country.name}</h3><p>{country.totalItems ? `${country.completedItems} of ${country.totalItems} research items reviewed` : "Open the checklist to establish your preparation baseline."}</p>
+            <div className="documents-progress-label"><span>Checklist progress</span><strong>{country.percentage}%</strong></div><progress value={country.percentage} max={100} aria-label={`${country.name} checklist progress`} />
+            <p className="documents-updated">{country.updatedAt ? `Last checklist change: ${new Date(country.updatedAt).toISOString().slice(0, 10)}` : "No checklist activity recorded"}</p>
+            <Link className="documents-country-link" href={country.href}>{country.status === "not_started" ? "Start research" : "Open checklist"}<span aria-hidden="true">↗</span></Link>
+          </article>)}</div>
+          {countries.length === 0 && <div className="documents-empty"><h3>{model.countries.length ? "No files match this view." : "Your first destination starts here."}</h3><p>{model.countries.length ? "Try another name or show all files." : "Choose a destination to connect its document checklist to your plan."}</p>{model.countries.length ? <button className="documents-button" type="button" onClick={() => { setSearch(""); setFilter("all"); }}>Show all files</button> : <Link className="documents-button" href="/countries">Choose a destination →</Link>}</div>}
         </section>
-
-        <section className="mt-8 grid gap-4 lg:grid-cols-3">
-          {[
-            ["Country Intelligence", "Validate the destination context behind every preparation decision.", "/countries", "Open countries"],
-            ["TGPI Learning", "Build language and global capabilities that become meaningful evidence.", "/courses", "Open learning"],
-            ["Verified Credentials", "Keep completed TGPI achievements distinct, signed and publicly verifiable.", "/certificates", "Open credentials"],
-          ].map(([title, description, href, action]) => (
-            <article key={title} className="rounded-[28px] border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] p-6 sm:p-7">
-              <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-strong)]">Connected system</p>
-              <h2 className="mt-4 font-[var(--tgpi-font-display)] text-3xl font-semibold text-[var(--tgpi-navy)]">{title}</h2>
-              <p className="mt-4 text-sm leading-7 text-[var(--tgpi-muted)]">{description}</p>
-              <Link href={href} className="mt-7 inline-flex text-sm font-extrabold text-[var(--tgpi-gold-strong)]">{action} →</Link>
-            </article>
-          ))}
-        </section>
-
-        <section className="mt-8 rounded-[28px] border border-[var(--tgpi-gold)]/45 bg-[var(--tgpi-gold-soft)] p-6 sm:p-8">
-          <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold-strong)]">Privacy boundary</p>
-          <h2 className="mt-2 font-[var(--tgpi-font-display)] text-3xl font-semibold text-[var(--tgpi-navy)]">Your workspace stores preparation progress — not copies of legal documents.</h2>
-          <p className="mt-3 max-w-5xl text-sm leading-7 text-[#4A3B1B]">
-            TGPI will only request a legal file inside a clearly identified, secured verification workflow. A passport number, document image or TGPI Global ID is never a password or recovery secret.
-          </p>
-        </section>
+        <section id="readiness-architecture" className="documents-section"><div className="documents-section-heading"><div><p className="documents-eyebrow">Readiness architecture</p><h2>Six layers. Clear priorities.</h2><p>Open any layer to strengthen the evidence behind your global plan.</p></div><span className="documents-completion">{model.layers.filter(layer => layer.status === "completed").length}/6 layers with progress achieved</span></div><div className="documents-layer-grid">{model.layers.map((layer, index) => <Link className="documents-layer" key={layer.label} href={layer.href}><div className="documents-layer-top"><span className="documents-layer-number">0{index + 1}</span><span className="documents-status" data-status={layer.status}>{layer.status === "completed" ? "Connected" : statusLabels[layer.status]}</span></div><h3>{layer.label}<span aria-hidden="true">↗</span></h3><p>{layer.description}</p></Link>)}</div></section>
+        <section id="preparation-signals" className="documents-section documents-breakdown"><div><p className="documents-eyebrow">Transparent by design</p><h2>Understand your score.</h2><p>Each confirmed signal adds its stated weight. Learning achievements are shown separately and never imply immigration eligibility.</p><p className="documents-sync-note">Saved changes refresh this workspace and other open TGPI tabs. Changes from another device reconcile while this page is visible, up to every 60 seconds.</p></div><ul>{model.signals.map(signal => <li key={signal.label}><span aria-hidden="true" className={signal.achieved ? "achieved" : ""}>{signal.achieved ? "✓" : "○"}</span><span>{signal.label}</span><strong>{signal.achieved ? signal.weight : 0}/{signal.weight}</strong></li>)}</ul></section>
+        <CapabilitySystemRail active="documents" metric={{ label: "Connected preparation", value: `${model.readinessScore}%`, detail: "Identity, country research, learning and credentials — each with its own evidence." }} />
+        <footer className="documents-privacy"><div><p className="documents-eyebrow">Private preparation workspace</p><h2>Track preparation. Protect your documents.</h2><p>This workspace stores checklist activity, not passport scans or legal files. Checklist completion records your research; it does not verify a document or grant a visa. Confirm requirements with the relevant official authority.</p></div><Link className="documents-text-link" href="/profile/security">Manage account security ↗</Link></footer>
       </div>
     </main>
   );
