@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     images: [
       {
-        url: "/images/home/editorial-v4/hero-desktop.webp",
+        url: "/images/home/editorial-v5/hero-desktop.webp",
         width: 1536,
         height: 1024,
         alt: "Planning an international next chapter with TGPI",
