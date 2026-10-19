@@ -1,6 +1,7 @@
 import FunnelTelemetry from "@/components/analytics/FunnelTelemetry";
 import GlobalProgressSync from "@/components/profile/GlobalProgressSync";
 import "./globals.css";
+import "./member-system.css";
 import "./spatial-surfaces.css";
 import "./capability-system.css";
 import "./mobile.css";

@@ -2,9 +2,13 @@
 
 import { announceProgressSaved } from "@/lib/progress-sync";
 import Link from "next/link";
+import MemberIdentityEditor from './MemberIdentityEditor';
+import MemberExportCenter from './MemberExportCenter';
+import MemberDirectory from './MemberDirectory';
+import AccountBillingPanel from './AccountBillingPanel';
 import { useUser } from "@clerk/nextjs";
 import { usePathname, useRouter } from "next/navigation";
-import { cloneElement, isValidElement, useId, useEffect, useMemo, useRef, useState, type ReactElement } from "react";
+import { Children, cloneElement, isValidElement, useId, useEffect, useMemo, useRef, useState, type ReactElement } from "react";
 import PublicProfileShareButton from "@/components/profile/PublicProfileShareButton";
 import GlobalProgressPanel from "@/components/profile/GlobalProgressPanel";
 import GlobalRankBadge from "@/components/profile/GlobalRankBadge";
@@ -38,7 +42,6 @@ type AccountSummary = {
   publicProfileUrl: string;
 };
 type TgpiAccountCenterProps = {
-  usernameEnabled: boolean;
   account: AccountSummary;
   children: React.ReactNode;
   countries: CountryOption[];
@@ -58,7 +61,8 @@ type SettingsSection =
   | "preferences"
   | "notifications"
   | "privacy"
-  | "security";
+  | "security"
+  | "billing";
 type SettingsSectionDefinition = {
   description: string;
   key: SettingsSection;
@@ -117,6 +121,7 @@ const settingsSections: readonly SettingsSectionDefinition[] = [
     group: "Account center",
     sticker: "⌂",
   },
+  { description: "Plan status, renewal and secure billing portal", key: "billing", keywords: "stripe payment subscription plan renew", label: "Subscription & billing", group: "Account center", sticker: "◈" },
   {
     description: "Cryptographic identity, fingerprint and verification",
     key: "global-key",
@@ -215,6 +220,7 @@ const goalLabels: Record<string, string> = {
 };
 
 const iconPaths: Record<SettingsSection, string> = {
+  billing: "M3 5h18v14H3zM3 9h18M7 14h3",
   overview: "M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z",
   "global-key": "M14.5 9.5a4.5 4.5 0 1 0-4 4L13 16h2v2h2v2h3v-3l-6.5-6.5M7 9.5h.01",
   identity: "M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM4.5 21a7.5 7.5 0 0 1 15 0",
@@ -278,8 +284,10 @@ function Field({
   label: string;
 }) {
   const id = useId();
-  const nativeInput = isValidElement(children) && typeof children.type === "string" && ["input", "select", "textarea"].includes(children.type);
-  const control = nativeInput ? cloneElement(children as ReactElement<{ id?: string; "aria-describedby"?: string }>, { id, "aria-describedby": description ? `${id}-description` : undefined }) : children;
+  const nodes = Children.toArray(children);
+  const primary = nodes.findIndex(node => isValidElement(node) && typeof node.type === 'string' && ['input', 'select', 'textarea'].includes(node.type));
+  const nativeInput = primary >= 0;
+  const control = nodes.map((node, index) => index === primary ? cloneElement(node as ReactElement<{ id?: string; "aria-describedby"?: string }>, { id, "aria-describedby": description ? `${id}-description` : undefined }) : node);
   return (
     <div className="block">
       {nativeInput ? <label htmlFor={id} className="text-sm font-extrabold text-[#0B1F3A]">{label}</label> : <p className="text-sm font-extrabold text-[#0B1F3A]">{label}</p>}
@@ -348,7 +356,6 @@ function isSettingsSection(value: string): value is SettingsSection {
 }
 
 export default function TgpiAccountCenter({
-  usernameEnabled,
   account,
   children,
   countries,
@@ -381,9 +388,10 @@ export default function TgpiAccountCenter({
   }, [query]);
   const activeDefinition = settingsSections.find((section) => section.key === activeSection) ?? settingsSections[0];
   const initials = `${identity.firstName.at(0) ?? ""}${identity.lastName.at(0) ?? ""}`.toUpperCase() || "TG";
-  const fullName = [identity.firstName, identity.lastName].filter(Boolean).join(" ") || "TGPI member";
+  const fullName = profile.displayName || [identity.firstName, identity.lastName].filter(Boolean).join(" ") || "TGPI member";
   const currentCountryName = countries.find((country) => country.slug === profile.currentCountry)?.name || profile.currentCountry;
   const sectionSummaries: Record<Exclude<SettingsSection, "overview">, string> = {
+    billing: account.membership,
     "global-key": "Global ID, verification and account security",
     global: profile.profession || (profile.languages.length ? `${profile.languages.length} languages` : "Add your global context"),
     identity: profile.currentCity || profile.currentCountry || "Add personal information",
@@ -419,10 +427,11 @@ export default function TgpiAccountCenter({
   useEffect(() => {
     function syncHash() {
       const section = window.location.hash.replace("#settings-", "");
-      if (isSettingsSection(section)) setActiveSection(section);
+      setActiveSection(isSettingsSection(section) ? section : "overview");
     }
     window.addEventListener("hashchange", syncHash);
-    return () => window.removeEventListener("hashchange", syncHash);
+    window.addEventListener("popstate", syncHash);
+    return () => { window.removeEventListener("hashchange", syncHash); window.removeEventListener("popstate", syncHash); };
   }, []);
 
   useEffect(() => {
@@ -436,8 +445,8 @@ export default function TgpiAccountCenter({
   function selectSection(section: SettingsSection) {
     setActiveSection(section);
     setQuery("");
-    window.history.replaceState(null, "", `#settings-${section}`);
-    window.requestAnimationFrame(() => contentRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }));
+    window.history.pushState(null, "", `#settings-${section}`);
+    window.requestAnimationFrame(() => contentRef.current?.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth", block: "start" }));
   }
 
   function updateProfile(patch: Partial<TgpiAccountProfile>) {
@@ -479,6 +488,8 @@ export default function TgpiAccountCenter({
 
   async function saveAccount() {
     if (saveState === "saving") return;
+    const invalid = contentRef.current?.querySelector<HTMLInputElement>('input:invalid, select:invalid, textarea:invalid');
+    if (invalid) { invalid.reportValidity(); return; }
     setSaveState("saving");
     setMessage("");
     const payload: TgpiAccountUpdate = { identity, profile };
@@ -513,7 +524,13 @@ export default function TgpiAccountCenter({
 
   const overviewScreen = (
     <div>
-      <ScreenHeading description="See your identity, plan and connected TGPI systems in one place." section="overview" title="Account overview" />
+      <ScreenHeading description="Your private preparation center: identity, learning and decisions, with distinct progress signals." section="overview" title="Account overview" />
+      <div className="mt-4 grid gap-3 sm:grid-cols-3">
+        <Link className="tgpi-account-tile rounded-2xl border border-slate-200 p-4" href="/courses"><strong>Continue learning →</strong><p className="mt-2 text-sm">Resume from your saved lesson.</p></Link>
+        <Link className="tgpi-account-tile rounded-2xl border border-slate-200 p-4" href="/certificates"><strong>My credentials →</strong><p className="mt-2 text-sm">Issued records and milestones to earn.</p></Link>
+        <Link className="tgpi-account-tile rounded-2xl border border-slate-200 p-4" href="/profile/security#settings-billing"><strong>{account.membership} →</strong><p className="mt-2 text-sm">Review plan and manage billing.</p></Link>
+      </div>
+      <div className="mt-4 rounded-2xl border border-blue-200 bg-blue-50 p-4"><strong>Next useful action</strong><p className="mt-2 text-sm">{!profile.profession ? 'Add your professional field: it gives career research a relevant starting point.' : !decisionContext.countries.length ? 'Save a destination: your current plan has no country shortlist.' : 'Review your Country Fit context: budget, timeline and priorities guide the research questions.'}</p><Link className="mt-2 inline-flex min-h-11 items-center font-bold" href="/country-fit">Update Country Fit →</Link></div>
       <article className="mt-6 overflow-hidden rounded-[26px] bg-[#0B1F3A] p-5 text-white sm:p-7">
         <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
           <AccountAvatar imageUrl={account.avatarUrl} initials={initials} label={fullName} />
@@ -645,7 +662,7 @@ export default function TgpiAccountCenter({
             <Field label="Gender" description="Choose how you identify. This does not determine country or career recommendations."><select className="tgpi-account-input" value={profile.gender} onChange={event => updateProfile({ gender: event.target.value as TgpiAccountProfile["gender"] })}><option value="">Select an option</option><option value="man">Man</option><option value="woman">Woman</option><option value="other">Other</option><option value="undisclosed">Prefer not to say</option></select></Field>
             <Field label="How should TGPI address you?" description="Independent of gender; choose what feels right."><select className="tgpi-account-input" value={profile.preferredTitle} onChange={event => updateProfile({ preferredTitle: event.target.value as TgpiAccountProfile["preferredTitle"] })}><option value="name">By my name</option><option value="mr">Mr.</option><option value="ms">Ms.</option><option value="mx">Mx.</option></select></Field>
             <div className="rounded-2xl border border-[#D8D2C4] bg-[#F8F5EE] p-4"><p className="text-xs font-bold text-[#526174]">Personal greeting preview</p><p className="mt-2 text-xl font-semibold text-[#0B1F3A]">{getAccountSalutation(identity, profile)}</p></div>
-            <div className="sm:col-span-2"><Field label="Unique TGPI @ID" description={usernameEnabled ? "3–30 characters. Start with a letter; use letters, numbers and underscores. Uniqueness is checked securely when you save. Your Global Key remains unchanged." : "TGPI @IDs are awaiting activation. Your name, photo and all other settings can be updated now."}><input className="tgpi-account-input" disabled={!usernameEnabled} autoComplete="username" autoCapitalize="none" spellCheck={false} maxLength={30} pattern="[a-z][a-z0-9_]{2,29}" onChange={(event) => updateIdentity({ username: event.target.value.replace(/^@/, "").toLowerCase() })} placeholder="renan_matheus" value={identity.username || ""} /></Field></div>
+            <div className="sm:col-span-2"><Field label="Display name" description="Your public presentation; certificate names remain separate."><input className="tgpi-account-input" autoComplete="nickname" maxLength={120} value={profile.displayName} onChange={e => updateProfile({ displayName: e.target.value })} /></Field></div>
             <div className="sm:col-span-2"><Field description="A concise line used in future profile and collaboration surfaces." label="Professional headline"><input className="tgpi-account-input" maxLength={120} onChange={(event) => updateProfile({ headline: event.target.value })} placeholder="Product designer building a global career" value={profile.headline} /></Field></div>
             <div className="sm:col-span-2"><Field description={`${profile.bio.length}/500 characters`} label="About you"><textarea className="tgpi-account-input min-h-32 resize-y py-3" maxLength={500} onChange={(event) => updateProfile({ bio: event.target.value })} placeholder="Share the context that helps TGPI understand your goals and experience." value={profile.bio} /></Field></div>
             <Field label="Country of residence"><ProfileSearchSelect label="Country of residence" value={profile.currentCountry} options={countries.map(country => ({ label: `${country.emoji} ${country.name}`, value: country.slug }))} onChange={value => updateProfile({ currentCountry: value, currentCity: "" })} /></Field>
@@ -657,6 +674,7 @@ export default function TgpiAccountCenter({
             <Field label="Timezone"><input className="tgpi-account-input" list="tgpi-timezones" maxLength={80} onChange={(event) => updateProfile({ timezone: event.target.value })} placeholder="America/Sao_Paulo" value={profile.timezone} /><datalist id="tgpi-timezones">{timezoneOptions.map((timezone) => <option key={timezone} value={timezone} />)}</datalist></Field>
           </div>
         </div>
+        <MemberIdentityEditor />
         <article className="tgpi-account-tile mt-6 rounded-[22px] border border-[#D7C68F] bg-[#FBF4DE] p-5 sm:p-7">
           <p className="text-xs font-extrabold uppercase tracking-wider text-[#705115]">Certificate identity preview</p>
           <h3 className="mt-3 break-words text-2xl text-[#0B1F3A]">{getCertificateName(identity, profile)}</h3>
@@ -693,23 +711,28 @@ export default function TgpiAccountCenter({
   if (activeSection === "public-profile") {
     activeScreen = (
       <div>
-        <ScreenHeading description="Control how your global identity appears, preview every shared field and open the exact page other people will see." section="public-profile" title="Public profile" />
+        <ScreenHeading description="Preview the saved public fields, manage your member identity and export an authorized presentation." section="public-profile" title="Public profile" />
+        <MemberIdentityEditor />
+        <MemberExportCenter />
+        <details className="mt-4"><summary className="cursor-pointer py-3 font-bold">Find a TGPI member</summary><MemberDirectory /></details>
+        <Link className="tgpi-member-button mt-4" href={`${account.publicProfileUrl}?preview=1`}>Open exact saved public preview →</Link>
+        <p className="mt-3 text-sm text-slate-600">Save profile and privacy changes before previewing or exporting. Public fields are read again on the server.</p>
         <div className="mt-6 grid gap-5 xl:grid-cols-[1.15fr_.85fr]">
           <article className="relative overflow-hidden rounded-[28px] border border-[#173754] bg-[#07182D] p-6 text-white shadow-[0_24px_65px_rgba(11,31,58,0.2)] sm:p-8">
             <div className="pointer-events-none absolute -right-20 -top-20 h-52 w-52 rounded-full bg-[#B58A2A]/15 blur-3xl" />
             <div className="relative flex flex-col gap-5 sm:flex-row sm:items-center">
               <AccountAvatar imageUrl={account.avatarUrl} initials={initials} label={fullName} />
               <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-3"><div className="min-w-0 flex-1"><p className="text-[9px] font-extrabold uppercase tracking-[0.18em] text-[#F0D58C]">TGPI Global Profile</p><h3 className="mt-2 truncate font-[var(--tgpi-font-display)] text-3xl font-semibold">{fullName}</h3></div><GlobalRankBadge rank={rank} size="small" /></div>
+                <div className="flex items-center gap-3"><div className="min-w-0 flex-1"><p className="text-[9px] font-extrabold uppercase tracking-[0.18em] text-[#F0D58C]">TGPI Global Profile</p><h3 className="mt-2 break-words font-[var(--tgpi-font-display)] text-3xl font-semibold">{fullName}</h3></div>{profile.privacy.showProgress ? <GlobalRankBadge rank={rank} size="small" /> : null}</div>
                 <p className="mt-1 text-sm font-bold text-[#CFD8E3]">{profile.headline || "Add a professional headline"}</p>
-                {profile.privacy.showLocation && (profile.currentCity || currentCountryName) ? <p className="mt-2 text-xs text-[#8FA0B3]">{[profile.currentCity, currentCountryName].filter(Boolean).join(", ")}</p> : null}
+                {profile.privacy.showLocation && (profile.currentCity || currentCountryName) ? <p className="mt-2 text-xs text-[#8FA0B3]">{currentCountryName}</p> : null}
               </div>
             </div>
             <p className="relative mt-6 max-w-2xl text-sm leading-7 text-[#AEBBC9]">{profile.bio || "Add a concise biography so people understand your experience, interests and global direction."}</p>
             <div className="relative mt-6 flex flex-wrap gap-2">
-              {profile.profession ? <span className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-[10px] font-extrabold text-[#D8E1EB]">{profile.profession}</span> : null}
-              {profile.educationLevel ? <span className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-[10px] font-extrabold text-[#D8E1EB]">{profile.educationLevel}</span> : null}
-              {profile.languages.slice(0, 4).map((language) => <span className="rounded-full border border-[#E5B94B]/20 bg-[#E5B94B]/10 px-3 py-2 text-[10px] font-extrabold text-[#F0D58C]" key={language}>{language}</span>)}
+              {profile.privacy.showCareer && profile.profession ? <span className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-[10px] font-extrabold text-[#D8E1EB]">{profile.profession}</span> : null}
+              {profile.privacy.showCareer && profile.educationLevel ? <span className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-[10px] font-extrabold text-[#D8E1EB]">{profile.educationLevel}</span> : null}
+              {(profile.privacy.showLanguages ? profile.languages : []).slice(0, 4).map((language) => <span className="rounded-full border border-[#E5B94B]/20 bg-[#E5B94B]/10 px-3 py-2 text-[10px] font-extrabold text-[#F0D58C]" key={language}>{language}</span>)}
             </div>
             <div className="relative mt-7 flex flex-wrap items-start gap-3 border-t border-white/10 pt-6">
               <Link className="inline-flex min-h-11 items-center justify-center rounded-xl border border-white/15 bg-white/5 px-5 text-xs font-extrabold text-white transition hover:bg-white/10" href={account.publicProfileUrl}>Open full profile</Link>
@@ -743,7 +766,7 @@ export default function TgpiAccountCenter({
   if (activeSection === "preferences") {
     activeScreen = (
       <div>
-        <ScreenHeading description="Choose the defaults TGPI should use across research, costs, dates and learning." section="preferences" title="App preferences" />
+        <ScreenHeading description="Save your research and display preferences. Content languages and unit conversion depend on the current feature." section="preferences" title="App preferences" />
         <div className="mt-6 rounded-[22px] border border-[#DDD7CB] bg-white p-5 sm:p-7">
           <div className="grid gap-5 sm:grid-cols-2">
             <Field label="Preferred language"><select className="tgpi-account-input" onChange={(event) => updateProfile({ preferredLanguage: event.target.value })} value={profile.preferredLanguage}>{languageOptions.map((language) => <option key={language} value={language}>{language}</option>)}</select></Field>
@@ -777,15 +800,25 @@ export default function TgpiAccountCenter({
   if (activeSection === "privacy") {
     activeScreen = (
       <div>
-        <ScreenHeading description="Decide what can appear in future TGPI community, profile and credential experiences." section="privacy" title="Privacy" />
+        <ScreenHeading description="Choose which saved fields can appear in your member profile, discovery and shareable presentations." section="privacy" title="Privacy" />
         <div className="mt-6 rounded-[22px] border border-[#DDD7CB] bg-white p-5 sm:p-7">
           <Field description="Private is the safest default. You can change this whenever you choose." label="Profile visibility"><select className="tgpi-account-input" onChange={(event) => updatePrivacy("visibility", event.target.value as TgpiAccountProfile["privacy"]["visibility"])} value={profile.privacy.visibility}><option value="private">Private — only you</option><option value="members">Members — signed-in TGPI members</option><option value="public">Public — shareable profile</option></select></Field>
-          <div className="mt-6 overflow-hidden rounded-2xl border border-[#E3DED3]"><Toggle checked={profile.privacy.showLocation} description="Show your country and city where your visibility permits." label="Show location" onChange={(value) => updatePrivacy("showLocation", value)} /><Toggle checked={profile.privacy.showProgress} description="Show learning and preparation progress on your profile." label="Show progress" onChange={(value) => updatePrivacy("showProgress", value)} /><Toggle checked={profile.privacy.showGoals} description="Show selected international goals on your profile." label="Show global goals" onChange={(value) => updatePrivacy("showGoals", value)} /></div>
+          <div className="mt-6 overflow-hidden rounded-2xl border border-[#E3DED3]"><Toggle checked={profile.privacy.showLocation} description="Share country only. Your city remains private." label="Show location" onChange={(value) => updatePrivacy("showLocation", value)} /><Toggle checked={profile.privacy.showProgress} description="Show learning and preparation progress on your profile." label="Show progress" onChange={(value) => updatePrivacy("showProgress", value)} /><Toggle checked={profile.privacy.showGoals} description="Show selected international goals on your profile." label="Show global goals" onChange={(value) => updatePrivacy("showGoals", value)} /></div>
+          <div className="mt-4 overflow-hidden rounded-2xl border border-[#E3DED3]">
+            <Toggle checked={profile.privacy.discoverable} label="Member discovery" description="Allow exact @ID and TGPI number searches by signed-in members. Your profile visibility still applies." onChange={v => updatePrivacy('discoverable', v)} />
+            <Toggle checked={profile.privacy.allowIndexing} label="Search engine indexing" description="Separate opt-in, effective only when your profile is Public. Search engines may take time to remove old copies." onChange={v => updatePrivacy('allowIndexing', v)} />
+            <Toggle checked={profile.privacy.showCareer} label="Share professional context" description="Profession and education, clearly marked as self-declared." onChange={v => updatePrivacy('showCareer', v)} />
+            <Toggle checked={profile.privacy.showLanguages} label="Share declared languages" description="Listing a language does not verify proficiency." onChange={v => updatePrivacy('showLanguages', v)} />
+            <Toggle checked={profile.privacy.showLinks} label="Share professional links" description="Publish your selected website and social links." onChange={v => updatePrivacy('showLinks', v)} />
+          </div>
+          <a className="tgpi-member-button mt-4" href="/api/account-data" download="tgpi-account-data.json">Download private profile & plan data</a>
           <div className="mt-6 rounded-2xl bg-[#F3EFE6] p-5 text-xs leading-6 text-[#5F6876]">TGPI never stores passwords, recovery methods, passport numbers, national IDs or document scans in this profile. Authentication remains protected by Clerk.</div>
         </div>
       </div>
     );
   }
+
+  if (activeSection === "billing") { activeScreen = <AccountBillingPanel />; }
 
   if (activeSection === "security") {
     activeScreen = (
@@ -798,12 +831,12 @@ export default function TgpiAccountCenter({
 
   return (
     <div className="tgpi-settings-v2 mx-auto max-w-[1500px]">
-      <header className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+      <header className="tgpi-account-heading mb-5 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div><p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#8B6416]">TGPI Global Key</p><h1 className="mt-2 font-[var(--tgpi-font-display)] text-4xl font-semibold tracking-[-0.045em] text-[#0B1F3A] sm:text-5xl">Settings</h1><p className="mt-2 text-sm text-[#6E7784]">Your identity, preferences and security in one connected app.</p></div>
         <Link className="inline-flex min-h-11 items-center justify-center rounded-xl border border-[#D6D0C4] bg-white px-4 text-xs font-extrabold text-[#0B1F3A] transition hover:border-[#B58A2A]" href="/profile">Back to workspace</Link>
       </header>
 
-      <div className="overflow-hidden rounded-[30px] border border-[#D8D2C4] bg-white shadow-[0_28px_80px_rgba(11,31,58,0.1)] lg:grid lg:min-h-[820px] lg:grid-cols-[310px_minmax(0,1fr)]">
+      <div className="overflow-hidden rounded-[30px] border border-[#D8D2C4] bg-white shadow-[0_28px_80px_rgba(11,31,58,0.1)] lg:grid lg:grid-cols-[270px_minmax(0,1fr)]">
         <aside className="hidden border-r border-[#E1DCD2] bg-[#FCFAF5] p-4 lg:flex lg:flex-col">
           <button className="flex items-center gap-3 rounded-2xl p-3 text-left transition hover:bg-white" onClick={() => selectSection("overview")} type="button"><AccountAvatar imageUrl={account.avatarUrl} initials={initials} label={fullName} size="small" /><span className="min-w-0"><span className="block truncate text-sm font-extrabold text-[#0B1F3A]">{fullName}</span><span className="mt-0.5 block truncate text-[11px] text-[#727B88]">{account.membership}</span></span></button>
           <label className="relative mt-3 block"><span className="sr-only">Search settings</span><svg aria-hidden="true" className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#7A8390]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4" /></svg><input className="h-11 w-full rounded-xl border border-[#DDD7CB] bg-white pl-9 pr-3 text-xs text-[#0B1F3A] outline-none transition placeholder:text-[#959CA6] focus:border-[#B58A2A] focus:ring-4 focus:ring-[#B58A2A]/10" onChange={(event) => setQuery(event.target.value)} placeholder="Search settings" value={query} /></label>
@@ -822,9 +855,9 @@ export default function TgpiAccountCenter({
             </nav>
           </div>
 
-          <div className="tgpi-account-content scroll-mt-36 p-4 pb-28 sm:p-7 sm:pb-28 lg:p-10 lg:pb-28 xl:p-12 xl:pb-28" id={`settings-${activeSection}`} ref={contentRef}>{activeScreen}</div>
+          <div className="tgpi-account-content scroll-mt-36 p-4 sm:p-6 lg:p-7 xl:p-8" id={`settings-${activeSection}`} ref={contentRef}><fieldset className="min-w-0" disabled={saveState === "saving"}>{activeScreen}</fieldset></div>
 
-          <div className="tgpi-account-save-bar sticky bottom-0 z-30 border-t border-[#DDD7CB] bg-white/95 px-4 py-3 backdrop-blur sm:px-7 lg:px-10">
+          <div className="tgpi-account-save-bar relative border-t border-[#DDD7CB] bg-white/95 px-4 py-3 backdrop-blur sm:px-7 lg:px-10">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div aria-live="polite" role="status"><p className={`text-xs font-extrabold ${saveState === "error" ? "text-[#A32626]" : isDirty ? "text-[#8B6416]" : "text-[#277352]"}`}>{saveState === "saving" ? "Synchronizing your account…" : message || (isDirty ? "You have unsaved changes" : "All changes are synchronized")}</p><p className="mt-0.5 text-[10px] text-[#7A8390]">Connected to Country Fit, Compare, Personal Plan and Learning</p></div>
               <button className="min-h-11 rounded-xl bg-[#0B1F3A] px-6 text-xs font-extrabold text-white shadow-[0_10px_24px_rgba(11,31,58,0.18)] transition hover:bg-[#173554] disabled:cursor-not-allowed disabled:opacity-50" disabled={!isDirty || saveState === "saving"} onClick={saveAccount} type="button">{saveState === "saving" ? "Saving…" : "Save changes"}</button>

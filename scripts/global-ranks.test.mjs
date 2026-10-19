@@ -23,7 +23,7 @@ test("profile completion alone never unlocks a rank",()=>{
 });
 test("research and preparation cannot replace completed learning",()=>{
  const rank=getGlobalRank({...empty,activationCompletion:100,profileCompletion:100,planCompletion:100,comparisons:4,documentReviews:4,savedCountries:8});
- assert.equal(rank.points,2200);
+ assert.equal(rank.points,2000);
  assert.equal(rank.id,"pathfinder");
  assert.equal(rank.pointsToNext,0);
  assert.equal(rank.completedCourses,0);
@@ -39,4 +39,9 @@ test("invalid inputs never produce negative or non-finite points",()=>{
   const rank=getGlobalRank(Object.fromEntries(Object.keys(empty).map(key=>[key,value])));
   assert.equal(rank.points,0);
  }
+});
+
+test("optional private profile fields cannot change public prestige", () => {
+ const activity={...empty, learningPaths:3, comparisons:2, planCompletion:80, activationCompletion:60};
+ assert.deepEqual(getGlobalRank({...activity,profileCompletion:0}),getGlobalRank({...activity,profileCompletion:100}));
 });

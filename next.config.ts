@@ -3,6 +3,8 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   async headers() {
     return [
+      { source: "/member/:path*", headers: [{ key: "Cache-Control", value: "private, no-store, max-age=0" }] },
+      { source: "/members", headers: [{ key: "Cache-Control", value: "private, no-store, max-age=0" }] },
       {
         source: "/sw.js",
         headers: [

@@ -1,0 +1,22 @@
+{
+  "typecheck": "passed",
+  "lint": "passed",
+  "accountTests": 29,
+  "platformTests": 11,
+  "navigationTests": 7,
+  "mobileLogicTests": 19,
+  "pwaTests": 5,
+  "prebuildLearningTests": 17,
+  "prebuildIntelligenceTests": 72,
+  "prebuildWorkspaceTests": 5,
+  "prebuildPersonalPlanTests": 2,
+  "webpackProductionBuild": "passed",
+  "defaultTurbopackBuild": "failed: local Google font import-map resolution",
+  "pdfVisualReview": "passed: synthetic A4 fixture rendered with Poppler",
+  "liveFirestore": "not executed",
+  "authenticatedBrowser": "not executed",
+  "responsiveVisualQA": "blocked: Chromium unavailable; remote browser cannot access local server",
+  "pngBrowserExport": "not executed",
+  "publication": "review branch; production unchanged",
+  "pdfQrDecoded": "passed: exact profile-only URL"
+}

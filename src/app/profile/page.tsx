@@ -1,3 +1,4 @@
+import { ensureMemberNumber } from '@/lib/members/identity.server';
 import { courses } from "@/data/courses";
 import { getGlobalRankSignals } from "@/lib/global-rank-signals";
 import type { Metadata } from "next";
@@ -40,6 +41,7 @@ export default async function ProfilePage({
     currentUser(),
     searchParams,
   ]);
+  const memberIdentity = await ensureMemberNumber(session.userId).catch(() => null);
   const name = user?.fullName || user?.firstName || "Global explorer";
   const email = user?.primaryEmailAddress?.emailAddress || "No primary email";
   const emailVerified = user?.primaryEmailAddress?.verification?.status === "verified";
@@ -96,12 +98,12 @@ export default async function ProfilePage({
       identity={{
         avatarUrl: user?.imageUrl || "",
         firstName: user?.firstName || name,
-        fullName: name,
+        fullName: accountProfile.displayName || name,
         globalId,
         headline: accountProfile.headline,
         membership,
         profileCompletion,
-        publicProfileUrl: `/member/${session.userId}`,
+        publicProfileUrl: memberIdentity ? `/member/${memberIdentity.number}` : `/member/${session.userId}`,
       }}
       model={workspaceModel}
       onboardingCompleted={params.onboarding === "completed"}

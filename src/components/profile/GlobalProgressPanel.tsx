@@ -12,10 +12,9 @@ export default function GlobalProgressPanel({ rank, headingLevel = 1 }: { rank: 
   const selected = GLOBAL_RANKS.find(item => item.id === selectedId) ?? GLOBAL_RANKS[0];
   const currentIndex = GLOBAL_RANKS.findIndex(item => item.id === rank.id);
   const pillars = [
-    { title: "Identity", points: rank.breakdown.identity, max: 200, href: "/profile/security#settings-identity", detail: "Complete your profile. Up to 200 points." },
     { title: "Personal plan", points: rank.breakdown.plan, max: 500, href: "/onboarding", detail: "Define your priorities and destination strategy." },
     { title: "Preparation", points: rank.breakdown.readiness, max: 500, href: "/profile", detail: "Connect research, costs, documents and learning." },
-    { title: "Learning & research", points: rank.breakdown.activity, max: 8800, href: "/courses", detail: "650 per completed course, up to 12. Research adds up to 1,000." },
+    { title: "Learning & research", points: rank.breakdown.activity, max: 9000, href: "/courses", detail: "Up to 8,000 from twelve completed courses. Research adds up to 1,000. Optional personal information earns no rank points." },
   ];
   return <div className="space-y-6">
     <AreaHero headingLevel={headingLevel} id="progress-title" eyebrow="TGPI / Earned progress" title={<>Build capability.<br />Earn your next rank.</>} description="Ten ranks connect your completed learning, country research and personal plan. Inspect each requirement and choose the work that moves you forward." image="/images/learning/tgpi-learning-hero-v2.webp" actions={[{href:"/courses",label:"Develop my skills"},{href:"/plan",label:"Review my plan"}]} />

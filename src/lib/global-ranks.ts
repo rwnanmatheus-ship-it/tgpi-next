@@ -51,7 +51,7 @@ export const GLOBAL_RANK_DISCLAIMER =
   "Your TGPI rank reflects progress inside the product. It is not immigration eligibility, an academic qualification or a professional credential.";
 
 export const GLOBAL_RANK_MAX_POINTS = 10000;
-export const GLOBAL_RANK_VERSION = 2;
+export const GLOBAL_RANK_VERSION = 3;
 // Existing activity is recalculated; no learning history is deleted.
 export const GLOBAL_RANKS: readonly GlobalRankDefinition[] = [
   {"id": "global-initiate", "name": "Global Initiate", "threshold": 0, "courses": 0, "plan": 0, "image": "/images/ranks/v2/global-initiate.svg", "description": "Build a focused global profile and a deliberate personal plan."},
@@ -79,13 +79,13 @@ export function getGlobalRank(input: GlobalRankInput): GlobalRank {
   const courses = Math.min(whole(input.learningPaths), 12);
   const plan = clamp(input.planCompletion, 0, 100);
   const breakdown: GlobalRankBreakdown = {
-    identity: Math.round(clamp(input.profileCompletion, 0, 100) * 2),
+    identity: 0, // Optional personal disclosures never change public rank.
     plan: Math.round(plan * 5),
     readiness: Math.round(clamp(input.activationCompletion, 0, 100) * 5),
     activity: Math.min(whole(input.savedCountries), 8) * 25
       + Math.min(whole(input.comparisons), 4) * 100
       + Math.min(whole(input.documentReviews), 4) * 100
-      + courses * 650,
+      + courses * 650 + Math.round(courses * 200 / 12),
   };
   const points = Math.min(GLOBAL_RANK_MAX_POINTS, Object.values(breakdown).reduce((sum, value) => sum + value, 0));
   const currentIndex = GLOBAL_RANKS.reduce(
