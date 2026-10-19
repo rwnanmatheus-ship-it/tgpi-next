@@ -1,4 +1,5 @@
 import "server-only";
+import { getCertificateName, normalizeAccountIdentity, normalizeTgpiAccountProfile } from "@/lib/account-profile";
 
 import { auth, clerkClient, currentUser } from "@clerk/nextjs/server";
 import { createHash } from "node:crypto";
@@ -58,7 +59,7 @@ export async function requireApiUser() {
     email: user?.primaryEmailAddress?.emailAddress || "",
     emailVerified:
       user?.primaryEmailAddress?.verification?.status === "verified",
-    publicName: user?.fullName || user?.username || "TGPI Member",
+    publicName: getCertificateName(normalizeAccountIdentity(user), normalizeTgpiAccountProfile(user?.unsafeMetadata.tgpiAccountProfile)) || user?.fullName || "TGPI Member",
   };
 }
 

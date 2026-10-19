@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 import { PDFDocument } from "pdf-lib";
+import { normalizeTgpiAccountProfile } from "../src/lib/account-profile.ts";
 import { createCertificatePdf } from "../src/lib/certificate-pdf.server.ts";
 
 const credential = {
@@ -49,14 +50,18 @@ function routeFixture({
   status = "active",
   integrity = true,
   fail = false,
+  birthDateConsent = false,
 } = {}) {
   let publicReads = 0;
+  let renderOptions;
   const module = { exports: {} };
   const source = readFileSync(
     new URL("../src/app/api/credentials/[id]/pdf/route.ts", import.meta.url),
     "utf8",
   );
   const services = {
+    "@clerk/nextjs/server": { currentUser: async () => ({ unsafeMetadata: { tgpiAccountProfile: { dateOfBirth: "2001-02-11", certificateBirthDateConsent: birthDateConsent } } }) },
+    "@/lib/account-profile": { normalizeTgpiAccountProfile },
     "next/server": { NextResponse: Response },
     "@/lib/auth/guards": {
       TgpiAuthenticationError: AuthenticationError,
@@ -84,7 +89,7 @@ function routeFixture({
             : "integrity_review",
     },
     "@/lib/certificate-pdf.server": {
-      createCertificatePdf: async () => Buffer.from("%PDF-1.7 fixture"),
+      createCertificatePdf: async (_credential, options) => { renderOptions = options; return Buffer.from("%PDF-1.7 fixture"); },
     },
   };
   runInNewContext(
@@ -106,6 +111,7 @@ function routeFixture({
         { params: Promise.resolve({ id }) },
       ),
     publicReads: () => publicReads,
+    renderOptions: () => renderOptions,
   };
 }
 
@@ -162,4 +168,17 @@ test("PDF contains a clickable QR verification target and preserves the original
   );
   assert.equal(credential.issuedAt, "2026-10-17T12:00:00Z");
   assert.equal(credential.identityEvidence.globalKeyId, "TGPI-AAAA-BBBB-CCCC");
+});
+
+
+test("birth date is included only on the owner PDF with explicit consent", async () => {
+  const privatePdf = routeFixture();
+  assert.equal((await privatePdf.get()).status, 200);
+  assert.equal(privatePdf.renderOptions().personalBirthDate, "");
+  const optedIn = routeFixture({ birthDateConsent: true });
+  assert.equal((await optedIn.get()).status, 200);
+  assert.equal(optedIn.renderOptions().personalBirthDate, "2001-02-11");
+  const bytes = await createCertificatePdf(credential, { personalBirthDate: "2001-02-11" });
+  assert.equal((await PDFDocument.load(bytes)).getPageCount(), 1);
+  assert.equal("dateOfBirth" in credential, false);
 });

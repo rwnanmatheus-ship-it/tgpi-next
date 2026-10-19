@@ -1,3 +1,4 @@
+import PersonalResearchContext from "@/components/profile/PersonalResearchContext";
 import type { Metadata } from "next";
 import Link from "next/link";
 import ActivationProgressProvider from "@/components/activation/ActivationProgressProvider";
@@ -24,7 +25,7 @@ export default async function ComparePage({ searchParams }: { searchParams?: Pro
   const countries = getAllCountries().map(({ slug, name, emoji, region }) => ({ slug, name, emoji, region })).sort((a, b) => a.name.localeCompare(b.name));
   return <ActivationProgressProvider><main className="ig-shell"><div className="ig-container">
     <header className="ig-hero"><p className="ig-eyebrow">TGPI / Compare</p><h1>Compare evidence.<br />Not promises.</h1><p>Put up to three countries side by side. See the source, reference year and limitations behind each observation, then investigate what matters to your own life.</p></header>
-    <GraphStatus state={state} />
+    <GraphStatus state={state} /><PersonalResearchContext />
     <CompareCountryPicker countries={countries} initialSlugs={slugs} initialGoal={goal} hasExplicitSelection={requested.length > 0} />
     {raw.length > 3 || requested.some(s => !valid.has(s)) ? <p className="ig-status">Only valid country selections are shown, up to three at a time.</p> : null}
     <section className="ig-section ig-panel"><p className="ig-eyebrow">Your decision lens / {getComparisonGoalConfig(goal).shortLabel}</p><h2>The best next step is a better question.</h2><p className="ig-small">{getComparisonGoalConfig(goal).description} This lens guides your research; it does not reweight statistics into a personal fit score. The first release deliberately withholds safety, affordability and immigration rankings without sufficient evidence.</p></section>

@@ -365,3 +365,16 @@ img {
 @media (prefers-reduced-motion: reduce) {
   .tgpi-settings-v2 *, .tgpi-settings-v2 *::before, .tgpi-settings-v2 *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
 }
+
+/* Explicit background-color fallback prevents light-on-light Global Key cards. */
+.tgpi-settings-v2 .tgpi-key-surface {
+  background-color: #07182d;
+  background-image: radial-gradient(ellipse at 100% 0, #204d73 0, transparent 65%);
+  color: #ffffff;
+  box-shadow: inset 0 1px 0 #ffffff24, 0 6px 0 #041020, 0 22px 46px #0b1f3a33;
+}
+.tgpi-key-emblem { box-shadow: inset 0 2px 0 #f0d58c40, 0 5px 0 #030f20, 0 12px 28px #0004; transform: perspective(500px) rotateY(-12deg); }
+.tgpi-settings-v2 .tgpi-key-surface a { color: #07182d; }
+.tgpi-settings-v2 .tgpi-account-input::placeholder { color: #657185; opacity: 1; }
+.tgpi-settings-v2 .tgpi-account-tile { box-shadow: inset 0 1px 0 #ffffffb3, 0 3px 0 #0b1f3a0d, 0 14px 30px #0b1f3a0a; }
+@media (prefers-reduced-motion: reduce) { .tgpi-key-emblem { transform: none; } }

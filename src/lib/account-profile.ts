@@ -6,6 +6,13 @@ export type MeasurementSystem = (typeof measurementSystemValues)[number];
 
 export type TgpiAccountProfile = {
   schemaVersion: 1;
+  legalFullName: string;
+  dateOfBirth: string;
+  gender: "" | "man" | "woman" | "other" | "undisclosed";
+  preferredTitle: "name" | "mr" | "ms" | "mx";
+  yearsExperience: string;
+  employmentType: string;
+  certificateBirthDateConsent: boolean;
   headline: string;
   bio: string;
   currentCountry: string;
@@ -51,6 +58,13 @@ const MAX_LANGUAGES = 8;
 
 export const emptyTgpiAccountProfile: TgpiAccountProfile = {
   schemaVersion: 1,
+  legalFullName: "",
+  dateOfBirth: "",
+  gender: "",
+  preferredTitle: "name",
+  yearsExperience: "",
+  employmentType: "",
+  certificateBirthDateConsent: false,
   headline: "",
   bio: "",
   currentCountry: "",
@@ -86,6 +100,23 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 function cleanText(value: unknown, maxLength: number) {
   return typeof value === "string" ? value.trim().slice(0, maxLength) : "";
+}
+
+export function normalizeBirthDate(value: unknown, now = new Date()): string {
+  if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return "";
+  const date = new Date(`${value}T00:00:00Z`);
+  if (Number.isNaN(date.getTime()) || date.toISOString().slice(0, 10) !== value) return "";
+  const today = now.toISOString().slice(0, 10);
+  return value >= "1900-01-01" && value <= today ? value : "";
+}
+
+export function getAccountSalutation(identity: AccountIdentityInput, profile: TgpiAccountProfile) {
+  const title = { name: "", mr: "Mr.", ms: "Ms.", mx: "Mx." }[profile.preferredTitle];
+  return [title, identity.firstName].filter(Boolean).join(" ");
+}
+
+export function getCertificateName(identity: AccountIdentityInput, profile: TgpiAccountProfile) {
+  return profile.legalFullName || [identity.firstName, identity.lastName].filter(Boolean).join(" ");
 }
 
 function cleanUrl(value: unknown, host?: string) {
@@ -142,6 +173,13 @@ export function normalizeTgpiAccountProfile(value: unknown): TgpiAccountProfile 
 
   return {
     schemaVersion: 1,
+    legalFullName: cleanText(input.legalFullName, 120),
+    dateOfBirth: normalizeBirthDate(input.dateOfBirth),
+    gender: isOneOf(input.gender, ["man", "woman", "other", "undisclosed"] as const) ? input.gender : "",
+    preferredTitle: isOneOf(input.preferredTitle, ["name", "mr", "ms", "mx"] as const) ? input.preferredTitle : "name",
+    yearsExperience: isOneOf(input.yearsExperience, ["0", "1-2", "3-5", "6-10", "11+"] as const) ? input.yearsExperience : "",
+    employmentType: isOneOf(input.employmentType, ["employed", "self-employed", "entrepreneur", "student", "seeking-work", "retired"] as const) ? input.employmentType : "",
+    certificateBirthDateConsent: getBoolean(input.certificateBirthDateConsent, false),
     headline: cleanText(input.headline, 120),
     bio: cleanText(input.bio, 500),
     currentCountry: cleanText(input.currentCountry, 80),

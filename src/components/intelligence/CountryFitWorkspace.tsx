@@ -1,4 +1,5 @@
 "use client";
+import { announceProgressSaved } from "@/lib/progress-sync";
 import { useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
@@ -29,6 +30,7 @@ export default function CountryFitWorkspace({ countries, snapshot, initialContex
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || "Unable to save your plan.");
       setSaveNotice("Saved to your private TGPI profile. Your other profile fields and existing shortlist are preserved.");
+      announceProgressSaved();
       try { await user?.reload(); } catch { /* The server confirmed persistence; retain the successful save message. */ }
     } catch (error) { setSaveNotice(error instanceof Error ? error.message : "Unable to save. Please try again."); }
     finally { setIsSaving(false); }

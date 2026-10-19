@@ -1,3 +1,4 @@
+import { normalizeTgpiAccountProfile } from "../src/lib/account-profile.ts";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -21,6 +22,7 @@ function handler({ userId = "test-user", previous = {}, fail = false } = {}) {
   const route = load("src/app/api/intelligence/plan/route.ts", {
     "@clerk/nextjs/server": { auth: async () => ({ userId }), clerkClient: async () => ({ users: { getUser: async () => { reads++; return { unsafeMetadata: { tgpiOnboarding: previous } }; }, updateUserMetadata: async (...args) => { if (fail) throw Error("Mock upstream failure"); writes.push(args); } } }) },
     "@/lib/onboarding": normalizer,
+    "@/lib/account-profile": { normalizeTgpiAccountProfile },
     "@/data/intelligence/identities.json": identities,
   });
   return { patch: route.PATCH, writes, reads: () => reads };
@@ -32,6 +34,8 @@ test("saving preserves unrelated fields, completion and existing countries", asy
   const h = handler({ previous: { completed: true, currentStep: 5, targetCountries: ["canada"], educationLevel: "Test education", internationalExperience: "short-trips", priorities: ["safety"], completedAt: "2026-01-01" } });
   const response = await h.patch(request()); assert.equal(response.status, 200); assert.equal(response.headers.get("cache-control"), "no-store"); assert.equal(h.writes.length, 1);
   const [userId, metadata] = h.writes[0]; const saved = metadata.unsafeMetadata.tgpiOnboarding;
+  assert.equal(metadata.unsafeMetadata.tgpiAccountProfile.profession, context.profession);
+  assert.deepEqual([...metadata.unsafeMetadata.tgpiAccountProfile.languages], context.languages);
   assert.equal(userId, "test-user"); assert.equal(saved.educationLevel, "Test education"); assert.equal(saved.completed, true); assert.equal(saved.completedAt, "2026-01-01"); assert.deepEqual([...saved.targetCountries], ["portugal", "canada"]); assert.equal(saved.primaryGoal, "work"); assert.equal(saved.priorities[0], "safety");
 });
 test("full shortlist is not silently truncated", async () => { const h = handler({ previous: { targetCountries: ["canada", "japan", "spain", "france", "italy"] } }); assert.equal((await h.patch(request())).status, 409); assert.equal(h.writes.length, 0); });

@@ -4,10 +4,13 @@ import { announceProgressSaved } from "@/lib/progress-sync";
 import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { cloneElement, isValidElement, useId, useEffect, useMemo, useRef, useState, type ReactElement } from "react";
 import PublicProfileShareButton from "@/components/profile/PublicProfileShareButton";
 import GlobalProgressPanel from "@/components/profile/GlobalProgressPanel";
 import GlobalRankBadge from "@/components/profile/GlobalRankBadge";
+import ProfileSearchSelect from "@/components/profile/ProfileSearchSelect";
+import { citySuggestions, professionSuggestions } from "@/lib/profile-options";
+import { getAccountSalutation, getCertificateName } from "@/lib/account-profile";
 import TgpiAvatarEditor from "@/components/profile/TgpiAvatarEditor";
 import {
   getAccountProfileCompletion,
@@ -274,12 +277,15 @@ function Field({
   description?: string;
   label: string;
 }) {
+  const id = useId();
+  const nativeInput = isValidElement(children) && typeof children.type === "string" && ["input", "select", "textarea"].includes(children.type);
+  const control = nativeInput ? cloneElement(children as ReactElement<{ id?: string; "aria-describedby"?: string }>, { id, "aria-describedby": description ? `${id}-description` : undefined }) : children;
   return (
-    <label className="block">
-      <span className="text-sm font-extrabold text-[#0B1F3A]">{label}</span>
-      {description ? <span className="mt-1 block text-xs leading-5 text-[#6B7280]">{description}</span> : null}
-      <span className="mt-2 block">{children}</span>
-    </label>
+    <div className="block">
+      {nativeInput ? <label htmlFor={id} className="text-sm font-extrabold text-[#0B1F3A]">{label}</label> : <p className="text-sm font-extrabold text-[#0B1F3A]">{label}</p>}
+      {description ? <p id={`${id}-description`} className="mt-1 text-xs leading-5 text-[#526174]">{description}</p> : null}
+      <div className="mt-2">{control}</div>
+    </div>
   );
 }
 
@@ -362,6 +368,7 @@ export default function TgpiAccountCenter({
   const [saveState, setSaveState] = useState<SaveState>("idle");
   const [message, setMessage] = useState("");
   const savedSnapshot = useRef(JSON.stringify({ identity: initialIdentity, profile: initialProfile }));
+  const incomingSnapshot = useRef(JSON.stringify({ identity: initialIdentity, profile: initialProfile }));
   const currentSnapshot = JSON.stringify({ identity, profile });
   const isDirty = currentSnapshot !== savedSnapshot.current;
   const completion = useMemo(() => getAccountProfileCompletion(identity, profile), [identity, profile]);
@@ -377,7 +384,7 @@ export default function TgpiAccountCenter({
   const fullName = [identity.firstName, identity.lastName].filter(Boolean).join(" ") || "TGPI member";
   const currentCountryName = countries.find((country) => country.slug === profile.currentCountry)?.name || profile.currentCountry;
   const sectionSummaries: Record<Exclude<SettingsSection, "overview">, string> = {
-    "global-key": "Integrity chain and encrypted proof",
+    "global-key": "Global ID, verification and account security",
     global: profile.profession || (profile.languages.length ? `${profile.languages.length} languages` : "Add your global context"),
     identity: profile.currentCity || profile.currentCountry || "Add personal information",
     progress: `${rank.name} · ${rank.points} points`,
@@ -387,6 +394,17 @@ export default function TgpiAccountCenter({
     privacy: profile.privacy.visibility.charAt(0).toUpperCase() + profile.privacy.visibility.slice(1),
     security: "Password, devices and login methods",
   };
+
+  useEffect(() => {
+    const nextSnapshot = JSON.stringify({ identity: initialIdentity, profile: initialProfile });
+    if (nextSnapshot === incomingSnapshot.current) return;
+    incomingSnapshot.current = nextSnapshot;
+    if (!isDirty) {
+      savedSnapshot.current = nextSnapshot;
+      setIdentity(initialIdentity);
+      setProfile(initialProfile);
+    }
+  }, [initialIdentity, initialProfile, isDirty]);
 
   useEffect(() => {
     const normalizedPath = pathname.replace(/\/+$/, "");
@@ -460,6 +478,7 @@ export default function TgpiAccountCenter({
   }
 
   async function saveAccount() {
+    if (saveState === "saving") return;
     setSaveState("saving");
     setMessage("");
     const payload: TgpiAccountUpdate = { identity, profile };
@@ -484,7 +503,7 @@ export default function TgpiAccountCenter({
       setSaveState("saved");
       setMessage("Saved across your TGPI account and decision tools.");
       announceProgressSaved();
-      await user?.reload();
+      try { await user?.reload(); } catch { /* Persistence succeeded; a session refresh can retry later. */ }
       router.refresh();
     } catch (error) {
       setSaveState("error");
@@ -577,23 +596,30 @@ export default function TgpiAccountCenter({
     activeScreen = (
       <div>
         <ScreenHeading description="Manage the cryptographic identity, encrypted proof, Base Mainnet anchor and linked integrity history behind your stable TGPI Global ID." section="global-key" title="Global Key" />
-        <article className="relative mt-6 overflow-hidden rounded-[28px] border border-[#173754] bg-[radial-gradient(circle_at_top_right,rgba(43,112,168,0.34),transparent_42%),#07182D] p-6 text-white shadow-[0_24px_65px_rgba(11,31,58,0.2)] sm:p-8">
+        <article className="tgpi-key-surface relative mt-6 overflow-hidden rounded-[28px] border border-[#173754] p-6 text-white shadow-[0_24px_65px_rgba(11,31,58,0.2)] sm:p-8">
           <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
-            <span aria-hidden="true" className="grid h-16 w-16 shrink-0 place-items-center rounded-[22px] border border-[#E5B94B]/35 bg-[#E5B94B]/10 text-3xl">🗝️</span>
+            <span aria-hidden="true" className="tgpi-key-emblem grid h-16 w-16 shrink-0 place-items-center rounded-[22px] border border-[#E5B94B]/35 bg-[#E5B94B]/10 text-[#F0D58C]"><SettingsIcon section="global-key" /></span>
             <div className="min-w-0 flex-1">
-              <div className="flex flex-wrap items-center gap-2"><p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#F0D58C]">TGPI Integrity Chain V2</p><span className="rounded-full border border-[#72C79D]/30 bg-[#72C79D]/10 px-2.5 py-1 text-[9px] font-extrabold uppercase tracking-[0.12em] text-[#AFE3C7]">Base Mainnet ready</span></div>
+              <div className="flex flex-wrap items-center gap-2"><p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#F0D58C]">TGPI Integrity Chain V2</p><span className="rounded-full border border-[#72C79D]/30 bg-[#72C79D]/10 px-2.5 py-1 text-[9px] font-extrabold uppercase tracking-[0.12em] text-[#AFE3C7]">Verification details in command center</span></div>
               <p className="mt-3 break-all font-mono text-lg font-bold tracking-[0.06em] text-white sm:text-2xl">{account.globalId}</p>
               <p className="mt-3 max-w-2xl text-xs leading-6 text-[#AEBBC9]">Your existing Global ID remains stable. The Integrity Chain adds signed blocks, an encrypted verification proof, safe rotation and an external Merkle receipt without changing login credentials.</p>
             </div>
           </div>
           <div className="mt-7 grid gap-3 border-t border-white/10 pt-6 sm:grid-cols-3">
-            {["Tamper-evident linked history", "Base Mainnet Merkle receipt", "No identity or private progress on-chain"].map((item) => <p className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-xs font-bold text-[#D7E0E8]" key={item}>✓ {item}</p>)}
+            {["Stable ID across your TGPI account", "Review actual proof and anchoring status", "Keep personal information off-chain"].map((item) => <p className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-xs font-bold text-[#D7E0E8]" key={item}>✓ {item}</p>)}
           </div>
           <Link className="mt-6 inline-flex min-h-11 items-center rounded-xl bg-[#E5B94B] px-5 text-xs font-extrabold text-[#07182D] transition hover:bg-[#F0C95F]" href="/global-key">Open Global Key Command Center →</Link>
         </article>
-        <div className="mt-6 grid gap-4 sm:grid-cols-2">
-          <article className="rounded-[22px] border border-[#DDD7CB] bg-white p-5 sm:p-6"><p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#86621A]">Authentication boundary</p><h3 className="mt-2 text-lg font-extrabold text-[#0B1F3A]">Clerk remains the security authority.</h3><p className="mt-3 text-xs leading-6 text-[#667085]">Passwords, MFA, passkeys, recovery and active sessions never enter the TGPI cryptographic proof.</p><button className="mt-4 text-xs font-extrabold text-[#76520C]" onClick={() => selectSection("security")} type="button">Open login security →</button></article>
-          <article className="rounded-[22px] border border-[#D7C68F] bg-[#FBF4DE] p-5 sm:p-6"><p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#73520F]">Transparent technology</p><h3 className="mt-2 text-lg font-extrabold text-[#0B1F3A]">Publicly anchored, never tokenized.</h3><p className="mt-3 text-xs leading-6 text-[#665A38]">V2 periodically writes a privacy-safe Merkle root to Base Mainnet. The Global Key is not a cryptocurrency, wallet, NFT or government credential.</p></article>
+        <div className="mt-5 grid gap-3 sm:grid-cols-3">
+          {[
+            { title: "Account connection", value: account.emailVerified ? "Email verified" : "Verify your email", detail: "Email verification confirms access to the address; it is not legal identity verification.", section: "security" as const },
+            { title: "Certificate identity", value: profile.legalFullName ? "Real name provided" : "Add your complete name", detail: "Review the name used for newly issued learning credentials.", section: "identity" as const },
+            { title: "Privacy controls", value: profile.privacy.visibility === "private" ? "Private profile" : "Review profile sharing", detail: "Choose which profile details other people can see.", section: "privacy" as const },
+          ].map(card => <button className="tgpi-account-tile rounded-2xl border border-[#D8D2C4] bg-white p-5 text-left" key={card.title} onClick={() => selectSection(card.section)} type="button"><span className="text-xs font-bold uppercase tracking-wider text-[#705115]">{card.title}</span><span className="mt-2 block text-base font-extrabold text-[#0B1F3A]">{card.value} →</span><span className="mt-2 block text-sm leading-6 text-[#526174]">{card.detail}</span></button>)}
+        </div>
+        <div className="tgpi-account-grid mt-6 grid gap-4 sm:grid-cols-2">
+          <article className="tgpi-account-tile rounded-[22px] border border-[#DDD7CB] bg-white p-5 sm:p-6"><p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#86621A]">Authentication boundary</p><h3 className="mt-2 text-lg font-extrabold text-[#0B1F3A]">Clerk remains the security authority.</h3><p className="mt-3 text-xs leading-6 text-[#667085]">Passwords, MFA, passkeys, recovery and active sessions never enter the TGPI cryptographic proof.</p><button className="mt-4 text-xs font-extrabold text-[#76520C]" onClick={() => selectSection("security")} type="button">Open login security →</button></article>
+          <article className="rounded-[22px] border border-[#D7C68F] bg-[#FBF4DE] p-5 sm:p-6"><p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#73520F]">Transparent technology</p><h3 className="mt-2 text-lg font-extrabold text-[#0B1F3A]">Publicly anchored, never tokenized.</h3><p className="mt-3 text-xs leading-6 text-[#665A38]">When anchoring is configured and confirmed, a privacy-safe Merkle root can be checked on Base Mainnet. The Global Key is not a cryptocurrency, wallet, NFT or government credential.</p></article>
         </div>
       </div>
     );
@@ -614,15 +640,31 @@ export default function TgpiAccountCenter({
           <div className="grid gap-5 sm:grid-cols-2">
             <Field label="First name"><input autoComplete="given-name" className="tgpi-account-input" maxLength={60} onChange={(event) => updateIdentity({ firstName: event.target.value })} required value={identity.firstName} /></Field>
             <Field label="Last name"><input autoComplete="family-name" className="tgpi-account-input" maxLength={60} onChange={(event) => updateIdentity({ lastName: event.target.value })} value={identity.lastName} /></Field>
+            <div className="sm:col-span-2"><Field label="Complete real name" description="Enter all given names and surnames exactly as you want them on new certificates. This is self-declared, not document-verified."><input autoComplete="name" className="tgpi-account-input" maxLength={120} onChange={event => updateProfile({ legalFullName: event.target.value })} placeholder={fullName} value={profile.legalFullName} /></Field></div>
+            <Field label="Date of birth" description="Private. Only added to your downloaded PDF if you enable the option below."><input type="date" className="tgpi-account-input" autoComplete="bday" min="1900-01-01" max={new Date().toISOString().slice(0, 10)} onChange={event => updateProfile({ dateOfBirth: event.target.value })} value={profile.dateOfBirth} /></Field>
+            <Field label="Gender" description="Choose how you identify. This does not determine country or career recommendations."><select className="tgpi-account-input" value={profile.gender} onChange={event => updateProfile({ gender: event.target.value as TgpiAccountProfile["gender"] })}><option value="">Select an option</option><option value="man">Man</option><option value="woman">Woman</option><option value="other">Other</option><option value="undisclosed">Prefer not to say</option></select></Field>
+            <Field label="How should TGPI address you?" description="Independent of gender; choose what feels right."><select className="tgpi-account-input" value={profile.preferredTitle} onChange={event => updateProfile({ preferredTitle: event.target.value as TgpiAccountProfile["preferredTitle"] })}><option value="name">By my name</option><option value="mr">Mr.</option><option value="ms">Ms.</option><option value="mx">Mx.</option></select></Field>
+            <div className="rounded-2xl border border-[#D8D2C4] bg-[#F8F5EE] p-4"><p className="text-xs font-bold text-[#526174]">Personal greeting preview</p><p className="mt-2 text-xl font-semibold text-[#0B1F3A]">{getAccountSalutation(identity, profile)}</p></div>
             <div className="sm:col-span-2"><Field label="Unique TGPI @ID" description={usernameEnabled ? "3–30 characters. Start with a letter; use letters, numbers and underscores. Uniqueness is checked securely when you save. Your Global Key remains unchanged." : "TGPI @IDs are awaiting activation. Your name, photo and all other settings can be updated now."}><input className="tgpi-account-input" disabled={!usernameEnabled} autoComplete="username" autoCapitalize="none" spellCheck={false} maxLength={30} pattern="[a-z][a-z0-9_]{2,29}" onChange={(event) => updateIdentity({ username: event.target.value.replace(/^@/, "").toLowerCase() })} placeholder="renan_matheus" value={identity.username || ""} /></Field></div>
             <div className="sm:col-span-2"><Field description="A concise line used in future profile and collaboration surfaces." label="Professional headline"><input className="tgpi-account-input" maxLength={120} onChange={(event) => updateProfile({ headline: event.target.value })} placeholder="Product designer building a global career" value={profile.headline} /></Field></div>
             <div className="sm:col-span-2"><Field description={`${profile.bio.length}/500 characters`} label="About you"><textarea className="tgpi-account-input min-h-32 resize-y py-3" maxLength={500} onChange={(event) => updateProfile({ bio: event.target.value })} placeholder="Share the context that helps TGPI understand your goals and experience." value={profile.bio} /></Field></div>
-            <Field label="Current country"><select className="tgpi-account-input" onChange={(event) => updateProfile({ currentCountry: event.target.value })} value={profile.currentCountry}><option value="">Select a country</option>{countries.map((country) => <option key={country.slug} value={country.slug}>{country.emoji} {country.name}</option>)}</select></Field>
-            <Field label="Current city"><input className="tgpi-account-input" maxLength={100} onChange={(event) => updateProfile({ currentCity: event.target.value })} placeholder="São Paulo" value={profile.currentCity} /></Field>
-            <Field label="Nationality"><input className="tgpi-account-input" maxLength={80} onChange={(event) => updateProfile({ nationality: event.target.value })} placeholder="Brazilian" value={profile.nationality} /></Field>
+            <Field label="Country of residence"><ProfileSearchSelect label="Country of residence" value={profile.currentCountry} options={countries.map(country => ({ label: `${country.emoji} ${country.name}`, value: country.slug }))} onChange={value => updateProfile({ currentCountry: value, currentCity: "" })} /></Field>
+            <Field label="City of residence" description="Search major-city suggestions or enter and select your city if it is not listed."><ProfileSearchSelect key={profile.currentCountry} label="City of residence" value={profile.currentCity} options={(citySuggestions[profile.currentCountry] ?? []).map(city => ({ label: city, value: city }))} allowCustom onChange={value => updateProfile({ currentCity: value })} /></Field>
+            <Field label="Nationality / country of citizenship" description="Your citizenship can differ from where you live. It helps frame document and immigration research."><ProfileSearchSelect label="Nationality" value={profile.nationality} options={countries.map(country => ({ label: country.name, value: country.name }))} onChange={value => updateProfile({ nationality: value })} /></Field>
+            <Field label="Profession" description="Used as context for career research, qualification recognition and your personal plan."><ProfileSearchSelect label="Profession" value={profile.profession} options={professionSuggestions.map(profession => ({ label: profession, value: profession }))} allowCustom onChange={value => updateProfile({ profession: value })} /></Field>
+            <Field label="Professional experience"><select className="tgpi-account-input" value={profile.yearsExperience} onChange={event => updateProfile({ yearsExperience: event.target.value })}><option value="">Select your experience</option><option value="0">Getting started</option><option value="1-2">1–2 years</option><option value="3-5">3–5 years</option><option value="6-10">6–10 years</option><option value="11+">11+ years</option></select></Field>
+            <Field label="Current professional situation"><select className="tgpi-account-input" value={profile.employmentType} onChange={event => updateProfile({ employmentType: event.target.value })}><option value="">Select an option</option><option value="employed">Employed</option><option value="self-employed">Self-employed</option><option value="entrepreneur">Entrepreneur</option><option value="student">Student</option><option value="seeking-work">Seeking work</option><option value="retired">Retired</option></select></Field>
             <Field label="Timezone"><input className="tgpi-account-input" list="tgpi-timezones" maxLength={80} onChange={(event) => updateProfile({ timezone: event.target.value })} placeholder="America/Sao_Paulo" value={profile.timezone} /><datalist id="tgpi-timezones">{timezoneOptions.map((timezone) => <option key={timezone} value={timezone} />)}</datalist></Field>
           </div>
         </div>
+        <article className="tgpi-account-tile mt-6 rounded-[22px] border border-[#D7C68F] bg-[#FBF4DE] p-5 sm:p-7">
+          <p className="text-xs font-extrabold uppercase tracking-wider text-[#705115]">Certificate identity preview</p>
+          <h3 className="mt-3 break-words text-2xl text-[#0B1F3A]">{getCertificateName(identity, profile)}</h3>
+          <p className="mt-2 break-all text-sm font-bold text-[#526174]">{account.globalId}</p>
+          <p className="mt-3 text-sm leading-6 text-[#62583E]">New certificates use your saved real name. Existing signed credentials preserve their original issued name. Your birth date and gender do not appear on your public profile or verification page.</p>
+          <Toggle checked={profile.certificateBirthDateConsent} label="Include birth date in my downloaded certificate PDF" description="Optional personal detail, provided by you. Anyone you send that PDF to will see it. Public verification does not include it." onChange={value => updateProfile({ certificateBirthDateConsent: value })} />
+          <Link className="mt-4 inline-flex font-bold text-[#705115]" href="/certificates">Open my certificates →</Link>
+        </article>
       </div>
     );
   }
@@ -633,7 +675,7 @@ export default function TgpiAccountCenter({
         <ScreenHeading description="This context synchronizes with Country Fit, Compare, your personal plan and learning paths." section="global" title="Global profile" />
         <div className="mt-6 rounded-[22px] border border-[#DDD7CB] bg-white p-5 sm:p-7">
           <div className="grid gap-5 sm:grid-cols-2">
-            <Field label="Profession or field"><input className="tgpi-account-input" maxLength={100} onChange={(event) => updateProfile({ profession: event.target.value })} placeholder="Software engineering" value={profile.profession} /></Field>
+            <Field label="Profession or field"><ProfileSearchSelect label="Profession or field" value={profile.profession} options={professionSuggestions.map(profession => ({ label: profession, value: profession }))} allowCustom onChange={value => updateProfile({ profession: value })} /></Field>
             <Field label="Education level"><select className="tgpi-account-input" onChange={(event) => updateProfile({ educationLevel: event.target.value })} value={profile.educationLevel}><option value="">Select your level</option><option value="Secondary education">Secondary education</option><option value="Technical or vocational">Technical or vocational</option><option value="Undergraduate">Undergraduate</option><option value="Bachelor's degree">Bachelor&apos;s degree</option><option value="Master's degree">Master&apos;s degree</option><option value="Doctorate">Doctorate</option><option value="Other">Other</option></select></Field>
             <div className="sm:col-span-2"><p className="text-sm font-extrabold text-[#0B1F3A]">Languages</p><p className="mt-1 text-xs leading-5 text-[#6B7280]">Choose up to eight. The same list updates your personal plan.</p><div className="mt-3 flex flex-wrap gap-2">{languageOptions.map((language) => { const selected = profile.languages.includes(language); return <button aria-pressed={selected} className={`rounded-full border px-3.5 py-2 text-xs font-extrabold transition ${selected ? "border-[#0B1F3A] bg-[#0B1F3A] text-white" : "border-[#D8D2C4] bg-white text-[#566173] hover:border-[#B58A2A]"}`} key={language} onClick={() => toggleLanguage(language)} type="button">{selected ? "✓ " : ""}{language}</button>; })}</div></div>
           </div>
