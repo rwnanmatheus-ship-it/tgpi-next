@@ -957,3 +957,54 @@ a[aria-current="page"] .tgpi-nav-miniature-art { transform: translateY(-2px) rot
   .tgpi-nav-miniature, .tgpi-nav-miniature-art { transition: none; }
 }
 .tgpi-desktop-primary-link .tgpi-nav-miniature-art svg { display: block; }
+/* Cinematic miniatures: one shared transparent atlas, no animation loop. */
+.tgpi-nav-cinematic {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 52px;
+  flex: 0 0 40px;
+  isolation: isolate;
+  perspective: 260px;
+}
+.tgpi-nav-cinematic-object {
+  position: absolute;
+  inset: 0;
+  background-image: url('/brand/navigation/tgpi-cinematic-atlas-v1.webp');
+  background-repeat: no-repeat;
+  background-size: 400% 307.6923%;
+  background-position: 0% 20.8333%;
+  filter: drop-shadow(0 3px 2px #0b1f3a35);
+  transform: translateZ(0);
+  transition: transform 260ms cubic-bezier(.2,.75,.25,1), filter 260ms ease;
+}
+.tgpi-nav-cinematic[data-cell="1"] .tgpi-nav-cinematic-object { background-position: 33.3333% 20.8333%; }
+.tgpi-nav-cinematic[data-cell="2"] .tgpi-nav-cinematic-object { background-position: 66.6667% 20.8333%; }
+.tgpi-nav-cinematic[data-cell="3"] .tgpi-nav-cinematic-object { background-position: 100% 20.8333%; }
+.tgpi-nav-cinematic[data-cell="4"] .tgpi-nav-cinematic-object { background-position: 0% 78.7037%; }
+.tgpi-nav-cinematic[data-cell="5"] .tgpi-nav-cinematic-object { background-position: 33.3333% 78.7037%; }
+.tgpi-nav-cinematic[data-cell="6"] .tgpi-nav-cinematic-object { background-position: 66.6667% 78.7037%; }
+.tgpi-nav-cinematic[data-cell="7"] .tgpi-nav-cinematic-object { background-position: 100% 78.7037%; }
+.tgpi-nav-cinematic-light {
+  position: absolute;
+  inset: 8px 2px;
+  z-index: -1;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, #e8c77845, transparent 72%);
+  opacity: 0;
+  transition: opacity 240ms ease;
+}
+:is(a,button):is(:hover,:focus-visible) .tgpi-nav-cinematic-object {
+  transform: translateY(-2px) rotateY(-12deg) rotateZ(-3deg) scale(1.07);
+  filter: drop-shadow(2px 5px 3px #0b1f3a40) brightness(1.06);
+}
+:is(a,button):is(:hover,:focus-visible) .tgpi-nav-cinematic-light { opacity: 1; }
+:is(a,button):active .tgpi-nav-cinematic-object { transform: translateY(1px) scale(.93); }
+.tgpi-desktop-primary-link { padding-block: 2px; }
+.tgpi-navigation-icon-button, .tgpi-navigation-square-button { padding-block: 0; }
+.tgpi-compact-topbar .tgpi-nav-cinematic,
+.tgpi-compact-dock-icon .tgpi-nav-cinematic { transform: scale(.76); }
+@media (prefers-reduced-motion: reduce) {
+  .tgpi-nav-cinematic-object, .tgpi-nav-cinematic-light { transition: none; }
+  :is(a,button):is(:hover,:focus-visible,:active) .tgpi-nav-cinematic-object { transform: none; }
+}
