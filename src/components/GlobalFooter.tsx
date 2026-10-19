@@ -30,7 +30,7 @@ const linkStyle = "inline-flex min-h-11 items-center rounded-md py-2 text-sm lea
 
 export default function GlobalFooter() {
   return (
-    <footer className="relative isolate overflow-hidden border-t border-[#C5A059]/30 bg-[#040E19] text-white">
+    <footer style={{ fontFamily: "var(--tgpi-font-sans)" }} className="relative isolate overflow-hidden border-t border-[#C5A059]/30 bg-[#040E19] text-white">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_left,rgba(197,160,89,0.09),transparent_50%),radial-gradient(ellipse_at_bottom_right,rgba(42,100,155,0.13),transparent_55%)]" />
       <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,#D4B36E,transparent)]" />
       <div aria-hidden="true" className="pointer-events-none absolute -right-32 -top-24 h-[480px] w-[480px] text-[#CDAE70]/[0.12] sm:right-0 lg:right-16">
@@ -52,7 +52,7 @@ export default function GlobalFooter() {
         <div className="mb-8 grid gap-7 border-b border-[#D4B36E]/20 pb-8 sm:mb-10 sm:pb-10 lg:grid-cols-[1fr_auto] lg:items-end">
           <div className="max-w-2xl">
             <p className="mb-4 flex items-center gap-3 text-[10px] font-semibold uppercase leading-5 tracking-[0.24em] text-[#E5C887]"><span aria-hidden="true" className="h-px w-8 bg-[#D4B36E]/70" />Knowledge without borders</p>
-            <p className="font-[var(--tgpi-font-display)] text-[clamp(2rem,4vw,3.5rem)] leading-[1.12] tracking-[-0.025em] text-[#F5F0E5]">A wider world.<br /><span className="bg-[linear-gradient(110deg,#B8914F,#F6E5B8_45%,#C9A35B)] bg-clip-text text-transparent">A more considered life.</span></p>
+            <p className="font-medium text-[clamp(1.875rem,3.6vw,3.125rem)] leading-[1.16] tracking-[-0.035em] text-[#F5F0E5]">A wider world.<br /><span className="bg-[linear-gradient(110deg,#B8914F,#F6E5B8_45%,#C9A35B)] bg-clip-text text-transparent">A more considered life.</span></p>
             <p className="mt-4 max-w-lg text-sm leading-6 text-[#B7C7D9]">The perspective to choose. The knowledge to prepare. The confidence to move forward.</p>
           </div>
           <Link href="/dashboard" className="group inline-flex min-h-12 w-fit items-center gap-5 rounded-full border border-[#D4B36E]/50 bg-[linear-gradient(120deg,rgba(212,179,110,0.17),rgba(212,179,110,0.04))] px-6 py-3 text-sm font-semibold text-[#F1D796] shadow-[inset_0_1px_0_rgba(255,244,211,0.14),0_8px_30px_rgba(0,0,0,0.18)] transition-colors hover:border-[#F1D796] hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#F1D796]">Enter your workspace<span aria-hidden="true">↗</span></Link>
@@ -71,7 +71,7 @@ export default function GlobalFooter() {
         <nav aria-label="TGPI footer navigation" className="grid grid-cols-2 gap-x-6 gap-y-7 pb-8 md:grid-cols-4 lg:gap-x-10">
           {footerGroups.map(({ title, links }) => (
             <div key={title} className="min-w-0">
-              <h2 className="mb-3 font-[var(--tgpi-font-sans)] text-xs font-bold uppercase leading-5 tracking-[0.12em] text-[#E5C887]">{title}</h2>
+              <h2 style={{ fontFamily: "var(--tgpi-font-sans)", fontSize: "0.875rem", fontWeight: 600, lineHeight: 1.5, letterSpacing: "0.015em" }} className="mb-3 text-[#E5C887]">{title}</h2>
               <ul>
                 {links.map(([label, href]) => <li key={href}><Link href={href} prefetch={false} className={linkStyle}>{label}</Link></li>)}
               </ul>
