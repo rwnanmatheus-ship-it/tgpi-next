@@ -544,6 +544,7 @@ export default function GlobalWorkspaceOS({
                     <span className="text-[#F0D58C]">{rank.nextRank ? `${rank.pointsToNext} pts` : "100%"}</span>
                   </div>
                   <ProgressBar label="Progress toward next TGPI rank" value={rank.progressWithinRank} />
+                  {rank.nextRank && <p className="mt-3 text-xs leading-5 text-[#AEBBC9]">Requires {rank.nextRank.courses} completed courses and {rank.nextRank.plan}% plan completion. Points alone do not unlock this rank.</p>}
                 </div>
                 <p className="mt-4 text-[10px] leading-5 text-[#77899D]">{GLOBAL_RANK_DISCLAIMER}</p>
                 <Link className="mt-4 inline-flex text-xs font-extrabold text-[#F0D58C]" href="/profile/security#settings-progress">View rank journey →</Link>
