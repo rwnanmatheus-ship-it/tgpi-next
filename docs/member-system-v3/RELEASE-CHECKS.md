@@ -16,7 +16,7 @@ The user explicitly requested completion of available tests and production publi
 ## Corrections from verification
 
 1. The current Clerk username could equal the requested application handle, producing two writes to the same Firestore reservation path. The migration now emits a single reservation write. A regression test asserts every transaction's write paths are unique and exercises this exact case.
-2. Account navigation scroll offset now measures the compact section navigator and global scroll padding, instead of scrolling the section heading underneath sticky navigation.
+2. Account navigation scroll offset now measures the compact section navigator and global scroll padding, instead of scrolling the section heading underneath sticky navigation. The rounded account container uses overflow-clip so it does not create a hidden scroll container that offsets the sticky navigator into the form.
 3. Member-identity loading failures replace the initial Loading status with an unavailable message while preserving the profile draft.
 
 ## Scope separation
