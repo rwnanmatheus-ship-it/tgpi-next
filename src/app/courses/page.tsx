@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import CapabilitySystemRail from "@/components/capability/CapabilitySystemRail";
 import LearningPathExplorer from "@/components/courses/LearningPathExplorer";
 import TGPIPageShell from "@/components/TGPIPageShell";
 import { coursesOverview } from "@/data/courses-overview";
@@ -24,5 +25,6 @@ export default function CoursesPage() {
       </div>
     </section>
     <LearningPathExplorer courses={catalog} />
+    <div className="mt-8"><CapabilitySystemRail active="learning" /></div>
   </TGPIPageShell>;
 }
