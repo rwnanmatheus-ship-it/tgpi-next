@@ -53,7 +53,7 @@ function registry() {
       getFirestoreDocument: async path => docs.has(path) ? { data: structuredClone(docs.get(path)) } : null,
       runFirestoreTransaction: build => {
         const result = queue.then(async () => { const plan = await build({ getDocuments: async paths => new Map(paths.map(path => [path, docs.has(path) ? { data: structuredClone(docs.get(path)) } : null])) });
-          for (const write of plan.writes) docs.set(write.path, structuredClone(write.data)); return plan.result; });
+          assert.equal(new Set(plan.writes.map(write => write.path)).size, plan.writes.length, 'each transaction must write each document at most once'); for (const write of plan.writes) docs.set(write.path, structuredClone(write.data)); return plan.result; });
         queue = result.catch(() => {}); return result;
       },
     },
@@ -119,4 +119,11 @@ test('profile export rejects anonymous and private profiles (real route, isolate
   signedIn = true; visibility = 'private'; assert.equal((await route.POST(request())).status,409);
   visibility = 'public'; const response = await route.POST(request()); assert.equal(response.status,200); assert.equal(response.headers.get('content-type'),'application/pdf'); assert.equal(response.headers.get('cache-control'),'private, no-store');
   assert.equal((await PDFDocument.load(await response.arrayBuffer())).getPageCount(),1);
+});
+
+test('migrating the current Clerk username writes its reservation only once', async () => {
+ const { api } = registry();
+ const identity = await api.claimMemberIdentity('owner1', 'existing_id', 'existing_id');
+ assert.equal(identity.handle, 'existing_id');
+ assert.equal(await api.resolveMember('handles', 'existing_id'), 'owner1');
 });

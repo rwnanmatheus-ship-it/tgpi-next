@@ -1,6 +1,6 @@
 # TGPI account and member identity — implementation review
 
-Status: implemented on a review branch; not released to production. This document distinguishes code verification from live-service verification.
+Status at initial review: implemented on a review branch. For the subsequent user-authorized publication and completed additional checks, read RELEASE-CHECKS.md. This document distinguishes code verification from live-service verification.
 
 ## Diagnosis
 

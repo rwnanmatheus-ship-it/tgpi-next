@@ -1,7 +1,7 @@
 {
   "typecheck": "passed",
   "lint": "passed",
-  "accountTests": 29,
+  "accountTests": 30,
   "platformTests": 11,
   "navigationTests": 7,
   "mobileLogicTests": 19,
@@ -14,9 +14,15 @@
   "defaultTurbopackBuild": "failed: local Google font import-map resolution",
   "pdfVisualReview": "passed: synthetic A4 fixture rendered with Poppler",
   "liveFirestore": "not executed",
-  "authenticatedBrowser": "not executed",
-  "responsiveVisualQA": "blocked: Chromium unavailable; remote browser cannot access local server",
-  "pngBrowserExport": "not executed",
-  "publication": "review branch; production unchanged",
-  "pdfQrDecoded": "passed: exact profile-only URL"
+  "authenticatedBrowser": "not executed: no real member session supplied",
+  "responsiveVisualQA": "30 no-overflow reports: six sections x 320/390/768/1280/1920px; synthetic actual-component Preview fixtures",
+  "pngBrowserExport": "passed: downloaded 1800x1125 PNG; QR decoded; visually inspected",
+  "publication": "explicitly authorized; production release pending final build",
+  "pdfQrDecoded": "passed: exact profile-only URL",
+  "automatedBaselineTotal": 168,
+  "anonymousPreviewAuthGuards": "passed: three actual application sign-in errors observed in browser",
+  "keyboardFocus": "passed: first name Tab to last name",
+  "saveFailurePreservesDraft": "passed: real anonymous PATCH rejection retained the edited name",
+  "zoom200Percent": "no horizontal overflow in CSS zoom fixture",
+  "reducedMotion": "animation none and transition 0s with explicit fixture override"
 }

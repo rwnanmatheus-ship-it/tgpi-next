@@ -1,5 +1,6 @@
 # Changed files
 
+- `docs/member-system-v3/RELEASE-CHECKS.md`
 - `docs/member-system-v3/DEPLOYMENT.md`
 - `docs/member-system-v3/FILES.md`
 - `docs/member-system-v3/REVIEW.md`

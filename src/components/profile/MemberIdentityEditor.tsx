@@ -17,7 +17,7 @@ export default function MemberIdentityEditor() {
       const data = await r.json(); if (!r.ok) throw new Error(data.error);
       setIdentity(data.identity); setHandle(data.identity?.handle || ''); setAvailable(data.available);
       setMessage(data.available ? 'Saved separately from your personal information. One change every 30 days; old IDs remain reserved to you and keep resolving to your profile.' : 'Member identity is temporarily unavailable. Your other settings remain available.');
-    }).catch(e => { if (e.name !== 'AbortError') setError('Unable to load your identity. Reload to retry.'); }).finally(() => { if (!controller.signal.aborted) setBusy(false); });
+    }).catch(e => { if (e.name !== 'AbortError') { setError('Unable to load your identity. Reload to retry.'); setMessage('Member identity is unavailable. Your profile draft is preserved.'); } }).finally(() => { if (!controller.signal.aborted) setBusy(false); });
     return () => controller.abort();
   }, []);
   async function save() {

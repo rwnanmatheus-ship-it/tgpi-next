@@ -40,7 +40,7 @@ export async function claimMemberIdentity(uid: string, value: unknown, legacyUse
       createFirestoreUpdateWrite(ownerPath, result),
       createFirestoreUpdateWrite(handlePath, { uid }),
       createFirestoreUpdateWrite(numberPath, { uid }),
-      ...(legacyPath && (!docs.get(legacyPath) || docs.get(legacyPath)?.data.uid === uid) ? [createFirestoreUpdateWrite(legacyPath, { uid })] : []),
+      ...(legacyPath && legacyPath !== handlePath && (!docs.get(legacyPath) || docs.get(legacyPath)?.data.uid === uid) ? [createFirestoreUpdateWrite(legacyPath, { uid })] : []),
     ] };
   });
 }
