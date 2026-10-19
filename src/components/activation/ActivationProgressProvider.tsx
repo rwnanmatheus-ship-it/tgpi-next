@@ -1,5 +1,6 @@
 "use client";
 
+import { PROGRESS_SYNC_CHANNEL } from "@/lib/progress-sync";
 import { useAuth } from "@clerk/nextjs";
 import {
   createContext,
@@ -83,6 +84,26 @@ export default function ActivationProgressProvider({
     };
   }, [isLoaded, userId]);
 
+  useEffect(() => {
+    if (!userId) return;
+    let active = true;
+    const refresh = () => {
+      if (document.visibilityState !== "visible") return;
+      const requestRevision = revision.current;
+      fetchActivationProgress(userId).then(next => {
+        if (!active || activeUserId.current !== userId || requestRevision !== revision.current) return;
+        setProgress(next);
+        setLoadedUserId(userId);
+        setError("");
+      }).catch(() => { /* Keep the last confirmed snapshot during a transient failure. */ });
+    };
+    const channel = typeof BroadcastChannel !== "undefined" ? new BroadcastChannel(PROGRESS_SYNC_CHANNEL) : null;
+    if (channel) channel.onmessage = refresh;
+    window.addEventListener("focus", refresh);
+    const interval = window.setInterval(refresh, 60_000);
+    return () => { active = false; channel?.close(); window.removeEventListener("focus", refresh); clearInterval(interval); };
+  }, [userId]);
+
   const mutate = useCallback((mutation: ActivationMutation) => {
     const requestUserId = userId;
     if (!requestUserId) return Promise.reject(new ActivationApiError("Sign in to save your learning progress.", 401));
@@ -98,6 +119,7 @@ export default function ActivationProgressProvider({
     const handledRequest = request.then(
       (next) => {
         if (activeUserId.current !== requestUserId) throw new ActivationApiError("Your session changed. Reload before saving.", 401);
+        revision.current += 1;
         setLoadedUserId(requestUserId);
         setProgress(next);
         setError("");

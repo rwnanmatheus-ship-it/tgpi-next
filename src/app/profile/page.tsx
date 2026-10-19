@@ -1,3 +1,4 @@
+import { getGlobalRankSignals } from "@/lib/global-rank-signals";
 import type { Metadata } from "next";
 import { currentUser } from "@clerk/nextjs/server";
 import GlobalWorkspaceOS from "@/components/profile/GlobalWorkspaceOS";
@@ -82,13 +83,10 @@ export default async function ProfilePage({
   );
   const profileCompletion = getAccountProfileCompletion(identity, accountProfile);
   const rank = getGlobalRank({
+    ...getGlobalRankSignals(activation),
     activationCompletion: workspaceModel.activationCompletion,
-    comparisons: activation.comparisons.length,
-    documentReviews: Object.keys(activation.documentReviews).length,
-    learningPaths: Object.keys(activation.courseProgress).length,
     planCompletion: workspaceModel.completion,
     profileCompletion,
-    savedCountries: activation.savedCountries.length,
   });
 
   return (

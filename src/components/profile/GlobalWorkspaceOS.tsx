@@ -283,7 +283,7 @@ export default function GlobalWorkspaceOS({
                   <p className="mt-1 truncate text-sm font-extrabold">{rank.name}</p>
                 </div>
               </div>
-              <p className="mt-3 text-xs leading-5 text-[#AEBBC9]">{rank.points} verified progress points across your private workspace.</p>
+              <p className="mt-3 text-xs leading-5 text-[#AEBBC9]">{rank.points} progress points across your private workspace.</p>
               <Link className="mt-4 inline-flex text-xs font-extrabold text-white" href="/profile/security#settings-progress">See progression →</Link>
             </article>
             <Link className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.025] p-3 transition hover:border-[#E5B94B]/30" href="/profile/security">
@@ -538,7 +538,7 @@ export default function GlobalWorkspaceOS({
                   <div className="min-w-0">
                     <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#E5B94B]">Global progression</p>
                     <h2 id="rank-card-title" className="mt-1 font-[var(--tgpi-font-display)] text-2xl font-semibold">{rank.name}</h2>
-                    <p className="mt-1 text-xs text-[#9DAEC0]">{rank.points} / 1,000 TGPI points</p>
+                    <p className="mt-1 text-xs text-[#9DAEC0]">{rank.points} / 10,000 TGPI points</p>
                   </div>
                 </div>
                 <p className="mt-4 text-xs leading-5 text-[#AEBBC9]">{rank.description}</p>

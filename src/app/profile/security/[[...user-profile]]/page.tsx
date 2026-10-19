@@ -1,3 +1,4 @@
+import { getGlobalRankSignals } from "@/lib/global-rank-signals";
 import { isUsernameEnabled } from "@/lib/auth/username-settings.server";
 import type { Metadata } from "next";
 import { currentUser } from "@clerk/nextjs/server";
@@ -86,13 +87,10 @@ export default async function SecurityPage() {
   );
   const workspaceModel = buildGlobalWorkspaceModel(onboarding, countries, activation);
   const rank = getGlobalRank({
+    ...getGlobalRankSignals(activation),
     activationCompletion: workspaceModel.activationCompletion,
-    comparisons: activation.comparisons.length,
-    documentReviews: Object.keys(activation.documentReviews).length,
-    learningPaths: Object.keys(activation.courseProgress).length,
     planCompletion: workspaceModel.completion,
     profileCompletion: getAccountProfileCompletion(identity, profile),
-    savedCountries: activation.savedCountries.length,
   });
 
   return (

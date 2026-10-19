@@ -1,5 +1,7 @@
 "use client";
 
+import { announceProgressSaved } from "@/lib/progress-sync";
+
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import type {
@@ -237,6 +239,7 @@ export default function OnboardingFlow({
 
       if (saved) {
         router.push("/profile?onboarding=completed");
+        announceProgressSaved();
         router.refresh();
       }
       return;

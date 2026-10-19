@@ -350,3 +350,18 @@ img {
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
   .tgpi-account-tile:hover { transform: translateY(-3px) rotateX(2deg); border-color: #B58A2A; box-shadow: 0 16px 28px rgba(11,31,58,.12), inset 0 1px 0 #fff; }
 }
+
+/* Account center II: scoped readability and tactile surfaces. */
+.tgpi-settings-v2 { font-family: var(--tgpi-font-sans), sans-serif; }
+.tgpi-settings-v2 .text-\[9px\],
+.tgpi-settings-v2 .text-\[10px\],
+.tgpi-settings-v2 .text-\[11px\] { font-size: .75rem; line-height: 1.5; }
+.tgpi-settings-v2 .text-xs { font-size: .875rem; line-height: 1.6; }
+.tgpi-settings-v2 article { box-shadow: 0 2px 0 #0b1f3a08, 0 12px 32px #0b1f3a06; }
+.tgpi-settings-v2 button:focus-visible,
+.tgpi-settings-v2 a:focus-visible { outline: 2px solid #B58A2A; outline-offset: 4px; }
+.tgpi-settings-v2 .tgpi-account-input { font-size: 1rem; min-height: 48px; }
+.tgpi-settings-v2 h1, .tgpi-settings-v2 h2, .tgpi-settings-v2 h3 { overflow-wrap: anywhere; }
+@media (prefers-reduced-motion: reduce) {
+  .tgpi-settings-v2 *, .tgpi-settings-v2 *::before, .tgpi-settings-v2 *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
+}

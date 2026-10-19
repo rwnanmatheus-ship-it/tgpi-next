@@ -1,10 +1,12 @@
 "use client";
 
+import { announceProgressSaved } from "@/lib/progress-sync";
 import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import PublicProfileShareButton from "@/components/profile/PublicProfileShareButton";
+import GlobalProgressPanel from "@/components/profile/GlobalProgressPanel";
 import GlobalRankBadge from "@/components/profile/GlobalRankBadge";
 import TgpiAvatarEditor from "@/components/profile/TgpiAvatarEditor";
 import {
@@ -14,8 +16,6 @@ import {
   type TgpiAccountUpdate,
 } from "@/lib/account-profile";
 import {
-  GLOBAL_RANKS,
-  GLOBAL_RANK_DISCLAIMER,
   type GlobalRank,
 } from "@/lib/global-ranks";
 
@@ -483,6 +483,7 @@ export default function TgpiAccountCenter({
       savedSnapshot.current = JSON.stringify({ identity: result.identity, profile: result.profile });
       setSaveState("saved");
       setMessage("Saved across your TGPI account and decision tools.");
+      announceProgressSaved();
       await user?.reload();
       router.refresh();
     } catch (error) {
@@ -644,27 +645,7 @@ export default function TgpiAccountCenter({
   }
 
   if (activeSection === "progress") {
-    activeScreen = (
-      <div>
-        <ScreenHeading description="Follow a transparent progression system based on your profile, personal plan, readiness actions and real TGPI activity." section="progress" title="Progress & ranks" />
-        <article className="relative mt-6 overflow-hidden rounded-[30px] border border-[#173754] bg-[radial-gradient(circle_at_top_right,rgba(43,112,168,0.34),transparent_43%),#07182D] p-6 text-white shadow-[0_24px_65px_rgba(11,31,58,0.2)] sm:p-8">
-          <div className="relative grid gap-6 md:grid-cols-[auto_minmax(0,1fr)] md:items-center">
-            <GlobalRankBadge rank={rank} size="large" />
-            <div><p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#F0D58C]">Current TGPI rank</p><h3 className="mt-2 font-[var(--tgpi-font-display)] text-4xl font-semibold sm:text-5xl">{rank.name}</h3><p className="mt-3 max-w-2xl text-sm leading-6 text-[#C6D1DD]">{rank.description}</p><div className="mt-5 max-w-xl"><div className="flex justify-between gap-4 text-xs font-extrabold"><span>{rank.points} / 1,000 points</span><span className="text-[#F0D58C]">{rank.nextRank ? `${rank.pointsToNext} to ${rank.nextRank.name}` : "Highest rank reached"}</span></div><div className="mt-2 h-2 overflow-hidden rounded-full bg-white/15"><div className="h-full rounded-full bg-gradient-to-r from-[#B58A2A] to-[#F0D58C]" style={{ width: `${rank.progressWithinRank}%` }} /></div></div></div>
-          </div>
-        </article>
-
-        <section aria-labelledby="rank-journey-title" className="mt-6 rounded-[26px] border border-[#DDD7CB] bg-white p-5 sm:p-7">
-          <div><p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#86621A]">Your learning journey</p><h3 id="rank-journey-title" className="mt-2 font-[var(--tgpi-font-display)] text-3xl font-semibold text-[#0B1F3A]">Six stages of connected global progress.</h3></div>
-          <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">{GLOBAL_RANKS.map((item) => { const reached = rank.points >= item.threshold; const current = rank.id === item.id; return <article className={`rounded-2xl border p-4 transition ${current ? "border-[#B58A2A] bg-[#FFF8E4] shadow-[0_12px_30px_rgba(181,138,42,0.12)]" : reached ? "border-[#BEDBCB] bg-[#F2FAF6]" : "border-[#E3DED4] bg-[#FAF8F3]"}`} key={item.id}><div className="flex items-center gap-3"><GlobalRankBadge rank={item} size="small" /><div><p className="text-[9px] font-extrabold uppercase tracking-[0.15em] text-[#7A8390]">{item.threshold} points</p><h4 className="mt-1 text-sm font-extrabold text-[#0B1F3A]">{item.name}</h4></div><span className={`ml-auto rounded-full px-2 py-1 text-[9px] font-extrabold uppercase ${current ? "bg-[#0B1F3A] text-white" : reached ? "bg-[#DDF1E7] text-[#246344]" : "bg-[#EDEAE3] text-[#747B85]"}`}>{current ? "Current" : reached ? "Reached" : "Locked"}</span></div><p className="mt-3 text-xs leading-5 text-[#657181]">{item.description}</p></article>; })}</div>
-        </section>
-
-        <div className="mt-6 grid gap-4 lg:grid-cols-2">
-          <article className="rounded-[24px] border border-[#DDD7CB] bg-white p-5 sm:p-6"><p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#86621A]">How your points are built</p><dl className="mt-4 grid gap-3 text-sm"><div className="flex justify-between gap-4"><dt className="text-[#687383]">Identity completeness</dt><dd className="font-extrabold text-[#0B1F3A]">{rank.breakdown.identity} / 200</dd></div><div className="flex justify-between gap-4"><dt className="text-[#687383]">Personal plan</dt><dd className="font-extrabold text-[#0B1F3A]">{rank.breakdown.plan} / 250</dd></div><div className="flex justify-between gap-4"><dt className="text-[#687383]">Readiness actions</dt><dd className="font-extrabold text-[#0B1F3A]">{rank.breakdown.readiness} / 250</dd></div><div className="flex justify-between gap-4"><dt className="text-[#687383]">Activity breadth</dt><dd className="font-extrabold text-[#0B1F3A]">{rank.breakdown.activity} / 300</dd></div></dl></article>
-          <article className="rounded-[24px] border border-[#D7C68F] bg-[#FBF4DE] p-5 sm:p-6"><p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#73520F]">Methodology & trust</p><p className="mt-3 text-sm leading-6 text-[#5E593F]">Points use bounded signals already connected to your account. Repeated clicks do not create unlimited points, and no score is inferred from private documents or unsupported external data.</p><p className="mt-4 text-xs font-bold leading-5 text-[#76520C]">{GLOBAL_RANK_DISCLAIMER}</p></article>
-        </div>
-      </div>
-    );
+    activeScreen = <GlobalProgressPanel rank={rank} />;
   }
 
   if (activeSection === "public-profile") {
@@ -774,7 +755,7 @@ export default function TgpiAccountCenter({
   }
 
   return (
-    <div className="mx-auto max-w-[1500px]">
+    <div className="tgpi-settings-v2 mx-auto max-w-[1500px]">
       <header className="mb-5 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div><p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#8B6416]">TGPI Global Key</p><h1 className="mt-2 font-[var(--tgpi-font-display)] text-4xl font-semibold tracking-[-0.045em] text-[#0B1F3A] sm:text-5xl">Settings</h1><p className="mt-2 text-sm text-[#6E7784]">Your identity, preferences and security in one connected app.</p></div>
         <Link className="inline-flex min-h-11 items-center justify-center rounded-xl border border-[#D6D0C4] bg-white px-4 text-xs font-extrabold text-[#0B1F3A] transition hover:border-[#B58A2A]" href="/profile">Back to workspace</Link>
@@ -785,7 +766,7 @@ export default function TgpiAccountCenter({
           <button className="flex items-center gap-3 rounded-2xl p-3 text-left transition hover:bg-white" onClick={() => selectSection("overview")} type="button"><AccountAvatar imageUrl={account.avatarUrl} initials={initials} label={fullName} size="small" /><span className="min-w-0"><span className="block truncate text-sm font-extrabold text-[#0B1F3A]">{fullName}</span><span className="mt-0.5 block truncate text-[11px] text-[#727B88]">{account.membership}</span></span></button>
           <label className="relative mt-3 block"><span className="sr-only">Search settings</span><svg aria-hidden="true" className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#7A8390]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4" /></svg><input className="h-11 w-full rounded-xl border border-[#DDD7CB] bg-white pl-9 pr-3 text-xs text-[#0B1F3A] outline-none transition placeholder:text-[#959CA6] focus:border-[#B58A2A] focus:ring-4 focus:ring-[#B58A2A]/10" onChange={(event) => setQuery(event.target.value)} placeholder="Search settings" value={query} /></label>
           <nav aria-label="Account settings" className="mt-4 space-y-4">
-            {settingsGroups.map((group) => { const groupSections = filteredSections.filter((section) => section.group === group); if (!groupSections.length) return null; return <div key={group}><p className="px-3 pb-1 text-[9px] font-extrabold uppercase tracking-[0.16em] text-[#9299A2]">{group}</p><div className="space-y-1">{groupSections.map((section) => { const active = section.key === activeSection; return <button aria-current={active ? "page" : undefined} className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition ${active ? "bg-[#0B1F3A] text-white shadow-[0_10px_24px_rgba(11,31,58,0.16)]" : "text-[#4F5B6A] hover:bg-white hover:text-[#0B1F3A]"}`} key={section.key} onClick={() => selectSection(section.key)} type="button"><span aria-hidden="true" className={`grid h-8 w-8 shrink-0 place-items-center rounded-xl text-sm ${active ? "bg-white/10 text-[#F0D58C]" : "bg-[#EEF1F4] text-[#0B1F3A]"}`}>{section.sticker}</span><span className="text-xs font-extrabold">{section.label}</span></button>; })}</div></div>; })}
+            {settingsGroups.map((group) => { const groupSections = filteredSections.filter((section) => section.group === group); if (!groupSections.length) return null; return <div key={group}><p className="px-3 pb-1 text-[9px] font-extrabold uppercase tracking-[0.16em] text-[#9299A2]">{group}</p><div className="space-y-1">{groupSections.map((section) => { const active = section.key === activeSection; return <button aria-current={active ? "page" : undefined} className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition ${active ? "bg-[#0B1F3A] text-white shadow-[0_10px_24px_rgba(11,31,58,0.16)]" : "text-[#4F5B6A] hover:bg-white hover:text-[#0B1F3A]"}`} key={section.key} onClick={() => selectSection(section.key)} type="button"><span aria-hidden="true" className={`grid h-8 w-8 shrink-0 place-items-center rounded-xl text-sm ${active ? "bg-white/10 text-[#F0D58C]" : "bg-[#EEF1F4] text-[#0B1F3A]"}`}><SettingsIcon section={section.key} /></span><span className="text-xs font-extrabold">{section.label}</span></button>; })}</div></div>; })}
           </nav>
           {filteredSections.length === 0 ? <p className="px-3 py-5 text-xs leading-5 text-[#717A87]">No setting matches this search.</p> : null}
           <div className="mt-auto rounded-2xl border border-[#E0D8C5] bg-[#F4E7BE] p-4"><p className="text-[9px] font-extrabold uppercase tracking-[0.18em] text-[#75530E]">Synchronization</p><p className="mt-2 text-xs font-extrabold text-[#0B1F3A]">{isDirty ? "Changes waiting to be saved" : "Your account is up to date"}</p><p className="mt-1 text-[11px] leading-5 text-[#685B38]">Last update: {formatSavedDate(profile.updatedAt)}</p></div>
@@ -795,7 +776,7 @@ export default function TgpiAccountCenter({
           <div className="tgpi-account-mobile-nav sticky top-0 z-30 border-b border-[#DDD7CB] bg-[#FFFDFA]/95 p-3 backdrop-blur lg:hidden">
             <div className="flex items-center gap-3"><AccountAvatar imageUrl={account.avatarUrl} initials={initials} label={fullName} size="small" /><div className="min-w-0 flex-1"><p className="truncate text-sm font-extrabold text-[#0B1F3A]">{activeDefinition.label}</p><p className="truncate text-[11px] text-[#737C89]">{activeDefinition.description}</p></div>{isDirty ? <span className="h-2.5 w-2.5 rounded-full bg-[#B58A2A]" title="Unsaved changes" /> : null}</div>
             <nav aria-label="Account settings" className="tgpi-smart-rail tgpi-account-tabs -mx-3 mt-3 flex gap-2 overflow-x-auto px-3 pb-1">
-              {settingsSections.map((section) => { const active = section.key === activeSection; return <button aria-current={active ? "page" : undefined} className={`tgpi-account-tab flex min-w-max items-center gap-2 rounded-full border px-3 py-2 text-[11px] font-extrabold transition ${active ? "border-[#0B1F3A] bg-[#0B1F3A] text-white" : "border-[#DDD7CB] bg-white text-[#596473]"}`} key={section.key} onClick={() => selectSection(section.key)} type="button"><span aria-hidden="true">{section.sticker}</span>{section.label}</button>; })}
+              {settingsSections.map((section) => { const active = section.key === activeSection; return <button aria-current={active ? "page" : undefined} className={`tgpi-account-tab flex min-w-max items-center gap-2 rounded-full border px-3 py-2 text-[11px] font-extrabold transition ${active ? "border-[#0B1F3A] bg-[#0B1F3A] text-white" : "border-[#DDD7CB] bg-white text-[#596473]"}`} key={section.key} onClick={() => selectSection(section.key)} type="button"><span aria-hidden="true"><SettingsIcon section={section.key} /></span>{section.label}</button>; })}
             </nav>
           </div>
 

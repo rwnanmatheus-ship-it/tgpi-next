@@ -1,5 +1,7 @@
 "use client";
 
+import { announceProgressSaved } from "@/lib/progress-sync";
+
 import type {
   ActivationMutation,
   TgpiActivationProgress,
@@ -63,5 +65,7 @@ export async function mutateActivationProgress(mutation: ActivationMutation) {
     method: "PATCH",
   });
 
-  return readResponse(response);
+  const progress = await readResponse(response);
+  announceProgressSaved();
+  return progress;
 }

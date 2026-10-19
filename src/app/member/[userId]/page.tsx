@@ -1,3 +1,4 @@
+import { getGlobalRankSignals } from "@/lib/global-rank-signals";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { auth, clerkClient } from "@clerk/nextjs/server";
@@ -125,13 +126,10 @@ export default async function PublicProfilePage({ params }: PublicProfilePagePro
   const profileCompletion = getAccountProfileCompletion(identity, profile);
   const workspaceModel = buildGlobalWorkspaceModel(onboarding, countries, activation);
   const rank = getGlobalRank({
+    ...getGlobalRankSignals(activation),
     activationCompletion: workspaceModel.activationCompletion,
-    comparisons: activation.comparisons.length,
-    documentReviews: Object.keys(activation.documentReviews).length,
-    learningPaths: Object.keys(activation.courseProgress).length,
     planCompletion: workspaceModel.completion,
     profileCompletion,
-    savedCountries: activation.savedCountries.length,
   });
   const publicPath = `/member/${user.id}`;
   const publicDetails = [
