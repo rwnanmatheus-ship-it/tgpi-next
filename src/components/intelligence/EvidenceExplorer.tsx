@@ -4,21 +4,22 @@ import dynamic from "next/dynamic";
 import type { CountryMapRegionId } from "@/lib/country-map";
 import Image from "next/image";
 import Link from "next/link";
+import { normalizeExplorerFilters, type ExplorerFilterInput } from "@/lib/explorer-filters";
 import SavedCountryButton from "@/components/activation/SavedCountryButton";
 
 type ExplorerCountry = { slug: string; name: string; emoji: string; region: string; iso3: string; observations: number };
 const CountryAtlas = dynamic(() => import("@/components/countries/CountriesWorldMap"), { ssr: false, loading: () => <p className="ig-status">Loading the interactive atlas…</p> });
-type ExplorerFilters = { q?: string; region?: string; selected?: string | string[]; limit?: string };
+type ExplorerFilters = ExplorerFilterInput;
 export default function EvidenceExplorer({ countries, initialFilters = {} }: { countries: ExplorerCountry[]; initialFilters?: ExplorerFilters }) {
-  const validSelections = (values: string[]) => [...new Set(values)].filter(slug => countries.some(country => country.slug === slug)).slice(0,3);
-  const [query, setQuery] = useState(initialFilters.q?.slice(0,120) ?? "");
+  const initial = normalizeExplorerFilters(initialFilters,countries);
+  const [query, setQuery] = useState(initial.query);
   const [showAtlas, setShowAtlas] = useState(false);
   const [atlasRegion, setAtlasRegion] = useState<CountryMapRegionId>("world");
   const [atlasCountry, setAtlasCountry] = useState("portugal");
-  const [region, setRegion] = useState(countries.some(country => country.region === initialFilters.region) ? initialFilters.region! : "all");
-  const [selection, setSelection] = useState<string[]>(validSelections(typeof initialFilters.selected === "string" ? [initialFilters.selected] : initialFilters.selected ?? []));
+  const [region, setRegion] = useState(initial.region);
+  const [selection, setSelection] = useState<string[]>(initial.selection);
   const [notice, setNotice] = useState("");
-  const [limit, setLimit] = useState(Math.max(24,Math.min(195,Number(initialFilters.limit) || 24)));
+  const [limit, setLimit] = useState(initial.limit);
   useEffect(() => {
     const restore = () => {
       const parameters = new URLSearchParams(window.location.search);

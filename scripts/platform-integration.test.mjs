@@ -1,3 +1,4 @@
+import { normalizeExplorerFilters } from "../src/lib/explorer-filters.ts";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { getJourneyStage, isImmersiveLearningRoute } from "../src/lib/platform-journey.ts";
@@ -56,4 +57,13 @@ test("lessons and certification keep focused navigation without hiding the catal
   assert.equal(isImmersiveLearningRoute("/courses/global-budget/lessons/costs"), true);
   assert.equal(isImmersiveLearningRoute("/courses/global-english-2026/certification/final"), true);
   assert.equal(isImmersiveLearningRoute("/courses/global-budget"), false);
+});
+
+test("country filters accept repeated query keys without invalid client state", () => {
+  const countries=[{slug:"portugal",region:"Europe"},{slug:"canada",region:"Americas"}];
+  const filters=normalizeExplorerFilters({q:["Portugal","Canada"],region:["invalid","Europe"],selected:["unknown","portugal","portugal","canada"],limit:["not-a-number","195"]},countries);
+  assert.equal(filters.query,"Portugal");
+  assert.equal(filters.region,"all");
+  assert.deepEqual(filters.selection,["portugal","canada"]);
+  assert.equal(filters.limit,24);
 });

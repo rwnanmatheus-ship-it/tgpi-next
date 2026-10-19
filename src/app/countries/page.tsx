@@ -1,3 +1,4 @@
+import type { ExplorerFilterInput } from "@/lib/explorer-filters";
 import ActivationProgressProvider from "@/components/activation/ActivationProgressProvider";
 import type { Metadata } from "next";
 import { Suspense } from "react";
@@ -12,7 +13,7 @@ import EvidenceExplorer from "@/components/intelligence/EvidenceExplorer";
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 export const metadata: Metadata = { title: "Countries — Source-linked research | TGPI", description: "Explore 195 country identities, available official statistics, source dates and the questions that matter to your international plan.", alternates: { canonical: "https://www.theglobalpolymath.com/countries" } };
-type Filters = { q?: string; region?: string; selected?: string | string[]; limit?: string };
+type Filters = ExplorerFilterInput;
 
 async function CountryResearch({ filters }: { filters: Filters }) {
   const state = await getIntelligence();

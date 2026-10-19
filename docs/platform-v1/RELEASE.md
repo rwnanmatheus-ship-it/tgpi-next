@@ -41,7 +41,7 @@ Country and comparison presentation no longer waits for the statistical collecti
 
 ## Evidence and limitations
 
-- Entire script suite: 223 tests passed, zero failed. Includes real reducer/persistence functions with only infrastructure replaced for isolated tests.
+- Entire script suite: 224 tests passed, zero failed. Includes real reducer/persistence functions with only infrastructure replaced for isolated tests.
 - TypeScript and production build are required before release; deployment readiness and commit are checked through Vercel after merge.
 - ESLint: zero errors; one pre-existing legacy Firebase document-navigation warning remains.
 - `git diff --check` passed.
