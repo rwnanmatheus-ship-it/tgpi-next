@@ -6,6 +6,7 @@ import "./capability-system.css";
 import "./mobile.css";
 import "./intelligence.css";
 import "./navigation-system.css";
+import "./app-system.css";
 import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Manrope } from "next/font/google";
 import NotificationProvider from "@/components/notifications/NotificationProvider";

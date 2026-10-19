@@ -1,3 +1,5 @@
+import { recordFunnelEvent, requestFunnelConsent } from "@/lib/funnel.server";
+import type { FunnelEvent } from "@/lib/funnel";
 import { scheduleNotificationReconciliation } from "@/lib/notifications/schedule.server";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
@@ -64,6 +66,14 @@ export async function PATCH(request: Request) {
       session.userId,
       mutation,
     );
+    const metric: Partial<Record<typeof mutation.type, FunnelEvent>> = {
+      record_comparison: "comparison_saved",
+      start_course: "learning_started",
+      complete_lesson: "learning_checkpoint_saved",
+      update_documents: "document_checkpoint_saved",
+    };
+    const event = metric[mutation.type];
+    if (event) recordFunnelEvent(event, requestFunnelConsent(request));
     scheduleNotificationReconciliation(session.userId);
     return json({ progress });
   } catch (error) {

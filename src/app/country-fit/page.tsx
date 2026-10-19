@@ -1,3 +1,4 @@
+import AreaHero from "@/components/ui/AreaHero";
 import PersonalResearchContext from "@/components/profile/PersonalResearchContext";
 import type { Metadata } from "next";
 import { auth, currentUser } from "@clerk/nextjs/server";
@@ -19,5 +20,5 @@ export default async function CountryFitPage({ searchParams }: { searchParams: P
   const context = { ...(savedContext ?? { primaryGoal: "study", budgetRange: "undecided", timeHorizon: "exploring", languages: [], profession: "", priorities: [] }), ...(requestedGoal ? { primaryGoal: requestedGoal } : {}) };
   const aliases = new Map(getAllCountries().map(c => [c.slug, c.name]));
   const countries = identities.map(c => ({ ...c, name: aliases.get(c.slug) ?? c.name })).sort((a, b) => a.name.localeCompare(b.name));
-  return <main className="ig-shell"><div className="ig-container"><header className="ig-hero"><p className="ig-eyebrow">TGPI / Country Fit + Personal plan</p><h1>Your ambition.<br />A clearer next step.</h1><p>Bring your context to the research. Understand what is supported, what is still unknown and what to do next — without an invented success score.</p></header><GraphStatus state={state} /><PersonalResearchContext /><CountryFitWorkspace countries={countries} snapshot={state.snapshot} initialCountry={params.country ?? savedContext?.targetCountries[0]} initialContext={context} /></div></main>;
+  return <main className="ig-shell"><div className="ig-container"><AreaHero id="country-fit-title" eyebrow="TGPI / Your personal research plan" title={<>Your ambition.<br />A practical next step.</>} description="Bring your goals, budget, languages and timeline into one research space. Understand the evidence, identify the gaps and prepare a plan you can act on." image="/images/about/global-perspective-v2.webp" /><GraphStatus state={state} /><PersonalResearchContext /><CountryFitWorkspace countries={countries} snapshot={state.snapshot} initialCountry={params.country ?? savedContext?.targetCountries[0]} initialContext={context} /></div></main>;
 }

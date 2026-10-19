@@ -84,7 +84,7 @@ export default function CompareCountryPicker({
 
     if (hasExplicitSelection) {
       if (initialSlugs.length >= 2) {
-        window.localStorage.setItem(STORAGE_KEY, JSON.stringify(initialSlugs));
+        try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(initialSlugs)); } catch { /* The URL remains the source of comparison context. */ }
       }
       return;
     }
@@ -106,7 +106,7 @@ export default function CompareCountryPicker({
       if (restored.length < 2) return;
       startTransition(() => router.replace(buildComparisonPath(restored, goal)));
     } catch {
-      window.localStorage.removeItem(STORAGE_KEY);
+      try { window.localStorage.removeItem(STORAGE_KEY); } catch { /* Storage is optional. */ }
     }
   }, [goal, hasExplicitSelection, initialSlugs, router, validSlugs]);
 
@@ -157,7 +157,7 @@ export default function CompareCountryPicker({
     setSlots(createSlots([]));
     setNotice("Choose at least two countries to build a comparison.");
     setCopyStatus("");
-    window.localStorage.removeItem(STORAGE_KEY);
+    try { window.localStorage.removeItem(STORAGE_KEY); } catch { /* Storage is optional. */ }
   }
 
   async function copyComparisonLink() {
@@ -181,7 +181,7 @@ export default function CompareCountryPicker({
       return;
     }
 
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(selectedSlugs));
+    try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(selectedSlugs)); } catch { /* Comparing and saving still work when storage is disabled. */ }
 
     if (isAuthenticated) {
       setIsSavingComparison(true);

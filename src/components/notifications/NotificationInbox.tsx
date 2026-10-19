@@ -37,7 +37,7 @@ export default function NotificationInbox() {
   const groups = ["Today", "Yesterday", "Earlier"].map(label => ({ label, items: visible.filter(item => notificationGroup(item.createdAt, now || new Date(0)) === label) }));
   const timezone = now ? Intl.DateTimeFormat().resolvedOptions().timeZone : "your local timezone";
   return (
-    <main id="main-content" className={`${styles.root} min-h-[80vh] px-3 py-5 sm:px-6 sm:py-8`}>
+    <main className={`${styles.root} min-h-[80vh] px-3 py-5 sm:px-6 sm:py-8`}>
       <div className="mx-auto max-w-[1320px]">
         <header className={`${styles.hero} flex flex-wrap items-center justify-between gap-4`}>
           <div><p className="text-xs font-bold uppercase tracking-[.15em] text-[#805D19]">TGPI · Activity center</p><h1 className="mt-2 text-[30px] font-extrabold tracking-tight [font-family:var(--tgpi-font-sans)] sm:text-4xl">Notifications<span className="ml-3 inline-flex translate-y-[-3px] rounded-full bg-[#0B1F3A] px-2.5 py-1 align-middle text-xs font-bold text-white">{unread}</span></h1><p className="mt-2 text-sm text-slate-600">Stay up to date. Pick up where you left off.</p></div>

@@ -1,3 +1,4 @@
+import { courses } from "@/data/courses";
 import { getGlobalRankSignals } from "@/lib/global-rank-signals";
 import type { Metadata } from "next";
 import { currentUser } from "@clerk/nextjs/server";
@@ -72,6 +73,7 @@ export default async function ProfilePage({
     onboarding,
     getAllCountries(),
     activation,
+    courses,
   );
   const identity = normalizeAccountIdentity({
     firstName: user?.firstName,

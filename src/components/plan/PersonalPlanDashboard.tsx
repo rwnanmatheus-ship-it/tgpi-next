@@ -1,3 +1,4 @@
+import PlatformBannerImage from "@/components/ui/PlatformBannerImage";
 import Link from "next/link";
 import NavigationIcon from "@/components/navigation/NavigationIcon";
 import type {
@@ -43,8 +44,9 @@ export default function PersonalPlanDashboard({
     model.actions.at(-1);
 
   return (
-    <main className="min-h-screen bg-[var(--tgpi-canvas)] pb-24 text-[var(--tgpi-ink)] lg:pb-16">
+    <main className="min-h-screen bg-[var(--tgpi-canvas)] pb-10 text-[var(--tgpi-ink)] lg:pb-12">
       <section className="relative overflow-hidden bg-[var(--tgpi-navy-deep)] text-white">
+        <PlatformBannerImage className="opacity-35" priority />
         <div
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 opacity-80 [background-image:radial-gradient(circle_at_12%_10%,rgba(196,149,54,.24),transparent_28%),radial-gradient(circle_at_88%_8%,rgba(36,87,127,.42),transparent_30%),linear-gradient(rgba(255,255,255,.025)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.025)_1px,transparent_1px)] [background-size:auto,auto,42px_42px,42px_42px]"
@@ -52,14 +54,14 @@ export default function PersonalPlanDashboard({
         <div className="relative mx-auto grid w-full max-w-7xl gap-8 px-4 py-10 sm:px-6 sm:py-14 lg:grid-cols-[minmax(0,1.35fr)_minmax(300px,.65fr)] lg:items-end lg:px-8 lg:py-20">
           <div className="min-w-0">
             <p className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold-light)]">
-              TGPI Personal Global Plan · V1
+              TGPI / Personal Global Plan
             </p>
             <h1 className="mt-4 max-w-4xl text-4xl leading-[0.95] sm:text-5xl lg:text-7xl">
               Your next move,
               <br />connected.
             </h1>
             <p className="mt-6 max-w-2xl text-sm leading-7 text-white/70 sm:text-base">
-              {firstName}, this is your canonical decision layer: one place for your goal,
+              {firstName}, keep your next move connected: one place for your goal,
               shortlist, evidence, preparation and learning progress.
             </p>
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">

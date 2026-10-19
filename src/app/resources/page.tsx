@@ -130,7 +130,7 @@ export default async function ResourcesPage() {
   const startHref = userId ? "/profile" : "/sign-up";
   const startLabel = userId ? "Open my Workspace" : "Create a free account";
   return (
-    <main id="main-content" className="resources-page">
+    <main className="resources-page">
       <div className="resources-frame">
         <section className="resources-hero" aria-labelledby="resources-title">
           <div className="resources-hero-copy">

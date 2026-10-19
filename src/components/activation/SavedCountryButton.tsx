@@ -46,7 +46,7 @@ export default function SavedCountryButton({
   }
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex flex-wrap items-center gap-2">
       <button
         type="button"
         onClick={toggleSaved}
@@ -60,7 +60,7 @@ export default function SavedCountryButton({
       >
         {isSaving ? "Saving…" : isSaved ? "✓ Saved to my plan" : "+ Save to my plan"}
       </button>
-      <span className="sr-only" aria-live="polite">
+      <span className="w-full text-xs leading-5 text-[var(--tgpi-muted)]" aria-live="polite">
         {message}
       </span>
     </div>

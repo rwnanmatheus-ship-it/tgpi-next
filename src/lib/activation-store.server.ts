@@ -400,7 +400,6 @@ export async function updateUserActivationProgress(
 
   await client.users.updateUserMetadata(userId, {
     privateMetadata: {
-      ...user.privateMetadata,
       [TGPI_ACTIVATION_METADATA_KEY]: serializeActivationProgressForStorage(progress),
     },
   });

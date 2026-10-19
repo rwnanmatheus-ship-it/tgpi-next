@@ -64,7 +64,7 @@ test("desktop launcher uses a native modal dialog with global keyboard access", 
   assert.match(source, /SUPER_APP_OPEN_EVENT/);
   assert.match(source, /event\.metaKey \|\| event\.ctrlKey/);
   assert.match(source, /Find an app, action or destination/);
-  assert.match(source, /tgpi-intelligence-network-v1\.webp/);
+  assert.match(source, /PlatformBannerImage/);
 });
 
 test("desktop navbar exposes the same global app launcher", () => {

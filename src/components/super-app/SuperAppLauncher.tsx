@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import PlatformBannerImage from "@/components/ui/PlatformBannerImage";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -94,14 +94,7 @@ export default function SuperAppLauncher() {
       >
         <div className="max-h-[92dvh] overflow-y-auto overscroll-contain">
           <header className="relative isolate min-h-52 overflow-hidden border-b border-white/10 p-6 sm:p-8">
-            <Image
-              src="/images/super-app/tgpi-intelligence-network-v1.webp"
-              alt=""
-              fill
-              priority={false}
-              sizes="(min-width: 768px) 760px, 100vw"
-              className="-z-20 object-cover object-center opacity-75"
-            />
+            {open ? <PlatformBannerImage className="-z-20 opacity-75" /> : null}
             <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(3,14,27,0.99)_0%,rgba(3,14,27,0.92)_45%,rgba(3,14,27,0.28)_100%),linear-gradient(0deg,rgba(3,14,27,0.82),transparent)]" />
             <div className="flex items-start justify-between gap-5">
               <div className="max-w-md">
@@ -152,16 +145,18 @@ export default function SuperAppLauncher() {
 
             <nav
               aria-label="TGPI Super App modules"
-              className="mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3"
+              className="tgpi-grid-3d mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3"
             >
               {visibleModules.map((module) => {
                 const active = isSuperAppRouteActive(pathname, module);
                 return (
                   <Link
                     key={module.id}
+                    data-tgpi-interactive="true"
+                    data-tgpi-tone="navy"
                     href={module.href}
                     aria-current={active ? "page" : undefined}
-                    className={`group min-w-0 rounded-2xl border p-4 transition hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E5B94B] ${
+                    className={`tgpi-card-3d group min-w-0 rounded-2xl border p-4 transition hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E5B94B] ${
                       active
                         ? "border-[#E5B94B]/55 bg-[#E5B94B]/12 shadow-[0_14px_32px_rgba(229,185,75,0.08)]"
                         : "border-white/10 bg-white/[0.035] hover:border-[#E5B94B]/30 hover:bg-white/[0.065]"

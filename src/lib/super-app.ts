@@ -170,7 +170,7 @@ export function getNextSuperAppModule(moduleId: SuperAppModuleId) {
 }
 
 export function isSuperAppRouteActive(pathname: string, module: SuperAppModule) {
-  return module.matchPrefixes.some((prefix) => routeMatches(pathname, prefix));
+  return getSuperAppModule(pathname)?.id === module.id;
 }
 
 export function searchSuperAppModules(query: string) {

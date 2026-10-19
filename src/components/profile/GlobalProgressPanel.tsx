@@ -1,11 +1,13 @@
 "use client";
 
+import AreaHero from "@/components/ui/AreaHero";
+
 import Link from "next/link";
 import { useState } from "react";
 import GlobalRankBadge from "@/components/profile/GlobalRankBadge";
 import { GLOBAL_RANKS, GLOBAL_RANK_DISCLAIMER, GLOBAL_RANK_MAX_POINTS, type GlobalRank } from "@/lib/global-ranks";
 
-export default function GlobalProgressPanel({ rank }: { rank: GlobalRank }) {
+export default function GlobalProgressPanel({ rank, headingLevel = 1 }: { rank: GlobalRank; headingLevel?: 1 | 2 }) {
   const [selectedId, setSelectedId] = useState(rank.nextRank?.id ?? rank.id);
   const selected = GLOBAL_RANKS.find(item => item.id === selectedId) ?? GLOBAL_RANKS[0];
   const currentIndex = GLOBAL_RANKS.findIndex(item => item.id === rank.id);
@@ -16,7 +18,7 @@ export default function GlobalProgressPanel({ rank }: { rank: GlobalRank }) {
     { title: "Learning & research", points: rank.breakdown.activity, max: 8800, href: "/courses", detail: "650 per completed course, up to 12. Research adds up to 1,000." },
   ];
   return <div className="space-y-6">
-    <header><p className="text-xs font-bold uppercase tracking-[.2em] text-[#73520F]">TGPI · Progression II</p><h2 className="mt-2 text-3xl font-semibold tracking-tight text-[#0B1F3A] sm:text-4xl">Progress & ranks</h2><p className="mt-3 max-w-2xl text-base leading-7 text-[#526174]">Earn your standing through completed work. Ten ranks connect your learning, research and personal plan.</p></header>
+    <AreaHero headingLevel={headingLevel} id="progress-title" eyebrow="TGPI / Earned progress" title={<>Build capability.<br />Earn your next rank.</>} description="Ten ranks connect your completed learning, country research and personal plan. Inspect each requirement and choose the work that moves you forward." image="/images/learning/tgpi-learning-hero-v2.webp" actions={[{href:"/courses",label:"Develop my skills"},{href:"/plan",label:"Review my plan"}]} />
     <section style={{backgroundColor:"#07182D"}} className="relative overflow-hidden rounded-[28px] border border-[#31506C] bg-[radial-gradient(ellipse_at_top_right,#244968,#07182D_70%)] p-6 text-white shadow-[0_24px_60px_#0B1F3A25] sm:p-8">
       <div className="flex flex-col gap-6 sm:flex-row sm:items-center"><GlobalRankBadge rank={rank} size="large"/><div className="min-w-0 flex-1"><p className="text-xs font-bold uppercase tracking-widest text-[#F0D58C]">Your current rank · {currentIndex + 1} / 10</p><h3 className="mt-2 text-3xl font-semibold sm:text-4xl">{rank.name}</h3><p className="mt-3 text-sm leading-6 text-[#D0DBE6]">{rank.points.toLocaleString("en-US")} / {GLOBAL_RANK_MAX_POINTS.toLocaleString("en-US")} points · {rank.completedCourses} completed courses</p></div></div>
       <div className="mt-6 border-t border-white/15 pt-5"><div className="flex flex-wrap justify-between gap-2 text-sm"><span>{rank.nextRank ? `Next: ${rank.nextRank.name}` : "Highest rank achieved"}</span><span className="font-bold text-[#F0D58C]">{rank.pointsToNext} points remaining</span></div><div aria-label="Points toward next rank" aria-valuemax={100} aria-valuemin={0} aria-valuenow={rank.progressWithinRank} role="progressbar" className="mt-3 h-2.5 overflow-hidden rounded-full bg-white/15"><div className="h-full rounded-full bg-gradient-to-r from-[#B58A2A] to-[#F0D58C] transition-all" style={{width:`${rank.progressWithinRank}%`}}/></div><p className="mt-3 text-sm leading-6 text-[#D0DBE6]">Points alone do not unlock a rank. Complete its course and plan requirements too. Starting a course earns no learning points.</p></div>
