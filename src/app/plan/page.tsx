@@ -1,3 +1,4 @@
+import { courses } from "@/data/courses";
 import type { Metadata } from "next";
 import { currentUser } from "@clerk/nextjs/server";
 import PersonalPlanDashboard from "@/components/plan/PersonalPlanDashboard";
@@ -31,6 +32,7 @@ export default async function PersonalPlanPage() {
     onboarding,
     getAllCountries(),
     activation,
+    courses,
   );
 
   return (

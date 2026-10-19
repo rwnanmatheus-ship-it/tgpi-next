@@ -1,3 +1,4 @@
+import { courses } from "@/data/courses";
 import { getGlobalRankSignals } from "@/lib/global-rank-signals";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -124,7 +125,7 @@ export default async function PublicProfilePage({ params }: PublicProfilePagePro
     })
     .slice(0, 5);
   const profileCompletion = getAccountProfileCompletion(identity, profile);
-  const workspaceModel = buildGlobalWorkspaceModel(onboarding, countries, activation);
+  const workspaceModel = buildGlobalWorkspaceModel(onboarding, countries, activation, courses);
   const rank = getGlobalRank({
     ...getGlobalRankSignals(activation),
     activationCompletion: workspaceModel.activationCompletion,

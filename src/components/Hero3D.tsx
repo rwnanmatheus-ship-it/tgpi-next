@@ -1,3 +1,4 @@
+import Link from "next/link";
 export default function Hero3D() {
   return (
     <section className="relative h-[80vh] flex items-center justify-center text-center overflow-hidden">
@@ -12,9 +13,9 @@ export default function Hero3D() {
           Prepare, connect and move across countries with clarity and strategy.
         </p>
 
-        <button className="mt-8 bg-yellow-500 text-black px-6 py-3 rounded-2xl font-semibold hover:scale-105 transition">
+        <Link href="/country-fit" className="mt-8 inline-flex min-h-12 items-center rounded-2xl bg-[var(--tgpi-gold)] px-6 py-3 font-semibold text-[var(--tgpi-navy)] transition hover:scale-105">
           Start Now
-        </button>
+        </Link>
       </div>
     </section>
   );

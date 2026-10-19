@@ -1,3 +1,4 @@
+import { courses } from "@/data/courses";
 import { getGlobalRankSignals } from "@/lib/global-rank-signals";
 import { isUsernameEnabled } from "@/lib/auth/username-settings.server";
 import type { Metadata } from "next";
@@ -85,7 +86,7 @@ export default async function SecurityPage() {
   const countryBySlug = new Map(
     countries.map((country) => [country.slug, country]),
   );
-  const workspaceModel = buildGlobalWorkspaceModel(onboarding, countries, activation);
+  const workspaceModel = buildGlobalWorkspaceModel(onboarding, countries, activation, courses);
   const rank = getGlobalRank({
     ...getGlobalRankSignals(activation),
     activationCompletion: workspaceModel.activationCompletion,

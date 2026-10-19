@@ -1,10 +1,10 @@
 import Link from "next/link";
-import { getJourneyStage, PLATFORM_JOURNEY } from "@/lib/platform-journey";
+import { getJourneyStage, isImmersiveLearningRoute, PLATFORM_JOURNEY } from "@/lib/platform-journey";
 
 export default function JourneyNavigation({ pathname }: { pathname: string }) {
   const current = getJourneyStage(pathname);
   // Marketing and focused access pages retain their own editorial composition.
-  if (!current || pathname === "/onboarding") return null;
+  if (!current || pathname === "/onboarding" || isImmersiveLearningRoute(pathname)) return null;
   return (
     <div className="tgpi-journey-context">
       <div className="tgpi-container">

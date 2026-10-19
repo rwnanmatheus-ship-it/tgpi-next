@@ -9,6 +9,8 @@ export function getLearningContinuation(
   const candidates = Object.entries(records).flatMap(([id, progress]) => {
     const course = catalogue.find(item => item.id === (id === "english-abroad" ? "global-english-2026" : id));
     if (!course) return [];
+    // A retained legacy edition must not override the canonical current record.
+    if (id !== course.id && records[course.id]) return [];
     const lessons = course.modules.flatMap(module => module.lessons);
     if (!lessons.length) return [];
     const sameVersion = progress.courseVersion === course.version;

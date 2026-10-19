@@ -111,6 +111,7 @@ export function buildPremiumCommandCenterModel(
     onboarding,
     allCountries,
     activation,
+    courses,
   );
   const countryBySlug = new Map(
     allCountries.map((country) => [country.slug, country]),

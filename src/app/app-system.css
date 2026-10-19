@@ -54,3 +54,44 @@ html { scroll-padding-top: 7rem; }
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
 }
+
+/* Institutional banners: useful hierarchy with real, responsive image assets. */
+.tgpi-area-hero { position: relative; isolation: isolate; overflow: hidden; border: 1px solid #c4953640; border-radius: var(--tgpi-radius-xl); background: var(--tgpi-navy-deep); color: #fff; box-shadow: var(--tgpi-depth-dark); }
+.tgpi-area-hero-art { position: absolute; inset: 0; z-index: -2; }
+.tgpi-area-hero-art img { object-position: 72% center; }
+.tgpi-area-hero::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg,#031426fa,#031426db 50%,#03142640),linear-gradient(0deg,#031426ba,transparent); }
+.tgpi-area-hero::after { content: ""; pointer-events: none; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 1px #f2d99740; }
+.tgpi-area-hero-content { position: relative; max-width: 56rem; padding: clamp(1.5rem,4.5vw,4rem); }
+.tgpi-area-eyebrow { margin: 0; color: #f2d997; font-size: .75rem; line-height: 1.6; letter-spacing: .14em; text-transform: uppercase; font-weight: 750; }
+#main-content .tgpi-area-hero :is(h1,h2) { margin-block: 1rem; max-width: 18ch; font-size: clamp(2.2rem,4.5vw,4.5rem); line-height: 1.08; letter-spacing: -.035em; overflow-wrap: break-word; }
+.tgpi-area-description { max-width: 58ch; margin: 1.25rem 0 0; color: #dbe5ed; font-size: clamp(1rem,1.3vw,1.125rem); line-height: 1.8; }
+.tgpi-area-actions { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; margin-top: 1.5rem; }
+.tgpi-area-primary,.tgpi-area-secondary { display: inline-flex; min-height: 48px; align-items: center; justify-content: center; gap: 1rem; padding: .75rem 1.25rem; border: 1px solid #f2d99766; border-radius: .875rem; font-size: .875rem; line-height: 1.5; font-weight: 750; }
+.tgpi-area-primary { background: linear-gradient(130deg,#f2d997,#d0a34d); color: #031426; box-shadow: inset 0 1px #fff8d5,0 6px 16px #00000018; }
+.tgpi-area-secondary { background: #03142670; color: #fff; border-color: #ffffff40; }
+:is(.tgpi-area-primary,.tgpi-area-secondary):focus-visible { outline: 3px solid #f2d997; outline-offset: 4px; }
+.tgpi-continuation { background: var(--tgpi-graphite); border-top: 1px solid #f2d99733; color: #fff; }
+.tgpi-continuation-inner { display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; padding-block: var(--tgpi-page-space); }
+.tgpi-continuation-title { margin: .5rem 0; font-family: var(--tgpi-font-display); font-size: clamp(1.75rem,3vw,2.5rem); line-height: 1.2; }
+.tgpi-continuation-copy { margin: .5rem 0 0; max-width: 56ch; font-size: .9375rem; line-height: 1.7; color: #c8d4e2; }
+.tgpi-continuation .tgpi-area-actions { flex-shrink: 0; margin: 0; }
+.tgpi-research-skeleton { display: grid; gap: .75rem; margin-top: 1.5rem; }
+.tgpi-research-skeleton span { display: block; height: .875rem; border-radius: .5rem; background: var(--tgpi-border-soft); }
+.tgpi-research-skeleton span:nth-child(2) { width: 80%; }.tgpi-research-skeleton span:nth-child(3) { width: 60%; }
+@media (max-width: 767px) {
+  .tgpi-continuation-inner { align-items: flex-start; flex-direction: column; }
+  .tgpi-area-hero-art img { object-position: 70% center; }
+  .tgpi-area-hero::before { background: linear-gradient(90deg,#031426ef,#031426a8),linear-gradient(0deg,#031426bd,transparent); }
+  .tgpi-area-hero { border-radius: var(--tgpi-radius-md); }
+}
+/* Shared reading and end spacing for the evidence-led areas. */
+.ig-shell { min-height: 0; padding: var(--tgpi-page-space) var(--tgpi-app-gutter); }
+.ig-container > :last-child { margin-bottom: 0; }
+.ig-eyebrow { font-size: .75rem; line-height: 1.6; }
+.ig-small { font-size: 1rem; line-height: 1.8; }
+.ig-meta { font-size: .8125rem; }
+.ig-image-label { font-size: .75rem; line-height: 1.5; }
+.ig-country-card h3 { overflow-wrap: break-word; }
+.ig-selection { position: sticky; top: 6rem; z-index: 15; box-shadow: var(--tgpi-depth-2); }
+.ig-details summary { min-height: 44px; display: flex; align-items: center; }
+@media (max-width:1023px) { .ig-selection { position: static; } }

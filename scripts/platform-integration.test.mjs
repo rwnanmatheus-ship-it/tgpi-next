@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { getJourneyStage } from "../src/lib/platform-journey.ts";
+import { getJourneyStage, isImmersiveLearningRoute } from "../src/lib/platform-journey.ts";
 import { getLearningContinuation } from "../src/lib/learning-continuity.ts";
 import { SUPER_APP_MODULES, isSuperAppRouteActive } from "../src/lib/super-app.ts";
 
@@ -41,4 +41,19 @@ test("version changes return to the overview rather than a stale lesson", () => 
 test("unknown courses never create a broken continuation link", () => {
   assert.equal(getLearningContinuation(catalogue, { deleted: record() }), undefined);
   assert.equal(getLearningContinuation(catalogue, {}), undefined);
+});
+
+test("legacy editions cannot override current course continuity", () => {
+  const next = getLearningContinuation(catalogue, {
+    "english-abroad": record({ updatedAt: "2026-10-21" }),
+    "global-english-2026": record({courseVersion:"2",completedLessonIds:["arrival","work"]}),
+  });
+  assert.equal(next.complete, true);
+  assert.equal(next.href, "/courses/global-english-2026");
+});
+
+test("lessons and certification keep focused navigation without hiding the catalogue", () => {
+  assert.equal(isImmersiveLearningRoute("/courses/global-budget/lessons/costs"), true);
+  assert.equal(isImmersiveLearningRoute("/courses/global-english-2026/certification/final"), true);
+  assert.equal(isImmersiveLearningRoute("/courses/global-budget"), false);
 });

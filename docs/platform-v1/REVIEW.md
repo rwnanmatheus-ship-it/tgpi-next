@@ -1,7 +1,7 @@
 # TGPI integrated application — review increment 1
 
 Date: 2026-10-19. Base: `6e1211d79deac1aa22bf960feea2c28d45ccf739` (`fix-deploy-hoje`).
-Status: implementation for review, not production release or completion of the full reconstruction brief.
+Status: historical increment-1 review. Superseded by `RELEASE.md` after the user explicitly authorized completing and publishing the integrated release.
 
 ## Diagnosis and decisions
 

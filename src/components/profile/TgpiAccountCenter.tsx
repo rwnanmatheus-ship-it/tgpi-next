@@ -687,7 +687,7 @@ export default function TgpiAccountCenter({
   }
 
   if (activeSection === "progress") {
-    activeScreen = <GlobalProgressPanel rank={rank} />;
+    activeScreen = <GlobalProgressPanel rank={rank} headingLevel={2} />;
   }
 
   if (activeSection === "public-profile") {
