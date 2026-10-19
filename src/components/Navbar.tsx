@@ -5,15 +5,14 @@ import TgpiAccountMenu from "@/components/profile/TgpiAccountMenu";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import NotificationBell from "@/components/NotificationBell";
-import BrandCrest from "@/components/BrandCrest";
+import BrandSignature from "@/components/navigation/BrandSignature";
 import { Container } from "@/components/design-system";
-import NavigationTileIcon from "@/components/navigation/NavigationTileIcon";
 import NavigationIcon from "@/components/navigation/NavigationIcon";
 import {
   isNavigationDestinationActive,
   PRIMARY_NAVIGATION,
 } from "@/lib/navigation-system";
-import { SUPER_APP_OPEN_EVENT } from "@/lib/super-app";
+import LauncherButton from "@/components/navigation/LauncherButton";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -24,22 +23,7 @@ export default function Navbar() {
       data-navigation-version="2"
     >
       <Container className="tgpi-desktop-navigation-frame">
-        <Link href="/" className="tgpi-desktop-brand" aria-label="TGPI — The Global Polymath Institute home">
-          <span className="tgpi-desktop-brand-crest">
-            <BrandCrest
-              fill
-              priority
-              sizes="48px"
-              className="object-contain drop-shadow-[0_7px_15px_rgba(7,26,50,0.2)]"
-            />
-          </span>
-          <span className="min-w-0">
-            <span className="block font-[var(--tgpi-font-display)] text-[1.45rem] font-bold leading-none tracking-[0.055em] text-[var(--tgpi-navy)]">
-              TGPI
-            </span>
-            <span className="tgpi-desktop-brand-line">The Global Polymath Institute</span>
-          </span>
-        </Link>
+        <BrandSignature />
 
         <nav className="tgpi-desktop-primary" aria-label="Primary navigation">
           {PRIMARY_NAVIGATION.map((destination) => {
@@ -51,7 +35,7 @@ export default function Navbar() {
                 aria-current={active ? "page" : undefined}
                 className="tgpi-desktop-primary-link"
               >
-                <NavigationTileIcon name={destination.icon} />
+                <NavigationIcon name={destination.icon} width={18} height={18} />
                 <span>{destination.label}</span>
               </Link>
             );
@@ -59,19 +43,7 @@ export default function Navbar() {
         </nav>
 
         <div className="tgpi-desktop-actions">
-          <button
-            type="button"
-            aria-label="Open TGPI apps"
-            aria-haspopup="dialog"
-            aria-controls="tgpi-super-app-launcher"
-            aria-keyshortcuts="Control+K Meta+K"
-            title="Open TGPI apps (Ctrl/⌘ K)"
-            onClick={() => window.dispatchEvent(new Event(SUPER_APP_OPEN_EVENT))}
-            className="tgpi-navigation-icon-button"
-          >
-            <NavigationTileIcon name="apps" />
-            <span className="tgpi-apps-label">Apps</span>
-          </button>
+          <LauncherButton />
 
           <Show when="signed-in">
             <NotificationBell />

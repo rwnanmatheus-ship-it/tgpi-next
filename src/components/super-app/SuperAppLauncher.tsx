@@ -1,5 +1,7 @@
 "use client";
 
+import { containDialogFocus } from "@/lib/dialog-focus";
+
 import PlatformBannerImage from "@/components/ui/PlatformBannerImage";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -80,6 +82,7 @@ export default function SuperAppLauncher() {
   return (
     <>
       <dialog
+        onKeyDown={containDialogFocus}
         ref={dialogRef}
         id="tgpi-super-app-launcher"
         aria-labelledby="tgpi-super-app-title"

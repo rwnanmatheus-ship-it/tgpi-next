@@ -1,0 +1,183 @@
+/* Global institutional chrome. Page surfaces and the approved crest remain independent. */
+:root {
+  --tgpi-header-surface: #fcfbf8;
+  --tgpi-header-ink: #102b46;
+  --tgpi-header-muted: #526174;
+  --tgpi-header-line: #dddcd6;
+  --tgpi-header-active: #e9f0f7;
+  --tgpi-header-focus: #1764a6;
+}
+body { min-width: 0; }
+html { scrollbar-gutter: stable; scroll-padding-top: 100px; }
+.tgpi-desktop-navigation,
+.tgpi-mobile.tgpi-compact-topbar {
+  background: linear-gradient(115deg, #f8f5ed, var(--tgpi-header-surface) 42%, #f2f5f8);
+  border-top: 2px solid #ac873d;
+  border-bottom: 1px solid var(--tgpi-header-line);
+  box-shadow: 0 3px 14px #102b4609;
+  color: var(--tgpi-header-ink);
+  backdrop-filter: none;
+}
+.tgpi-desktop-navigation-frame {
+  grid-template-columns: minmax(190px, 1fr) max-content minmax(240px, 1fr);
+  min-height: 78px;
+  gap: 20px;
+}
+.tgpi-brand-signature {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+  min-height: 54px;
+  width: fit-content;
+  color: var(--tgpi-header-ink);
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+.tgpi-brand-symbol { display: flex; align-items: center; flex: 0 0 44px; }
+.tgpi-brand-symbol img { width: 44px; height: 54px; object-fit: contain; }
+.tgpi-brand-wordmark { display: grid; gap: 5px; }
+.tgpi-brand-wordmark strong {
+  font-family: var(--tgpi-font-display);
+  font-size: 29px;
+  line-height: .95;
+  font-weight: 700;
+  letter-spacing: .095em;
+}
+.tgpi-brand-wordmark > span {
+  max-width: 170px;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.45;
+  letter-spacing: .035em;
+  color: var(--tgpi-header-muted);
+}
+/* These elements stay mounted between route changes; CSS never hides the fallback. */
+@keyframes tgpi-signature-entry {
+  from { opacity: .2; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.tgpi-brand-symbol { animation: tgpi-signature-entry 460ms ease-out; }
+.tgpi-brand-wordmark { animation: tgpi-signature-entry 620ms ease-out; }
+.tgpi-desktop-primary { gap: 2px; }
+.tgpi-desktop-primary-link {
+  min-height: 44px;
+  padding: 10px 11px;
+  gap: 7px;
+  border: 0;
+  border-radius: 7px;
+  font-size: 13px;
+  font-weight: 650;
+  color: #394c60;
+  background: transparent;
+  box-shadow: none;
+  transform: none;
+  transition: background 150ms ease, color 150ms ease;
+}
+.tgpi-desktop-primary-link > svg { display: none; }
+.tgpi-desktop-primary-link:hover {
+  background: #edf0f2;
+  color: var(--tgpi-header-ink);
+  box-shadow: none;
+  transform: none;
+}
+.tgpi-desktop-primary-link[aria-current="page"] {
+  background: var(--tgpi-header-active);
+  color: #164b79;
+  box-shadow: none;
+}
+.tgpi-desktop-primary-link[aria-current="page"]::after {
+  content: "";
+  position: absolute;
+  bottom: 3px;
+  left: 12px;
+  right: 12px;
+  height: 2px;
+  border-radius: 2px;
+  background: #236293;
+}
+.tgpi-desktop-actions { gap: 8px; }
+.tgpi-navigation-icon-button,
+.tgpi-navigation-square-button,
+.tgpi-navigation-workspace-button,
+.tgpi-mobile .tgpi-compact-action {
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid #d7dce0;
+  border-radius: 9px;
+  background: #ffffffa6;
+  box-shadow: none;
+  color: var(--tgpi-header-ink);
+  transform: none;
+}
+.tgpi-navigation-icon-button:hover,
+.tgpi-navigation-square-button:hover,
+.tgpi-navigation-workspace-button:hover,
+.tgpi-mobile .tgpi-compact-action:hover {
+  background: #e9f0f7;
+  border-color: #9eb5cb;
+  transform: none;
+}
+.tgpi-navigation-login { color: #394c60; font-weight: 650; }
+.tgpi-navigation-key-button {
+  min-height: 44px;
+  border: 1px solid #b89a55;
+  border-radius: 8px;
+  background: linear-gradient(115deg, #efdfb1, #d8bc79);
+  box-shadow: inset 0 1px 0 #fff6;
+  color: #142b42;
+  font-size: 12px;
+  font-weight: 750;
+  white-space: nowrap;
+  max-width: none;
+}
+.tgpi-navigation-key-button:hover { background: #e8d39f; transform: none; }
+.tgpi-desktop-actions button[aria-controls="tgpi-account-popover"] { width: 44px; height: 44px; }
+:is(.tgpi-desktop-navigation,.tgpi-compact-topbar,.tgpi-compact-dock) :is(a,button):focus-visible {
+  outline: 3px solid var(--tgpi-header-focus);
+  outline-offset: 3px;
+}
+@media (min-width: 1024px) and (max-width: 1535px) {
+  .tgpi-desktop-navigation-frame { grid-template-columns: minmax(150px, 1fr) max-content max-content; gap: 16px; }
+  .tgpi-apps-label,.tgpi-workspace-label { display: none; }
+  .tgpi-navigation-icon-button,.tgpi-navigation-workspace-button { width: 44px; padding-inline: 0; }
+}
+@media (min-width: 1024px) and (max-width: 1199px) {
+  .tgpi-brand-wordmark > span { display: none; }
+  .tgpi-desktop-navigation-frame { grid-template-columns: 130px 1fr max-content; gap: 10px; }
+  .tgpi-desktop-primary-link { padding-inline: 8px; font-size: 12px; }
+  .tgpi-navigation-key-button { padding-inline: 10px; }
+  .tgpi-navigation-key-button svg { display: none; }
+}
+@media (max-width: 1023px) {
+  html { scroll-padding-top: calc(var(--tgpi-compact-header) + var(--tgpi-safe-top) + 18px); }
+  .tgpi-mobile.tgpi-compact-topbar { gap: 8px; }
+  .tgpi-brand-signature { gap: 8px; flex-shrink: 1; }
+  .tgpi-brand-symbol { flex-basis: 36px; }
+  .tgpi-brand-symbol img { width: 36px; height: 44px; }
+  .tgpi-brand-wordmark { gap: 4px; }
+  .tgpi-brand-wordmark strong { font-size: 25px; }
+  .tgpi-brand-wordmark > span { max-width: 165px; font-size: 9px; line-height: 1.35; }
+  .tgpi-compact-actions { gap: 5px; }
+  .tgpi-compact-action svg { flex-shrink: 0; }
+  .tgpi-mobile .tgpi-compact-apps { width: 44px; padding-inline: 0; }
+  .tgpi-compact-apps > span { display: none; }
+  .tgpi-mobile .tgpi-compact-dock {
+    border-color: #ccd6df;
+    background: #102b46;
+    box-shadow: 0 -2px 16px #102b4612;
+  }
+  .tgpi-compact-dock a { color: #c9d6e3; }
+  .tgpi-compact-dock a[aria-current="page"] { color: #fff; background: #244967; box-shadow: inset 0 -2px 0 #e0c483; }
+  .tgpi-compact-dock a:focus-visible { outline-color: #b9daf7; outline-offset: -3px; }
+}
+@media (max-width: 420px) {
+  .tgpi-brand-wordmark > span { display: none; }
+  .tgpi-brand-signature { gap: 6px; }
+  .tgpi-brand-wordmark strong { font-size: 24px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tgpi-brand-symbol,.tgpi-brand-wordmark { animation: none; }
+}
+
+.tgpi-compact-dock-icon { display: grid; place-items: center; }

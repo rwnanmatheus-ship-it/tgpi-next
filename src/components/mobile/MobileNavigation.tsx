@@ -1,12 +1,14 @@
 "use client";
+
+import { containDialogFocus } from "@/lib/dialog-focus";
 import { Show } from "@clerk/nextjs";
 import NotificationBell from "@/components/NotificationBell";
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import BrandCrest from "@/components/BrandCrest";
-import NavigationTileIcon from "@/components/navigation/NavigationTileIcon";
+import LauncherButton from "@/components/navigation/LauncherButton";
+import BrandSignature from "@/components/navigation/BrandSignature";
 import NavigationIcon from "@/components/navigation/NavigationIcon";
 import {
   COMPACT_NAVIGATION,
@@ -20,21 +22,21 @@ import {
 } from "@/lib/mobile-experience";
 import {
   searchSuperAppModules,
-  SUPER_APP_OPEN_EVENT,
 } from "@/lib/super-app";
 
 const suggestedCountries = ["Portugal", "Canada", "Japan", "Spain"] as const;
 
 export default function MobileNavigation() {
   const pathname = usePathname();
-  return <MobileNavigationContent key={pathname} pathname={pathname} />;
+  return <MobileNavigationContent pathname={pathname} />;
 }
 
 function MobileNavigationContent({ pathname }: { pathname: string }) {
   const dialogRef = useRef<HTMLDialogElement>(null);
   const searchButtonRef = useRef<HTMLButtonElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
-  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchRoute, setSearchRoute] = useState<string | null>(null);
+  const searchOpen = searchRoute === pathname;
   const [query, setQuery] = useState("");
   const [countries, setCountries] = useState<MobileCountry[]>([]);
   const [loadState, setLoadState] = useState<"idle" | "loading" | "ready" | "error">("idle");
@@ -56,7 +58,7 @@ function MobileNavigationContent({ pathname }: { pathname: string }) {
       window.requestAnimationFrame(() => searchInputRef.current?.focus());
       const media = window.matchMedia("(min-width: 1024px)");
       const onResize = () => {
-        if (media.matches) setSearchOpen(false);
+        if (media.matches) setSearchRoute(null);
       };
       media.addEventListener("change", onResize);
       return () => {
@@ -117,13 +119,11 @@ function MobileNavigationContent({ pathname }: { pathname: string }) {
   }, [searchOpen, retry]);
 
   function closeSearch() {
-    setSearchOpen(false);
+    setSearchRoute(null);
     setQuery("");
   }
 
-  function openApps() {
-    window.dispatchEvent(new Event(SUPER_APP_OPEN_EVENT));
-  }
+
 
   return (
     <>
@@ -132,13 +132,7 @@ function MobileNavigationContent({ pathname }: { pathname: string }) {
         aria-label="TGPI compact navigation"
         data-navigation-version="2"
       >
-        <Link href="/" className="tgpi-compact-brand" aria-label="TGPI — The Global Polymath Institute home">
-          <BrandCrest width={38} height={46} sizes="38px" className="object-contain" />
-          <span>
-            <strong>TGPI</strong>
-            <small title="The Global Polymath Institute">Global Polymath Institute</small>
-          </span>
-        </Link>
+        <BrandSignature compact />
         <div className="tgpi-compact-actions">
           <Show when="signed-in"><NotificationBell /></Show>
           <button
@@ -148,21 +142,12 @@ function MobileNavigationContent({ pathname }: { pathname: string }) {
             aria-label="Search TGPI"
             aria-haspopup="dialog"
             aria-controls="tgpi-compact-search"
-            onClick={() => setSearchOpen(true)}
+            aria-expanded={searchOpen}
+            onClick={() => setSearchRoute(pathname)}
           >
             <NavigationIcon name="search" />
           </button>
-          <button
-            type="button"
-            className="tgpi-compact-action tgpi-compact-apps"
-            aria-label="Open TGPI apps"
-            aria-haspopup="dialog"
-            aria-controls="tgpi-super-app-launcher"
-            onClick={openApps}
-          >
-            <NavigationTileIcon name="apps" />
-            <span>Apps</span>
-          </button>
+          <LauncherButton compact />
         </div>
       </header>
 
@@ -181,7 +166,7 @@ function MobileNavigationContent({ pathname }: { pathname: string }) {
                 aria-current={active ? "page" : undefined}
               >
                 <span className="tgpi-compact-dock-icon">
-                  <NavigationTileIcon name={destination.icon} />
+                  <NavigationIcon name={destination.icon} width={22} height={22} />
                 </span>
                 <span>{destination.shortLabel}</span>
               </Link>
@@ -191,6 +176,7 @@ function MobileNavigationContent({ pathname }: { pathname: string }) {
       ) : null}
 
       <dialog
+        onKeyDown={containDialogFocus}
         ref={dialogRef}
         id="tgpi-compact-search"
         className="tgpi-compact-search"
