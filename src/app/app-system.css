@@ -57,11 +57,11 @@ html { scroll-padding-top: 7rem; }
 
 /* Institutional banners: useful hierarchy with real, responsive image assets. */
 .tgpi-area-hero { position: relative; isolation: isolate; overflow: hidden; border: 1px solid #c4953640; border-radius: var(--tgpi-radius-xl); background: var(--tgpi-navy-deep); color: #fff; box-shadow: var(--tgpi-depth-dark); }
-.tgpi-area-hero-art { position: absolute; inset: 0; z-index: -2; }
+.tgpi-area-hero-art { position: absolute; inset: 0; z-index: 0; }
 .tgpi-area-hero-art img { object-position: 72% center; }
-.tgpi-area-hero::before { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg,#031426fa,#031426db 50%,#03142640),linear-gradient(0deg,#031426ba,transparent); }
-.tgpi-area-hero::after { content: ""; pointer-events: none; position: absolute; inset: 0; border-radius: inherit; box-shadow: inset 0 1px #f2d99740; }
-.tgpi-area-hero-content { position: relative; max-width: 56rem; padding: clamp(1.5rem,4.5vw,4rem); }
+.tgpi-area-hero::before { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(90deg,#031426fa,#031426db 50%,#03142640),linear-gradient(0deg,#031426ba,transparent); }
+.tgpi-area-hero::after { content: ""; pointer-events: none; position: absolute; inset: 0; z-index: 3; border-radius: inherit; box-shadow: inset 0 1px #f2d99740; }
+.tgpi-area-hero-content { position: relative; z-index: 2; max-width: 56rem; padding: clamp(1.5rem,4.5vw,4rem); }
 .tgpi-area-eyebrow { margin: 0; color: #f2d997; font-size: .75rem; line-height: 1.6; letter-spacing: .14em; text-transform: uppercase; font-weight: 750; }
 #main-content .tgpi-area-hero :is(h1,h2) { margin-block: 1rem; max-width: 18ch; font-size: clamp(2.2rem,4.5vw,4.5rem); line-height: 1.08; letter-spacing: -.035em; overflow-wrap: break-word; }
 .tgpi-area-description { max-width: 58ch; margin: 1.25rem 0 0; color: #dbe5ed; font-size: clamp(1rem,1.3vw,1.125rem); line-height: 1.8; }

@@ -41,7 +41,7 @@ Country and comparison presentation no longer waits for the statistical collecti
 
 ## Evidence and limitations
 
-- Entire script suite: 224 tests passed, zero failed. Includes real reducer/persistence functions with only infrastructure replaced for isolated tests.
+- Entire script suite: 225 tests passed, zero failed. Includes real reducer/persistence functions with only infrastructure replaced for isolated tests.
 - TypeScript and production build are required before release; deployment readiness and commit are checked through Vercel after merge.
 - ESLint: zero errors; one pre-existing legacy Firebase document-navigation warning remains.
 - `git diff --check` passed.
@@ -57,3 +57,7 @@ Country and comparison presentation no longer waits for the statistical collecti
 Release through PR #75 into the existing production branch. Verify Vercel READY, exact Git SHA and public domain rendering. Keep service errors distinct from deployment protection. Revert the release commits or restore the prior production deployment if a regression is observed. This release has no schema migration, user deletion, subscription change or credential rotation.
 
 Next verification work, when test access is available: five-width browser matrix, actual Free/Premium journeys, Stripe test checkout → webhook → access/revocation, assessed learning → signed certificate → verification/PDF, two-device concurrent writes, keyboard/zoom/contrast and field-vitals instrumentation. These unexecuted checks remain disclosed after publication.
+
+### Post-publication correction
+
+Browser verification reproduced an explorer return bug: the address retained the query and selection after Comparison → Back, while a cached client subtree initialized its local filters from stale props. The correction derives filters directly from a subscribed location snapshot (`useSyncExternalStore`) with a deterministic server snapshot. Added a URL restoration regression test. Hero layers use explicit positive stacking to keep artwork above its base surface. Recheck the public comparison-and-return journey after this correction is deployed.

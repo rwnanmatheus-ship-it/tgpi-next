@@ -1,4 +1,4 @@
-import { normalizeExplorerFilters } from "../src/lib/explorer-filters.ts";
+import { explorerFiltersFromSearch, explorerFiltersToSearch, normalizeExplorerFilters } from "../src/lib/explorer-filters.ts";
 import test from "node:test";
 import assert from "node:assert/strict";
 import { getJourneyStage, isImmersiveLearningRoute } from "../src/lib/platform-journey.ts";
@@ -66,4 +66,14 @@ test("country filters accept repeated query keys without invalid client state", 
   assert.equal(filters.region,"all");
   assert.deepEqual(filters.selection,["portugal","canada"]);
   assert.equal(filters.limit,24);
+});
+
+test("explorer restoration derives selection and query from the current history URL", () => {
+  const countries=[{slug:"portugal",region:"Europe"},{slug:"canada",region:"Americas"}];
+  const current="?q=Portugal&selected=canada&selected=portugal";
+  const restored=normalizeExplorerFilters(explorerFiltersFromSearch(current),countries);
+  assert.equal(restored.query,"Portugal");
+  assert.deepEqual(restored.selection,["canada","portugal"]);
+  const roundtrip=explorerFiltersToSearch(explorerFiltersFromSearch(current));
+  assert.deepEqual(normalizeExplorerFilters(explorerFiltersFromSearch(roundtrip),countries),restored);
 });
