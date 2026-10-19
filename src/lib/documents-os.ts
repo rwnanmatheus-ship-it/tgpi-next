@@ -27,6 +27,7 @@ export type DocumentCountryProgress = {
   slug: string;
   status: ActivationStatus;
   totalItems: number;
+  updatedAt?: string;
 };
 
 export type DocumentReadinessLayer = {
@@ -37,6 +38,10 @@ export type DocumentReadinessLayer = {
 };
 
 export type DocumentsMemberModel = {
+  credentialCount: number | null;
+  completedCourses: number;
+  totalItems: number;
+  signals: { label: string; achieved: boolean; weight: number }[];
   completedCountryReviews: number;
   completedItems: number;
   countries: DocumentCountryProgress[];
@@ -125,7 +130,7 @@ function buildCountryProgress(
       ...Object.keys(activation.documentReviews),
       ...activation.savedCountries,
     ]),
-  ).slice(0, 5);
+  );
 
   return selectedSlugs.flatMap((slug): DocumentCountryProgress[] => {
     const country = availableCountries.get(slug);
@@ -137,7 +142,8 @@ function buildCountryProgress(
 
     return [
       {
-        completedItems,
+        completedItems: Math.min(completedItems, totalItems),
+        updatedAt: review?.updatedAt,
         emoji: country.emoji,
         href: `/countries/${country.slug}#documents-to-verify`,
         name: country.name,
@@ -146,7 +152,7 @@ function buildCountryProgress(
             ? Math.min(100, Math.round((completedItems / totalItems) * 100))
             : 0,
         slug: country.slug,
-        status: getDocumentReviewStatus(review),
+        status: totalItems > 0 ? getDocumentReviewStatus(review) : "not_started",
         totalItems,
       },
     ];
@@ -158,6 +164,7 @@ export function buildDocumentsMemberModel(
   activation: TgpiActivationProgress,
   countries: Country[],
   emailVerified: boolean,
+  credentialCount: number | null = null,
 ): DocumentsMemberModel {
   const goal = normalizeGoal(onboarding.primaryGoal);
   const countryProgress = buildCountryProgress(onboarding, activation, countries);
@@ -172,17 +179,20 @@ export function buildDocumentsMemberModel(
     0,
   );
 
+  const completedCourses = Object.values(activation.courseProgress).filter((course) => Boolean(course.completedAt)).length;
+  const totalItems = countryProgress.reduce((sum, country) => sum + country.totalItems, 0);
   const readinessSignals = [
-    { achieved: emailVerified, weight: 15 },
-    { achieved: onboarding.completed, weight: 20 },
-    { achieved: onboarding.targetCountries.length > 0, weight: 15 },
-    { achieved: Boolean(onboarding.primaryGoal), weight: 10 },
+    { label: "Verified email", achieved: emailVerified, weight: 15 },
+    { label: "Planning profile", achieved: onboarding.completed, weight: 20 },
+    { label: "Destination selected", achieved: countryProgress.length > 0, weight: 15 },
+    { label: "Primary objective", achieved: Boolean(onboarding.primaryGoal), weight: 10 },
     {
-      achieved: Boolean(onboarding.timeHorizon && onboarding.budgetRange),
+      label: "Timeline and budget",
+      achieved: Boolean(onboarding.timeHorizon && onboarding.budgetRange && onboarding.budgetRange !== "undecided"),
       weight: 10,
     },
-    { achieved: startedCountryReviews > 0, weight: 15 },
-    { achieved: completedCountryReviews > 0, weight: 15 },
+    { label: "Document research started", achieved: startedCountryReviews > 0, weight: 15 },
+    { label: "All destination checklists reviewed", achieved: countryProgress.length > 0 && completedCountryReviews === countryProgress.length, weight: 15 },
   ];
   const readinessScore = readinessSignals.reduce(
     (score, signal) => score + (signal.achieved ? signal.weight : 0),
@@ -262,10 +272,10 @@ export function buildDocumentsMemberModel(
         startedCountryReviews > 0
           ? `${completedItems} checklist item${completedItems === 1 ? "" : "s"} reviewed across your targets.`
           : "Start a country checklist to map preparation gaps.",
-      href: countryProgress[0]?.href || "/countries",
+      href: countryProgress.find((country) => country.status !== "completed")?.href || countryProgress[0]?.href || "/countries",
       label: "Document review",
       status:
-        completedCountryReviews > 0
+        countryProgress.length > 0 && completedCountryReviews === countryProgress.length
           ? "completed"
           : startedCountryReviews > 0
             ? "in_progress"
@@ -277,20 +287,23 @@ export function buildDocumentsMemberModel(
       href: "/courses",
       label: "Learning evidence",
       status:
-        Object.keys(activation.courseProgress).length > 0
+        completedCourses > 0 ? "completed" : Object.keys(activation.courseProgress).length > 0
           ? "in_progress"
           : "not_started",
     },
     {
-      description:
-        "Certificates remain separate, verifiable achievements and are never treated as legal documents.",
       href: "/certificates",
       label: "Verified credentials",
-      status: "not_started",
+      status: credentialCount === null ? "needs_attention" : credentialCount > 0 ? "completed" : "not_started",
+      description: credentialCount === null ? "Certificate records could not be confirmed. Open certificates to retry." : `${credentialCount} active, issued certificate${credentialCount === 1 ? "" : "s"}. These are learning achievements, separate from legal documents.`,
     },
   ];
 
   return {
+    credentialCount,
+    completedCourses,
+    totalItems,
+    signals: readinessSignals,
     completedCountryReviews,
     completedItems,
     countries: countryProgress,

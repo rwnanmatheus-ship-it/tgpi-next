@@ -1,3 +1,6 @@
+import "./documents.css";
+import { isLearningStorageConfigured } from "@/lib/firestore-admin-rest.server";
+import { listUserLearningCredentials } from "@/lib/learning-records.server";
 import type { Metadata } from "next";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import DocumentsGuestExperience from "@/components/documents/DocumentsGuestExperience";
@@ -35,11 +38,16 @@ export default async function PassportPage() {
   );
   const emailVerified =
     user?.primaryEmailAddress?.verification?.status === "verified";
+  const credentials = isLearningStorageConfigured() ? await listUserLearningCredentials(session.userId).then(
+    (records) => records.filter((record) => record.status === "active").length,
+    () => null,
+  ) : null;
   const model = buildDocumentsMemberModel(
     onboarding,
     activation,
     countries,
     emailVerified,
+    credentials,
   );
 
   return (

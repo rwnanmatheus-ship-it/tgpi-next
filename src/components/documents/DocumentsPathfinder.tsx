@@ -19,7 +19,7 @@ export default function DocumentsPathfinder() {
       className="mt-8 overflow-hidden rounded-[32px] border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] shadow-[var(--tgpi-shadow-premium)]"
     >
       <div className="border-b border-[var(--tgpi-border)] px-5 py-7 sm:px-8 lg:px-10">
-        <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[var(--tgpi-gold-strong)]">
+        <p className="text-xs font-extrabold uppercase tracking-[0.24em] text-[var(--tgpi-gold-strong)]">
           Find your document path
         </p>
         <div className="mt-3 grid gap-4 lg:grid-cols-[1fr_.72fr] lg:items-end">
@@ -29,7 +29,7 @@ export default function DocumentsPathfinder() {
           >
             Start with the outcome. TGPI maps the evidence.
           </h2>
-          <p className="text-sm leading-7 text-[var(--tgpi-muted)]">
+          <p className="text-base leading-7 text-[var(--tgpi-muted)]">
             A document matters because of the decision it supports. Choose your
             objective to see how TGPI structures the research — without asking you
             to upload sensitive legal files.
@@ -61,17 +61,17 @@ export default function DocumentsPathfinder() {
 
       <div className="grid lg:grid-cols-[.82fr_1.18fr]">
         <div className="bg-[var(--tgpi-navy)] p-6 text-white sm:p-8 lg:p-10">
-          <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold)]">
+          <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold)]">
             {selectedPath.eyebrow}
           </p>
           <h3 className="mt-4 font-[var(--tgpi-font-display)] text-4xl font-semibold leading-none tracking-[-0.035em]">
             {selectedPath.title}
           </h3>
-          <p className="mt-5 text-sm leading-7 text-white/70">
+          <p className="mt-5 text-base leading-7 text-white/70">
             {selectedPath.description}
           </p>
           <div className="mt-8 rounded-2xl border border-white/12 bg-white/[0.06] p-5">
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-white/50">
+            <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-white/50">
               Designed outcome
             </p>
             <p className="mt-2 text-base font-extrabold text-white">
@@ -81,7 +81,7 @@ export default function DocumentsPathfinder() {
         </div>
 
         <div className="p-6 sm:p-8 lg:p-10">
-          <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-muted)]">
+          <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-muted)]">
             Your readiness layers
           </p>
           <div className="mt-5 grid gap-3 sm:grid-cols-2">
@@ -94,7 +94,7 @@ export default function DocumentsPathfinder() {
                   <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[var(--tgpi-gold-soft)] text-xs font-black text-[var(--tgpi-gold-strong)]">
                     0{index + 1}
                   </span>
-                  <span className="text-[9px] font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-muted)]">
+                  <span className="text-xs font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-muted)]">
                     Research layer
                   </span>
                 </div>
