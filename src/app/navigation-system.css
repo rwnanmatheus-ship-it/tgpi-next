@@ -704,7 +704,7 @@ body {
     --tgpi-app-gutter: 1rem;
   }
 
-  .tgpi-compact-apps span {
+  .tgpi-compact-apps > span:not(.tgpi-nav-cinematic) {
     display: none;
   }
 
@@ -1006,5 +1006,56 @@ a[aria-current="page"] .tgpi-nav-miniature-art { transform: translateY(-2px) rot
 .tgpi-compact-dock-icon .tgpi-nav-cinematic { transform: scale(.76); }
 @media (prefers-reduced-motion: reduce) {
   .tgpi-nav-cinematic-object, .tgpi-nav-cinematic-light { transition: none; }
+  :is(a,button):is(:hover,:focus-visible,:active) .tgpi-nav-cinematic-object { transform: none; }
+}
+
+/* Compact artwork uses real dimensions, so icons and labels never share space. */
+.tgpi-nav-cinematic {
+  width: 28px;
+  height: 36.4px;
+  flex-basis: 28px;
+}
+.tgpi-nav-cinematic-object { filter: drop-shadow(0 2px 1px #0b1f3a26); }
+.tgpi-desktop-navigation-frame { min-height: 80px; }
+.tgpi-desktop-primary-link { min-height: 46px; gap: 6px; padding-block: 5px; }
+.tgpi-navigation-icon-button, .tgpi-navigation-square-button { min-height: 44px; }
+:is(a,button):is(:hover,:focus-visible) .tgpi-nav-cinematic-object {
+  transform: translateY(-1px) rotateY(-5deg) scale(1.025);
+  filter: drop-shadow(0 3px 2px #0b1f3a30);
+}
+@media (max-width: 1023px) {
+  .tgpi-compact-topbar .tgpi-nav-cinematic,
+  .tgpi-compact-dock-icon .tgpi-nav-cinematic {
+    width: 26px;
+    height: 33.8px;
+    flex-basis: 26px;
+    transform: none;
+  }
+  .tgpi-compact-dock a {
+    display: grid;
+    grid-template-rows: 34px minmax(15px, auto);
+    align-content: center;
+    justify-items: center;
+    gap: 5px;
+    min-height: 62px;
+    padding: 3px 1px;
+    font-size: 11px;
+    line-height: 1.35;
+  }
+  .tgpi-compact-dock-icon { width: 30px; height: 34px; }
+  .tgpi-compact-dock a > span:last-child {
+    display: block;
+    max-width: 100%;
+    text-align: center;
+    overflow-wrap: anywhere;
+    line-height: 1.35;
+  }
+  .tgpi-compact-dock a[aria-current="page"] .tgpi-compact-dock-icon { transform: none; }
+  .tgpi-compact-actions { align-items: center; }
+  .tgpi-compact-action { height: 44px; flex-shrink: 0; }
+  .tgpi-compact-apps .tgpi-nav-cinematic-object,
+  .tgpi-compact-apps .tgpi-nav-cinematic-light { display: block; }
+}
+@media (prefers-reduced-motion: reduce) {
   :is(a,button):is(:hover,:focus-visible,:active) .tgpi-nav-cinematic-object { transform: none; }
 }
