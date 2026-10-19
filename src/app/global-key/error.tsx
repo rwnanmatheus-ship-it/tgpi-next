@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 
-export default function GlobalIdentityError({ reset }: { reset: () => void }) {
+export default function GlobalIdentityError({ retry }: { retry: () => void }) {
   return (
     <main className="min-h-[65vh] bg-[#050C14] px-4 py-12 text-white sm:py-20">
       <section
@@ -22,7 +22,7 @@ export default function GlobalIdentityError({ reset }: { reset: () => void }) {
         <div className="mt-7 flex flex-wrap gap-3">
           <button
             type="button"
-            onClick={reset}
+            onClick={retry}
             className="min-h-12 rounded-xl bg-[#E5B94B] px-5 text-sm font-bold text-[#07182D] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
           >
             Try again
