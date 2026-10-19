@@ -29,6 +29,10 @@ export default function PublicProfileShareButton({
     }
   }
 
+  async function copyLink() {
+    try { await navigator.clipboard.writeText(new URL(url, window.location.origin).toString()); setMessage("Profile link copied."); }
+    catch { setMessage("Unable to copy automatically. Open the profile and copy its address."); }
+  }
   return (
     <div>
       <button
@@ -38,6 +42,7 @@ export default function PublicProfileShareButton({
       >
         {label}
       </button>
+      <button className="ml-3 inline-flex min-h-11 items-center rounded-xl border border-current/30 px-4 text-sm font-bold" type="button" onClick={copyLink}>Copy link</button>
       <p aria-live="polite" className="mt-2 text-[11px] font-bold text-[#9FD5BD]" role="status">{message}</p>
     </div>
   );

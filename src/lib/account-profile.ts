@@ -13,6 +13,7 @@ export type TgpiAccountProfile = {
   yearsExperience: string;
   employmentType: string;
   certificateBirthDateConsent: boolean;
+  displayName: string;
   headline: string;
   bio: string;
   currentCountry: string;
@@ -39,6 +40,11 @@ export type TgpiAccountProfile = {
     showLocation: boolean;
     showProgress: boolean;
     showGoals: boolean;
+    discoverable: boolean;
+    allowIndexing: boolean;
+    showCareer: boolean;
+    showLanguages: boolean;
+    showLinks: boolean;
   };
   updatedAt?: string;
 };
@@ -65,6 +71,7 @@ export const emptyTgpiAccountProfile: TgpiAccountProfile = {
   yearsExperience: "",
   employmentType: "",
   certificateBirthDateConsent: false,
+  displayName: "",
   headline: "",
   bio: "",
   currentCountry: "",
@@ -91,6 +98,11 @@ export const emptyTgpiAccountProfile: TgpiAccountProfile = {
     showLocation: false,
     showProgress: false,
     showGoals: false,
+    discoverable: false,
+    allowIndexing: false,
+    showCareer: false,
+    showLanguages: false,
+    showLinks: false,
   },
 };
 
@@ -127,7 +139,7 @@ function cleanUrl(value: unknown, host?: string) {
 
   try {
     const url = new URL(withProtocol);
-    if (!/^https?:$/.test(url.protocol)) return "";
+    if (!/^https?:$/.test(url.protocol) || url.username || url.password) return "";
     if (host && !(url.hostname === host || url.hostname.endsWith(`.${host}`))) return "";
     return url.toString().slice(0, 240);
   } catch {
@@ -180,6 +192,7 @@ export function normalizeTgpiAccountProfile(value: unknown): TgpiAccountProfile 
     yearsExperience: isOneOf(input.yearsExperience, ["0", "1-2", "3-5", "6-10", "11+"] as const) ? input.yearsExperience : "",
     employmentType: isOneOf(input.employmentType, ["employed", "self-employed", "entrepreneur", "student", "seeking-work", "retired"] as const) ? input.employmentType : "",
     certificateBirthDateConsent: getBoolean(input.certificateBirthDateConsent, false),
+    displayName: cleanText(input.displayName, 120),
     headline: cleanText(input.headline, 120),
     bio: cleanText(input.bio, 500),
     currentCountry: cleanText(input.currentCountry, 80),
@@ -210,6 +223,11 @@ export function normalizeTgpiAccountProfile(value: unknown): TgpiAccountProfile 
       showLocation: getBoolean(privacy.showLocation, false),
       showProgress: getBoolean(privacy.showProgress, false),
       showGoals: getBoolean(privacy.showGoals, false),
+      discoverable: getBoolean(privacy.discoverable, false),
+      allowIndexing: getBoolean(privacy.allowIndexing, false),
+      showCareer: getBoolean(privacy.showCareer, false),
+      showLanguages: getBoolean(privacy.showLanguages, false),
+      showLinks: getBoolean(privacy.showLinks, false),
     },
     updatedAt: cleanText(input.updatedAt, 40) || undefined,
   };

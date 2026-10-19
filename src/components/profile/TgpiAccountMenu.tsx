@@ -2,6 +2,8 @@
 
 import { useClerk, useUser } from "@clerk/nextjs";
 import Link from "next/link";
+import { normalizeTgpiAccountProfile } from '@/lib/account-profile';
+import type { MemberIdentity } from '@/lib/members/identity';
 import { useEffect, useRef, useState } from "react";
 
 const destinations = [
@@ -18,6 +20,18 @@ export default function TgpiAccountMenu() {
   const [open, setOpen] = useState(false);
   const [signingOut, setSigningOut] = useState(false);
   const [error, setError] = useState("");
+  const [memberIdentity, setMemberIdentity] = useState<MemberIdentity | null>(null);
+  const [identityLoading, setIdentityLoading] = useState(false);
+  const [identityError, setIdentityError] = useState(false);
+  useEffect(() => {
+    if (!open || !user?.id) return;
+    const controller = new AbortController();
+    fetch('/api/member-identity', { cache: 'no-store', signal: controller.signal }).then(async response => {
+      if (!response.ok) throw new Error('Unavailable');
+      const data = await response.json(); setMemberIdentity(data.identity);
+    }).catch(error => { if (error.name !== 'AbortError') setIdentityError(true); }).finally(() => { if (!controller.signal.aborted) setIdentityLoading(false); });
+    return () => controller.abort();
+  }, [open, user?.id]);
   const root = useRef<HTMLDivElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
   useEffect(() => {
@@ -36,13 +50,13 @@ export default function TgpiAccountMenu() {
     };
   }, [open]);
   if (!isLoaded || !user) return null;
-  const name = [user.firstName, user.lastName].filter(Boolean).join(" ") || "TGPI member";
-  const handle = user.username ? `@${user.username}` : "Create your unique @ID";
+  const name = normalizeTgpiAccountProfile(user.unsafeMetadata.tgpiAccountProfile).displayName || [user.firstName, user.lastName].filter(Boolean).join(" ") || "TGPI member";
+  const handle = identityLoading ? 'Loading member ID…' : memberIdentity?.handle ? `@${memberIdentity.handle}` : identityError ? 'Manage your member ID' : 'Create your unique @ID';
   return (
     <div className="relative" ref={root} onBlur={(event) => {
       if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setOpen(false);
     }}>
-      <button ref={trigger} type="button" aria-label={`Account settings for ${name}`} aria-expanded={open} aria-controls="tgpi-account-popover" onClick={() => setOpen(!open)} className="grid h-10 w-10 place-items-center overflow-hidden rounded-full border-2 border-[#B58A2A]/50 bg-[#0B1F3A] text-sm font-bold text-[#F0D58C] shadow-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#B58A2A]">
+      <button ref={trigger} type="button" aria-label={`Account settings for ${name}`} aria-expanded={open} aria-controls="tgpi-account-popover" onClick={() => { if (!open) { setIdentityLoading(true); setIdentityError(false); } setOpen(!open); }} className="grid h-10 w-10 place-items-center overflow-hidden rounded-full border-2 border-[#B58A2A]/50 bg-[#0B1F3A] text-sm font-bold text-[#F0D58C] shadow-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#B58A2A]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         {user.imageUrl ? <img src={user.imageUrl} alt="" className="h-full w-full object-cover" /> : name.slice(0, 1)}
       </button>
@@ -51,13 +65,14 @@ export default function TgpiAccountMenu() {
           <p className="text-[10px] font-bold uppercase tracking-[.22em] text-[#F0D58C]">TGPI · Your account</p>
           <p className="mt-3 break-words text-lg font-bold">{name}</p>
           <Link href="/profile/security#settings-identity" onClick={() => setOpen(false)} className="mt-1 block text-sm text-[#F0D58C]">{handle}</Link>
-          {!user.firstName || !user.username ? <p className="mt-3 text-xs leading-5 text-[#D6DFEA]">Next step: add your name and claim your TGPI @ID.</p> : null}
+          {!user.firstName || (!identityLoading && !identityError && !memberIdentity?.handle) ? <p className="mt-3 text-xs leading-5 text-[#D6DFEA]">Next step: add your name and claim your TGPI @ID.</p> : null}
         </div>
         <nav aria-label="Account shortcuts" className="mt-2">
           {destinations.map(([section, label, description]) => <Link key={section} href={`/profile/security#settings-${section}`} onClick={() => setOpen(false)} className="block rounded-xl px-4 py-3 transition hover:bg-[#F5F1E8] focus-visible:outline-[#B58A2A]"><span className="block text-sm font-bold">{label}</span><span className="mt-1 block text-xs text-[#667085]">{description}</span></Link>)}
+          <Link href="/members" onClick={() => setOpen(false)} className="block min-h-11 rounded-xl px-4 py-3 text-sm font-bold">Find a TGPI member →</Link>
           <div className="grid grid-cols-2 gap-2 border-t border-[#D8D2C4] pt-3">
             <Link href="/profile" onClick={() => setOpen(false)} className="rounded-xl bg-[#F5F1E8] p-3 text-center text-xs font-bold">Workspace</Link>
-            <Link href="/premium" onClick={() => setOpen(false)} className="rounded-xl bg-[#F5F1E8] p-3 text-center text-xs font-bold">Plan & billing</Link>
+            <Link href="/profile/security#settings-billing" onClick={() => setOpen(false)} className="rounded-xl bg-[#F5F1E8] p-3 text-center text-xs font-bold">Plan & billing</Link>
           </div>
         </nav>
         <button type="button" disabled={signingOut} onClick={async () => {

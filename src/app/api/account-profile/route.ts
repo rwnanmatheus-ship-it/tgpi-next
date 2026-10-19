@@ -1,4 +1,4 @@
-import { isUsernameEnabled } from "@/lib/auth/username-settings.server";
+import { getMemberIdentity } from '@/lib/members/identity.server';
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import {
@@ -57,18 +57,14 @@ export async function PATCH(request: Request) {
       );
     }
 
-    if (identity.username && (!/^[a-z][a-z0-9_]{2,29}$/.test(identity.username) ||
-      ["admin", "support", "tgpi", "security", "billing", "official", "system"].includes(identity.username))) {
-      return NextResponse.json({ error: "Choose an ID with 3–30 characters: start with a letter and use letters, numbers or underscores. This ID may be reserved." }, { status: 400 });
-    }
-
     const client = await clerkClient();
     const user = await client.users.getUser(session.userId);
     const onboarding = normalizeOnboardingData(
       user.unsafeMetadata.tgpiOnboarding,
     );
-    if (identity.username && identity.username !== user.username && !(await isUsernameEnabled())) {
-      return NextResponse.json({ error: "TGPI @IDs are awaiting activation. Save your other settings without changing your ID." }, { status: 409 });
+    const existing = normalizeTgpiAccountProfile(user.unsafeMetadata.tgpiAccountProfile);
+    if (input.profile?.updatedAt && existing.updatedAt && input.profile.updatedAt !== existing.updatedAt) {
+      return NextResponse.json({ error: "This profile changed in another session. Copy your edits, reload and review the latest version before saving." }, { status: 409 });
     }
     const now = new Date().toISOString();
     // Merge normalized known fields so older clients cannot erase newly added information.
@@ -84,10 +80,10 @@ export async function PATCH(request: Request) {
       updatedAt: now,
     };
 
-    const updatedUser = await client.users.updateUser(session.userId, {
+    const memberIdentity = await getMemberIdentity(session.userId).catch(() => null);
+    await client.users.updateUser(session.userId, {
       firstName: identity.firstName,
       lastName: identity.lastName,
-      ...(identity.username && identity.username !== user.username ? { username: identity.username } : {}),
       unsafeMetadata: {
         ...user.unsafeMetadata,
         tgpiAccountProfile: savedProfile,
@@ -96,7 +92,7 @@ export async function PATCH(request: Request) {
     });
 
     return NextResponse.json({
-      identity: { ...identity, username: updatedUser.username || "" },
+      identity: { ...identity, username: memberIdentity?.handle || "" },
       profile: savedProfile,
       synchronized: [
         "country-fit",

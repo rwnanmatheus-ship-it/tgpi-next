@@ -8,7 +8,7 @@
     "verify:premium": "node scripts/verify-premium-command-center.mjs",
     "test:intelligence": "node --experimental-strip-types --test scripts/intelligence.test.mjs scripts/intelligence-plan.test.mjs scripts/intelligence-dossiers.test.mjs scripts/intelligence-worksheet.test.mjs",
     "test:global-key": "node --experimental-strip-types --test scripts/global-key.test.mjs scripts/global-key-anchor.test.mjs",
-    "test:account": "node --experimental-strip-types --test scripts/account-profile.test.mjs scripts/global-ranks.test.mjs",
+    "test:account": "node --experimental-strip-types --test scripts/account-profile.test.mjs scripts/global-ranks.test.mjs scripts/member-system.test.mjs",
     "test:mobile": "node --experimental-strip-types --test scripts/mobile-experience.test.mjs",
     "test:pwa": "node --experimental-strip-types --test scripts/pwa-runtime.test.mjs",
     "test:platform": "node --experimental-strip-types --test scripts/platform-integration.test.mjs scripts/platform-persistence.test.mjs",
