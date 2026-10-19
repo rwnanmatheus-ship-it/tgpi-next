@@ -25,7 +25,7 @@ export default function TgpiAccountMenu() {
   const [identityError, setIdentityError] = useState(false);
   useEffect(() => {
     if (!open || !user?.id) return;
-    const controller = new AbortController(); setIdentityLoading(true); setIdentityError(false);
+    const controller = new AbortController();
     fetch('/api/member-identity', { cache: 'no-store', signal: controller.signal }).then(async response => {
       if (!response.ok) throw new Error('Unavailable');
       const data = await response.json(); setMemberIdentity(data.identity);
@@ -56,7 +56,7 @@ export default function TgpiAccountMenu() {
     <div className="relative" ref={root} onBlur={(event) => {
       if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setOpen(false);
     }}>
-      <button ref={trigger} type="button" aria-label={`Account settings for ${name}`} aria-expanded={open} aria-controls="tgpi-account-popover" onClick={() => setOpen(!open)} className="grid h-10 w-10 place-items-center overflow-hidden rounded-full border-2 border-[#B58A2A]/50 bg-[#0B1F3A] text-sm font-bold text-[#F0D58C] shadow-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#B58A2A]">
+      <button ref={trigger} type="button" aria-label={`Account settings for ${name}`} aria-expanded={open} aria-controls="tgpi-account-popover" onClick={() => { if (!open) { setIdentityLoading(true); setIdentityError(false); } setOpen(!open); }} className="grid h-10 w-10 place-items-center overflow-hidden rounded-full border-2 border-[#B58A2A]/50 bg-[#0B1F3A] text-sm font-bold text-[#F0D58C] shadow-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#B58A2A]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         {user.imageUrl ? <img src={user.imageUrl} alt="" className="h-full w-full object-cover" /> : name.slice(0, 1)}
       </button>
