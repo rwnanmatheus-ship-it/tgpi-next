@@ -109,7 +109,7 @@ function ChainBlock({
             </p>
             <h3 className="mt-1 text-sm font-extrabold text-white">
               {block.type === "issued"
-                ? "Global identity anchored"
+                ? "Global identity issued"
                 : `Integrity revision ${block.sequence}`}
             </h3>
           </div>
@@ -173,14 +173,14 @@ function PublicAnchorPanel({
                   id="public-anchor-title"
                 >
                   {activating
-                    ? "External anchoring is ready for activation"
+                    ? "External anchoring is not active yet"
                     : "Current revision is queued for anchoring"}
                 </h2>
               </div>
             </div>
             <p className="mt-4 text-xs leading-6 text-[#A6B8C8] sm:text-sm">
               {activating
-                ? "The cryptographic foundation is installed. The first production batch will begin only after the dedicated TGPI signer, RPC and operational kill switch are securely configured."
+                ? "Your TGPI identity is active. External blockchain receipts are not enabled yet; identity integrity and account access continue to work independently."
                 : "Your Integrity Chain remains verified now. Its current fingerprint will join the next daily Merkle batch; earlier on-chain receipts remain historically valid after a rotation."}
             </p>
           </div>
@@ -309,6 +309,7 @@ export default function GlobalKeyCenter({
   }
 
   function rotateProof() {
+    if (isPending) return;
     if (!confirmRotation) {
       setConfirmRotation(true);
       setFeedback({
@@ -318,7 +319,6 @@ export default function GlobalKeyCenter({
       return;
     }
 
-    if (isPending) return;
     startTransition(async () => {
       try {
         const result: RotateGlobalKeyResult = await rotateGlobalKeyAction();

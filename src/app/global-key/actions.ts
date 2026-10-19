@@ -7,8 +7,7 @@ import { rotateUserGlobalKey } from "@/lib/global-key.server";
 import type { TgpiGlobalKeyView } from "@/lib/global-key";
 
 export type RotateGlobalKeyResult =
-  | { key: TgpiGlobalKeyView; ok: true }
-  | { error: string; ok: false };
+  { key: TgpiGlobalKeyView; ok: true } | { error: string; ok: false };
 
 export async function rotateGlobalKeyAction(): Promise<RotateGlobalKeyResult> {
   const session = await auth();
@@ -25,7 +24,9 @@ export async function rotateGlobalKeyAction(): Promise<RotateGlobalKeyResult> {
     if (error instanceof GlobalKeyIntegrityError) {
       return { error: error.message, ok: false };
     }
-    console.error("Unable to rotate TGPI Global Key", error);
+    console.error("Unable to rotate TGPI Global Key", {
+      errorName: error instanceof Error ? error.name : "UnknownError",
+    });
     return {
       error: "The cryptographic proof could not be rotated right now.",
       ok: false,
