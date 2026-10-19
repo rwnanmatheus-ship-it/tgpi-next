@@ -7,16 +7,16 @@ import { usePathname } from "next/navigation";
 import NotificationBell from "@/components/NotificationBell";
 import BrandCrest from "@/components/BrandCrest";
 import { Container } from "@/components/design-system";
+import NavigationTileIcon from "@/components/navigation/NavigationTileIcon";
 import NavigationIcon from "@/components/navigation/NavigationIcon";
 import {
   isNavigationDestinationActive,
   PRIMARY_NAVIGATION,
 } from "@/lib/navigation-system";
-import { getSuperAppModule, SUPER_APP_OPEN_EVENT } from "@/lib/super-app";
+import { SUPER_APP_OPEN_EVENT } from "@/lib/super-app";
 
 export default function Navbar() {
   const pathname = usePathname();
-  const currentModule = getSuperAppModule(pathname);
 
   return (
     <header
@@ -51,7 +51,7 @@ export default function Navbar() {
                 aria-current={active ? "page" : undefined}
                 className="tgpi-desktop-primary-link"
               >
-                <NavigationIcon name={destination.icon} width={17} height={17} />
+                <NavigationTileIcon name={destination.icon} />
                 <span>{destination.label}</span>
               </Link>
             );
@@ -59,13 +59,6 @@ export default function Navbar() {
         </nav>
 
         <div className="tgpi-desktop-actions">
-          {currentModule ? (
-            <span className="tgpi-desktop-context" title={currentModule.description}>
-              <span aria-hidden="true" />
-              {currentModule.shortLabel}
-            </span>
-          ) : null}
-
           <button
             type="button"
             aria-label="Open TGPI apps"
@@ -76,7 +69,7 @@ export default function Navbar() {
             onClick={() => window.dispatchEvent(new Event(SUPER_APP_OPEN_EVENT))}
             className="tgpi-navigation-icon-button"
           >
-            <NavigationIcon name="apps" />
+            <NavigationTileIcon name="apps" />
             <span className="tgpi-apps-label">Apps</span>
           </button>
 

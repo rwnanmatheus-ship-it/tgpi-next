@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import BrandCrest from "@/components/BrandCrest";
+import NavigationTileIcon from "@/components/navigation/NavigationTileIcon";
 import NavigationIcon from "@/components/navigation/NavigationIcon";
 import {
   COMPACT_NAVIGATION,
@@ -159,7 +160,7 @@ function MobileNavigationContent({ pathname }: { pathname: string }) {
             aria-controls="tgpi-super-app-launcher"
             onClick={openApps}
           >
-            <NavigationIcon name="apps" />
+            <NavigationTileIcon name="apps" />
             <span>Apps</span>
           </button>
         </div>
@@ -180,7 +181,7 @@ function MobileNavigationContent({ pathname }: { pathname: string }) {
                 aria-current={active ? "page" : undefined}
               >
                 <span className="tgpi-compact-dock-icon">
-                  <NavigationIcon name={destination.icon} />
+                  <NavigationTileIcon name={destination.icon} />
                 </span>
                 <span>{destination.shortLabel}</span>
               </Link>

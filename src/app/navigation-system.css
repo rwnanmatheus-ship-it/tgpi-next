@@ -857,3 +857,103 @@ body {
   .tgpi-compact-brand { gap: .4rem; }
   .tgpi-compact-brand small { max-width: 5.4rem; }
 }
+
+/* Navigation V3: intrinsic columns prevent translated labels from overlapping. */
+.tgpi-desktop-navigation-frame {
+  grid-template-columns: minmax(132px, 206px) minmax(max-content, 1fr) max-content;
+  gap: clamp(10px, 1vw, 18px);
+  min-height: 92px;
+}
+.tgpi-desktop-brand { width: 100%; overflow: hidden; }
+.tgpi-desktop-brand > span:last-child { min-width: 0; flex: 1; }
+.tgpi-desktop-brand-line {
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: normal;
+  font-size: 10px;
+  line-height: 1.45;
+  letter-spacing: .025em;
+}
+.tgpi-desktop-primary { gap: 3px; }
+.tgpi-desktop-primary-link { gap: 7px; padding: 8px; min-height: 52px; }
+.tgpi-desktop-actions { flex-shrink: 0; gap: 8px; }
+.tgpi-navigation-icon-button { min-height: 52px; }
+.tgpi-navigation-square-button { width: 48px; min-height: 52px; }
+.tgpi-desktop-primary-link > span:last-child { white-space: nowrap; }
+.tgpi-nav-miniature {
+  --tile-ink: #123d63;
+  --tile-light: #c5dff0;
+  position: relative;
+  display: inline-grid;
+  width: 34px;
+  height: 36px;
+  flex: 0 0 34px;
+  place-items: center;
+  isolation: isolate;
+  perspective: 150px;
+  transition: transform 220ms ease;
+}
+.tgpi-nav-miniature[data-symbol="compass"] { --tile-ink: #7f5b16; --tile-light: #f0dba6; }
+.tgpi-nav-miniature[data-symbol="compare"] { --tile-ink: #26517f; --tile-light: #ccdeef; }
+.tgpi-nav-miniature[data-symbol="file"] { --tile-ink: #244b53; --tile-light: #d0e5e5; }
+.tgpi-nav-miniature[data-symbol="book"] { --tile-ink: #624c25; --tile-light: #eee0bf; }
+.tgpi-nav-miniature[data-symbol="apps"] { --tile-ink: #273f6a; --tile-light: #d3ddf3; }
+.tgpi-nav-miniature[data-symbol="bell"] { --tile-ink: #856018; --tile-light: #f4dda4; }
+.tgpi-nav-miniature-plinth {
+  position: absolute;
+  inset: 5px 1px 1px;
+  border-radius: 10px;
+  background: var(--tile-ink);
+  transform: rotate(-6deg);
+  box-shadow: 0 4px 5px #0b1f3a20;
+  opacity: .65;
+}
+.tgpi-nav-miniature-art {
+  position: absolute;
+  inset: 1px 1px 4px;
+  display: grid;
+  place-items: center;
+  border: 1px solid #ffffffba;
+  border-radius: 10px;
+  background: linear-gradient(145deg, #fffef9, var(--tile-light));
+  color: var(--tile-ink);
+  box-shadow: inset 0 2px 0 #fff, inset -2px -3px 3px #0b1f3a15, 0 3px 4px #0b1f3a15;
+  transform: rotate(-6deg) rotateY(-10deg);
+  transition: transform 220ms ease;
+}
+.tgpi-nav-miniature-art svg { color: inherit !important; stroke-width: 1.9; filter: drop-shadow(0 1px 0 #fff); }
+.tgpi-nav-miniature-glint {
+  position: absolute;
+  top: 2px;
+  right: 0;
+  width: 5px;
+  height: 5px;
+  border: 1px solid white;
+  border-radius: 50%;
+  background: #b58a2a;
+  box-shadow: 0 1px 3px #0b1f3a30;
+}
+:is(a,button):is(:hover,:focus-visible) > .tgpi-nav-miniature .tgpi-nav-miniature-art,
+a[aria-current="page"] .tgpi-nav-miniature-art { transform: translateY(-2px) rotate(2deg) rotateY(0); }
+:is(a,button):active > .tgpi-nav-miniature { transform: translateY(2px) scale(.91); }
+.tgpi-compact-dock-icon .tgpi-nav-miniature { width: 30px; height: 31px; transform: scale(.88); }
+@media (min-width: 1024px) and (max-width: 1535px) {
+  .tgpi-apps-label, .tgpi-workspace-label { display: none; }
+  .tgpi-navigation-workspace-button { width: 48px; padding-inline: 0; }
+  .tgpi-navigation-icon-button { width: 48px; padding-inline: 0; }
+  .tgpi-desktop-navigation-frame { grid-template-columns: minmax(120px,190px) minmax(max-content,1fr) max-content; }
+}
+@media (min-width: 1024px) and (max-width: 1220px) {
+  .tgpi-desktop-navigation-frame { grid-template-columns: 120px minmax(max-content,1fr) max-content; gap: 8px; }
+  .tgpi-desktop-primary-link { padding-inline: 5px; gap: 5px; font-size: 12px; }
+  .tgpi-desktop-brand-line { display: none; }
+  .tgpi-desktop-actions { gap: 5px; }
+  .tgpi-navigation-key-button { max-width: 126px; white-space: normal; line-height: 1.3; }
+}
+@media (max-width: 1023px) {
+  .tgpi-compact-topbar .tgpi-navigation-square-button { width: 44px; min-height: 44px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tgpi-nav-miniature, .tgpi-nav-miniature-art { transition: none; }
+}
+.tgpi-desktop-primary-link .tgpi-nav-miniature-art svg { display: block; }
