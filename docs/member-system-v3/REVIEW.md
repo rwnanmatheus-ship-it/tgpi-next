@@ -108,4 +108,4 @@ Additional lifestyle/accessibility/dependent data, language-proficiency records,
 
 ## Publication
 
-The implementation is reviewable in an isolated Git branch and draft PR. Production remains unchanged until the live-service and visual gates above are satisfied. No subscription rules, security credentials, Firebase rules or deployment protection settings were changed.
+The implementation is reviewable in draft PR #80. Vercel Preview for application commit `cd759e4b0b39eb779d3a72ac0a7d3d51793e1473` reached READY with the default Turbopack compiler; see DEPLOYMENT.md. Protected endpoint smoke tests were blocked by Vercel deployment authentication, not confirmed as application-level responses. Production remains unchanged until the live-service and visual gates above are satisfied. No subscription rules, security credentials, Firebase rules or deployment protection settings were changed.

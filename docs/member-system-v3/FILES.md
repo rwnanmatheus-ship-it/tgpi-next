@@ -1,5 +1,6 @@
 # Changed files
 
+- `docs/member-system-v3/DEPLOYMENT.md`
 - `docs/member-system-v3/FILES.md`
 - `docs/member-system-v3/REVIEW.md`
 - `docs/member-system-v3/evidence/pdf-qr.json`
