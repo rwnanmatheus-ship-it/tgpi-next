@@ -12,7 +12,7 @@ export default function GlobalProgressSync() {
   const pathname = usePathname();
   const router = useRouter();
   useEffect(() => {
-    if (!userId || !(/^\/(profile|ranking|member)(\/|$)/.test(pathname))) return;
+    if (!userId || !(/^\/(profile|ranking|member|compare|country-fit|plan|passport|certificates|courses)(\/|$)/.test(pathname))) return;
     let timer: ReturnType<typeof setTimeout> | undefined;
     const refresh = () => {
       if (document.visibilityState !== "visible") return;

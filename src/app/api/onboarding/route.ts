@@ -1,3 +1,4 @@
+import { normalizeTgpiAccountProfile } from "@/lib/account-profile";
 import { scheduleNotificationReconciliation } from "@/lib/notifications/schedule.server";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
@@ -45,6 +46,13 @@ export async function PATCH(request: Request) {
     await client.users.updateUserMetadata(session.userId, {
       unsafeMetadata: {
         tgpiOnboarding: savedOnboarding,
+        tgpiAccountProfile: {
+          ...normalizeTgpiAccountProfile(user.unsafeMetadata.tgpiAccountProfile),
+          profession: savedOnboarding.profession,
+          educationLevel: savedOnboarding.educationLevel,
+          languages: savedOnboarding.languages,
+          updatedAt: now,
+        },
       },
     });
 

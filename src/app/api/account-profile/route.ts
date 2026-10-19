@@ -3,6 +3,7 @@ import { auth, clerkClient } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import {
   normalizeAccountIdentity,
+  normalizeBirthDate,
   normalizeTgpiAccountProfile,
   type TgpiAccountUpdate,
 } from "@/lib/account-profile";
@@ -43,6 +44,12 @@ export async function PATCH(request: Request) {
     const identity = normalizeAccountIdentity(input.identity);
     const profile = normalizeTgpiAccountProfile(input.profile);
 
+    if (input.profile?.dateOfBirth && !normalizeBirthDate(input.profile.dateOfBirth)) {
+      return NextResponse.json({ error: "Choose a valid birth date, no later than today." }, { status: 400 });
+    }
+    if (input.profile?.legalFullName && profile.legalFullName.split(/\s+/).length < 2) {
+      return NextResponse.json({ error: "Enter your complete real name for certificates." }, { status: 400 });
+    }
     if (!identity.firstName) {
       return NextResponse.json(
         { error: "Add your first name before saving your account." },
@@ -64,7 +71,11 @@ export async function PATCH(request: Request) {
       return NextResponse.json({ error: "TGPI @IDs are awaiting activation. Save your other settings without changing your ID." }, { status: 409 });
     }
     const now = new Date().toISOString();
-    const savedProfile = { ...profile, updatedAt: now };
+    // Merge normalized known fields so older clients cannot erase newly added information.
+    const savedProfile = { ...normalizeTgpiAccountProfile({
+      ...normalizeTgpiAccountProfile(user.unsafeMetadata.tgpiAccountProfile),
+      ...input.profile,
+    }), updatedAt: now };
     const syncedOnboarding = {
       ...onboarding,
       languages: savedProfile.languages,

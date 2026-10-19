@@ -1,3 +1,5 @@
+import { currentUser } from "@clerk/nextjs/server";
+import { normalizeTgpiAccountProfile } from "@/lib/account-profile";
 import { NextResponse } from "next/server";
 import { requireApiUser, TgpiAuthenticationError } from "@/lib/auth/guards";
 import {
@@ -44,7 +46,12 @@ export async function GET(
         },
         { status: 409, headers },
       );
-    const pdf = await createCertificatePdf(credential);
+    const user = await currentUser();
+    const profile = normalizeTgpiAccountProfile(user?.unsafeMetadata.tgpiAccountProfile);
+    const pdf = await createCertificatePdf(credential, {
+      // Owner-only presentation annotation; never added to the public signed credential.
+      personalBirthDate: profile.certificateBirthDateConsent ? profile.dateOfBirth : "",
+    });
     return new NextResponse(Buffer.from(pdf), {
       headers: {
         ...headers,

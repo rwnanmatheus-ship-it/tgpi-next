@@ -118,3 +118,53 @@ test("rejects lookalike social domains and allows genuine subdomains", () => {
   assert.equal(normalizeTgpiAccountProfile({ instagram: "https://fakeinstagram.com/me" }).instagram, "");
   assert.equal(normalizeTgpiAccountProfile({ linkedin: "https://www.linkedin.com/in/me" }).linkedin, "https://www.linkedin.com/in/me");
 });
+
+test("validates real dates and keeps birth dates private by default", async () => {
+  const { normalizeBirthDate } = await import("../src/lib/account-profile.ts");
+  const now = new Date("2026-10-19T12:00:00Z");
+  assert.equal(normalizeBirthDate("2000-02-29", now), "2000-02-29");
+  for (const date of ["2001-02-29", "2026-13-01", "2026-10-20", "1899-12-31", "01/02/2000", "", null]) assert.equal(normalizeBirthDate(date, now), "");
+  const profile = normalizeTgpiAccountProfile({ dateOfBirth: "2001-02-11", gender: "man" });
+  assert.equal(profile.dateOfBirth, "2001-02-11");
+  assert.equal(profile.certificateBirthDateConsent, false);
+  assert.equal(profile.privacy.visibility, "private");
+});
+
+test("uses real names for credentials and explicit titles without inferring gender", async () => {
+  const { getCertificateName, getAccountSalutation } = await import("../src/lib/account-profile.ts");
+  const identity = { firstName: "Renan", lastName: "Fernandes" };
+  const profile = normalizeTgpiAccountProfile({ legalFullName: " Renan Matheus da Silva Fernandes ", gender: "man", preferredTitle: "mx" });
+  assert.equal(getCertificateName(identity, profile), "Renan Matheus da Silva Fernandes");
+  assert.equal(getAccountSalutation(identity, profile), "Mx. Renan");
+  assert.equal(getAccountSalutation(identity, normalizeTgpiAccountProfile({ gender: "woman" })), "Renan");
+  assert.equal(getCertificateName(identity, normalizeTgpiAccountProfile({})), "Renan Fernandes");
+});
+
+test("normalizes personal context and rejects arbitrary enum values", () => {
+  const profile = normalizeTgpiAccountProfile({ gender: "invalid", preferredTitle: "Dr", employmentType: "injected", yearsExperience: "999", certificateBirthDateConsent: "true" });
+  assert.equal(profile.gender, ""); assert.equal(profile.preferredTitle, "name");
+  assert.equal(profile.employmentType, ""); assert.equal(profile.yearsExperience, "");
+  assert.equal(profile.certificateBirthDateConsent, false);
+});
+
+test("avatar crop stays within the source at every zoom and position", async () => {
+  const { getAvatarCrop } = await import("../src/lib/avatar-crop.ts");
+  assert.deepEqual(getAvatarCrop(1600, 800, 1, 50, 50), { left: 400, top: 0, size: 800 });
+  for (const [width, height] of [[1600, 800], [800, 1600], [1024, 1024]]) {
+    for (const zoom of [1, 2, 3]) for (const x of [-10, 0, 50, 100, 110]) for (const y of [0, 50, 100]) {
+      const crop = getAvatarCrop(width, height, zoom, x, y);
+      assert.ok(crop.left >= 0 && crop.top >= 0);
+      assert.ok(crop.left + crop.size <= width + .001);
+      assert.ok(crop.top + crop.size <= height + .001);
+    }
+  }
+  assert.throws(() => getAvatarCrop(0, 100, 1, 50, 50));
+});
+
+test("search matches diacritics and provides a broad profession catalog", async () => {
+  const { filterProfileOptions, citySuggestions, professionSuggestions } = await import("../src/lib/profile-options.ts");
+  assert.equal(filterProfileOptions([{ label: "São Paulo" }], "sao")[0].label, "São Paulo");
+  assert.ok(citySuggestions.brazil.includes("São Paulo"));
+  assert.ok(professionSuggestions.length >= 100);
+  assert.ok(professionSuggestions.includes("Waiter"));
+});

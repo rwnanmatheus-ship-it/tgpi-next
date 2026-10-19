@@ -28,6 +28,7 @@ const crestBytes = () =>
 
 export async function createCertificatePdf(
   credential: PublicTgpiLearningCredential,
+  options: { personalBirthDate?: string } = {},
 ) {
   if (credential.status !== "active" || !credential.integrityVerified) {
     throw new Error(
@@ -190,6 +191,9 @@ export async function createCertificatePdf(
   text("Professional Certificate", 56, 414, 29, serif);
   text("AWARDED TO", 58, 383, 8, sans, muted);
   wrapped(credential.publicName, 56, 350, 550, 28, serif, 2, 30);
+  if (options.personalBirthDate && /^\d{4}-\d{2}-\d{2}$/.test(options.personalBirthDate)) {
+    text(`Date of birth: ${options.personalBirthDate} (holder-provided)`, 58, 304, 8, sans, muted, 548);
+  }
   text(
     "For successful completion of the applied learning and assessed performance in",
     58,
