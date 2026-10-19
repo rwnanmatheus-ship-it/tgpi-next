@@ -1,3 +1,4 @@
+import PlatformBannerImage from "@/components/ui/PlatformBannerImage";
 import Image from "next/image";
 import styles from "./GlobalWorkspaceOS.module.css";
 import Link from "next/link";
@@ -244,7 +245,7 @@ export default function GlobalWorkspaceOS({
   return (
     <main className={`${styles.workspace} min-h-screen bg-[#040B13] text-white`}>
       <div className="mx-auto max-w-[1800px] lg:grid lg:grid-cols-[228px_minmax(0,1fr)] 2xl:grid-cols-[244px_minmax(0,1fr)]">
-        <aside className="hidden min-w-0 border-b border-white/10 bg-[#06101B] px-4 py-4 lg:block lg:min-h-screen lg:border-b-0 lg:border-r lg:px-4 lg:py-7">
+        <aside className="hidden min-w-0 border-b border-white/10 bg-[#06101B] px-4 py-4 lg:block lg:border-b-0 lg:border-r lg:px-4 lg:py-7">
           <div className="hidden lg:block">
             <p className="px-2 text-[11px] font-extrabold uppercase tracking-[0.22em] text-[#E5B94B]">TGPI Intelligence OS</p>
             <p className="mt-3 px-2 font-[var(--tgpi-font-display)] text-[1.65rem] font-semibold leading-[1.08]">One system for your global life.</p>
@@ -376,14 +377,9 @@ export default function GlobalWorkspaceOS({
                 data-tgpi-depth="hero"
                 data-tgpi-tone="navy"
               >
-                <Image
-                  alt={primaryCountry ? getCountryImageAlt(primaryCountry) : "TGPI global intelligence network"}
-                  className="absolute inset-0 h-full w-full object-cover object-center opacity-50"
-                  fill
-                  priority
-                  sizes="(min-width: 1536px) 55vw, 100vw"
-                  src={primaryCountry ? getCountryImageUrl(primaryCountry) : "/images/super-app/tgpi-intelligence-network-v1.webp"}
-                />
+                {primaryCountry ? (
+                  <Image alt={getCountryImageAlt(primaryCountry)} className="absolute inset-0 h-full w-full object-cover object-center opacity-50" fill priority sizes="(min-width: 1536px) 55vw, 100vw" src={getCountryImageUrl(primaryCountry)} />
+                ) : <PlatformBannerImage priority className="opacity-65" />}
                 <div className="absolute inset-0 bg-gradient-to-r from-[#06111E] via-[#071421]/95 to-[#071421]/35" />
                 <div className={`${styles.missionGrid} relative grid min-h-[350px] min-w-0 gap-6 p-6 sm:p-8`}>
                   <div className="min-w-0 max-w-2xl">
@@ -452,7 +448,7 @@ export default function GlobalWorkspaceOS({
                 </div>
                 <div className={styles.modules}>
                   {SUPER_APP_MODULES.filter((item) => item.id !== "workspace" && item.id !== "settings").map((item) => (
-                    <Link className={styles.module} href={item.href} key={item.id}>
+                    <Link className={`${styles.module} tgpi-card-3d`} data-tgpi-tone="navy" data-tgpi-interactive="true" href={item.href} key={item.id}>
                       <span className={styles.moduleIcon}><NavigationIcon name={getSuperAppIconName(item.id)} width={24} height={24} /></span>
                       <span className="min-w-0"><span className="block text-sm font-semibold">{item.label}</span><span className="mt-1 block text-xs leading-5 text-[#ACBBCB]">{item.description}</span></span>
                       <span aria-hidden="true" className="text-[#E5B94B]">↗</span>

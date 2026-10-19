@@ -1,3 +1,5 @@
+import { getLearningContinuation } from "./learning-continuity.ts";
+import type { Course } from "../types/course.ts";
 import type { Country } from "./countries.ts";
 import {
   createEmptyActivationProgress,
@@ -179,6 +181,7 @@ export function buildGlobalWorkspaceModel(
   onboarding: TgpiOnboardingData,
   allCountries: Country[],
   activation = createEmptyActivationProgress(),
+  catalogue: readonly Course[] = [],
 ): GlobalWorkspaceModel {
   const comparisonGoal = getComparisonGoal(onboarding.primaryGoal);
   const selectedCountries = onboarding.targetCountries
@@ -217,10 +220,13 @@ export function buildGlobalWorkspaceModel(
       : hasCountry
         ? "not_started"
         : "needs_attention";
+  const continuation = getLearningContinuation(catalogue, activation.courseProgress);
   const courseStatuses = Object.values(activation.courseProgress).map((course) =>
     getCourseProgressStatus(course),
   );
-  const learningStatus: ActivationStatus = courseStatuses.includes("completed")
+  const learningStatus: ActivationStatus = continuation
+    ? continuation.complete ? "completed" : "in_progress"
+    : courseStatuses.includes("completed")
     ? "completed"
     : courseStatuses.includes("in_progress")
       ? "in_progress"
@@ -326,7 +332,7 @@ export function buildGlobalWorkspaceModel(
       eyebrow: "Develop",
       href:
         learningStatus === "in_progress" || learningStatus === "completed"
-          ? "/courses/global-english-2026"
+          ? continuation?.href ?? "/courses"
           : "/courses#learning-paths",
       id: "learning",
       status: learningStatus,

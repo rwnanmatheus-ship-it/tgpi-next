@@ -254,11 +254,12 @@ body {
     scroll-padding-bottom: var(--tgpi-compact-content-end);
   }
 
+  /* The footer owns dock clearance; content keeps its original section spacing. */
   body:has(.tgpi-compact-dock) #main-content > :last-child {
-    padding-bottom: var(--tgpi-compact-content-end);
+    scroll-margin-bottom: var(--tgpi-compact-content-end);
   }
 
-  body:has(.tgpi-compact-dock) footer {
+  body:has(.tgpi-compact-dock) .tgpi-app-shell > footer {
     padding-bottom: var(--tgpi-compact-content-end);
   }
 

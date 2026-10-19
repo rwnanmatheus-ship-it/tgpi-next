@@ -11,7 +11,7 @@ export default function FunnelTelemetry() {
       void fetch("/api/analytics/funnel", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ event }), keepalive: true }).catch(() => {});
     }
     if (pathname.startsWith("/sign-up")) send("signup_started");
-    if (pathname === "/pricing") send("premium_visit");
+    if (["/pricing", "/premium", "/upgrade"].includes(pathname)) send("premium_visit");
     function onClick(event: MouseEvent) {
       const target = event.target instanceof Element ? event.target.closest<HTMLElement>("[data-funnel-event]") : null;
       const name = target?.dataset.funnelEvent;

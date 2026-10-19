@@ -16,6 +16,18 @@ type RuntimeNotice = "install" | "ios-install" | "offline" | "update" | null;
 
 const INSTALL_DISMISS_KEY = "tgpi:pwa-install-dismissed:v1";
 
+// Storage may be disabled by privacy settings. Runtime connectivity still works.
+function readInstallDismissal() {
+  try { return window.localStorage.getItem(INSTALL_DISMISS_KEY) === "1"; }
+  catch { return false; }
+}
+function persistInstallDismissal(dismissed: boolean) {
+  try {
+    if (dismissed) window.localStorage.setItem(INSTALL_DISMISS_KEY, "1");
+    else window.localStorage.removeItem(INSTALL_DISMISS_KEY);
+  } catch { /* In-memory dismissal remains effective for this visit. */ }
+}
+
 function isStandaloneMode() {
   const navigatorWithStandalone = navigator as Navigator & { standalone?: boolean };
   return (
@@ -39,7 +51,7 @@ export default function TgpiAppRuntime() {
     let runtimeRegistration: ServiceWorkerRegistration | null = null;
     let installingWorker: ServiceWorker | null = null;
     const standalone = isStandaloneMode();
-    const dismissed = window.localStorage.getItem(INSTALL_DISMISS_KEY) === "1";
+    const dismissed = readInstallDismissal();
     const isiOS =
       /iphone|ipad|ipod/i.test(navigator.userAgent) ||
       (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
@@ -59,7 +71,7 @@ export default function TgpiAppRuntime() {
       setInstallPrompt(null);
       setInstallDismissed(true);
       setIosInstallAvailable(false);
-      window.localStorage.removeItem(INSTALL_DISMISS_KEY);
+      persistInstallDismissal(false);
     };
     const onOnline = () => setOnline(true);
     const onOffline = () => setOnline(false);
@@ -170,7 +182,7 @@ export default function TgpiAppRuntime() {
   }
 
   function dismissInstall() {
-    window.localStorage.setItem(INSTALL_DISMISS_KEY, "1");
+    persistInstallDismissal(true);
     setInstallDismissed(true);
     setIosInstallAvailable(false);
     setInstallPrompt(null);

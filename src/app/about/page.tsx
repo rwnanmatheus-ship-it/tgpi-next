@@ -19,7 +19,7 @@ const pillars = [
 ];
 
 export default function AboutPage() {
-  return <main className={styles.page} id="main-content">
+  return <main className={styles.page}>
     <div className={styles.frame}>
       <section className={styles.hero} aria-labelledby="about-title">
         <Image src="/images/about/global-perspective-v2.webp" alt="A brass globe and open notebook overlooking an international city at blue hour" fill sizes="(max-width: 1280px) 100vw, 1280px" priority className={styles.heroImage} />

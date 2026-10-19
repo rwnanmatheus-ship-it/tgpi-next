@@ -9,5 +9,5 @@ type Props = { children: ReactNode; navigation: ReactNode; footer: ReactNode; ru
 export default function AccessAwareChrome({ children, navigation, footer, runtime }: Props) {
   const pathname = usePathname();
   const focused = ["/sign-in", "/sign-up", "/welcome", "/login"].some(route => pathname === route || pathname.startsWith(`${route}/`));
-  return <>{focused ? null : navigation}{children}{focused ? null : footer}{focused ? null : runtime}</>;
+  return <div className="tgpi-app-shell" data-focused={focused ? "true" : "false"}>{focused ? null : navigation}{children}{focused ? null : footer}{focused ? null : runtime}</div>;
 }

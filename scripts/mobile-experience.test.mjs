@@ -59,10 +59,12 @@ test("country filter focus containment is mobile-only",()=>{
 test("workspace framing prevents horizontal clipping and exposes notifications",()=>{
   const workspace=readFileSync(new URL("../src/components/profile/GlobalWorkspaceOS.tsx",import.meta.url),"utf8");
   const settings=readFileSync(new URL("../src/components/profile/TgpiAccountCenter.tsx",import.meta.url),"utf8");
-  assert.match(workspace,/overflow-x-clip/);
-  assert.match(workspace,/2xl:grid-cols-\[minmax\(0,1fr\)_minmax\(300px,340px\)\]/);
+  const frame=readFileSync(new URL("../src/app/navigation-system.css",import.meta.url),"utf8");
+  const layout=readFileSync(new URL("../src/components/profile/GlobalWorkspaceOS.module.css",import.meta.url),"utf8");
+  assert.match(frame,/#main-content[\s\S]*?overflow-x: clip/);
+  assert.match(layout,/@container \(min-width: 1350px\)/);
   assert.doesNotMatch(workspace,/xl:grid-cols-\[minmax\(0,1fr\)_370px\]/);
-  assert.match(workspace,/href="\/notifications"[\s\S]*?🔔/);
+  assert.match(workspace,/href="\/notifications"/);
   assert.match(settings,/key: "notifications"[\s\S]*?sticker: "🔔"/);
 });
 test("intentional mobile rails keep readable card widths",()=>{
@@ -71,7 +73,10 @@ test("intentional mobile rails keep readable card widths",()=>{
   assert.match(css,/:not\(\.tgpi-smart-rail\):not\(\[class\*="overflow-x-auto"\]\)/);
   assert.match(css,/\.tgpi-smart-rail > \* \{[\s\S]*?flex-shrink: 0;[\s\S]*?scroll-snap-align: start;/);
   assert.match(css,/\.tgpi-journey-rail > \.tgpi-journey-card \{[\s\S]*?flex: 0 0 clamp\(15\.5rem, 78vw, 19rem\);/);
-  assert.match(workspace,/tgpi-smart-rail tgpi-journey-rail/);
+  // The current Workspace uses a wrapping grid rather than a horizontal rail.
+  const layout=readFileSync(new URL("../src/components/profile/GlobalWorkspaceOS.module.css",import.meta.url),"utf8");
+  assert.match(workspace,/styles\.journey/);
+  assert.match(layout,/\.journey \{ grid-template-columns: repeat\(2,minmax\(0,1fr\)\)/);
 });
 test("compact workspace and settings do not compete with global navigation",()=>{
   const css=readFileSync(new URL("../src/app/navigation-system.css",import.meta.url),"utf8");

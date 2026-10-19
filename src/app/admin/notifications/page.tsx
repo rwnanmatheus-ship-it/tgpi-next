@@ -8,7 +8,7 @@ export default async function NotificationOperationsPage() {
   await requireAdmin();
   return (
     <main
-      id="main-content"
+
       className="min-h-[75vh] bg-[#F8F5EE] px-4 py-10 text-[#0B1F3A]"
     >
       <div className="mx-auto max-w-2xl">

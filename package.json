@@ -11,6 +11,7 @@
     "test:account": "node --experimental-strip-types --test scripts/account-profile.test.mjs scripts/global-ranks.test.mjs",
     "test:mobile": "node --experimental-strip-types --test scripts/mobile-experience.test.mjs",
     "test:pwa": "node --experimental-strip-types --test scripts/pwa-runtime.test.mjs",
+    "test:platform": "node --experimental-strip-types --test scripts/platform-integration.test.mjs",
     "test:super-app": "node --experimental-strip-types --test scripts/super-app.test.mjs",
     "test:workspace": "node --experimental-strip-types --test scripts/workspace-home.test.mjs",
     "test:personal-plan": "node --experimental-strip-types --test scripts/personal-plan.test.mjs",

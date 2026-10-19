@@ -8,6 +8,7 @@ function route(userId) {
   const exports = {};
   const expected = { courseProgress: {} };
   new Function("require", "exports", code)((id) => {
+    if (id === "@/lib/funnel.server") return { recordFunnelEvent: () => undefined, requestFunnelConsent: () => false };
     if (id === "@clerk/nextjs/server") return { auth: async () => ({ userId }) };
     if (id === "@/lib/notifications/schedule.server") return { scheduleNotificationReconciliation: () => undefined };
     if (id === "next/cache") return { unstable_cache: () => { throw new Error("Request-scoped Clerk client cannot run in a cache scope"); } };
