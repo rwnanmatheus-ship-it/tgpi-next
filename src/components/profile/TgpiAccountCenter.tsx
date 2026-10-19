@@ -446,7 +446,14 @@ export default function TgpiAccountCenter({
     setActiveSection(section);
     setQuery("");
     window.history.pushState(null, "", `#settings-${section}`);
-    window.requestAnimationFrame(() => contentRef.current?.scrollIntoView({ behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth", block: "start" }));
+    window.requestAnimationFrame(() => {
+      const content = contentRef.current;
+      if (!content) return;
+      const nav = content.parentElement?.querySelector<HTMLElement>('.tgpi-account-mobile-nav');
+      const navHeight = nav && window.getComputedStyle(nav).display !== 'none' ? nav.getBoundingClientRect().height : 0;
+      const headerOffset = Number.parseFloat(window.getComputedStyle(document.documentElement).scrollPaddingTop) || 84;
+      window.scrollTo({ top: Math.max(0, window.scrollY + content.getBoundingClientRect().top - headerOffset - navHeight - 16), behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
+    });
   }
 
   function updateProfile(patch: Partial<TgpiAccountProfile>) {
