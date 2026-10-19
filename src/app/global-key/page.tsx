@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
+import { currentUser } from "@clerk/nextjs/server";
 import { headers } from "next/headers";
 import GlobalKeyCenter from "@/components/profile/GlobalKeyCenter";
 import { requireUser } from "@/lib/auth/guards";
 import { getOrCreateGlobalKey } from "@/lib/global-key.server";
 
 export const metadata: Metadata = {
-  title: "Global Key Public Anchor — TGPI",
+  title: "Global ID — TGPI",
   description:
-    "Manage the cryptographic proof, Base Mainnet anchor and integrity history connected to your TGPI Global Key.",
+    "Your permanent TGPI identity, learning credentials, verification and account security.",
   robots: { follow: false, index: false },
 };
 
@@ -26,12 +27,19 @@ function getRequestOrigin(requestHeaders: Headers) {
 }
 
 export default async function GlobalKeyPage() {
-  const [session, requestHeaders] = await Promise.all([requireUser(), headers()]);
-  const key = await getOrCreateGlobalKey(session.userId);
+  const [session, requestHeaders] = await Promise.all([
+    requireUser(),
+    headers(),
+  ]);
+  const [key, member] = await Promise.all([
+    getOrCreateGlobalKey(session.userId),
+    currentUser(),
+  ]);
 
   return (
     <GlobalKeyCenter
       initialKey={key}
+      memberName={member?.fullName || member?.username || "TGPI Member"}
       verifyOrigin={getRequestOrigin(requestHeaders)}
     />
   );
