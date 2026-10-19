@@ -38,7 +38,7 @@ function storeHarness() {
       return plan.result;
     },
   };
-  const module = { exports: {} };
+  const testModule = { exports: {} };
   vm.runInNewContext(
     ts.transpileModule(
       readFileSync(
@@ -53,8 +53,8 @@ function storeHarness() {
       },
     ).outputText,
     {
-      module,
-      exports: module.exports,
+      module: testModule,
+      exports: testModule.exports,
       Buffer,
       console,
       process: {
@@ -74,7 +74,7 @@ function storeHarness() {
               : require(name),
     },
   );
-  return { api: module.exports, documents, writes };
+  return { api: testModule.exports, documents, writes };
 }
 test("optional emails require opt-in; malformed preferences cannot enable them", () => {
   assert.equal(

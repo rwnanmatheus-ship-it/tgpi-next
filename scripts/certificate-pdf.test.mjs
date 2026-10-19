@@ -54,7 +54,7 @@ function routeFixture({
 } = {}) {
   let publicReads = 0;
   let renderOptions;
-  const module = { exports: {} };
+  const testModule = { exports: {} };
   const source = readFileSync(
     new URL("../src/app/api/credentials/[id]/pdf/route.ts", import.meta.url),
     "utf8",
@@ -97,8 +97,8 @@ function routeFixture({
       compilerOptions: { module: ts.ModuleKind.CommonJS },
     }).outputText,
     {
-      module,
-      exports: module.exports,
+      module: testModule,
+      exports: testModule.exports,
       require: (name) => services[name],
       Buffer,
       console: { error() {} },
@@ -106,7 +106,7 @@ function routeFixture({
   );
   return {
     get: (id = credential.id) =>
-      module.exports.GET(
+      testModule.exports.GET(
         new Request("https://example.test/api/credentials/test/pdf"),
         { params: Promise.resolve({ id }) },
       ),

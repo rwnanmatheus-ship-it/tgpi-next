@@ -5,8 +5,8 @@ import Link from "next/link";
 import { registrationLanguages } from "@/lib/auth/registration";
 import styles from "./auth.module.css";
 
-type Props = { firstName: string; lastName: string; currentCountry: string; preferredLanguage: string; countries: { code: string; name: string }[] };
-export default function RegistrationProfile({ firstName, lastName, currentCountry, preferredLanguage, countries }: Props) {
+type Props = { returnTo?: string; firstName: string; lastName: string; currentCountry: string; preferredLanguage: string; countries: { code: string; name: string }[] };
+export default function RegistrationProfile({ firstName, lastName, currentCountry, preferredLanguage, countries, returnTo = "/onboarding" }: Props) {
   const router = useRouter();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
@@ -24,7 +24,7 @@ export default function RegistrationProfile({ firstName, lastName, currentCountr
         const result = await response.json().catch(() => null) as { error?: string } | null;
         throw new Error(result?.error || "Unable to save your profile. Please try again.");
       }
-      router.replace("/onboarding"); router.refresh();
+      router.replace(returnTo); router.refresh();
     } catch (cause) { setError(cause instanceof Error ? cause.message : "Unable to connect. Please try again."); }
     finally { submitting.current = false; setBusy(false); }
   }

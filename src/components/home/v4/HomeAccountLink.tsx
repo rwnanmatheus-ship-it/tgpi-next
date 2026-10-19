@@ -1,0 +1,12 @@
+"use client";
+
+import { useAuth } from "@clerk/nextjs";
+import Link from "next/link";
+import { HOME_ROUTES } from "@/lib/home-content";
+
+export default function HomeAccountLink({ className, placement }: { className: string; placement: string }) {
+  const { isSignedIn } = useAuth();
+  return <Link href={isSignedIn ? HOME_ROUTES.workspace : HOME_ROUTES.signup} className={className} data-funnel-event={isSignedIn ? undefined : "home_primary_cta"} data-placement={placement}>
+    {isSignedIn ? "Continue to your workspace" : "Create your free account"}<span aria-hidden="true">↗</span>
+  </Link>;
+}

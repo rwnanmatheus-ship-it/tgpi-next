@@ -2,7 +2,7 @@ import { homeFaq } from "@/data/home-system";
 
 const siteUrl = "https://theglobalpolymath.com";
 
-const homeStructuredData = {
+function getHomeStructuredData(faq: readonly { question: string; answer: string }[]) { return {
   "@context": "https://schema.org",
   "@graph": [
     {
@@ -49,7 +49,7 @@ const homeStructuredData = {
     {
       "@type": "FAQPage",
       "@id": `${siteUrl}/#frequently-asked-questions`,
-      mainEntity: homeFaq.map((item) => ({
+      mainEntity: faq.map((item) => ({
         "@type": "Question",
         name: item.question,
         acceptedAnswer: {
@@ -59,14 +59,14 @@ const homeStructuredData = {
       })),
     },
   ],
-};
+}; }
 
-export default function HomeStructuredData() {
+export default function HomeStructuredData({ faq = homeFaq }: { faq?: readonly { question: string; answer: string }[] }) {
   return (
     <script
       type="application/ld+json"
       dangerouslySetInnerHTML={{
-        __html: JSON.stringify(homeStructuredData).replace(/</g, "\\u003c"),
+        __html: JSON.stringify(getHomeStructuredData(faq)).replace(/</g, "\\u003c"),
       }}
     />
   );

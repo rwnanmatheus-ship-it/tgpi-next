@@ -9,7 +9,7 @@ import { TGPI_FREE_PLAN, TGPI_PREMIUM_PLAN } from "@/lib/subscription-plans";
 export const metadata: Metadata = {
   title: "TGPI Premium — Choose your country. Build your plan.",
   description:
-    "Country Fit, unlimited comparisons, personal planning and practical learning. TGPI Premium: US$ 19.90/month. Subscribe securely or access your membership.",
+    "Country research, personal planning and a protected Premium Command Center. TGPI Premium: US$ 19.90/month. Subscribe securely or access your membership.",
   alternates: { canonical: "/pricing" },
   openGraph: {
     title: "TGPI Premium — Your global next step, connected.",
@@ -67,13 +67,12 @@ const systems = [
 ] as const;
 
 const comparisons = [
-  ["Country Fit", "Preliminary analysis", "Complete analysis"],
-  ["Country comparisons", "1 comparison", "Unlimited comparisons"],
-  ["Saved countries", "Up to 3", "Unlimited"],
-  ["Readiness", "Starting orientation", "Score and prioritized actions"],
-  ["Documents", "Country research", "Connected preparation checklists"],
-  ["Learning", "Introductory access", "Premium library and progress history"],
-  ["Workspace", "Global Profile", "Private Premium Command Center"],
+  ["Country Fit research planning", "Available", "Available"],
+  ["Country comparisons", "Up to 3 countries at a time", "Up to 3 countries at a time"],
+  ["Countries of interest", "Up to 5", "Up to 5"],
+  ["Documents", "Member preparation tools", "Member preparation tools"],
+  ["Current courses", "Learning and progress with an account", "Learning and progress with an account"],
+  ["Workspace", "Personal Workspace", "Personal Workspace + protected Premium Command Center"],
 ] as const;
 
 const faqs = [
@@ -99,7 +98,7 @@ const faqs = [
   ],
   [
     "Are TGPI certificates externally accredited?",
-    "TGPI records learning completion and evidence. External accreditation is only claimed when an established accrediting partnership exists.",
+    "TGPI records learning completion and evidence. TGPI certificates are not academic degrees, professional licences or a claim of external accreditation.",
   ],
 ] as const;
 
@@ -411,7 +410,7 @@ export default async function PricingPage({
               Still exploring? {TGPI_FREE_PLAN.description}
             </p>
             <Link
-              href="/sign-up"
+              href="/sign-up?next=%2Fpricing%23membership"
               className="inline-flex min-h-11 shrink-0 items-center font-bold text-[#0B1F3A] underline underline-offset-4"
             >
               Create a free account →

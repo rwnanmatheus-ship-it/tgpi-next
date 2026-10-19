@@ -1,3 +1,5 @@
+import { matchesPremiumOffer } from "@/lib/commercial-offer";
+import { recordFunnelEvent, requestFunnelConsent } from "@/lib/funnel.server";
 import { NextResponse } from "next/server";
 import { requireApiUser, TgpiAuthenticationError } from "@/lib/auth/guards";
 import {
@@ -44,6 +46,10 @@ export async function POST(request: Request) {
     }
 
     const stripe = getStripeServer();
+    // Read-only validation before customer or Checkout creation: never bill an
+    // amount or cadence that differs from the advertised monthly offer.
+    const price = await stripe.prices.retrieve(TGPI_PREMIUM_PRICE_ID);
+    if (!matchesPremiumOffer(price)) return NextResponse.json({ error: "The membership offer is being reviewed. Please try again later.", code: "OFFER_MISMATCH" }, { status: 503 });
     const baseUrl = getBaseUrl(request);
     const customerId = await getOrCreateStripeCustomer(user.uid, user.email);
     const existingSubscription =
@@ -91,6 +97,7 @@ export async function POST(request: Request) {
         metadata: {
           tgpiUserId: user.uid,
           plan: "premium",
+          tgpiAnalyticsConsent: requestFunnelConsent(request) ? "granted" : "denied",
         },
       },
       success_url: `${baseUrl}/upgrade-success?session_id={CHECKOUT_SESSION_ID}`,
@@ -99,6 +106,7 @@ export async function POST(request: Request) {
       locale: "auto",
     });
 
+    recordFunnelEvent("checkout_started", requestFunnelConsent(request));
     return NextResponse.json({ url: session.url });
   } catch (error) {
     const status = error instanceof TgpiAuthenticationError ? 401 : 500;

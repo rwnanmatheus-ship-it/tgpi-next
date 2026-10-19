@@ -1,3 +1,4 @@
+import FunnelTelemetry from "@/components/analytics/FunnelTelemetry";
 import GlobalProgressSync from "@/components/profile/GlobalProgressSync";
 import "./globals.css";
 import "./spatial-surfaces.css";
@@ -95,6 +96,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         >
           <NotificationProvider>
           <GlobalProgressSync />
+          {process.env.TGPI_FUNNEL_ANALYTICS_ENABLED === "true" ? <FunnelTelemetry /> : null}
           <a href="#main-content" className="sr-only fixed left-4 top-4 z-[100] rounded-xl bg-[var(--tgpi-gold)] px-4 py-3 text-sm font-extrabold text-[var(--tgpi-navy-deep)] shadow-lg transition focus:not-sr-only">Skip to content</a>
           <AccessAwareChrome
             navigation={<><Navbar /><MobileNavigation /><SuperAppLauncher /></>}
