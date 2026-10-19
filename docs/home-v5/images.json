@@ -1,0 +1,93 @@
+{
+  "hero": {
+    "source": "exec-9e88927d-626d-4eea-93f1-7b7490c02ce8.png",
+    "desktop": {
+      "width": 1536,
+      "height": 1024,
+      "bytes": 217202
+    },
+    "mobile": {
+      "width": 1280,
+      "height": 960,
+      "bytes": 138628
+    }
+  },
+  "decision": {
+    "source": "exec-659d2b79-cb1f-4774-a945-27413d94159b.png",
+    "desktop": {
+      "width": 1536,
+      "height": 1024,
+      "bytes": 414866
+    },
+    "mobile": {
+      "width": 1280,
+      "height": 800,
+      "bytes": 244220
+    }
+  },
+  "country": {
+    "source": "exec-a33a351e-0361-4f27-b23c-146fc138395b.png",
+    "desktop": {
+      "width": 1536,
+      "height": 1024,
+      "bytes": 278982
+    },
+    "mobile": {
+      "width": 1280,
+      "height": 800,
+      "bytes": 167608
+    }
+  },
+  "preparation": {
+    "source": "exec-aa51dc6a-bb97-4105-9f5f-c9b993c4691f.png",
+    "desktop": {
+      "width": 1536,
+      "height": 1024,
+      "bytes": 274248
+    },
+    "mobile": {
+      "width": 1280,
+      "height": 800,
+      "bytes": 162254
+    }
+  },
+  "learning": {
+    "source": "exec-68537cd6-8990-4d7a-8ab4-344590ffb2ac.png",
+    "desktop": {
+      "width": 1536,
+      "height": 1024,
+      "bytes": 267844
+    },
+    "mobile": {
+      "width": 1280,
+      "height": 800,
+      "bytes": 161638
+    }
+  },
+  "english": {
+    "source": "exec-096bde60-9297-492f-a139-44399505df5a.png",
+    "desktop": {
+      "width": 1536,
+      "height": 1024,
+      "bytes": 326400
+    },
+    "mobile": {
+      "width": 1280,
+      "height": 800,
+      "bytes": 203982
+    }
+  },
+  "budget": {
+    "source": "exec-d127133a-d05b-4d10-9904-352468256095.png",
+    "desktop": {
+      "width": 1536,
+      "height": 1024,
+      "bytes": 409532
+    },
+    "mobile": {
+      "width": 1280,
+      "height": 800,
+      "bytes": 233980
+    }
+  }
+}

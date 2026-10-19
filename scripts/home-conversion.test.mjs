@@ -5,6 +5,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { safeReturnTo } from "../src/lib/auth/return-to.ts";
 import { hasFunnelConsent } from "../src/lib/funnel.ts";
 import { HOME_ROUTES, HOME_COURSES, HOME_FAQ } from "../src/lib/home-content.ts";
+import { HOME_GOALS, HOME_SECTIONS, homeGoal } from "../src/lib/home-journey.ts";
 
 const read = path => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
 test("authentication preserves allowed local intent including country goal and membership anchor", () => {
@@ -29,7 +30,7 @@ test("every central Home destination resolves to a route", () => {
 test("featured course ids exist in the published catalogue and all generated crops exist", () => {
   const catalog = read("src/data/courses-overview.ts");
   for (const { id } of HOME_COURSES) assert.ok(catalog.includes(`"${id}"`), id);
-  for (const asset of ["hero", "decision", "preparation", "learning", ...HOME_COURSES.map(c => c.asset)]) for (const crop of ["desktop", "mobile"]) assert.ok(existsSync(new URL(`../public/images/home/editorial-v4/${asset}-${crop}.webp`, import.meta.url)));
+  for (const asset of ["hero", "decision", "preparation", "learning", ...HOME_COURSES.map(c => c.asset)]) for (const crop of ["desktop", "mobile"]) assert.ok(existsSync(new URL(`../public/images/home/editorial-v5/${asset}-${crop}.webp`, import.meta.url)));
 });
 test("Home provides one H1 and FAQ structured data uses the same answers", () => {
   const home = read("src/components/home/v4/InstitutionalHome.tsx");
@@ -42,4 +43,18 @@ test("checkout price guard rejects wrong amounts, currency, cadence and inactive
   const price = { active: true, currency: "usd", unit_amount: 1990, recurring: { interval: "month", interval_count: 1 } };
   assert.equal(matchesPremiumOffer(price), true);
   for (const patch of [{ active: false }, { currency: "brl" }, { unit_amount: 2990 }, { unit_amount: null }, { recurring: null }, { recurring: { interval: "year", interval_count: 1 } }, { recurring: { interval: "month", interval_count: 2 } }]) assert.equal(matchesPremiumOffer({ ...price, ...patch }), false);
+});
+
+// Integration contract: every Home choice must remain accepted by the real destination.
+test("Home goals use the Country Fit route's supported vocabulary and safe defaults", () => {
+  const route = read("src/app/country-fit/page.tsx");
+  for (const goal of HOME_GOALS) {
+    assert.ok(route.includes(`"${goal.id}"`), goal.id);
+    assert.equal(homeGoal(goal.id), goal.id);
+  }
+  for (const invalid of [undefined, null, "<script>", "admin", [], {}]) assert.equal(homeGoal(invalid), "study");
+});
+test("chapter index targets real focusable Home sections", () => {
+  const home = read("src/components/home/v4/InstitutionalHome.tsx");
+  for (const { id } of HOME_SECTIONS) assert.ok(home.includes(`id="${id}" tabIndex={-1}`), id);
 });
