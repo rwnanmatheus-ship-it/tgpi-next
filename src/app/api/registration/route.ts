@@ -1,3 +1,4 @@
+import { recordFunnelEvent, requestFunnelConsent } from "@/lib/funnel.server";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { normalizeTgpiAccountProfile } from "@/lib/account-profile";
@@ -35,6 +36,7 @@ export async function POST(request: Request) {
       unsafeMetadata: { ...user.unsafeMetadata, tgpiAccountProfile: { ...profile, currentCountry: country, preferredLanguage: input.preferredLanguage, updatedAt: now } },
       privateMetadata: { ...user.privateMetadata, tgpiRegistration: { completedAt: now, termsVersion: "2026-10-17", termsAcceptedAt: now } },
     });
+    if (!user.privateMetadata.tgpiRegistration) recordFunnelEvent("signup_completed", requestFunnelConsent(request));
     return NextResponse.json({ saved: true }, { headers: { "Cache-Control": "no-store" } });
   } catch (error) {
     if (error instanceof SyntaxError) return NextResponse.json({ error: "Send a valid profile." }, { status: 400 });

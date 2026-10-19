@@ -1,0 +1,26 @@
+{
+  "mode": "Three HTTP requests to protected Vercel Preview after share authentication; includes network and TLS; not browser Core Web Vitals or p75.",
+  "samples": [
+    {
+      "status": 200,
+      "response_headers_ms": 4486,
+      "body_complete_ms": 4560,
+      "html_bytes": 166139,
+      "cache": "HIT"
+    },
+    {
+      "status": 200,
+      "response_headers_ms": 4510,
+      "body_complete_ms": 4572,
+      "html_bytes": 166139,
+      "cache": "HIT"
+    },
+    {
+      "status": 200,
+      "response_headers_ms": 4586,
+      "body_complete_ms": 4664,
+      "html_bytes": 166139,
+      "cache": "HIT"
+    }
+  ]
+}

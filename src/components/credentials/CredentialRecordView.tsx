@@ -193,7 +193,7 @@ export default function CredentialRecordView({
                 ))}
               </ul>
               <p>
-                The TGPI quality seal is the institute's own issuer mark, based
+                The TGPI quality seal is the institute&apos;s own issuer mark, based
                 on its identity, assessment and record-verification checks. This
                 professional learning certificate is not a government degree or
                 professional license.

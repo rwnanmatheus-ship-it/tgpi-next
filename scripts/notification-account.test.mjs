@@ -8,10 +8,10 @@ import { parsePreferences, welcomeEvent } from '../src/lib/notifications/model.t
 const require = createRequire(import.meta.url);
 function harness() {
   const users = new Map(['A','B'].map(id => [id, { createdAt: Date.now(), privateMetadata: { existing: 'preserved' } }]));
-  const module = { exports: {} };
+  const testModule = { exports: {} };
   const mockClient = { users: { updateUserMetadata: async (uid, input) => { const user = users.get(uid); Object.assign(user.privateMetadata, input.privateMetadata); } } };
-  vm.runInNewContext(ts.transpileModule(readFileSync(new URL('../src/lib/notifications/account-inbox.server.ts', import.meta.url), 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText, { module, exports: module.exports, Buffer, Date, console, require: name => name === 'server-only' ? {} : name.includes('clerk') ? { clerkClient: async () => mockClient } : name.includes('reconcile') ? { collectNotificationEvents: async uid => ({ events: [welcomeEvent, { ...welcomeEvent, key: "next:sample", category: "planning" }], user: users.get(uid) }) } : name === './model' ? { parsePreferences } : require(name) });
-  return { api: module.exports, users };
+  vm.runInNewContext(ts.transpileModule(readFileSync(new URL('../src/lib/notifications/account-inbox.server.ts', import.meta.url), 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText, { module: testModule, exports: testModule.exports, Buffer, Date, console, require: name => name === 'server-only' ? {} : name.includes('clerk') ? { clerkClient: async () => mockClient } : name.includes('reconcile') ? { collectNotificationEvents: async uid => ({ events: [welcomeEvent, { ...welcomeEvent, key: "next:sample", category: "planning" }], user: users.get(uid) }) } : name === './model' ? { parsePreferences } : require(name) });
+  return { api: testModule.exports, users };
 }
 test('account mode persists read and preferences without modifying other private metadata', async () => {
   const { api, users } = harness();

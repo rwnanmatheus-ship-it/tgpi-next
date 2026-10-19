@@ -1,3 +1,4 @@
+import { recordFunnelEvent } from "@/lib/funnel.server";
 import "server-only";
 import { tryPublishNotification } from "@/lib/notifications/store.server";
 import { billingEvent } from "@/lib/notifications/model";
@@ -163,6 +164,7 @@ export async function syncUserBillingFromSubscription({
       event?.created || current.lastStripeEventCreated,
     updatedAt: new Date().toISOString(),
   });
+  if (event && plan === "premium" && current.plan !== "premium") recordFunnelEvent("subscription_confirmed", subscription.metadata.tgpiAnalyticsConsent === "granted");
   if (hasConfiguredPremiumPrice(stripePriceId)) await tryPublishNotification(uid, billingEvent(subscription.id, status, subscription.cancel_at_period_end, record.currentPeriodEnd));
   return record;
 }

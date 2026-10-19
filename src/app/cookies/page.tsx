@@ -1,3 +1,4 @@
+import AnalyticsPreferences from "@/components/analytics/AnalyticsPreferences";
 import type { Metadata } from "next";
 import LegalDocument from "@/components/legal/LegalDocument";
 
@@ -66,9 +67,7 @@ export default function CookiePolicyPage() {
         <h2 className="text-2xl font-semibold text-[var(--tgpi-navy)]">6. Your controls</h2>
         <p className="mt-3">
           Your browser may allow you to block or delete cookies. Blocking essential cookies
-          can break authentication, security or payment functions. If TGPI introduces
-          non-essential technologies that require a consent manager, available preferences
-          will be presented through that interface.
+          can break authentication, security or payment functions. Optional usage measurement is off by default. Use the controls below to allow it or keep it off.
         </p>
       </section>
 
@@ -81,6 +80,7 @@ export default function CookiePolicyPage() {
           </a>.
         </p>
       </section>
+      <AnalyticsPreferences />
     </LegalDocument>
   );
 }

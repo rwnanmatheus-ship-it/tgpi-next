@@ -1,0 +1,51 @@
+# Arquivos alterados
+
+A implementação inicial altera/adiciona os arquivos abaixo. A documentação e as evidências desta pasta complementam a entrega. Header, rodapé e brasão não foram editados.
+
+- `.env.example`
+- `public/images/home/editorial-v4/budget-desktop.webp`
+- `public/images/home/editorial-v4/budget-mobile.webp`
+- `public/images/home/editorial-v4/country-desktop.webp`
+- `public/images/home/editorial-v4/country-mobile.webp`
+- `public/images/home/editorial-v4/decision-desktop.webp`
+- `public/images/home/editorial-v4/decision-mobile.webp`
+- `public/images/home/editorial-v4/english-desktop.webp`
+- `public/images/home/editorial-v4/english-mobile.webp`
+- `public/images/home/editorial-v4/hero-desktop.webp`
+- `public/images/home/editorial-v4/hero-mobile.webp`
+- `public/images/home/editorial-v4/learning-desktop.webp`
+- `public/images/home/editorial-v4/learning-mobile.webp`
+- `public/images/home/editorial-v4/preparation-desktop.webp`
+- `public/images/home/editorial-v4/preparation-mobile.webp`
+- `scripts/certificate-pdf.test.mjs`
+- `scripts/home-conversion.test.mjs`
+- `scripts/notification-account.test.mjs`
+- `scripts/notifications.test.mjs`
+- `src/app/api/analytics/funnel/route.ts`
+- `src/app/api/registration/route.ts`
+- `src/app/api/stripe/create-checkout-session/route.ts`
+- `src/app/cookies/page.tsx`
+- `src/app/country-fit/page.tsx`
+- `src/app/layout.tsx`
+- `src/app/page.tsx`
+- `src/app/pricing/page.tsx`
+- `src/app/sign-in/[[...sign-in]]/page.tsx`
+- `src/app/sign-up/[[...sign-up]]/page.tsx`
+- `src/app/welcome/page.tsx`
+- `src/components/analytics/AnalyticsPreferences.tsx`
+- `src/components/analytics/FunnelTelemetry.tsx`
+- `src/components/auth/RegistrationProfile.tsx`
+- `src/components/credentials/CredentialRecordView.tsx`
+- `src/components/home/HomeStructuredData.tsx`
+- `src/components/home/v4/HomeAccountLink.tsx`
+- `src/components/home/v4/HomeResearchPreview.tsx`
+- `src/components/home/v4/InstitutionalHome.tsx`
+- `src/components/home/v4/home.module.css`
+- `src/components/intelligence/CountryFitWorkspace.tsx`
+- `src/lib/auth/return-to.ts`
+- `src/lib/billing.server.ts`
+- `src/lib/commercial-offer.ts`
+- `src/lib/funnel.server.ts`
+- `src/lib/funnel.ts`
+- `src/lib/home-content.ts`
+- `src/lib/subscription-plans.ts`

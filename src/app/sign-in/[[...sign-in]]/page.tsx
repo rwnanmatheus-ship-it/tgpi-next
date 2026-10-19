@@ -1,3 +1,4 @@
+import { safeReturnTo } from "@/lib/auth/return-to";
 import type { Metadata } from "next";
 import { SignIn } from "@clerk/nextjs";
 import TGPIAuthShell from "@/components/auth/TGPIAuthShell";
@@ -9,15 +10,17 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default function SignInPage() {
+export default async function SignInPage({ searchParams }: { searchParams: Promise<{ next?: string; redirect_url?: string }> }) {
+  const params = await searchParams;
+  const next = safeReturnTo(params.next ?? params.redirect_url, "/profile");
   return (
     <TGPIAuthShell mode="sign-in">
       <SignIn
         path="/sign-in"
         routing="path"
-        signUpUrl="/sign-up"
-        fallbackRedirectUrl="/profile"
-        signUpForceRedirectUrl="/welcome"
+        signUpUrl={`/sign-up?next=${encodeURIComponent(next)}`}
+        forceRedirectUrl={next}
+        signUpForceRedirectUrl={`/welcome?next=${encodeURIComponent(next)}`}
         fallback={<p role="status">Loading secure sign in…</p>}
         appearance={tgpiClerkAppearance}
       />
