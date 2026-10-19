@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import NavigationTileIcon from "@/components/navigation/NavigationTileIcon";
+import NavigationIcon from "@/components/navigation/NavigationIcon";
 import { useNotifications } from "@/components/notifications/NotificationProvider";
 export default function NotificationBell() {
   const { items } = useNotifications();
@@ -18,9 +18,9 @@ export default function NotificationBell() {
       }
       title="Notifications"
     >
-      <NavigationTileIcon name="bell" />
+      <NavigationIcon name="bell" width={20} height={20} />
       {unread > 0 && (
-        <span className="absolute -right-1 -top-1 min-w-4 rounded-full bg-[#B58A2A] px-1 text-center text-[10px] font-extrabold text-white">
+        <span className="absolute -right-1 -top-1 min-w-4 rounded-full bg-[#805c17] px-1 text-center text-[10px] font-extrabold text-white">
           {unread > 9 ? "9+" : unread}
         </span>
       )}
