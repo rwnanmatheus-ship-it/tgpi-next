@@ -19,7 +19,8 @@ const sourceContracts = [
       /title: "Complete your global profile"/,
       /#documents-to-verify/,
       /#cost-of-living/,
-      /\/courses\/english-abroad/,
+      /getLearningContinuation\(catalogue, activation\.courseProgress\)/,
+      /continuation\?\.href \?\? "\/courses"/,
       /\/onboarding/,
     ],
   },
@@ -45,11 +46,11 @@ const sourceContracts = [
   },
   {
     file: "src/app/courses/page.tsx",
-    checks: [/LearningPathExplorer/, /\/courses\/english-abroad/],
+    checks: [/LearningPathExplorer/, /coursesOverview/, /global-english-2026/],
   },
   {
     file: "src/components/courses/LearningPathExplorer.tsx",
-    checks: [/id="learning-paths"/, /CourseCard/, /aria-pressed/],
+    checks: [/id="learning-paths"/, /href=\{course\.href\}/, /aria-pressed/],
   },
   {
     file: "src/data/courses.ts",
@@ -58,8 +59,8 @@ const sourceContracts = [
   {
     file: "src/data/courses/english-abroad/index.ts",
     checks: [
-      /id: "english-abroad"/,
-      /version: "1\.0\.0"/,
+      /id: "global-english-2026"/,
+      /version: "2\.0\.0"/,
       /estimatedMinutes: 370/,
       /arrivalModule/,
       /housingModule/,
@@ -98,13 +99,13 @@ const runtimeContracts = [
     validate: validateSignInRedirect,
   },
   {
-    label: "Learning path signed-out protection",
-    path: "/courses/english-abroad",
-    validate: validateSignInRedirect,
+    label: "Public learning path overview",
+    path: "/courses/global-english-2026",
+    validate: validatePage({ anchor: "curriculum-title" }),
   },
   {
     label: "Course lesson signed-out protection",
-    path: "/courses/english-abroad/lessons/intro",
+    path: "/courses/global-english-2026/lessons/intro",
     validate: validateSignInRedirect,
   },
   {
@@ -147,8 +148,18 @@ function isRedirect(status) {
   return [301, 302, 303, 307, 308].includes(status);
 }
 
-function validateSignInRedirect(response) {
+async function validateSignInRedirect(response) {
   const location = response.headers.get("location") || "";
+  // App Router can start streaming the shared layout before auth resolves.
+  // In that case Next emits its redirect meta tag in an HTTP 200 response.
+  if (response.status === 200) {
+    const html = await response.text();
+    invariant(
+      /<meta\b(?=[^>]*\bid=["']__next-page-redirect["'])(?=[^>]*\bhttp-equiv=["']refresh["'])(?=[^>]*\bcontent=["']\d+;url=\/sign-in(?:[?][^"']*)?["'])[^>]*>/i.test(html),
+      "expected a streamed Next.js sign-in redirect",
+    );
+    return;
+  }
   invariant(isRedirect(response.status), `expected a redirect, received ${response.status}`);
   invariant(location.includes("/sign-in"), `expected /sign-in redirect, received ${location || "no location"}`);
 }
