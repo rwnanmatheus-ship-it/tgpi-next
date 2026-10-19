@@ -66,6 +66,28 @@ test("workspace journey is calculated from real plan and activation data", () =>
   assert.deepEqual(model.savedCountries.map(({ slug }) => slug), ["spain", "portugal"]);
 });
 
+test("action labels match saved destinations when the plan has changed", () => {
+  const model = buildGlobalWorkspaceModel(onboarding, countries, {
+    ...activation,
+    comparisons: [{ ...activation.comparisons[0], countrySlugs: ["spain", "portugal"], goal: "study" }],
+    documentReviews: { spain: activation.documentReviews.portugal },
+    costEstimates: { spain: { updatedAt: activation.updatedAt } },
+  });
+  const documents = model.actions.find(action => action.id === "documents");
+  assert.equal(documents.action, "Review Spain");
+  assert.equal(documents.href, "/countries/spain#documents-to-verify");
+  assert.match(documents.description, /Spain/);
+  assert.doesNotMatch(documents.description, /strongest current fit/);
+  const cost = model.actions.find(action => action.id === "cost");
+  assert.equal(cost.href, "/countries/spain#cost-of-living");
+  assert.match(cost.description, /Spain/);
+  assert.doesNotMatch(cost.description, /Portugal/);
+  const comparison = model.actions.find(action => action.id === "compare");
+  assert.match(comparison.description, /Spain & Portugal/);
+  assert.match(comparison.description, /study/);
+  assert.match(comparison.href, /goal=study/);
+});
+
 test("action pulse reconciles every action without inventing activity", () => {
   const model = buildGlobalWorkspaceModel(onboarding, countries, activation);
   const total = Object.values(model.actionSummary).reduce((sum, value) => sum + value, 0);

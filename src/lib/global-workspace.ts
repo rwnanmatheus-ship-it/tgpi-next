@@ -245,6 +245,11 @@ export function buildGlobalWorkspaceModel(
   const latestCostCountry = Object.entries(activation.costEstimates).sort(
     ([, first], [, second]) => second.updatedAt.localeCompare(first.updatedAt),
   )[0]?.[0];
+  const documentCountry = allCountries.find(country => country.slug === latestDocumentEntry?.[0]) ?? primaryCountry;
+  const costCountry = allCountries.find(country => country.slug === latestCostCountry);
+  const comparisonCountries = latestComparison
+    ? latestComparison.countrySlugs.flatMap(slug => allCountries.filter(country => country.slug === slug))
+    : countriesForComparison;
   const progress: WorkspaceProgressItem[] = [
     { complete: Boolean(onboarding.primaryGoal), label: "Primary goal" },
     {
@@ -282,11 +287,11 @@ export function buildGlobalWorkspaceModel(
           : canCompare
             ? "Open personalized comparison"
             : "Add countries",
-      description: canCompare
+      description: comparisonCountries.length >= 2
         ? `Compare ${joinLabels(
-            countriesForComparison.map((country) => country.name),
+            comparisonCountries.map((country) => country.name),
             "your shortlist",
-          )} through the ${getComparisonGoalConfig(comparisonGoal).shortLabel.toLowerCase()} lens.`
+          )} through the ${getComparisonGoalConfig(latestComparison?.goal ?? comparisonGoal).shortLabel.toLowerCase()} lens.`
         : "Select at least two countries so TGPI can build a meaningful side-by-side decision.",
       eyebrow: "Decide",
       href: latestComparison
@@ -304,9 +309,9 @@ export function buildGlobalWorkspaceModel(
       title: "Compare selected countries",
     },
     {
-      action: hasCountry ? `Review ${primaryCountry.name}` : "Choose a country",
-      description: hasCountry
-        ? `Open the documentation checklist for ${primaryCountry.name}, your strongest current fit.`
+      action: documentCountry ? `Review ${documentCountry.name}` : "Choose a country",
+      description: documentCountry
+        ? `Open the documentation checklist for ${documentCountry.name}${latestDocumentEntry ? ", where you last saved a review" : ", from your shortlist"}.`
         : "Choose a country before reviewing visa and residence pathways.",
       eyebrow: "Prepare",
       href: latestDocumentEntry
@@ -345,7 +350,9 @@ export function buildGlobalWorkspaceModel(
           : hasCountry
             ? "Open cost intelligence"
             : "Explore country costs",
-      description: hasCountry
+      description: costCountry
+        ? `Review your saved monthly estimate for ${costCountry.name}.`
+        : hasCountry
         ? canCompare
           ? `Review monthly budget references for ${joinLabels(
               countriesForComparison.map((country) => country.name),
