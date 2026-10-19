@@ -3,7 +3,7 @@
  * are intentionally network-only and are never written to Cache Storage.
  */
 
-const CACHE_NAME = "tgpi-public-shell-v1";
+const CACHE_NAME = "tgpi-public-shell-v2";
 const OFFLINE_URL = "/offline.html";
 const MAX_STATIC_ASSETS = 80;
 const PUBLIC_SHELL = [

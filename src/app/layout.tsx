@@ -39,8 +39,8 @@ export const metadata: Metadata = {
   description: "Prepare, compare and move globally with strategic clarity using TGPI — a premium education and decision system for international life.",
   keywords: ["move abroad", "global mobility", "international life", "country comparison", "cost of living", "learn languages", "global education", "international planning", "TGPI", "The Global Polymath Institute"],
   icons: {
-    icon: "/brand/tgpi-crest-v2-256.png",
-    shortcut: "/brand/tgpi-crest-v2-256.png",
+    icon: "/brand/tgpi-crest-metal-v3-256.png",
+    shortcut: "/brand/tgpi-crest-metal-v3-256.png",
     apple: "/pwa/apple-touch-icon.png",
   },
   manifest: "/manifest.webmanifest",

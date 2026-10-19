@@ -412,7 +412,7 @@ export default function GlobalKeyCenter({
               >
                 <div className="mb-6 flex items-center gap-4">
                   <Image
-                    src="/brand/tgpi-crest-v2-256.png"
+                    src="/brand/tgpi-crest-metal-v3-256.png"
                     alt="TGPI crest"
                     width={48}
                     height={58}

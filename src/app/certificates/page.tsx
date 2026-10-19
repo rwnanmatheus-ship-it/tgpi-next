@@ -67,7 +67,7 @@ export default async function CertificatesPage() {
             aria-label="Your certificate portfolio"
           >
             <Image
-              src="/brand/tgpi-crest-v2.webp"
+              src="/brand/tgpi-crest-metal-v3.webp"
               alt="TGPI"
               width={76}
               height={86}
@@ -145,7 +145,7 @@ export default async function CertificatesPage() {
             <article className="certificate-next">
               <div className="certificate-course-art" aria-hidden="true">
                 <Image
-                  src="/brand/tgpi-crest-v2.webp"
+                  src="/brand/tgpi-crest-metal-v3.webp"
                   alt=""
                   width={90}
                   height={106}

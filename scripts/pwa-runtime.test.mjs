@@ -53,7 +53,7 @@ test("service worker caches only the public shell and hashed build assets", () =
   );
 
   assert.equal(syntax.status, 0, syntax.stderr);
-  assert.match(source, /tgpi-public-shell-v1/);
+  assert.match(source, /tgpi-public-shell-v\d+/);
   assert.match(source, /MAX_STATIC_ASSETS = 80/);
   assert.match(source, /request\.mode === "navigate"/);
   assert.match(source, /fetch\(request\)\.catch/);

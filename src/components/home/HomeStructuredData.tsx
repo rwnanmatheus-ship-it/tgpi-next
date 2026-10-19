@@ -11,7 +11,7 @@ const homeStructuredData = {
       name: "TGPI — The Global Polymath Institute",
       alternateName: "TGPI",
       url: siteUrl,
-      logo: `${siteUrl}/brand/tgpi-crest-v2-256.png`,
+      logo: `${siteUrl}/brand/tgpi-crest-metal-v3-256.png`,
       description:
         "An educational decision-intelligence platform for country research, international preparation and practical global capability.",
       sameAs: ["https://www.instagram.com/theglobalpolymath/"],

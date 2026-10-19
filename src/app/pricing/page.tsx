@@ -135,7 +135,7 @@ export default async function PricingPage({
           <div className="min-w-0">
             <div className="flex items-center gap-3">
               <Image
-                src="/brand/tgpi-crest-v2-256.png"
+                src="/brand/tgpi-crest-metal-v3-256.png"
                 alt="TGPI crest"
                 width={48}
                 height={48}

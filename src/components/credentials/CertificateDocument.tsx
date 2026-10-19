@@ -24,7 +24,7 @@ export default function CertificateDocument({
       <header className="diploma-brand">
         <div className="diploma-brand-main">
           <Image
-            src="/brand/tgpi-crest-v2.webp"
+            src="/brand/tgpi-crest-metal-v3.webp"
             alt="TGPI institutional crest"
             width={72}
             height={88}
