@@ -1,3 +1,4 @@
+import { currentUser } from "@clerk/nextjs/server";
 import type { Metadata } from "next";
 import CommunityApp from "@/components/community/CommunityApp";
 export const metadata: Metadata = {
@@ -13,8 +14,18 @@ export default async function CommunityPage({
   const p = await searchParams;
   return (
     <CommunityApp
+      globalAdmin={(await currentUser())?.privateMetadata.role === "admin"}
       initialView={
-        ["mine", "requests", "saved"].includes(p.view || "")
+        [
+          "mine",
+          "requests",
+          "saved",
+          "meetings",
+          "feed",
+          "questions",
+          "atlas",
+          "preferences",
+        ].includes(p.view || "")
           ? p.view
           : "explore"
       }

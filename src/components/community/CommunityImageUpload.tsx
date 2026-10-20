@@ -1,4 +1,77 @@
-'use client';
-import {useState} from 'react';
-import s from './Community.module.css';
-export default function CommunityImageUpload({community,kind,post='',onUpload}:{community:string;kind:'avatar'|'cover'|'post';post?:string;onUpload:(image:{id:string;alt:string})=>void}){const [alt,setAlt]=useState(''),[file,setFile]=useState<File|null>(null),[busy,setBusy]=useState(false),[error,setError]=useState('');return <div className={s.reply}><label>{kind==='post'?'Attach a photo':`Community ${kind}`}<input type="file" accept="image/jpeg,image/png,image/webp" disabled={busy} onChange={e=>setFile(e.target.files?.[0]||null)}/></label><label>Image description (alternative text)<input value={alt} maxLength={250} onChange={e=>setAlt(e.target.value)}/></label><p className={s.notice}>JPEG, PNG or WebP · under 3 MB. Do not upload personal documents.</p><button type="button" className={s.secondary} disabled={busy||!file||!alt.trim()} onClick={async()=>{if(!file)return;setBusy(true);setError('');try{if(file.size>3_000_000)throw new Error('Use an image under 3 MB.');const r=await fetch(`/api/community/assets?${new URLSearchParams({community,kind,post,alt})}`,{method:'POST',body:file,cache:'no-store'}),data=await r.json();if(!r.ok)throw new Error(data.error);onUpload(data);setFile(null);setAlt('');}catch(e){setError((e as Error).message);}finally{setBusy(false);}}}>{busy?'Uploading…':'Upload image'}</button>{error&&<p className={s.error} role="alert">{error}</p>}</div>;}
+"use client";
+import { useState } from "react";
+import s from "./Community.module.css";
+export default function CommunityImageUpload({
+  community,
+  kind,
+  post = "",
+  onUpload,
+}: {
+  community: string;
+  kind: "avatar" | "cover" | "post";
+  post?: string;
+  onUpload: (image: { id: string; alt: string }) => void;
+}) {
+  const [alt, setAlt] = useState(""),
+    [file, setFile] = useState<File | null>(null),
+    [busy, setBusy] = useState(false),
+    [error, setError] = useState("");
+  return (
+    <div className={s.reply}>
+      <label>
+        {kind === "post" ? "Attach a photo" : `Community ${kind}`}
+        <input
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          disabled={busy}
+          onChange={(e) => setFile(e.target.files?.[0] || null)}
+        />
+      </label>
+      <label>
+        Image description (alternative text)
+        <input
+          value={alt}
+          maxLength={250}
+          onChange={(e) => setAlt(e.target.value)}
+        />
+      </label>
+      <p className={s.notice}>
+        JPEG, PNG or WebP · under 3 MB. Do not upload personal documents.
+      </p>
+      <button
+        type="button"
+        className={s.secondary}
+        disabled={busy || !file || !alt.trim()}
+        onClick={async () => {
+          if (!file) return;
+          setBusy(true);
+          setError("");
+          try {
+            if (file.size > 3_000_000)
+              throw new Error("Use an image under 3 MB.");
+            const r = await fetch(
+                `/api/community/assets?${new URLSearchParams({ community, kind, post, alt })}`,
+                { method: "POST", body: file, cache: "no-store" },
+              ),
+              data = await r.json();
+            if (!r.ok) throw new Error(data.error);
+            onUpload(data);
+            setFile(null);
+            setAlt("");
+          } catch (e) {
+            setError((e as Error).message);
+          } finally {
+            setBusy(false);
+          }
+        }}
+      >
+        {busy ? "Uploading…" : "Upload image"}
+      </button>
+      {error && (
+        <p className={s.error} role="alert">
+          {error}
+        </p>
+      )}
+    </div>
+  );
+}

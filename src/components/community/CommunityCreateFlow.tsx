@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import {journeyStages} from "@/lib/community/features";
+import { journeyStages } from "@/lib/community/features";
 import { defaultRules } from "@/lib/community/model";
 import { api } from "./api";
 import s from "./Community.module.css";
@@ -12,7 +12,9 @@ const empty = {
   about: "",
   destination: "",
   language: "English",
-  theme: "Life abroad",journey:"",courseId:"",
+  theme: "Life abroad",
+  journey: "",
+  courseId: "",
   visibility: "public",
   admission: "instant",
   rules: defaultRules,
@@ -21,14 +23,18 @@ const empty = {
 };
 export default function CommunityCreateFlow({ close }: { close: () => void }) {
   const router = useRouter(),
-    [catalog,setCatalog]=useState<{id:string;title:string}[]>([]),
+    [catalog, setCatalog] = useState<{ id: string; title: string }[]>([]),
     [value, setValue] = useState(empty),
     [step, setStep] = useState(1),
     [busy, setBusy] = useState(false),
     [error, setError] = useState("");
   useEffect(() => {
     let mounted = true;
-    api<{courses:{id:string;title:string}[]}>({catalog:"1"}).then(p=>{if(mounted)setCatalog(p.courses);}).catch(()=>{});
+    api<{ courses: { id: string; title: string }[] }>({ catalog: "1" })
+      .then((p) => {
+        if (mounted) setCatalog(p.courses);
+      })
+      .catch(() => {});
     api<typeof empty | null>({ draft: "1" })
       .then((d) => {
         if (d && mounted) setValue({ ...empty, ...d });
@@ -141,7 +147,36 @@ export default function CommunityCreateFlow({ close }: { close: () => void }) {
               {field("language", "Languages")}
               {field("theme", "Topic or journey stage")}
             </div>
-            <label>Journey Circle (optional)<select value={value.journey} onChange={e=>setValue({...value,journey:e.target.value})}><option value="">Any stage</option>{journeyStages.map(stage=><option key={stage}>{stage}</option>)}</select></label><label>Course study group (optional)<select value={value.courseId} onChange={e=>setValue({...value,courseId:e.target.value})}><option value="">No course connection</option>{catalog.map(c=><option key={c.id} value={c.id}>{c.title}</option>)}</select></label>
+            <label>
+              Journey Circle (optional)
+              <select
+                value={value.journey}
+                onChange={(e) =>
+                  setValue({ ...value, journey: e.target.value })
+                }
+              >
+                <option value="">Any stage</option>
+                {journeyStages.map((stage) => (
+                  <option key={stage}>{stage}</option>
+                ))}
+              </select>
+            </label>
+            <label>
+              Course study group (optional)
+              <select
+                value={value.courseId}
+                onChange={(e) =>
+                  setValue({ ...value, courseId: e.target.value })
+                }
+              >
+                <option value="">No course connection</option>
+                {catalog.map((c) => (
+                  <option key={c.id} value={c.id}>
+                    {c.title}
+                  </option>
+                ))}
+              </select>
+            </label>
             <p className={s.notice}>
               Check Explore for related communities before creating yours.
             </p>

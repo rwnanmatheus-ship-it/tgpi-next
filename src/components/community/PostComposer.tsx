@@ -5,13 +5,14 @@ import ImageUpload from "./CommunityImageUpload";
 import s from "./Community.module.css";
 export default function PostComposer({
   action,
-  busy,community,
+  busy,
+  community,
 }: {
-  community:string;
+  community: string;
   action: Action;
   busy: boolean;
 }) {
-  const [images,setImages]=useState<{id:string;alt:string}[]>([]),
+  const [images, setImages] = useState<{ id: string; alt: string }[]>([]),
     [open, setOpen] = useState(false),
     [kind, setKind] = useState("discussion"),
     [title, setTitle] = useState(""),
@@ -42,7 +43,8 @@ export default function PostComposer({
                 body,
                 destination,
                 context,
-                source,attachments:images,
+                source,
+                attachments: images,
               })
             ) {
               setImages([]);
@@ -114,8 +116,19 @@ export default function PostComposer({
             Identify personal experiences and estimates. Include dates, currency
             and sources when relevant. Never publish private documents.
           </p>
-          {images.map(x=><p className={s.meta} key={x.id}>Photo attached: {x.alt}</p>)}
-          {images.length<4&&<ImageUpload community={community} kind="post" post={id} onUpload={image=>setImages(prev=>[...prev,image])}/>}
+          {images.map((x) => (
+            <p className={s.meta} key={x.id}>
+              Photo attached: {x.alt}
+            </p>
+          ))}
+          {images.length < 4 && (
+            <ImageUpload
+              community={community}
+              kind="post"
+              post={id}
+              onUpload={(image) => setImages((prev) => [...prev, image])}
+            />
+          )}
           <button className={s.button} disabled={busy}>
             {busy ? "Publishing…" : "Publish"}
           </button>

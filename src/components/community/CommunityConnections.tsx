@@ -66,6 +66,7 @@ export default function CommunityConnections() {
         <Link href="/community">Explore communities →</Link>
         <Link href="/community?view=requests">My requests</Link>
         <Link href="/community?view=saved">Saved contributions</Link>
+        <Link href="/community?view=meetings">Upcoming sessions</Link>
       </div>
     </section>
   );

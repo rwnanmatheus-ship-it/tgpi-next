@@ -52,7 +52,9 @@ export default function CommunityPost({
     <article className={s.panel} id={`post-${p.id}`}>
       <div className={s.meta}>
         <span className={s.badge}>{p.kind}</span>
-        {p.state==="pending"&&<span className={s.badge}>Awaiting moderation</span>}
+        {p.state === "pending" && (
+          <span className={s.badge}>Awaiting moderation</span>
+        )}
         {p.pinned && <span className={s.badge}>Pinned</span>}
         {p.kind === "question" && (
           <span className={s.badge}>
@@ -108,7 +110,19 @@ export default function CommunityPost({
           <p className={s.body}>{p.body}</p>
         </>
       )}
-      {p.attachments?.map(image=><figure key={image.id}><img src={`/api/community/assets/${p.community}/${image.id}`} alt={image.alt} width={960} height={640} loading="lazy" style={{width:"100%",height:"auto",borderRadius:12}}/><figcaption className={s.meta}>{image.alt}</figcaption></figure>)}
+      {p.attachments?.map((image) => (
+        <figure key={image.id}>
+          <img
+            src={`/api/community/assets/${p.community}/${image.id}`}
+            alt={image.alt}
+            width={960}
+            height={640}
+            loading="lazy"
+            style={{ width: "100%", height: "auto", borderRadius: 12 }}
+          />
+          <figcaption className={s.meta}>{image.alt}</figcaption>
+        </figure>
+      ))}
       {(p.destination || p.context) && (
         <p className={s.meta}>
           {p.destination} · {p.context}
@@ -132,9 +146,37 @@ export default function CommunityPost({
         >
           {replies === null ? "Open replies" : "Close replies"}
         </button>
-        {active(membership)&&p.state!=="pending"&&<button className={s.secondary} disabled={busy} aria-pressed={Boolean(p.reacted)} onClick={()=>void action({action:"reaction",post:p.id,helpful:!p.reacted})}>Helpful · {p.helpfulCount||0}</button>}
-        <Link className={s.secondary} href={`/community/${p.community}?post=${p.id}`}>Discussion link</Link>
-        {moderator&&p.state==="pending"&&<button className={s.button} disabled={busy} onClick={()=>void action({action:"approve-post",post:p.id})}>Approve publication</button>}
+        {active(membership) && p.state !== "pending" && (
+          <button
+            className={s.secondary}
+            disabled={busy}
+            aria-pressed={Boolean(p.reacted)}
+            onClick={() =>
+              void action({
+                action: "reaction",
+                post: p.id,
+                helpful: !p.reacted,
+              })
+            }
+          >
+            Helpful · {p.helpfulCount || 0}
+          </button>
+        )}
+        <Link
+          className={s.secondary}
+          href={`/community/${p.community}?post=${p.id}`}
+        >
+          Discussion link
+        </Link>
+        {moderator && p.state === "pending" && (
+          <button
+            className={s.button}
+            disabled={busy}
+            onClick={() => void action({ action: "approve-post", post: p.id })}
+          >
+            Approve publication
+          </button>
+        )}
         {uid && (
           <>
             <button
@@ -146,7 +188,45 @@ export default function CommunityPost({
             >
               {p.saved ? "Unsave" : "Save"}
             </button>
-            {uid!==p.author&&active(membership)&&<><button className={s.secondary} disabled={busy} onClick={()=>{if(window.confirm("Block this member? Their contributions will be hidden from your signed-in view."))void action({action:"block",target:p.author,blocked:true});}}>Block member</button><button className={s.secondary} disabled={busy} onClick={()=>{const reason=window.prompt("Describe the member issue: harassment, fraud, privacy or spam");if(reason)void action({action:"report-member",target:p.author,reason});}}>Report member</button></>}
+            {uid !== p.author && active(membership) && (
+              <>
+                <button
+                  className={s.secondary}
+                  disabled={busy}
+                  onClick={() => {
+                    if (
+                      window.confirm(
+                        "Block this member? Their contributions will be hidden from your signed-in view.",
+                      )
+                    )
+                      void action({
+                        action: "block",
+                        target: p.author,
+                        blocked: true,
+                      });
+                  }}
+                >
+                  Block member
+                </button>
+                <button
+                  className={s.secondary}
+                  disabled={busy}
+                  onClick={() => {
+                    const reason = window.prompt(
+                      "Describe the member issue: harassment, fraud, privacy or spam",
+                    );
+                    if (reason)
+                      void action({
+                        action: "report-member",
+                        target: p.author,
+                        reason,
+                      });
+                  }}
+                >
+                  Report member
+                </button>
+              </>
+            )}
             <button
               className={s.secondary}
               disabled={busy}
