@@ -75,7 +75,7 @@ export default function CommunityOperations() {
           </p>
           <p>
             {status.pendingSample.length} pending jobs in the current sample ·{" "}
-            {status.identityErrors} identity checks awaiting retry
+            {status.identityErrors} identity service failures recorded
           </p>
           {status.retrying && (
             <p className={s.notice}>

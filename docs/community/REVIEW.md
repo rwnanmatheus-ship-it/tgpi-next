@@ -51,7 +51,7 @@ Image access rechecks current membership and publication availability on every r
 
 ## Validation and evidence
 
-The community service suite has **39 passing tests**, using isolated transactional persistence and real Sharp image conversion. It covers privacy, rule acceptance, duplicate operations, escalation, invitations, transfer, moderation, reactions, appeals, blocking, playbooks, scoped cursors, media encryption/revocation and account-inbox events without legacy activation.
+The community service suite has **56 passing tests**, using isolated transactional persistence and real Sharp image conversion. It covers privacy, rule acceptance, duplicate operations, escalation, invitations, transfer, moderation, reactions, appeals, blocking, playbooks, scoped cursors, media encryption/revocation and account-inbox events without legacy activation.
 
 Lint, TypeScript and Next production build pass. Account (30), notification (10), platform (12) and PWA (5) regression tests pass. The build also executes the existing learning-credential, intelligence, Workspace and personal-plan prebuild checks.
 
@@ -64,9 +64,9 @@ Live visual files include desktop and mobile screenshots of the actual applicati
 - Discovery is indexed, accent-normalized first-word prefix search, not a semantic or multi-word full-text search engine.
 - Aggregated conversations and upcoming sessions consider up to eight active communities from the first membership page; every community retains its own cursor-paginated archive. Filters operate on the loaded contributions.
 - Experiences and guides use structured context fields plus safe plain text; there is no rich-document editor or poll UI.
-- No provider-backed AI, translation, email delivery, browser push or scheduled reminder service is configured. No such capability is simulated or advertised as operational.
+- No provider-backed AI, translation, email delivery, browser push or event-reminder service is configured. No such capability is simulated or advertised as operational.
 - Real mobile OS virtual keyboards, assistive technologies and a complete accessibility certification require device testing. Browser viewport/focus/zoom checks are recorded with their actual limits.
-- Removed post/reply bodies are cleared and subsequent file access is denied. Audit, ownership history and encrypted orphan media are retained. Automated retention, comprehensive account-erasure orchestration, bulk email and advanced reputation remain operational follow-up work; this release does not claim the entire original ecosystem brief is finished.
+- Removed post/reply bodies are cleared immediately. Durable community erasure and retention are implemented below. Full cross-product account erasure, bulk email and advanced reputation remain outside this community cleanup scope.
 
 ## Functional references
 
@@ -79,3 +79,20 @@ Public primary documentation informed access separation, role hierarchy, moderat
 - InterNations: https://support.internations.org/hc/en-us/articles/4402779148177-How-can-I-find-InterNations-Global-Groups-and-Events
 
 Deployment outcome, final commit and verified domain are reported in the delivery message and pull request #82.
+
+
+## Community privacy and lifecycle completion
+
+Community Preferences now includes a server-confirmed removal flow with typed confirmation, ownership checks, actual progress and retry status. It removes community publications, replies, media, memberships, requests, RSVP, saved items, preferences and personal community notifications. Other members’ knowledge, TGPI accounts, billing, courses and certificates are preserved. Accepted-answer pointers, reaction/attendance/member counters are updated transactionally. Owned communities require transfer or archiving first; deleted Clerk owners are archived automatically. Global administrators can offer an archived orphan’s ownership to an active member, whose acceptance remains mandatory.
+
+Removal is a durable cursor-based job, not a browser task. It blocks mutations and authored-content/media retrieval immediately, checkpoints each batch, leases workers and retries storage failures. Creation quotas and participation bans survive in pseudonymous security records. Audit/report identities are pseudonymized; pending moderation evidence is retained. The HMAC privacy identifier is derived from the existing community media key (legacy fallback: service-account key); preserve this key together with encrypted media. Key rotation requires migration of privacy jobs, restrictions, trust and identity-check identifiers.
+
+The authenticated `/api/cron/community-maintenance` runs every five minutes in production, using a sensitive `CRON_SECRET`. It processes pending removals and bounded retention scans, retaining a durable cursor across invocations. `/api/community/operations` and the existing TGPI moderation console expose actual runs, failures and manual recovery batches to server-verified global administrators only. A Clerk `user.deleted` webhook queues cleanup when configured. Production currently lacks a webhook signing secret; the scheduled scan therefore also verifies member identities against Clerk, caching successful checks for one day. A Clerk 404 queues removal; outages never trigger deletion. Discovery of a deleted identity depends on the bounded scan reaching that membership and is not a promise of instant cleanup after account deletion.
+
+Retention removes unattached/replaced images after 24 hours, removed threads/replies and descendants after 30 days, expired invites after 30 days, inactive drafts after 30 days, closed reports/audit/activity after 90 days, and completed privacy receipts after 90 days. Attached media, unresolved reports and active participation restrictions are preserved. These are application-managed batches, not a database TTL that bypasses authorization or consistency.
+
+New files: `lifecycle.server.ts`, `privacy.server.ts`, privacy/operations/cron route handlers, `CommunityPrivacy.tsx`, `CommunityOperations.tsx` and lifecycle/service/API tests. Existing Firestore REST transactions now support delete writes and child-collection discovery. The existing Clerk webhook, community service, protected assets, preferences and moderation console are extended; no parallel database or identity system is introduced.
+
+Validation includes 56 community/service/lifecycle/API tests: concurrent workers, durable retries, identity-service outages, owner protection/recovery, pseudonymous bans, typed confirmation, origin/role checks, scheduler authentication and production gating. Account (30), notification (10), platform (12) and PWA (5) regressions, lint, TypeScript and clean Next production build pass. The first local build encountered a stale Turbopack persistence directory; a clean generated cache resolved it without changing application configuration.
+
+Live follow-up validation: `evidence/lifecycle-preview-checks.json` records 12 passing checks with two real synthetic Clerk identities, the actual Preview APIs and Firestore. Removal completed through the maintenance service; encrypted images became inaccessible immediately, other members’ content survived, and reply/accepted-answer/reaction/member counters were reconciled. Desktop, 390 px mobile and 768 px tablet screenshots are `lifecycle-desktop.webp`, `lifecycle-mobile.webp` and `lifecycle-tablet.webp`. Keyboard focus and 200% CSS/browser zoom checks passed without horizontal overflow. Physical mobile keyboards and assistive-technology certification remain unverified. Fixture cleanup is recorded separately in `lifecycle-preview-cleanup.json`; no temporary QA route is included in the final release.

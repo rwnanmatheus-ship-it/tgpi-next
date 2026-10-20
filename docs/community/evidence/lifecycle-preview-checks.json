@@ -1,0 +1,23 @@
+{
+  "origin": "https://tgpi-next-8i7u5li6w-rwnanmatheus-ship-its-projects.vercel.app",
+  "commit": "9f80b53cfaa0a88c54e50c4ed058c79ad93cb328",
+  "checkedAt": "2026-10-20T15:09:40.797Z",
+  "synthetic": true,
+  "checks": [
+    "Two real Clerk test identities authenticated",
+    "Real transactional posts, reply, accepted answer, save, reaction and encrypted upload persist",
+    "Ordinary members cannot inspect maintenance operations",
+    "Owner erasure requires transfer or archive",
+    "Desktop and mobile privacy controls load, focus by keyboard, and avoid horizontal overflow",
+    "Tablet and 200% browser zoom preserve page width",
+    "Typed confirmation enforced by server",
+    "Member removal queues a durable job",
+    "Authored content and encrypted image stop being readable immediately",
+    "Scheduled worker service completes resumable erasure in the real datastore",
+    "Erasure removes participation, replies, accepted answer, reactions, saved content and media while preserving others’ posts",
+    "Administrator observes actual maintenance state and configured scheduler"
+  ],
+  "limits": [
+    "Browser viewport and focus checks do not emulate an actual mobile OS keyboard."
+  ]
+}

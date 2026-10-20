@@ -78,7 +78,8 @@ export default function CommunityPrivacy() {
       <p className={s.notice}>
         Ownership must be transferred or the community archived first. Removal
         is irreversible once processing starts. Security decisions are
-        pseudonymized; blocks and participation restrictions remain effective.
+        pseudonymized; other members’ blocks and participation restrictions
+        remain effective.
       </p>
       <details>
         <summary>Retention policy</summary>
