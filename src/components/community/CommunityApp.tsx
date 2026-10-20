@@ -104,7 +104,7 @@ export default function CommunityApp({
     if (isLoaded) {
       setDetail(null);
       setCards([]);
-      setSaved([]);
+      setSaved([]);setFeed([]);
       setNext(null);
       void load();
     }
@@ -368,6 +368,7 @@ export default function CommunityApp({
                         {c.destination} · {c.language}
                       </span>
                     </div>
+                    {c.journey&&<p className={s.badge}>Journey Circle · {c.journey}</p>}{c.courseId&&<p><Link href={`/courses/${c.courseId}`}>Open connected TGPI course →</Link></p>}
                     {c.archived && (
                       <p className={s.status}>This community is archived.</p>
                     )}

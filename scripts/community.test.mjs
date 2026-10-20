@@ -77,6 +77,7 @@ globalThis.__communityTest = {
 const featuresUrl=dataUrl(compile(fs.readFileSync("src/lib/community/features.ts","utf8").replace(/from ["']\.\/model["']/,`from '${modelUrl}'`)));
 const source = fs
   .readFileSync("src/lib/community/store.server.ts", "utf8")
+  .replace(/import \{getCourse\} from ["']@\/data\/courses["'];/,"const getCourse=id=>id===\"global-english-2026\"?{id}:null;")
   .replace(/import ["']server-only["'];?/, "")
   .replace(
     /import\s*\{\s*createFirestoreUpdateWrite[\s\S]*?from ["']@\/lib\/firestore-admin-rest.server["'];/,

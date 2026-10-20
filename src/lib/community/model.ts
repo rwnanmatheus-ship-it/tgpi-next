@@ -31,6 +31,7 @@ export type Community = {
   transferTo: string;
   createdAt: string;
   updatedAt: string;
+  journey?:string;
   avatarId?:string;coverId?:string;
   postApproval?:boolean;slowModeSeconds?:number;searchIndex?:string[];courseId?:string;
 };

@@ -1,5 +1,6 @@
+import {getCourse} from "@/data/courses";
 import "server-only";
-import {searchTokens,searchQuery,moderatorSettings,attachments,type Playbook,type ParticipationAppeal,type CommunityAsset} from "./features";
+import {searchTokens,searchQuery,moderatorSettings,attachments,journeyStages,type Playbook,type ParticipationAppeal,type CommunityAsset} from "./features";
 import {resolveMember} from "@/lib/members/identity.server";
 import {
   createCipheriv,
@@ -537,6 +538,7 @@ export async function mutate(actor: Actor, input: Record<string, unknown>) {
           destination: text(input.destination, 100),
           language: text(input.language, 100),
           theme: text(input.theme, 100),
+          journey:text(input.journey,100),courseId:text(input.courseId,100),
           rules: text(input.rules, 5000),
           entryQuestion: text(input.entryQuestion, 500),
           welcome: text(input.welcome, 1000),
@@ -559,7 +561,9 @@ export async function mutate(actor: Actor, input: Record<string, unknown>) {
             "Community creation limit reached. Contact TGPI support.",
             429,
           );
+        const journey=text(input.journey,100),courseId=text(input.courseId,100);if(journey&&!journeyStages.includes(journey as typeof journeyStages[number]))throw new CommunityError("Choose a valid journey stage.");if(courseId&&!getCourse(courseId))throw new CommunityError("Choose an available TGPI course.");
         const community: Community = {
+          journey,courseId,
           id,
           name: text(input.name, 90, true),
           description: text(input.description, 240, true),
@@ -759,7 +763,7 @@ export async function mutate(actor: Actor, input: Record<string, unknown>) {
         audit(iid);
       } else if (action === "post") {
         participate();
-        if(c.slowModeSeconds&&m?.lastPublishedAt&&Date.now()-Date.parse(m.lastPublishedAt)<c.slowModeSeconds*1000)throw new CommunityError("Slow mode is active. Wait before your next publication.",429);
+
         if (
           !["discussion", "question", "experience", "guide"].includes(
             String(input.kind),
@@ -774,6 +778,7 @@ export async function mutate(actor: Actor, input: Record<string, unknown>) {
             throw new CommunityError("Publication ID unavailable.", 409);
           return { result: { id }, writes: [] };
         }
+        if(c.slowModeSeconds&&m?.lastPublishedAt&&Date.now()-Date.parse(m.lastPublishedAt)<c.slowModeSeconds*1000)throw new CommunityError("Slow mode is active. Wait before your next publication.",429);
         const images=attachments(input.attachments);if(images.length){const records=await getDocuments<CommunityAsset>(images.map(x=>`${path}/assets/${x.id}`));if(images.some(x=>{const a=records.get(`${path}/assets/${x.id}`)?.data;return !a||a.owner!==uid||a.kind!=="post"||a.post!==pid;}))throw new CommunityError("Choose images uploaded for this publication.");}
         put(postPath, {
           attachments:images,
@@ -812,7 +817,7 @@ export async function mutate(actor: Actor, input: Record<string, unknown>) {
           "report-comment",
         ].includes(action)
       ) {
-        if (!canRead(c, m))
+        if (!canRead(c, m)&&!actor.admin)
           throw new CommunityError("Membership required.", 403);
         const pid = identifier(input.post),
           postPath = pp(id, pid),

@@ -1,3 +1,4 @@
+import {courses} from "@/data/courses";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { CommunityError } from "@/lib/community/model";
@@ -44,7 +45,7 @@ export async function GET(request: Request) {
       u = new URL(request.url),
       id = u.searchParams.get("community"),
       after = u.searchParams.get("after") || "";
-    const result = u.searchParams.has("blocks") ? await blocks(uid,after) : u.searchParams.has("feed") ? await personalFeed(uid,after) : u.searchParams.has("global-reports") ? await globalReports(uid,(await currentUser())?.privateMetadata.role==="admin",after) : u.searchParams.has("preferences")
+    const result = u.searchParams.has("catalog") ? {courses:courses.map(c=>({id:c.id,title:c.title}))} : u.searchParams.has("blocks") ? await blocks(uid,after) : u.searchParams.has("feed") ? await personalFeed(uid,after) : u.searchParams.has("global-reports") ? await globalReports(uid,(await currentUser())?.privateMetadata.role==="admin",after) : u.searchParams.has("preferences")
       ? await preferences(uid)
       : u.searchParams.has("mine")
         ? await mine(uid, after)
