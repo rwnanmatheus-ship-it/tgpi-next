@@ -5,3 +5,15 @@
 @media(max-width:1100px){.layout{grid-template-columns:minmax(0,1fr)}.aside{grid-template-columns:repeat(2,minmax(0,1fr))}.header{align-items:flex-start}.header>.actions{max-width:300px}.hero{grid-template-columns:minmax(0,1fr) 190px}.next{align-items:flex-start}}
 @media(max-width:767px){.hero{grid-template-columns:minmax(0,1fr);padding:23px}.heroContext{display:none}.hero:after{background:linear-gradient(90deg,#06111bf0,#07131cc4)}.header{flex-direction:column;gap:16px}.header>.actions{max-width:none}.stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.stats>a{padding:15px}.stats strong{font-size:28px}.aside{grid-template-columns:minmax(0,1fr)}.next{flex-direction:column}.next .actions{max-width:none}.panel{padding:19px}.panel h2{font-size:22px}.localNav{gap:6px}.localNav a{padding:9px 12px;font-size:12px}.resourceGrid,.journey{grid-template-columns:minmax(0,1fr)}.search{grid-template-columns:minmax(0,1fr)}.heroContent .actions{align-items:stretch;flex-direction:column}.identityLine{margin-bottom:16px}.workspace :is(button,.quiet,.primary){min-height:44px}}
 @media(prefers-reduced-motion:reduce){.workspace *{animation:none!important;transition:none!important;scroll-behavior:auto!important}.workspace a:hover{transform:none!important}}
+/* Keep controls and metrics readable at narrow effective widths, including zoom. */
+.workspace{container-type:inline-size}
+.workspace :is(strong,small,span,button,label,legend){overflow-wrap:anywhere}
+.header>.actions{width:100%;min-width:0}
+.actions{max-width:100%}
+.progress>span,.resume>span:last-child{flex-shrink:0}
+@container(max-width:300px){.stats{grid-template-columns:minmax(0,1fr)}.header>.actions{flex-direction:column;align-items:stretch}.header>.actions>*{max-width:100%}.heroContent .primary{flex-wrap:wrap}.planSummary{grid-template-columns:minmax(0,1fr)}}
+.header>.actions{width:auto;flex:0 1 440px;max-width:100%}
+@media(max-width:767px){.header>.actions{width:100%;flex:none}}
+.header>.actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+.header>.actions>:first-child{grid-column:1/-1;width:100%;max-width:none}
+@container(max-width:300px){.header>.actions{grid-template-columns:minmax(0,1fr)}}

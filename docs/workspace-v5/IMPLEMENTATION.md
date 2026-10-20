@@ -48,12 +48,12 @@ Optional personal tasks, decision-board stages and module reordering were not ad
 
 - `npm run typecheck`: PASS.
 - ESLint for every changed TS/TSX application file: PASS.
-- `npm run test:workspace`: 17 PASS, 0 FAIL (domain, API-handler mocks, archive transaction mocks and existing workspace checks).
-- `npm run prebuild`: 108 PASS, 0 FAIL across learning/credentials, intelligence, workspace and personal plan.
+- `npm run test:workspace`: 18 PASS, 0 FAIL (domain, API-handler mocks, archive transaction mocks and existing workspace checks).
+- `npm run prebuild`: 109 PASS, 0 FAIL across learning/credentials, intelligence, workspace and personal plan.
 - `next build --webpack`: PASS before final history integration; final verification recorded in VALIDATION.md.
 - Standard Turbopack build was blocked by the external node_modules symlink used by this runtime. Webpack resolves the same dependencies successfully. A pre-existing viem/ox dynamic dependency warning remains outside Workspace.
 - Authenticated end-to-end login, real Firestore writes/pagination, two-account isolation, paid access, course mutation and certificate issuance have NOT been executed. Unit handler/transaction tests do not establish live service correctness.
-- Browser QA at 360/390/768/1024/1440/1920 and performance metrics have NOT been executed: Chromium was absent and its download returned an invalid archive. CSS breakpoints cover these ranges, but this is implementation, not visual validation.
+- Chromium component-fixture QA executed at 360/390/768/1024/1440/1920, 200% CSS zoom, reduced motion and keyboard focus. No horizontal document overflow, broken images or JavaScript page errors were observed. Search, empty results, history filtering/pagination, preference persistence, restore defaults, dismissals and failed-save rollback passed against isolated synthetic test storage. Evidence is in evidence/browser-qa.json. This is not live Clerk/Firestore E2E.
 - No Lighthouse, Core Web Vitals or WCAG conformance score is claimed.
 
 ## Artwork
@@ -77,4 +77,4 @@ Prompt: “Sophisticated photorealistic architectural global education observato
 
 ## Release gate
 
-Verify configured Firestore deny rules and environment; run the authenticated flows and six target viewport checks on a connected preview before production promotion. Authorization is not the blocker: this environment lacks live test credentials and browser execution. No production-ready claim is made.
+Production release is explicitly authorized. Build, domain tests, handler/transaction tests and component-browser fixtures passed. Preview private history rejects unsigned requests with HTTP 401. Real authenticated Clerk/Firestore journeys and deployed deny rules remain unexecuted/uninspected because no disposable authenticated account or Firebase administrator session is available. No protection settings or real member data were changed for testing. Release monitoring and final deployment status are recorded in VALIDATION.md.

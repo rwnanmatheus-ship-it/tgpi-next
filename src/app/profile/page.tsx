@@ -103,7 +103,7 @@ export default async function ProfilePage({
       rank={rank}
       userId={session.userId}
       resources={buildWorkspaceResources(activation, courses, getAllCountries())}
-      history={historyPage.available ? historyPage.events : workspaceHistory(activation)}
+      history={workspaceHistory({ ...activation, activities: [...historyPage.events, ...activation.activities] })}
       historyCursor={historyPage.cursor}
       historyCoverage={historyPage.coverageStartedAt}
       historyAvailable={historyPage.available}

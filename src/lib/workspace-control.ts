@@ -50,3 +50,16 @@ export function buildWorkspaceResources(progress: TgpiActivationProgress, catalo
 export function workspaceHistory(progress: TgpiActivationProgress) {
   return [...new Map(progress.activities.filter(a => a.href.startsWith('/') && !a.href.startsWith('//') && Number.isFinite(Date.parse(a.occurredAt))).map(a => [a.id, a])).values()].sort((a,b) => b.occurredAt.localeCompare(a.occurredAt));
 }
+
+export function parseWorkspaceHistoryPage(value: unknown): { events: TgpiActivationProgress['activities']; cursor: string | null } | null {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+  const page = value as Record<string, unknown>;
+  if (!Array.isArray(page.events) || page.events.length > 12 || !(page.cursor === null || typeof page.cursor === 'string' && page.cursor.length <= 4096)) return null;
+  const types = ['comparison', 'cost', 'course', 'documents', 'saved_country'];
+  if (!page.events.every(raw => {
+    if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return false;
+    const event = raw as Record<string, unknown>;
+    return typeof event.id === 'string' && event.id.length > 0 && event.id.length <= 160 && typeof event.title === 'string' && event.title.length <= 120 && typeof event.href === 'string' && event.href.startsWith('/') && !event.href.startsWith('//') && event.href.length <= 180 && typeof event.type === 'string' && types.includes(event.type) && typeof event.occurredAt === 'string' && Number.isFinite(Date.parse(event.occurredAt));
+  })) return null;
+  return { events: page.events as TgpiActivationProgress['activities'], cursor: page.cursor as string | null };
+}

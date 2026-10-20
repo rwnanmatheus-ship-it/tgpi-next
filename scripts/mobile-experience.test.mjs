@@ -60,9 +60,9 @@ test("workspace framing prevents horizontal clipping and exposes notifications",
   const workspace=readFileSync(new URL("../src/components/profile/GlobalWorkspaceOS.tsx",import.meta.url),"utf8");
   const settings=readFileSync(new URL("../src/components/profile/TgpiAccountCenter.tsx",import.meta.url),"utf8");
   const frame=readFileSync(new URL("../src/app/navigation-system.css",import.meta.url),"utf8");
-  const layout=readFileSync(new URL("../src/components/profile/GlobalWorkspaceOS.module.css",import.meta.url),"utf8");
+  const layout=readFileSync(new URL("../src/components/profile/WorkspaceCommandCenter.module.css",import.meta.url),"utf8");
   assert.match(frame,/#main-content[\s\S]*?overflow-x: clip/);
-  assert.match(layout,/@container \(min-width: 1350px\)/);
+  assert.match(layout,/@container\(max-width:300px\)/);
   assert.doesNotMatch(workspace,/xl:grid-cols-\[minmax\(0,1fr\)_370px\]/);
   assert.match(workspace,/href="\/notifications"/);
   assert.match(settings,/key: "notifications"[\s\S]*?sticker: "🔔"/);
@@ -74,15 +74,17 @@ test("intentional mobile rails keep readable card widths",()=>{
   assert.match(css,/\.tgpi-smart-rail > \* \{[\s\S]*?flex-shrink: 0;[\s\S]*?scroll-snap-align: start;/);
   assert.match(css,/\.tgpi-journey-rail > \.tgpi-journey-card \{[\s\S]*?flex: 0 0 clamp\(15\.5rem, 78vw, 19rem\);/);
   // The current Workspace uses a wrapping grid rather than a horizontal rail.
-  const layout=readFileSync(new URL("../src/components/profile/GlobalWorkspaceOS.module.css",import.meta.url),"utf8");
+  const layout=readFileSync(new URL("../src/components/profile/WorkspaceCommandCenter.module.css",import.meta.url),"utf8");
   assert.match(workspace,/styles\.journey/);
-  assert.match(layout,/\.journey \{ grid-template-columns: repeat\(2,minmax\(0,1fr\)\)/);
+  assert.match(layout,/\.journey\{display:grid;grid-template-columns:repeat\(2,minmax\(0,1fr\)\)/);
 });
 test("compact workspace and settings do not compete with global navigation",()=>{
   const css=readFileSync(new URL("../src/app/navigation-system.css",import.meta.url),"utf8");
   const workspace=readFileSync(new URL("../src/components/profile/GlobalWorkspaceOS.tsx",import.meta.url),"utf8");
   const settings=readFileSync(new URL("../src/components/profile/TgpiAccountCenter.tsx",import.meta.url),"utf8");
-  assert.match(workspace,/<aside className="hidden[\s\S]*?lg:block/);
+  const layout=readFileSync(new URL("../src/components/profile/WorkspaceCommandCenter.module.css",import.meta.url),"utf8");
+  assert.doesNotMatch(layout,/position:\s*(fixed|sticky)/);
+  assert.match(workspace,/aria-label="Workspace sections"/);
   assert.match(settings,/tgpi-account-tabs/);
   assert.match(settings,/tgpi-account-save-bar/);
   assert.match(css,/\.tgpi-account-tabs > \.tgpi-account-tab \{[\s\S]*?min-width: max-content;[\s\S]*?white-space: nowrap;/);
