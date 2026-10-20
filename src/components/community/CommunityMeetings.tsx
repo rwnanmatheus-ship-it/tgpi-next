@@ -17,6 +17,7 @@ export default function CommunityMeetings({
   busy: boolean;
 }) {
   const [items, setItems] = useState<Session[]>([]),
+    [loading, setLoading] = useState(true),
     [error, setError] = useState("");
   useEffect(() => {
     let live = true;
@@ -26,6 +27,9 @@ export default function CommunityMeetings({
       })
       .catch((e) => {
         if (live) setError(e.message);
+      })
+      .finally(() => {
+        if (live) setLoading(false);
       });
     return () => {
       live = false;
@@ -38,6 +42,7 @@ export default function CommunityMeetings({
         Upcoming exchanges from up to eight of your active communities. Times
         are shown in your current time zone.
       </p>
+      {loading && <p role="status">Loading…</p>}
       {error && (
         <p className={s.error} role="alert">
           {error}
@@ -92,7 +97,7 @@ export default function CommunityMeetings({
           )}
         </article>
       ))}
-      {!items.length && !error && (
+      {!loading && !items.length && !error && (
         <p>
           No upcoming sessions in these communities. Events appear here when
           their organizers schedule them.

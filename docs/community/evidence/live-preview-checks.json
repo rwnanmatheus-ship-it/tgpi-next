@@ -1,0 +1,33 @@
+{
+  "origin": "https://tgpi-next-9cxhniu0r-rwnanmatheus-ship-its-projects.vercel.app",
+  "checkedAt": "2026-10-20T10:05:12.948Z",
+  "synthetic": true,
+  "checks": [
+    "Two real Clerk test identities authenticated",
+    "Public community persisted",
+    "Rules required and concurrent join idempotent",
+    "Pending request cannot read private post or preview",
+    "Privilege escalation denied by server",
+    "Cancel, refuse, request again and approve persist",
+    "Reply, edit, accepted answer and saved content persist",
+    "Helpful reaction idempotent",
+    "Report queue and audited decision persist",
+    "Playbook keeps authorized source and author",
+    "Real protected image upload and member retrieval",
+    "Live desktop and mobile layouts have no horizontal overflow",
+    "Revocation removes posts, saved content and image access",
+    "Appeal and restoration persist",
+    "Hidden metadata protected and revoked/valid invitations enforced",
+    "Ownership transfer requires recipient and last owner cannot leave",
+    "Community update reaches existing account inbox without legacy storage activation",
+    "Session creation, concurrent RSVP and cross-community event integration persist",
+    "Expired invitation is rejected against real persisted expiry",
+    "Global moderation checks trusted server role and rejects ordinary members",
+    "Composer remains usable with focused text in a compact mobile viewport",
+    "Real global chrome and community pass four widths, 200 percent CSS zoom and keyboard focus"
+  ],
+  "limitations": [
+    "Viewport-height simulation is not a real mobile OS keyboard test.",
+    "Some initial cases ran on the preceding preview commit; final adapter and visuals ran on this preview."
+  ]
+}

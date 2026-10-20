@@ -1,12 +1,21 @@
-# Changed files
+# Community release files
+
+Compared with the published Workspace baseline `e668637`. The temporary Preview QA route is excluded from production.
 
 - `AGENTS.md`
 - `CLAUDE.md`
+- `docs/community/FILES.md`
 - `docs/community/IMAGERY.md`
 - `docs/community/REVIEW.md`
+- `docs/community/evidence/checks-release.json`
 - `docs/community/evidence/checks.json`
 - `docs/community/evidence/desktop-discussion.webp`
 - `docs/community/evidence/desktop.webp`
+- `docs/community/evidence/live-preview-checks.json`
+- `docs/community/evidence/live-preview-cleanup.json`
+- `docs/community/evidence/live-preview-desktop.webp`
+- `docs/community/evidence/live-preview-mobile-composer.webp`
+- `docs/community/evidence/live-preview-mobile.webp`
 - `docs/community/evidence/mobile-composer.webp`
 - `docs/community/evidence/mobile-create.webp`
 - `docs/community/evidence/mobile-restricted.webp`
@@ -14,6 +23,7 @@
 - `docs/community/evidence/small-mobile.webp`
 - `docs/community/evidence/tablet.webp`
 - `docs/community/evidence/visual-qa.json`
+- `package-lock.json`
 - `package.json`
 - `public/images/community/global-commons.webp`
 - `public/images/community/life-across-borders.webp`
@@ -21,8 +31,13 @@
 - `public/images/community/shared-knowledge.webp`
 - `public/sw.js`
 - `scripts/community.test.mjs`
+- `scripts/workspace-browser-qa.cjs`
+- `src/app/api/community/assets/[community]/[asset]/route.ts`
+- `src/app/api/community/assets/route.ts`
 - `src/app/api/community/route.ts`
+- `src/app/api/community/status/route.ts`
 - `src/app/community/[slug]/page.tsx`
+- `src/app/community/moderation/page.tsx`
 - `src/app/community/page.tsx`
 - `src/app/countries/[slug]/page.tsx`
 - `src/app/country-fit/page.tsx`
@@ -30,14 +45,21 @@
 - `src/components/community/CommunityApp.tsx`
 - `src/components/community/CommunityConnections.tsx`
 - `src/components/community/CommunityCreateFlow.tsx`
+- `src/components/community/CommunityImageUpload.tsx`
 - `src/components/community/CommunityManagement.tsx`
+- `src/components/community/CommunityMeetings.tsx`
+- `src/components/community/CommunityPlaybooks.tsx`
 - `src/components/community/CommunityPost.tsx`
 - `src/components/community/CommunityPreferences.tsx`
 - `src/components/community/GlobalSessions.tsx`
+- `src/components/community/ModerationConsole.tsx`
 - `src/components/community/PostComposer.tsx`
 - `src/components/community/api.ts`
 - `src/components/profile/GlobalWorkspaceOS.tsx`
+- `src/lib/community/assets.server.ts`
+- `src/lib/community/features.ts`
+- `src/lib/community/google.server.ts`
 - `src/lib/community/model.ts`
 - `src/lib/community/store.server.ts`
 - `src/lib/firestore-admin-rest.server.ts`
-- `docs/community/FILES.md`
+- `src/lib/notifications/reconcile.server.ts`

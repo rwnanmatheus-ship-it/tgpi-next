@@ -115,7 +115,8 @@ export async function uploadCommunityAsset(
   try {
     await transaction(async ({ getDocuments }) => {
       const docs = await getDocuments<
-          Community & Membership & { time: number; bytes: number }
+          Community &
+            Membership & { time: number; bytes: number; count?: number }
         >([cp, mp, `${root}/people/${uid}/uploadLimits/current`]),
         c = docs.get(cp)?.data,
         m = docs.get(mp)?.data,
@@ -123,10 +124,10 @@ export async function uploadCommunityAsset(
       const limit =
         previous && Date.now() - previous.time < 86400000
           ? previous
-          : { time: Date.now(), bytes: 0 };
+          : { time: Date.now(), bytes: 0, count: 0 };
       if (!c || !active(m) || c.archived || (kind !== "post" && !manages(m)))
         throw new CommunityError("Image upload permission changed.", 403);
-      if (limit.bytes + bytes.length > 20_000_000)
+      if ((limit.count || 0) >= 40 || limit.bytes + bytes.length > 20_000_000)
         throw new CommunityError("Daily image allowance reached.", 429);
       const asset: CommunityAsset & { ciphertext?: string } = {
         ...(process.env.TGPI_COMMUNITY_STORAGE_BUCKET
@@ -148,6 +149,7 @@ export async function uploadCommunityAsset(
           write(`${root}/people/${uid}/uploadLimits/current`, {
             time: limit.time,
             bytes: limit.bytes + bytes.length,
+            count: (limit.count || 0) + 1,
           }),
           ...(kind === "avatar"
             ? [

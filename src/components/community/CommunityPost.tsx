@@ -165,6 +165,16 @@ export default function CommunityPost({
         <Link
           className={s.secondary}
           href={`/community/${p.community}?post=${p.id}`}
+          onClick={() => {
+            try {
+              sessionStorage.setItem(
+                "tgpi.community.scroll:" +
+                  window.location.pathname +
+                  window.location.search,
+                String(window.scrollY),
+              );
+            } catch {}
+          }}
         >
           Discussion link
         </Link>

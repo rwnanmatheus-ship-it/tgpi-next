@@ -132,6 +132,22 @@ export default function CommunityApp({
       void load();
     }
   }, [load, isLoaded, uid]);
+  useEffect(() => {
+    if (loading || post) return;
+    try {
+      const key =
+          "tgpi.community.scroll:" +
+          window.location.pathname +
+          window.location.search,
+        value = sessionStorage.getItem(key);
+      if (value !== null) {
+        sessionStorage.removeItem(key);
+        const y = Number(value);
+        if (Number.isFinite(y) && y >= 0)
+          requestAnimationFrame(() => window.scrollTo(0, y));
+      }
+    } catch {}
+  }, [loading, post, id, view]);
   async function action(body: Record<string, unknown>) {
     if (busy) return false;
     setBusy(true);
@@ -279,11 +295,11 @@ export default function CommunityApp({
             </p>
           )}
           {creating ? (
-            <CreateFlow close={() => setCreating(false)} />
+            <CreateFlow key={uid} close={() => setCreating(false)} />
           ) : (
             <>
               {!id && view === "preferences" && user && (
-                <Preferences action={action} busy={busy} />
+                <Preferences key={uid} action={action} busy={busy} />
               )}
               {!id &&
                 ![
@@ -382,7 +398,7 @@ export default function CommunityApp({
                   </>
                 )}
               {!id && view === "meetings" && (
-                <Meetings action={action} busy={busy} />
+                <Meetings key={uid} action={action} busy={busy} />
               )}
               {!id && ["feed", "questions", "atlas"].includes(view) && (
                 <section>

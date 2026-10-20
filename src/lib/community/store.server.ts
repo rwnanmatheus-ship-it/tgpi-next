@@ -204,6 +204,7 @@ const publicCard = (c: Community) => ({
   owner: "",
   transferTo: "",
   welcome: "",
+  about: c.visibility === "public" ? c.about : "",
 });
 async function allowedPost(
   p: Post,
@@ -1260,6 +1261,10 @@ export async function mutate(actor: Actor, input: Record<string, unknown>) {
               throw new CommunityError("Only the author can edit.", 403);
             put(postPath, {
               ...p,
+              state:
+                c.postApproval && !manages(m)
+                  ? "pending"
+                  : p.state || "published",
               title: text(input.title, 180, true),
               body: text(input.body, 16000, true),
               updatedAt: now,

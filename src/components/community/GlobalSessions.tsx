@@ -20,6 +20,7 @@ export default function GlobalSessions({
       (GlobalSession & { attending: boolean })[]
     >([]),
     [next, setNext] = useState<string | null>(null),
+    [loading, setLoading] = useState(true),
     [error, setError] = useState(""),
     [open, setOpen] = useState(false),
     [title, setTitle] = useState(""),
@@ -39,6 +40,8 @@ export default function GlobalSessions({
       setNext(r.next);
     } catch (e) {
       setError((e as Error).message);
+    } finally {
+      setLoading(false);
     }
   }
   useEffect(() => {
@@ -55,7 +58,10 @@ export default function GlobalSessions({
           {error}
         </p>
       )}
-      {!events.length && !error && <p>No sessions have been scheduled yet.</p>}
+      {loading && <p role="status">Loading sessions…</p>}
+      {!loading && !events.length && !error && (
+        <p>No sessions have been scheduled yet.</p>
+      )}
       {events.map((e) => (
         <article className={s.reply} key={e.id}>
           <h3>{e.title}</h3>

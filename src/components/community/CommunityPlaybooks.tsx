@@ -28,6 +28,7 @@ export default function CommunityPlaybooks({
 }) {
   const [books, setBooks] = useState<Book[]>([]),
     [next, setNext] = useState<string | null>(null),
+    [loading, setLoading] = useState(true),
     [error, setError] = useState(""),
     [title, setTitle] = useState(""),
     [description, setDescription] = useState(""),
@@ -60,6 +61,9 @@ export default function CommunityPlaybooks({
       })
       .catch((e) => {
         if (live) setError(e.message);
+      })
+      .finally(() => {
+        if (live) setLoading(false);
       });
     return () => {
       live = false;
@@ -93,7 +97,7 @@ export default function CommunityPlaybooks({
           {!b.sources.length && <p>No source is currently available to you.</p>}
         </article>
       ))}
-      {!books.length && <p>No playbooks yet.</p>}
+      {!loading && !books.length && <p>No playbooks yet.</p>}
       {next && (
         <button className={s.secondary} onClick={() => void load(next)}>
           Load more playbooks

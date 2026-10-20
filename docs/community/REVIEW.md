@@ -1,88 +1,81 @@
-# TGPI Global Community — implementation review
+# TGPI Global Community — release review
 
-## Status
+## Diagnosis and preserved systems
 
-A substantial first implementation is prepared locally on `feat/tgpi-global-community`, based on `60b51af2d9952ed32eda833a03d42f250c2b4616`. It is **not deployed** and the complete requested ecosystem is **not finished**. Remote branch export was rejected by automatic approval review because the repository is public and explicit permission to publish the new code was not supplied. No alternate export mechanism was used.
+The original `/community` contained fixed room links and illustrative member cards, with no persistent community lifecycle. This release replaces that destination while preserving the legacy room routes. It reuses Clerk, the existing Firestore Admin REST transaction engine, member @ID/profile privacy, global navigation, official crest, visual tokens, courses, Country Fit and notification presentation.
 
-## Diagnosis and reuse
+The published Workspace update at `e668637` was merged and preserved. Community continuity was added to its current layout rather than restoring the older Workspace. AGENTS.md and Next route-handler documentation were reviewed before the release edits. No agents were delegated.
 
-The original `/community` displayed fixed country-room links and three illustrative member cards. It had no community creation, membership or persistent discussion lifecycle. The implementation replaces that page without deleting the legacy rooms system or changing its routes.
+## Product and architecture
 
-Reused: Clerk authentication; existing member @ID resolver and privacy-controlled `/u` → member profile flow; protected Firestore Admin REST transaction engine; notification inbox format; official metal crest; application color/font variables; global header/footer/mobile navigation. Workspace remains `/profile`; `/dashboard` redirects there. Existing Country Fit, learning, credentials and Stripe records are preserved.
-
-No AGENTS.md was present in the baseline checkout. Next generated AGENTS.md/CLAUDE.md during local development; its route-handler guidance was reviewed. No agents were delegated.
-
-## Implemented behavior
-
-- Discovery and bounded cursor pagination; loaded-page text filtering by destination, language and topic. This is not a full-text search engine.
-- Four-step creation, unique identifiers, durable drafts, introductory text, optional entry question/welcome, numbered rules.
-- Public/private/hidden visibility separated from instant/approval/invitation admission. Hidden requires invitation; privacy never checks Premium.
-- Current-rule acceptance, join/cancel/leave, request approval/refusal with reasons, suspensions, bans, restoration, owner-assigned moderators, owner-only promotions, two-party ownership transfer and archive/reopen.
-- Last owner cannot leave; moderators cannot modify owners or other moderators. Ordinary members cannot promote themselves.
-- Hashed random invitation tokens, server expiry, configurable 1–30 days / 1–100 uses, atomic redemption and revocation. Active members retain access after the invitation is consumed or expires.
-- Four text publication formats, contextual destination/period/currency fields, HTTPS sources, author editing, removal, moderator pin flag, chronological cursor pagination, comments, accepted answers, persistent save/unsave and independently authorized direct post links.
-- Post/comment reports, paginated moderator queue and decisions, paginated administrative audit.
-- Global Sessions with timezone-aware presentation, future-date validation, capacity, atomic/idempotent RSVP, cancellation and protected meeting URLs.
-- Explicit interests, optional match explanations, hiding recommendations and muting community inbox notifications. Private Country Fit questionnaire answers are not imported.
-- Workspace community participation/pending-request links and saved-content continuity. Destination dossiers and Country Fit link into community exploration. These are specific integrations, not a claim of complete synchronization across every TGPI module.
-- Essential participation/reply inbox notifications written atomically with the originating transaction, with deduplication and generic privacy-safe wording. No email delivery is claimed.
-- Four new cinematic image assets, generated with the built-in image tool and optimized into WebP. Official crest preserved.
-- Responsive columns, motion reduction, keyboard focus, real error/empty/restricted states, bounded Load more controls, inline text editor and draft preservation after failed submission.
-
-## Data and authorization
-
-All community records are beneath `tgpiLearningUsers/_community`, inheriting the documented existing recursive client-deny rule on `tgpiLearningUsers/{document=**}`. The activation gate reuses `TGPI_LEARNING_SECURITY_RULES_CONFIRMED`; direct browser Firestore access is not introduced. Authoritative reads and writes use the server transaction engine. Current live rules were not independently inspected or deployed.
-
-Collections cover communities, members/rule acceptance/requests, invitations, posts, comments, sessions/RSVP, reports, audit, explicit preferences, drafts, per-person membership references, saved content, operational limits and metric events. Stable IDs and application-server UTC timestamps are used. No membership/content permissions depend on localStorage. Soft-deleted posts/replies have their body cleared; parent-post removal also prevents comment retrieval. Audit and ownership records are retained; automated retention/account-erasure processing remains a separate pending operational requirement.
-
-The API authenticates mutations, verifies same origin, bounds streamed input to 30 KB, validates fields and authorizes operations from current transactional membership. Content is rendered as React text, not HTML. Source/meeting URLs require HTTPS and reject credentials. Community identifiers/cursors cannot inject document paths. Private content is rechecked in post, comment, saved and event reads. Hidden communities are omitted from discovery and unavailable responses are generic. Private projections do not disclose owner/transfer target or welcome content to non-members. Pagination cursors are encrypted with authenticated AES-GCM and bound to their collection scope, preventing hidden identifiers from leaking through discovery cursors. API caching is private/no-store; the service worker explicitly excludes community data. Old in-flight client responses are discarded when a newer identity load occurs.
-
-Queries are parent-scoped and bounded to 25 rows. Chronological posts/comments use createdAt + document name; other collections use stable document-name cursors. No new composite query indexes are intentionally required. Firestore query/index behavior still needs a real project smoke test.
+- Public, private and hidden visibility is independent of immediate, approval or invitation admission. Hidden communities require invitations and never appear in discovery. Privacy never depends on Premium.
+- Four-step creation includes durable server drafts, numbered rules, languages, destinations, an optional Journey Circle stage and a validated connection to an existing TGPI course. Avatar and cover editing is available after creation.
+- Membership, exact rule acceptance, request/cancel/refuse/approve, hashed expiring invitations, revocation, suspensions, bans, appeals, moderator roles, two-party ownership transfer and archiving are enforced transactionally on the server.
+- Experiences, questions, guides and discussions use safe text, contextual destination/period/currency fields and HTTPS sources. Replies, author editing, removal, accepted answers, helpful reactions, saving, direct links and moderation are persistent.
+- Moderators can review publications before release, configure slow mode, curate playbooks with original source links, process reports and review appeals. Global moderation requires the existing trusted Clerk `privateMetadata.role === "admin"` role. Ordinary clients cannot grant it.
+- Blocking affects authenticated post, reply, saved and media reads. Public publications remain public to signed-out visitors. Notifications use generic wording and opaque keys so removed access does not expose private titles, text or hidden community identifiers.
+- Recommendations explain matches against explicitly supplied interests. Users can disable explanations, hide recommendations, mute communities or choose notification preferences. Private Country Fit answers are never imported.
+- Chronological cross-community conversations, unanswered questions, Experience Atlas filtering, community sessions and a consolidated upcoming-session view connect participation to practical next steps.
 
 ## Permission matrix
 
-| Actor | Read public content | Read private content | Write | Moderate | Change roles/transfer |
-|---|---|---|---|---|---|
-| Visitor | Yes | No | No | No | No |
-| Authenticated non-member / applicant | Yes | No | Save/report accessible content; submit/cancel request | No | No |
-| Active member | Yes | Joined communities | Posts, replies, RSVP, own edits | No | No |
-| Moderator | Yes | Joined communities | Member functions | Members below moderator, content, requests, reports, invitations | No |
-| Owner | Yes | Own communities | Member functions | Own community | Assign moderators; offer transfer; recipient must accept |
-| Global TGPI administrator | Existing account role preserved | No new global bypass added | Existing TGPI admin tools | Dedicated global community console pending | No implicit bypass |
+| Actor | Public content | Private content | Contribute | Moderate | Ownership |
+| --- | --- | --- | --- | --- | --- |
+| Visitor | Read | No | No | No | No |
+| Signed-in non-member | Read/save/report accessible content | No | Request admission | No | No |
+| Active member | Read | Joined communities | Posts, replies, RSVP, own edits | Report and block | No |
+| Moderator | Read | Own communities | Member actions | Scoped content, members below moderator, requests, reports, appeals, invitations | No self-promotion |
+| Owner | Read | Own communities | Member actions | Own community, rules, settings | Offer transfer; recipient must accept |
+| Global TGPI administrator | Read | Authorized management endpoints | Existing account role preserved | Global report queue and scoped management actions | No client-controlled role |
 
-Premium is intentionally absent from this matrix.
+The last owner cannot leave. Pending membership never grants private content access. Role changes and sensitive decisions create audit records. Access checks run for direct post links, search results, saved content and image responses, not only in the interface.
 
-## Verification and evidence
+## Persistence and media
 
-The community suite has 35 passing tests. See `evidence/checks.json` for exit codes and `evidence/visual-qa.json` for browser observations. Automated service tests use isolated in-memory persistence and serialized transaction boundaries. They are not Firestore emulator tests, live IAM/rules validation or proof of real Clerk login. Cases cover privacy, escalation attempts, invitations, ownership, rule revisions, moderation, revocation, saves, sessions, preferences, pagination and direct links.
+Community data lives under `tgpiLearningUsers/_community`, within the existing protected Firestore tree. No authoritative content or permissions use localStorage. Application-server UTC timestamps, stable identifiers, slug uniqueness, encrypted scoped cursors, bounded queries, transaction retries and idempotent reactions/joins/invitations handle consistency.
 
-A local full-app browser attempt stopped at **Missing secretKey** from Clerk. Local configuration contains a publishable key but no Clerk server secret or Firebase service credentials. Those external boundaries cannot be reported as passing.
+The live Preview database is Firestore **Standard**, native mode, location `nam5`. Its deployed rules were inspected: all direct client reads and writes are denied. The application uses the existing server service account. No rules were replaced. Production readiness is checked separately; Preview IAM is not proof of production IAM.
 
-The visual evidence uses the actual production community components bundled in a separate temporary QA harness. Next image/link/router and Clerk identity are stubbed only inside that harness; all member/activity data are clearly labeled synthetic. The harness is not an application route and is not shipped. It checks component layout and interaction, not real authentication, production global chrome or live persistence. Typography uses the documented fallback families in the harness.
+Uploads accept still JPEG/PNG/WebP up to 3 MB, reject SVG/animation/oversized dimensions, remove original metadata, and convert to WebP up to 1280 px (512 px for avatars), capped at 350 KB. Files are encrypted with AES-256-GCM and bound to community, purpose and publication. The durable default is the existing protected Firestore database; an explicitly configured GCS bucket can be used instead. Preview bucket provisioning was unavailable, so the release does not depend on a newly provisioned bucket. The media key is stored as a sensitive Vercel variable in Preview and production and must be retained for existing images.
 
-Checked: 320/390/768/1440 px, hidden → invitation admission lock, required rule acceptance, restricted post absence, preserved composer text after simulated 503, keyboard focus, reduced-motion media and 200% CSS zoom. A zoom overflow was found and corrected. This is not a full accessibility certification or a real mobile OS keyboard test.
+Image access rechecks current membership and publication availability on every request, with private/no-store caching. Post images must be attached to their original publication. Uploads have a daily byte/count allowance. Unbound uploads are visible only to their owner or authorized moderators.
 
-## Remaining requested work
+## Integration
 
-Before calling the entire brief complete:
+- Identity: existing Clerk account, @ID resolver and privacy-controlled member profile routes.
+- Workspace: active/pending communities, saved contributions and upcoming-session navigation, preserving the newly published Command Center.
+- Country Fit/destinations: contextual exploration links; only user-supplied community interests drive personalization.
+- Courses: creation validates a real course ID and links to that course. No achievement is shared automatically and no unverified experience badge is invented.
+- Notifications: atomic community events are projected into the **existing account inbox collector**, preserving its read/archive marks and current production storage mode. The legacy Firestore inbox projection is written only where that system is already activated. No production notification-mode migration is performed. Preferences, deduplication, blocking and an hourly cap apply.
+- Events: future-date/time-zone validation, capacity, idempotent RSVP, cancellation and current-access meeting links. Local and original time zones are shown.
 
-- Authenticated staging runs with two real Clerk identities; actual Firestore transactions, rules/index validation and live notification reads.
-- Safe avatar/cover/post-image uploads, protected file serving/revocation and image alt-text workflow. No nonfunctional upload controls are exposed.
-- Full-text/server-side global discovery and unified personalized cross-community feed; richer Journey Circles taxonomy and atlas filters.
-- Reactions, structured mentions, playbook curation with source links and course-study-group/credential consent integration.
-- Dedicated global moderation console, community/member reports, appeals, user blocking, slow mode, pre-publication review, operational retention/account deletion.
-- Complete per-community notification-frequency controls and email-provider delivery; upcoming-RSVP/reply summaries in Workspace.
-- Provider-backed AI summaries, translation, tagging and triage. No AI feature is simulated.
-- Full end-to-end keyboard/mobile virtual-keyboard/slow-network checks in the real authenticated app.
+## Validation and evidence
 
-These missing features are not presented as implemented. Existing services are reused; this review does not claim market superiority or that the ecosystem has been fully delivered.
+The community service suite has **39 passing tests**, using isolated transactional persistence and real Sharp image conversion. It covers privacy, rule acceptance, duplicate operations, escalation, invitations, transfer, moderation, reactions, appeals, blocking, playbooks, scoped cursors, media encryption/revocation and account-inbox events without legacy activation.
 
-## Reference review
+Lint, TypeScript and Next production build pass. Account (30), notification (10), platform (12) and PWA (5) regression tests pass. The build also executes the existing learning-credential, intelligence, Workspace and personal-plan prebuild checks.
 
-Functional patterns consulted from primary public documentation, without copying branding/assets:
+`evidence/live-preview-checks.json` records authenticated browser/API/Firestore checks with two actual **synthetic Clerk test accounts**. The Preview-only fixture route is removed before production. Test communities and users are cleaned up; they are never presented as real members or shipped to the production database. Earlier `evidence/visual-qa.json` uses a separately labeled component harness and must not be confused with these live Preview checks.
 
-- Circle: https://help.circle.so/p/basics/spaces/managing-space-access-and-visibility — distinct discovery and content-access concepts.
-- Discord: https://support.discord.com/hc/en-us/articles/214836687-Discord-Roles-and-Permissions — scoped roles and hierarchy.
-- Discourse: https://blog.discourse.org/2018/06/understanding-discourse-trust-levels/ — progressive trust; no automatic scientific expertise badge implemented.
-- Reddit: https://support.reddithelp.com/hc/en-us/articles/15484546290068-Community-settings — public/restricted/private participation patterns.
-- InterNations: https://support.internations.org/hc/en-us/articles/4402779148177-How-can-I-find-InterNations-Global-Groups-and-Events — interest groups and event continuity.
+Live visual files include desktop and mobile screenshots of the actual application, global navigation and clearly labeled test communities. These are evidence of the Preview layout, not a claim that the pictured test activity exists in production.
+
+## Concrete limits and operations
+
+- Discovery is indexed, accent-normalized first-word prefix search, not a semantic or multi-word full-text search engine.
+- Aggregated conversations and upcoming sessions consider up to eight active communities from the first membership page; every community retains its own cursor-paginated archive. Filters operate on the loaded contributions.
+- Experiences and guides use structured context fields plus safe plain text; there is no rich-document editor or poll UI.
+- No provider-backed AI, translation, email delivery, browser push or scheduled reminder service is configured. No such capability is simulated or advertised as operational.
+- Real mobile OS virtual keyboards, assistive technologies and a complete accessibility certification require device testing. Browser viewport/focus/zoom checks are recorded with their actual limits.
+- Removed post/reply bodies are cleared and subsequent file access is denied. Audit, ownership history and encrypted orphan media are retained. Automated retention, comprehensive account-erasure orchestration, bulk email and advanced reputation remain operational follow-up work; this release does not claim the entire original ecosystem brief is finished.
+
+## Functional references
+
+Public primary documentation informed access separation, role hierarchy, moderation and interest/event organization without copying branding, text or assets:
+
+- Circle: https://help.circle.so/p/basics/spaces/managing-space-access-and-visibility
+- Discord: https://support.discord.com/hc/en-us/articles/214836687-Discord-Roles-and-Permissions
+- Discourse: https://blog.discourse.org/2018/06/understanding-discourse-trust-levels/
+- Reddit: https://support.reddithelp.com/hc/en-us/articles/15484546290068-Community-settings
+- InterNations: https://support.internations.org/hc/en-us/articles/4402779148177-How-can-I-find-InterNations-Global-Groups-and-Events
+
+Deployment outcome, final commit and verified domain are reported in the delivery message and pull request #82.
