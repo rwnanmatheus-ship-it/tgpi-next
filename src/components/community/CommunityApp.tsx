@@ -20,6 +20,7 @@ const Composer = dynamic(() => import("./PostComposer"));
 const PostCard = dynamic(() => import("./CommunityPost"));
 const Management = dynamic(() => import("./CommunityManagement"));
 const Preferences = dynamic(() => import("./CommunityPreferences"));
+const Playbooks=dynamic(()=>import("./CommunityPlaybooks"));
 const Sessions = dynamic(() => import("./GlobalSessions"));
 export default function CommunityApp({
   id = "",
@@ -38,6 +39,8 @@ export default function CommunityApp({
     [cards, setCards] = useState<CommunityCard[]>([]),
     [detail, setDetail] = useState<CommunityDetail | null>(null),
     [saved, setSaved] = useState<Post[]>([]),
+    [feed,setFeed]=useState<(Post&{membership:CommunityDetail["membership"];communityName:string})[]>([]),
+    [query,setQuery]=useState(destination),
     [next, setNext] = useState<string | null>(null),
     [error, setError] = useState(""),
     [notice, setNotice] = useState(""),
@@ -70,6 +73,8 @@ export default function CommunityApp({
             cursor && prev ? { ...r, posts: [...prev.posts, ...r.posts] } : r,
           );
           setNext(r.next);
+        } else if (["feed","questions","atlas"].includes(view)) {
+          const r=await api<Page<Post&{membership:CommunityDetail["membership"];communityName:string}>>({feed:"1",...(cursor?{after:cursor}:{})});if(revision!==loadVersion.current)return;setFeed(prev=>cursor?[...prev,...r.items]:r.items);setNext(r.next);
         } else if (view === "saved") {
           const r = await api<Page<Post>>({
             saved: "1",
@@ -80,7 +85,7 @@ export default function CommunityApp({
           setNext(r.next);
         } else {
           const r = await api<Page<CommunityCard>>({
-            ...(["mine", "requests"].includes(view) ? { mine: "1" } : {}),
+            ...(["mine", "requests"].includes(view) ? { mine: "1" } : {q:query}),
             ...(cursor ? { after: cursor } : {}),
           });
           if (revision !== loadVersion.current) return;
@@ -93,7 +98,7 @@ export default function CommunityApp({
         if (revision === loadVersion.current) setLoading(false);
       }
     },
-    [id, token, view, post],
+    [id, token, view, post,query],
   );
   useEffect(() => {
     if (isLoaded) {
@@ -142,15 +147,14 @@ export default function CommunityApp({
     (c) =>
       (view !== "mine" || c.membership?.state === "active") &&
       (view !== "requests" || c.membership?.state === "pending") &&
-      `${c.name} ${c.description} ${c.destination} ${c.theme} ${c.language}`
-        .toLowerCase()
-        .includes(search.toLowerCase()),
+      (view==="explore"||`${c.name} ${c.description} ${c.destination} ${c.theme} ${c.language}`.toLowerCase().includes(search.toLowerCase())),
   );
   return (
     <main className={s.shell}>
       <header className={s.hero}>
         <Image
-          src="/images/community/global-commons.webp"
+          src={c?.coverId?`/api/community/assets/${c.id}/${c.coverId}`:"/images/community/global-commons.webp"}
+          unoptimized={Boolean(c?.coverId)}
           alt="AI-generated editorial illustration of an international learning commons"
           fill
           sizes="(max-width:760px) 100vw, 1200px"
@@ -185,7 +189,7 @@ export default function CommunityApp({
           {id ? (
             <Link href="/community">All communities</Link>
           ) : (
-            ["explore", "mine", "requests", "saved", "preferences"].map((v) => (
+            ["feed", "explore", "mine", "questions", "atlas", "requests", "saved", "preferences"].map((v) => (
               <button
                 aria-current={view === v ? "page" : undefined}
                 key={v}
@@ -196,6 +200,7 @@ export default function CommunityApp({
               >
                 {
                   {
+                    feed:"For you", questions:"Questions that need you", atlas:"Experience Atlas",
                     explore: "Explore",
                     mine: "My communities",
                     requests: "My requests",
@@ -234,11 +239,11 @@ export default function CommunityApp({
               {!id && view === "preferences" && user && (
                 <Preferences action={action} busy={busy} />
               )}
-              {!id && !["saved", "preferences"].includes(view) && (
+              {!id && !["saved", "preferences","feed","questions","atlas"].includes(view) && (
                 <>
-                  <div className={s.tools}>
+                  <form className={s.tools} onSubmit={e=>{e.preventDefault();setQuery(search);}}>
                     <label style={{ flex: 1, margin: 0 }}>
-                      Search loaded communities
+                      Search communities
                       <input
                         type="search"
                         value={search}
@@ -246,11 +251,8 @@ export default function CommunityApp({
                         placeholder="Destination, topic or language"
                       />
                     </label>
-                  </div>
-                  <p className={s.notice}>
-                    Search filters this loaded page. Use Load more to include
-                    more communities.
-                  </p>
+                  <button className={s.secondary}>Search</button></form>
+                  <p className={s.notice}>Search by the first word of a destination, topic or language.</p>
                   <div className={s.grid}>
                     {filtered.map((c) => (
                       <article className={s.card} key={c.id}>
@@ -315,6 +317,7 @@ export default function CommunityApp({
                   )}
                 </>
               )}
+              {!id&&["feed","questions","atlas"].includes(view)&&<section><h2>{view==="questions"?"Questions that need you":view==="atlas"?"Experience Atlas":"Your circles, in chronological order"}</h2><p className={s.notice}>Recent contributions from up to eight active communities on your first membership page. Load more within each community to explore its full archive.</p>{view==="atlas"&&<label>Destination or topic<input value={search} onChange={e=>setSearch(e.target.value)}/></label>}{feed.filter(p=>view==="questions"?p.kind==="question"&&!p.accepted:view==="atlas"?p.kind==="experience"&&`${p.destination} ${p.title} ${p.context}`.toLowerCase().includes(search.toLowerCase()):true).map(p=><section key={`${p.community}-${p.id}`}><Link href={`/community/${p.community}`}>{p.communityName}</Link><PostCard post={p} uid={uid} membership={p.membership} busy={busy} action={body=>action({...body,community:p.community})}/></section>)}{!loading&&!feed.length&&!error&&<div className={s.empty}><h3>Choose your first circle.</h3><p>Join a community to bring its conversations here.</p><button className={s.button} onClick={()=>setView("explore")}>Explore communities</button></div>}</section>}
               {!id && view === "saved" && (
                 <section>
                   <h2>Saved contributions</h2>
@@ -356,6 +359,7 @@ export default function CommunityApp({
               {c && (
                 <>
                   <section className={s.panel}>
+                    {c.avatarId&&<Image src={`/api/community/assets/${c.id}/${c.avatarId}`} alt={`${c.name} avatar`} width={72} height={72} unoptimized/>}
                     <div className={s.meta}>
                       <span className={s.badge}>{c.visibility}</span>
                       <span className={s.badge}>{c.admission}</span>
@@ -378,6 +382,7 @@ export default function CommunityApp({
                         )}
                       </p>
                     )}
+                    {user&&["banned","suspended","declined"].includes(m?.state||"")&&<button className={s.secondary} disabled={busy} onClick={()=>{const body=window.prompt("Explain why this decision should be reviewed");if(body)void action({action:"appeal",body});}}>Appeal participation decision</button>}
                     {joined && c.welcome && (
                       <p className={s.body}>{c.welcome}</p>
                     )}
@@ -460,6 +465,7 @@ export default function CommunityApp({
                         >
                           Mute community notifications
                         </button>
+                        <button className={s.secondary} disabled={busy} onClick={()=>{const reason=window.prompt("Describe the community issue: privacy, spam, fraud, harassment or other");if(reason)void action({action:"report-community",reason});}}>Report community</button>
                         {admin && (
                           <button
                             className={s.secondary}
@@ -530,7 +536,7 @@ export default function CommunityApp({
                     </section>
                   )}
                   {joined && !c.archived && (
-                    <Composer action={action} busy={busy} />
+                    <Composer community={c.id} action={action} busy={busy} />
                   )}
                   {(joined || c.visibility === "public") && (
                     <label>
@@ -593,6 +599,7 @@ export default function CommunityApp({
                       busy={busy}
                     />
                   )}
+                  {(joined||c.visibility==="public")&&<Playbooks community={c.id} posts={detail.posts} manage={admin} action={action} busy={busy}/>}
                   <section className={s.panel} id="community-rules">
                     <h2>About & rules</h2>
                     <p className={s.body}>{c.about}</p>

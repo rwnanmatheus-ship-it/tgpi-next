@@ -1,0 +1,69 @@
+{
+  "fixture": true,
+  "liveClerk": false,
+  "liveFirestore": false,
+  "errors": [],
+  "checks": [
+    {
+      "width": 360,
+      "scrollWidth": 345,
+      "brokenImages": 0,
+      "brokenSources": []
+    },
+    {
+      "width": 390,
+      "scrollWidth": 375,
+      "brokenImages": 0,
+      "brokenSources": []
+    },
+    {
+      "width": 768,
+      "scrollWidth": 753,
+      "brokenImages": 0,
+      "brokenSources": []
+    },
+    {
+      "width": 1024,
+      "scrollWidth": 1009,
+      "brokenImages": 0,
+      "brokenSources": []
+    },
+    {
+      "width": 1440,
+      "scrollWidth": 1425,
+      "brokenImages": 0,
+      "brokenSources": []
+    },
+    {
+      "width": 1920,
+      "scrollWidth": 1905,
+      "brokenImages": 0,
+      "brokenSources": []
+    },
+    {
+      "zoom200": {
+        "width": 390,
+        "scrollWidth": 375,
+        "clientWidth": 390
+      }
+    },
+    {
+      "focus": "SUMMARY",
+      "reducedMotion": true
+    }
+  ],
+  "interactions": [
+    "library incremental disclosure",
+    "search",
+    "empty search",
+    "history filter",
+    "history pagination",
+    "density persistence",
+    "module hide persistence",
+    "restore defaults",
+    "save rollback",
+    "dismiss suggestion",
+    "empty and storage unavailable"
+  ],
+  "writes": 4
+}

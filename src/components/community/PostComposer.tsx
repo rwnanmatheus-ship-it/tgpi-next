@@ -1,15 +1,18 @@
 "use client";
 import { useState } from "react";
 import type { Action } from "./api";
+import ImageUpload from "./CommunityImageUpload";
 import s from "./Community.module.css";
 export default function PostComposer({
   action,
-  busy,
+  busy,community,
 }: {
+  community:string;
   action: Action;
   busy: boolean;
 }) {
-  const [open, setOpen] = useState(false),
+  const [images,setImages]=useState<{id:string;alt:string}[]>([]),
+    [open, setOpen] = useState(false),
     [kind, setKind] = useState("discussion"),
     [title, setTitle] = useState(""),
     [body, setBody] = useState(""),
@@ -39,9 +42,10 @@ export default function PostComposer({
                 body,
                 destination,
                 context,
-                source,
+                source,attachments:images,
               })
             ) {
+              setImages([]);
               setTitle("");
               setBody("");
               setContext("");
@@ -110,6 +114,8 @@ export default function PostComposer({
             Identify personal experiences and estimates. Include dates, currency
             and sources when relevant. Never publish private documents.
           </p>
+          {images.map(x=><p className={s.meta} key={x.id}>Photo attached: {x.alt}</p>)}
+          {images.length<4&&<ImageUpload community={community} kind="post" post={id} onUpload={image=>setImages(prev=>[...prev,image])}/>}
           <button className={s.button} disabled={busy}>
             {busy ? "Publishing…" : "Publish"}
           </button>

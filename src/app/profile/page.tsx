@@ -1,6 +1,10 @@
+import { archiveWorkspaceHistory, loadWorkspaceHistory } from '@/lib/workspace-history.server';
+import { getGlobalRankSignals } from '@/lib/global-rank-signals';
+import { getGlobalRank } from '@/lib/global-ranks';
+import { getFirestoreDocument, isLearningStorageConfigured } from '@/lib/firestore-admin-rest.server';
+import { buildWorkspaceResources, normalizeWorkspacePreferences, workspaceHistory } from '@/lib/workspace-control';
 import { ensureMemberNumber } from '@/lib/members/identity.server';
 import { courses } from "@/data/courses";
-import { getGlobalRankSignals } from "@/lib/global-rank-signals";
 import type { Metadata } from "next";
 import { currentUser } from "@clerk/nextjs/server";
 import GlobalWorkspaceOS from "@/components/profile/GlobalWorkspaceOS";
@@ -19,7 +23,6 @@ import {
   TGPI_BILLING_METADATA_KEY,
 } from "@/lib/billing";
 import { getAllCountries } from "@/lib/countries";
-import { getGlobalRank } from "@/lib/global-ranks";
 import { buildGlobalWorkspaceModel } from "@/lib/global-workspace";
 import { normalizeOnboardingData } from "@/lib/onboarding";
 import { getControlledPremiumAccessMode } from "@/lib/premium-access.server";
@@ -41,7 +44,11 @@ export default async function ProfilePage({
     currentUser(),
     searchParams,
   ]);
-  const memberIdentity = await ensureMemberNumber(session.userId).catch(() => null);
+  if (!user) throw new Error("Your account could not be loaded. Please retry.");
+  const [memberIdentity, savedPreferences] = await Promise.all([
+    ensureMemberNumber(session.userId).catch(() => null),
+    isLearningStorageConfigured() ? getFirestoreDocument(`tgpiLearningUsers/${session.userId}/workspace/preferences`).then(record => ({ record, available: true })).catch(() => ({ record: null, available: false })) : Promise.resolve({ record: null, available: false }),
+  ]);
   const name = user?.fullName || user?.firstName || "Global explorer";
   const email = user?.primaryEmailAddress?.emailAddress || "No primary email";
   const emailVerified = user?.primaryEmailAddress?.verification?.status === "verified";
@@ -52,6 +59,8 @@ export default async function ProfilePage({
   const activation = normalizeActivationProgress(
     user?.privateMetadata[TGPI_ACTIVATION_METADATA_KEY],
   );
+  await archiveWorkspaceHistory(session.userId, activation).catch(() => null);
+  const historyPage = await loadWorkspaceHistory(session.userId).catch(() => ({ events: [], cursor: null, coverageStartedAt: null, available: false }));
   const billing = normalizeSubscriptionRecord(
     user?.privateMetadata[TGPI_BILLING_METADATA_KEY],
     session.userId,
@@ -86,16 +95,22 @@ export default async function ProfilePage({
     onboarding,
   );
   const profileCompletion = getAccountProfileCompletion(identity, accountProfile);
-  const rank = getGlobalRank({
-    ...getGlobalRankSignals(activation),
-    activationCompletion: workspaceModel.activationCompletion,
-    planCompletion: workspaceModel.completion,
-    profileCompletion,
-  });
 
+
+  const rank = getGlobalRank({ ...getGlobalRankSignals(activation), activationCompletion: workspaceModel.activationCompletion, planCompletion: workspaceModel.completion, profileCompletion });
   return (
     <GlobalWorkspaceOS
+      rank={rank}
+      userId={session.userId}
+      resources={buildWorkspaceResources(activation, courses, getAllCountries())}
+      history={workspaceHistory({ ...activation, activities: [...historyPage.events, ...activation.activities] })}
+      historyCursor={historyPage.cursor}
+      historyCoverage={historyPage.coverageStartedAt}
+      historyAvailable={historyPage.available}
+      preferences={normalizeWorkspacePreferences(savedPreferences.record?.data)}
+      preferencesAvailable={savedPreferences.available}
       identity={{
+        handle: memberIdentity?.handle || user.username || undefined,
         avatarUrl: user?.imageUrl || "",
         firstName: user?.firstName || name,
         fullName: accountProfile.displayName || name,
@@ -107,7 +122,6 @@ export default async function ProfilePage({
       }}
       model={workspaceModel}
       onboardingCompleted={params.onboarding === "completed"}
-      rank={rank}
     />
   );
 }

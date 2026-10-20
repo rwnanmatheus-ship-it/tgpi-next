@@ -1,4 +1,6 @@
 import "server-only";
+import {searchTokens,searchQuery,moderatorSettings,attachments,type Playbook,type ParticipationAppeal,type CommunityAsset} from "./features";
+import {resolveMember} from "@/lib/members/identity.server";
 import {
   createCipheriv,
   createDecipheriv,
@@ -15,6 +17,7 @@ import {
 } from "@/lib/firestore-admin-rest.server";
 import {
   active,
+  postVisible,
   parseCommunityPreferences,
   canDiscover,
   canRead,
@@ -76,7 +79,7 @@ function sealCursor(scope: string, id: string, date = "") {
 }
 function openCursor(scope: string, value: string) {
   try {
-    if (value.length > 1000 || !/^[a-zA-Z0-9_-]+$/.test(value))
+    if (value.length > 16000 || !/^[a-zA-Z0-9_-]+$/.test(value))
       throw new Error();
     const bytes = Buffer.from(value, "base64url"),
       decipher = createDecipheriv(
@@ -102,9 +105,9 @@ function openCursor(scope: string, value: string) {
     throw new CommunityError("Invalid cursor.");
   }
 }
-async function children<T>(parent: string, collection: string, after = "") {
+async function children<T>(parent: string, collection: string, after = "", filter?:{field:string;term:string}) {
   const chronological = collection === "posts" || collection === "comments",
-    scope = `${parent}/${collection}`,
+    scope = `${parent}/${collection}${filter?`:${filter.field}:${filter.term}`:""}`,
     cursor = after ? openCursor(scope, after) : null;
   if (
     cursor &&
@@ -113,10 +116,11 @@ async function children<T>(parent: string, collection: string, after = "") {
       !Number.isFinite(Date.parse(cursor.date)))
   )
     throw new CommunityError("Invalid cursor.");
-  const reference = `projects/${process.env.TGPI_FIREBASE_PROJECT_ID || "tgpi-next"}/databases/(default)/documents/${scope}/${cursor?.id || ""}`;
+  const reference = `projects/${process.env.TGPI_FIREBASE_PROJECT_ID || "tgpi-next"}/databases/(default)/documents/${parent}/${collection}/${cursor?.id || ""}`;
   const rows = await query<T>(
     {
       from: [{ collectionId: collection }],
+      ...(filter?{where:{fieldFilter:{field:{fieldPath:filter.field},op:"ARRAY_CONTAINS",value:{stringValue:filter.term}}}}:{}),
       orderBy: [
         ...(chronological
           ? [{ field: { fieldPath: "createdAt" }, direction: "DESCENDING" }]
@@ -173,6 +177,20 @@ const publicCard = (c: Community) => ({
   transferTo: "",
   welcome: "",
 });
+async function allowedPost(p:Post,m:Membership|null|undefined,uid:string){if(!postVisible(p,m,uid))return false;if(!uid||p.author===uid)return true;const paths=[`${root}/people/${uid}/blocks/${p.author}`,`${root}/people/${p.author}/blocks/${uid}`];const records=await Promise.all(paths.map(path=>get<{blocked:boolean}>(path)));return !records.some(x=>x?.data.blocked);}
+async function enrichPost(p:Post,uid:string){const [bookmark,reaction]=uid?await Promise.all([get<{saved:boolean}>(`${root}/saved/${uid}/items/${p.community}--${p.id}`),get<{helpful:boolean}>(`${pp(p.community,p.id)}/reactions/${uid}`)]):[null,null];return {...p,saved:Boolean(bookmark?.data.saved),reacted:Boolean(reaction?.data.helpful)};}
+export async function playbooks(id:string,uid:string,after=""){const a=await access(id,uid);if(!canRead(a.community,a.membership))throw new CommunityError("Membership required.",403);const page=await children<Playbook>(cp(id),"playbooks",after);return {...page,items:await Promise.all(page.items.map(async book=>{const posts=await Promise.all(book.posts.slice(0,20).map(async pid=>{const p=await get<Post>(pp(id,pid));return p&&await allowedPost(p.data,a.membership,uid)?{id:p.data.id,title:p.data.title,authorName:p.data.authorName,source:p.data.source,updatedAt:p.data.updatedAt}:null;}));return {...book,sources:posts.filter(x=>x!==null)};}))};}
+export async function pendingPosts(id:string,uid:string,after=""){const a=await access(id,uid);if(!manages(a.membership))throw new CommunityError("Management permission required.",403);const rows=await children<Post>(cp(id),"posts",after);return {...rows,items:rows.items.filter(p=>!p.removed&&p.state==="pending")};}
+export async function globalReports(uid:string,admin:boolean,after=""){ready();if(!admin)throw new CommunityError("Administrator permission required.",403);return children<Report&{community:string}>(root,"reports",after);}
+export async function personalFeed(uid:string,cursor=""){
+ if(!uid)throw new CommunityError("Sign in to see your feed.",401);const scope=`${root}/people/${uid}/feed`,prefs=await preferences(uid),groups=(await mine(uid)).items.filter(c=>active(c.membership)&&!prefs.muted.includes(c.id)).slice(0,8);
+ let positions:Record<string,string>={};if(cursor){try{positions=JSON.parse(openCursor(scope,cursor).date);}catch{throw new CommunityError("Invalid cursor.");}}
+ const pages=await Promise.all(groups.map(async c=>({community:c,...await children<Post>(cp(c.id),"posts",typeof positions[c.id]==="string"?positions[c.id]:"")})));
+ const candidates=(await Promise.all(pages.flatMap(page=>page.items.map(async p=>await allowedPost(p,page.community.membership,uid)?{...await enrichPost(p,uid),communityName:page.community.name,membership:page.community.membership}:null)))).filter(p=>p!==null).sort((a,b)=>b.createdAt.localeCompare(a.createdAt)||b.community.localeCompare(a.community)||b.id.localeCompare(a.id));
+ const items=candidates.slice(0,25);for(const page of pages){if(!candidates.some(p=>p.community===page.community.id)&&page.items.length){const last=page.items.at(-1)!;positions[page.community.id]=sealCursor(`${cp(page.community.id)}/posts`,last.id,last.createdAt);}}for(const p of items)positions[p.community]=sealCursor(`${cp(p.community)}/posts`,p.id,p.createdAt);
+ return {items,communitiesConsidered:groups.length,next:candidates.length>25||pages.some(p=>p.next)?sealCursor(scope,"feed",JSON.stringify(positions)):null};
+}
+export async function blocks(uid:string,after=""){ready();if(!uid)throw new CommunityError("Sign in.",401);const page=await children<{uid:string;blocked:boolean}>(`${root}/people/${uid}`,"blocks",after);return {...page,items:page.items.filter(x=>x.blocked)};}
 export async function preferences(uid: string) {
   ready();
   if (!uid) throw new CommunityError("Sign in to manage interests.", 401);
@@ -184,9 +202,10 @@ export async function preferences(uid: string) {
     )?.data,
   );
 }
-export async function discover(uid: string, after = "") {
+export async function discover(uid: string, after = "", search="") {
   ready();
-  const result = await children<Community>(root, "communities", after);
+  const q=searchQuery(search);
+  const result = await children<Community>(root, "communities", after,q.length>=2?{field:"searchIndex",term:q}:undefined);
   const prefs = uid ? await preferences(uid) : parseCommunityPreferences(null);
   const items = await Promise.all(
     result.items.map(async (c) => {
@@ -266,22 +285,8 @@ export async function detail(id: string, uid: string, after = "", token = "") {
   if (!canRead(a.community, a.membership))
     return { ...a, posts: [], next: null };
   const rows = await children<Post>(cp(id), "posts", after);
-  const posts = await Promise.all(
-    rows.items
-      .filter((p) => !p.removed)
-      .map(async (p) => ({
-        ...p,
-        saved: uid
-          ? Boolean(
-              (
-                await get<{ saved: boolean }>(
-                  `${root}/saved/${uid}/items/${id}--${p.id}`,
-                )
-              )?.data.saved,
-            )
-          : false,
-      })),
-  );
+  const checked=await Promise.all(rows.items.map(async p=>await allowedPost(p,a.membership,uid)?enrichPost(p,uid):null));
+  const posts=checked.filter(p=>p!==null);
   return { ...a, posts, next: rows.next };
 }
 export async function publication(id: string, pid: string, uid: string) {
@@ -289,7 +294,7 @@ export async function publication(id: string, pid: string, uid: string) {
   if (!canRead(a.community, a.membership))
     throw new CommunityError("Membership required.", 403);
   const post = await get<Post>(pp(id, pid));
-  if (!post || post.data.removed)
+  if (!post || !await allowedPost(post.data,a.membership,uid))
     throw new CommunityError("Publication unavailable.", 404);
   const saved = uid
     ? Boolean(
@@ -303,7 +308,7 @@ export async function publication(id: string, pid: string, uid: string) {
   return {
     ...a,
     community: active(a.membership) ? a.community : publicCard(a.community),
-    posts: [{ ...post.data, saved }],
+    posts: [{ ...await enrichPost(post.data,uid), saved }],
     next: null,
   };
 }
@@ -317,21 +322,25 @@ export async function comments(
   if (!canRead(a.community, a.membership))
     throw new CommunityError("Membership required.", 403);
   const p = await get<Post>(pp(id, pid));
-  if (!p || p.data.removed)
+  if (!p || !await allowedPost(p.data,a.membership,uid))
     throw new CommunityError("Publication unavailable.", 404);
   const rows = await children<Comment>(pp(id, pid), "comments", after);
-  return { ...rows, items: rows.items.filter((x) => !x.removed) };
+  const checked=await Promise.all(rows.items.map(async x=>!x.removed&&await allowedPost({...p.data,author:x.author},a.membership,uid)?x:null));
+  return { ...rows, items: checked.filter(x=>x!==null) };
 }
 export async function management(
   id: string,
   uid: string,
   section = "members",
   after = "",
+  globalAdmin=false,
 ) {
-  const a = await access(id, uid);
-  if (!manages(a.membership))
+  const a = globalAdmin?{community:(await get<Community>(cp(id)))?.data,membership:(await get<Membership>(mp(id,uid)))?.data}:await access(id, uid);
+  if (!a.community)throw new CommunityError("Community unavailable.",404);
+  if (!manages(a.membership)&&!globalAdmin)
     throw new CommunityError("Management permission required.", 403);
-  if (!["members", "reports", "invites", "audit"].includes(section))
+  if(section==="context")return {community:a.community};
+  if (!["members", "reports", "invites", "audit","appeals"].includes(section))
     throw new CommunityError("Invalid management section.");
   return children<Membership | Invite | Report>(cp(id), section, after);
 }
@@ -375,7 +384,7 @@ export async function saved(uid: string, after = "") {
           const a = await access(x.community, uid);
           if (!canRead(a.community, a.membership)) return null;
           const p = await get<Post>(pp(x.community, x.post));
-          return p && !p.data.removed ? p.data : null;
+          return p && await allowedPost(p.data,a.membership,uid) ? p.data : null;
         } catch (e) {
           if (e instanceof CommunityError && [403, 404].includes(e.status))
             return null;
@@ -396,7 +405,7 @@ export async function draft(uid: string) {
 export async function mutate(actor: Actor, input: Record<string, unknown>) {
   ready();
   const action = text(input.action, 40, true),
-    id = ["draft", "preferences"].includes(action)
+    id = ["draft", "preferences","unblock"].includes(action)
       ? action
       : identifier(input.community),
     uid = actor.uid,
@@ -437,12 +446,21 @@ export async function mutate(actor: Actor, input: Record<string, unknown>) {
           reason,
           createdAt: now,
         });
+      const notificationsPlanned=new Set<string>();
       const notify = async (target: string, key: string) => {
+        if (process.env.TGPI_NOTIFICATIONS_SECURITY_RULES_CONFIRMED !== "true") return;
+        if(notificationsPlanned.has(target))return;
+        const blockPath=`${root}/people/${target}/blocks/${uid}`;
+        if((await getDocuments<{blocked:boolean}>([blockPath])).get(blockPath)?.data.blocked)return;
         const preferencePath = `${root}/people/${target}/preferences/current`;
         const prefs = (
           await getDocuments<Record<string, JsonValue>>([preferencePath])
         ).get(preferencePath)?.data;
-        if (parseCommunityPreferences(prefs).muted.includes(id)) return;
+        const settings=parseCommunityPreferences(prefs);if(settings.muted.includes(id))return;
+        const mode=settings.communityNotifications?.[id]||"all";if(mode==="none"||mode==="mentions"&&!key.startsWith("mention:"))return;
+        const windowPath=`${root}/people/${target}/notificationWindows/${id}`;const previous=(await getDocuments<{time:number;count:number}>([windowPath])).get(windowPath)?.data;
+        const frequency=previous&&Date.now()-previous.time<3600000?previous:{time:Date.now(),count:0};if(frequency.count>=10)return;
+        put(windowPath,{time:frequency.time,count:frequency.count+1});notificationsPlanned.add(target);
         if (process.env.TGPI_NOTIFICATIONS_SECURITY_RULES_CONFIRMED !== "true")
           return;
         const nid = hash(`${target}:community:${id}:${key}`);
@@ -485,13 +503,14 @@ export async function mutate(actor: Actor, input: Record<string, unknown>) {
         });
       };
       const manage = () => {
-        if (!manages(m))
+        if (!manages(m)&&!actor.admin)
           throw new CommunityError("Management permission required.", 403);
       };
       const owner = () => {
         if (!active(m) || m?.role !== "owner")
           throw new CommunityError("Owner permission required.", 403);
       };
+      const mention=async(body:string,key:string)=>{const handles=[...new Set([...body.matchAll(/(?:^|\s)@([a-z][a-z0-9_]{2,29})/g)].map(x=>x[1]))].slice(0,5);for(const handle of handles){const target=await resolveMember("handles",handle);if(!target||target===uid)continue;const member=(await getDocuments<Membership>([mp(id,target)])).get(mp(id,target))?.data;if(active(member))await notify(target,`mention:${key}:${target}`);}};
       const participate = () => {
         if (!active(m) || c?.archived)
           throw new CommunityError("Active membership required.", 403);
@@ -501,6 +520,7 @@ export async function mutate(actor: Actor, input: Record<string, unknown>) {
             403,
           );
       };
+      if(action==="unblock"){const target=text(input.target,150,true);if(!/^user_[a-zA-Z0-9]+$/.test(target))throw new CommunityError("Invalid member.");put(`${root}/people/${uid}/blocks/${target}`,{uid:target,blocked:false,updatedAt:now});return {result:{id},writes};}
       if (action === "preferences") {
         put(
           `${root}/people/${uid}/preferences/current`,
@@ -552,6 +572,8 @@ export async function mutate(actor: Actor, input: Record<string, unknown>) {
           entryQuestion: text(input.entryQuestion, 500),
           welcome: text(input.welcome, 1000),
           rulesVersion: 1,
+          ...moderatorSettings(input),
+          searchIndex:searchTokens(String(input.name||""),String(input.description||""),String(input.destination||""),String(input.theme||""),String(input.language||"")),
           owner: uid,
           memberCount: 1,
           archived: false,
@@ -565,7 +587,7 @@ export async function mutate(actor: Actor, input: Record<string, unknown>) {
         audit(uid);
         return { result: { id }, writes };
       }
-      if (!c || (!canDiscover(c, m) && action !== "redeem"))
+      if (!c || (!canDiscover(c, m) && action !== "redeem" && !(action==="appeal"&&m) && !actor.admin))
         throw new CommunityError("Community unavailable.", 404);
       if (action === "join" || action === "redeem") {
         if (c.archived || ["banned", "suspended"].includes(m?.state || ""))
@@ -627,7 +649,7 @@ export async function mutate(actor: Actor, input: Record<string, unknown>) {
         const tm = (await getDocuments<Membership>([mp(id, target)])).get(
           mp(id, target),
         )?.data;
-        if (!tm || tm.role === "owner" || target === uid)
+        if (!tm || (tm.role === "owner"&&!actor.admin) || target === uid)
           throw new CommunityError("This member cannot be changed.", 403);
         if (["promote", "demote", "transfer"].includes(action)) {
           owner();
@@ -644,7 +666,7 @@ export async function mutate(actor: Actor, input: Record<string, unknown>) {
               tm.acceptedVersion,
             );
         } else {
-          if (tm.role === "moderator" || action === "restore") owner();
+          if ((tm.role === "moderator" || action === "restore")&&!actor.admin) owner();
           if (["approve", "decline"].includes(action) && tm.state !== "pending")
             throw new CommunityError("Request no longer pending.", 409);
           const state =
@@ -737,6 +759,7 @@ export async function mutate(actor: Actor, input: Record<string, unknown>) {
         audit(iid);
       } else if (action === "post") {
         participate();
+        if(c.slowModeSeconds&&m?.lastPublishedAt&&Date.now()-Date.parse(m.lastPublishedAt)<c.slowModeSeconds*1000)throw new CommunityError("Slow mode is active. Wait before your next publication.",429);
         if (
           !["discussion", "question", "experience", "guide"].includes(
             String(input.kind),
@@ -751,13 +774,17 @@ export async function mutate(actor: Actor, input: Record<string, unknown>) {
             throw new CommunityError("Publication ID unavailable.", 409);
           return { result: { id }, writes: [] };
         }
+        const images=attachments(input.attachments);if(images.length){const records=await getDocuments<CommunityAsset>(images.map(x=>`${path}/assets/${x.id}`));if(images.some(x=>{const a=records.get(`${path}/assets/${x.id}`)?.data;return !a||a.owner!==uid||a.kind!=="post"||a.post!==pid;}))throw new CommunityError("Choose images uploaded for this publication.");}
         put(postPath, {
+          attachments:images,
           id: pid,
           community: id,
           author: uid,
           authorName: actor.name,
           handle: actor.handle,
           kind: input.kind,
+          state:c.postApproval&&!manages(m)?"pending":"published",
+          helpfulCount:0,
           title: text(input.title, 180, true),
           body: text(input.body, 16000, true),
           destination: text(input.destination, 100),
@@ -769,6 +796,8 @@ export async function mutate(actor: Actor, input: Record<string, unknown>) {
           createdAt: now,
           updatedAt: now,
         });
+        put(memberPath,{...m!,lastPublishedAt:now});
+        if(!c.postApproval||manages(m))await mention(text(input.body,16000,true),`post:${pid}`);
       } else if (
         [
           "comment",
@@ -788,8 +817,12 @@ export async function mutate(actor: Actor, input: Record<string, unknown>) {
         const pid = identifier(input.post),
           postPath = pp(id, pid),
           p = (await getDocuments<Post>([postPath])).get(postPath)?.data;
-        if (!p || p.removed)
+        if (!p || !postVisible(p,m,uid))
           throw new CommunityError("Publication unavailable.", 404);
+        if(["comment","accept","edit-comment"].includes(action)&&p.author!==uid&&!manages(m)){
+          const paths=[`${root}/people/${uid}/blocks/${p.author}`,`${root}/people/${p.author}/blocks/${uid}`],records=await getDocuments<{blocked:boolean}>(paths);
+          if(paths.some(path=>records.get(path)?.data.blocked))throw new CommunityError("This interaction is unavailable.",403);
+        }
         if (action === "save")
           put(`${root}/saved/${uid}/items/${id}--${pid}`, {
             community: id,
@@ -808,8 +841,8 @@ export async function mutate(actor: Actor, input: Record<string, unknown>) {
               throw new CommunityError("Reply unavailable.", 404);
           }
           const rid = hash(`${uid}:${pid}:${cid}`);
-          put(`${path}/reports/${rid}`, {
-            id: rid,
+          const report = {
+            id: rid, community:id, kind:action,
             post: pid,
             comment: cid,
             reporter: uid,
@@ -817,7 +850,8 @@ export async function mutate(actor: Actor, input: Record<string, unknown>) {
             status: "pending",
             decision: "",
             createdAt: now,
-          });
+          };
+          put(`${path}/reports/${rid}`, report);put(`${root}/reports/${hash(id+rid)}`, {...report,id:hash(id+rid),localId:rid});
         } else if (action === "comment") {
           participate();
           const cid = identifier(input.id),
@@ -841,6 +875,7 @@ export async function mutate(actor: Actor, input: Record<string, unknown>) {
             updatedAt: now,
           });
           if (p.author !== uid) await notify(p.author, `reply:${pid}:${cid}`);
+          await mention(text(input.body,6000,true),`comment:${pid}:${cid}`);
         } else if (
           ["edit-comment", "delete-comment", "accept"].includes(action)
         ) {
@@ -878,8 +913,8 @@ export async function mutate(actor: Actor, input: Record<string, unknown>) {
             }
           }
         } else {
-          participate();
-          if (p.author !== uid && !manages(m))
+          if(!actor.admin)participate();
+          if (p.author !== uid && !manages(m) && !actor.admin)
             throw new CommunityError("Publication permission required.", 403);
           if (action === "pin") {
             manage();
@@ -922,6 +957,8 @@ export async function mutate(actor: Actor, input: Record<string, unknown>) {
           reviewer: uid,
           reviewedAt: now,
         });
+        const centralId=(r as Report&{kind?:string}).kind?.startsWith("report-")&&["report-community","report-member"].includes((r as Report&{kind:string}).kind)?rid:hash(id+rid);
+        const central=(await getDocuments<Report>([`${root}/reports/${centralId}`])).get(`${root}/reports/${centralId}`)?.data;if(central)put(`${root}/reports/${centralId}`,{...central,status:"reviewed",decision:reason,reviewer:uid,reviewedAt:now});
         audit(rid, reason);
       } else if (action === "create-event") {
         manage();
@@ -995,6 +1032,39 @@ export async function mutate(actor: Actor, input: Record<string, unknown>) {
             ),
           });
         }
+      } else if(action==="reaction") {
+        participate();const pid=identifier(input.post),postPath=pp(id,pid),rp=`${postPath}/reactions/${uid}`,records=await getDocuments<Post&{helpful:boolean}>([postPath,rp]),p=records.get(postPath)?.data;
+        if(!p||!await allowedPost(p,m,uid)||p.state==="pending")throw new CommunityError("Publication unavailable.",404);
+        const helpful=input.helpful===true,previous=records.get(rp)?.data.helpful===true;
+        put(rp,{uid,helpful,updatedAt:now});put(postPath,{...p,helpfulCount:Math.max(0,(p.helpfulCount||0)+(helpful?1:0)-(previous?1:0))});
+      } else if(action==="settings") {
+        owner();put(path,{...c,...moderatorSettings(input),updatedAt:now});audit(id);
+      } else if(action==="approve-post") {
+        manage();const pid=identifier(input.post),postPath=pp(id,pid),p=(await getDocuments<Post>([postPath])).get(postPath)?.data;
+        if(!p||p.removed)throw new CommunityError("Publication unavailable.",404);put(postPath,{...p,state:"published",updatedAt:now});audit(pid);
+      } else if(action==="block") {
+        const target=text(input.target,150,true);if(!/^user_[a-zA-Z0-9]+$/.test(target)||target===uid)throw new CommunityError("Choose another member.");
+        put(`${root}/people/${uid}/blocks/${target}`,{uid:target,blocked:input.blocked===true,updatedAt:now});
+      } else if(action==="appeal") {
+        if(!m||!["banned","suspended","declined"].includes(m.state))throw new CommunityError("No decision available for appeal.",403);
+        put(`${path}/appeals/${uid}`,{id:uid,uid,body:text(input.body,3000,true),state:"pending",decision:"",updatedAt:now});audit(uid);
+      } else if(action==="appeal-decision") {
+        manage();const target=text(input.target,150,true);if(!/^user_[a-zA-Z0-9]+$/.test(target))throw new CommunityError("Invalid member.");
+        const ap=`${path}/appeals/${target}`,records=await getDocuments<ParticipationAppeal&Membership>([ap,mp(id,target)]),appeal=records.get(ap)?.data,tm=records.get(mp(id,target))?.data;
+        if(!appeal||!tm)throw new CommunityError("Appeal unavailable.",404);if(tm.role==="owner"&&!actor.admin)throw new CommunityError("Global review required.",403);
+        const decision=text(input.reason,1000,true);put(ap,{...appeal,state:"reviewed",decision,updatedAt:now});
+        if(input.restore===true){membership(target,"active",tm.role,tm.answers,decision,tm.acceptedVersion);put(path,{...c,memberCount:c.memberCount+(active(tm)?0:1),updatedAt:now});}
+        audit(target,decision);await notify(target,operation);
+      } else if(action==="report-community"||action==="report-member") {
+        if(!active(m))throw new CommunityError("Active membership required.",403);
+        const target=action==="report-member"?text(input.target,150,true):id;if(action==="report-member"&&!/^user_[a-zA-Z0-9]+$/.test(target))throw new CommunityError("Invalid member.");
+        const rid=hash(`${uid}:${id}:${action}:${target}`),report={id:rid,community:id,kind:action,target,reporter:uid,reason:text(input.reason,1000,true),status:"pending",decision:"",createdAt:now};
+        put(`${root}/reports/${rid}`,report);put(`${path}/reports/${rid}`,report);
+      } else if(action==="playbook") {
+        manage();const bid=identifier(input.id);if(!Array.isArray(input.posts)||input.posts.length<1||input.posts.length>20)throw new CommunityError("Choose 1–20 source publications.");
+        const ids=[...new Set(input.posts.map(identifier))],records=await getDocuments<Post>(ids.map(pid=>pp(id,pid)));
+        if(ids.some(pid=>{const p=records.get(pp(id,pid))?.data;return !p||p.removed||p.state==="pending";}))throw new CommunityError("Choose published, available sources.");
+        put(`${path}/playbooks/${bid}`,{id:bid,title:text(input.title,180,true),description:text(input.description,2000),posts:ids,editor:uid,updatedAt:now});audit(bid);
       } else if (action === "rules") {
         owner();
         const rules = text(input.rules, 5000, true);

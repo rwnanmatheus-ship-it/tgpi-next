@@ -13,7 +13,7 @@
     "test:pwa": "node --experimental-strip-types --test scripts/pwa-runtime.test.mjs",
     "test:platform": "node --experimental-strip-types --test scripts/platform-integration.test.mjs scripts/platform-persistence.test.mjs",
     "test:super-app": "node --experimental-strip-types --test scripts/super-app.test.mjs",
-    "test:workspace": "node --experimental-strip-types --test scripts/workspace-home.test.mjs",
+    "test:workspace": "node --experimental-strip-types --test scripts/workspace-home.test.mjs scripts/workspace-control.test.mjs scripts/workspace-api.test.mjs scripts/workspace-history.test.mjs",
     "test:personal-plan": "node --experimental-strip-types --test scripts/personal-plan.test.mjs",
     "typecheck": "tsc --noEmit",
     "build": "next build",
@@ -39,6 +39,7 @@
     "qrcode.react": "^4.2.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
+    "sharp": "0.35.4",
     "stripe": "^22.0.2",
     "viem": "^2.56.3"
   },

@@ -6,8 +6,10 @@ import type {
   Membership,
   Invite,
   Report,
-  Page,
+  Page,Post,
 } from "@/lib/community/model";
+import type {ParticipationAppeal} from "@/lib/community/features";
+import ImageUpload from "./CommunityImageUpload";
 import { api, type Action } from "./api";
 import s from "./Community.module.css";
 type Audit = {
@@ -29,7 +31,7 @@ export default function CommunityManagement({
   busy: boolean;
 }) {
   const [section, setSection] = useState("members"),
-    [items, setItems] = useState<(Membership | Invite | Report | Audit)[]>([]),
+    [items, setItems] = useState<(Membership | Invite | Report | Audit | ParticipationAppeal | Post)[]>([]),
     [next, setNext] = useState<string | null>(null),
     [error, setError] = useState(""),
     [invite, setInvite] = useState(""),
@@ -38,9 +40,9 @@ export default function CommunityManagement({
   async function load(append = false) {
     setError("");
     try {
-      const r = await api<Page<Membership | Invite | Report | Audit>>({
+      const r = await api<Page<Membership | Invite | Report | Audit | ParticipationAppeal | Post>>({
         community: c.id,
-        manage: "1",
+        ...(section==="pending"?{pending:"1"}:{manage:"1"}),
         section,
         ...(append && next ? { after: next } : {}),
       });
@@ -60,7 +62,7 @@ export default function CommunityManagement({
     <section className={s.panel}>
       <h2>Community management</h2>
       <div className={s.actions}>
-        {["members", "reports", "invites", "audit"].map((x) => (
+        {["members", "pending", "appeals", "reports", "invites", "audit"].map((x) => (
           <button
             className={s.secondary}
             aria-pressed={section === x}
@@ -77,6 +79,8 @@ export default function CommunityManagement({
         </p>
       )}
       {!items.length && <p>No records in this page.</p>}
+      {section==="appeals"&&items.map(x=>{const a=x as ParticipationAppeal;return <article className={s.reply} key={a.id}><Link href={`/u/${a.uid}`}>Member profile</Link><p>{a.body}</p><p>{a.state} · {a.decision}</p>{a.state==="pending"&&<button className={s.secondary} disabled={busy} onClick={()=>{const reason=window.prompt("Record the review outcome and explanation");if(reason){const restore=window.confirm("Restore participation? Cancel records the decision without restoring access.");void act({action:"appeal-decision",target:a.uid,reason,restore});}}}>Review appeal</button>}</article>;})}
+      {section==="pending"&&items.map(x=>{const p=x as Post;return <article className={s.reply} key={p.id}><h3>{p.title}</h3><p className={s.body}>{p.body}</p><button className={s.button} disabled={busy} onClick={()=>void act({action:"approve-post",post:p.id})}>Approve publication</button><button className={s.secondary} disabled={busy} onClick={()=>{if(window.confirm("Remove this publication?"))void act({action:"delete",post:p.id});}}>Remove publication</button></article>;})}
       {section === "members" &&
         items.map((x) => {
           const member = x as Membership;
@@ -262,6 +266,7 @@ export default function CommunityManagement({
           Load more {section}
         </button>
       )}
+      {m.role==="owner"&&<details><summary>Publication settings and community images</summary><form key={`${c.postApproval}-${c.slowModeSeconds}`} onSubmit={e=>{e.preventDefault();const data=new FormData(e.currentTarget);void act({action:"settings",postApproval:data.has("approval"),slowModeSeconds:Number(data.get("slow"))});}}><label><input name="approval" type="checkbox" defaultChecked={c.postApproval}/>Require moderator approval for new publications</label><label>Slow mode: seconds between publications<input name="slow" type="number" min={0} max={3600} defaultValue={c.slowModeSeconds||0}/></label><button className={s.button} disabled={busy}>Save settings</button></form><ImageUpload community={c.id} kind="avatar" onUpload={()=>void act({action:"settings",postApproval:c.postApproval,slowModeSeconds:c.slowModeSeconds})}/><ImageUpload community={c.id} kind="cover" onUpload={()=>void act({action:"settings",postApproval:c.postApproval,slowModeSeconds:c.slowModeSeconds})}/></details>}
       {m.role === "owner" && (
         <div className={s.actions}>
           <button

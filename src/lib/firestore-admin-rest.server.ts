@@ -288,8 +288,19 @@ export async function listFirestoreDocuments<T>(
   return (payload.documents || []).map(decodeDocument<T>);
 }
 
+/** Document-name ordering requires no additional composite index. Opaque cursor is server validated by Firestore. */
+export async function listFirestoreDocumentPage<T>(parentPath: string, collectionId: string, pageToken?: string) {
+  const parent = `/${safeDocumentPath(parentPath)}`;
+  const query = new URLSearchParams({ pageSize: '12', orderBy: '__name__ desc' });
+  if (pageToken) query.set('pageToken', pageToken);
+  const response = await firestoreFetch(`/documents${parent}/${encodeURIComponent(collectionId)}?${query}`);
+  const payload = await response.json() as { documents?: FirestoreDocument[]; nextPageToken?: string };
+  return { items: (payload.documents ?? []).map(decodeDocument<T>), nextPageToken: payload.nextPageToken ?? null };
+}
+
 export async function runFirestoreQuery<T>(structuredQuery: object, parentPath = "") {
   const response = await firestoreFetch(`/documents${parentPath ? `/${safeDocumentPath(parentPath)}` : ""}:runQuery`, {
+
     body: JSON.stringify({ structuredQuery }),
     method: "POST",
   });

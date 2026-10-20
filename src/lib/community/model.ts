@@ -9,6 +9,7 @@ export type Membership = {
   answers: string;
   updatedAt: string;
   reason: string;
+  lastPublishedAt?:string;
 };
 export type Community = {
   id: string;
@@ -30,6 +31,8 @@ export type Community = {
   transferTo: string;
   createdAt: string;
   updatedAt: string;
+  avatarId?:string;coverId?:string;
+  postApproval?:boolean;slowModeSeconds?:number;searchIndex?:string[];courseId?:string;
 };
 export type Post = {
   id: string;
@@ -37,6 +40,8 @@ export type Post = {
   author: string;
   authorName: string;
   handle: string;
+  attachments?:{id:string;alt:string}[];
+  state?:"published"|"pending";helpfulCount?:number;reacted?:boolean;
   kind: "discussion" | "question" | "experience" | "guide";
   title: string;
   body: string;
@@ -183,6 +188,7 @@ export type CommunityPreferences = {
   interests: string[];
   muted: string[];
   hidden: string[];
+  communityNotifications?:Record<string,"all"|"mentions"|"none">;
 };
 export function parseCommunityPreferences(v: unknown): CommunityPreferences {
   const x = v && typeof v === "object" ? (v as Record<string, unknown>) : {};
@@ -196,5 +202,8 @@ export function parseCommunityPreferences(v: unknown): CommunityPreferences {
     interests: list(x.interests, 100),
     muted: list(x.muted, 60).map(identifier),
     hidden: list(x.hidden, 60).map(identifier),
+    communityNotifications:Object.fromEntries(Object.entries(x.communityNotifications&&typeof x.communityNotifications==="object"?x.communityNotifications:{}).slice(0,30).map(([key,value])=>{identifier(key);if(!["all","mentions","none"].includes(String(value)))throw new CommunityError("Choose a valid notification preference.");return [key,value as "all"|"mentions"|"none"];})),
   };
 }
+
+export function postVisible(p:Post,m:Membership|null|undefined,uid:string){return !p.removed&&(p.state!=="pending"||p.author===uid||manages(m));}

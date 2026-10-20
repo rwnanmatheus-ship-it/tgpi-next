@@ -45,6 +45,7 @@ globalThis.__communityTest = {
           : name > p,
       );
     }
+    if(q.where){const f=q.where.fieldFilter;rows=rows.filter(([,v])=>Array.isArray(v[f.field.fieldPath])&&v[f.field.fieldPath].includes(f.value.stringValue));}
     return rows
       .slice(0, q.limit)
       .map(([name, data]) => ({ name, data: structuredClone(data) }));
@@ -73,6 +74,7 @@ globalThis.__communityTest = {
     return next;
   },
 };
+const featuresUrl=dataUrl(compile(fs.readFileSync("src/lib/community/features.ts","utf8").replace(/from ["']\.\/model["']/,`from '${modelUrl}'`)));
 const source = fs
   .readFileSync("src/lib/community/store.server.ts", "utf8")
   .replace(/import ["']server-only["'];?/, "")
@@ -80,7 +82,9 @@ const source = fs
     /import\s*\{\s*createFirestoreUpdateWrite[\s\S]*?from ["']@\/lib\/firestore-admin-rest.server["'];/,
     "const {write,get,query,transaction}=globalThis.__communityTest;",
   )
-  .replace(/from ["']\.\/model["']/, `from '${modelUrl}'`);
+  .replace(/from ["']\.\/model["']/, `from '${modelUrl}'`)
+  .replace(/from ["']\.\/features["']/,`from '${featuresUrl}'`)
+  .replace(/import\s*\{\s*resolveMember\s*\}\s*from ["']@\/lib\/members\/identity.server["'];/,"const resolveMember=async()=>null;");
 const store = await import(dataUrl(compile(source)));
 process.env.TGPI_FIREBASE_CLIENT_EMAIL = "test";
 process.env.TGPI_FIREBASE_PRIVATE_KEY = "test";
@@ -620,6 +624,41 @@ test("community server workflows with isolated transactional persistence", async
       );
     },
   );
+  await t.test("release extensions preserve scoped permissions", async()=>{
+    db.clear();await create("release-circle");await act(member,"release-circle","join",{acceptedVersion:1});
+    await act(owner,"release-circle","settings",{postApproval:true,slowModeSeconds:30});
+    await act(member,"release-circle","post",{id:"review-post",kind:"question",title:"Needs review",body:"Practical context"});
+    assert.equal((await store.detail("release-circle",other.uid)).posts.length,0);
+    await assert.rejects(store.publication("release-circle","review-post",other.uid),/unavailable/);
+    await assert.rejects(act(other,"release-circle","save",{post:"review-post",saved:true}),/unavailable/);
+    assert.equal((await store.pendingPosts("release-circle",owner.uid)).items.length,1);
+    await assert.rejects(act(member,"release-circle","approve-post",{post:"review-post"}),/permission/);
+    await act(owner,"release-circle","approve-post",{post:"review-post"});
+    await Promise.all([act(member,"release-circle","reaction",{post:"review-post",helpful:true}),act(member,"release-circle","reaction",{post:"review-post",helpful:true})]);
+    assert.equal((await store.publication("release-circle","review-post",member.uid)).posts[0].helpfulCount,1);
+    await assert.rejects(act(member,"release-circle","post",{id:"too-fast",kind:"discussion",title:"Another",body:"Too fast"}),/Slow mode/);
+    await act(owner,"release-circle","playbook",{id:"arrival-guide",title:"Arrival",description:"Reading path",posts:["review-post"]});
+    const books=await store.playbooks("release-circle",other.uid);assert.equal(books.items[0].sources[0].authorName,member.name);
+    await act(owner,"release-circle","report-member",{target:member.uid,reason:"Test report"});
+    await assert.rejects(store.globalReports(member.uid,false),/Administrator/);
+    assert.equal((await store.globalReports(owner.uid,true)).items.length,1);
+    const report=(await store.management("release-circle",owner.uid,"reports")).items[0];await act(owner,"release-circle","resolve-report",{report:report.id,reason:"Reviewed with context"});
+    assert.equal((await store.globalReports(owner.uid,true)).items[0].status,"reviewed");
+    await act(owner,"release-circle","block",{target:member.uid,blocked:true});
+    assert.equal((await store.detail("release-circle",owner.uid)).posts.length,0);
+    await assert.rejects(store.publication("release-circle","review-post",owner.uid),/unavailable/);
+    assert.equal((await store.blocks(owner.uid)).items.length,1);
+    await act(owner,"preferences","unblock",{target:member.uid});assert.equal((await store.blocks(owner.uid)).items.length,0);
+    await act(owner,"release-circle","suspend",{target:member.uid,reason:"Test suspension"});
+    await act(member,"release-circle","appeal",{body:"Please review this decision"});
+    const appeals=await store.management("release-circle",owner.uid,"appeals");assert.equal(appeals.items[0].state,"pending");
+    await act(owner,"release-circle","appeal-decision",{target:member.uid,reason:"Participation restored",restore:true});
+    assert.equal((await store.detail("release-circle",member.uid)).membership.state,"active");
+    assert.equal((await store.discover(other.uid,"","glob")).items[0].id,"release-circle");
+  });
+  await t.test("attachment identifiers reject document path injection",async()=>{
+    await assert.rejects(act(member,"release-circle","post",{id:"malicious-file",kind:"discussion",title:"File",body:"Image",attachments:[{id:"../../other",alt:"Example"}]}));
+  });
   await t.test("configuration gate fails closed", async () => {
     delete process.env.TGPI_LEARNING_SECURITY_RULES_CONFIRMED;
     await assert.rejects(store.discover(""), /unavailable/);
