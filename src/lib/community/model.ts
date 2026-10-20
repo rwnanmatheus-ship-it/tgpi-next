@@ -44,6 +44,7 @@ export type Post = {
   community: string;
   author: string;
   authorName: string;
+  authorImage?: string;
   handle: string;
   attachments?: { id: string; alt: string }[];
   state?: "published" | "pending";
@@ -64,8 +65,11 @@ export type Post = {
 export type Comment = {
   id: string;
   post: string;
+  attachments?: { id: string; alt: string }[];
+  handle?: string;
   author: string;
   authorName: string;
+  authorImage?: string;
   body: string;
   removed: boolean;
   createdAt: string;

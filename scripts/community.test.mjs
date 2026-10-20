@@ -859,6 +859,125 @@ test("community server workflows with isolated transactional persistence", async
         (await globalThis.__communitySharp(bytes).metadata()).format,
         "webp",
       );
+      db.delete(`tgpiLearningUsers/_community/limits/${owner.uid}`);
+      db.delete(`tgpiLearningUsers/_community/limits/${member.uid}`);
+      await act(owner, "release-circle", "settings", {
+        slowModeSeconds: 0,
+        postApproval: false,
+      });
+      await act(member, "release-circle", "join", {
+        acceptedVersion: db.get(cp("release-circle")).rulesVersion,
+      });
+      await assert.rejects(
+        act(member, "release-circle", "post", {
+          id: "community-chat",
+          kind: "discussion",
+          title: "Chat",
+          body: "Hello",
+        }),
+        /permission/,
+      );
+      await act(owner, "release-circle", "post", {
+        id: "community-chat",
+        kind: "discussion",
+        title: "Chat",
+        body: "Welcome",
+      });
+      const chatPhoto = await assets.uploadCommunityAsset(
+        member.uid,
+        "release-circle",
+        {
+          bytes: png,
+          kind: "comment",
+          post: "community-chat",
+          comment: "photo-message",
+          alt: "A city skyline",
+        },
+      );
+      await assert.rejects(
+        assets.readCommunityAsset(owner.uid, "release-circle", chatPhoto.id),
+        /unavailable/,
+      );
+      await assert.rejects(
+        act(owner, "release-circle", "comment", {
+          post: "community-chat",
+          id: "photo-message",
+          body: "",
+          attachments: [chatPhoto],
+        }),
+        /uploaded/,
+      );
+      await assert.rejects(
+        act(member, "release-circle", "comment", {
+          post: "community-chat",
+          id: "wrong-message",
+          body: "",
+          attachments: [chatPhoto],
+        }),
+        /uploaded/,
+      );
+      await act(member, "release-circle", "comment", {
+        post: "community-chat",
+        id: "photo-message",
+        body: "",
+        attachments: [chatPhoto],
+      });
+      const messages = await store.comments(
+        "release-circle",
+        "community-chat",
+        owner.uid,
+      );
+      assert.equal(messages.items[0].attachments[0].id, chatPhoto.id);
+      assert.equal(messages.items[0].handle, member.handle);
+      assert.equal(
+        (
+          await globalThis
+            .__communitySharp(
+              await assets.readCommunityAsset(
+                owner.uid,
+                "release-circle",
+                chatPhoto.id,
+              ),
+            )
+            .metadata()
+        ).format,
+        "webp",
+      );
+      await act(member, "release-circle", "comment", {
+        post: "community-chat",
+        id: "photo-message",
+        body: "",
+        attachments: [chatPhoto],
+      });
+      assert.equal(
+        (await store.comments("release-circle", "community-chat", owner.uid))
+          .items.length,
+        1,
+      );
+      await act(member, "release-circle", "delete-comment", {
+        post: "community-chat",
+        comment: "photo-message",
+      });
+      await assert.rejects(
+        assets.readCommunityAsset(owner.uid, "release-circle", chatPhoto.id),
+        /unavailable/,
+      );
+      await act(owner, "release-circle", "settings", {
+        slowModeSeconds: 30,
+        postApproval: false,
+      });
+      await assert.rejects(
+        act(member, "release-circle", "comment", {
+          post: "community-chat",
+          id: "too-fast-message",
+          body: "Too soon",
+        }),
+        /Slow mode/,
+      );
+      await act(owner, "release-circle", "settings", {
+        slowModeSeconds: 0,
+        postApproval: false,
+      });
       await act(owner, "release-circle", "delete", {
         post: "image-publication",
       });

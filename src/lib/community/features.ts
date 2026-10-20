@@ -62,7 +62,8 @@ export type CommunityAsset = {
   id: string;
   owner: string;
   post: string;
-  kind: "post" | "avatar" | "cover";
+  kind: "post" | "comment" | "avatar" | "cover";
+  comment?: string;
   objectName: string;
   alt: string;
   bytes: number;
