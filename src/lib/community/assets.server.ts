@@ -1,3 +1,10 @@
+import {
+  assertCommunityAvailable,
+  authorAvailable,
+  privacyBlocked,
+  privacyPath,
+  type PrivacyFlag,
+} from "./privacy.server";
 import "server-only";
 import {
   createCipheriv,
@@ -47,6 +54,7 @@ export async function uploadCommunityAsset(
   input: { bytes: Buffer; kind: unknown; post: unknown; alt: unknown },
 ) {
   identifier(id);
+  await assertCommunityAvailable(uid);
   encryptionKey();
   if (!["post", "avatar", "cover"].includes(String(input.kind)))
     throw new CommunityError("Choose a valid image purpose.");
@@ -117,7 +125,12 @@ export async function uploadCommunityAsset(
       const docs = await getDocuments<
           Community &
             Membership & { time: number; bytes: number; count?: number }
-        >([cp, mp, `${root}/people/${uid}/uploadLimits/current`]),
+        >([
+          cp,
+          mp,
+          `${root}/people/${uid}/uploadLimits/current`,
+          privacyPath(uid),
+        ]),
         c = docs.get(cp)?.data,
         m = docs.get(mp)?.data,
         previous = docs.get(`${root}/people/${uid}/uploadLimits/current`)?.data;
@@ -125,6 +138,12 @@ export async function uploadCommunityAsset(
         previous && Date.now() - previous.time < 86400000
           ? previous
           : { time: Date.now(), bytes: 0, count: 0 };
+      if (
+        privacyBlocked(
+          docs.get(privacyPath(uid))?.data as unknown as PrivacyFlag,
+        )
+      )
+        throw new CommunityError("Community data removal is in progress.", 423);
       if (!c || !active(m) || c.archived || (kind !== "post" && !manages(m)))
         throw new CommunityError("Image upload permission changed.", 403);
       if ((limit.count || 0) >= 40 || limit.bytes + bytes.length > 20_000_000)
@@ -190,6 +209,12 @@ export async function readCommunityAsset(uid: string, id: string, aid: string) {
     get<Community>(cp),
     uid ? get<Membership>(`${cp}/members/${uid}`) : null,
   ]);
+  if (
+    asset &&
+    (!(await authorAvailable(asset.data.owner)) ||
+      (asset.data as { deleting?: boolean }).deleting)
+  )
+    throw new CommunityError("Image unavailable.", 404);
   if (!asset || !c) throw new CommunityError("Image unavailable.", 404);
   if (asset.data.kind === "post") {
     if (!canRead(c.data, m?.data))

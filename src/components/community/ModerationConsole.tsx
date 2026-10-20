@@ -1,4 +1,5 @@
 "use client";
+import CommunityOperations from "./CommunityOperations";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { Page, Report, Membership } from "@/lib/community/model";
@@ -37,6 +38,7 @@ export default function ModerationConsole() {
   }, []);
   return (
     <main className={s.shell}>
+      <CommunityOperations />
       <header className={s.panel}>
         <p className={s.eyebrow}>TGPI administration</p>
         <h1>Community moderation</h1>

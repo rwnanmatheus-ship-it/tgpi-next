@@ -60,7 +60,7 @@ export async function googleStorage(path: string, init: RequestInit = {}) {
   if (!response.ok)
     throw new CommunityError(
       "Image storage is unavailable. Please try again later.",
-      503,
+      response.status === 404 ? 404 : 503,
     );
   return response;
 }

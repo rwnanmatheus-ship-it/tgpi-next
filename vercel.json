@@ -3,6 +3,10 @@
     {
       "path": "/api/cron/global-key-anchor",
       "schedule": "17 3 * * *"
+    },
+    {
+      "path": "/api/cron/community-maintenance",
+      "schedule": "*/5 * * * *"
     }
   ]
 }

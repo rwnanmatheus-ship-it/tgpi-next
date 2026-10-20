@@ -88,6 +88,7 @@ const featuresUrl = dataUrl(
       .replace(/from ["']\.\/model["']/, `from '${modelUrl}'`),
   ),
 );
+const privacyUrl=dataUrl(compile(fs.readFileSync("src/lib/community/privacy.server.ts","utf8").replace(/import ['"]server-only['"];?/,"").replace(/import\s*\{\s*getFirestoreDocument\s*\}\s*from ['"]@\/lib\/firestore-admin-rest.server['"];?/,'const getFirestoreDocument=globalThis.__communityTest.get;').replace(/from ['"]\.\/model['"]/,`from '${modelUrl}'`)));
 const source = fs
   .readFileSync("src/lib/community/store.server.ts", "utf8")
   .replace(
@@ -101,6 +102,7 @@ const source = fs
   )
   .replace(/from ["']\.\/model["']/, `from '${modelUrl}'`)
   .replace(/from ["']\.\/features["']/, `from '${featuresUrl}'`)
+  .replace(/from ["']\.\/privacy.server["']/, `from '${privacyUrl}'`)
   .replace(
     /import\s*\{\s*resolveMember\s*\}\s*from ["']@\/lib\/members\/identity.server["'];/,
     "const resolveMember=async()=>null;",
@@ -810,7 +812,7 @@ test("community server workflows with isolated transactional persistence", async
           /import\s*\{\s*googleStorage\s*\}\s*from ['"]\.\/google.server['"];?/,
           'const googleStorage=async()=>{throw Error("Unexpected external image storage");};',
         );
-      const assets = await import(dataUrl(compile(code)));
+      const assets = await import(dataUrl(compile(code.replace(/from ["']\.\/privacy.server["']/,`from '${privacyUrl}'`))));
       process.env.TGPI_COMMUNITY_MEDIA_KEY = Buffer.alloc(32, 1).toString(
         "base64",
       );
