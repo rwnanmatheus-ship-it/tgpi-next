@@ -120,7 +120,7 @@ test("empty context directs the journey to canonical TGPI modules", () => {
   assert.equal(model.journey.find(({ id }) => id === "prepare")?.href, "/passport");
 });
 
-test("Workspace V4 uses the shared Super App navigation and live command center", () => {
+test("Command Center preserves shared navigation and direct module links", () => {
   const workspace = readFileSync(
     new URL("../src/components/profile/GlobalWorkspaceOS.tsx", import.meta.url),
     "utf8",
@@ -130,11 +130,11 @@ test("Workspace V4 uses the shared Super App navigation and live command center"
     "utf8",
   );
 
-  assert.match(workspace, /Workspace Intelligence Home · V4/);
-  assert.match(workspace, /SUPER_APP_MODULES\.map/);
-  assert.match(workspace, /Global decision journey/);
-  assert.match(workspace, /Decision pulse/);
-  assert.match(workspace, /href="\/notifications"[\s\S]*?🔔/);
+  assert.match(workspace, /Global Command Center/);
+  assert.match(workspace, /SUPER_APP_MODULES\.filter/);
+  assert.match(workspace, /WorkspacePersonalSpace/);
+  assert.match(workspace, /WorkspaceCertificates/);
+  assert.match(workspace, /href="\/notifications"/);
   assert.doesNotMatch(workspace, /workspaceNav/);
   assert.doesNotMatch(workspace, /action="\/search"/);
   assert.doesNotMatch(workspace, /href="\/documents"/);

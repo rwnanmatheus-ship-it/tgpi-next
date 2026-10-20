@@ -1,3 +1,4 @@
+import { archiveWorkspaceHistory } from '@/lib/workspace-history.server';
 import "server-only";
 
 import { clerkClient } from "@clerk/nextjs/server";
@@ -404,5 +405,7 @@ export async function updateUserActivationProgress(
     },
   });
 
+  // Progress remains authoritative in Clerk. A failed archive is retried from retained events on the next workspace load.
+  await archiveWorkspaceHistory(userId, progress).catch(() => console.error('Workspace activity archive temporarily unavailable'));
   return progress;
 }
