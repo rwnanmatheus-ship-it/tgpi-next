@@ -1,3 +1,9 @@
+import { after } from "next/server";
+import {
+  requestCommunityErasure,
+  runErasureJob,
+} from "@/lib/community/lifecycle.server";
+import { privacyKey } from "@/lib/community/privacy.server";
 import { verifyWebhook } from "@clerk/nextjs/webhooks";
 import { NextResponse, type NextRequest } from "next/server";
 import { welcomeEvent } from "@/lib/notifications/model";
@@ -6,7 +12,7 @@ import {
   publishNotification,
 } from "@/lib/notifications/store.server";
 export async function POST(request: NextRequest) {
-  if (!process.env.CLERK_WEBHOOK_SIGNING_SECRET || !notificationsConfigured())
+  if (!process.env.CLERK_WEBHOOK_SIGNING_SECRET)
     return NextResponse.json(
       { error: "Webhook is not configured." },
       { status: 503 },
@@ -21,6 +27,20 @@ export async function POST(request: NextRequest) {
     );
   }
   try {
+    if (event.type === "user.deleted" && event.data.id) {
+      const uid = event.data.id;
+      await requestCommunityErasure(uid, true);
+      after(async () => {
+        try {
+          await runErasureJob(privacyKey(uid), 20);
+        } catch {
+          console.error("Community privacy job will retry");
+        }
+      });
+      return NextResponse.json({ received: true });
+    }
+    if (!notificationsConfigured())
+      return NextResponse.json({ received: true });
     if (event.type === "user.created")
       await publishNotification(event.data.id, welcomeEvent);
     if (event.type === "session.created")

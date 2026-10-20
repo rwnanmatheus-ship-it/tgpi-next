@@ -88,6 +88,18 @@ const featuresUrl = dataUrl(
       .replace(/from ["']\.\/model["']/, `from '${modelUrl}'`),
   ),
 );
+const privacyUrl = dataUrl(
+  compile(
+    fs
+      .readFileSync("src/lib/community/privacy.server.ts", "utf8")
+      .replace(/import ['"]server-only['"];?/, "")
+      .replace(
+        /import\s*\{\s*getFirestoreDocument\s*\}\s*from ['"]@\/lib\/firestore-admin-rest.server['"];?/,
+        "const getFirestoreDocument=globalThis.__communityTest.get;",
+      )
+      .replace(/from ['"]\.\/model['"]/, `from '${modelUrl}'`),
+  ),
+);
 const source = fs
   .readFileSync("src/lib/community/store.server.ts", "utf8")
   .replace(
@@ -101,6 +113,7 @@ const source = fs
   )
   .replace(/from ["']\.\/model["']/, `from '${modelUrl}'`)
   .replace(/from ["']\.\/features["']/, `from '${featuresUrl}'`)
+  .replace(/from ["']\.\/privacy.server["']/, `from '${privacyUrl}'`)
   .replace(
     /import\s*\{\s*resolveMember\s*\}\s*from ["']@\/lib\/members\/identity.server["'];/,
     "const resolveMember=async()=>null;",
@@ -810,7 +823,16 @@ test("community server workflows with isolated transactional persistence", async
           /import\s*\{\s*googleStorage\s*\}\s*from ['"]\.\/google.server['"];?/,
           'const googleStorage=async()=>{throw Error("Unexpected external image storage");};',
         );
-      const assets = await import(dataUrl(compile(code)));
+      const assets = await import(
+        dataUrl(
+          compile(
+            code.replace(
+              /from ["']\.\/privacy.server["']/,
+              `from '${privacyUrl}'`,
+            ),
+          ),
+        )
+      );
       process.env.TGPI_COMMUNITY_MEDIA_KEY = Buffer.alloc(32, 1).toString(
         "base64",
       );
@@ -954,6 +976,22 @@ test("community server workflows with isolated transactional persistence", async
           .items.length,
         1,
       );
+      const privacy = await import(privacyUrl),
+        ownerGate = privacy.privacyPath(owner.uid);
+      db.set(ownerGate, { state: "queued", accountDeleted: false });
+      await assert.rejects(
+        assets.readCommunityAsset(member.uid, "release-circle", chatPhoto.id),
+        /unavailable/,
+      );
+      await assert.rejects(
+        act(member, "release-circle", "comment", {
+          post: "community-chat",
+          id: "target-erasure-reply",
+          body: "Cannot add to a removing thread",
+        }),
+        /unavailable/,
+      );
+      db.delete(ownerGate);
       await act(member, "release-circle", "delete-comment", {
         post: "community-chat",
         comment: "photo-message",
@@ -1023,6 +1061,64 @@ test("community server workflows with isolated transactional persistence", async
         false,
       );
       process.env.TGPI_NOTIFICATIONS_SECURITY_RULES_CONFIRMED = "true";
+    },
+  );
+  await t.test(
+    "privacy jobs block contribution and pseudonymous bans survive re-entry",
+    async () => {
+      const privacy = await import(privacyUrl),
+        gate = privacy.privacyPath(member.uid);
+      db.set(gate, { state: "queued", accountDeleted: false });
+      await assert.rejects(
+        act(member, "release-circle", "comment", {
+          post: "notification-question",
+          id: "blocked-reply",
+          body: "Should not persist",
+        }),
+        /removal/,
+      );
+      db.delete(gate);
+      const path = cp("release-circle") + "/members/" + member.uid,
+        membership = db.get(path);
+      db.delete(path);
+      const restriction =
+        cp("release-circle") +
+        "/restrictions/" +
+        privacy.privacyKey(member.uid);
+      db.set(restriction, { state: "banned" });
+      await assert.rejects(
+        act(member, "release-circle", "join", { acceptedVersion: 1 }),
+        /restricted/,
+      );
+      db.delete(restriction);
+      db.set(path, membership);
+    },
+  );
+  await t.test(
+    "orphaned archive recovery requires administrator offer and recipient acceptance",
+    async () => {
+      const path = cp("release-circle"),
+        c = db.get(path),
+        old = db.get(path + "/members/" + owner.uid);
+      db.set(path, { ...c, owner: "deleted", archived: true, transferTo: "" });
+      db.delete(path + "/members/" + owner.uid);
+      await assert.rejects(
+        act(member, "release-circle", "transfer", { target: other.uid }),
+        /permission|cannot/i,
+      );
+      await act({ ...owner, admin: true }, "release-circle", "transfer", {
+        target: member.uid,
+      });
+      assert.equal(db.get(path).owner, "deleted");
+      await act(member, "release-circle", "accept-transfer");
+      assert.equal(db.get(path).owner, member.uid);
+      assert.equal(db.get(path + "/members/" + member.uid).role, "owner");
+      db.set(path, c);
+      db.set(path + "/members/" + owner.uid, old);
+      db.set(path + "/members/" + member.uid, {
+        ...db.get(path + "/members/" + member.uid),
+        role: "member",
+      });
     },
   );
   await t.test("configuration gate fails closed", async () => {

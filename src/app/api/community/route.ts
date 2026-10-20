@@ -1,3 +1,4 @@
+import {assertCommunityAvailable} from "@/lib/community/privacy.server";
 import { courses } from "@/data/courses";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
@@ -50,6 +51,7 @@ export async function GET(request: Request) {
       u = new URL(request.url),
       id = u.searchParams.get("community"),
       after = u.searchParams.get("after") || "";
+    await assertCommunityAvailable(uid);
     const result = u.searchParams.has("upcoming")
       ? await upcomingSessions(uid)
       : u.searchParams.has("catalog")

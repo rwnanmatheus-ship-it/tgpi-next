@@ -33,10 +33,15 @@ export type FirestoreDecodedDocument<T> = {
   updateTime?: string;
 };
 
-export type FirestoreWrite = {
-  currentDocument?: { exists?: boolean; updateTime?: string };
-  update: FirestoreDocument;
-};
+export type FirestoreWrite =
+  | {
+      currentDocument?: { exists?: boolean; updateTime?: string };
+      update: FirestoreDocument;
+    }
+  | {
+      currentDocument?: { exists?: boolean; updateTime?: string };
+      delete: string;
+    };
 
 type TransactionContext = {
   getDocuments: <T>(
@@ -70,8 +75,7 @@ function getConfig() {
   return {
     clientEmail: process.env.TGPI_FIREBASE_CLIENT_EMAIL?.trim() || "",
     privateKey:
-      process.env.TGPI_FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n").trim() ||
-      "",
+      process.env.TGPI_FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n").trim() || "",
     projectId: process.env.TGPI_FIREBASE_PROJECT_ID?.trim() || "tgpi-next",
   };
 }
@@ -137,7 +141,10 @@ function apiUrl(path: string) {
 
 function safeDocumentPath(path: string) {
   const segments = path.split("/").filter(Boolean);
-  if (!segments.length || segments.some((segment) => segment === "." || segment === "..")) {
+  if (
+    !segments.length ||
+    segments.some((segment) => segment === "." || segment === "..")
+  ) {
     throw new FirestoreAdminError("Firestore document path is invalid.", 500);
   }
   return segments.map(encodeURIComponent).join("/");
@@ -191,9 +198,9 @@ function decodeValue(value: FirestoreValue): JsonValue {
   return null;
 }
 
-export function encodeFirestoreFields(
-  data: { [key: string]: JsonValue | undefined },
-) {
+export function encodeFirestoreFields(data: {
+  [key: string]: JsonValue | undefined;
+}) {
   return Object.fromEntries(
     Object.entries(data)
       .map(([key, value]) => [key, encodeValue(value)] as const)
@@ -261,6 +268,26 @@ export function createFirestoreUpdateWrite(
   };
 }
 
+export function createFirestoreDeleteWrite(path: string): FirestoreWrite {
+  return { delete: firestoreDocumentName(path) };
+}
+export async function listFirestoreChildCollections(path: string) {
+  const response = await firestoreFetch(
+    `/documents/${safeDocumentPath(path)}:listCollectionIds`,
+    { method: "POST", body: JSON.stringify({ pageSize: 100 }) },
+  );
+  const payload = (await response.json()) as {
+    collectionIds?: string[];
+    nextPageToken?: string;
+  };
+  if (payload.nextPageToken)
+    throw new FirestoreAdminError(
+      "Community subtree has too many collection types.",
+      503,
+    );
+  return payload.collectionIds || [];
+}
+
 export async function getFirestoreDocument<T>(path: string) {
   try {
     const response = await firestoreFetch(
@@ -268,7 +295,8 @@ export async function getFirestoreDocument<T>(path: string) {
     );
     return decodeDocument<T>((await response.json()) as FirestoreDocument);
   } catch (error) {
-    if (error instanceof FirestoreAdminError && error.status === 404) return null;
+    if (error instanceof FirestoreAdminError && error.status === 404)
+      return null;
     throw error;
   }
 }
@@ -289,27 +317,47 @@ export async function listFirestoreDocuments<T>(
 }
 
 /** Document-name ordering requires no additional composite index. Opaque cursor is server validated by Firestore. */
-export async function listFirestoreDocumentPage<T>(parentPath: string, collectionId: string, pageToken?: string) {
+export async function listFirestoreDocumentPage<T>(
+  parentPath: string,
+  collectionId: string,
+  pageToken?: string,
+) {
   const parent = `/${safeDocumentPath(parentPath)}`;
-  const query = new URLSearchParams({ pageSize: '12', orderBy: '__name__ desc' });
-  if (pageToken) query.set('pageToken', pageToken);
-  const response = await firestoreFetch(`/documents${parent}/${encodeURIComponent(collectionId)}?${query}`);
-  const payload = await response.json() as { documents?: FirestoreDocument[]; nextPageToken?: string };
-  return { items: (payload.documents ?? []).map(decodeDocument<T>), nextPageToken: payload.nextPageToken ?? null };
+  const query = new URLSearchParams({
+    pageSize: "12",
+    orderBy: "__name__ desc",
+  });
+  if (pageToken) query.set("pageToken", pageToken);
+  const response = await firestoreFetch(
+    `/documents${parent}/${encodeURIComponent(collectionId)}?${query}`,
+  );
+  const payload = (await response.json()) as {
+    documents?: FirestoreDocument[];
+    nextPageToken?: string;
+  };
+  return {
+    items: (payload.documents ?? []).map(decodeDocument<T>),
+    nextPageToken: payload.nextPageToken ?? null,
+  };
 }
 
-export async function runFirestoreQuery<T>(structuredQuery: object, parentPath = "") {
-  const response = await firestoreFetch(`/documents${parentPath ? `/${safeDocumentPath(parentPath)}` : ""}:runQuery`, {
-
-    body: JSON.stringify({ structuredQuery }),
-    method: "POST",
-  });
+export async function runFirestoreQuery<T>(
+  structuredQuery: object,
+  parentPath = "",
+) {
+  const response = await firestoreFetch(
+    `/documents${parentPath ? `/${safeDocumentPath(parentPath)}` : ""}:runQuery`,
+    {
+      body: JSON.stringify({ structuredQuery }),
+      method: "POST",
+    },
+  );
   const payload = (await response.json()) as Array<{
     document?: FirestoreDocument;
   }>;
   return payload
-    .filter(
-      (item): item is { document: FirestoreDocument } => Boolean(item.document),
+    .filter((item): item is { document: FirestoreDocument } =>
+      Boolean(item.document),
     )
     .map((item) => decodeDocument<T>(item.document));
 }
@@ -353,7 +401,10 @@ async function getDocumentsInTransaction<T>(
   return result;
 }
 
-async function commitTransaction(transaction: string, writes: FirestoreWrite[]) {
+async function commitTransaction(
+  transaction: string,
+  writes: FirestoreWrite[],
+) {
   await firestoreFetch("/documents:commit", {
     body: JSON.stringify({ transaction, writes }),
     method: "POST",

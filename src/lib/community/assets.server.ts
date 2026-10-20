@@ -1,3 +1,10 @@
+import {
+  assertCommunityAvailable,
+  authorAvailable,
+  privacyBlocked,
+  privacyPath,
+  type PrivacyFlag,
+} from "./privacy.server";
 import "server-only";
 import {
   createCipheriv,
@@ -54,6 +61,7 @@ export async function uploadCommunityAsset(
   },
 ) {
   identifier(id);
+  await assertCommunityAvailable(uid);
   encryptionKey();
   if (!["post", "comment", "avatar", "cover"].includes(String(input.kind)))
     throw new CommunityError("Choose a valid image purpose.");
@@ -101,7 +109,11 @@ export async function uploadCommunityAsset(
     );
   if (kind === "comment") {
     const post = await get<Post>(`${cp}/posts/${pid}`);
-    if (!post || !postVisible(post.data, member?.data, uid))
+    if (
+      !post ||
+      !postVisible(post.data, member?.data, uid) ||
+      !(await authorAvailable(post.data.author))
+    )
       throw new CommunityError("Conversation unavailable.", 404);
   }
   const bytes = await image
@@ -135,7 +147,12 @@ export async function uploadCommunityAsset(
       const docs = await getDocuments<
           Community &
             Membership & { time: number; bytes: number; count?: number }
-        >([cp, mp, `${root}/people/${uid}/uploadLimits/current`]),
+        >([
+          cp,
+          mp,
+          `${root}/people/${uid}/uploadLimits/current`,
+          privacyPath(uid),
+        ]),
         c = docs.get(cp)?.data,
         m = docs.get(mp)?.data,
         previous = docs.get(`${root}/people/${uid}/uploadLimits/current`)?.data;
@@ -143,6 +160,12 @@ export async function uploadCommunityAsset(
         previous && Date.now() - previous.time < 86400000
           ? previous
           : { time: Date.now(), bytes: 0, count: 0 };
+      if (
+        privacyBlocked(
+          docs.get(privacyPath(uid))?.data as unknown as PrivacyFlag,
+        )
+      )
+        throw new CommunityError("Community data removal is in progress.", 423);
       if (
         !c ||
         !active(m) ||
@@ -219,6 +242,12 @@ export async function readCommunityAsset(uid: string, id: string, aid: string) {
     get<Community>(cp),
     uid ? get<Membership>(`${cp}/members/${uid}`) : null,
   ]);
+  if (
+    asset &&
+    (!(await authorAvailable(asset.data.owner)) ||
+      (asset.data as { deleting?: boolean }).deleting)
+  )
+    throw new CommunityError("Image unavailable.", 404);
   if (!asset || !c) throw new CommunityError("Image unavailable.", 404);
   if (["post", "comment"].includes(asset.data.kind)) {
     if (!canRead(c.data, m?.data))
@@ -227,6 +256,7 @@ export async function readCommunityAsset(uid: string, id: string, aid: string) {
     if (
       post
         ? !postVisible(post.data, m?.data, uid) ||
+          !(await authorAvailable(post.data.author)) ||
           (asset.data.kind === "post" &&
             !post.data.attachments?.some((x) => x.id === aid))
         : asset.data.owner !== uid && !manages(m?.data)

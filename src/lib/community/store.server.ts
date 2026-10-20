@@ -1,3 +1,10 @@
+import {
+  authorAvailable,
+  privacyBlocked,
+  privacyKey,
+  privacyPath,
+  type PrivacyFlag,
+} from "./privacy.server";
 import { getCourse } from "@/data/courses";
 import "server-only";
 import {
@@ -61,8 +68,8 @@ export type Actor = {
 export function configured() {
   return Boolean(
     process.env.TGPI_FIREBASE_CLIENT_EMAIL &&
-    process.env.TGPI_FIREBASE_PRIVATE_KEY &&
-    process.env.TGPI_LEARNING_SECURITY_RULES_CONFIRMED === "true",
+      process.env.TGPI_FIREBASE_PRIVATE_KEY &&
+      process.env.TGPI_LEARNING_SECURITY_RULES_CONFIRMED === "true",
   );
 }
 function ready() {
@@ -212,7 +219,8 @@ async function allowedPost(
   m: Membership | null | undefined,
   uid: string,
 ) {
-  if (!postVisible(p, m, uid)) return false;
+  if (!postVisible(p, m, uid) || !(await authorAvailable(p.author)))
+    return false;
   if (!uid || p.author === uid) return true;
   const paths = [
     `${root}/people/${uid}/blocks/${p.author}`,
@@ -627,7 +635,13 @@ export async function mutate(actor: Actor, input: Record<string, unknown>) {
     async ({ getDocuments }) => {
       const docs = await getDocuments<
         Community & Membership & { time: number; count: number }
-      >([path, memberPath, `${root}/limits/${uid}`]);
+      >([path, memberPath, `${root}/limits/${uid}`, privacyPath(uid)]);
+      if (
+        privacyBlocked(
+          docs.get(privacyPath(uid))?.data as unknown as PrivacyFlag,
+        )
+      )
+        throw new CommunityError("Community data removal is in progress.", 423);
       const c = docs.get(path)?.data as Community | undefined,
         m = docs.get(memberPath)?.data as Membership | undefined,
         limit = docs.get(`${root}/limits/${uid}`)?.data;
@@ -809,10 +823,16 @@ export async function mutate(actor: Actor, input: Record<string, unknown>) {
         if (c)
           throw new CommunityError("This identifier is already taken.", 409);
         const settings = validateAccess(input.visibility, input.admission),
-          lp = `${root}/creation/${uid}`;
-        const count =
-          (await getDocuments<{ count: number }>([lp])).get(lp)?.data.count ||
-          0;
+          lp = `${root}/creation/${uid}`,
+          trustPath = `${root}/trust/${privacyKey(uid)}`;
+        const count = Math.max(
+          ...[
+            ...(
+              await getDocuments<{ count: number }>([lp, trustPath])
+            ).values(),
+          ].map((x) => x?.data.count || 0),
+          0,
+        );
         if (count >= 5)
           throw new CommunityError(
             "Community creation limit reached. Contact TGPI support.",
@@ -875,6 +895,16 @@ export async function mutate(actor: Actor, input: Record<string, unknown>) {
         if (c.archived || ["banned", "suspended"].includes(m?.state || ""))
           throw new CommunityError("Participation unavailable.", 403);
         if (active(m)) return { result: { id }, writes: [] };
+        const restriction = (
+          await getDocuments<{ state: string }>([
+            `${path}/restrictions/${privacyKey(uid)}`,
+          ])
+        ).get(`${path}/restrictions/${privacyKey(uid)}`)?.data;
+        if (restriction && ["banned", "suspended"].includes(restriction.state))
+          throw new CommunityError(
+            "Participation restricted. Contact moderation to request review.",
+            403,
+          );
         if (input.acceptedVersion !== c.rulesVersion)
           throw new CommunityError("Read and accept the current rules.");
         let accepted = c.admission === "instant";
@@ -930,13 +960,26 @@ export async function mutate(actor: Actor, input: Record<string, unknown>) {
         const target = text(input.target, 150, true);
         if (!/^user_[a-zA-Z0-9]+$/.test(target))
           throw new CommunityError("Invalid member.");
+        const targetPrivacy = (
+          await getDocuments<PrivacyFlag>([privacyPath(target)])
+        ).get(privacyPath(target))?.data;
+        if (privacyBlocked(targetPrivacy))
+          throw new CommunityError("Member unavailable.", 409);
         const tm = (await getDocuments<Membership>([mp(id, target)])).get(
           mp(id, target),
         )?.data;
         if (!tm || (tm.role === "owner" && !actor.admin) || target === uid)
           throw new CommunityError("This member cannot be changed.", 403);
         if (["promote", "demote", "transfer"].includes(action)) {
-          owner();
+          if (
+            !(
+              actor.admin &&
+              action === "transfer" &&
+              c.archived &&
+              c.owner === "deleted"
+            )
+          )
+            owner();
           if (!active(tm)) throw new CommunityError("Choose an active member.");
           if (action === "transfer")
             put(path, { ...c, transferTo: target, updatedAt: now });
@@ -996,16 +1039,20 @@ export async function mutate(actor: Actor, input: Record<string, unknown>) {
         const old = (await getDocuments<Membership>([mp(id, c.owner)])).get(
           mp(id, c.owner),
         )?.data;
-        if (!old || old.role !== "owner")
+        if (
+          (!old || old.role !== "owner") &&
+          !(c.owner === "deleted" && c.archived)
+        )
           throw new CommunityError("Ownership changed.", 409);
-        membership(
-          c.owner,
-          "active",
-          "member",
-          old.answers,
-          "",
-          old.acceptedVersion,
-        );
+        if (old)
+          membership(
+            c.owner,
+            "active",
+            "member",
+            old.answers,
+            "",
+            old.acceptedVersion,
+          );
         membership(uid, "active", "owner", m!.answers, "", m!.acceptedVersion);
         put(path, { ...c, owner: uid, transferTo: "", updatedAt: now });
         audit(uid);
@@ -1078,7 +1125,11 @@ export async function mutate(actor: Actor, input: Record<string, unknown>) {
             images.some((x) => {
               const a = records.get(`${path}/assets/${x.id}`)?.data;
               return (
-                !a || a.owner !== uid || a.kind !== "post" || a.post !== pid
+                !a ||
+                (a as CommunityAsset & { deleting?: boolean }).deleting ||
+                a.owner !== uid ||
+                a.kind !== "post" ||
+                a.post !== pid
               );
             })
           )
@@ -1130,7 +1181,16 @@ export async function mutate(actor: Actor, input: Record<string, unknown>) {
         const pid = identifier(input.post),
           postPath = pp(id, pid),
           p = (await getDocuments<Post>([postPath])).get(postPath)?.data;
-        if (!p || (!postVisible(p, m, uid) && !actor.admin))
+        const authorGate = p?.author.startsWith("user_")
+          ? (await getDocuments<PrivacyFlag>([privacyPath(p.author)])).get(
+              privacyPath(p.author),
+            )?.data
+          : null;
+        if (
+          !p ||
+          privacyBlocked(authorGate) ||
+          (!postVisible(p, m, uid) && !actor.admin)
+        )
           throw new CommunityError("Publication unavailable.", 404);
         if (
           ["comment", "accept", "edit-comment"].includes(action) &&
@@ -1213,6 +1273,7 @@ export async function mutate(actor: Actor, input: Record<string, unknown>) {
                 const asset = records.get(`${path}/assets/${x.id}`)?.data;
                 return (
                   !asset ||
+                  (asset as CommunityAsset & { deleting?: boolean }).deleting ||
                   asset.owner !== uid ||
                   asset.kind !== "comment" ||
                   asset.post !== pid ||
@@ -1381,6 +1442,7 @@ export async function mutate(actor: Actor, input: Record<string, unknown>) {
           attendeeCount: 0,
           cancelled: false,
           createdAt: now,
+          createdBy: uid,
         });
         audit(eid);
       } else if (["rsvp", "cancel-event"].includes(action)) {
