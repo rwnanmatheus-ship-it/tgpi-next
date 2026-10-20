@@ -30,6 +30,7 @@ import {
   type Community,
   type Membership,
   type Post,
+  type Comment,
 } from "./model";
 import type { CommunityAsset } from "./features";
 import { googleStorage } from "./google.server";
@@ -51,15 +52,22 @@ function bucket() {
 export async function uploadCommunityAsset(
   uid: string,
   id: string,
-  input: { bytes: Buffer; kind: unknown; post: unknown; alt: unknown },
+  input: {
+    bytes: Buffer;
+    kind: unknown;
+    post: unknown;
+    alt: unknown;
+    comment?: unknown;
+  },
 ) {
   identifier(id);
   await assertCommunityAvailable(uid);
   encryptionKey();
-  if (!["post", "avatar", "cover"].includes(String(input.kind)))
+  if (!["post", "comment", "avatar", "cover"].includes(String(input.kind)))
     throw new CommunityError("Choose a valid image purpose.");
   const kind = input.kind as CommunityAsset["kind"],
-    pid = kind === "post" ? identifier(input.post) : "",
+    pid = ["post", "comment"].includes(kind) ? identifier(input.post) : "",
+    comment = kind === "comment" ? identifier(input.comment) : "",
     alt = text(input.alt, 250, true);
   if (input.bytes.length > 3_000_000)
     throw new CommunityError("Use an image under 3 MB.", 413);
@@ -91,9 +99,23 @@ export async function uploadCommunityAsset(
     !community ||
     !active(member?.data) ||
     community.data.archived ||
-    (kind !== "post" && !manages(member?.data))
+    (!["post", "comment"].includes(kind) && !manages(member?.data))
   )
     throw new CommunityError("Image upload permission required.", 403);
+  if (member?.data.acceptedVersion !== community.data.rulesVersion)
+    throw new CommunityError(
+      "Accept the current community rules before uploading.",
+      403,
+    );
+  if (kind === "comment") {
+    const post = await get<Post>(`${cp}/posts/${pid}`);
+    if (
+      !post ||
+      !postVisible(post.data, member?.data, uid) ||
+      !(await authorAvailable(post.data.author))
+    )
+      throw new CommunityError("Conversation unavailable.", 404);
+  }
   const bytes = await image
     .rotate()
     .resize({
@@ -144,8 +166,18 @@ export async function uploadCommunityAsset(
         )
       )
         throw new CommunityError("Community data removal is in progress.", 423);
-      if (!c || !active(m) || c.archived || (kind !== "post" && !manages(m)))
+      if (
+        !c ||
+        !active(m) ||
+        c.archived ||
+        (!["post", "comment"].includes(kind) && !manages(m))
+      )
         throw new CommunityError("Image upload permission changed.", 403);
+      if (m?.acceptedVersion !== c.rulesVersion)
+        throw new CommunityError(
+          "Accept the current community rules before uploading.",
+          403,
+        );
       if ((limit.count || 0) >= 40 || limit.bytes + bytes.length > 20_000_000)
         throw new CommunityError("Daily image allowance reached.", 429);
       const asset: CommunityAsset & { ciphertext?: string } = {
@@ -156,6 +188,7 @@ export async function uploadCommunityAsset(
         owner: uid,
         kind,
         post: pid,
+        ...(comment ? { comment } : {}),
         objectName,
         alt,
         bytes: bytes.length,
@@ -216,21 +249,36 @@ export async function readCommunityAsset(uid: string, id: string, aid: string) {
   )
     throw new CommunityError("Image unavailable.", 404);
   if (!asset || !c) throw new CommunityError("Image unavailable.", 404);
-  if (asset.data.kind === "post") {
+  if (["post", "comment"].includes(asset.data.kind)) {
     if (!canRead(c.data, m?.data))
       throw new CommunityError("Image unavailable.", 404);
     const post = await get<Post>(`${cp}/posts/${asset.data.post}`);
     if (
       post
         ? !postVisible(post.data, m?.data, uid) ||
-          !post.data.attachments?.some((x) => x.id === aid)
+          !(await authorAvailable(post.data.author)) ||
+          (asset.data.kind === "post" &&
+            !post.data.attachments?.some((x) => x.id === aid))
         : asset.data.owner !== uid && !manages(m?.data)
     )
       throw new CommunityError("Image unavailable.", 404);
+    if (asset.data.kind === "comment") {
+      if (!post) throw new CommunityError("Image unavailable.", 404);
+      const message = await get<Comment>(
+        `${cp}/posts/${asset.data.post}/comments/${asset.data.comment}`,
+      );
+      if (
+        message
+          ? message.data.removed ||
+            !message.data.attachments?.some((x) => x.id === aid)
+          : asset.data.owner !== uid
+      )
+        throw new CommunityError("Image unavailable.", 404);
+    }
   } else if (!canDiscover(c.data, m?.data))
     throw new CommunityError("Image unavailable.", 404);
   if (
-    asset.data.kind === "post" &&
+    ["post", "comment"].includes(asset.data.kind) &&
     uid &&
     asset.data.owner !== uid &&
     !manages(m?.data)

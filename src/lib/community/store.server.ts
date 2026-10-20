@@ -61,6 +61,7 @@ const record = (v: object) => v as Record<string, JsonValue>;
 export type Actor = {
   uid: string;
   name: string;
+  image?: string;
   handle: string;
   admin: boolean;
 };
@@ -1097,11 +1098,12 @@ export async function mutate(actor: Actor, input: Record<string, unknown>) {
           )
         )
           throw new CommunityError("Choose a publication format.");
+        if (input.id === "community-chat") manage();
         const pid = identifier(input.id),
           postPath = pp(id, pid),
           previous = (await getDocuments<Post>([postPath])).get(postPath);
         if (previous) {
-          if (previous.data.author !== uid)
+          if (previous.data.author !== uid && pid !== "community-chat")
             throw new CommunityError("Publication ID unavailable.", 409);
           return { result: { id }, writes: [] };
         }
@@ -1141,6 +1143,7 @@ export async function mutate(actor: Actor, input: Record<string, unknown>) {
           community: id,
           author: uid,
           authorName: actor.name,
+          authorImage: actor.image || "",
           handle: actor.handle,
           kind: input.kind,
           state: c.postApproval && !manages(m) ? "pending" : "published",
@@ -1178,7 +1181,16 @@ export async function mutate(actor: Actor, input: Record<string, unknown>) {
         const pid = identifier(input.post),
           postPath = pp(id, pid),
           p = (await getDocuments<Post>([postPath])).get(postPath)?.data;
-        if (!p || (!postVisible(p, m, uid) && !actor.admin))
+        const authorGate = p?.author.startsWith("user_")
+          ? (await getDocuments<PrivacyFlag>([privacyPath(p.author)])).get(
+              privacyPath(p.author),
+            )?.data
+          : null;
+        if (
+          !p ||
+          privacyBlocked(authorGate) ||
+          (!postVisible(p, m, uid) && !actor.admin)
+        )
           throw new CommunityError("Publication unavailable.", 404);
         if (
           ["comment", "accept", "edit-comment"].includes(action) &&
@@ -1241,18 +1253,55 @@ export async function mutate(actor: Actor, input: Record<string, unknown>) {
               throw new CommunityError("Reply ID unavailable.", 409);
             return { result: { id }, writes: [] };
           }
+          if (
+            c.slowModeSeconds &&
+            m?.lastPublishedAt &&
+            Date.now() - Date.parse(m.lastPublishedAt) <
+              c.slowModeSeconds * 1000
+          )
+            throw new CommunityError(
+              "Slow mode is active. Wait before your next message.",
+              429,
+            );
+          const images = attachments(input.attachments);
+          if (images.length) {
+            const records = await getDocuments<CommunityAsset>(
+              images.map((x) => `${path}/assets/${x.id}`),
+            );
+            if (
+              images.some((x) => {
+                const asset = records.get(`${path}/assets/${x.id}`)?.data;
+                return (
+                  !asset ||
+                  (asset as CommunityAsset & { deleting?: boolean }).deleting ||
+                  asset.owner !== uid ||
+                  asset.kind !== "comment" ||
+                  asset.post !== pid ||
+                  asset.comment !== cid
+                );
+              })
+            )
+              throw new CommunityError(
+                "Choose images uploaded for this message.",
+              );
+          }
+          const messageBody = text(input.body, 6000, !images.length);
           put(commentPath, {
+            attachments: images,
+            handle: actor.handle,
             id: cid,
             post: pid,
             author: uid,
             authorName: actor.name,
-            body: text(input.body, 6000, true),
+            authorImage: actor.image || "",
+            body: messageBody,
             removed: false,
             createdAt: now,
             updatedAt: now,
           });
+          put(memberPath, { ...m!, lastPublishedAt: now });
           if (p.author !== uid) await notify(p.author, `reply:${pid}:${cid}`);
-          await mention(text(input.body, 6000, true), `comment:${pid}:${cid}`);
+          await mention(messageBody, `comment:${pid}:${cid}`);
         } else if (
           ["edit-comment", "delete-comment", "accept"].includes(action)
         ) {

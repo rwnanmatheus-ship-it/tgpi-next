@@ -507,6 +507,7 @@ export async function runErasureJob(key: string, budget = 30) {
               ...d,
               author: "deleted",
               authorName: "Deleted member",
+              authorImage: "",
               handle: "",
               title: "Removed publication",
               body: "",
@@ -549,6 +550,9 @@ export async function runErasureJob(key: string, budget = 30) {
             ...d,
             author: "deleted",
             authorName: "Deleted member",
+            authorImage: "",
+            handle: "",
+            attachments: [],
             body: "",
             removed: true,
             updatedAt: new Date().toISOString(),
@@ -982,11 +986,20 @@ async function orphanAssetInTransaction(
     id = path.split("/").at(-1);
   if (asset.kind === "avatar") return c?.avatarId !== id;
   if (asset.kind === "cover") return c?.coverId !== id;
+  const messagePath =
+    asset.kind === "comment" && pid && typeof asset.comment === "string"
+      ? `${pid}/comments/${identifier(asset.comment)}`
+      : "";
+  const binding = messagePath
+    ? (await getDocuments<Data>([messagePath])).get(messagePath)?.data
+    : p;
   return (
     !p ||
     p.removed === true ||
-    !Array.isArray(p.attachments) ||
-    !p.attachments.some(
+    !binding ||
+    binding.removed === true ||
+    !Array.isArray(binding.attachments) ||
+    !binding.attachments.some(
       (x) => x && typeof x === "object" && !Array.isArray(x) && x.id === id,
     )
   );

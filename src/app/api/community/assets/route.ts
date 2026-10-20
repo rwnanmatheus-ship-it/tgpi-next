@@ -37,6 +37,7 @@ export async function POST(request: Request) {
           kind: u.searchParams.get("kind"),
           post: u.searchParams.get("post"),
           alt: u.searchParams.get("alt"),
+          comment: u.searchParams.get("comment"),
         },
       ),
       { headers },

@@ -22,6 +22,8 @@ const Management = dynamic(() => import("./CommunityManagement"));
 const Preferences = dynamic(() => import("./CommunityPreferences"));
 const Meetings = dynamic(() => import("./CommunityMeetings"));
 const Playbooks = dynamic(() => import("./CommunityPlaybooks"));
+const Chat = dynamic(() => import("./CommunityChat"));
+const ImageUpload = dynamic(() => import("./CommunityImageUpload"));
 const Sessions = dynamic(() => import("./GlobalSessions"));
 export default function CommunityApp({
   globalAdmin = false,
@@ -514,6 +516,23 @@ export default function CommunityApp({
                         unoptimized
                       />
                     )}
+                    {admin && (
+                      <details className={s.brandEditor}>
+                        <summary>Change community photo or cover</summary>
+                        <div className={s.split}>
+                          <ImageUpload
+                            community={c.id}
+                            kind="avatar"
+                            onUpload={() => void load()}
+                          />
+                          <ImageUpload
+                            community={c.id}
+                            kind="cover"
+                            onUpload={() => void load()}
+                          />
+                        </div>
+                      </details>
+                    )}
                     <div className={s.meta}>
                       <span className={s.badge}>{c.visibility}</span>
                       <span className={s.badge}>{c.admission}</span>
@@ -730,6 +749,14 @@ export default function CommunityApp({
                       </button>
                     </section>
                   )}
+                  {joined && (
+                    <Chat
+                      key={`${c.id}:${uid}`}
+                      community={c}
+                      membership={m || null}
+                      uid={uid}
+                    />
+                  )}
                   {joined && !c.archived && (
                     <Composer community={c.id} action={action} busy={busy} />
                   )}
@@ -751,11 +778,12 @@ export default function CommunityApp({
                   {detail.posts
                     .filter(
                       (p) =>
-                        postFilter === "all" ||
-                        (postFilter === "open" &&
-                          p.kind === "question" &&
-                          !p.accepted) ||
-                        p.kind === postFilter,
+                        p.id !== "community-chat" &&
+                        (postFilter === "all" ||
+                          (postFilter === "open" &&
+                            p.kind === "question" &&
+                            !p.accepted) ||
+                          p.kind === postFilter),
                     )
                     .map((p) => (
                       <PostCard

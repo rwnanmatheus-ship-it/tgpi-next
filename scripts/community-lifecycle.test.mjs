@@ -60,12 +60,10 @@ globalThis.__lifecycle = {
         ([p]) =>
           p > q.startAt.values.at(-1).referenceValue.split("/documents/")[1],
       );
-    return rows
-      .slice(0, q.limit || 25)
-      .map(([name, data]) => ({
-        name: "projects/test/databases/(default)/documents/" + name,
-        data: structuredClone(data),
-      }));
+    return rows.slice(0, q.limit || 25).map(([name, data]) => ({
+      name: "projects/test/databases/(default)/documents/" + name,
+      data: structuredClone(data),
+    }));
   },
   transaction: (fn) => {
     const next = queue.then(async () => {
@@ -180,6 +178,8 @@ function seed() {
     id: "own-post",
     author: uid,
     authorName: "Target name",
+    authorImage: "https://example.com/personal-avatar.png",
+    handle: "personal-handle",
     handle: "target",
     body: "Personal content",
     title: "Personal title",
@@ -204,7 +204,10 @@ function seed() {
     id: "own-reply",
     author: uid,
     authorName: "Target name",
+    authorImage: "https://example.com/personal-avatar.png",
+    handle: "personal-handle",
     body: "Personal reply",
+    attachments: [{ id: "message-photo", alt: "Personal image" }],
     removed: false,
     createdAt: now,
     updatedAt: now,
@@ -224,6 +227,14 @@ function seed() {
     post: "own-post",
     ciphertext: "encrypted-personal-photo",
     createdAt: now,
+  });
+  db.set(cp + "/assets/message-photo", {
+    owner: uid,
+    kind: "comment",
+    post: "other-post",
+    comment: "own-reply",
+    ciphertext: "encrypted-message-photo",
+    createdAt: old,
   });
   db.set(cp + "/sessions/test-session", {
     id: "test-session",
@@ -316,6 +327,12 @@ test("community lifecycle privacy and retention", async (t) => {
         "Keep this reply",
       );
       assert.equal(db.has(cp + "/assets/own-photo"), false);
+      assert.equal(db.has(cp + "/assets/message-photo"), false);
+      const reply = db.get(cp + "/posts/other-post/comments/own-reply");
+      assert.deepEqual(reply.attachments, []);
+      assert.equal(reply.authorImage, "");
+      assert.equal(reply.handle, "");
+      assert.equal(db.get(cp + "/posts/own-post").authorImage, "");
       assert.equal(
         db.has(root + "/people/" + uid + "/preferences/current"),
         false,
@@ -429,6 +446,26 @@ test("community lifecycle privacy and retention", async (t) => {
       assert.equal(db.has(cp + "/reports/reviewed"), false);
       assert.equal(db.has(cp + "/invites/expired"), false);
       assert.equal(db.has(root + "/drafts/" + uid), false);
+    },
+  );
+  await t.test(
+    "retention preserves photos attached to community messages",
+    async () => {
+      seed();
+      for (let i = 0; i < 8; i++) {
+        const result = await lifecycle.runCommunityMaintenance(40);
+        if (result.cycleComplete) break;
+      }
+      assert.equal(db.has(cp + "/assets/message-photo"), true);
+      db.set(cp + "/posts/other-post/comments/own-reply", {
+        ...db.get(cp + "/posts/other-post/comments/own-reply"),
+        removed: true,
+      });
+      for (let i = 0; i < 8; i++) {
+        const result = await lifecycle.runCommunityMaintenance(40);
+        if (result.cycleComplete) break;
+      }
+      assert.equal(db.has(cp + "/assets/message-photo"), false);
     },
   );
   await t.test(

@@ -156,9 +156,10 @@ export async function POST(request: Request) {
     const result = await mutate(
       {
         uid: userId,
-        name: identity?.handle
-          ? `@${identity.handle}`
-          : user.firstName || "TGPI member",
+        name:
+          [user.firstName, user.lastName].filter(Boolean).join(" ") ||
+          "TGPI member",
+        image: user.imageUrl,
         handle: identity?.handle || "",
         admin: user.privateMetadata.role === "admin",
       },
