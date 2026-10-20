@@ -1,0 +1,66 @@
+import "server-only";
+import { createSign } from "node:crypto";
+import { CommunityError } from "./model";
+const tokens = new Map<string, { token: string; until: number }>();
+export async function googleAccessToken(scope: string) {
+  const previous = tokens.get(scope);
+  if (previous && previous.until > Date.now() + 60000) return previous.token;
+  const email = process.env.TGPI_FIREBASE_CLIENT_EMAIL,
+    key = process.env.TGPI_FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n");
+  if (!email || !key)
+    throw new CommunityError("Cloud access is unavailable.", 503);
+  const now = Math.floor(Date.now() / 1000),
+    header = Buffer.from(JSON.stringify({ alg: "RS256", typ: "JWT" })).toString(
+      "base64url",
+    ),
+    payload = Buffer.from(
+      JSON.stringify({
+        iss: email,
+        scope,
+        aud: "https://oauth2.googleapis.com/token",
+        iat: now,
+        exp: now + 3600,
+      }),
+    ).toString("base64url"),
+    unsigned = `${header}.${payload}`,
+    signer = createSign("RSA-SHA256");
+  signer.update(unsigned);
+  signer.end();
+  const assertion = `${unsigned}.${signer.sign(key).toString("base64url")}`;
+  const response = await fetch("https://oauth2.googleapis.com/token", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
+      assertion,
+    }),
+    cache: "no-store",
+  });
+  if (!response.ok)
+    throw new CommunityError("Cloud authorization is unavailable.", 503);
+  const value = (await response.json()) as {
+    access_token: string;
+    expires_in: number;
+  };
+  tokens.set(scope, {
+    token: value.access_token,
+    until: Date.now() + Math.min(value.expires_in, 3500) * 1000,
+  });
+  return value.access_token;
+}
+export async function googleStorage(path: string, init: RequestInit = {}) {
+  const token = await googleAccessToken(
+    "https://www.googleapis.com/auth/devstorage.read_write",
+  );
+  const response = await fetch(`https://storage.googleapis.com${path}`, {
+    ...init,
+    cache: "no-store",
+    headers: { ...init.headers, Authorization: `Bearer ${token}` },
+  });
+  if (!response.ok)
+    throw new CommunityError(
+      "Image storage is unavailable. Please try again later.",
+      503,
+    );
+  return response;
+}

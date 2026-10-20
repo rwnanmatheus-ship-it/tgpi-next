@@ -1,0 +1,54 @@
+{
+  "fixture": true,
+  "liveAuth": false,
+  "errors": [],
+  "reports": [
+    {
+      "state": "discovery",
+      "name": "desktop",
+      "scroll": 1440,
+      "width": 1440
+    },
+    {
+      "state": "discovery",
+      "name": "tablet",
+      "scroll": 768,
+      "width": 768
+    },
+    {
+      "state": "discovery",
+      "name": "mobile",
+      "scroll": 390,
+      "width": 390
+    },
+    {
+      "state": "discovery",
+      "name": "small-mobile",
+      "scroll": 320,
+      "width": 320
+    },
+    {
+      "hiddenAdmission": "invite",
+      "admissionDisabled": true
+    },
+    {
+      "failedSavePreserved": "Keep this text after a simulated failure."
+    },
+    {
+      "restrictedPostVisible": 0,
+      "joinDisabled": true
+    },
+    {
+      "zoom200": {
+        "scroll": 390,
+        "width": 390
+      }
+    },
+    {
+      "reducedMotion": true
+    },
+    {
+      "keyboardFocus": "A"
+    }
+  ]
+}

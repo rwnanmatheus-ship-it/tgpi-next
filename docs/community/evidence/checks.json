@@ -1,0 +1,39 @@
+{
+  "typecheck": {
+    "exitCode": 0
+  },
+  "lint": {
+    "exitCode": 0
+  },
+  "community": {
+    "exitCode": 0,
+    "tests": 35,
+    "testBoundary": "Isolated in-memory transaction adapter, not a live database or emulator"
+  },
+  "account": {
+    "exitCode": 0
+  },
+  "notifications": {
+    "exitCode": 0
+  },
+  "pwa": {
+    "exitCode": 0
+  },
+  "platform": {
+    "exitCode": 0
+  },
+  "build": {
+    "exitCode": 0
+  },
+  "visual": {
+    "fixture": true,
+    "liveClerk": false,
+    "viewports": [
+      320,
+      390,
+      768,
+      1440
+    ],
+    "zoom200Overflow": false
+  }
+}

@@ -298,8 +298,9 @@ export async function listFirestoreDocumentPage<T>(parentPath: string, collectio
   return { items: (payload.documents ?? []).map(decodeDocument<T>), nextPageToken: payload.nextPageToken ?? null };
 }
 
-export async function runFirestoreQuery<T>(structuredQuery: object) {
-  const response = await firestoreFetch("/documents:runQuery", {
+export async function runFirestoreQuery<T>(structuredQuery: object, parentPath = "") {
+  const response = await firestoreFetch(`/documents${parentPath ? `/${safeDocumentPath(parentPath)}` : ""}:runQuery`, {
+
     body: JSON.stringify({ structuredQuery }),
     method: "POST",
   });

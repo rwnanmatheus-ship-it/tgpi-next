@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports -- Node CommonJS browser verification harness. */
 const fs=require('fs'),path=require('path'),http=require('http'),Module=require('module');
 const root=process.cwd(),qa='/tmp/tgpi-workspace-browser';fs.mkdirSync(qa,{recursive:true});fs.mkdirSync(root+'/docs/workspace-v5/evidence',{recursive:true});
 const req=Module.createRequire(root+'/package.json'),ts=req('typescript');

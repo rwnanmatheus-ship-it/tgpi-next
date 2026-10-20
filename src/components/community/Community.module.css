@@ -1,0 +1,379 @@
+.shell {
+  max-width: var(--tgpi-container, 80rem);
+  margin: auto;
+  padding: 24px clamp(16px, 3vw, 40px) 40px;
+  color: var(--tgpi-ink, #071a32);
+}
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 290px;
+  border-radius: 24px;
+  background: #071a32;
+  color: #fff;
+  padding: clamp(24px, 4vw, 48px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+.hero:after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(90deg, #04101bf5, #04101bc9 45%, #04101b20);
+}
+.hero img {
+  object-fit: cover;
+  z-index: -2;
+}
+.hero h1 {
+  font-size: clamp(36px, 5vw, 64px);
+  line-height: 1.05;
+  max-width: 640px;
+}
+.hero p {
+  max-width: 490px;
+  color: #e2e8f0;
+}
+.eyebrow {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  color: #e8c77d;
+  font-weight: 800;
+}
+.layout {
+  display: grid;
+  grid-template-columns: 180px minmax(0, 1fr);
+  gap: 24px;
+}
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-self: start;
+  position: sticky;
+  top: 100px;
+}
+.nav a,
+.nav button {
+  padding: 12px 14px;
+  border-radius: 12px;
+  text-align: left;
+  background: transparent;
+  border: 0;
+  color: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+.nav [aria-current="page"] {
+  background: #071a32;
+  color: #fff;
+}
+.context {
+  display: none;
+}
+.content {
+  min-width: 0;
+}
+.tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 20px;
+}
+.tools input {
+  flex: 1;
+  min-width: 140px;
+}
+.shell input,
+.shell select,
+.shell textarea {
+  width: 100%;
+  padding: 12px 14px;
+  background: #fff;
+  border: 1px solid #bac4d0;
+  border-radius: 10px;
+  color: #071a32;
+  min-height: 46px;
+}
+.shell textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+.shell label {
+  display: block;
+  font-size: 14px;
+  font-weight: 700;
+  margin: 12px 0;
+}
+.shell label input,
+.shell label select,
+.shell label textarea {
+  margin-top: 6px;
+}
+.shell input[type="checkbox"] {
+  width: 20px;
+  min-height: 20px;
+  margin: 0 8px 0 0;
+  vertical-align: middle;
+}
+.button,
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 10px 18px;
+  gap: 8px;
+  border-radius: 10px;
+  background: #071a32;
+  color: #fff;
+  border: 1px solid #071a32;
+  font-weight: 700;
+  cursor: pointer;
+}
+.secondary {
+  background: #fff;
+  color: #071a32;
+  border-color: #b8c3cf;
+}
+.hero .button {
+  background: #d9b461;
+  border-color: #d9b461;
+  color: #071a32;
+}
+.button:disabled,
+.secondary:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+  gap: 16px;
+}
+.card,
+.panel {
+  border: 1px solid #d6dce3;
+  border-radius: 18px;
+  background: #fffffff2;
+  padding: 22px;
+  box-shadow: 0 10px 30px #071a3208;
+  margin-bottom: 16px;
+  overflow-wrap: anywhere;
+}
+.card {
+  border-top: 3px solid #bb984c;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 18px 35px #071a3212;
+}
+.card h2,
+.panel h2 {
+  font-size: 28px;
+  line-height: 1.15;
+  margin: 8px 0 12px;
+}
+.meta {
+  font-size: 13px;
+  color: #526176;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.badge {
+  border: 1px solid #cbd5e1;
+  background: #f4f7fa;
+  padding: 3px 9px;
+  border-radius: 99px;
+  font-size: 12px;
+  color: #334155;
+}
+.body {
+  white-space: pre-wrap;
+  line-height: 1.8;
+  max-width: 72ch;
+}
+.empty {
+  padding: 36px 24px;
+  text-align: center;
+  border: 1px dashed #aab8c9;
+  border-radius: 18px;
+  background: #f6f8fa;
+}
+.empty h2 {
+  font-size: 32px;
+}
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+.status {
+  padding: 14px;
+  border: 1px solid #96b7cf;
+  background: #edf5fb;
+  border-radius: 12px;
+  margin: 12px 0;
+  overflow-wrap: anywhere;
+}
+.error {
+  padding: 14px;
+  border: 1px solid #ba7777;
+  color: #8c2424;
+  background: #fff2f2;
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+.rules {
+  white-space: pre-wrap;
+  font-size: 14px;
+  line-height: 1.8;
+}
+.reply {
+  border-left: 3px solid #b99a53;
+  padding: 12px 18px;
+  margin-top: 12px;
+  background: #f5f7fa;
+  border-radius: 0 12px 12px 0;
+}
+.step {
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  color: #526176;
+}
+.shell :is(a, button, input, textarea, select):focus-visible {
+  outline: 3px solid #2679b5;
+  outline-offset: 3px;
+}
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.identity {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.notice {
+  font-size: 13px;
+  color: #526176;
+}
+.loading {
+  padding: 30px;
+  text-align: center;
+}
+.editorial {
+  position: relative;
+  height: 145px;
+  overflow: hidden;
+  border-radius: 12px;
+  margin-bottom: 14px;
+}
+.editorial img {
+  object-fit: cover;
+}
+@media (min-width: 1280px) {
+  .layout {
+    grid-template-columns: 175px minmax(0, 1fr) 240px;
+  }
+  .context {
+    display: block;
+    align-self: start;
+  }
+}
+@media (max-width: 760px) {
+  .shell {
+    padding: 12px 16px 24px;
+  }
+  .layout {
+    display: block;
+  }
+  .nav {
+    position: static;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 16px;
+  }
+  .nav a,
+  .nav button {
+    padding: 9px 11px;
+    font-size: 13px;
+  }
+  .hero {
+    min-height: 270px;
+    border-radius: 18px;
+    padding: 24px;
+  }
+  .hero:after {
+    background: linear-gradient(90deg, #04101bf0, #04101bb3);
+  }
+  .split {
+    grid-template-columns: 1fr;
+  }
+  .panel,
+  .card {
+    padding: 18px;
+  }
+  .hero h1 {
+    font-size: 39px;
+  }
+  .tools {
+    align-items: stretch;
+  }
+  .tools .button {
+    width: 100%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .card {
+    transition: none;
+  }
+  .card:hover {
+    transform: none;
+  }
+}
+/* Preserve usable controls when browser zoom reduces the CSS viewport. */
+.button,
+.secondary {
+  max-width: 100%;
+  min-width: 0;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-align: center;
+}
+.nav a,
+.nav button {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+.shell label {
+  min-width: 0;
+}
+.hero h1,
+.empty h2 {
+  overflow-wrap: anywhere;
+}
+.content form {
+  min-width: 0;
+}
+.hero h1 {
+  font-size: clamp(36px, 4vw, 54px);
+  line-height: 1.08;
+  max-width: 680px;
+}

@@ -1,0 +1,17 @@
+{
+  "community": 39,
+  "account": 30,
+  "notifications": 10,
+  "platform": 12,
+  "pwa": 5,
+  "livePreview": 22,
+  "typecheck": "pass",
+  "lint": "pass",
+  "productionBuild": "pass \u2014 clean-cache Next build; final remote candidate also builds on Vercel",
+  "fixtureCleanup": {
+    "users": 2,
+    "communities": 3,
+    "documents": 109
+  },
+  "note": "Isolated tests and live Preview checks are different forms of evidence; see REVIEW.md."
+}

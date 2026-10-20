@@ -1,20 +1,35 @@
-import GlobalRoomsList from "@/components/GlobalRoomsList";
-import UserCard from "@/components/UserCard";
-
-export default function CommunityPage() {
+import { currentUser } from "@clerk/nextjs/server";
+import type { Metadata } from "next";
+import CommunityApp from "@/components/community/CommunityApp";
+export const metadata: Metadata = {
+  title: "Global Community | TGPI",
+  description:
+    "Connect with people navigating life across borders. Share experiences, ask questions and build your next step.",
+};
+export default async function CommunityPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ view?: string; destination?: string }>;
+}) {
+  const p = await searchParams;
   return (
-    <main className="min-h-screen bg-black text-white px-6 py-10 space-y-8">
-      <h1 className="text-4xl text-yellow-400 font-bold">
-        Global Community
-      </h1>
-
-      <GlobalRoomsList />
-
-      <section className="grid md:grid-cols-3 gap-4">
-        <UserCard name="Global Builder" />
-        <UserCard name="Future Operator" />
-        <UserCard name="Portugal Move" />
-      </section>
-    </main>
+    <CommunityApp
+      globalAdmin={(await currentUser())?.privateMetadata.role === "admin"}
+      initialView={
+        [
+          "mine",
+          "requests",
+          "saved",
+          "meetings",
+          "feed",
+          "questions",
+          "atlas",
+          "preferences",
+        ].includes(p.view || "")
+          ? p.view
+          : "explore"
+      }
+      destination={(p.destination || "").slice(0, 100)}
+    />
   );
 }
