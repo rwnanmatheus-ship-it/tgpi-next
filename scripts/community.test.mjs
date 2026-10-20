@@ -876,6 +876,36 @@ test("community server workflows with isolated transactional persistence", async
       );
     },
   );
+  await t.test(
+    "community updates reach the existing account inbox adapter without legacy activation",
+    async () => {
+      delete process.env.TGPI_NOTIFICATIONS_SECURITY_RULES_CONFIRMED;
+      await act(owner, "release-circle", "settings", {
+        postApproval: false,
+        slowModeSeconds: 0,
+      });
+      await act(owner, "release-circle", "post", {
+        id: "notification-question",
+        kind: "question",
+        title: "Private topic title",
+        body: "Private topic context",
+      });
+      await act(member, "release-circle", "comment", {
+        post: "notification-question",
+        id: "notification-reply",
+        body: "An answer",
+      });
+      const events = await store.communityNotificationEvents(owner.uid);
+      assert.ok(events.length);
+      assert.ok(events.some((e) => e.href === "/community"));
+      assert.equal(JSON.stringify(events).includes("release-circle"), false);
+      assert.equal(
+        JSON.stringify(events).includes("Private topic title"),
+        false,
+      );
+      process.env.TGPI_NOTIFICATIONS_SECURITY_RULES_CONFIRMED = "true";
+    },
+  );
   await t.test("configuration gate fails closed", async () => {
     delete process.env.TGPI_LEARNING_SECURITY_RULES_CONFIRMED;
     await assert.rejects(store.discover(""), /unavailable/);

@@ -131,6 +131,30 @@ export async function POST(request: Request) {
       if (user.privateMetadata.tgpiCommunityQaRun !== run)
         throw new Error("Fixture mismatch");
     }
+    if (input.action === "fixture-admin") {
+      await client.users.updateUserMetadata(fixture.data.users[0], {
+        privateMetadata: { role: "admin" },
+      });
+      return Response.json({ updated: true }, { headers });
+    }
+    if (input.action === "expire-invite") {
+      const invite = String(input.invite || "");
+      if (!/^[a-f0-9]{64}$/.test(invite))
+        throw new Error("Invalid fixture invite");
+      const path = `${root}/communities/${run}-hidden/invites/${invite}`,
+        record = await get<Record<string, string | number | boolean>>(path);
+      if (!record) throw new Error("Fixture invite missing");
+      await runFirestoreTransaction(async () => ({
+        result: null,
+        writes: [
+          write(path, {
+            ...record.data,
+            expiresAt: "2000-01-01T00:00:00.000Z",
+          }),
+        ],
+      }));
+      return Response.json({ expired: true }, { headers });
+    }
     if (input.action === "tickets") {
       return Response.json(
         {

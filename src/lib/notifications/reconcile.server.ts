@@ -1,3 +1,4 @@
+import { communityNotificationEvents } from "@/lib/community/store.server";
 import "server-only";
 import { TGPI_PREMIUM_PRICE_ID } from "@/lib/stripe";
 import { clerkClient } from "@clerk/nextjs/server";
@@ -28,14 +29,17 @@ export async function collectNotificationEvents(uid: string) {
     user.privateMetadata[TGPI_BILLING_METADATA_KEY],
     uid,
   );
-  const events: NotificationEvent[] = [{ ...welcomeEvent, occurredAt: new Date(user.createdAt).toISOString() }, {
-    key: "product:intelligence-inbox:v2",
-    category: "product",
-    title: "Your TGPI intelligence inbox is here",
-    body: "Find your account updates, learning milestones and recommended next steps in one place. Search, filter and save your reading preferences across devices.",
-    href: "/notifications",
-    actionLabel: "Explore my inbox",
-  }];
+  const events: NotificationEvent[] = [
+    { ...welcomeEvent, occurredAt: new Date(user.createdAt).toISOString() },
+    {
+      key: "product:intelligence-inbox:v2",
+      category: "product",
+      title: "Your TGPI intelligence inbox is here",
+      body: "Find your account updates, learning milestones and recommended next steps in one place. Search, filter and save your reading preferences across devices.",
+      href: "/notifications",
+      actionLabel: "Explore my inbox",
+    },
+  ];
   const onboarding = user.unsafeMetadata.tgpiOnboarding as
     | { completed?: boolean }
     | undefined;
@@ -135,6 +139,7 @@ export async function collectNotificationEvents(uid: string) {
         actionLabel: "Review official sources",
       });
   }
+  events.push(...(await communityNotificationEvents(uid)));
   return { events, user };
 }
 

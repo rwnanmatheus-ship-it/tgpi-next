@@ -28,6 +28,8 @@ import type { CommunityAsset } from "./features";
 import { googleStorage } from "./google.server";
 const root = "tgpiLearningUsers/_community";
 function encryptionKey() {
+  if (process.env.TGPI_LEARNING_SECURITY_RULES_CONFIRMED !== "true")
+    throw new CommunityError("Protected image storage is unavailable.", 503);
   const key = Buffer.from(process.env.TGPI_COMMUNITY_MEDIA_KEY || "", "base64");
   if (key.length !== 32)
     throw new CommunityError("Protected image storage is not configured.", 503);

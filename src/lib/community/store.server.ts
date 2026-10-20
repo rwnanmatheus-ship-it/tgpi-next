@@ -121,7 +121,10 @@ async function children<T>(
   after = "",
   filter?: { field: string; term: string },
 ) {
-  const chronological = collection === "posts" || collection === "comments",
+  const chronological =
+      collection === "posts" ||
+      collection === "comments" ||
+      collection === "updates",
     scope = `${parent}/${collection}${filter ? `:${filter.field}:${filter.term}` : ""}`,
     cursor = after ? openCursor(scope, after) : null;
   if (
@@ -396,6 +399,7 @@ export async function discover(uid: string, after = "", search = "") {
     result.items.map(async (c) => {
       const m = uid ? (await get<Membership>(mp(c.id, uid)))?.data : null;
       if (
+        c.visibility === "hidden" ||
         !canDiscover(c, m) ||
         prefs.hidden.includes(c.id) ||
         prefs.muted.includes(c.id)
@@ -651,8 +655,6 @@ export async function mutate(actor: Actor, input: Record<string, unknown>) {
         });
       const notificationsPlanned = new Set<string>();
       const notify = async (target: string, key: string) => {
-        if (process.env.TGPI_NOTIFICATIONS_SECURITY_RULES_CONFIRMED !== "true")
-          return;
         if (notificationsPlanned.has(target)) return;
         const blockPath = `${root}/people/${target}/blocks/${uid}`;
         if (
@@ -683,23 +685,28 @@ export async function mutate(actor: Actor, input: Record<string, unknown>) {
         if (frequency.count >= 10) return;
         put(windowPath, { time: frequency.time, count: frequency.count + 1 });
         notificationsPlanned.add(target);
-        if (process.env.TGPI_NOTIFICATIONS_SECURITY_RULES_CONFIRMED !== "true")
-          return;
-        const nid = hash(`${target}:community:${id}:${key}`);
-        put(`tgpiNotificationInbox/${nid}`, {
-          id: nid,
-          uid: target,
-          key: `community:${id}:${key}`,
+        const eventKey = `community:${hash(id)}:${hash(key)}`,
+          nid = hash(`${target}:${eventKey}`);
+        const event = {
+          key: eventKey,
           category: "product",
           title: "Community participation update",
           body: "There is an update to your TGPI community participation. Open Community to review your current access.",
           href: "/community",
           actionLabel: "Open Community",
           important: false,
+          occurredAt: now,
           createdAt: now,
-          readAt: null,
-          archivedAt: null,
-        });
+        };
+        put(`${root}/people/${target}/updates/${nid}`, event);
+        if (process.env.TGPI_NOTIFICATIONS_SECURITY_RULES_CONFIRMED === "true")
+          put(`tgpiNotificationInbox/${nid}`, {
+            ...event,
+            id: nid,
+            uid: target,
+            readAt: null,
+            archivedAt: null,
+          });
       };
       const membership = (
         target: string,
@@ -888,6 +895,8 @@ export async function mutate(actor: Actor, input: Record<string, unknown>) {
           throw new CommunityError("Invitation required.", 403);
         const answers = text(input.answers, 2000, Boolean(c.entryQuestion));
         membership(uid, accepted ? "active" : "pending", "member", answers);
+        if (!accepted)
+          await notify(c.owner, `request:${uid}:${m?.updatedAt || "initial"}`);
         if (accepted)
           put(path, { ...c, memberCount: c.memberCount + 1, updatedAt: now });
       } else if (action === "cancel" || action === "leave") {
@@ -1560,4 +1569,24 @@ export async function upcomingSessions(uid: string) {
       .slice(0, 25),
     next: null,
   };
+}
+
+export async function communityNotificationEvents(uid: string) {
+  if (!configured()) return [];
+  if (!uid) throw new CommunityError("Sign in.", 401);
+  const page = await children<
+    import("@/lib/notifications/model").NotificationEvent & {
+      createdAt: string;
+    }
+  >(`${root}/people/${uid}`, "updates");
+  return page.items.map((e) => ({
+    key: e.key,
+    category: e.category,
+    title: e.title,
+    body: e.body,
+    href: e.href,
+    actionLabel: e.actionLabel,
+    important: e.important,
+    occurredAt: e.occurredAt,
+  }));
 }
