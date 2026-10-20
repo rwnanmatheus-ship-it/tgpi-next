@@ -85,6 +85,7 @@ self.addEventListener("fetch", (event) => {
     url.pathname.startsWith("/onboarding") ||
     url.pathname.startsWith("/upgrade") ||
     url.pathname.startsWith("/notifications") ||
+    url.pathname.startsWith("/community") ||
     url.pathname.startsWith("/_next/image")
   ) {
     return;

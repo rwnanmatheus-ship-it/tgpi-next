@@ -1,6 +1,7 @@
 import PlatformBannerImage from "@/components/ui/PlatformBannerImage";
 import Image from "next/image";
 import styles from "./GlobalWorkspaceOS.module.css";
+import CommunityConnections from "@/components/community/CommunityConnections";
 import Link from "next/link";
 import NavigationIcon from "@/components/navigation/NavigationIcon";
 import GlobalRankBadge from "@/components/profile/GlobalRankBadge";
@@ -588,6 +589,7 @@ export default function GlobalWorkspaceOS({
                 </dl>
               </section>
 
+              <CommunityConnections />
               <section aria-labelledby="activity-title" className="tgpi-card-3d rounded-[28px] border border-white/10 bg-[#0A1521] p-5 sm:p-6" data-tgpi-depth="raised" data-tgpi-tone="navy">
                 <div className="flex items-center justify-between gap-3">
                   <div>

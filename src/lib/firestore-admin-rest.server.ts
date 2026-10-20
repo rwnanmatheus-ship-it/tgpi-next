@@ -288,8 +288,8 @@ export async function listFirestoreDocuments<T>(
   return (payload.documents || []).map(decodeDocument<T>);
 }
 
-export async function runFirestoreQuery<T>(structuredQuery: object) {
-  const response = await firestoreFetch("/documents:runQuery", {
+export async function runFirestoreQuery<T>(structuredQuery: object, parentPath = "") {
+  const response = await firestoreFetch(`/documents${parentPath ? `/${safeDocumentPath(parentPath)}` : ""}:runQuery`, {
     body: JSON.stringify({ structuredQuery }),
     method: "POST",
   });

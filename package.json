@@ -25,7 +25,8 @@
     "test:home": "node --experimental-strip-types --test scripts/home-conversion.test.mjs",
     "prebuild": "npm run test:learning-credentials && npm run test:intelligence && npm run test:workspace && npm run test:personal-plan",
     "test:notifications": "node --experimental-strip-types --test scripts/notifications.test.mjs scripts/notification-account.test.mjs scripts/notification-timeline.test.mjs",
-    "test:certificate-pdf": "node --experimental-strip-types --test scripts/certificate-pdf.test.mjs"
+    "test:certificate-pdf": "node --experimental-strip-types --test scripts/certificate-pdf.test.mjs",
+    "test:community": "node --test scripts/community.test.mjs"
   },
   "dependencies": {
     "@clerk/nextjs": "^7.7.7",
