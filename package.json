@@ -13,7 +13,7 @@
     "test:pwa": "node --experimental-strip-types --test scripts/pwa-runtime.test.mjs",
     "test:platform": "node --experimental-strip-types --test scripts/platform-integration.test.mjs scripts/platform-persistence.test.mjs",
     "test:super-app": "node --experimental-strip-types --test scripts/super-app.test.mjs",
-    "test:workspace": "node --experimental-strip-types --test scripts/workspace-home.test.mjs",
+    "test:workspace": "node --experimental-strip-types --test scripts/workspace-home.test.mjs scripts/workspace-control.test.mjs scripts/workspace-api.test.mjs scripts/workspace-history.test.mjs",
     "test:personal-plan": "node --experimental-strip-types --test scripts/personal-plan.test.mjs",
     "typecheck": "tsc --noEmit",
     "build": "next build",

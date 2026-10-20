@@ -1,622 +1,68 @@
-import PlatformBannerImage from "@/components/ui/PlatformBannerImage";
-import Image from "next/image";
-import styles from "./GlobalWorkspaceOS.module.css";
-import Link from "next/link";
-import NavigationIcon from "@/components/navigation/NavigationIcon";
-import GlobalRankBadge from "@/components/profile/GlobalRankBadge";
-import WorkspaceSyncButton from "@/components/profile/WorkspaceSyncButton";
-import WorkspaceCommandButton from "@/components/profile/WorkspaceCommandButton";
-import { getCountryImageAlt, getCountryImageUrl } from "@/lib/countries";
-import { GLOBAL_RANK_DISCLAIMER, type GlobalRank } from "@/lib/global-ranks";
-import type {
-  GlobalWorkspaceModel,
-  WorkspaceAction,
-  WorkspaceActionStatus,
-  WorkspaceJourneyStage,
-} from "@/lib/global-workspace";
-import { SUPER_APP_MODULES } from "@/lib/super-app";
-import { getSuperAppIconName } from "@/lib/navigation-system";
+import GlobalRankBadge from './GlobalRankBadge';
+import { GLOBAL_RANK_DISCLAIMER, type GlobalRank } from '@/lib/global-ranks';
+import { Suspense } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import type { GlobalWorkspaceModel } from '@/lib/global-workspace';
+import type { WorkspacePreferences, WorkspaceResource } from '@/lib/workspace-control';
+import type { ActivationActivity } from '@/lib/activation-progress';
+import WorkspacePersonalSpace from './WorkspacePersonalSpace';
+import WorkspaceCertificates from './WorkspaceCertificates';
+import WorkspaceCommandButton from './WorkspaceCommandButton';
+import WorkspaceSyncButton from './WorkspaceSyncButton';
+import NavigationIcon from '@/components/navigation/NavigationIcon';
+import { SUPER_APP_MODULES } from '@/lib/super-app';
+import { getSuperAppIconName } from '@/lib/navigation-system';
+import styles from './WorkspaceCommandCenter.module.css';
 
-type WorkspaceIdentity = {
-  avatarUrl: string;
-  firstName: string;
-  fullName: string;
-  globalId: string;
-  headline: string;
-  membership: string;
-  profileCompletion: number;
-  publicProfileUrl: string;
+type Props = {
+  identity: { avatarUrl: string; firstName: string; fullName: string; globalId: string; headline: string; membership: string; profileCompletion: number; publicProfileUrl: string; handle?: string };
+  model: GlobalWorkspaceModel; onboardingCompleted?: boolean; rank: GlobalRank;
+  userId: string; resources: WorkspaceResource[]; history: ActivationActivity[]; historyCursor: string | null; historyCoverage: string | null; historyAvailable: boolean; preferences: WorkspacePreferences; preferencesAvailable: boolean;
 };
-
-type GlobalWorkspaceOSProps = {
-  identity: WorkspaceIdentity;
-  model: GlobalWorkspaceModel;
-  onboardingCompleted?: boolean;
-  rank: GlobalRank;
-};
-
-const actionIcons: Record<WorkspaceAction["id"], string> = {
-  compare: "⚖️",
-  cost: "◒",
-  documents: "🛂",
-  learning: "🎓",
-  profile: "◉",
-};
-
-const activityIcons: Record<string, string> = {
-  comparison: "⚖️",
-  cost: "◒",
-  course: "🎓",
-  documents: "🛂",
-  saved_country: "♥",
-};
-
-const statusLabels: Record<WorkspaceActionStatus, string> = {
-  completed: "Completed",
-  in_progress: "In progress",
-  needs_attention: "Needs context",
-  not_started: "Ready",
-};
-
-const statusClasses: Record<WorkspaceActionStatus, string> = {
-  completed: "border-[#68BF96]/30 bg-[#68BF96]/10 text-[#BCE8D0]",
-  in_progress: "border-[#6B9EE8]/30 bg-[#6B9EE8]/10 text-[#C9DFFF]",
-  needs_attention: "border-[#E5B94B]/30 bg-[#E5B94B]/10 text-[#F5DD9D]",
-  not_started: "border-white/10 bg-white/5 text-[#B9C5D1]",
-};
-
-const stageRingClasses: Record<WorkspaceActionStatus, string> = {
-  completed: "border-[#68BF96]/55 bg-[#68BF96]/15 text-[#BCE8D0]",
-  in_progress: "border-[#6B9EE8]/55 bg-[#6B9EE8]/15 text-[#C9DFFF]",
-  needs_attention: "border-[#E5B94B]/55 bg-[#E5B94B]/15 text-[#F5DD9D]",
-  not_started: "border-white/15 bg-white/5 text-[#AAB8C6]",
-};
-
-const actionPriority: Record<WorkspaceActionStatus, number> = {
-  in_progress: 0,
-  needs_attention: 1,
-  not_started: 2,
-  completed: 3,
-};
-
-function WorkspaceAvatar({
-  identity,
-  large = false,
-}: {
-  identity: WorkspaceIdentity;
-  large?: boolean;
-}) {
-  const initials =
-    identity.fullName
-      .split(" ")
-      .slice(0, 2)
-      .map((part) => part.at(0))
-      .join("")
-      .toUpperCase() || "TG";
-
-  return (
-    <span
-      aria-label={`${identity.fullName} profile image`}
-      className={`flex shrink-0 items-center justify-center rounded-full border-2 border-[#E5B94B] bg-[#132B47] bg-cover bg-center font-[var(--tgpi-font-display)] font-semibold text-[#F0D58C] ${large ? "h-20 w-20 text-2xl" : "h-11 w-11 text-sm"}`}
-      role="img"
-      style={identity.avatarUrl ? { backgroundImage: `url(${identity.avatarUrl})` } : undefined}
-    >
-      {!identity.avatarUrl ? initials : <span className="sr-only">{identity.fullName}</span>}
-    </span>
-  );
+const labels = { completed: 'Completed', in_progress: 'In progress', needs_attention: 'Needs context', not_started: 'Not started' };
+function Progress({ value, label }: { value: number; label: string }) {
+  return <div className={styles.progress}><progress max={100} value={value} aria-label={label} /><span>{value}%</span></div>;
 }
-
-function ProgressBar({ label, value }: { label: string; value: number }) {
-  return (
-    <div
-      aria-label={label}
-      aria-valuemax={100}
-      aria-valuemin={0}
-      aria-valuenow={value}
-      className="h-1.5 overflow-hidden rounded-full bg-white/10"
-      role="progressbar"
-    >
-      <div
-        className="h-full rounded-full bg-gradient-to-r from-[#B58A2A] via-[#E5B94B] to-[#F4D77C] transition-[width] duration-500"
-        style={{ width: `${value}%` }}
-      />
+export default function GlobalWorkspaceOS({ identity, model, onboardingCompleted, rank, userId, resources, history, historyCursor, historyCoverage, historyAvailable, preferences, preferencesAvailable }: Props) {
+  const inProgress = model.actions.filter(a => a.status === 'in_progress');
+  const suggestions = [...model.actions].filter(a => a.status !== 'completed').sort((a,b) => Number(b.status === 'in_progress') - Number(a.status === 'in_progress'));
+  const resume = resources.find(r => r.kind === 'course' && r.status === 'in_progress') ?? resources.find(r => r.kind === 'documents' && r.status === 'in_progress');
+  const primary = resume ? { href: resume.href, action: 'Continue where you left off' } : suggestions[0];
+  const activityValues = new Map(model.activationStats.map(s => [s.label, s.value]));
+  const stats = [
+    { title: 'Profile completed', value: `${identity.profileCompletion}%`, detail: 'Account information', href: '/profile/security' },
+    { title: 'Saved countries', value: activityValues.get('Saved countries') ?? '—', detail: 'Your private shortlist', href: '/countries' },
+    { title: 'Saved comparisons', value: activityValues.get('Comparisons') ?? '—', detail: 'Retained decision records', href: '/compare' },
+    { title: 'Learning paths', value: String(resources.filter(r => r.kind === 'course').length), detail: `${resources.filter(r => r.kind === 'course' && r.status === 'completed').length} completed in current editions`, href: '/courses' },
+  ];
+  const journey = <section className={styles.panel} aria-labelledby="journey-title">
+    <div className={styles.sectionHeading}><div><p className={styles.eyebrow}>My journey</p><h2 id="journey-title">A direction you can act on.</h2></div><Link href="/onboarding">Edit goal and destinations ↗</Link></div>
+    <div className={styles.journey}>{model.journey.map((stage,index) => <Link className={styles.stage} href={stage.href} key={stage.id} aria-current={model.currentStageId === stage.id ? 'step' : undefined}><span className={styles.eyebrow}>0{index+1} / {labels[stage.status]}</span><h3>{stage.label}</h3><p>{stage.description}</p><Progress value={stage.progress} label={`${stage.label} TGPI steps completed`} /></Link>)}</div>
+    <details className={styles.calculation}><summary>How these progress indicators are calculated</summary><p>These percentages measure steps recorded within TGPI. They do not measure immigration eligibility, job prospects or legal approval.</p><ul><li>Discover: five context groups, each worth 20%.</li><li>Decide: comparison and budget estimate, each worth 50% when recorded.</li><li>Prepare: checked items divided by total items across recorded document checklists.</li><li>Develop: recorded lesson checkpoints divided by recorded course lesson totals.</li></ul><p>Stored course editions may differ from the current catalogue. The personal library identifies edition changes before resuming.</p><ul>{model.progress.map(p => <li key={p.label}>{p.complete ? 'Complete' : 'Not provided'} · {p.label}</li>)}</ul></details>
+    <div className={styles.planSummary}>{model.planSummary.filter(s => s.label !== 'Budget').map(s => <div key={s.label}><span>{s.label}</span><strong>{s.value}</strong></div>)}</div>
+  </section>;
+  return <main className={styles.workspace}>
+    <div className={styles.shell}>
+      <header className={styles.header}><div><p className={styles.eyebrow}>TGPI / Global Command Center</p><h1>Your world. In perspective.</h1><p>Welcome back, {identity.fullName}.</p></div><div className={styles.actions}><WorkspaceCommandButton /><Link className={styles.quiet} href="/notifications">Notifications ↗</Link><WorkspaceSyncButton /></div></header>
+      {onboardingCompleted && <p role="status" className={styles.notice}>Your global context has been saved. Your workspace now reflects your plan.</p>}
+      <section className={styles.hero} aria-labelledby="mission-title">
+        <Image src="/images/workspace/command-center-v1.webp" alt="" fill priority sizes="(min-width: 1440px) 1400px, 100vw" className={styles.heroImage} />
+        <div className={styles.heroContent}><div className={styles.identityLine}><span className={styles.membership}>{identity.membership}</span><span>Private workspace</span></div><p className={styles.eyebrow}>Your current direction</p><h2 id="mission-title">{model.goalLabel === 'Goal not defined' ? 'Start with a clear direction.' : model.goalLabel}</h2><p>{resume ? `${resume.title} · ${resume.detail}` : 'Connect your goals, destinations and practical preparation in one place.'}</p><div className={styles.actions}><Link className={styles.primary} href={primary?.href ?? '/onboarding'}>{primary?.action ?? 'Define my direction'} <span aria-hidden="true">↗</span></Link><Link href="/profile/security">{identity.handle ? `@${identity.handle}` : 'Set up your @ID'} · {identity.globalId}</Link></div></div>
+        <div className={styles.heroContext}><p className={styles.eyebrow}>Plan context</p><strong>{model.completion}<small>%</small></strong><p>Information supplied for your journey</p><Progress value={model.completion} label="Plan context supplied" /><Link href="#workspace-personal">See criteria ↓</Link></div>
+      </section>
+      <nav className={styles.localNav} aria-label="Workspace sections"><a href="#workspace-now">Now</a><a href="#workspace-journey">My journey</a><a href="#workspace-library">My library</a><a href="#workspace-history">My history</a></nav>
+      <div id="workspace-now" className={styles.stats}>{stats.map(s => <Link href={s.href} key={s.title}><span>{s.title}</span><strong>{s.value}</strong><small>{s.detail} ↗</small></Link>)}</div>
+      <div className={styles.layout}><div>
+        <section className={styles.panel} aria-labelledby="resume-title"><div className={styles.sectionHeading}><div><p className={styles.eyebrow}>Now / {inProgress.length} activities in progress</p><h2 id="resume-title">Continue with context.</h2></div><Link href="/courses">All learning ↗</Link></div>{resume ? <Link className={styles.resume} href={resume.href}><span><strong>{resume.title}</strong><span>{resume.detail}</span><span>Resume at the recorded lesson or checklist.</span></span><span aria-hidden="true">↗</span></Link> : <div className={styles.empty}><h3>No activity to resume yet.</h3><p>Start a learning path or save a checklist. Your next visit will connect to that record.</p><Link href="/courses">Find a learning path ↗</Link></div>}</section>
+        <WorkspacePersonalSpace resources={resources} history={history} initialCursor={historyCursor} historyCoverage={historyCoverage} historyAvailable={historyAvailable} initialPreferences={preferences} storageAvailable={preferencesAvailable} journey={journey} suggestions={suggestions} />
+      </div><aside className={styles.aside} aria-label="Connected resources">
+        <section className={styles.panel}><p className={styles.eyebrow}>Country Fit / live research</p><h2>Your priorities. The evidence.</h2><p>Your saved shortlist is a personal choice, not a ranked compatibility result. Country Fit evaluates your context against country evidence when you open it.</p>{model.countryFits.length ? <div className={styles.countryList}>{model.countryFits.map(fit => <Link key={fit.country.slug} href={`/country-fit?country=${fit.country.slug}`}><span>{fit.country.emoji} {fit.country.name}</span><span aria-hidden="true">↗</span></Link>)}</div> : <p>No destinations supplied yet.</p>}<details className={styles.calculation}><summary>Preferences and analysis coverage</summary><p>{model.planSummary.find(s => s.label === 'Priorities')?.value}</p><p>No previous fit score or analysis timestamp is persisted by the current Country Fit service. Open it to review current evidence after changing your preferences.</p></details><Link href="/country-fit">Open Country Fit ↗</Link></section>
+        <Suspense fallback={<section className={`${styles.panel} ${styles.skeleton}`} aria-busy="true"><h2>Loading certificates…</h2></section>}><WorkspaceCertificates userId={userId} /></Suspense>
+        <section className={styles.panel}><p className={styles.eyebrow}>Your connected TGPI</p><h2>One workspace. Every tool.</h2><nav className={styles.tools} aria-label="TGPI tools">{SUPER_APP_MODULES.filter(m => m.id !== 'workspace').map(item => <Link href={item.href} key={item.id}><NavigationIcon name={getSuperAppIconName(item.id)} width={19} height={19} /><span>{item.shortLabel}</span><span aria-hidden="true">↗</span></Link>)}</nav></section>
+        <section className={styles.panel}><p className={styles.eyebrow}>Verified workspace milestones</p><GlobalRankBadge rank={rank} size="small" /><h2>{rank.name}</h2><p>{rank.points} TGPI progress points</p><p>{GLOBAL_RANK_DISCLAIMER}</p><Link href="/profile/security#settings-progress">View progression criteria ↗</Link></section>
+        <section className={styles.panel}><p className={styles.eyebrow}>Your identity</p><h2>{identity.fullName}</h2><p>{identity.headline || 'Your international journey starts with your own context.'}</p><Link href="/global-key">Open Global Key ↗</Link><p><Link href={identity.publicProfileUrl}>View public profile ↗</Link></p><p>Only fields allowed by your public profile settings are shared.</p></section>
+      </aside></div>
     </div>
-  );
-}
-
-function formatActivityDate(value: string) {
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return "Recent";
-  return new Intl.DateTimeFormat("en", {
-    day: "numeric",
-    month: "short",
-  }).format(date);
-}
-
-function formatSyncDate(value?: string) {
-  if (!value) return "Ready to connect";
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return "Recently synchronized";
-  return `Synced ${new Intl.DateTimeFormat("en", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  }).format(date)}`;
-}
-
-function JourneyStage({
-  active,
-  index,
-  stage,
-}: {
-  active: boolean;
-  index: number;
-  stage: WorkspaceJourneyStage;
-}) {
-  return (
-    <Link
-      aria-current={active ? "step" : undefined}
-      className={`tgpi-journey-card group relative flex min-w-0 flex-1 gap-3 rounded-2xl border p-4 transition hover:-translate-y-0.5 hover:border-[#E5B94B]/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E5B94B] lg:min-w-0 ${active ? "border-[#E5B94B]/40 bg-[#E5B94B]/[0.08]" : "border-white/10 bg-white/[0.025]"}`}
-      href={stage.href}
-    >
-      <span
-        aria-hidden="true"
-        className={`grid h-11 w-11 shrink-0 place-items-center rounded-2xl border text-lg ${stageRingClasses[stage.status]}`}
-      >
-        {stage.icon}
-      </span>
-      <span className="min-w-0 flex-1">
-        <span className="flex items-center justify-between gap-2">
-          <span className="text-xs font-extrabold uppercase tracking-[0.13em] text-[#8FA0B2]">
-            0{index + 1} · {stage.label}
-          </span>
-          <span className="text-xs font-extrabold text-[#F0D58C]">
-            {stage.progress}%
-          </span>
-        </span>
-        <span className="mt-2 line-clamp-2 block text-xs leading-5 text-[#AAB8C6]">
-          {stage.description}
-        </span>
-        <span className="mt-3 block">
-          <ProgressBar label={`${stage.label} stage progress`} value={stage.progress} />
-        </span>
-      </span>
-    </Link>
-  );
-}
-
-function ActionItem({ action }: { action: WorkspaceAction }) {
-  return (
-    <Link
-      className="group flex min-h-24 items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.025] p-4 transition hover:-translate-y-0.5 hover:border-[#E5B94B]/35 hover:bg-white/[0.05] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E5B94B]"
-      href={action.href}
-    >
-      <span
-        aria-hidden="true"
-        className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl border border-[#E5B94B]/20 bg-[#E5B94B]/10 text-xl text-[#F0D58C]"
-      >
-        {actionIcons[action.id]}
-      </span>
-      <span className="min-w-0 flex-1">
-        <span className="flex flex-wrap items-center gap-2">
-          <span className="text-sm font-extrabold text-white">{action.title}</span>
-          <span className={`rounded-full border px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.11em] ${statusClasses[action.status]}`}>
-            {statusLabels[action.status]}
-          </span>
-        </span>
-        <span className="mt-1.5 line-clamp-2 block text-xs leading-5 text-[#9AAABC]">
-          {action.description}
-        </span>
-      </span>
-      <span aria-hidden="true" className="text-xl text-[#E5B94B] transition group-hover:translate-x-1">→</span>
-    </Link>
-  );
-}
-
-export default function GlobalWorkspaceOS({
-  identity,
-  model,
-  onboardingCompleted = false,
-  rank,
-}: GlobalWorkspaceOSProps) {
-  const prioritizedActions = [...model.actions].sort(
-    (first, second) => actionPriority[first.status] - actionPriority[second.status],
-  );
-  const primaryAction = prioritizedActions.find((action) => action.status !== "completed");
-  const primaryCountry = model.countryFits[0]?.country;
-  const currentStage =
-    model.journey.find((stage) => stage.id === model.currentStageId) ?? model.journey[0];
-  const activityValues = new Map(model.activationStats.map((item) => [item.label, item.value]));
-  const dashboardStats = [
-    { icon: "◎", label: "Plan context", value: `${model.completion}%`, hint: "goal and priorities", href: "/plan" },
-    { icon: "♥", label: "Saved countries", value: activityValues.get("Saved countries") ?? "0", hint: "private shortlist", href: "/countries" },
-    { icon: "⚖️", label: "Comparisons", value: activityValues.get("Comparisons") ?? "0", hint: "decision records", href: "/compare" },
-    { icon: "🎓", label: "Learning paths", value: activityValues.get("Learning paths") ?? "0", hint: "capability progress", href: "/courses" },
-  ];
-
-  const milestones = [
-    { label: "Identity established", done: identity.profileCompletion === 100, href: "/profile/security", detail: "Complete your personal profile" },
-    { label: "Direction defined", done: model.completion === 100, href: "/plan", detail: "Set your goal, budget and priorities" },
-    { label: "First country saved", done: model.savedCountries.length > 0, href: "/countries", detail: "Build your private shortlist" },
-    { label: "First comparison", done: Number(activityValues.get("Comparisons") ?? 0) > 0, href: "/compare", detail: "Record the trade-offs that matter" },
-    { label: "Learning started", done: Number(activityValues.get("Learning paths") ?? 0) > 0, href: "/courses", detail: "Begin a capability-building course" },
-  ];
-
-  return (
-    <main className={`${styles.workspace} min-h-screen bg-[#040B13] text-white`}>
-      <div className="mx-auto max-w-[1800px] lg:grid lg:grid-cols-[228px_minmax(0,1fr)] 2xl:grid-cols-[244px_minmax(0,1fr)]">
-        <aside className="hidden min-w-0 border-b border-white/10 bg-[#06101B] px-4 py-4 lg:block lg:border-b-0 lg:border-r lg:px-4 lg:py-7">
-          <div className="hidden lg:block">
-            <p className="px-2 text-[11px] font-extrabold uppercase tracking-[0.22em] text-[#E5B94B]">TGPI Intelligence OS</p>
-            <p className="mt-3 px-2 font-[var(--tgpi-font-display)] text-[1.65rem] font-semibold leading-[1.08]">One system for your global life.</p>
-          </div>
-
-          <nav aria-label="Workspace navigation" className="flex gap-2 overflow-x-auto pb-1 lg:mt-7 lg:grid lg:gap-1 lg:overflow-visible">
-            {SUPER_APP_MODULES.map((item) => {
-              const active = item.id === "workspace";
-              return (
-                <Link
-                  aria-current={active ? "page" : undefined}
-                  className={`flex min-w-max items-center gap-3 rounded-2xl border px-3 py-2.5 text-xs font-extrabold transition lg:w-full ${active ? "border-[#E5B94B]/35 bg-[#E5B94B]/10 text-[#F3D982]" : "border-transparent text-[#A9B7C5] hover:border-white/10 hover:bg-white/5 hover:text-white"}`}
-                  href={item.href}
-                  key={item.id}
-                  title={item.description}
-                >
-                  <span aria-hidden="true" className={`grid h-8 w-8 place-items-center rounded-xl text-sm ${active ? "bg-[#E5B94B]/15" : "bg-white/5"}`}>
-                    <NavigationIcon name={getSuperAppIconName(item.id)} width={17} height={17} />
-                  </span>
-                  {item.shortLabel}
-                </Link>
-              );
-            })}
-          </nav>
-
-          <div className="mt-7 hidden lg:grid lg:gap-3">
-            <article
-              className="tgpi-card-3d rounded-3xl border border-[#E5B94B]/20 bg-gradient-to-br from-[#E5B94B]/12 to-transparent p-4"
-              data-tgpi-depth="subtle"
-              data-tgpi-tone="glass"
-            >
-              <div className="flex items-center gap-3">
-                <GlobalRankBadge rank={rank} size="small" />
-                <div className="min-w-0">
-                  <p className="text-[10px] font-extrabold uppercase tracking-[0.15em] text-[#F0D58C]">Current rank</p>
-                  <p className="mt-1 truncate text-sm font-extrabold">{rank.name}</p>
-                </div>
-              </div>
-              <p className="mt-3 text-xs leading-5 text-[#AEBBC9]">{rank.points} progress points across your private workspace.</p>
-              <Link className="mt-4 inline-flex text-xs font-extrabold text-white" href="/profile/security#settings-progress">See progression →</Link>
-            </article>
-            <Link className="flex items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.025] p-3 transition hover:border-[#E5B94B]/30" href="/profile/security">
-              <WorkspaceAvatar identity={identity} />
-              <span className="min-w-0">
-                <span className="block truncate text-xs font-extrabold">{identity.fullName}</span>
-                <span className="mt-1 block text-[11px] text-[#8C9CAF]">Manage identity</span>
-              </span>
-            </Link>
-          </div>
-        </aside>
-
-        <div className="min-w-0 p-4 sm:p-6 xl:p-7 2xl:p-8">
-          {onboardingCompleted ? (
-            <div className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[#68BF96]/25 bg-[#68BF96]/10 px-4 py-3 text-xs text-[#CFEADB]" role="status">
-              <p><span className="font-extrabold">Your global plan is ready.</span> Workspace Intelligence has synchronized your decision context.</p>
-              <Link className="font-extrabold text-white" href="/plan">Open plan →</Link>
-            </div>
-          ) : null}
-
-          <header className={styles.header}>
-            <div className="min-w-0">
-              <p className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-[#E5B94B]">Workspace Intelligence Home · V4</p>
-              <h1 className="mt-2 font-[var(--tgpi-font-display)] text-[clamp(1.8rem,3vw,2.8rem)] font-semibold leading-[1.12] tracking-[-0.035em] [overflow-wrap:anywhere]">Your next chapter, {identity.firstName.split(" ")[0]}.</h1>
-              <p className="mt-3 max-w-2xl text-sm leading-6 text-[#9BAABC]">Your identity, decisions and learning. One clear view of your global progress.</p>
-            </div>
-            <div className="flex min-w-0 items-center gap-3">
-              <WorkspaceCommandButton />
-              <Link
-                aria-label="Open notifications"
-                className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-white/10 bg-[#0A1521] text-lg transition hover:border-[#E5B94B]/45 hover:bg-[#E5B94B]/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E5B94B]"
-                href="/notifications"
-                title="Notifications"
-              >
-                <span aria-hidden="true">🔔</span>
-              </Link>
-              <Link aria-label="Open account settings" className="shrink-0 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E5B94B]" href="/profile/security">
-                <WorkspaceAvatar identity={identity} />
-              </Link>
-            </div>
-          </header>
-
-          <div className="mt-5 flex flex-wrap items-center justify-between gap-3 border-b border-white/10 pb-4">
-            <p className="text-xs leading-5 text-[#ACBBCB]">Private workspace · {identity.membership} · {formatSyncDate(model.lastSyncedAt)}</p>
-            <WorkspaceSyncButton />
-          </div>
-
-          <section aria-label="Workspace indicators" className="mt-6 grid grid-cols-2 gap-3 xl:grid-cols-4">
-            {dashboardStats.map((stat) => (
-              <Link
-                href={stat.href}
-                className="tgpi-card-3d rounded-2xl border border-white/10 bg-[#0A1521] p-4"
-                data-tgpi-depth="subtle"
-                data-tgpi-tone="navy"
-                key={stat.label}
-              >
-                <div className="flex items-start justify-between gap-2">
-                  <p className="text-[10px] font-extrabold uppercase tracking-[0.13em] text-[#8798AA]">{stat.label}</p>
-                  <span aria-hidden="true" className="text-sm text-[#E5B94B]">{stat.icon}</span>
-                </div>
-                <p className="mt-2 text-2xl font-extrabold text-white">{stat.value}</p>
-                <p className="mt-1 text-[11px] text-[#8999AB]">{stat.hint} <span aria-hidden="true">↗</span></p>
-              </Link>
-            ))}
-          </section>
-
-          <section aria-labelledby="milestones-title" className={`${styles.milestonePanel} mt-5`}>
-            <div className="flex flex-wrap items-center justify-between gap-3">
-              <div>
-                <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#E5B94B]">Your progress, made visible</p>
-                <h2 id="milestones-title" className="mt-2 text-xl font-semibold">Small steps. Lasting momentum.</h2>
-              </div>
-              <span className="rounded-full border border-[#E5B94B]/30 px-4 py-2 text-sm text-[#F0D58C]">{milestones.filter((item) => item.done).length} / {milestones.length} milestones</span>
-            </div>
-            <div className={styles.milestones}>
-              {milestones.map((item, index) => (
-                <Link className={styles.milestone} data-complete={item.done} href={item.href} key={item.label}>
-                  <span aria-hidden="true" className={styles.step}>{item.done ? "✓" : `0${index + 1}`}</span>
-                  <span className="min-w-0"><span className="block text-sm font-semibold">{item.label}</span><span className="mt-1 block text-xs leading-5 text-[#ACBBCB]">{item.done ? "Milestone reached" : item.detail}</span></span>
-                </Link>
-              ))}
-            </div>
-          </section>
-
-          <div className={`${styles.mainGrid} mt-5 grid min-w-0 gap-5`}>
-            <div className="grid min-w-0 content-start gap-5">
-              <section
-                aria-labelledby="mission-title"
-                className="tgpi-card-3d relative overflow-hidden rounded-[30px] border border-white/10 bg-[#0A1521]"
-                data-tgpi-depth="hero"
-                data-tgpi-tone="navy"
-              >
-                {primaryCountry ? (
-                  <Image alt={getCountryImageAlt(primaryCountry)} className="absolute inset-0 h-full w-full object-cover object-center opacity-50" fill priority sizes="(min-width: 1536px) 55vw, 100vw" src={getCountryImageUrl(primaryCountry)} />
-                ) : <PlatformBannerImage priority className="opacity-65" />}
-                <div className="absolute inset-0 bg-gradient-to-r from-[#06111E] via-[#071421]/95 to-[#071421]/35" />
-                <div className={`${styles.missionGrid} relative grid min-h-[350px] min-w-0 gap-6 p-6 sm:p-8`}>
-                  <div className="min-w-0 max-w-2xl">
-                    <div className="flex flex-wrap items-center gap-3">
-                      <span className="rounded-full border border-[#E5B94B]/30 bg-[#06101B]/80 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#F0D58C] backdrop-blur">{currentStage.icon} Current stage · {currentStage.label}</span>
-                      {primaryCountry ? (
-                        <span className="rounded-full border border-white/15 bg-[#06101B]/75 px-3 py-1.5 text-xs font-extrabold backdrop-blur">{primaryCountry.emoji} {primaryCountry.name}</span>
-                      ) : null}
-                    </div>
-                    <p className="mt-5 text-[11px] font-extrabold uppercase tracking-[0.2em] text-[#E5B94B]">Current mission</p>
-                    <h2 id="mission-title" className="mt-3 font-[var(--tgpi-font-display)] text-[clamp(2rem,3.1vw,3.1rem)] font-semibold leading-[1.08]">{model.goalLabel}</h2>
-                    <p className="mt-5 max-w-xl text-sm leading-7 text-[#C7D1DB]">{currentStage.description} Continue with the next action below. Your progress follows the work you save across TGPI.</p>
-                    {primaryAction ? (
-                      <Link className="mt-7 inline-flex min-h-12 items-center justify-center rounded-xl bg-[#E5B94B] px-6 text-xs font-extrabold text-[#07182D] shadow-[0_12px_30px_rgba(229,185,75,0.2)] transition hover:-translate-y-0.5 hover:bg-[#F0C95F] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white" href={primaryAction.href}>{primaryAction.action} →</Link>
-                    ) : null}
-                  </div>
-                  <div className="w-full min-w-0 rounded-2xl border border-white/10 bg-[#06101B]/88 p-5 backdrop-blur">
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <p className="text-[10px] font-extrabold uppercase tracking-[0.15em] text-[#8999AB]">Decision context</p>
-                        <p className="mt-2 text-3xl font-extrabold">{model.completion}%</p>
-                      </div>
-                      <span aria-hidden="true" className="grid h-10 w-10 place-items-center rounded-xl bg-[#E5B94B]/10 text-lg">🧠</span>
-                    </div>
-                    <div className="mt-4"><ProgressBar label="Decision context completeness" value={model.completion} /></div>
-                    <p className="mt-3 text-[11px] leading-5 text-[#8C9CAF]">Goal, countries, timeline, budget and priorities.</p>
-                    <div className="mt-4 flex items-center justify-between gap-3 border-t border-white/10 pt-4">
-                      <span className="text-[10px] font-bold text-[#8FA0B2]">{formatSyncDate(model.lastSyncedAt)}</span>
-                      <Link className="text-xs font-extrabold text-[#F0D58C]" href="/onboarding">Edit plan</Link>
-                    </div>
-                  </div>
-                </div>
-              </section>
-
-              <section aria-labelledby="journey-title" className="tgpi-card-3d rounded-[30px] border border-white/10 bg-[#08131F] p-5 sm:p-6" data-tgpi-depth="raised" data-tgpi-tone="navy">
-                <div className="flex flex-wrap items-end justify-between gap-3">
-                  <div>
-                    <p className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-[#E5B94B]">Global decision journey</p>
-                    <h2 id="journey-title" className="mt-2 font-[var(--tgpi-font-display)] text-3xl font-semibold">Know where you are. See what comes next.</h2>
-                  </div>
-                  <span className="rounded-full border border-white/10 px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.12em] text-[#9FAEBC]">
-                    <span className="lg:hidden">Your journey</span>
-                    <span className="hidden lg:inline">Private progress</span>
-                  </span>
-                </div>
-                <div className={`${styles.journey} mt-5 grid gap-3`}>
-                  {model.journey.map((stage, index) => <JourneyStage active={stage.id === model.currentStageId} index={index} key={stage.id} stage={stage} />)}
-                </div>
-              </section>
-
-              <section aria-labelledby="next-actions-title" className="tgpi-card-3d rounded-[30px] border border-white/10 bg-[#08131F] p-5 sm:p-7" data-tgpi-depth="raised" data-tgpi-tone="navy">
-                <div className="flex flex-wrap items-end justify-between gap-3">
-                  <div>
-                    <p className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-[#E5B94B]">Intelligent action queue</p>
-                    <h2 id="next-actions-title" className="mt-2 font-[var(--tgpi-font-display)] text-3xl font-semibold sm:text-4xl">Move the plan forward.</h2>
-                  </div>
-                  <Link className="text-xs font-extrabold text-[#F0D58C]" href="/plan">Open full plan →</Link>
-                </div>
-                <div className="mt-6 grid gap-3 lg:grid-cols-2">{prioritizedActions.map((action) => <ActionItem action={action} key={action.id} />)}</div>
-              </section>
-
-              <section aria-labelledby="ecosystem-title" className={`${styles.milestonePanel}`}>
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                  <div><p className="text-xs font-bold uppercase tracking-[0.16em] text-[#E5B94B]">Your connected ecosystem</p><h2 id="ecosystem-title" className="mt-2 text-2xl font-semibold">Everything has a next step.</h2></div>
-                  <Link className="text-sm font-semibold text-[#F0D58C]" href="/certificates">My certificates →</Link>
-                </div>
-                <div className={styles.modules}>
-                  {SUPER_APP_MODULES.filter((item) => item.id !== "workspace" && item.id !== "settings").map((item) => (
-                    <Link className={`${styles.module} tgpi-card-3d`} data-tgpi-tone="navy" data-tgpi-interactive="true" href={item.href} key={item.id}>
-                      <span className={styles.moduleIcon}><NavigationIcon name={getSuperAppIconName(item.id)} width={24} height={24} /></span>
-                      <span className="min-w-0"><span className="block text-sm font-semibold">{item.label}</span><span className="mt-1 block text-xs leading-5 text-[#ACBBCB]">{item.description}</span></span>
-                      <span aria-hidden="true" className="text-[#E5B94B]">↗</span>
-                    </Link>
-                  ))}
-                </div>
-              </section>
-
-              <section aria-labelledby="shortlist-title" className="tgpi-card-3d rounded-[30px] border border-white/10 bg-[#08131F] p-5 sm:p-7" data-tgpi-depth="raised" data-tgpi-tone="navy">
-                <div className="flex flex-wrap items-end justify-between gap-3">
-                  <div>
-                    <p className="text-[11px] font-extrabold uppercase tracking-[0.18em] text-[#E5B94B]">Country intelligence</p>
-                    <h2 id="shortlist-title" className="mt-2 font-[var(--tgpi-font-display)] text-3xl font-semibold sm:text-4xl">Your decision shortlist.</h2>
-                  </div>
-                  <Link className="text-xs font-extrabold text-[#F0D58C]" href={model.selectedCountryCount >= 2 ? model.compareHref : "/country-fit"}>{model.selectedCountryCount >= 2 ? "Compare shortlist →" : "Build shortlist →"}</Link>
-                </div>
-                {model.countryFits.length ? (
-                  <div className="mt-6 grid gap-4 lg:grid-cols-3">
-                    {model.countryFits.slice(0, 3).map((fit, index) => (
-                      <article className="tgpi-card-3d group overflow-hidden rounded-2xl border border-white/10 bg-[#0A1726]" data-tgpi-depth="subtle" data-tgpi-interactive="true" data-tgpi-tone="glass" key={fit.country.slug}>
-                        <Link aria-label={`Open ${fit.country.name} intelligence`} className="relative block aspect-[16/9] overflow-hidden" href={`/countries/${fit.country.slug}`}>
-                          <Image alt={getCountryImageAlt(fit.country)} className="object-cover transition duration-700 group-hover:scale-105" fill sizes="(min-width:1280px) 22vw, 100vw" src={getCountryImageUrl(fit.country)} />
-                          <span className="absolute inset-0 bg-gradient-to-t from-[#06101B] via-transparent to-transparent" />
-                          <span className="absolute bottom-3 left-3 rounded-full bg-[#06101B]/80 px-3 py-1.5 text-sm font-extrabold text-white backdrop-blur">{fit.country.emoji} {fit.country.name}</span>
-                        </Link>
-                        <div className="p-4">
-                          <div className="flex items-center justify-between gap-2">
-                            <span className="text-[10px] font-extrabold uppercase tracking-[0.13em] text-[#8999AB]">Shortlist 0{index + 1}</span>
-                            <span className="text-[10px] font-extrabold text-[#F0D58C]">Evidence review</span>
-                          </div>
-                          <p className="mt-3 line-clamp-2 text-xs leading-5 text-[#9AAABC]">{fit.warning}</p>
-                        </div>
-                      </article>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="mt-6 rounded-2xl border border-dashed border-white/15 p-8 text-center">
-                    <span aria-hidden="true" className="text-3xl">🌍</span>
-                    <p className="mt-3 text-sm font-extrabold">No country shortlist yet.</p>
-                    <p className="mt-2 text-xs leading-5 text-[#91A2B5]">Start Country Fit to connect your priorities to verifiable evidence.</p>
-                    <Link className="mt-5 inline-flex text-xs font-extrabold text-[#F0D58C]" href="/country-fit">Open Country Fit →</Link>
-                  </div>
-                )}
-                {model.savedCountries.length ? (
-                  <div className="mt-5 flex flex-wrap items-center gap-2 border-t border-white/10 pt-5">
-                    <span className="mr-1 text-[10px] font-extrabold uppercase tracking-[0.13em] text-[#8798AA]">Saved privately</span>
-                    {model.savedCountries.slice(0, 6).map((country) => (
-                      <Link className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1.5 text-xs font-bold text-[#C9D2DB] transition hover:border-[#E5B94B]/35" href={`/countries/${country.slug}`} key={country.slug}>{country.emoji} {country.name}</Link>
-                    ))}
-                  </div>
-                ) : null}
-              </section>
-            </div>
-
-            <aside className="grid min-w-0 content-start gap-5">
-              <section aria-labelledby="pulse-title" className="tgpi-card-3d rounded-[28px] border border-[#E5B94B]/25 bg-gradient-to-br from-[#10243A] to-[#08131F] p-5 sm:p-6" data-tgpi-depth="floating" data-tgpi-tone="navy">
-                <div className="flex items-start justify-between gap-3">
-                  <div>
-                    <p className="text-[10px] font-extrabold uppercase tracking-[0.17em] text-[#E5B94B]">Decision pulse</p>
-                    <h2 id="pulse-title" className="mt-2 text-lg font-extrabold leading-6">A truthful view of your momentum.</h2>
-                  </div>
-                  <span aria-hidden="true" className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl border border-[#E5B94B]/25 bg-[#E5B94B]/10 text-xl">🧠</span>
-                </div>
-                <dl className="mt-5 grid grid-cols-2 gap-2">
-                  {[
-                    { label: "Completed", value: model.actionSummary.completed, color: "text-[#AEE0C5]" },
-                    { label: "In progress", value: model.actionSummary.inProgress, color: "text-[#BBD6FA]" },
-                    { label: "Needs context", value: model.actionSummary.needsContext, color: "text-[#F4DA95]" },
-                    { label: "Ready", value: model.actionSummary.ready, color: "text-[#D8E1EA]" },
-                  ].map((item) => (
-                    <div className="rounded-2xl border border-white/10 bg-white/[0.035] p-3" key={item.label}>
-                      <dt className="text-[10px] font-bold text-[#8FA0B2]">{item.label}</dt>
-                      <dd className={`mt-1 text-2xl font-extrabold ${item.color}`}>{item.value}</dd>
-                    </div>
-                  ))}
-                </dl>
-                <p className="mt-4 text-xs leading-6 text-[#B1BECC]">Calculated from your saved plan and private activity. No simulated score or approval probability.</p>
-              </section>
-
-              <section aria-labelledby="rank-card-title" className="tgpi-card-3d overflow-hidden rounded-[28px] border border-[#E5B94B]/20 bg-[radial-gradient(circle_at_top_right,rgba(34,99,156,0.32),transparent_45%),#0A1521] p-5 sm:p-6" data-tgpi-depth="raised" data-tgpi-tone="navy">
-                <div className="flex items-center gap-4">
-                  <GlobalRankBadge rank={rank} size="medium" />
-                  <div className="min-w-0">
-                    <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#E5B94B]">Global progression</p>
-                    <h2 id="rank-card-title" className="mt-1 font-[var(--tgpi-font-display)] text-2xl font-semibold">{rank.name}</h2>
-                    <p className="mt-1 text-xs text-[#9DAEC0]">{rank.points} / 10,000 TGPI points</p>
-                  </div>
-                </div>
-                <p className="mt-4 text-xs leading-5 text-[#AEBBC9]">{rank.description}</p>
-                <div className="mt-4">
-                  <div className="mb-2 flex justify-between gap-3 text-[10px] font-extrabold">
-                    <span>{rank.nextRank ? `Next: ${rank.nextRank.name}` : "Highest rank reached"}</span>
-                    <span className="text-[#F0D58C]">{rank.nextRank ? `${rank.pointsToNext} pts` : "100%"}</span>
-                  </div>
-                  <ProgressBar label="Progress toward next TGPI rank" value={rank.progressWithinRank} />
-                  {rank.nextRank && <p className="mt-3 text-xs leading-5 text-[#AEBBC9]">Requires {rank.nextRank.courses} completed courses and {rank.nextRank.plan}% plan completion. Points alone do not unlock this rank.</p>}
-                </div>
-                <p className="mt-4 text-[10px] leading-5 text-[#77899D]">{GLOBAL_RANK_DISCLAIMER}</p>
-                <Link className="mt-4 inline-flex text-xs font-extrabold text-[#F0D58C]" href="/profile/security#settings-progress">View rank journey →</Link>
-              </section>
-
-              <section aria-labelledby="identity-card-title" className="tgpi-card-3d min-w-0 overflow-hidden rounded-[28px] border border-white/10 bg-[#0A1521] p-5 sm:p-6" data-tgpi-depth="raised" data-tgpi-tone="navy">
-                <div className="flex min-w-0 items-center gap-4">
-                  <WorkspaceAvatar identity={identity} large />
-                  <div className="min-w-0 flex-1">
-                    <p className="text-[10px] font-extrabold uppercase tracking-[0.16em] text-[#E5B94B]">Global identity</p>
-                    <h2 id="identity-card-title" className="mt-1 truncate text-lg font-extrabold">{identity.fullName}</h2>
-                    <p className="mt-1 truncate text-xs text-[#91A2B5]">{identity.headline || "Complete your public headline"}</p>
-                  </div>
-                </div>
-                <div className="mt-5 flex min-w-0 flex-wrap items-end justify-between gap-3">
-                  <div>
-                    <p className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#8798AA]">Profile readiness</p>
-                    <p className="mt-1 text-xl font-extrabold">{identity.profileCompletion}%</p>
-                  </div>
-                  <span className="text-right text-[11px] font-extrabold text-[#AEE0C5]">{identity.membership}</span>
-                </div>
-                <div className="mt-3"><ProgressBar label="Global profile completeness" value={identity.profileCompletion} /></div>
-                <p className="mt-4 break-all text-[11px] text-[#7C8EA2]">{identity.globalId}</p>
-                <div className="mt-4 grid gap-2 sm:grid-cols-2 2xl:grid-cols-1">
-                  <Link className="rounded-xl border border-[#E5B94B]/30 bg-[#E5B94B]/10 px-3 py-3 text-center text-xs font-extrabold text-[#F0D58C] transition hover:border-[#E5B94B]/55" href="/global-key">Open Global Key</Link>
-                  <Link className="rounded-xl border border-white/10 px-3 py-3 text-center text-xs font-extrabold text-white transition hover:border-[#E5B94B]/35" href="/profile/security">Edit profile</Link>
-                  <Link className="rounded-xl bg-[#E5B94B] px-3 py-3 text-center text-xs font-extrabold text-[#07182D] transition hover:bg-[#F0C95F]" href={identity.publicProfileUrl}>View profile</Link>
-                </div>
-              </section>
-
-              <section aria-labelledby="plan-summary-title" className="tgpi-card-3d rounded-[28px] border border-white/10 bg-[#0A1521] p-5 sm:p-6" data-tgpi-depth="raised" data-tgpi-tone="navy">
-                <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#8798AA]">Connected plan</p>
-                <h2 id="plan-summary-title" className="mt-2 font-[var(--tgpi-font-display)] text-2xl font-semibold">Your direction at a glance.</h2>
-                <dl className="mt-4 grid gap-3">
-                  {model.planSummary.map((item) => (
-                    <div className="border-b border-white/10 pb-3 last:border-0 last:pb-0" key={item.label}>
-                      <dt className="text-[10px] font-extrabold uppercase tracking-[0.13em] text-[#7C8EA2]">{item.label}</dt>
-                      <dd className="mt-1 text-xs font-bold leading-5 text-[#D8E1EA]">{item.value}</dd>
-                    </div>
-                  ))}
-                </dl>
-              </section>
-
-              <section aria-labelledby="activity-title" className="tgpi-card-3d rounded-[28px] border border-white/10 bg-[#0A1521] p-5 sm:p-6" data-tgpi-depth="raised" data-tgpi-tone="navy">
-                <div className="flex items-center justify-between gap-3">
-                  <div>
-                    <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#8798AA]">Recent activity</p>
-                    <h2 id="activity-title" className="mt-1 text-base font-extrabold">Private timeline</h2>
-                  </div>
-                  <span className="rounded-full border border-white/10 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.11em] text-[#9AAABC]">Only you</span>
-                </div>
-                {model.recentActivities.length ? (
-                  <div className="mt-4 grid gap-2">
-                    {model.recentActivities.map((activity) => (
-                      <Link className="flex items-center justify-between gap-3 rounded-xl border border-white/10 px-3 py-3 transition hover:border-[#E5B94B]/30" href={activity.href} key={activity.id}>
-                        <span aria-hidden="true" className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-white/5 text-sm text-[#F0D58C]">{activityIcons[activity.type] ?? "•"}</span>
-                        <span className="min-w-0 flex-1">
-                          <span className="block truncate text-xs font-extrabold text-[#E2E8EE]">{activity.title}</span>
-                          <span className="mt-1 block text-[10px] text-[#7C8EA2]">{formatActivityDate(activity.occurredAt)}</span>
-                        </span>
-                        <span aria-hidden="true" className="text-[#E5B94B]">→</span>
-                      </Link>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="mt-4 text-xs leading-6 text-[#8999AB]">Your timeline starts when you save a country, compare options, review documents or begin learning.</p>
-                )}
-              </section>
-            </aside>
-          </div>
-        </div>
-      </div>
-    </main>
-  );
+  </main>;
 }
