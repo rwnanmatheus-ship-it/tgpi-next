@@ -20,7 +20,7 @@ async function api<T>(url: string, init?: RequestInit): Promise<T> {
   return body as T;
 }
 
-export default function AtlasChat({ userId, enabled = true }: { userId: string; enabled?: boolean }) {
+export default function AtlasChat({ userId, enabled = true, embedded = false }: { userId: string; enabled?: boolean; embedded?: boolean }) {
   const [id, setId] = useState('');
   const [messages, setMessages] = useState<AtlasMessage[]>([]);
   const [items, setItems] = useState<AtlasSummary[]>([]);
@@ -180,7 +180,7 @@ export default function AtlasChat({ userId, enabled = true }: { userId: string; 
     finally { lock.current = false; setBusy(false); }
   }
   const saved = !temporary && items.some(x => x.id === id);
-  return <main id="atlas-main" ref={shell} className={styles.shell}>
+  return <main id={embedded ? 'atlas-widget-chat' : 'atlas-main'} tabIndex={-1} ref={shell} className={`${styles.shell} ${embedded ? styles.embedded : ''}`}>
     <aside className={`${styles.sidebar} ${showHistory ? styles.sidebarOpen : ''}`} aria-label="Atlas conversations">
       <Link href="/profile" className={styles.back}>← Workspace</Link>
       <div className={styles.brand}><Image src="/brand/atlas/avatar.webp" width={48} height={48} alt="Atlas owl" /><div><strong>TGPI ATLAS AI</strong><span>Your global companion</span></div></div>
