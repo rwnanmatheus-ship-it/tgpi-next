@@ -21,6 +21,7 @@ import MobileContentFrame from "@/components/mobile/MobileContentFrame";
 import SuperAppLauncher from "@/components/super-app/SuperAppLauncher";
 import TgpiAppRuntime from "@/components/app-runtime/TgpiAppRuntime";
 import AccessAwareChrome from "@/components/auth/AccessAwareChrome";
+import AtlasWidget from "@/components/atlas/AtlasWidget";
 
 const displayFont = Cormorant_Garamond({
   subsets: ["latin"],
@@ -108,6 +109,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           >
             <MobileContentFrame>{children}</MobileContentFrame>
           </AccessAwareChrome>
+          <AtlasWidget />
           </NotificationProvider>
         </ClerkProvider>
       </body>
