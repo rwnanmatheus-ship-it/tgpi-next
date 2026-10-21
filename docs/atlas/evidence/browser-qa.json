@@ -1,0 +1,39 @@
+{
+  "synthetic": true,
+  "liveClerk": false,
+  "liveFirestore": false,
+  "liveModel": false,
+  "errors": [],
+  "checks": [
+    {
+      "width": 360,
+      "scrollWidth": 360
+    },
+    {
+      "width": 390,
+      "scrollWidth": 390
+    },
+    {
+      "width": 768,
+      "scrollWidth": 768
+    },
+    {
+      "width": 1440,
+      "scrollWidth": 1440
+    }
+  ],
+  "interactions": [
+    "opt-in scopes",
+    "stream rendering",
+    "safe Markdown",
+    "feedback",
+    "rename",
+    "draft recovery",
+    "error and idempotent retry",
+    "delete confirmation",
+    "temporary history",
+    "stop",
+    "mobile drawer",
+    "reduced motion"
+  ]
+}

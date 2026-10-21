@@ -1,4 +1,5 @@
 export type SuperAppModuleId =
+  | "atlas"
   | "workspace"
   | "global-key"
   | "country-fit"
@@ -34,6 +35,16 @@ export const SUPER_APP_MODULES: readonly SuperAppModule[] = [
     description: "Your decisions, progress and global identity.",
     keywords: ["dashboard", "profile", "progress", "identity", "rank"],
     matchPrefixes: ["/profile"],
+  },
+  {
+    id: "atlas",
+    href: "/atlas",
+    icon: "✦",
+    label: "TGPI Atlas AI",
+    shortLabel: "Atlas AI",
+    description: "Talk through ideas and prepare your global next step.",
+    keywords: ["assistant", "chat", "ai", "conversation", "atlas"],
+    matchPrefixes: ["/atlas"],
   },
   {
     id: "global-key",
@@ -138,6 +149,7 @@ export const SUPER_APP_MODULES: readonly SuperAppModule[] = [
 ] as const;
 
 const NEXT_MODULE: Record<SuperAppModuleId, SuperAppModuleId> = {
+  atlas: "workspace",
   workspace: "global-key",
   "global-key": "country-fit",
   "country-fit": "compare",

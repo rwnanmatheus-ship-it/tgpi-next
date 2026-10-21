@@ -10,9 +10,11 @@ import {
 } from "../src/lib/super-app.ts";
 
 test("super app exposes one unique route for every core module", () => {
-  assert.equal(SUPER_APP_MODULES.length, 11);
-  assert.equal(new Set(SUPER_APP_MODULES.map(({ id }) => id)).size, 11);
-  assert.equal(new Set(SUPER_APP_MODULES.map(({ href }) => href)).size, 11);
+  assert.equal(SUPER_APP_MODULES.length, 12);
+  assert.equal(new Set(SUPER_APP_MODULES.map(({ id }) => id)).size, 12);
+  assert.equal(new Set(SUPER_APP_MODULES.map(({ href }) => href)).size, 12);
+  assert.equal(SUPER_APP_MODULES[0].id, 'workspace');
+  assert.equal(getSuperAppModule('/atlas')?.id, 'atlas');
   assert.ok(SUPER_APP_MODULES.every(({ href, icon }) => href.startsWith("/") && icon.length > 0));
 });
 
@@ -69,15 +71,17 @@ test("desktop launcher uses a native modal dialog with global keyboard access", 
 
 test("desktop navbar exposes the same global app launcher", () => {
   const source = readFileSync(new URL("../src/components/Navbar.tsx", import.meta.url), "utf8");
-  assert.match(source, /aria-label="Open TGPI apps"/);
-  assert.match(source, /aria-keyshortcuts="Control\+K Meta\+K"/);
-  assert.match(source, /SUPER_APP_OPEN_EVENT/);
+  const launcher = readFileSync(new URL("../src/components/navigation/LauncherButton.tsx", import.meta.url), "utf8");
+  assert.match(source, /<LauncherButton/);
+  assert.match(launcher, /aria-label="Open TGPI apps"/);
+  assert.match(launcher, /aria-keyshortcuts="Control\+K Meta\+K"/);
+  assert.match(launcher, /SUPER_APP_OPEN_EVENT/);
 });
 
 test("mobile navigation consumes the same shared module registry", () => {
   const source = readFileSync(new URL("../src/components/mobile/MobileNavigation.tsx", import.meta.url), "utf8");
   assert.match(source, /searchSuperAppModules/);
-  assert.match(source, /SUPER_APP_OPEN_EVENT/);
+  assert.match(source, /<LauncherButton compact/);
   assert.match(source, /COMPACT_NAVIGATION\.map/);
   assert.doesNotMatch(source, /mobile-dock-emoji/);
 });
