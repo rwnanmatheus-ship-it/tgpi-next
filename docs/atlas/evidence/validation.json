@@ -1,0 +1,21 @@
+{
+  "date": "2026-10-20",
+  "modelId": "gpt-6-astra",
+  "modelListedForAccount": true,
+  "liveInference": {
+    "passed": false,
+    "httpStatus": 429,
+    "code": "credit_balance_exhausted"
+  },
+  "typecheck": "passed",
+  "focusedEslint": "passed",
+  "deterministicTests": {
+    "passed": 29,
+    "failed": 0
+  },
+  "productionBuild": "passed after clearing invalid local Turbopack cache",
+  "browser": "synthetic fixture passed; see browser-qa.json",
+  "liveClerkFirestore": "not tested",
+  "deployedRulesAndTtl": "not verified",
+  "productionPublished": false
+}

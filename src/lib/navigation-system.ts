@@ -100,6 +100,7 @@ export const COMPACT_NAVIGATION: readonly NavigationDestination[] = [
 ] as const;
 
 const MODULE_ICONS: Record<SuperAppModuleId, NavigationIconName> = {
+  atlas: "spark",
   workspace: "home",
   "global-key": "key",
   "country-fit": "compass",
