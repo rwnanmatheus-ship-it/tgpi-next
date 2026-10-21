@@ -20,7 +20,7 @@ async function api<T>(url: string, init?: RequestInit): Promise<T> {
   return body as T;
 }
 
-export default function AtlasChat({ userId }: { userId: string }) {
+export default function AtlasChat({ userId, enabled = true }: { userId: string; enabled?: boolean }) {
   const [id, setId] = useState('');
   const [messages, setMessages] = useState<AtlasMessage[]>([]);
   const [items, setItems] = useState<AtlasSummary[]>([]);
@@ -60,9 +60,9 @@ export default function AtlasChat({ userId }: { userId: string }) {
   useEffect(() => {
     setId(crypto.randomUUID());
     try { setDraft(sessionStorage.getItem(draftKey) || ''); } catch { /* storage disabled */ }
-    void loadHistory();
+    if (enabled) void loadHistory();
     return () => { abort.current?.abort(); };
-  }, [draftKey, loadHistory]);
+  }, [draftKey, loadHistory, enabled]);
 
   useEffect(() => {
     const visual = window.visualViewport;
@@ -123,7 +123,7 @@ export default function AtlasChat({ userId }: { userId: string }) {
     finally { lock.current = false; setBusy(false); }
   }
   async function send(retry?: AtlasInput) {
-    if (lock.current || (!retry && !draft.trim()) || !id) return;
+    if (!enabled || lock.current || (!retry && !draft.trim()) || !id) return;
     lock.current = true; setBusy(true); setError(''); setNotice('');
     const request: AtlasInput = retry ? { ...retry, requestId: retry.temporary ? crypto.randomUUID() : retry.requestId } : { conversationId: id, requestId: crypto.randomUUID(), text: draft.trim(), scopes, temporary,
       history: temporary ? messages.filter(x => x.status === 'complete').slice(-10).map(x => ({ role: x.role, content: x.content })) : [] };
@@ -201,6 +201,7 @@ export default function AtlasChat({ userId }: { userId: string }) {
         <div><h1>Atlas <span>AI</span></h1><p>{temporary ? 'Temporary conversation' : title}</p></div>
         <div className={styles.headerActions}>{saved && <><button disabled={busy} onClick={() => void openConversation(id)}>Reload</button><button disabled={busy} onClick={() => { setAction('rename'); setRename(title); }}>Rename</button><button disabled={busy} onClick={() => setAction('delete')}>Delete</button></>}</div>
       </header>
+      {!enabled && <div className={styles.confirm} role="status"><p><strong>Atlas preview</strong> — Explore the interface. AI replies are not available for this account yet. Messages cannot be sent during this preview.</p></div>}
       {action && <div className={styles.confirm}>
         {action === 'rename' ? <><label>Conversation title<input value={rename} maxLength={70} onChange={e => setRename(e.target.value)} /></label><button disabled={busy || !rename.trim()} onClick={() => void mutate({ title: rename.trim() })}>Save title</button></> : <><p>Delete this conversation and its messages from TGPI? This cannot be undone.</p><button disabled={busy} onClick={() => void mutate('delete')}>Confirm deletion</button></>}
         <button disabled={busy} onClick={() => setAction(null)}>Cancel</button>
@@ -240,7 +241,7 @@ export default function AtlasChat({ userId }: { userId: string }) {
           <textarea id="atlas-message" ref={composer} value={draft} maxLength={4000} rows={2} placeholder="Ask Atlas anything…" onChange={e => updateDraft(e.target.value)} onKeyDown={e => {
             if (e.key === 'Enter' && !e.shiftKey && !e.nativeEvent.isComposing && window.matchMedia('(min-width: 768px)').matches) { e.preventDefault(); if (!pending) void send(); }
           }} />
-          {busy ? <button type="button" disabled={!abort.current} onClick={() => abort.current?.abort()}>Stop</button> : <button type="submit" disabled={!draft.trim() || !!pending || !id} aria-label="Send message">Send ↑</button>}
+          {busy ? <button type="button" disabled={!abort.current} onClick={() => abort.current?.abort()}>Stop</button> : <button type="submit" disabled={!enabled || !draft.trim() || !!pending || !id} aria-label="Send message">Send ↑</button>}
         </form>
         <p className={styles.status} role="status" aria-live="polite">{busy ? 'Processing your request…' : notice}</p>
         <details className={styles.privacy}><summary>{temporary ? 'Temporary · not saved in TGPI chat history' : 'Private history · 30-day access window'} · Privacy & limits</summary>

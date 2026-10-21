@@ -1,6 +1,6 @@
 # TGPI Atlas AI — first functional core
 
-Status: implemented for private validation, **not released to production and not validated end to end against live services**.
+Status: interface-only production release authorized on 2026-10-21. AI generation remains disabled pending live validation. The page shows a preview notice, disables sending, and skips initial history loading when server generation gates are not satisfied. **Not validated end to end against live services.**
 
 ## Diagnosis and decisions
 
@@ -76,4 +76,4 @@ Run `npm run verify:atlas` with the key securely loaded into the environment aft
 4. Add coherent question editing/branching, full-history search, explicit memory controls, richer mascot states and localization of UI labels. Current UI follows the site's English language; model instructions support multilingual conversation but this is not yet live-evaluated.
 5. Add confirmed/idempotent write tools only after read-only retrieval is evaluated. Attachments and voice remain out of scope for this first core.
 
-No production publication is included. A code build and synthetic browser test do not constitute a completed live AI integration.
+The authorized production scope is interface visualization only. A code build and synthetic browser test do not constitute a completed live AI integration.
