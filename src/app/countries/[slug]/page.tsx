@@ -13,6 +13,7 @@ import { getIntelligence, identities, identitySource } from "@/lib/intelligence/
 import DossierEvidence, { CostReferences } from "@/components/intelligence/DossierEvidence";
 import SourceWatch from "@/components/intelligence/SourceWatch";
 import CountryResearchBrief from "@/components/intelligence/CountryResearchBrief";
+import CountrySatellitePanel from "@/components/countries/CountrySatellitePanel";
 import ResearchWorkbench from "@/components/intelligence/ResearchWorkbench";
 
 export const dynamic = "force-dynamic";
@@ -38,12 +39,13 @@ export default async function CountryPage({ params }: Props) {
   const state = await getIntelligence();
   return <ActivationProgressProvider><main className="ig-shell country-studio"><div className="ig-container">
     <Link href="/countries" className="ig-link">← All countries</Link>
-    <header className="country-dossier-hero" id="overview"><Image src={`/images/countries/identity/${slug}.webp`} alt={`${country.name} destination visual`} fill sizes="(max-width: 768px) 100vw, 1280px" className="object-cover" priority /><div className="country-dossier-intro"><p className="ig-eyebrow">Country intelligence / {identity.iso3} / {identity.region}</p><h1>{country.emoji} {country.name}</h1><p>A destination. A personal plan. Your next informed decision.</p><div className="ig-actions"><SavedCountryButton countryName={country.name} countrySlug={slug} /><Link className="ig-button" href={`/compare?country=${slug}`}>Compare destination →</Link><a className="ig-button ig-secondary" href="#research-workbench">Open Decision Lab ↓</a></div></div></header>
-    <nav className="country-section-nav" aria-label="Country research sections"><a href="#overview">Overview</a><a href="#research-workbench">Decision Lab</a><a href="#research-dossier">Routes & education</a><a href="#cost-of-living">Cost references</a><a href="#decision-signals">National context</a><a href="#documents-to-verify">Preparation</a></nav>
+    <header className="country-dossier-hero" id="overview"><Image src={`/images/countries/identity/${slug}.webp`} alt={`${country.name} destination visual`} fill sizes="(max-width: 768px) 100vw, 1280px" className="object-cover" quality={88} priority /><div className="country-dossier-intro"><p className="ig-eyebrow">Country intelligence / {identity.iso3} / {identity.region}</p><h1>{country.emoji} {country.name}</h1><p>A destination. A personal plan. Your next informed decision.</p><div className="ig-actions"><SavedCountryButton countryName={country.name} countrySlug={slug} /><Link className="ig-button" href={`/compare?country=${slug}`}>Compare destination →</Link><a className="ig-button ig-secondary" href="#research-workbench">Open Decision Lab ↓</a></div></div></header>
+    <nav className="country-section-nav" aria-label="Country research sections"><a href="#overview">Overview</a><a href="#research-workbench">Decision Lab</a><a href="#research-dossier">Routes & education</a><a href="#cost-of-living">Cost references</a><a href="#satellite">Satellite</a><a href="#decision-signals">National context</a><a href="#documents-to-verify">Preparation</a></nav>
     <CountryResearchBrief country={slug} name={country.name} />
     <ResearchWorkbench country={slug} countryName={country.name} />
     <DossierEvidence country={slug} />
     <div id="cost-of-living"><CostReferences country={slug} /></div>
+    <CountrySatellitePanel country={slug} name={country.name} />
     <details className="country-provenance"><summary>Country identity, methodology & data status</summary><GraphStatus state={state} /><p className="ig-small">{identity.name} · {identity.iso2} / {identity.iso3} · M49 {identity.m49} · {identity.subregion || identity.region}</p><p className="ig-meta">Identity reference consulted {identitySource.retrievedAt.slice(0, 10)}. Statistical geography does not express a position on sovereignty or border disputes.</p><a className="ig-link" href={identitySource.url} target="_blank" rel="noreferrer">UN Statistics Division — M49 ↗</a></details>
     <section id="decision-signals" className="ig-section"><p className="ig-eyebrow">National context / Source-linked observations</p><h2>Facts with their boundaries.</h2><div className="ig-evidence-grid">{INDICATOR_IDS.map(id => <EvidenceCard key={id} indicator={id} countryCode={identity.iso2} observation={findObservation(state.snapshot, slug, id)} />)}</div></section>
     <SourceWatch key={slug} country={slug} />

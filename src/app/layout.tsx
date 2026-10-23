@@ -9,6 +9,7 @@ import "./intelligence.css";
 import "./navigation-system.css";
 import "./app-system.css";
 import "./institutional-navigation.css";
+import "leaflet/dist/leaflet.css";
 import "./country-studio.css";
 import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Manrope } from "next/font/google";
