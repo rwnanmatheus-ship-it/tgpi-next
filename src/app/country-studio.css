@@ -1,0 +1,99 @@
+/* Country Intelligence: compact, accessible surfaces shared by all 195 dossiers. */
+.country-studio { --studio-line: #d7dfe3; }
+.country-studio .ig-container { max-width: 1320px; }
+.country-studio .ig-section { margin-top: 24px; }
+.country-studio .ig-panel { padding: clamp(18px, 2vw, 28px); }
+.country-explorer-hero { display:flex; align-items:center; justify-content:space-between; gap:24px; padding:32px 38px; margin-bottom:22px; border-radius:24px; color:#fff; background:linear-gradient(90deg,rgba(3,20,38,.98),rgba(3,20,38,.72)),url('/images/countries/identity/portugal.webp') center/cover; }
+.country-explorer-hero h1 { font-family:var(--tgpi-font-display); font-size:clamp(36px,4.4vw,60px); line-height:1.02; margin:8px 0 14px; }
+.country-explorer-hero h1 em { font-style:normal; color:#f2d997; }
+.country-explorer-hero p:not(.ig-eyebrow) { max-width:650px; color:#dae5ed; font-size:15px; line-height:1.7; }
+.country-explorer-hero .ig-eyebrow,.country-dossier-hero .ig-eyebrow {color:#f2d997;}
+.country-explorer-hero .ig-link { color:#f2d997; }
+.country-hero-stat {display:grid; min-width:190px; padding:24px; border-left:1px solid #ffffff30;}
+.country-hero-stat strong {font:64px var(--tgpi-font-display); color:#f2d997;}
+.country-hero-stat span {max-width:170px; font-size:13px;color:#dae5ed;}
+.country-studio #country-explorer {scroll-margin-top:100px;}
+.country-search-bar { grid-template-columns:minmax(0, 2fr) minmax(180px,1fr); gap:12px; padding:16px; border:1px solid #c7d5df; border-radius:18px; background:#fff; box-shadow:0 8px 24px #123a6008; }
+.country-search-bar input,.country-search-bar select { min-height:48px; background:#f5f8fa; border:1px solid #c7d5df; border-radius:12px; font-size:16px; }
+.country-search-tools {display:flex; align-items:center; flex-wrap:wrap; gap:10px; margin:12px 0 20px; font-size:12px; color:#526174;}
+.country-search-tools span { margin-right:auto; }
+.country-studio .ig-country-grid {gap:16px;}
+.country-studio .ig-country-image {height:180px; min-height:0;}
+.country-studio .ig-card-body {padding:18px;}
+.country-studio .ig-country-card h3 {font-size:25px; margin:8px 0;}
+.country-studio .ig-selection {position:sticky; top:84px; z-index:25; border:1px solid #b99a53; box-shadow:0 8px 25px #03142618; background:#fffaf0; border-radius:16px;}
+.country-dossier-hero {position:relative; isolation:isolate; overflow:hidden; border-radius:24px; min-height:310px; margin:18px 0; background:#061b33;}
+.country-dossier-hero:after {content:"";position:absolute;inset:0;background:linear-gradient(90deg,rgba(3,20,38,.96),rgba(3,20,38,.68) 55%,rgba(3,20,38,.2));z-index:-1;}
+.country-dossier-hero>img {z-index:-2;}
+.country-dossier-intro {padding:32px; color:#fff;max-width:850px;}
+.country-dossier-intro h1 {font:clamp(38px,5vw,66px)/1.05 var(--tgpi-font-display);margin:12px 0;}
+.country-dossier-intro>p:not(.ig-eyebrow) {color:#d8e5ee;font-size:16px;}
+.country-dossier-intro .ig-actions {margin-top:22px;}
+.country-dossier-intro .ig-secondary {background:#ffffff12;color:#fff;border-color:#ffffff50;}
+.country-section-nav {display:flex;overflow-x:auto;gap:6px;position:sticky;top:80px;z-index:24;background:#f7f3eaf5;backdrop-filter:blur(14px);padding:10px 0;border-bottom:1px solid var(--studio-line);}
+.country-section-nav a {flex-shrink:0;padding:10px 14px;border:1px solid #d6dfe6;border-radius:100px;font-size:13px;font-weight:700;background:#fff;color:#193951;text-decoration:none;}
+.country-brief {margin:24px 0;padding:24px;background:linear-gradient(120deg,#eef4f8,#fffdf7);border:1px solid #cedce6;border-radius:22px;}
+.country-brief h2 {font-size:clamp(23px,2.4vw,32px);margin:6px 0;}
+.research-context-chips {display:flex;flex-wrap:wrap;gap:8px;margin:14px 0;}
+.research-context-chips span {padding:6px 10px;background:#ffffffb0;border:1px solid #cfdae1;border-radius:8px;font-size:12px;color:#36516a;}
+.country-priority-grid {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:16px 0;}
+.country-priority-grid a {display:block;background:#fff;border:1px solid #d9e2e8;border-radius:14px;padding:16px;color:#102f48;text-decoration:none;transition:transform .2s;}
+.country-priority-grid a:hover {transform:translateY(-2px);border-color:#a67b29;}
+.country-priority-grid span {font:22px var(--tgpi-font-display);color:#967025;display:block;margin-bottom:6px;}
+.country-priority-grid strong {font-size:14px;}
+.country-priority-grid p {font-size:12px;line-height:1.65;color:#526174;margin:8px 0 0;}
+.country-provenance {border:1px solid #d8e0e5;border-radius:16px;padding:16px 20px;margin:22px 0;background:#fff;}
+.country-provenance summary,.research-checkpoints summary {font-weight:700;cursor:pointer;color:#163852;}
+.country-atlas {color:#193951;}
+.country-atlas [aria-label="Zoom the world map by region"] {gap:8px;}
+.country-atlas [aria-label="Zoom the world map by region"] button {font-size:12px!important;min-height:42px;}
+.atlas-controls {display:flex;align-items:end;justify-content:space-between;gap:16px;margin:16px 0;}
+.atlas-controls label {display:grid;gap:6px;font-size:12px;min-width:220px;}
+.atlas-controls select {padding:10px 12px;background:#fff;color:#102f48;border:1px solid #c7d5df;border-radius:10px;font-size:16px;max-width:100%;}
+.atlas-controls [role="group"] {display:flex;align-items:center;gap:8px;}
+.atlas-controls button {border:1px solid #c7d5df;background:#fff;color:#183b56;border-radius:10px;min-height:44px;min-width:44px;padding:8px 12px;}
+.atlas-controls button:disabled {opacity:.45;}
+.atlas-open-country {margin-top:6px;color:#f2d997;font-size:12px;min-height:32px;font-weight:700;}
+.country-atlas .tgpi-map-canvas g.transition-transform {transition:transform .25s ease-out;}
+.decision-lab {margin-top:24px;}
+.research-slot-bar {display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 18px;border:1px solid #c9d5df;border-radius:18px 18px 0 0;background:#eaf0f5;color:#14334d;font-size:13px;font-weight:700;}
+.research-slot-bar [role="group"] {display:flex;gap:6px;}
+.research-slot-bar button {padding:10px 14px;min-height:42px;border-radius:10px;background:white;border:1px solid #c9d5df;}
+.research-slot-bar button[aria-pressed="true"] {background:#0b2a43;color:#fff;border-color:#0b2a43;}
+.decision-lab .research-workbench {margin-top:0!important;border-radius:0 0 20px 20px;padding:24px;scroll-margin-top:140px;}
+.research-workbench h2 {font-size:clamp(26px,3vw,36px);margin:4px 0 10px;}
+.research-workbench .ig-form-grid {grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:12px 0;}
+.research-workbench .ig-form-grid label {font-size:12px;gap:6px;line-height:1.45;}
+.research-workbench .ig-form-grid input,.research-workbench .ig-form-grid select {min-height:44px;padding:10px 12px;border-radius:10px;border:1px solid #cbd6de;background:#f8fafc;font-size:16px;color:#102f48;width:100%;}
+.research-workbench input:focus,.country-search-bar input:focus,.research-workbench select:focus {outline:2px solid #42779b;outline-offset:2px;background:#fff;}
+.research-fields {padding:0;border:0;margin:18px 0;min-width:0;}
+.research-fields legend {font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:800;color:#8a6727;}
+.research-workbench .ig-budget-result {padding:20px;border-radius:16px;background:linear-gradient(120deg,#071d34,#123a55);color:#fff;}
+.research-workbench .ig-budget-result .ig-value {font-size:clamp(28px,4vw,42px);color:#f2d997;}
+.research-workbench .ig-budget-result .ig-small,.research-workbench .ig-budget-result .ig-meta {color:#d6e4ed;}
+.research-workbench .ig-budget-result .ig-caution {color:#f2d997;background:#ffffff08;}
+.research-checkpoints {padding:14px 0;margin-top:18px!important;}
+.research-report-card {display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:18px;margin:18px 0;padding:20px 24px;border:1px solid #c6b17e;border-radius:18px;background:linear-gradient(110deg,#fffaf0,#eef4f8);}
+.research-report-card strong {font-size:18px;color:#15344d;}
+.research-report-card p:not(.ig-eyebrow) {font-size:12px;color:#526174;line-height:1.6;margin:6px 0 0;}
+.research-report-card .ig-eyebrow {font-size:10px;margin:0 0 6px;}
+.research-currency-confirm {border:1px solid #c49536;background:#fff8e5;padding:16px;border-radius:12px;margin:12px 0;}
+.research-currency-confirm button {margin-right:10px;}
+.country-studio section[id],.country-studio div[id] {scroll-margin-top:140px;}
+@media(min-width:1100px){.country-studio .ig-country-grid{grid-template-columns:repeat(4,minmax(0,1fr));}.country-studio .ig-country-image{height:160px;}}
+@media(max-width:767px){
+.country-studio .ig-container{padding-left:14px;padding-right:14px;}
+.country-explorer-hero{padding:24px;border-radius:18px;}.country-hero-stat{display:none;}.country-explorer-hero h1{font-size:40px;}
+.country-search-bar{grid-template-columns:1fr;padding:12px;}.country-search-tools{font-size:11px;}
+.country-studio .ig-country-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}.country-studio .ig-country-image{height:125px;}.country-studio .ig-card-body{padding:12px;}.country-studio .ig-country-card h3{font-size:20px;}.country-studio .ig-country-card .ig-small{font-size:11px;}.country-studio .ig-country-card .ig-actions{gap:8px;}.country-studio .ig-country-card .ig-actions>*{font-size:12px;min-height:40px;}
+.country-dossier-intro{padding:24px 20px;}.country-dossier-hero{min-height:300px;}.country-dossier-intro h1{font-size:40px;}.country-dossier-intro .ig-actions{gap:8px;}.country-dossier-intro .ig-button{font-size:12px;padding:10px 12px;}
+.country-section-nav{top:64px;}.country-section-nav a{font-size:12px;padding:9px 12px;}.country-studio .ig-selection{top:68px;}
+.country-brief{padding:18px;}.country-priority-grid{grid-template-columns:1fr;gap:8px;}.country-priority-grid a{padding:12px 14px;}.country-priority-grid span{float:left;margin:0 12px 0 0;}.country-priority-grid p{margin-top:5px;}
+.research-slot-bar{align-items:flex-start;flex-direction:column;padding:12px;}.research-slot-bar [role="group"]{width:100%;}.research-slot-bar button{flex:1;padding:8px;font-size:12px;}
+.decision-lab .research-workbench{padding:16px;}.research-workbench .ig-form-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}.research-workbench .ig-form-grid .ig-wide{grid-column:1/-1;}.research-workbench .ig-budget-result{padding:16px;}.research-report-card{padding:16px;}.research-report-card .ig-button{width:100%;justify-content:center;}
+.atlas-controls{align-items:stretch;flex-direction:column;gap:12px;}.atlas-controls label{min-width:0;}.atlas-controls [role="group"]{justify-content:space-between;}.country-atlas .tgpi-map-cinematic-frame{height:330px;border-radius:16px;}.country-atlas .tgpi-map-preview{max-width:calc(100% - 24px);}.country-atlas .tgpi-map-preview>div:first-child{display:none;}
+}
+@media(max-width:359px){.country-studio .ig-country-grid{grid-template-columns:1fr;}.research-workbench .ig-form-grid{grid-template-columns:1fr;}}
+@media(prefers-reduced-motion:reduce){.country-atlas *,.country-priority-grid a{transition:none!important;animation:none!important;}}
+
+@media(max-width:767px){.country-studio.ig-shell{padding-left:0;padding-right:0;}.country-studio .ig-task-grid{grid-template-columns:1fr;}.country-studio .ig-evidence-grid{grid-template-columns:1fr;}}

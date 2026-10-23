@@ -114,12 +114,16 @@ export default function CountriesWorldMap({
   onRegionChange,
 }: CountriesWorldMapProps) {
   const router = useRouter();
+  const [zoomLevel, setZoomLevel] = useState(1);
+  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const drag = useRef<{ x: number; y: number; px: number; py: number } | null>(null);
+  const moved = useRef(false);
   const svgRef = useRef<SVGSVGElement>(null);
   const navigationTimersRef = useRef<number[]>([]);
   const prefetchedRoutesRef = useRef(new Set<string>());
   const [mapData, setMapData] = useState<WorldMapData | null>(null);
   const [mapError, setMapError] = useState("");
-  const [cinematic, setCinematic] = useState<{
+  const [cinematic] = useState<{
     phase: CinematicPhase;
     targetSlug: string;
   }>({ phase: "idle", targetSlug: "" });
@@ -212,7 +216,8 @@ export default function CountriesWorldMap({
   const selectedFeature = features.find(
     (feature) => feature.country?.slug === selectedSlug,
   );
-  const zoom = getZoomTransform(activeRegionId);
+  const baseZoom = getZoomTransform(activeRegionId);
+  const zoom = { scale: baseZoom.scale * zoomLevel, translateX: 500 + (baseZoom.translateX - 500) * zoomLevel + pan.x, translateY: 250 + (baseZoom.translateY - 250) * zoomLevel + pan.y };
   const selectedFeatureX = selectedFeature
     ? activeRegionId === "oceania" &&
       selectedFeature.country?.region === "Oceania" &&
@@ -243,31 +248,7 @@ export default function CountriesWorldMap({
     };
   }, [activeRegionId, cinematic.targetSlug, features, selectedSlug, zoom.scale, zoom.translateX, zoom.translateY]);
 
-  function openCountry(slug: string) {
-    if (cinematic.phase !== "idle") return;
-    const route = `/countries/${slug}`;
-    router.prefetch(route);
-
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      router.push(route);
-      return;
-    }
-
-    onCountryPreview(slug);
-    setCinematic({ phase: "locking", targetSlug: slug });
-    navigationTimersRef.current = [
-      window.setTimeout(
-        () => setCinematic({ phase: "resolving", targetSlug: slug }),
-        290,
-      ),
-      window.setTimeout(
-        () => setCinematic({ phase: "entering", targetSlug: slug }),
-        610,
-      ),
-      window.setTimeout(() => router.push(route), 940),
-    ];
-  }
-
+  function openCountry(slug: string) { router.push(`/countries/${slug}`); }
   function previewCountry(slug: string) {
     onCountryPreview(slug);
     const route = `/countries/${slug}`;
@@ -328,7 +309,7 @@ export default function CountriesWorldMap({
   }
 
   return (
-    <div className="relative mt-5">
+    <div className="relative mt-5 country-atlas">
       <div
         role="group"
         aria-label="Zoom the world map by region"
@@ -342,11 +323,11 @@ export default function CountriesWorldMap({
               type="button"
               aria-pressed={isActive}
               disabled={cinematic.phase !== "idle"}
-              onClick={() => onRegionChange(region.id)}
+              onClick={() => { onRegionChange(region.id); setZoomLevel(1); setPan({ x: 0, y: 0 }); const first = interactiveCountries.find(c => region.id === "world" || region.sourceRegions.includes(features.find(f => f.country?.slug === c.slug)?.continent ?? "")); if (first) onCountryPreview(first.slug); }}
               className={`min-h-10 shrink-0 rounded-full border px-4 text-[9px] font-extrabold uppercase tracking-[0.1em] backdrop-blur transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white disabled:cursor-wait disabled:opacity-50 ${
                 isActive
                   ? "border-[var(--tgpi-gold-light)] bg-[var(--tgpi-gold)] text-[var(--tgpi-navy)]"
-                  : "border-white/15 bg-white/[0.055] text-white/70 hover:border-[var(--tgpi-gold-light)]/60 hover:text-white"
+                  : "border-[#b8c9d7] bg-white text-[#183b56] hover:border-[#a67b29] hover:text-[#061b33]"
               }`}
             >
               {region.label}
@@ -355,6 +336,7 @@ export default function CountriesWorldMap({
         })}
       </div>
 
+      <div className="atlas-controls"><label>Locate a destination<select aria-label="Locate a destination on the atlas" value={selectedSlug} onChange={e => { previewCountry(e.target.value); setZoomLevel(1); setPan({ x: 0, y: 0 }); onRegionChange("world"); }}>{countries.map(c => <option key={c.slug} value={c.slug}>{c.name}</option>)}</select></label><div role="group" aria-label="Map zoom"><button type="button" aria-label="Zoom out" disabled={zoomLevel <= 1} onClick={() => setZoomLevel(z => Math.max(1, z - .5))}>−</button><span>{Math.round(zoomLevel * 100)}%</span><button type="button" aria-label="Zoom in" disabled={zoomLevel >= 4} onClick={() => setZoomLevel(z => Math.min(4, z + .5))}>+</button><button type="button" onClick={() => { setZoomLevel(1); setPan({ x: 0, y: 0 }); onRegionChange("world"); }}>Reset</button></div></div>
       <div
         className="tgpi-map-cinematic-frame relative mt-3 h-[340px] overflow-hidden rounded-[26px] border border-white/12 bg-[#06172B] shadow-[inset_0_0_110px_rgba(56,113,158,.18),0_24px_70px_rgba(0,0,0,.2)] sm:h-[440px] lg:h-[500px]"
         data-phase={cinematic.phase}
@@ -371,14 +353,18 @@ export default function CountriesWorldMap({
             preserveAspectRatio="xMidYMid meet"
             aria-labelledby="tgpi-world-map-title tgpi-world-map-description"
             className="h-full w-full"
+            style={{ touchAction: zoomLevel > 1 ? "none" : "pan-y" }}
+            onPointerDown={event => { moved.current = false; if (zoomLevel <= 1) return; drag.current = { x: event.clientX, y: event.clientY, px: pan.x, py: pan.y }; event.currentTarget.setPointerCapture(event.pointerId); }}
+            onPointerMove={event => { if (!drag.current) return; const dx = event.clientX - drag.current.x, dy = event.clientY - drag.current.y; if (Math.abs(dx) + Math.abs(dy) > 8) moved.current = true; const scale = 1000 / event.currentTarget.getBoundingClientRect().width; setPan({ x: Math.max(-1800, Math.min(1800, drag.current.px + dx * scale)), y: Math.max(-900, Math.min(900, drag.current.py + dy * scale)) }); }}
+            onPointerUp={() => { drag.current = null; }} onPointerCancel={() => { drag.current = null; }}
           >
           <title id="tgpi-world-map-title">TGPI interactive country map</title>
           <desc id="tgpi-world-map-description">
             Real country boundaries. Hover or focus a territory to preview it, then
-            click or press Enter to open its country intelligence page. Use arrow keys
+            select to preview or press Enter to open its country intelligence page. Use arrow keys
             to move between countries.
           </desc>
-          <defs>
+          <defs><linearGradient id="tgpi-land-relief" x1="0" y1="0" x2=".7" y2="1"><stop offset="0" stopColor="#6e9a92"/><stop offset=".35" stopColor="#315f68"/><stop offset=".7" stopColor="#234659"/><stop offset="1" stopColor="#122d45"/></linearGradient>
             <linearGradient id="tgpi-map-water" x1="0" y1="0" x2="1" y2="1">
               <stop offset="0" stopColor="#09213B" />
               <stop offset="0.5" stopColor="#0A2D4D" />
@@ -432,13 +418,13 @@ export default function CountriesWorldMap({
                   key={`${feature.isoA3}-${feature.name}`}
                   d={feature.path}
                   data-country-slug={country?.slug}
-                  role={country ? "link" : undefined}
+                  role={country ? "button" : undefined}
                   tabIndex={country && isSelected && !usesPacificDuplicate ? 0 : -1}
-                  aria-label={country ? `Open ${country.name} country profile` : undefined}
+                  aria-label={country ? `Preview ${country.name} on the map` : undefined}
                   aria-keyshortcuts={country ? "Enter ArrowLeft ArrowRight ArrowUp ArrowDown" : undefined}
                   onMouseEnter={country ? () => previewCountry(country.slug) : undefined}
                   onFocus={country ? () => previewCountry(country.slug) : undefined}
-                  onClick={country ? () => openCountry(country.slug) : undefined}
+                  onClick={country ? () => { if (!moved.current) previewCountry(country.slug); } : undefined}
                   onKeyDown={country ? (event) => handleCountryKeyDown(event, country.slug) : undefined}
                   vectorEffect="non-scaling-stroke"
                   className={`stroke-[0.72] transition-[fill,stroke,opacity] duration-200 focus-visible:outline-none ${
@@ -449,7 +435,7 @@ export default function CountriesWorldMap({
                     country && isSelected
                       ? "fill-[var(--tgpi-gold)] stroke-[var(--tgpi-gold-light)]"
                       : country
-                        ? "fill-[#1A4A70]"
+                        ? "fill-[url(#tgpi-land-relief)]"
                         : ""
                   }`}
                 >
@@ -476,19 +462,19 @@ export default function CountriesWorldMap({
                         transform="translate(1000 0)"
                         data-country-slug={country.slug}
                         data-pacific-duplicate="true"
-                        role="link"
+                        role="button"
                         tabIndex={isSelected ? 0 : -1}
-                        aria-label={`Open ${country.name} country profile`}
+                        aria-label={`Preview ${country.name} on the map`}
                         aria-keyshortcuts="Enter ArrowLeft ArrowRight ArrowUp ArrowDown"
                         onMouseEnter={() => previewCountry(country.slug)}
                         onFocus={() => previewCountry(country.slug)}
-                        onClick={() => openCountry(country.slug)}
+                        onClick={() => { if (!moved.current) previewCountry(country.slug); }}
                         onKeyDown={(event) => handleCountryKeyDown(event, country.slug)}
                         vectorEffect="non-scaling-stroke"
                         className={`cursor-pointer stroke-[0.72] transition-[fill,stroke] duration-200 hover:fill-[var(--tgpi-gold)] hover:stroke-[var(--tgpi-gold-light)] focus-visible:fill-[var(--tgpi-gold)] focus-visible:stroke-white focus-visible:outline-none ${
                           isSelected
                             ? "fill-[var(--tgpi-gold)] stroke-[var(--tgpi-gold-light)]"
-                            : "fill-[#1A4A70] stroke-[#94BBD5]/45"
+                            : "fill-[url(#tgpi-land-relief)] stroke-[#94BBD5]/45"
                         }`}
                       >
                         <title>{country.name} — open profile</title>
@@ -510,7 +496,7 @@ export default function CountriesWorldMap({
                   aria-hidden="true"
                   className="cursor-pointer"
                   onMouseEnter={() => previewCountry(country.slug)}
-                  onClick={() => openCountry(country.slug)}
+                  onClick={() => { if (!moved.current) previewCountry(country.slug); }}
                 >
                   <circle cx={feature.label[0]} cy={feature.label[1]} r={hitRadius} fill="transparent" />
                   <circle
@@ -545,7 +531,7 @@ export default function CountriesWorldMap({
                         aria-hidden="true"
                         className="cursor-pointer"
                         onMouseEnter={() => previewCountry(country.slug)}
-                        onClick={() => openCountry(country.slug)}
+                        onClick={() => { if (!moved.current) previewCountry(country.slug); }}
                       >
                         <circle cx={feature.label[0] + 1000} cy={feature.label[1]} r={5.5 / zoom.scale} fill="transparent" />
                         <circle
@@ -605,7 +591,7 @@ export default function CountriesWorldMap({
         ) : null}
 
         {selectedCountry && mapData && cinematic.phase === "idle" ? (
-          <div key={selectedCountry.slug} className="tgpi-map-preview pointer-events-none absolute bottom-3 left-3 flex max-w-[calc(100%-1.5rem)] items-center gap-3 rounded-2xl border border-white/15 bg-[#041426]/90 p-2 pr-4 text-white shadow-2xl backdrop-blur-md sm:max-w-[330px]">
+          <div key={selectedCountry.slug} className="tgpi-map-preview absolute bottom-3 left-3 flex max-w-[calc(100%-1.5rem)] items-center gap-3 rounded-2xl border border-white/15 bg-[#041426]/90 p-2 pr-4 text-white shadow-2xl backdrop-blur-md sm:max-w-[330px]">
             <div className="relative h-14 w-20 shrink-0 overflow-hidden rounded-xl border border-white/10">
               <Image
                 src={selectedCountry.visual.url}
@@ -618,7 +604,7 @@ export default function CountriesWorldMap({
             <div className="min-w-0">
               <p className="text-[8px] font-extrabold uppercase tracking-[0.14em] text-[var(--tgpi-gold-light)]">Intelligence preview</p>
               <p className="mt-0.5 truncate text-sm font-extrabold">{selectedCountry.emoji} {selectedCountry.name}</p>
-              <p className="truncate text-[9px] font-bold text-white/55">Open source-linked country research</p>
+              <button type="button" className="atlas-open-country" onClick={() => openCountry(selectedCountry.slug)}>Open country dossier →</button>
             </div>
           </div>
         ) : null}
@@ -651,11 +637,11 @@ export default function CountriesWorldMap({
         ) : null}
       </div>
 
-      <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[9px] font-bold uppercase tracking-[0.12em] text-white/45">
-        <span>Hover to preview · Click to enter</span>
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[9px] font-bold uppercase tracking-[0.12em] text-[#526174]">
+        <span>Select to preview · Zoom to drag</span>
         <span>Keyboard: arrows + Enter</span>
       </div>
-      <p className="mt-2 text-[9px] leading-4 text-white/35">
+      <p className="mt-2 text-xs leading-5 text-[#526174]">
         Boundary reference: Natural Earth de facto cartography. Disputed areas may vary
         by legal or political point of view.
       </p>

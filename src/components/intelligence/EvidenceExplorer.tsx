@@ -1,5 +1,5 @@
 "use client";
-import { useState, useSyncExternalStore } from "react";
+import { useMemo, useState, useSyncExternalStore } from "react";
 import dynamic from "next/dynamic";
 import type { CountryMapRegionId } from "@/lib/country-map";
 import Image from "next/image";
@@ -7,7 +7,10 @@ import Link from "next/link";
 import { explorerFiltersFromSearch, explorerFiltersToSearch, normalizeExplorerFilters, type ExplorerFilterInput } from "@/lib/explorer-filters";
 import SavedCountryButton from "@/components/activation/SavedCountryButton";
 
-type ExplorerCountry = { slug: string; name: string; emoji: string; region: string; iso3: string; observations: number };
+import { countrySearchScore, countrySearchTerms } from "@/lib/country-search";
+import { useResearchProfile } from "./useResearchProfile";
+import ResearchReportCard from "./ResearchReportCard";
+type ExplorerCountry = { slug: string; name: string; emoji: string; region: string; iso2: string; iso3: string; dossierCount: number; observations: number };
 const CountryAtlas = dynamic(() => import("@/components/countries/CountriesWorldMap"), { ssr: false, loading: () => <p className="ig-status">Loading the interactive atlas…</p> });
 type ExplorerFilters = ExplorerFilterInput;
 const FILTERS_CHANGED = "tgpi:explorer-location";
@@ -23,6 +26,9 @@ export default function EvidenceExplorer({ countries, initialFilters = {} }: { c
   const initialSearch = explorerFiltersToSearch(initialFilters);
   const search = useSyncExternalStore(subscribeLocation,locationSearch,() => initialSearch);
   const {query,region,selection,limit} = normalizeExplorerFilters(explorerFiltersFromSearch(search),countries);
+  const { user, journey } = useResearchProfile();
+  const [onlySaved, setOnlySaved] = useState(false);
+  const terms = useMemo(() => new Map(countries.map(c => [c.slug, countrySearchTerms(c)])), [countries]);
   const [showAtlas, setShowAtlas] = useState(false);
   const [atlasRegion, setAtlasRegion] = useState<CountryMapRegionId>("world");
   const [atlasCountry, setAtlasCountry] = useState("portugal");
@@ -43,18 +49,20 @@ export default function EvidenceExplorer({ countries, initialFilters = {} }: { c
     const next = selection.includes(slug) ? selection.filter(value => value !== slug) : [...selection,slug];
     setNotice(""); updateUrl({selection:next});
   }
-  const normalized = query.normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim().toLowerCase();
-  const filtered = countries.filter(c => (region === "all" || c.region === region) && `${c.name} ${c.slug} ${c.iso3}`.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().includes(normalized));
+  const filtered = countries.map(c => ({ country: c, score: countrySearchScore(terms.get(c.slug) ?? [], query) })).filter(({ country: c, score }) => score > 0 && (region === "all" || c.region === region) && (!onlySaved || journey.targetCountries.includes(c.slug))).sort((a, b) => b.score - a.score || a.country.name.localeCompare(b.country.name)).map(c => c.country);
   const params = new URLSearchParams(); selection.forEach(slug => params.append("country", slug));
   return <section id="country-explorer" className="ig-section">
-    <div className="ig-panel mb-6"><div className="ig-spread"><div><p className="ig-eyebrow">Explore spatially</p><h2>An atlas, not a ranking.</h2></div><button type="button" className="ig-button ig-secondary" aria-expanded={showAtlas} onClick={() => setShowAtlas(!showAtlas)}>{showAtlas ? "Close atlas" : "Open interactive atlas"}</button></div>{showAtlas ? <><p className="ig-small">Select a country to preview its dossier. Map geometry is an exploration aid, not an authoritative boundary determination.</p><CountryAtlas countries={countries.map(c => ({ ...c, visual: { alt: `TGPI illustration of ${c.name}`, hasImage: true, url: `/images/countries/identity/${c.slug}.webp` } }))} activeRegionId={atlasRegion} selectedSlug={atlasCountry} onCountryPreview={setAtlasCountry} onRegionChange={setAtlasRegion} /></> : null}</div>
-    <div className="ig-spread"><h2>Find your next research question.</h2><p className="ig-meta" aria-live="polite">{filtered.length} {filtered.length === 1 ? "country" : "countries"} · Alphabetical order</p></div>
-    <div className="ig-form-grid"><label>Search countries<input type="search" value={query} onChange={e => { updateUrl({query:e.target.value,limit:24}); }} placeholder="Country name or ISO code" /></label><label>Statistical region<select value={region} onChange={e => { updateUrl({region:e.target.value,limit:24}); }}><option value="all">All regions</option>{Array.from(new Set(countries.map(c => c.region))).sort().map(r => <option key={r}>{r}</option>)}</select></label></div>
+
+    <div className="ig-spread"><h2>Find your next destination.</h2><p className="ig-meta" aria-live="polite">{filtered.length} {filtered.length === 1 ? "country" : "countries"} · {query ? "Best search matches" : "A–Z"}</p></div>
+    <div className="ig-form-grid country-search-bar"><label>Search countries<input type="search" value={query} onChange={e => { updateUrl({query:e.target.value,limit:24}); }} placeholder="Country, translated name or ISO code…" /></label><label>Statistical region<select value={region} onChange={e => { updateUrl({region:e.target.value,limit:24}); setAtlasRegion(e.target.value === "all" || e.target.value === "Americas" ? "world" : e.target.value.toLowerCase() as CountryMapRegionId); }}><option value="all">All regions</option>{Array.from(new Set(countries.map(c => c.region))).sort().map(r => <option key={r}>{r}</option>)}</select></label></div>
+    <div className="country-search-tools"><span>Search in English, Português, Español, Français, Deutsch or Italiano.</span>{user && <button className="ig-select" type="button" aria-pressed={onlySaved} onClick={() => setOnlySaved(!onlySaved)}>{onlySaved ? "Show all destinations" : "My profile shortlist"}</button>}<button type="button" className="ig-select" onClick={() => { setOnlySaved(false); updateUrl({ query: "", region: "all", limit: 24 }); }}>Reset filters</button></div>
+    <div className="ig-panel mb-6"><div className="ig-spread"><div><p className="ig-eyebrow">Geospatial intelligence</p><h2>TGPI World Atlas.</h2></div><button type="button" className="ig-button ig-secondary" aria-expanded={showAtlas} onClick={() => setShowAtlas(!showAtlas)}>{showAtlas ? "Close atlas" : "Open interactive atlas"}</button></div>{showAtlas ? <><p className="ig-small">Select a country to preview its dossier. Map geometry is an exploration aid, not an authoritative boundary determination.</p><CountryAtlas countries={countries.map(c => ({ ...c, visual: { alt: `TGPI illustration of ${c.name}`, hasImage: true, url: `/images/countries/identity/${c.slug}.webp` } }))} activeRegionId={atlasRegion} selectedSlug={atlasCountry} onCountryPreview={setAtlasCountry} onRegionChange={id => { setAtlasRegion(id); updateUrl({ region: id === "world" ? "all" : id.includes("america") ? "Americas" : id.charAt(0).toUpperCase() + id.slice(1), limit: 24 }); }} /></> : null}</div>
     {selection.length ? <div className="ig-selection"><span>{selection.map(slug => countries.find(c => c.slug === slug)?.name).join(" · ")}</span><div className="ig-actions"><Link className="ig-button" href={`/compare?${params}`}>Compare {selection.length}/3 →</Link><button type="button" className="ig-button ig-secondary" onClick={() => { setNotice(""); updateUrl({selection:[]}); }}>Clear</button></div></div> : null}
+    {(query || selection.length > 0) && filtered.length > 0 && <ResearchReportCard country={selection[0] || filtered[0].slug} name={countries.find(c => c.slug === (selection[0] || filtered[0].slug))?.name || "Country"} />}
     <p className="ig-meta" role="status">{notice}</p>
     <div className="ig-country-grid">{filtered.slice(0, limit).map(country => <article key={country.slug} className="ig-country-card tgpi-card-3d" data-tgpi-tone="white" data-tgpi-interactive="true">
-      <Link href={`/countries/${country.slug}`} className="ig-country-image"><Image src={`/images/countries/identity/${country.slug}.webp`} alt={`TGPI illustration inspired by ${country.name}`} fill sizes="(max-width: 640px) 100vw, (max-width: 1000px) 50vw, 33vw" className="object-cover" /><span className="ig-image-label">Editorial illustration</span></Link>
-      <div className="ig-card-body"><div className="ig-spread"><p className="ig-eyebrow">{country.region}</p><span className="ig-meta">{country.iso3}</span></div><h3><Link href={`/countries/${country.slug}`}>{country.emoji} {country.name}</Link></h3><p className="ig-small">{country.observations}/4 statistical observations available. Identity mapped to UNSD.</p><div className="ig-actions"><Link className="ig-link" href={`/countries/${country.slug}`}>Explore evidence →</Link><button type="button" aria-pressed={selection.includes(country.slug)} className="ig-select" onClick={() => toggleSelection(country.slug)}>{selection.includes(country.slug) ? "✓ Selected" : "+ Compare"}</button><SavedCountryButton countryName={country.name} countrySlug={country.slug} /></div></div>
+      <Link href={`/countries/${country.slug}`} className="ig-country-image"><Image src={`/images/countries/identity/${country.slug}.webp`} alt={`${country.name} destination visual`} fill sizes="(max-width: 640px) 100vw, (max-width: 1000px) 50vw, 33vw" className="object-cover" /></Link>
+      <div className="ig-card-body"><div className="ig-spread"><p className="ig-eyebrow">{country.region}</p><span className="ig-meta">{country.iso3}</span></div><h3><Link href={`/countries/${country.slug}`}>{country.emoji} {country.name}</Link></h3><p className="ig-small">{country.observations}/4 national indicators · {country.dossierCount ? `${country.dossierCount} research summaries` : "Core country profile"}</p><div className="ig-actions"><Link className="ig-link" href={`/countries/${country.slug}`}>Explore evidence →</Link><button type="button" aria-pressed={selection.includes(country.slug)} className="ig-select" onClick={() => toggleSelection(country.slug)}>{selection.includes(country.slug) ? "✓ Selected" : "+ Compare"}</button><SavedCountryButton countryName={country.name} countrySlug={country.slug} /></div></div>
     </article>)}</div>
     {!filtered.length ? <p className="ig-panel">No countries found. Try another name or clear the region filter.</p> : null}
     {filtered.length > limit ? <button type="button" className="ig-button ig-secondary" onClick={() => { const next = Math.min(limit + 24,countries.length); updateUrl({limit:next}); }}>Show more countries</button> : null}
