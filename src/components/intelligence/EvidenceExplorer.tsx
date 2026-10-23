@@ -33,7 +33,8 @@ export default function EvidenceExplorer({ countries, initialFilters = {} }: { c
   const [showAtlas, setShowAtlas] = useState(false);
   const [atlasLayer, setAtlasLayer] = useState<"satellite" | "countries">("satellite");
   const [atlasRegion, setAtlasRegion] = useState<CountryMapRegionId>("world");
-  const [atlasCountry, setAtlasCountry] = useState("portugal");
+  const [atlasFocus, setAtlasFocus] = useState({ slug: "portugal", query: "", region: "all" });
+  function setAtlasCountry(slug: string) { setAtlasFocus({ slug, query, region }); }
   const [notice, setNotice] = useState("");
   function updateUrl(next: {query?:string;region?:string;selection?:string[];limit?:number}) {
     const url = new URL(window.location.href);
@@ -52,6 +53,10 @@ export default function EvidenceExplorer({ countries, initialFilters = {} }: { c
     setNotice(""); updateUrl({selection:next});
   }
   const filtered = countries.map(c => ({ country: c, score: countrySearchScore(terms.get(c.slug) ?? [], query) })).filter(({ country: c, score }) => score > 0 && (region === "all" || c.region === region) && (!onlySaved || journey.targetCountries.includes(c.slug))).sort((a, b) => b.score - a.score || a.country.name.localeCompare(b.country.name)).map(c => c.country);
+  // Search, restored URLs and region changes focus the best visible match.
+  // An explicit map preview remains selected until those filters change.
+  const atlasCountry = atlasFocus.query === query && atlasFocus.region === region
+    ? atlasFocus.slug : filtered[0]?.slug ?? atlasFocus.slug;
   const params = new URLSearchParams(); selection.forEach(slug => params.append("country", slug));
   return <section id="country-explorer" className="ig-section">
 
