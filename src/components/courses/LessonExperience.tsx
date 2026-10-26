@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import LearningJournal from "@/components/courses/LearningJournal";
 import ActiveRecallPractice from "@/components/courses/ActiveRecallPractice";
 import {
   useEffect,
@@ -294,7 +295,8 @@ function Lesson({
               </div>
             </LessonSection>
 
-            <ActiveRecallPractice key={lesson.id} lesson={lesson} />
+            <ActiveRecallPractice key={lesson.id} lesson={lesson} applied={course.id !== "global-english-2026"} />
+            <LearningJournal key={`journal-${course.id}-${course.version}-${lesson.id}`} course={course} lesson={lesson} />
 
             <section id="checkpoint" className="scroll-mt-24 rounded-[28px] border border-[var(--tgpi-gold)]/35 bg-[#FFF7DE] p-6 shadow-[var(--tgpi-shadow-soft)] sm:p-8" aria-labelledby="checkpoint-title">
               <div className="flex flex-wrap items-center justify-between gap-3">
@@ -393,12 +395,7 @@ function Lesson({
             ) : (
               <div />
             )}
-            {nextLesson && !isCompleted ? (
-              <a href="#checkpoint" className="rounded-2xl border border-[var(--tgpi-gold)] bg-[#FFF7DE] p-5 text-right focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]">
-                <span className="block text-xs font-bold">Complete the checkpoint to continue</span>
-                <span className="mt-2 block text-sm">Your next lesson: {nextLesson.title} ↑</span>
-              </a>
-            ) : nextLesson ? (
+            {nextLesson ? (
               <LessonNavigationLink courseId={course.id} direction="next" lesson={nextLesson} />
             ) : (
               <Link href={`/courses/${course.id}`} className="rounded-2xl bg-[var(--tgpi-navy)] p-5 text-right text-white transition hover:-translate-y-0.5 hover:bg-[var(--tgpi-navy-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]">
