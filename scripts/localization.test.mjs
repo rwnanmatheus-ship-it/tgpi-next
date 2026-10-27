@@ -66,3 +66,27 @@ test('guest preference uses a cookie; signed-in preference merges only its own m
   assert.equal(response.status, 503);
   assert.equal(response.headers.has('set-cookie'), false);
 });
+
+test('all four home goals have complete translated guidance without changing route values', async () => {
+  const { HOME_GOALS, homeGoal } = await import(url(fs.readFileSync('src/lib/home-journey.ts', 'utf8')));
+  assert.deepEqual(HOME_GOALS.map(goal => goal.id), ['study', 'work', 'live', 'learn']);
+  for (const goal of HOME_GOALS) {
+    assert.equal(homeGoal(goal.id), goal.id);
+    for (const source of [goal.label, goal.heading, goal.copy, goal.outcome, ...goal.checks]) {
+      for (const locale of locales.filter(locale => locale !== 'en')) {
+        assert.notEqual(translate(locale, source), source, `${locale}: ${source}`);
+      }
+    }
+  }
+});
+
+test('home FAQ translates questions and complete answers in every supported language', async () => {
+  const { HOME_FAQ } = await import(url(fs.readFileSync('src/lib/home-content.ts', 'utf8')));
+  for (const item of HOME_FAQ) {
+    for (const source of [item.question, item.answer]) {
+      for (const locale of locales.filter(locale => locale !== 'en')) {
+        assert.notEqual(translate(locale, source), source, `${locale}: ${source}`);
+      }
+    }
+  }
+});

@@ -5024,6 +5024,318 @@ export const messages = {
     "fr": "Cours trouvés : {count}",
     "de": "Gefundene Kurse: {count}",
     "it": "Corsi trovati: {count}"
+  },
+  "Start with the institution. Then the destination.": {
+    "en": "Start with the institution. Then the destination.",
+    "pt-BR": "Comece pela instituição. Depois, pelo destino.",
+    "es": "Empieza por la institución. Después, por el destino.",
+    "fr": "Commencez par l’établissement. Puis par la destination.",
+    "de": "Beginnen Sie mit der Bildungseinrichtung. Dann mit dem Reiseziel.",
+    "it": "Inizia dall’istituto. Poi dalla destinazione."
+  },
+  "Explore the programme, language requirements and total costs before committing to a place.": {
+    "en": "Explore the programme, language requirements and total costs before committing to a place.",
+    "pt-BR": "Pesquise o programa, os requisitos de idioma e os custos totais antes de escolher um lugar.",
+    "es": "Investiga el programa, los requisitos de idioma y los costes totales antes de elegir un lugar.",
+    "fr": "Étudiez le programme, les exigences linguistiques et le coût total avant de choisir un lieu.",
+    "de": "Prüfen Sie das Programm, die Sprachanforderungen und die Gesamtkosten, bevor Sie sich für einen Ort entscheiden.",
+    "it": "Esamina il programma, i requisiti linguistici e i costi totali prima di scegliere un luogo."
+  },
+  "A research plan for your education pathway.": {
+    "en": "A research plan for your education pathway.",
+    "pt-BR": "Um plano de pesquisa para sua trajetória educacional.",
+    "es": "Un plan de investigación para tu trayectoria educativa.",
+    "fr": "Un plan de recherche pour votre parcours d’études.",
+    "de": "Ein Rechercheplan für Ihren Bildungsweg.",
+    "it": "Un piano di ricerca per il tuo percorso di studi."
+  },
+  "Verify the institution and programme": {
+    "en": "Verify the institution and programme",
+    "pt-BR": "Verifique a instituição e o programa",
+    "es": "Verifica la institución y el programa",
+    "fr": "Vérifiez l’établissement et le programme",
+    "de": "Prüfen Sie die Bildungseinrichtung und das Programm",
+    "it": "Verifica l’istituto e il programma"
+  },
+  "Check study permissions and deadlines": {
+    "en": "Check study permissions and deadlines",
+    "pt-BR": "Confira as autorizações de estudo e os prazos",
+    "es": "Revisa los permisos de estudio y los plazos",
+    "fr": "Vérifiez les autorisations d’études et les échéances",
+    "de": "Prüfen Sie Studiengenehmigungen und Fristen",
+    "it": "Controlla i permessi di studio e le scadenze"
+  },
+  "Plan tuition and everyday costs": {
+    "en": "Plan tuition and everyday costs",
+    "pt-BR": "Planeje as taxas de ensino e os gastos do dia a dia",
+    "es": "Planifica la matrícula y los gastos cotidianos",
+    "fr": "Prévoyez les frais de scolarité et les dépenses quotidiennes",
+    "de": "Planen Sie Studiengebühren und Alltagskosten",
+    "it": "Pianifica le tasse di iscrizione e le spese quotidiane"
+  },
+  "Give your career move a research plan.": {
+    "en": "Give your career move a research plan.",
+    "pt-BR": "Crie um plano de pesquisa para sua mudança profissional.",
+    "es": "Crea un plan de investigación para tu cambio profesional.",
+    "fr": "Préparez un plan de recherche pour votre évolution professionnelle.",
+    "de": "Erstellen Sie einen Rechercheplan für Ihren nächsten Karriereschritt.",
+    "it": "Crea un piano di ricerca per il tuo cambiamento professionale."
+  },
+  "Connect your field and language skills to the questions that matter before you apply or move.": {
+    "en": "Connect your field and language skills to the questions that matter before you apply or move.",
+    "pt-BR": "Relacione sua área e suas habilidades de idioma às questões importantes antes de se candidatar ou se mudar.",
+    "es": "Relaciona tu área y tus habilidades lingüísticas con las preguntas importantes antes de postularte o mudarte.",
+    "fr": "Reliez votre domaine et vos compétences linguistiques aux questions importantes avant de postuler ou de déménager.",
+    "de": "Verknüpfen Sie Ihr Fachgebiet und Ihre Sprachkenntnisse mit wichtigen Fragen, bevor Sie sich bewerben oder umziehen.",
+    "it": "Collega il tuo settore e le tue competenze linguistiche alle domande importanti prima di candidarti o trasferirti."
+  },
+  "A research plan for your professional next step.": {
+    "en": "A research plan for your professional next step.",
+    "pt-BR": "Um plano de pesquisa para seu próximo passo profissional.",
+    "es": "Un plan de investigación para tu próximo paso profesional.",
+    "fr": "Un plan de recherche pour votre prochaine étape professionnelle.",
+    "de": "Ein Rechercheplan für Ihren nächsten beruflichen Schritt.",
+    "it": "Un piano di ricerca per il tuo prossimo passo professionale."
+  },
+  "Verify work permissions for your nationality": {
+    "en": "Verify work permissions for your nationality",
+    "pt-BR": "Verifique as autorizações de trabalho para sua nacionalidade",
+    "es": "Verifica los permisos de trabajo para tu nacionalidad",
+    "fr": "Vérifiez les autorisations de travail selon votre nationalité",
+    "de": "Prüfen Sie Arbeitsgenehmigungen für Ihre Staatsangehörigkeit",
+    "it": "Verifica i permessi di lavoro per la tua nazionalità"
+  },
+  "Check qualifications and licensing": {
+    "en": "Check qualifications and licensing",
+    "pt-BR": "Confira as qualificações e as licenças profissionais",
+    "es": "Revisa las cualificaciones y las licencias profesionales",
+    "fr": "Vérifiez les qualifications et les autorisations professionnelles",
+    "de": "Prüfen Sie Qualifikationen und Berufszulassungen",
+    "it": "Controlla le qualifiche e le abilitazioni professionali"
+  },
+  "Research city-level living costs": {
+    "en": "Research city-level living costs",
+    "pt-BR": "Pesquise o custo de vida na cidade",
+    "es": "Investiga el coste de vida en la ciudad",
+    "fr": "Étudiez le coût de la vie dans la ville",
+    "de": "Recherchieren Sie die Lebenshaltungskosten in der Stadt",
+    "it": "Ricerca il costo della vita in città"
+  },
+  "Think beyond the move. Prepare for daily life.": {
+    "en": "Think beyond the move. Prepare for daily life.",
+    "pt-BR": "Pense além da mudança. Prepare-se para o dia a dia.",
+    "es": "Piensa más allá de la mudanza. Prepárate para la vida diaria.",
+    "fr": "Pensez au-delà du déménagement. Préparez le quotidien.",
+    "de": "Denken Sie über den Umzug hinaus. Bereiten Sie sich auf den Alltag vor.",
+    "it": "Pensa oltre il trasferimento. Preparati alla vita quotidiana."
+  },
+  "Investigate residence, housing and practical routines in the context of your own situation.": {
+    "en": "Investigate residence, housing and practical routines in the context of your own situation.",
+    "pt-BR": "Pesquise residência, moradia e rotinas práticas considerando sua situação.",
+    "es": "Investiga la residencia, la vivienda y las rutinas prácticas según tu situación.",
+    "fr": "Renseignez-vous sur le séjour, le logement et les habitudes pratiques selon votre situation.",
+    "de": "Informieren Sie sich über Aufenthalt, Wohnen und Alltagsabläufe in Ihrer persönlichen Situation.",
+    "it": "Informati su soggiorno, alloggio e abitudini pratiche in base alla tua situazione."
+  },
+  "A research plan for a more considered move.": {
+    "en": "A research plan for a more considered move.",
+    "pt-BR": "Um plano de pesquisa para uma mudança mais consciente.",
+    "es": "Un plan de investigación para una mudanza más meditada.",
+    "fr": "Un plan de recherche pour un départ plus réfléchi.",
+    "de": "Ein Rechercheplan für einen durchdachten Umzug.",
+    "it": "Un piano di ricerca per un trasferimento più ponderato."
+  },
+  "Verify residence requirements": {
+    "en": "Verify residence requirements",
+    "pt-BR": "Verifique os requisitos de residência",
+    "es": "Verifica los requisitos de residencia",
+    "fr": "Vérifiez les conditions de séjour",
+    "de": "Prüfen Sie die Aufenthaltsvoraussetzungen",
+    "it": "Verifica i requisiti di soggiorno"
+  },
+  "Build a budget with dated local quotes": {
+    "en": "Build a budget with dated local quotes",
+    "pt-BR": "Monte um orçamento com cotações locais datadas",
+    "es": "Elabora un presupuesto con cotizaciones locales fechadas",
+    "fr": "Établissez un budget avec des devis locaux datés",
+    "de": "Erstellen Sie ein Budget mit datierten lokalen Angeboten",
+    "it": "Crea un budget con preventivi locali datati"
+  },
+  "Organize preparation and language practice": {
+    "en": "Organize preparation and language practice",
+    "pt-BR": "Organize a preparação e a prática do idioma",
+    "es": "Organiza la preparación y la práctica del idioma",
+    "fr": "Organisez votre préparation et votre pratique linguistique",
+    "de": "Organisieren Sie Ihre Vorbereitung und Sprachpraxis",
+    "it": "Organizza la preparazione e la pratica linguistica"
+  },
+  "Build skills you can put into practice.": {
+    "en": "Build skills you can put into practice.",
+    "pt-BR": "Desenvolva habilidades que você possa aplicar.",
+    "es": "Desarrolla habilidades que puedas poner en práctica.",
+    "fr": "Développez des compétences applicables au quotidien.",
+    "de": "Entwickeln Sie Fähigkeiten, die Sie praktisch einsetzen können.",
+    "it": "Sviluppa competenze da mettere in pratica."
+  },
+  "Use language, country research and budgeting lessons to prepare for real international situations.": {
+    "en": "Use language, country research and budgeting lessons to prepare for real international situations.",
+    "pt-BR": "Use aulas de idiomas, pesquisa de países e orçamento para se preparar para situações internacionais reais.",
+    "es": "Utiliza lecciones de idiomas, investigación de países y presupuestos para prepararte para situaciones internacionales reales.",
+    "fr": "Utilisez les cours de langues, de recherche sur les pays et de budget pour préparer des situations internationales réelles.",
+    "de": "Nutzen Sie Lektionen zu Sprachen, Länderrecherche und Budgetplanung, um sich auf reale internationale Situationen vorzubereiten.",
+    "it": "Usa le lezioni di lingue, ricerca sui paesi e budget per prepararti a situazioni internazionali reali."
+  },
+  "A starting point for your practical learning plan.": {
+    "en": "A starting point for your practical learning plan.",
+    "pt-BR": "Um ponto de partida para seu plano de aprendizagem prática.",
+    "es": "Un punto de partida para tu plan de aprendizaje práctico.",
+    "fr": "Un point de départ pour votre plan d’apprentissage pratique.",
+    "de": "Ein Ausgangspunkt für Ihren praktischen Lernplan.",
+    "it": "Un punto di partenza per il tuo piano di apprendimento pratico."
+  },
+  "Identify the situations you want to prepare for": {
+    "en": "Identify the situations you want to prepare for",
+    "pt-BR": "Identifique as situações para as quais deseja se preparar",
+    "es": "Identifica las situaciones para las que quieres prepararte",
+    "fr": "Identifiez les situations auxquelles vous souhaitez vous préparer",
+    "de": "Bestimmen Sie die Situationen, auf die Sie sich vorbereiten möchten",
+    "it": "Individua le situazioni a cui vuoi prepararti"
+  },
+  "Explore the available learning catalogue": {
+    "en": "Explore the available learning catalogue",
+    "pt-BR": "Explore o catálogo de cursos disponíveis",
+    "es": "Explora el catálogo de cursos disponibles",
+    "fr": "Explorez le catalogue des cours disponibles",
+    "de": "Entdecken Sie den verfügbaren Kurskatalog",
+    "it": "Esplora il catalogo dei corsi disponibili"
+  },
+  "Create an account to continue your progress": {
+    "en": "Create an account to continue your progress",
+    "pt-BR": "Crie uma conta para continuar seu progresso",
+    "es": "Crea una cuenta para continuar tu progreso",
+    "fr": "Créez un compte pour poursuivre votre progression",
+    "de": "Erstellen Sie ein Konto, um Ihre Fortschritte fortzusetzen",
+    "it": "Crea un account per proseguire i tuoi progressi"
+  },
+  "A starting point, not a commitment. Your choice stays in this page’s URL.": {
+    "en": "A starting point, not a commitment. Your choice stays in this page’s URL.",
+    "pt-BR": "Um ponto de partida, sem compromisso. Sua escolha fica no endereço desta página.",
+    "es": "Un punto de partida, sin compromiso. Tu elección se conserva en la dirección de esta página.",
+    "fr": "Un point de départ, sans engagement. Votre choix est conservé dans l’adresse de cette page.",
+    "de": "Ein Ausgangspunkt ohne Verpflichtung. Ihre Auswahl bleibt in der Adresse dieser Seite gespeichert.",
+    "it": "Un punto di partenza, senza impegno. La tua scelta resta nell’indirizzo di questa pagina."
+  },
+  "Your starting point · {goal}": {
+    "en": "Your starting point · {goal}",
+    "pt-BR": "Seu ponto de partida · {goal}",
+    "es": "Tu punto de partida · {goal}",
+    "fr": "Votre point de départ · {goal}",
+    "de": "Ihr Ausgangspunkt · {goal}",
+    "it": "Il tuo punto di partenza · {goal}"
+  },
+  "Example destinations. Country Fit lets you explore other countries and save a plan after signing in.": {
+    "en": "Example destinations. Country Fit lets you explore other countries and save a plan after signing in.",
+    "pt-BR": "Destinos de exemplo. O País ideal permite explorar outros países e salvar um plano após entrar na conta.",
+    "es": "Destinos de ejemplo. País ideal permite explorar otros países y guardar un plan después de iniciar sesión.",
+    "fr": "Destinations à titre d’exemple. Pays idéal permet d’explorer d’autres pays et d’enregistrer un plan après connexion.",
+    "de": "Beispielziele. Mit Passendes Land können Sie weitere Länder erkunden und nach der Anmeldung einen Plan speichern.",
+    "it": "Destinazioni di esempio. Paese ideale permette di esplorare altri paesi e salvare un piano dopo l’accesso."
+  },
+  "The Global Polymath Institute is a platform for people exploring study, work or life abroad. It connects country research, comparison, preparation and practical education so you can make a more informed next step.": {
+    "en": "The Global Polymath Institute is a platform for people exploring study, work or life abroad. It connects country research, comparison, preparation and practical education so you can make a more informed next step.",
+    "pt-BR": "O Global Polymath Institute é uma plataforma para quem explora oportunidades de estudo, trabalho ou vida no exterior. Ela conecta pesquisa de países, comparação, preparação e educação prática para ajudar você a dar um próximo passo mais bem informado.",
+    "es": "The Global Polymath Institute es una plataforma para quienes exploran oportunidades de estudio, trabajo o vida en el extranjero. Conecta investigación de países, comparación, preparación y educación práctica para ayudarte a dar un siguiente paso mejor informado.",
+    "fr": "The Global Polymath Institute est une plateforme pour les personnes qui envisagent d’étudier, de travailler ou de vivre à l’étranger. Elle relie la recherche sur les pays, la comparaison, la préparation et la formation pratique pour vous aider à avancer de manière plus éclairée.",
+    "de": "The Global Polymath Institute ist eine Plattform für Menschen, die ein Studium, eine Arbeit oder ein Leben im Ausland erwägen. Sie verbindet Länderrecherche, Vergleich, Vorbereitung und praktische Bildung, damit Sie Ihren nächsten Schritt fundierter planen können.",
+    "it": "The Global Polymath Institute è una piattaforma per chi esplora opportunità di studio, lavoro o vita all’estero. Collega ricerca sui paesi, confronto, preparazione e formazione pratica per aiutarti a compiere un prossimo passo più consapevole."
+  },
+  "Yes. Explore country profiles, compare up to three countries at a time, try Country Fit and browse the course catalogue without an account. A free account lets you save your research context and a shortlist of up to five countries, continue learning and track your preparation.": {
+    "en": "Yes. Explore country profiles, compare up to three countries at a time, try Country Fit and browse the course catalogue without an account. A free account lets you save your research context and a shortlist of up to five countries, continue learning and track your preparation.",
+    "pt-BR": "Sim. Explore perfis de países, compare até três países por vez, experimente o País ideal e navegue pelo catálogo de cursos sem criar uma conta. Uma conta gratuita permite salvar o contexto da pesquisa e uma lista de até cinco países, continuar aprendendo e acompanhar sua preparação.",
+    "es": "Sí. Explora perfiles de países, compara hasta tres países a la vez, prueba País ideal y consulta el catálogo de cursos sin una cuenta. Una cuenta gratuita permite guardar el contexto de tu investigación y una lista de hasta cinco países, continuar aprendiendo y seguir tu preparación.",
+    "fr": "Oui. Explorez les profils des pays, comparez jusqu’à trois pays à la fois, essayez Pays idéal et consultez le catalogue de cours sans compte. Un compte gratuit permet d’enregistrer le contexte de vos recherches et une sélection de cinq pays maximum, de poursuivre votre apprentissage et de suivre votre préparation.",
+    "de": "Ja. Erkunden Sie Länderprofile, vergleichen Sie bis zu drei Länder gleichzeitig, testen Sie Passendes Land und durchsuchen Sie den Kurskatalog ohne Konto. Mit einem kostenlosen Konto können Sie Ihren Recherchekontext und eine Auswahl von bis zu fünf Ländern speichern, weiterlernen und Ihre Vorbereitung verfolgen.",
+    "it": "Sì. Esplora i profili dei paesi, confronta fino a tre paesi alla volta, prova Paese ideale e consulta il catalogo dei corsi senza un account. Un account gratuito permette di salvare il contesto della ricerca e una selezione di massimo cinque paesi, continuare ad apprendere e seguire la tua preparazione."
+  },
+  "Premium opens the protected Premium Command Center: a consolidated view of your destinations, readiness, preparation and learning, with membership and billing management. Country comparison, research-plan saving and the current learning routes are also available without a paid subscription. Review the membership page before subscribing.": {
+    "en": "Premium opens the protected Premium Command Center: a consolidated view of your destinations, readiness, preparation and learning, with membership and billing management. Country comparison, research-plan saving and the current learning routes are also available without a paid subscription. Review the membership page before subscribing.",
+    "pt-BR": "O Premium dá acesso à Central de Comando Premium protegida: uma visão consolidada dos seus destinos, prontidão, preparação e aprendizagem, com gestão da assinatura e da cobrança. A comparação de países, o salvamento de planos de pesquisa e os percursos atuais de aprendizagem também estão disponíveis sem assinatura paga. Consulte a página de assinatura antes de contratar.",
+    "es": "Premium da acceso al Centro de Control Premium protegido: una vista consolidada de tus destinos, nivel de preparación, tareas y aprendizaje, con gestión de la suscripción y la facturación. La comparación de países, el guardado de planes de investigación y los itinerarios de aprendizaje actuales también están disponibles sin una suscripción de pago. Consulta la página de suscripción antes de contratar.",
+    "fr": "Premium ouvre l’accès au Centre de commande Premium protégé : une vue d’ensemble de vos destinations, de votre niveau de préparation, de vos démarches et de votre apprentissage, avec gestion de l’abonnement et de la facturation. La comparaison des pays, l’enregistrement des plans de recherche et les parcours d’apprentissage actuels sont aussi disponibles sans abonnement payant. Consultez la page d’abonnement avant de souscrire.",
+    "de": "Premium öffnet das geschützte Premium Command Center: eine Gesamtansicht Ihrer Ziele, Ihres Bereitschaftsstands, Ihrer Vorbereitung und Ihres Lernens sowie die Verwaltung von Mitgliedschaft und Abrechnung. Ländervergleiche, das Speichern von Rechercheplänen und die aktuellen Lernpfade sind auch ohne kostenpflichtiges Abonnement verfügbar. Prüfen Sie vor dem Abschluss die Mitgliedschaftsseite.",
+    "it": "Premium apre il Centro di controllo Premium protetto: una vista complessiva delle destinazioni, del livello di preparazione, delle attività e dell’apprendimento, con gestione dell’abbonamento e della fatturazione. Il confronto dei paesi, il salvataggio dei piani di ricerca e gli attuali percorsi di apprendimento sono disponibili anche senza un abbonamento a pagamento. Consulta la pagina dell’abbonamento prima di sottoscriverlo."
+  },
+  "Compare source-linked information, reference years and evidence gaps. Country Fit connects your goal, budget, languages and timeline to research questions and next actions. National statistics do not establish your eligibility or make one country universally better.": {
+    "en": "Compare source-linked information, reference years and evidence gaps. Country Fit connects your goal, budget, languages and timeline to research questions and next actions. National statistics do not establish your eligibility or make one country universally better.",
+    "pt-BR": "Compare informações vinculadas às fontes, anos de referência e lacunas nas evidências. O País ideal relaciona seu objetivo, orçamento, idiomas e prazo a perguntas de pesquisa e próximas ações. Estatísticas nacionais não determinam sua elegibilidade nem tornam um país universalmente melhor.",
+    "es": "Compara información vinculada a sus fuentes, años de referencia y lagunas en la evidencia. País ideal relaciona tu objetivo, presupuesto, idiomas y plazos con preguntas de investigación y próximas acciones. Las estadísticas nacionales no determinan tu elegibilidad ni hacen que un país sea universalmente mejor.",
+    "fr": "Comparez les informations reliées à leurs sources, les années de référence et les lacunes dans les données. Pays idéal relie votre objectif, votre budget, vos langues et votre calendrier aux questions de recherche et aux prochaines actions. Les statistiques nationales ne déterminent pas votre admissibilité et ne rendent pas un pays meilleur dans tous les cas.",
+    "de": "Vergleichen Sie Informationen mit Quellenbezug, Referenzjahre und Datenlücken. Passendes Land verbindet Ihr Ziel, Budget, Ihre Sprachen und Ihren Zeitplan mit Recherchefragen und nächsten Schritten. Nationale Statistiken bestimmen weder Ihre persönliche Berechtigung noch machen sie ein Land grundsätzlich besser.",
+    "it": "Confronta informazioni collegate alle fonti, anni di riferimento e lacune nei dati. Paese ideale collega il tuo obiettivo, budget, lingue e tempistiche alle domande di ricerca e alle prossime azioni. Le statistiche nazionali non determinano la tua idoneità né rendono un paese universalmente migliore."
+  },
+  "Browse available courses, then sign in to learn and save progress. Where verified certification is available, issuance requires the course’s lesson, assessment, reflection and verified-identity requirements, plus your consent to the public record. TGPI credentials have a public verification page. They are not academic degrees, professional licences or a claim of external accreditation.": {
+    "en": "Browse available courses, then sign in to learn and save progress. Where verified certification is available, issuance requires the course’s lesson, assessment, reflection and verified-identity requirements, plus your consent to the public record. TGPI credentials have a public verification page. They are not academic degrees, professional licences or a claim of external accreditation.",
+    "pt-BR": "Navegue pelos cursos disponíveis e entre na conta para aprender e salvar seu progresso. Quando houver certificação verificada, a emissão exige o cumprimento dos requisitos de aulas, avaliação, reflexão e identidade verificada do curso, além do seu consentimento para o registro público. As credenciais TGPI têm uma página pública de verificação. Elas não são diplomas acadêmicos, licenças profissionais nem uma alegação de acreditação externa.",
+    "es": "Consulta los cursos disponibles e inicia sesión para aprender y guardar tu progreso. Cuando se ofrece certificación verificada, su emisión exige cumplir los requisitos de lecciones, evaluación, reflexión e identidad verificada del curso, además de tu consentimiento para el registro público. Las credenciales TGPI tienen una página pública de verificación. No son títulos académicos, licencias profesionales ni una afirmación de acreditación externa.",
+    "fr": "Consultez les cours disponibles, puis connectez-vous pour apprendre et enregistrer votre progression. Lorsqu’une certification vérifiée est proposée, sa délivrance exige de satisfaire aux exigences du cours relatives aux leçons, à l’évaluation, à la réflexion et à la vérification d’identité, ainsi que votre consentement à l’inscription au registre public. Les attestations TGPI disposent d’une page publique de vérification. Elles ne constituent ni des diplômes universitaires, ni des autorisations professionnelles, ni une revendication d’accréditation externe.",
+    "de": "Durchsuchen Sie die verfügbaren Kurse und melden Sie sich an, um zu lernen und Ihren Fortschritt zu speichern. Wenn eine verifizierte Zertifizierung verfügbar ist, müssen für die Ausstellung die Anforderungen des Kurses an Lektionen, Prüfung, Reflexion und verifizierte Identität erfüllt sein. Außerdem ist Ihre Einwilligung zum öffentlichen Nachweis erforderlich. TGPI-Nachweise haben eine öffentliche Verifizierungsseite. Sie sind weder akademische Abschlüsse noch Berufszulassungen und behaupten keine externe Akkreditierung.",
+    "it": "Consulta i corsi disponibili, poi accedi per apprendere e salvare i progressi. Quando è disponibile una certificazione verificata, il rilascio richiede il completamento dei requisiti del corso relativi a lezioni, valutazione, riflessione e identità verificata, oltre al tuo consenso al registro pubblico. Le credenziali TGPI hanno una pagina pubblica di verifica. Non sono titoli accademici, abilitazioni professionali né una dichiarazione di accreditamento esterno."
+  },
+  "Sign in with your subscribing account, open the membership page and select Manage subscription to use the Stripe customer portal. You can manage payment details, invoices and cancellation there. Your account shows the access end date when cancellation is scheduled for the end of a billing period. Billing and refund policies remain available in the footer.": {
+    "en": "Sign in with your subscribing account, open the membership page and select Manage subscription to use the Stripe customer portal. You can manage payment details, invoices and cancellation there. Your account shows the access end date when cancellation is scheduled for the end of a billing period. Billing and refund policies remain available in the footer.",
+    "pt-BR": "Entre na conta usada para assinar, abra a página de assinatura e selecione Gerenciar assinatura para acessar o portal do cliente Stripe. Lá você pode gerenciar dados de pagamento, faturas e cancelamento. Sua conta mostra a data de término do acesso quando o cancelamento está agendado para o fim de um período de cobrança. As políticas de cobrança e reembolso continuam disponíveis no rodapé.",
+    "es": "Inicia sesión con la cuenta de tu suscripción, abre la página de suscripción y selecciona Gestionar suscripción para acceder al portal de clientes de Stripe. Allí puedes gestionar los datos de pago, las facturas y la cancelación. Tu cuenta muestra la fecha de fin del acceso cuando la cancelación está programada para el final de un periodo de facturación. Las políticas de facturación y reembolso siguen disponibles en el pie de página.",
+    "fr": "Connectez-vous avec le compte utilisé pour l’abonnement, ouvrez la page d’abonnement et sélectionnez Gérer l’abonnement pour accéder au portail client Stripe. Vous pouvez y gérer les coordonnées de paiement, les factures et la résiliation. Votre compte indique la date de fin d’accès lorsque la résiliation est prévue à la fin d’une période de facturation. Les politiques de facturation et de remboursement restent disponibles dans le pied de page.",
+    "de": "Melden Sie sich mit Ihrem Abonnementkonto an, öffnen Sie die Mitgliedschaftsseite und wählen Sie Abonnement verwalten, um das Stripe-Kundenportal zu nutzen. Dort können Sie Zahlungsdaten, Rechnungen und Kündigungen verwalten. Ihr Konto zeigt das Ende des Zugangs an, wenn die Kündigung zum Ende eines Abrechnungszeitraums vorgemerkt ist. Die Abrechnungs- und Erstattungsrichtlinien sind weiterhin in der Fußzeile verfügbar.",
+    "it": "Accedi con l’account dell’abbonamento, apri la pagina dell’abbonamento e seleziona Gestisci abbonamento per utilizzare il portale clienti Stripe. Qui puoi gestire i dati di pagamento, le fatture e la disdetta. Il tuo account mostra la data di fine dell’accesso quando la disdetta è prevista alla fine di un periodo di fatturazione. Le politiche di fatturazione e rimborso restano disponibili nel piè di pagina."
+  },
+  "What is TGPI?": {
+    "en": "What is TGPI?",
+    "pt-BR": "O que é a TGPI?",
+    "es": "¿Qué es TGPI?",
+    "fr": "Qu’est-ce que TGPI ?",
+    "de": "Was ist TGPI?",
+    "it": "Che cos’è TGPI?"
+  },
+  "Can I start for free?": {
+    "en": "Can I start for free?",
+    "pt-BR": "Posso começar gratuitamente?",
+    "es": "¿Puedo empezar gratis?",
+    "fr": "Puis-je commencer gratuitement ?",
+    "de": "Kann ich kostenlos beginnen?",
+    "it": "Posso iniziare gratuitamente?"
+  },
+  "What changes with Premium?": {
+    "en": "What changes with Premium?",
+    "pt-BR": "O que muda com o Premium?",
+    "es": "¿Qué cambia con Premium?",
+    "fr": "Qu’est-ce qui change avec Premium ?",
+    "de": "Was ändert sich mit Premium?",
+    "it": "Cosa cambia con Premium?"
+  },
+  "How does TGPI help me choose countries?": {
+    "en": "How does TGPI help me choose countries?",
+    "pt-BR": "Como a TGPI me ajuda a escolher países?",
+    "es": "¿Cómo me ayuda TGPI a elegir países?",
+    "fr": "Comment TGPI m’aide-t-il à choisir des pays ?",
+    "de": "Wie hilft mir TGPI bei der Länderwahl?",
+    "it": "Come mi aiuta TGPI a scegliere i paesi?"
+  },
+  "How do courses and certificates work?": {
+    "en": "How do courses and certificates work?",
+    "pt-BR": "Como funcionam os cursos e certificados?",
+    "es": "¿Cómo funcionan los cursos y certificados?",
+    "fr": "Comment fonctionnent les cours et les certificats ?",
+    "de": "Wie funktionieren Kurse und Zertifikate?",
+    "it": "Come funzionano i corsi e i certificati?"
+  },
+  "How do I manage or cancel my subscription?": {
+    "en": "How do I manage or cancel my subscription?",
+    "pt-BR": "Como gerencio ou cancelo minha assinatura?",
+    "es": "¿Cómo gestiono o cancelo mi suscripción?",
+    "fr": "Comment gérer ou résilier mon abonnement ?",
+    "de": "Wie verwalte oder kündige ich mein Abonnement?",
+    "it": "Come gestisco o disdico il mio abbonamento?"
   }
 } as const satisfies Record<string, Record<Locale, string>>;
 
