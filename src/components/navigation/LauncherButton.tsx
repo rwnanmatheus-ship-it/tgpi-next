@@ -1,4 +1,5 @@
 "use client";
+import { useLocale } from "@/components/localization/LocaleProvider";
 
 import { useSyncExternalStore } from "react";
 import NavigationIcon from "@/components/navigation/NavigationIcon";
@@ -16,21 +17,22 @@ function getSnapshot() {
 }
 
 export default function LauncherButton({ compact = false }: { compact?: boolean }) {
+  const { t } = useLocale();
   const open = useSyncExternalStore(subscribe, getSnapshot, () => false);
   return (
     <button
       type="button"
-      aria-label="Open TGPI apps"
+      aria-label={t("Open TGPI apps")}
       aria-haspopup="dialog"
       aria-expanded={open}
       aria-controls="tgpi-super-app-launcher"
       aria-keyshortcuts="Control+K Meta+K"
-      title="Open TGPI apps (Ctrl/⌘ K)"
+      title={t("Open TGPI apps (Ctrl/⌘ K)")}
       onClick={() => window.dispatchEvent(new Event(SUPER_APP_OPEN_EVENT))}
       className={compact ? "tgpi-compact-action tgpi-compact-apps" : "tgpi-navigation-icon-button"}
     >
       <NavigationIcon name={compact ? "menu" : "apps"} width={20} height={20} />
-      <span className="tgpi-apps-label">Apps</span>
+      <span className="tgpi-apps-label">{t("Apps")}</span>
     </button>
   );
 }

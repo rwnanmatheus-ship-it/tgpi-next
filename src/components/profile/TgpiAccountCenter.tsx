@@ -1,4 +1,5 @@
 "use client";
+import LanguageSelector from "@/components/localization/LanguageSelector";
 
 import { announceProgressSaved } from "@/lib/progress-sync";
 import Link from "next/link";
@@ -776,7 +777,7 @@ export default function TgpiAccountCenter({
         <ScreenHeading description="Save your research and display preferences. Content languages and unit conversion depend on the current feature." section="preferences" title="App preferences" />
         <div className="mt-6 rounded-[22px] border border-[#DDD7CB] bg-white p-5 sm:p-7">
           <div className="grid gap-5 sm:grid-cols-2">
-            <Field label="Preferred language"><select className="tgpi-account-input" onChange={(event) => updateProfile({ preferredLanguage: event.target.value })} value={profile.preferredLanguage}>{languageOptions.map((language) => <option key={language} value={language}>{language}</option>)}</select></Field>
+            <LanguageSelector />
             <Field label="Preferred currency"><select className="tgpi-account-input" onChange={(event) => updateProfile({ preferredCurrency: event.target.value })} value={profile.preferredCurrency}>{currencyOptions.map((currency) => <option key={currency} value={currency}>{currency}</option>)}</select></Field>
             <Field label="Measurement system"><select className="tgpi-account-input" onChange={(event) => updateProfile({ measurementSystem: event.target.value === "imperial" ? "imperial" : "metric" })} value={profile.measurementSystem}><option value="metric">Metric — km, kg, °C</option><option value="imperial">Imperial — mi, lb, °F</option></select></Field>
             <div className="hidden sm:block" />

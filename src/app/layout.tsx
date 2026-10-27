@@ -1,3 +1,7 @@
+import "./localization.css";
+import { getLocale } from "@/lib/localization/server";
+import { LocaleProvider, AccountLocaleSync, LocalizedText } from "@/components/localization/LocaleProvider";
+import { enUS, ptBR, esES, frFR, deDE, itIT } from "@clerk/localizations";
 import FunnelTelemetry from "@/components/analytics/FunnelTelemetry";
 import GlobalProgressSync from "@/components/profile/GlobalProgressSync";
 import "./globals.css";
@@ -86,24 +90,25 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const locale = await getLocale();
+  const clerkLocales = { en: enUS, "pt-BR": ptBR, es: esES, fr: frFR, de: deDE, it: itIT };
   return (
-    <html lang="en" className={`${displayFont.variable} ${interfaceFont.variable}`}>
+    <html lang={locale} className={`${displayFont.variable} ${interfaceFont.variable}`}>
       <body>
+        <LocaleProvider locale={locale}>
         <ClerkProvider
           signInUrl="/sign-in"
           signUpUrl="/sign-up"
           afterSignOutUrl="/"
-          localization={{
-            signIn: { start: { title: "Sign in to TGPI", titleCombined: "Continue to TGPI" } },
-            signUp: { start: { title: "Create your TGPI Global Key", titleCombined: "Create your TGPI Global Key" } },
-          }}
+          localization={clerkLocales[locale]}
           appearance={tgpiClerkAppearance}
         >
+          <AccountLocaleSync />
           <NotificationProvider>
           <GlobalProgressSync />
           {process.env.TGPI_FUNNEL_ANALYTICS_ENABLED === "true" ? <FunnelTelemetry /> : null}
-          <a href="#main-content" className="sr-only fixed left-4 top-4 z-[100] rounded-xl bg-[var(--tgpi-gold)] px-4 py-3 text-sm font-extrabold text-[var(--tgpi-navy-deep)] shadow-lg transition focus:not-sr-only">Skip to content</a>
+          <a href="#main-content" className="sr-only fixed left-4 top-4 z-[100] rounded-xl bg-[var(--tgpi-gold)] px-4 py-3 text-sm font-extrabold text-[var(--tgpi-navy-deep)] shadow-lg transition focus:not-sr-only"><LocalizedText text="Skip to content" /></a>
           <AccessAwareChrome
             navigation={<><Navbar /><MobileNavigation /><SuperAppLauncher /></>}
             footer={<GlobalFooter />}
@@ -114,6 +119,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <AtlasWidget />
           </NotificationProvider>
         </ClerkProvider>
+        </LocaleProvider>
       </body>
     </html>
   );
