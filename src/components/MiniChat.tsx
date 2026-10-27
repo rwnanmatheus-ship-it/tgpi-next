@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 export default function MiniChat({
   targetName,
@@ -40,9 +42,7 @@ export default function MiniChat({
         <button
           onClick={send}
           className="bg-yellow-500 px-4 py-2 text-black rounded"
-        >
-          Send
-        </button>
+        ><LocalizedText text="Send" /></button>
       </div>
     </section>
   );

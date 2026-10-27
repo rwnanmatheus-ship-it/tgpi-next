@@ -3,6 +3,8 @@
 import { FormEvent, useState } from "react";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 type FormState = {
   name: string;
@@ -114,9 +116,7 @@ export default function PremiumWaitlistForm() {
       className="rounded-[32px] border border-[#D8D2C4] bg-white p-6 shadow-[0_24px_70px_rgba(11,31,58,0.08)] md:p-9"
     >
       <div className="grid gap-5 md:grid-cols-2">
-        <label className="text-sm font-bold text-[#303846]">
-          Full name
-          <input
+        <label className="text-sm font-bold text-[#303846]"><LocalizedText text="Full name" /><input
             required
             value={form.name}
             onChange={(event) => updateField("name", event.target.value)}
@@ -157,9 +157,7 @@ export default function PremiumWaitlistForm() {
           />
         </label>
 
-        <label className="text-sm font-bold text-[#303846]">
-          Primary goal
-          <select
+        <label className="text-sm font-bold text-[#303846]"><LocalizedText text="Primary goal" /><select
             value={form.goal}
             onChange={(event) => updateField("goal", event.target.value)}
             className="mt-2 w-full rounded-2xl border border-[#D8D2C4] bg-[#FFFDF8] px-4 py-3 font-normal outline-none transition focus:border-[#B58A2A]"
@@ -189,9 +187,7 @@ export default function PremiumWaitlistForm() {
 
       </div>
 
-      <label className="absolute -left-[10000px] top-auto h-px w-px overflow-hidden">
-        Website
-        <input
+      <label className="absolute -left-[10000px] top-auto h-px w-px overflow-hidden"><LocalizedText text="Website" /><input
           tabIndex={-1}
           autoComplete="off"
           value={form.website}

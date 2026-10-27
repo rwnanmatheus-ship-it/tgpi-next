@@ -9,6 +9,8 @@ import {
 import { courses } from "@/data/courses";
 import CredentialPortfolioExplorer from "@/components/credentials/CredentialPortfolioExplorer";
 import "./certificates.css";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 export const metadata: Metadata = {
   title: "My certificates — TGPI",
@@ -44,9 +46,9 @@ export default async function CertificatesPage() {
     <main className="certificate-center">
       <div className="certificate-shell">
         <nav aria-label="Breadcrumb" className="certificate-breadcrumb">
-          <Link href="/profile">Workspace</Link>
+          <Link href="/profile"><LocalizedText text="Workspace" /></Link>
           <span aria-hidden="true">/</span>
-          <span>Certificates</span>
+          <span><LocalizedText text="Certificates" /></span>
         </nav>
         <header className="certificate-header">
           <div className="min-w-0">
@@ -57,8 +59,7 @@ export default async function CertificatesPage() {
               your achievement.
             </p>
           </div>
-          <Link href="/courses" className="certificate-button secondary">
-            Explore learning <span aria-hidden="true">↗</span>
+          <Link href="/courses" className="certificate-button secondary"><LocalizedText text="Explore learning" />{" "}<span aria-hidden="true">↗</span>
           </Link>
         </header>
         <div className="certificate-overview">
@@ -167,7 +168,7 @@ export default async function CertificatesPage() {
                         ? "In progress"
                         : "Available to earn"}
                 </span>
-                <h3>{course.title}</h3>
+                <h3><LocalizedText text={course.title} /></h3>
                 <p>
                   Build practical English skills for life abroad. Complete your
                   learning and required assessments to earn your certificate.
@@ -244,9 +245,9 @@ export default async function CertificatesPage() {
           className="certificate-footer-links"
           aria-label="Connected workspace"
         >
-          <Link href="/courses">Learning</Link>
+          <Link href="/courses"><LocalizedText text="Learning" /></Link>
           <Link href="/global-key">Global Key</Link>
-          <Link href="/profile">My workspace</Link>
+          <Link href="/profile"><LocalizedText text="My workspace" /></Link>
         </nav>
       </div>
     </main>

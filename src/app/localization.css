@@ -7,3 +7,7 @@
 .tgpi-desktop-primary-link{white-space:normal;text-align:center}
 .tgpi-compact-dock>a{min-width:0}
 .tgpi-compact-dock>a>span:last-child{overflow-wrap:anywhere}
+
+footer .tgpi-language-label{color:#e5c887}
+
+.tgpi-language-note{max-width:30rem;margin-top:6px;color:#667085;font-size:12px;line-height:1.6}footer .tgpi-language-note{color:#b7c7d9}

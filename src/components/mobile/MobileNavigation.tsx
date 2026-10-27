@@ -25,6 +25,8 @@ import {
 import {
   searchSuperAppModules,
 } from "@/lib/super-app";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 const suggestedCountries = ["Portugal", "Canada", "Japan", "Spain"] as const;
 
@@ -246,7 +248,7 @@ function MobileNavigationContent({ pathname }: { pathname: string }) {
                     {moduleResults.map((module) => (
                       <Link key={module.id} href={module.href} onClick={closeSearch}>
                         <NavigationIcon name={getSuperAppIconName(module.id)} />
-                        <span><strong>{module.shortLabel}</strong><small>{module.description}</small></span>
+                        <span><strong><LocalizedText text={module.shortLabel} /></strong><small><LocalizedText text={module.description} /></small></span>
                         <NavigationIcon name="arrow" width={17} height={17} />
                       </Link>
                     ))}
@@ -261,7 +263,7 @@ function MobileNavigationContent({ pathname }: { pathname: string }) {
                     {countryResults.map((country) => (
                       <Link key={country.slug} href={`/countries/${country.slug}`} onClick={closeSearch}>
                         <span aria-hidden="true">{country.emoji}</span>
-                        <span><strong>{country.name}</strong><small>{country.capital} · {country.region}</small></span>
+                        <span><strong><LocalizedText text={country.name} /></strong><small>{country.capital} · <LocalizedText text={country.region} /></small></span>
                         <NavigationIcon name="arrow" width={17} height={17} />
                       </Link>
                     ))}

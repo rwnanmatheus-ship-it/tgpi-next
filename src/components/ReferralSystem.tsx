@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 export default function ReferralSystem() {
   const link = "https://theglobalpolymath.com/invite";
 
@@ -17,9 +19,7 @@ export default function ReferralSystem() {
           readOnly
           className="flex-1 rounded-xl bg-slate-950 p-3 text-sm"
         />
-        <button className="bg-yellow-500 text-black px-4 rounded-xl">
-          Copy
-        </button>
+        <button className="bg-yellow-500 text-black px-4 rounded-xl"><LocalizedText text="Copy" /></button>
       </div>
     </section>
   );

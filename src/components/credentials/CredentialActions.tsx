@@ -3,6 +3,8 @@
 import Link from "next/link";
 import CertificateDownloadButton from "@/components/credentials/CertificateDownloadButton";
 import { useState } from "react";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 type CredentialActionsProps = {
   canDownload?: boolean;
@@ -85,9 +87,7 @@ export default function CredentialActions({
           onClick={() =>
             void copyValue(verificationUrl, "Verification link copied.")
           }
-        >
-          Copy verification link
-        </button>
+        ><LocalizedText text="Copy verification link" /></button>
         <a href={downloadUrl}>Export evidence JSON</a>
       </div>
       <p

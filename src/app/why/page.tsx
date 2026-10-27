@@ -2,6 +2,8 @@ import Link from "next/link";
 import TGPIEditorialVisual from "@/components/TGPIEditorialVisual";
 import TGPIPageShell from "@/components/TGPIPageShell";
 import WhyTGPIIsDifferent from "@/components/WhyTGPIIsDifferent";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 export default function WhyPage() {
   return (
@@ -22,9 +24,7 @@ export default function WhyPage() {
               <Link
                 href="/compare"
                 className="rounded-2xl bg-[#0B1F3A] px-6 py-4 text-center text-sm font-black text-white transition hover:bg-[#132B4C]"
-              >
-                Compare Countries
-              </Link>
+              ><LocalizedText text="Compare Countries" /></Link>
               <Link
                 href="/about"
                 className="rounded-2xl border border-[#B58A2A] bg-[#FFF7DE] px-6 py-4 text-center text-sm font-black text-[#6F4908] transition hover:bg-[#F7E8BA]"

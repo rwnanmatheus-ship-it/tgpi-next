@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { homeIntents, homeSystemStages } from "@/data/home-system";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 export default function HomePortal() {
   return (
@@ -118,9 +120,7 @@ export default function HomePortal() {
                     {stage.description}
                   </p>
                   <div className="mt-5 border-t border-white/10 pt-4">
-                    <p className="text-[9px] font-extrabold uppercase tracking-[0.16em] text-[var(--tgpi-gold-light)]">
-                      Designed outcome
-                    </p>
+                    <p className="text-[9px] font-extrabold uppercase tracking-[0.16em] text-[var(--tgpi-gold-light)]"><LocalizedText text="Designed outcome" /></p>
                     <p className="mt-2 text-xs font-bold leading-5 text-white/75">{stage.outcome}</p>
                   </div>
                 </Link>

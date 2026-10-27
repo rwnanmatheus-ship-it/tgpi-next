@@ -2,6 +2,8 @@ import Link from "next/link";
 import TGPIEditorialVisual, {
   type TGPIVisualVariant,
 } from "@/components/TGPIEditorialVisual";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 type CountryCard = {
   name: string;
@@ -60,9 +62,7 @@ export default function HomeCountryCardsV2() {
       <div className="mx-auto max-w-[1280px]">
         <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
           <div className="max-w-3xl">
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[var(--tgpi-gold-light)]">
-              Country intelligence
-            </p>
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[var(--tgpi-gold-light)]"><LocalizedText text="Country intelligence" /></p>
             <h2
               id="home-country-intelligence-title"
               className="mt-4 font-[var(--tgpi-font-display)] text-[clamp(2.8rem,5vw,4.8rem)] font-semibold leading-[0.95] text-white"
@@ -76,9 +76,7 @@ export default function HomeCountryCardsV2() {
           <Link
             href="/countries"
             className="hidden min-h-12 items-center justify-center rounded-2xl border border-white/20 px-6 text-sm font-extrabold text-white transition hover:border-[var(--tgpi-gold-light)] hover:text-[var(--tgpi-gold-light)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold-light)] lg:inline-flex"
-          >
-            Explore all countries
-          </Link>
+          ><LocalizedText text="Explore all countries" /></Link>
         </div>
 
         <div
@@ -108,7 +106,7 @@ export default function HomeCountryCardsV2() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-[#071a32] via-[#071a32]/22 to-transparent" />
                   <div className="absolute left-4 top-4 flex items-center gap-2 rounded-full border border-white/15 bg-[#071a32]/82 px-3 py-2 text-[10px] font-extrabold uppercase tracking-[0.16em] text-white backdrop-blur-xl">
-                    <span className="text-[var(--tgpi-gold-light)]">Country {country.score}</span>
+                    <span className="text-[var(--tgpi-gold-light)]"><LocalizedText text="Country" />{" "}{country.score}</span>
                     <span className="text-white/35">•</span>
                     <span>{country.signal}</span>
                   </div>
@@ -129,7 +127,7 @@ export default function HomeCountryCardsV2() {
                         Country profile
                       </p>
                       <h3 className="mt-2 font-[var(--tgpi-font-display)] text-3xl font-semibold text-white">
-                        {country.name}
+                        <LocalizedText text={country.name} />
                       </h3>
                     </div>
                     <span className="font-[var(--tgpi-font-display)] text-4xl font-semibold text-[var(--tgpi-gold-light)]">
@@ -140,7 +138,7 @@ export default function HomeCountryCardsV2() {
                     {country.fit}
                   </p>
                   <div className="mt-5 flex items-center justify-between border-t border-white/10 pt-4">
-                    <span className="text-sm font-extrabold text-white">Open country intelligence</span>
+                    <span className="text-sm font-extrabold text-white"><LocalizedText text="Open country intelligence" /></span>
                     <span className="text-xl text-[var(--tgpi-gold-light)] transition group-hover:translate-x-1">→</span>
                   </div>
                 </div>
@@ -150,8 +148,7 @@ export default function HomeCountryCardsV2() {
                 <Link
                   href={country.compareHref}
                   className="inline-flex min-h-11 w-full items-center justify-center rounded-xl border border-white/15 bg-white/5 px-4 text-xs font-extrabold text-white transition hover:border-[var(--tgpi-gold-light)] hover:bg-white/10 hover:text-[var(--tgpi-gold-light)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold-light)]"
-                >
-                  Compare {country.name}
+                ><LocalizedText text="Compare" />{" "}<LocalizedText text={country.name} />
                 </Link>
               </div>
             </article>
@@ -162,15 +159,11 @@ export default function HomeCountryCardsV2() {
           <Link
             href="/onboarding"
             className="inline-flex min-h-14 items-center justify-center rounded-2xl bg-[var(--tgpi-gold)] px-6 text-sm font-extrabold text-[var(--tgpi-navy)] transition hover:-translate-y-0.5 hover:bg-[#d1a644] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
-          >
-            Find your country fit
-          </Link>
+          ><LocalizedText text="Find your country fit" /></Link>
           <Link
             href="/countries"
             className="inline-flex min-h-14 items-center justify-center rounded-2xl border border-white/20 px-6 text-sm font-extrabold text-white transition hover:border-[var(--tgpi-gold-light)] hover:text-[var(--tgpi-gold-light)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold-light)] lg:hidden"
-          >
-            Explore countries
-          </Link>
+          ><LocalizedText text="Explore countries" /></Link>
         </div>
       </div>
     </section>

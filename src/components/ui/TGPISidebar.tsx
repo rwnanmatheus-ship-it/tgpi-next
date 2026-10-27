@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 const items = [
   { name: "Dashboard", href: "/profile" },
@@ -49,7 +51,7 @@ export default function TGPISidebar() {
       </nav>
 
       <div className="mt-8 rounded-2xl border border-yellow-500/20 bg-yellow-500/10 p-4">
-        <p className="font-semibold text-yellow-400">Premium Plan</p>
+        <p className="font-semibold text-yellow-400"><LocalizedText text="Premium Plan" /></p>
         <p className="mt-2 text-xs text-slate-400">
           Unlock certificates, AI tools, and global identity.
         </p>
@@ -57,9 +59,7 @@ export default function TGPISidebar() {
         <Link
           href="/premium"
           className="mt-4 block rounded-xl bg-yellow-500 px-4 py-2 text-center text-sm font-bold text-black"
-        >
-          Manage Plan
-        </Link>
+        ><LocalizedText text="Manage Plan" /></Link>
       </div>
     </aside>
   );

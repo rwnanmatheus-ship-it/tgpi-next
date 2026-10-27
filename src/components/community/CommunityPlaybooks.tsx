@@ -5,6 +5,8 @@ import type { Playbook } from "@/lib/community/features";
 import type { Page, Post } from "@/lib/community/model";
 import { api, type Action } from "./api";
 import s from "./Community.module.css";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 type Book = Playbook & {
   sources: {
     id: string;
@@ -126,9 +128,7 @@ export default function CommunityPlaybooks({
               }
             }}
           >
-            <label>
-              Title
-              <input
+            <label><LocalizedText text="Title" /><input
                 required
                 maxLength={180}
                 value={title}

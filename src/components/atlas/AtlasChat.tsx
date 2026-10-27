@@ -7,6 +7,8 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { safeAtlasLink, type AtlasConversation, type AtlasEvent, type AtlasInput, type AtlasMessage, type AtlasScope, type AtlasSummary } from '@/lib/atlas/contracts';
 import styles from './atlas.module.css';
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 const choices: { id: AtlasScope; label: string }[] = [
   { id: 'destinations', label: 'Destinations & goals' }, { id: 'languages', label: 'Languages' },
@@ -182,7 +184,7 @@ export default function AtlasChat({ userId, enabled = true, embedded = false }: 
   const saved = !temporary && items.some(x => x.id === id);
   return <main id={embedded ? 'atlas-widget-chat' : 'atlas-main'} tabIndex={-1} ref={shell} className={`${styles.shell} ${embedded ? styles.embedded : ''}`}>
     <aside className={`${styles.sidebar} ${showHistory ? styles.sidebarOpen : ''}`} aria-label="Atlas conversations">
-      <Link href="/profile" className={styles.back}>← Workspace</Link>
+      <Link href="/profile" className={styles.back}><LocalizedText text="← Workspace" /></Link>
       <div className={styles.brand}><Image src="/brand/atlas/avatar.webp" width={48} height={48} alt="Atlas owl" /><div><strong>TGPI ATLAS AI</strong><span>Your global companion</span></div></div>
       <button className={styles.primary} disabled={busy} onClick={() => newConversation(false)}>＋ New conversation</button>
       <button disabled={busy} onClick={() => newConversation(true)}>Start temporary conversation</button>
@@ -204,7 +206,7 @@ export default function AtlasChat({ userId, enabled = true, embedded = false }: 
       {!enabled && <div className={styles.confirm} role="status"><p><strong>Atlas preview</strong> — Explore the interface. AI replies are not available for this account yet. Messages cannot be sent during this preview.</p></div>}
       {action && <div className={styles.confirm}>
         {action === 'rename' ? <><label>Conversation title<input value={rename} maxLength={70} onChange={e => setRename(e.target.value)} /></label><button disabled={busy || !rename.trim()} onClick={() => void mutate({ title: rename.trim() })}>Save title</button></> : <><p>Delete this conversation and its messages from TGPI? This cannot be undone.</p><button disabled={busy} onClick={() => void mutate('delete')}>Confirm deletion</button></>}
-        <button disabled={busy} onClick={() => setAction(null)}>Cancel</button>
+        <button disabled={busy} onClick={() => setAction(null)}><LocalizedText text="Cancel" /></button>
       </div>}
       <div className={styles.messages} ref={viewport} tabIndex={0} aria-label="Message history" onScroll={e => {
         const el = e.currentTarget; follow.current = el.scrollHeight - el.scrollTop - el.clientHeight < 90;
@@ -213,7 +215,7 @@ export default function AtlasChat({ userId, enabled = true, embedded = false }: 
         {!messages.length ? <div className={styles.welcome}>
           <Image src="/brand/atlas/welcome.webp" alt="Atlas, the TGPI explorer owl" width={220} height={220} priority />
           <span className={styles.eyebrow}>INTELLIGENCE FOR YOUR GLOBAL LIFE</span>
-          <h2>A world of possibilities.<br /><em>A clearer next step.</em></h2>
+          <h2><LocalizedText text="A world of possibilities." /><br /><em><LocalizedText text="A clearer next step." /></em></h2>
           <p>Ask about a destination, explore an idea, or work through a decision. We can start wherever you are.</p>
           <div className={styles.starters}>{starters.map(prompt => <button key={prompt} onClick={() => { updateDraft(prompt); composer.current?.focus(); }}>{prompt}<span aria-hidden="true">↗</span></button>)}</div>
         </div> : <div className={styles.messageColumn}>{messages.map(message => <article key={message.id} className={message.role === 'user' ? styles.userMessage : styles.assistantMessage}>
@@ -223,7 +225,7 @@ export default function AtlasChat({ userId, enabled = true, embedded = false }: 
             {!!message.factors?.length && <p className={styles.factors}>Profile fields shared: {message.factors.join(' · ')}</p>}
             {message.status !== 'complete' && message.content && <small>Partial reply</small>}
             {message.content && <div className={styles.messageActions}>
-              <button onClick={() => { void navigator.clipboard.writeText(message.content).then(() => setNotice('Reply copied.')).catch(() => setError('Copy unavailable. Select the reply to copy it.')); }}>Copy</button>
+              <button onClick={() => { void navigator.clipboard.writeText(message.content).then(() => setNotice('Reply copied.')).catch(() => setError('Copy unavailable. Select the reply to copy it.')); }}><LocalizedText text="Copy" /></button>
               {saved && !message.id.endsWith('-stream') && <><button disabled={busy} aria-pressed={message.feedback === 'up'} onClick={() => void mutate({ messageId: message.id, feedback: 'up' })}>Helpful</button><button disabled={busy} aria-pressed={message.feedback === 'down'} onClick={() => void mutate({ messageId: message.id, feedback: 'down' })}>Needs improvement</button></>}
             </div>}
           </>}

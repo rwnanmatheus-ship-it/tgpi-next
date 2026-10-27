@@ -11,6 +11,8 @@ import {
   type Timestamp,
 } from "firebase/firestore";
 import { db, auth } from "@/lib/firebase";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 type ChatMessage = {
   id: string;
@@ -64,7 +66,7 @@ export default function RealTimeChat({ chatId }: { chatId: string }) {
 
   return (
     <section className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-      <h2 className="text-yellow-400 font-bold">Live Chat</h2>
+      <h2 className="text-yellow-400 font-bold"><LocalizedText text="Live Chat" /></h2>
 
       <div className="mt-4 h-48 overflow-y-auto space-y-2">
         {messages.map((message) => (
@@ -80,9 +82,7 @@ export default function RealTimeChat({ chatId }: { chatId: string }) {
           onChange={(event) => setInput(event.target.value)}
           className="flex-1 bg-slate-800 px-3 py-2 rounded text-white"
         />
-        <button onClick={send} className="bg-yellow-500 px-4 py-2 rounded text-black">
-          Send
-        </button>
+        <button onClick={send} className="bg-yellow-500 px-4 py-2 rounded text-black"><LocalizedText text="Send" /></button>
       </div>
     </section>
   );

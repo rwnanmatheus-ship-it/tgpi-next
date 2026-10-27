@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 const countries = [
   { name: "Canada", slug: "canada", score: 87, note: "Career + education", tone: "bg-emerald-400" },
@@ -194,7 +196,7 @@ function CountryPanel({ expanded = false }: { expanded?: boolean }) {
             <span className={`h-2.5 w-2.5 rounded-full ${country.tone}`} />
             <span>
               <span className="block text-sm font-extrabold text-white">
-                {index + 1}. {country.name}
+                {index + 1}. <LocalizedText text={country.name} />
               </span>
               <span className="mt-1 block text-xs text-white/45">{country.note}</span>
             </span>

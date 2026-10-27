@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { TGPI_PREMIUM_PLAN } from "@/lib/subscription-plans";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 const benefits = [
   "A living country shortlist",
@@ -40,12 +42,8 @@ export default function HomeLaunchClose() {
               ))}
             </div>
             <div className="mt-8 grid gap-3 sm:flex">
-              <Link href="/onboarding" className="inline-flex min-h-14 items-center justify-center rounded-2xl bg-[var(--tgpi-gold)] px-7 text-sm font-extrabold text-[var(--tgpi-navy)] transition hover:-translate-y-0.5 hover:bg-[#d1a644] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">
-                Find your country fit
-              </Link>
-              <Link href="/pricing" className="inline-flex min-h-14 items-center justify-center rounded-2xl border border-white/20 px-7 text-sm font-extrabold text-white transition hover:border-[var(--tgpi-gold-light)] hover:text-[var(--tgpi-gold-light)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]">
-                Explore TGPI Premium
-              </Link>
+              <Link href="/onboarding" className="inline-flex min-h-14 items-center justify-center rounded-2xl bg-[var(--tgpi-gold)] px-7 text-sm font-extrabold text-[var(--tgpi-navy)] transition hover:-translate-y-0.5 hover:bg-[#d1a644] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"><LocalizedText text="Find your country fit" /></Link>
+              <Link href="/pricing" className="inline-flex min-h-14 items-center justify-center rounded-2xl border border-white/20 px-7 text-sm font-extrabold text-white transition hover:border-[var(--tgpi-gold-light)] hover:text-[var(--tgpi-gold-light)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"><LocalizedText text="Explore TGPI Premium" /></Link>
             </div>
           </div>
 

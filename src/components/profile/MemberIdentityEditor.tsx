@@ -3,6 +3,8 @@ import { useEffect, useState, useId } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { handleError, normalizeHandle, type MemberIdentity } from '@/lib/members/identity';
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 export default function MemberIdentityEditor() {
   const router = useRouter(); const id = useId();
   const [identity, setIdentity] = useState<MemberIdentity | null>(null);
@@ -30,5 +32,5 @@ export default function MemberIdentityEditor() {
     } catch (e) { setError(e instanceof Error ? e.message : 'Unable to save. Your entry is preserved.'); }
     finally { setBusy(false); }
   }
-  return <section className="tgpi-member-panel mt-5"><p className="tgpi-member-eyebrow">Member identity</p><h3>Your name across TGPI.</h3><label htmlFor={id} className="mt-4 block font-bold">Unique @ID</label><div className="mt-2 flex flex-wrap gap-3"><input id={id} aria-describedby={`${id}-help ${id}-error`} aria-invalid={Boolean(error)} disabled={!available || busy} autoCapitalize="none" autoComplete="off" spellCheck={false} maxLength={30} className="tgpi-account-input min-w-0 flex-1" value={handle} onChange={e => { setHandle(normalizeHandle(e.target.value)); setError(''); }} /><button className="tgpi-member-button" disabled={!available || busy || identity?.handle === handle} onClick={save} type="button">{busy ? 'Please wait…' : identity?.handle ? 'Change @ID' : 'Create @ID'}</button></div><p id={`${id}-help`} role="status" className="mt-3 text-sm">{message}</p><p id={`${id}-error`} role="alert" className="text-sm text-red-800">{error}</p>{identity ? <p className="mt-3 break-all font-mono text-sm">{identity.number}</p> : null}<Link href="/members" className="mt-4 inline-flex min-h-11 items-center font-bold text-[#164e83]">Find another member →</Link></section>;
+  return <section className="tgpi-member-panel mt-5"><p className="tgpi-member-eyebrow"><LocalizedText text="Member identity" /></p><h3>Your name across TGPI.</h3><label htmlFor={id} className="mt-4 block font-bold">Unique @ID</label><div className="mt-2 flex flex-wrap gap-3"><input id={id} aria-describedby={`${id}-help ${id}-error`} aria-invalid={Boolean(error)} disabled={!available || busy} autoCapitalize="none" autoComplete="off" spellCheck={false} maxLength={30} className="tgpi-account-input min-w-0 flex-1" value={handle} onChange={e => { setHandle(normalizeHandle(e.target.value)); setError(''); }} /><button className="tgpi-member-button" disabled={!available || busy || identity?.handle === handle} onClick={save} type="button">{busy ? 'Please wait…' : identity?.handle ? 'Change @ID' : 'Create @ID'}</button></div><p id={`${id}-help`} role="status" className="mt-3 text-sm">{message}</p><p id={`${id}-error`} role="alert" className="text-sm text-red-800">{error}</p>{identity ? <p className="mt-3 break-all font-mono text-sm">{identity.number}</p> : null}<Link href="/members" className="mt-4 inline-flex min-h-11 items-center font-bold text-[#164e83]">Find another member →</Link></section>;
 }

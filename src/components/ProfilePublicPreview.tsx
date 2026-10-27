@@ -1,5 +1,8 @@
 "use client";
 
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
+
 type Props = {
   displayName: string;
   username: string;
@@ -73,8 +76,7 @@ export default function ProfilePublicPreview({
               ) : null}
 
               {showGoals && goal ? (
-                <span className="rounded-full border border-white/10 bg-black/30 px-4 py-2 text-sm text-white">
-                  Goal: {goal}
+                <span className="rounded-full border border-white/10 bg-black/30 px-4 py-2 text-sm text-white"><LocalizedText text="Goal:" />{" "}{goal}
                 </span>
               ) : null}
             </div>

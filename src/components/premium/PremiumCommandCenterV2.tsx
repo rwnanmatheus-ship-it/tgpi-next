@@ -14,6 +14,8 @@ import type {
   WorkspaceActionStatus,
 } from "@/lib/global-workspace";
 import type { PremiumAccessMode } from "@/types";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 type PremiumCommandCenterV2Props = {
   accessMode: Exclude<PremiumAccessMode, "none">;
@@ -141,11 +143,11 @@ function CountryCard({ country }: { country: PremiumCountryCard }) {
         <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-4 text-white">
           <div>
             <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#F0D58C]">
-              {country.region}
+              <LocalizedText text={country.region} />
             </p>
             <h3 className="mt-1 text-lg font-extrabold">
               <span aria-hidden="true">{country.emoji} </span>
-              {country.name}
+              <LocalizedText text={country.name} />
             </h3>
           </div>
           <span className="rounded-full border border-white/25 bg-[#081A31]/70 px-3 py-1 text-xs font-extrabold backdrop-blur-sm">
@@ -168,9 +170,7 @@ function CountryCard({ country }: { country: PremiumCountryCard }) {
           </p>
         </div>
         <div className="p-4">
-          <p className="text-[9px] font-extrabold uppercase tracking-[0.15em] text-[#7A8390]">
-            Documents
-          </p>
+          <p className="text-[9px] font-extrabold uppercase tracking-[0.15em] text-[#7A8390]"><LocalizedText text="Documents" /></p>
           <p className="mt-2 font-extrabold text-[#0B1F3A]">
             {country.documentProgress
               ? `${country.documentProgress.completed}/${country.documentProgress.total} reviewed`
@@ -181,8 +181,7 @@ function CountryCard({ country }: { country: PremiumCountryCard }) {
       <Link
         className="flex min-h-12 items-center justify-between px-4 text-xs font-extrabold text-[#79550F] transition hover:bg-[#F7F2E8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#B58A2A]"
         href={`/countries/${country.slug}`}
-      >
-        Open country intelligence <span aria-hidden="true">→</span>
+      ><LocalizedText text="Open country intelligence" />{" "}<span aria-hidden="true">→</span>
       </Link>
     </article>
   );
@@ -345,8 +344,7 @@ export default function PremiumCommandCenterV2({
             <Link
               className="inline-flex min-h-11 items-center rounded-xl border border-[#CFC7B8] bg-white px-5 text-sm font-extrabold text-[#0B1F3A] transition hover:border-[#B58A2A]"
               href="/countries"
-            >
-              Explore all countries <span aria-hidden="true">→</span>
+            ><LocalizedText text="Explore all countries" />{" "}<span aria-hidden="true">→</span>
             </Link>
           </div>
 
@@ -572,9 +570,7 @@ export default function PremiumCommandCenterV2({
             <article className="rounded-[30px] border border-[#D8D2C4] bg-[#FFFDF8] p-7 sm:p-8">
               <div className="flex flex-wrap items-start justify-between gap-4">
                 <div>
-                  <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#79550F]">
-                    Your global plan
-                  </p>
+                  <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#79550F]"><LocalizedText text="Your global plan" /></p>
                   <h2 className="mt-3 font-[var(--tgpi-font-display)] text-3xl font-semibold">
                     The context behind every recommendation.
                   </h2>
@@ -582,9 +578,7 @@ export default function PremiumCommandCenterV2({
                 <Link
                   className="text-xs font-extrabold text-[#79550F] underline decoration-[#B58A2A]/40 underline-offset-4"
                   href="/onboarding"
-                >
-                  Edit plan
-                </Link>
+                ><LocalizedText text="Edit plan" /></Link>
               </div>
               <dl className="mt-6 grid gap-3 sm:grid-cols-2">
                 {model.planSummary.map((item) => (
@@ -604,12 +598,8 @@ export default function PremiumCommandCenterV2({
 
               <div className="mt-6 border-t border-[#E4DED2] pt-6">
                 <div className="flex items-center justify-between gap-4">
-                  <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#79550F]">
-                    Recent activity
-                  </p>
-                  <span className="rounded-full border border-[#D8D2C4] bg-white px-3 py-1 text-[9px] font-extrabold uppercase tracking-[0.12em] text-[#657082]">
-                    Private
-                  </span>
+                  <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#79550F]"><LocalizedText text="Recent activity" /></p>
+                  <span className="rounded-full border border-[#D8D2C4] bg-white px-3 py-1 text-[9px] font-extrabold uppercase tracking-[0.12em] text-[#657082]"><LocalizedText text="Private" /></span>
                 </div>
                 {model.recentActivities.length ? (
                   <div className="mt-4 grid gap-2">

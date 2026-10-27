@@ -5,6 +5,8 @@ import Link from "next/link";
 import type * as Leaflet from "leaflet";
 import locations from "@/data/country-map-locations.json";
 import { BASEMAP_URL, SATELLITE_LAYERS, isSatelliteDate, satelliteTileUrl, type SatelliteCatalog, type SatelliteSensor } from "@/lib/satellite";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 export type SatelliteCountry = { slug: string; name: string };
 const points: Record<string, { lat: number; lng: number; zoom: number }> = locations;
@@ -114,7 +116,7 @@ export default function SatelliteAtlas({ countries, selectedSlug, onCountryPrevi
     <div className="satellite-actions"><button type="button" disabled={!date || mode === "terrain" || date === catalog?.layers[sensor].earliest} onClick={previousDay}>← Previous day</button><button type="button" disabled={!catalog || mode === "terrain"} onClick={() => { setSelectedDate(""); setFollowLatest(true); setRefresh(value => value + 1); }}>Latest available</button><button type="button" onClick={() => setRefresh(value => value + 1)}>Refresh imagery</button><button type="button" onClick={() => map?.setView([20, 0], 2)}>World view</button><button type="button" aria-pressed={expanded} onClick={() => setExpanded(!expanded)}>{expanded ? "Compact map" : "Expand map"}</button></div>
     {catalogError && <p className="ig-caution" role="alert">{catalogError}{catalog ? ` Last successful catalog check: ${catalog.checkedAt.slice(0, 16).replace("T", " ")} UTC.` : ""}</p>}
     <div ref={container} className="satellite-map" role="region" aria-label={`Satellite imagery for ${country?.name || "the world"}. Use arrow keys to pan and plus or minus to zoom.`} />
-    <div className="satellite-status"><p role="status">{tileStatus}</p>{country && <Link className="ig-link" href={`/countries/${country.slug}`}>Explore {country.name} →</Link>}</div>
+    <div className="satellite-status"><p role="status">{tileStatus}</p>{country && <Link className="ig-link" href={`/countries/${country.slug}`}><LocalizedText text="Explore" />{" "}<LocalizedText text={country.name} /> →</Link>}</div>
     <div className="satellite-facts"><span><strong>{mode === "terrain" ? "Reference composite" : date || "Checking source…"}</strong>{mode === "terrain" ? "Not a current capture" : "Observation day · UTC"}</span><span><strong>{mode === "terrain" ? "NASA Blue Marble" : SATELLITE_LAYERS[sensor].label}</strong>{mode === "terrain" ? "Relief & bathymetry" : SATELLITE_LAYERS[sensor].resolution}</span><span><strong>{catalog ? catalog.checkedAt.slice(11, 16) + " UTC" : "Pending"}</strong>Catalog checked{catalog ? ` · ${catalog.checkedAt.slice(0, 10)}` : ""}</span></div>
     <p className="ig-small">Daily satellite imagery, not live video or street-level photography. The initial view uses the previous source day for broader coverage; choose Latest available to inspect the newest day. Black areas can mean no observations. Near real-time products generally arrive within a few hours of observation; today’s coverage can be partial. Clouds, night and missing passes can obscure the surface. Try another date or sensor. The selected day is not an exact capture timestamp for every pixel. Markers locate countries approximately and do not define borders.</p>
     <a className="ig-link" href="https://worldview.earthdata.nasa.gov/" target="_blank" rel="noreferrer">Inspect imagery in NASA Worldview ↗</a>

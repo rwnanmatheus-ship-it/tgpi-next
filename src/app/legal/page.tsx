@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import LegalDocument from "@/components/legal/LegalDocument";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 export const metadata: Metadata = {
   title: "Legal & Company Information | TGPI",
@@ -64,7 +66,7 @@ export default function LegalPage() {
             <dd className="mt-1 font-bold text-[#0B1F3A]">Campinas, São Paulo, Brazil</dd>
           </div>
           <div>
-            <dt className="text-xs font-extrabold uppercase tracking-[0.14em] text-[#956A13]">Website</dt>
+            <dt className="text-xs font-extrabold uppercase tracking-[0.14em] text-[#956A13]"><LocalizedText text="Website" /></dt>
             <dd className="mt-1 font-bold text-[#0B1F3A]">theglobalpolymath.com</dd>
           </div>
           <div>

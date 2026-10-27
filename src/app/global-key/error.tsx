@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 export default function GlobalIdentityError({ retry }: { retry: () => void }) {
   return (
@@ -24,9 +26,7 @@ export default function GlobalIdentityError({ retry }: { retry: () => void }) {
             type="button"
             onClick={retry}
             className="min-h-12 rounded-xl bg-[#E5B94B] px-5 text-sm font-bold text-[#07182D] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
-          >
-            Try again
-          </button>
+          ><LocalizedText text="Try again" /></button>
           <Link
             href="/profile"
             className="inline-flex min-h-12 items-center rounded-xl border border-white/25 px-5 text-sm font-semibold focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
@@ -36,9 +36,7 @@ export default function GlobalIdentityError({ retry }: { retry: () => void }) {
           <Link
             href="/profile/security"
             className="inline-flex min-h-12 items-center px-2 text-sm font-semibold underline underline-offset-4"
-          >
-            Account security
-          </Link>
+          ><LocalizedText text="Account security" /></Link>
         </div>
       </section>
     </main>

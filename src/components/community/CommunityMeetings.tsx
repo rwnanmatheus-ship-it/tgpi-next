@@ -4,6 +4,8 @@ import Link from "next/link";
 import type { GlobalSession, Page } from "@/lib/community/model";
 import { api, type Action } from "./api";
 import s from "./Community.module.css";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 type Session = GlobalSession & {
   attending: boolean;
   community: string;
@@ -37,7 +39,7 @@ export default function CommunityMeetings({
   }, []);
   return (
     <section className={s.panel}>
-      <h2>Global Sessions</h2>
+      <h2><LocalizedText text="Global Sessions" /></h2>
       <p>
         Upcoming exchanges from up to eight of your active communities. Times
         are shown in your current time zone.
@@ -91,9 +93,7 @@ export default function CommunityMeetings({
               href={e.url}
               target="_blank"
               rel="noopener noreferrer"
-            >
-              Open meeting ↗
-            </a>
+            ><LocalizedText text="Open meeting ↗" /></a>
           )}
         </article>
       ))}

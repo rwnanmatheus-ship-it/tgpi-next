@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { countries } from "@/data/countries";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 const regionConfig = [
   {
@@ -55,7 +57,7 @@ export default function WorldMapExplorer() {
                   className="flex items-center justify-between rounded-2xl border border-slate-800 bg-slate-950 px-4 py-3 transition hover:border-yellow-500"
                 >
                   <span className="text-slate-200">
-                    {country.emoji} {country.name}
+                    {country.emoji} <LocalizedText text={country.name} />
                   </span>
                   <span className="text-sm text-yellow-300">Open →</span>
                 </Link>

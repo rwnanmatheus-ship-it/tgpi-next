@@ -1,3 +1,4 @@
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -25,9 +26,9 @@ export default function AboutPage() {
         <Image src="/images/about/global-perspective-v2.webp" alt="A brass globe and open notebook overlooking an international city at blue hour" fill sizes="(max-width: 1280px) 100vw, 1280px" priority className={styles.heroImage} />
         <div className={styles.heroContent}>
           <p className={styles.eyebrow}>The Global Polymath Institute</p>
-          <h1 id="about-title">A wider world.<br />A clearer <em>direction.</em></h1>
+          <h1 id="about-title"><LocalizedText text="A wider world." /><br />A clearer <em>direction.</em></h1>
           <p className={styles.heroLead}>Practical education and intelligence for people building a life beyond borders.</p>
-          <div className={styles.actions}><Link href="/sign-up" className={styles.primary}>Start your TGPI journey <span aria-hidden="true">↗</span></Link><a href="#purpose" className={styles.secondary}>Discover the institute <span aria-hidden="true">↓</span></a></div>
+          <div className={styles.actions}><Link href="/sign-up" className={styles.primary}><LocalizedText text="Start your TGPI journey" />{" "}<span aria-hidden="true">↗</span></Link><a href="#purpose" className={styles.secondary}>Discover the institute <span aria-hidden="true">↓</span></a></div>
         </div>
         <div className={styles.heroFoot}><span>ABOUT TGPI</span><span>Data · Education · Mobility · Decision</span></div>
       </section>
@@ -53,7 +54,7 @@ export default function AboutPage() {
           <details><summary>Clear scope. Honest expectations. <span aria-hidden="true">+</span></summary><p>TGPI is an education and decision-support platform. It does not guarantee visas, employment or relocation outcomes, and does not replace qualified legal or immigration advice.</p></details>
         </div>
       </section>
-      <section className={styles.closing}><p className={styles.eyebrow}>Your next chapter</p><h2>Understand more.<br /><em>Move forward with purpose.</em></h2><p>Explore the world through your priorities. Build the capabilities to take your next step.</p><div className={styles.actions}><Link href="/sign-up" className={styles.primary}>Create your account <span aria-hidden="true">↗</span></Link><Link href="/pricing" className={styles.secondary}>Explore TGPI Premium <span aria-hidden="true">→</span></Link></div><span className={styles.wordmark}>TGPI</span></section>
+      <section className={styles.closing}><p className={styles.eyebrow}>Your next chapter</p><h2>Understand more.<br /><em>Move forward with purpose.</em></h2><p>Explore the world through your priorities. Build the capabilities to take your next step.</p><div className={styles.actions}><Link href="/sign-up" className={styles.primary}>Create your account <span aria-hidden="true">↗</span></Link><Link href="/pricing" className={styles.secondary}><LocalizedText text="Explore TGPI Premium" />{" "}<span aria-hidden="true">→</span></Link></div><span className={styles.wordmark}>TGPI</span></section>
     </div>
   </main>;
 }

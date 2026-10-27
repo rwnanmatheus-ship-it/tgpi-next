@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 const items = [
   "Dashboard",
@@ -33,10 +35,8 @@ export default function Sidebar() {
       </nav>
 
       <div className="mt-auto rounded-2xl border border-yellow-500/20 bg-yellow-500/10 p-4">
-        <p className="text-sm">Premium Plan</p>
-        <button className="mt-3 w-full rounded-xl bg-yellow-500 py-2 text-black font-bold">
-          Manage Plan
-        </button>
+        <p className="text-sm"><LocalizedText text="Premium Plan" /></p>
+        <button className="mt-3 w-full rounded-xl bg-yellow-500 py-2 text-black font-bold"><LocalizedText text="Manage Plan" /></button>
       </div>
     </aside>
   );

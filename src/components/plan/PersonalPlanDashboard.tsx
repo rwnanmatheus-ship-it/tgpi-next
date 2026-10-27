@@ -5,6 +5,8 @@ import type {
   GlobalWorkspaceModel,
   WorkspaceActionStatus,
 } from "@/lib/global-workspace";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 type PersonalPlanDashboardProps = {
   firstName: string;
@@ -272,8 +274,8 @@ export default function PersonalPlanDashboard({
                   <div className="flex items-center gap-3">
                     <span className="text-3xl" aria-hidden="true">{country.emoji}</span>
                     <div className="min-w-0">
-                      <h3 className="truncate text-xl text-[var(--tgpi-navy)]">{country.name}</h3>
-                      <p className="text-[10px] font-extrabold uppercase tracking-[0.12em] text-[var(--tgpi-muted)]">{country.region}</p>
+                      <h3 className="truncate text-xl text-[var(--tgpi-navy)]"><LocalizedText text={country.name} /></h3>
+                      <p className="text-[10px] font-extrabold uppercase tracking-[0.12em] text-[var(--tgpi-muted)]"><LocalizedText text={country.region} /></p>
                     </div>
                   </div>
                   <ul className="mt-4 space-y-2 text-xs leading-5 text-[var(--tgpi-muted)]">

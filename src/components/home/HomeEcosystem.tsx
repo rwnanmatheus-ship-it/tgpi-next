@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import NavigationIcon from "@/components/navigation/NavigationIcon";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 const pillars = [
   { number: "01", title: "Data", label: "Country Intelligence", copy: "Source-linked country context with visible reference years, gaps and limitations.", href: "/countries", icon: "graph", className: "lg:col-span-7" },
@@ -43,7 +45,7 @@ export default function HomeEcosystem() {
             <p className="mt-5 text-base leading-8 text-[var(--tgpi-muted)]">Organize what needs verification, build capability around the gaps and carry your connected TGPI progress through one global identity.</p>
             <div className="mt-8 grid gap-3 sm:grid-cols-2">
               {[{ icon: "file" as const, title: "Documents OS", copy: "Preparation categories, readiness and official checks.", href: "/passport" }, { icon: "key" as const, title: "Global Key", copy: "Connected identity and verifiable progress continuity.", href: "/global-key" }, { icon: "certificate" as const, title: "Certificates", copy: "Credential evidence linked to completed capability.", href: "/certificates" }, { icon: "shield" as const, title: "Verification", copy: "Public routes for checking issued TGPI credentials.", href: "/verify" }].map((item) => (
-                <Link key={item.title} href={item.href} className="group rounded-2xl border border-[var(--tgpi-border)] bg-[var(--tgpi-canvas)] p-4 transition hover:border-[var(--tgpi-gold)] hover:bg-white"><span className="grid h-10 w-10 place-items-center rounded-xl bg-[var(--tgpi-navy)] text-[var(--tgpi-gold-light)]"><NavigationIcon name={item.icon} width={19} height={19} /></span><h4 className="mt-4 font-[var(--tgpi-font-display)] text-2xl font-semibold text-[var(--tgpi-navy)]">{item.title}</h4><p className="mt-2 text-xs leading-6 text-[var(--tgpi-muted)]">{item.copy}</p><span className="mt-4 inline-flex items-center gap-2 text-xs font-extrabold text-[var(--tgpi-navy)]">Open <NavigationIcon name="arrow" width={15} height={15} className="transition group-hover:translate-x-1" /></span></Link>
+                <Link key={item.title} href={item.href} className="group rounded-2xl border border-[var(--tgpi-border)] bg-[var(--tgpi-canvas)] p-4 transition hover:border-[var(--tgpi-gold)] hover:bg-white"><span className="grid h-10 w-10 place-items-center rounded-xl bg-[var(--tgpi-navy)] text-[var(--tgpi-gold-light)]"><NavigationIcon name={item.icon} width={19} height={19} /></span><h4 className="mt-4 font-[var(--tgpi-font-display)] text-2xl font-semibold text-[var(--tgpi-navy)]">{item.title}</h4><p className="mt-2 text-xs leading-6 text-[var(--tgpi-muted)]">{item.copy}</p><span className="mt-4 inline-flex items-center gap-2 text-xs font-extrabold text-[var(--tgpi-navy)]"><LocalizedText text="Open" />{" "}<NavigationIcon name="arrow" width={15} height={15} className="transition group-hover:translate-x-1" /></span></Link>
               ))}
             </div>
           </div>

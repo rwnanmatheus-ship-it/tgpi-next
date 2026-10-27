@@ -15,6 +15,8 @@ import type {
   TgpiGlobalKeyBlockView,
   TgpiGlobalKeyView,
 } from "@/lib/global-key";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 type GlobalKeyCenterProps = {
   initialKey: TgpiGlobalKeyView;
@@ -352,15 +354,12 @@ export default function GlobalKeyCenter({
             className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 text-xs font-extrabold text-[#D5DEE7] transition hover:border-[#E5B94B]/35 hover:text-white"
             href="/profile"
           >
-            <span aria-hidden="true">←</span> Workspace
-          </Link>
+            <span aria-hidden="true">←</span>{" "}<LocalizedText text="Workspace" /></Link>
           <div className="flex flex-wrap gap-2">
             <Link
               className="inline-flex min-h-11 items-center rounded-xl border border-white/10 px-4 text-xs font-extrabold text-[#D5DEE7] transition hover:border-[#E5B94B]/35"
               href="/profile/security"
-            >
-              Account security
-            </Link>
+            ><LocalizedText text="Account security" /></Link>
             <a
               className="inline-flex min-h-11 items-center rounded-xl bg-[#E5B94B] px-4 text-xs font-extrabold text-[#07182D] transition hover:bg-[#F0C95F]"
               href={verifyUrl}
@@ -418,7 +417,7 @@ export default function GlobalKeyCenter({
                     height={58}
                   />
                   <div className="min-w-0">
-                    <p className="text-xs text-[#B9C7D5]">Member identity</p>
+                    <p className="text-xs text-[#B9C7D5]"><LocalizedText text="Member identity" /></p>
                     <p className="mt-1 break-words text-xl font-semibold text-white">
                       {memberName}
                     </p>
@@ -442,9 +441,7 @@ export default function GlobalKeyCenter({
                     className="min-h-11 rounded-xl border border-white/15 bg-white/5 px-4 text-xs font-extrabold transition hover:border-[#E5B94B]/45 hover:bg-white/10"
                     onClick={() => copyValue(verifyUrl, "Verification link")}
                     type="button"
-                  >
-                    Copy verification link
-                  </button>
+                  ><LocalizedText text="Copy verification link" /></button>
                 </div>
               </div>
             </div>
@@ -694,9 +691,7 @@ export default function GlobalKeyCenter({
                       setFeedback(null);
                     }}
                     type="button"
-                  >
-                    Cancel
-                  </button>
+                  ><LocalizedText text="Cancel" /></button>
                 ) : null}
               </section>
 

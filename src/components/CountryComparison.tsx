@@ -3,6 +3,8 @@
 import { useMemo, useState } from "react";
 import { countries } from "@/data/countries";
 import { compareCountries } from "@/lib/country-comparison";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 export default function CountryComparison() {
   const [firstSlug, setFirstSlug] = useState(countries[0]?.slug || "");
@@ -26,9 +28,7 @@ export default function CountryComparison() {
   return (
     <section className="rounded-3xl border border-yellow-700/20 bg-gradient-to-br from-yellow-500/10 to-slate-950 p-8">
       <div className="mb-6">
-        <h2 className="text-3xl font-bold text-yellow-400">
-          Compare Countries
-        </h2>
+        <h2 className="text-3xl font-bold text-yellow-400"><LocalizedText text="Compare Countries" /></h2>
         <p className="mt-2 text-slate-300">
           Evaluate two pathways side by side and make smarter global decisions.
         </p>

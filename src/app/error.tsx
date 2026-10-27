@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useEffect } from "react";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 export default function ErrorBoundary({
   error,
@@ -22,7 +24,7 @@ export default function ErrorBoundary({
         <h1 className="mt-3 text-4xl text-[var(--tgpi-navy)]">This area did not load.</h1>
         <p className="mt-4 text-base leading-7 text-[var(--tgpi-muted)]">Your account and saved progress were not changed. Try the request again or return to the Workspace.</p>
         <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
-          <button className="min-h-12 rounded-xl bg-[var(--tgpi-gold)] px-6 text-sm font-extrabold text-[var(--tgpi-navy)] transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold-strong)]" onClick={reset} type="button">Try again</button>
+          <button className="min-h-12 rounded-xl bg-[var(--tgpi-gold)] px-6 text-sm font-extrabold text-[var(--tgpi-navy)] transition hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold-strong)]" onClick={reset} type="button"><LocalizedText text="Try again" /></button>
           <Link className="inline-flex min-h-12 items-center justify-center rounded-xl border border-[var(--tgpi-border)] px-6 text-sm font-extrabold text-[var(--tgpi-navy)] transition hover:border-[var(--tgpi-gold)] hover:bg-[var(--tgpi-gold-soft)]" href="/profile">Open Workspace</Link>
         </div>
       </section>

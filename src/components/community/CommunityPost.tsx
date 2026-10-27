@@ -14,6 +14,8 @@ import {
 } from "@/lib/community/model";
 import { api, type Action } from "./api";
 import s from "./Community.module.css";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 export default function CommunityPost({
   conversation = false,
   post: p,
@@ -148,9 +150,7 @@ export default function CommunityPost({
                 setEditing(false);
             }}
           >
-            <label>
-              Title
-              <input
+            <label><LocalizedText text="Title" /><input
                 required
                 maxLength={180}
                 value={title}
@@ -166,16 +166,12 @@ export default function CommunityPost({
                 onChange={(e) => setBody(e.target.value)}
               />
             </label>
-            <button className={s.button} disabled={busy}>
-              Save changes
-            </button>
+            <button className={s.button} disabled={busy}><LocalizedText text="Save changes" /></button>
             <button
               className={s.secondary}
               type="button"
               onClick={() => setEditing(false)}
-            >
-              Cancel
-            </button>
+            ><LocalizedText text="Cancel" /></button>
           </form>
         ) : (
           <>

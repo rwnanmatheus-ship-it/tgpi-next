@@ -5,6 +5,8 @@ import PremiumActionButton from "@/components/PremiumActionButton";
 import PricingOutcomeSelector from "@/components/pricing/PricingOutcomeSelector";
 import TGPIPageShell from "@/components/TGPIPageShell";
 import { TGPI_FREE_PLAN, TGPI_PREMIUM_PLAN } from "@/lib/subscription-plans";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 export const metadata: Metadata = {
   title: "TGPI Premium — Choose your country. Build your plan.",
@@ -238,12 +240,8 @@ export default async function PricingPage({
                 </ul>
               </div>
               <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 border-t border-white/15 pt-5 text-xs text-white/80">
-                <Link href="/terms" className="underline underline-offset-4">
-                  Terms
-                </Link>
-                <Link href="/privacy" className="underline underline-offset-4">
-                  Privacy
-                </Link>
+                <Link href="/terms" className="underline underline-offset-4"><LocalizedText text="Terms" /></Link>
+                <Link href="/privacy" className="underline underline-offset-4"><LocalizedText text="Privacy" /></Link>
                 <Link href="/refunds" className="underline underline-offset-4">
                   Refund policy
                 </Link>
@@ -378,9 +376,7 @@ export default async function PricingPage({
                     <th scope="col" className="p-5">
                       Capability
                     </th>
-                    <th scope="col" className="p-5">
-                      Free
-                    </th>
+                    <th scope="col" className="p-5"><LocalizedText text="Free" /></th>
                     <th scope="col" className="bg-[#0B1F3A] p-5 text-[#F0D58C]">
                       Premium
                     </th>

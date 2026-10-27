@@ -3,6 +3,8 @@
 import Image from "next/image";
 import TGPIQrCode from "@/components/TGPIQrCode";
 import type { UserData } from "@/types";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 type IdentityProfile = UserData & {
   country?: string;
@@ -30,8 +32,8 @@ export default function TGPIIdentityCard({ profile }: TGPIIdentityCardProps) {
           <p><strong>Username:</strong> @{profile?.username || "username"}</p>
           <p><strong>ID:</strong> {tgpiId}</p>
           <p><strong>Country:</strong> {profile?.country || profile?.currentCountry || "Not defined"}</p>
-          <p><strong>Languages:</strong> {profile?.languagePreference || "Not defined"}</p>
-          <p><strong>Goal:</strong> {profile?.goal || profile?.travelIntent || "Not defined"}</p>
+          <p><strong><LocalizedText text="Languages:" /></strong> {profile?.languagePreference || "Not defined"}</p>
+          <p><strong><LocalizedText text="Goal:" /></strong> {profile?.goal || profile?.travelIntent || "Not defined"}</p>
           <p className="mt-4 font-bold text-yellow-400">ELITE MEMBER</p>
         </div>
 

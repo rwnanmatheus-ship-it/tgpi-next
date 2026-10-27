@@ -1,4 +1,5 @@
 "use client";
+import { useLocale } from "@/components/localization/LocaleProvider";
 
 import { containDialogFocus } from "@/lib/dialog-focus";
 
@@ -16,8 +17,11 @@ import {
   SUPER_APP_MODULES,
   SUPER_APP_OPEN_EVENT,
 } from "@/lib/super-app";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 export default function SuperAppLauncher() {
+  const { t } = useLocale();
   const pathname = usePathname();
   const currentModule = getSuperAppModule(pathname);
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -107,9 +111,7 @@ export default function SuperAppLauncher() {
                 <h2
                   id="tgpi-super-app-title"
                   className="mt-4 font-[var(--tgpi-font-display)] text-4xl font-semibold leading-none sm:text-5xl"
-                >
-                  One system. Every global decision.
-                </h2>
+                ><LocalizedText text="One system. Every global decision." /></h2>
                 <p className="mt-4 max-w-sm text-xs leading-6 text-[#C3D0DE] sm:text-sm">
                   Move between evidence, comparison, preparation and learning
                   without losing your context.
@@ -132,7 +134,7 @@ export default function SuperAppLauncher() {
               className="flex min-h-14 items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.055] px-4 text-[#C8D4E0] transition focus-within:border-[#E5B94B]/55 focus-within:bg-white/[0.075]"
             >
               <span aria-hidden="true" className="text-lg">⌕</span>
-              <span className="sr-only">Find a TGPI app</span>
+              <span className="sr-only"><LocalizedText text="Find a TGPI app" /></span>
               <input
                 ref={searchRef}
                 id="tgpi-super-app-search"
@@ -178,10 +180,10 @@ export default function SuperAppLauncher() {
                       </span>
                     </span>
                     <span className="mt-4 block truncate text-sm font-extrabold">
-                      {module.shortLabel}
+                      {t(module.shortLabel)}
                     </span>
                     <span className="mt-1 line-clamp-2 block text-[11px] leading-5 text-[#8FA2B7]">
-                      {module.description}
+                      {t(module.description)}
                     </span>
                   </Link>
                 );
@@ -203,11 +205,11 @@ export default function SuperAppLauncher() {
                 <p className="mt-2 text-sm font-extrabold">
                   <span className="inline-flex items-center gap-2">
                     <NavigationIcon name={getSuperAppIconName(nextModule.id)} width={18} height={18} />
-                    Continue in {nextModule.label}
+                    Continue in {t(nextModule.label)}
                   </span>
                 </p>
                 <p className="mt-1 text-xs leading-5 text-[#9FB0C2]">
-                  {nextModule.description}
+                  {t(nextModule.description)}
                 </p>
               </div>
               <Link

@@ -12,6 +12,8 @@ import {
   type CountrySortOption,
 } from "@/data/country-page-system";
 import type { CountryExplorerItem, CountryGoal } from "@/lib/countries";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 type ExplorerView = "visual" | "index";
 
@@ -254,7 +256,7 @@ export default function CountriesExplorerV3({ countries, goals, regions }: Count
       <div className="mobile-explorer-toolbar sticky top-[72px] z-30 rounded-[22px] border border-[var(--tgpi-border)] bg-[rgba(255,253,248,0.94)] p-3 shadow-[var(--tgpi-shadow-soft)] backdrop-blur-2xl">
         <div className="grid gap-3 lg:grid-cols-[1fr_auto_auto]">
           <label className="relative block">
-            <span className="sr-only">Search countries</span>
+            <span className="sr-only"><LocalizedText text="Search countries" /></span>
             <input value={query} onChange={(event) => { setQuery(event.target.value); setActivePreset(null); }} placeholder="Search countries, regions, languages or currencies" className="h-12 w-full rounded-2xl border border-[var(--tgpi-border)] bg-white px-4 pr-12 text-sm text-[var(--tgpi-navy)] outline-none transition placeholder:text-[var(--tgpi-muted)] focus:border-[var(--tgpi-gold)] focus:ring-2 focus:ring-[var(--tgpi-gold)]/20" />
             <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[var(--tgpi-gold-strong)]">⌕</span>
           </label>
@@ -326,7 +328,7 @@ export default function CountriesExplorerV3({ countries, goals, regions }: Count
           <div className="mt-8 rounded-[28px] border border-[var(--tgpi-border)] bg-white p-8 text-center shadow-[var(--tgpi-shadow-soft)]">
             <p className="font-[var(--tgpi-font-display)] text-3xl font-semibold text-[var(--tgpi-navy)]">No country matches every selected filter.</p>
             <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-[var(--tgpi-muted)]">Lower the minimum safety score, expand the region or remove one preference to reopen the country pool.</p>
-            <button type="button" onClick={clearFilters} className="mt-6 rounded-2xl bg-[var(--tgpi-navy)] px-6 py-3 text-sm font-extrabold text-white">Reset filters</button>
+            <button type="button" onClick={clearFilters} className="mt-6 rounded-2xl bg-[var(--tgpi-navy)] px-6 py-3 text-sm font-extrabold text-white"><LocalizedText text="Reset filters" /></button>
           </div>
         )}
 
@@ -357,7 +359,7 @@ export default function CountriesExplorerV3({ countries, goals, regions }: Count
               <RangeField label="Minimum English access" value={minEnglish} onChange={(value) => { setMinEnglish(value); setActivePreset(null); }} />
             </div>
             <div className="sticky bottom-0 grid gap-3 border-t border-[var(--tgpi-border)] bg-[var(--tgpi-canvas)] pt-4 sm:grid-cols-2">
-              <button type="button" onClick={clearFilters} className="min-h-12 rounded-2xl border border-[var(--tgpi-border)] bg-white text-sm font-extrabold text-[var(--tgpi-navy)]">Reset</button>
+              <button type="button" onClick={clearFilters} className="min-h-12 rounded-2xl border border-[var(--tgpi-border)] bg-white text-sm font-extrabold text-[var(--tgpi-navy)]"><LocalizedText text="Reset" /></button>
               <button type="button" onClick={() => setFiltersOpen(false)} className="min-h-12 rounded-2xl bg-[var(--tgpi-navy)] text-sm font-extrabold text-white">Show {filteredCountries.length} results</button>
             </div>
           </section>
@@ -367,10 +369,10 @@ export default function CountriesExplorerV3({ countries, goals, regions }: Count
       {selectedCountries.length ? (
         <div className="mobile-comparison-tray fixed inset-x-0 bottom-0 z-50 border-t border-[var(--tgpi-gold)]/30 bg-[rgba(7,26,50,0.96)] px-4 py-4 text-white shadow-2xl backdrop-blur-xl">
           <div className="mx-auto flex max-w-[1280px] flex-col gap-3 md:flex-row md:items-center md:justify-between">
-            <div><p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-light)]">Comparison tray</p><div className="mt-2 flex flex-wrap gap-2">{selectedCountries.map((country) => <button key={country.slug} type="button" onClick={() => toggleCountry(country.slug)} className="rounded-full border border-white/15 px-3 py-2 text-xs font-bold">{country.name} ×</button>)}</div></div>
+            <div><p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-light)]">Comparison tray</p><div className="mt-2 flex flex-wrap gap-2">{selectedCountries.map((country) => <button key={country.slug} type="button" onClick={() => toggleCountry(country.slug)} className="rounded-full border border-white/15 px-3 py-2 text-xs font-bold"><LocalizedText text={country.name} /> ×</button>)}</div></div>
             <div className="flex flex-wrap items-center gap-3">
-              <button type="button" onClick={() => { setSelectedSlugs([]); setCompareNotice(""); }} className="rounded-2xl border border-white/20 px-4 py-3 text-sm font-extrabold">Clear</button>
-              {selectedCountries.length >= 2 ? <Link href={compareHref} className="rounded-2xl bg-[var(--tgpi-gold)] px-5 py-3 text-sm font-extrabold text-[var(--tgpi-navy)]">Compare {selectedCountries.length} countries</Link> : <span className="rounded-2xl border border-white/15 bg-white/5 px-5 py-3 text-sm font-bold text-[#D7E0EB]">Select one more country</span>}
+              <button type="button" onClick={() => { setSelectedSlugs([]); setCompareNotice(""); }} className="rounded-2xl border border-white/20 px-4 py-3 text-sm font-extrabold"><LocalizedText text="Clear" /></button>
+              {selectedCountries.length >= 2 ? <Link href={compareHref} className="rounded-2xl bg-[var(--tgpi-gold)] px-5 py-3 text-sm font-extrabold text-[var(--tgpi-navy)]"><LocalizedText text="Compare" />{" "}{selectedCountries.length} countries</Link> : <span className="rounded-2xl border border-white/15 bg-white/5 px-5 py-3 text-sm font-bold text-[#D7E0EB]">Select one more country</span>}
             </div>
           </div>
         </div>
@@ -431,8 +433,8 @@ function CountryIndexRow({
         <div className="flex min-w-0 items-start gap-3">
           <span aria-hidden="true" className="text-2xl">{country.emoji}</span>
           <div className="min-w-0">
-            <p className="text-[9px] font-extrabold uppercase tracking-[0.12em] text-[var(--tgpi-gold-strong)]">{country.region} · {country.capital}</p>
-            <h3 className="mt-1 truncate font-[var(--tgpi-font-display)] text-2xl font-semibold text-[var(--tgpi-navy)]">{country.name}</h3>
+            <p className="text-[9px] font-extrabold uppercase tracking-[0.12em] text-[var(--tgpi-gold-strong)]"><LocalizedText text={country.region} /> · {country.capital}</p>
+            <h3 className="mt-1 truncate font-[var(--tgpi-font-display)] text-2xl font-semibold text-[var(--tgpi-navy)]"><LocalizedText text={country.name} /></h3>
             <p className="mt-1 truncate text-xs font-semibold text-[var(--tgpi-muted)]">{country.language} · {country.currencyCode}</p>
           </div>
         </div>

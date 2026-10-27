@@ -4,6 +4,8 @@ import { Show } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import NavigationIcon from "@/components/navigation/NavigationIcon";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 const workspaceCards = [
   ["Shortlist", "Your countries and decision context", "globe"],
@@ -23,7 +25,7 @@ export default function HomeCommandCenter() {
           <div className="mt-8 grid gap-3 sm:flex sm:flex-wrap">
             <Show when="signed-out">
               <Link href="/sign-up" className="inline-flex min-h-14 items-center justify-center gap-3 rounded-2xl bg-[var(--tgpi-gold)] px-6 text-sm font-extrabold text-[var(--tgpi-navy-deep)] transition hover:-translate-y-0.5 hover:bg-[var(--tgpi-gold-light)]">Create my Global Key <NavigationIcon name="key" width={18} height={18} /></Link>
-              <Link href="/sign-in" className="inline-flex min-h-14 items-center justify-center rounded-2xl border border-white/20 px-6 text-sm font-extrabold text-white transition hover:border-[var(--tgpi-gold-light)] hover:text-[var(--tgpi-gold-light)]">Sign in</Link>
+              <Link href="/sign-in" className="inline-flex min-h-14 items-center justify-center rounded-2xl border border-white/20 px-6 text-sm font-extrabold text-white transition hover:border-[var(--tgpi-gold-light)] hover:text-[var(--tgpi-gold-light)]"><LocalizedText text="Sign in" /></Link>
             </Show>
             <Show when="signed-in">
               <Link href="/profile" className="inline-flex min-h-14 items-center justify-center gap-3 rounded-2xl bg-[var(--tgpi-gold)] px-6 text-sm font-extrabold text-[var(--tgpi-navy-deep)] transition hover:-translate-y-0.5 hover:bg-[var(--tgpi-gold-light)]">Open my workspace <NavigationIcon name="arrow" width={18} height={18} /></Link>

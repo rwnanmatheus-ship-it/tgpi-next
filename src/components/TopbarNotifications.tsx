@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 type NotificationItem = {
   id: string;
@@ -64,7 +66,7 @@ export default function TopbarNotifications() {
         <div className="absolute right-0 top-14 z-50 w-[340px] rounded-3xl border border-white/10 bg-[#0b1220] p-4 shadow-[0_20px_60px_rgba(0,0,0,0.45)]">
           <div className="mb-4 flex items-center justify-between">
             <div>
-              <p className="text-sm font-semibold text-white">Notifications</p>
+              <p className="text-sm font-semibold text-white"><LocalizedText text="Notifications" /></p>
               <p className="mt-1 text-xs text-slate-400">
                 Quick updates from your account and the platform
               </p>

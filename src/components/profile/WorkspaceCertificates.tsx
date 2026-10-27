@@ -2,8 +2,10 @@ import Link from 'next/link';
 import { isLearningStorageConfigured } from '@/lib/firestore-admin-rest.server';
 import { listUserLearningCredentials } from '@/lib/learning-records.server';
 import styles from './WorkspaceCommandCenter.module.css';
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 export default async function WorkspaceCertificates({ userId }: { userId: string }) {
-  if (!isLearningStorageConfigured()) return <section className={styles.panel}><h2>Certificates</h2><p>Certificate storage is currently unavailable. This does not mean you have no certificates.</p><Link href="/certificates">Open certificate center ↗</Link></section>;
+  if (!isLearningStorageConfigured()) return <section className={styles.panel}><h2><LocalizedText text="Certificates" /></h2><p>Certificate storage is currently unavailable. This does not mean you have no certificates.</p><Link href="/certificates">Open certificate center ↗</Link></section>;
   const [result] = await Promise.allSettled([listUserLearningCredentials(userId)]);
   if (result.status === 'rejected') return <section className={styles.panel} role="status"><h2>Certificates could not be loaded.</h2><p>Your other workspace modules are available.</p><Link href="/certificates">Retry in certificate center ↗</Link></section>;
   const records = result.value.filter(r => r.status === 'active');

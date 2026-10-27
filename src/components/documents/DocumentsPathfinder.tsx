@@ -6,6 +6,8 @@ import {
   documentGoalPaths,
   type DocumentGoal,
 } from "@/lib/documents-os";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 export default function DocumentsPathfinder() {
   const [selectedGoal, setSelectedGoal] = useState<DocumentGoal>("travel");
@@ -71,9 +73,7 @@ export default function DocumentsPathfinder() {
             {selectedPath.description}
           </p>
           <div className="mt-8 rounded-2xl border border-white/12 bg-white/[0.06] p-5">
-            <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-white/50">
-              Designed outcome
-            </p>
+            <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-white/50"><LocalizedText text="Designed outcome" /></p>
             <p className="mt-2 text-base font-extrabold text-white">
               {selectedPath.outcome}
             </p>

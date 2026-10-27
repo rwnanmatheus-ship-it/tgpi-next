@@ -1,14 +1,14 @@
 import Link from "next/link";
 import TGPIEditorialVisual from "@/components/TGPIEditorialVisual";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 export default function WorldMapCard() {
   return (
     <section className="overflow-hidden rounded-[28px] border border-[#D8D2C4] bg-[#FFFDF8] shadow-[0_18px_55px_rgba(11,31,58,0.08)]">
       <div className="flex items-center justify-between gap-4 p-6">
         <div>
-          <p className="text-xs font-black uppercase tracking-[0.22em] text-[#9A6A12]">
-            Country intelligence
-          </p>
+          <p className="text-xs font-black uppercase tracking-[0.22em] text-[#9A6A12]"><LocalizedText text="Country intelligence" /></p>
           <h2 className="mt-2 font-serif text-3xl font-semibold text-[#0B1F3A]">
             Global Decision Map
           </h2>
@@ -17,9 +17,7 @@ export default function WorldMapCard() {
         <Link
           href="/countries"
           className="rounded-xl border border-[#B58A2A] bg-[#FFF7DE] px-4 py-2 text-sm font-black text-[#6F4908] transition hover:bg-[#F7E8BA]"
-        >
-          Explore
-        </Link>
+        ><LocalizedText text="Explore" /></Link>
       </div>
 
       <div className="relative mx-6 mb-6 overflow-hidden rounded-[26px] border border-[#D8D2C4]">

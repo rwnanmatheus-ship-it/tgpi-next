@@ -1,11 +1,11 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 export default function ProfileCompletion() {
   const progress = 65;
 
   return (
     <div className="rounded-2xl border border-slate-800 p-5 bg-slate-900">
-      <h3 className="text-yellow-400 font-bold">
-        Profile Completion
-      </h3>
+      <h3 className="text-yellow-400 font-bold"><LocalizedText text="Profile Completion" /></h3>
 
       <div className="mt-4 h-2 bg-slate-700 rounded-full">
         <div

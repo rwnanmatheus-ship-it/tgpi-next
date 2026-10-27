@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { getAvatarCrop } from "@/lib/avatar-crop";
 import { announceProgressSaved } from "@/lib/progress-sync";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 const ACCEPTED_IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
 export default function TgpiAvatarEditor({ displayName, initialImageUrl, initials }: {
@@ -102,7 +104,7 @@ export default function TgpiAvatarEditor({ displayName, initialImageUrl, initial
         { label: "Horizontal position", value: x, set: setX, min: 0, max: 100, step: 1 },
         { label: "Vertical position", value: y, set: setY, min: 0, max: 100, step: 1 },
       ].map(control => <label key={control.label} className="block text-sm font-bold text-[#0B1F3A]">{control.label}<input type="range" min={control.min} max={control.max} step={control.step} value={control.value} onChange={event => control.set(Number(event.target.value))} className="mt-3 block w-full accent-[#0B1F3A]" /></label>)}
-        <div className="flex flex-wrap gap-3"><button type="button" disabled={!bitmap || busy} onClick={save} className="min-h-11 rounded-xl bg-[#0B1F3A] px-5 text-sm font-bold text-white disabled:opacity-50">{busy ? "Saving…" : "Save cropped photo"}</button><button type="button" disabled={busy} onClick={cancel} className="min-h-11 rounded-xl border border-[#D8D2C4] bg-white px-4 text-sm font-bold text-[#0B1F3A]">Cancel</button></div>
+        <div className="flex flex-wrap gap-3"><button type="button" disabled={!bitmap || busy} onClick={save} className="min-h-11 rounded-xl bg-[#0B1F3A] px-5 text-sm font-bold text-white disabled:opacity-50">{busy ? "Saving…" : "Save cropped photo"}</button><button type="button" disabled={busy} onClick={cancel} className="min-h-11 rounded-xl border border-[#D8D2C4] bg-white px-4 text-sm font-bold text-[#0B1F3A]"><LocalizedText text="Cancel" /></button></div>
       </div>
     </fieldset> : null}
     <p aria-live="polite" role="status" className={`mt-3 text-sm font-bold ${error ? "text-[#A32626]" : "text-[#277352]"}`}>{message}</p>

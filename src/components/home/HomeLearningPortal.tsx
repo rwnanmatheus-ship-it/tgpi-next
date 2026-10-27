@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { coursesOverview } from "@/data/courses-overview";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 const learningOutcomes = [
   ["Understand", "Learn the context behind the decision."],
@@ -51,9 +53,7 @@ export default function HomeLearningPortal() {
               <Link
                 href="/courses"
                 className="inline-flex min-h-14 items-center justify-center rounded-2xl bg-[var(--tgpi-navy)] px-6 text-sm font-extrabold text-white transition hover:-translate-y-0.5 hover:bg-[var(--tgpi-navy-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
-              >
-                Explore TGPI Learning
-              </Link>
+              ><LocalizedText text="Explore TGPI Learning" /></Link>
               <Link
                 href="/courses/global-english-2026"
                 className="inline-flex min-h-14 items-center justify-center rounded-2xl border border-[var(--tgpi-gold)] bg-white px-6 text-sm font-extrabold text-[var(--tgpi-navy)] transition hover:-translate-y-0.5 hover:bg-[var(--tgpi-gold-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
@@ -110,7 +110,7 @@ export default function HomeLearningPortal() {
                     </span>
                     <span className="text-[var(--tgpi-gold-light)] transition group-hover:translate-x-1">→</span>
                   </div>
-                  <p className="mt-4 text-sm font-extrabold leading-6 text-white">{course.title}</p>
+                  <p className="mt-4 text-sm font-extrabold leading-6 text-white"><LocalizedText text={course.title} /></p>
                   <p className="mt-2 text-xs leading-5 text-white/45">{course.status === "available" ? "Available now" : "Capability roadmap"}</p>
                 </Link>
               ))}

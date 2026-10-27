@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { countries } from "@/data/countries";
 import { getUserMemory } from "@/lib/user-memory";
 import { buildRecommendationSignals } from "@/lib/recommendation-signals";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 export default function RecommendedCountries() {
   const [recommended, setRecommended] = useState<typeof countries>([]);
@@ -43,7 +45,7 @@ export default function RecommendedCountries() {
               className="rounded-xl border border-slate-800 bg-slate-950 p-4"
             >
               <div className="text-2xl">{country.emoji}</div>
-              <h3 className="mt-2 font-bold text-white">{country.name}</h3>
+              <h3 className="mt-2 font-bold text-white"><LocalizedText text={country.name} /></h3>
               <p className="mt-1 text-sm text-slate-400">
                 {country.shortDescription}
               </p>

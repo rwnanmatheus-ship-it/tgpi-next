@@ -1,7 +1,8 @@
 "use client";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import { useMemo, useState } from "react";
 import dynamic from "next/dynamic";
-const SatelliteAtlas = dynamic(() => import("./SatelliteAtlas"), { ssr: false, loading: () => <p role="status">Preparing satellite explorer…</p> });
+const SatelliteAtlas = dynamic(() => import("./SatelliteAtlas"), { ssr: false, loading: () => <p role="status"><LocalizedText text="Preparing satellite explorer…" /></p> });
 export default function CountrySatellitePanel({ country, name }: { country: string; name: string }) {
   const [open, setOpen] = useState(false);
   const countries = useMemo(() => [{ slug: country, name }], [country, name]);

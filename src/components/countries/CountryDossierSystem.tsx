@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 type CountryDossierNavigationProps = {
   countryName: string;
@@ -37,7 +39,7 @@ export function CountryDossierNavigation({
               {section.index}
             </span>
             <span className="text-xs font-extrabold uppercase tracking-[0.12em] text-[#1C3858] transition group-hover:text-white group-focus-visible:text-white">
-              {section.label}
+              <LocalizedText text={section.label} />
             </span>
           </a>
         ))}

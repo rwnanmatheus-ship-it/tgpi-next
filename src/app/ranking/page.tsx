@@ -11,6 +11,8 @@ import { getGlobalRank } from "@/lib/global-ranks";
 import { getAllCountries } from "@/lib/countries";
 import { buildGlobalWorkspaceModel } from "@/lib/global-workspace";
 import { normalizeOnboardingData } from "@/lib/onboarding";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 export const metadata: Metadata = { title: "Progress & ranks — TGPI", robots: { index: false, follow: false } };
 export default async function RankingPage() {
@@ -22,5 +24,5 @@ export default async function RankingPage() {
   const activation = normalizeActivationProgress(user?.privateMetadata[TGPI_ACTIVATION_METADATA_KEY]);
   const model = buildGlobalWorkspaceModel(onboarding, getAllCountries(), activation, courses);
   const rank = getGlobalRank({...getGlobalRankSignals(activation), activationCompletion:model.activationCompletion, planCompletion:model.completion, profileCompletion:getAccountProfileCompletion(identity,profile)});
-  return <main className="min-h-screen bg-[#F8F5EE] px-4 py-8 sm:px-6 sm:py-12"><div className="mx-auto max-w-6xl"><nav aria-label="Progress navigation" className="mb-6 flex flex-wrap gap-3 text-sm font-bold text-[#0B1F3A]"><Link className="rounded-xl border border-[#D8D2C4] bg-white px-4 py-3" href="/profile">← Workspace</Link><Link className="rounded-xl border border-[#D8D2C4] bg-white px-4 py-3" href="/profile/security">Account settings</Link></nav><GlobalProgressPanel rank={rank}/></div></main>;
+  return <main className="min-h-screen bg-[#F8F5EE] px-4 py-8 sm:px-6 sm:py-12"><div className="mx-auto max-w-6xl"><nav aria-label="Progress navigation" className="mb-6 flex flex-wrap gap-3 text-sm font-bold text-[#0B1F3A]"><Link className="rounded-xl border border-[#D8D2C4] bg-white px-4 py-3" href="/profile"><LocalizedText text="← Workspace" /></Link><Link className="rounded-xl border border-[#D8D2C4] bg-white px-4 py-3" href="/profile/security"><LocalizedText text="Account settings" /></Link></nav><GlobalProgressPanel rank={rank}/></div></main>;
 }

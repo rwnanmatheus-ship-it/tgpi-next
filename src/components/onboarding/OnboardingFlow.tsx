@@ -10,6 +10,8 @@ import type {
   OnboardingPriority,
   TgpiOnboardingData,
 } from "@/types/onboarding";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 type SaveStatus = "saved" | "saving" | "error";
 
@@ -590,7 +592,7 @@ function CountriesStep({
                 aria-label={`Remove ${country.name}`}
               >
                 <span>{country.emoji}</span>
-                {country.name}
+                <LocalizedText text={country.name} />
                 <span aria-hidden="true" className="text-[#8A641F]">×</span>
               </button>
             );
@@ -619,7 +621,7 @@ function CountriesStep({
               </span>
               <span className="min-w-0">
                 <span className="block truncate text-sm font-extrabold text-[#0B1F3A]">
-                  {country.name}
+                  <LocalizedText text={country.name} />
                 </span>
                 <span className="mt-1 block truncate text-xs text-[#7A8390]">
                   {regionLabels[country.region] || country.region}
@@ -652,9 +654,7 @@ function CountriesStep({
           type="button"
           onClick={() => setVisibleCount((count) => count + 24)}
           className="mx-auto mt-6 flex min-h-11 items-center justify-center rounded-xl border border-[#CFC7B8] bg-white px-5 text-sm font-extrabold text-[#0B1F3A] transition hover:border-[#B58A2A]"
-        >
-          Show more countries
-        </button>
+        ><LocalizedText text="Show more countries" /></button>
       ) : null}
     </div>
   );
@@ -771,7 +771,7 @@ function ContextStep({
       <div className="mt-9 grid gap-5 sm:grid-cols-2">
         <label className="block">
           <span className="text-sm font-extrabold text-[#0B1F3A]">Profession or field of interest</span>
-          <span className="mt-1 block text-xs text-[#7A8390]">Optional</span>
+          <span className="mt-1 block text-xs text-[#7A8390]"><LocalizedText text="Optional" /></span>
           <input
             type="text"
             value={data.profession}
@@ -782,8 +782,8 @@ function ContextStep({
           />
         </label>
         <label className="block">
-          <span className="text-sm font-extrabold text-[#0B1F3A]">Education level</span>
-          <span className="mt-1 block text-xs text-[#7A8390]">Optional</span>
+          <span className="text-sm font-extrabold text-[#0B1F3A]"><LocalizedText text="Education level" /></span>
+          <span className="mt-1 block text-xs text-[#7A8390]"><LocalizedText text="Optional" /></span>
           <select
             value={data.educationLevel}
             onChange={(event) => updateData({ educationLevel: event.target.value })}
@@ -918,9 +918,7 @@ function PlanSummary({
       <div className="relative border-b border-white/10 p-7">
         <div aria-hidden="true" className="absolute -right-10 -top-14 h-36 w-36 rounded-full border border-[#E5BF5A]/25" />
         <div aria-hidden="true" className="absolute right-8 top-9 h-16 w-16 rounded-full border border-[#E5BF5A]/20" />
-        <p className="relative text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#F0D58C]">
-          Your global plan
-        </p>
+        <p className="relative text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#F0D58C]"><LocalizedText text="Your global plan" /></p>
         <h2 className="relative mt-4 font-[var(--tgpi-font-display)] text-3xl font-semibold leading-tight">
           A view designed for you.
         </h2>

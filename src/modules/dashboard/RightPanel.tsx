@@ -1,8 +1,10 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 export default function RightPanel() {
   return (
     <div className="space-y-6">
       <div className="rounded-3xl border border-white/10 bg-white/5 p-5">
-        <h3 className="text-yellow-400">Current Mission</h3>
+        <h3 className="text-yellow-400"><LocalizedText text="Current Mission" /></h3>
         <p className="mt-2 text-sm text-slate-400">
           Move to Canada
         </p>

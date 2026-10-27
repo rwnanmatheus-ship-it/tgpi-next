@@ -12,6 +12,8 @@ import { INDICATOR_IDS, INDICATORS, findObservation, comparisonCaveat } from "@/
 import { getIntelligence, identities } from "@/lib/intelligence/server";
 import { isComparisonGoal, getComparisonGoalConfig } from "@/lib/tgpi-comparison";
 import DossierComparison from "@/components/intelligence/DossierComparison";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
@@ -26,7 +28,7 @@ export default async function ComparePage({ searchParams }: { searchParams?: Pro
   const goal = isComparisonGoal(params?.goal) ? params.goal : "overall";
   const countries = getAllCountries().map(({ slug, name, emoji, region }) => ({ slug, name, emoji, region })).sort((a, b) => a.name.localeCompare(b.name));
   return <ActivationProgressProvider><main className="ig-shell"><div className="ig-container">
-    <AreaHero id="compare-title" eyebrow="TGPI / Compare with purpose" title={<>Better questions.<br />Clearer decisions.</>} description="Put up to three countries side by side. Inspect the sources, dates and gaps, then connect the trade-offs to your own priorities." image="/images/home/editorial-v5/hero-desktop.webp" actions={[{href:"#comparison-builder",label:"Build my comparison"},{href:"/countries",label:"Explore destinations"}]} />
+    <AreaHero id="compare-title" eyebrow="TGPI / Compare with purpose" title={<><LocalizedText text="Better questions." /><br />Clearer decisions.</>} description="Put up to three countries side by side. Inspect the sources, dates and gaps, then connect the trade-offs to your own priorities." image="/images/home/editorial-v5/hero-desktop.webp" actions={[{href:"#comparison-builder",label:"Build my comparison"},{href:"/countries",label:"Explore destinations"}]} />
     <PersonalResearchContext />
     <CompareCountryPicker countries={countries} initialSlugs={slugs} initialGoal={goal} hasExplicitSelection={requested.length > 0} />
     {raw.length > 3 || requested.some(s => !valid.has(s)) ? <p className="ig-status">Only valid country selections are shown, up to three at a time.</p> : null}

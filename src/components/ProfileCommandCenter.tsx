@@ -13,6 +13,8 @@ import OnlineNow from "@/components/OnlineNow";
 import CommandCenterNav from "@/components/CommandCenterNav";
 import ProfileAvatarUploader from "@/components/ProfileAvatarUploader";
 import ProfileDetailsForm from "@/components/ProfileDetailsForm";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 type ViewMode = "profile" | "dashboard";
 
@@ -281,7 +283,7 @@ export default function ProfileCommandCenter({ mode }: { mode: ViewMode }) {
                   </div>
 
                   <div className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950 p-3">
-                    <span className="text-slate-400">Level</span>
+                    <span className="text-slate-400"><LocalizedText text="Level" /></span>
                     <span className="font-semibold text-white">{profile?.level ?? 1}</span>
                   </div>
 
@@ -383,7 +385,7 @@ export default function ProfileCommandCenter({ mode }: { mode: ViewMode }) {
                   href="/countries"
                   className="block rounded-2xl border border-slate-800 bg-slate-900 p-4 transition hover:border-yellow-500/40"
                 >
-                  <p className="font-semibold text-white">Explore Countries</p>
+                  <p className="font-semibold text-white"><LocalizedText text="Explore Countries" /></p>
                   <p className="mt-1 text-sm text-slate-400">
                     Compare destinations and strengthen your decision signals.
                   </p>

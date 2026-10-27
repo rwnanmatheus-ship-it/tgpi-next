@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { SignOutButton } from "@clerk/nextjs";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 type Props = {
   email?: string;
@@ -50,7 +52,7 @@ export default function AccountSecurityPanel({ email = "", updatedAt = "" }: Pro
         </div>
 
         <SignOutButton redirectUrl="/">
-          <button type="button" className="w-full rounded-2xl border border-red-500/25 bg-red-500/10 px-5 py-3 font-semibold text-red-200 transition hover:bg-red-500/15">Sign out</button>
+          <button type="button" className="w-full rounded-2xl border border-red-500/25 bg-red-500/10 px-5 py-3 font-semibold text-red-200 transition hover:bg-red-500/15"><LocalizedText text="Sign out" /></button>
         </SignOutButton>
       </div>
     </section>

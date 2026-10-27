@@ -9,6 +9,8 @@ import type {
   WorkspaceAction,
   WorkspaceActionStatus,
 } from "@/lib/global-workspace";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 type GlobalWorkspaceV1Props = {
   firstName: string;
@@ -69,9 +71,7 @@ export default function GlobalWorkspaceV1({
           <div className="bg-[#0B1F3A] p-6 text-white sm:p-8 lg:p-10">
             <div className="flex items-end justify-between gap-5">
               <div>
-                <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#F0D58C]">
-                  Global profile
-                </p>
+                <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#F0D58C]"><LocalizedText text="Global profile" /></p>
                 <p className="mt-3 font-[var(--tgpi-font-display)] text-4xl font-semibold">
                   {model.completion}% complete
                 </p>
@@ -79,9 +79,7 @@ export default function GlobalWorkspaceV1({
               <Link
                 href="/onboarding"
                 className="text-xs font-extrabold text-[#F0D58C] underline decoration-[#F0D58C]/40 underline-offset-4"
-              >
-                Edit plan
-              </Link>
+              ><LocalizedText text="Edit plan" /></Link>
             </div>
             <div className="mt-5 h-2 overflow-hidden rounded-full bg-white/10">
               <div
@@ -151,16 +149,12 @@ export default function GlobalWorkspaceV1({
           <div className="p-6 sm:p-8">
             <div className="flex items-end justify-between gap-4">
               <div>
-                <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#956A13]">
-                  Recent activity
-                </p>
+                <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#956A13]"><LocalizedText text="Recent activity" /></p>
                 <h2 className="mt-2 font-[var(--tgpi-font-display)] text-3xl font-semibold">
                   Your work continues across devices.
                 </h2>
               </div>
-              <span className="rounded-full border border-[#D8D2C4] bg-[#F7F2E8] px-3 py-2 text-[9px] font-extrabold uppercase tracking-[0.14em] text-[#657082]">
-                Private
-              </span>
+              <span className="rounded-full border border-[#D8D2C4] bg-[#F7F2E8] px-3 py-2 text-[9px] font-extrabold uppercase tracking-[0.14em] text-[#657082]"><LocalizedText text="Private" /></span>
             </div>
 
             {model.recentActivities.length ? (

@@ -3,6 +3,8 @@
 import Link from "next/link";
 import CertificateDownloadButton from "@/components/credentials/CertificateDownloadButton";
 import { useDeferredValue, useState } from "react";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 export type CredentialPortfolioItem = {
   assessmentScore: number;
@@ -161,8 +163,7 @@ export default function CredentialPortfolioExplorer({
                 <h3>{item.courseTitle}</h3>
                 <p className="certificate-earned-meta">
                   {item.assessmentScore}% mastery · {item.learningHours} hours
-                  <br />
-                  Issued {formatDate(item.issuedAt)}
+                  <br /><LocalizedText text="Issued" />{" "}{formatDate(item.issuedAt)}
                 </p>
                 <div className="certificate-skills">
                   {item.skills.slice(0, 4).map((skill) => (
@@ -170,7 +171,7 @@ export default function CredentialPortfolioExplorer({
                   ))}
                 </div>
                 <div className="certificate-reference">
-                  <span>Certificate ID</span>
+                  <span><LocalizedText text="Certificate ID" /></span>
                   <code>{item.id}</code>
                 </div>
                 <div className="certificate-earned-actions">

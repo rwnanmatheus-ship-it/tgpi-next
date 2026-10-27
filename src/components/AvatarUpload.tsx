@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import { updateProfile } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { uploadAvatar } from "@/lib/storage";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 export default function AvatarUpload() {
   const [loading, setLoading] = useState(false);
@@ -69,7 +71,7 @@ export default function AvatarUpload() {
         )}
 
         <div>
-          <p className="text-sm font-medium text-slate-300">Profile photo</p>
+          <p className="text-sm font-medium text-slate-300"><LocalizedText text="Profile photo" /></p>
           <p className="mt-1 text-xs text-slate-400">
             Personalize your TGPI identity.
           </p>

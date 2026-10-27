@@ -8,6 +8,8 @@ import ActivationProgressProvider, {
 import { getCourseLessons } from "@/data/courses";
 import { getCourseStandardAudit } from "@/lib/learning-standard";
 import type { Course } from "@/types/course";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 function formatDuration(totalMinutes: number) {
   const hours = Math.floor(totalMinutes / 60);
@@ -97,7 +99,7 @@ function CourseOverview({ course }: { course: Course }) {
                 </span>
               </div>
               <h1 className="mt-6 max-w-4xl font-[var(--tgpi-font-display)] text-[clamp(2.3rem,4.5vw,4.2rem)] font-semibold leading-[0.91] tracking-[-0.05em]">
-                {course.title}
+                <LocalizedText text={course.title} />
               </h1>
               <p className="mt-6 max-w-3xl text-base leading-8 text-white/70 sm:text-lg">
                 {course.description}
@@ -398,7 +400,7 @@ function CourseOverview({ course }: { course: Course }) {
               </Link>
             </div>
           </aside>
-          ) : <aside className="self-start rounded-[26px] border border-[var(--tgpi-border)] bg-white p-7 sm:p-9"><p className="text-sm font-bold text-[var(--tgpi-gold-strong)]">Applied short course</p><h2 className="mt-3 text-3xl font-semibold">Make something you can use.</h2><p className="mt-4 text-base leading-7 text-[var(--tgpi-muted)]">Complete the lessons and formative checkpoints, then self-review your practical outputs. Lesson progress is saved to your account. This course does not issue a professional certificate.</p><Link href="/dashboard" className="mt-5 inline-flex min-h-12 items-center rounded-xl bg-[var(--tgpi-navy)] px-5 text-sm font-bold text-white">Open my workspace →</Link></aside>}
+          ) : <aside className="self-start rounded-[26px] border border-[var(--tgpi-border)] bg-white p-7 sm:p-9"><p className="text-sm font-bold text-[var(--tgpi-gold-strong)]">Applied short course</p><h2 className="mt-3 text-3xl font-semibold">Make something you can use.</h2><p className="mt-4 text-base leading-7 text-[var(--tgpi-muted)]">Complete the lessons and formative checkpoints, then self-review your practical outputs. Lesson progress is saved to your account. This course does not issue a professional certificate.</p><Link href="/dashboard" className="mt-5 inline-flex min-h-12 items-center rounded-xl bg-[var(--tgpi-navy)] px-5 text-sm font-bold text-white"><LocalizedText text="Open my workspace →" /></Link></aside>}
         </section>
 
         <section className="pb-16" aria-labelledby="curriculum-title">
@@ -428,8 +430,7 @@ function CourseOverview({ course }: { course: Course }) {
                 <article key={courseModule.id} className="overflow-hidden rounded-[28px] border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] shadow-[var(--tgpi-shadow-sm)]">
                   <div className="grid gap-6 border-b border-[var(--tgpi-border-soft)] bg-white p-6 sm:p-8 lg:grid-cols-[1fr_auto] lg:items-end">
                     <div>
-                      <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-strong)]">
-                        Module {String(moduleIndex + 1).padStart(2, "0")}
+                      <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-strong)]"><LocalizedText text="Module" />{" "}{String(moduleIndex + 1).padStart(2, "0")}
                       </p>
                       <h3 className="mt-3 text-3xl font-semibold sm:text-4xl">{courseModule.title}</h3>
                       <p className="mt-3 max-w-3xl text-sm leading-7 text-[var(--tgpi-muted)]">{courseModule.description}</p>

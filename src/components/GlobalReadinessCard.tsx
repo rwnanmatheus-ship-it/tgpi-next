@@ -6,6 +6,8 @@ import {
   calculateGlobalReadinessScore,
   getReadinessLevel,
 } from "@/lib/global-readiness-score";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 type GlobalReadinessCardProps = {
   score?: number;
@@ -50,8 +52,7 @@ export default function GlobalReadinessCard({
       </div>
 
       <p className="mt-3 inline-block rounded-full border border-yellow-500/30 bg-yellow-500/10 px-3 py-1 text-sm text-yellow-200">
-        {level} Level
-      </p>
+        {level}{" "}<LocalizedText text="Level" /></p>
 
       <p className="mt-4 text-sm leading-6 text-slate-300">
         This score reflects how prepared your TGPI journey is becoming based on
