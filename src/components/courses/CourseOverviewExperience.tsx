@@ -355,7 +355,7 @@ function CourseOverview({ course, workshop }: { course: Course; workshop?: React
             </p>
           </div>
 
-          {course.credential.status === "live" ? (
+          {course.id === "global-english-2026" || course.credential.status === "live" ? (
           <aside className="overflow-hidden rounded-[30px] border border-[var(--tgpi-gold)]/30 bg-[#FFF7DE] shadow-[var(--tgpi-shadow-soft)]" aria-label="Professional credential pathway">
             <div className="p-7 sm:p-9">
               <div className="flex items-center justify-between gap-3">

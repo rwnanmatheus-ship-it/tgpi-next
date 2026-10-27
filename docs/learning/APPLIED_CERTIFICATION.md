@@ -41,3 +41,11 @@ Live end-to-end validation still requires a disposable authenticated learner and
 This increment implements the practical submission/review/certification service and public-curriculum tutor context. It does not establish independent academic content review, a validated automated evaluator, robust equivalent English retake banks, measured retention, a separate formal appeals operation, an editable versioned curriculum CMS, track credentials or a controlled name-correction/reissue workflow. Existing lesson text and fourteen workshops are available; no claimed university-level equivalence is made. The English bank's legacy rules are preserved, including prior earned credentials.
 
 Deployment records and live results must be appended after Preview and production verification; a successful build alone is not evidence of these unresolved learning outcomes.
+
+## Release checkpoint
+
+Remote implementation commit: `3da96924037a070267622fbd809ab258684b0fb9`; source tree `0419139523c1e230c35feef54c4c8db91ceab02b`. Preview deployment `dpl_95fgY51mhDKj4bLYdeWxPgBZ6cLB` is READY at https://tgpi-next-yjr80e8ee-rwnanmatheus-ship-its-projects.vercel.app . Production is still the prior `fc39e5a` release.
+
+Preview and production both list the existing learning-storage and credential-signing environment variable names. Their secret values were not inspected. The environment metadata does not list `OPENAI_API_KEY` or the `TGPI_ATLAS_*` activation variables required by the current Atlas generation guard. Contextual tutor code is implemented, but live AI responses are not activated or verified.
+
+A controlled browser test reached Vercel Authentication and the user selected GitHub through the secure authentication capability. GitHub returned “Incorrect username or password”; no signed-in session was established. No credentials were inspected, retained in code, or written to this record. The browser is being handed back for authentication. No production promotion was performed because the required controlled authenticated learning and credential acceptance flow remains unverified.
