@@ -13,7 +13,11 @@ function reference(uid: string, courseId: string, version: string, lessonId: str
 }
 
 export async function readJournal(uid: string, courseId: string, version: string, lessonId: string) {
-  return (await getFirestoreDocument<LearningJournal>(reference(uid, courseId, version, lessonId)))?.data ?? null;
+  // Historical journals remain readable even when a lesson/version leaves the current catalogue.
+  // The authenticated owner and validated path still define the entire access boundary.
+  const path = journalPath(uid, courseId, version, lessonId);
+  if (!isLearningStorageConfigured()) throw new JournalError("Private learning storage is unavailable.", 503);
+  return (await getFirestoreDocument<LearningJournal>(path))?.data ?? null;
 }
 
 export async function saveJournal(uid: string, raw: unknown) {
@@ -23,6 +27,13 @@ export async function saveJournal(uid: string, raw: unknown) {
   const path = reference(uid, input.courseId, input.courseVersion, input.lessonId);
   return runFirestoreTransaction(async ({ getDocuments }) => {
     const existing = (await getDocuments<LearningJournal>([path])).get(path);
+    // A lost HTTP response must not turn a successful save into a false conflict.
+    // Only the exact payload at the immediately following revision can be replayed.
+    if (existing?.data.revision === input.revision + 1 &&
+      existing.data.notes === input.notes && existing.data.practice === input.practice &&
+      existing.data.diagnostic === input.diagnostic && existing.data.reviewDays === input.reviewDays &&
+      existing.data.courseId === input.courseId && existing.data.courseVersion === input.courseVersion &&
+      existing.data.lessonId === input.lessonId) return { result: existing.data, writes: [] };
     if ((existing?.data.revision ?? 0) !== input.revision) throw new JournalError("A newer copy was saved in another tab or device. Copy your draft before reloading.", 409);
     const journal = nextJournal(input, new Date());
     return { result: journal, writes: [createFirestoreUpdateWrite(path, { ...journal }, existing?.updateTime ? { updateTime: existing.updateTime } : { exists: false })] };

@@ -100,6 +100,23 @@ test('unavailable storage is an explicit error rather than a false saved state',
   await assert.rejects(store.saveJournal('alice', input({})), error => error.status === 503);
 });
 
+test('retry after a lost response is idempotent and does not move the review date', async () => {
+  const { store, data } = storage(); const entry = input({});
+  const first = await store.saveJournal('alice', entry);
+  const replay = await store.saveJournal('alice', entry);
+  assert.deepEqual(replay, first);
+  assert.equal(data.size, 1);
+  await assert.rejects(store.saveJournal('alice', input({ notes: 'different stale draft' })), error => error.status === 409);
+});
+test('historical notes remain readable only by their owner after a curriculum change', async () => {
+  const { store, data } = storage(); const entry = input({ courseVersion: 'old-archived' });
+  const record = journal.nextJournal(entry, new Date('2026-01-01T00:00:00Z'));
+  data.set(journal.journalPath('alice', entry.courseId, entry.courseVersion, entry.lessonId), record);
+  assert.deepEqual(await store.readJournal('alice', entry.courseId, entry.courseVersion, entry.lessonId), record);
+  assert.equal(await store.readJournal('bob', entry.courseId, entry.courseVersion, entry.lessonId), null);
+  await assert.rejects(store.saveJournal('alice', { ...entry, revision: 1 }), error => error.status === 409);
+});
+
 if (process.env.TGPI_WRITE_LEARNING_MATRIX === 'true') {
   const { writeFileSync } = await import('node:fs');
   const rows = courses.map(course => {
