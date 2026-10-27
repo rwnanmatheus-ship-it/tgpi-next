@@ -3,6 +3,8 @@
 import { useSyncExternalStore } from "react";
 import { HOME_GOALS, homeGoal } from "@/lib/home-journey";
 import styles from "./home.module.css";
+import { LocalizedText, useLocale } from "@/components/localization/LocaleProvider";
+
 
 const changeEvent = "tgpi:home-goal";
 function subscribe(callback: () => void) {
@@ -14,6 +16,7 @@ function snapshot() { return homeGoal(new URLSearchParams(window.location.search
 function serverSnapshot() { return "study" as const; }
 
 export default function HomeGoalExplorer() {
+  const { t } = useLocale();
   const goal = useSyncExternalStore(subscribe, snapshot, serverSnapshot);
   const current = HOME_GOALS.find(item => item.id === goal)!;
   function choose(value: string) {
@@ -24,20 +27,20 @@ export default function HomeGoalExplorer() {
   }
   return <form action="/country-fit" method="get" className={styles.goalExplorer} aria-labelledby="goal-explorer-title">
     <div className={styles.goalControls}>
-      <p className={styles.eyebrow}>Make the first step yours</p>
-      <h3 id="goal-explorer-title">What brings you here?</h3>
-      <fieldset className={styles.goalOptions}><legend className="sr-only">Choose your goal</legend>
+      <p className={styles.eyebrow}><LocalizedText text="Make the first step yours" /></p>
+      <h3 id="goal-explorer-title"><LocalizedText text="What brings you here?" /></h3>
+      <fieldset className={styles.goalOptions}><legend className="sr-only"><LocalizedText text="Choose your goal" /></legend>
         {HOME_GOALS.map(item => <label key={item.id} className={styles.goalOption}>
           <input type="radio" name="goal" value={item.id} checked={goal === item.id} onChange={() => choose(item.id)} />
-          <span>{item.label}</span><span aria-hidden="true">↗</span>
+          <span><LocalizedText text={item.label} /></span><span aria-hidden="true">↗</span>
         </label>)}
       </fieldset>
-      <p className={styles.goalHint}>A starting point, not a commitment. Your choice stays in this page’s URL.</p>
+      <p className={styles.goalHint}><LocalizedText text="A starting point, not a commitment. Your choice stays in this page’s URL." /></p>
     </div>
     <div className={styles.goalResult}>
-      <div aria-live="polite" aria-atomic="true"><p className={styles.goalResultLabel}>Your starting point · {current.label}</p><h3>{current.heading}</h3><p className={styles.goalDescription}>{current.copy}</p><ul>{current.checks.map(check => <li key={check}><span aria-hidden="true">✓</span>{check}</li>)}</ul><p className={styles.goalOutcome}>{current.outcome}</p></div>
-      <div className={styles.goalLaunch}><label htmlFor="home-research-country">Start researching<select id="home-research-country" name="country" defaultValue="portugal"><option value="portugal">Portugal</option><option value="canada">Canada</option></select></label><button type="submit" className={styles.primary}>Build my research plan <span aria-hidden="true">→</span></button></div>
-      <p className={styles.goalHint}>Example destinations. Country Fit lets you explore other countries and save a plan after signing in.</p>
+      <div aria-live="polite" aria-atomic="true"><p className={styles.goalResultLabel}>{t("Your starting point · {goal}", { goal: t(current.label) })}</p><h3>{t(current.heading)}</h3><p className={styles.goalDescription}>{t(current.copy)}</p><ul>{current.checks.map(check => <li key={check}><span aria-hidden="true">✓</span>{t(check)}</li>)}</ul><p className={styles.goalOutcome}>{t(current.outcome)}</p></div>
+      <div className={styles.goalLaunch}><label htmlFor="home-research-country"><LocalizedText text="Start researching" /><select id="home-research-country" name="country" defaultValue="portugal"><option value="portugal">{t("Portugal")}</option><option value="canada">{t("Canada")}</option></select></label><button type="submit" className={styles.primary}><LocalizedText text="Build my research plan" />{" "}<span aria-hidden="true">→</span></button></div>
+      <p className={styles.goalHint}><LocalizedText text="Example destinations. Country Fit lets you explore other countries and save a plan after signing in." /></p>
     </div>
   </form>;
 }

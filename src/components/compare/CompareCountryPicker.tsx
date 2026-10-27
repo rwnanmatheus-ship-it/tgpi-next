@@ -9,6 +9,8 @@ import {
   getComparisonGoalConfig,
   type ComparisonGoal,
 } from "@/lib/tgpi-comparison";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 const MAX_COUNTRIES = 3;
 const STORAGE_KEY = "tgpi-country-comparison:v1";
@@ -387,9 +389,7 @@ export default function CompareCountryPicker({
                 type="button"
                 onClick={clearSelection}
                 className="min-h-10 rounded-xl px-4 text-xs font-extrabold text-[var(--tgpi-gold-strong)] transition hover:bg-[var(--tgpi-gold-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
-              >
-                Clear
-              </button>
+              ><LocalizedText text="Clear" /></button>
             </div>
           </div>
         </div>

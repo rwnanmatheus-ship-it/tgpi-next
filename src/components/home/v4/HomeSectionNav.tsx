@@ -1,12 +1,16 @@
 "use client";
+import { useLocale } from "@/components/localization/LocaleProvider";
 
 import { useEffect, useRef, useState } from "react";
 import { HOME_SECTIONS } from "@/lib/home-journey";
 import styles from "./home.module.css";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 type SectionId = typeof HOME_SECTIONS[number]["id"];
 
 export default function HomeSectionNav() {
+  const { t } = useLocale();
   const [active, setActive] = useState<SectionId>("how-it-works");
   const ref = useRef<HTMLElement>(null);
   useEffect(() => {
@@ -35,11 +39,11 @@ export default function HomeSectionNav() {
     target.focus({ preventScroll: true });
   }
   const index = HOME_SECTIONS.findIndex(section => section.id === active);
-  return <nav ref={ref} className={styles.sectionNav} aria-label="On this page">
+  return <nav ref={ref} className={styles.sectionNav} aria-label={t("On this page")}>
     <div className={`${styles.container} ${styles.sectionNavInner}`}>
-      <span className={styles.sectionNavLabel}>Inside TGPI</span>
-      <ol className={styles.sectionNavLinks}>{HOME_SECTIONS.map((section, i) => <li key={section.id}><a href={`#${section.id}`} aria-current={active === section.id ? "location" : undefined}><span aria-hidden="true">0{i + 1}</span>{section.short}</a></li>)}</ol>
-      <label className={styles.sectionNavSelect}><span className="sr-only">Jump to a section</span><select value={active} onChange={event => jump(event.target.value)}>{HOME_SECTIONS.map((section, i) => <option key={section.id} value={section.id}>0{i + 1} · {section.label}</option>)}</select></label>
+      <span className={styles.sectionNavLabel}><LocalizedText text="Inside TGPI" /></span>
+      <ol className={styles.sectionNavLinks}>{HOME_SECTIONS.map((section, i) => <li key={section.id}><a href={`#${section.id}`} aria-current={active === section.id ? "location" : undefined}><span aria-hidden="true">0{i + 1}</span>{t(section.short)}</a></li>)}</ol>
+      <label className={styles.sectionNavSelect}><span className="sr-only"><LocalizedText text="Jump to a section" /></span><select value={active} onChange={event => jump(event.target.value)}>{HOME_SECTIONS.map((section, i) => <option key={section.id} value={section.id}>0{i + 1} · {t(section.label)}</option>)}</select></label>
       <span className={styles.sectionCount} aria-hidden="true">0{index + 1}<span> / 06</span></span>
     </div>
   </nav>;

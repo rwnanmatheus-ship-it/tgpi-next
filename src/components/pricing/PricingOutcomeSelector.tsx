@@ -2,6 +2,8 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 const outcomes = [
   {
@@ -124,7 +126,7 @@ export default function PricingOutcomeSelector() {
 
               <div className="mt-5 flex flex-col gap-4 rounded-2xl border border-[#D7B45D]/25 bg-[#D7B45D]/8 p-5 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                  <p className="text-[9px] font-extrabold uppercase tracking-[0.2em] text-[#F0D58C]">Designed outcome</p>
+                  <p className="text-[9px] font-extrabold uppercase tracking-[0.2em] text-[#F0D58C]"><LocalizedText text="Designed outcome" /></p>
                   <p className="mt-2 text-sm font-bold text-white">{active.result}</p>
                 </div>
                 <Link href="#membership" className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[#B58A2A] px-5 text-sm font-extrabold text-[#071A31] transition hover:bg-[#C79B36]">

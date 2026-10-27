@@ -15,6 +15,8 @@ import ActivationProgressProvider, {
 } from "@/components/activation/ActivationProgressProvider";
 import { getCourseLessons } from "@/data/courses";
 import type { Course, CourseLesson, CourseModule } from "@/types/course";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 type LessonExperienceProps = {
   course: Course;
@@ -157,8 +159,7 @@ function Lesson({
           </div>
           <header className="rounded-[30px] border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] p-7 shadow-[var(--tgpi-shadow-soft)] sm:p-10">
             <div className="flex flex-wrap items-center gap-2">
-              <span className="rounded-full bg-[var(--tgpi-navy)] px-3 py-2 text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-gold-light)]">
-                Module {course.modules.findIndex((item) => item.id === courseModule.id) + 1}
+              <span className="rounded-full bg-[var(--tgpi-navy)] px-3 py-2 text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-gold-light)]"><LocalizedText text="Module" />{" "}{course.modules.findIndex((item) => item.id === courseModule.id) + 1}
               </span>
               <span className="rounded-full border border-[var(--tgpi-border)] bg-white px-3 py-2 text-[10px] font-extrabold uppercase tracking-[0.16em] text-[var(--tgpi-muted)]">
                 {lesson.durationMinutes} minutes
@@ -350,8 +351,7 @@ function Lesson({
               </div>
 
               {attemptCount > 0 ? (
-                <p className="mt-3 text-xs font-bold text-[#7A6948]">
-                  Attempt {attemptCount}. {course.id === "global-english-2026" ? "Feedback is part of learning; certificate scoring begins only at the performance gates." : "Review the feedback and apply the decision rule to your practical output."}
+                <p className="mt-3 text-xs font-bold text-[#7A6948]"><LocalizedText text="Attempt" />{" "}{attemptCount}. {course.id === "global-english-2026" ? "Feedback is part of learning; certificate scoring begins only at the performance gates." : "Review the feedback and apply the decision rule to your practical output."}
                 </p>
               ) : null}
 

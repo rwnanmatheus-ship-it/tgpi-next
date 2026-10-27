@@ -1,13 +1,13 @@
 import Link from "next/link";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 const rooms = ["canada", "portugal", "usa", "germany", "japan"];
 
 export default function GlobalRoomsList() {
   return (
     <section className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-      <h2 className="text-xl font-bold text-yellow-400">
-        Global Rooms
-      </h2>
+      <h2 className="text-xl font-bold text-yellow-400"><LocalizedText text="Global Rooms" /></h2>
 
       <div className="mt-4 grid gap-4 md:grid-cols-3">
         {rooms.map((room) => (

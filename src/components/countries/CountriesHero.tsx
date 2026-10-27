@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { COUNTRY_DECISION_PRESETS } from "@/data/country-page-system";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 interface CountriesHeroProps {
   countryCount: number;
@@ -51,8 +53,7 @@ export default function CountriesHero({
             Understand a country before you choose a future.
           </h1>
 
-          <p className="mt-5 max-w-2xl text-base leading-7 text-[#D2DCE7] sm:text-lg sm:leading-8">
-            Explore {countryCount} country systems through cost, safety, language,
+          <p className="mt-5 max-w-2xl text-base leading-7 text-[#D2DCE7] sm:text-lg sm:leading-8"><LocalizedText text="Explore" />{" "}{countryCount} country systems through cost, safety, language,
             education, careers, culture and mobility—then carry the decision into
             comparison, documents and learning.
           </p>

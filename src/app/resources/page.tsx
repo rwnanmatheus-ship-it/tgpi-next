@@ -7,6 +7,8 @@ import ResourceExplorer, {
 } from "@/components/resources/ResourceExplorer";
 import { TGPI_FREE_PLAN, TGPI_PREMIUM_PLAN } from "@/lib/subscription-plans";
 import "./resources.css";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 export const metadata: Metadata = {
   title: "Resources — Explore, Learn & Prepare | TGPI",
@@ -137,10 +139,8 @@ export default async function ResourcesPage() {
             <p className="resources-kicker">
               The Global Polymath Institute / Resources
             </p>
-            <h1 id="resources-title">
-              A wider world.
-              <br />
-              <em>A clearer next step.</em>
+            <h1 id="resources-title"><LocalizedText text="A wider world." /><br />
+              <em><LocalizedText text="A clearer next step." /></em>
             </h1>
             <p>
               Explore your options. Build practical skills. Prepare with

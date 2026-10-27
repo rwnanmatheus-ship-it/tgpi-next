@@ -2,6 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 import BrandCrest from "@/components/BrandCrest";
 import styles from "./auth.module.css";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 type TGPIAuthShellProps = { children: React.ReactNode; mode: "sign-in" | "sign-up" | "welcome" };
 
@@ -33,8 +35,8 @@ export default function TGPIAuthShell({ children, mode }: TGPIAuthShellProps) {
             <span><strong>TGPI</strong><small>The Global Polymath Institute</small></span>
           </Link>
           <div className={styles.storyCopy}>
-            <span className={styles.eyebrow}><span className={styles.signal} /> Education for a global life</span>
-            <h1>Your world.<br />A clearer direction.</h1>
+            <span className={styles.eyebrow}><span className={styles.signal} />{" "}<LocalizedText text="Education for a global life" /></span>
+            <h1><LocalizedText text="Your world." /><br />A clearer direction.</h1>
             <p>Understand your options. Build your skills.<br />Create a global plan that starts with you.</p>
           </div>
           <div className={styles.pathways} aria-label="Your TGPI journey">
@@ -49,7 +51,7 @@ export default function TGPIAuthShell({ children, mode }: TGPIAuthShellProps) {
             {joining ? <ol className={styles.steps} aria-label="Registration steps"><li aria-current={mode === "sign-up" ? "step" : undefined}><span>1</span> Secure access</li><li aria-current={mode === "welcome" ? "step" : undefined}><span>2</span> Your profile</li></ol> : null}
             <div className={styles.authWidget}>{children}</div>
             <div className={styles.security}><AccessSymbol kind="shield" /><p>Secure access. Your progress stays connected.</p></div>
-            <nav className={styles.legal} aria-label="Account help and policies"><Link href="/privacy">Privacy</Link><span aria-hidden="true">·</span><Link href="/terms">Terms</Link><span aria-hidden="true">·</span><a href="mailto:contact@theglobalpolymath.com">Need help?</a></nav>
+            <nav className={styles.legal} aria-label="Account help and policies"><Link href="/privacy"><LocalizedText text="Privacy" /></Link><span aria-hidden="true">·</span><Link href="/terms"><LocalizedText text="Terms" /></Link><span aria-hidden="true">·</span><a href="mailto:contact@theglobalpolymath.com">Need help?</a></nav>
           </div>
         </section>
       </div>

@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { CommunityCard, Page } from "@/lib/community/model";
 import { api } from "./api";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 export default function CommunityConnections() {
   const [items, setItems] = useState<CommunityCard[]>([]),
     [status, setStatus] = useState("Loading community connections…");
@@ -32,9 +34,7 @@ export default function CommunityConnections() {
       className="rounded-[28px] border border-white/10 bg-[#08131F] p-5 sm:p-6"
       aria-labelledby="workspace-community"
     >
-      <p className="text-xs font-bold uppercase tracking-widest text-[#E5B94B]">
-        Global Community
-      </p>
+      <p className="text-xs font-bold uppercase tracking-widest text-[#E5B94B]"><LocalizedText text="Global Community" /></p>
       <h2 id="workspace-community" className="mt-2 text-2xl text-white">
         Continue the conversation.
       </h2>
@@ -65,7 +65,7 @@ export default function CommunityConnections() {
       <div className="mt-4 flex flex-wrap gap-4 text-sm font-bold text-[#F0D58C]">
         <Link href="/community">Explore communities →</Link>
         <Link href="/community?view=requests">My requests</Link>
-        <Link href="/community?view=saved">Saved contributions</Link>
+        <Link href="/community?view=saved"><LocalizedText text="Saved contributions" /></Link>
         <Link href="/community?view=meetings">Upcoming sessions</Link>
       </div>
     </section>

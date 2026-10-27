@@ -1,4 +1,7 @@
 "use client";
+import { useLocale } from "@/components/localization/LocaleProvider";
+import { localeOptions } from "@/lib/localization/config";
+import LanguageSelector from "@/components/localization/LanguageSelector";
 
 import { announceProgressSaved } from "@/lib/progress-sync";
 import Link from "next/link";
@@ -25,6 +28,8 @@ import {
 import {
   type GlobalRank,
 } from "@/lib/global-ranks";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 type CountryOption = { emoji: string; name: string; slug: string };
 type DecisionContext = {
@@ -269,7 +274,7 @@ function AccountAvatar({
       role="img"
       style={imageUrl ? { backgroundImage: `url(${imageUrl})` } : undefined}
     >
-      {!imageUrl ? initials : <span className="sr-only">{label}</span>}
+      {!imageUrl ? initials : <span className="sr-only"><LocalizedText text={label} /></span>}
     </span>
   );
 }
@@ -290,8 +295,8 @@ function Field({
   const control = nodes.map((node, index) => index === primary ? cloneElement(node as ReactElement<{ id?: string; "aria-describedby"?: string }>, { id, "aria-describedby": description ? `${id}-description` : undefined }) : node);
   return (
     <div className="block">
-      {nativeInput ? <label htmlFor={id} className="text-sm font-extrabold text-[#0B1F3A]">{label}</label> : <p className="text-sm font-extrabold text-[#0B1F3A]">{label}</p>}
-      {description ? <p id={`${id}-description`} className="mt-1 text-xs leading-5 text-[#526174]">{description}</p> : null}
+      {nativeInput ? <label htmlFor={id} className="text-sm font-extrabold text-[#0B1F3A]"><LocalizedText text={label} /></label> : <p className="text-sm font-extrabold text-[#0B1F3A]"><LocalizedText text={label} /></p>}
+      {description ? <p id={`${id}-description`} className="mt-1 text-xs leading-5 text-[#526174]"><LocalizedText text={description} /></p> : null}
       <div className="mt-2">{control}</div>
     </div>
   );
@@ -311,8 +316,8 @@ function Toggle({
   return (
     <label className="flex cursor-pointer items-center justify-between gap-5 border-b border-[#E8E3D9] px-4 py-4 last:border-0 sm:px-5">
       <span>
-        <span className="block text-sm font-extrabold text-[#0B1F3A]">{label}</span>
-        <span className="mt-1 block text-xs leading-5 text-[#697386]">{description}</span>
+        <span className="block text-sm font-extrabold text-[#0B1F3A]"><LocalizedText text={label} /></span>
+        <span className="mt-1 block text-xs leading-5 text-[#697386]"><LocalizedText text={description} /></span>
       </span>
       <input checked={checked} className="peer sr-only" onChange={(event) => onChange(event.target.checked)} type="checkbox" />
       <span className="relative h-7 w-12 shrink-0 rounded-full bg-[#D4D7DC] transition peer-checked:bg-[#0B1F3A] peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-[#B58A2A]">
@@ -337,8 +342,8 @@ function ScreenHeading({
         <SettingsIcon section={section} />
       </span>
       <div>
-        <h2 className="font-[var(--tgpi-font-display)] text-3xl font-semibold tracking-[-0.035em] text-[#0B1F3A] sm:text-4xl">{title}</h2>
-        <p className="mt-2 max-w-2xl text-sm leading-6 text-[#667085]">{description}</p>
+        <h2 className="font-[var(--tgpi-font-display)] text-3xl font-semibold tracking-[-0.035em] text-[#0B1F3A] sm:text-4xl"><LocalizedText text={title} /></h2>
+        <p className="mt-2 max-w-2xl text-sm leading-6 text-[#667085]"><LocalizedText text={description} /></p>
       </div>
     </div>
   );
@@ -364,6 +369,7 @@ export default function TgpiAccountCenter({
   initialProfile,
   rank,
 }: TgpiAccountCenterProps) {
+  const { locale } = useLocale();
   const { user } = useUser();
   const pathname = usePathname();
   const router = useRouter();
@@ -397,7 +403,7 @@ export default function TgpiAccountCenter({
     identity: profile.currentCity || profile.currentCountry || "Add personal information",
     progress: `${rank.name} · ${rank.points} points`,
     notifications: `${Object.values(profile.notifications).filter(Boolean).length} enabled`,
-    preferences: `${profile.preferredLanguage} · ${profile.preferredCurrency}`,
+    preferences: `${localeOptions.find(option => option.code === locale)?.name} · ${profile.preferredCurrency}`,
     "public-profile": profile.privacy.visibility === "private" ? "Only you can view it" : "Ready to preview and share",
     privacy: profile.privacy.visibility.charAt(0).toUpperCase() + profile.privacy.visibility.slice(1),
     security: "Password, devices and login methods",
@@ -533,7 +539,7 @@ export default function TgpiAccountCenter({
     <div>
       <ScreenHeading description="Your private preparation center: identity, learning and decisions, with distinct progress signals." section="overview" title="Account overview" />
       <div className="mt-4 grid gap-3 sm:grid-cols-3">
-        <Link className="tgpi-account-tile rounded-2xl border border-slate-200 p-4" href="/courses"><strong>Continue learning →</strong><p className="mt-2 text-sm">Resume from your saved lesson.</p></Link>
+        <Link className="tgpi-account-tile rounded-2xl border border-slate-200 p-4" href="/courses"><strong><LocalizedText text="Continue learning →" /></strong><p className="mt-2 text-sm">Resume from your saved lesson.</p></Link>
         <Link className="tgpi-account-tile rounded-2xl border border-slate-200 p-4" href="/certificates"><strong>My credentials →</strong><p className="mt-2 text-sm">Issued records and milestones to earn.</p></Link>
         <Link className="tgpi-account-tile rounded-2xl border border-slate-200 p-4" href="/profile/security#settings-billing"><strong>{account.membership} →</strong><p className="mt-2 text-sm">Review plan and manage billing.</p></Link>
       </div>
@@ -564,12 +570,12 @@ export default function TgpiAccountCenter({
       </article>
 
       <div className="mt-6">
-        <p className="px-1 text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#86621A]">Account settings</p>
+        <p className="px-1 text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#86621A]"><LocalizedText text="Account settings" /></p>
         <div className="tgpi-account-grid mt-3 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
           {settingsSections.slice(1).map((section) => (
             <button className="tgpi-account-tile group flex w-full items-center gap-4 rounded-[22px] border border-[#DDD7CB] px-4 py-5 text-left sm:px-5" key={section.key} onClick={() => selectSection(section.key)} type="button">
               <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#EEF1F4] text-[#0B1F3A] transition group-hover:bg-[#0B1F3A] group-hover:text-[#F0D58C]"><SettingsIcon section={section.key} /></span>
-              <span className="min-w-0 flex-1"><span className="block text-sm font-extrabold text-[#0B1F3A]">{section.label}</span><span className="mt-0.5 block truncate text-xs text-[#707987]">{sectionSummaries[section.key as Exclude<SettingsSection, "overview">]}</span></span>
+              <span className="min-w-0 flex-1"><span className="block text-sm font-extrabold text-[#0B1F3A]"><LocalizedText text={section.label} /></span><span className="mt-0.5 block truncate text-xs text-[#707987]">{sectionSummaries[section.key as Exclude<SettingsSection, "overview">]}</span></span>
               <span aria-hidden="true" className="text-xl text-[#A0A7B0] transition group-hover:translate-x-0.5 group-hover:text-[#956A13]">›</span>
             </button>
           ))}
@@ -579,11 +585,11 @@ export default function TgpiAccountCenter({
       <div className="mt-6 grid gap-4 xl:grid-cols-3">
         <article className="rounded-[24px] border border-[#DDD7CB] bg-white p-5 sm:p-6">
           <div className="flex flex-wrap items-start justify-between gap-4">
-            <div><p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#86621A]">Personal plan</p><h3 className="mt-2 text-lg font-extrabold text-[#0B1F3A]">{decisionContext.completed ? "Decision context connected" : "Complete your decision context"}</h3></div>
+            <div><p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#86621A]"><LocalizedText text="Personal plan" /></p><h3 className="mt-2 text-lg font-extrabold text-[#0B1F3A]">{decisionContext.completed ? "Decision context connected" : "Complete your decision context"}</h3></div>
             <span className="rounded-full bg-[#EDF0F3] px-3 py-1.5 text-xs font-extrabold text-[#0B1F3A]">{decisionContext.progress}%</span>
           </div>
           <div className="mt-5 space-y-3 text-xs">
-            <div className="flex justify-between gap-4"><span className="text-[#737C89]">Primary goal</span><span className="text-right font-extrabold text-[#0B1F3A]">{goalLabels[decisionContext.goal] || "Not defined"}</span></div>
+            <div className="flex justify-between gap-4"><span className="text-[#737C89]"><LocalizedText text="Primary goal" /></span><span className="text-right font-extrabold text-[#0B1F3A]">{goalLabels[decisionContext.goal] || "Not defined"}</span></div>
             <div className="flex justify-between gap-4"><span className="text-[#737C89]">Shortlist</span><span className="max-w-[65%] text-right font-extrabold text-[#0B1F3A]">{decisionContext.countries.map((country) => `${country.emoji} ${country.name}`).join(", ") || "No countries selected"}</span></div>
           </div>
           <Link className="mt-5 inline-flex text-xs font-extrabold text-[#8C6414]" href="/onboarding">Open personal plan →</Link>
@@ -702,10 +708,10 @@ export default function TgpiAccountCenter({
           <div className="grid gap-5 sm:grid-cols-2">
             <Field label="Profession or field"><ProfileSearchSelect label="Profession or field" value={profile.profession} options={professionSuggestions.map(profession => ({ label: profession, value: profession }))} allowCustom onChange={value => updateProfile({ profession: value })} /></Field>
             <Field label="Education level"><select className="tgpi-account-input" onChange={(event) => updateProfile({ educationLevel: event.target.value })} value={profile.educationLevel}><option value="">Select your level</option><option value="Secondary education">Secondary education</option><option value="Technical or vocational">Technical or vocational</option><option value="Undergraduate">Undergraduate</option><option value="Bachelor's degree">Bachelor&apos;s degree</option><option value="Master's degree">Master&apos;s degree</option><option value="Doctorate">Doctorate</option><option value="Other">Other</option></select></Field>
-            <div className="sm:col-span-2"><p className="text-sm font-extrabold text-[#0B1F3A]">Languages</p><p className="mt-1 text-xs leading-5 text-[#6B7280]">Choose up to eight. The same list updates your personal plan.</p><div className="mt-3 flex flex-wrap gap-2">{languageOptions.map((language) => { const selected = profile.languages.includes(language); return <button aria-pressed={selected} className={`rounded-full border px-3.5 py-2 text-xs font-extrabold transition ${selected ? "border-[#0B1F3A] bg-[#0B1F3A] text-white" : "border-[#D8D2C4] bg-white text-[#566173] hover:border-[#B58A2A]"}`} key={language} onClick={() => toggleLanguage(language)} type="button">{selected ? "✓ " : ""}{language}</button>; })}</div></div>
+            <div className="sm:col-span-2"><p className="text-sm font-extrabold text-[#0B1F3A]"><LocalizedText text="Languages" /></p><p className="mt-1 text-xs leading-5 text-[#6B7280]">Choose up to eight. The same list updates your personal plan.</p><div className="mt-3 flex flex-wrap gap-2">{languageOptions.map((language) => { const selected = profile.languages.includes(language); return <button aria-pressed={selected} className={`rounded-full border px-3.5 py-2 text-xs font-extrabold transition ${selected ? "border-[#0B1F3A] bg-[#0B1F3A] text-white" : "border-[#D8D2C4] bg-white text-[#566173] hover:border-[#B58A2A]"}`} key={language} onClick={() => toggleLanguage(language)} type="button">{selected ? "✓ " : ""}{language}</button>; })}</div></div>
           </div>
           <div className="mt-7 rounded-2xl border border-[#D9C78D] bg-[#FBF4DE] p-5"><p className="text-sm font-extrabold text-[#0B1F3A]">One canonical personal plan</p><p className="mt-1 text-xs leading-5 text-[#6F6241]">Goals, shortlist, budget, timeline and priorities remain in the plan editor to prevent conflicting recommendations.</p><Link className="mt-4 inline-flex text-xs font-extrabold text-[#76520C]" href="/onboarding">Edit personal plan →</Link></div>
-          {decisionContext.countries.length ? <div className="mt-5 rounded-2xl border border-[#D9E0E7] bg-[#F4F8FB] p-5"><p className="text-[10px] font-extrabold uppercase tracking-[0.16em] text-[#48677F]">Countries synchronized with your plan</p><div className="mt-3 flex flex-wrap gap-2">{decisionContext.countries.map((country) => <Link className="rounded-full border border-[#C9D8E4] bg-white px-3 py-2 text-xs font-extrabold text-[#0B1F3A] transition hover:border-[#B58A2A]" href={`/countries/${country.slug}`} key={country.slug}>{country.emoji} {country.name}</Link>)}</div></div> : null}
+          {decisionContext.countries.length ? <div className="mt-5 rounded-2xl border border-[#D9E0E7] bg-[#F4F8FB] p-5"><p className="text-[10px] font-extrabold uppercase tracking-[0.16em] text-[#48677F]">Countries synchronized with your plan</p><div className="mt-3 flex flex-wrap gap-2">{decisionContext.countries.map((country) => <Link className="rounded-full border border-[#C9D8E4] bg-white px-3 py-2 text-xs font-extrabold text-[#0B1F3A] transition hover:border-[#B58A2A]" href={`/countries/${country.slug}`} key={country.slug}>{country.emoji} <LocalizedText text={country.name} /></Link>)}</div></div> : null}
         </div>
       </div>
     );
@@ -776,7 +782,7 @@ export default function TgpiAccountCenter({
         <ScreenHeading description="Save your research and display preferences. Content languages and unit conversion depend on the current feature." section="preferences" title="App preferences" />
         <div className="mt-6 rounded-[22px] border border-[#DDD7CB] bg-white p-5 sm:p-7">
           <div className="grid gap-5 sm:grid-cols-2">
-            <Field label="Preferred language"><select className="tgpi-account-input" onChange={(event) => updateProfile({ preferredLanguage: event.target.value })} value={profile.preferredLanguage}>{languageOptions.map((language) => <option key={language} value={language}>{language}</option>)}</select></Field>
+            <LanguageSelector />
             <Field label="Preferred currency"><select className="tgpi-account-input" onChange={(event) => updateProfile({ preferredCurrency: event.target.value })} value={profile.preferredCurrency}>{currencyOptions.map((currency) => <option key={currency} value={currency}>{currency}</option>)}</select></Field>
             <Field label="Measurement system"><select className="tgpi-account-input" onChange={(event) => updateProfile({ measurementSystem: event.target.value === "imperial" ? "imperial" : "metric" })} value={profile.measurementSystem}><option value="metric">Metric — km, kg, °C</option><option value="imperial">Imperial — mi, lb, °F</option></select></Field>
             <div className="hidden sm:block" />
@@ -846,9 +852,9 @@ export default function TgpiAccountCenter({
       <div className="overflow-clip rounded-[30px] border border-[#D8D2C4] bg-white shadow-[0_28px_80px_rgba(11,31,58,0.1)] lg:grid lg:grid-cols-[270px_minmax(0,1fr)]">
         <aside className="hidden border-r border-[#E1DCD2] bg-[#FCFAF5] p-4 lg:flex lg:flex-col">
           <button className="flex items-center gap-3 rounded-2xl p-3 text-left transition hover:bg-white" onClick={() => selectSection("overview")} type="button"><AccountAvatar imageUrl={account.avatarUrl} initials={initials} label={fullName} size="small" /><span className="min-w-0"><span className="block truncate text-sm font-extrabold text-[#0B1F3A]">{fullName}</span><span className="mt-0.5 block truncate text-[11px] text-[#727B88]">{account.membership}</span></span></button>
-          <label className="relative mt-3 block"><span className="sr-only">Search settings</span><svg aria-hidden="true" className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#7A8390]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4" /></svg><input className="h-11 w-full rounded-xl border border-[#DDD7CB] bg-white pl-9 pr-3 text-xs text-[#0B1F3A] outline-none transition placeholder:text-[#959CA6] focus:border-[#B58A2A] focus:ring-4 focus:ring-[#B58A2A]/10" onChange={(event) => setQuery(event.target.value)} placeholder="Search settings" value={query} /></label>
+          <label className="relative mt-3 block"><span className="sr-only"><LocalizedText text="Search settings" /></span><svg aria-hidden="true" className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#7A8390]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4" /></svg><input className="h-11 w-full rounded-xl border border-[#DDD7CB] bg-white pl-9 pr-3 text-xs text-[#0B1F3A] outline-none transition placeholder:text-[#959CA6] focus:border-[#B58A2A] focus:ring-4 focus:ring-[#B58A2A]/10" onChange={(event) => setQuery(event.target.value)} placeholder="Search settings" value={query} /></label>
           <nav aria-label="Account settings" className="mt-4 space-y-4">
-            {settingsGroups.map((group) => { const groupSections = filteredSections.filter((section) => section.group === group); if (!groupSections.length) return null; return <div key={group}><p className="px-3 pb-1 text-[9px] font-extrabold uppercase tracking-[0.16em] text-[#9299A2]">{group}</p><div className="space-y-1">{groupSections.map((section) => { const active = section.key === activeSection; return <button aria-current={active ? "page" : undefined} className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition ${active ? "bg-[#0B1F3A] text-white shadow-[0_10px_24px_rgba(11,31,58,0.16)]" : "text-[#4F5B6A] hover:bg-white hover:text-[#0B1F3A]"}`} key={section.key} onClick={() => selectSection(section.key)} type="button"><span aria-hidden="true" className={`grid h-8 w-8 shrink-0 place-items-center rounded-xl text-sm ${active ? "bg-white/10 text-[#F0D58C]" : "bg-[#EEF1F4] text-[#0B1F3A]"}`}><SettingsIcon section={section.key} /></span><span className="text-xs font-extrabold">{section.label}</span></button>; })}</div></div>; })}
+            {settingsGroups.map((group) => { const groupSections = filteredSections.filter((section) => section.group === group); if (!groupSections.length) return null; return <div key={group}><p className="px-3 pb-1 text-[9px] font-extrabold uppercase tracking-[0.16em] text-[#9299A2]">{group}</p><div className="space-y-1">{groupSections.map((section) => { const active = section.key === activeSection; return <button aria-current={active ? "page" : undefined} className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition ${active ? "bg-[#0B1F3A] text-white shadow-[0_10px_24px_rgba(11,31,58,0.16)]" : "text-[#4F5B6A] hover:bg-white hover:text-[#0B1F3A]"}`} key={section.key} onClick={() => selectSection(section.key)} type="button"><span aria-hidden="true" className={`grid h-8 w-8 shrink-0 place-items-center rounded-xl text-sm ${active ? "bg-white/10 text-[#F0D58C]" : "bg-[#EEF1F4] text-[#0B1F3A]"}`}><SettingsIcon section={section.key} /></span><span className="text-xs font-extrabold"><LocalizedText text={section.label} /></span></button>; })}</div></div>; })}
           </nav>
           {filteredSections.length === 0 ? <p className="px-3 py-5 text-xs leading-5 text-[#717A87]">No setting matches this search.</p> : null}
           <div className="mt-auto rounded-2xl border border-[#E0D8C5] bg-[#F4E7BE] p-4"><p className="text-[9px] font-extrabold uppercase tracking-[0.18em] text-[#75530E]">Synchronization</p><p className="mt-2 text-xs font-extrabold text-[#0B1F3A]">{isDirty ? "Changes waiting to be saved" : "Your account is up to date"}</p><p className="mt-1 text-[11px] leading-5 text-[#685B38]">Last update: {formatSavedDate(profile.updatedAt)}</p></div>
@@ -856,9 +862,9 @@ export default function TgpiAccountCenter({
 
         <div className="min-w-0 bg-[#F8F5EE]">
           <div className="tgpi-account-mobile-nav sticky top-0 z-30 border-b border-[#DDD7CB] bg-[#FFFDFA]/95 p-3 backdrop-blur lg:hidden">
-            <div className="flex items-center gap-3"><AccountAvatar imageUrl={account.avatarUrl} initials={initials} label={fullName} size="small" /><div className="min-w-0 flex-1"><p className="truncate text-sm font-extrabold text-[#0B1F3A]">{activeDefinition.label}</p><p className="truncate text-[11px] text-[#737C89]">{activeDefinition.description}</p></div>{isDirty ? <span className="h-2.5 w-2.5 rounded-full bg-[#B58A2A]" title="Unsaved changes" /> : null}</div>
+            <div className="flex items-center gap-3"><AccountAvatar imageUrl={account.avatarUrl} initials={initials} label={fullName} size="small" /><div className="min-w-0 flex-1"><p className="truncate text-sm font-extrabold text-[#0B1F3A]"><LocalizedText text={activeDefinition.label} /></p><p className="truncate text-[11px] text-[#737C89]"><LocalizedText text={activeDefinition.description} /></p></div>{isDirty ? <span className="h-2.5 w-2.5 rounded-full bg-[#B58A2A]" title="Unsaved changes" /> : null}</div>
             <nav aria-label="Account settings" className="tgpi-smart-rail tgpi-account-tabs -mx-3 mt-3 flex gap-2 overflow-x-auto px-3 pb-1">
-              {settingsSections.map((section) => { const active = section.key === activeSection; return <button aria-current={active ? "page" : undefined} className={`tgpi-account-tab flex min-w-max items-center gap-2 rounded-full border px-3 py-2 text-[11px] font-extrabold transition ${active ? "border-[#0B1F3A] bg-[#0B1F3A] text-white" : "border-[#DDD7CB] bg-white text-[#596473]"}`} key={section.key} onClick={() => selectSection(section.key)} type="button"><span aria-hidden="true"><SettingsIcon section={section.key} /></span>{section.label}</button>; })}
+              {settingsSections.map((section) => { const active = section.key === activeSection; return <button aria-current={active ? "page" : undefined} className={`tgpi-account-tab flex min-w-max items-center gap-2 rounded-full border px-3 py-2 text-[11px] font-extrabold transition ${active ? "border-[#0B1F3A] bg-[#0B1F3A] text-white" : "border-[#DDD7CB] bg-white text-[#596473]"}`} key={section.key} onClick={() => selectSection(section.key)} type="button"><span aria-hidden="true"><SettingsIcon section={section.key} /></span><LocalizedText text={section.label} /></button>; })}
             </nav>
           </div>
 

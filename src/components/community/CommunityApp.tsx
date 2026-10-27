@@ -15,6 +15,8 @@ import {
 } from "@/lib/community/model";
 import { api } from "./api";
 import s from "./Community.module.css";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 const CreateFlow = dynamic(() => import("./CommunityCreateFlow"));
 const Composer = dynamic(() => import("./PostComposer"));
 const PostCard = dynamic(() => import("./CommunityPost"));
@@ -215,9 +217,7 @@ export default function CommunityApp({
             "Connect with people navigating life across borders."}
         </p>
         <div className={s.actions}>
-          <Link className={s.button} href="/community">
-            Explore communities
-          </Link>
+          <Link className={s.button} href="/community"><LocalizedText text="Explore communities" /></Link>
           {user ? (
             <button className={s.secondary} onClick={() => setCreating(true)}>
               Create community
@@ -275,19 +275,17 @@ export default function CommunityApp({
           {globalAdmin && (
             <Link href="/community/moderation">Global moderation</Link>
           )}
-          <Link href="/profile">Workspace</Link>
+          <Link href="/profile"><LocalizedText text="Workspace" /></Link>
           <Link href="/countries">Destinations</Link>
           <Link href="/members">Find members</Link>
-          {id && <a href="#community-rules">About & rules</a>}
+          {id && <a href="#community-rules"><LocalizedText text="About & rules" /></a>}
         </nav>
         <section className={s.content} aria-label="Community content">
           {error && (
             <div className={s.error} role="alert">
               {error}
               <div className={s.actions}>
-                <button className={s.secondary} onClick={() => void load()}>
-                  Try again
-                </button>
+                <button className={s.secondary} onClick={() => void load()}><LocalizedText text="Try again" /></button>
               </div>
             </div>
           )}
@@ -459,16 +457,14 @@ export default function CommunityApp({
                       <button
                         className={s.button}
                         onClick={() => setView("explore")}
-                      >
-                        Explore communities
-                      </button>
+                      ><LocalizedText text="Explore communities" /></button>
                     </div>
                   )}
                 </section>
               )}
               {!id && view === "saved" && (
                 <section>
-                  <h2>Saved contributions</h2>
+                  <h2><LocalizedText text="Saved contributions" /></h2>
                   {!loading && !saved.length && !error && (
                     <p className={s.empty}>
                       No accessible saved contributions yet.
@@ -832,7 +828,7 @@ export default function CommunityApp({
                     />
                   )}
                   <section className={s.panel} id="community-rules">
-                    <h2>About & rules</h2>
+                    <h2><LocalizedText text="About & rules" /></h2>
                     <p className={s.body}>{c.about}</p>
                     <p className={s.rules}>{c.rules}</p>
                     <p className={s.notice}>
@@ -848,9 +844,7 @@ export default function CommunityApp({
                 </p>
               )}
               {next && !loading && (
-                <button className={s.secondary} onClick={() => void load(next)}>
-                  Load more
-                </button>
+                <button className={s.secondary} onClick={() => void load(next)}><LocalizedText text="Load more" /></button>
               )}
             </>
           )}

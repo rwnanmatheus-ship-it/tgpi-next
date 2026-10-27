@@ -12,6 +12,8 @@ import {
 import { api } from "./api";
 import CommunityPost from "./CommunityPost";
 import s from "./Community.module.css";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 export default function CommunityChat({
   community,
   membership,
@@ -80,9 +82,7 @@ export default function CommunityChat({
       {error && (
         <div className={s.status}>
           <p role="alert">{error}</p>
-          <button className={s.secondary} onClick={() => void load()}>
-            Try again
-          </button>
+          <button className={s.secondary} onClick={() => void load()}><LocalizedText text="Try again" /></button>
         </div>
       )}
       {missing && (

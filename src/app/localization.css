@@ -1,0 +1,14 @@
+.tgpi-language-control{position:relative;min-width:0;color:#0b1f3a}
+.tgpi-language-label{display:block;margin-bottom:6px;font-size:13px;font-weight:700}
+.tgpi-language-select{min-height:44px;max-width:100%;border:1px solid #d8d2c4;border-radius:10px;background:#fffdfa;color:#0b1f3a;padding:8px 24px 8px 10px;font:inherit;font-size:13px;cursor:pointer}
+.tgpi-language-select:focus-visible{outline:2px solid #b58a2a;outline-offset:3px}
+.tgpi-language-select:disabled{opacity:.65;cursor:wait}
+.tgpi-language-error{display:block;position:absolute;right:0;top:100%;z-index:80;width:220px;padding:12px;border:1px solid #d8d2c4;border-radius:10px;background:#fffdfa;color:#8c2929;font-size:12px;box-shadow:0 8px 30px #0b1f3a22}
+.tgpi-desktop-primary-link{white-space:normal;text-align:center}
+.tgpi-compact-dock>a{min-width:0}
+.tgpi-compact-dock>a>span:last-child{overflow-wrap:anywhere}
+
+footer .tgpi-language-label{color:#e5c887}
+
+.tgpi-language-note{max-width:30rem;margin-top:6px;color:#667085;font-size:12px;line-height:1.6}footer .tgpi-language-note{color:#b7c7d9}
+@media(max-width:380px){.tgpi-compact-topbar .tgpi-brand-wordmark{display:none}}

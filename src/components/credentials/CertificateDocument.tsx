@@ -8,6 +8,8 @@ import {
   certificateVerificationUrl,
 } from "@/lib/certificate-presentation";
 import type { PublicTgpiLearningCredential } from "@/types/learning";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 export default function CertificateDocument({
   credential,
@@ -33,7 +35,7 @@ export default function CertificateDocument({
           <div>
             <strong>TGPI</strong>
             <span>The Global Polymath Institute</span>
-            <small>Education for a global life</small>
+            <small><LocalizedText text="Education for a global life" /></small>
           </div>
         </div>
         <span className="diploma-brand-edition">
@@ -80,9 +82,7 @@ export default function CertificateDocument({
               id={credential.id}
             />
           </a>
-          <p className="diploma-qr-caption">
-            Scan to verify
-            <br />
+          <p className="diploma-qr-caption"><LocalizedText text="Scan to verify" /><br />
             <span>Live status · Issuer record</span>
           </p>
         </aside>
@@ -93,11 +93,11 @@ export default function CertificateDocument({
           <dd>{credential.identityEvidence.globalKeyId}</dd>
         </div>
         <div className="diploma-certificate-id">
-          <dt>Certificate ID</dt>
+          <dt><LocalizedText text="Certificate ID" /></dt>
           <dd>{credential.id}</dd>
         </div>
         <div>
-          <dt>Issued</dt>
+          <dt><LocalizedText text="Issued" /></dt>
           <dd>{certificateDate(credential.issuedAt)}</dd>
         </div>
         <div>

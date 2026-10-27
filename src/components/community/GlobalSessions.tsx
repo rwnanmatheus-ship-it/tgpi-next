@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import type { GlobalSession, Page } from "@/lib/community/model";
 import { api, type Action } from "./api";
 import s from "./Community.module.css";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 export default function GlobalSessions({
   community,
   manage,
@@ -49,7 +51,7 @@ export default function GlobalSessions({
   }, [community]);
   return (
     <section className={s.panel}>
-      <h2>Global Sessions</h2>
+      <h2><LocalizedText text="Global Sessions" /></h2>
       <p className={s.notice}>
         Meetups and experience exchanges. Times use your device timezone.
       </p>
@@ -110,9 +112,7 @@ export default function GlobalSessions({
                   href={e.url}
                   target="_blank"
                   rel="noopener noreferrer nofollow"
-                >
-                  Open meeting ↗
-                </a>
+                ><LocalizedText text="Open meeting ↗" /></a>
               )}
               {manage && (
                 <button

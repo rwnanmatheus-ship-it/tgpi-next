@@ -7,6 +7,8 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "@/lib/firebase";
 import { loadCommandCenterProfile } from "@/lib/profile-command-center";
 import type { UserData } from "@/types";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 type DashboardProfile = Pick<
   UserData,
@@ -64,7 +66,7 @@ export default function DashboardIdentity() {
       <div className="mt-5 grid grid-cols-4 gap-2 text-center">
         <div className="rounded-xl border border-white/10 bg-white/5 p-3">
           <p className="text-lg font-bold">24</p>
-          <p className="text-xs text-slate-400">Countries</p>
+          <p className="text-xs text-slate-400"><LocalizedText text="Countries" /></p>
         </div>
         <div className="rounded-xl border border-white/10 bg-white/5 p-3">
           <p className="text-lg font-bold">8</p>

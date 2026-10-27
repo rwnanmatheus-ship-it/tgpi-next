@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 const nav = [
   { label: "Home", href: "/" },
@@ -39,9 +41,7 @@ export default function TGPITopNav() {
           <Link
             href="/login"
             className="rounded-xl border border-yellow-500/30 px-4 py-2 text-sm font-semibold text-yellow-400 transition hover:bg-yellow-500/10"
-          >
-            Sign in
-          </Link>
+          ><LocalizedText text="Sign in" /></Link>
 
           <Link
             href="/login"

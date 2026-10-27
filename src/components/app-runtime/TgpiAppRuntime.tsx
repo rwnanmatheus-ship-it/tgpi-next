@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 type InstallChoice = {
   outcome: "accepted" | "dismissed";
@@ -265,45 +267,35 @@ export default function TgpiAppRuntime() {
                 className="min-h-11 rounded-xl bg-[#E5B94B] px-4 text-sm font-extrabold text-[#07182D] transition hover:bg-[#F0C95F] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
                 onClick={() => void installApp()}
                 type="button"
-              >
-                Install TGPI
-              </button>
+              ><LocalizedText text="Install TGPI" /></button>
             ) : null}
             {notice === "update" ? (
               <button
                 className="min-h-11 rounded-xl bg-[#E5B94B] px-4 text-sm font-extrabold text-[#07182D] transition hover:bg-[#F0C95F] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
                 onClick={activateUpdate}
                 type="button"
-              >
-                Update now
-              </button>
+              ><LocalizedText text="Update now" /></button>
             ) : null}
             {notice === "ios-install" ? (
               <button
                 className="min-h-11 rounded-xl border border-white/15 px-4 text-sm font-extrabold text-white transition hover:border-[#E5B94B]/40 hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E5B94B]"
                 onClick={dismissInstall}
                 type="button"
-              >
-                Got it
-              </button>
+              ><LocalizedText text="Got it" /></button>
             ) : null}
             {notice === "offline" ? (
               <button
                 className="min-h-11 rounded-xl border border-white/15 px-4 text-sm font-extrabold text-white transition hover:border-[#E5B94B]/40 hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E5B94B]"
                 onClick={() => window.location.reload()}
                 type="button"
-              >
-                Try again
-              </button>
+              ><LocalizedText text="Try again" /></button>
             ) : null}
             {notice === "install" ? (
               <button
                 className="min-h-11 rounded-xl px-3 text-sm font-bold text-[#AEBBC8] transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E5B94B]"
                 onClick={dismissInstall}
                 type="button"
-              >
-                Not now
-              </button>
+              ><LocalizedText text="Not now" /></button>
             ) : null}
           </div>
         </div>

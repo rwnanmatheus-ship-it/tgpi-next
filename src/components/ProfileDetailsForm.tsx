@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { auth, db } from "@/lib/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { updateUserMemory } from "@/lib/user-memory";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 type FormState = {
   displayName: string;
@@ -174,7 +176,7 @@ export default function ProfileDetailsForm() {
         </div>
 
         <div>
-          <label className="mb-2 block text-sm text-slate-300">Country</label>
+          <label className="mb-2 block text-sm text-slate-300"><LocalizedText text="Country" /></label>
           <input
             value={form.country}
             onChange={(e) => updateField("country", e.target.value)}
@@ -200,7 +202,7 @@ export default function ProfileDetailsForm() {
         </div>
 
         <div>
-          <label className="mb-2 block text-sm text-slate-300">Main Goal</label>
+          <label className="mb-2 block text-sm text-slate-300"><LocalizedText text="Main Goal" /></label>
           <select
             value={form.goal}
             onChange={(e) => updateField("goal", e.target.value as FormState["goal"])}

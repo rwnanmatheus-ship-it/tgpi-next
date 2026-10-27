@@ -30,9 +30,11 @@
     "test:certificate-pdf": "node --experimental-strip-types --test scripts/certificate-pdf.test.mjs",
     "test:community": "node --test scripts/community.test.mjs scripts/community-lifecycle.test.mjs scripts/community-lifecycle-api.test.mjs",
     "test:country-studio": "node --experimental-strip-types --test scripts/country-studio.test.mjs scripts/satellite.test.mjs",
-    "test:learning-mastery": "node --experimental-strip-types --test scripts/learning-mastery.test.mjs scripts/learning-portfolio.test.mjs"
+    "test:learning-mastery": "node --experimental-strip-types --test scripts/learning-mastery.test.mjs scripts/learning-portfolio.test.mjs",
+    "test:localization": "node --test scripts/localization.test.mjs"
   },
   "dependencies": {
+    "@clerk/localizations": "^4.24.2",
     "@clerk/nextjs": "^7.7.7",
     "@pdf-lib/fontkit": "^1.1.1",
     "@stripe/stripe-js": "^9.2.0",

@@ -1,5 +1,7 @@
 import Link from "next/link";
 import type { Country } from "@/data/countries";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 type CountryCardProps = {
   country: Country;
@@ -16,14 +18,12 @@ export default function CountryCard({ country }: CountryCardProps) {
           <div>
             <div className="text-5xl">{country.emoji}</div>
             <h3 className="mt-4 text-2xl font-bold text-yellow-400">
-              {country.name}
+              <LocalizedText text={country.name} />
             </h3>
-            <p className="mt-1 text-sm text-slate-400">{country.region}</p>
+            <p className="mt-1 text-sm text-slate-400"><LocalizedText text={country.region} /></p>
           </div>
 
-          <span className="rounded-full border border-yellow-700/30 bg-yellow-500/5 px-3 py-1 text-xs text-yellow-300">
-            Open
-          </span>
+          <span className="rounded-full border border-yellow-700/30 bg-yellow-500/5 px-3 py-1 text-xs text-yellow-300"><LocalizedText text="Open" /></span>
         </div>
 
         <p className="text-sm leading-7 text-slate-300">
@@ -33,22 +33,22 @@ export default function CountryCard({ country }: CountryCardProps) {
 
       <div className="grid gap-3 p-6 sm:grid-cols-2">
         <div className="rounded-2xl border border-slate-800 bg-slate-900 p-4">
-          <p className="text-xs text-slate-400">Language</p>
+          <p className="text-xs text-slate-400"><LocalizedText text="Language" /></p>
           <p className="mt-1 text-sm text-white">{country.language}</p>
         </div>
 
         <div className="rounded-2xl border border-slate-800 bg-slate-900 p-4">
-          <p className="text-xs text-slate-400">Capital</p>
+          <p className="text-xs text-slate-400"><LocalizedText text="Capital" /></p>
           <p className="mt-1 text-sm text-white">{country.capital}</p>
         </div>
 
         <div className="rounded-2xl border border-slate-800 bg-slate-900 p-4">
-          <p className="text-xs text-slate-400">Currency</p>
+          <p className="text-xs text-slate-400"><LocalizedText text="Currency" /></p>
           <p className="mt-1 text-sm text-white">{country.currencyCode}</p>
         </div>
 
         <div className="rounded-2xl border border-slate-800 bg-slate-900 p-4">
-          <p className="text-xs text-slate-400">Main Goal</p>
+          <p className="text-xs text-slate-400"><LocalizedText text="Main Goal" /></p>
           <p className="mt-1 text-sm text-white">{country.mainGoal}</p>
         </div>
       </div>
@@ -66,7 +66,7 @@ export default function CountryCard({ country }: CountryCardProps) {
         </div>
 
         <div className="rounded-2xl border border-yellow-700/20 bg-yellow-500/5 p-4">
-          <p className="text-xs text-slate-400">Preview</p>
+          <p className="text-xs text-slate-400"><LocalizedText text="Preview" /></p>
           <p className="mt-1 text-sm text-slate-200">
             Open this page to view detailed country context, cost of life, and currency exploration.
           </p>

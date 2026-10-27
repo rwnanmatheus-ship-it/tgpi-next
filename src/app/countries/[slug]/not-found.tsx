@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 export default function CountryNotFound() {
   return (
@@ -19,9 +21,7 @@ export default function CountryNotFound() {
           <Link
             href="/countries"
             className="rounded-xl bg-yellow-500 px-6 py-3 font-semibold text-black transition hover:bg-yellow-400"
-          >
-            Explore Countries
-          </Link>
+          ><LocalizedText text="Explore Countries" /></Link>
 
           <Link
             href="/"

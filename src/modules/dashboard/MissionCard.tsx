@@ -1,9 +1,9 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 export default function MissionCard() {
   return (
     <section className="rounded-3xl border border-yellow-500/20 bg-gradient-to-br from-yellow-500/10 to-black p-6">
-      <p className="text-sm uppercase tracking-[0.25em] text-yellow-400">
-        Current Mission
-      </p>
+      <p className="text-sm uppercase tracking-[0.25em] text-yellow-400"><LocalizedText text="Current Mission" /></p>
 
       <h2 className="mt-3 text-2xl font-bold text-white">
         Build your global readiness

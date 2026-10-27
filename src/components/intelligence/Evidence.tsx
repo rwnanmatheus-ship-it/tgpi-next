@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { INDICATORS, INDICATOR_PRODUCERS, evidenceLabel, evidenceStatus, formatObservation, indicatorUrl, type IndicatorId, type IntelligenceState, type Observation } from "@/lib/intelligence/core";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 export function EvidenceCard({ observation, indicator, countryCode }: { observation?: Observation; indicator: IndicatorId; countryCode: string }) {
   const definition = INDICATORS[indicator];
@@ -27,5 +29,5 @@ export function GraphStatus({ state }: { state: IntelligenceState }) {
 }
 
 export function IntelligenceBanner() {
-  return <section className="ig-banner"><div><p className="ig-eyebrow">Decision dossiers + Your personal scenario</p><h2>Know the evidence. Build your next move.</h2><p>Explore official study pathways, institution checks and scoped cost references. Compare the questions that matter, then build a personal plan.</p></div><div className="ig-actions"><Link href="/country-fit" className="ig-button">Build my Country Fit →</Link><Link href="/intelligence/research" className="ig-button ig-secondary">Explore decision dossiers</Link><Link href="/intelligence" className="ig-link">Sources & methodology</Link></div></section>;
+  return <section className="ig-banner"><div><p className="ig-eyebrow">Decision dossiers + Your personal scenario</p><h2>Know the evidence. Build your next move.</h2><p>Explore official study pathways, institution checks and scoped cost references. Compare the questions that matter, then build a personal plan.</p></div><div className="ig-actions"><Link href="/country-fit" className="ig-button">Build my Country Fit →</Link><Link href="/intelligence/research" className="ig-button ig-secondary">Explore decision dossiers</Link><Link href="/intelligence" className="ig-link"><LocalizedText text="Sources & methodology" /></Link></div></section>;
 }

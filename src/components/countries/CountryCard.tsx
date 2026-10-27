@@ -3,6 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { CountryExplorerItem } from "@/lib/countries";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 type CountryCardCountry = Omit<CountryExplorerItem, "visual"> & {
   visual?: CountryExplorerItem["visual"];
@@ -95,7 +97,7 @@ export function CountryCard({ country }: CountryCardProps) {
 
           <div className="absolute left-4 top-4 flex max-w-[66%] flex-wrap items-center gap-2">
             <span className="rounded-full border border-white/35 bg-[#071A32]/90 px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.14em] text-white backdrop-blur-xl">
-              {country.region}
+              <LocalizedText text={country.region} />
             </span>
             <span className="rounded-full border border-white/30 bg-white/90 px-3 py-1 text-[10px] font-bold text-[var(--tgpi-navy)] backdrop-blur">
               {getVisualBadgeLabel(country)}
@@ -110,7 +112,7 @@ export function CountryCard({ country }: CountryCardProps) {
           <div className="absolute inset-x-5 bottom-4">
             <div className="mb-1 text-2xl drop-shadow-2xl">{country.emoji}</div>
             <h3 className="truncate font-[var(--tgpi-font-display)] text-[1.7rem] font-semibold tracking-[-0.02em] text-white drop-shadow-xl">
-              {country.name}
+              <LocalizedText text={country.name} />
             </h3>
             <p className="mt-1 truncate text-[10px] font-extrabold uppercase tracking-[0.2em] text-white/80">
               {country.capital} · {country.currencyCode}

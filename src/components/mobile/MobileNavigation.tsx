@@ -1,4 +1,6 @@
 "use client";
+import LanguageSelector from "@/components/localization/LanguageSelector";
+import { useLocale } from "@/components/localization/LocaleProvider";
 
 import { containDialogFocus } from "@/lib/dialog-focus";
 import { Show } from "@clerk/nextjs";
@@ -23,6 +25,8 @@ import {
 import {
   searchSuperAppModules,
 } from "@/lib/super-app";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 const suggestedCountries = ["Portugal", "Canada", "Japan", "Spain"] as const;
 
@@ -32,6 +36,7 @@ export default function MobileNavigation() {
 }
 
 function MobileNavigationContent({ pathname }: { pathname: string }) {
+  const { t } = useLocale();
   const dialogRef = useRef<HTMLDialogElement>(null);
   const searchButtonRef = useRef<HTMLButtonElement>(null);
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -129,17 +134,18 @@ function MobileNavigationContent({ pathname }: { pathname: string }) {
     <>
       <header
         className="tgpi-mobile tgpi-compact-topbar"
-        aria-label="TGPI compact navigation"
+        aria-label={t("TGPI compact navigation")}
         data-navigation-version="2"
       >
         <BrandSignature compact />
         <div className="tgpi-compact-actions">
+          <LanguageSelector compact />
           <Show when="signed-in"><NotificationBell /></Show>
           <button
             ref={searchButtonRef}
             type="button"
             className="tgpi-compact-action"
-            aria-label="Search TGPI"
+            aria-label={t("Search TGPI")}
             aria-haspopup="dialog"
             aria-controls="tgpi-compact-search"
             aria-expanded={searchOpen}
@@ -154,7 +160,7 @@ function MobileNavigationContent({ pathname }: { pathname: string }) {
       {!focused ? (
         <nav
           className="tgpi-mobile tgpi-compact-dock"
-          aria-label="Mobile primary navigation"
+          aria-label={t("Mobile primary navigation")}
           data-keyboard={keyboardOpen ? "open" : "closed"}
         >
           {COMPACT_NAVIGATION.map((destination) => {
@@ -168,7 +174,7 @@ function MobileNavigationContent({ pathname }: { pathname: string }) {
                 <span className="tgpi-compact-dock-icon">
                   <NavigationIcon name={destination.icon} width={22} height={22} />
                 </span>
-                <span>{destination.shortLabel}</span>
+                <span>{t(destination.shortLabel)}</span>
               </Link>
             );
           })}
@@ -192,23 +198,23 @@ function MobileNavigationContent({ pathname }: { pathname: string }) {
         <div className="tgpi-compact-search-panel">
           <header>
             <div>
-              <p>TGPI GLOBAL SEARCH</p>
-              <h2 id="tgpi-compact-search-title">Find your next move.</h2>
+              <p>{t("TGPI GLOBAL SEARCH")}</p>
+              <h2 id="tgpi-compact-search-title">{t("Find your next move.")}</h2>
             </div>
-            <button type="button" aria-label="Close search" onClick={closeSearch}>
+            <button type="button" aria-label={t("Close search")} onClick={closeSearch}>
               <NavigationIcon name="close" />
             </button>
           </header>
 
           <label className="tgpi-compact-search-field" htmlFor="tgpi-global-search">
             <NavigationIcon name="search" />
-            <span className="sr-only">Search countries, tools or actions</span>
+            <span className="sr-only">{t("Search countries, tools or actions")}</span>
             <input
               ref={searchInputRef}
               id="tgpi-global-search"
               type="search"
               value={query}
-              placeholder="Country, capital, tool or action…"
+              placeholder={t("Country, capital, tool or action…")}
               autoComplete="off"
               enterKeyHint="search"
               onChange={(event) => setQuery(event.target.value)}
@@ -217,12 +223,12 @@ function MobileNavigationContent({ pathname }: { pathname: string }) {
 
           <div className="tgpi-compact-search-status" role="status">
             {loadState === "loading"
-              ? "Connecting to TGPI intelligence…"
+              ? t("Connecting to TGPI intelligence…")
               : loadState === "error"
-                ? "Country intelligence is temporarily unavailable. App search remains active."
+                ? t("Country intelligence is temporarily unavailable. App search remains active.")
                 : query.trim()
-                  ? `${moduleResults.length} tools · ${countryResults.length} countries found`
-                  : "Search across the connected TGPI system."}
+                  ? t("{tools} tools · {countries} countries found", { tools: moduleResults.length, countries: countryResults.length })
+                  : t("Search across the connected TGPI system.")}
           </div>
 
           {loadState === "error" ? (
@@ -230,21 +236,19 @@ function MobileNavigationContent({ pathname }: { pathname: string }) {
               type="button"
               className="tgpi-compact-retry"
               onClick={() => setRetry((value) => value + 1)}
-            >
-              Reconnect country intelligence
-            </button>
+            >{t("Reconnect country intelligence")}</button>
           ) : null}
 
           {query.trim() ? (
             <div className="tgpi-compact-results">
               {moduleResults.length > 0 ? (
                 <section aria-labelledby="tgpi-tool-results">
-                  <h3 id="tgpi-tool-results">Tools</h3>
+                  <h3 id="tgpi-tool-results">{t("Tools")}</h3>
                   <div className="tgpi-compact-tool-grid">
                     {moduleResults.map((module) => (
                       <Link key={module.id} href={module.href} onClick={closeSearch}>
                         <NavigationIcon name={getSuperAppIconName(module.id)} />
-                        <span><strong>{module.shortLabel}</strong><small>{module.description}</small></span>
+                        <span><strong><LocalizedText text={module.shortLabel} /></strong><small><LocalizedText text={module.description} /></small></span>
                         <NavigationIcon name="arrow" width={17} height={17} />
                       </Link>
                     ))}
@@ -254,12 +258,12 @@ function MobileNavigationContent({ pathname }: { pathname: string }) {
 
               {countryResults.length > 0 ? (
                 <section aria-labelledby="tgpi-country-results">
-                  <h3 id="tgpi-country-results">Countries</h3>
+                  <h3 id="tgpi-country-results">{t("Countries")}</h3>
                   <div className="tgpi-compact-country-results">
                     {countryResults.map((country) => (
                       <Link key={country.slug} href={`/countries/${country.slug}`} onClick={closeSearch}>
                         <span aria-hidden="true">{country.emoji}</span>
-                        <span><strong>{country.name}</strong><small>{country.capital} · {country.region}</small></span>
+                        <span><strong><LocalizedText text={country.name} /></strong><small>{country.capital} · <LocalizedText text={country.region} /></small></span>
                         <NavigationIcon name="arrow" width={17} height={17} />
                       </Link>
                     ))}
@@ -268,12 +272,12 @@ function MobileNavigationContent({ pathname }: { pathname: string }) {
               ) : null}
 
               {loadState === "ready" && moduleResults.length === 0 && countryResults.length === 0 ? (
-                <p className="tgpi-compact-empty">No exact match. Open Apps to browse every TGPI capability.</p>
+                <p className="tgpi-compact-empty">{t("No exact match. Open Apps to browse every TGPI capability.")}</p>
               ) : null}
             </div>
           ) : (
             <section className="tgpi-compact-discovery" aria-labelledby="tgpi-search-starts">
-              <h3 id="tgpi-search-starts">Suggested starting points</h3>
+              <h3 id="tgpi-search-starts">{t("Suggested starting points")}</h3>
               <div>
                 {suggestedCountries.map((country) => (
                   <button key={country} type="button" onClick={() => setQuery(country)}>

@@ -1,5 +1,8 @@
 "use client";
 
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
+
 export default function InviteCard({ username }: { username: string }) {
   const link = `https://theglobalpolymath.com/user/${username}`;
 
@@ -10,9 +13,7 @@ export default function InviteCard({ username }: { username: string }) {
 
   return (
     <div className="bg-slate-900 p-6 rounded-2xl">
-      <h2 className="text-yellow-400 font-bold">
-        Invite Friends
-      </h2>
+      <h2 className="text-yellow-400 font-bold"><LocalizedText text="Invite Friends" /></h2>
 
       <p className="text-sm text-slate-400 mt-2">
         Grow your global network.

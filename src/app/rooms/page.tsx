@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 const rooms = [
   { slug: "canada", title: "Canada Room", subtitle: "Work, study, relocation and readiness" },
@@ -12,9 +14,7 @@ export default function RoomsPage() {
     <main className="min-h-screen bg-black px-6 py-10 text-white">
       <div className="mx-auto max-w-6xl space-y-8">
         <section className="rounded-[2rem] border border-yellow-700/20 bg-gradient-to-br from-yellow-500/10 via-slate-950 to-slate-900 p-10">
-          <h1 className="text-4xl font-bold text-yellow-400">
-            Global Rooms
-          </h1>
+          <h1 className="text-4xl font-bold text-yellow-400"><LocalizedText text="Global Rooms" /></h1>
 
           <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-300">
             Join country-based rooms to talk with people preparing for the same

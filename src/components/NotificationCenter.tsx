@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 export default function NotificationCenter() {
   const [notifications] = useState([
@@ -11,9 +13,7 @@ export default function NotificationCenter() {
 
   return (
     <div className="rounded-xl border border-slate-800 p-6 bg-slate-900">
-      <h2 className="text-xl font-bold text-yellow-400">
-        Notifications
-      </h2>
+      <h2 className="text-xl font-bold text-yellow-400"><LocalizedText text="Notifications" /></h2>
 
       <div className="mt-4 space-y-3">
         {notifications.map((n, i) => (

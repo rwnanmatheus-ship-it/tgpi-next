@@ -7,12 +7,14 @@ import Link from "next/link";
 import { COUNTRY_CURRENCIES, dossierFor, formatMoney, formatReference, referenceReviewState, sourceFor } from "@/lib/intelligence/dossiers";
 import SourceReviewNotice from "./SourceReviewNotice";
 import { COST_CATEGORIES, PLAN_CURRENCIES, RESEARCH_TASKS, emptyWorksheet, validateWorksheet, worksheetTotals, type ResearchWorksheet, type PlanningCurrency } from "@/lib/intelligence/research-plan";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 export default function ResearchWorkbench({ country, countryName }: { country: string; countryName: string }) {
   const { user, isLoaded } = useResearchProfile();
   const [slot, setSlot] = useState("1");
   if (!isLoaded) return <section className="ig-panel" role="status">Loading your decision workspace…</section>;
-  return <div className="decision-lab"><div className="research-slot-bar"><span>Decision Lab / Independent scenarios</span><div role="group" aria-label="Scenario slots">{["1", "2", "3"].map(id => <button type="button" aria-pressed={slot === id} key={id} onClick={() => setSlot(id)}>Scenario {id}</button>)}</div></div><Worksheet key={`${user?.id ?? "guest"}:${country}:${slot}`} owner={user?.id ?? "guest"} slot={slot} country={country} countryName={countryName} canSave={Boolean(user)} /></div>;
+  return <div className="decision-lab"><div className="research-slot-bar"><span>Decision Lab / Independent scenarios</span><div role="group" aria-label="Scenario slots">{["1", "2", "3"].map(id => <button type="button" aria-pressed={slot === id} key={id} onClick={() => setSlot(id)}><LocalizedText text="Scenario" />{" "}{id}</button>)}</div></div><Worksheet key={`${user?.id ?? "guest"}:${country}:${slot}`} owner={user?.id ?? "guest"} slot={slot} country={country} countryName={countryName} canSave={Boolean(user)} /></div>;
 }
 function Worksheet({ country, countryName, canSave, owner, slot }: { country: string; countryName: string; canSave: boolean; owner: string; slot: string }) {
   const [plan, setPlan] = useState<ResearchWorksheet>(() => emptyWorksheet(country, COUNTRY_CURRENCIES[country] ?? "USD"));

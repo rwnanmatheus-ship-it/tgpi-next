@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { getUserMemory, UserActivityItem } from "@/lib/user-memory";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 function formatDate(date: string) {
   try {
@@ -28,9 +30,7 @@ export default function RecentActivityTimeline() {
 
   return (
     <section className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
-      <h2 className="mb-4 text-xl font-bold text-yellow-400">
-        Recent Activity
-      </h2>
+      <h2 className="mb-4 text-xl font-bold text-yellow-400"><LocalizedText text="Recent Activity" /></h2>
 
       {activities.length === 0 ? (
         <p className="text-sm text-slate-400">No recent activity yet.</p>

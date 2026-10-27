@@ -10,6 +10,8 @@ import {
   getCountryMapRegionId,
   type CountryMapRegionId,
 } from "@/lib/country-map";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 type CountriesWorldJourneyProps = { countries: CountryExplorerItem[] };
 
@@ -179,7 +181,7 @@ export default function CountriesWorldJourney({ countries }: CountriesWorldJourn
                 className="min-h-12 w-full rounded-2xl border border-[var(--tgpi-border)] bg-white px-4 pr-16 text-sm font-semibold text-[var(--tgpi-navy)] shadow-sm outline-none transition placeholder:text-[var(--tgpi-muted)]/75 focus:border-[var(--tgpi-gold)] focus:ring-4 focus:ring-[var(--tgpi-gold)]/15"
               />
               {query ? (
-                <button type="button" onClick={() => setQuery("")} className="absolute right-2 top-1/2 min-h-9 -translate-y-1/2 rounded-xl px-3 text-[10px] font-extrabold text-[var(--tgpi-muted)] hover:bg-[var(--tgpi-gold-soft)]">Clear</button>
+                <button type="button" onClick={() => setQuery("")} className="absolute right-2 top-1/2 min-h-9 -translate-y-1/2 rounded-xl px-3 text-[10px] font-extrabold text-[var(--tgpi-muted)] hover:bg-[var(--tgpi-gold-soft)]"><LocalizedText text="Clear" /></button>
               ) : (
                 <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[var(--tgpi-gold-strong)]" aria-hidden="true">⌕</span>
               )}
@@ -206,7 +208,7 @@ export default function CountriesWorldJourney({ countries }: CountriesWorldJourn
                     className={`flex min-h-10 min-w-0 items-center gap-2 rounded-xl border px-3 text-left text-xs font-extrabold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)] ${isSelected ? "border-[var(--tgpi-gold)] bg-[var(--tgpi-gold-soft)] text-[var(--tgpi-navy)]" : "border-[var(--tgpi-border)] bg-white text-[var(--tgpi-navy)] hover:border-[var(--tgpi-gold)]"}`}
                   >
                     <span aria-hidden="true">{country.emoji}</span>
-                    <span className="truncate">{country.name}</span>
+                    <span className="truncate"><LocalizedText text={country.name} /></span>
                   </button>
                 );
               })}
@@ -229,7 +231,7 @@ export default function CountriesWorldJourney({ countries }: CountriesWorldJourn
               <div className="flex items-end justify-between gap-3">
                 <div className="min-w-0">
                   <p className="text-[9px] font-extrabold uppercase tracking-[0.14em] text-[var(--tgpi-gold-light)]">{selectedCountry.region} · {selectedCountry.capital}</p>
-                  <h3 className="mt-1 truncate font-[var(--tgpi-font-display)] text-3xl font-semibold text-white">{selectedCountry.emoji} {selectedCountry.name}</h3>
+                  <h3 className="mt-1 truncate font-[var(--tgpi-font-display)] text-3xl font-semibold text-white">{selectedCountry.emoji} <LocalizedText text={selectedCountry.name} /></h3>
                 </div>
                 <div className="shrink-0 rounded-xl border border-[var(--tgpi-gold-light)]/35 bg-[#031426]/80 px-3 py-2 text-center backdrop-blur">
                   <p className="text-[7px] font-extrabold uppercase tracking-[0.12em] text-[var(--tgpi-gold-light)]">TGPI signal</p>
@@ -243,7 +245,7 @@ export default function CountriesWorldJourney({ countries }: CountriesWorldJourn
               </div>
               <div className="mt-4 grid grid-cols-[1fr_auto] gap-2">
                 <Link href={`/countries/${selectedCountry.slug}`} className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[var(--tgpi-gold)] px-4 text-xs font-extrabold text-[var(--tgpi-navy)] transition hover:bg-[#D4AA49] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">Open dossier →</Link>
-                <Link href={`/compare?country=${selectedCountry.slug}`} className="inline-flex min-h-11 items-center justify-center rounded-xl border border-white/20 bg-[#031426]/70 px-4 text-xs font-extrabold text-white backdrop-blur transition hover:border-[var(--tgpi-gold-light)]">Compare</Link>
+                <Link href={`/compare?country=${selectedCountry.slug}`} className="inline-flex min-h-11 items-center justify-center rounded-xl border border-white/20 bg-[#031426]/70 px-4 text-xs font-extrabold text-white backdrop-blur transition hover:border-[var(--tgpi-gold-light)]"><LocalizedText text="Compare" /></Link>
               </div>
             </div>
           </article>

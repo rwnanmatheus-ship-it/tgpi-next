@@ -1,7 +1,9 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 export default function CoursesRow() {
   return (
     <div className="space-y-3">
-      <h2 className="text-lg font-bold">Continue Learning</h2>
+      <h2 className="text-lg font-bold"><LocalizedText text="Continue Learning" /></h2>
 
       <div className="grid gap-4 md:grid-cols-4">
         {["Japan", "Portugal", "English", "Arabic"].map((course) => (

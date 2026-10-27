@@ -8,6 +8,8 @@ import {
 } from "@/lib/referral";
 import { onAuthStateChanged } from "firebase/auth";
 import { useEffect, useState } from "react";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 export default function ReferralCard() {
   const [referralLink, setReferralLink] = useState("");
@@ -54,7 +56,7 @@ export default function ReferralCard() {
 
   return (
     <div className="rounded-3xl border border-yellow-700/20 bg-gradient-to-br from-yellow-500/10 via-slate-950 to-slate-900 p-6">
-      <h2 className="text-2xl font-bold text-yellow-400">Invite Friends</h2>
+      <h2 className="text-2xl font-bold text-yellow-400"><LocalizedText text="Invite Friends" /></h2>
       <p className="mt-3 text-slate-300">
         Bring other users to TGPI and grow your global network.
       </p>

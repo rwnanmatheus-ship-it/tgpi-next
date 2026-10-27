@@ -1,8 +1,10 @@
 "use client";
+import { useLocale } from "@/components/localization/LocaleProvider";
 import Link from "next/link";
 import NavigationIcon from "@/components/navigation/NavigationIcon";
 import { useNotifications } from "@/components/notifications/NotificationProvider";
 export default function NotificationBell() {
+  const { t } = useLocale();
   const { items } = useNotifications();
   const unread = items.filter(
     (item) => !item.readAt && !item.archivedAt,
@@ -13,10 +15,10 @@ export default function NotificationBell() {
       className="tgpi-navigation-square-button relative"
       aria-label={
         unread
-          ? `Notifications, ${unread} unread in recent history`
-          : "Open notifications"
+          ? t("Notifications, {count} unread in recent history", { count: unread })
+          : t("Open notifications")
       }
-      title="Notifications"
+      title={t("Notifications")}
     >
       <NavigationIcon name="bell" width={20} height={20} />
       {unread > 0 && (

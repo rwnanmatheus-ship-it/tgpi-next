@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 const activity = [
   "Profile identity updated",
   "Japan pathway viewed",
@@ -8,7 +10,7 @@ const activity = [
 export default function RecentActivityCard() {
   return (
     <section className="rounded-3xl border border-white/10 bg-white/5 p-6">
-      <h2 className="text-lg font-bold text-white">Recent Activity</h2>
+      <h2 className="text-lg font-bold text-white"><LocalizedText text="Recent Activity" /></h2>
 
       <div className="mt-4 space-y-3">
         {activity.map((item) => (

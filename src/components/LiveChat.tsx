@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 export default function LiveChat() {
   const [messages, setMessages] = useState<string[]>([]);
@@ -14,7 +16,7 @@ export default function LiveChat() {
 
   return (
     <div className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-      <h2 className="text-yellow-400 font-bold">Live Chat</h2>
+      <h2 className="text-yellow-400 font-bold"><LocalizedText text="Live Chat" /></h2>
 
       <div className="mt-4 space-y-2 max-h-40 overflow-y-auto">
         {messages.map((m, i) => (
@@ -33,9 +35,7 @@ export default function LiveChat() {
         <button
           onClick={send}
           className="bg-yellow-500 text-black px-4 rounded-xl"
-        >
-          Send
-        </button>
+        ><LocalizedText text="Send" /></button>
       </div>
     </div>
   );

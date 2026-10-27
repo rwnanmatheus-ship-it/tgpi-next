@@ -8,6 +8,8 @@ import {
   COUNTRY_MAP_REGIONS,
   type CountryMapRegionId,
 } from "@/lib/country-map";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 type MapCountry = Pick<
   CountryExplorerItem,
@@ -336,7 +338,7 @@ export default function CountriesWorldMap({
         })}
       </div>
 
-      <div className="atlas-controls"><label>Locate a destination<select aria-label="Locate a destination on the atlas" value={selectedSlug} onChange={e => { previewCountry(e.target.value); setZoomLevel(1); setPan({ x: 0, y: 0 }); onRegionChange("world"); }}>{countries.map(c => <option key={c.slug} value={c.slug}>{c.name}</option>)}</select></label><div role="group" aria-label="Map zoom"><button type="button" aria-label="Zoom out" disabled={zoomLevel <= 1} onClick={() => setZoomLevel(z => Math.max(1, z - .5))}>−</button><span>{Math.round(zoomLevel * 100)}%</span><button type="button" aria-label="Zoom in" disabled={zoomLevel >= 4} onClick={() => setZoomLevel(z => Math.min(4, z + .5))}>+</button><button type="button" onClick={() => { setZoomLevel(1); setPan({ x: 0, y: 0 }); onRegionChange("world"); }}>Reset</button></div></div>
+      <div className="atlas-controls"><label>Locate a destination<select aria-label="Locate a destination on the atlas" value={selectedSlug} onChange={e => { previewCountry(e.target.value); setZoomLevel(1); setPan({ x: 0, y: 0 }); onRegionChange("world"); }}>{countries.map(c => <option key={c.slug} value={c.slug}>{c.name}</option>)}</select></label><div role="group" aria-label="Map zoom"><button type="button" aria-label="Zoom out" disabled={zoomLevel <= 1} onClick={() => setZoomLevel(z => Math.max(1, z - .5))}>−</button><span>{Math.round(zoomLevel * 100)}%</span><button type="button" aria-label="Zoom in" disabled={zoomLevel >= 4} onClick={() => setZoomLevel(z => Math.min(4, z + .5))}>+</button><button type="button" onClick={() => { setZoomLevel(1); setPan({ x: 0, y: 0 }); onRegionChange("world"); }}><LocalizedText text="Reset" /></button></div></div>
       <div
         className="tgpi-map-cinematic-frame relative mt-3 h-[340px] overflow-hidden rounded-[26px] border border-white/12 bg-[#06172B] shadow-[inset_0_0_110px_rgba(56,113,158,.18),0_24px_70px_rgba(0,0,0,.2)] sm:h-[440px] lg:h-[500px]"
         data-phase={cinematic.phase}
@@ -477,7 +479,7 @@ export default function CountriesWorldMap({
                             : "fill-[url(#tgpi-land-relief)] stroke-[#94BBD5]/45"
                         }`}
                       >
-                        <title>{country.name} — open profile</title>
+                        <title><LocalizedText text={country.name} /> — open profile</title>
                       </path>
                     );
                   })
@@ -603,7 +605,7 @@ export default function CountriesWorldMap({
             </div>
             <div className="min-w-0">
               <p className="text-[8px] font-extrabold uppercase tracking-[0.14em] text-[var(--tgpi-gold-light)]">Intelligence preview</p>
-              <p className="mt-0.5 truncate text-sm font-extrabold">{selectedCountry.emoji} {selectedCountry.name}</p>
+              <p className="mt-0.5 truncate text-sm font-extrabold">{selectedCountry.emoji} <LocalizedText text={selectedCountry.name} /></p>
               <button type="button" className="atlas-open-country" onClick={() => openCountry(selectedCountry.slug)}>Open country dossier →</button>
             </div>
           </div>

@@ -13,6 +13,8 @@ import type { ParticipationAppeal } from "@/lib/community/features";
 import ImageUpload from "./CommunityImageUpload";
 import { api, type Action } from "./api";
 import s from "./Community.module.css";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 type Audit = {
   action: string;
   actor: string;
@@ -91,7 +93,7 @@ export default function CommunityManagement({
           const a = x as ParticipationAppeal;
           return (
             <article className={s.reply} key={a.id}>
-              <Link href={`/u/${a.uid}`}>Member profile</Link>
+              <Link href={`/u/${a.uid}`}><LocalizedText text="Member profile" /></Link>
               <p>{a.body}</p>
               <p>
                 {a.state} · {a.decision}
@@ -331,8 +333,7 @@ export default function CommunityManagement({
           );
         })}
       {next && (
-        <button className={s.secondary} onClick={() => void load(true)}>
-          Load more {section}
+        <button className={s.secondary} onClick={() => void load(true)}><LocalizedText text="Load more" />{" "}{section}
         </button>
       )}
       {m.role === "owner" && (

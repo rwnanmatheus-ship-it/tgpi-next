@@ -7,6 +7,8 @@ import type {
   LearningAssessmentResult,
   LearningCredentialEligibility,
 } from "@/types/learning";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 type SubmissionResponse = {
   eligibility?: LearningCredentialEligibility;
@@ -116,7 +118,7 @@ export default function AssessmentExperience({
 
         {result ? (
           <section className={`mt-7 rounded-[26px] border p-7 sm:p-9 ${result.passed ? "border-[#86BCA1] bg-[#EAF7F0]" : "border-[#D8B75D] bg-[#FFF6D8]"}`} aria-live="polite">
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#72520F]">Attempt {result.attemptNumber} scored</p>
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#72520F]"><LocalizedText text="Attempt" />{" "}{result.attemptNumber} scored</p>
             <div className="mt-3 flex flex-wrap items-end justify-between gap-4">
               <div>
                 <h2 className="text-3xl font-semibold">{result.passed ? "Mastery threshold reached" : "Review the capability, then retry"}</h2>
@@ -149,7 +151,7 @@ export default function AssessmentExperience({
             const itemFeedback = feedback.get(question.id);
             return (
               <fieldset key={question.id} disabled={Boolean(result)} className="rounded-[24px] border border-[#D9D1C2] bg-[#FFFDF8] p-6 shadow-[0_12px_35px_rgba(11,31,58,.05)] sm:p-8">
-                <legend className="sr-only">Question {index + 1}</legend>
+                <legend className="sr-only"><LocalizedText text="Question" />{" "}{index + 1}</legend>
                 <div className="flex gap-4">
                   <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#EEE6D2] text-xs font-extrabold text-[#72520F]">{index + 1}</span>
                   <div className="min-w-0 flex-1">

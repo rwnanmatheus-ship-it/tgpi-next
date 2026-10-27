@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { getGlobalProfile } from "@/lib/global-profile";
 import { getBestCountries } from "@/lib/ai-decision";
 import type { Country } from "@/types";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 export default function AIDecision() {
   const [results, setResults] = useState<Country[]>([]);
@@ -21,7 +23,7 @@ export default function AIDecision() {
     <div className="grid gap-4">
       {results.map((country) => (
         <div key={country.slug} className="card">
-          <h3>{country.name}</h3>
+          <h3><LocalizedText text={country.name} /></h3>
         </div>
       ))}
     </div>

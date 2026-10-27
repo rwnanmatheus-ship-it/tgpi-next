@@ -3,6 +3,8 @@ import { useState } from "react";
 import type { Action } from "./api";
 import ImageUpload from "./CommunityImageUpload";
 import s from "./Community.module.css";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 export default function PostComposer({
   action,
   busy,
@@ -66,9 +68,7 @@ export default function PostComposer({
               <option value="guide">Guide</option>
             </select>
           </label>
-          <label>
-            Title
-            <input
+          <label><LocalizedText text="Title" /><input
               required
               maxLength={180}
               value={title}

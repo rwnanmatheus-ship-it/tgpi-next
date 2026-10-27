@@ -5,6 +5,8 @@ import {
   getLeaderboardEntries,
   type LeaderboardEntry,
 } from "@/lib/user-stats";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 export default function Leaderboard() {
   const [entries, setEntries] = useState<LeaderboardEntry[]>([]);
@@ -60,8 +62,7 @@ export default function Leaderboard() {
                   <h3 className="text-lg font-semibold text-white">
                     {user.name}
                   </h3>
-                  <p className="text-sm text-slate-400">
-                    Level {user.level}
+                  <p className="text-sm text-slate-400"><LocalizedText text="Level" />{" "}{user.level}
                   </p>
                 </div>
               </div>

@@ -1,10 +1,12 @@
 import type { Badge } from "@/lib/badges";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
 
 export default function BadgesGrid({ badges }: { badges: Badge[] }) {
   if (!badges.length) {
     return (
       <div className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-        <h2 className="text-2xl font-bold text-yellow-400">Badges</h2>
+        <h2 className="text-2xl font-bold text-yellow-400"><LocalizedText text="Badges" /></h2>
         <p className="mt-3 text-slate-400">
           Start exploring countries and courses to unlock your first badge.
         </p>
@@ -14,7 +16,7 @@ export default function BadgesGrid({ badges }: { badges: Badge[] }) {
 
   return (
     <div className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-      <h2 className="text-2xl font-bold text-yellow-400">Badges</h2>
+      <h2 className="text-2xl font-bold text-yellow-400"><LocalizedText text="Badges" /></h2>
 
       <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {badges.map((badge) => (
