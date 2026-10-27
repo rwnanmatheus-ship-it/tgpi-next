@@ -1,3 +1,6 @@
+"use client";
+
+import { useLocale } from "@/components/localization/LocaleProvider";
 import Link from "next/link";
 import {
   getNextCapabilityArea,
@@ -20,6 +23,7 @@ export default function CapabilitySystemRail({
   metric,
   theme = "light",
 }: CapabilitySystemRailProps) {
+  const { t } = useLocale();
   const nextArea = getNextCapabilityArea(active);
 
   return (
@@ -31,33 +35,33 @@ export default function CapabilitySystemRail({
       <div className="tgpi-capability-system__heading">
         <div>
           <p className="tgpi-capability-system__eyebrow">
-            TGPI Capability System
+            {t("TGPI Capability System")}
           </p>
           <h2 id={`capability-system-${active}`}>
-            One identity. Four connected capability layers.
+            {t("One identity. Four connected capability layers.")}
           </h2>
         </div>
         {metric ? (
           <div className="tgpi-capability-system__metric">
             <dl>
-              <dt>{metric.label}</dt>
+              <dt>{t(metric.label)}</dt>
               <dd>{metric.value}</dd>
             </dl>
-            <p>{metric.detail}</p>
+            <p>{t(metric.detail)}</p>
           </div>
         ) : (
           <Link
             className="tgpi-capability-system__next"
             href={nextArea.href}
           >
-            Next layer · {nextArea.phase}
+            {t("Next layer · {phase}", { phase: t(nextArea.phase) })}
             <span aria-hidden="true">→</span>
           </Link>
         )}
       </div>
 
       <nav
-        aria-label="TGPI capability areas"
+        aria-label={t("TGPI capability areas")}
         className="tgpi-capability-system__grid"
       >
         {TGPI_CAPABILITY_AREAS.map((area) => {
@@ -76,10 +80,10 @@ export default function CapabilitySystemRail({
               </span>
               <span className="tgpi-capability-system__copy">
                 <span className="tgpi-capability-system__phase">
-                  {area.phase}
+                  {t(area.phase)}
                 </span>
-                <strong>{area.label}</strong>
-                <small>{area.description}</small>
+                <strong>{t(area.label)}</strong>
+                <small>{t(area.description)}</small>
               </span>
               <span className="tgpi-capability-system__arrow" aria-hidden="true">
                 {isActive ? "●" : "↗"}

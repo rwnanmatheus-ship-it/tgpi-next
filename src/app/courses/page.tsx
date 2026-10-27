@@ -1,3 +1,5 @@
+import { getLocale } from "@/lib/localization/server";
+import { translate } from "@/lib/localization/messages";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -13,13 +15,15 @@ export const metadata: Metadata = {
   description: "Explore practical courses in global English, country selection, relocation budgeting and international career readiness. Build a plan you can act on.",
 };
 
-export default function CoursesPage() {
+export default async function CoursesPage() {
+  const locale = await getLocale();
+  const t = (text: string) => translate(locale, text);
   const catalog = [...coursesOverview].sort((a, b) => Number(b.id === "global-english-2026") - Number(a.id === "global-english-2026"));
   const available = catalog.filter(course => course.status === "available");
   return <TGPIPageShell width="capability">
-    <nav aria-label="Learning navigation" className="flex min-h-12 flex-wrap items-center justify-between gap-3 py-3 text-sm font-semibold text-[var(--tgpi-navy)]"><span><LocalizedText text="TGPI / Learning" /></span><div className="flex gap-5"><Link href="/dashboard"><LocalizedText text="My workspace" /></Link><Link href="/certificates"><LocalizedText text="Certificates ↗" /></Link></div></nav>
+    <nav aria-label={t("Learning navigation")} className="flex min-h-12 flex-wrap items-center justify-between gap-3 py-3 text-sm font-semibold text-[var(--tgpi-navy)]"><span><LocalizedText text="TGPI / Learning" /></span><div className="flex gap-5"><Link href="/dashboard"><LocalizedText text="My workspace" /></Link><Link href="/certificates"><LocalizedText text="Certificates ↗" /></Link></div></nav>
     <section className="relative isolate overflow-hidden rounded-[26px] border border-white/10 bg-[#0B1F3A] text-white shadow-xl sm:rounded-[32px]" aria-labelledby="learning-title">
-      <Image src="/images/learning/tgpi-learning-hero-v2.webp" alt="TGPI global learning observatory with an illuminated world atlas" fill priority sizes="100vw" className="object-cover object-right" />
+      <Image src="/images/learning/tgpi-learning-hero-v2.webp" alt={t("TGPI global learning observatory with an illuminated world atlas")} fill priority sizes="100vw" className="object-cover object-right" />
       <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(5,20,39,.98),rgba(5,20,39,.9)_48%,rgba(5,20,39,.45))]" />
       <div className="relative grid gap-8 p-7 sm:p-10 lg:grid-cols-[1fr_240px] lg:items-end lg:p-12">
         <div className="max-w-2xl"><p className="text-xs font-bold uppercase tracking-[.18em] text-[#E4C779]"><LocalizedText text="TGPI Learning · Practical by design" /></p><h1 id="learning-title" className="mt-4 text-[clamp(2rem,4.1vw,3.65rem)] font-semibold leading-[1.06] tracking-[-.04em]"><LocalizedText text="Build skills." /><br /><LocalizedText text="Expand your world." /></h1><p className="mt-5 max-w-xl text-base leading-7 text-[#DAE2EC]"><LocalizedText text="Choose your next country with clarity. Prepare your finances, strengthen your English and build a career that travels." /></p><Link href="#learning-paths" className="mt-6 inline-flex min-h-12 items-center justify-center rounded-xl bg-[#DFC06F] px-6 text-sm font-bold text-[#0B1F3A] transition hover:bg-[#EED595] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"><LocalizedText text="Explore the courses ↓" /></Link></div>

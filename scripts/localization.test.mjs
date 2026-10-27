@@ -90,3 +90,32 @@ test('home FAQ translates questions and complete answers in every supported lang
     }
   }
 });
+
+// Resolve the actual catalogue and its dependencies, so newly added courses cannot silently fall back to English.
+async function localModuleUrl(path) {
+  let compiled = ts.transpileModule(fs.readFileSync(path, 'utf8'), { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 } }).outputText;
+  const imports = [...compiled.matchAll(/from\s+["'](@\/[^"']+)["']/g)];
+  for (const match of imports) compiled = compiled.replace(match[0], `from ${JSON.stringify(await localModuleUrl(`src/${match[1].slice(2)}.ts`))}`);
+  return 'data:text/javascript;base64,' + Buffer.from(compiled).toString('base64');
+}
+test('course catalogue cards and global journey have complete translations', async () => {
+  const { coursesOverview } = await import(await localModuleUrl('src/data/courses-overview.ts'));
+  const { PLATFORM_JOURNEY } = await import(await localModuleUrl('src/lib/platform-journey.ts'));
+  const keys = new Set([
+    ...coursesOverview.flatMap(course => [course.title, course.category, course.desc, course.format, course.series, ...course.benefits.slice(0, 2)]).filter(Boolean),
+    ...PLATFORM_JOURNEY.flatMap(stage => [stage.label, stage.description]),
+  ]);
+  for (const key of keys) {
+    assert.ok(Object.hasOwn(messages, key), `Missing catalogue entry: ${key}`);
+    for (const locale of locales) assert.ok(messages[key][locale]?.trim(), `${locale}: ${key}`);
+  }
+});
+test('all language options ship self-contained vector flags with no remote dependencies', async () => {
+  const { localeOptions } = await import(configUrl);
+  assert.deepEqual(localeOptions.map(option => option.code), [...locales]);
+  for (const option of localeOptions) {
+    const svg = fs.readFileSync(`public${option.flag}`, 'utf8');
+    assert.match(svg, /<svg\b/);
+    assert.doesNotMatch(svg, /<script\b|<foreignObject\b|(?:href|src)=["']https?:/i);
+  }
+});

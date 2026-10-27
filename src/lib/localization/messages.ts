@@ -2043,11 +2043,11 @@ export const messages = {
   },
   "Learning navigation": {
     "en": "Learning navigation",
-    "pt-BR": "Navegação de aprendizado",
+    "pt-BR": "Navegação de aprendizagem",
     "es": "Navegación de aprendizaje",
     "fr": "Navigation d’apprentissage",
     "de": "Lernnavigation",
-    "it": "Navigazione di apprendimento"
+    "it": "Navigazione dell’apprendimento"
   },
   "TGPI / Learning": {
     "en": "TGPI / Learning",
@@ -5336,6 +5336,950 @@ export const messages = {
     "fr": "Comment gérer ou résilier mon abonnement ?",
     "de": "Wie verwalte oder kündige ich mein Abonnement?",
     "it": "Come gestisco o disdico il mio abbonamento?"
+  },
+  "Your global journey": {
+    "en": "Your global journey",
+    "pt-BR": "Sua jornada global",
+    "es": "Tu trayectoria global",
+    "fr": "Votre parcours international",
+    "de": "Ihre globale Reise",
+    "it": "Il tuo percorso globale"
+  },
+  "Global journey": {
+    "en": "Global journey",
+    "pt-BR": "Jornada global",
+    "es": "Trayectoria global",
+    "fr": "Parcours international",
+    "de": "Globale Reise",
+    "it": "Percorso globale"
+  },
+  "Research destinations": {
+    "en": "Research destinations",
+    "pt-BR": "Pesquise destinos",
+    "es": "Investiga destinos",
+    "fr": "Recherchez des destinations",
+    "de": "Reiseziele recherchieren",
+    "it": "Ricerca le destinazioni"
+  },
+  "Understand trade-offs": {
+    "en": "Understand trade-offs",
+    "pt-BR": "Entenda os prós e contras",
+    "es": "Comprende las ventajas y desventajas",
+    "fr": "Comprenez les compromis",
+    "de": "Vor- und Nachteile verstehen",
+    "it": "Comprendi vantaggi e svantaggi"
+  },
+  "Develop practical skills": {
+    "en": "Develop practical skills",
+    "pt-BR": "Desenvolva habilidades práticas",
+    "es": "Desarrolla habilidades prácticas",
+    "fr": "Développez des compétences pratiques",
+    "de": "Praktische Fähigkeiten entwickeln",
+    "it": "Sviluppa competenze pratiche"
+  },
+  "Review learning evidence": {
+    "en": "Review learning evidence",
+    "pt-BR": "Consulte suas evidências de aprendizagem",
+    "es": "Revisa tus evidencias de aprendizaje",
+    "fr": "Consultez vos preuves d’apprentissage",
+    "de": "Lernnachweise prüfen",
+    "it": "Consulta le prove di apprendimento"
+  },
+  "Continue in your workspace": {
+    "en": "Continue in your workspace",
+    "pt-BR": "Continue no seu espaço",
+    "es": "Continúa en tu espacio",
+    "fr": "Continuez dans votre espace",
+    "de": "Im Arbeitsbereich fortfahren",
+    "it": "Continua nel tuo spazio"
+  },
+  "Prove": {
+    "en": "Prove",
+    "pt-BR": "Comprovar",
+    "es": "Demostrar",
+    "fr": "Démontrer",
+    "de": "Nachweisen",
+    "it": "Dimostrare"
+  },
+  "Advance": {
+    "en": "Advance",
+    "pt-BR": "Avançar",
+    "es": "Avanzar",
+    "fr": "Avancer",
+    "de": "Weiterkommen",
+    "it": "Progredire"
+  },
+  "Anchor": {
+    "en": "Anchor",
+    "pt-BR": "Vincular",
+    "es": "Vincular",
+    "fr": "Relier",
+    "de": "Verknüpfen",
+    "it": "Collegare"
+  },
+  "Chapter {number}": {
+    "en": "Chapter {number}",
+    "pt-BR": "Capítulo {number}",
+    "es": "Capítulo {number}",
+    "fr": "Chapitre {number}",
+    "de": "Kapitel {number}",
+    "it": "Capitolo {number}"
+  },
+  "Explore {course}": {
+    "en": "Explore {course}",
+    "pt-BR": "Explore {course}",
+    "es": "Explora {course}",
+    "fr": "Découvrez {course}",
+    "de": "{course} entdecken",
+    "it": "Esplora {course}"
+  },
+  "TGPI Capability System": {
+    "en": "TGPI Capability System",
+    "pt-BR": "Sistema de competências TGPI",
+    "es": "Sistema de competencias TGPI",
+    "fr": "Système de compétences TGPI",
+    "de": "TGPI-Kompetenzsystem",
+    "it": "Sistema di competenze TGPI"
+  },
+  "One identity. Four connected capability layers.": {
+    "en": "One identity. Four connected capability layers.",
+    "pt-BR": "Uma identidade. Quatro camadas de competências conectadas.",
+    "es": "Una identidad. Cuatro niveles de competencias conectados.",
+    "fr": "Une identité. Quatre niveaux de compétences connectés.",
+    "de": "Eine Identität. Vier verbundene Kompetenzebenen.",
+    "it": "Un’identità. Quattro livelli di competenze collegati."
+  },
+  "Next layer · {phase}": {
+    "en": "Next layer · {phase}",
+    "pt-BR": "Próxima camada · {phase}",
+    "es": "Siguiente nivel · {phase}",
+    "fr": "Niveau suivant · {phase}",
+    "de": "Nächste Ebene · {phase}",
+    "it": "Livello successivo · {phase}"
+  },
+  "TGPI capability areas": {
+    "en": "TGPI capability areas",
+    "pt-BR": "Áreas de competências TGPI",
+    "es": "Áreas de competencias TGPI",
+    "fr": "Domaines de compétences TGPI",
+    "de": "TGPI-Kompetenzbereiche",
+    "it": "Aree di competenza TGPI"
+  },
+  "Practice skills through applied lessons and performance gates.": {
+    "en": "Practice skills through applied lessons and performance gates.",
+    "pt-BR": "Pratique habilidades com aulas aplicadas e etapas de avaliação de desempenho.",
+    "es": "Practica habilidades con lecciones aplicadas y etapas de evaluación del desempeño.",
+    "fr": "Exercez vos compétences avec des leçons pratiques et des étapes d’évaluation des performances.",
+    "de": "Üben Sie Fähigkeiten mit praktischen Lektionen und Leistungsprüfungen.",
+    "it": "Esercita le competenze con lezioni pratiche e verifiche delle prestazioni."
+  },
+  "Organize country-aware research without storing sensitive files.": {
+    "en": "Organize country-aware research without storing sensitive files.",
+    "pt-BR": "Organize pesquisas específicas de cada país sem armazenar arquivos sensíveis.",
+    "es": "Organiza investigaciones específicas de cada país sin almacenar archivos sensibles.",
+    "fr": "Organisez des recherches adaptées aux pays sans stocker de fichiers sensibles.",
+    "de": "Organisieren Sie länderspezifische Recherchen, ohne sensible Dateien zu speichern.",
+    "it": "Organizza ricerche specifiche per paese senza archiviare file sensibili."
+  },
+  "Turn assessed performance into a live, verifiable record.": {
+    "en": "Turn assessed performance into a live, verifiable record.",
+    "pt-BR": "Transforme o desempenho avaliado em um registro atualizado e verificável.",
+    "es": "Convierte el desempeño evaluado en un registro actualizado y verificable.",
+    "fr": "Transformez les performances évaluées en un dossier actualisé et vérifiable.",
+    "de": "Machen Sie bewertete Leistungen zu einem aktuellen, überprüfbaren Nachweis.",
+    "it": "Trasforma le prestazioni valutate in un registro aggiornato e verificabile."
+  },
+  "Bind progress to a private identity and integrity chain.": {
+    "en": "Bind progress to a private identity and integrity chain.",
+    "pt-BR": "Vincule o progresso a uma identidade privada e a uma cadeia de integridade.",
+    "es": "Vincula el progreso a una identidad privada y una cadena de integridad.",
+    "fr": "Reliez la progression à une identité privée et à une chaîne d’intégrité.",
+    "de": "Verknüpfen Sie Fortschritte mit einer privaten Identität und einer Integritätskette.",
+    "it": "Collega i progressi a un’identità privata e a una catena di integrità."
+  },
+  "Documents OS": {
+    "en": "Documents OS",
+    "pt-BR": "Sistema de documentos",
+    "es": "Sistema de documentos",
+    "fr": "Système documentaire",
+    "de": "Dokumentensystem",
+    "it": "Sistema documentale"
+  },
+  "Progress could not load. Open your course to retry.": {
+    "en": "Progress could not load. Open your course to retry.",
+    "pt-BR": "Não foi possível carregar o progresso. Abra seu curso para tentar novamente.",
+    "es": "No se pudo cargar el progreso. Abre tu curso para volver a intentarlo.",
+    "fr": "Impossible de charger la progression. Ouvrez votre cours pour réessayer.",
+    "de": "Der Fortschritt konnte nicht geladen werden. Öffnen Sie Ihren Kurs, um es erneut zu versuchen.",
+    "it": "Impossibile caricare i progressi. Apri il corso per riprovare."
+  },
+  "Each available course includes scenarios, practical tasks and formative checkpoints with feedback.": {
+    "en": "Each available course includes scenarios, practical tasks and formative checkpoints with feedback.",
+    "pt-BR": "Cada curso disponível inclui cenários, atividades práticas e avaliações formativas com feedback.",
+    "es": "Cada curso disponible incluye escenarios, tareas prácticas y evaluaciones formativas con comentarios.",
+    "fr": "Chaque cours disponible comprend des scénarios, des exercices pratiques et des évaluations formatives avec retour.",
+    "de": "Jeder verfügbare Kurs enthält Szenarien, praktische Aufgaben und formative Lernkontrollen mit Feedback.",
+    "it": "Ogni corso disponibile comprende scenari, attività pratiche e verifiche formative con feedback."
+  },
+  "Sign in to record completed lessons. Practical written outputs are self-reviewed and are not uploaded or graded.": {
+    "en": "Sign in to record completed lessons. Practical written outputs are self-reviewed and are not uploaded or graded.",
+    "pt-BR": "Entre para registrar as aulas concluídas. Os trabalhos escritos práticos são revisados pelo próprio aluno e não são enviados nem recebem nota.",
+    "es": "Inicia sesión para registrar las lecciones completadas. Los trabajos escritos prácticos son revisados por el propio alumno y no se suben ni se califican.",
+    "fr": "Connectez-vous pour enregistrer les leçons terminées. Les travaux écrits pratiques sont autoévalués, sans envoi ni notation.",
+    "de": "Melden Sie sich an, um abgeschlossene Lektionen zu erfassen. Praktische schriftliche Arbeiten werden selbst überprüft und weder hochgeladen noch benotet.",
+    "it": "Accedi per registrare le lezioni completate. Gli elaborati pratici scritti sono autovalutati e non vengono caricati né valutati con un voto."
+  },
+  "Global English has a separate verified assessment pathway. The new short courses record lesson progress and do not issue professional certificates.": {
+    "en": "Global English has a separate verified assessment pathway. The new short courses record lesson progress and do not issue professional certificates.",
+    "pt-BR": "O Inglês Global tem um percurso separado de avaliação verificada. Os novos cursos curtos registram o progresso das aulas e não emitem certificados profissionais.",
+    "es": "Inglés Global tiene un itinerario separado de evaluación verificada. Los nuevos cursos cortos registran el progreso de las lecciones y no emiten certificados profesionales.",
+    "fr": "Anglais global propose un parcours distinct d’évaluation vérifiée. Les nouveaux cours courts enregistrent la progression des leçons et ne délivrent pas de certificats professionnels.",
+    "de": "Global English bietet einen separaten verifizierten Prüfungsweg. Die neuen Kurzkurse erfassen den Lernfortschritt und stellen keine beruflichen Zertifikate aus.",
+    "it": "Inglese globale prevede un percorso separato di valutazione verificata. I nuovi corsi brevi registrano i progressi delle lezioni e non rilasciano certificati professionali."
+  },
+  "The Arrival Playbook: Your First 30 Days": {
+    "en": "The Arrival Playbook: Your First 30 Days",
+    "pt-BR": "Guia de chegada: seus primeiros 30 dias",
+    "es": "Guía de llegada: tus primeros 30 días",
+    "fr": "Guide d’arrivée : vos 30 premiers jours",
+    "de": "Ankunftsleitfaden: Ihre ersten 30 Tage",
+    "it": "Guida all’arrivo: i tuoi primi 30 giorni"
+  },
+  "Arrival & Independence": {
+    "en": "Arrival & Independence",
+    "pt-BR": "Chegada e independência",
+    "es": "Llegada e independencia",
+    "fr": "Arrivée et autonomie",
+    "de": "Ankunft und Selbstständigkeit",
+    "it": "Arrivo e autonomia"
+  },
+  "Turn a stressful arrival into a clear sequence of first-day essentials, local setup and weekly actions.": {
+    "en": "Turn a stressful arrival into a clear sequence of first-day essentials, local setup and weekly actions.",
+    "pt-BR": "Transforme uma chegada estressante em uma sequência clara de necessidades do primeiro dia, organização local e ações semanais.",
+    "es": "Convierte una llegada estresante en una secuencia clara de necesidades del primer día, organización local y acciones semanales.",
+    "fr": "Transformez une arrivée stressante en une suite claire d’essentiels du premier jour, d’installation locale et d’actions hebdomadaires.",
+    "de": "Machen Sie eine stressige Ankunft zu einer klaren Abfolge von Aufgaben für den ersten Tag, der Einrichtung vor Ort und wöchentlichen Schritten.",
+    "it": "Trasforma un arrivo stressante in una sequenza chiara di priorità del primo giorno, organizzazione locale e azioni settimanali."
+  },
+  "3 applied lessons": {
+    "en": "3 applied lessons",
+    "pt-BR": "3 aulas práticas",
+    "es": "3 lecciones prácticas",
+    "fr": "3 leçons pratiques",
+    "de": "3 praktische Lektionen",
+    "it": "3 lezioni pratiche"
+  },
+  "First 30 Days": {
+    "en": "First 30 Days",
+    "pt-BR": "Primeiros 30 dias",
+    "es": "Primeros 30 días",
+    "fr": "30 premiers jours",
+    "de": "Die ersten 30 Tage",
+    "it": "Primi 30 giorni"
+  },
+  "Find Your First Home Abroad": {
+    "en": "Find Your First Home Abroad",
+    "pt-BR": "Encontre sua primeira moradia no exterior",
+    "es": "Encuentra tu primera vivienda en el extranjero",
+    "fr": "Trouvez votre premier logement à l’étranger",
+    "de": "Finden Sie Ihr erstes Zuhause im Ausland",
+    "it": "Trova la tua prima casa all’estero"
+  },
+  "Housing & Independence": {
+    "en": "Housing & Independence",
+    "pt-BR": "Moradia e independência",
+    "es": "Vivienda e independencia",
+    "fr": "Logement et autonomie",
+    "de": "Wohnen und Selbstständigkeit",
+    "it": "Alloggio e autonomia"
+  },
+  "Screen housing options, compare the full cost and document the questions that matter before committing.": {
+    "en": "Screen housing options, compare the full cost and document the questions that matter before committing.",
+    "pt-BR": "Avalie opções de moradia, compare o custo total e registre as perguntas importantes antes de se comprometer.",
+    "es": "Evalúa opciones de vivienda, compara el coste total y documenta las preguntas importantes antes de comprometerte.",
+    "fr": "Évaluez les logements, comparez le coût total et notez les questions importantes avant de vous engager.",
+    "de": "Prüfen Sie Wohnangebote, vergleichen Sie die Gesamtkosten und dokumentieren Sie wichtige Fragen, bevor Sie sich festlegen.",
+    "it": "Valuta gli alloggi, confronta il costo totale e annota le domande importanti prima di impegnarti."
+  },
+  "Belong Abroad: Cross-Cultural Confidence": {
+    "en": "Belong Abroad: Cross-Cultural Confidence",
+    "pt-BR": "Sinta-se em casa no exterior: confiança intercultural",
+    "es": "Siéntete en casa en el extranjero: confianza intercultural",
+    "fr": "Se sentir chez soi à l’étranger : confiance interculturelle",
+    "de": "Im Ausland ankommen: interkulturelle Sicherheit",
+    "it": "Sentirsi a casa all’estero: fiducia interculturale"
+  },
+  "Culture & Communication": {
+    "en": "Culture & Communication",
+    "pt-BR": "Cultura e comunicação",
+    "es": "Cultura y comunicación",
+    "fr": "Culture et communication",
+    "de": "Kultur und Kommunikation",
+    "it": "Cultura e comunicazione"
+  },
+  "Read unfamiliar situations, repair misunderstandings and build relationships without relying on stereotypes.": {
+    "en": "Read unfamiliar situations, repair misunderstandings and build relationships without relying on stereotypes.",
+    "pt-BR": "Interprete situações desconhecidas, esclareça mal-entendidos e construa relações sem recorrer a estereótipos.",
+    "es": "Interpreta situaciones desconocidas, aclara malentendidos y construye relaciones sin recurrir a estereotipos.",
+    "fr": "Interprétez des situations nouvelles, dissipez les malentendus et tissez des liens sans vous appuyer sur des stéréotypes.",
+    "de": "Verstehen Sie ungewohnte Situationen, klären Sie Missverständnisse und bauen Sie Beziehungen ohne Stereotype auf.",
+    "it": "Interpreta situazioni nuove, chiarisci i malintesi e costruisci relazioni senza affidarti agli stereotipi."
+  },
+  "Travel Smart: Protect Your Digital Life": {
+    "en": "Travel Smart: Protect Your Digital Life",
+    "pt-BR": "Viaje com inteligência: proteja sua vida digital",
+    "es": "Viaja con inteligencia: protege tu vida digital",
+    "fr": "Voyagez malin : protégez votre vie numérique",
+    "de": "Clever reisen: Schützen Sie Ihr digitales Leben",
+    "it": "Viaggia con intelligenza: proteggi la tua vita digitale"
+  },
+  "Digital Independence": {
+    "en": "Digital Independence",
+    "pt-BR": "Independência digital",
+    "es": "Independencia digital",
+    "fr": "Autonomie numérique",
+    "de": "Digitale Selbstständigkeit",
+    "it": "Autonomia digitale"
+  },
+  "Prepare account recovery, recognize suspicious requests and build a calm response plan for a lost device.": {
+    "en": "Prepare account recovery, recognize suspicious requests and build a calm response plan for a lost device.",
+    "pt-BR": "Prepare a recuperação de contas, reconheça solicitações suspeitas e crie um plano de resposta tranquilo para a perda de um dispositivo.",
+    "es": "Prepara la recuperación de cuentas, reconoce solicitudes sospechosas y crea un plan de respuesta sereno ante la pérdida de un dispositivo.",
+    "fr": "Préparez la récupération de comptes, repérez les demandes suspectes et établissez un plan de réaction serein en cas de perte d’un appareil.",
+    "de": "Bereiten Sie die Kontowiederherstellung vor, erkennen Sie verdächtige Anfragen und planen Sie eine besonnene Reaktion auf einen Geräteverlust.",
+    "it": "Prepara il recupero degli account, riconosci le richieste sospette e crea un piano di risposta calmo per lo smarrimento di un dispositivo."
+  },
+  "Build Your International Network": {
+    "en": "Build Your International Network",
+    "pt-BR": "Construa sua rede internacional",
+    "es": "Construye tu red internacional",
+    "fr": "Développez votre réseau international",
+    "de": "Bauen Sie Ihr internationales Netzwerk auf",
+    "it": "Costruisci la tua rete internazionale"
+  },
+  "Career & Relationships": {
+    "en": "Career & Relationships",
+    "pt-BR": "Carreira e relacionamentos",
+    "es": "Carrera y relaciones",
+    "fr": "Carrière et relations",
+    "de": "Karriere und Beziehungen",
+    "it": "Carriera e relazioni"
+  },
+  "Make relevant introductions, ask useful questions and turn professional contacts into respectful long-term relationships.": {
+    "en": "Make relevant introductions, ask useful questions and turn professional contacts into respectful long-term relationships.",
+    "pt-BR": "Faça apresentações relevantes, formule perguntas úteis e transforme contatos profissionais em relações duradouras e respeitosas.",
+    "es": "Haz presentaciones relevantes, formula preguntas útiles y convierte contactos profesionales en relaciones duraderas y respetuosas.",
+    "fr": "Présentez-vous de façon pertinente, posez des questions utiles et transformez vos contacts professionnels en relations durables et respectueuses.",
+    "de": "Stellen Sie sich gezielt vor, stellen Sie hilfreiche Fragen und machen Sie aus beruflichen Kontakten respektvolle langfristige Beziehungen.",
+    "it": "Presentati in modo pertinente, poni domande utili e trasforma i contatti professionali in relazioni durature e rispettose."
+  },
+  "Career Without Borders": {
+    "en": "Career Without Borders",
+    "pt-BR": "Carreira sem fronteiras",
+    "es": "Carrera sin fronteras",
+    "fr": "Carrière sans frontières",
+    "de": "Karriere ohne Grenzen",
+    "it": "Carriera senza frontiere"
+  },
+  "Remote Work: Build Your Operating System": {
+    "en": "Remote Work: Build Your Operating System",
+    "pt-BR": "Trabalho remoto: crie seu sistema de trabalho",
+    "es": "Trabajo remoto: crea tu sistema de trabajo",
+    "fr": "Télétravail : créez votre système de travail",
+    "de": "Remote-Arbeit: Entwickeln Sie Ihr Arbeitssystem",
+    "it": "Lavoro da remoto: crea il tuo sistema di lavoro"
+  },
+  "Work & Adaptability": {
+    "en": "Work & Adaptability",
+    "pt-BR": "Trabalho e adaptabilidade",
+    "es": "Trabajo y adaptabilidad",
+    "fr": "Travail et adaptabilité",
+    "de": "Arbeit und Anpassungsfähigkeit",
+    "it": "Lavoro e adattabilità"
+  },
+  "Design clear asynchronous communication, reliable handovers and a work rhythm that travels across time zones.": {
+    "en": "Design clear asynchronous communication, reliable handovers and a work rhythm that travels across time zones.",
+    "pt-BR": "Crie uma comunicação assíncrona clara, passagens de trabalho confiáveis e um ritmo de trabalho adaptado a diferentes fusos horários.",
+    "es": "Diseña una comunicación asíncrona clara, traspasos de trabajo fiables y un ritmo de trabajo adaptado a diferentes zonas horarias.",
+    "fr": "Concevez une communication asynchrone claire, des transmissions fiables et un rythme de travail adapté aux fuseaux horaires.",
+    "de": "Gestalten Sie klare asynchrone Kommunikation, zuverlässige Übergaben und einen Arbeitsrhythmus über Zeitzonen hinweg.",
+    "it": "Crea una comunicazione asincrona chiara, passaggi di consegne affidabili e un ritmo di lavoro adatto a diversi fusi orari."
+  },
+  "Evidence Literacy: Think Beyond the Headline": {
+    "en": "Evidence Literacy: Think Beyond the Headline",
+    "pt-BR": "Leitura crítica de evidências: pense além da manchete",
+    "es": "Lectura crítica de evidencias: piensa más allá del titular",
+    "fr": "Comprendre les preuves : pensez au-delà des titres",
+    "de": "Evidenz verstehen: Denken Sie über Schlagzeilen hinaus",
+    "it": "Comprendere le evidenze: pensa oltre il titolo"
+  },
+  "Evidence & Judgment": {
+    "en": "Evidence & Judgment",
+    "pt-BR": "Evidências e discernimento",
+    "es": "Evidencias y criterio",
+    "fr": "Preuves et discernement",
+    "de": "Evidenz und Urteilsvermögen",
+    "it": "Evidenze e giudizio"
+  },
+  "Trace claims, compare compatible data and recognize when uncertainty should change your next decision.": {
+    "en": "Trace claims, compare compatible data and recognize when uncertainty should change your next decision.",
+    "pt-BR": "Rastreie afirmações, compare dados compatíveis e reconheça quando a incerteza deve mudar sua próxima decisão.",
+    "es": "Rastrea afirmaciones, compara datos compatibles y reconoce cuándo la incertidumbre debe cambiar tu próxima decisión.",
+    "fr": "Retracez les affirmations, comparez des données compatibles et reconnaissez quand l’incertitude doit modifier votre prochaine décision.",
+    "de": "Verfolgen Sie Aussagen zurück, vergleichen Sie kompatible Daten und erkennen Sie, wann Unsicherheit Ihre nächste Entscheidung ändern sollte.",
+    "it": "Risali alle affermazioni, confronta dati compatibili e riconosci quando l’incertezza dovrebbe cambiare la tua prossima decisione."
+  },
+  "The Intelligence Toolkit": {
+    "en": "The Intelligence Toolkit",
+    "pt-BR": "Ferramentas de inteligência",
+    "es": "Herramientas de inteligencia",
+    "fr": "La boîte à outils de l’intelligence",
+    "de": "Das Intelligenz-Werkzeugset",
+    "it": "Gli strumenti dell’intelligenza"
+  },
+  "AI at Work: From Prompt to Reliable Output": {
+    "en": "AI at Work: From Prompt to Reliable Output",
+    "pt-BR": "IA no trabalho: do comando ao resultado confiável",
+    "es": "IA en el trabajo: de la instrucción al resultado fiable",
+    "fr": "L’IA au travail : de la consigne au résultat fiable",
+    "de": "KI bei der Arbeit: Vom Prompt zum verlässlichen Ergebnis",
+    "it": "IA al lavoro: dall’istruzione al risultato affidabile"
+  },
+  "Technology & Adaptability": {
+    "en": "Technology & Adaptability",
+    "pt-BR": "Tecnologia e adaptabilidade",
+    "es": "Tecnología y adaptabilidad",
+    "fr": "Technologie et adaptabilité",
+    "de": "Technologie und Anpassungsfähigkeit",
+    "it": "Tecnologia e adattabilità"
+  },
+  "Scope an AI-assisted task, verify its output and design a workflow with clear human review and privacy boundaries.": {
+    "en": "Scope an AI-assisted task, verify its output and design a workflow with clear human review and privacy boundaries.",
+    "pt-BR": "Defina o escopo de uma tarefa com IA, verifique o resultado e crie um fluxo de trabalho com revisão humana e limites de privacidade claros.",
+    "es": "Define una tarea asistida por IA, verifica su resultado y diseña un flujo de trabajo con revisión humana y límites de privacidad claros.",
+    "fr": "Délimitez une tâche assistée par l’IA, vérifiez son résultat et concevez un processus avec une révision humaine et des limites de confidentialité claires.",
+    "de": "Grenzen Sie eine KI-gestützte Aufgabe ein, prüfen Sie das Ergebnis und gestalten Sie einen Ablauf mit klarer menschlicher Kontrolle und Datenschutzgrenzen.",
+    "it": "Definisci un’attività assistita dall’IA, verifica il risultato e crea un flusso di lavoro con revisione umana e limiti di riservatezza chiari."
+  },
+  "The Cost of Living Lab: Beyond Cheap": {
+    "en": "The Cost of Living Lab: Beyond Cheap",
+    "pt-BR": "Laboratório do custo de vida: além do barato",
+    "es": "Laboratorio del coste de vida: más allá de lo barato",
+    "fr": "Laboratoire du coût de la vie : au-delà du prix bas",
+    "de": "Lebenshaltungskosten-Labor: Mehr als nur günstig",
+    "it": "Laboratorio del costo della vita: oltre il risparmio"
+  },
+  "Economics & Opportunity": {
+    "en": "Economics & Opportunity",
+    "pt-BR": "Economia e oportunidades",
+    "es": "Economía y oportunidades",
+    "fr": "Économie et opportunités",
+    "de": "Wirtschaft und Chancen",
+    "it": "Economia e opportunità"
+  },
+  "Build a realistic monthly basket, compare spendable income and stress-test a budget before choosing a destination.": {
+    "en": "Build a realistic monthly basket, compare spendable income and stress-test a budget before choosing a destination.",
+    "pt-BR": "Monte uma cesta mensal realista, compare a renda disponível e teste o orçamento em cenários adversos antes de escolher um destino.",
+    "es": "Elabora una cesta mensual realista, compara los ingresos disponibles y somete el presupuesto a escenarios adversos antes de elegir un destino.",
+    "fr": "Établissez un panier mensuel réaliste, comparez le revenu disponible et testez la résistance du budget avant de choisir une destination.",
+    "de": "Erstellen Sie einen realistischen monatlichen Warenkorb, vergleichen Sie verfügbares Einkommen und testen Sie das Budget unter Belastung, bevor Sie ein Ziel wählen.",
+    "it": "Crea un paniere mensile realistico, confronta il reddito disponibile e metti alla prova il budget prima di scegliere una destinazione."
+  },
+  "The Global Money Series": {
+    "en": "The Global Money Series",
+    "pt-BR": "Série Finanças Globais",
+    "es": "Serie Finanzas Globales",
+    "fr": "La série Finances mondiales",
+    "de": "Die Reihe Globale Finanzen",
+    "it": "La serie Finanze globali"
+  },
+  "Study Abroad: Build a Decision-Ready Plan": {
+    "en": "Study Abroad: Build a Decision-Ready Plan",
+    "pt-BR": "Estude no exterior: crie um plano para decidir",
+    "es": "Estudia en el extranjero: crea un plan para decidir",
+    "fr": "Étudier à l’étranger : préparez un plan pour décider",
+    "de": "Studium im Ausland: Planen Sie Ihre Entscheidung",
+    "it": "Studiare all’estero: crea un piano per decidere"
+  },
+  "Study & Mobility": {
+    "en": "Study & Mobility",
+    "pt-BR": "Estudos e mobilidade",
+    "es": "Estudios y movilidad",
+    "fr": "Études et mobilité",
+    "de": "Studium und Mobilität",
+    "it": "Studio e mobilità"
+  },
+  "Compare programs, map application dependencies and build a funding plan that does not rely on unverified promises.": {
+    "en": "Compare programs, map application dependencies and build a funding plan that does not rely on unverified promises.",
+    "pt-BR": "Compare programas, mapeie as dependências da candidatura e crie um plano de financiamento sem depender de promessas não verificadas.",
+    "es": "Compara programas, identifica las dependencias de la solicitud y crea un plan de financiación sin depender de promesas no verificadas.",
+    "fr": "Comparez les programmes, identifiez les dépendances des candidatures et établissez un financement sans promesses non vérifiées.",
+    "de": "Vergleichen Sie Programme, erfassen Sie Abhängigkeiten bei der Bewerbung und erstellen Sie einen Finanzierungsplan ohne ungeprüfte Zusagen.",
+    "it": "Confronta i programmi, individua le dipendenze della candidatura e crea un piano di finanziamento senza promesse non verificate."
+  },
+  "Country Fit: Choose Where You Can Thrive": {
+    "en": "Country Fit: Choose Where You Can Thrive",
+    "pt-BR": "País ideal: escolha onde você pode prosperar",
+    "es": "País ideal: elige dónde puedes prosperar",
+    "fr": "Pays idéal : choisissez où vous épanouir",
+    "de": "Passendes Land: Wählen Sie, wo Sie sich entfalten können",
+    "it": "Paese ideale: scegli dove prosperare"
+  },
+  "Decision Intelligence": {
+    "en": "Decision Intelligence",
+    "pt-BR": "Inteligência de decisão",
+    "es": "Inteligencia de decisión",
+    "fr": "Intelligence décisionnelle",
+    "de": "Entscheidungsintelligenz",
+    "it": "Intelligenza decisionale"
+  },
+  "Compare countries against your constraints, evidence and priorities before committing to a move.": {
+    "en": "Compare countries against your constraints, evidence and priorities before committing to a move.",
+    "pt-BR": "Compare países considerando suas restrições, evidências e prioridades antes de se comprometer com uma mudança.",
+    "es": "Compara países según tus limitaciones, evidencias y prioridades antes de comprometerte con una mudanza.",
+    "fr": "Comparez les pays selon vos contraintes, les preuves et vos priorités avant de vous engager dans un départ.",
+    "de": "Vergleichen Sie Länder anhand Ihrer Einschränkungen, Belege und Prioritäten, bevor Sie sich für einen Umzug entscheiden.",
+    "it": "Confronta i paesi in base ai tuoi vincoli, alle evidenze e alle priorità prima di impegnarti in un trasferimento."
+  },
+  "Move Abroad: Build Your Financial Runway": {
+    "en": "Move Abroad: Build Your Financial Runway",
+    "pt-BR": "Mude para o exterior: planeje sua reserva financeira",
+    "es": "Múdate al extranjero: planifica tu reserva financiera",
+    "fr": "Partir à l’étranger : préparez votre réserve financière",
+    "de": "Umzug ins Ausland: Planen Sie Ihren finanziellen Spielraum",
+    "it": "Trasferirsi all’estero: pianifica la tua riserva finanziaria"
+  },
+  "Build a relocation budget, test your runway and create a practical financial go/no-go plan.": {
+    "en": "Build a relocation budget, test your runway and create a practical financial go/no-go plan.",
+    "pt-BR": "Monte um orçamento de mudança, teste a duração da sua reserva e crie um plano financeiro prático para decidir se deve avançar.",
+    "es": "Elabora un presupuesto de mudanza, comprueba cuánto dura tu reserva y crea un plan financiero práctico para decidir si avanzar.",
+    "fr": "Établissez un budget de déménagement, testez la durée de votre réserve et préparez un plan financier concret pour décider de partir ou non.",
+    "de": "Erstellen Sie ein Umzugsbudget, prüfen Sie die Reichweite Ihrer Rücklagen und planen Sie finanziell, ob Sie den Schritt wagen können.",
+    "it": "Crea un budget per il trasferimento, verifica la durata della riserva e prepara un piano finanziario pratico per decidere se procedere."
+  },
+  "International Career: Prove Your Value": {
+    "en": "International Career: Prove Your Value",
+    "pt-BR": "Carreira internacional: comprove seu valor",
+    "es": "Carrera internacional: demuestra tu valor",
+    "fr": "Carrière internationale : démontrez votre valeur",
+    "de": "Internationale Karriere: Belegen Sie Ihren Wert",
+    "it": "Carriera internazionale: dimostra il tuo valore"
+  },
+  "Turn experience into credible evidence, targeted applications and clear international interview answers.": {
+    "en": "Turn experience into credible evidence, targeted applications and clear international interview answers.",
+    "pt-BR": "Transforme experiência em evidências confiáveis, candidaturas direcionadas e respostas claras em entrevistas internacionais.",
+    "es": "Convierte la experiencia en evidencias creíbles, candidaturas dirigidas y respuestas claras en entrevistas internacionales.",
+    "fr": "Transformez l’expérience en preuves crédibles, en candidatures ciblées et en réponses claires aux entretiens internationaux.",
+    "de": "Machen Sie aus Erfahrung glaubwürdige Nachweise, gezielte Bewerbungen und klare Antworten in internationalen Vorstellungsgesprächen.",
+    "it": "Trasforma l’esperienza in prove credibili, candidature mirate e risposte chiare nei colloqui internazionali."
+  },
+  "Global English: Live, Work & Belong Abroad": {
+    "en": "Global English: Live, Work & Belong Abroad",
+    "pt-BR": "Inglês Global: viva, trabalhe e sinta-se em casa no exterior",
+    "es": "Inglés Global: vive, trabaja y siéntete en casa en el extranjero",
+    "fr": "Anglais global : vivre, travailler et s’intégrer à l’étranger",
+    "de": "Global English: Im Ausland leben, arbeiten und dazugehören",
+    "it": "Inglese globale: vivi, lavora e sentiti a casa all’estero"
+  },
+  "Language & Mobility": {
+    "en": "Language & Mobility",
+    "pt-BR": "Idiomas e mobilidade",
+    "es": "Idiomas y movilidad",
+    "fr": "Langues et mobilité",
+    "de": "Sprachen und Mobilität",
+    "it": "Lingue e mobilità"
+  },
+  "Build practical English for the moments that determine whether you can arrive, adapt, work and belong with confidence.": {
+    "en": "Build practical English for the moments that determine whether you can arrive, adapt, work and belong with confidence.",
+    "pt-BR": "Desenvolva um inglês prático para os momentos que determinam sua capacidade de chegar, se adaptar, trabalhar e se integrar com confiança.",
+    "es": "Desarrolla un inglés práctico para los momentos que determinan tu capacidad de llegar, adaptarte, trabajar e integrarte con confianza.",
+    "fr": "Développez un anglais pratique pour les moments qui déterminent votre capacité à arriver, vous adapter, travailler et vous intégrer avec confiance.",
+    "de": "Entwickeln Sie praktisches Englisch für die Momente, in denen es darauf ankommt, sicher anzukommen, sich anzupassen, zu arbeiten und dazuzugehören.",
+    "it": "Sviluppa un inglese pratico per i momenti che determinano la capacità di arrivare, adattarti, lavorare e integrarti con fiducia."
+  },
+  "18 scenario-based lessons": {
+    "en": "18 scenario-based lessons",
+    "pt-BR": "18 aulas baseadas em cenários",
+    "es": "18 lecciones basadas en escenarios",
+    "fr": "18 leçons fondées sur des scénarios",
+    "de": "18 szenariobasierte Lektionen",
+    "it": "18 lezioni basate su scenari"
+  },
+  "Strategic Thinking for Global Decisions": {
+    "en": "Strategic Thinking for Global Decisions",
+    "pt-BR": "Pensamento estratégico para decisões globais",
+    "es": "Pensamiento estratégico para decisiones globales",
+    "fr": "Pensée stratégique pour les décisions internationales",
+    "de": "Strategisches Denken für globale Entscheidungen",
+    "it": "Pensiero strategico per decisioni globali"
+  },
+  "Develop a disciplined system for evaluating countries, opportunities, risks and high-stakes choices without relying on instinct alone.": {
+    "en": "Develop a disciplined system for evaluating countries, opportunities, risks and high-stakes choices without relying on instinct alone.",
+    "pt-BR": "Desenvolva um sistema disciplinado para avaliar países, oportunidades, riscos e decisões importantes sem depender apenas do instinto.",
+    "es": "Desarrolla un sistema disciplinado para evaluar países, oportunidades, riesgos y decisiones importantes sin depender solo del instinto.",
+    "fr": "Développez un système rigoureux pour évaluer pays, opportunités, risques et choix importants sans vous fier uniquement à l’instinct.",
+    "de": "Entwickeln Sie ein strukturiertes System zur Bewertung von Ländern, Chancen, Risiken und wichtigen Entscheidungen, ohne sich allein auf Ihr Gefühl zu verlassen.",
+    "it": "Sviluppa un sistema rigoroso per valutare paesi, opportunità, rischi e scelte importanti senza affidarti solo all’istinto."
+  },
+  "Applied decision laboratories": {
+    "en": "Applied decision laboratories",
+    "pt-BR": "Laboratórios práticos de decisão",
+    "es": "Laboratorios prácticos de decisión",
+    "fr": "Laboratoires pratiques de décision",
+    "de": "Praktische Entscheidungslabore",
+    "it": "Laboratori pratici di decisione"
+  },
+  "AI & the Future of Human Work": {
+    "en": "AI & the Future of Human Work",
+    "pt-BR": "IA e o futuro do trabalho humano",
+    "es": "IA y el futuro del trabajo humano",
+    "fr": "L’IA et l’avenir du travail humain",
+    "de": "KI und die Zukunft menschlicher Arbeit",
+    "it": "IA e il futuro del lavoro umano"
+  },
+  "Understand artificial intelligence, automation and the human capabilities required to remain useful, adaptive and globally competitive.": {
+    "en": "Understand artificial intelligence, automation and the human capabilities required to remain useful, adaptive and globally competitive.",
+    "pt-BR": "Entenda a inteligência artificial, a automação e as capacidades humanas necessárias para continuar útil, adaptável e competitivo globalmente.",
+    "es": "Comprende la inteligencia artificial, la automatización y las capacidades humanas necesarias para seguir siendo útil, adaptable y competitivo globalmente.",
+    "fr": "Comprenez l’intelligence artificielle, l’automatisation et les capacités humaines nécessaires pour rester utile, adaptable et compétitif à l’échelle mondiale.",
+    "de": "Verstehen Sie künstliche Intelligenz, Automatisierung und die menschlichen Fähigkeiten, um nützlich, anpassungsfähig und weltweit wettbewerbsfähig zu bleiben.",
+    "it": "Comprendi l’intelligenza artificiale, l’automazione e le capacità umane necessarie per restare utile, adattabile e competitivo a livello globale."
+  },
+  "Human–AI capability labs": {
+    "en": "Human–AI capability labs",
+    "pt-BR": "Laboratórios de competências humano–IA",
+    "es": "Laboratorios de competencias humano–IA",
+    "fr": "Laboratoires de compétences humain–IA",
+    "de": "Mensch-KI-Kompetenzlabore",
+    "it": "Laboratori di competenze uomo–IA"
+  },
+  "Global Economics: Money, Markets & Opportunity": {
+    "en": "Global Economics: Money, Markets & Opportunity",
+    "pt-BR": "Economia global: dinheiro, mercados e oportunidades",
+    "es": "Economía global: dinero, mercados y oportunidades",
+    "fr": "Économie mondiale : argent, marchés et opportunités",
+    "de": "Globale Wirtschaft: Geld, Märkte und Chancen",
+    "it": "Economia globale: denaro, mercati e opportunità"
+  },
+  "Learn how money, currencies, trade and global markets shape the real opportunities available across countries and careers.": {
+    "en": "Learn how money, currencies, trade and global markets shape the real opportunities available across countries and careers.",
+    "pt-BR": "Aprenda como dinheiro, moedas, comércio e mercados globais moldam as oportunidades reais disponíveis em diferentes países e carreiras.",
+    "es": "Aprende cómo el dinero, las divisas, el comercio y los mercados globales moldean las oportunidades reales en distintos países y carreras.",
+    "fr": "Découvrez comment l’argent, les devises, le commerce et les marchés mondiaux façonnent les opportunités réelles selon les pays et les carrières.",
+    "de": "Lernen Sie, wie Geld, Währungen, Handel und globale Märkte reale Chancen in Ländern und Berufen prägen.",
+    "it": "Scopri come denaro, valute, commercio e mercati globali plasmano le opportunità reali nei diversi paesi e percorsi professionali."
+  },
+  "Global market case studies": {
+    "en": "Global market case studies",
+    "pt-BR": "Estudos de caso de mercados globais",
+    "es": "Casos prácticos de mercados globales",
+    "fr": "Études de cas de marchés mondiaux",
+    "de": "Fallstudien zu globalen Märkten",
+    "it": "Casi di studio sui mercati globali"
+  },
+  "Prioritize a safe arrival, communication and temporary accommodation.": {
+    "en": "Prioritize a safe arrival, communication and temporary accommodation.",
+    "pt-BR": "Priorize uma chegada segura, comunicação e hospedagem temporária.",
+    "es": "Prioriza una llegada segura, comunicación y alojamiento temporal.",
+    "fr": "Priorisez une arrivée sûre, la communication et un hébergement temporaire.",
+    "de": "Priorisieren Sie sichere Ankunft, Kommunikation und eine vorübergehende Unterkunft.",
+    "it": "Dai priorità a un arrivo sicuro, alla comunicazione e a un alloggio temporaneo."
+  },
+  "Identify dependencies between the services you need to establish.": {
+    "en": "Identify dependencies between the services you need to establish.",
+    "pt-BR": "Identifique as dependências entre os serviços que precisa organizar.",
+    "es": "Identifica las dependencias entre los servicios que necesitas organizar.",
+    "fr": "Identifiez les dépendances entre les services à mettre en place.",
+    "de": "Erkennen Sie Abhängigkeiten zwischen den einzurichtenden Diensten.",
+    "it": "Individua le dipendenze tra i servizi da attivare."
+  },
+  "Check a housing offer for inconsistencies before sending money or identity documents.": {
+    "en": "Check a housing offer for inconsistencies before sending money or identity documents.",
+    "pt-BR": "Verifique inconsistências em uma oferta de moradia antes de enviar dinheiro ou documentos de identidade.",
+    "es": "Revisa las incoherencias de una oferta de vivienda antes de enviar dinero o documentos de identidad.",
+    "fr": "Vérifiez les incohérences d’une offre de logement avant d’envoyer de l’argent ou des pièces d’identité.",
+    "de": "Prüfen Sie Wohnangebote auf Unstimmigkeiten, bevor Sie Geld oder Ausweisdokumente senden.",
+    "it": "Verifica le incongruenze di un’offerta abitativa prima di inviare denaro o documenti d’identità."
+  },
+  "Calculate recurring housing costs and initial cash requirements separately.": {
+    "en": "Calculate recurring housing costs and initial cash requirements separately.",
+    "pt-BR": "Calcule separadamente os custos recorrentes de moradia e os recursos iniciais necessários.",
+    "es": "Calcula por separado los gastos recurrentes de vivienda y el dinero inicial necesario.",
+    "fr": "Calculez séparément les frais récurrents de logement et les fonds initiaux nécessaires.",
+    "de": "Berechnen Sie laufende Wohnkosten und anfänglichen Geldbedarf getrennt.",
+    "it": "Calcola separatamente i costi abitativi ricorrenti e il fabbisogno iniziale di denaro."
+  },
+  "Separate observed behaviour from assumptions about people or culture.": {
+    "en": "Separate observed behaviour from assumptions about people or culture.",
+    "pt-BR": "Separe o comportamento observado das suposições sobre pessoas ou culturas.",
+    "es": "Separa el comportamiento observado de las suposiciones sobre personas o culturas.",
+    "fr": "Distinguez les comportements observés des suppositions sur les personnes ou la culture.",
+    "de": "Trennen Sie beobachtetes Verhalten von Annahmen über Menschen oder Kulturen.",
+    "it": "Distingui il comportamento osservato dalle supposizioni su persone o culture."
+  },
+  "Use clarification and a concrete next step to repair a difficult exchange.": {
+    "en": "Use clarification and a concrete next step to repair a difficult exchange.",
+    "pt-BR": "Use esclarecimentos e um próximo passo concreto para melhorar uma conversa difícil.",
+    "es": "Utiliza aclaraciones y un siguiente paso concreto para resolver un intercambio difícil.",
+    "fr": "Utilisez une clarification et une prochaine étape concrète pour rétablir un échange difficile.",
+    "de": "Nutzen Sie Klärung und einen konkreten nächsten Schritt, um ein schwieriges Gespräch zu verbessern.",
+    "it": "Usa chiarimenti e un prossimo passo concreto per risolvere uno scambio difficile."
+  },
+  "Reduce dependence on one device for access to essential accounts.": {
+    "en": "Reduce dependence on one device for access to essential accounts.",
+    "pt-BR": "Reduza a dependência de um único dispositivo para acessar contas essenciais.",
+    "es": "Reduce la dependencia de un solo dispositivo para acceder a cuentas esenciales.",
+    "fr": "Réduisez la dépendance à un seul appareil pour accéder aux comptes essentiels.",
+    "de": "Verringern Sie die Abhängigkeit von einem Gerät für den Zugang zu wichtigen Konten.",
+    "it": "Riduci la dipendenza da un solo dispositivo per accedere agli account essenziali."
+  },
+  "Use an independent channel to check requests for payment, credentials or identity data.": {
+    "en": "Use an independent channel to check requests for payment, credentials or identity data.",
+    "pt-BR": "Use um canal independente para verificar pedidos de pagamento, credenciais ou dados de identidade.",
+    "es": "Utiliza un canal independiente para verificar solicitudes de pago, credenciales o datos de identidad.",
+    "fr": "Utilisez un canal indépendant pour vérifier les demandes de paiement, d’identifiants ou de données d’identité.",
+    "de": "Prüfen Sie Zahlungs-, Zugangsdaten- oder Identitätsdatenanfragen über einen unabhängigen Kanal.",
+    "it": "Usa un canale indipendente per verificare richieste di pagamento, credenziali o dati d’identità."
+  },
+  "Identify relevant professional communities and the value you can contribute.": {
+    "en": "Identify relevant professional communities and the value you can contribute.",
+    "pt-BR": "Identifique comunidades profissionais relevantes e o valor com que pode contribuir.",
+    "es": "Identifica comunidades profesionales relevantes y el valor que puedes aportar.",
+    "fr": "Identifiez les communautés professionnelles pertinentes et la valeur que vous pouvez apporter.",
+    "de": "Finden Sie relevante berufliche Gemeinschaften und Ihren möglichen Beitrag.",
+    "it": "Individua comunità professionali pertinenti e il valore che puoi offrire."
+  },
+  "Send a concise message with context, relevance and a bounded request.": {
+    "en": "Send a concise message with context, relevance and a bounded request.",
+    "pt-BR": "Envie uma mensagem concisa com contexto, relevância e um pedido delimitado.",
+    "es": "Envía un mensaje conciso con contexto, relevancia y una petición delimitada.",
+    "fr": "Envoyez un message concis avec du contexte, de la pertinence et une demande délimitée.",
+    "de": "Senden Sie eine kurze Nachricht mit Kontext, Relevanz und einer klar begrenzten Bitte.",
+    "it": "Invia un messaggio conciso con contesto, pertinenza e una richiesta delimitata."
+  },
+  "Write updates that explain the outcome, status and decision needed.": {
+    "en": "Write updates that explain the outcome, status and decision needed.",
+    "pt-BR": "Escreva atualizações que expliquem o resultado, a situação e a decisão necessária.",
+    "es": "Escribe actualizaciones que expliquen el resultado, el estado y la decisión necesaria.",
+    "fr": "Rédigez des mises à jour expliquant le résultat, l’état et la décision nécessaire.",
+    "de": "Schreiben Sie Updates zu Ergebnis, Status und erforderlicher Entscheidung.",
+    "it": "Scrivi aggiornamenti che spieghino risultato, stato e decisione necessaria."
+  },
+  "Leave enough context for another person to continue work independently.": {
+    "en": "Leave enough context for another person to continue work independently.",
+    "pt-BR": "Deixe contexto suficiente para que outra pessoa continue o trabalho de forma independente.",
+    "es": "Deja suficiente contexto para que otra persona continúe el trabajo de forma independiente.",
+    "fr": "Laissez assez de contexte pour qu’une autre personne poursuive le travail en autonomie.",
+    "de": "Hinterlassen Sie genügend Kontext, damit andere selbstständig weiterarbeiten können.",
+    "it": "Lascia un contesto sufficiente affinché un’altra persona prosegua il lavoro autonomamente."
+  },
+  "Distinguish an original source from repeated commentary.": {
+    "en": "Distinguish an original source from repeated commentary.",
+    "pt-BR": "Distinga uma fonte original de comentários repetidos.",
+    "es": "Distingue una fuente original de comentarios repetidos.",
+    "fr": "Distinguez une source originale des commentaires répétés.",
+    "de": "Unterscheiden Sie Originalquellen von wiederholten Kommentaren.",
+    "it": "Distingui una fonte originale dai commenti ripetuti."
+  },
+  "Recognize mismatched definitions, denominators and time periods.": {
+    "en": "Recognize mismatched definitions, denominators and time periods.",
+    "pt-BR": "Reconheça definições, denominadores e períodos de tempo incompatíveis.",
+    "es": "Reconoce definiciones, denominadores y periodos de tiempo incompatibles.",
+    "fr": "Repérez les définitions, dénominateurs et périodes incompatibles.",
+    "de": "Erkennen Sie unvereinbare Definitionen, Bezugsgrößen und Zeiträume.",
+    "it": "Riconosci definizioni, denominatori e periodi temporali incompatibili."
+  },
+  "Define an AI-assisted task with inputs, constraints and acceptance criteria.": {
+    "en": "Define an AI-assisted task with inputs, constraints and acceptance criteria.",
+    "pt-BR": "Defina uma tarefa assistida por IA com dados de entrada, restrições e critérios de aceitação.",
+    "es": "Define una tarea asistida por IA con datos de entrada, restricciones y criterios de aceptación.",
+    "fr": "Définissez une tâche assistée par l’IA avec ses entrées, contraintes et critères d’acceptation.",
+    "de": "Definieren Sie eine KI-gestützte Aufgabe mit Eingaben, Einschränkungen und Abnahmekriterien.",
+    "it": "Definisci un’attività assistita dall’IA con dati di ingresso, vincoli e criteri di accettazione."
+  },
+  "Check claims, calculations and source references before using AI-generated work.": {
+    "en": "Check claims, calculations and source references before using AI-generated work.",
+    "pt-BR": "Verifique afirmações, cálculos e referências às fontes antes de usar trabalhos gerados por IA.",
+    "es": "Verifica afirmaciones, cálculos y referencias a fuentes antes de usar trabajos generados por IA.",
+    "fr": "Vérifiez les affirmations, calculs et références avant d’utiliser un travail généré par l’IA.",
+    "de": "Prüfen Sie Aussagen, Berechnungen und Quellenangaben, bevor Sie KI-generierte Arbeit nutzen.",
+    "it": "Verifica affermazioni, calcoli e fonti prima di usare un lavoro generato dall’IA."
+  },
+  "Estimate a relevant cost basket instead of relying on a generic city average.": {
+    "en": "Estimate a relevant cost basket instead of relying on a generic city average.",
+    "pt-BR": "Estime uma cesta de gastos relevante em vez de depender de uma média genérica da cidade.",
+    "es": "Estima una cesta de gastos pertinente en lugar de depender de un promedio genérico de la ciudad.",
+    "fr": "Estimez un panier de dépenses pertinent plutôt que de vous fier à une moyenne urbaine générique.",
+    "de": "Schätzen Sie einen passenden Ausgabenkorb statt sich auf einen allgemeinen Stadtdurchschnitt zu verlassen.",
+    "it": "Stima un paniere di spese pertinente invece di affidarti a una media generica della città."
+  },
+  "Calculate a consistent monthly margin using net income and a comparable cost basket.": {
+    "en": "Calculate a consistent monthly margin using net income and a comparable cost basket.",
+    "pt-BR": "Calcule uma margem mensal consistente usando a renda líquida e uma cesta de gastos comparável.",
+    "es": "Calcula un margen mensual consistente usando ingresos netos y una cesta de gastos comparable.",
+    "fr": "Calculez une marge mensuelle cohérente avec le revenu net et un panier de dépenses comparable.",
+    "de": "Berechnen Sie einen konsistenten monatlichen Spielraum anhand von Nettoeinkommen und vergleichbaren Ausgaben.",
+    "it": "Calcola un margine mensile coerente usando reddito netto e un paniere di spese comparabile."
+  },
+  "Verify the awarding institution, qualification and fit with your intended outcome.": {
+    "en": "Verify the awarding institution, qualification and fit with your intended outcome.",
+    "pt-BR": "Verifique a instituição emissora, a qualificação e a compatibilidade com seu objetivo.",
+    "es": "Verifica la institución que otorga el título, la cualificación y su adecuación a tu objetivo.",
+    "fr": "Vérifiez l’établissement délivrant le titre, la qualification et l’adéquation à votre objectif.",
+    "de": "Prüfen Sie die verleihende Einrichtung, die Qualifikation und die Eignung für Ihr Ziel.",
+    "it": "Verifica l’istituzione che rilascia il titolo, la qualifica e la coerenza con il tuo obiettivo."
+  },
+  "Sequence documents, tests and deadlines using official program requirements.": {
+    "en": "Sequence documents, tests and deadlines using official program requirements.",
+    "pt-BR": "Organize documentos, provas e prazos conforme os requisitos oficiais do programa.",
+    "es": "Ordena documentos, pruebas y plazos según los requisitos oficiales del programa.",
+    "fr": "Organisez documents, examens et échéances selon les exigences officielles du programme.",
+    "de": "Planen Sie Dokumente, Prüfungen und Fristen anhand der offiziellen Programmanforderungen.",
+    "it": "Organizza documenti, prove e scadenze secondo i requisiti ufficiali del programma."
+  },
+  "Separate legal feasibility from lifestyle preferences.": {
+    "en": "Separate legal feasibility from lifestyle preferences.",
+    "pt-BR": "Separe a viabilidade legal das preferências de estilo de vida.",
+    "es": "Separa la viabilidad legal de las preferencias de estilo de vida.",
+    "fr": "Distinguez la faisabilité juridique des préférences de mode de vie.",
+    "de": "Trennen Sie rechtliche Machbarkeit von Lebensstilpräferenzen.",
+    "it": "Distingui la fattibilità legale dalle preferenze di stile di vita."
+  },
+  "Use consistent measures to compare three destinations.": {
+    "en": "Use consistent measures to compare three destinations.",
+    "pt-BR": "Use medidas consistentes para comparar três destinos.",
+    "es": "Usa medidas consistentes para comparar tres destinos.",
+    "fr": "Utilisez des mesures cohérentes pour comparer trois destinations.",
+    "de": "Vergleichen Sie drei Ziele anhand einheitlicher Maßstäbe.",
+    "it": "Usa misure coerenti per confrontare tre destinazioni."
+  },
+  "Separate one-time cash needs from recurring living costs.": {
+    "en": "Separate one-time cash needs from recurring living costs.",
+    "pt-BR": "Separe as necessidades pontuais de dinheiro dos custos recorrentes de vida.",
+    "es": "Separa las necesidades puntuales de dinero de los gastos recurrentes de vida.",
+    "fr": "Séparez les besoins ponctuels de trésorerie des dépenses courantes.",
+    "de": "Trennen Sie einmaligen Geldbedarf von laufenden Lebenshaltungskosten.",
+    "it": "Distingui il fabbisogno una tantum di denaro dai costi ricorrenti della vita."
+  },
+  "Calculate how long liquid funds cover a monthly shortfall.": {
+    "en": "Calculate how long liquid funds cover a monthly shortfall.",
+    "pt-BR": "Calcule por quanto tempo os recursos líquidos cobrem um déficit mensal.",
+    "es": "Calcula cuánto tiempo los fondos líquidos cubren un déficit mensual.",
+    "fr": "Calculez combien de temps les liquidités couvrent un déficit mensuel.",
+    "de": "Berechnen Sie, wie lange liquide Mittel eine monatliche Unterdeckung ausgleichen.",
+    "it": "Calcola per quanto tempo i fondi liquidi coprono un deficit mensile."
+  },
+  "Compare role requirements with evidence you can show.": {
+    "en": "Compare role requirements with evidence you can show.",
+    "pt-BR": "Compare os requisitos da função com evidências que você pode apresentar.",
+    "es": "Compara los requisitos del puesto con evidencias que puedas mostrar.",
+    "fr": "Comparez les exigences du poste aux preuves que vous pouvez présenter.",
+    "de": "Vergleichen Sie Stellenanforderungen mit Ihren vorzeigbaren Nachweisen.",
+    "it": "Confronta i requisiti del ruolo con le prove che puoi mostrare."
+  },
+  "Write outcome-led experience without exaggeration.": {
+    "en": "Write outcome-led experience without exaggeration.",
+    "pt-BR": "Descreva experiências com foco nos resultados, sem exageros.",
+    "es": "Describe experiencias centradas en los resultados, sin exagerar.",
+    "fr": "Présentez vos expériences par leurs résultats, sans exagération.",
+    "de": "Beschreiben Sie Erfahrungen ergebnisorientiert, ohne Übertreibung.",
+    "it": "Descrivi le esperienze in base ai risultati, senza esagerare."
+  },
+  "Navigate arrival, housing and healthcare conversations": {
+    "en": "Navigate arrival, housing and healthcare conversations",
+    "pt-BR": "Conduza conversas sobre chegada, moradia e saúde",
+    "es": "Desenvuélvete en conversaciones sobre llegada, vivienda y salud",
+    "fr": "Menez des conversations sur l’arrivée, le logement et la santé",
+    "de": "Führen Sie Gespräche über Ankunft, Wohnen und Gesundheitsversorgung",
+    "it": "Gestisci conversazioni su arrivo, alloggio e assistenza sanitaria"
+  },
+  "Communicate with confidence in interviews and at work": {
+    "en": "Communicate with confidence in interviews and at work",
+    "pt-BR": "Comunique-se com confiança em entrevistas e no trabalho",
+    "es": "Comunícate con confianza en entrevistas y en el trabajo",
+    "fr": "Communiquez avec assurance en entretien et au travail",
+    "de": "Kommunizieren Sie sicher in Vorstellungsgesprächen und bei der Arbeit",
+    "it": "Comunica con sicurezza nei colloqui e al lavoro"
+  },
+  "Separate evidence from assumptions and social pressure": {
+    "en": "Separate evidence from assumptions and social pressure",
+    "pt-BR": "Separe evidências de suposições e pressão social",
+    "es": "Separa las evidencias de las suposiciones y la presión social",
+    "fr": "Distinguez les preuves des suppositions et de la pression sociale",
+    "de": "Trennen Sie Belege von Annahmen und sozialem Druck",
+    "it": "Distingui le evidenze dalle supposizioni e dalla pressione sociale"
+  },
+  "Compare options through a repeatable decision framework": {
+    "en": "Compare options through a repeatable decision framework",
+    "pt-BR": "Compare opções com um método de decisão repetível",
+    "es": "Compara opciones con un método de decisión repetible",
+    "fr": "Comparez les options avec un cadre de décision reproductible",
+    "de": "Vergleichen Sie Optionen mit einem wiederholbaren Entscheidungsrahmen",
+    "it": "Confronta le opzioni con un metodo decisionale ripetibile"
+  },
+  "Understand how AI changes roles, industries and leverage": {
+    "en": "Understand how AI changes roles, industries and leverage",
+    "pt-BR": "Entenda como a IA muda funções, setores e capacidade de impacto",
+    "es": "Comprende cómo la IA cambia funciones, sectores y capacidad de impacto",
+    "fr": "Comprenez comment l’IA transforme les métiers, les secteurs et les leviers d’action",
+    "de": "Verstehen Sie, wie KI Rollen, Branchen und Handlungsmöglichkeiten verändert",
+    "it": "Comprendi come l’IA cambia ruoli, settori e capacità di incidere"
+  },
+  "Identify the capabilities that become more valuable": {
+    "en": "Identify the capabilities that become more valuable",
+    "pt-BR": "Identifique as competências que se tornam mais valiosas",
+    "es": "Identifica las competencias que adquieren más valor",
+    "fr": "Identifiez les compétences qui gagnent en valeur",
+    "de": "Erkennen Sie Fähigkeiten, die an Wert gewinnen",
+    "it": "Individua le competenze che acquistano più valore"
+  },
+  "Read markets, currencies and trade as connected systems": {
+    "en": "Read markets, currencies and trade as connected systems",
+    "pt-BR": "Interprete mercados, moedas e comércio como sistemas conectados",
+    "es": "Interpreta mercados, divisas y comercio como sistemas conectados",
+    "fr": "Interprétez marchés, devises et commerce comme des systèmes liés",
+    "de": "Verstehen Sie Märkte, Währungen und Handel als verbundene Systeme",
+    "it": "Interpreta mercati, valute e commercio come sistemi collegati"
+  },
+  "Understand why opportunity moves between countries": {
+    "en": "Understand why opportunity moves between countries",
+    "pt-BR": "Entenda por que as oportunidades se deslocam entre países",
+    "es": "Comprende por qué las oportunidades se desplazan entre países",
+    "fr": "Comprenez pourquoi les opportunités se déplacent entre pays",
+    "de": "Verstehen Sie, warum sich Chancen zwischen Ländern verschieben",
+    "it": "Comprendi perché le opportunità si spostano tra i paesi"
+  },
+  "4 weeks": {
+    "en": "4 weeks",
+    "pt-BR": "4 semanas",
+    "es": "4 semanas",
+    "fr": "4 semaines",
+    "de": "4 Wochen",
+    "it": "4 settimane"
+  },
+  "6 weeks": {
+    "en": "6 weeks",
+    "pt-BR": "6 semanas",
+    "es": "6 semanas",
+    "fr": "6 semaines",
+    "de": "6 Wochen",
+    "it": "6 settimane"
+  },
+  "Plan": {
+    "en": "Plan",
+    "pt-BR": "Planejar",
+    "es": "Planificar",
+    "fr": "Planifier",
+    "de": "Planen",
+    "it": "Pianificare"
+  },
+  "TGPI global learning observatory with an illuminated world atlas": {
+    "en": "TGPI global learning observatory with an illuminated world atlas",
+    "pt-BR": "Observatório global de aprendizagem TGPI com um atlas mundial iluminado",
+    "es": "Observatorio global de aprendizaje TGPI con un atlas mundial iluminado",
+    "fr": "Observatoire mondial d’apprentissage TGPI avec un atlas du monde illuminé",
+    "de": "Globales TGPI-Lernobservatorium mit beleuchtetem Weltatlas",
+    "it": "Osservatorio globale di apprendimento TGPI con un atlante mondiale illuminato"
   }
 } as const satisfies Record<string, Record<Locale, string>>;
 

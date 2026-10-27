@@ -8,7 +8,9 @@ The root layout reads the validated `tgpi_locale` HTTP-only cookie, falling back
 
 ## Coverage and limits
 
-This release establishes the six-language infrastructure and translates the global navigation, account menu, authentication controls, footer, home navigation and many labels across the country explorer, learning catalog, profile, preparation, community and workspace. The four home goal journeys now translate their complete guidance, checklists and outcome text; the six home FAQs translate both questions and full answers. Country names use reviewed generated CLDR display names. The same fallback serves unknown strings in their original language.
+This release establishes the six-language infrastructure and translates the global navigation, account menu, authentication controls, footer, home navigation and many labels across the country explorer, learning catalog, profile, preparation, community and workspace. The language picker uses bundled SVG flags with native language names, keyboard-accessible buttons, outside-click dismissal and Escape dismissal. Flag illustrations are visual cues only and never set citizenship. Catalogue cards translate titles, descriptions, categories, series and visible outcomes, while series filter values remain stable source identifiers. The global journey and capability rail share the same locale.
+
+The four home goal journeys now translate their complete guidance, checklists and outcome text; the six home FAQs translate both questions and full answers. Country names use reviewed generated CLDR display names. The same fallback serves unknown strings in their original language.
 
 It is **not a complete translation of every page, lesson, country dossier, legal document, notification payload or error message**. The full selector explicitly explains that some content remains in its original language. Source curriculum, certification questions and community contributions require a separate content-localization workflow and must preserve their assessment and provenance semantics. Do not advertise 100% platform translation until those migrations are complete.
 
