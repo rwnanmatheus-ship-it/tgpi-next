@@ -1,6 +1,7 @@
 import "server-only";
 
 import { createHash } from "node:crypto";
+import { portfolioPath, portfolioApproved, portfolioScore, type PortfolioRecord } from "@/lib/learning/portfolio";
 import { getEnglishAbroadAssessmentBank } from "@/data/courses/english-abroad/assessment-bank.server";
 import {
   getCourse,
@@ -99,7 +100,7 @@ function userCredentialPath(userId: string, credentialId: string) {
 
 function supportedCourse(courseId: string) {
   const course = getCourse(courseId);
-  if (!course || course.id !== COURSE_ID || courseId !== course.id) {
+  if (!course || courseId !== course.id) {
     throw new LearningInputError("This certification path is not available.", 404);
   }
   return course;
@@ -134,7 +135,19 @@ function computeEligibility(
   lessonsCompleted: number,
   totalLessons: number,
   identityVerified: boolean,
+  portfolio?: PortfolioRecord | null,
 ): LearningCredentialEligibility {
+  if (record.courseId !== COURSE_ID) {
+    const course = supportedCourse(record.courseId);
+    const approved = portfolioApproved(course, portfolio);
+    const complete = totalLessons > 0 && lessonsCompleted >= totalLessons;
+    return {
+      capstonePassed: approved, checkpointCompletion: totalLessons ? Math.min(100, Math.round(lessonsCompleted / totalLessons * 100)) : 0,
+      credentialId: record.credentialId, eligible: complete && approved && identityVerified && isLearningStorageConfigured() && isCredentialSigningConfigured(),
+      finalScore: portfolioScore(course, portfolio), identityVerified, lessonsCompleted,
+      moduleGatesPassed: approved ? course.competencies.length : 0, reflectionCompleted: approved, totalLessons,
+    };
+  }
   const bank = getEnglishAbroadAssessmentBank();
   const moduleGates = bank.filter((item) => item.kind === "module_gate");
   const capstone = bank.find((item) => item.kind === "capstone");
@@ -217,9 +230,14 @@ function credentialPayload(
     courseVersion: course.version,
     credentialProfile: TGPI_VERIFIED_LEARNING_PROFILE,
     credentialSchemaVersion: TGPI_VERIFIED_LEARNING_SCHEMA_VERSION,
-    credentialStandardVersion: "2.0",
+    credentialStandardVersion: course.id === COURSE_ID ? "2.0" : "applied-1.0",
     criteriaUrl: "/courses/" + course.id + "/certification",
-    evidenceSummary: [
+    evidenceSummary: course.id !== COURSE_ID ? [
+      `${eligibility.lessonsCompleted}/${eligibility.totalLessons} formative lesson checkpoints completed`,
+      `${course.competencies.length} competencies assessed by an authorized TGPI reviewer; each at or above ${course.assessment.masteryThreshold}%`,
+      "Original applied project and transfer task reviewed; rubric applied-1.0",
+      "Not an academic degree or independently accredited qualification",
+    ] : [
       `${eligibility.lessonsCompleted}/${eligibility.totalLessons} scenario checkpoints completed`,
       `${eligibility.moduleGatesPassed}/6 module performance gates passed`,
       `Integrated capstone passed at or above ${course.assessment.masteryThreshold}%`,
@@ -235,7 +253,7 @@ function credentialPayload(
     issuedAt,
     issuer: course.credential.issuer,
     keyId: TGPI_CREDENTIAL_KEY_ID,
-    learningHours: Math.round((course.estimatedMinutes / 60) * 10) / 10,
+    learningHours: Math.round(((course.estimatedMinutes + (course.id === COURSE_ID ? 0 : 30)) / 60) * 10) / 10,
     masteryThreshold: course.assessment.masteryThreshold,
     publicName: identity.publicName.slice(0, 120),
     skills: course.competencies.map((item) => ({
@@ -281,6 +299,7 @@ function requireAssessmentAccess(
   record: CourseLearningRecord,
 ) {
   const course = supportedCourse(courseId);
+  if (course.id !== COURSE_ID) throw new LearningInputError("This course uses a reviewed practical project, not this assessment bank.", 404);
   const assessment = getEnglishAbroadAssessmentBank().find(
     (item) => item.id === assessmentId,
   );
@@ -416,7 +435,7 @@ async function progressSnapshot(userId: string, courseId: string) {
   const progress = await getUserActivationProgress(userId);
   const courseProgress = progress.courseProgress[courseId];
   return {
-    completedLessonIds: courseProgress?.completedLessonIds || [],
+    completedLessonIds: [...new Set((courseProgress?.completedLessonIds || []).filter(id => course.modules.some(courseModule => courseModule.lessons.some(lesson => lesson.id === id))))],
     totalLessons: getCourseLessonCount(course),
   };
 }
@@ -434,6 +453,8 @@ export async function getLearningCertificationStatus(
       ))?.data || emptyRecord(identity.uid, courseId, course.version)
     : emptyRecord(identity.uid, courseId, course.version);
 
+  const portfolio = storageConfigured && course.id !== COURSE_ID
+    ? (await getFirestoreDocument<PortfolioRecord>(portfolioPath(identity.uid, course.id, course.version)))?.data : null;
   return {
     assessments: Object.values(record.assessments).sort((a, b) =>
       a.assessmentId.localeCompare(b.assessmentId),
@@ -445,6 +466,7 @@ export async function getLearningCertificationStatus(
       progress.completedLessonIds.length,
       progress.totalLessons,
       identity.emailVerified && hasIssuablePublicName(identity.publicName),
+      portfolio,
     ),
     publicName: identity.publicName,
     storageConfigured,
@@ -580,14 +602,17 @@ export async function issueLearningCredential(
   const recordPath = courseRecordPath(identity.uid, courseId);
 
   return runFirestoreTransaction(async ({ getDocuments }) => {
-    const documents = await getDocuments<CourseLearningRecord>([recordPath]);
-    const existing = documents.get(recordPath);
+    const projectPath = portfolioPath(identity.uid, course.id, course.version);
+    const documents = await getDocuments<CourseLearningRecord | PortfolioRecord>(course.id === COURSE_ID ? [recordPath] : [recordPath, projectPath]);
+    const existing = documents.get(recordPath) as { data: CourseLearningRecord; updateTime?: string } | null | undefined;
+    const portfolio = documents.get(projectPath)?.data as PortfolioRecord | undefined;
     const record = existing?.data || emptyRecord(identity.uid, courseId, course.version);
     const eligibility = computeEligibility(
       record,
       progress.completedLessonIds.length,
       progress.totalLessons,
       identity.emailVerified && hasIssuablePublicName(identity.publicName),
+      portfolio,
     );
     if (record.credentialId) return { result: record.credentialId, writes: [] };
     if (!eligibility.eligible) {

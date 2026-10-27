@@ -1,4 +1,5 @@
 import OpenAI from 'openai';
+import { buildLearningTutorContext, learningTutorInstructions } from '@/lib/learning/tutor-context.server';
 import { clerkClient } from '@clerk/nextjs/server';
 import { atlasBody, atlasFailure, atlasUser, requireAtlasGeneration } from '@/lib/atlas/http.server';
 import { AtlasError, chatSchema, type AtlasEvent, type AtlasMessage } from '@/lib/atlas/contracts';
@@ -17,7 +18,9 @@ export async function POST(request: Request) {
       const user = await (await clerkClient()).users.getUser(userId);
       selected = selectAtlasContext(user.unsafeMetadata, input.scopes);
     }
-    const instructions = `${atlasInstructions}\nUSER_PROFILE_DATA: ${JSON.stringify(selected.data)}`;
+    const learning = input.learningContext ? buildLearningTutorContext(input.learningContext.courseId, input.learningContext.lessonId) : null;
+    if (learning) selected.factors.push(`Course material: ${learning.courseTitle} v${learning.curriculumVersion}`);
+    const instructions = `${atlasInstructions}\n${learning ? learningTutorInstructions : ''}\nUSER_PROFILE_DATA: ${JSON.stringify(selected.data)}${learning ? `\nTGPI_LEARNING_CONTEXT: ${JSON.stringify(learning)}` : ''}`;
     if (new TextEncoder().encode(instructions).length > 12000) throw new AtlasError('Profile context exceeds the allowed size.', 413);
     const turn = await beginTurn(userId, input, budget);
     const encoder = new TextEncoder();

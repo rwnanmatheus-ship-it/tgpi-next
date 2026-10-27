@@ -29,7 +29,7 @@ export function auditCourseStructure(course: Course, workshop?: LearningWorkshop
       "Equivalent retake variants and essential competency minima need validation",
       "Practical artifact evaluation and appeals operation need validation",
       "Controlled authenticated certification flow must be verified in Preview",
-      ...(course.id === "global-english-2026" ? [] : ["Server certification path not implemented for this course"]),
+      ...(course.id === "global-english-2026" ? [] : ["Practical certification uses an authorized reviewer; live operational validation pending"]),
     ],
   };
 }

@@ -248,6 +248,11 @@ export default async function CertificatesPage() {
           <Link href="/global-key">Global Key</Link>
           <Link href="/profile">My workspace</Link>
         </nav>
+        <section className="mt-8 rounded-3xl border border-[var(--tgpi-border)] bg-white p-5 sm:p-8" aria-labelledby="applied-certificate-routes">
+          <h2 id="applied-certificate-routes" className="text-2xl font-semibold">Applied course certificates</h2>
+          <p className="mt-3 text-sm leading-7">Each course has its own practical project and competency review. Complete its checkpoints and receive approval for every essential competency before issuing that course’s certificate. Review times vary; a pending submission is not an earned credential.</p>
+          <div className="mt-5 grid gap-3 sm:grid-cols-2">{courses.filter(item => item.id !== "global-english-2026").map(item => <Link key={item.id} href={`/courses/${item.id}/project`} className="rounded-xl border p-4 text-sm font-bold leading-7 focus-visible:outline-2 focus-visible:outline-[var(--tgpi-gold)]">{item.title}<span className="mt-2 block text-xs font-normal">Open project and review status →</span></Link>)}</div>
+        </section>
       </div>
     </main>
   );

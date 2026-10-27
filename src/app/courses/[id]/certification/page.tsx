@@ -21,7 +21,8 @@ export default async function CertificationPage({
   await requireUser();
   const { id } = await params;
   const course = getCourse(id);
-  if (!course || course.id !== "global-english-2026") notFound();
+  if (!course) notFound();
+  if (course.id !== "global-english-2026") redirect(`/courses/${course.id}/project`);
   if (id !== course.id) redirect(`/courses/${course.id}/certification`);
 
   const assessments = getEnglishAbroadAssessmentBank().map(

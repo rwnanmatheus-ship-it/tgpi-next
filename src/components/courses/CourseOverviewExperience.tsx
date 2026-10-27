@@ -355,7 +355,7 @@ function CourseOverview({ course, workshop }: { course: Course; workshop?: React
             </p>
           </div>
 
-          {course.id === "global-english-2026" ? (
+          {course.credential.status === "live" ? (
           <aside className="overflow-hidden rounded-[30px] border border-[var(--tgpi-gold)]/30 bg-[#FFF7DE] shadow-[var(--tgpi-shadow-soft)]" aria-label="Professional credential pathway">
             <div className="p-7 sm:p-9">
               <div className="flex items-center justify-between gap-3">
@@ -363,7 +363,7 @@ function CourseOverview({ course, workshop }: { course: Course; workshop?: React
                   Professional credential pathway
                 </p>
                 <span className="rounded-full bg-[var(--tgpi-navy)] px-3 py-1.5 text-[9px] font-extrabold uppercase tracking-[0.14em] text-[var(--tgpi-gold-light)]">
-                  Preview ready
+                  {course.id === "global-english-2026" ? "Assessed pathway" : "Reviewed project"}
                 </span>
               </div>
               <h2 className="mt-5 text-3xl font-semibold sm:text-4xl">{course.credential.title}</h2>
@@ -391,7 +391,7 @@ function CourseOverview({ course, workshop }: { course: Course; workshop?: React
               </div>
 
               <p className="mt-6 border-t border-[var(--tgpi-gold)]/25 pt-5 text-xs leading-6 text-[#7A6948]">
-                Every assessment is scored on TGPI servers and recorded privately. Public verification exposes only the evidence needed to trust the credential.
+                {course.id === "global-english-2026" ? "Assessment results are computed on TGPI servers and recorded privately." : `An authorized TGPI reviewer must approve every competency at ${course.assessment.masteryThreshold}% or higher. Review is asynchronous; no response time is promised.`} Public verification exposes the issued credential, not private submissions.
               </p>
               <Link href={`/courses/${course.id}/certification`} className="mt-6 inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[var(--tgpi-navy)] px-6 text-sm font-extrabold text-white">
                 Open certification path →

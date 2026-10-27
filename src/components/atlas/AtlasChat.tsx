@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -21,6 +22,9 @@ async function api<T>(url: string, init?: RequestInit): Promise<T> {
 }
 
 export default function AtlasChat({ userId, enabled = true, embedded = false }: { userId: string; enabled?: boolean; embedded?: boolean }) {
+  const pathname = usePathname();
+  const courseMatch = pathname.match(/^\/courses\/([a-z0-9-]+)(?:\/lessons\/([a-z0-9-]+))?$/);
+  const [learningConsentPath, setLearningConsentPath] = useState('');
   const [id, setId] = useState('');
   const [messages, setMessages] = useState<AtlasMessage[]>([]);
   const [items, setItems] = useState<AtlasSummary[]>([]);
@@ -98,7 +102,7 @@ export default function AtlasChat({ userId, enabled = true, embedded = false }: 
     if (lock.current) return;
     setId(crypto.randomUUID()); setMessages([]); setTitle('New conversation'); setPending(null);
     setError(''); setNotice(''); setAction(null); setTemporary(isTemporary); setShowHistory(false);
-    setScopes([]); follow.current = true; setHasNew(false);
+    setScopes([]); setLearningConsentPath(''); follow.current = true; setHasNew(false);
     if (isTemporary) { try { sessionStorage.removeItem(draftKey); } catch { /* optional */ } }
     composer.current?.focus();
   }
@@ -125,7 +129,7 @@ export default function AtlasChat({ userId, enabled = true, embedded = false }: 
   async function send(retry?: AtlasInput) {
     if (!enabled || lock.current || (!retry && !draft.trim()) || !id) return;
     lock.current = true; setBusy(true); setError(''); setNotice('');
-    const request: AtlasInput = retry ? { ...retry, requestId: retry.temporary ? crypto.randomUUID() : retry.requestId } : { conversationId: id, requestId: crypto.randomUUID(), text: draft.trim(), scopes, temporary,
+    const request: AtlasInput = retry ? { ...retry, requestId: retry.temporary ? crypto.randomUUID() : retry.requestId } : { conversationId: id, requestId: crypto.randomUUID(), text: draft.trim(), scopes, temporary, learningContext: courseMatch && learningConsentPath === pathname ? { courseId: courseMatch[1], ...(courseMatch[2] ? { lessonId: courseMatch[2] } : {}) } : undefined,
       history: temporary ? messages.filter(x => x.status === 'complete').slice(-10).map(x => ({ role: x.role, content: x.content })) : [] };
     setPending(request);
     const baseIndex = messages.findIndex(x => x.role === 'user' && x.requestId === (retry?.requestId || request.requestId));
@@ -235,6 +239,7 @@ export default function AtlasChat({ userId, enabled = true, embedded = false }: 
           <p>For your next question, share selected fields from your TGPI profile with OpenAI. Unchecking a category stops future retrieval; previous replies may still contain it. Start a new conversation for a fresh context.</p>
           <div>{choices.map(choice => <label key={choice.id}><input disabled={busy || !!pending} type="checkbox" checked={scopes.includes(choice.id)} onChange={e => setScopes(previous => e.target.checked ? [...previous, choice.id] : previous.filter(x => x !== choice.id))} />{choice.label}</label>)}</div>
         </details>
+        {courseMatch && <label className={styles.context}><input type="checkbox" disabled={busy || !!pending} checked={learningConsentPath === pathname} onChange={event => setLearningConsentPath(event.target.checked ? pathname : '')} /> Include this course or lesson’s public material as tutor context. Private notes, project submissions and protected answers are excluded.</label>}
         {error && <div role="alert" className={styles.error}><p>{error}</p>{pending && !busy && <div><button onClick={() => void send(pending)}>Retry last question</button>{!temporary && <button onClick={() => void openConversation(id)}>Reload conversation</button>}<button onClick={() => newConversation()}>Start new conversation</button></div>}</div>}
         <form className={styles.composer} onSubmit={e => { e.preventDefault(); if (!pending) void send(); }}>
           <label className={styles.srOnly} htmlFor="atlas-message">Message Atlas</label>

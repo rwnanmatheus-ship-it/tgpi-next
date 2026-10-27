@@ -9,6 +9,7 @@ export const chatSchema = z.object({
   text: z.string().trim().min(1).max(4000),
   scopes: z.array(scopeSchema).max(4).default([]),
   temporary: z.boolean().default(false),
+  learningContext: z.object({ courseId: z.string().regex(/^[a-z0-9-]{1,100}$/), lessonId: z.string().regex(/^[a-z0-9-]{1,100}$/).optional() }).strict().optional(),
   history: z.array(z.object({ role: z.enum(['user', 'assistant']), content: z.string().max(8000) }).strict()).max(12).default([]),
 }).strict();
 export type AtlasInput = z.infer<typeof chatSchema>;

@@ -152,6 +152,7 @@ test('chat streams only visible text and saves the reply after provider completi
   const request = input();
   const route = load('src/app/api/atlas/chat/route.ts', {
     openai: Provider,
+    '@/lib/learning/tutor-context.server': { buildLearningTutorContext: () => { throw Error("curriculum requires explicit consent"); }, learningTutorInstructions: "Tutor guard" },
     '@clerk/nextjs/server': { clerkClient: async () => ({ users: { getUser: async () => { profileCalls++; throw Error('must not fetch without consent'); } } }) },
     '@/lib/atlas/http.server': { atlasUser: async () => 'member_a', requireAtlasGeneration: () => 5, atlasBody: async () => request, atlasFailure: () => Response.json({}, { status: 503 }) },
     '@/lib/atlas/contracts': contracts,
@@ -173,11 +174,29 @@ test('provider failures expose no raw error and persist a retryable failure', as
   let saved;
   class Provider { responses = { create: async () => { throw Error('secret account billing detail'); } }; }
   const route = load('src/app/api/atlas/chat/route.ts', {
-    openai: Provider, '@clerk/nextjs/server': {},
+    openai: Provider,
+    '@/lib/learning/tutor-context.server': { buildLearningTutorContext: () => { throw Error("curriculum requires explicit consent"); }, learningTutorInstructions: "Tutor guard" }, '@clerk/nextjs/server': {},
     '@/lib/atlas/http.server': { atlasUser: async () => 'member_a', requireAtlasGeneration: () => 5, atlasBody: async () => input(), atlasFailure: () => Response.json({}, { status: 503 }) },
     '@/lib/atlas/contracts': contracts, '@/lib/atlas/context': { selectAtlasContext, atlasInstructions: 'Test instructions' },
     '@/lib/atlas/store.server': { beginTurn: async () => ({ token: 'token', replay: null, history: [] }), finishTurn: async (...args) => { saved = args; return null; } },
   });
   const body = await (await route.POST(new Request('https://tgpi.test/api/atlas/chat', { method: 'POST' }))).text();
   assert.doesNotMatch(body, /secret account/); assert.match(body, /"type":"error"/); assert.equal(saved[4], 'failed');
+});
+
+test('course context is included only with explicit consent and records the actual source version', async () => {
+  let captured; let contextCalls = 0;
+  class Provider { responses = { create: async args => { captured = args; return (async function*(){yield {type:'response.output_text.delta',delta:'Try the first step.'};yield {type:'response.completed',response:{}};})(); } }; }
+  const request = input({ learningContext: { courseId: 'country-fit', lessonId: 'country-fit-1' } });
+  assert.equal(contracts.chatSchema.safeParse(request).success,true);
+  assert.equal(contracts.chatSchema.safeParse(input({learningContext:{courseId:'country-fit',uid:'victim'}})).success,false);
+  const route=load('src/app/api/atlas/chat/route.ts',{
+    openai:Provider,'@clerk/nextjs/server':{},
+    '@/lib/learning/tutor-context.server':{buildLearningTutorContext:(courseId,lessonId)=>{contextCalls++;assert.equal(courseId,'country-fit');assert.equal(lessonId,'country-fit-1');return {courseTitle:'Country Fit',curriculumVersion:'1.0.0',sourceUrl:'/courses/country-fit/lessons/country-fit-1'};},learningTutorInstructions:'Hints only; never complete a graded task.'},
+    '@/lib/atlas/http.server':{atlasUser:async()=>'member_a',requireAtlasGeneration:()=>5,atlasBody:async()=>request,atlasFailure:()=>Response.json({}, {status:503})},
+    '@/lib/atlas/contracts':contracts,'@/lib/atlas/context':{selectAtlasContext,atlasInstructions:'Existing guard'},
+    '@/lib/atlas/store.server':{beginTurn:async()=>({token:'token',replay:null,history:[]}),finishTurn:async()=>null},
+  });
+  const body=await (await route.POST(new Request('https://tgpi.test/api/atlas/chat',{method:'POST'}))).text();
+  assert.equal(contextCalls,1);assert.match(captured.instructions,/TGPI_LEARNING_CONTEXT/);assert.match(captured.instructions,/Hints only/);assert.match(body,/Course material: Country Fit v1.0.0/);
 });
