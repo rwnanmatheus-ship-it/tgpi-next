@@ -1,3 +1,4 @@
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import { safeReturnTo } from "@/lib/auth/return-to";
 import type { Metadata } from "next";
 import { SignUp } from "@clerk/nextjs";
@@ -22,7 +23,7 @@ export default async function SignUpPage({ searchParams }: { searchParams: Promi
         signInUrl={`/sign-in?next=${encodeURIComponent(next)}`}
         forceRedirectUrl={welcome}
         signInFallbackRedirectUrl={next}
-        fallback={<p role="status">Loading secure registration…</p>}
+        fallback={<p role="status"><LocalizedText text="Loading secure registration…" /></p>}
         appearance={tgpiClerkAppearance}
       />
     </TGPIAuthShell>

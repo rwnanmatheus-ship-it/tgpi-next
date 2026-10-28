@@ -119,3 +119,32 @@ test('all language options ship self-contained vector flags with no remote depen
     assert.doesNotMatch(svg, /<script\b|<foreignObject\b|(?:href|src)=["']https?:/i);
   }
 });
+
+test('home and access presentation copy cannot silently bypass the translation catalog', () => {
+  const brandCopy = new Set(['TGPI', 'TGPI Premium', 'The Global Polymath Institute', 'US$ 0']);
+  for (const path of ['src/components/home/v4/InstitutionalHome.tsx', 'src/components/auth/TGPIAuthShell.tsx']) {
+    const source = ts.createSourceFile(path, fs.readFileSync(path, 'utf8'), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+    function registered(key) { assert.ok(Object.hasOwn(messages, key), `${path}: missing ${key}`); }
+    function visit(node) {
+      if (ts.isJsxText(node)) {
+        const value = node.text.replace(/\s+/g, ' ').trim();
+        assert.ok(!/[A-Za-z]{2}/.test(value) || brandCopy.has(value), `${path}: unlocalized visible copy: ${value}`);
+      }
+      if (ts.isCallExpression(node) && node.expression.getText(source) === 't' && ts.isStringLiteral(node.arguments[0])) registered(node.arguments[0].text);
+      if (ts.isPropertyAssignment(node) && ['title','copy','question','text'].includes(node.name.getText(source)) && ts.isStringLiteral(node.initializer)) registered(node.initializer.text);
+      ts.forEachChild(node, visit);
+    }
+    visit(source);
+  }
+});
+test('evidence labels are translated and locale formatting never changes the source value', async () => {
+  const { INDICATORS, formatObservation } = await import(await localModuleUrl('src/lib/intelligence/core.ts'));
+  for (const indicator of Object.values(INDICATORS)) {
+    for (const key of [indicator.label, indicator.unit, indicator.explanation]) assert.ok(Object.hasOwn(messages,key), `Missing indicator copy: ${key}`);
+  }
+  const observation = { indicator: 'SE.TER.ENRR', value: 77.7 };
+  assert.equal(formatObservation(observation, 'pt-BR'), '77,7');
+  assert.equal(formatObservation(observation, 'en'), '77.7');
+  assert.equal(observation.value, 77.7);
+  assert.equal(formatObservation(undefined, 'pt-BR'), 'Not available');
+});

@@ -1,3 +1,6 @@
+import { getLocale } from "@/lib/localization/server";
+import { translate } from "@/lib/localization/messages";
+import LanguageSelector from "@/components/localization/LanguageSelector";
 import Image from "next/image";
 import Link from "next/link";
 import BrandCrest from "@/components/BrandCrest";
@@ -22,36 +25,39 @@ const pathways = [
   { kind: "plan", title: "Your personal plan", text: "Know your next move.", number: "03" },
 ] as const;
 
-export default function TGPIAuthShell({ children, mode }: TGPIAuthShellProps) {
+export default async function TGPIAuthShell({ children, mode }: TGPIAuthShellProps) {
+  const locale = await getLocale();
+  const t = (text: string) => translate(locale, text);
   const joining = mode !== "sign-in";
   return (
     <main className={styles.page} data-access-version="3" data-access-mode={mode}>
       <div className={styles.shell}>
-        <section className={styles.story} aria-label="Global education and decision intelligence">
-          <Image src="/images/auth/tgpi-global-library-v1.webp" alt="Globe and books in a sunlit research library overlooking an international city" fill priority sizes="(min-width: 1024px) 520px, 1px" className={styles.photo} />
+        <section className={styles.story} aria-label={t("Global education and decision intelligence")}>
+          <Image src="/images/auth/tgpi-global-library-v1.webp" alt={t("Globe and books in a sunlit research library overlooking an international city")} fill priority sizes="(min-width: 1024px) 520px, 1px" className={styles.photo} />
           <div className={styles.shade} />
-          <Link href="/" className={styles.brand} aria-label="TGPI home">
+          <Link href="/" className={styles.brand} aria-label={t("TGPI home")}>
             <span className={styles.crest}><BrandCrest fill sizes="44px" className="object-contain" /></span>
             <span><strong>TGPI</strong><small>The Global Polymath Institute</small></span>
           </Link>
           <div className={styles.storyCopy}>
             <span className={styles.eyebrow}><span className={styles.signal} />{" "}<LocalizedText text="Education for a global life" /></span>
-            <h1><LocalizedText text="Your world." /><br />A clearer direction.</h1>
-            <p>Understand your options. Build your skills.<br />Create a global plan that starts with you.</p>
+            <h1><LocalizedText text="Your world." /><br />{t("A clearer direction.")}</h1>
+            <p>{t("Understand your options. Build your skills.")}<br />{t("Create a global plan that starts with you.")}</p>
           </div>
-          <div className={styles.pathways} aria-label="Your TGPI journey">
-            {pathways.map(item => <article key={item.kind} className={styles.pathway}><span className={styles.pathwayIcon}><AccessSymbol kind={item.kind} /></span><div><h2>{item.title}</h2><p>{item.text}</p></div><span className={styles.pathwayNumber}>{item.number}</span></article>)}
+          <div className={styles.pathways} aria-label={t("Your TGPI journey")}>
+            {pathways.map(item => <article key={item.kind} className={styles.pathway}><span className={styles.pathwayIcon}><AccessSymbol kind={item.kind} /></span><div><h2>{t(item.title)}</h2><p>{t(item.text)}</p></div><span className={styles.pathwayNumber}>{item.number}</span></article>)}
           </div>
-          <div className={styles.storyFoot}><span>Explore. Learn. Decide.</span><span>One connected workspace.</span></div>
+          <div className={styles.storyFoot}><span>{t("Explore. Learn. Decide.")}</span><span>{t("One connected workspace.")}</span></div>
         </section>
-        <section className={styles.panel} aria-label={joining ? "Create your TGPI account" : "Sign in to your TGPI account"}>
+        <section className={styles.panel} aria-label={t(joining ? "Create your TGPI account" : "Sign in to your TGPI account")}>
           <div className={styles.formWrap}>
-            <div className={styles.mobileBrand}><Link href="/" aria-label="TGPI home"><BrandCrest width={30} height={36} /><strong>TGPI</strong></Link><span>Global education & intelligence</span></div>
-            <div className={styles.panelTop}><span className={styles.accessLabel}>{joining ? "Your global journey starts here" : "Your global workspace"}</span><Link href="/" className={styles.back}>← Home</Link></div>
-            {joining ? <ol className={styles.steps} aria-label="Registration steps"><li aria-current={mode === "sign-up" ? "step" : undefined}><span>1</span> Secure access</li><li aria-current={mode === "welcome" ? "step" : undefined}><span>2</span> Your profile</li></ol> : null}
+            <div className={styles.mobileBrand}><Link href="/" aria-label={t("TGPI home")}><BrandCrest width={30} height={36} /><strong>TGPI</strong></Link><span>{t("Global education & intelligence")}</span></div>
+            <div className={styles.panelTop}><span className={styles.accessLabel}>{t(joining ? "Your global journey starts here" : "Your global workspace")}</span><Link href="/" className={styles.back}>{t("← Home")}</Link></div>
+            {joining ? <ol className={styles.steps} aria-label={t("Registration steps")}><li aria-current={mode === "sign-up" ? "step" : undefined}><span>1</span>{" "}{t("Secure access")}</li><li aria-current={mode === "welcome" ? "step" : undefined}><span>2</span>{" "}{t("Your profile")}</li></ol> : null}
+            <div className="mb-4 flex justify-end"><LanguageSelector compact /></div>
             <div className={styles.authWidget}>{children}</div>
-            <div className={styles.security}><AccessSymbol kind="shield" /><p>Secure access. Your progress stays connected.</p></div>
-            <nav className={styles.legal} aria-label="Account help and policies"><Link href="/privacy"><LocalizedText text="Privacy" /></Link><span aria-hidden="true">·</span><Link href="/terms"><LocalizedText text="Terms" /></Link><span aria-hidden="true">·</span><a href="mailto:contact@theglobalpolymath.com">Need help?</a></nav>
+            <div className={styles.security}><AccessSymbol kind="shield" /><p>{t("Secure access. Your progress stays connected.")}</p></div>
+            <nav className={styles.legal} aria-label={t("Account help and policies")}><Link href="/privacy"><LocalizedText text="Privacy" /></Link><span aria-hidden="true">·</span><Link href="/terms"><LocalizedText text="Terms" /></Link><span aria-hidden="true">·</span><a href="mailto:contact@theglobalpolymath.com">{t("Need help?")}</a></nav>
           </div>
         </section>
       </div>

@@ -14,6 +14,8 @@ The four home goal journeys now translate their complete guidance, checklists an
 
 It is **not a complete translation of every page, lesson, country dossier, legal document, notification payload or error message**. The full selector explicitly explains that some content remains in its original language. Source curriculum, certification questions and community contributions require a separate content-localization workflow and must preserve their assessment and provenance semantics. Do not advertise 100% platform translation until those migrations are complete.
 
+The home presentation, access shell, and evidence cards now translate their static explanatory text, while evidence values and collection dates use the selected locale. Source names, statistical values, source links, and licensing identifiers remain authoritative. Sign-in and sign-up include their own language picker.
+
 ## Extending coverage
 
 1. Add the complete English source string and translations for all six locales to `src/lib/localization/messages.ts`.

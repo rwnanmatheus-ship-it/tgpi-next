@@ -1419,11 +1419,11 @@ export const messages = {
   },
   "Country intelligence": {
     "en": "Country intelligence",
-    "pt-BR": "Dados de países",
-    "es": "Datos de países",
-    "fr": "Données pays",
-    "de": "Länderdaten",
-    "it": "Dati sui paesi"
+    "pt-BR": "Inteligência sobre países",
+    "es": "Inteligencia sobre países",
+    "fr": "Intelligence sur les pays",
+    "de": "Länderintelligenz",
+    "it": "Intelligenza sui paesi"
   },
   "Global Rooms": {
     "en": "Global Rooms",
@@ -2276,9 +2276,9 @@ export const messages = {
   "Your TGPI journey": {
     "en": "Your TGPI journey",
     "pt-BR": "Sua jornada TGPI",
-    "es": "Tu recorrido TGPI",
+    "es": "Tu trayectoria TGPI",
     "fr": "Votre parcours TGPI",
-    "de": "Ihr TGPI-Weg",
+    "de": "Ihre TGPI-Reise",
     "it": "Il tuo percorso TGPI"
   },
   "Research with perspective.": {
@@ -2836,9 +2836,9 @@ export const messages = {
   "Start your TGPI journey": {
     "en": "Start your TGPI journey",
     "pt-BR": "Comece sua jornada TGPI",
-    "es": "Empieza tu recorrido TGPI",
+    "es": "Empieza tu trayectoria TGPI",
     "fr": "Commencez votre parcours TGPI",
-    "de": "Beginnen Sie Ihren TGPI-Weg",
+    "de": "Beginnen Sie Ihre TGPI-Reise",
     "it": "Inizia il tuo percorso TGPI"
   },
   "On this page": {
@@ -2899,11 +2899,11 @@ export const messages = {
   },
   "Example Country Fit research plan": {
     "en": "Example Country Fit research plan",
-    "pt-BR": "Exemplo de plano de pesquisa de país ideal",
-    "es": "Ejemplo de plan de investigación de país ideal",
-    "fr": "Exemple de plan de recherche de pays idéal",
-    "de": "Beispiel eines Country-Fit-Rechercheplans",
-    "it": "Esempio di piano di ricerca Country Fit"
+    "pt-BR": "Exemplo de plano de pesquisa do País ideal",
+    "es": "Ejemplo de plan de investigación de País ideal",
+    "fr": "Exemple de plan de recherche Pays idéal",
+    "de": "Beispiel-Rechercheplan für Passendes Land",
+    "it": "Esempio di piano di ricerca Paese ideale"
   },
   "Example plan": {
     "en": "Example plan",
@@ -6280,6 +6280,678 @@ export const messages = {
     "fr": "Observatoire mondial d’apprentissage TGPI avec un atlas du monde illuminé",
     "de": "Globales TGPI-Lernobservatorium mit beleuchtetem Weltatlas",
     "it": "Osservatorio globale di apprendimento TGPI con un atlante mondiale illuminato"
+  },
+  "Global education and decision intelligence": {
+    "en": "Global education and decision intelligence",
+    "pt-BR": "Educação global e inteligência de decisão",
+    "es": "Educación global e inteligencia de decisión",
+    "fr": "Éducation internationale et intelligence décisionnelle",
+    "de": "Globale Bildung und Entscheidungsintelligenz",
+    "it": "Formazione globale e intelligenza decisionale"
+  },
+  "Globe and books in a sunlit research library overlooking an international city": {
+    "en": "Globe and books in a sunlit research library overlooking an international city",
+    "pt-BR": "Globo e livros em uma biblioteca iluminada pelo sol com vista para uma cidade internacional",
+    "es": "Globo y libros en una biblioteca soleada con vistas a una ciudad internacional",
+    "fr": "Globe et livres dans une bibliothèque ensoleillée donnant sur une ville internationale",
+    "de": "Globus und Bücher in einer sonnigen Forschungsbibliothek mit Blick auf eine internationale Stadt",
+    "it": "Globo e libri in una biblioteca soleggiata affacciata su una città internazionale"
+  },
+  "A clearer direction.": {
+    "en": "A clearer direction.",
+    "pt-BR": "Uma direção mais clara.",
+    "es": "Un rumbo más claro.",
+    "fr": "Une direction plus claire.",
+    "de": "Eine klarere Richtung.",
+    "it": "Una direzione più chiara."
+  },
+  "Understand your options. Build your skills.": {
+    "en": "Understand your options. Build your skills.",
+    "pt-BR": "Entenda suas opções. Desenvolva suas habilidades.",
+    "es": "Comprende tus opciones. Desarrolla tus habilidades.",
+    "fr": "Comprenez vos options. Développez vos compétences.",
+    "de": "Verstehen Sie Ihre Optionen. Entwickeln Sie Ihre Fähigkeiten.",
+    "it": "Comprendi le tue opzioni. Sviluppa le tue competenze."
+  },
+  "Create a global plan that starts with you.": {
+    "en": "Create a global plan that starts with you.",
+    "pt-BR": "Crie um plano global que começa com você.",
+    "es": "Crea un plan global que empieza contigo.",
+    "fr": "Créez un projet international qui commence par vous.",
+    "de": "Erstellen Sie einen globalen Plan, der bei Ihnen beginnt.",
+    "it": "Crea un piano globale che parte da te."
+  },
+  "Find where you fit.": {
+    "en": "Find where you fit.",
+    "pt-BR": "Encontre seu lugar.",
+    "es": "Encuentra tu lugar.",
+    "fr": "Trouvez votre place.",
+    "de": "Finden Sie Ihren Platz.",
+    "it": "Trova il tuo posto."
+  },
+  "Build skills for life abroad.": {
+    "en": "Build skills for life abroad.",
+    "pt-BR": "Desenvolva habilidades para a vida no exterior.",
+    "es": "Desarrolla habilidades para la vida en el extranjero.",
+    "fr": "Développez des compétences pour vivre à l’étranger.",
+    "de": "Entwickeln Sie Fähigkeiten für das Leben im Ausland.",
+    "it": "Sviluppa competenze per la vita all’estero."
+  },
+  "Your personal plan": {
+    "en": "Your personal plan",
+    "pt-BR": "Seu plano pessoal",
+    "es": "Tu plan personal",
+    "fr": "Votre projet personnel",
+    "de": "Ihr persönlicher Plan",
+    "it": "Il tuo piano personale"
+  },
+  "Know your next move.": {
+    "en": "Know your next move.",
+    "pt-BR": "Saiba qual é seu próximo passo.",
+    "es": "Define tu próximo paso.",
+    "fr": "Identifiez votre prochaine étape.",
+    "de": "Kennen Sie Ihren nächsten Schritt.",
+    "it": "Individua il tuo prossimo passo."
+  },
+  "Explore. Learn. Decide.": {
+    "en": "Explore. Learn. Decide.",
+    "pt-BR": "Explore. Aprenda. Decida.",
+    "es": "Explora. Aprende. Decide.",
+    "fr": "Explorez. Apprenez. Décidez.",
+    "de": "Entdecken. Lernen. Entscheiden.",
+    "it": "Esplora. Impara. Decidi."
+  },
+  "One connected workspace.": {
+    "en": "One connected workspace.",
+    "pt-BR": "Um espaço de trabalho conectado.",
+    "es": "Un espacio de trabajo conectado.",
+    "fr": "Un espace de travail connecté.",
+    "de": "Ein vernetzter Arbeitsbereich.",
+    "it": "Uno spazio di lavoro connesso."
+  },
+  "Create your TGPI account": {
+    "en": "Create your TGPI account",
+    "pt-BR": "Crie sua conta TGPI",
+    "es": "Crea tu cuenta TGPI",
+    "fr": "Créez votre compte TGPI",
+    "de": "Erstellen Sie Ihr TGPI-Konto",
+    "it": "Crea il tuo account TGPI"
+  },
+  "Sign in to your TGPI account": {
+    "en": "Sign in to your TGPI account",
+    "pt-BR": "Entre na sua conta TGPI",
+    "es": "Inicia sesión en tu cuenta TGPI",
+    "fr": "Connectez-vous à votre compte TGPI",
+    "de": "Melden Sie sich bei Ihrem TGPI-Konto an",
+    "it": "Accedi al tuo account TGPI"
+  },
+  "Global education & intelligence": {
+    "en": "Global education & intelligence",
+    "pt-BR": "Educação e inteligência globais",
+    "es": "Educación e inteligencia globales",
+    "fr": "Éducation et intelligence internationales",
+    "de": "Globale Bildung und Intelligenz",
+    "it": "Formazione e intelligenza globali"
+  },
+  "Your global journey starts here": {
+    "en": "Your global journey starts here",
+    "pt-BR": "Sua jornada global começa aqui",
+    "es": "Tu trayectoria global empieza aquí",
+    "fr": "Votre parcours international commence ici",
+    "de": "Ihre globale Reise beginnt hier",
+    "it": "Il tuo percorso globale inizia qui"
+  },
+  "Your global workspace": {
+    "en": "Your global workspace",
+    "pt-BR": "Seu espaço de trabalho global",
+    "es": "Tu espacio de trabajo global",
+    "fr": "Votre espace de travail international",
+    "de": "Ihr globaler Arbeitsbereich",
+    "it": "Il tuo spazio di lavoro globale"
+  },
+  "← Home": {
+    "en": "← Home",
+    "pt-BR": "← Início",
+    "es": "← Inicio",
+    "fr": "← Accueil",
+    "de": "← Startseite",
+    "it": "← Home"
+  },
+  "Registration steps": {
+    "en": "Registration steps",
+    "pt-BR": "Etapas do cadastro",
+    "es": "Pasos del registro",
+    "fr": "Étapes d’inscription",
+    "de": "Registrierungsschritte",
+    "it": "Passaggi di registrazione"
+  },
+  "Secure access": {
+    "en": "Secure access",
+    "pt-BR": "Acesso seguro",
+    "es": "Acceso seguro",
+    "fr": "Accès sécurisé",
+    "de": "Sicherer Zugang",
+    "it": "Accesso sicuro"
+  },
+  "Your profile": {
+    "en": "Your profile",
+    "pt-BR": "Seu perfil",
+    "es": "Tu perfil",
+    "fr": "Votre profil",
+    "de": "Ihr Profil",
+    "it": "Il tuo profilo"
+  },
+  "Secure access. Your progress stays connected.": {
+    "en": "Secure access. Your progress stays connected.",
+    "pt-BR": "Acesso seguro. Seu progresso permanece conectado.",
+    "es": "Acceso seguro. Tu progreso permanece conectado.",
+    "fr": "Accès sécurisé. Votre progression reste connectée.",
+    "de": "Sicherer Zugang. Ihre Fortschritte bleiben verknüpft.",
+    "it": "Accesso sicuro. I tuoi progressi restano collegati."
+  },
+  "Account help and policies": {
+    "en": "Account help and policies",
+    "pt-BR": "Ajuda e políticas da conta",
+    "es": "Ayuda y políticas de la cuenta",
+    "fr": "Aide et politiques du compte",
+    "de": "Kontohilfe und Richtlinien",
+    "it": "Assistenza e politiche dell’account"
+  },
+  "Need help?": {
+    "en": "Need help?",
+    "pt-BR": "Precisa de ajuda?",
+    "es": "¿Necesitas ayuda?",
+    "fr": "Besoin d’aide ?",
+    "de": "Benötigen Sie Hilfe?",
+    "it": "Hai bisogno di aiuto?"
+  },
+  "Loading secure sign in…": {
+    "en": "Loading secure sign in…",
+    "pt-BR": "Carregando acesso seguro…",
+    "es": "Cargando acceso seguro…",
+    "fr": "Chargement de la connexion sécurisée…",
+    "de": "Sichere Anmeldung wird geladen…",
+    "it": "Caricamento dell’accesso sicuro…"
+  },
+  "Loading secure registration…": {
+    "en": "Loading secure registration…",
+    "pt-BR": "Carregando cadastro seguro…",
+    "es": "Cargando registro seguro…",
+    "fr": "Chargement de l’inscription sécurisée…",
+    "de": "Sichere Registrierung wird geladen…",
+    "it": "Caricamento della registrazione sicura…"
+  },
+  "Understand destinations through country profiles, source-linked observations and visible evidence gaps.": {
+    "en": "Understand destinations through country profiles, source-linked observations and visible evidence gaps.",
+    "pt-BR": "Entenda os destinos com perfis de países, dados vinculados às fontes e lacunas nas evidências identificadas.",
+    "es": "Comprende los destinos con perfiles de países, datos vinculados a fuentes y lagunas de evidencia visibles.",
+    "fr": "Comprenez les destinations grâce aux profils des pays, aux observations reliées aux sources et aux lacunes visibles.",
+    "de": "Verstehen Sie Ziele anhand von Länderprofilen, quellenbezogenen Beobachtungen und sichtbaren Datenlücken.",
+    "it": "Comprendi le destinazioni attraverso profili dei paesi, dati collegati alle fonti e lacune evidenti."
+  },
+  "Which requirements depend on my nationality, destination and timeline? Use the profile as a starting point, then verify with the competent authority.": {
+    "en": "Which requirements depend on my nationality, destination and timeline? Use the profile as a starting point, then verify with the competent authority.",
+    "pt-BR": "Quais requisitos dependem da minha nacionalidade, destino e prazo? Use o perfil como ponto de partida e depois confirme com a autoridade competente.",
+    "es": "¿Qué requisitos dependen de mi nacionalidad, destino y plazos? Usa el perfil como punto de partida y verifica con la autoridad competente.",
+    "fr": "Quelles exigences dépendent de ma nationalité, de ma destination et de mon calendrier ? Utilisez le profil comme point de départ, puis vérifiez auprès de l’autorité compétente.",
+    "de": "Welche Anforderungen hängen von meiner Staatsangehörigkeit, meinem Ziel und Zeitplan ab? Nutzen Sie das Profil als Ausgangspunkt und prüfen Sie die Angaben bei der zuständigen Behörde.",
+    "it": "Quali requisiti dipendono dalla mia nazionalità, destinazione e tempistiche? Usa il profilo come punto di partenza, poi verifica con l’autorità competente."
+  },
+  "Put up to three countries side by side. Investigate the trade-offs that matter to your own situation.": {
+    "en": "Put up to three countries side by side. Investigate the trade-offs that matter to your own situation.",
+    "pt-BR": "Coloque até três países lado a lado. Investigue os prós e contras relevantes para sua situação.",
+    "es": "Compara hasta tres países lado a lado. Investiga las ventajas y desventajas relevantes para tu situación.",
+    "fr": "Comparez jusqu’à trois pays côte à côte. Étudiez les compromis importants pour votre situation.",
+    "de": "Vergleichen Sie bis zu drei Länder nebeneinander. Untersuchen Sie die Vor- und Nachteile für Ihre Situation.",
+    "it": "Confronta fino a tre paesi fianco a fianco. Esamina i vantaggi e gli svantaggi rilevanti per la tua situazione."
+  },
+  "Are these observations comparable? Check the source, reference year, definition and missing evidence before drawing a conclusion.": {
+    "en": "Are these observations comparable? Check the source, reference year, definition and missing evidence before drawing a conclusion.",
+    "pt-BR": "Esses dados são comparáveis? Confira a fonte, o ano de referência, a definição e as evidências ausentes antes de concluir.",
+    "es": "¿Son comparables estos datos? Revisa la fuente, el año de referencia, la definición y la evidencia que falta antes de concluir.",
+    "fr": "Ces observations sont-elles comparables ? Vérifiez la source, l’année de référence, la définition et les données manquantes avant de conclure.",
+    "de": "Sind diese Beobachtungen vergleichbar? Prüfen Sie Quelle, Referenzjahr, Definition und fehlende Belege, bevor Sie Schlüsse ziehen.",
+    "it": "Questi dati sono comparabili? Verifica fonte, anno di riferimento, definizione ed evidenze mancanti prima di concludere."
+  },
+  "Connect your destination, research questions and document tasks. Keep your next actions in view.": {
+    "en": "Connect your destination, research questions and document tasks. Keep your next actions in view.",
+    "pt-BR": "Conecte seu destino, suas perguntas de pesquisa e as tarefas com documentos. Mantenha suas próximas ações à vista.",
+    "es": "Conecta tu destino, tus preguntas de investigación y las tareas de documentos. Mantén a la vista tus próximas acciones.",
+    "fr": "Reliez votre destination, vos questions de recherche et vos démarches documentaires. Gardez vos prochaines actions en vue.",
+    "de": "Verknüpfen Sie Ihr Ziel, Ihre Recherchefragen und Dokumentenaufgaben. Behalten Sie die nächsten Schritte im Blick.",
+    "it": "Collega la destinazione, le domande di ricerca e le attività sui documenti. Tieni in vista le prossime azioni."
+  },
+  "What must I verify before committing money? Start with the legal route, deadlines, dated cost estimates and document requirements.": {
+    "en": "What must I verify before committing money? Start with the legal route, deadlines, dated cost estimates and document requirements.",
+    "pt-BR": "O que devo verificar antes de comprometer dinheiro? Comece pela via legal, pelos prazos, pelas estimativas de custos datadas e pelos documentos exigidos.",
+    "es": "¿Qué debo verificar antes de comprometer dinero? Empieza por la vía legal, los plazos, las estimaciones de costes fechadas y los documentos exigidos.",
+    "fr": "Que vérifier avant d’engager de l’argent ? Commencez par la voie légale, les échéances, les estimations de coûts datées et les documents requis.",
+    "de": "Was muss ich prüfen, bevor ich Geld ausgebe? Beginnen Sie mit dem rechtlichen Weg, Fristen, datierten Kostenschätzungen und Dokumentenanforderungen.",
+    "it": "Cosa devo verificare prima di impegnare denaro? Inizia dal percorso legale, dalle scadenze, dalle stime dei costi datate e dai documenti richiesti."
+  },
+  "Learn through applied scenarios in English, country decisions, relocation budgeting and international careers.": {
+    "en": "Learn through applied scenarios in English, country decisions, relocation budgeting and international careers.",
+    "pt-BR": "Aprenda com cenários práticos de inglês, escolha de países, orçamento de mudança e carreiras internacionais.",
+    "es": "Aprende con escenarios prácticos de inglés, elección de países, presupuestos de mudanza y carreras internacionales.",
+    "fr": "Apprenez à travers des situations pratiques en anglais, des choix de pays, des budgets de déménagement et des carrières internationales.",
+    "de": "Lernen Sie anhand praktischer Szenarien zu Englisch, Länderentscheidungen, Umzugsbudgets und internationalen Karrieren.",
+    "it": "Impara con scenari pratici di inglese, scelta dei paesi, budget per il trasferimento e carriere internazionali."
+  },
+  "Which everyday situation do I want to handle better? Choose a practical course and use an account to continue your learning progress.": {
+    "en": "Which everyday situation do I want to handle better? Choose a practical course and use an account to continue your learning progress.",
+    "pt-BR": "Qual situação do dia a dia quero enfrentar melhor? Escolha um curso prático e use uma conta para continuar seu aprendizado.",
+    "es": "¿Qué situación cotidiana quiero manejar mejor? Elige un curso práctico y usa una cuenta para continuar tu aprendizaje.",
+    "fr": "Quelle situation quotidienne voudrais-je mieux gérer ? Choisissez un cours pratique et utilisez un compte pour poursuivre votre apprentissage.",
+    "de": "Welche Alltagssituation möchte ich besser meistern? Wählen Sie einen praktischen Kurs und nutzen Sie ein Konto, um weiterzulernen.",
+    "it": "Quale situazione quotidiana voglio gestire meglio? Scegli un corso pratico e usa un account per proseguire l’apprendimento."
+  },
+  "Considering Portugal and Canada for study? Start with comparable evidence. Then check the institution, your legal route and a city-level budget.": {
+    "en": "Considering Portugal and Canada for study? Start with comparable evidence. Then check the institution, your legal route and a city-level budget.",
+    "pt-BR": "Pensa em estudar em Portugal ou no Canadá? Comece com dados comparáveis. Depois verifique a instituição, sua via legal e um orçamento para a cidade.",
+    "es": "¿Piensas estudiar en Portugal o Canadá? Empieza con datos comparables. Después verifica la institución, tu vía legal y un presupuesto para la ciudad.",
+    "fr": "Vous envisagez des études au Portugal ou au Canada ? Commencez par des données comparables. Vérifiez ensuite l’établissement, votre voie légale et un budget local.",
+    "de": "Erwägen Sie ein Studium in Portugal oder Kanada? Beginnen Sie mit vergleichbaren Belegen. Prüfen Sie dann die Einrichtung, Ihren rechtlichen Weg und ein Budget für die Stadt.",
+    "it": "Stai valutando di studiare in Portogallo o Canada? Inizia da dati comparabili. Poi verifica l’istituto, il percorso legale e un budget per la città."
+  },
+  "Real observations from TGPI’s bundled snapshot · Collected {date}. The same evidence component is used in Compare. Enrolment describes national context; it does not measure education quality or your chances of admission. Open Compare for refreshed coverage.": {
+    "en": "Real observations from TGPI’s bundled snapshot · Collected {date}. The same evidence component is used in Compare. Enrolment describes national context; it does not measure education quality or your chances of admission. Open Compare for refreshed coverage.",
+    "pt-BR": "Dados reais da base incluída na TGPI · Coletados em {date}. O mesmo componente de evidências é usado em Comparar. As matrículas descrevem o contexto nacional; não medem a qualidade do ensino nem suas chances de admissão. Abra Comparar para consultar a cobertura atualizada.",
+    "es": "Datos reales de la base incluida en TGPI · Recopilados el {date}. El mismo componente de evidencia se usa en Comparar. La matrícula describe el contexto nacional; no mide la calidad educativa ni tus posibilidades de admisión. Abre Comparar para ver la cobertura actualizada.",
+    "fr": "Observations réelles de l’instantané intégré à TGPI · Collectées le {date}. Le même composant est utilisé dans Comparer. Les inscriptions décrivent le contexte national ; elles ne mesurent ni la qualité de l’enseignement ni vos chances d’admission. Ouvrez Comparer pour consulter la couverture actualisée.",
+    "de": "Reale Beobachtungen aus dem integrierten TGPI-Datenstand · Erhoben am {date}. Dieselbe Evidenzkomponente wird in Vergleichen verwendet. Einschreibungen beschreiben den nationalen Kontext, nicht die Bildungsqualität oder Ihre Zulassungschancen. Öffnen Sie Vergleichen für aktualisierte Abdeckung.",
+    "it": "Dati reali dell’istantanea inclusa in TGPI · Raccolti il {date}. Lo stesso componente viene usato in Confronta. Le iscrizioni descrivono il contesto nazionale; non misurano la qualità dell’istruzione né le possibilità di ammissione. Apri Confronta per la copertura aggiornata."
+  },
+  "Your Workspace brings your activity together.": {
+    "en": "Your Workspace brings your activity together.",
+    "pt-BR": "Seu espaço reúne suas atividades.",
+    "es": "Tu espacio reúne tus actividades.",
+    "fr": "Votre espace rassemble vos activités.",
+    "de": "Ihr Arbeitsbereich bündelt Ihre Aktivitäten.",
+    "it": "Il tuo spazio riunisce le tue attività."
+  },
+  "Your Global Key connects your TGPI identity and learning records; it is a platform identity, not a government document.": {
+    "en": "Your Global Key connects your TGPI identity and learning records; it is a platform identity, not a government document.",
+    "pt-BR": "Sua Global Key conecta sua identidade TGPI e seus registros de aprendizagem; é uma identidade da plataforma, não um documento governamental.",
+    "es": "Tu Global Key conecta tu identidad TGPI y tus registros de aprendizaje; es una identidad de la plataforma, no un documento gubernamental.",
+    "fr": "Votre Global Key relie votre identité TGPI et vos dossiers d’apprentissage ; c’est une identité de plateforme, pas un document officiel.",
+    "de": "Ihr Global Key verbindet Ihre TGPI-Identität und Lernnachweise; er ist eine Plattformidentität, kein behördliches Dokument.",
+    "it": "La tua Global Key collega l’identità TGPI ai registri di apprendimento; è un’identità della piattaforma, non un documento governativo."
+  },
+  "Handle practical conversations for arrival, housing and work.": {
+    "en": "Handle practical conversations for arrival, housing and work.",
+    "pt-BR": "Conduza conversas práticas sobre chegada, moradia e trabalho.",
+    "es": "Gestiona conversaciones prácticas sobre llegada, vivienda y trabajo.",
+    "fr": "Gérez des conversations pratiques sur l’arrivée, le logement et le travail.",
+    "de": "Meistern Sie praktische Gespräche zu Ankunft, Wohnen und Arbeit.",
+    "it": "Gestisci conversazioni pratiche su arrivo, alloggio e lavoro."
+  },
+  "Compare destinations against your constraints and the evidence.": {
+    "en": "Compare destinations against your constraints and the evidence.",
+    "pt-BR": "Compare destinos considerando suas restrições e as evidências.",
+    "es": "Compara destinos según tus limitaciones y las evidencias.",
+    "fr": "Comparez les destinations selon vos contraintes et les preuves.",
+    "de": "Vergleichen Sie Ziele anhand Ihrer Einschränkungen und der Belege.",
+    "it": "Confronta le destinazioni in base ai tuoi vincoli e alle evidenze."
+  },
+  "Separate moving costs from living costs and test your financial runway.": {
+    "en": "Separate moving costs from living costs and test your financial runway.",
+    "pt-BR": "Separe os custos da mudança dos custos de vida e teste a duração da sua reserva financeira.",
+    "es": "Separa los costes de mudanza de los gastos de vida y comprueba cuánto dura tu reserva financiera.",
+    "fr": "Séparez les frais de déménagement du coût de la vie et testez la durée de votre réserve financière.",
+    "de": "Trennen Sie Umzugskosten von Lebenshaltungskosten und prüfen Sie die Reichweite Ihrer Rücklagen.",
+    "it": "Distingui i costi del trasferimento dai costi della vita e verifica la durata della riserva finanziaria."
+  },
+  "Where verified certification is available, complete the lesson, assessment, reflection and identity requirements before issuance. TGPI credentials have a public verification record; they are not academic degrees or professional licences.": {
+    "en": "Where verified certification is available, complete the lesson, assessment, reflection and identity requirements before issuance. TGPI credentials have a public verification record; they are not academic degrees or professional licences.",
+    "pt-BR": "Quando houver certificação verificada, cumpra os requisitos de aulas, avaliação, reflexão e identidade antes da emissão. As credenciais TGPI têm um registro público de verificação; não são diplomas acadêmicos nem licenças profissionais.",
+    "es": "Cuando haya certificación verificada, cumple los requisitos de lecciones, evaluación, reflexión e identidad antes de la emisión. Las credenciales TGPI tienen un registro público de verificación; no son títulos académicos ni licencias profesionales.",
+    "fr": "Lorsqu’une certification vérifiée est proposée, remplissez les exigences de leçons, d’évaluation, de réflexion et d’identité avant la délivrance. Les attestations TGPI disposent d’un registre public de vérification ; elles ne sont ni des diplômes universitaires ni des autorisations professionnelles.",
+    "de": "Wenn eine verifizierte Zertifizierung verfügbar ist, erfüllen Sie vor der Ausstellung die Anforderungen an Lektionen, Prüfung, Reflexion und Identität. TGPI-Nachweise haben einen öffentlichen Verifizierungsnachweis; sie sind keine akademischen Abschlüsse oder Berufszulassungen.",
+    "it": "Quando è disponibile una certificazione verificata, completa i requisiti di lezioni, valutazione, riflessione e identità prima del rilascio. Le credenziali TGPI hanno un registro pubblico di verifica; non sono titoli accademici né abilitazioni professionali."
+  },
+  "Research first. Create an account when you want to save your work. Choose Premium for the protected command center.": {
+    "en": "Research first. Create an account when you want to save your work. Choose Premium for the protected command center.",
+    "pt-BR": "Pesquise primeiro. Crie uma conta quando quiser salvar seu trabalho. Escolha o Premium para acessar o centro de comando protegido.",
+    "es": "Investiga primero. Crea una cuenta cuando quieras guardar tu trabajo. Elige Premium para acceder al centro de control protegido.",
+    "fr": "Commencez par vos recherches. Créez un compte pour enregistrer votre travail. Choisissez Premium pour accéder au centre de commande protégé.",
+    "de": "Recherchieren Sie zuerst. Erstellen Sie ein Konto, wenn Sie Ihre Arbeit speichern möchten. Wählen Sie Premium für das geschützte Command Center.",
+    "it": "Inizia dalle ricerche. Crea un account per salvare il lavoro. Scegli Premium per il centro di controllo protetto."
+  },
+  "Monthly renewal until cancelled. Confirm the amount and recurring terms at checkout. Your bank may apply conversion fees.": {
+    "en": "Monthly renewal until cancelled. Confirm the amount and recurring terms at checkout. Your bank may apply conversion fees.",
+    "pt-BR": "Renovação mensal até o cancelamento. Confirme o valor e as condições recorrentes no pagamento. Seu banco poderá cobrar taxas de conversão.",
+    "es": "Renovación mensual hasta la cancelación. Confirma el importe y las condiciones recurrentes al pagar. Tu banco puede aplicar comisiones de conversión.",
+    "fr": "Renouvellement mensuel jusqu’à résiliation. Confirmez le montant et les conditions récurrentes lors du paiement. Votre banque peut facturer des frais de conversion.",
+    "de": "Monatliche Verlängerung bis zur Kündigung. Bestätigen Sie Betrag und wiederkehrende Bedingungen beim Bezahlen. Ihre Bank kann Umrechnungsgebühren berechnen.",
+    "it": "Rinnovo mensile fino alla disdetta. Conferma l’importo e le condizioni ricorrenti al pagamento. La banca potrebbe applicare commissioni di conversione."
+  },
+  "Public comparison, research-plan saving and current learning routes are also available without a paid subscription. Premium does not change the three-country comparison or five-country shortlist limits in the current release.": {
+    "en": "Public comparison, research-plan saving and current learning routes are also available without a paid subscription. Premium does not change the three-country comparison or five-country shortlist limits in the current release.",
+    "pt-BR": "A comparação pública, o salvamento de planos de pesquisa e os percursos atuais de aprendizagem também estão disponíveis sem assinatura paga. Nesta versão, o Premium não altera os limites de três países na comparação e cinco países na lista de interesse.",
+    "es": "La comparación pública, el guardado de planes de investigación y los itinerarios actuales de aprendizaje también están disponibles sin suscripción de pago. En esta versión, Premium no cambia los límites de tres países en la comparación y cinco en la lista de interés.",
+    "fr": "La comparaison publique, l’enregistrement des plans de recherche et les parcours actuels sont aussi disponibles sans abonnement payant. Dans cette version, Premium ne modifie pas les limites de trois pays comparés et de cinq pays sélectionnés.",
+    "de": "Öffentliche Vergleiche, gespeicherte Recherchepläne und aktuelle Lernpfade sind auch ohne kostenpflichtiges Abonnement verfügbar. Premium ändert in dieser Version nicht die Grenzen von drei Vergleichsländern und fünf Ländern in der Auswahl.",
+    "it": "Il confronto pubblico, il salvataggio dei piani di ricerca e i percorsi attuali sono disponibili anche senza abbonamento a pagamento. In questa versione, Premium non modifica i limiti di tre paesi nel confronto e cinque nella selezione."
+  },
+  "TGPI connects practical education, country research and preparation for international life. We show source context and uncertainty so you can investigate your options with greater clarity.": {
+    "en": "TGPI connects practical education, country research and preparation for international life. We show source context and uncertainty so you can investigate your options with greater clarity.",
+    "pt-BR": "A TGPI conecta educação prática, pesquisa de países e preparação para a vida internacional. Apresentamos o contexto das fontes e as incertezas para você investigar suas opções com mais clareza.",
+    "es": "TGPI conecta educación práctica, investigación de países y preparación para la vida internacional. Mostramos el contexto de las fuentes y la incertidumbre para que investigues tus opciones con más claridad.",
+    "fr": "TGPI relie formation pratique, recherche sur les pays et préparation à la vie internationale. Nous présentons le contexte des sources et les incertitudes pour vous aider à étudier vos options plus clairement.",
+    "de": "TGPI verbindet praktische Bildung, Länderrecherche und Vorbereitung auf ein internationales Leben. Wir zeigen Quellenkontext und Unsicherheiten, damit Sie Ihre Optionen klarer untersuchen können.",
+    "it": "TGPI collega formazione pratica, ricerca sui paesi e preparazione alla vita internazionale. Mostriamo il contesto delle fonti e le incertezze per aiutarti a valutare le opzioni con più chiarezza."
+  },
+  "/month": {
+    "en": "/month",
+    "pt-BR": "/mês",
+    "es": "/mes",
+    "fr": "/mois",
+    "de": "/Monat",
+    "it": "/mese"
+  },
+  "Tertiary enrollment": {
+    "en": "Tertiary enrollment",
+    "pt-BR": "Matrículas no ensino superior",
+    "es": "Matrícula en educación superior",
+    "fr": "Inscriptions dans l’enseignement supérieur",
+    "de": "Einschreibungen im Hochschulbereich",
+    "it": "Iscrizioni all’istruzione superiore"
+  },
+  "Internet use": {
+    "en": "Internet use",
+    "pt-BR": "Uso da internet",
+    "es": "Uso de internet",
+    "fr": "Utilisation d’Internet",
+    "de": "Internetnutzung",
+    "it": "Uso di Internet"
+  },
+  "Unemployment": {
+    "en": "Unemployment",
+    "pt-BR": "Desemprego",
+    "es": "Desempleo",
+    "fr": "Chômage",
+    "de": "Arbeitslosigkeit",
+    "it": "Disoccupazione"
+  },
+  "people": {
+    "en": "people",
+    "pt-BR": "pessoas",
+    "es": "personas",
+    "fr": "personnes",
+    "de": "Personen",
+    "it": "persone"
+  },
+  "% of population": {
+    "en": "% of population",
+    "pt-BR": "% da população",
+    "es": "% de la población",
+    "fr": "% de la population",
+    "de": "% der Bevölkerung",
+    "it": "% della popolazione"
+  },
+  "% of labor force": {
+    "en": "% of labor force",
+    "pt-BR": "% da força de trabalho",
+    "es": "% de la población activa",
+    "fr": "% de la population active",
+    "de": "% der Erwerbsbevölkerung",
+    "it": "% della forza lavoro"
+  },
+  "% gross": {
+    "en": "% gross",
+    "pt-BR": "% bruto",
+    "es": "% bruto",
+    "fr": "% brut",
+    "de": "% brutto",
+    "it": "% lordo"
+  },
+  "Total population. National context, not the size of your destination city.": {
+    "en": "Total population. National context, not the size of your destination city.",
+    "pt-BR": "População total. Contexto nacional, não o tamanho da sua cidade de destino.",
+    "es": "Población total. Contexto nacional, no el tamaño de tu ciudad de destino.",
+    "fr": "Population totale. Contexte national, pas la taille de votre ville de destination.",
+    "de": "Gesamtbevölkerung. Nationaler Kontext, nicht die Größe Ihrer Zielstadt.",
+    "it": "Popolazione totale. Contesto nazionale, non le dimensioni della città di destinazione."
+  },
+  "People using the internet. Not a measure of connection speed or service quality.": {
+    "en": "People using the internet. Not a measure of connection speed or service quality.",
+    "pt-BR": "Pessoas que usam a internet. Não mede a velocidade da conexão nem a qualidade do serviço.",
+    "es": "Personas que usan internet. No mide la velocidad de conexión ni la calidad del servicio.",
+    "fr": "Personnes utilisant Internet. Ne mesure ni le débit ni la qualité du service.",
+    "de": "Personen, die das Internet nutzen. Kein Maß für Verbindungsgeschwindigkeit oder Servicequalität.",
+    "it": "Persone che usano Internet. Non misura la velocità della connessione né la qualità del servizio."
+  },
+  "Modeled ILO estimate of total unemployment. Not your probability of getting a job; profession and work authorization matter.": {
+    "en": "Modeled ILO estimate of total unemployment. Not your probability of getting a job; profession and work authorization matter.",
+    "pt-BR": "Estimativa modelada da OIT para o desemprego total. Não é sua probabilidade de conseguir emprego; profissão e autorização de trabalho importam.",
+    "es": "Estimación modelizada de la OIT del desempleo total. No es tu probabilidad de conseguir empleo; importan la profesión y la autorización de trabajo.",
+    "fr": "Estimation modélisée de l’OIT du chômage total. Ce n’est pas votre probabilité d’obtenir un emploi ; le métier et l’autorisation de travail comptent.",
+    "de": "Modellierte ILO-Schätzung der Gesamtarbeitslosigkeit. Nicht Ihre Wahrscheinlichkeit, Arbeit zu finden; Beruf und Arbeitserlaubnis sind relevant.",
+    "it": "Stima modellizzata dell’OIL della disoccupazione totale. Non è la tua probabilità di trovare lavoro; contano la professione e il permesso di lavoro."
+  },
+  "Gross enrollment ratio includes students outside the official age group and can exceed 100%. Not university quality or admission probability.": {
+    "en": "Gross enrollment ratio includes students outside the official age group and can exceed 100%. Not university quality or admission probability.",
+    "pt-BR": "A taxa bruta de matrícula inclui estudantes fora da faixa etária oficial e pode superar 100%. Não mede a qualidade universitária nem a probabilidade de admissão.",
+    "es": "La tasa bruta de matrícula incluye estudiantes fuera de la edad oficial y puede superar el 100%. No mide la calidad universitaria ni la probabilidad de admisión.",
+    "fr": "Le taux brut d’inscription inclut des étudiants hors de la tranche d’âge officielle et peut dépasser 100 %. Il ne mesure ni la qualité universitaire ni les chances d’admission.",
+    "de": "Die Bruttoeinschreibungsquote umfasst Studierende außerhalb der offiziellen Altersgruppe und kann 100 % überschreiten. Kein Maß für Hochschulqualität oder Zulassungschancen.",
+    "it": "Il tasso lordo di iscrizione include studenti fuori dalla fascia d’età ufficiale e può superare il 100%. Non misura la qualità universitaria né la probabilità di ammissione."
+  },
+  "Source checked": {
+    "en": "Source checked",
+    "pt-BR": "Fonte verificada",
+    "es": "Fuente verificada",
+    "fr": "Source vérifiée",
+    "de": "Quelle geprüft",
+    "it": "Fonte verificata"
+  },
+  "Older observation": {
+    "en": "Older observation",
+    "pt-BR": "Dado histórico",
+    "es": "Dato histórico",
+    "fr": "Observation ancienne",
+    "de": "Ältere Beobachtung",
+    "it": "Dato storico"
+  },
+  "Refresh overdue": {
+    "en": "Refresh overdue",
+    "pt-BR": "Atualização atrasada",
+    "es": "Actualización pendiente",
+    "fr": "Actualisation en retard",
+    "de": "Aktualisierung überfällig",
+    "it": "Aggiornamento in ritardo"
+  },
+  "Reference year {year}": {
+    "en": "Reference year {year}",
+    "pt-BR": "Ano de referência {year}",
+    "es": "Año de referencia {year}",
+    "fr": "Année de référence {year}",
+    "de": "Referenzjahr {year}",
+    "it": "Anno di riferimento {year}"
+  },
+  "No observation supplied": {
+    "en": "No observation supplied",
+    "pt-BR": "Nenhum dado fornecido",
+    "es": "No se proporcionaron datos",
+    "fr": "Aucune observation fournie",
+    "de": "Keine Beobachtung vorhanden",
+    "it": "Nessun dato fornito"
+  },
+  "Source & confidence": {
+    "en": "Source & confidence",
+    "pt-BR": "Fonte e confiabilidade",
+    "es": "Fuente y confianza",
+    "fr": "Source et fiabilité",
+    "de": "Quelle und Verlässlichkeit",
+    "it": "Fonte e affidabilità"
+  },
+  "Source: {producer}, via World Bank, World Development Indicators. Indicator license: CC BY 4.0 (registry reviewed 2026-09-02). Values are rounded for display; no missing observations are imputed. Confidence here describes traceability and freshness, not a probability of truth.": {
+    "en": "Source: {producer}, via World Bank, World Development Indicators. Indicator license: CC BY 4.0 (registry reviewed 2026-09-02). Values are rounded for display; no missing observations are imputed. Confidence here describes traceability and freshness, not a probability of truth.",
+    "pt-BR": "Fonte: {producer}, via Banco Mundial, Indicadores do Desenvolvimento Mundial. Licença do indicador: CC BY 4.0 (registro revisado em 2026-09-02). Os valores são arredondados para exibição; dados ausentes não são estimados. Confiabilidade aqui descreve rastreabilidade e atualização, não uma probabilidade de veracidade.",
+    "es": "Fuente: {producer}, a través del Banco Mundial, Indicadores del Desarrollo Mundial. Licencia del indicador: CC BY 4.0 (registro revisado el 2026-09-02). Los valores se redondean para mostrarlos; no se imputan datos ausentes. La confianza describe la trazabilidad y actualidad, no una probabilidad de verdad.",
+    "fr": "Source : {producer}, via la Banque mondiale, Indicateurs du développement dans le monde. Licence : CC BY 4.0 (registre révisé le 2026-09-02). Les valeurs sont arrondies pour l’affichage ; aucune observation manquante n’est imputée. La fiabilité décrit ici la traçabilité et l’actualité, pas une probabilité de vérité.",
+    "de": "Quelle: {producer}, über die Weltbank, World Development Indicators. Indikatorlizenz: CC BY 4.0 (Register geprüft am 2026-09-02). Werte werden zur Anzeige gerundet; fehlende Beobachtungen werden nicht ergänzt. Verlässlichkeit beschreibt hier Nachvollziehbarkeit und Aktualität, keine Wahrheitswahrscheinlichkeit.",
+    "it": "Fonte: {producer}, tramite Banca Mondiale, Indicatori dello sviluppo mondiale. Licenza: CC BY 4.0 (registro verificato il 2026-09-02). I valori sono arrotondati per la visualizzazione; i dati mancanti non sono imputati. L’affidabilità indica tracciabilità e aggiornamento, non una probabilità di verità."
+  },
+  "Collected {date}. Source dataset update: {updated}.": {
+    "en": "Collected {date}. Source dataset update: {updated}.",
+    "pt-BR": "Coletado em {date}. Atualização da base de origem: {updated}.",
+    "es": "Recopilado el {date}. Actualización de la base de origen: {updated}.",
+    "fr": "Collecté le {date}. Mise à jour des données source : {updated}.",
+    "de": "Erhoben am {date}. Aktualisierung des Quelldatensatzes: {updated}.",
+    "it": "Raccolto il {date}. Aggiornamento dei dati di origine: {updated}."
+  },
+  "not supplied": {
+    "en": "not supplied",
+    "pt-BR": "não informado",
+    "es": "no indicado",
+    "fr": "non fourni",
+    "de": "nicht angegeben",
+    "it": "non indicato"
+  },
+  "No verified observation is currently available in TGPI for this indicator and country. No value is inferred.": {
+    "en": "No verified observation is currently available in TGPI for this indicator and country. No value is inferred.",
+    "pt-BR": "Não há dados verificados disponíveis na TGPI para este indicador e país. Nenhum valor é inferido.",
+    "es": "Actualmente no hay datos verificados en TGPI para este indicador y país. No se infiere ningún valor.",
+    "fr": "Aucune observation vérifiée n’est actuellement disponible dans TGPI pour cet indicateur et ce pays. Aucune valeur n’est déduite.",
+    "de": "Für diesen Indikator und dieses Land liegen in TGPI derzeit keine verifizierten Beobachtungen vor. Es wird kein Wert abgeleitet.",
+    "it": "TGPI non dispone attualmente di dati verificati per questo indicatore e paese. Non viene dedotto alcun valore."
+  },
+  "Registered source, valid schema and acceptable reference-year age under methodology v1.": {
+    "en": "Registered source, valid schema and acceptable reference-year age under methodology v1.",
+    "pt-BR": "Fonte registrada, estrutura válida e ano de referência dentro do limite da metodologia v1.",
+    "es": "Fuente registrada, estructura válida y antigüedad del año de referencia aceptable según la metodología v1.",
+    "fr": "Source enregistrée, schéma valide et ancienneté de l’année de référence acceptable selon la méthodologie v1.",
+    "de": "Registrierte Quelle, gültiges Schema und akzeptables Referenzjahr gemäß Methodik v1.",
+    "it": "Fonte registrata, struttura valida e anno di riferimento entro i limiti della metodologia v1."
+  },
+  "The observation is older than the indicator's reference-year threshold. Use only as historical context.": {
+    "en": "The observation is older than the indicator's reference-year threshold. Use only as historical context.",
+    "pt-BR": "O dado é mais antigo que o limite do ano de referência do indicador. Use apenas como contexto histórico.",
+    "es": "El dato supera el límite de antigüedad del indicador. Úsalo solo como contexto histórico.",
+    "fr": "L’observation dépasse le seuil d’ancienneté de l’indicateur. À utiliser uniquement comme contexte historique.",
+    "de": "Die Beobachtung ist älter als der Referenzjahresgrenzwert des Indikators. Nur als historischen Kontext verwenden.",
+    "it": "Il dato supera il limite temporale dell’indicatore. Usalo solo come contesto storico."
+  },
+  "The source has not been successfully checked within seven days; validate directly before use.": {
+    "en": "The source has not been successfully checked within seven days; validate directly before use.",
+    "pt-BR": "A fonte não foi verificada com sucesso nos últimos sete dias; confirme diretamente antes de usar.",
+    "es": "La fuente no se ha verificado correctamente en siete días; compruébala directamente antes de usarla.",
+    "fr": "La source n’a pas été vérifiée avec succès depuis sept jours ; vérifiez-la directement avant utilisation.",
+    "de": "Die Quelle wurde seit sieben Tagen nicht erfolgreich geprüft; vor Verwendung direkt verifizieren.",
+    "it": "La fonte non è stata verificata con successo negli ultimi sette giorni; controllala direttamente prima dell’uso."
+  },
+  "Insufficient evidence for a quantitative conclusion.": {
+    "en": "Insufficient evidence for a quantitative conclusion.",
+    "pt-BR": "Evidências insuficientes para uma conclusão quantitativa.",
+    "es": "Evidencia insuficiente para una conclusión cuantitativa.",
+    "fr": "Preuves insuffisantes pour une conclusion quantitative.",
+    "de": "Unzureichende Belege für eine quantitative Schlussfolgerung.",
+    "it": "Evidenze insufficienti per una conclusione quantitativa."
+  },
+  "Open source and indicator metadata ↗": {
+    "en": "Open source and indicator metadata ↗",
+    "pt-BR": "Abrir fonte e metadados do indicador ↗",
+    "es": "Abrir fuente y metadatos del indicador ↗",
+    "fr": "Ouvrir la source et les métadonnées de l’indicateur ↗",
+    "de": "Quelle und Indikatormetadaten öffnen ↗",
+    "it": "Apri fonte e metadati dell’indicatore ↗"
+  },
+  "Population": {
+    "en": "Population",
+    "pt-BR": "População",
+    "es": "Población",
+    "fr": "Population",
+    "de": "Bevölkerung",
+    "it": "Popolazione"
+  },
+  "Intelligence data status": {
+    "en": "Intelligence data status",
+    "pt-BR": "Estado dos dados de inteligência",
+    "es": "Estado de los datos de inteligencia",
+    "fr": "État des données d’intelligence",
+    "de": "Status der Intelligenzdaten",
+    "it": "Stato dei dati di intelligence"
+  },
+  "TGPI Intelligence Graph · Statistical layer v1": {
+    "en": "TGPI Intelligence Graph · Statistical layer v1",
+    "pt-BR": "Grafo de inteligência TGPI · Camada estatística v1",
+    "es": "Grafo de inteligencia TGPI · Capa estadística v1",
+    "fr": "Graphe d’intelligence TGPI · Couche statistique v1",
+    "de": "TGPI-Intelligenzgraph · Statistische Ebene v1",
+    "it": "Grafo di intelligence TGPI · Livello statistico v1"
+  },
+  "Methodology & coverage →": {
+    "en": "Methodology & coverage →",
+    "pt-BR": "Metodologia e cobertura →",
+    "es": "Metodología y cobertura →",
+    "fr": "Méthodologie et couverture →",
+    "de": "Methodik und Abdeckung →",
+    "it": "Metodologia e copertura →"
+  },
+  "Source-linked observations. National context, not a personal recommendation or a real-time world feed.": {
+    "en": "Source-linked observations. National context, not a personal recommendation or a real-time world feed.",
+    "pt-BR": "Dados vinculados às fontes. Contexto nacional, não uma recomendação pessoal nem uma transmissão mundial em tempo real.",
+    "es": "Datos vinculados a fuentes. Contexto nacional, no una recomendación personal ni una transmisión mundial en tiempo real.",
+    "fr": "Observations reliées aux sources. Contexte national, pas une recommandation personnelle ni un flux mondial en temps réel.",
+    "de": "Quellenbezogene Beobachtungen. Nationaler Kontext, keine persönliche Empfehlung oder weltweite Echtzeitübertragung.",
+    "it": "Dati collegati alle fonti. Contesto nazionale, non una raccomandazione personale né un flusso mondiale in tempo reale."
+  },
+  "Collection: {date} UTC · Revision {revision}": {
+    "en": "Collection: {date} UTC · Revision {revision}",
+    "pt-BR": "Coleta: {date} UTC · Revisão {revision}",
+    "es": "Recopilación: {date} UTC · Revisión {revision}",
+    "fr": "Collecte : {date} UTC · Révision {revision}",
+    "de": "Erhebung: {date} UTC · Revision {revision}",
+    "it": "Raccolta: {date} UTC · Revisione {revision}"
+  },
+  "Statistical collection pending validation. Official country identities remain available.": {
+    "en": "Statistical collection pending validation. Official country identities remain available.",
+    "pt-BR": "Coleta estatística aguardando validação. As identidades oficiais dos países continuam disponíveis.",
+    "es": "Recopilación estadística pendiente de validación. Las identidades oficiales de los países siguen disponibles.",
+    "fr": "Collecte statistique en attente de validation. Les identités officielles des pays restent disponibles.",
+    "de": "Statistische Erhebung wartet auf Validierung. Offizielle Länderidentitäten bleiben verfügbar.",
+    "it": "Raccolta statistica in attesa di convalida. Le identità ufficiali dei paesi restano disponibili."
+  },
+  "Decision dossiers + Your personal scenario": {
+    "en": "Decision dossiers + Your personal scenario",
+    "pt-BR": "Dossiês de decisão + Seu cenário pessoal",
+    "es": "Dossieres de decisión + Tu escenario personal",
+    "fr": "Dossiers de décision + Votre scénario personnel",
+    "de": "Entscheidungsdossiers + Ihr persönliches Szenario",
+    "it": "Dossier decisionali + Il tuo scenario personale"
+  },
+  "Know the evidence. Build your next move.": {
+    "en": "Know the evidence. Build your next move.",
+    "pt-BR": "Conheça as evidências. Prepare seu próximo passo.",
+    "es": "Conoce las evidencias. Prepara tu próximo paso.",
+    "fr": "Comprenez les preuves. Préparez votre prochaine étape.",
+    "de": "Kennen Sie die Belege. Planen Sie Ihren nächsten Schritt.",
+    "it": "Conosci le evidenze. Prepara il prossimo passo."
+  },
+  "Explore official study pathways, institution checks and scoped cost references. Compare the questions that matter, then build a personal plan.": {
+    "en": "Explore official study pathways, institution checks and scoped cost references. Compare the questions that matter, then build a personal plan.",
+    "pt-BR": "Explore percursos oficiais de estudo, verificações de instituições e referências de custos delimitadas. Compare as questões importantes e crie um plano pessoal.",
+    "es": "Explora itinerarios oficiales de estudio, verificaciones de instituciones y referencias de costes delimitadas. Compara las preguntas importantes y crea un plan personal.",
+    "fr": "Explorez les parcours d’études officiels, les vérifications d’établissements et les références de coûts délimitées. Comparez les questions importantes, puis créez un projet personnel.",
+    "de": "Erkunden Sie offizielle Studienwege, Einrichtungsprüfungen und eingegrenzte Kostenreferenzen. Vergleichen Sie wichtige Fragen und erstellen Sie einen persönlichen Plan.",
+    "it": "Esplora percorsi di studio ufficiali, verifiche degli istituti e riferimenti di costo circoscritti. Confronta le domande importanti, poi crea un piano personale."
+  },
+  "Build my Country Fit →": {
+    "en": "Build my Country Fit →",
+    "pt-BR": "Criar meu plano de país ideal →",
+    "es": "Crear mi plan de país ideal →",
+    "fr": "Créer mon plan de pays idéal →",
+    "de": "Meinen Plan für das passende Land erstellen →",
+    "it": "Crea il mio piano del paese ideale →"
+  },
+  "Explore decision dossiers": {
+    "en": "Explore decision dossiers",
+    "pt-BR": "Explore os dossiês de decisão",
+    "es": "Explora los dosieres de decisión",
+    "fr": "Explorez les dossiers de décision",
+    "de": "Entscheidungsdossiers erkunden",
+    "it": "Esplora i dossier decisionali"
   }
 } as const satisfies Record<string, Record<Locale, string>>;
 

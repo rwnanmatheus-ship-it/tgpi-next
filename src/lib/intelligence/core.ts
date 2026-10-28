@@ -37,9 +37,9 @@ export function evidenceStatus(observation: Observation | undefined, now = new D
 export function evidenceLabel(status: EvidenceStatus) {
   return { current: "Source checked", historical: "Older observation", stale: "Refresh overdue", missing: "Not available" }[status];
 }
-export function formatObservation(observation: Observation | undefined) {
+export function formatObservation(observation: Observation | undefined, locale = "en-US") {
   if (!observation) return "Not available";
-  return new Intl.NumberFormat("en-US", { maximumFractionDigits: observation.indicator === "SP.POP.TOTL" ? 0 : 1 }).format(observation.value);
+  return new Intl.NumberFormat(locale, { maximumFractionDigits: observation.indicator === "SP.POP.TOTL" ? 0 : 1 }).format(observation.value);
 }
 export function findObservation(snapshot: IntelligenceSnapshot, country: string, indicator: IndicatorId) {
   return snapshot.observations.find(item => item.country === country && item.indicator === indicator);
