@@ -218,3 +218,63 @@ test('Atlas preview renders in all six locales without enabling sending or makin
     }
   } finally { globalThis.fetch = realFetch; }
 });
+
+test('cookies and refund policies translate every paragraph without changing links or consent defaults', async () => {
+  const React = await import('react');
+  const runtime = await import('react/jsx-runtime');
+  const { renderToStaticMarkup } = await import('react-dom/server');
+  const escape = text => text.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#x27;');
+  for (const locale of locales) {
+    function load(path) {
+      const code = ts.transpileModule(fs.readFileSync(path, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX, esModuleInterop: true } }).outputText;
+      const exports = {};
+      new Function('require', 'exports', code)(name => {
+        if (name === 'react') return React;
+        if (name === 'react/jsx-runtime') return runtime;
+        if (name === '@/lib/localization/server') return { getLocale: async () => locale };
+        if (name === '@/lib/localization/messages') return { translate };
+        if (name === '@/components/localization/LocaleProvider') return { useLocale: () => ({ t: (key, values) => translate(locale, key, values) }) };
+        if (name === '@/lib/funnel') return { FUNNEL_CONSENT_COOKIE: 'tgpi_analytics_consent', hasFunnelConsent: () => false };
+        if (name === 'next/link') return { __esModule: true, default: ({ children, ...props }) => React.createElement('a', props, children) };
+        if (name === '@/components/legal/LegalDocument') return { __esModule: true, default: () => null };
+        if (name === '@/components/analytics/AnalyticsPreferences') return { __esModule: true, default: load('src/components/analytics/AnalyticsPreferences.tsx').default };
+        throw new Error(`Unexpected import: ${name}`);
+      }, exports);
+      return exports;
+    }
+    for (const route of ['cookies', 'refunds']) {
+      const path = `src/app/${route}/page.tsx`;
+      const sourceText = fs.readFileSync(path, 'utf8');
+      const source = ts.createSourceFile(path, sourceText, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+      const keys = [];
+      function visit(node) {
+        if (ts.isJsxText(node)) {
+          const text = node.text.replace(/\s+/g, ' ').trim();
+          assert.ok(!/[a-z]{2}/i.test(text) || text === 'contact@theglobalpolymath.com', `Untranslated policy text: ${text}`);
+        }
+        if (ts.isCallExpression(node) && node.expression.getText(source) === 't' && ts.isStringLiteral(node.arguments[0])) {
+          const key = node.arguments[0].text;
+          assert.ok(Object.hasOwn(messages, key), `Missing legal translation: ${key}`);
+          keys.push(key);
+        }
+        ts.forEachChild(node, visit);
+      }
+      visit(source);
+      const page = load(path);
+      const element = await page.default();
+      const shell = await load('src/components/legal/LegalDocument.tsx').default(element.props);
+      const html = renderToStaticMarkup(shell);
+      const metadata = await page.generateMetadata();
+      for (const key of keys) assert.ok((html + metadata.title + metadata.description).includes(escape(translate(locale, key))) || (metadata.title + metadata.description).includes(translate(locale, key)), `${locale}: ${key}`);
+      assert.ok(html.includes('mailto:contact@theglobalpolymath.com'));
+      assert.ok(html.includes('CNPJ 49.709.438/0001-32'));
+      assert.ok(html.includes(escape(new Intl.DateTimeFormat(locale, { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(Date.parse('October 13, 2026')))));
+      if (route === 'cookies') {
+        assert.match(html, /aria-pressed="false"[^>]*>/);
+        assert.match(html, /aria-pressed="true"[^>]*>/);
+        assert.ok(html.includes(escape(translate(locale, 'Keep measurement off'))));
+        assert.ok(html.includes(escape(translate(locale, 'Your preference: {status}. You can change it here at any time. Changes apply to future browser events; previously recorded aggregate counts cannot identify you.', { status: translate(locale, 'off') }))));
+      }
+    }
+  }
+});

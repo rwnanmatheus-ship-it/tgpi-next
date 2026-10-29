@@ -1,6 +1,406 @@
 import type { Locale } from "./config";
 
 export const messages = {
+  "How TGPI uses cookies and similar technologies for authentication, security, billing and preferences.": {
+    "en": "How TGPI uses cookies and similar technologies for authentication, security, billing and preferences.",
+    "pt-BR": "Como a TGPI usa cookies e tecnologias semelhantes para autenticação, segurança, cobrança e preferências.",
+    "es": "Cómo utiliza TGPI cookies y tecnologías similares para autenticación, seguridad, facturación y preferencias.",
+    "fr": "Comment TGPI utilise les cookies et technologies similaires pour l’authentification, la sécurité, la facturation et les préférences.",
+    "de": "Wie TGPI Cookies und ähnliche Technologien für Authentifizierung, Sicherheit, Abrechnung und Einstellungen verwendet.",
+    "it": "Come TGPI utilizza cookie e tecnologie simili per autenticazione, sicurezza, fatturazione e preferenze."
+  },
+  "Cancellation, withdrawal and refund rules for TGPI Premium subscriptions.": {
+    "en": "Cancellation, withdrawal and refund rules for TGPI Premium subscriptions.",
+    "pt-BR": "Regras de cancelamento, arrependimento e reembolso das assinaturas TGPI Premium.",
+    "es": "Normas de cancelación, desistimiento y reembolso de las suscripciones TGPI Premium.",
+    "fr": "Règles de résiliation, de rétractation et de remboursement des abonnements TGPI Premium.",
+    "de": "Regeln zu Kündigung, Widerruf und Erstattung für TGPI-Premium-Abonnements.",
+    "it": "Regole di disdetta, recesso e rimborso per gli abbonamenti TGPI Premium."
+  },
+  "Your preference: {status}. You can change it here at any time. Changes apply to future browser events; previously recorded aggregate counts cannot identify you.": {
+    "en": "Your preference: {status}. You can change it here at any time. Changes apply to future browser events; previously recorded aggregate counts cannot identify you.",
+    "pt-BR": "Sua preferência: {status}. Você pode alterá-la aqui a qualquer momento. As alterações se aplicam a eventos futuros do navegador; contagens agregadas registradas anteriormente não podem identificar você.",
+    "es": "Tu preferencia: {status}. Puedes cambiarla aquí en cualquier momento. Los cambios se aplican a futuros eventos del navegador; los recuentos agregados registrados anteriormente no pueden identificarte.",
+    "fr": "Votre préférence : {status}. Vous pouvez la modifier ici à tout moment. Les changements s’appliquent aux futurs événements du navigateur ; les comptages agrégés déjà enregistrés ne permettent pas de vous identifier.",
+    "de": "Deine Einstellung: {status}. Du kannst sie hier jederzeit ändern. Änderungen gelten für zukünftige Browserereignisse; zuvor erfasste aggregierte Zählungen können dich nicht identifizieren.",
+    "it": "La tua preferenza: {status}. Puoi modificarla qui in qualsiasi momento. Le modifiche si applicano ai futuri eventi del browser; i conteggi aggregati già registrati non possono identificarti."
+  },
+  "off": {
+    "en": "off",
+    "pt-BR": "desativada",
+    "es": "desactivada",
+    "fr": "désactivée",
+    "de": "deaktiviert",
+    "it": "disattivata"
+  },
+  "allowed (subject to Global Privacy Control)": {
+    "en": "allowed (subject to Global Privacy Control)",
+    "pt-BR": "permitida (sujeita ao Global Privacy Control)",
+    "es": "permitida (sujeta a Global Privacy Control)",
+    "fr": "autorisée (sous réserve de Global Privacy Control)",
+    "de": "erlaubt (vorbehaltlich Global Privacy Control)",
+    "it": "consentita (soggetta a Global Privacy Control)"
+  },
+  "Keep measurement off": {
+    "en": "Keep measurement off",
+    "pt-BR": "Manter medição desativada",
+    "es": "Mantener medición desactivada",
+    "fr": "Laisser la mesure désactivée",
+    "de": "Messung deaktiviert lassen",
+    "it": "Mantieni misurazione disattivata"
+  },
+  "Allow optional measurement": {
+    "en": "Allow optional measurement",
+    "pt-BR": "Permitir medição opcional",
+    "es": "Permitir medición opcional",
+    "fr": "Autoriser la mesure facultative",
+    "de": "Optionale Messung erlauben",
+    "it": "Consenti misurazione facoltativa"
+  },
+  "You can allow basic event counts for Home actions, registration and membership. Event logs exclude your identity, research answers and payment details. This is off by default. Global Privacy Control is respected.": {
+    "en": "You can allow basic event counts for Home actions, registration and membership. Event logs exclude your identity, research answers and payment details. This is off by default. Global Privacy Control is respected.",
+    "pt-BR": "Você pode permitir contagens básicas de eventos de ações na página inicial, cadastro e assinatura. Os registros de eventos não incluem sua identidade, respostas de pesquisa nem dados de pagamento. A opção fica desativada por padrão. O Global Privacy Control é respeitado.",
+    "es": "Puedes permitir recuentos básicos de eventos de acciones en Inicio, registro y membresía. Los registros excluyen tu identidad, respuestas de investigación y datos de pago. Está desactivado por defecto. Se respeta Global Privacy Control.",
+    "fr": "Vous pouvez autoriser des comptages basiques d’événements liés aux actions d’accueil, à l’inscription et à l’abonnement. Les journaux excluent votre identité, vos réponses de recherche et vos données de paiement. Cette option est désactivée par défaut. Global Privacy Control est respecté.",
+    "de": "Du kannst grundlegende Ereigniszählungen für Startseitenaktionen, Registrierung und Mitgliedschaft erlauben. Ereignisprotokolle enthalten weder deine Identität noch Rechercheantworten oder Zahlungsdaten. Dies ist standardmäßig deaktiviert. Global Privacy Control wird berücksichtigt.",
+    "it": "Puoi consentire conteggi di base degli eventi per le azioni nella Home, la registrazione e l’abbonamento. I registri escludono identità, risposte di ricerca e dati di pagamento. L’opzione è disattivata per impostazione predefinita. Global Privacy Control viene rispettato."
+  },
+  "Optional usage measurement": {
+    "en": "Optional usage measurement",
+    "pt-BR": "Medição opcional de uso",
+    "es": "Medición opcional de uso",
+    "fr": "Mesure facultative de l’utilisation",
+    "de": "Optionale Nutzungsmessung",
+    "it": "Misurazione facoltativa dell’utilizzo"
+  },
+  "CNPJ 49.709.438/0001-32 · Campinas, São Paulo, Brazil": {
+    "en": "CNPJ 49.709.438/0001-32 · Campinas, São Paulo, Brazil",
+    "pt-BR": "CNPJ 49.709.438/0001-32 · Campinas, São Paulo, Brasil",
+    "es": "CNPJ 49.709.438/0001-32 · Campinas, São Paulo, Brasil",
+    "fr": "CNPJ 49.709.438/0001-32 · Campinas, São Paulo, Brésil",
+    "de": "CNPJ 49.709.438/0001-32 · Campinas, São Paulo, Brasilien",
+    "it": "CNPJ 49.709.438/0001-32 · Campinas, São Paulo, Brasile"
+  },
+  "Customer and billing support:": {
+    "en": "Customer and billing support:",
+    "pt-BR": "Suporte ao cliente e cobrança:",
+    "es": "Atención al cliente y facturación:",
+    "fr": "Assistance client et facturation :",
+    "de": "Kunden- und Abrechnungssupport:",
+    "it": "Assistenza clienti e fatturazione:"
+  },
+  "Official electronic address:": {
+    "en": "Official electronic address:",
+    "pt-BR": "Endereço eletrônico oficial:",
+    "es": "Dirección electrónica oficial:",
+    "fr": "Adresse électronique officielle :",
+    "de": "Offizielle E-Mail-Adresse:",
+    "it": "Indirizzo elettronico ufficiale:"
+  },
+  "TGPI legal documents": {
+    "en": "TGPI legal documents",
+    "pt-BR": "Documentos legais da TGPI",
+    "es": "Documentos legales de TGPI",
+    "fr": "Documents juridiques TGPI",
+    "de": "Rechtliche Dokumente von TGPI",
+    "it": "Documenti legali TGPI"
+  },
+  "Last updated: {date}": {
+    "en": "Last updated: {date}",
+    "pt-BR": "Última atualização: {date}",
+    "es": "Última actualización: {date}",
+    "fr": "Dernière mise à jour : {date}",
+    "de": "Zuletzt aktualisiert: {date}",
+    "it": "Ultimo aggiornamento: {date}"
+  },
+  "Cookies": {
+    "en": "Cookies",
+    "pt-BR": "Cookies",
+    "es": "Cookies",
+    "fr": "Cookies",
+    "de": "Cookies",
+    "it": "Cookie"
+  },
+  "Refunds": {
+    "en": "Refunds",
+    "pt-BR": "Reembolsos",
+    "es": "Reembolsos",
+    "fr": "Remboursements",
+    "de": "Erstattungen",
+    "it": "Rimborsi"
+  },
+  "Company": {
+    "en": "Company",
+    "pt-BR": "Empresa",
+    "es": "Empresa",
+    "fr": "Entreprise",
+    "de": "Unternehmen",
+    "it": "Azienda"
+  },
+  "Questions about cookies or privacy may be sent to": {
+    "en": "Questions about cookies or privacy may be sent to",
+    "pt-BR": "Dúvidas sobre cookies ou privacidade podem ser enviadas para",
+    "es": "Puedes enviar preguntas sobre cookies o privacidad a",
+    "fr": "Les questions sur les cookies ou la confidentialité peuvent être envoyées à",
+    "de": "Fragen zu Cookies oder Datenschutz können gesendet werden an",
+    "it": "Le domande sui cookie o sulla privacy possono essere inviate a"
+  },
+  "7. Contact": {
+    "en": "7. Contact",
+    "pt-BR": "7. Contato",
+    "es": "7. Contacto",
+    "fr": "7. Contact",
+    "de": "7. Kontakt",
+    "it": "7. Contatti"
+  },
+  "Your browser may allow you to block or delete cookies. Blocking essential cookies can break authentication, security or payment functions. Optional usage measurement is off by default. Use the controls below to allow it or keep it off.": {
+    "en": "Your browser may allow you to block or delete cookies. Blocking essential cookies can break authentication, security or payment functions. Optional usage measurement is off by default. Use the controls below to allow it or keep it off.",
+    "pt-BR": "Seu navegador pode permitir bloquear ou excluir cookies. Bloquear cookies essenciais pode prejudicar funções de autenticação, segurança ou pagamento. A medição opcional de uso fica desativada por padrão. Use os controles abaixo para permiti-la ou mantê-la desativada.",
+    "es": "Tu navegador puede permitir bloquear o eliminar cookies. Bloquear cookies esenciales puede impedir funciones de autenticación, seguridad o pago. La medición opcional de uso está desactivada por defecto. Usa los controles siguientes para permitirla o mantenerla desactivada.",
+    "fr": "Votre navigateur peut vous permettre de bloquer ou de supprimer les cookies. Bloquer les cookies essentiels peut perturber l’authentification, la sécurité ou les paiements. La mesure facultative de l’utilisation est désactivée par défaut. Utilisez les contrôles ci-dessous pour l’autoriser ou la laisser désactivée.",
+    "de": "Dein Browser ermöglicht möglicherweise das Blockieren oder Löschen von Cookies. Das Blockieren wesentlicher Cookies kann Authentifizierungs-, Sicherheits- oder Zahlungsfunktionen beeinträchtigen. Die optionale Nutzungsmessung ist standardmäßig deaktiviert. Mit den folgenden Steuerelementen kannst du sie erlauben oder deaktiviert lassen.",
+    "it": "Il browser può consentire di bloccare o eliminare i cookie. Bloccare i cookie essenziali può compromettere autenticazione, sicurezza o pagamenti. La misurazione facoltativa dell’utilizzo è disattivata per impostazione predefinita. Usa i controlli seguenti per consentirla o mantenerla disattivata."
+  },
+  "6. Your controls": {
+    "en": "6. Your controls",
+    "pt-BR": "6. Seus controles",
+    "es": "6. Tus controles",
+    "fr": "6. Vos contrôles",
+    "de": "6. Deine Steuerungsmöglichkeiten",
+    "it": "6. I tuoi controlli"
+  },
+  "Authentication and payment providers such as Clerk and Stripe may use their own cookies or similar technologies to secure sessions, detect fraud and complete requested services. Their handling of information is also governed by their own privacy and cookie disclosures.": {
+    "en": "Authentication and payment providers such as Clerk and Stripe may use their own cookies or similar technologies to secure sessions, detect fraud and complete requested services. Their handling of information is also governed by their own privacy and cookie disclosures.",
+    "pt-BR": "Provedores de autenticação e pagamento, como Clerk e Stripe, podem usar seus próprios cookies ou tecnologias semelhantes para proteger sessões, detectar fraudes e concluir os serviços solicitados. O tratamento de informações por eles também é regido por suas próprias políticas de privacidade e cookies.",
+    "es": "Los proveedores de autenticación y pagos, como Clerk y Stripe, pueden utilizar sus propias cookies o tecnologías similares para proteger sesiones, detectar fraudes y completar los servicios solicitados. Su tratamiento de la información también se rige por sus propias declaraciones de privacidad y cookies.",
+    "fr": "Les prestataires d’authentification et de paiement, tels que Clerk et Stripe, peuvent utiliser leurs propres cookies ou technologies similaires pour sécuriser les sessions, détecter les fraudes et exécuter les services demandés. Leur traitement des informations est également régi par leurs propres informations sur la confidentialité et les cookies.",
+    "de": "Authentifizierungs- und Zahlungsanbieter wie Clerk und Stripe können eigene Cookies oder ähnliche Technologien verwenden, um Sitzungen abzusichern, Betrug zu erkennen und angeforderte Dienste auszuführen. Ihr Umgang mit Informationen unterliegt auch ihren eigenen Datenschutz- und Cookie-Hinweisen.",
+    "it": "I fornitori di autenticazione e pagamento, come Clerk e Stripe, possono utilizzare propri cookie o tecnologie simili per proteggere le sessioni, rilevare frodi e completare i servizi richiesti. Il loro trattamento delle informazioni è disciplinato anche dalle rispettive informative sulla privacy e sui cookie."
+  },
+  "5. Third-party services": {
+    "en": "5. Third-party services",
+    "pt-BR": "5. Serviços de terceiros",
+    "es": "5. Servicios de terceros",
+    "fr": "5. Services tiers",
+    "de": "5. Dienste Dritter",
+    "it": "5. Servizi di terze parti"
+  },
+  "TGPI may use privacy-conscious performance or analytics technologies when enabled to understand reliability and product usage. Where applicable law requires consent for non-essential cookies, TGPI will provide appropriate controls before using them.": {
+    "en": "TGPI may use privacy-conscious performance or analytics technologies when enabled to understand reliability and product usage. Where applicable law requires consent for non-essential cookies, TGPI will provide appropriate controls before using them.",
+    "pt-BR": "A TGPI pode usar tecnologias de desempenho ou análise que considerem a privacidade, quando habilitadas, para compreender a confiabilidade e o uso do produto. Quando a legislação aplicável exigir consentimento para cookies não essenciais, a TGPI fornecerá os controles apropriados antes de usá-los.",
+    "es": "TGPI puede utilizar tecnologías de rendimiento o análisis que tengan en cuenta la privacidad, cuando estén habilitadas, para comprender la fiabilidad y el uso del producto. Cuando la legislación aplicable exija consentimiento para cookies no esenciales, TGPI proporcionará los controles adecuados antes de utilizarlas.",
+    "fr": "TGPI peut utiliser, lorsqu’elles sont activées, des technologies de performance ou d’analyse soucieuses de la confidentialité pour comprendre la fiabilité et l’utilisation du produit. Lorsque la loi applicable exige un consentement pour les cookies non essentiels, TGPI fournit les contrôles appropriés avant de les utiliser.",
+    "de": "TGPI kann bei Aktivierung datenschutzbewusste Leistungs- oder Analysetechnologien einsetzen, um Zuverlässigkeit und Produktnutzung zu verstehen. Wenn das geltende Recht eine Einwilligung für nicht wesentliche Cookies verlangt, stellt TGPI vor deren Verwendung geeignete Steuerelemente bereit.",
+    "it": "TGPI può utilizzare, quando abilitate, tecnologie di prestazioni o analisi attente alla privacy per comprendere l’affidabilità e l’utilizzo del prodotto. Ove la legge applicabile richieda il consenso per cookie non essenziali, TGPI fornirà i controlli appropriati prima di utilizzarli."
+  },
+  "4. Analytics and measurement": {
+    "en": "4. Analytics and measurement",
+    "pt-BR": "4. Análise e medição",
+    "es": "4. Análisis y medición",
+    "fr": "4. Analyse et mesure",
+    "de": "4. Analyse und Messung",
+    "it": "4. Analisi e misurazione"
+  },
+  "TGPI may store preferences needed to maintain user-selected settings or improve continuity between visits. These may include interface or application state that is not used for cross-site advertising.": {
+    "en": "TGPI may store preferences needed to maintain user-selected settings or improve continuity between visits. These may include interface or application state that is not used for cross-site advertising.",
+    "pt-BR": "A TGPI pode armazenar preferências necessárias para manter as configurações escolhidas pelo usuário ou melhorar a continuidade entre visitas. Elas podem incluir estados da interface ou da aplicação que não são usados para publicidade entre sites.",
+    "es": "TGPI puede guardar preferencias necesarias para mantener los ajustes elegidos por el usuario o mejorar la continuidad entre visitas. Pueden incluir el estado de la interfaz o de la aplicación que no se utiliza para publicidad entre sitios.",
+    "fr": "TGPI peut enregistrer les préférences nécessaires pour conserver les paramètres choisis par l’utilisateur ou améliorer la continuité entre les visites. Elles peuvent inclure des états de l’interface ou de l’application qui ne sont pas utilisés pour la publicité intersites.",
+    "de": "TGPI kann Einstellungen speichern, die erforderlich sind, um vom Nutzer gewählte Optionen beizubehalten oder die Kontinuität zwischen Besuchen zu verbessern. Dazu können Zustände der Benutzeroberfläche oder Anwendung gehören, die nicht für websiteübergreifende Werbung verwendet werden.",
+    "it": "TGPI può memorizzare preferenze necessarie a mantenere le impostazioni scelte dall’utente o migliorare la continuità tra le visite. Possono includere stati dell’interfaccia o dell’applicazione che non vengono utilizzati per la pubblicità tra siti."
+  },
+  "3. Functional preferences": {
+    "en": "3. Functional preferences",
+    "pt-BR": "3. Preferências funcionais",
+    "es": "3. Preferencias funcionales",
+    "fr": "3. Préférences fonctionnelles",
+    "de": "3. Funktionale Einstellungen",
+    "it": "3. Preferenze funzionali"
+  },
+  "TGPI and its service providers may use essential technologies required for account authentication, session continuity, security, fraud prevention, payment flows and core application functionality. Disabling these technologies may prevent sign-in, billing or other parts of TGPI from working correctly.": {
+    "en": "TGPI and its service providers may use essential technologies required for account authentication, session continuity, security, fraud prevention, payment flows and core application functionality. Disabling these technologies may prevent sign-in, billing or other parts of TGPI from working correctly.",
+    "pt-BR": "A TGPI e seus prestadores de serviços podem usar tecnologias essenciais necessárias para autenticação de contas, continuidade de sessões, segurança, prevenção de fraudes, fluxos de pagamento e funcionalidades centrais da aplicação. Desativar essas tecnologias pode impedir que o acesso à conta, a cobrança ou outras partes da TGPI funcionem corretamente.",
+    "es": "TGPI y sus proveedores de servicios pueden utilizar tecnologías esenciales para la autenticación de cuentas, la continuidad de sesiones, la seguridad, la prevención del fraude, los flujos de pago y las funciones principales de la aplicación. Desactivarlas puede impedir que el inicio de sesión, la facturación u otras partes de TGPI funcionen correctamente.",
+    "fr": "TGPI et ses prestataires peuvent utiliser des technologies essentielles à l’authentification des comptes, à la continuité des sessions, à la sécurité, à la prévention de la fraude, aux paiements et aux fonctions principales de l’application. Leur désactivation peut empêcher la connexion, la facturation ou d’autres parties de TGPI de fonctionner correctement.",
+    "de": "TGPI und seine Dienstleister können wesentliche Technologien verwenden, die für die Kontoauthentifizierung, Sitzungskontinuität, Sicherheit, Betrugsprävention, Zahlungsabläufe und grundlegende Anwendungsfunktionen erforderlich sind. Ihre Deaktivierung kann verhindern, dass Anmeldung, Abrechnung oder andere Teile von TGPI ordnungsgemäß funktionieren.",
+    "it": "TGPI e i suoi fornitori possono utilizzare tecnologie essenziali per l’autenticazione degli account, la continuità delle sessioni, la sicurezza, la prevenzione delle frodi, i flussi di pagamento e le funzionalità principali dell’applicazione. Disattivarle può impedire il corretto funzionamento dell’accesso, della fatturazione o di altre parti di TGPI."
+  },
+  "2. Strictly necessary and security technologies": {
+    "en": "2. Strictly necessary and security technologies",
+    "pt-BR": "2. Tecnologias estritamente necessárias e de segurança",
+    "es": "2. Tecnologías estrictamente necesarias y de seguridad",
+    "fr": "2. Technologies strictement nécessaires et de sécurité",
+    "de": "2. Unbedingt erforderliche Technologien und Sicherheitstechnologien",
+    "it": "2. Tecnologie strettamente necessarie e di sicurezza"
+  },
+  "Cookies, local storage, session storage and similar technologies can store or read information on your device so websites can maintain sessions, remember choices, prevent abuse and deliver requested functionality.": {
+    "en": "Cookies, local storage, session storage and similar technologies can store or read information on your device so websites can maintain sessions, remember choices, prevent abuse and deliver requested functionality.",
+    "pt-BR": "Cookies, armazenamento local, armazenamento de sessão e tecnologias semelhantes podem armazenar ou ler informações no seu dispositivo para que os sites mantenham sessões, lembrem escolhas, previnam abusos e ofereçam as funcionalidades solicitadas.",
+    "es": "Las cookies, el almacenamiento local, el almacenamiento de sesión y tecnologías similares pueden guardar o leer información en tu dispositivo para que los sitios web mantengan sesiones, recuerden elecciones, prevengan abusos y ofrezcan las funciones solicitadas.",
+    "fr": "Les cookies, le stockage local, le stockage de session et les technologies similaires peuvent enregistrer ou lire des informations sur votre appareil afin que les sites maintiennent les sessions, mémorisent les choix, préviennent les abus et fournissent les fonctionnalités demandées.",
+    "de": "Cookies, lokaler Speicher, Sitzungsspeicher und ähnliche Technologien können Informationen auf deinem Gerät speichern oder lesen, damit Websites Sitzungen aufrechterhalten, Entscheidungen speichern, Missbrauch verhindern und angeforderte Funktionen bereitstellen können.",
+    "it": "Cookie, archiviazione locale, archiviazione di sessione e tecnologie simili possono memorizzare o leggere informazioni sul dispositivo affinché i siti mantengano le sessioni, ricordino le scelte, prevengano abusi e forniscano le funzionalità richieste."
+  },
+  "1. What these technologies are": {
+    "en": "1. What these technologies are",
+    "pt-BR": "1. O que são essas tecnologias",
+    "es": "1. Qué son estas tecnologías",
+    "fr": "1. Que sont ces technologies ?",
+    "de": "1. Was diese Technologien sind",
+    "it": "1. Cosa sono queste tecnologie"
+  },
+  "How cookies and similar technologies support secure sessions, authentication, billing and platform functionality.": {
+    "en": "How cookies and similar technologies support secure sessions, authentication, billing and platform functionality.",
+    "pt-BR": "Como cookies e tecnologias semelhantes auxiliam sessões seguras, autenticação, cobrança e funcionalidades da plataforma.",
+    "es": "Cómo las cookies y tecnologías similares permiten sesiones seguras, autenticación, facturación y funciones de la plataforma.",
+    "fr": "Comment les cookies et technologies similaires assurent des sessions sécurisées, l’authentification, la facturation et les fonctionnalités de la plateforme.",
+    "de": "Wie Cookies und ähnliche Technologien sichere Sitzungen, Authentifizierung, Abrechnung und Plattformfunktionen unterstützen.",
+    "it": "Come i cookie e le tecnologie simili supportano sessioni sicure, autenticazione, fatturazione e funzionalità della piattaforma."
+  },
+  "Cookie Policy": {
+    "en": "Cookie Policy",
+    "pt-BR": "Política de Cookies",
+    "es": "Política de cookies",
+    "fr": "Politique relative aux cookies",
+    "de": "Cookie-Richtlinie",
+    "it": "Informativa sui cookie"
+  },
+  "Legal · Privacy": {
+    "en": "Legal · Privacy",
+    "pt-BR": "Jurídico · Privacidade",
+    "es": "Legal · Privacidad",
+    "fr": "Juridique · Confidentialité",
+    "de": "Rechtliches · Datenschutz",
+    "it": "Legale · Privacy"
+  },
+  "Cancellation or refund support:": {
+    "en": "Cancellation or refund support:",
+    "pt-BR": "Suporte para cancelamento ou reembolso:",
+    "es": "Asistencia para cancelaciones o reembolsos:",
+    "fr": "Assistance pour résiliation ou remboursement :",
+    "de": "Hilfe bei Kündigung oder Erstattung:",
+    "it": "Assistenza per disdetta o rimborso:"
+  },
+  "6. How to contact us": {
+    "en": "6. How to contact us",
+    "pt-BR": "6. Como entrar em contato",
+    "es": "6. Cómo contactarnos",
+    "fr": "6. Comment nous contacter",
+    "de": "6. So erreichst du uns",
+    "it": "6. Come contattarci"
+  },
+  "A standard end-of-period cancellation normally preserves Premium access until the paid period expires. A full refund, charge reversal or withdrawal from the contract may end Premium access earlier where consistent with applicable law and the reason for the refund.": {
+    "en": "A standard end-of-period cancellation normally preserves Premium access until the paid period expires. A full refund, charge reversal or withdrawal from the contract may end Premium access earlier where consistent with applicable law and the reason for the refund.",
+    "pt-BR": "Um cancelamento padrão ao fim do período normalmente preserva o acesso Premium até o término do período pago. Um reembolso integral, estorno ou arrependimento contratual poderá encerrar o acesso Premium antes, quando isso for compatível com a legislação aplicável e o motivo do reembolso.",
+    "es": "Una cancelación estándar al final del período normalmente conserva el acceso Premium hasta que expire el período pagado. Un reembolso completo, una reversión del cargo o el desistimiento del contrato pueden finalizar antes el acceso Premium cuando sea compatible con la legislación aplicable y el motivo del reembolso.",
+    "fr": "Une résiliation standard en fin de période préserve normalement l’accès Premium jusqu’à l’expiration de la période payée. Un remboursement intégral, une annulation de paiement ou une rétractation du contrat peut mettre fin plus tôt à l’accès Premium lorsque cela est conforme à la loi applicable et au motif du remboursement.",
+    "de": "Eine reguläre Kündigung zum Periodenende erhält den Premium-Zugang normalerweise bis zum Ablauf des bezahlten Zeitraums. Eine vollständige Erstattung, eine Rückbuchung oder ein Widerruf des Vertrags kann den Premium-Zugang früher beenden, soweit dies mit dem geltenden Recht und dem Erstattungsgrund vereinbar ist.",
+    "it": "Una disdetta ordinaria a fine periodo normalmente mantiene l’accesso Premium fino alla scadenza del periodo pagato. Un rimborso integrale, uno storno o il recesso dal contratto possono terminare prima l’accesso Premium, ove compatibile con la legge applicabile e con il motivo del rimborso."
+  },
+  "5. Account access after cancellation or refund": {
+    "en": "5. Account access after cancellation or refund",
+    "pt-BR": "5. Acesso à conta após cancelamento ou reembolso",
+    "es": "5. Acceso a la cuenta tras la cancelación o el reembolso",
+    "fr": "5. Accès au compte après résiliation ou remboursement",
+    "de": "5. Kontozugang nach Kündigung oder Erstattung",
+    "it": "5. Accesso all’account dopo disdetta o rimborso"
+  },
+  "Approved refunds are submitted through the payment processor. The time for funds to appear depends on Stripe, the card network, bank and payment method. TGPI does not control external settlement timelines after a refund has been submitted.": {
+    "en": "Approved refunds are submitted through the payment processor. The time for funds to appear depends on Stripe, the card network, bank and payment method. TGPI does not control external settlement timelines after a refund has been submitted.",
+    "pt-BR": "Os reembolsos aprovados são encaminhados pelo processador de pagamentos. O prazo para o valor aparecer depende da Stripe, da bandeira do cartão, do banco e da forma de pagamento. A TGPI não controla os prazos externos de liquidação após o envio do reembolso.",
+    "es": "Los reembolsos aprobados se tramitan a través del procesador de pagos. El plazo para que aparezcan los fondos depende de Stripe, la red de tarjetas, el banco y el método de pago. TGPI no controla los plazos externos de liquidación una vez enviado el reembolso.",
+    "fr": "Les remboursements approuvés sont transmis par l’intermédiaire du prestataire de paiement. Le délai d’apparition des fonds dépend de Stripe, du réseau de cartes, de la banque et du mode de paiement. TGPI ne contrôle pas les délais externes de règlement après la transmission du remboursement.",
+    "de": "Genehmigte Erstattungen werden über den Zahlungsdienstleister eingereicht. Wann das Geld sichtbar wird, hängt von Stripe, dem Kartennetzwerk, der Bank und der Zahlungsmethode ab. TGPI hat nach Einreichung einer Erstattung keinen Einfluss auf externe Abwicklungsfristen.",
+    "it": "I rimborsi approvati vengono inoltrati tramite il gestore dei pagamenti. I tempi di accredito dipendono da Stripe, dal circuito della carta, dalla banca e dal metodo di pagamento. TGPI non controlla i tempi di regolamento esterni dopo l’inoltro del rimborso."
+  },
+  "4. Processing time": {
+    "en": "4. Processing time",
+    "pt-BR": "4. Prazo de processamento",
+    "es": "4. Plazo de procesamiento",
+    "fr": "4. Délai de traitement",
+    "de": "4. Bearbeitungszeit",
+    "it": "4. Tempi di elaborazione"
+  },
+  "Except where law requires a refund, fees for an elapsed or partially elapsed billing period are generally non-refundable. TGPI may nevertheless review requests involving duplicate charges, technical billing errors, unauthorized transactions or exceptional circumstances on a case-by-case basis.": {
+    "en": "Except where law requires a refund, fees for an elapsed or partially elapsed billing period are generally non-refundable. TGPI may nevertheless review requests involving duplicate charges, technical billing errors, unauthorized transactions or exceptional circumstances on a case-by-case basis.",
+    "pt-BR": "Exceto quando a lei exigir reembolso, as cobranças referentes a um período de faturamento transcorrido ou parcialmente transcorrido geralmente não são reembolsáveis. Ainda assim, a TGPI poderá analisar individualmente solicitações envolvendo cobranças duplicadas, erros técnicos de cobrança, transações não autorizadas ou circunstâncias excepcionais.",
+    "es": "Salvo cuando la ley exija un reembolso, los cargos de un período de facturación transcurrido total o parcialmente generalmente no son reembolsables. No obstante, TGPI podrá revisar individualmente las solicitudes por cargos duplicados, errores técnicos de facturación, transacciones no autorizadas o circunstancias excepcionales.",
+    "fr": "Sauf lorsque la loi impose un remboursement, les frais d’une période de facturation entièrement ou partiellement écoulée ne sont généralement pas remboursables. TGPI peut toutefois examiner au cas par cas les demandes concernant des doubles prélèvements, des erreurs techniques de facturation, des transactions non autorisées ou des circonstances exceptionnelles.",
+    "de": "Sofern das Gesetz keine Erstattung verlangt, sind Gebühren für einen vollständig oder teilweise abgelaufenen Abrechnungszeitraum grundsätzlich nicht erstattungsfähig. TGPI kann Anfragen wegen doppelter Abbuchungen, technischer Abrechnungsfehler, nicht autorisierter Transaktionen oder außergewöhnlicher Umstände dennoch im Einzelfall prüfen.",
+    "it": "Salvo ove la legge imponga un rimborso, gli importi relativi a un periodo di fatturazione trascorso in tutto o in parte non sono generalmente rimborsabili. TGPI può comunque esaminare caso per caso richieste relative ad addebiti duplicati, errori tecnici di fatturazione, transazioni non autorizzate o circostanze eccezionali."
+  },
+  "3. Refunds outside mandatory withdrawal periods": {
+    "en": "3. Refunds outside mandatory withdrawal periods",
+    "pt-BR": "3. Reembolsos fora dos prazos legais de arrependimento",
+    "es": "3. Reembolsos fuera de los plazos legales de desistimiento",
+    "fr": "3. Remboursements hors des délais légaux de rétractation",
+    "de": "3. Erstattungen außerhalb gesetzlicher Widerrufsfristen",
+    "it": "3. Rimborsi al di fuori dei termini legali di recesso"
+  },
+  "To exercise this right, send a clear request to contact@theglobalpolymath.com and include the email used for the TGPI account and enough transaction information for us to identify the subscription. TGPI will confirm receipt of the request.": {
+    "en": "To exercise this right, send a clear request to contact@theglobalpolymath.com and include the email used for the TGPI account and enough transaction information for us to identify the subscription. TGPI will confirm receipt of the request.",
+    "pt-BR": "Para exercer esse direito, envie uma solicitação clara para contact@theglobalpolymath.com e inclua o email usado na conta TGPI e informações suficientes da transação para identificarmos a assinatura. A TGPI confirmará o recebimento da solicitação.",
+    "es": "Para ejercer este derecho, envía una solicitud clara a contact@theglobalpolymath.com e incluye el correo utilizado en la cuenta TGPI e información suficiente de la transacción para identificar la suscripción. TGPI confirmará la recepción de la solicitud.",
+    "fr": "Pour exercer ce droit, envoyez une demande claire à contact@theglobalpolymath.com en indiquant l’adresse e-mail du compte TGPI et suffisamment d’informations sur la transaction pour identifier l’abonnement. TGPI confirmera la réception de la demande.",
+    "de": "Um dieses Recht auszuüben, sende eine eindeutige Anfrage an contact@theglobalpolymath.com mit der E-Mail-Adresse deines TGPI-Kontos und ausreichenden Transaktionsinformationen zur Identifizierung des Abonnements. TGPI bestätigt den Eingang der Anfrage.",
+    "it": "Per esercitare questo diritto, invia una richiesta chiara a contact@theglobalpolymath.com includendo l’email dell’account TGPI e informazioni sulla transazione sufficienti a identificare l’abbonamento. TGPI confermerà la ricezione della richiesta."
+  },
+  "Where the Brazilian Consumer Defense Code applies to an online purchase, a consumer may exercise the statutory right of withdrawal within seven days from the applicable legal starting point. When validly exercised, TGPI will process the cancellation and refund in accordance with mandatory Brazilian consumer law.": {
+    "en": "Where the Brazilian Consumer Defense Code applies to an online purchase, a consumer may exercise the statutory right of withdrawal within seven days from the applicable legal starting point. When validly exercised, TGPI will process the cancellation and refund in accordance with mandatory Brazilian consumer law.",
+    "pt-BR": "Quando o Código de Defesa do Consumidor brasileiro se aplicar a uma compra online, o consumidor poderá exercer o direito legal de arrependimento em até sete dias a partir do marco inicial previsto na legislação aplicável. Quando exercido validamente, a TGPI processará o cancelamento e o reembolso de acordo com as normas obrigatórias de defesa do consumidor no Brasil.",
+    "es": "Cuando el Código de Defensa del Consumidor brasileño sea aplicable a una compra en línea, el consumidor podrá ejercer el derecho legal de desistimiento en un plazo de siete días desde el inicio del cómputo legal aplicable. Cuando se ejerza válidamente, TGPI procesará la cancelación y el reembolso conforme a la normativa obligatoria brasileña de protección del consumidor.",
+    "fr": "Lorsque le Code brésilien de défense du consommateur s’applique à un achat en ligne, le consommateur peut exercer son droit légal de rétractation dans les sept jours suivant le point de départ légal applicable. Lorsque ce droit est valablement exercé, TGPI traite l’annulation et le remboursement conformément aux dispositions impératives du droit brésilien de la consommation.",
+    "de": "Wenn das brasilianische Verbraucherschutzgesetz auf einen Onlinekauf anwendbar ist, kann ein Verbraucher das gesetzliche Widerrufsrecht innerhalb von sieben Tagen ab dem maßgeblichen gesetzlichen Fristbeginn ausüben. Bei wirksamer Ausübung bearbeitet TGPI den Widerruf und die Erstattung gemäß dem zwingenden brasilianischen Verbraucherrecht.",
+    "it": "Quando il Codice brasiliano di difesa del consumatore si applica a un acquisto online, il consumatore può esercitare il diritto legale di recesso entro sette giorni dalla decorrenza prevista dalla legge applicabile. Se esercitato validamente, TGPI elaborerà la cancellazione e il rimborso in conformità alle norme inderogabili brasiliane a tutela dei consumatori."
+  },
+  "2. Brazilian right of withdrawal": {
+    "en": "2. Brazilian right of withdrawal",
+    "pt-BR": "2. Direito de arrependimento no Brasil",
+    "es": "2. Derecho de desistimiento en Brasil",
+    "fr": "2. Droit de rétractation au Brésil",
+    "de": "2. Brasilianisches Widerrufsrecht",
+    "it": "2. Diritto di recesso in Brasile"
+  },
+  "You can cancel recurring renewal through the TGPI customer billing portal or by contacting TGPI. Unless applicable law requires a different result, cancellation stops future renewal and Premium access remains available until the end of the already-paid billing period.": {
+    "en": "You can cancel recurring renewal through the TGPI customer billing portal or by contacting TGPI. Unless applicable law requires a different result, cancellation stops future renewal and Premium access remains available until the end of the already-paid billing period.",
+    "pt-BR": "Você pode cancelar a renovação recorrente pelo portal de cobrança do cliente TGPI ou entrando em contato com a TGPI. Salvo quando a legislação aplicável exigir outro resultado, o cancelamento interrompe futuras renovações e o acesso Premium permanece disponível até o fim do período de cobrança já pago.",
+    "es": "Puedes cancelar la renovación recurrente a través del portal de facturación de clientes de TGPI o contactando con TGPI. Salvo que la legislación aplicable exija otro resultado, la cancelación detiene las renovaciones futuras y el acceso Premium permanece disponible hasta el final del período de facturación ya pagado.",
+    "fr": "Vous pouvez annuler le renouvellement récurrent via le portail de facturation des clients TGPI ou en contactant TGPI. Sauf disposition contraire de la loi applicable, la résiliation arrête les renouvellements futurs et l’accès Premium reste disponible jusqu’à la fin de la période de facturation déjà payée.",
+    "de": "Du kannst die wiederkehrende Verlängerung über das TGPI-Kundenabrechnungsportal oder durch Kontaktaufnahme mit TGPI kündigen. Soweit das geltende Recht nichts anderes verlangt, beendet die Kündigung zukünftige Verlängerungen; der Premium-Zugang bleibt bis zum Ende des bereits bezahlten Abrechnungszeitraums verfügbar.",
+    "it": "Puoi annullare il rinnovo ricorrente tramite il portale di fatturazione clienti TGPI o contattando TGPI. Salvo ove la legge applicabile imponga un esito diverso, la disdetta interrompe i rinnovi futuri e l’accesso Premium resta disponibile fino alla fine del periodo di fatturazione già pagato."
+  },
+  "1. Cancel anytime": {
+    "en": "1. Cancel anytime",
+    "pt-BR": "1. Cancele a qualquer momento",
+    "es": "1. Cancela en cualquier momento",
+    "fr": "1. Résiliez à tout moment",
+    "de": "1. Jederzeit kündigen",
+    "it": "1. Disdici in qualsiasi momento"
+  },
+  "How to cancel TGPI Premium, exercise applicable withdrawal rights and request review of charges.": {
+    "en": "How to cancel TGPI Premium, exercise applicable withdrawal rights and request review of charges.",
+    "pt-BR": "Como cancelar o TGPI Premium, exercer os direitos de arrependimento aplicáveis e solicitar a revisão de cobranças.",
+    "es": "Cómo cancelar TGPI Premium, ejercer los derechos de desistimiento aplicables y solicitar la revisión de cargos.",
+    "fr": "Comment résilier TGPI Premium, exercer les droits de rétractation applicables et demander un examen des frais.",
+    "de": "So kündigst du TGPI Premium, übst geltende Widerrufsrechte aus und beantragst die Prüfung von Abbuchungen.",
+    "it": "Come disdire TGPI Premium, esercitare i diritti di recesso applicabili e richiedere la verifica degli addebiti."
+  },
+  "Refund & Cancellation Policy": {
+    "en": "Refund & Cancellation Policy",
+    "pt-BR": "Política de Reembolso e Cancelamento",
+    "es": "Política de reembolsos y cancelación",
+    "fr": "Politique de remboursement et d’annulation",
+    "de": "Erstattungs- und Kündigungsrichtlinie",
+    "it": "Politica di rimborso e cancellazione"
+  },
+  "Legal · Consumer": {
+    "en": "Legal · Consumer",
+    "pt-BR": "Jurídico · Consumidor",
+    "es": "Legal · Consumidor",
+    "fr": "Juridique · Consommateur",
+    "de": "Rechtliches · Verbraucher",
+    "it": "Legale · Consumatore"
+  },
   "Continue your global journey": {
     "en": "Continue your global journey",
     "pt-BR": "Continue sua jornada global",
