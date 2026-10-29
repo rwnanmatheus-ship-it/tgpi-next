@@ -1,6 +1,30 @@
 import type { Locale } from "./config";
 
 export const messages = {
+  "Continue your global journey": {
+    "en": "Continue your global journey",
+    "pt-BR": "Continue sua jornada global",
+    "es": "Continúa tu camino global",
+    "fr": "Poursuivez votre parcours international",
+    "de": "Setze deinen globalen Weg fort",
+    "it": "Continua il tuo percorso globale"
+  },
+  "Connected by TGPI": {
+    "en": "Connected by TGPI",
+    "pt-BR": "Conectado pela TGPI",
+    "es": "Conectado por TGPI",
+    "fr": "Connecté par TGPI",
+    "de": "Verbunden durch TGPI",
+    "it": "Connesso da TGPI"
+  },
+  "Explore another part of your journey whenever you are ready.": {
+    "en": "Explore another part of your journey whenever you are ready.",
+    "pt-BR": "Explore outra etapa da sua jornada quando estiver pronto.",
+    "es": "Explora otra etapa de tu camino cuando estés listo.",
+    "fr": "Explorez une autre étape de votre parcours quand vous le souhaitez.",
+    "de": "Entdecke einen weiteren Teil deines Weges, sobald du bereit bist.",
+    "it": "Esplora un’altra tappa del tuo percorso quando sei pronto."
+  },
   "Invalid conversation.": {
     "en": "Invalid conversation.",
     "pt-BR": "Conversa inválida.",

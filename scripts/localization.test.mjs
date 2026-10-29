@@ -151,7 +151,7 @@ test('evidence labels are translated and locale formatting never changes the sou
 
 test('Atlas and recovery copy, accessible labels, and known service errors have six-language coverage', () => {
   const paths = [
-    'src/app/error.tsx', 'src/app/profile/error.tsx', 'src/app/profile/loading.tsx',
+    'src/components/navigation/JourneyContinuation.tsx', 'src/app/error.tsx', 'src/app/profile/error.tsx', 'src/app/profile/loading.tsx',
     'src/app/loading.tsx', 'src/app/global-key/error.tsx', 'src/app/global-key/loading.tsx',
     'src/app/countries/[slug]/not-found.tsx', 'src/components/atlas/AtlasChat.tsx',
     'src/components/atlas/AtlasWidget.tsx', 'src/lib/atlas/contracts.ts',
