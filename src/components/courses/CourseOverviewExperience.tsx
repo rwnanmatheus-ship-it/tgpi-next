@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef, type ReactNode } from "react";
 import ActivationProgressProvider, {
   useActivationProgress,
 } from "@/components/activation/ActivationProgressProvider";
@@ -17,15 +17,15 @@ function formatDuration(totalMinutes: number) {
   return hours ? (minutes ? `${hours}h ${minutes}m` : `${hours}h`) : `${minutes}m`;
 }
 
-export default function CourseOverviewExperience({ course }: { course: Course }) {
+export default function CourseOverviewExperience({ course, workshop }: { course: Course; workshop?: ReactNode }) {
   return (
     <ActivationProgressProvider>
-      <CourseOverview course={course} />
+      <CourseOverview course={course} workshop={workshop} />
     </ActivationProgressProvider>
   );
 }
 
-function CourseOverview({ course }: { course: Course }) {
+function CourseOverview({ course, workshop }: { course: Course; workshop?: ReactNode }) {
   const { error, isAuthenticated, isLoading, mutate, progress } = useActivationProgress();
   const startRequested = useRef(false);
   const lessons = useMemo(() => getCourseLessons(course), [course]);
@@ -489,6 +489,7 @@ function CourseOverview({ course }: { course: Course }) {
             })}
           </div>
         </section>
+        {workshop}
       </div>
     </main>
   );
