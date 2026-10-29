@@ -1,6 +1,128 @@
 import type { Locale } from "./config";
 
 export const messages = {
+
+  "Compare the world.": {
+    "en": "Compare the world.",
+    "pt-BR": "Compare o mundo.",
+    "es": "Compara el mundo.",
+    "fr": "Comparez le monde.",
+    "de": "Vergleiche die Welt.",
+    "it": "Confronta il mondo."
+  },
+  "Decide with intelligence.": {
+    "en": "Decide with intelligence.",
+    "pt-BR": "Decida com inteligência.",
+    "es": "Decide con inteligencia.",
+    "fr": "Décidez avec intelligence.",
+    "de": "Entscheide mit Wissen.",
+    "it": "Decidi con intelligenza."
+  },
+  "Decision intelligence": {
+    "en": "Decision intelligence",
+    "pt-BR": "Inteligência de decisão",
+    "es": "Inteligencia de decisión",
+    "fr": "Intelligence décisionnelle",
+    "de": "Entscheidungswissen",
+    "it": "Intelligenza decisionale"
+  },
+  "See the bigger picture.": {
+    "en": "See the bigger picture.",
+    "pt-BR": "Veja o cenário completo.",
+    "es": "Mira el panorama completo.",
+    "fr": "Voyez la vue d’ensemble.",
+    "de": "Sieh das Gesamtbild.",
+    "it": "Guarda il quadro completo."
+  },
+  "Evidence before rankings. Missing information remains visible.": {
+    "en": "Evidence before rankings. Missing information remains visible.",
+    "pt-BR": "Evidências antes de rankings. As informações ausentes permanecem visíveis.",
+    "es": "Evidencia antes de clasificaciones. La información faltante sigue visible.",
+    "fr": "Les preuves avant les classements. Les informations manquantes restent visibles.",
+    "de": "Belege vor Ranglisten. Fehlende Informationen bleiben sichtbar.",
+    "it": "Prove prima delle classifiche. Le informazioni mancanti restano visibili."
+  },
+  "Country research": {
+    "en": "Country research",
+    "pt-BR": "Pesquisa de destino",
+    "es": "Investigación del destino",
+    "fr": "Recherche sur la destination",
+    "de": "Länderrecherche",
+    "it": "Ricerca sulla destinazione"
+  },
+  "Check your legal route, language requirements and local budget separately.": {
+    "en": "Check your legal route, language requirements and local budget separately.",
+    "pt-BR": "Verifique separadamente sua rota legal, requisitos de idioma e orçamento local.",
+    "es": "Verifica por separado tu vía legal, requisitos de idioma y presupuesto local.",
+    "fr": "Vérifiez séparément votre voie légale, les exigences linguistiques et le budget local.",
+    "de": "Prüfe Rechtsweg, Sprachanforderungen und lokales Budget getrennt.",
+    "it": "Verifica separatamente percorso legale, requisiti linguistici e budget locale."
+  },
+  "Source-linked summaries": {
+    "en": "Source-linked summaries",
+    "pt-BR": "Resumos com fontes",
+    "es": "Resúmenes con fuentes",
+    "fr": "Synthèses avec sources",
+    "de": "Zusammenfassungen mit Quellen",
+    "it": "Sintesi con fonti"
+  },
+  "Published cost references": {
+    "en": "Published cost references",
+    "pt-BR": "Referências de custos publicadas",
+    "es": "Referencias de costes publicadas",
+    "fr": "Références de coûts publiées",
+    "de": "Veröffentlichte Kostenreferenzen",
+    "it": "Riferimenti di costo pubblicati"
+  },
+  "Coverage counts are not quality or eligibility scores. Inspect dates and limitations below.": {
+    "en": "Coverage counts are not quality or eligibility scores. Inspect dates and limitations below.",
+    "pt-BR": "A contagem de cobertura não mede qualidade nem elegibilidade. Consulte datas e limitações abaixo.",
+    "es": "El recuento no mide calidad ni elegibilidad. Consulta fechas y limitaciones abajo.",
+    "fr": "Ces nombres ne mesurent ni la qualité ni l’éligibilité. Consultez les dates et limites ci-dessous.",
+    "de": "Diese Anzahl misst weder Qualität noch Berechtigung. Prüfe Daten und Einschränkungen unten.",
+    "it": "Questi conteggi non misurano qualità o idoneità. Consulta date e limiti sotto."
+  },
+  "Explore country": {
+    "en": "Explore country",
+    "pt-BR": "Explorar país",
+    "es": "Explorar país",
+    "fr": "Explorer le pays",
+    "de": "Land erkunden",
+    "it": "Esplora il paese"
+  },
+  "Sources & evidence": {
+    "en": "Sources & evidence",
+    "pt-BR": "Fontes e evidências",
+    "es": "Fuentes y evidencia",
+    "fr": "Sources et preuves",
+    "de": "Quellen und Belege",
+    "it": "Fonti e prove"
+  },
+  "Next steps": {
+    "en": "Next steps",
+    "pt-BR": "Próximos passos",
+    "es": "Próximos pasos",
+    "fr": "Prochaines étapes",
+    "de": "Nächste Schritte",
+    "it": "Prossimi passi"
+  },
+  "Budget & preparation": {
+    "en": "Budget & preparation",
+    "pt-BR": "Orçamento e preparação",
+    "es": "Presupuesto y preparación",
+    "fr": "Budget et préparation",
+    "de": "Budget und Vorbereitung",
+    "it": "Budget e preparazione"
+  },
+  "Build a city budget and a preparation checklist for each destination. Your estimates remain separate from published evidence.": {
+    "en": "Build a city budget and a preparation checklist for each destination. Your estimates remain separate from published evidence.",
+    "pt-BR": "Crie um orçamento por cidade e uma lista de preparação para cada destino. Suas estimativas ficam separadas das evidências publicadas.",
+    "es": "Crea un presupuesto por ciudad y una lista de preparación para cada destino. Tus estimaciones se separan de la evidencia publicada.",
+    "fr": "Créez un budget par ville et une liste de préparation par destination. Vos estimations restent séparées des données publiées.",
+    "de": "Erstelle ein Stadtbudget und eine Vorbereitungsliste je Ziel. Deine Schätzungen bleiben von veröffentlichten Belegen getrennt.",
+    "it": "Crea un budget per città e una lista di preparazione per destinazione. Le tue stime restano separate dai dati pubblicati."
+  },
+
   "How TGPI uses cookies and similar technologies for authentication, security, billing and preferences.": {
     "en": "How TGPI uses cookies and similar technologies for authentication, security, billing and preferences.",
     "pt-BR": "Como a TGPI usa cookies e tecnologias semelhantes para autenticação, segurança, cobrança e preferências.",

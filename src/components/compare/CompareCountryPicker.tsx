@@ -9,7 +9,9 @@ import {
   getComparisonGoalConfig,
   type ComparisonGoal,
 } from "@/lib/tgpi-comparison";
-import { LocalizedText } from "@/components/localization/LocaleProvider";
+import { countrySearchScore, countrySearchTerms } from "@/lib/country-search";
+import { comparisonPath, restoreComparison } from "@/lib/comparison-state";
+import { LocalizedText, useLocale } from "@/components/localization/LocaleProvider";
 
 
 const MAX_COUNTRIES = 3;
@@ -20,6 +22,8 @@ export type ComparePickerCountry = {
   name: string;
   emoji: string;
   region: string;
+  iso2?: string;
+  iso3?: string;
 };
 
 type CompareCountryPickerProps = {
@@ -33,12 +37,6 @@ function createSlots(slugs: string[]): string[] {
   return Array.from({ length: MAX_COUNTRIES }, (_, index) => slugs[index] ?? "");
 }
 
-function buildComparisonPath(slugs: string[], goal: ComparisonGoal) {
-  const params = new URLSearchParams();
-  slugs.forEach((slug) => params.append("country", slug));
-  if (goal !== "overall") params.set("goal", goal);
-  return `/compare?${params.toString()}`;
-}
 
 export default function CompareCountryPicker({
   countries,
@@ -47,6 +45,8 @@ export default function CompareCountryPicker({
   hasExplicitSelection,
 }: CompareCountryPickerProps) {
   const router = useRouter();
+  const { t } = useLocale();
+  const [search, setSearch] = useState("");
   const { isAuthenticated, mutate } = useActivationProgress();
   const builderRef = useRef<HTMLElement>(null);
   const builderTopRef = useRef<number | null>(null);
@@ -78,6 +78,7 @@ export default function CompareCountryPicker({
         .filter((country): country is ComparePickerCountry => Boolean(country)),
     [countryBySlug, selectedSlugs],
   );
+  const searchTerms = useMemo(() => new Map(countries.map(country => [country.slug, countrySearchTerms({ ...country, iso2: country.iso2 ?? "ZZ", iso3: country.iso3 ?? "" })])), [countries]);
   const isCompact = isPastBuilder && !isManuallyExpanded;
 
   useEffect(() => {
@@ -86,7 +87,7 @@ export default function CompareCountryPicker({
 
     if (hasExplicitSelection) {
       if (initialSlugs.length >= 2) {
-        try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(initialSlugs)); } catch { /* The URL remains the source of comparison context. */ }
+        try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify({ countrySlugs: initialSlugs, goal: initialGoal })); } catch { /* The URL remains the source of comparison context. */ }
       }
       return;
     }
@@ -94,23 +95,14 @@ export default function CompareCountryPicker({
     try {
       const stored = window.localStorage.getItem(STORAGE_KEY);
       const parsed: unknown = stored ? JSON.parse(stored) : [];
-      if (!Array.isArray(parsed)) return;
+      const restored = restoreComparison(parsed, validSlugs, COMPARISON_GOALS);
+      if (!restored) return;
+      startTransition(() => router.replace(comparisonPath(restored.countrySlugs, restored.goal)));
 
-      const restored = Array.from(
-        new Set(
-          parsed.filter(
-            (slug): slug is string =>
-              typeof slug === "string" && validSlugs.has(slug),
-          ),
-        ),
-      ).slice(0, MAX_COUNTRIES);
-
-      if (restored.length < 2) return;
-      startTransition(() => router.replace(buildComparisonPath(restored, goal)));
     } catch {
       try { window.localStorage.removeItem(STORAGE_KEY); } catch { /* Storage is optional. */ }
     }
-  }, [goal, hasExplicitSelection, initialSlugs, router, validSlugs]);
+  }, [hasExplicitSelection, initialGoal, initialSlugs, router, validSlugs]);
 
   useEffect(() => {
     let frame = 0;
@@ -169,7 +161,7 @@ export default function CompareCountryPicker({
     }
 
     try {
-      const path = buildComparisonPath(selectedSlugs, goal);
+      const path = comparisonPath(selectedSlugs, goal);
       await navigator.clipboard.writeText(`${window.location.origin}${path}`);
       setCopyStatus("Decision link copied.");
     } catch {
@@ -183,7 +175,7 @@ export default function CompareCountryPicker({
       return;
     }
 
-    try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify(selectedSlugs)); } catch { /* Comparing and saving still work when storage is disabled. */ }
+    try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify({ countrySlugs: selectedSlugs, goal })); } catch { /* Comparing and saving still work when storage is disabled. */ }
 
     if (isAuthenticated) {
       setIsSavingComparison(true);
@@ -202,7 +194,7 @@ export default function CompareCountryPicker({
       }
     }
 
-    startTransition(() => router.push(buildComparisonPath(selectedSlugs, goal)));
+    startTransition(() => router.push(comparisonPath(selectedSlugs, goal)));
   }
 
   return (
@@ -210,7 +202,7 @@ export default function CompareCountryPicker({
       ref={builderRef}
       id="comparison-builder"
       aria-labelledby="comparison-builder-title"
-      className="relative z-30 mt-7 scroll-mt-28 rounded-[28px] border border-[var(--tgpi-border)] bg-[rgba(255,253,248,0.97)] shadow-[var(--tgpi-shadow-premium)] backdrop-blur-2xl transition-all duration-300 lg:sticky lg:top-[76px]"
+      className="compare-builder relative z-30 mt-7 scroll-mt-28 rounded-[28px] border border-[var(--tgpi-border)] bg-[rgba(255,253,248,0.97)] shadow-[var(--tgpi-shadow-premium)] backdrop-blur-2xl transition-all duration-300 "
     >
       {isCompact ? (
         <div className="flex min-h-[74px] flex-col gap-3 p-3 sm:flex-row sm:items-center sm:justify-between sm:px-4">
@@ -284,6 +276,10 @@ export default function CompareCountryPicker({
             </div>
           </div>
 
+          <label className="mt-4 block">
+            <span className="mb-2 block text-xs font-bold">{t("Search countries")}</span>
+            <input type="search" value={search} onChange={event => setSearch(event.target.value)} placeholder={t("Country, translated name or ISO code…")} className="h-11 w-full rounded-xl border border-[var(--tgpi-border)] bg-white px-4 text-sm" />
+          </label>
           <div className="mt-4 grid gap-3 lg:grid-cols-[1fr_1fr_1fr_0.9fr_auto] lg:items-end">
             {slots.map((slug, index) => (
               <label key={index} className="block">
@@ -300,7 +296,7 @@ export default function CompareCountryPicker({
                   className="h-12 w-full rounded-2xl border border-[var(--tgpi-border)] bg-white px-4 text-sm font-bold text-[var(--tgpi-navy)] outline-none transition focus:border-[var(--tgpi-gold)] focus:ring-2 focus:ring-[var(--tgpi-gold)]/25"
                 >
                   <option value="">Choose a country</option>
-                  {countries.map((country) => {
+                  {countries.filter(country => slots.includes(country.slug) || countrySearchScore(searchTerms.get(country.slug) ?? [], search) > 0).map((country) => {
                     const usedElsewhere = slots.some(
                       (selected, selectedIndex) =>
                         selectedIndex !== index && selected === country.slug,
@@ -311,7 +307,7 @@ export default function CompareCountryPicker({
                         value={country.slug}
                         disabled={usedElsewhere}
                       >
-                        {country.emoji} {country.name} · {country.region}
+                        {country.emoji} {t(country.name)} · {t(country.region)}
                       </option>
                     );
                   })}
