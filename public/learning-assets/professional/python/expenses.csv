@@ -1,0 +1,5 @@
+category,currency,amount,description
+housing,EUR,900.00,"Rent, synthetic example"
+food,EUR,250.50,Synthetic groceries
+food,EUR,49.50,Synthetic groceries
+transport,BRL,100.00,Synthetic travel

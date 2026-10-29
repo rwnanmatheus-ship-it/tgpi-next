@@ -1,0 +1,72 @@
+[
+  {
+    "key": "ai",
+    "sourceWidth": 1672,
+    "sourceHeight": 941,
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "key": "english",
+    "sourceWidth": 1672,
+    "sourceHeight": 941,
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "key": "spreadsheets",
+    "sourceWidth": 1672,
+    "sourceHeight": 941,
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "key": "career",
+    "sourceWidth": 1672,
+    "sourceHeight": 941,
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "key": "data-analysis",
+    "sourceWidth": 1672,
+    "sourceHeight": 941,
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "key": "projects",
+    "sourceWidth": 1672,
+    "sourceHeight": 941,
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "key": "marketing",
+    "sourceWidth": 1672,
+    "sourceHeight": 941,
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "key": "security",
+    "sourceWidth": 1672,
+    "sourceHeight": 941,
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "key": "python",
+    "sourceWidth": 1672,
+    "sourceHeight": 941,
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "key": "communication",
+    "sourceWidth": 1672,
+    "sourceHeight": 941,
+    "width": 1600,
+    "height": 900
+  }
+]
