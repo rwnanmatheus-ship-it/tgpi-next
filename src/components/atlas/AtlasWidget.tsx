@@ -1,5 +1,5 @@
 'use client';
-import { useLocale } from "@/components/localization/LocaleProvider";
+import { useLocale, LocalizedText } from "@/components/localization/LocaleProvider";
 
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
@@ -9,7 +9,7 @@ import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
 import styles from './widget.module.css';
 
-const Chat = dynamic(() => import('./AtlasChat'), { loading: () => <p className={styles.loading}>Loading Atlas…</p>, ssr: false });
+const Chat = dynamic(() => import('./AtlasChat'), { loading: () => <p className={styles.loading}><LocalizedText text="Loading Atlas…" /></p>, ssr: false });
 
 export default function AtlasWidget() {
   const { t } = useLocale();

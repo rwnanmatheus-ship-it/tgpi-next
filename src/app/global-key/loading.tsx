@@ -1,4 +1,8 @@
+'use client';
+
+import { useLocale } from '@/components/localization/LocaleProvider';
 export default function GlobalIdentityLoading() {
+  const { t } = useLocale();
   return (
     <main
       aria-busy="true"
@@ -13,12 +17,8 @@ export default function GlobalIdentityLoading() {
           id="identity-loading-title"
           role="status"
           className="mt-4 text-2xl font-semibold"
-        >
-          Loading your identity…
-        </h1>
-        <p className="mt-3 text-sm leading-6 text-[#CBD5E1]">
-          Checking your private record and proof integrity.
-        </p>
+        >{t("Loading your identity…")}</h1>
+        <p className="mt-3 text-sm leading-6 text-[#CBD5E1]">{t("Checking your private record and proof integrity.")}</p>
         <div aria-hidden="true" className="mt-8 grid gap-4 sm:grid-cols-2">
           <div className="h-40 rounded-2xl border border-white/10 bg-white/5" />
           <div className="h-40 rounded-2xl border border-white/10 bg-white/5" />

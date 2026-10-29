@@ -1,6 +1,1062 @@
 import type { Locale } from "./config";
 
 export const messages = {
+  "Invalid conversation.": {
+    "en": "Invalid conversation.",
+    "pt-BR": "Conversa inválida.",
+    "es": "Conversación no válida.",
+    "fr": "Conversation non valide.",
+    "de": "Ungültige Unterhaltung.",
+    "it": "Conversazione non valida."
+  },
+  "Message is too long. Please shorten it.": {
+    "en": "Message is too long. Please shorten it.",
+    "pt-BR": "A mensagem é muito longa. Reduza o texto.",
+    "es": "El mensaje es demasiado largo. Acórtalo.",
+    "fr": "Le message est trop long. Raccourcissez-le.",
+    "de": "Die Nachricht ist zu lang. Bitte kürzen.",
+    "it": "Il messaggio è troppo lungo. Accorcialo."
+  },
+  "Conversation not found or expired.": {
+    "en": "Conversation not found or expired.",
+    "pt-BR": "Conversa não encontrada ou expirada.",
+    "es": "Conversación no encontrada o caducada.",
+    "fr": "Conversation introuvable ou expirée.",
+    "de": "Unterhaltung nicht gefunden oder abgelaufen.",
+    "it": "Conversazione non trovata o scaduta."
+  },
+  "Start a new temporary conversation.": {
+    "en": "Start a new temporary conversation.",
+    "pt-BR": "Inicie uma nova conversa temporária.",
+    "es": "Inicia una nueva conversación temporal.",
+    "fr": "Commencez une nouvelle conversation temporaire.",
+    "de": "Beginne eine neue temporäre Unterhaltung.",
+    "it": "Inizia una nuova conversazione temporanea."
+  },
+  "Conversation expired. Start a new one.": {
+    "en": "Conversation expired. Start a new one.",
+    "pt-BR": "A conversa expirou. Inicie uma nova.",
+    "es": "La conversación ha caducado. Inicia una nueva.",
+    "fr": "La conversation a expiré. Commencez-en une nouvelle.",
+    "de": "Die Unterhaltung ist abgelaufen. Beginne eine neue.",
+    "it": "La conversazione è scaduta. Iniziane una nuova."
+  },
+  "A reply is already in progress. Wait briefly and reload the conversation.": {
+    "en": "A reply is already in progress. Wait briefly and reload the conversation.",
+    "pt-BR": "Uma resposta já está em andamento. Aguarde um momento e recarregue a conversa.",
+    "es": "Ya hay una respuesta en curso. Espera un momento y recarga la conversación.",
+    "fr": "Une réponse est déjà en cours. Patientez un instant et rechargez la conversation.",
+    "de": "Eine Antwort wird bereits erstellt. Warte kurz und lade die Unterhaltung erneut.",
+    "it": "Una risposta è già in corso. Attendi un momento e ricarica la conversazione."
+  },
+  "This temporary request was already accepted. Start a new request to avoid duplicate billing.": {
+    "en": "This temporary request was already accepted. Start a new request to avoid duplicate billing.",
+    "pt-BR": "Esta solicitação temporária já foi aceita. Inicie uma nova solicitação para evitar cobrança duplicada.",
+    "es": "Esta solicitud temporal ya fue aceptada. Inicia una nueva solicitud para evitar cargos duplicados.",
+    "fr": "Cette demande temporaire a déjà été acceptée. Lancez une nouvelle demande pour éviter une double facturation.",
+    "de": "Diese temporäre Anfrage wurde bereits angenommen. Starte eine neue Anfrage, um eine doppelte Abrechnung zu vermeiden.",
+    "it": "Questa richiesta temporanea è già stata accettata. Avvia una nuova richiesta per evitare addebiti duplicati."
+  },
+  "Atlas request limit reached. Up to 10 requests per UTC day are available during validation.": {
+    "en": "Atlas request limit reached. Up to 10 requests per UTC day are available during validation.",
+    "pt-BR": "Limite de solicitações do Atlas atingido. Durante a validação, estão disponíveis até 10 solicitações por dia UTC.",
+    "es": "Se alcanzó el límite de solicitudes de Atlas. Durante la validación hay hasta 10 solicitudes por día UTC.",
+    "fr": "Limite de demandes Atlas atteinte. Jusqu’à 10 demandes par jour UTC sont disponibles pendant la validation.",
+    "de": "Atlas-Anfragelimit erreicht. Während der Validierung sind bis zu 10 Anfragen pro UTC-Tag verfügbar.",
+    "it": "Limite di richieste Atlas raggiunto. Durante la validazione sono disponibili fino a 10 richieste al giorno UTC."
+  },
+  "Atlas daily spending limit reached. Please return tomorrow.": {
+    "en": "Atlas daily spending limit reached. Please return tomorrow.",
+    "pt-BR": "O limite diário de gastos do Atlas foi atingido. Volte amanhã.",
+    "es": "Se alcanzó el límite de gasto diario de Atlas. Vuelve mañana.",
+    "fr": "Le plafond de dépenses quotidien d’Atlas est atteint. Revenez demain.",
+    "de": "Das tägliche Ausgabenlimit von Atlas wurde erreicht. Bitte komm morgen wieder.",
+    "it": "Il limite di spesa giornaliero di Atlas è stato raggiunto. Torna domani."
+  },
+  "This request cannot replace an earlier turn.": {
+    "en": "This request cannot replace an earlier turn.",
+    "pt-BR": "Esta solicitação não pode substituir uma interação anterior.",
+    "es": "Esta solicitud no puede reemplazar una interacción anterior.",
+    "fr": "Cette demande ne peut pas remplacer un échange précédent.",
+    "de": "Diese Anfrage kann keinen früheren Austausch ersetzen.",
+    "it": "Questa richiesta non può sostituire uno scambio precedente."
+  },
+  "Conversation limit reached. Start a new conversation.": {
+    "en": "Conversation limit reached. Start a new conversation.",
+    "pt-BR": "Limite da conversa atingido. Inicie uma nova conversa.",
+    "es": "Se alcanzó el límite de la conversación. Inicia una nueva conversación.",
+    "fr": "Limite de conversation atteinte. Commencez une nouvelle conversation.",
+    "de": "Unterhaltungslimit erreicht. Beginne eine neue Unterhaltung.",
+    "it": "Limite della conversazione raggiunto. Inizia una nuova conversazione."
+  },
+  "Conversation not found.": {
+    "en": "Conversation not found.",
+    "pt-BR": "Conversa não encontrada.",
+    "es": "Conversación no encontrada.",
+    "fr": "Conversation introuvable.",
+    "de": "Unterhaltung nicht gefunden.",
+    "it": "Conversazione non trovata."
+  },
+  "Conversation expired.": {
+    "en": "Conversation expired.",
+    "pt-BR": "Conversa expirada.",
+    "es": "Conversación caducada.",
+    "fr": "Conversation expirée.",
+    "de": "Unterhaltung abgelaufen.",
+    "it": "Conversazione scaduta."
+  },
+  "Reply not found.": {
+    "en": "Reply not found.",
+    "pt-BR": "Resposta não encontrada.",
+    "es": "Respuesta no encontrada.",
+    "fr": "Réponse introuvable.",
+    "de": "Antwort nicht gefunden.",
+    "it": "Risposta non trovata."
+  },
+  "Profile context exceeds the allowed size.": {
+    "en": "Profile context exceeds the allowed size.",
+    "pt-BR": "O contexto do perfil excede o tamanho permitido.",
+    "es": "El contexto del perfil supera el tamaño permitido.",
+    "fr": "Le contexte du profil dépasse la taille autorisée.",
+    "de": "Der Profilkontext überschreitet die zulässige Größe.",
+    "it": "Il contesto del profilo supera la dimensione consentita."
+  },
+  "Sign in to use Atlas.": {
+    "en": "Sign in to use Atlas.",
+    "pt-BR": "Entre na sua conta para usar o Atlas.",
+    "es": "Inicia sesión para usar Atlas.",
+    "fr": "Connectez-vous pour utiliser Atlas.",
+    "de": "Melde dich an, um Atlas zu nutzen.",
+    "it": "Accedi per usare Atlas."
+  },
+  "Request origin could not be verified.": {
+    "en": "Request origin could not be verified.",
+    "pt-BR": "Não foi possível verificar a origem da solicitação.",
+    "es": "No se pudo verificar el origen de la solicitud.",
+    "fr": "Impossible de vérifier l’origine de la demande.",
+    "de": "Der Ursprung der Anfrage konnte nicht überprüft werden.",
+    "it": "Impossibile verificare l’origine della richiesta."
+  },
+  "Atlas storage is not configured yet.": {
+    "en": "Atlas storage is not configured yet.",
+    "pt-BR": "O armazenamento do Atlas ainda não está configurado.",
+    "es": "El almacenamiento de Atlas aún no está configurado.",
+    "fr": "Le stockage d’Atlas n’est pas encore configuré.",
+    "de": "Der Atlas-Speicher ist noch nicht eingerichtet.",
+    "it": "L’archiviazione di Atlas non è ancora configurata."
+  },
+  "Atlas is in a private validation phase. Access is not enabled for this account yet.": {
+    "en": "Atlas is in a private validation phase. Access is not enabled for this account yet.",
+    "pt-BR": "O Atlas está em fase de validação privada. O acesso ainda não está habilitado para esta conta.",
+    "es": "Atlas está en fase de validación privada. El acceso aún no está habilitado para esta cuenta.",
+    "fr": "Atlas est en phase de validation privée. L’accès n’est pas encore activé pour ce compte.",
+    "de": "Atlas befindet sich in einer privaten Validierungsphase. Der Zugriff ist für dieses Konto noch nicht freigeschaltet.",
+    "it": "Atlas è in una fase di validazione privata. L’accesso non è ancora abilitato per questo account."
+  },
+  "Atlas configuration is awaiting validation.": {
+    "en": "Atlas configuration is awaiting validation.",
+    "pt-BR": "A configuração do Atlas aguarda validação.",
+    "es": "La configuración de Atlas está pendiente de validación.",
+    "fr": "La configuration d’Atlas est en attente de validation.",
+    "de": "Die Atlas-Konfiguration wartet auf Validierung.",
+    "it": "La configurazione di Atlas è in attesa di validazione."
+  },
+  "Atlas spending limit is not configured.": {
+    "en": "Atlas spending limit is not configured.",
+    "pt-BR": "O limite de gastos do Atlas não está configurado.",
+    "es": "El límite de gasto de Atlas no está configurado.",
+    "fr": "Le plafond de dépenses d’Atlas n’est pas configuré.",
+    "de": "Das Ausgabenlimit von Atlas ist nicht eingerichtet.",
+    "it": "Il limite di spesa di Atlas non è configurato."
+  },
+  "The configured model needs cost validation.": {
+    "en": "The configured model needs cost validation.",
+    "pt-BR": "O modelo configurado precisa de validação de custos.",
+    "es": "El modelo configurado necesita una validación de costes.",
+    "fr": "Le modèle configuré nécessite une validation des coûts.",
+    "de": "Für das konfigurierte Modell müssen die Kosten validiert werden.",
+    "it": "Il modello configurato richiede una validazione dei costi."
+  },
+  "Missing request body.": {
+    "en": "Missing request body.",
+    "pt-BR": "O conteúdo da solicitação está ausente.",
+    "es": "Falta el contenido de la solicitud.",
+    "fr": "Le contenu de la demande est manquant.",
+    "de": "Der Inhalt der Anfrage fehlt.",
+    "it": "Manca il contenuto della richiesta."
+  },
+  "Request is too large.": {
+    "en": "Request is too large.",
+    "pt-BR": "A solicitação é muito grande.",
+    "es": "La solicitud es demasiado grande.",
+    "fr": "La demande est trop volumineuse.",
+    "de": "Die Anfrage ist zu groß.",
+    "it": "La richiesta è troppo grande."
+  },
+  "Invalid request.": {
+    "en": "Invalid request.",
+    "pt-BR": "Solicitação inválida.",
+    "es": "Solicitud no válida.",
+    "fr": "Demande non valide.",
+    "de": "Ungültige Anfrage.",
+    "it": "Richiesta non valida."
+  },
+  "Atlas is temporarily unavailable. Please retry.": {
+    "en": "Atlas is temporarily unavailable. Please retry.",
+    "pt-BR": "O Atlas está temporariamente indisponível. Tente novamente.",
+    "es": "Atlas no está disponible temporalmente. Inténtalo de nuevo.",
+    "fr": "Atlas est temporairement indisponible. Réessayez.",
+    "de": "Atlas ist vorübergehend nicht verfügbar. Bitte erneut versuchen.",
+    "it": "Atlas è temporaneamente non disponibile. Riprova."
+  },
+  "Invalid cursor.": {
+    "en": "Invalid cursor.",
+    "pt-BR": "Referência de paginação inválida.",
+    "es": "Referencia de paginación no válida.",
+    "fr": "Référence de pagination non valide.",
+    "de": "Ungültige Seitenreferenz.",
+    "it": "Riferimento di paginazione non valido."
+  },
+  "Reply interrupted. You can retry the last question.": {
+    "en": "Reply interrupted. You can retry the last question.",
+    "pt-BR": "Resposta interrompida. Você pode reenviar a última pergunta.",
+    "es": "Respuesta interrumpida. Puedes reintentar la última pregunta.",
+    "fr": "Réponse interrompue. Vous pouvez réessayer la dernière question.",
+    "de": "Antwort unterbrochen. Du kannst die letzte Frage erneut stellen.",
+    "it": "Risposta interrotta. Puoi riprovare l’ultima domanda."
+  },
+  "The AI provider could not complete this reply. Please try again later.": {
+    "en": "The AI provider could not complete this reply. Please try again later.",
+    "pt-BR": "O provedor de IA não conseguiu concluir esta resposta. Tente novamente mais tarde.",
+    "es": "El proveedor de IA no pudo completar esta respuesta. Inténtalo más tarde.",
+    "fr": "Le fournisseur d’IA n’a pas pu terminer cette réponse. Réessayez plus tard.",
+    "de": "Der KI-Anbieter konnte diese Antwort nicht abschließen. Bitte versuche es später erneut.",
+    "it": "Il fornitore di IA non ha potuto completare questa risposta. Riprova più tardi."
+  },
+  "The reply could not be saved. Reload before retrying.": {
+    "en": "The reply could not be saved. Reload before retrying.",
+    "pt-BR": "Não foi possível salvar a resposta. Recarregue antes de tentar novamente.",
+    "es": "No se pudo guardar la respuesta. Recarga antes de reintentar.",
+    "fr": "Impossible d’enregistrer la réponse. Rechargez avant de réessayer.",
+    "de": "Die Antwort konnte nicht gespeichert werden. Lade vor einem neuen Versuch erneut.",
+    "it": "Impossibile salvare la risposta. Ricarica prima di riprovare."
+  },
+  "Destinations and goals": {
+    "en": "Destinations and goals",
+    "pt-BR": "Destinos e objetivos",
+    "es": "Destinos y objetivos",
+    "fr": "Destinations et objectifs",
+    "de": "Ziele und Reiseziele",
+    "it": "Destinazioni e obiettivi"
+  },
+  "Declared languages": {
+    "en": "Declared languages",
+    "pt-BR": "Idiomas declarados",
+    "es": "Idiomas declarados",
+    "fr": "Langues déclarées",
+    "de": "Angegebene Sprachen",
+    "it": "Lingue dichiarate"
+  },
+  "Career and education": {
+    "en": "Career and education",
+    "pt-BR": "Carreira e educação",
+    "es": "Carrera y educación",
+    "fr": "Carrière et formation",
+    "de": "Beruf und Bildung",
+    "it": "Carriera e formazione"
+  },
+  "Budget range — currency and period unconfirmed": {
+    "en": "Budget range — currency and period unconfirmed",
+    "pt-BR": "Faixa de orçamento — moeda e período não confirmados",
+    "es": "Rango de presupuesto — moneda y periodo sin confirmar",
+    "fr": "Fourchette de budget — devise et période non confirmées",
+    "de": "Budgetrahmen — Währung und Zeitraum unbestätigt",
+    "it": "Fascia di budget — valuta e periodo non confermati"
+  },
+  "Country Pathway Not Found": {
+    "en": "Country Pathway Not Found",
+    "pt-BR": "Percurso do país não encontrado",
+    "es": "Ruta del país no encontrada",
+    "fr": "Parcours du pays introuvable",
+    "de": "Länderpfad nicht gefunden",
+    "it": "Percorso del paese non trovato"
+  },
+  "This country pathway is not available yet in the current TGPI system. Explore the active countries or return to the main platform.": {
+    "en": "This country pathway is not available yet in the current TGPI system. Explore the active countries or return to the main platform.",
+    "pt-BR": "Este percurso de país ainda não está disponível na TGPI. Explore os países disponíveis ou volte à plataforma principal.",
+    "es": "Esta ruta de país aún no está disponible en TGPI. Explora los países disponibles o vuelve a la plataforma principal.",
+    "fr": "Ce parcours de pays n’est pas encore disponible sur TGPI. Explorez les pays disponibles ou revenez à la plateforme principale.",
+    "de": "Dieser Länderpfad ist in TGPI noch nicht verfügbar. Entdecke die verfügbaren Länder oder kehre zur Hauptplattform zurück.",
+    "it": "Questo percorso del paese non è ancora disponibile su TGPI. Esplora i paesi disponibili o torna alla piattaforma principale."
+  },
+  "Back Home": {
+    "en": "Back Home",
+    "pt-BR": "Voltar ao início",
+    "es": "Volver al inicio",
+    "fr": "Retour à l’accueil",
+    "de": "Zur Startseite",
+    "it": "Torna alla home"
+  },
+  "Runtime recovery": {
+    "en": "Runtime recovery",
+    "pt-BR": "Recuperação de acesso",
+    "es": "Recuperación del acceso",
+    "fr": "Rétablissement de l’accès",
+    "de": "Zugriff wiederherstellen",
+    "it": "Ripristino dell’accesso"
+  },
+  "This area did not load.": {
+    "en": "This area did not load.",
+    "pt-BR": "Esta área não carregou.",
+    "es": "Esta sección no se ha cargado.",
+    "fr": "Cette section ne s’est pas chargée.",
+    "de": "Dieser Bereich wurde nicht geladen.",
+    "it": "Questa sezione non è stata caricata."
+  },
+  "Your account and saved progress were not changed. Try the request again or return to the Workspace.": {
+    "en": "Your account and saved progress were not changed. Try the request again or return to the Workspace.",
+    "pt-BR": "Sua conta e seu progresso salvo não foram alterados. Tente novamente ou volte ao espaço de trabalho.",
+    "es": "Tu cuenta y tu progreso guardado no han cambiado. Inténtalo de nuevo o vuelve al espacio de trabajo.",
+    "fr": "Votre compte et votre progression enregistrée n’ont pas été modifiés. Réessayez ou revenez à l’espace de travail.",
+    "de": "Dein Konto und dein gespeicherter Fortschritt wurden nicht geändert. Versuche es erneut oder kehre zum Arbeitsbereich zurück.",
+    "it": "Il tuo account e i progressi salvati non sono stati modificati. Riprova o torna allo spazio di lavoro."
+  },
+  "Open Workspace": {
+    "en": "Open Workspace",
+    "pt-BR": "Abrir espaço de trabalho",
+    "es": "Abrir espacio de trabajo",
+    "fr": "Ouvrir l’espace de travail",
+    "de": "Arbeitsbereich öffnen",
+    "it": "Apri lo spazio di lavoro"
+  },
+  "Open workspace": {
+    "en": "Open workspace",
+    "pt-BR": "Abrir espaço de trabalho",
+    "es": "Abrir espacio de trabajo",
+    "fr": "Ouvrir l’espace de travail",
+    "de": "Arbeitsbereich öffnen",
+    "it": "Apri lo spazio di lavoro"
+  },
+  "Your identity could not be loaded.": {
+    "en": "Your identity could not be loaded.",
+    "pt-BR": "Não foi possível carregar sua identidade.",
+    "es": "No se pudo cargar tu identidad.",
+    "fr": "Impossible de charger votre identité.",
+    "de": "Deine Identität konnte nicht geladen werden.",
+    "it": "Impossibile caricare la tua identità."
+  },
+  "We could not confirm your identity record right now. Try again. If this continues, return to your workspace or check your account access.": {
+    "en": "We could not confirm your identity record right now. Try again. If this continues, return to your workspace or check your account access.",
+    "pt-BR": "Não foi possível confirmar seu registro de identidade agora. Tente novamente. Se o problema continuar, volte ao espaço de trabalho ou verifique o acesso à sua conta.",
+    "es": "No pudimos confirmar tu registro de identidad en este momento. Inténtalo de nuevo. Si el problema continúa, vuelve al espacio de trabajo o revisa el acceso a tu cuenta.",
+    "fr": "Nous n’avons pas pu confirmer votre identité pour le moment. Réessayez. Si le problème persiste, revenez à votre espace de travail ou vérifiez l’accès à votre compte.",
+    "de": "Dein Identitätsnachweis konnte gerade nicht bestätigt werden. Versuche es erneut. Falls das Problem weiterhin besteht, kehre zum Arbeitsbereich zurück oder prüfe deinen Kontozugang.",
+    "it": "Non è stato possibile confermare il tuo record di identità al momento. Riprova. Se il problema persiste, torna allo spazio di lavoro o verifica l’accesso al tuo account."
+  },
+  "Loading your identity…": {
+    "en": "Loading your identity…",
+    "pt-BR": "Carregando sua identidade…",
+    "es": "Cargando tu identidad…",
+    "fr": "Chargement de votre identité…",
+    "de": "Deine Identität wird geladen…",
+    "it": "Caricamento della tua identità…"
+  },
+  "Checking your private record and proof integrity.": {
+    "en": "Checking your private record and proof integrity.",
+    "pt-BR": "Verificando seu registro privado e a integridade do comprovante.",
+    "es": "Verificando tu registro privado y la integridad del comprobante.",
+    "fr": "Vérification de votre dossier privé et de l’intégrité du justificatif.",
+    "de": "Dein privater Datensatz und die Integrität des Nachweises werden geprüft.",
+    "it": "Verifica del tuo record privato e dell’integrità della prova."
+  },
+  "Loading TGPI": {
+    "en": "Loading TGPI",
+    "pt-BR": "Carregando TGPI",
+    "es": "Cargando TGPI",
+    "fr": "Chargement de TGPI",
+    "de": "TGPI wird geladen",
+    "it": "Caricamento di TGPI"
+  },
+  "Loading the latest TGPI experience…": {
+    "en": "Loading the latest TGPI experience…",
+    "pt-BR": "Carregando a experiência atualizada da TGPI…",
+    "es": "Cargando la experiencia actualizada de TGPI…",
+    "fr": "Chargement de la nouvelle expérience TGPI…",
+    "de": "Die aktuelle TGPI-Oberfläche wird geladen…",
+    "it": "Caricamento dell’esperienza aggiornata di TGPI…"
+  },
+  "Your workspace could not be loaded.": {
+    "en": "Your workspace could not be loaded.",
+    "pt-BR": "Não foi possível carregar seu espaço de trabalho.",
+    "es": "No se pudo cargar tu espacio de trabajo.",
+    "fr": "Impossible de charger votre espace de travail.",
+    "de": "Dein Arbeitsbereich konnte nicht geladen werden.",
+    "it": "Impossibile caricare il tuo spazio di lavoro."
+  },
+  "Check your connection and retry. Your saved activity has not been changed.": {
+    "en": "Check your connection and retry. Your saved activity has not been changed.",
+    "pt-BR": "Verifique sua conexão e tente novamente. Sua atividade salva não foi alterada.",
+    "es": "Comprueba tu conexión e inténtalo de nuevo. Tu actividad guardada no ha cambiado.",
+    "fr": "Vérifiez votre connexion et réessayez. Votre activité enregistrée n’a pas été modifiée.",
+    "de": "Prüfe deine Verbindung und versuche es erneut. Deine gespeicherten Aktivitäten wurden nicht geändert.",
+    "it": "Controlla la connessione e riprova. Le attività salvate non sono state modificate."
+  },
+  "Retry workspace": {
+    "en": "Retry workspace",
+    "pt-BR": "Recarregar espaço de trabalho",
+    "es": "Recargar espacio de trabajo",
+    "fr": "Recharger l’espace de travail",
+    "de": "Arbeitsbereich erneut laden",
+    "it": "Ricarica lo spazio di lavoro"
+  },
+  "Loading your private workspace": {
+    "en": "Loading your private workspace",
+    "pt-BR": "Carregando seu espaço de trabalho privado",
+    "es": "Cargando tu espacio de trabajo privado",
+    "fr": "Chargement de votre espace de travail privé",
+    "de": "Dein privater Arbeitsbereich wird geladen",
+    "it": "Caricamento del tuo spazio di lavoro privato"
+  },
+  "Loading your workspace…": {
+    "en": "Loading your workspace…",
+    "pt-BR": "Carregando seu espaço de trabalho…",
+    "es": "Cargando tu espacio de trabajo…",
+    "fr": "Chargement de votre espace de travail…",
+    "de": "Dein Arbeitsbereich wird geladen…",
+    "it": "Caricamento del tuo spazio di lavoro…"
+  },
+  "Destinations & goals": {
+    "en": "Destinations & goals",
+    "pt-BR": "Destinos e objetivos",
+    "es": "Destinos y objetivos",
+    "fr": "Destinations et objectifs",
+    "de": "Ziele und Reiseziele",
+    "it": "Destinazioni e obiettivi"
+  },
+  "Career & education": {
+    "en": "Career & education",
+    "pt-BR": "Carreira e educação",
+    "es": "Carrera y educación",
+    "fr": "Carrière et formation",
+    "de": "Beruf und Bildung",
+    "it": "Carriera e formazione"
+  },
+  "Budget range": {
+    "en": "Budget range",
+    "pt-BR": "Faixa de orçamento",
+    "es": "Rango de presupuesto",
+    "fr": "Fourchette de budget",
+    "de": "Budgetrahmen",
+    "it": "Fascia di budget"
+  },
+  "Help me compare two destinations.": {
+    "en": "Help me compare two destinations.",
+    "pt-BR": "Ajude-me a comparar dois destinos.",
+    "es": "Ayúdame a comparar dos destinos.",
+    "fr": "Aidez-moi à comparer deux destinations.",
+    "de": "Hilf mir, zwei Reiseziele zu vergleichen.",
+    "it": "Aiutami a confrontare due destinazioni."
+  },
+  "How should I prepare to study abroad?": {
+    "en": "How should I prepare to study abroad?",
+    "pt-BR": "Como devo me preparar para estudar no exterior?",
+    "es": "¿Cómo debo prepararme para estudiar en el extranjero?",
+    "fr": "Comment me préparer à étudier à l’étranger ?",
+    "de": "Wie sollte ich mich auf ein Studium im Ausland vorbereiten?",
+    "it": "Come dovrei prepararmi a studiare all’estero?"
+  },
+  "Help me build a language-learning routine.": {
+    "en": "Help me build a language-learning routine.",
+    "pt-BR": "Ajude-me a criar uma rotina de estudo de idiomas.",
+    "es": "Ayúdame a crear una rutina para aprender idiomas.",
+    "fr": "Aidez-moi à créer une routine d’apprentissage des langues.",
+    "de": "Hilf mir, eine Routine zum Sprachenlernen aufzubauen.",
+    "it": "Aiutami a creare una routine per imparare le lingue."
+  },
+  "Request failed. Please retry.": {
+    "en": "Request failed. Please retry.",
+    "pt-BR": "A solicitação falhou. Tente novamente.",
+    "es": "La solicitud falló. Inténtalo de nuevo.",
+    "fr": "La demande a échoué. Réessayez.",
+    "de": "Die Anfrage ist fehlgeschlagen. Bitte erneut versuchen.",
+    "it": "La richiesta non è riuscita. Riprova."
+  },
+  "History unavailable.": {
+    "en": "History unavailable.",
+    "pt-BR": "Histórico indisponível.",
+    "es": "Historial no disponible.",
+    "fr": "Historique indisponible.",
+    "de": "Verlauf nicht verfügbar.",
+    "it": "Cronologia non disponibile."
+  },
+  "The last reply is incomplete. You can retry after any active request finishes.": {
+    "en": "The last reply is incomplete. You can retry after any active request finishes.",
+    "pt-BR": "A última resposta está incompleta. Você pode tentar novamente quando a solicitação em andamento terminar.",
+    "es": "La última respuesta está incompleta. Puedes reintentar cuando termine la solicitud en curso.",
+    "fr": "La dernière réponse est incomplète. Vous pourrez réessayer une fois la demande en cours terminée.",
+    "de": "Die letzte Antwort ist unvollständig. Du kannst es erneut versuchen, sobald die laufende Anfrage abgeschlossen ist.",
+    "it": "L’ultima risposta è incompleta. Puoi riprovare quando la richiesta in corso sarà terminata."
+  },
+  "Could not load conversation.": {
+    "en": "Could not load conversation.",
+    "pt-BR": "Não foi possível carregar a conversa.",
+    "es": "No se pudo cargar la conversación.",
+    "fr": "Impossible de charger la conversation.",
+    "de": "Die Unterhaltung konnte nicht geladen werden.",
+    "it": "Impossibile caricare la conversazione."
+  },
+  "Unable to start reply.": {
+    "en": "Unable to start reply.",
+    "pt-BR": "Não foi possível iniciar a resposta.",
+    "es": "No se pudo iniciar la respuesta.",
+    "fr": "Impossible de commencer la réponse.",
+    "de": "Die Antwort konnte nicht gestartet werden.",
+    "it": "Impossibile avviare la risposta."
+  },
+  "Response stream unavailable.": {
+    "en": "Response stream unavailable.",
+    "pt-BR": "Transmissão da resposta indisponível.",
+    "es": "Transmisión de la respuesta no disponible.",
+    "fr": "Flux de réponse indisponible.",
+    "de": "Antwortübertragung nicht verfügbar.",
+    "it": "Trasmissione della risposta non disponibile."
+  },
+  "Conversation no longer exists. Start a new one.": {
+    "en": "Conversation no longer exists. Start a new one.",
+    "pt-BR": "A conversa não existe mais. Inicie uma nova.",
+    "es": "La conversación ya no existe. Inicia una nueva.",
+    "fr": "La conversation n’existe plus. Commencez-en une nouvelle.",
+    "de": "Die Unterhaltung existiert nicht mehr. Beginne eine neue.",
+    "it": "La conversazione non esiste più. Iniziane una nuova."
+  },
+  "Reply complete.": {
+    "en": "Reply complete.",
+    "pt-BR": "Resposta concluída.",
+    "es": "Respuesta completada.",
+    "fr": "Réponse terminée.",
+    "de": "Antwort abgeschlossen.",
+    "it": "Risposta completata."
+  },
+  "Reply incomplete. Retry the last question or start a new conversation.": {
+    "en": "Reply incomplete. Retry the last question or start a new conversation.",
+    "pt-BR": "Resposta incompleta. Reenvie a última pergunta ou inicie uma nova conversa.",
+    "es": "Respuesta incompleta. Reintenta la última pregunta o inicia una nueva conversación.",
+    "fr": "Réponse incomplète. Réessayez la dernière question ou commencez une nouvelle conversation.",
+    "de": "Antwort unvollständig. Stelle die letzte Frage erneut oder beginne eine neue Unterhaltung.",
+    "it": "Risposta incompleta. Riprova l’ultima domanda o inizia una nuova conversazione."
+  },
+  "Connection ended before confirmation. Reload the conversation before retrying.": {
+    "en": "Connection ended before confirmation. Reload the conversation before retrying.",
+    "pt-BR": "A conexão terminou antes da confirmação. Recarregue a conversa antes de tentar novamente.",
+    "es": "La conexión terminó antes de la confirmación. Recarga la conversación antes de reintentar.",
+    "fr": "La connexion s’est interrompue avant la confirmation. Rechargez la conversation avant de réessayer.",
+    "de": "Die Verbindung wurde vor der Bestätigung beendet. Lade die Unterhaltung vor einem neuen Versuch erneut.",
+    "it": "La connessione si è interrotta prima della conferma. Ricarica la conversazione prima di riprovare."
+  },
+  "Reply stopped. Reload to recover any saved text, or retry the last question.": {
+    "en": "Reply stopped. Reload to recover any saved text, or retry the last question.",
+    "pt-BR": "Resposta interrompida. Recarregue para recuperar o texto salvo ou reenvie a última pergunta.",
+    "es": "Respuesta detenida. Recarga para recuperar el texto guardado o reintenta la última pregunta.",
+    "fr": "Réponse interrompue. Rechargez pour récupérer le texte enregistré ou réessayez la dernière question.",
+    "de": "Antwort angehalten. Lade erneut, um gespeicherten Text wiederherzustellen, oder stelle die letzte Frage erneut.",
+    "it": "Risposta interrotta. Ricarica per recuperare il testo salvato o riprova l’ultima domanda."
+  },
+  "Connection failed. Your question is preserved.": {
+    "en": "Connection failed. Your question is preserved.",
+    "pt-BR": "Falha na conexão. Sua pergunta foi preservada.",
+    "es": "Error de conexión. Tu pregunta se ha conservado.",
+    "fr": "Échec de la connexion. Votre question a été conservée.",
+    "de": "Verbindung fehlgeschlagen. Deine Frage wurde beibehalten.",
+    "it": "Connessione non riuscita. La tua domanda è stata conservata."
+  },
+  "Conversation deleted.": {
+    "en": "Conversation deleted.",
+    "pt-BR": "Conversa excluída.",
+    "es": "Conversación eliminada.",
+    "fr": "Conversation supprimée.",
+    "de": "Unterhaltung gelöscht.",
+    "it": "Conversazione eliminata."
+  },
+  "Saved.": {
+    "en": "Saved.",
+    "pt-BR": "Salvo.",
+    "es": "Guardado.",
+    "fr": "Enregistré.",
+    "de": "Gespeichert.",
+    "it": "Salvato."
+  },
+  "Could not save change.": {
+    "en": "Could not save change.",
+    "pt-BR": "Não foi possível salvar a alteração.",
+    "es": "No se pudo guardar el cambio.",
+    "fr": "Impossible d’enregistrer la modification.",
+    "de": "Die Änderung konnte nicht gespeichert werden.",
+    "it": "Impossibile salvare la modifica."
+  },
+  "Atlas conversations": {
+    "en": "Atlas conversations",
+    "pt-BR": "Conversas do Atlas",
+    "es": "Conversaciones de Atlas",
+    "fr": "Conversations Atlas",
+    "de": "Atlas-Unterhaltungen",
+    "it": "Conversazioni di Atlas"
+  },
+  "Atlas owl": {
+    "en": "Atlas owl",
+    "pt-BR": "Coruja Atlas",
+    "es": "Búho Atlas",
+    "fr": "Chouette Atlas",
+    "de": "Atlas-Eule",
+    "it": "Gufo Atlas"
+  },
+  "Your global companion": {
+    "en": "Your global companion",
+    "pt-BR": "Seu companheiro global",
+    "es": "Tu compañero global",
+    "fr": "Votre compagnon à travers le monde",
+    "de": "Dein weltweiter Begleiter",
+    "it": "Il tuo compagno globale"
+  },
+  "＋ New conversation": {
+    "en": "＋ New conversation",
+    "pt-BR": "＋ Nova conversa",
+    "es": "＋ Nueva conversación",
+    "fr": "＋ Nouvelle conversation",
+    "de": "＋ Neue Unterhaltung",
+    "it": "＋ Nuova conversazione"
+  },
+  "Start temporary conversation": {
+    "en": "Start temporary conversation",
+    "pt-BR": "Iniciar conversa temporária",
+    "es": "Iniciar conversación temporal",
+    "fr": "Commencer une conversation temporaire",
+    "de": "Temporäre Unterhaltung starten",
+    "it": "Inizia una conversazione temporanea"
+  },
+  "Search loaded history": {
+    "en": "Search loaded history",
+    "pt-BR": "Buscar no histórico carregado",
+    "es": "Buscar en el historial cargado",
+    "fr": "Rechercher dans l’historique chargé",
+    "de": "Geladenen Verlauf durchsuchen",
+    "it": "Cerca nella cronologia caricata"
+  },
+  "Search by title…": {
+    "en": "Search by title…",
+    "pt-BR": "Buscar por título…",
+    "es": "Buscar por título…",
+    "fr": "Rechercher par titre…",
+    "de": "Nach Titel suchen…",
+    "it": "Cerca per titolo…"
+  },
+  "No saved conversations loaded.": {
+    "en": "No saved conversations loaded.",
+    "pt-BR": "Nenhuma conversa salva carregada.",
+    "es": "No se han cargado conversaciones guardadas.",
+    "fr": "Aucune conversation enregistrée n’a été chargée.",
+    "de": "Keine gespeicherten Unterhaltungen geladen.",
+    "it": "Nessuna conversazione salvata caricata."
+  },
+  "Load more conversations": {
+    "en": "Load more conversations",
+    "pt-BR": "Carregar mais conversas",
+    "es": "Cargar más conversaciones",
+    "fr": "Charger plus de conversations",
+    "de": "Weitere Unterhaltungen laden",
+    "it": "Carica altre conversazioni"
+  },
+  "Loading history…": {
+    "en": "Loading history…",
+    "pt-BR": "Carregando histórico…",
+    "es": "Cargando historial…",
+    "fr": "Chargement de l’historique…",
+    "de": "Verlauf wird geladen…",
+    "it": "Caricamento della cronologia…"
+  },
+  "PRIVATE VALIDATION": {
+    "en": "PRIVATE VALIDATION",
+    "pt-BR": "VALIDAÇÃO PRIVADA",
+    "es": "VALIDACIÓN PRIVADA",
+    "fr": "VALIDATION PRIVÉE",
+    "de": "PRIVATE VALIDIERUNG",
+    "it": "VALIDAZIONE PRIVATA"
+  },
+  "One thoughtful step at a time.": {
+    "en": "One thoughtful step at a time.",
+    "pt-BR": "Um passo consciente de cada vez.",
+    "es": "Un paso consciente a la vez.",
+    "fr": "Un pas réfléchi à la fois.",
+    "de": "Ein durchdachter Schritt nach dem anderen.",
+    "it": "Un passo ponderato alla volta."
+  },
+  "Account & privacy ↗": {
+    "en": "Account & privacy ↗",
+    "pt-BR": "Conta e privacidade ↗",
+    "es": "Cuenta y privacidad ↗",
+    "fr": "Compte et confidentialité ↗",
+    "de": "Konto und Datenschutz ↗",
+    "it": "Account e privacy ↗"
+  },
+  "Conversation with Atlas": {
+    "en": "Conversation with Atlas",
+    "pt-BR": "Conversa com Atlas",
+    "es": "Conversación con Atlas",
+    "fr": "Conversation avec Atlas",
+    "de": "Unterhaltung mit Atlas",
+    "it": "Conversazione con Atlas"
+  },
+  "History": {
+    "en": "History",
+    "pt-BR": "Histórico",
+    "es": "Historial",
+    "fr": "Historique",
+    "de": "Verlauf",
+    "it": "Cronologia"
+  },
+  "Temporary conversation": {
+    "en": "Temporary conversation",
+    "pt-BR": "Conversa temporária",
+    "es": "Conversación temporal",
+    "fr": "Conversation temporaire",
+    "de": "Temporäre Unterhaltung",
+    "it": "Conversazione temporanea"
+  },
+  "New conversation": {
+    "en": "New conversation",
+    "pt-BR": "Nova conversa",
+    "es": "Nueva conversación",
+    "fr": "Nouvelle conversation",
+    "de": "Neue Unterhaltung",
+    "it": "Nuova conversazione"
+  },
+  "Reload": {
+    "en": "Reload",
+    "pt-BR": "Recarregar",
+    "es": "Recargar",
+    "fr": "Recharger",
+    "de": "Neu laden",
+    "it": "Ricarica"
+  },
+  "Rename": {
+    "en": "Rename",
+    "pt-BR": "Renomear",
+    "es": "Cambiar nombre",
+    "fr": "Renommer",
+    "de": "Umbenennen",
+    "it": "Rinomina"
+  },
+  "Delete": {
+    "en": "Delete",
+    "pt-BR": "Excluir",
+    "es": "Eliminar",
+    "fr": "Supprimer",
+    "de": "Löschen",
+    "it": "Elimina"
+  },
+  "Atlas preview": {
+    "en": "Atlas preview",
+    "pt-BR": "Prévia do Atlas",
+    "es": "Vista previa de Atlas",
+    "fr": "Aperçu d’Atlas",
+    "de": "Atlas-Vorschau",
+    "it": "Anteprima di Atlas"
+  },
+  "— Explore the interface. AI replies are not available for this account yet. Messages cannot be sent during this preview.": {
+    "en": "— Explore the interface. AI replies are not available for this account yet. Messages cannot be sent during this preview.",
+    "pt-BR": "— Explore a interface. As respostas de IA ainda não estão disponíveis para esta conta. Não é possível enviar mensagens nesta prévia.",
+    "es": "— Explora la interfaz. Las respuestas de IA aún no están disponibles para esta cuenta. No se pueden enviar mensajes durante esta vista previa.",
+    "fr": "— Explorez l’interface. Les réponses de l’IA ne sont pas encore disponibles pour ce compte. L’envoi de messages est désactivé dans cet aperçu.",
+    "de": "— Entdecke die Oberfläche. KI-Antworten sind für dieses Konto noch nicht verfügbar. In dieser Vorschau können keine Nachrichten gesendet werden.",
+    "it": "— Esplora l’interfaccia. Le risposte dell’IA non sono ancora disponibili per questo account. Non è possibile inviare messaggi durante questa anteprima."
+  },
+  "Conversation title": {
+    "en": "Conversation title",
+    "pt-BR": "Título da conversa",
+    "es": "Título de la conversación",
+    "fr": "Titre de la conversation",
+    "de": "Titel der Unterhaltung",
+    "it": "Titolo della conversazione"
+  },
+  "Save title": {
+    "en": "Save title",
+    "pt-BR": "Salvar título",
+    "es": "Guardar título",
+    "fr": "Enregistrer le titre",
+    "de": "Titel speichern",
+    "it": "Salva titolo"
+  },
+  "Delete this conversation and its messages from TGPI? This cannot be undone.": {
+    "en": "Delete this conversation and its messages from TGPI? This cannot be undone.",
+    "pt-BR": "Excluir esta conversa e suas mensagens da TGPI? Esta ação não pode ser desfeita.",
+    "es": "¿Eliminar esta conversación y sus mensajes de TGPI? Esta acción no se puede deshacer.",
+    "fr": "Supprimer cette conversation et ses messages de TGPI ? Cette action est irréversible.",
+    "de": "Diese Unterhaltung und ihre Nachrichten aus TGPI löschen? Dies kann nicht rückgängig gemacht werden.",
+    "it": "Eliminare questa conversazione e i suoi messaggi da TGPI? L’azione non può essere annullata."
+  },
+  "Confirm deletion": {
+    "en": "Confirm deletion",
+    "pt-BR": "Confirmar exclusão",
+    "es": "Confirmar eliminación",
+    "fr": "Confirmer la suppression",
+    "de": "Löschen bestätigen",
+    "it": "Conferma eliminazione"
+  },
+  "Message history": {
+    "en": "Message history",
+    "pt-BR": "Histórico de mensagens",
+    "es": "Historial de mensajes",
+    "fr": "Historique des messages",
+    "de": "Nachrichtenverlauf",
+    "it": "Cronologia dei messaggi"
+  },
+  "Atlas, the TGPI explorer owl": {
+    "en": "Atlas, the TGPI explorer owl",
+    "pt-BR": "Atlas, a coruja exploradora da TGPI",
+    "es": "Atlas, el búho explorador de TGPI",
+    "fr": "Atlas, la chouette exploratrice de TGPI",
+    "de": "Atlas, die Entdecker-Eule von TGPI",
+    "it": "Atlas, il gufo esploratore di TGPI"
+  },
+  "INTELLIGENCE FOR YOUR GLOBAL LIFE": {
+    "en": "INTELLIGENCE FOR YOUR GLOBAL LIFE",
+    "pt-BR": "INTELIGÊNCIA PARA SUA VIDA GLOBAL",
+    "es": "INTELIGENCIA PARA TU VIDA GLOBAL",
+    "fr": "L’INTELLIGENCE AU SERVICE DE VOTRE VIE INTERNATIONALE",
+    "de": "INTELLIGENZ FÜR DEIN GLOBALES LEBEN",
+    "it": "INTELLIGENZA PER LA TUA VITA GLOBALE"
+  },
+  "Ask about a destination, explore an idea, or work through a decision. We can start wherever you are.": {
+    "en": "Ask about a destination, explore an idea, or work through a decision. We can start wherever you are.",
+    "pt-BR": "Pergunte sobre um destino, explore uma ideia ou avalie uma decisão. Podemos começar de onde você estiver.",
+    "es": "Pregunta sobre un destino, explora una idea o analiza una decisión. Podemos empezar desde donde estés.",
+    "fr": "Posez une question sur une destination, explorez une idée ou réfléchissez à une décision. Nous pouvons commencer là où vous en êtes.",
+    "de": "Frage nach einem Reiseziel, erkunde eine Idee oder durchdenke eine Entscheidung. Wir können dort beginnen, wo du gerade stehst.",
+    "it": "Chiedi informazioni su una destinazione, esplora un’idea o ragiona su una decisione. Possiamo iniziare da dove ti trovi."
+  },
+  "You": {
+    "en": "You",
+    "pt-BR": "Você",
+    "es": "Tú",
+    "fr": "Vous",
+    "de": "Du",
+    "it": "Tu"
+  },
+  "Profile fields shared:": {
+    "en": "Profile fields shared:",
+    "pt-BR": "Campos do perfil compartilhados:",
+    "es": "Campos del perfil compartidos:",
+    "fr": "Champs du profil partagés :",
+    "de": "Geteilte Profilfelder:",
+    "it": "Campi del profilo condivisi:"
+  },
+  "Partial reply": {
+    "en": "Partial reply",
+    "pt-BR": "Resposta parcial",
+    "es": "Respuesta parcial",
+    "fr": "Réponse partielle",
+    "de": "Teilantwort",
+    "it": "Risposta parziale"
+  },
+  "Reply copied.": {
+    "en": "Reply copied.",
+    "pt-BR": "Resposta copiada.",
+    "es": "Respuesta copiada.",
+    "fr": "Réponse copiée.",
+    "de": "Antwort kopiert.",
+    "it": "Risposta copiata."
+  },
+  "Copy unavailable. Select the reply to copy it.": {
+    "en": "Copy unavailable. Select the reply to copy it.",
+    "pt-BR": "Cópia indisponível. Selecione a resposta para copiá-la.",
+    "es": "Copia no disponible. Selecciona la respuesta para copiarla.",
+    "fr": "Copie indisponible. Sélectionnez la réponse pour la copier.",
+    "de": "Kopieren nicht verfügbar. Markiere die Antwort, um sie zu kopieren.",
+    "it": "Copia non disponibile. Seleziona la risposta per copiarla."
+  },
+  "Helpful": {
+    "en": "Helpful",
+    "pt-BR": "Útil",
+    "es": "Útil",
+    "fr": "Utile",
+    "de": "Hilfreich",
+    "it": "Utile"
+  },
+  "Needs improvement": {
+    "en": "Needs improvement",
+    "pt-BR": "Precisa melhorar",
+    "es": "Necesita mejorar",
+    "fr": "À améliorer",
+    "de": "Verbesserungswürdig",
+    "it": "Da migliorare"
+  },
+  "New response ↓": {
+    "en": "New response ↓",
+    "pt-BR": "Nova resposta ↓",
+    "es": "Nueva respuesta ↓",
+    "fr": "Nouvelle réponse ↓",
+    "de": "Neue Antwort ↓",
+    "it": "Nuova risposta ↓"
+  },
+  "Personalization · {count} selected categories": {
+    "en": "Personalization · {count} selected categories",
+    "pt-BR": "Personalização · {count} categorias selecionadas",
+    "es": "Personalización · {count} categorías seleccionadas",
+    "fr": "Personnalisation · {count} catégories sélectionnées",
+    "de": "Personalisierung · {count} ausgewählte Kategorien",
+    "it": "Personalizzazione · {count} categorie selezionate"
+  },
+  "Personalization · off": {
+    "en": "Personalization · off",
+    "pt-BR": "Personalização · desativada",
+    "es": "Personalización · desactivada",
+    "fr": "Personnalisation · désactivée",
+    "de": "Personalisierung · aus",
+    "it": "Personalizzazione · disattivata"
+  },
+  "For your next question, share selected fields from your TGPI profile with OpenAI. Unchecking a category stops future retrieval; previous replies may still contain it. Start a new conversation for a fresh context.": {
+    "en": "For your next question, share selected fields from your TGPI profile with OpenAI. Unchecking a category stops future retrieval; previous replies may still contain it. Start a new conversation for a fresh context.",
+    "pt-BR": "Para sua próxima pergunta, compartilhe campos selecionados do seu perfil TGPI com a OpenAI. Desmarcar uma categoria interrompe futuras consultas desses dados; respostas anteriores ainda podem contê-los. Inicie uma nova conversa para renovar o contexto.",
+    "es": "Para tu próxima pregunta, comparte campos seleccionados de tu perfil TGPI con OpenAI. Desmarcar una categoría detiene futuras consultas de esos datos; las respuestas anteriores aún pueden contenerlos. Inicia una nueva conversación para renovar el contexto.",
+    "fr": "Pour votre prochaine question, partagez certains champs de votre profil TGPI avec OpenAI. Décocher une catégorie empêche toute nouvelle récupération de ces données ; les réponses précédentes peuvent encore les contenir. Commencez une nouvelle conversation pour repartir avec un contexte vierge.",
+    "de": "Teile für deine nächste Frage ausgewählte Felder deines TGPI-Profils mit OpenAI. Das Abwählen einer Kategorie verhindert künftige Abrufe dieser Daten; frühere Antworten können sie weiterhin enthalten. Beginne eine neue Unterhaltung für einen neuen Kontext.",
+    "it": "Per la prossima domanda, condividi alcuni campi del tuo profilo TGPI con OpenAI. Deselezionare una categoria interrompe il recupero futuro di quei dati; le risposte precedenti potrebbero ancora contenerli. Inizia una nuova conversazione per un nuovo contesto."
+  },
+  "Retry last question": {
+    "en": "Retry last question",
+    "pt-BR": "Reenviar última pergunta",
+    "es": "Reintentar última pregunta",
+    "fr": "Réessayer la dernière question",
+    "de": "Letzte Frage erneut stellen",
+    "it": "Riprova l’ultima domanda"
+  },
+  "Reload conversation": {
+    "en": "Reload conversation",
+    "pt-BR": "Recarregar conversa",
+    "es": "Recargar conversación",
+    "fr": "Recharger la conversation",
+    "de": "Unterhaltung neu laden",
+    "it": "Ricarica la conversazione"
+  },
+  "Start new conversation": {
+    "en": "Start new conversation",
+    "pt-BR": "Iniciar nova conversa",
+    "es": "Iniciar nueva conversación",
+    "fr": "Commencer une nouvelle conversation",
+    "de": "Neue Unterhaltung starten",
+    "it": "Inizia una nuova conversazione"
+  },
+  "Message Atlas": {
+    "en": "Message Atlas",
+    "pt-BR": "Mensagem para Atlas",
+    "es": "Mensaje para Atlas",
+    "fr": "Message à Atlas",
+    "de": "Nachricht an Atlas",
+    "it": "Messaggio ad Atlas"
+  },
+  "Ask Atlas anything…": {
+    "en": "Ask Atlas anything…",
+    "pt-BR": "Pergunte ao Atlas…",
+    "es": "Pregúntale a Atlas…",
+    "fr": "Posez votre question à Atlas…",
+    "de": "Stelle Atlas eine Frage…",
+    "it": "Chiedi ad Atlas…"
+  },
+  "Stop": {
+    "en": "Stop",
+    "pt-BR": "Parar",
+    "es": "Detener",
+    "fr": "Arrêter",
+    "de": "Anhalten",
+    "it": "Interrompi"
+  },
+  "Send message": {
+    "en": "Send message",
+    "pt-BR": "Enviar mensagem",
+    "es": "Enviar mensaje",
+    "fr": "Envoyer le message",
+    "de": "Nachricht senden",
+    "it": "Invia messaggio"
+  },
+  "Send ↑": {
+    "en": "Send ↑",
+    "pt-BR": "Enviar ↑",
+    "es": "Enviar ↑",
+    "fr": "Envoyer ↑",
+    "de": "Senden ↑",
+    "it": "Invia ↑"
+  },
+  "Processing your request…": {
+    "en": "Processing your request…",
+    "pt-BR": "Processando sua solicitação…",
+    "es": "Procesando tu solicitud…",
+    "fr": "Traitement de votre demande…",
+    "de": "Deine Anfrage wird verarbeitet…",
+    "it": "Elaborazione della richiesta…"
+  },
+  "Temporary · not saved in TGPI chat history": {
+    "en": "Temporary · not saved in TGPI chat history",
+    "pt-BR": "Temporária · não salva no histórico da TGPI",
+    "es": "Temporal · no se guarda en el historial de TGPI",
+    "fr": "Temporaire · non enregistrée dans l’historique TGPI",
+    "de": "Temporär · nicht im TGPI-Verlauf gespeichert",
+    "it": "Temporanea · non salvata nella cronologia TGPI"
+  },
+  "Private history · 30-day access window": {
+    "en": "Private history · 30-day access window",
+    "pt-BR": "Histórico privado · acesso por 30 dias",
+    "es": "Historial privado · acceso durante 30 días",
+    "fr": "Historique privé · accès pendant 30 jours",
+    "de": "Privater Verlauf · 30 Tage zugänglich",
+    "it": "Cronologia privata · accesso per 30 giorni"
+  },
+  "· Privacy & limits": {
+    "en": "· Privacy & limits",
+    "pt-BR": "· Privacidade e limites",
+    "es": "· Privacidad y límites",
+    "fr": "· Confidentialité et limites",
+    "de": "· Datenschutz und Grenzen",
+    "it": "· Privacy e limiti"
+  },
+  "Messages and selected profile fields are processed by OpenAI. Atlas does not update your profile or create memories. Saved chats expire 30 days after creation; deletion removes the active TGPI record. Provider retention, backup retention and asynchronous cleanup may differ.": {
+    "en": "Messages and selected profile fields are processed by OpenAI. Atlas does not update your profile or create memories. Saved chats expire 30 days after creation; deletion removes the active TGPI record. Provider retention, backup retention and asynchronous cleanup may differ.",
+    "pt-BR": "As mensagens e os campos selecionados do perfil são processados pela OpenAI. O Atlas não atualiza seu perfil nem cria memórias. As conversas salvas expiram 30 dias após a criação; a exclusão remove o registro ativo da TGPI. Os prazos de retenção do provedor, dos backups e da limpeza assíncrona podem variar.",
+    "es": "OpenAI procesa los mensajes y los campos seleccionados del perfil. Atlas no actualiza tu perfil ni crea recuerdos. Los chats guardados caducan 30 días después de su creación; la eliminación borra el registro activo de TGPI. La retención del proveedor, de las copias de seguridad y la limpieza asíncrona pueden variar.",
+    "fr": "Les messages et les champs de profil sélectionnés sont traités par OpenAI. Atlas ne met pas à jour votre profil et ne crée pas de souvenirs. Les conversations enregistrées expirent 30 jours après leur création ; leur suppression retire l’enregistrement actif de TGPI. Les délais de conservation du fournisseur, des sauvegardes et du nettoyage asynchrone peuvent différer.",
+    "de": "Nachrichten und ausgewählte Profilfelder werden von OpenAI verarbeitet. Atlas aktualisiert dein Profil nicht und legt keine Erinnerungen an. Gespeicherte Chats verfallen 30 Tage nach ihrer Erstellung; beim Löschen wird der aktive TGPI-Datensatz entfernt. Aufbewahrungsfristen des Anbieters, von Sicherungskopien und der asynchronen Bereinigung können abweichen.",
+    "it": "I messaggi e i campi del profilo selezionati vengono elaborati da OpenAI. Atlas non aggiorna il tuo profilo né crea ricordi. Le chat salvate scadono 30 giorni dopo la creazione; l’eliminazione rimuove il record attivo di TGPI. I tempi di conservazione del fornitore, dei backup e della pulizia asincrona possono differire."
+  },
+  "Temporary messages stay in this page while it is open; TGPI retains usage metadata for rate limits, not their text.": {
+    "en": "Temporary messages stay in this page while it is open; TGPI retains usage metadata for rate limits, not their text.",
+    "pt-BR": "As mensagens temporárias permanecem nesta página enquanto ela estiver aberta; a TGPI mantém metadados de uso para controlar limites de solicitações, não o texto das mensagens.",
+    "es": "Los mensajes temporales permanecen en esta página mientras esté abierta; TGPI conserva metadatos de uso para controlar los límites de solicitudes, no el texto de los mensajes.",
+    "fr": "Les messages temporaires restent sur cette page tant qu’elle est ouverte ; TGPI conserve les métadonnées d’utilisation pour limiter les requêtes, pas le texte des messages.",
+    "de": "Temporäre Nachrichten bleiben auf dieser Seite, solange sie geöffnet ist; TGPI speichert Nutzungsmetadaten für Anfragelimits, nicht den Nachrichtentext.",
+    "it": "I messaggi temporanei rimangono su questa pagina finché è aperta; TGPI conserva i metadati di utilizzo per i limiti delle richieste, non il testo dei messaggi."
+  },
+  "Unsent drafts are kept in this browser tab until sent or cleared. History is stored in your private account.": {
+    "en": "Unsent drafts are kept in this browser tab until sent or cleared. History is stored in your private account.",
+    "pt-BR": "Rascunhos não enviados ficam nesta aba do navegador até serem enviados ou apagados. O histórico é armazenado na sua conta privada.",
+    "es": "Los borradores no enviados permanecen en esta pestaña hasta enviarlos o borrarlos. El historial se almacena en tu cuenta privada.",
+    "fr": "Les brouillons non envoyés restent dans cet onglet jusqu’à leur envoi ou leur suppression. L’historique est stocké dans votre compte privé.",
+    "de": "Nicht gesendete Entwürfe bleiben in diesem Browser-Tab, bis sie gesendet oder gelöscht werden. Der Verlauf wird in deinem privaten Konto gespeichert.",
+    "it": "Le bozze non inviate restano in questa scheda del browser finché non vengono inviate o cancellate. La cronologia è salvata nel tuo account privato."
+  },
+  "This validation version allows 10 requests per account per UTC day, with a shared spending cap. It has no live web research, attachments, voice or account-changing tools. Verify important or time-sensitive information.": {
+    "en": "This validation version allows 10 requests per account per UTC day, with a shared spending cap. It has no live web research, attachments, voice or account-changing tools. Verify important or time-sensitive information.",
+    "pt-BR": "Esta versão de validação permite 10 solicitações por conta por dia UTC, com um limite de gastos compartilhado. Não oferece pesquisa na web em tempo real, anexos, voz nem ferramentas que alteram a conta. Verifique informações importantes ou sujeitas a mudanças.",
+    "es": "Esta versión de validación permite 10 solicitudes por cuenta por día UTC, con un límite de gasto compartido. No incluye búsquedas web en tiempo real, archivos adjuntos, voz ni herramientas que modifiquen la cuenta. Verifica la información importante o sujeta a cambios.",
+    "fr": "Cette version de validation autorise 10 demandes par compte et par jour UTC, avec un plafond de dépenses partagé. Elle ne propose ni recherche web en direct, ni pièces jointes, ni voix, ni outils de modification du compte. Vérifiez les informations importantes ou susceptibles de changer.",
+    "de": "Diese Validierungsversion erlaubt 10 Anfragen pro Konto und UTC-Tag mit einem gemeinsamen Ausgabenlimit. Sie bietet keine Live-Websuche, Anhänge, Spracheingabe oder Werkzeuge zur Kontoänderung. Überprüfe wichtige oder zeitabhängige Informationen.",
+    "it": "Questa versione di validazione consente 10 richieste per account al giorno UTC, con un tetto di spesa condiviso. Non include ricerche web in tempo reale, allegati, voce o strumenti che modificano l’account. Verifica le informazioni importanti o soggette a cambiamenti."
+  },
+  "Loading Atlas…": {
+    "en": "Loading Atlas…",
+    "pt-BR": "Carregando Atlas…",
+    "es": "Cargando Atlas…",
+    "fr": "Chargement d’Atlas…",
+    "de": "Atlas wird geladen…",
+    "it": "Caricamento di Atlas…"
+  },
   "Language": {
     "en": "Language",
     "pt-BR": "Idioma",
@@ -6956,9 +8012,12 @@ export const messages = {
 } as const satisfies Record<string, Record<Locale, string>>;
 
 export type MessageKey = keyof typeof messages;
-const normalizedMessages = new Map(Object.entries(messages).map(([key, value]) => [key.toLowerCase(), value]));
+// Widen lookup values while keeping MessageKey and six-locale authoring checks exact.
+// Large catalogs must not expand every translated string into a compiler union.
+const catalog: Readonly<Record<string, Readonly<Record<Locale, string>>>> = messages;
+const normalizedMessages = new Map(Object.entries(catalog).map(([key, value]) => [key.toLowerCase(), value]));
 export function translate(locale: Locale, key: string, values: Record<string, string | number> = {}): string {
-  const entry = Object.prototype.hasOwnProperty.call(messages, key) ? messages[key as MessageKey] : normalizedMessages.get(key.toLowerCase());
+  const entry = Object.prototype.hasOwnProperty.call(catalog, key) ? catalog[key] : normalizedMessages.get(key.toLowerCase());
   const template = locale === 'en' ? key : entry?.[locale] ?? key;
   return template.replace(/\{(\w+)\}/g, (match, name: string) => Object.prototype.hasOwnProperty.call(values, name) ? String(values[name]) : match);
 }

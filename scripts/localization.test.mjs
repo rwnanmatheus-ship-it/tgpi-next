@@ -148,3 +148,73 @@ test('evidence labels are translated and locale formatting never changes the sou
   assert.equal(observation.value, 77.7);
   assert.equal(formatObservation(undefined, 'pt-BR'), 'Not available');
 });
+
+test('Atlas and recovery copy, accessible labels, and known service errors have six-language coverage', () => {
+  const paths = [
+    'src/app/error.tsx', 'src/app/profile/error.tsx', 'src/app/profile/loading.tsx',
+    'src/app/loading.tsx', 'src/app/global-key/error.tsx', 'src/app/global-key/loading.tsx',
+    'src/app/countries/[slug]/not-found.tsx', 'src/components/atlas/AtlasChat.tsx',
+    'src/components/atlas/AtlasWidget.tsx', 'src/lib/atlas/contracts.ts',
+    'src/lib/atlas/http.server.ts', 'src/lib/atlas/store.server.ts',
+    'src/lib/atlas/context.ts', 'src/app/api/atlas/chat/route.ts',
+    'src/app/api/atlas/conversations/route.ts',
+  ];
+  const brands = new Set(['TGPI Global ID', 'TGPI ATLAS AI', 'TGPI Atlas AI', 'Atlas', 'AI']);
+  for (const path of paths) {
+    const source = ts.createSourceFile(path, fs.readFileSync(path, 'utf8'), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+    function registered(key) {
+      assert.ok(Object.hasOwn(messages, key), `${path}: missing ${key}`);
+      for (const locale of locales) assert.ok(messages[key][locale]?.trim(), `${locale}: ${key}`);
+    }
+    function visit(node) {
+      if (ts.isJsxText(node)) {
+        const value = node.text.replace(/\s+/g, ' ').trim();
+        assert.ok(!/[A-Za-z]{2}/.test(value) || brands.has(value), `${path}: untranslated copy: ${value}`);
+      }
+      if (ts.isJsxAttribute(node) && node.initializer && ts.isStringLiteral(node.initializer)) {
+        if (['text', 'alt', 'aria-label', 'placeholder'].includes(node.name.text) && node.initializer.text) registered(node.initializer.text);
+      }
+      if (ts.isNewExpression(node) && node.expression.getText(source) === 'AtlasError' && ts.isStringLiteral(node.arguments?.[0])) registered(node.arguments[0].text);
+      if (ts.isCallExpression(node) && ['t', 'setError', 'setNotice'].includes(node.expression.getText(source)) && ts.isStringLiteral(node.arguments[0]) && node.arguments[0].text) registered(node.arguments[0].text);
+      // Public stream failures and profile-sharing factors must not bypass the catalog.
+      if (path.endsWith('/api/atlas/chat/route.ts') && ts.isStringLiteral(node) && /(?:reply|retrying)\.$/.test(node.text)) registered(node.text);
+      if (path.endsWith('/atlas/context.ts') && ts.isCallExpression(node) && node.expression.getText(source) === 'factors.push') registered(node.arguments[0].text);
+      ts.forEachChild(node, visit);
+    }
+    visit(source);
+  }
+});
+
+test('Atlas preview renders in all six locales without enabling sending or making API requests', async () => {
+  const React = await import('react');
+  const { renderToStaticMarkup } = await import('react-dom/server');
+  const code = ts.transpileModule(fs.readFileSync('src/components/atlas/AtlasChat.tsx', 'utf8'), {
+    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX, esModuleInterop: true },
+  }).outputText;
+  const runtime = await import('react/jsx-runtime');
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = () => { throw new Error('Rendering must not issue an API request'); };
+  try {
+    for (const locale of locales) {
+      const exports = {};
+      const t = key => translate(locale, key);
+      new Function('require', 'exports', code)(name => {
+        if (name === 'react') return React;
+        if (name === 'react/jsx-runtime') return runtime;
+        if (name === '@/components/localization/LocaleProvider') return { useLocale: () => ({ locale, t }), LocalizedText: ({ text }) => t(text) };
+        if (name === 'next/image') return { __esModule: true, default: ({ alt }) => React.createElement('span', { 'data-alt': alt }) };
+        if (name === 'next/link') return { __esModule: true, default: ({ children, ...props }) => React.createElement('a', props, children) };
+        if (name === 'react-markdown') return { __esModule: true, default: ({ children }) => children };
+        if (name === 'remark-gfm') return { __esModule: true, default: () => {} };
+        if (name.endsWith('.module.css')) return { __esModule: true, default: {} };
+        if (name === '@/lib/atlas/contracts') return { safeAtlasLink: value => value };
+        throw new Error(`Unexpected import: ${name}`);
+      }, exports);
+      const html = renderToStaticMarkup(React.createElement(exports.default, { userId: 'localization-test', enabled: false }));
+      const escape = text => text.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#x27;');
+      for (const key of ['New conversation', 'Help me compare two destinations.', 'Atlas preview', 'Message Atlas', 'Ask Atlas anything…', 'For your next question, share selected fields from your TGPI profile with OpenAI. Unchecking a category stops future retrieval; previous replies may still contain it. Start a new conversation for a fresh context.']) assert.ok(html.includes(escape(t(key))), `${locale}: ${key}`);
+      assert.match(html, /<button type="submit" disabled=""/);
+      assert.match(html, /maxLength="4000"/);
+    }
+  } finally { globalThis.fetch = realFetch; }
+});

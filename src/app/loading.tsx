@@ -1,8 +1,12 @@
+'use client';
+
+import { useLocale } from '@/components/localization/LocaleProvider';
 export default function Loading() {
+  const { t } = useLocale();
   return (
     <main
       aria-busy="true"
-      aria-label="Loading TGPI"
+      aria-label={t("Loading TGPI")}
       className="min-h-[62vh] bg-[var(--tgpi-canvas)] px-4 py-12 sm:px-6"
       role="status"
     >
@@ -15,7 +19,7 @@ export default function Loading() {
           <div className="h-44 rounded-[1.75rem] border border-[var(--tgpi-border-soft)] bg-white" />
           <div className="h-44 rounded-[1.75rem] border border-[var(--tgpi-border-soft)] bg-white" />
         </div>
-        <span className="sr-only">Loading the latest TGPI experience…</span>
+        <span className="sr-only">{t("Loading the latest TGPI experience…")}</span>
       </div>
     </main>
   );
