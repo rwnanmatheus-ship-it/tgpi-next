@@ -48,13 +48,13 @@ export default function CertificateDocument({
         <div className="diploma-inactive-banner" role="status">
           {credential.status === "revoked"
             ? "REVOKED - This certificate is no longer active"
-            : "INTEGRITY REVIEW - This record is not verified"}
+            : credential.status === "replaced" ? "REPLACED - Open the replacement record" : "INTEGRITY REVIEW - This record is not verified"}
         </div>
       )}
       <div className="diploma-body">
         <div className="diploma-main">
           <p className="diploma-eyebrow">Certificate of achievement</p>
-          <h2>Professional Certificate</h2>
+          <h2>{credential.documentNature || "Professional Certificate"}</h2>
           <p className="diploma-label">Awarded to</p>
           <p className="diploma-name">{credential.publicName}</p>
           <p className="diploma-description">

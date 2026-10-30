@@ -662,12 +662,14 @@ export async function getUserLearningCredential(
 
 export async function getPublicLearningCredential(
   credentialId: string,
+  includeOwnerPrivate = false,
 ): Promise<PublicTgpiLearningCredential | null> {
   if (!isLearningStorageConfigured() || credentialId.length > 100) return null;
   const document = await getFirestoreDocument<TgpiLearningCredential>(
     credentialPath(credentialId),
   );
   if (!document) return null;
+  if (document.data.professionalEvidence?.sharing === false && !includeOwnerPrivate) return null;
   const { ownerUid: _ownerUid, verificationHash: _verificationHash, ...credential } =
     document.data;
   void _ownerUid;

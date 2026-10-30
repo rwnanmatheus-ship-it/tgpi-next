@@ -78,7 +78,7 @@ export type LearningCertificationStatus = {
   storageConfigured: boolean;
 };
 
-export type TgpiLearningCredentialStatus = "active" | "revoked";
+export type TgpiLearningCredentialStatus = "active" | "revoked" | "replaced";
 
 export type TgpiCredentialAnchorEvidence =
   | {
@@ -108,6 +108,16 @@ export type TgpiCredentialIdentityEvidence = {
 };
 
 export type TgpiLearningCredential = {
+  completedAt?: string;
+  replacedBy?: string;
+  replaces?: string;
+  documentNature?: string;
+  professionalEvidence?: {
+    sharing: boolean;
+    instructionLanguage: string;
+    certificateLanguage: string;
+    rubricVersion: string;
+  };
   achievementType: "Professional Certificate";
   assessmentScore: number;
   competencyIds: string[];

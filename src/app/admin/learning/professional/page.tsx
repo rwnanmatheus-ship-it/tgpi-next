@@ -13,6 +13,7 @@ export default async function ProfessionalCurriculumReview() {
     <Link href="/admin" className="underline focus-visible:outline-2 focus-visible:outline-blue-600">← Administração</Link>
     <p className="mt-8 text-xs font-semibold uppercase tracking-widest text-blue-700">TGPI Learning · revisão editorial</p>
     <h1 className="mt-3 text-3xl font-semibold tracking-tight">Dez percursos profissionais em preparação</h1>
+    <Link href="/admin/learning/professional/reviews" className="mt-4 inline-block rounded-xl bg-blue-600 px-5 py-3 font-semibold text-white">Avaliar projetos e contestações</Link>
     <p className="mt-4 max-w-3xl leading-7">Rascunhos iniciais em português. Esta área permite inspecionar o conteúdo, os projetos e as rubricas. Os cursos ainda não estão disponíveis para matrícula ou certificação. As estimativas de tempo não constituem carga horária final.</p>
     <nav aria-label="Cursos em revisão" className="mt-6 flex flex-wrap gap-2">{professionalCourseDrafts.map((course, index) => <a key={course.id} href={`#${course.id}`} className="rounded-full border border-slate-300 px-3 py-2 text-sm hover:bg-slate-100 focus-visible:outline-2 focus-visible:outline-blue-600">{String(index + 1).padStart(2, "0")} · {course.title}</a>)}</nav>
     <div className="mt-10 space-y-10">{professionalCourseDrafts.map(course => {

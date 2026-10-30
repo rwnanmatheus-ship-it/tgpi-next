@@ -25,16 +25,17 @@ export type CourseDraftInput = {
   continuation: string;
 };
 
-/** Editorial drafts are deliberately absent from courses.ts and the public catalogue. */
+/** Versioned release candidate. Production availability is controlled separately. */
 export function defineProfessionalDraft(input: CourseDraftInput): ProfessionalCourseDraft {
   return {
     ...input,
-    version: "0.1.0-draft",
-    status: "authoring",
+    version: "1.0.0",
+    status: "review",
     instructionLanguage: "pt-BR",
     certificateLanguage: "pt-BR",
-    access: "unresolved",
-    approval: { quizMinimum: 80, projectMinimum: 70, rubricVersion: "professional-1.0-draft" },
+    // Existing TGPI Free terms include current courses and account-based progress.
+    access: "free",
+    approval: { quizMinimum: 80, projectMinimum: 70, rubricVersion: "professional-1.0" },
     modules: input.modules.map((module, index) => {
       const id = `${input.id}-m${index + 1}`;
       const lesson: ProfessionalLesson = {

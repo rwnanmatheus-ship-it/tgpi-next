@@ -36,6 +36,8 @@ export async function createCertificatePdf(
     );
   }
   const document = await PDFDocument.create();
+  const portuguese = credential.professionalEvidence?.certificateLanguage === "pt-BR";
+  const privateSharing = credential.professionalEvidence?.sharing === false;
   document.registerFontkit(fontkit);
   document.setTitle(`${credential.courseTitle} — TGPI Certificate`);
   document.setAuthor("TGPI — The Global Polymath Institute");
@@ -187,15 +189,16 @@ export async function createCertificatePdf(
   );
   text("VERIFIED LEARNING", 648, 532, 9, sans, white, 155);
   text("PROFESSIONAL ACHIEVEMENT", 648, 516, 7, sans, rgb(0.9, 0.8, 0.53), 155);
-  text("CERTIFICATE OF ACHIEVEMENT", 58, 450, 9, sans, gold);
-  text("Professional Certificate", 56, 414, 29, serif);
-  text("AWARDED TO", 58, 383, 8, sans, muted);
+  text(portuguese ? "CONCLUSÃO E COMPETÊNCIAS AVALIADAS" : "CERTIFICATE OF ACHIEVEMENT", 58, 450, 9, sans, gold);
+  if (credential.documentNature) wrapped(credential.documentNature, 56, 424, 550, 19, serif, 2, 22);
+  else text("Professional Certificate", 56, 414, 29, serif);
+  text(portuguese ? "CONFERIDO A" : "AWARDED TO", 58, 383, 8, sans, muted);
   wrapped(credential.publicName, 56, 350, 550, 28, serif, 2, 30);
   if (options.personalBirthDate && /^\d{4}-\d{2}-\d{2}$/.test(options.personalBirthDate)) {
     text(`Date of birth: ${options.personalBirthDate} (holder-provided)`, 58, 304, 8, sans, muted, 548);
   }
   text(
-    "For successful completion of the applied learning and assessed performance in",
+    portuguese ? "Pela conclusão das atividades e aprovação na avaliação do curso" : "For successful completion of the applied learning and assessed performance in",
     58,
     286,
     9,
@@ -205,7 +208,7 @@ export async function createCertificatePdf(
   );
   wrapped(credential.courseTitle, 56, 260, 550, 19, serif, 2, 23);
   const skills = credential.skills
-    ?.slice(0, 3)
+    ?.slice(0, 4)
     .map((skill) => skill.name)
     .join("  /  ");
   text(
@@ -288,8 +291,8 @@ export async function createCertificatePdf(
           height: unit + 0.005,
           color: navy,
         });
-  centered("SCAN TO VERIFY", cx, 188, 8, sans, navy);
-  centered("Live status · Issuer record", cx, 174, 7, sans, muted);
+  centered(portuguese ? "LINK DE VERIFICAÇÃO" : "SCAN TO VERIFY", cx, 188, 8, sans, navy);
+  centered(privateSharing ? (portuguese ? "Privado até o titular compartilhar" : "Private until shared by holder") : "Live status · Issuer record", cx, 174, 7, sans, muted);
   const linkAnnotation = document.context.obj({
     Type: PDFName.of("Annot"),
     Subtype: PDFName.of("Link"),
@@ -314,20 +317,20 @@ export async function createCertificatePdf(
     {
       x: 495,
       w: 118,
-      label: "ISSUED",
+      label: portuguese ? "EMISSÃO" : "ISSUED",
       value: certificateDate(credential.issuedAt),
     },
     {
       x: 625,
       w: 70,
-      label: "MASTERY",
+      label: portuguese ? "PROJETO" : "MASTERY",
       value: `${credential.assessmentScore}%`,
     },
     {
       x: 707,
       w: 79,
-      label: "VOLUME",
-      value: `${credential.learningHours} hours`,
+      label: portuguese ? "CARGA ESTIMADA" : "VOLUME",
+      value: `${credential.learningHours} ${portuguese ? "horas" : "hours"}`,
     },
   ];
   page.drawLine({
@@ -340,6 +343,7 @@ export async function createCertificatePdf(
     text(column.label, column.x, 140, 7, sans, gold, column.w);
     text(column.value, column.x, 122, 10, sans, navy, column.w);
   }
+  if (credential.completedAt) text(`Conclusão: ${certificateDate(credential.completedAt)} · Curso ${credential.courseVersion} · Idioma: ${credential.professionalEvidence?.certificateLanguage || "pt-BR"}`, 58, 108, 6.5, sans, muted, 727);
   page.drawRectangle({
     x: 44,
     y: 65,
@@ -347,7 +351,7 @@ export async function createCertificatePdf(
     height: 37,
     color: rgb(0.94, 0.93, 0.89),
   });
-  const marks = ["IDENTITY LINKED", "ASSESSED LEARNING", "PUBLIC VERIFICATION"];
+  const marks = portuguese ? ["CONTA VINCULADA", "PROJETO AVALIADO", privateSharing ? "TITULAR CONTROLA O ACESSO" : "VERIFICAÇÃO PÚBLICA"] : ["IDENTITY LINKED", "ASSESSED LEARNING", "PUBLIC VERIFICATION"];
   marks.forEach((value, index) => {
     const x = 63 + index * 244;
     page.drawCircle({ x: x + 5, y: 84, size: 7, color: navy });
@@ -355,7 +359,7 @@ export async function createCertificatePdf(
     text(value, x + 20, 81, 8, sans, navy, 200);
   });
   text(
-    "TGPI-issued professional learning certificate. Not a government degree, professional license or third-party accreditation.",
+    portuguese ? "Curso livre TGPI. Não equivale a diploma, licença profissional ou certificação externa. Aceitação depende da instituição destinatária." : "TGPI-issued professional learning certificate. Not a government degree, professional license or third-party accreditation.",
     58,
     49,
     6.5,

@@ -19,14 +19,15 @@ export default function CredentialRecordView({
   const trustState = getCredentialTrustState(credential);
   const verified = trustState === "active_verified";
   const revoked = trustState === "revoked";
+  const replaced = trustState === "replaced";
   const label = verified
     ? "Credential verified"
-    : revoked
+    : replaced ? "Credential replaced" : revoked
       ? "Credential revoked"
       : "Integrity review required";
   const description = verified
     ? "The live issuer record is active and its server signature is valid."
-    : revoked
+    : replaced ? "This certificate was replaced. Its original evidence remains in the history; use the replacement record." : revoked
       ? "This certificate is no longer active. Its original issuance remains in the history."
       : "The record could not pass every integrity check. Do not present it as verified.";
   const verificationUrl = certificateVerificationUrl(credential.id);
@@ -81,6 +82,7 @@ export default function CredentialRecordView({
           owner={owner}
         />
         <CertificateDocument credential={credential} verified={verified} />
+        {credential.replacedBy && <p className="credential-status-note"><Link href={`${owner ? "/certificates/" : "/verify/credentials/"}${encodeURIComponent(credential.replacedBy)}`}>Abrir certificado substituto →</Link></p>}
         {owner && (
           <section className="credential-refresh-note">
             <div className="credential-refresh-icon" aria-hidden="true">

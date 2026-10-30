@@ -1,6 +1,8 @@
 # TGPI Professional Learning — candidate, 29 October 2026
 
-## Actual delivery status
+> Historical editorial diagnosis. Runtime implementation has since advanced; see [current runtime status](PROFESSIONAL_RUNTIME_STATUS.md). The editorial expansion and real learning validation below remain release requirements.
+
+## Actual delivery status at initial draft
 
 This candidate is **not a completed or published ten-course release**. It contains an initial Portuguese editorial draft of eight lessons for each of ten proposed courses (80 lessons), ten diagnostics, ten project briefs and course-specific weighted rubrics. Lessons include an explanation, worked example, guided task, independent task, success criteria, common errors and recovery. The current short lessons require substantive expansion and subject review before they can support the requested professional courses.
 

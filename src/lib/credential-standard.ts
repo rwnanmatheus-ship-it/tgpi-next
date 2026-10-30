@@ -11,6 +11,7 @@ export const TGPI_CREDENTIAL_ALIGNMENT_TARGETS = [
 export type CredentialTrustState =
   | "active_verified"
   | "revoked"
+  | "replaced"
   | "integrity_review";
 
 type PortableCredentialSource = {
@@ -52,6 +53,8 @@ export function getCredentialTrustState(input: {
   status: string;
 }): CredentialTrustState {
   if (input.status === "revoked") return "revoked";
+  if (input.status === "replaced") return "replaced";
+  if (input.status !== "active") return "integrity_review";
   return input.integrityVerified ? "active_verified" : "integrity_review";
 }
 

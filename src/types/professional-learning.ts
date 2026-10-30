@@ -78,6 +78,7 @@ export type ProfessionalReleaseEvidence = {
 
 export type ProfessionalAssessmentQuestion = {
   id: string;
+  prompt: string;
   options: Array<{ id: string; label: string }>;
   correctOptionId: string;
   essential: boolean;

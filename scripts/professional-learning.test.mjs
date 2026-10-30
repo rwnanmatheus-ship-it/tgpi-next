@@ -59,7 +59,7 @@ test("all ten drafts retain eight distinct module lessons, projects and Portugue
 
 test("drafts cannot be released on a build or an absent/stale approval", () => {
   for (const item of courses) {
-    assert.deepEqual(professionalReleaseBlockers(item), ["curriculum_not_ready", "access_policy_unresolved", "release_evidence_missing_or_stale"]);
+    assert.deepEqual(professionalReleaseBlockers(item), ["curriculum_not_ready", "release_evidence_missing_or_stale"]);
   }
   const evidence = { courseId: course.id, courseVersion: "old", artworkIntegrated: true };
   assert.ok(professionalReleaseBlockers(course, evidence).includes("release_evidence_missing_or_stale"));
