@@ -16,6 +16,7 @@ new Function("require", "exports", compiled)((id) => {
   if (id === "@/lib/countries") return { getCountry: () => undefined };
   if (id === "@/lib/tgpi-comparison") return { isComparisonGoal: () => false };
   if (id === "@clerk/nextjs/server") return {};
+  if (id === "@/lib/workspace-history.server") return { archiveWorkspaceHistory: async () => undefined };
   throw new Error(`Unexpected import ${id}`);
 }, exports);
 const { applyActivationMutation, parseActivationMutation } = exports;
