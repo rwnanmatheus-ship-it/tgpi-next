@@ -42,3 +42,6 @@ yarn-error.log*
 next-env.d.ts
 
 .vercel
+
+# Resumable offline translation batches and usage ledger (no credentials)
+/.localization-cache/

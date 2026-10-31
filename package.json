@@ -33,7 +33,10 @@
     "test:localization": "node --test scripts/localization.test.mjs",
     "test:learning-workshops": "node --test scripts/learning-workshops.test.mjs",
     "test:professional-learning": "node --experimental-strip-types --test scripts/professional-learning.test.mjs scripts/professional-runtime.test.mjs",
-    "test:billing": "node --experimental-strip-types --test scripts/checkout-intent.test.mjs scripts/checkout-route.test.mjs scripts/billing-sync.test.mjs"
+    "test:billing": "node --experimental-strip-types --test scripts/checkout-intent.test.mjs scripts/checkout-route.test.mjs scripts/billing-sync.test.mjs",
+    "localization:inventory": "node scripts/localization/generate.mjs",
+    "localization:generate": "node scripts/localization/generate.mjs --execute",
+    "test:localization-pipeline": "node --test scripts/localization-pipeline.test.mjs"
   },
   "dependencies": {
     "@clerk/localizations": "^4.24.2",
