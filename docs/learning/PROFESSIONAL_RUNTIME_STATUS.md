@@ -11,3 +11,9 @@ Verificações locais: 14 testes de política/runtime com fixtures sintéticas, 
 Pendências de liberação: testar matrícula, recarga, duas contas e arquivos privados no backend real; submeter projeto e revisar com conta administrativa distinta e qualificada; conferir emissão/PDF/QR/estados no ambiente real; inspeção responsiva e teclado; revisão editorial e teste pedagógico representativo dos dez cursos. Build e testes sintéticos não substituem esses critérios. Não habilitar produção sem registrá-los.
 
 Reversão: conservar branch de produção anterior; candidato não muda matrículas ou certificados antigos e não migra/destrói coleções. Novos registros ficam em caminhos versionados de tgpiLearningUsers. A chave existente de assinatura também deriva chaves de arquivos/áudio com domínios separados: sua rotação exige estratégia de chaves antigas antes de remover o segredo anterior. Uploads limitados a seis vínculos/projeto, dez arquivos/dia/conta e 3 MB por arquivo; áudio até 600 KB e cinco/dia.
+
+## Atualização editorial e aceite observado — 31/10/2026
+
+Adicionados 80 laboratórios originais, um por módulo, apresentados na aula e no download. Os casos são fictícios, com entradas, resultados esperados e variações; o dataset público mantém proveniência separada. Esta ampliação não representa aprovação independente nem tempo de estudo medido.
+
+Na sessão anterior do preview a matrícula e uma prática identificada como teste técnico persistiram após recarga; outra conta apresentou diagnóstico inicial sem o progresso da primeira. O painel de revisão retornou 404 para ambas, em concordância com requireAdmin e privateMetadata.role. Nenhuma avaliação ou emissão real foi realizada. O papel administrativo precisa ser configurado pelo responsável no Clerk de desenvolvimento utilizado pelo preview, preservando aluno e revisor distintos. Não substituir esta exigência por bypass ou autoavaliação.
