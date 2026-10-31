@@ -13,10 +13,10 @@ export type CredentialPortfolioItem = {
   issuedAt: string;
   learningHours: number;
   skills: Array<{ id: string; level: string; name: string }>;
-  status: "active" | "revoked";
+  status: "active" | "revoked" | "replaced";
 };
 
-type PortfolioFilter = "all" | "active" | "revoked";
+type PortfolioFilter = "all" | "active" | "revoked" | "replaced";
 type PortfolioSort = "newest" | "score" | "title";
 
 function formatDate(value: string) {
@@ -128,6 +128,7 @@ export default function CredentialPortfolioExplorer({
                 { value: "all", label: "All records" },
                 { value: "active", label: "Earned" },
                 { value: "revoked", label: "Revoked" },
+                { value: "replaced", label: "Replaced" },
               ] as const
             ).map((option) => (
               <button
@@ -157,7 +158,7 @@ export default function CredentialPortfolioExplorer({
                   <span
                     className={`certificate-status${item.status === "revoked" ? " revoked" : ""}`}
                   >
-                    {item.status === "active" ? "Earned" : "Revoked"}
+                    {item.status === "active" ? "Earned" : item.status === "replaced" ? "Replaced" : "Revoked"}
                   </span>
                 </div>
                 <h3>{item.courseTitle}</h3>

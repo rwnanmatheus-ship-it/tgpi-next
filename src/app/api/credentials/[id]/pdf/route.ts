@@ -34,7 +34,7 @@ export async function GET(
         { error: "Certificate not found in your account." },
         { status: 404, headers },
       );
-    const credential = await getPublicLearningCredential(id);
+    const credential = await getPublicLearningCredential(id, true);
     if (
       !credential ||
       getCredentialTrustState(credential) !== "active_verified"

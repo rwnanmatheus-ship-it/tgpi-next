@@ -8,6 +8,8 @@ import { courses } from "@/data/courses";
 import type { Metadata } from "next";
 import { currentUser } from "@clerk/nextjs/server";
 import GlobalWorkspaceOS from "@/components/profile/GlobalWorkspaceOS";
+import ProfessionalResume from "@/components/courses/ProfessionalResume";
+import { Suspense } from "react";
 import {
   getAccountProfileCompletion,
   mergeAccountProfileWithOnboarding,
@@ -99,7 +101,7 @@ export default async function ProfilePage({
 
   const rank = getGlobalRank({ ...getGlobalRankSignals(activation), activationCompletion: workspaceModel.activationCompletion, planCompletion: workspaceModel.completion, profileCompletion });
   return (
-    <GlobalWorkspaceOS
+    <><Suspense fallback={null}><ProfessionalResume uid={session.userId} /></Suspense><GlobalWorkspaceOS
       rank={rank}
       userId={session.userId}
       resources={buildWorkspaceResources(activation, courses, getAllCountries())}
@@ -122,6 +124,6 @@ export default async function ProfilePage({
       }}
       model={workspaceModel}
       onboardingCompleted={params.onboarding === "completed"}
-    />
+    /></>
   );
 }

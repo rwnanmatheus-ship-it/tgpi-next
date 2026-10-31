@@ -1,0 +1,19 @@
+{
+  "publisher": "World Bank",
+  "dataset": "World Development Indicators",
+  "indicator": "NY.GDP.PCAP.CD",
+  "sourceUrl": "https://api.worldbank.org/v2/country/BRA;PRT;CAN;DEU/indicator/NY.GDP.PCAP.CD?date=2020:2023&format=json&per_page=100",
+  "license": "CC BY 4.0",
+  "licenseUrl": "https://datacatalog.worldbank.org/public-licenses",
+  "retrievedOn": "2026-10-29",
+  "sourceUpdatedOn": "2026-10-08",
+  "observations": 16,
+  "rawSha256": "186c8df1099b8df2bdbda35af083815935d28a153e95f7ff5d929422ded0c509",
+  "changes": "Selected four countries and years 2020–2023; renamed columns and sorted rows. Numeric observations unchanged.",
+  "dictionary": {
+    "country_iso3": "ISO3 country code; part of the row key",
+    "country": "Country label from source",
+    "year": "Calendar year; part of the row key",
+    "gdp_per_capita_current_usd": "GDP per capita in current US dollars, not wages, purchasing power or living costs"
+  }
+}

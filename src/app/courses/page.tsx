@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import CapabilitySystemRail from "@/components/capability/CapabilitySystemRail";
 import LearningPathExplorer from "@/components/courses/LearningPathExplorer";
+import { professionalCatalog } from "@/lib/learning/professional-catalog";
 import TGPIPageShell from "@/components/TGPIPageShell";
 import { coursesOverview } from "@/data/courses-overview";
 import { LocalizedText } from "@/components/localization/LocaleProvider";
@@ -18,7 +19,7 @@ export const metadata: Metadata = {
 export default async function CoursesPage() {
   const locale = await getLocale();
   const t = (text: string) => translate(locale, text);
-  const catalog = [...coursesOverview].sort((a, b) => Number(b.id === "global-english-2026") - Number(a.id === "global-english-2026"));
+  const catalog = [...professionalCatalog(process.env.VERCEL_ENV || process.env.NODE_ENV), ...coursesOverview].sort((a, b) => Number(b.id === "global-english-2026") - Number(a.id === "global-english-2026"));
   const available = catalog.filter(course => course.status === "available");
   return <TGPIPageShell width="capability">
     <nav aria-label={t("Learning navigation")} className="flex min-h-12 flex-wrap items-center justify-between gap-3 py-3 text-sm font-semibold text-[var(--tgpi-navy)]"><span><LocalizedText text="TGPI / Learning" /></span><div className="flex gap-5"><Link href="/dashboard"><LocalizedText text="My workspace" /></Link><Link href="/certificates"><LocalizedText text="Certificates ↗" /></Link></div></nav>

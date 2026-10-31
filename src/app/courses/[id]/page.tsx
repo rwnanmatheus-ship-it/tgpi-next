@@ -3,6 +3,8 @@ import { notFound, redirect } from "next/navigation";
 import CourseWorkshop from "@/components/courses/CourseWorkshop";
 import CourseOverviewExperience from "@/components/courses/CourseOverviewExperience";
 import { courses, getCourse } from "@/data/courses";
+import ProfessionalOverview from "@/components/courses/ProfessionalOverview";
+import { getProfessionalCourse, professionalCourseEnabled } from "@/lib/learning/professional-runtime";
 
 type CoursePageProps = {
   params: Promise<{ id: string }>;
@@ -16,6 +18,8 @@ export async function generateMetadata({
   params,
 }: CoursePageProps): Promise<Metadata> {
   const { id } = await params;
+  const professional = getProfessionalCourse(id);
+  if (professional && professionalCourseEnabled(id, process.env.VERCEL_ENV || process.env.NODE_ENV)) return { title: `${professional.title} | TGPI Learning`, description: professional.outcomes.join(" ") };
   const course = getCourse(id);
 
   if (!course) return { title: "Course not found | TGPI" };
@@ -28,6 +32,8 @@ export async function generateMetadata({
 
 export default async function CoursePage({ params }: CoursePageProps) {
   const { id } = await params;
+  const professional = getProfessionalCourse(id);
+  if (professional && professionalCourseEnabled(id, process.env.VERCEL_ENV || process.env.NODE_ENV)) return <ProfessionalOverview course={professional} />;
   const course = getCourse(id);
 
   if (!course) notFound();

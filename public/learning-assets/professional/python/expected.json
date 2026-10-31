@@ -1,0 +1,8 @@
+{
+  "groups": [
+    {"category": "food", "currency": "EUR", "total": "300.00"},
+    {"category": "housing", "currency": "EUR", "total": "900.00"},
+    {"category": "transport", "currency": "BRL", "total": "100.00"}
+  ],
+  "rows": 4
+}
