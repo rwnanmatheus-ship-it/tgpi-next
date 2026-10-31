@@ -230,7 +230,7 @@ export default function CompareCountryPicker({
               aria-expanded="false"
               className="min-h-11 rounded-xl border border-[var(--tgpi-border)] bg-white px-4 text-xs font-extrabold text-[var(--tgpi-navy)] transition hover:border-[var(--tgpi-gold)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
             >
-              Edit comparison
+              {t("Edit comparison")}
             </button>
             <button
               type="button"
@@ -238,7 +238,7 @@ export default function CompareCountryPicker({
               disabled={isPending || isSavingComparison || selectedSlugs.length < 2}
               className="min-h-11 rounded-xl bg-[var(--tgpi-gold)] px-5 text-xs font-extrabold text-[var(--tgpi-navy-deep)] transition hover:bg-[var(--tgpi-gold-light)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-navy)] disabled:cursor-not-allowed disabled:opacity-45"
             >
-              {isSavingComparison ? "Saving…" : isPending ? "Building…" : "Rebuild decision"}
+              {t(isSavingComparison ? "Saving…" : isPending ? "Building…" : "Rebuild decision")}
             </button>
           </div>
         </div>
@@ -247,13 +247,13 @@ export default function CompareCountryPicker({
           <div className="flex flex-col gap-3 border-b border-[var(--tgpi-border-soft)] pb-4 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold-strong)]">
-                Comparison builder
+                {t("Comparison builder")}
               </p>
               <h2
                 id="comparison-builder-title"
                 className="mt-1 max-w-3xl font-[var(--tgpi-font-display)] text-2xl font-semibold text-[var(--tgpi-navy)] sm:text-3xl"
               >
-                Build the decision set. TGPI will expose the trade-offs.
+                {t("Build the decision set. TGPI will expose the trade-offs.")}
               </h2>
             </div>
             <div className="flex flex-wrap items-center gap-3">
@@ -264,14 +264,14 @@ export default function CompareCountryPicker({
                   aria-expanded="true"
                   className="inline-flex min-h-11 items-center text-sm font-extrabold text-[var(--tgpi-muted)] transition hover:text-[var(--tgpi-navy)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
                 >
-                  Keep compact ↑
+                  {t("Keep compact ↑")}
                 </button>
               ) : null}
               <Link
                 href="/countries#country-explorer"
                 className="inline-flex min-h-11 items-center text-sm font-extrabold text-[var(--tgpi-gold-strong)] underline decoration-[var(--tgpi-gold)]/40 underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
               >
-                Browse all 195 profiles
+                {t("Browse all 195 profiles")}
               </Link>
             </div>
           </div>
@@ -284,18 +284,18 @@ export default function CompareCountryPicker({
             {slots.map((slug, index) => (
               <label key={index} className="block">
                 <span className="mb-2 block text-[11px] font-extrabold uppercase tracking-[0.16em] text-[var(--tgpi-muted)]">
-                  {index === 0
+                  {t(index === 0
                     ? "Country A"
                     : index === 1
                       ? "Country B"
-                      : "Country C · optional"}
+                      : "Country C · optional")}
                 </span>
                 <select
                   value={slug}
                   onChange={(event) => updateSlot(index, event.target.value)}
                   className="h-12 w-full rounded-2xl border border-[var(--tgpi-border)] bg-white px-4 text-sm font-bold text-[var(--tgpi-navy)] outline-none transition focus:border-[var(--tgpi-gold)] focus:ring-2 focus:ring-[var(--tgpi-gold)]/25"
                 >
-                  <option value="">Choose a country</option>
+                  <option value="">{t("Choose a country")}</option>
                   {countries.filter(country => slots.includes(country.slug) || countrySearchScore(searchTerms.get(country.slug) ?? [], search) > 0).map((country) => {
                     const usedElsewhere = slots.some(
                       (selected, selectedIndex) =>
@@ -317,7 +317,7 @@ export default function CompareCountryPicker({
 
             <label className="block">
               <span className="mb-2 block text-[11px] font-extrabold uppercase tracking-[0.16em] text-[var(--tgpi-muted)]">
-                Decision lens
+                {t("Decision lens")}
               </span>
               <select
                 value={goal}
@@ -330,7 +330,7 @@ export default function CompareCountryPicker({
               >
                 {COMPARISON_GOALS.map((value) => (
                   <option key={value} value={value}>
-                    {getComparisonGoalConfig(value).label}
+                    {t(getComparisonGoalConfig(value).label)}
                   </option>
                 ))}
               </select>
@@ -342,11 +342,11 @@ export default function CompareCountryPicker({
               disabled={isPending || isSavingComparison || selectedSlugs.length < 2}
               className="inline-flex h-12 items-center justify-center rounded-2xl bg-[var(--tgpi-navy)] px-6 text-sm font-extrabold text-white shadow-lg transition hover:-translate-y-0.5 hover:bg-[var(--tgpi-navy-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)] disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:translate-y-0"
             >
-              {isSavingComparison
+              {t(isSavingComparison
                 ? "Saving…"
                 : isPending
                   ? "Building…"
-                  : "Compare now"}
+                  : "Compare now")}
             </button>
           </div>
 
@@ -371,7 +371,7 @@ export default function CompareCountryPicker({
                 disabled={selectedSlugs.length < 2}
                 className="min-h-10 rounded-xl border border-[var(--tgpi-border)] bg-white px-4 text-xs font-extrabold text-[var(--tgpi-navy)] transition hover:border-[var(--tgpi-gold)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)] disabled:opacity-40"
               >
-                Copy decision link
+                {t("Copy decision link")}
               </button>
               <button
                 type="button"
@@ -379,7 +379,7 @@ export default function CompareCountryPicker({
                 disabled={!slots[0] || !slots[1]}
                 className="min-h-10 rounded-xl border border-[var(--tgpi-border)] bg-white px-4 text-xs font-extrabold text-[var(--tgpi-navy)] transition hover:border-[var(--tgpi-gold)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)] disabled:opacity-40"
               >
-                Swap A ↔ B
+                {t("Swap A ↔ B")}
               </button>
               <button
                 type="button"

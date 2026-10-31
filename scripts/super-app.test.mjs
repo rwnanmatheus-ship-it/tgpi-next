@@ -73,7 +73,7 @@ test("desktop navbar exposes the same global app launcher", () => {
   const source = readFileSync(new URL("../src/components/Navbar.tsx", import.meta.url), "utf8");
   const launcher = readFileSync(new URL("../src/components/navigation/LauncherButton.tsx", import.meta.url), "utf8");
   assert.match(source, /<LauncherButton/);
-  assert.match(launcher, /aria-label="Open TGPI apps"/);
+  assert.match(launcher, /aria-label=\{t\("Open TGPI apps"\)\}/);
   assert.match(launcher, /aria-keyshortcuts="Control\+K Meta\+K"/);
   assert.match(launcher, /SUPER_APP_OPEN_EVENT/);
 });

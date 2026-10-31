@@ -255,7 +255,7 @@ test("production anchor runtime has authentication, environment and spend guards
 });
 
 test("Vercel schedules one daily production anchor batch", () => {
-  assert.deepEqual(vercelConfig.crons, [
+  assert.deepEqual(vercelConfig.crons.filter(cron => cron.path === "/api/cron/global-key-anchor"), [
     {
       path: "/api/cron/global-key-anchor",
       schedule: "17 3 * * *",
