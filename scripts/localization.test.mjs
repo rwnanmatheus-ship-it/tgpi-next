@@ -328,3 +328,16 @@ test('practice interface follows all six locales while English rehearsal input k
     }
   }
 });
+
+test('global installation, offline and update notices have six-language copy', () => {
+  const path = 'src/components/app-runtime/TgpiAppRuntime.tsx';
+  const source = ts.createSourceFile(path, fs.readFileSync(path, 'utf8'), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+  const keys = [];
+  function visit(node) {
+    if (ts.isPropertyAssignment(node) && ['eyebrow', 'title', 'description'].includes(node.name.getText(source)) && ts.isStringLiteral(node.initializer)) keys.push(node.initializer.text);
+    ts.forEachChild(node, visit);
+  }
+  visit(source);
+  assert.equal(keys.length, 12);
+  for (const key of keys) for (const locale of locales) assert.ok(messages[key]?.[locale]?.trim(), `${locale}: ${key}`);
+});

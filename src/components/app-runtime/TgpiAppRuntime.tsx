@@ -257,10 +257,10 @@ export default function TgpiAppRuntime() {
         </span>
         <div className="min-w-0 flex-1">
           <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-[#E5C46F]">
-            {content.eyebrow}
+            <LocalizedText text={content.eyebrow} />
           </p>
-          <p className="mt-1 text-sm font-extrabold text-white">{content.title}</p>
-          <p className="mt-1 text-xs leading-5 text-[#B4C0CC]">{content.description}</p>
+          <p className="mt-1 text-sm font-extrabold text-white"><LocalizedText text={content.title} /></p>
+          <p className="mt-1 text-xs leading-5 text-[#B4C0CC]"><LocalizedText text={content.description} /></p>
           <div className="mt-4 flex flex-wrap gap-2">
             {notice === "install" ? (
               <button
