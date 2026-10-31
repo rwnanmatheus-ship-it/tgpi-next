@@ -65,3 +65,17 @@ Usar duas contas controladas em Clerk de desenvolvimento e, para cursos profissi
 ## Publicação
 
 Somente branch e preview estão previstos neste incremento. Produção permanece no commit inicial enquanto houver os bloqueadores descritos. Não há testes pós-publicação de uma nova produção porque ela não foi promovida. O commit/deployment do candidato e o resultado final do build serão registrados após a criação.
+
+## Continuação — candidato de cobrança e publicação independente
+
+A solicitação seguinte autorizou concluir e publicar todas as atualizações possíveis. O candidato financeiro agora usa um registro canônico transacional em `tgpiLearningUsers/{uid}/billing/subscription` e recibos de eventos em `billingEvents`. Os contratos públicos permanecem SubscriptionRecord v1. Registros anteriores do Clerk são preservados e servem de fallback somente enquanto o documento canônico não existir; falhas de leitura não acionam fallback. Autorização Premium, Workspace, configurações, status e notificações consultam o mesmo serviço. Atualizações atrasadas do espelho no Clerk não concedem acesso. Cada tentativa transacional relê assinaturas atuais no Stripe e grava estado e recibo juntos. Eventos antigos não restauram snapshots antigos, e uma exclusão antiga não cancela uma assinatura nova ativa. Clientes excluídos e preços divergentes revogam acesso. Histórico truncado ou proprietário divergente falham sem conceder benefícios.
+
+Dez testes adicionais exercitam concorrência otimista com repetição, 20 entregas simultâneas, eventos antigos e com o mesmo segundo, espelho atrasado, falhas de persistência/Clerk, mudança de preço, inadimplência e exclusão de customer. Total local: 386 testes aprovados. São testes com provider e armazenamento simulados, não Stripe test real. A migração lógica de autoridade requer aceite real em preview e revisão das regras implantadas antes da produção. Não é migração destrutiva nem alteração de preço. Metadados Clerk antigos permanecem disponíveis para rollback, mas um rollback depois de eventos novos exige reconciliar o estado Stripe; não confiar cegamente no espelho.
+
+O preview anterior apresentou sessão autenticada em modo de desenvolvimento, com perfil inicial sem dados pessoais. Foi executada a comparação Portugal/Canadá: Workspace passou a exibir dois países e uma comparação salva. Isto comprova integração básica de comparação/Workspace nessa sessão; ainda não comprova isolamento entre contas ou persistência após novo login.
+
+A publicação independente deve conter somente controles/traduções de comparação e ajustes de testes já validados; não levar as alterações financeiras sem aceite. Ela não aprova o lançamento completo nem oculta o P0 do webhook ainda em produção. O novo candidato financeiro deve continuar separado no PR #88.
+
+Fontes técnicas consultadas: https://docs.stripe.com/webhooks (ordem e repetição de eventos), https://firebase.google.com/docs/firestore/transaction-data-contention (isolamento serializável) e documentação empacotada do Next.js 16.3.4.
+
+Nesta continuação, o build padrão local encontrou falha de persistência do cache Turbopack. O diretório gerado foi preservado em scratch e o build limpo avançou até uma falha interna do next/font/google/Turbopack (import map). Sem alterar fontes ou dependências do produto, foi iniciado também o build oficial com `npm run build -- --webpack`. O resultado remoto padrão deve ser confirmado antes de qualquer promoção; não atribuir essa falha a TypeScript nem omiti-la.
