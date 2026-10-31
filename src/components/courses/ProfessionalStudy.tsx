@@ -1,4 +1,5 @@
 "use client";
+import { professionalEarlyAccessNotice } from "@/lib/learning/professional-runtime";
 import { useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
@@ -101,7 +102,7 @@ function StudyAccount({ course }: { course: ProfessionalCourseDraft }) {
   if (loading) return <main className="mx-auto max-w-5xl px-4 py-12" role="status">{ui.loading}</main>;
   return <main lang="pt-BR" className="mx-auto max-w-6xl px-4 py-8 text-slate-950">
     <Link href={`/courses/${course.id}`} className="text-sm underline">← {ui.back}</Link><h1 className="mt-5 text-3xl font-semibold">{course.title}</h1>
-    <p className="mt-3 text-sm leading-7">{ui.instructionNotice}</p><p className="mt-3 text-sm leading-7">Instrução: português · exemplos de idioma preservados · {course.version}. O registro das práticas indica atividade realizada; a competência depende do questionário e do projeto avaliado.</p>
+    <p role="note" className="mt-5 rounded-xl border border-amber-300 bg-amber-50 p-4 text-sm leading-7">{professionalEarlyAccessNotice}</p><p className="mt-3 text-sm leading-7">{ui.instructionNotice}</p><p className="mt-3 text-sm leading-7">Instrução: português · exemplos de idioma preservados · {course.version}. O registro das práticas indica atividade realizada; a competência depende do questionário e do projeto avaliado.</p>
     <div className="mt-4 flex flex-wrap gap-4 text-sm font-semibold text-blue-700"><a href={`${endpoint}/materials`} download>Baixar material e caderno de prática</a>{course.id === "python-automacao-profissionais" && ["README.md", "expenses.csv", "expected.json", "solution.py", "test_solution.py"].map(file => <a key={file} href={`/learning-assets/professional/python/${file}`} download>{file}</a>)}{course.id === "planilhas-decisoes-profissionais" && <><a href="/learning-assets/professional/spreadsheets/exercise.xlsx" download>Planilha de exercício</a><a href="/learning-assets/professional/spreadsheets/solution.xlsx" download>Solução comentada</a></>}{course.id === "analise-dados-power-bi-ia" && <><a href="/learning-assets/professional/data/world-bank-gdp.csv" download>Dataset público</a><a href="/learning-assets/professional/data/README.md" download>Origem e dicionário</a><a href="/learning-assets/professional/data/power-query.m" download>Power Query comentado</a></>}</div>
     {error && <div role="alert" className="my-4 rounded-xl border border-red-300 bg-red-50 p-4"><p>{error}</p><button onClick={() => window.location.reload()} className="mt-2 underline">Recarregar o último registro confirmado</button><p className="mt-2 text-xs">Copie os campos ainda não salvos antes de recarregar.</p></div>}
     {message && <p role="status" className="my-4 rounded-xl bg-blue-50 p-4">{message}</p>}
