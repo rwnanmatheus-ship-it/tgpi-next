@@ -1,3 +1,4 @@
+import { getUserBillingRecord } from "@/lib/billing.server";
 import { archiveWorkspaceHistory, loadWorkspaceHistory } from '@/lib/workspace-history.server';
 import { getGlobalRankSignals } from '@/lib/global-rank-signals';
 import { getGlobalRank } from '@/lib/global-ranks';
@@ -20,10 +21,6 @@ import {
   TGPI_ACTIVATION_METADATA_KEY,
 } from "@/lib/activation-progress";
 import { formatTgpiGlobalId, requireUser } from "@/lib/auth/guards";
-import {
-  normalizeSubscriptionRecord,
-  TGPI_BILLING_METADATA_KEY,
-} from "@/lib/billing";
 import { getAllCountries } from "@/lib/countries";
 import { buildGlobalWorkspaceModel } from "@/lib/global-workspace";
 import { normalizeOnboardingData } from "@/lib/onboarding";
@@ -63,10 +60,7 @@ export default async function ProfilePage({
   );
   await archiveWorkspaceHistory(session.userId, activation).catch(() => null);
   const historyPage = await loadWorkspaceHistory(session.userId).catch(() => ({ events: [], cursor: null, coverageStartedAt: null, available: false }));
-  const billing = normalizeSubscriptionRecord(
-    user?.privateMetadata[TGPI_BILLING_METADATA_KEY],
-    session.userId,
-  );
+  const billing = await getUserBillingRecord(session.userId);
   const controlledAccessMode = await getControlledPremiumAccessMode(
     {
       uid: session.userId,

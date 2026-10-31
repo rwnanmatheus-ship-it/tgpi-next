@@ -1,3 +1,4 @@
+import { getUserBillingRecord } from "@/lib/billing.server";
 import { ensureMemberNumber } from '@/lib/members/identity.server';
 import { courses } from "@/data/courses";
 import { getGlobalRankSignals } from "@/lib/global-rank-signals";
@@ -16,10 +17,6 @@ import {
 } from "@/lib/activation-progress";
 import { tgpiClerkAppearance } from "@/lib/auth/clerk-appearance";
 import { formatTgpiGlobalId, requireUser } from "@/lib/auth/guards";
-import {
-  normalizeSubscriptionRecord,
-  TGPI_BILLING_METADATA_KEY,
-} from "@/lib/billing";
 import { getAllCountries } from "@/lib/countries";
 import { getGlobalRank } from "@/lib/global-ranks";
 import { buildGlobalWorkspaceModel } from "@/lib/global-workspace";
@@ -66,10 +63,7 @@ export default async function SecurityPage() {
   const activation = normalizeActivationProgress(
     user?.privateMetadata[TGPI_ACTIVATION_METADATA_KEY],
   );
-  const billing = normalizeSubscriptionRecord(
-    user?.privateMetadata[TGPI_BILLING_METADATA_KEY],
-    session.userId,
-  );
+  const billing = await getUserBillingRecord(session.userId);
   const controlledAccessMode = await getControlledPremiumAccessMode({
     uid: session.userId,
     email,

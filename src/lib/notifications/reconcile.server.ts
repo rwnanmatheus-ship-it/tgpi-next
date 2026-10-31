@@ -1,3 +1,4 @@
+import { getUserBillingRecord } from "@/lib/billing.server";
 import { communityNotificationEvents } from "@/lib/community/store.server";
 import "server-only";
 import { TGPI_PREMIUM_PRICE_ID } from "@/lib/stripe";
@@ -6,10 +7,6 @@ import {
   normalizeActivationProgress,
   TGPI_ACTIVATION_METADATA_KEY,
 } from "@/lib/activation-progress";
-import {
-  normalizeSubscriptionRecord,
-  TGPI_BILLING_METADATA_KEY,
-} from "@/lib/billing";
 import { listUserLearningCredentials } from "@/lib/learning-records.server";
 import { billingEvent, welcomeEvent, type NotificationEvent } from "./model";
 import {
@@ -25,10 +22,7 @@ export async function collectNotificationEvents(uid: string) {
   const progress = normalizeActivationProgress(
     user.privateMetadata[TGPI_ACTIVATION_METADATA_KEY],
   );
-  const billing = normalizeSubscriptionRecord(
-    user.privateMetadata[TGPI_BILLING_METADATA_KEY],
-    uid,
-  );
+  const billing = await getUserBillingRecord(uid);
   const events: NotificationEvent[] = [
     { ...welcomeEvent, occurredAt: new Date(user.createdAt).toISOString() },
     {

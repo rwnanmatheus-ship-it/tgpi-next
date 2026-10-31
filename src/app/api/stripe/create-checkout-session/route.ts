@@ -1,3 +1,4 @@
+import { reserveCheckoutIntent } from "@/lib/checkout-intent.server";
 import { matchesPremiumOffer } from "@/lib/commercial-offer";
 import { recordFunnelEvent, requestFunnelConsent } from "@/lib/funnel.server";
 import { NextResponse } from "next/server";
@@ -51,7 +52,7 @@ export async function POST(request: Request) {
     const price = await stripe.prices.retrieve(TGPI_PREMIUM_PRICE_ID);
     if (!matchesPremiumOffer(price)) return NextResponse.json({ error: "The membership offer is being reviewed. Please try again later.", code: "OFFER_MISMATCH" }, { status: 503 });
     const baseUrl = getBaseUrl(request);
-    const customerId = await getOrCreateStripeCustomer(user.uid, user.email);
+    const customerId = await getOrCreateStripeCustomer(user.uid);
     const existingSubscription =
       await findLatestStripeSubscription(customerId);
 
@@ -78,8 +79,13 @@ export async function POST(request: Request) {
       }
     }
 
+    const intent = await reserveCheckoutIntent({
+      uid: user.uid, customerId, priceId: TGPI_PREMIUM_PRICE_ID,
+      baseUrl, analyticsConsent: requestFunnelConsent(request),
+    });
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
+      expires_at: intent.expiresAt,
       line_items: [
         {
           price: TGPI_PREMIUM_PRICE_ID,
@@ -97,17 +103,24 @@ export async function POST(request: Request) {
         metadata: {
           tgpiUserId: user.uid,
           plan: "premium",
-          tgpiAnalyticsConsent: requestFunnelConsent(request) ? "granted" : "denied",
+          tgpiAnalyticsConsent: intent.analyticsConsent ? "granted" : "denied",
         },
       },
       success_url: `${baseUrl}/upgrade-success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${baseUrl}/pricing?canceled=1`,
       allow_promotion_codes: true,
       locale: "auto",
-    });
+    }, { idempotencyKey: `tgpi-checkout-v1-${intent.id}` });
+
+    // Replayed requests may return a completed or expired Stripe session.
+    // The redirect never grants benefits; billing synchronization remains authoritative.
+    const currentSession = await stripe.checkout.sessions.retrieve(session.id);
+    if (currentSession.status !== "open" || !currentSession.url) {
+      return NextResponse.json({ error: "This checkout is no longer open. Check your billing status before trying again.", code: "CHECKOUT_NOT_OPEN" }, { status: 409 });
+    }
 
     recordFunnelEvent("checkout_started", requestFunnelConsent(request));
-    return NextResponse.json({ url: session.url });
+    return NextResponse.json({ url: currentSession.url }, { headers: { "Cache-Control": "private, no-store" } });
   } catch (error) {
     const status = error instanceof TgpiAuthenticationError ? 401 : 500;
 
