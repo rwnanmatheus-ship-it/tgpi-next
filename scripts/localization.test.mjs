@@ -233,7 +233,7 @@ test('cookies and refund policies translate every paragraph without changing lin
         if (name === 'react/jsx-runtime') return runtime;
         if (name === '@/lib/localization/server') return { getLocale: async () => locale };
         if (name === '@/lib/localization/messages') return { translate };
-        if (name === '@/components/localization/LocaleProvider') return { useLocale: () => ({ t: (key, values) => translate(locale, key, values) }) };
+        if (name === '@/components/localization/LocaleProvider') return { useLocale: () => ({ t: (key, values) => translate(locale, key, values) }), LocalizedText: ({ text }) => translate(locale, text) };
         if (name === '@/lib/funnel') return { FUNNEL_CONSENT_COOKIE: 'tgpi_analytics_consent', hasFunnelConsent: () => false };
         if (name === 'next/link') return { __esModule: true, default: ({ children, ...props }) => React.createElement('a', props, children) };
         if (name === '@/components/legal/LegalDocument') return { __esModule: true, default: () => null };
@@ -242,7 +242,7 @@ test('cookies and refund policies translate every paragraph without changing lin
       }, exports);
       return exports;
     }
-    for (const route of ['cookies', 'refunds']) {
+    for (const route of ['cookies', 'refunds', 'privacy']) {
       const path = `src/app/${route}/page.tsx`;
       const sourceText = fs.readFileSync(path, 'utf8');
       const source = ts.createSourceFile(path, sourceText, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
@@ -275,6 +275,56 @@ test('cookies and refund policies translate every paragraph without changing lin
         assert.ok(html.includes(escape(translate(locale, 'Keep measurement off'))));
         assert.ok(html.includes(escape(translate(locale, 'Your preference: {status}. You can change it here at any time. Changes apply to future browser events; previously recorded aggregate counts cannot identify you.', { status: translate(locale, 'off') }))));
       }
+    }
+  }
+});
+
+test('account language is resolved on the server; stale browser state cannot overwrite it', async () => {
+  const source = fs.readFileSync('src/lib/localization/preference.ts', 'utf8').replace("'./config'", JSON.stringify(configUrl));
+  const { preferredLocale, readLocaleSignal } = await import(url(source));
+  assert.equal(preferredLocale('Deutsch', 'pt-BR', 'en'), 'de');
+  assert.equal(preferredLocale('French', 'en', 'pt-BR'), 'fr');
+  assert.equal(preferredLocale('unsupported', 'it', 'en'), 'it');
+  assert.equal(preferredLocale(null, '<script>', 'es'), 'es');
+  assert.equal(readLocaleSignal(JSON.stringify({ locale: 'pt-BR', at: 123 })), 'pt-BR');
+  for (const raw of [null, '{', JSON.stringify({ locale: 'zh' }), JSON.stringify({ locale: {} }), ' '.repeat(129)]) assert.equal(readLocaleSignal(raw), undefined);
+  const provider = fs.readFileSync('src/components/localization/LocaleProvider.tsx', 'utf8');
+  assert.doesNotMatch(provider, /user\.unsafeMetadata|changeLocale\(saved\)/, 'Signing in must not POST a stale account language');
+});
+
+test('English can translate Portuguese source copy, without changing identifiers or placeholders', () => {
+  assert.equal(translate('en', 'Países'), 'Countries');
+  assert.equal(translate('en', 'Falha no envio.'), 'Upload failed.');
+  assert.equal(translate('en', ' · essencial, mínimo {minimum}%', { minimum: 80 }), ' · essential, minimum 80%');
+  assert.equal(translate('pt-BR', 'Falha no envio.'), 'Falha no envio.');
+  assert.equal(translate('fr', 'stable-course-id'), 'stable-course-id');
+});
+
+test('practice interface follows all six locales while English rehearsal input keeps its learning language', async () => {
+  const React = await import('react');
+  const runtime = await import('react/jsx-runtime');
+  const { renderToStaticMarkup } = await import('react-dom/server');
+  const code = ts.transpileModule(fs.readFileSync('src/components/courses/ActiveRecallPractice.tsx', 'utf8'), {
+    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX, esModuleInterop: true },
+  }).outputText;
+  const escape = text => text.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#x27;');
+  for (const locale of locales) {
+    const exports = {};
+    const t = (key, values) => translate(locale, key, values);
+    new Function('require', 'exports', code)(name => {
+      if (name === 'react') return React;
+      if (name === 'react/jsx-runtime') return runtime;
+      if (name === '@/components/localization/LocaleProvider') return { useLocale: () => ({ locale, t }), LocalizedText: ({ text }) => t(text) };
+      throw Error(name);
+    }, exports);
+    for (const applied of [false, true]) {
+      const html = renderToStaticMarkup(React.createElement(exports.default, { lesson: { id: 'unchanged-lesson-id', dialogue: [] }, applied }));
+      assert.ok(html.includes(escape(t('Your real-world rehearsal'))), locale);
+      assert.ok(html.includes(escape(t('Start with your purpose. Add the essential detail. Confirm the next step.'))), locale);
+      assert.ok(html.includes(`lang="${applied ? locale : 'en'}"`), locale);
+      assert.ok(html.includes('id="rehearsal-unchanged-lesson-id"'));
+      assert.equal((html.match(/type="checkbox"/g) || []).length, 4);
+      assert.ok(html.includes(escape(t(applied ? 'I used traceable evidence and stated uncertainty.' : 'I stated the purpose before adding details.'))));
     }
   }
 });

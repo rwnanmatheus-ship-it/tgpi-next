@@ -3,8 +3,9 @@
 import { createContext, useContext, useCallback, useMemo, useRef, useState, useEffect, useTransition, type ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
-import { type Locale, resolveLocale } from '@/lib/localization/config';
+import { type Locale } from '@/lib/localization/config';
 import { translate } from '@/lib/localization/messages';
+import { localeSyncKey, readLocaleSignal } from '@/lib/localization/preference';
 
 type LocaleContextValue = {
   locale: Locale;
@@ -18,6 +19,20 @@ const LocaleContext = createContext<LocaleContextValue | null>(null);
 export function LocaleProvider({ locale, children }: { locale: Locale; children: ReactNode }) {
   const router = useRouter();
   const [refreshing, startTransition] = useTransition();
+  const [appliedLocale, setAppliedLocale] = useState(locale);
+  useEffect(() => { setAppliedLocale(locale); }, [locale]);
+  useEffect(() => { document.documentElement.lang = appliedLocale; }, [appliedLocale]);
+  useEffect(() => {
+    const synchronize = (event: StorageEvent) => {
+      if (event.key !== localeSyncKey) return;
+      const selected = readLocaleSignal(event.newValue);
+      if (!selected) return;
+      setAppliedLocale(selected);
+      startTransition(() => router.refresh());
+    };
+    window.addEventListener('storage', synchronize);
+    return () => window.removeEventListener('storage', synchronize);
+  }, [router]);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState(false);
   const inFlight = useRef(false);
@@ -31,6 +46,8 @@ export function LocaleProvider({ locale, children }: { locale: Locale; children:
         method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ locale: next }),
       });
       if (!response.ok) throw new Error('Locale preference could not be saved');
+      setAppliedLocale(next);
+      try { localStorage.setItem(localeSyncKey, JSON.stringify({ locale: next, at: Date.now() })); } catch { /* Storage may be unavailable in private browser modes. */ }
       startTransition(() => router.refresh());
     } catch {
       setError(true);
@@ -39,7 +56,7 @@ export function LocaleProvider({ locale, children }: { locale: Locale; children:
       setPending(false);
     }
   }, [router]);
-  const value = useMemo(() => ({ locale, pending: pending || refreshing, error, changeLocale, t: (key: string, values?: Record<string, string | number>) => translate(locale, key, values) }), [locale, pending, refreshing, error, changeLocale]);
+  const value = useMemo(() => ({ locale: appliedLocale, pending: pending || refreshing, error, changeLocale, t: (key: string, values?: Record<string, string | number>) => translate(appliedLocale, key, values) }), [appliedLocale, pending, refreshing, error, changeLocale]);
   return <LocaleContext.Provider value={value}>{children}</LocaleContext.Provider>;
 }
 export function useLocale() {
@@ -48,19 +65,19 @@ export function useLocale() {
   return value;
 }
 
-/** Restore an explicit account choice once per signed-in identity, including a new device. */
+/** Refresh on identity transitions; restoring a preference never writes stale SDK metadata. */
 export function AccountLocaleSync() {
   const { user, isLoaded } = useUser();
-  const { locale, changeLocale } = useLocale();
-  const synced = useRef<string | null>(null);
+  const router = useRouter();
+  const identity = useRef<string | null | undefined>(undefined);
   useEffect(() => {
     if (!isLoaded) return;
-    if (!user) { synced.current = null; return; }
-    if (synced.current === user.id) return;
-    synced.current = user.id;
-    const saved = resolveLocale(user.unsafeMetadata.tgpiLocale);
-    if (saved && saved !== locale) void changeLocale(saved);
-  }, [isLoaded, user, locale, changeLocale]);
+    const next = user?.id ?? null;
+    if (identity.current === next) return;
+    const previous = identity.current;
+    identity.current = next;
+    if (previous !== undefined || next !== null) router.refresh();
+  }, [isLoaded, user?.id, router]);
   return null;
 }
 

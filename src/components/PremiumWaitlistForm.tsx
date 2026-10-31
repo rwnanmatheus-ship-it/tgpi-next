@@ -164,7 +164,7 @@ export default function PremiumWaitlistForm() {
           >
             <option value="move">Move abroad</option>
             <option value="work">Work internationally</option>
-            <option value="study">Study abroad</option>
+            <option value="study"><LocalizedText text="Study abroad" /></option>
             <option value="remote">Build a remote global life</option>
             <option value="documents">Prepare documents</option>
           </select>
@@ -177,7 +177,7 @@ export default function PremiumWaitlistForm() {
             onChange={(event) => updateField("timeline", event.target.value)}
             className="mt-2 w-full rounded-2xl border border-[#D8D2C4] bg-[#FFFDF8] px-4 py-3 font-normal outline-none transition focus:border-[#B58A2A]"
           >
-            <option value="0-3-months">Within 3 months</option>
+            <option value="0-3-months"><LocalizedText text="Within 3 months" /></option>
             <option value="3-6-months">3 to 6 months</option>
             <option value="6-12-months">6 to 12 months</option>
             <option value="12-plus-months">More than 12 months</option>

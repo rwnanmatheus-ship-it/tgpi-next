@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import type { Metadata } from "next";
 import Link from "next/link";
 import LegalDocument from "@/components/legal/LegalDocument";
@@ -94,9 +96,7 @@ export default function TermsPage() {
           Consumers may have mandatory withdrawal or refund rights under applicable law,
           including rights that may apply to online contracts in Brazil. These rights are not
           waived by these Terms. See the{" "}
-          <Link href="/refunds" className="font-bold text-[#956A13] hover:underline">
-            Refund & Cancellation Policy
-          </Link>.
+          <Link href="/refunds" className="font-bold text-[#956A13] hover:underline"><LocalizedText text="Refund & Cancellation Policy" /></Link>.
         </p>
       </section>
 
@@ -161,13 +161,9 @@ export default function TermsPage() {
         <h2 className="text-2xl font-semibold text-[var(--tgpi-navy)]">12. Privacy</h2>
         <p className="mt-3">
           Personal data is handled as described in the{" "}
-          <Link href="/privacy" className="font-bold text-[#956A13] hover:underline">
-            Privacy Policy
-          </Link>{" "}
+          <Link href="/privacy" className="font-bold text-[#956A13] hover:underline"><LocalizedText text="Privacy Policy" /></Link>{" "}
           and{" "}
-          <Link href="/cookies" className="font-bold text-[#956A13] hover:underline">
-            Cookie Policy
-          </Link>.
+          <Link href="/cookies" className="font-bold text-[#956A13] hover:underline"><LocalizedText text="Cookie Policy" /></Link>.
         </p>
       </section>
 

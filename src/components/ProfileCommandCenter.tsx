@@ -273,7 +273,7 @@ export default function ProfileCommandCenter({ mode }: { mode: ViewMode }) {
 
                 <div className="space-y-3 text-sm">
                   <div className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950 p-3">
-                    <span className="text-slate-400">Plan</span>
+                    <span className="text-slate-400"><LocalizedText text="Plan" /></span>
                     <span className="font-semibold text-white">{profile?.plan || "FREE"}</span>
                   </div>
 

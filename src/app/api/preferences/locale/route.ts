@@ -6,8 +6,30 @@ export async function POST(request: Request) {
   if (request.headers.get('origin') !== new URL(request.url).origin) {
     return NextResponse.json({ error: 'Origin not allowed' }, { status: 403 });
   }
-  const raw = await request.text();
-  if (new TextEncoder().encode(raw).byteLength > 128) return NextResponse.json({ error: 'Payload too large' }, { status: 413 });
+  const declaredSize = Number(request.headers.get('content-length'));
+  if (Number.isFinite(declaredSize) && declaredSize > 128) return NextResponse.json({ error: 'Payload too large' }, { status: 413 });
+  const reader = request.body?.getReader();
+  if (!reader) return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+  const chunks: Uint8Array[] = [];
+  let size = 0;
+  try {
+    for (;;) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      size += value.byteLength;
+      if (size > 128) {
+        await reader.cancel();
+        return NextResponse.json({ error: 'Payload too large' }, { status: 413 });
+      }
+      chunks.push(value);
+    }
+  } catch {
+    return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 });
+  } finally { reader.releaseLock(); }
+  const bytes = new Uint8Array(size);
+  let offset = 0;
+  for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.byteLength; }
+  const raw = new TextDecoder().decode(bytes);
   let value: unknown;
   try { value = JSON.parse(raw); } catch { return NextResponse.json({ error: 'Invalid JSON' }, { status: 400 }); }
   const locale = value && typeof value === 'object' && 'locale' in value ? value.locale : undefined;

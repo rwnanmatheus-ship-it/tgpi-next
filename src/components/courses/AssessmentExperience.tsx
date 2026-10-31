@@ -122,7 +122,7 @@ export default function AssessmentExperience({
             <div className="mt-3 flex flex-wrap items-end justify-between gap-4">
               <div>
                 <h2 className="text-3xl font-semibold">{result.passed ? "Mastery threshold reached" : "Review the capability, then retry"}</h2>
-                <p className="mt-2 text-sm leading-7 text-[#5F6875]">{result.correctAnswers} of {result.totalQuestions} decisions correct. Your best result remains in your private learning record. Detailed answer feedback is released only after mastery.</p>
+                <p className="mt-2 text-sm leading-7 text-[#5F6875]">{result.correctAnswers}{" "}<LocalizedText text="of" />{" "}{result.totalQuestions} decisions correct. Your best result remains in your private learning record. Detailed answer feedback is released only after mastery.</p>
               </div>
               <div className="text-5xl font-extrabold">{result.score}%</div>
             </div>

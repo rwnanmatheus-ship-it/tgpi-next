@@ -1,4 +1,6 @@
 "use client";
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import { useUser } from "@clerk/nextjs";
 import { useState } from "react";
 import { emptyWorksheet, validateWorksheet, RESEARCH_TASKS, type ResearchWorksheet } from "@/lib/intelligence/research-plan";
@@ -26,5 +28,5 @@ export default function ResearchReportCard({ country, name, worksheet }: { count
       const url = URL.createObjectURL(await response.blob()); const link = document.createElement("a"); link.href = url; link.download = `TGPI-${country}-research.pdf`; link.click(); setTimeout(() => URL.revokeObjectURL(url), 10_000);
     } catch (e) { setError(e instanceof Error ? e.message : "Please try again."); } finally { setBusy(false); }
   }
-  return <aside className="research-report-card"><div><p className="ig-eyebrow">TGPI / Research edition</p><strong>Your {name} decision brief</strong><p>{worksheet ? "Download this scenario with your evidence, checkpoints and dated sources." : user ? "Download a saved scenario with published country evidence. Unsaved drafts are available in the Decision Lab." : "Download published country evidence and an empty planning worksheet."}</p></div>{!worksheet && user && <label className="report-scenario-select">Saved scenario<select value={slot} disabled={busy || !isLoaded} onChange={event => setSlot(event.target.value)}>{["1", "2", "3"].map(id => <option key={id} value={id}>Scenario {id}</option>)}</select></label>}<button type="button" className="ig-button" disabled={busy || !isLoaded} onClick={download}>{busy ? "Preparing PDF…" : "Download research PDF ↓"}</button>{error && <p role="alert">{error}</p>}</aside>;
+  return <aside className="research-report-card"><div><p className="ig-eyebrow">TGPI / Research edition</p><strong>Your {name} decision brief</strong><p>{worksheet ? "Download this scenario with your evidence, checkpoints and dated sources." : user ? "Download a saved scenario with published country evidence. Unsaved drafts are available in the Decision Lab." : "Download published country evidence and an empty planning worksheet."}</p></div>{!worksheet && user && <label className="report-scenario-select">Saved scenario<select value={slot} disabled={busy || !isLoaded} onChange={event => setSlot(event.target.value)}>{["1", "2", "3"].map(id => <option key={id} value={id}><LocalizedText text="Scenario" />{" "}{id}</option>)}</select></label>}<button type="button" className="ig-button" disabled={busy || !isLoaded} onClick={download}>{busy ? "Preparing PDF…" : "Download research PDF ↓"}</button>{error && <p role="alert">{error}</p>}</aside>;
 }

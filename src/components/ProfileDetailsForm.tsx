@@ -208,7 +208,7 @@ export default function ProfileDetailsForm() {
             onChange={(e) => updateField("goal", e.target.value as FormState["goal"])}
             className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-white outline-none focus:border-yellow-500"
           >
-            <option value="">Select</option>
+            <option value=""><LocalizedText text="Select" /></option>
             <option value="work">Work Abroad</option>
             <option value="study">Study Abroad</option>
             <option value="live">Live Abroad</option>
@@ -224,10 +224,10 @@ export default function ProfileDetailsForm() {
             }
             className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-white outline-none focus:border-yellow-500"
           >
-            <option value="">Select</option>
-            <option value="basic">Basic</option>
-            <option value="intermediate">Intermediate</option>
-            <option value="advanced">Advanced</option>
+            <option value=""><LocalizedText text="Select" /></option>
+            <option value="basic"><LocalizedText text="Basic" /></option>
+            <option value="intermediate"><LocalizedText text="Intermediate" /></option>
+            <option value="advanced"><LocalizedText text="Advanced" /></option>
           </select>
         </div>
 
@@ -238,7 +238,7 @@ export default function ProfileDetailsForm() {
             onChange={(e) => updateField("budget", e.target.value as FormState["budget"])}
             className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-white outline-none focus:border-yellow-500"
           >
-            <option value="">Select</option>
+            <option value=""><LocalizedText text="Select" /></option>
             <option value="low">Low</option>
             <option value="medium">Medium</option>
             <option value="high">High</option>

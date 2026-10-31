@@ -1,5 +1,7 @@
 "use client";
 
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import { useState } from "react";
 import type { FormEvent } from "react";
 import {
@@ -54,9 +56,9 @@ export default function GlobalProfileForm() {
       </select>
 
       <select name="englishLevel" className="input">
-        <option value="basic">Basic</option>
-        <option value="intermediate">Intermediate</option>
-        <option value="advanced">Advanced</option>
+        <option value="basic"><LocalizedText text="Basic" /></option>
+        <option value="intermediate"><LocalizedText text="Intermediate" /></option>
+        <option value="advanced"><LocalizedText text="Advanced" /></option>
       </select>
 
       <select name="budget" className="input">

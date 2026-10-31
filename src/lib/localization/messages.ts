@@ -1,6 +1,757 @@
 import type { Locale } from "./config";
 
 export const messages = {
+  "Revision and history": {"en": "Revision and history", "pt-BR": "Revision and history", "es": "Revisión e historial", "fr": "Révision et historique", "de": "Überarbeitung und Verlauf", "it": "Revisione e cronologia"},
+  " · essencial, mínimo {minimum}%": {"en": " · essential, minimum {minimum}%", "pt-BR": " · essencial, mínimo {minimum}%", "es": " · esencial, mínimo {minimum}%", "fr": " · essentiel, minimum {minimum}%", "de": " · wesentlich, mindestens {minimum}%", "it": " · essenziale, minimo {minimum}%"},
+  "Acesso antecipado: validações pedagógicas, de usabilidade e do fluxo completo de certificação ainda estão em andamento. A carga de 8 horas é estimada. O certificado exige práticas, aprovação no questionário e revisão independente do projeto; o envio não garante aprovação. Não há prazo de devolutiva prometido.": {"en": "Early access: educational, usability and end-to-end certification validation is still in progress. The 8-hour workload is an estimate. Certification requires practices, passing the quiz and independent project review; submission does not guarantee approval. No feedback deadline is promised.", "pt-BR": "Acesso antecipado: validações pedagógicas, de usabilidade e do fluxo completo de certificação ainda estão em andamento. A carga de 8 horas é estimada. O certificado exige práticas, aprovação no questionário e revisão independente do projeto; o envio não garante aprovação. Não há prazo de devolutiva prometido.", "es": "Acceso anticipado: las validaciones pedagógicas, de usabilidad y del flujo completo de certificación siguen en curso. La carga de 8 horas es estimada. El certificado exige prácticas, aprobar el cuestionario y revisión independiente del proyecto; el envío no garantiza aprobación. No se promete un plazo de devolución.", "fr": "Accès anticipé : les validations pédagogiques, d’utilisabilité et du parcours complet de certification sont en cours. La charge de 8 heures est estimative. Le certificat exige des exercices, la réussite au questionnaire et une évaluation indépendante du projet ; le dépôt ne garantit pas la validation. Aucun délai de retour n’est promis.", "de": "Frühzugang: Die pädagogische Prüfung, Nutzbarkeitsprüfung und Validierung des gesamten Zertifizierungsablaufs laufen noch. Der Aufwand von 8 Stunden ist geschätzt. Das Zertifikat erfordert Übungen, ein bestandenes Quiz und eine unabhängige Projektprüfung; die Einreichung garantiert keine Genehmigung. Es wird keine Rückmeldefrist zugesagt.", "it": "Accesso anticipato: le verifiche pedagogiche, di usabilità e del flusso completo di certificazione sono ancora in corso. Il carico di 8 ore è stimato. Il certificato richiede pratiche, superamento del questionario e revisione indipendente del progetto; l’invio non garantisce l’approvazione. Non è promessa una scadenza di riscontro."},
+  "acompanhar a devolutiva do revisor": {"en": "follow the reviewer’s feedback", "pt-BR": "acompanhar a devolutiva do revisor", "es": "consultar los comentarios del revisor", "fr": "suivre le retour de l’évaluateur", "de": "Rückmeldung des Prüfers verfolgen", "it": "seguire il riscontro del revisore"},
+  "conferir a devolutiva e emitir seu certificado": {"en": "review the feedback and issue your certificate", "pt-BR": "conferir a devolutiva e emitir seu certificado", "es": "revisar los comentarios y emitir tu certificado", "fr": "consulter le retour et émettre votre certificat", "de": "Rückmeldung prüfen und Zertifikat ausstellen", "it": "verificare il riscontro ed emettere il certificato"},
+  "preparar e enviar o projeto": {"en": "prepare and submit the project", "pt-BR": "preparar e enviar o projeto", "es": "preparar y enviar el proyecto", "fr": "préparer et soumettre le projet", "de": "Projekt vorbereiten und einreichen", "it": "preparare e inviare il progetto"},
+  "responder e revisar o questionário": {"en": "answer and review the quiz", "pt-BR": "responder e revisar o questionário", "es": "responder y revisar el cuestionario", "fr": "répondre au questionnaire et le revoir", "de": "Quiz beantworten und überprüfen", "it": "rispondere e rivedere il questionario"},
+  "produzir e salvar as práticas": {"en": "complete and save your practices", "pt-BR": "produzir e salvar as práticas", "es": "realizar y guardar las prácticas", "fr": "réaliser et enregistrer les exercices", "de": "Übungen bearbeiten und speichern", "it": "svolgere e salvare le pratiche"},
+  "contestação em análise": {"en": "appeal under review", "pt-BR": "contestação em análise", "es": "impugnación en revisión", "fr": "contestation en cours d’examen", "de": "Einspruch wird geprüft", "it": "contestazione in esame"},
+  "aprovado": {"en": "approved", "pt-BR": "aprovado", "es": "aprobado", "fr": "validé", "de": "genehmigt", "it": "approvato"},
+  "revisão solicitada": {"en": "revision requested", "pt-BR": "revisão solicitada", "es": "revisión solicitada", "fr": "révision demandée", "de": "Überarbeitung angefordert", "it": "revisione richiesta"},
+  "aguardando revisão": {"en": "awaiting review", "pt-BR": "aguardando revisão", "es": "pendiente de revisión", "fr": "en attente d’évaluation", "de": "wartet auf Prüfung", "it": "in attesa di revisione"},
+  "em estudo": {"en": "studying", "pt-BR": "em estudo", "es": "en estudio", "fr": "en cours d’étude", "de": "in Bearbeitung", "it": "in studio"},
+  "Falha no envio.": {"en": "Upload failed.", "pt-BR": "Falha no envio.", "es": "Error en el envío.", "fr": "Échec de l’envoi.", "de": "Hochladen fehlgeschlagen.", "it": "Invio non riuscito."},
+  "Falha ao salvar. Seus campos permanecem nesta tela.": {"en": "Saving failed. Your fields remain on this screen.", "pt-BR": "Falha ao salvar. Seus campos permanecem nesta tela.", "es": "Error al guardar. Tus campos permanecen en esta pantalla.", "fr": "Échec de l’enregistrement. Vos champs restent sur cet écran.", "de": "Speichern fehlgeschlagen. Deine Felder bleiben auf dieser Seite erhalten.", "it": "Salvataggio non riuscito. I campi rimangono in questa schermata."},
+  "Não foi possível salvar.": {"en": "Could not save.", "pt-BR": "Não foi possível salvar.", "es": "No se pudo guardar.", "fr": "Impossible d’enregistrer.", "de": "Speichern nicht möglich.", "it": "Impossibile salvare."},
+  "Falha ao carregar.": {"en": "Failed to load.", "pt-BR": "Falha ao carregar.", "es": "Error al cargar.", "fr": "Échec du chargement.", "de": "Laden fehlgeschlagen.", "it": "Caricamento non riuscito."},
+  "Certificados": {"en": "Certificates", "pt-BR": "Certificados", "es": "Certificados", "fr": "Certificats", "de": "Zertifikate", "it": "Certificati"},
+  "Cursos": {"en": "Courses", "pt-BR": "Cursos", "es": "Cursos", "fr": "Cours", "de": "Kurse", "it": "Corsi"},
+  "Comparar": {"en": "Compare", "pt-BR": "Comparar", "es": "Comparar", "fr": "Comparer", "de": "Vergleichen", "it": "Confronta"},
+  "Países": {"en": "Countries", "pt-BR": "Países", "es": "Países", "fr": "Pays", "de": "Länder", "it": "Paesi"},
+  "Próximos passos na TGPI": {"en": "Next steps in TGPI", "pt-BR": "Próximos passos na TGPI", "es": "Próximos pasos en TGPI", "fr": "Prochaines étapes dans TGPI", "de": "Nächste Schritte in TGPI", "it": "Prossimi passi in TGPI"},
+  "Permitir consulta pública do nome e competências; posso desativar depois.": {"en": "Allow public lookup of my name and competencies; I can disable it later.", "pt-BR": "Permitir consulta pública do nome e competências; posso desativar depois.", "es": "Permitir la consulta pública de mi nombre y competencias; puedo desactivarla después.", "fr": "Autoriser la consultation publique de mon nom et de mes compétences ; je pourrai la désactiver ensuite.", "de": "Öffentliche Abfrage meines Namens und meiner Kompetenzen erlauben; ich kann sie später deaktivieren.", "it": "Consenti la consultazione pubblica di nome e competenze; potrò disattivarla in seguito."},
+  "Conferi o nome de certificado nas configurações da minha conta e autorizo a emissão com esse nome.": {"en": "I checked the certificate name in my account settings and authorize issuance using that name.", "pt-BR": "Conferi o nome de certificado nas configurações da minha conta e autorizo a emissão com esse nome.", "es": "He comprobado el nombre del certificado en los ajustes de mi cuenta y autorizo su emisión con ese nombre.", "fr": "J’ai vérifié le nom du certificat dans les paramètres de mon compte et j’autorise l’émission avec ce nom.", "de": "Ich habe den Zertifikatsnamen in meinen Kontoeinstellungen geprüft und autorisiere die Ausstellung mit diesem Namen.", "it": "Ho verificato il nome del certificato nelle impostazioni dell’account e autorizzo l’emissione con quel nome."},
+  "Permitir verificação pública com nome e competências, sem e-mail, respostas ou áudio.": {"en": "Allow public verification of name and competencies, without email, answers or audio.", "pt-BR": "Permitir verificação pública com nome e competências, sem e-mail, respostas ou áudio.", "es": "Permitir la verificación pública del nombre y las competencias, sin correo, respuestas ni audio.", "fr": "Autoriser la vérification publique du nom et des compétences, sans e-mail, réponses ni audio.", "de": "Öffentliche Prüfung von Name und Kompetenzen erlauben, ohne E-Mail, Antworten oder Audio.", "it": "Consenti la verifica pubblica di nome e competenze, senza email, risposte o audio."},
+  "Seu certificado": {"en": "Your certificate", "pt-BR": "Seu certificado", "es": "Tu certificado", "fr": "Votre certificat", "de": "Dein Zertifikat", "it": "Il tuo certificato"},
+  "Enviar contestação fundamentada": {"en": "Submit a reasoned appeal", "pt-BR": "Enviar contestação fundamentada", "es": "Enviar una impugnación fundamentada", "fr": "Envoyer une contestation motivée", "de": "Begründeten Einspruch einreichen", "it": "Invia una contestazione motivata"},
+  "Contestar um critério (80–4.000 caracteres)": {"en": "Appeal a criterion (80–4,000 characters)", "pt-BR": "Contestar um critério (80–4.000 caracteres)", "es": "Impugnar un criterio (80–4.000 caracteres)", "fr": "Contester un critère (80 à 4 000 caractères)", "de": "Ein Kriterium anfechten (80–4.000 Zeichen)", "it": "Contesta un criterio (80–4.000 caratteri)"},
+  "% · peso": {"en": "% · weight", "pt-BR": "% · peso", "es": "% · peso", "fr": "% · poids", "de": "% · Gewichtung", "it": "% · peso"},
+  "Devolutiva": {"en": "Feedback", "pt-BR": "Devolutiva", "es": "Comentarios", "fr": "Retour d’évaluation", "de": "Rückmeldung", "it": "Riscontro"},
+  "Salve o rascunho antes de submeter. A submissão fica bloqueada durante a revisão. Um revisor autorizado precisa inspecionar o trabalho; nenhum arquivo ou tamanho de texto aprova automaticamente o projeto. Sem prazo de devolutiva prometido.": {"en": "Save the draft before submitting. Submission is locked during review. An authorized reviewer must inspect the work; no file or text length automatically approves a project. No feedback deadline is promised.", "pt-BR": "Salve o rascunho antes de submeter. A submissão fica bloqueada durante a revisão. Um revisor autorizado precisa inspecionar o trabalho; nenhum arquivo ou tamanho de texto aprova automaticamente o projeto. Sem prazo de devolutiva prometido.", "es": "Guarda el borrador antes de enviar. La entrega queda bloqueada durante la revisión. Un revisor autorizado debe inspeccionar el trabajo; ningún archivo ni extensión de texto aprueba automáticamente el proyecto. No se promete un plazo de devolución.", "fr": "Enregistrez le brouillon avant de soumettre. Le dépôt est verrouillé pendant l’évaluation. Un évaluateur autorisé doit examiner le travail ; aucun fichier ni longueur de texte ne valide automatiquement un projet. Aucun délai de retour n’est promis.", "de": "Speichere den Entwurf vor der Einreichung. Während der Prüfung ist die Einreichung gesperrt. Ein berechtigter Prüfer muss die Arbeit prüfen; keine Datei oder Textlänge genehmigt ein Projekt automatisch. Es wird keine Rückmeldefrist zugesagt.", "it": "Salva la bozza prima dell’invio. La consegna è bloccata durante la revisione. Un revisore autorizzato deve esaminare il lavoro; nessun file o lunghezza di testo approva automaticamente il progetto. Non è promessa una scadenza di riscontro."},
+  "Amostra recebida. Salve o rascunho antes de enviar o projeto.": {"en": "Sample received. Save the draft before submitting the project.", "pt-BR": "Amostra recebida. Salve o rascunho antes de enviar o projeto.", "es": "Muestra recibida. Guarda el borrador antes de enviar el proyecto.", "fr": "Extrait reçu. Enregistrez le brouillon avant de soumettre le projet.", "de": "Probe empfangen. Speichere den Entwurf vor dem Einreichen des Projekts.", "it": "Campione ricevuto. Salva la bozza prima di inviare il progetto."},
+  "Selecionar amostra": {"en": "Select sample", "pt-BR": "Selecionar amostra", "es": "Seleccionar muestra", "fr": "Sélectionner un extrait", "de": "Probe auswählen", "it": "Seleziona campione"},
+  "Consinto com o armazenamento privado da minha voz para avaliação por revisor autorizado.": {"en": "I consent to private storage of my voice for assessment by an authorized reviewer.", "pt-BR": "Consinto com o armazenamento privado da minha voz para avaliação por revisor autorizado.", "es": "Consiento el almacenamiento privado de mi voz para evaluación por un revisor autorizado.", "fr": "Je consens au stockage privé de ma voix pour une évaluation par un évaluateur autorisé.", "de": "Ich willige in die private Speicherung meiner Stimme zur Bewertung durch einen berechtigten Prüfer ein.", "it": "Acconsento alla conservazione privata della mia voce per la valutazione da parte di un revisore autorizzato."},
+  "Grave localmente uma apresentação e uma resposta de entrevista. Use WebM ou WAV, até 600 KB, sem dados sensíveis. Se necessário, divida a fala em uma amostra curta que demonstre os critérios. O revisor avaliará compreensão, clareza e adequação; texto não comprova pronúncia.": {"en": "Record a presentation and an interview response locally. Use WebM or WAV, up to 600 KB, without sensitive data. If needed, split your speech into a short sample demonstrating the criteria. A reviewer will assess comprehension, clarity and appropriateness; text does not demonstrate pronunciation.", "pt-BR": "Grave localmente uma apresentação e uma resposta de entrevista. Use WebM ou WAV, até 600 KB, sem dados sensíveis. Se necessário, divida a fala em uma amostra curta que demonstre os critérios. O revisor avaliará compreensão, clareza e adequação; texto não comprova pronúncia.", "es": "Graba localmente una presentación y una respuesta de entrevista. Usa WebM o WAV de hasta 600 KB, sin datos sensibles. Si es necesario, divide el discurso en una muestra breve que demuestre los criterios. Un revisor evaluará comprensión, claridad y adecuación; el texto no demuestra pronunciación.", "fr": "Enregistrez localement une présentation et une réponse d’entretien. Utilisez WebM ou WAV, 600 Ko maximum, sans données sensibles. Si nécessaire, fournissez un court extrait démontrant les critères. Un évaluateur jugera la compréhension, la clarté et la pertinence ; le texte ne prouve pas la prononciation.", "de": "Nimm lokal eine Präsentation und eine Interviewantwort auf. Verwende WebM oder WAV, höchstens 600 KB, ohne sensible Daten. Teile die Aufnahme bei Bedarf in eine kurze Probe, die die Kriterien zeigt. Ein Prüfer bewertet Verständnis, Klarheit und Angemessenheit; Text belegt keine Aussprache.", "it": "Registra localmente una presentazione e una risposta a un colloquio. Usa WebM o WAV fino a 600 KB, senza dati sensibili. Se necessario, suddividi il discorso in un breve campione che dimostri i criteri. Un revisore valuterà comprensione, chiarezza e adeguatezza; il testo non dimostra la pronuncia."},
+  "Evidência oral privada": {"en": "Private oral evidence", "pt-BR": "Evidência oral privada", "es": "Evidencia oral privada", "fr": "Preuve orale privée", "de": "Privater mündlicher Nachweis", "it": "Evidenza orale privata"},
+  "Salve o rascunho após adicionar ou remover vínculos.": {"en": "Save the draft after adding or removing links.", "pt-BR": "Salve o rascunho após adicionar ou remover vínculos.", "es": "Guarda el borrador después de añadir o eliminar vínculos.", "fr": "Enregistrez le brouillon après l’ajout ou le retrait de liens.", "de": "Speichere den Entwurf nach dem Hinzufügen oder Entfernen von Verknüpfungen.", "it": "Salva la bozza dopo aver aggiunto o rimosso collegamenti."},
+  "Remover do rascunho": {"en": "Remove from draft", "pt-BR": "Remover do rascunho", "es": "Eliminar del borrador", "fr": "Retirer du brouillon", "de": "Aus Entwurf entfernen", "it": "Rimuovi dalla bozza"},
+  "Baixar arquivo": {"en": "Download file", "pt-BR": "Baixar arquivo", "es": "Descargar archivo", "fr": "Télécharger le fichier", "de": "Datei herunterladen", "it": "Scarica file"},
+  "Adicionar arquivo": {"en": "Add file", "pt-BR": "Adicionar arquivo", "es": "Añadir archivo", "fr": "Ajouter un fichier", "de": "Datei hinzufügen", "it": "Aggiungi file"},
+  "Até seis arquivos de 3 MB: XLSX, PBIX, PDF, CSV, JSON, PY, TXT ou MD. Planilhas exige XLSX; Power BI exige PBIX; Python exige PY. Não envie credenciais ou dados pessoais. Os arquivos não são executados pelo servidor; o revisor deve inspecionar o resultado.": {"en": "Up to six 3 MB files: XLSX, PBIX, PDF, CSV, JSON, PY, TXT or MD. Spreadsheets requires XLSX; Power BI requires PBIX; Python requires PY. Do not submit credentials or personal data. Files are not executed by the server; the reviewer must inspect the result.", "pt-BR": "Até seis arquivos de 3 MB: XLSX, PBIX, PDF, CSV, JSON, PY, TXT ou MD. Planilhas exige XLSX; Power BI exige PBIX; Python exige PY. Não envie credenciais ou dados pessoais. Os arquivos não são executados pelo servidor; o revisor deve inspecionar o resultado.", "es": "Hasta seis archivos de 3 MB: XLSX, PBIX, PDF, CSV, JSON, PY, TXT o MD. Hojas de cálculo exige XLSX; Power BI, PBIX; Python, PY. No envíes credenciales ni datos personales. El servidor no ejecuta los archivos; el revisor debe inspeccionar el resultado.", "fr": "Jusqu’à six fichiers de 3 Mo : XLSX, PBIX, PDF, CSV, JSON, PY, TXT ou MD. Le cours de tableurs exige XLSX ; Power BI, PBIX ; Python, PY. N’envoyez pas d’identifiants ni de données personnelles. Le serveur n’exécute pas les fichiers ; l’évaluateur doit examiner le résultat.", "de": "Bis zu sechs Dateien mit je 3 MB: XLSX, PBIX, PDF, CSV, JSON, PY, TXT oder MD. Tabellenkalkulation erfordert XLSX; Power BI PBIX; Python PY. Keine Zugangsdaten oder personenbezogenen Daten übermitteln. Der Server führt Dateien nicht aus; der Prüfer muss das Ergebnis prüfen.", "it": "Fino a sei file da 3 MB: XLSX, PBIX, PDF, CSV, JSON, PY, TXT o MD. Il corso sui fogli richiede XLSX; Power BI, PBIX; Python, PY. Non inviare credenziali o dati personali. I file non vengono eseguiti dal server; il revisore deve ispezionare il risultato."},
+  "Arquivos privados do projeto": {"en": "Private project files", "pt-BR": "Arquivos privados do projeto", "es": "Archivos privados del proyecto", "fr": "Fichiers privés du projet", "de": "Private Projektdateien", "it": "File privati del progetto"},
+  "Como utilizou IA, ou informe “não utilizei”": {"en": "Explain how you used AI, or state ‘I did not use it’", "pt-BR": "Como utilizou IA, ou informe “não utilizei”", "es": "Explica cómo utilizaste IA o indica «no la utilicé»", "fr": "Expliquez votre utilisation de l’IA ou indiquez « je ne l’ai pas utilisée »", "de": "Erkläre deinen KI-Einsatz oder gib an: „Ich habe keine KI verwendet“", "it": "Spiega come hai utilizzato l’IA oppure indica «non l’ho utilizzata»"},
+  "Resposta ao desafio de transferência": {"en": "Response to the transfer challenge", "pt-BR": "Resposta ao desafio de transferência", "es": "Respuesta al desafío de transferencia", "fr": "Réponse au défi de transfert", "de": "Antwort auf die Transferaufgabe", "it": "Risposta alla sfida di trasferimento"},
+  "Evidência:": {"en": "Evidence:", "pt-BR": "Evidência:", "es": "Evidencia:", "fr": "Preuve :", "de": "Nachweis:", "it": "Evidenza:"},
+  "Seu projeto": {"en": "Your project", "pt-BR": "Seu projeto", "es": "Tu proyecto", "fr": "Votre projet", "de": "Dein Projekt", "it": "Il tuo progetto"},
+  "Desafio de transferência:": {"en": "Transfer challenge:", "pt-BR": "Desafio de transferência:", "es": "Desafío de transferencia:", "fr": "Défi de transfert :", "de": "Transferaufgabe:", "it": "Sfida di trasferimento:"},
+  "Projeto final": {"en": "Final project", "pt-BR": "Projeto final", "es": "Proyecto final", "fr": "Projet final", "de": "Abschlussprojekt", "it": "Progetto finale"},
+  "Última tentativa:": {"en": "Last attempt:", "pt-BR": "Última tentativa:", "es": "Último intento:", "fr": "Dernière tentative :", "de": "Letzter Versuch:", "it": "Ultimo tentativo:"},
+  "% e todas as questões essenciais corretas. Revise a explicação e tente novamente quando necessário. A aprovação do projeto continua obrigatória.": {"en": "% and all essential questions correct. Review the explanation and try again when necessary. Project approval is still required.", "pt-BR": "% e todas as questões essenciais corretas. Revise a explicação e tente novamente quando necessário. A aprovação do projeto continua obrigatória.", "es": "% y todas las preguntas esenciales correctas. Revisa la explicación e inténtalo de nuevo cuando sea necesario. La aprobación del proyecto sigue siendo obligatoria.", "fr": "% et toutes les questions essentielles correctes. Relisez l’explication et réessayez si nécessaire. La validation du projet reste obligatoire.", "de": "% und alle wesentlichen Fragen richtig. Prüfe die Erklärung und versuche es bei Bedarf erneut. Die Projektgenehmigung bleibt erforderlich.", "it": "% e tutte le domande essenziali corrette. Rivedi la spiegazione e riprova quando necessario. L’approvazione del progetto rimane obbligatoria."},
+  "Uma decisão por módulo; mínimo": {"en": "One decision per module; minimum", "pt-BR": "Uma decisão por módulo; mínimo", "es": "Una decisión por módulo; mínimo", "fr": "Une décision par module ; minimum", "de": "Eine Entscheidung pro Modul; mindestens", "it": "Una decisione per modulo; minimo"},
+  "Questionário de aplicação": {"en": "Application quiz", "pt-BR": "Questionário de aplicação", "es": "Cuestionario de aplicación", "fr": "Questionnaire d’application", "de": "Anwendungsquiz", "it": "Questionario di applicazione"},
+  "Descreva o resultado, sua justificativa e um limite. Privado à conta e aos revisores autorizados. Não envie senhas, documentos ou informações confidenciais.": {"en": "Describe the result, your reasoning and one limitation. Private to your account and authorized reviewers. Do not submit passwords, documents or confidential information.", "pt-BR": "Descreva o resultado, sua justificativa e um limite. Privado à conta e aos revisores autorizados. Não envie senhas, documentos ou informações confidenciais.", "es": "Describe el resultado, tu justificación y una limitación. Privado para tu cuenta y los revisores autorizados. No envíes contraseñas, documentos ni información confidencial.", "fr": "Décrivez le résultat, votre justification et une limite. Réservé à votre compte et aux évaluateurs autorisés. N’envoyez pas de mots de passe, de documents ni d’informations confidentielles.", "de": "Beschreibe das Ergebnis, deine Begründung und eine Einschränkung. Nur für dein Konto und berechtigte Prüfer. Übermittle keine Passwörter, Dokumente oder vertraulichen Informationen.", "it": "Descrivi il risultato, la motivazione e un limite. Privato per il tuo account e i revisori autorizzati. Non inviare password, documenti o informazioni riservate."},
+  "Sua prática e autoavaliação": {"en": "Your practice and self-assessment", "pt-BR": "Sua prática e autoavaliação", "es": "Tu práctica y autoevaluación", "fr": "Votre pratique et autoévaluation", "de": "Deine Übung und Selbsteinschätzung", "it": "La tua pratica e autovalutazione"},
+  "Prática independente": {"en": "Independent practice", "pt-BR": "Prática independente", "es": "Práctica independiente", "fr": "Pratique autonome", "de": "Selbstständige Übung", "it": "Pratica indipendente"},
+  "Prática guiada": {"en": "Guided practice", "pt-BR": "Prática guiada", "es": "Práctica guiada", "fr": "Pratique guidée", "de": "Angeleitete Übung", "it": "Pratica guidata"},
+  "Pessoas, organizações e números deste laboratório são fictícios. Dados públicos dos arquivos de apoio preservam sua própria proveniência.": {"en": "People, organizations and numbers in this lab are fictional. Public data in supporting files retains its own provenance.", "pt-BR": "Pessoas, organizações e números deste laboratório são fictícios. Dados públicos dos arquivos de apoio preservam sua própria proveniência.", "es": "Las personas, organizaciones y cifras de este laboratorio son ficticias. Los datos públicos de los archivos de apoyo conservan su propia procedencia.", "fr": "Les personnes, organisations et chiffres de cet atelier sont fictifs. Les données publiques des fichiers d’appui conservent leur propre provenance.", "de": "Personen, Organisationen und Zahlen in diesem Labor sind fiktiv. Öffentliche Daten in Begleitdateien behalten ihre eigene Herkunft.", "it": "Persone, organizzazioni e numeri di questo laboratorio sono fittizi. I dati pubblici dei file di supporto mantengono la propria provenienza."},
+  "Laboratório resolvido e variação": {"en": "Worked lab and variation", "pt-BR": "Laboratório resolvido e variação", "es": "Laboratorio resuelto y variación", "fr": "Atelier résolu et variante", "de": "Ausgearbeitetes Labor und Variante", "it": "Laboratorio svolto e variante"},
+  "Exemplo resolvido": {"en": "Worked example", "pt-BR": "Exemplo resolvido", "es": "Ejemplo resuelto", "fr": "Exemple résolu", "de": "Ausgearbeitetes Beispiel", "it": "Esempio svolto"},
+  "Aulas": {"en": "Lessons", "pt-BR": "Aulas", "es": "Lecciones", "fr": "Leçons", "de": "Lektionen", "it": "Lezioni"},
+  "Próximo passo:": {"en": "Next step:", "pt-BR": "Próximo passo:", "es": "Siguiente paso:", "fr": "Prochaine étape :", "de": "Nächster Schritt:", "it": "Prossimo passo:"},
+  "Estado:": {"en": "Status:", "pt-BR": "Estado:", "es": "Estado:", "fr": "État :", "de": "Status:", "it": "Stato:"},
+  "práticas registradas": {"en": "recorded practices", "pt-BR": "práticas registradas", "es": "prácticas registradas", "fr": "exercices enregistrés", "de": "erfasste Übungen", "it": "pratiche registrate"},
+  "Progresso persistido": {"en": "Saved progress", "pt-BR": "Progresso persistido", "es": "Progreso guardado", "fr": "Progression enregistrée", "de": "Gespeicherter Fortschritt", "it": "Progressi salvati"},
+  "Use dados fictícios. Este diagnóstico é uma reflexão inicial, não uma atribuição automática de nível. Compare sua resposta com os exemplos durante o curso.": {"en": "Use fictional data. This diagnostic is an initial reflection, not an automatic proficiency rating. Compare your answer with the examples throughout the course.", "pt-BR": "Use dados fictícios. Este diagnóstico é uma reflexão inicial, não uma atribuição automática de nível. Compare sua resposta com os exemplos durante o curso.", "es": "Usa datos ficticios. Este diagnóstico es una reflexión inicial, no una asignación automática de nivel. Compara tu respuesta con los ejemplos durante el curso.", "fr": "Utilisez des données fictives. Ce diagnostic est une réflexion initiale, pas une attribution automatique de niveau. Comparez votre réponse aux exemples au fil du cours.", "de": "Verwende fiktive Daten. Diese Diagnose ist eine erste Reflexion, keine automatische Niveaueinstufung. Vergleiche deine Antwort im Kurs mit den Beispielen.", "it": "Usa dati fittizi. Questa diagnosi è una riflessione iniziale, non un’attribuzione automatica di livello. Confronta la risposta con gli esempi durante il corso."},
+  "Sua análise inicial (80–4.000 caracteres)": {"en": "Your initial analysis (80–4,000 characters)", "pt-BR": "Sua análise inicial (80–4.000 caracteres)", "es": "Tu análisis inicial (80–4.000 caracteres)", "fr": "Votre analyse initiale (80 à 4 000 caractères)", "de": "Deine erste Analyse (80–4.000 Zeichen)", "it": "La tua analisi iniziale (80–4.000 caratteri)"},
+  "Diagnóstico inicial": {"en": "Initial diagnostic", "pt-BR": "Diagnóstico inicial", "es": "Diagnóstico inicial", "fr": "Diagnostic initial", "de": "Eingangsdiagnose", "it": "Diagnosi iniziale"},
+  "Copie os campos ainda não salvos antes de recarregar.": {"en": "Copy any unsaved fields before reloading.", "pt-BR": "Copie os campos ainda não salvos antes de recarregar.", "es": "Copia los campos sin guardar antes de recargar.", "fr": "Copiez les champs non enregistrés avant de recharger.", "de": "Kopiere ungespeicherte Felder vor dem Neuladen.", "it": "Copia i campi non salvati prima di ricaricare."},
+  "Recarregar o último registro confirmado": {"en": "Reload the last confirmed record", "pt-BR": "Recarregar o último registro confirmado", "es": "Recargar el último registro confirmado", "fr": "Recharger le dernier enregistrement confirmé", "de": "Letzten bestätigten Datensatz neu laden", "it": "Ricarica l’ultima registrazione confermata"},
+  "Power Query comentado": {"en": "Annotated Power Query", "pt-BR": "Power Query comentado", "es": "Power Query comentado", "fr": "Power Query commenté", "de": "Kommentiertes Power Query", "it": "Power Query commentato"},
+  "Origem e dicionário": {"en": "Source and data dictionary", "pt-BR": "Origem e dicionário", "es": "Fuente y diccionario de datos", "fr": "Source et dictionnaire des données", "de": "Quelle und Datenwörterbuch", "it": "Fonte e dizionario dei dati"},
+  "Dataset público": {"en": "Public dataset", "pt-BR": "Dataset público", "es": "Conjunto de datos público", "fr": "Jeu de données public", "de": "Öffentlicher Datensatz", "it": "Dataset pubblico"},
+  "Solução comentada": {"en": "Annotated solution", "pt-BR": "Solução comentada", "es": "Solución comentada", "fr": "Solution commentée", "de": "Kommentierte Lösung", "it": "Soluzione commentata"},
+  "Planilha de exercício": {"en": "Exercise spreadsheet", "pt-BR": "Planilha de exercício", "es": "Hoja de cálculo del ejercicio", "fr": "Tableur d’exercice", "de": "Übungstabelle", "it": "Foglio di esercizio"},
+  "Baixar material e caderno de prática": {"en": "Download materials and practice workbook", "pt-BR": "Baixar material e caderno de prática", "es": "Descargar material y cuaderno de práctica", "fr": "Télécharger le matériel et le cahier d’exercices", "de": "Material und Übungsheft herunterladen", "it": "Scarica materiale e quaderno di pratica"},
+  ". O registro das práticas indica atividade realizada; a competência depende do questionário e do projeto avaliado.": {"en": ". Practice records indicate completed activities; competence depends on the quiz and reviewed project.", "pt-BR": ". O registro das práticas indica atividade realizada; a competência depende do questionário e do projeto avaliado.", "es": ". Los registros de práctica indican actividades realizadas; la competencia depende del cuestionario y del proyecto evaluado.", "fr": ". Les enregistrements d’exercices indiquent les activités réalisées ; la compétence dépend du questionnaire et du projet évalué.", "de": ". Übungsnachweise belegen durchgeführte Aktivitäten; Kompetenz hängt vom Quiz und dem bewerteten Projekt ab.", "it": ". I registri delle pratiche indicano attività svolte; la competenza dipende dal questionario e dal progetto valutato."},
+  "Instrução: português · exemplos de idioma preservados ·": {"en": "Instruction: Portuguese · language examples preserved ·", "pt-BR": "Instrução: português · exemplos de idioma preservados ·", "es": "Instrucción: portugués · ejemplos de idioma conservados ·", "fr": "Enseignement : portugais · exemples de langue conservés ·", "de": "Unterricht: Portugiesisch · Sprachbeispiele bleiben erhalten ·", "it": "Istruzione: portoghese · esempi linguistici preservati ·"},
+  "Arquivo privado recebido. Salve o rascunho para vinculá-lo ao projeto.": {"en": "Private file received. Save the draft to attach it to the project.", "pt-BR": "Arquivo privado recebido. Salve o rascunho para vinculá-lo ao projeto.", "es": "Archivo privado recibido. Guarda el borrador para vincularlo al proyecto.", "fr": "Fichier privé reçu. Enregistrez le brouillon pour le joindre au projet.", "de": "Private Datei empfangen. Speichere den Entwurf, um sie mit dem Projekt zu verknüpfen.", "it": "File privato ricevuto. Salva la bozza per collegarlo al progetto."},
+  "Use até seis arquivos, cada um com até 3 MB.": {"en": "Use up to six files, each no larger than 3 MB.", "pt-BR": "Use até seis arquivos, cada um com até 3 MB.", "es": "Usa hasta seis archivos, cada uno de hasta 3 MB.", "fr": "Utilisez jusqu’à six fichiers de 3 Mo maximum chacun.", "de": "Verwende bis zu sechs Dateien mit jeweils höchstens 3 MB.", "it": "Usa fino a sei file, ciascuno di massimo 3 MB."},
+  "Áudio privado recebido. Salve o rascunho para vinculá-lo ao projeto.": {"en": "Private audio received. Save the draft to attach it to the project.", "pt-BR": "Áudio privado recebido. Salve o rascunho para vinculá-lo ao projeto.", "es": "Audio privado recibido. Guarda el borrador para vincularlo al proyecto.", "fr": "Audio privé reçu. Enregistrez le brouillon pour le joindre au projet.", "de": "Private Audiodatei empfangen. Speichere den Entwurf, um sie mit dem Projekt zu verknüpfen.", "it": "Audio privato ricevuto. Salva la bozza per collegarlo al progetto."},
+  "Confirme o consentimento e use WebM ou WAV de até 600 KB.": {"en": "Confirm consent and use a WebM or WAV file of up to 600 KB.", "pt-BR": "Confirme o consentimento e use WebM ou WAV de até 600 KB.", "es": "Confirma el consentimiento y usa WebM o WAV de hasta 600 KB.", "fr": "Confirmez votre consentement et utilisez un fichier WebM ou WAV de 600 Ko maximum.", "de": "Bestätige die Einwilligung und verwende WebM oder WAV mit höchstens 600 KB.", "it": "Conferma il consenso e usa WebM o WAV fino a 600 KB."},
+  "Registro confirmado no servidor.": {"en": "Record confirmed on the server.", "pt-BR": "Registro confirmado no servidor.", "es": "Registro confirmado en el servidor.", "fr": "Enregistrement confirmé sur le serveur.", "de": "Datensatz auf dem Server bestätigt.", "it": "Registrazione confermata sul server."},
+  "A prática desta aula ainda não foi salva. Deseja trocar de aula e descartar este campo?": {"en": "Your practice for this lesson has not been saved. Switch lessons and discard this field?", "pt-BR": "A prática desta aula ainda não foi salva. Deseja trocar de aula e descartar este campo?", "es": "La práctica de esta lección no se ha guardado. ¿Cambiar de lección y descartar este campo?", "fr": "L’exercice de cette leçon n’est pas enregistré. Changer de leçon et abandonner ce champ ?", "de": "Die Übung dieser Lektion wurde nicht gespeichert. Lektion wechseln und dieses Feld verwerfen?", "it": "La pratica di questa lezione non è stata salvata. Cambiare lezione e scartare questo campo?"},
+  "Recuperação:": {"en": "Remediation:", "pt-BR": "Recuperação:", "es": "Recuperación:", "fr": "Remédiation :", "de": "Nachbereitung:", "it": "Recupero:"},
+  "Erros frequentes": {"en": "Common mistakes", "pt-BR": "Erros frequentes", "es": "Errores frecuentes", "fr": "Erreurs fréquentes", "de": "Häufige Fehler", "it": "Errori frequenti"},
+  "Critérios de sucesso": {"en": "Success criteria", "pt-BR": "Critérios de sucesso", "es": "Criterios de éxito", "fr": "Critères de réussite", "de": "Erfolgskriterien", "it": "Criteri di successo"},
+  "We may update this policy as TGPI evolves or legal requirements change. Material updates will be reflected by a revised date and, where required, additional notice. Privacy requests:": {"en": "We may update this policy as TGPI evolves or legal requirements change. Material updates will be reflected by a revised date and, where required, additional notice. Privacy requests:", "pt-BR": "Podemos atualizar esta política conforme a evolução da TGPI ou mudanças nos requisitos legais. Atualizações relevantes serão indicadas por uma nova data e, quando exigido, por aviso adicional. Solicitações de privacidade:", "es": "Podemos actualizar esta política a medida que evolucione TGPI o cambien los requisitos legales. Las actualizaciones importantes se reflejarán en una nueva fecha y, cuando sea obligatorio, en un aviso adicional. Solicitudes de privacidad:", "fr": "Nous pouvons mettre à jour cette politique à mesure que TGPI évolue ou que les exigences légales changent. Les modifications importantes seront signalées par une nouvelle date et, si nécessaire, un avis supplémentaire. Demandes relatives à la confidentialité :", "de": "Wir können diese Erklärung aktualisieren, wenn TGPI sich weiterentwickelt oder rechtliche Anforderungen sich ändern. Wesentliche Änderungen werden durch ein neues Datum und gegebenenfalls einen zusätzlichen Hinweis kenntlich gemacht. Datenschutzanfragen:", "it": "Possiamo aggiornare questa informativa in base all’evoluzione di TGPI o a modifiche dei requisiti legali. Gli aggiornamenti rilevanti saranno indicati da una nuova data e, ove richiesto, da un avviso aggiuntivo. Richieste sulla privacy:"},
+  "12. Updates and contact": {"en": "12. Updates and contact", "pt-BR": "12. Atualizações e contato", "es": "12. Actualizaciones y contacto", "fr": "12. Mises à jour et contact", "de": "12. Aktualisierungen und Kontakt", "it": "12. Aggiornamenti e contatti"},
+  "Authentication, security, payment and preference technologies may be used to keep TGPI functional and secure. Details are available in the": {"en": "Authentication, security, payment and preference technologies may be used to keep TGPI functional and secure. Details are available in the", "pt-BR": "Tecnologias de autenticação, segurança, pagamento e preferências podem ser usadas para manter a TGPI funcional e segura. Os detalhes estão disponíveis na", "es": "Pueden utilizarse tecnologías de autenticación, seguridad, pago y preferencias para mantener TGPI funcional y segura. Los detalles están disponibles en la", "fr": "Des technologies d’authentification, de sécurité, de paiement et de préférences peuvent être utilisées pour assurer le fonctionnement et la sécurité de TGPI. Les détails figurent dans la", "de": "Technologien für Authentifizierung, Sicherheit, Zahlung und Einstellungen können eingesetzt werden, um TGPI funktionsfähig und sicher zu halten. Einzelheiten findest du in der", "it": "Possono essere utilizzate tecnologie di autenticazione, sicurezza, pagamento e preferenze per mantenere TGPI funzionante e sicura. I dettagli sono disponibili nell’"},
+  "11. Cookies and similar technologies": {"en": "11. Cookies and similar technologies", "pt-BR": "11. Cookies e tecnologias semelhantes", "es": "11. Cookies y tecnologías similares", "fr": "11. Cookies et technologies similaires", "de": "11. Cookies und ähnliche Technologien", "it": "11. Cookie e tecnologie simili"},
+  "TGPI does not knowingly seek to process children's personal data contrary to applicable law. Where a minor cannot validly consent or contract independently, authorization from a parent or legal guardian may be required. If you believe a child's data has been provided improperly, contact us so we can assess and take appropriate action.": {"en": "TGPI does not knowingly seek to process children's personal data contrary to applicable law. Where a minor cannot validly consent or contract independently, authorization from a parent or legal guardian may be required. If you believe a child's data has been provided improperly, contact us so we can assess and take appropriate action.", "pt-BR": "A TGPI não busca conscientemente tratar dados pessoais de crianças em desacordo com a legislação aplicável. Quando um menor não puder consentir ou contratar validamente de forma independente, poderá ser necessária autorização de pai, mãe ou responsável legal. Se você acreditar que dados de uma criança foram fornecidos indevidamente, entre em contato para avaliarmos e tomarmos as medidas adequadas.", "es": "TGPI no busca tratar conscientemente datos personales de niños en contra de la legislación aplicable. Cuando un menor no pueda consentir o contratar válidamente de forma independiente, puede requerirse autorización de sus padres o tutor legal. Si crees que se han facilitado indebidamente datos de un niño, contáctanos para evaluar el caso y adoptar las medidas apropiadas.", "fr": "TGPI ne cherche pas sciemment à traiter des données personnelles d’enfants en violation de la loi applicable. Lorsqu’un mineur ne peut valablement consentir ou contracter de manière autonome, l’autorisation d’un parent ou représentant légal peut être nécessaire. Si vous pensez que des données d’enfant ont été fournies indûment, contactez-nous afin que nous évaluions la situation et prenions les mesures appropriées.", "de": "TGPI beabsichtigt nicht, wissentlich personenbezogene Daten von Kindern entgegen geltendem Recht zu verarbeiten. Kann ein Minderjähriger nicht selbstständig wirksam einwilligen oder einen Vertrag schließen, kann die Zustimmung eines Elternteils oder gesetzlichen Vertreters erforderlich sein. Wenn du glaubst, dass Kinderdaten unzulässig bereitgestellt wurden, kontaktiere uns zur Prüfung und für geeignete Maßnahmen.", "it": "TGPI non intende trattare consapevolmente dati personali di bambini in violazione della legge applicabile. Quando un minore non può validamente prestare consenso o stipulare contratti autonomamente, può essere necessaria l’autorizzazione di un genitore o tutore legale. Se ritieni che dati di un bambino siano stati forniti impropriamente, contattaci affinché possiamo valutare il caso e adottare misure adeguate."},
+  "10. Children and minors": {"en": "10. Children and minors", "pt-BR": "10. Crianças e adolescentes", "es": "10. Niños y menores", "fr": "10. Enfants et mineurs", "de": "10. Kinder und Minderjährige", "it": "10. Bambini e minori"},
+  "Requests may be sent to contact@theglobalpolymath.com. We may need to verify your identity before fulfilling a request and may retain information where the law permits or requires continued retention.": {"en": "Requests may be sent to contact@theglobalpolymath.com. We may need to verify your identity before fulfilling a request and may retain information where the law permits or requires continued retention.", "pt-BR": "As solicitações podem ser enviadas para contact@theglobalpolymath.com. Podemos precisar verificar sua identidade antes de atender à solicitação e reter informações quando a lei permitir ou exigir sua conservação.", "es": "Las solicitudes pueden enviarse a contact@theglobalpolymath.com. Podemos necesitar verificar tu identidad antes de atender una solicitud y conservar información cuando la ley lo permita o exija.", "fr": "Les demandes peuvent être envoyées à contact@theglobalpolymath.com. Nous pouvons devoir vérifier votre identité avant d’y répondre et conserver des informations lorsque la loi le permet ou l’impose.", "de": "Anfragen können an contact@theglobalpolymath.com gesendet werden. Vor der Bearbeitung müssen wir gegebenenfalls deine Identität prüfen und Informationen aufbewahren, soweit das Gesetz dies erlaubt oder verlangt.", "it": "Le richieste possono essere inviate a contact@theglobalpolymath.com. Potremmo dover verificare la tua identità prima di soddisfarle e conservare informazioni quando la legge lo consente o lo richiede."},
+  "Subject to applicable law, you may request confirmation of processing, access, correction, information about sharing, portability where regulated and applicable, review of eligible automated decisions, anonymization, blocking or deletion of certain data, withdrawal of consent where processing is based on consent, and other rights available under the LGPD or local law.": {"en": "Subject to applicable law, you may request confirmation of processing, access, correction, information about sharing, portability where regulated and applicable, review of eligible automated decisions, anonymization, blocking or deletion of certain data, withdrawal of consent where processing is based on consent, and other rights available under the LGPD or local law.", "pt-BR": "Conforme a legislação aplicável, você poderá solicitar confirmação do tratamento, acesso, correção, informações sobre compartilhamento, portabilidade quando regulamentada e aplicável, revisão de decisões automatizadas elegíveis, anonimização, bloqueio ou exclusão de determinados dados, revogação do consentimento quando ele fundamentar o tratamento e outros direitos previstos na LGPD ou na legislação local.", "es": "Conforme a la legislación aplicable, puedes solicitar confirmación del tratamiento, acceso, rectificación, información sobre el intercambio, portabilidad cuando esté regulada y sea aplicable, revisión de decisiones automatizadas elegibles, anonimización, bloqueo o eliminación de ciertos datos, retirada del consentimiento cuando este fundamente el tratamiento y otros derechos previstos en la LGPD o la legislación local.", "fr": "Sous réserve de la loi applicable, vous pouvez demander confirmation du traitement, accès, rectification, informations sur le partage, portabilité lorsqu’elle est réglementée et applicable, réexamen des décisions automatisées concernées, anonymisation, blocage ou suppression de certaines données, retrait du consentement lorsque le traitement en dépend et autres droits prévus par la LGPD ou le droit local.", "de": "Nach geltendem Recht kannst du eine Bestätigung der Verarbeitung, Auskunft, Berichtigung, Informationen zur Weitergabe, Portabilität soweit geregelt und anwendbar, Prüfung einschlägiger automatisierter Entscheidungen, Anonymisierung, Sperrung oder Löschung bestimmter Daten, Widerruf einer als Grundlage dienenden Einwilligung sowie weitere Rechte nach der LGPD oder lokalem Recht verlangen.", "it": "Fatto salvo il diritto applicabile, puoi richiedere conferma del trattamento, accesso, rettifica, informazioni sulla condivisione, portabilità ove regolamentata e applicabile, riesame di decisioni automatizzate ammissibili, anonimizzazione, blocco o cancellazione di determinati dati, revoca del consenso quando il trattamento si basa su di esso e altri diritti previsti dalla LGPD o dalla legge locale."},
+  "9. Your privacy rights": {"en": "9. Your privacy rights", "pt-BR": "9. Seus direitos de privacidade", "es": "9. Tus derechos de privacidad", "fr": "9. Vos droits relatifs à la confidentialité", "de": "9. Deine Datenschutzrechte", "it": "9. I tuoi diritti sulla privacy"},
+  "TGPI applies technical and organizational measures intended to protect personal data, including access controls, secured infrastructure, restricted secrets and trusted payment and authentication providers. No internet service can guarantee absolute security, and users should protect their own credentials and devices.": {"en": "TGPI applies technical and organizational measures intended to protect personal data, including access controls, secured infrastructure, restricted secrets and trusted payment and authentication providers. No internet service can guarantee absolute security, and users should protect their own credentials and devices.", "pt-BR": "A TGPI aplica medidas técnicas e organizacionais destinadas a proteger dados pessoais, incluindo controles de acesso, infraestrutura segura, segredos de acesso restrito e prestadores confiáveis de pagamento e autenticação. Nenhum serviço de internet pode garantir segurança absoluta; os usuários devem proteger suas próprias credenciais e dispositivos.", "es": "TGPI aplica medidas técnicas y organizativas para proteger los datos personales, incluidos controles de acceso, infraestructura segura, secretos de acceso restringido y proveedores fiables de pagos y autenticación. Ningún servicio de internet puede garantizar seguridad absoluta; los usuarios deben proteger sus propias credenciales y dispositivos.", "fr": "TGPI applique des mesures techniques et organisationnelles visant à protéger les données personnelles, notamment des contrôles d’accès, une infrastructure sécurisée, des secrets à accès restreint et des prestataires fiables de paiement et d’authentification. Aucun service internet ne peut garantir une sécurité absolue ; les utilisateurs doivent protéger leurs propres identifiants et appareils.", "de": "TGPI setzt technische und organisatorische Maßnahmen zum Schutz personenbezogener Daten ein, darunter Zugriffskontrollen, gesicherte Infrastruktur, zugriffsbeschränkte Geheimnisse sowie vertrauenswürdige Zahlungs- und Authentifizierungsanbieter. Kein Internetdienst kann absolute Sicherheit garantieren; Nutzer sollten ihre eigenen Zugangsdaten und Geräte schützen.", "it": "TGPI applica misure tecniche e organizzative per proteggere i dati personali, inclusi controlli degli accessi, infrastruttura sicura, segreti ad accesso limitato e fornitori affidabili di pagamento e autenticazione. Nessun servizio internet può garantire sicurezza assoluta; gli utenti devono proteggere le proprie credenziali e i propri dispositivi."},
+  "8. Security": {"en": "8. Security", "pt-BR": "8. Segurança", "es": "8. Seguridad", "fr": "8. Sécurité", "de": "8. Sicherheit", "it": "8. Sicurezza"},
+  "We retain personal data for as long as reasonably necessary to provide the service, maintain account continuity, comply with tax, accounting, legal and security obligations, resolve disputes and enforce agreements. Retention periods vary by data type. Data may be deleted, anonymized or isolated when it is no longer required, subject to lawful retention obligations.": {"en": "We retain personal data for as long as reasonably necessary to provide the service, maintain account continuity, comply with tax, accounting, legal and security obligations, resolve disputes and enforce agreements. Retention periods vary by data type. Data may be deleted, anonymized or isolated when it is no longer required, subject to lawful retention obligations.", "pt-BR": "Retemos dados pessoais pelo tempo razoavelmente necessário para fornecer o serviço, manter a continuidade da conta, cumprir obrigações fiscais, contábeis, legais e de segurança, resolver disputas e fazer cumprir acordos. Os prazos variam conforme o tipo de dado. Os dados podem ser excluídos, anonimizados ou isolados quando deixarem de ser necessários, observadas as obrigações legais de retenção.", "es": "Conservamos datos personales durante el tiempo razonablemente necesario para prestar el servicio, mantener la continuidad de la cuenta, cumplir obligaciones fiscales, contables, legales y de seguridad, resolver disputas y hacer cumplir acuerdos. Los plazos varían según el tipo de dato. Los datos pueden eliminarse, anonimizarse o aislarse cuando ya no sean necesarios, sin perjuicio de las obligaciones legales de conservación.", "fr": "Nous conservons les données personnelles aussi longtemps que raisonnablement nécessaire pour fournir le service, maintenir la continuité du compte, respecter les obligations fiscales, comptables, légales et de sécurité, résoudre les litiges et faire appliquer les accords. Les durées varient selon le type de données. Elles peuvent être supprimées, anonymisées ou isolées lorsqu’elles ne sont plus nécessaires, sous réserve des obligations légales de conservation.", "de": "Wir speichern personenbezogene Daten so lange, wie es vernünftigerweise für die Leistungserbringung, Kontinuität des Kontos, Erfüllung steuerlicher, buchhalterischer, gesetzlicher und sicherheitsbezogener Pflichten, Streitbeilegung und Durchsetzung von Vereinbarungen erforderlich ist. Die Dauer hängt von der Datenart ab. Nicht mehr benötigte Daten können vorbehaltlich gesetzlicher Aufbewahrungspflichten gelöscht, anonymisiert oder isoliert werden.", "it": "Conserviamo i dati personali per il tempo ragionevolmente necessario a fornire il servizio, mantenere la continuità dell’account, rispettare obblighi fiscali, contabili, legali e di sicurezza, risolvere controversie e far rispettare accordi. I tempi variano per tipo di dato. I dati non più necessari possono essere eliminati, anonimizzati o isolati, fatti salvi gli obblighi legali di conservazione."},
+  "7. Retention": {"en": "7. Retention", "pt-BR": "7. Retenção", "es": "7. Conservación", "fr": "7. Conservation", "de": "7. Aufbewahrung", "it": "7. Conservazione"},
+  "TGPI is built for international use and some infrastructure providers may process or store data outside Brazil. When applicable, TGPI relies on lawful transfer mechanisms and safeguards available under the LGPD and other applicable data-protection laws, together with the contractual and security commitments of its providers.": {"en": "TGPI is built for international use and some infrastructure providers may process or store data outside Brazil. When applicable, TGPI relies on lawful transfer mechanisms and safeguards available under the LGPD and other applicable data-protection laws, together with the contractual and security commitments of its providers.", "pt-BR": "A TGPI foi criada para uso internacional, e alguns prestadores de infraestrutura podem tratar ou armazenar dados fora do Brasil. Quando aplicável, a TGPI utiliza mecanismos legais de transferência e salvaguardas previstos na LGPD e em outras leis de proteção de dados aplicáveis, juntamente com os compromissos contratuais e de segurança dos seus prestadores.", "es": "TGPI está diseñada para uso internacional y algunos proveedores de infraestructura pueden tratar o almacenar datos fuera de Brasil. Cuando corresponda, TGPI utiliza mecanismos legales de transferencia y garantías disponibles bajo la LGPD y otras leyes aplicables de protección de datos, junto con los compromisos contractuales y de seguridad de sus proveedores.", "fr": "TGPI est conçue pour un usage international et certains prestataires d’infrastructure peuvent traiter ou stocker des données hors du Brésil. Le cas échéant, TGPI s’appuie sur les mécanismes légaux de transfert et les garanties prévus par la LGPD et les autres lois applicables sur la protection des données, ainsi que sur les engagements contractuels et de sécurité de ses prestataires.", "de": "TGPI ist für die internationale Nutzung ausgelegt; einige Infrastrukturanbieter können Daten außerhalb Brasiliens verarbeiten oder speichern. Soweit anwendbar, stützt sich TGPI auf rechtmäßige Übermittlungsmechanismen und Schutzmaßnahmen nach der LGPD und anderen geltenden Datenschutzgesetzen sowie auf vertragliche und sicherheitsbezogene Verpflichtungen seiner Anbieter.", "it": "TGPI è progettata per l’utilizzo internazionale e alcuni fornitori di infrastruttura possono trattare o conservare dati fuori dal Brasile. Ove applicabile, TGPI si avvale di meccanismi leciti di trasferimento e garanzie previsti dalla LGPD e da altre leggi applicabili sulla protezione dei dati, unitamente agli impegni contrattuali e di sicurezza dei propri fornitori."},
+  "6. International transfers": {"en": "6. International transfers", "pt-BR": "6. Transferências internacionais", "es": "6. Transferencias internacionales", "fr": "6. Transferts internationaux", "de": "6. Internationale Übermittlungen", "it": "6. Trasferimenti internazionali"},
+  "Providers process data under their own terms and privacy obligations and receive only the information reasonably necessary for the services they perform.": {"en": "Providers process data under their own terms and privacy obligations and receive only the information reasonably necessary for the services they perform.", "pt-BR": "Os prestadores tratam dados conforme seus próprios termos e obrigações de privacidade e recebem apenas as informações razoavelmente necessárias aos serviços que executam.", "es": "Los proveedores tratan datos conforme a sus propios términos y obligaciones de privacidad y reciben únicamente la información razonablemente necesaria para los servicios que prestan.", "fr": "Les prestataires traitent les données selon leurs propres conditions et obligations de confidentialité et ne reçoivent que les informations raisonnablement nécessaires aux services fournis.", "de": "Dienstleister verarbeiten Daten nach ihren eigenen Bedingungen und Datenschutzpflichten und erhalten nur die für ihre Leistungen vernünftigerweise erforderlichen Informationen.", "it": "I fornitori trattano i dati secondo i propri termini e obblighi di privacy e ricevono solo le informazioni ragionevolmente necessarie ai servizi prestati."},
+  "TGPI uses specialized providers to operate the service. These may include Clerk for authentication and account infrastructure, Stripe for billing and payment processing, Vercel for hosting and deployment infrastructure, and Google/Firebase services where enabled for platform storage or application functionality. We may also use security, communications and performance providers when necessary.": {"en": "TGPI uses specialized providers to operate the service. These may include Clerk for authentication and account infrastructure, Stripe for billing and payment processing, Vercel for hosting and deployment infrastructure, and Google/Firebase services where enabled for platform storage or application functionality. We may also use security, communications and performance providers when necessary.", "pt-BR": "A TGPI utiliza prestadores especializados para operar o serviço. Eles podem incluir Clerk para autenticação e infraestrutura de contas, Stripe para cobrança e processamento de pagamentos, Vercel para hospedagem e infraestrutura de publicação e serviços Google/Firebase, quando habilitados para armazenamento ou funcionalidades da aplicação. Também podemos utilizar prestadores de segurança, comunicação e desempenho quando necessário.", "es": "TGPI utiliza proveedores especializados para operar el servicio. Pueden incluir Clerk para autenticación e infraestructura de cuentas, Stripe para facturación y pagos, Vercel para alojamiento e infraestructura de despliegue, y servicios Google/Firebase cuando estén habilitados para almacenamiento o funciones de la aplicación. También podemos utilizar proveedores de seguridad, comunicaciones y rendimiento cuando sea necesario.", "fr": "TGPI fait appel à des prestataires spécialisés pour exploiter le service. Ceux-ci peuvent inclure Clerk pour l’authentification et l’infrastructure des comptes, Stripe pour la facturation et les paiements, Vercel pour l’hébergement et les déploiements, et Google/Firebase lorsqu’ils sont activés pour le stockage ou les fonctions de l’application. Nous pouvons également utiliser des prestataires de sécurité, de communication et de performance si nécessaire.", "de": "TGPI nutzt spezialisierte Dienstleister für den Betrieb. Dazu können Clerk für Authentifizierung und Kontoinfrastruktur, Stripe für Abrechnung und Zahlungsabwicklung, Vercel für Hosting und Bereitstellung sowie Google/Firebase für aktivierte Speicher- oder Anwendungsfunktionen gehören. Bei Bedarf können wir auch Anbieter für Sicherheit, Kommunikation und Leistung einsetzen.", "it": "TGPI utilizza fornitori specializzati per gestire il servizio. Possono includere Clerk per autenticazione e infrastruttura degli account, Stripe per fatturazione e pagamenti, Vercel per hosting e distribuzione, e Google/Firebase ove abilitati per archiviazione o funzionalità dell’applicazione. Possiamo inoltre utilizzare fornitori di sicurezza, comunicazioni e prestazioni quando necessario."},
+  "5. Service providers": {"en": "5. Service providers", "pt-BR": "5. Prestadores de serviços", "es": "5. Proveedores de servicios", "fr": "5. Prestataires de services", "de": "5. Dienstleister", "it": "5. Fornitori di servizi"},
+  "Where the Brazilian General Data Protection Law (LGPD) applies, processing may rely on performance of a contract or pre-contractual procedures, compliance with legal or regulatory obligations, legitimate interests subject to applicable safeguards, exercise of rights, fraud-prevention and security grounds permitted by law, or consent when consent is the appropriate legal basis.": {"en": "Where the Brazilian General Data Protection Law (LGPD) applies, processing may rely on performance of a contract or pre-contractual procedures, compliance with legal or regulatory obligations, legitimate interests subject to applicable safeguards, exercise of rights, fraud-prevention and security grounds permitted by law, or consent when consent is the appropriate legal basis.", "pt-BR": "Quando a Lei Geral de Proteção de Dados brasileira (LGPD) se aplicar, o tratamento poderá se basear na execução de contrato ou procedimentos preliminares, cumprimento de obrigações legais ou regulatórias, interesses legítimos sujeitos às salvaguardas aplicáveis, exercício de direitos, hipóteses legais de prevenção à fraude e segurança ou consentimento, quando esta for a base legal adequada.", "es": "Cuando sea aplicable la Ley General de Protección de Datos brasileña (LGPD), el tratamiento podrá basarse en la ejecución de un contrato o procedimientos precontractuales, el cumplimiento de obligaciones legales o regulatorias, intereses legítimos sujetos a las garantías aplicables, el ejercicio de derechos, motivos de prevención del fraude y seguridad permitidos por la ley, o el consentimiento cuando sea la base jurídica apropiada.", "fr": "Lorsque la loi générale brésilienne sur la protection des données (LGPD) s’applique, le traitement peut reposer sur l’exécution d’un contrat ou de mesures précontractuelles, le respect d’obligations légales ou réglementaires, des intérêts légitimes assortis des garanties applicables, l’exercice de droits, les fondements de prévention de la fraude et de sécurité autorisés par la loi, ou le consentement lorsqu’il constitue la base légale appropriée.", "de": "Soweit das brasilianische Datenschutzgesetz (LGPD) gilt, kann die Verarbeitung auf Vertragserfüllung oder vorvertraglichen Maßnahmen, gesetzlichen oder regulatorischen Pflichten, berechtigten Interessen unter anwendbaren Schutzmaßnahmen, der Ausübung von Rechten, gesetzlich zulässigen Gründen zur Betrugsprävention und Sicherheit oder auf Einwilligung beruhen, wenn diese die geeignete Rechtsgrundlage ist.", "it": "Quando si applica la Legge generale brasiliana sulla protezione dei dati (LGPD), il trattamento può fondarsi sull’esecuzione di un contratto o di misure precontrattuali, sull’adempimento di obblighi legali o normativi, su interessi legittimi soggetti alle garanzie applicabili, sull’esercizio di diritti, su motivi di prevenzione delle frodi e sicurezza consentiti dalla legge, o sul consenso quando costituisce la base giuridica appropriata."},
+  "4. Legal bases": {"en": "4. Legal bases", "pt-BR": "4. Bases legais", "es": "4. Bases jurídicas", "fr": "4. Bases légales", "de": "4. Rechtsgrundlagen", "it": "4. Basi giuridiche"},
+  "We use personal data to create and secure accounts; provide and personalize TGPI features; save progress and preferences; deliver Premium access; process and reconcile subscriptions; provide support; issue and verify eligible credentials; prevent abuse; diagnose reliability problems; comply with legal obligations; and improve the platform.": {"en": "We use personal data to create and secure accounts; provide and personalize TGPI features; save progress and preferences; deliver Premium access; process and reconcile subscriptions; provide support; issue and verify eligible credentials; prevent abuse; diagnose reliability problems; comply with legal obligations; and improve the platform.", "pt-BR": "Usamos dados pessoais para criar e proteger contas; oferecer e personalizar funcionalidades da TGPI; salvar progresso e preferências; fornecer acesso Premium; processar e conciliar assinaturas; prestar suporte; emitir e verificar credenciais elegíveis; prevenir abusos; diagnosticar problemas de confiabilidade; cumprir obrigações legais; e melhorar a plataforma.", "es": "Utilizamos datos personales para crear y proteger cuentas; proporcionar y personalizar funciones de TGPI; guardar progreso y preferencias; ofrecer acceso Premium; procesar y conciliar suscripciones; prestar asistencia; emitir y verificar credenciales elegibles; prevenir abusos; diagnosticar problemas de fiabilidad; cumplir obligaciones legales y mejorar la plataforma.", "fr": "Nous utilisons les données personnelles pour créer et sécuriser les comptes ; fournir et personnaliser les fonctionnalités TGPI ; enregistrer la progression et les préférences ; fournir l’accès Premium ; traiter et rapprocher les abonnements ; assurer l’assistance ; émettre et vérifier les justificatifs éligibles ; prévenir les abus ; diagnostiquer les problèmes de fiabilité ; respecter les obligations légales et améliorer la plateforme.", "de": "Wir verwenden personenbezogene Daten, um Konten zu erstellen und abzusichern, TGPI-Funktionen bereitzustellen und zu personalisieren, Fortschritt und Einstellungen zu speichern, Premium-Zugang zu gewähren, Abonnements abzuwickeln und abzugleichen, Support zu leisten, berechtigte Nachweise auszustellen und zu prüfen, Missbrauch zu verhindern, Zuverlässigkeitsprobleme zu diagnostizieren, gesetzlichen Pflichten nachzukommen und die Plattform zu verbessern.", "it": "Utilizziamo dati personali per creare e proteggere gli account; fornire e personalizzare le funzionalità TGPI; salvare progressi e preferenze; fornire accesso Premium; elaborare e riconciliare gli abbonamenti; fornire assistenza; emettere e verificare credenziali ammissibili; prevenire abusi; diagnosticare problemi di affidabilità; rispettare obblighi legali e migliorare la piattaforma."},
+  "3. Why we use personal data": {"en": "3. Why we use personal data", "pt-BR": "3. Por que usamos dados pessoais", "es": "3. Por qué utilizamos datos personales", "fr": "3. Pourquoi nous utilisons les données personnelles", "de": "3. Warum wir personenbezogene Daten verwenden", "it": "3. Perché utilizziamo dati personali"},
+  "Payment-card details are generally collected and processed by Stripe rather than stored directly by TGPI. TGPI may receive payment status, customer identifiers, subscription identifiers, billing dates and limited transaction information needed to operate your membership.": {"en": "Payment-card details are generally collected and processed by Stripe rather than stored directly by TGPI. TGPI may receive payment status, customer identifiers, subscription identifiers, billing dates and limited transaction information needed to operate your membership.", "pt-BR": "Os dados do cartão de pagamento geralmente são coletados e processados pela Stripe, em vez de armazenados diretamente pela TGPI. A TGPI pode receber o status de pagamento, identificadores do cliente e da assinatura, datas de cobrança e informações limitadas das transações necessárias para operar sua assinatura.", "es": "Los datos de las tarjetas de pago generalmente son recopilados y tratados por Stripe, en lugar de almacenarse directamente en TGPI. TGPI puede recibir el estado de pago, identificadores de cliente y suscripción, fechas de facturación e información limitada de las transacciones necesaria para gestionar tu membresía.", "fr": "Les données de carte bancaire sont généralement collectées et traitées par Stripe plutôt que stockées directement par TGPI. TGPI peut recevoir l’état du paiement, les identifiants de client et d’abonnement, les dates de facturation et les informations limitées sur les transactions nécessaires à la gestion de votre abonnement.", "de": "Zahlungskartendaten werden in der Regel von Stripe erhoben und verarbeitet, statt direkt bei TGPI gespeichert zu werden. TGPI kann Zahlungsstatus, Kunden- und Abonnementkennungen, Abrechnungsdaten sowie begrenzte Transaktionsinformationen erhalten, die für deine Mitgliedschaft erforderlich sind.", "it": "I dati delle carte di pagamento sono generalmente raccolti e trattati da Stripe anziché conservati direttamente da TGPI. TGPI può ricevere stato del pagamento, identificativi di cliente e abbonamento, date di fatturazione e informazioni limitate sulle transazioni necessarie per gestire l’abbonamento."},
+  "Depending on how you use TGPI, we may process account identifiers, name, email, profile information, preferences, selected countries, comparison data, readiness inputs, learning progress, certificates, document-related metadata, support communications, subscription status, transaction references, device information, logs, IP address and security signals.": {"en": "Depending on how you use TGPI, we may process account identifiers, name, email, profile information, preferences, selected countries, comparison data, readiness inputs, learning progress, certificates, document-related metadata, support communications, subscription status, transaction references, device information, logs, IP address and security signals.", "pt-BR": "Conforme seu uso da TGPI, podemos tratar identificadores de conta, nome, email, informações do perfil, preferências, países selecionados, dados de comparação, informações de preparação, progresso de aprendizagem, certificados, metadados relacionados a documentos, comunicações de suporte, situação da assinatura, referências de transações, informações do dispositivo, registros, endereço IP e sinais de segurança.", "es": "Según cómo utilices TGPI, podemos tratar identificadores de cuenta, nombre, correo electrónico, información del perfil, preferencias, países seleccionados, datos comparativos, datos de preparación, progreso de aprendizaje, certificados, metadatos de documentos, comunicaciones de soporte, estado de la suscripción, referencias de transacciones, información del dispositivo, registros, dirección IP y señales de seguridad.", "fr": "Selon votre utilisation de TGPI, nous pouvons traiter les identifiants de compte, le nom, l’e-mail, les informations de profil, les préférences, les pays sélectionnés, les données comparatives, les données de préparation, la progression, les certificats, les métadonnées documentaires, les échanges d’assistance, l’état de l’abonnement, les références de transactions, les informations de l’appareil, les journaux, l’adresse IP et les signaux de sécurité.", "de": "Je nach Nutzung von TGPI können wir Kontoidentifikatoren, Namen, E-Mail-Adresse, Profilinformationen, Einstellungen, ausgewählte Länder, Vergleichsdaten, Angaben zur Vorbereitung, Lernfortschritt, Zertifikate, dokumentbezogene Metadaten, Supportkommunikation, Abonnementstatus, Transaktionsreferenzen, Geräteinformationen, Protokolle, IP-Adresse und Sicherheitssignale verarbeiten.", "it": "In base all’utilizzo di TGPI, possiamo trattare identificativi dell’account, nome, email, informazioni del profilo, preferenze, paesi selezionati, dati comparativi, informazioni sulla preparazione, progressi di apprendimento, certificati, metadati documentali, comunicazioni di assistenza, stato dell’abbonamento, riferimenti delle transazioni, informazioni del dispositivo, registri, indirizzo IP e segnali di sicurezza."},
+  "2. Data we may collect": {"en": "2. Data we may collect", "pt-BR": "2. Dados que podemos coletar", "es": "2. Datos que podemos recopilar", "fr": "2. Données susceptibles d’être collectées", "de": "2. Daten, die wir erheben können", "it": "2. Dati che possiamo raccogliere"},
+  "TGPI GLOBAL EDUCATION LTDA, CNPJ 49.709.438/0001-32, is the controller of personal data processed for the operation of TGPI where it determines the purposes and means of processing. Privacy requests can be sent to": {"en": "TGPI GLOBAL EDUCATION LTDA, CNPJ 49.709.438/0001-32, is the controller of personal data processed for the operation of TGPI where it determines the purposes and means of processing. Privacy requests can be sent to", "pt-BR": "A TGPI GLOBAL EDUCATION LTDA, CNPJ 49.709.438/0001-32, é a controladora dos dados pessoais tratados para a operação da TGPI quando determina as finalidades e os meios do tratamento. Solicitações de privacidade podem ser enviadas para", "es": "TGPI GLOBAL EDUCATION LTDA, CNPJ 49.709.438/0001-32, es responsable de los datos personales tratados para operar TGPI cuando determina los fines y los medios del tratamiento. Las solicitudes de privacidad pueden enviarse a", "fr": "TGPI GLOBAL EDUCATION LTDA, CNPJ 49.709.438/0001-32, est responsable du traitement des données personnelles nécessaires au fonctionnement de TGPI lorsqu’elle en détermine les finalités et les moyens. Les demandes relatives à la confidentialité peuvent être envoyées à", "de": "TGPI GLOBAL EDUCATION LTDA, CNPJ 49.709.438/0001-32, ist für die zum Betrieb von TGPI verarbeiteten personenbezogenen Daten verantwortlich, soweit sie die Zwecke und Mittel der Verarbeitung bestimmt. Datenschutzanfragen können gesendet werden an", "it": "TGPI GLOBAL EDUCATION LTDA, CNPJ 49.709.438/0001-32, è titolare dei dati personali trattati per il funzionamento di TGPI quando determina finalità e mezzi del trattamento. Le richieste sulla privacy possono essere inviate a"},
+  "1. Controller": {"en": "1. Controller", "pt-BR": "1. Controlador", "es": "1. Responsable del tratamiento", "fr": "1. Responsable du traitement", "de": "1. Verantwortlicher", "it": "1. Titolare del trattamento"},
+  "This policy explains how TGPI handles personal data across accounts, country intelligence, learning, billing, credentials and platform operations.": {"en": "This policy explains how TGPI handles personal data across accounts, country intelligence, learning, billing, credentials and platform operations.", "pt-BR": "Esta política explica como a TGPI trata dados pessoais em contas, inteligência sobre países, aprendizagem, cobrança, credenciais e operações da plataforma.", "es": "Esta política explica cómo trata TGPI los datos personales en cuentas, información sobre países, aprendizaje, facturación, credenciales y operaciones de la plataforma.", "fr": "Cette politique explique comment TGPI traite les données personnelles liées aux comptes, à l’information sur les pays, à l’apprentissage, à la facturation, aux justificatifs et au fonctionnement de la plateforme.", "de": "Diese Erklärung erläutert, wie TGPI personenbezogene Daten für Konten, Länderinformationen, Lernen, Abrechnung, Nachweise und den Plattformbetrieb verarbeitet.", "it": "Questa informativa spiega come TGPI tratta i dati personali relativi ad account, informazioni sui paesi, apprendimento, fatturazione, credenziali e funzionamento della piattaforma."},
+  "Privacy Policy": {"en": "Privacy Policy", "pt-BR": "Política de Privacidade", "es": "Política de privacidad", "fr": "Politique de confidentialité", "de": "Datenschutzerklärung", "it": "Informativa sulla privacy"},
+  "Your next lesson: {title} ↑": {"en": "Your next lesson: {title} ↑", "pt-BR": "Sua próxima aula: {title} ↑", "es": "Tu próxima lección: {title} ↑", "fr": "Votre prochaine leçon : {title} ↑", "de": "Deine nächste Lektion: {title} ↑", "it": "La tua prossima lezione: {title} ↑"},
+  "Sync needs attention: {error}": {"en": "Sync needs attention: {error}", "pt-BR": "A sincronização precisa de atenção: {error}", "es": "La sincronización requiere atención: {error}", "fr": "La synchronisation nécessite votre attention : {error}", "de": "Die Synchronisierung benötigt Aufmerksamkeit: {error}", "it": "La sincronizzazione richiede attenzione: {error}"},
+  "{completed} of {total} lessons completed · Learning record synced": {"en": "{completed} of {total} lessons completed · Learning record synced", "pt-BR": "{completed} de {total} aulas concluídas · Registro de aprendizagem sincronizado", "es": "{completed} de {total} lecciones completadas · Registro de aprendizaje sincronizado", "fr": "{completed} leçons terminées sur {total} · Dossier d’apprentissage synchronisé", "de": "{completed} von {total} Lektionen abgeschlossen · Lernnachweis synchronisiert", "it": "{completed} di {total} lezioni completate · Registro di apprendimento sincronizzato"},
+  "Lesson {current} of {total}": {"en": "Lesson {current} of {total}", "pt-BR": "Aula {current} de {total}", "es": "Lección {current} de {total}", "fr": "Leçon {current} sur {total}", "de": "Lektion {current} von {total}", "it": "Lezione {current} di {total}"},
+  "Transfer challenge: change the location, deadline or amount. Can you still achieve the same outcome?": {
+    "en": "Transfer challenge: change the location, deadline or amount. Can you still achieve the same outcome?",
+    "pt-BR": "Desafio de transferência: altere o local, o prazo ou o valor. Você ainda consegue alcançar o mesmo resultado?",
+    "es": "Desafío de transferencia: cambia el lugar, el plazo o el importe. ¿Puedes lograr el mismo resultado?",
+    "fr": "Défi de transfert : changez le lieu, le délai ou le montant. Pouvez-vous encore obtenir le même résultat ?",
+    "de": "Transferaufgabe: Ändere Ort, Termin oder Betrag. Kannst du noch dasselbe Ergebnis erreichen?",
+    "it": "Sfida di trasferimento: cambia luogo, scadenza o importo. Riesci ancora a ottenere lo stesso risultato?"
+  },
+  "Now change one detail in the scenario and answer again. Revisit tomorrow and in seven days to test retrieval.": {
+    "en": "Now change one detail in the scenario and answer again. Revisit tomorrow and in seven days to test retrieval.",
+    "pt-BR": "Agora altere um detalhe do cenário e responda novamente. Revise amanhã e em sete dias para testar a recuperação da memória.",
+    "es": "Ahora cambia un detalle del escenario y responde de nuevo. Repasa mañana y dentro de siete días para comprobar el recuerdo.",
+    "fr": "Modifiez maintenant un détail du scénario et répondez à nouveau. Revenez demain et dans sept jours pour tester le rappel.",
+    "de": "Ändere jetzt ein Detail im Szenario und antworte erneut. Wiederhole morgen und in sieben Tagen, um den Abruf zu testen.",
+    "it": "Ora cambia un dettaglio dello scenario e rispondi di nuovo. Ripassa domani e tra sette giorni per verificare il richiamo."
+  },
+  "Review your response, then repeat without looking": {
+    "en": "Review your response, then repeat without looking",
+    "pt-BR": "Revise sua resposta e repita sem consultar",
+    "es": "Revisa tu respuesta y repite sin consultar",
+    "fr": "Relisez votre réponse, puis répétez sans regarder",
+    "de": "Prüfe deine Antwort und wiederhole sie ohne Nachschauen",
+    "it": "Rivedi la risposta, poi ripeti senza guardare"
+  },
+  "Compare with the worked example": {
+    "en": "Compare with the worked example",
+    "pt-BR": "Comparar com o exemplo resolvido",
+    "es": "Comparar con el ejemplo resuelto",
+    "fr": "Comparer avec l’exemple résolu",
+    "de": "Mit dem ausgearbeiteten Beispiel vergleichen",
+    "it": "Confronta con l’esempio svolto"
+  },
+  "Hide worked example": {
+    "en": "Hide worked example",
+    "pt-BR": "Ocultar exemplo resolvido",
+    "es": "Ocultar ejemplo resuelto",
+    "fr": "Masquer l’exemple résolu",
+    "de": "Ausgearbeitetes Beispiel ausblenden",
+    "it": "Nascondi esempio svolto"
+  },
+  "Private scratchpad for this visit. Copy anything you want to keep. This practice is self-reviewed and is not graded.": {
+    "en": "Private scratchpad for this visit. Copy anything you want to keep. This practice is self-reviewed and is not graded.",
+    "pt-BR": "Rascunho privado desta visita. Copie o que quiser guardar. Esta prática é autoavaliada e não recebe nota.",
+    "es": "Borrador privado de esta visita. Copia lo que quieras conservar. Esta práctica es autoevaluada y no se califica.",
+    "fr": "Brouillon privé pour cette visite. Copiez ce que vous souhaitez conserver. Cet exercice est autoévalué et non noté.",
+    "de": "Privater Notizbereich für diesen Besuch. Kopiere, was du behalten möchtest. Diese Übung wird selbst geprüft und nicht benotet.",
+    "it": "Bozza privata per questa visita. Copia ciò che vuoi conservare. Questa pratica è autovalutata e non riceve un voto."
+  },
+  "Start with your purpose. Add the essential detail. Confirm the next step.": {
+    "en": "Start with your purpose. Add the essential detail. Confirm the next step.",
+    "pt-BR": "Comece pelo objetivo. Acrescente o detalhe essencial. Confirme o próximo passo.",
+    "es": "Empieza por el objetivo. Añade el detalle esencial. Confirma el siguiente paso.",
+    "fr": "Commencez par l’objectif. Ajoutez le détail essentiel. Confirmez la prochaine étape.",
+    "de": "Beginne mit dem Ziel. Ergänze das wesentliche Detail. Bestätige den nächsten Schritt.",
+    "it": "Inizia dallo scopo. Aggiungi il dettaglio essenziale. Conferma il passo successivo."
+  },
+  "What would you actually say?": {
+    "en": "What would you actually say?",
+    "pt-BR": "O que você realmente diria?",
+    "es": "¿Qué dirías realmente?",
+    "fr": "Que diriez-vous réellement ?",
+    "de": "Was würdest du tatsächlich sagen?",
+    "it": "Cosa diresti davvero?"
+  },
+  "What would you decide, and what evidence supports it?": {
+    "en": "What would you decide, and what evidence supports it?",
+    "pt-BR": "O que você decidiria e quais evidências apoiam sua decisão?",
+    "es": "¿Qué decidirías y qué evidencias lo respaldan?",
+    "fr": "Que décideriez-vous et quelles preuves étayent votre décision ?",
+    "de": "Was würdest du entscheiden, und welche Belege sprechen dafür?",
+    "it": "Cosa decideresti e quali evidenze lo supportano?"
+  },
+  "Read the scenario. Look away from the model. Say your response aloud, then write it from memory.": {
+    "en": "Read the scenario. Look away from the model. Say your response aloud, then write it from memory.",
+    "pt-BR": "Leia o cenário. Desvie o olhar do modelo. Diga sua resposta em voz alta e depois escreva de memória.",
+    "es": "Lee el escenario. Aparta la mirada del modelo. Di tu respuesta en voz alta y escríbela de memoria.",
+    "fr": "Lisez le scénario. Détournez le regard du modèle. Dites votre réponse à voix haute, puis écrivez-la de mémoire.",
+    "de": "Lies das Szenario. Schaue vom Modell weg. Sprich deine Antwort laut aus und schreibe sie dann aus dem Gedächtnis auf.",
+    "it": "Leggi lo scenario. Distogli lo sguardo dal modello. Pronuncia la risposta ad alta voce, poi scrivila a memoria."
+  },
+  "Read the scenario and create the practical output. Review the evidence, assumptions and next step.": {
+    "en": "Read the scenario and create the practical output. Review the evidence, assumptions and next step.",
+    "pt-BR": "Leia o cenário e crie a entrega prática. Revise as evidências, as premissas e o próximo passo.",
+    "es": "Lee el escenario y crea la entrega práctica. Revisa las evidencias, los supuestos y el siguiente paso.",
+    "fr": "Lisez le scénario et créez la production pratique. Examinez les preuves, les hypothèses et la prochaine étape.",
+    "de": "Lies das Szenario und erstelle das praktische Ergebnis. Prüfe Belege, Annahmen und den nächsten Schritt.",
+    "it": "Leggi lo scenario e crea l’elaborato pratico. Rivedi le evidenze, le ipotesi e il passo successivo."
+  },
+  "Your real-world rehearsal": {
+    "en": "Your real-world rehearsal",
+    "pt-BR": "Seu ensaio para a vida real",
+    "es": "Tu ensayo para la vida real",
+    "fr": "Votre entraînement à la vie réelle",
+    "de": "Deine Übung für die Praxis",
+    "it": "La tua prova per la vita reale"
+  },
+  "I confirmed the next action in my own words.": {
+    "en": "I confirmed the next action in my own words.",
+    "pt-BR": "Confirmei a próxima ação com minhas próprias palavras.",
+    "es": "Confirmé la siguiente acción con mis propias palabras.",
+    "fr": "J’ai confirmé la prochaine action avec mes propres mots.",
+    "de": "Ich habe den nächsten Schritt mit eigenen Worten bestätigt.",
+    "it": "Ho confermato la prossima azione con parole mie."
+  },
+  "I asked for clarification instead of pretending to understand.": {
+    "en": "I asked for clarification instead of pretending to understand.",
+    "pt-BR": "Pedi esclarecimento em vez de fingir que entendi.",
+    "es": "Pedí aclaraciones en lugar de fingir que entendía.",
+    "fr": "J’ai demandé des précisions plutôt que de faire semblant de comprendre.",
+    "de": "Ich habe nachgefragt, statt Verständnis vorzutäuschen.",
+    "it": "Ho chiesto chiarimenti invece di fingere di aver capito."
+  },
+  "I used a specific fact, amount, place or deadline.": {
+    "en": "I used a specific fact, amount, place or deadline.",
+    "pt-BR": "Usei um fato, valor, local ou prazo específico.",
+    "es": "Utilicé un dato, importe, lugar o plazo específico.",
+    "fr": "J’ai utilisé un fait, un montant, un lieu ou un délai précis.",
+    "de": "Ich habe eine konkrete Tatsache, einen Betrag, Ort oder Termin genannt.",
+    "it": "Ho usato un fatto, importo, luogo o termine specifico."
+  },
+  "I stated the purpose before adding details.": {
+    "en": "I stated the purpose before adding details.",
+    "pt-BR": "Apresentei o objetivo antes dos detalhes.",
+    "es": "Expuse el objetivo antes de añadir detalles.",
+    "fr": "J’ai indiqué l’objectif avant d’ajouter des détails.",
+    "de": "Ich habe das Ziel vor den Details genannt.",
+    "it": "Ho indicato lo scopo prima di aggiungere dettagli."
+  },
+  "I defined a practical next action and review date.": {
+    "en": "I defined a practical next action and review date.",
+    "pt-BR": "Defini uma próxima ação prática e uma data de revisão.",
+    "es": "Definí una siguiente acción práctica y una fecha de revisión.",
+    "fr": "J’ai défini une prochaine action concrète et une date de révision.",
+    "de": "Ich habe einen konkreten nächsten Schritt und ein Überprüfungsdatum festgelegt.",
+    "it": "Ho definito una prossima azione pratica e una data di revisione."
+  },
+  "I tested an alternative or downside case.": {
+    "en": "I tested an alternative or downside case.",
+    "pt-BR": "Testei uma alternativa ou um cenário adverso.",
+    "es": "Probé una alternativa o un escenario adverso.",
+    "fr": "J’ai testé une alternative ou un scénario défavorable.",
+    "de": "Ich habe eine Alternative oder ein ungünstiges Szenario geprüft.",
+    "it": "Ho verificato un’alternativa o uno scenario sfavorevole."
+  },
+  "I made the assumptions and calculation basis explicit.": {
+    "en": "I made the assumptions and calculation basis explicit.",
+    "pt-BR": "Explicitei as premissas e a base de cálculo.",
+    "es": "Hice explícitos los supuestos y la base de cálculo.",
+    "fr": "J’ai explicité les hypothèses et la base de calcul.",
+    "de": "Ich habe Annahmen und Berechnungsgrundlage offengelegt.",
+    "it": "Ho esplicitato le ipotesi e la base di calcolo."
+  },
+  "I used traceable evidence and stated uncertainty.": {
+    "en": "I used traceable evidence and stated uncertainty.",
+    "pt-BR": "Usei evidências rastreáveis e indiquei a incerteza.",
+    "es": "Utilicé evidencias verificables e indiqué la incertidumbre.",
+    "fr": "J’ai utilisé des preuves traçables et indiqué l’incertitude.",
+    "de": "Ich habe nachvollziehbare Belege verwendet und Unsicherheit angegeben.",
+    "it": "Ho usato evidenze tracciabili e indicato l’incertezza."
+  },
+  "Next lesson →": {
+    "en": "Next lesson →",
+    "pt-BR": "Próxima aula →",
+    "es": "Siguiente lección →",
+    "fr": "Leçon suivante →",
+    "de": "Nächste Lektion →",
+    "it": "Lezione successiva →"
+  },
+  "← Previous lesson": {
+    "en": "← Previous lesson",
+    "pt-BR": "← Aula anterior",
+    "es": "← Lección anterior",
+    "fr": "← Leçon précédente",
+    "de": "← Vorherige Lektion",
+    "it": "← Lezione precedente"
+  },
+  "Create the practical output, check its assumptions and use it to choose your next action.": {
+    "en": "Create the practical output, check its assumptions and use it to choose your next action.",
+    "pt-BR": "Crie a entrega prática, verifique suas premissas e use-a para escolher sua próxima ação.",
+    "es": "Crea la entrega práctica, comprueba sus supuestos y úsala para elegir tu siguiente acción.",
+    "fr": "Créez la production pratique, vérifiez ses hypothèses et utilisez-la pour choisir votre prochaine action.",
+    "de": "Erstelle das praktische Ergebnis, prüfe seine Annahmen und nutze es zur Wahl deines nächsten Schritts.",
+    "it": "Crea l’elaborato pratico, verifica le ipotesi e usalo per scegliere la tua prossima azione."
+  },
+  "Say every model phrase aloud. Recognition is useful; retrieval is what you need in the real world.": {
+    "en": "Say every model phrase aloud. Recognition is useful; retrieval is what you need in the real world.",
+    "pt-BR": "Diga cada frase-modelo em voz alta. Reconhecer é útil; recuperar da memória é o que você precisa no mundo real.",
+    "es": "Di cada frase modelo en voz alta. Reconocer es útil; recuperar de memoria es lo que necesitas en el mundo real.",
+    "fr": "Dites chaque phrase modèle à voix haute. Reconnaître est utile ; retrouver de mémoire est ce qu’il vous faut dans la vie réelle.",
+    "de": "Sprich jeden Modellsatz laut aus. Wiedererkennen ist nützlich; im Alltag brauchst du den Abruf aus dem Gedächtnis.",
+    "it": "Pronuncia ogni frase modello ad alta voce. Riconoscere è utile; nella vita reale serve recuperare dalla memoria."
+  },
+  "Course syllabus": {
+    "en": "Course syllabus",
+    "pt-BR": "Programa do curso",
+    "es": "Programa del curso",
+    "fr": "Programme du cours",
+    "de": "Kursprogramm",
+    "it": "Programma del corso"
+  },
+  "Practice & checkpoint ↓": {
+    "en": "Practice & checkpoint ↓",
+    "pt-BR": "Prática e verificação ↓",
+    "es": "Práctica y comprobación ↓",
+    "fr": "Pratique et contrôle ↓",
+    "de": "Übung und Lernkontrolle ↓",
+    "it": "Pratica e verifica ↓"
+  },
+  "Lesson rhythm": {
+    "en": "Lesson rhythm",
+    "pt-BR": "Ritmo da aula",
+    "es": "Ritmo de la lección",
+    "fr": "Rythme de la leçon",
+    "de": "Lektionsablauf",
+    "it": "Ritmo della lezione"
+  },
+  "Lesson guide": {
+    "en": "Lesson guide",
+    "pt-BR": "Guia da aula",
+    "es": "Guía de la lección",
+    "fr": "Guide de la leçon",
+    "de": "Lektionsleitfaden",
+    "it": "Guida della lezione"
+  },
+  "Return to course overview →": {
+    "en": "Return to course overview →",
+    "pt-BR": "Voltar à visão geral do curso →",
+    "es": "Volver al resumen del curso →",
+    "fr": "Retourner à la présentation du cours →",
+    "de": "Zur Kursübersicht zurückkehren →",
+    "it": "Torna alla panoramica del corso →"
+  },
+  "Learning review": {
+    "en": "Learning review",
+    "pt-BR": "Revisão da aprendizagem",
+    "es": "Revisión del aprendizaje",
+    "fr": "Bilan d’apprentissage",
+    "de": "Lernrückblick",
+    "it": "Revisione dell’apprendimento"
+  },
+  "Your next lesson:": {
+    "en": "Your next lesson:",
+    "pt-BR": "Sua próxima aula:",
+    "es": "Tu próxima lección:",
+    "fr": "Votre prochaine leçon :",
+    "de": "Deine nächste Lektion:",
+    "it": "La tua prossima lezione:"
+  },
+  "Complete the checkpoint to continue": {
+    "en": "Complete the checkpoint to continue",
+    "pt-BR": "Conclua a verificação para continuar",
+    "es": "Completa la comprobación para continuar",
+    "fr": "Terminez le contrôle pour continuer",
+    "de": "Schließe die Lernkontrolle ab, um fortzufahren",
+    "it": "Completa la verifica per continuare"
+  },
+  "Lesson navigation": {
+    "en": "Lesson navigation",
+    "pt-BR": "Navegação das aulas",
+    "es": "Navegación de lecciones",
+    "fr": "Navigation des leçons",
+    "de": "Lektionsnavigation",
+    "it": "Navigazione delle lezioni"
+  },
+  "Which decision rule can you apply tomorrow, and what evidence would change your conclusion?": {
+    "en": "Which decision rule can you apply tomorrow, and what evidence would change your conclusion?",
+    "pt-BR": "Qual regra de decisão você pode aplicar amanhã e que evidência mudaria sua conclusão?",
+    "es": "¿Qué regla de decisión puedes aplicar mañana y qué evidencia cambiaría tu conclusión?",
+    "fr": "Quelle règle de décision pouvez-vous appliquer demain et quelles preuves changeraient votre conclusion ?",
+    "de": "Welche Entscheidungsregel kannst du morgen anwenden, und welche Belege würden dein Fazit ändern?",
+    "it": "Quale regola decisionale puoi applicare domani e quali evidenze cambierebbero la tua conclusione?"
+  },
+  "Which phrase must you be able to produce tomorrow without looking?": {
+    "en": "Which phrase must you be able to produce tomorrow without looking?",
+    "pt-BR": "Qual frase você precisa conseguir produzir amanhã sem consultar?",
+    "es": "¿Qué frase debes poder producir mañana sin consultar?",
+    "fr": "Quelle phrase devez-vous pouvoir produire demain sans regarder ?",
+    "de": "Welchen Satz musst du morgen ohne Nachschauen bilden können?",
+    "it": "Quale frase devi saper produrre domani senza guardare?"
+  },
+  "Retrieval target": {
+    "en": "Retrieval target",
+    "pt-BR": "Meta de recuperação da memória",
+    "es": "Objetivo de recuperación de memoria",
+    "fr": "Objectif de rappel",
+    "de": "Abrufziel",
+    "it": "Obiettivo di richiamo"
+  },
+  "Where could this exact situation appear in your country, study or career plan?": {
+    "en": "Where could this exact situation appear in your country, study or career plan?",
+    "pt-BR": "Onde essa situação poderia aparecer no seu plano de país, estudo ou carreira?",
+    "es": "¿Dónde podría aparecer esta situación en tu plan de país, estudios o carrera?",
+    "fr": "Où cette situation pourrait-elle se présenter dans votre projet de pays, d’études ou de carrière ?",
+    "de": "Wo könnte diese konkrete Situation in deinem Länder-, Studien- oder Karriereplan auftreten?",
+    "it": "Dove potrebbe presentarsi questa situazione nel tuo piano di paese, studio o carriera?"
+  },
+  "Context transfer": {
+    "en": "Context transfer",
+    "pt-BR": "Transferência de contexto",
+    "es": "Transferencia de contexto",
+    "fr": "Transfert de contexte",
+    "de": "Kontextübertragung",
+    "it": "Trasferimento di contesto"
+  },
+  "Transfer the skill to your real plan": {
+    "en": "Transfer the skill to your real plan",
+    "pt-BR": "Transfira a habilidade para seu plano real",
+    "es": "Transfiere la habilidad a tu plan real",
+    "fr": "Transférez la compétence à votre projet réel",
+    "de": "Übertrage die Fähigkeit auf deinen konkreten Plan",
+    "it": "Trasferisci la competenza al tuo piano reale"
+  },
+  "05 · Reflect": {
+    "en": "05 · Reflect",
+    "pt-BR": "05 · Refletir",
+    "es": "05 · Reflexionar",
+    "fr": "05 · Réfléchir",
+    "de": "05 · Reflektieren",
+    "it": "05 · Riflettere"
+  },
+  "Pass the checkpoint to complete this lesson.": {
+    "en": "Pass the checkpoint to complete this lesson.",
+    "pt-BR": "Passe na verificação para concluir esta aula.",
+    "es": "Supera la comprobación para completar esta lección.",
+    "fr": "Réussissez le contrôle pour terminer cette leçon.",
+    "de": "Bestehe die Lernkontrolle, um diese Lektion abzuschließen.",
+    "it": "Supera la verifica per completare questa lezione."
+  },
+  "Complete lesson": {
+    "en": "Complete lesson",
+    "pt-BR": "Concluir aula",
+    "es": "Completar lección",
+    "fr": "Terminer la leçon",
+    "de": "Lektion abschließen",
+    "it": "Completa lezione"
+  },
+  "✓ Lesson completed": {
+    "en": "✓ Lesson completed",
+    "pt-BR": "✓ Aula concluída",
+    "es": "✓ Lección completada",
+    "fr": "✓ Leçon terminée",
+    "de": "✓ Lektion abgeschlossen",
+    "it": "✓ Lezione completata"
+  },
+  "Review the feedback and apply the decision rule to your practical output.": {
+    "en": "Review the feedback and apply the decision rule to your practical output.",
+    "pt-BR": "Revise o feedback e aplique a regra de decisão à sua entrega prática.",
+    "es": "Revisa la retroalimentación y aplica la regla de decisión a tu entrega práctica.",
+    "fr": "Relisez le retour et appliquez la règle de décision à votre production pratique.",
+    "de": "Prüfe das Feedback und wende die Entscheidungsregel auf dein praktisches Ergebnis an.",
+    "it": "Rivedi il feedback e applica la regola decisionale al tuo elaborato pratico."
+  },
+  "Feedback is part of learning; certificate scoring begins only at the performance gates.": {
+    "en": "Feedback is part of learning; certificate scoring begins only at the performance gates.",
+    "pt-BR": "O feedback faz parte da aprendizagem; a nota do certificado começa apenas nas avaliações de desempenho.",
+    "es": "La retroalimentación forma parte del aprendizaje; la calificación del certificado comienza solo en las evaluaciones de desempeño.",
+    "fr": "Le retour fait partie de l’apprentissage ; la notation du certificat commence uniquement aux évaluations de performance.",
+    "de": "Feedback gehört zum Lernen; die Zertifikatsbewertung beginnt erst bei den Leistungsprüfungen.",
+    "it": "Il feedback fa parte dell’apprendimento; il punteggio del certificato inizia solo nelle valutazioni di prestazione."
+  },
+  "Not yet. Review the options and try again.": {
+    "en": "Not yet. Review the options and try again.",
+    "pt-BR": "Ainda não. Revise as opções e tente novamente.",
+    "es": "Todavía no. Revisa las opciones e inténtalo de nuevo.",
+    "fr": "Pas encore. Relisez les choix et réessayez.",
+    "de": "Noch nicht. Prüfe die Optionen und versuche es erneut.",
+    "it": "Non ancora. Rivedi le opzioni e riprova."
+  },
+  "Correct — this is the clearest response.": {
+    "en": "Correct — this is the clearest response.",
+    "pt-BR": "Correto — esta é a resposta mais clara.",
+    "es": "Correcto: esta es la respuesta más clara.",
+    "fr": "Correct : c’est la réponse la plus claire.",
+    "de": "Richtig – das ist die klarste Antwort.",
+    "it": "Corretto: questa è la risposta più chiara."
+  },
+  "Check answer & save progress": {
+    "en": "Check answer & save progress",
+    "pt-BR": "Verificar resposta e salvar progresso",
+    "es": "Comprobar respuesta y guardar progreso",
+    "fr": "Vérifier la réponse et enregistrer la progression",
+    "de": "Antwort prüfen und Fortschritt speichern",
+    "it": "Verifica risposta e salva progressi"
+  },
+  "Saving your progress…": {
+    "en": "Saving your progress…",
+    "pt-BR": "Salvando seu progresso…",
+    "es": "Guardando tu progreso…",
+    "fr": "Enregistrement de votre progression…",
+    "de": "Dein Fortschritt wird gespeichert…",
+    "it": "Salvataggio dei tuoi progressi…"
+  },
+  "Prove the decision": {
+    "en": "Prove the decision",
+    "pt-BR": "Demonstre a decisão",
+    "es": "Demuestra la decisión",
+    "fr": "Démontrez la décision",
+    "de": "Belege die Entscheidung",
+    "it": "Dimostra la decisione"
+  },
+  "Formative · not certificate-scored": {
+    "en": "Formative · not certificate-scored",
+    "pt-BR": "Formativa · não compõe a nota do certificado",
+    "es": "Formativa · no cuenta para la nota del certificado",
+    "fr": "Formative · ne compte pas pour la note du certificat",
+    "de": "Formativ · zählt nicht zur Zertifikatsnote",
+    "it": "Formativa · non contribuisce al voto del certificato"
+  },
+  "04 · Prove": {
+    "en": "04 · Prove",
+    "pt-BR": "04 · Demonstrar",
+    "es": "04 · Demostrar",
+    "fr": "04 · Démontrer",
+    "de": "04 · Nachweisen",
+    "it": "04 · Dimostrare"
+  },
+  "Professional response rubric": {
+    "en": "Professional response rubric",
+    "pt-BR": "Rubrica de resposta profissional",
+    "es": "Rúbrica de respuesta profesional",
+    "fr": "Grille de réponse professionnelle",
+    "de": "Bewertungsraster für professionelle Antworten",
+    "it": "Rubrica della risposta professionale"
+  },
+  "Your rehearsal prompt": {
+    "en": "Your rehearsal prompt",
+    "pt-BR": "Proposta de prática",
+    "es": "Propuesta de práctica",
+    "fr": "Consigne d’entraînement",
+    "de": "Deine Übungsaufgabe",
+    "it": "La tua traccia di esercitazione"
+  },
+  "03 · Rehearse": {
+    "en": "03 · Rehearse",
+    "pt-BR": "03 · Praticar",
+    "es": "03 · Practicar",
+    "fr": "03 · S’exercer",
+    "de": "03 · Üben",
+    "it": "03 · Esercitarsi"
+  },
+  "Use instead": {
+    "en": "Use instead",
+    "pt-BR": "Use no lugar",
+    "es": "Usa en su lugar",
+    "fr": "À utiliser à la place",
+    "de": "Stattdessen verwenden",
+    "it": "Usa invece"
+  },
+  "Avoid": {
+    "en": "Avoid",
+    "pt-BR": "Evite",
+    "es": "Evita",
+    "fr": "À éviter",
+    "de": "Vermeiden",
+    "it": "Evita"
+  },
+  "Make it sound clear and natural": {
+    "en": "Make it sound clear and natural",
+    "pt-BR": "Expresse-se com clareza e naturalidade",
+    "es": "Exprésate con claridad y naturalidad",
+    "fr": "Exprimez-vous clairement et naturellement",
+    "de": "Formuliere klar und natürlich",
+    "it": "Esprimiti con chiarezza e naturalezza"
+  },
+  "Work through the decision": {
+    "en": "Work through the decision",
+    "pt-BR": "Analise a decisão passo a passo",
+    "es": "Analiza la decisión paso a paso",
+    "fr": "Analysez la décision étape par étape",
+    "de": "Gehe die Entscheidung Schritt für Schritt durch",
+    "it": "Analizza la decisione passo dopo passo"
+  },
+  "See the language in motion": {
+    "en": "See the language in motion",
+    "pt-BR": "Veja o idioma em ação",
+    "es": "Observa el idioma en acción",
+    "fr": "Voyez la langue en action",
+    "de": "Erlebe die Sprache in Aktion",
+    "it": "Osserva la lingua in azione"
+  },
+  "Four principles to apply": {
+    "en": "Four principles to apply",
+    "pt-BR": "Quatro princípios para aplicar",
+    "es": "Cuatro principios para aplicar",
+    "fr": "Quatre principes à appliquer",
+    "de": "Vier Prinzipien zum Anwenden",
+    "it": "Quattro principi da applicare"
+  },
+  "Four phrases to carry with you": {
+    "en": "Four phrases to carry with you",
+    "pt-BR": "Quatro frases para levar com você",
+    "es": "Cuatro frases para llevar contigo",
+    "fr": "Quatre phrases à retenir",
+    "de": "Vier Sätze zum Mitnehmen",
+    "it": "Quattro frasi da portare con te"
+  },
+  "02 · Learn": {
+    "en": "02 · Learn",
+    "pt-BR": "02 · Aprender",
+    "es": "02 · Aprender",
+    "fr": "02 · Apprendre",
+    "de": "02 · Lernen",
+    "it": "02 · Imparare"
+  },
+  "Enter the scenario": {
+    "en": "Enter the scenario",
+    "pt-BR": "Entre no cenário",
+    "es": "Entra en el escenario",
+    "fr": "Entrez dans le scénario",
+    "de": "Steige in das Szenario ein",
+    "it": "Entra nello scenario"
+  },
+  "01 · Orient": {
+    "en": "01 · Orient",
+    "pt-BR": "01 · Orientação",
+    "es": "01 · Orientación",
+    "fr": "01 · Orientation",
+    "de": "01 · Orientierung",
+    "it": "01 · Orientamento"
+  },
+  "Capability target": {
+    "en": "Capability target",
+    "pt-BR": "Competência-alvo",
+    "es": "Competencia objetivo",
+    "fr": "Compétence visée",
+    "de": "Angestrebte Kompetenz",
+    "it": "Competenza obiettivo"
+  },
+  "Performance objective": {
+    "en": "Performance objective",
+    "pt-BR": "Objetivo de desempenho",
+    "es": "Objetivo de desempeño",
+    "fr": "Objectif de performance",
+    "de": "Leistungsziel",
+    "it": "Obiettivo di prestazione"
+  },
+  "✓ Completed": {
+    "en": "✓ Completed",
+    "pt-BR": "✓ Concluída",
+    "es": "✓ Completada",
+    "fr": "✓ Terminée",
+    "de": "✓ Abgeschlossen",
+    "it": "✓ Completata"
+  },
+  "Applied mastery": {
+    "en": "Applied mastery",
+    "pt-BR": "Domínio aplicado",
+    "es": "Dominio aplicado",
+    "fr": "Maîtrise appliquée",
+    "de": "Angewandte Kompetenz",
+    "it": "Padronanza applicata"
+  },
+  "minutes": {
+    "en": "minutes",
+    "pt-BR": "minutos",
+    "es": "minutos",
+    "fr": "minutes",
+    "de": "Minuten",
+    "it": "minuti"
+  },
+  "Saving to your TGPI account…": {
+    "en": "Saving to your TGPI account…",
+    "pt-BR": "Salvando na sua conta TGPI…",
+    "es": "Guardando en tu cuenta TGPI…",
+    "fr": "Enregistrement dans votre compte TGPI…",
+    "de": "Wird in deinem TGPI-Konto gespeichert…",
+    "it": "Salvataggio nel tuo account TGPI…"
+  },
+  "Loading your saved learning record…": {
+    "en": "Loading your saved learning record…",
+    "pt-BR": "Carregando seu registro de aprendizagem…",
+    "es": "Cargando tu registro de aprendizaje…",
+    "fr": "Chargement de votre dossier d’apprentissage…",
+    "de": "Dein Lernnachweis wird geladen…",
+    "it": "Caricamento del tuo registro di apprendimento…"
+  },
+  "Course completion": {
+    "en": "Course completion",
+    "pt-BR": "Conclusão do curso",
+    "es": "Finalización del curso",
+    "fr": "Achèvement du cours",
+    "de": "Kursabschluss",
+    "it": "Completamento del corso"
+  },
+  "of": {
+    "en": "of",
+    "pt-BR": "de",
+    "es": "de",
+    "fr": "sur",
+    "de": "von",
+    "it": "di"
+  },
+  "Lesson": {
+    "en": "Lesson",
+    "pt-BR": "Aula",
+    "es": "Lección",
+    "fr": "Leçon",
+    "de": "Lektion",
+    "it": "Lezione"
+  },
+  "Course overview": {
+    "en": "Course overview",
+    "pt-BR": "Visão geral do curso",
+    "es": "Resumen del curso",
+    "fr": "Présentation du cours",
+    "de": "Kursübersicht",
+    "it": "Panoramica del corso"
+  },
+  "We could not save this lesson. Please try again.": {
+    "en": "We could not save this lesson. Please try again.",
+    "pt-BR": "Não foi possível salvar esta aula. Tente novamente.",
+    "es": "No se pudo guardar esta lección. Inténtalo de nuevo.",
+    "fr": "Impossible d’enregistrer cette leçon. Réessayez.",
+    "de": "Diese Lektion konnte nicht gespeichert werden. Bitte erneut versuchen.",
+    "it": "Impossibile salvare questa lezione. Riprova."
+  },
+  "Lesson completed. Your progress has been saved.": {
+    "en": "Lesson completed. Your progress has been saved.",
+    "pt-BR": "Aula concluída. Seu progresso foi salvo.",
+    "es": "Lección completada. Tu progreso se ha guardado.",
+    "fr": "Leçon terminée. Votre progression est enregistrée.",
+    "de": "Lektion abgeschlossen. Dein Fortschritt wurde gespeichert.",
+    "it": "Lezione completata. I tuoi progressi sono stati salvati."
+  },
+  "Course completed. Your TGPI workspace is now up to date.": {
+    "en": "Course completed. Your TGPI workspace is now up to date.",
+    "pt-BR": "Curso concluído. Seu espaço TGPI está atualizado.",
+    "es": "Curso completado. Tu espacio TGPI está actualizado.",
+    "fr": "Cours terminé. Votre espace TGPI est à jour.",
+    "de": "Kurs abgeschlossen. Dein TGPI-Arbeitsbereich ist aktuell.",
+    "it": "Corso completato. Il tuo spazio TGPI è aggiornato."
+  },
 
   "Compare the world.": {
     "en": "Compare the world.",
@@ -8564,6 +9315,6 @@ const catalog: Readonly<Record<string, Readonly<Record<Locale, string>>>> = mess
 const normalizedMessages = new Map(Object.entries(catalog).map(([key, value]) => [key.toLowerCase(), value]));
 export function translate(locale: Locale, key: string, values: Record<string, string | number> = {}): string {
   const entry = Object.prototype.hasOwnProperty.call(catalog, key) ? catalog[key] : normalizedMessages.get(key.toLowerCase());
-  const template = locale === 'en' ? key : entry?.[locale] ?? key;
+  const template = entry?.[locale] ?? key;
   return template.replace(/\{(\w+)\}/g, (match, name: string) => Object.prototype.hasOwnProperty.call(values, name) ? String(values[name]) : match);
 }

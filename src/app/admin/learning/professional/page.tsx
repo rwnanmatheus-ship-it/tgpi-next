@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import Image from "next/image";
 import Link from "next/link";
 import { professionalCourseDrafts } from "@/data/courses/professional";
@@ -29,9 +31,9 @@ export default async function ProfessionalCurriculumReview() {
             <p><strong>Exemplo resolvido: </strong>{lesson.workedExample}</p>
             <p><strong>Prática guiada: </strong>{lesson.guidedPractice}</p>
             <p><strong>Prática independente: </strong>{lesson.independentPractice}</p>
-            <div><h4 className="font-semibold">Critérios de sucesso</h4><ul className="list-disc pl-5">{lesson.successCriteria.map(item => <li key={item}>{item}</li>)}</ul></div>
-            <div><h4 className="font-semibold">Erros frequentes</h4><ul className="list-disc pl-5">{lesson.commonErrors.map(item => <li key={item}>{item}</li>)}</ul></div>
-            <p><strong>Recuperação: </strong>{lesson.recovery}</p>
+            <div><h4 className="font-semibold"><LocalizedText text="Critérios de sucesso" /></h4><ul className="list-disc pl-5">{lesson.successCriteria.map(item => <li key={item}>{item}</li>)}</ul></div>
+            <div><h4 className="font-semibold"><LocalizedText text="Erros frequentes" /></h4><ul className="list-disc pl-5">{lesson.commonErrors.map(item => <li key={item}>{item}</li>)}</ul></div>
+            <p><strong><LocalizedText text="Recuperação:" />{" "}</strong>{lesson.recovery}</p>
           </div>)}</details>)}
           <section className="rounded-2xl bg-slate-950 p-5 text-white"><h3 className="text-xl font-semibold">Projeto final proposto</h3><p className="mt-3 text-sm leading-7">{course.project.brief}</p><ul className="mt-3 list-disc pl-5 text-sm leading-7">{course.project.deliverables.map(item => <li key={item}>{item}</li>)}</ul><p className="mt-4 text-sm leading-7"><strong>Transferência: </strong>{course.project.transfer}</p></section>
           <div className="overflow-x-auto"><table className="w-full min-w-[480px] text-left text-sm"><caption className="mb-3 text-left font-semibold">Rubrica proposta · {course.approval.rubricVersion}</caption><thead><tr><th scope="col" className="p-2">Critério</th><th scope="col" className="p-2">Evidência</th><th scope="col" className="p-2">Peso</th><th scope="col" className="p-2">Essencial</th></tr></thead><tbody>{course.project.rubric.map(item => <tr key={item.id} className="border-t border-slate-200"><th scope="row" className="p-2">{item.title}</th><td className="p-2 leading-6">{item.description}</td><td className="p-2">{item.weight}%</td><td className="p-2">{item.essential ? `Sim · mínimo ${item.minimum}%` : "Não"}</td></tr>)}</tbody></table></div>

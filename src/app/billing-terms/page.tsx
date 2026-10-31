@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import type { Metadata } from "next";
 import Link from "next/link";
 import LegalDocument from "@/components/legal/LegalDocument";
@@ -87,9 +89,7 @@ export default function BillingTermsPage() {
         <h2 className="text-2xl font-semibold text-[var(--tgpi-navy)]">8. Refunds and statutory rights</h2>
         <p className="mt-3">
           Refund eligibility and mandatory withdrawal rights are described in the{" "}
-          <Link href="/refunds" className="font-bold text-[#956A13] hover:underline">
-            Refund & Cancellation Policy
-          </Link>.
+          <Link href="/refunds" className="font-bold text-[#956A13] hover:underline"><LocalizedText text="Refund & Cancellation Policy" /></Link>.
           Nothing in these Billing Terms limits rights that cannot legally be waived.
         </p>
       </section>

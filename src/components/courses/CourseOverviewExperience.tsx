@@ -72,7 +72,7 @@ function CourseOverview({ course, workshop }: { course: Course; workshop?: React
         </Link>
 
         {course.series && <nav aria-label="Course series" className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-[var(--tgpi-border)] bg-white px-5 py-4 text-sm">
-          <p className="font-bold">{course.series.name} <span className="font-normal text-[var(--tgpi-muted)]">· Chapter {course.series.chapter} of {course.series.totalChapters}</span></p>
+          <p className="font-bold">{course.series.name} <span className="font-normal text-[var(--tgpi-muted)]">· Chapter {course.series.chapter}{" "}<LocalizedText text="of" />{" "}{course.series.totalChapters}</span></p>
           {course.series.nextCourseId && <Link href={`/courses/${course.series.nextCourseId}`} className="inline-flex min-h-11 items-center font-bold underline underline-offset-4">Next in this series →</Link>}
         </nav>}
 
@@ -131,7 +131,7 @@ function CourseOverview({ course, workshop }: { course: Course; workshop?: React
                   {completion}%
                 </p>
                 <p className="pb-1 text-sm font-extrabold text-white/65">
-                  {completedLessonIds.length} of {lessons.length}
+                  {completedLessonIds.length}{" "}<LocalizedText text="of" />{" "}{lessons.length}
                 </p>
               </div>
               <div

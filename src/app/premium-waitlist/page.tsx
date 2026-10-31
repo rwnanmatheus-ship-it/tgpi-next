@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import type { Metadata } from "next";
 import Link from "next/link";
 import PremiumWaitlistForm from "@/components/PremiumWaitlistForm";
@@ -59,7 +61,7 @@ export default function PremiumWaitlistPage() {
               </p>
               <p className="mt-4 text-4xl font-black text-[#F0D58C]">
                 US$ 19.90
-                <span className="ml-2 text-sm font-semibold text-[#C8D0DC]">/month</span>
+                <span className="ml-2 text-sm font-semibold text-[#C8D0DC]"><LocalizedText text="/month" /></span>
               </p>
               <ul className="mt-6 space-y-3 text-sm leading-6 text-[#E7EDF5]">
                 <li>✓ Complete Country Fit and Global Readiness</li>

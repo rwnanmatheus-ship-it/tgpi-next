@@ -286,7 +286,7 @@ export default function CountriesExplorerV3({ countries, goals, regions }: Count
       <div aria-live="polite" className="mt-5 flex flex-col gap-4 rounded-[24px] border border-[var(--tgpi-border)] bg-white p-5 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <p className="text-sm text-[var(--tgpi-muted)]">
-            Showing <span className="font-extrabold text-[var(--tgpi-navy)]">{Math.min(visibleCountries.length, filteredCountries.length)}</span> of <span className="font-extrabold text-[var(--tgpi-navy)]">{filteredCountries.length}</span> countries
+            Showing <span className="font-extrabold text-[var(--tgpi-navy)]">{Math.min(visibleCountries.length, filteredCountries.length)}</span>{" "}<LocalizedText text="of" />{" "}<span className="font-extrabold text-[var(--tgpi-navy)]">{filteredCountries.length}</span> countries
           </p>
           {activeFilters.length ? <div className="mt-3 flex flex-wrap gap-2">{activeFilters.map((filter) => <span key={filter} className="rounded-full border border-[var(--tgpi-border)] bg-[var(--tgpi-canvas)] px-3 py-2 text-xs font-bold text-[var(--tgpi-navy)]">{filter}</span>)}</div> : null}
         </div>

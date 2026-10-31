@@ -789,8 +789,8 @@ function ContextStep({
             onChange={(event) => updateData({ educationLevel: event.target.value })}
             className="mt-3 min-h-12 w-full rounded-xl border border-[#D8D2C4] bg-white px-4 text-sm text-[#0B1F3A] focus:border-[#B58A2A]"
           >
-            <option value="">Select an option</option>
-            <option value="secondary">Secondary education</option>
+            <option value=""><LocalizedText text="Select an option" /></option>
+            <option value="secondary"><LocalizedText text="Secondary education" /></option>
             <option value="technical">Technical or vocational training</option>
             <option value="undergraduate">Undergraduate degree in progress</option>
             <option value="graduated">Undergraduate degree completed</option>
