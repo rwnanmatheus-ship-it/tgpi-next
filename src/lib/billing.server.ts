@@ -1,3 +1,4 @@
+import { stripeCustomerIdempotencyKey } from "@/lib/checkout-intent.server";
 import { recordFunnelEvent } from "@/lib/funnel.server";
 import "server-only";
 import { tryPublishNotification } from "@/lib/notifications/store.server";
@@ -69,18 +70,17 @@ export async function getUserBillingRecord(uid: string) {
   );
 }
 
-export async function getOrCreateStripeCustomer(uid: string, email: string) {
+export async function getOrCreateStripeCustomer(uid: string) {
   const billing = await getUserBillingRecord(uid);
   if (billing.stripeCustomerId) return billing.stripeCustomerId;
 
   const stripe = getStripeServer();
   const customer = await stripe.customers.create({
-    email: email || undefined,
     metadata: {
       tgpiPlan: "premium",
       tgpiUserId: uid,
     },
-  });
+  }, { idempotencyKey: stripeCustomerIdempotencyKey(uid) });
 
   await writeBillingRecord({
     ...billing,

@@ -73,6 +73,7 @@ test('all fourteen courses retain completion after compact storage and normaliza
     if (id === '@/data/courses') return { courses };
     if (id === '@/lib/countries') return { getCountry: () => undefined };
     if (id === '@/lib/tgpi-comparison') return { isComparisonGoal: () => false };
+    if (id === "@/lib/workspace-history.server") return { archiveWorkspaceHistory: async () => undefined };
     throw Error('Unexpected dependency ' + id);
   }, exports);
   let progress = activation.createEmptyActivationProgress();

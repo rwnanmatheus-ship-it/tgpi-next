@@ -25,14 +25,15 @@
     "test:capability-system": "node --experimental-strip-types --test scripts/capability-system.test.mjs",
     "test:navigation-system": "node --experimental-strip-types --test scripts/navigation-system.test.mjs",
     "test:home": "node --experimental-strip-types --test scripts/home-conversion.test.mjs",
-    "prebuild": "npm run test:learning-credentials && npm run test:intelligence && npm run test:workspace && npm run test:personal-plan && npm run test:country-studio && npm run test:learning-workshops && npm run test:professional-learning",
+    "prebuild": "npm run test:billing && npm run test:learning-credentials && npm run test:intelligence && npm run test:workspace && npm run test:personal-plan && npm run test:country-studio && npm run test:learning-workshops && npm run test:professional-learning",
     "test:notifications": "node --experimental-strip-types --test scripts/notifications.test.mjs scripts/notification-account.test.mjs scripts/notification-timeline.test.mjs",
     "test:certificate-pdf": "node --experimental-strip-types --test scripts/certificate-pdf.test.mjs",
     "test:community": "node --test scripts/community.test.mjs scripts/community-lifecycle.test.mjs scripts/community-lifecycle-api.test.mjs",
     "test:country-studio": "node --experimental-strip-types --test scripts/country-studio.test.mjs scripts/satellite.test.mjs",
     "test:localization": "node --test scripts/localization.test.mjs",
     "test:learning-workshops": "node --test scripts/learning-workshops.test.mjs",
-    "test:professional-learning": "node --experimental-strip-types --test scripts/professional-learning.test.mjs scripts/professional-runtime.test.mjs"
+    "test:professional-learning": "node --experimental-strip-types --test scripts/professional-learning.test.mjs scripts/professional-runtime.test.mjs",
+    "test:billing": "node --experimental-strip-types --test scripts/checkout-intent.test.mjs scripts/checkout-route.test.mjs"
   },
   "dependencies": {
     "@clerk/localizations": "^4.24.2",
