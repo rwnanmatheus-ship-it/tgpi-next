@@ -2,7 +2,7 @@ export default function Topbar() {
   return (
     <header className="flex items-center justify-between border-b border-white/10 p-5">
       <input
-        placeholder="Search countries, courses..."
+      placeholder="Search countries, courses..."
         className="w-full max-w-md rounded-xl border border-white/10 bg-white/5 px-4 py-2"
       />
 
