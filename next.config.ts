@@ -1,6 +1,13 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  async redirects() {
+    return [
+      { source: "/learn/:path*", destination: "/courses/:path*", permanent: true },
+      { source: "/prices", destination: "/pricing", permanent: true },
+      { source: "/billing", destination: "/billing-terms", permanent: true },
+    ];
+  },
   async headers() {
     return [
       { source: "/member/:path*", headers: [{ key: "Cache-Control", value: "private, no-store, max-age=0" }] },

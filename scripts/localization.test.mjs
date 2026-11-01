@@ -93,6 +93,7 @@ test('home FAQ translates questions and complete answers in every supported lang
 
 // Resolve the actual catalogue and its dependencies, so newly added courses cannot silently fall back to English.
 async function localModuleUrl(path) {
+  if (!fs.existsSync(path) && path.endsWith('.ts')) path = path.slice(0, -3) + '/index.ts';
   let compiled = ts.transpileModule(fs.readFileSync(path, 'utf8'), { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 } }).outputText;
   const imports = [...compiled.matchAll(/from\s+["'](@\/[^"']+)["']/g)];
   for (const match of imports) compiled = compiled.replace(match[0], `from ${JSON.stringify(await localModuleUrl(`src/${match[1].slice(2)}.ts`))}`);
@@ -340,4 +341,77 @@ test('global installation, offline and update notices have six-language copy', (
   visit(source);
   assert.equal(keys.length, 12);
   for (const key of keys) for (const locale of locales) assert.ok(messages[key]?.[locale]?.trim(), `${locale}: ${key}`);
+});
+
+test('course overview localizes controls and counts unique lessons without granting a credential', async () => {
+  const React = await import('react'), runtime = await import('react/jsx-runtime');
+  const { renderToStaticMarkup } = await import('react-dom/server');
+  const data = await import(await localModuleUrl('src/data/courses.ts'));
+  const standards = await import(await localModuleUrl('src/lib/learning-standard.ts'));
+  const original = data.courses.find(course => course.id === 'global-english-2026');
+  const lesson = original.modules[0].lessons[0];
+  const course = { ...original, modules: [{ ...original.modules[0], lessons: [lesson] }] };
+  const code = ts.transpileModule(fs.readFileSync('src/components/courses/CourseOverviewExperience.tsx', 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX, esModuleInterop: true } }).outputText;
+  for (const locale of locales) {
+    const exports = {}, t = (key, values) => translate(locale, key, values);
+    new Function('require', 'exports', code)(name => {
+      if (name === 'react') return React;
+      if (name === 'react/jsx-runtime') return runtime;
+      if (name === 'next/link') return { __esModule: true, default: ({ children, ...props }) => React.createElement('a', props, children) };
+      if (name === '@/components/localization/LocaleProvider') return { useLocale: () => ({ locale, t }), LocalizedText: ({ text }) => t(text) };
+      if (name === '@/components/activation/ActivationProgressProvider') return { __esModule: true, default: ({ children }) => children, useActivationProgress: () => ({ error: '', isAuthenticated: false, isLoading: false, mutate: () => { throw Error('Render cannot write progress'); }, progress: { courseProgress: { [course.id]: { completedLessonIds: [lesson.id, lesson.id, 'removed-lesson'] } } } }) };
+      if (name === '@/data/courses') return data;
+      if (name === '@/lib/learning-standard') return standards;
+      throw Error(`Unexpected import: ${name}`);
+    }, exports);
+    const element = React.createElement(exports.default, { course });
+    const html = renderToStaticMarkup(element);
+    assert.ok(html.includes(`lang="${locale}"`));
+    assert.match(html, /aria-valuenow="100"/);
+    assert.ok(html.includes(t('Lessons completed')));
+    assert.ok(html.includes(t('Assessment required')));
+    assert.ok(html.includes(t('Curriculum structure')));
+    for (const key of ['Modules', 'Lessons', 'Review course', 'Resume your studies', 'Start first lesson', 'Live now', 'Preview ready', 'Credential gate', 'Evidence before certification.', 'The certificate will name what you can actually do.']) assert.ok(Object.hasOwn(messages, key), key);
+    assert.ok(html.includes(t('Review course')));
+    assert.ok(html.includes(t('Evidence before certification.')));
+    assert.ok(html.includes(`/courses/${course.id}/certification`));
+    assert.doesNotMatch(html, /aria-valuenow="200"/);
+    const empty = renderToStaticMarkup(React.createElement(exports.default, { course: { ...course, modules: [] } }));
+    assert.match(empty, /aria-valuenow="0"/);
+    assert.ok(!empty.includes(t('Lessons completed')));
+  }
+});
+
+test('workspace server presentation follows locale and preserves private identity and canonical destinations', async () => {
+  const React = await import('react'), runtime = await import('react/jsx-runtime');
+  const { renderToStaticMarkup } = await import('react-dom/server');
+  const code = ts.transpileModule(fs.readFileSync('src/components/profile/GlobalWorkspaceOS.tsx', 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX, esModuleInterop: true } }).outputText;
+  const props = { identity: { fullName: 'Test <Learner>', membership: 'TGPI Free', profileCompletion: 0, globalId: 'TGPI-TEST', publicProfileUrl: '/member/TGPI-TEST' }, model: { actions: [], activationStats: [], journey: [], progress: [], planSummary: [], goalLabel: 'Goal not defined', completion: 0, countryFits: [] }, rank: { name: 'Pathfinder', points: 0 }, resources: [], history: [], preferences: {}, userId: 'synthetic-render-only' };
+  for (const locale of locales) {
+    const exports = {}, t = (key, values) => translate(locale, key, values);
+    new Function('require', 'exports', code)(name => {
+      if (name === 'react') return React;
+      if (name === 'react/jsx-runtime') return runtime;
+      if (name === '@/lib/localization/server') return { getLocale: async () => locale };
+      if (name === '@/lib/localization/messages') return { translate };
+      if (name === '@/components/localization/LocaleProvider') return { LocalizedText: ({ text }) => t(text) };
+      if (name === 'next/link') return { __esModule: true, default: ({ children, ...props }) => React.createElement('a', props, children) };
+      if (name === 'next/image') return { __esModule: true, default: () => null };
+      if (name === '@/lib/super-app') return { SUPER_APP_MODULES: [] };
+      if (name === '@/lib/navigation-system') return { getSuperAppIconName: () => 'graph' };
+      if (name === '@/lib/global-ranks') return { GLOBAL_RANK_DISCLAIMER: 'Test disclaimer' };
+      if (name.endsWith('.module.css')) return { __esModule: true, default: {} };
+      if (name === './WorkspacePersonalSpace') return { __esModule: true, default: ({ journey }) => journey };
+      if (name.startsWith('./') || name.startsWith('@/components/')) return { __esModule: true, default: () => null };
+      throw Error(`Unexpected import: ${name}`);
+    }, exports);
+    const html = renderToStaticMarkup(await exports.default(props));
+    assert.ok(html.includes(`lang="${locale}"`));
+    assert.ok(html.includes(t('Your world. In perspective.')));
+    assert.ok(html.includes(`aria-label="${t('Workspace sections')}"`));
+    assert.ok(html.includes('Test &lt;Learner&gt;'));
+    assert.ok(html.includes('href="/notifications"'));
+    assert.ok(html.includes('href="/profile/security"'));
+    assert.ok(html.includes(t('No activity to resume yet.')));
+  }
 });
