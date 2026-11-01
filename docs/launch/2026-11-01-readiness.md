@@ -18,7 +18,7 @@ A preferência de idioma continua sendo resolvida pelo serviço existente e não
 - ESLint executado; a conclusão e avisos devem ser conferidos no registro da execução.
 - Novos testes renderizam os componentes reais de curso e Workspace em seis idiomas com dados e dependências controlados. Verificam escape do nome, destinos canônicos, rótulos acessíveis, progresso sem duplicidade e curso vazio. Não são testes com aluno real ou cobrança real.
 - Navegação de leitura na produção autenticada confirmou conteúdo misto no Workspace antes da alteração. A conta do fundador não foi usada para criar evidências de aprendizagem, testar pagamentos ou emitir certificados.
-- Inventário de textos estáticos: 1.302 mensagens registradas e 2.407 candidatos antes; 1.446 registradas e 2.302 candidatos depois. Não mede toda a plataforma nem qualidade linguística. Conteúdo dinâmico, aulas, APIs e downloads exigem inventários próprios.
+- Inventário de textos estáticos: 1.302 mensagens registradas e 2.407 candidatos antes; 1.462 registradas e 2.302 candidatos depois. Não mede toda a plataforma nem qualidade linguística. Conteúdo dinâmico, aulas, APIs e downloads exigem inventários próprios.
 
 ## Checklist mensurável
 

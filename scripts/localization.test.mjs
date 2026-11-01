@@ -371,6 +371,9 @@ test('course overview localizes controls and counts unique lessons without grant
     assert.ok(html.includes(t('Lessons completed')));
     assert.ok(html.includes(t('Assessment required')));
     assert.ok(html.includes(t('Curriculum structure')));
+    for (const key of ['Modules', 'Lessons', 'Review course', 'Resume your studies', 'Start first lesson', 'Live now', 'Preview ready', 'Credential gate', 'Evidence before certification.', 'The certificate will name what you can actually do.']) assert.ok(Object.hasOwn(messages, key), key);
+    assert.ok(html.includes(t('Review course')));
+    assert.ok(html.includes(t('Evidence before certification.')));
     assert.ok(html.includes(`/courses/${course.id}/certification`));
     assert.doesNotMatch(html, /aria-valuenow="200"/);
     const empty = renderToStaticMarkup(React.createElement(exports.default, { course: { ...course, modules: [] } }));

@@ -89,9 +89,9 @@ function CourseOverview({ course, workshop }: { course: Course; workshop?: React
             <div className="p-7 sm:p-10 lg:p-14">
               <div className="flex flex-wrap items-center gap-2">
                 <span className="rounded-full border border-[var(--tgpi-gold)]/35 bg-[var(--tgpi-gold)]/10 px-3 py-2 text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-light)]"><LocalizedText text="New edition 2026 · Applied mastery" /></span>
-                <span className="rounded-full border border-white/15 bg-white/5 px-3 py-2 text-[10px] font-extrabold uppercase tracking-[0.16em] text-white/70"><LocalizedText text="Version" />{course.version}
+                <span className="rounded-full border border-white/15 bg-white/5 px-3 py-2 text-[10px] font-extrabold uppercase tracking-[0.16em] text-white/70"><LocalizedText text="Version" />{" "}{course.version}
                 </span>
-                <span className="rounded-full border border-white/15 bg-white/5 px-3 py-2 text-[10px] font-extrabold uppercase tracking-[0.16em] text-white/70"><LocalizedText text="Standard" />{course.learningStandard.version}
+                <span className="rounded-full border border-white/15 bg-white/5 px-3 py-2 text-[10px] font-extrabold uppercase tracking-[0.16em] text-white/70"><LocalizedText text="Standard" />{" "}{course.learningStandard.version}
                 </span>
               </div>
               <h1 className="mt-6 max-w-4xl font-[var(--tgpi-font-display)] text-[clamp(2.3rem,4.5vw,4.2rem)] font-semibold leading-[0.91] tracking-[-0.05em]">
@@ -365,10 +365,10 @@ function CourseOverview({ course, workshop }: { course: Course; workshop?: React
           <div className="max-w-3xl">
             <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold-strong)]"><LocalizedText text="Full curriculum" /></p>
             <h2 id="curriculum-title" className="mt-4 text-4xl font-semibold sm:text-6xl">
-              {course.id === "global-english-2026" ? "Six stages from arrival to independence." : `${course.modules.length} modules. One practical outcome at a time.`}
+              {course.id === "global-english-2026" ? t("Six stages from arrival to independence.") : t("{count} modules. One practical outcome at a time.", { count: course.modules.length })}
             </h2>
             <p className="mt-5 text-base leading-8 text-[var(--tgpi-muted)]">
-              {course.id === "global-english-2026" ? "Each lesson combines a real situation, language patterns, a model dialogue, coaching and a practical checkpoint." : "Each lesson combines a realistic scenario, a worked example, a practical output and a formative checkpoint."}
+              {t(course.id === "global-english-2026" ? "Each lesson combines a real situation, language patterns, a model dialogue, coaching and a practical checkpoint." : "Each lesson combines a realistic scenario, a worked example, a practical output and a formative checkpoint.")}
             </p>
           </div>
 
@@ -392,7 +392,7 @@ function CourseOverview({ course, workshop }: { course: Course; workshop?: React
                       <p className="mt-3 max-w-3xl text-sm leading-7 text-[var(--tgpi-muted)]">{t(courseModule.description)}</p>
                       <div className="mt-4 flex flex-wrap gap-2">
                         {moduleCompetencies.map((competency) => (
-                          <span key={competency.id} className="rounded-full border border-[var(--tgpi-gold)]/25 bg-[#FFF9E9] px-3 py-1.5 text-[9px] font-extrabold uppercase tracking-[0.12em] text-[var(--tgpi-gold-strong)]"><LocalizedText text="Capability ·" />{t(competency.title)}
+                          <span key={competency.id} className="rounded-full border border-[var(--tgpi-gold)]/25 bg-[#FFF9E9] px-3 py-1.5 text-[9px] font-extrabold uppercase tracking-[0.12em] text-[var(--tgpi-gold-strong)]"><LocalizedText text="Capability ·" />{" "}{t(competency.title)}
                           </span>
                         ))}
                       </div>
