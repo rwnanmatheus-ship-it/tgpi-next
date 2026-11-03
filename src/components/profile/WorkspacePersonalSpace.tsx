@@ -4,13 +4,15 @@ import Link from 'next/link';
 import type { ActivationActivity } from '@/lib/activation-progress';
 import { defaultWorkspacePreferences, parseWorkspaceHistoryPage, type WorkspacePreferences, type WorkspaceModule, type WorkspaceResource } from '@/lib/workspace-control';
 import styles from './WorkspaceCommandCenter.module.css';
-import { LocalizedText } from "@/components/localization/LocaleProvider";
+import { LocalizedText, useLocale } from "@/components/localization/LocaleProvider";
 
 const names: Record<WorkspaceModule, string> = { journey: 'My journey', library: 'Personal library', history: 'My history' };
 export default function WorkspacePersonalSpace({ resources, history, initialCursor, historyCoverage, historyAvailable, initialPreferences, storageAvailable, journey, suggestions }: {
   resources: WorkspaceResource[]; history: ActivationActivity[]; initialCursor: string | null; historyCoverage: string | null; historyAvailable: boolean; initialPreferences: WorkspacePreferences; storageAvailable: boolean; journey: ReactNode;
   suggestions: { id: string; title: string; href: string; description: string; action: string }[];
 }) {
+  const { locale, t } = useLocale();
+  const historyDate = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeZone: 'UTC' });
   const [preferences, setPreferences] = useState(initialPreferences);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState('');
@@ -45,21 +47,21 @@ export default function WorkspacePersonalSpace({ resources, history, initialCurs
     } catch (error) { setMessage(error instanceof Error ? error.message : 'Unable to save. Please retry.'); }
     finally { setBusy(false); }
   }
-  const needle = query.trim().toLocaleLowerCase();
-  const found = resources.filter(r => (kind === 'all' || r.kind === kind) && `${r.title} ${r.detail}`.toLocaleLowerCase().includes(needle));
+  const needle = query.trim().toLocaleLowerCase(locale);
+  const found = resources.filter(r => (kind === 'all' || r.kind === kind) && `${r.title} ${r.detail}`.toLocaleLowerCase(locale).includes(needle));
   const events = loadedHistory.filter(e => filter === 'all' || e.type === filter);
   const nextAction = suggestions.find(s => !preferences.dismissed.includes(s.id));
   return <div id="workspace-personal" className={styles.personal} data-density={preferences.density} aria-busy={busy}>
     <section className={`${styles.panel} ${styles.next}`} aria-labelledby="next-step-title">
       <div><p className={styles.eyebrow}>Your next useful step</p><h2 id="next-step-title">{nextAction?.title ?? 'Choose your next step.'}</h2><p>{nextAction?.description ?? 'Explore your saved resources or choose a new learning path.'}</p></div>
-      <div className={styles.actions}><Link className={styles.primary} href={nextAction?.href ?? '/courses'}>{nextAction?.action ?? 'Explore learning'} <span aria-hidden="true">↗</span></Link>{nextAction && storageAvailable && <button disabled={busy} className={styles.quiet} onClick={() => save({ ...preferences, dismissed: [...preferences.dismissed, nextAction.id].slice(-8) })}>Dismiss suggestion</button>}</div>
+      <div className={styles.actions}><Link className={styles.primary} href={nextAction?.href ?? '/courses'}>{t(nextAction?.action ?? 'Explore learning')} <span aria-hidden="true">↗</span></Link>{nextAction && storageAvailable && <button disabled={busy} className={styles.quiet} onClick={() => save({ ...preferences, dismissed: [...preferences.dismissed, nextAction.id].slice(-8) })}>Dismiss suggestion</button>}</div>
     </section>
     <details className={styles.customize}>
       <summary>Organize this workspace</summary>
       {!storageAvailable && <p>Personalization storage is unavailable. Your resources remain accessible.</p>}
       <fieldset disabled={busy || !storageAvailable}><legend>Display preferences · saved to your account</legend>
         <label>Density <select value={preferences.density} onChange={e => save({ ...preferences, density: e.target.value as WorkspacePreferences['density'] })}><option value="comfortable">Comfortable</option><option value="compact">Compact</option></select></label>
-        {(['journey','library','history'] as const).map(id => <label key={id}><input type="checkbox" checked={!preferences.hidden.includes(id)} onChange={e => save({ ...preferences, hidden: e.target.checked ? preferences.hidden.filter(x => x !== id) : [...preferences.hidden, id] })} />{names[id]}</label>)}
+        {(['journey','library','history'] as const).map(id => <label key={id}><input type="checkbox" checked={!preferences.hidden.includes(id)} onChange={e => save({ ...preferences, hidden: e.target.checked ? preferences.hidden.filter(x => x !== id) : [...preferences.hidden, id] })} />{t(names[id])}</label>)}
         <button className={styles.quiet} onClick={() => save(defaultWorkspacePreferences())}>Restore defaults and suggestions</button>
       </fieldset>
     </details>
@@ -76,8 +78,8 @@ export default function WorkspacePersonalSpace({ resources, history, initialCurs
     </section> : <p>Your library is hidden. Restore it in “Organize this workspace”.</p>}</div>
     <div id="workspace-history">{!preferences.hidden.includes('history') ? <section className={styles.panel} aria-labelledby="history-title">
       <div className={styles.sectionHeading}><div><p className={styles.eyebrow}>Recorded activity</p><h2 id="history-title"><LocalizedText text="My history" /></h2></div><label>Activity type<select value={filter} onChange={e => { setFilter(e.target.value); setPage(1); }}><option value="all">All activity</option><option value="course"><LocalizedText text="Learning" /></option><option value="comparison"><LocalizedText text="Comparisons" /></option><option value="saved_country"><LocalizedText text="Countries" /></option><option value="documents"><LocalizedText text="Preparation" /></option><option value="cost">Budget research</option></select></label></div>
-      <p>{historyAvailable ? `Archive coverage began ${historyCoverage ? new Intl.DateTimeFormat('en', { dateStyle: 'medium', timeZone: 'UTC' }).format(new Date(historyCoverage)) : 'with your first recorded activity'}. Earlier retained events are included only when backed by source records. Filters apply to loaded events.` : 'The archive is unavailable. Showing up to six retained recent events from your progress store.'}</p>
-      <ol className={styles.timeline}>{events.slice(0, page * 3).map(e => <li key={e.id}><span className={styles.dot} aria-hidden="true" /><div><span className={styles.eyebrow}>{e.type.replace('_',' ')}</span><Link href={e.href}>{e.title} ↗</Link><time dateTime={e.occurredAt}>{new Intl.DateTimeFormat('en', { dateStyle: 'medium', timeZone: 'UTC' }).format(new Date(e.occurredAt))} · UTC</time></div></li>)}</ol>
+      <p>{historyAvailable ? `Archive coverage began ${historyCoverage ? historyDate.format(new Date(historyCoverage)) : 'with your first recorded activity'}. Earlier retained events are included only when backed by source records. Filters apply to loaded events.` : 'The archive is unavailable. Showing up to six retained recent events from your progress store.'}</p>
+      <ol className={styles.timeline}>{events.slice(0, page * 3).map(e => <li key={e.id}><span className={styles.dot} aria-hidden="true" /><div><span className={styles.eyebrow}>{e.type.replace('_',' ')}</span><Link href={e.href}>{e.title} ↗</Link><time dateTime={e.occurredAt}>{historyDate.format(new Date(e.occurredAt))} · UTC</time></div></li>)}</ol>
       {!events.length && <p>No matching activity in the loaded records. Load earlier activity or choose another category.</p>}
       {events.length > page * 3 && <button className={styles.quiet} onClick={() => setPage(page + 1)}>Show more loaded activity</button>}
       {cursor && <button disabled={historyBusy} className={styles.quiet} onClick={loadHistory}>{historyBusy ? 'Loading history…' : 'Load earlier activity'}</button>}
