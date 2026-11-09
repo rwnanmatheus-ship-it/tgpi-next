@@ -16,12 +16,12 @@ export const metadata: Metadata = {
     "global readiness",
     "TGPI",
   ],
-  alternates: { canonical: "https://theglobalpolymath.com" },
+  alternates: { canonical: "https://www.theglobalpolymath.com" },
   openGraph: {
     title: "TGPI — Compare Countries. Prepare Your Next Chapter.",
     description:
       "Country intelligence, transparent comparison, document preparation and practical learning in one connected global decision system.",
-    url: "https://theglobalpolymath.com",
+    url: "https://www.theglobalpolymath.com",
     siteName: "TGPI — The Global Polymath Institute",
     type: "website",
     locale: "en_US",

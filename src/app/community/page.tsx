@@ -2,6 +2,7 @@ import { currentUser } from "@clerk/nextjs/server";
 import type { Metadata } from "next";
 import CommunityApp from "@/components/community/CommunityApp";
 export const metadata: Metadata = {
+  alternates: { canonical: "/community" },
   title: "Global Community | TGPI",
   description:
     "Connect with people navigating life across borders. Share experiences, ask questions and build your next step.",

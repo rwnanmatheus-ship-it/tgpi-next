@@ -1,9 +1,16 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import TGPIEditorialVisual from "@/components/TGPIEditorialVisual";
 import TGPIPageShell from "@/components/TGPIPageShell";
 import WhyTGPIIsDifferent from "@/components/WhyTGPIIsDifferent";
 import { LocalizedText } from "@/components/localization/LocaleProvider";
 
+
+export const metadata: Metadata = {
+  title: "Why TGPI — International decisions with evidence",
+  description: "Connect country research, practical learning and document preparation to understand the trade-offs behind your international plans.",
+  alternates: { canonical: "/why" },
+};
 
 export default function WhyPage() {
   return (

@@ -1,0 +1,36 @@
+name: SEO health
+on:
+  schedule:
+    - cron: "23 8 * * *"
+  workflow_dispatch:
+  deployment_status:
+permissions:
+  contents: read
+concurrency:
+  group: seo-health
+  cancel-in-progress: false
+jobs:
+  audit:
+    if: >-
+      github.event_name != 'deployment_status' ||
+      (github.event.deployment_status.state == 'success' &&
+      (startsWith(github.event.deployment.environment, 'Production') ||
+      startsWith(github.event.deployment.environment, 'production')))
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Test SEO checks
+        run: node --test scripts/seo.test.mjs
+      - name: Audit public production pages
+        run: node scripts/seo-audit.mjs
+      - name: Save audit evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: seo-audit
+          path: seo-audit-report.json
+          retention-days: 30

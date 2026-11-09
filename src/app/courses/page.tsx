@@ -11,6 +11,7 @@ import { coursesOverview } from '@/data/courses-overview';
 import { parseCatalogFilters } from '@/lib/learning/catalog-filters';
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/courses" },
   title: 'TGPI Learning — Practical Skills for a Global Life',
   description: 'Explore practical learning, resume your courses and understand the assessment and credential requirements for each pathway.',
 };

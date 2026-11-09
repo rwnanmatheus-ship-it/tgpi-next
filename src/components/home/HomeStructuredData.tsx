@@ -1,6 +1,6 @@
 import { homeFaq } from "@/data/home-system";
 
-const siteUrl = "https://theglobalpolymath.com";
+const siteUrl = "https://www.theglobalpolymath.com";
 
 function getHomeStructuredData(faq: readonly { question: string; answer: string }[]) { return {
   "@context": "https://schema.org",

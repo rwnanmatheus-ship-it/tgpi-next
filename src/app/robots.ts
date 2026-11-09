@@ -16,7 +16,7 @@ export default function robots(): MetadataRoute.Robots {
         "/profile",
       ],
     },
-    sitemap: "https://theglobalpolymath.com/sitemap.xml",
-    host: "https://theglobalpolymath.com",
+    sitemap: "https://www.theglobalpolymath.com/sitemap.xml",
+    host: "https://www.theglobalpolymath.com",
   };
 }

@@ -47,7 +47,7 @@ const interfaceFont = Manrope({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://theglobalpolymath.com"),
+  metadataBase: new URL("https://www.theglobalpolymath.com"),
   applicationName: "TGPI",
   title: "TGPI — Build Your Global Identity",
   description: "Prepare, compare and move globally with strategic clarity using TGPI — a premium education and decision system for international life.",
@@ -74,7 +74,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "TGPI — Build Your Global Identity",
     description: "Compare countries, build practical skills and prepare a global life with clarity.",
-    url: "https://theglobalpolymath.com",
+    url: "https://www.theglobalpolymath.com",
     siteName: "TGPI",
     locale: "en_US",
     type: "website",

@@ -42,3 +42,6 @@ yarn-error.log*
 next-env.d.ts
 
 .vercel
+
+# Local SEO health report (CI stores it as an artifact)
+/seo-audit-report.json

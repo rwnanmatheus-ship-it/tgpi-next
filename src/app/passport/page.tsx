@@ -15,6 +15,7 @@ import { buildDocumentsMemberModel } from "@/lib/documents-os";
 import { normalizeOnboardingData } from "@/lib/onboarding";
 
 export const metadata: Metadata = {
+  alternates: { canonical: "/passport" },
   title: "Documents OS | TGPI Global Readiness",
   description:
     "Build a country-aware document readiness strategy connected to your TGPI identity, global goals, learning and verified achievements.",
