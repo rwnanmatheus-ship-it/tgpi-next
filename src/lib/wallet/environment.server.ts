@@ -14,3 +14,9 @@ export function assertStripeKeyMode() {
   const prefix = WALLET_MODE === 'live' ? /^(sk|rk)_live_/ : /^(sk|rk)_test_/;
   if (!prefix.test(process.env.STRIPE_SECRET_KEY || '')) throw new AtlasError('Payment environment is not configured.', 503);
 }
+export function assertStripeMerchant(account: { id: string; charges_enabled: boolean; default_currency?: string }) {
+  const expected = process.env.TGPI_ATLAS_STRIPE_ACCOUNT_ID;
+  if (!expected || account.id !== expected) throw new AtlasError('Wallet merchant account has not been verified.', 503);
+  if (!['usd', 'brl'].includes(account.default_currency || '')) throw new AtlasError('Merchant settlement currency is not supported.', 503);
+  if (WALLET_MODE === 'live' && !account.charges_enabled) throw new AtlasError('Merchant account cannot accept payments yet.', 503);
+}

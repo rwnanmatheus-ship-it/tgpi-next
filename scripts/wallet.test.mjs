@@ -15,8 +15,10 @@ function load(path, dependencies) {
   return exports;
 }
 const policy = load('src/lib/wallet/policy.ts', {});
+const settlementPolicy = load('src/lib/wallet/settlement.ts', {});
 function harness(mode = 'production') {
   process.env.VERCEL_ENV = mode;
+  process.env.TGPI_ATLAS_STRIPE_ACCOUNT_ID = 'acct_fixture';
   process.env.STRIPE_SECRET_KEY = mode === 'production' ? 'sk_live_fixture' : 'sk_test_fixture';
   const data = new Map(); let queue = Promise.resolve();
   const firestore = {
@@ -32,17 +34,17 @@ function harness(mode = 'production') {
       }); queue = result.catch(() => {}); return result;
     },
   };
-  const dependencies = { '@/lib/firestore-admin-rest.server': firestore, '@/lib/atlas/contracts': contracts, './policy': policy, '@/lib/wallet/policy': policy };
+  const dependencies = { './settlement': settlementPolicy, '@/lib/firestore-admin-rest.server': firestore, '@/lib/atlas/contracts': contracts, './policy': policy, '@/lib/wallet/policy': policy };
   const environment = load('src/lib/wallet/environment.server.ts', dependencies);
   dependencies['./environment.server'] = environment;
   const wallet = load('src/lib/wallet/store.server.ts', dependencies);
   const store = load('src/lib/atlas/store.server.ts', { ...dependencies, './contracts': contracts, '@/lib/wallet/store.server': wallet });
-  let charge = { livemode: mode === 'production', id: 'ch_one', paid: true, disputed: false, amount_refunded: 0, payment_intent: 'pi_one', balance_transaction: { currency: 'usd', net: 455 } };
+  let charge = { livemode: mode === 'production', id: 'ch_one', currency: 'usd', amount: 500, paid: true, disputed: false, amount_refunded: 0, payment_intent: 'pi_one', balance_transaction: { id: 'txn_test', currency: 'usd', amount: 500, fee: 45, net: 455, exchange_rate: null, available_on: 1800000000, status: 'pending' } };
   const intent = { id: randomUUID(), uid: 'alice', customer: 'cus_alice', cents: 500, pack: 'starter', origin: 'https://tgpi.test', createdAt: Date.now(), expiresAt: Date.now() + 2_100_000 };
   data.set(`${environment.COMMERCE_ROOT}/intents/${intent.id}`, intent);
   const pi = { livemode: mode === 'production', id: 'pi_one', status: 'succeeded', currency: 'usd', amount_received: 500, customer: 'cus_alice', latest_charge: 'ch_one', metadata: { tgpiWalletIntent: intent.id } };
   const sessions = [];
-  const payments = load('src/lib/wallet/payments.server.ts', { ...dependencies, './store.server': wallet, '@/lib/billing.server': { getOrCreateStripeCustomer: async () => 'cus_alice' }, '@/lib/stripe': { getStripeServer: () => ({ customers: { create: async () => ({ id: 'cus_alice', livemode: mode === 'production' }), retrieve: async () => ({ id: 'cus_alice', livemode: mode === 'production' }) }, paymentIntents: { retrieve: async () => structuredClone(pi) }, charges: { retrieve: async () => structuredClone(charge) }, checkout: { sessions: { create: async (args, options) => { sessions.push({ args, options }); return { livemode: mode === 'production', status: 'open', url: 'https://checkout.stripe.com/session' }; } } } }) } });
+  const payments = load('src/lib/wallet/payments.server.ts', { ...dependencies, './store.server': wallet, '@/lib/billing.server': { getOrCreateStripeCustomer: async () => 'cus_alice' }, '@/lib/stripe': { getStripeServer: () => ({ accounts: { retrieve: async () => ({ id: 'acct_fixture', charges_enabled: true, default_currency: 'brl' }) }, customers: { create: async () => ({ id: 'cus_alice', livemode: mode === 'production' }), retrieve: async () => ({ id: 'cus_alice', livemode: mode === 'production' }) }, paymentIntents: { retrieve: async () => structuredClone(pi) }, charges: { retrieve: async () => structuredClone(charge) }, checkout: { sessions: { create: async (args, options) => { sessions.push({ args, options }); return { livemode: mode === 'production', status: 'open', url: 'https://checkout.stripe.com/session' }; } } } }) } });
   process.env.TGPI_ATLAS_PROVIDER_PREPAID_CENTS = '100'; process.env.TGPI_ATLAS_FUNDING_REFERENCE = 'test-fixture-no-real-funds';
   return { environment, data, wallet, store, payments, pi, charge, intent, sessions, account: () => data.get(wallet.walletPath('alice')), treasury: () => data.get(wallet.TREASURY_PATH), reserve: (requestId = randomUUID(), token = randomUUID(), conversation = randomUUID()) => firestore.runFirestoreTransaction(async ({ getDocuments }) => ({ result: token, writes: await wallet.reserveWallet(getDocuments, 'alice', requestId, conversation, token) })), seed: cents => { data.set(wallet.walletPath('alice'), { ...policy.emptyWallet(), balanceCents: cents }); data.set(wallet.TREASURY_PATH, { ...wallet.emptyTreasury(), collectedCents: 1000 }); } };
 }
@@ -105,7 +107,7 @@ test('disputes freeze the payment once without double subtracting a partial refu
 });
 test('checkout retries reuse immutable server prices and one Stripe idempotency key', async () => {
   const h = harness(); await Promise.all([h.payments.createWalletCheckout('alice', 'starter', 'https://tgpi.test'), h.payments.createWalletCheckout('alice', 'starter', 'https://tgpi.test')]);
-  assert.deepEqual(h.sessions[0], h.sessions[1]); assert.equal(h.sessions[0].args.line_items[0].price_data.unit_amount, 500); assert.equal(h.sessions[0].args.mode, 'payment');
+  assert.deepEqual(h.sessions[0], h.sessions[1]); assert.equal(h.sessions[0].args.line_items[0].price_data.unit_amount, 500); assert.equal(h.sessions[0].args.mode, 'payment'); assert.equal(h.sessions[0].args.adaptive_pricing.enabled, false);
   await assert.rejects(h.payments.createWalletCheckout('alice', 'global', 'https://tgpi.test'), e => e.status === 409);
 });
 test('bounded text cost stays below conservative reserve; monetary corruption fails closed', () => {
@@ -182,4 +184,44 @@ test('wallet financial disclosures have matching keys across all six platform lo
     for (const value of Object.values(copy)) assert.ok(typeof value === 'string' && value.trim().length > 0);
     assert.match(copy.chatPrice, /0[.,]10/);
   }
+});
+
+test('USD sale settled in BRL grants USD credits and keeps native fees and conversion evidence', async () => {
+  const h = harness('preview'); Object.assign(h.charge.balance_transaction, { currency: 'brl', amount: 2600, fee: 141, net: 2459, exchange_rate: 5.2 });
+  await h.payments.reconcileWalletPayment('pi_one'); await h.payments.reconcileWalletPayment('pi_one');
+  assert.equal(h.account().balanceCents, 500); assert.equal(h.treasury().collectedCents, 472);
+  const payment = h.data.get(`${h.environment.COMMERCE_ROOT}/payments/pi_one`);
+  assert.equal(payment.settlement.currency, 'brl'); assert.equal(payment.settlement.netMinor, 2459); assert.equal(payment.settlement.feeMinor, 141); assert.equal(payment.settlement.status, 'pending');
+  h.charge.amount_refunded = 200; await h.payments.reconcileWalletPayment('pi_one');
+  assert.equal(h.account().balanceCents, 300); assert.equal(h.treasury().reversedCents, 200); assert.equal(h.treasury().collectedCents, 472);
+});
+test('unsupported currencies, missing exchange rates and inconsistent processor fees do not credit wallets', async () => {
+  for (const changes of [{ currency: 'jpy' }, { currency: 'brl' }, { currency: 'brl', exchange_rate: 0 }, { currency: 'brl', exchange_rate: 5.2 }, { fee: 10 }, { amount: 499 }, { net: Infinity }]) {
+    const h = harness(); Object.assign(h.charge.balance_transaction, changes);
+    await assert.rejects(h.payments.reconcileWalletPayment('pi_one')); assert.equal(h.account(), undefined);
+  }
+});
+test('negative processor net is preserved in audit data and adds no API funding capacity', () => {
+  const result = settlementPolicy.reconcileSettlement({ id: 'txn_negative', currency: 'usd', amount: 500, fee: 600, net: -100, exchange_rate: null, available_on: 1800000000, status: 'available' }, 500);
+  assert.equal(result.netUsdCents, 0); assert.equal(result.settlement.netMinor, -100);
+});
+
+test('merchant mismatch, unsupported settlement and disabled live charges are rejected', () => {
+  const h = harness();
+  assert.throws(() => h.environment.assertStripeMerchant({ id: 'acct_other', charges_enabled: true, default_currency: 'brl' }), /not been verified/);
+  assert.throws(() => h.environment.assertStripeMerchant({ id: 'acct_fixture', charges_enabled: true, default_currency: 'jpy' }), /not supported/);
+  assert.throws(() => h.environment.assertStripeMerchant({ id: 'acct_fixture', charges_enabled: false, default_currency: 'brl' }), /cannot accept payments/);
+});
+test('commercial availability requires explicit tax review and merchant binding as well as funding', () => {
+  const h = harness();
+  Object.assign(process.env, { BILLING_ENABLED: 'true', TGPI_ATLAS_WALLET_ENABLED: 'true', TGPI_ATLAS_WALLET_WEBHOOKS_CONFIRMED: 'true' });
+  delete process.env.TGPI_ATLAS_TAX_POLICY_CONFIRMED; assert.equal(h.wallet.walletCheckoutConfigured(), false);
+  process.env.TGPI_ATLAS_TAX_POLICY_CONFIRMED = 'true'; assert.equal(h.wallet.walletCheckoutConfigured(), true);
+  delete process.env.TGPI_ATLAS_STRIPE_ACCOUNT_ID; assert.equal(h.wallet.walletCheckoutConfigured(), false);
+});
+test('readiness distinguishes unavailable Stripe evidence from missing configuration and never enables commerce', async () => {
+  const h = harness();
+  const module = load('src/lib/wallet/readiness.server.ts', { './policy': policy, './environment.server': h.environment, './store.server': h.wallet, '@/lib/stripe': { getStripeServer: () => ({ accounts: { retrieve: async () => { throw Error('sensitive provider error'); } }, webhookEndpoints: { list: async () => ({ data: [], has_more: false }) } }) } });
+  const result = await module.walletReadiness();
+  assert.equal(result.account, null); assert.ok(result.checks.some(x => x.state === 'unverified')); assert.ok(result.checks.some(x => x.label.includes('Endpoint') && x.state === 'pending')); assert.doesNotMatch(JSON.stringify(result), /sensitive provider error/);
 });

@@ -1,4 +1,5 @@
-import { WALLET_MODE, COMMERCE_ROOT, walletOwnerPath, assertStripeMode, assertStripeKeyMode } from './environment.server';
+import { reconcileSettlement } from './settlement';
+import { WALLET_MODE, COMMERCE_ROOT, walletOwnerPath, assertStripeMode, assertStripeKeyMode, assertStripeMerchant } from './environment.server';
 import 'server-only';
 import { randomUUID } from 'node:crypto';
 import type Stripe from 'stripe';
@@ -9,12 +10,13 @@ import { assertWallet, emptyWallet, WALLET_PACKS, type WalletAccount, type Walle
 import { assertTreasury, emptyTreasury, ledgerWrite, TREASURY_PATH, walletPath, walletWrite, type Treasury } from './store.server';
 
 type Intent = { id: string; uid: string; customer: string; cents: number; pack: WalletPack; origin: string; createdAt: number; expiresAt: number };
-type Payment = { creditedCents: number; revokedCents: number; netCents: number; paymentIntent: string; uid: string; charge: string };
+type Payment = { creditedCents: number; revokedCents: number; netCents: number; paymentIntent: string; uid: string; charge: string; settlement?: ReturnType<typeof reconcileSettlement>['settlement'] };
 const intentPath = (id: string) => `${COMMERCE_ROOT}/intents/${id}`;
 const identifier = (value: string | { id: string } | null) => typeof value === 'string' ? value : value?.id;
 
 export async function createWalletCheckout(uid: string, packId: WalletPack, origin: string) {
   assertStripeKeyMode();
+  assertStripeMerchant(await getStripeServer().accounts.retrieve(null, {}, { timeout: 10_000, maxNetworkRetries: 0 }));
   const pack = WALLET_PACKS.find(x => x.id === packId);
   if (!pack) throw new AtlasError('Invalid credit pack.', 400);
   const customerPath = `${walletOwnerPath(uid)}/walletCustomer/stripe`;
@@ -42,7 +44,7 @@ export async function createWalletCheckout(uid: string, packId: WalletPack, orig
   });
   const session = await getStripeServer().checkout.sessions.create({
     mode: 'payment', customer: intent.customer, client_reference_id: uid,
-    payment_method_types: ['card'],
+    payment_method_types: ['card'], adaptive_pricing: { enabled: false },
     line_items: [{ quantity: 1, price_data: { currency: 'usd', unit_amount: intent.cents, product_data: { name: 'TGPI Atlas — prepaid service credits', description: 'For Atlas usage only. No automatic renewal. USD 0.10 per completed reply.' } } }],
     metadata: { tgpiWalletIntent: intent.id }, payment_intent_data: { metadata: { tgpiWalletIntent: intent.id } },
     success_url: `${intent.origin}/atlas/wallet?checkout=success`, cancel_url: `${intent.origin}/atlas/wallet?checkout=cancelled`,
@@ -69,10 +71,10 @@ export async function reconcileWalletPayment(paymentIntentId: string) {
   if (!chargeId) throw Error('Wallet charge is not available');
   const charge = await stripe.charges.retrieve(chargeId, { expand: ['balance_transaction'] });
   assertStripeMode(charge.livemode);
-  if (!charge.paid || identifier(charge.payment_intent) !== paymentIntent.id) throw Error('Wallet charge not paid');
+  if (!charge.paid || charge.currency !== 'usd' || charge.amount !== intent.cents || identifier(charge.payment_intent) !== paymentIntent.id) throw Error('Wallet charge not paid');
   const balance = charge.balance_transaction as Stripe.BalanceTransaction | null;
-  // Require USD settlement so treasury never mixes currencies or guesses processing fees.
-  if (!balance || typeof balance === 'string' || balance.currency !== 'usd') throw Error('USD payment settlement is not ready');
+  if (!balance || typeof balance === 'string') throw Error('Payment settlement is not ready');
+  const settlement = reconcileSettlement(balance, intent.cents);
   if (!Number.isSafeInteger(balance.net) || !Number.isSafeInteger(charge.amount_refunded) || charge.amount_refunded < 0) throw Error('Invalid Stripe monetary values');
   const paymentPath = `${COMMERCE_ROOT}/payments/${paymentIntent.id}`;
   const path = walletPath(intent.uid);
@@ -96,8 +98,8 @@ export async function reconcileWalletPayment(paymentIntentId: string) {
     return { result: null, writes: [
       ...(checkoutLock?.id === intent.id ? [walletWrite(lockPath, { ...checkoutLock, expiresAt: 0 })] : []),
       walletWrite(path, { ...account, balanceCents: account.balanceCents + delta, updatedAt: new Date().toISOString() }),
-      walletWrite(paymentPath, { uid: intent.uid, paymentIntent: paymentIntent.id, charge: charge.id, creditedCents: target, revokedCents, netCents: prior?.netCents ?? balance.net }),
-      walletWrite(TREASURY_PATH, { ...treasury, collectedCents: treasury.collectedCents + (prior ? 0 : Math.max(0, balance.net)), reversedCents: treasury.reversedCents + revokedCents - (prior?.revokedCents || 0) }),
+      walletWrite(paymentPath, { uid: intent.uid, paymentIntent: paymentIntent.id, charge: charge.id, creditedCents: target, revokedCents, netCents: prior?.netCents ?? settlement.netUsdCents, settlement: prior?.settlement ?? settlement.settlement }),
+      walletWrite(TREASURY_PATH, { ...treasury, collectedCents: treasury.collectedCents + (prior ? 0 : settlement.netUsdCents), reversedCents: treasury.reversedCents + revokedCents - (prior?.revokedCents || 0) }),
       ledgerWrite(intent.uid, entryId, delta >= 0 ? 'topup' : 'reversal', delta, paymentIntent.id),
     ] };
   });

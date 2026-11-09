@@ -1,3 +1,4 @@
+import { walletReadiness } from '@/lib/wallet/readiness.server';
 import { auth } from '@clerk/nextjs/server';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
@@ -9,16 +10,22 @@ export default async function TreasuryPage() {
   const founders = (process.env.TGPI_FOUNDER_USER_IDS || '').split(',').map(x => x.trim());
   if (!userId || !founders.includes(userId)) notFound();
   if (!isLearningStorageConfigured()) return <main className={styles.page}><h1>Tesouraria TGPI</h1><p>Armazenamento indisponível. Nenhum saldo foi presumido.</p></main>;
-  const treasury = (await getFirestoreDocument<Treasury>(TREASURY_PATH))?.data || emptyTreasury();
+  const [treasuryRecord, readiness] = await Promise.all([getFirestoreDocument<Treasury>(TREASURY_PATH), walletReadiness()]);
+  const treasury = treasuryRecord?.data || emptyTreasury();
   const usd = (cents: number) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'USD' }).format(cents / 100);
   return <main className={styles.page}><nav><Link href="/atlas/wallet">← Carteira Atlas</Link><span>TGPI · FOUNDER</span></nav><header><p className={styles.eyebrow}>TESOURARIA</p><h1>Receita com controle.</h1><p>Pagamentos, obrigações de créditos e capacidade da API em contas separadas.</p></header><section className={styles.packs}>
     {[
-      ['Recebimentos líquidos registrados', usd(treasury.collectedCents)],
+      ['Recebimentos líquidos — equivalente USD', usd(treasury.collectedCents)],
       ['Reversões registradas', usd(treasury.reversedCents)],
-      ['Receita por respostas concluídas', usd(treasury.revenueCents)],
+      ['Consumo registrado antes de estornos', usd(treasury.revenueCents)],
       ['Reserva conservadora da API', usd(treasury.providerReservedMicroUsd / 10_000)],
       ['Financiamento da API documentado', usd(fundedLimitMicroUsd() / 10_000)],
       ['Capacidade da API restante', usd(Math.max(0, fundedLimitMicroUsd() - treasury.providerReservedMicroUsd) / 10_000)],
     ].map(([label, value]) => <article key={label}><span>{label}</span><h3>{value}</h3></article>)}
+    </section><section><h2>Diagnóstico de ativação</h2><p className={styles.fine}>Ambiente: {readiness.mode === 'live' ? 'produção' : 'testes'}. Este painel consulta a integração instalada no site; conectar o Stripe ao ChatGPT não altera automaticamente as credenciais do site.</p>
+      {readiness.account && <p className={styles.fine}>Conta: {readiness.account.id} · País: {readiness.account.country || 'Não informado'} · Liquidação: {readiness.account.currency?.toUpperCase() || 'Não informada'}</p>}
+      <ul className={styles.ledger}>{readiness.checks.map(check => <li key={check.label}><strong>{check.label}</strong><span>{check.state === 'met' ? 'Confirmado' : check.state === 'pending' ? 'Pendente' : 'Não verificado'}</span></li>)}</ul>
+      <details><summary>Eventos Stripe necessários</summary><ul>{readiness.requiredEvents.map(event => <li key={event}><code>{event}</code></li>)}</ul></details>
+      <p className={styles.fine}>A existência do webhook não comprova a entrega de eventos. Valores convertidos de BRL usam a liquidação registrada pelo Stripe; não representam dólares disponíveis, saque ou lucro.</p>
     </section><p className={styles.notice}>{walletCheckoutConfigured() ? 'Configuração comercial habilitada; cada compra e chamada ainda passa por verificação de acesso e capacidade.' : 'Compras desabilitadas até a validação comercial e do financiamento.'}</p><p className={styles.fine}>Recebimentos registrados não são saldo bancário disponível nem lucro distribuível. Créditos ainda não utilizados são obrigações com os usuários. Taxas, impostos, disputas, infraestrutura e demais custos devem ser conciliados antes de calcular o lucro. Pagamentos seguem para a conta Stripe já vinculada à TGPI; esta tela não executa transferências ou saques.</p></main>;
 }

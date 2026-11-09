@@ -22,7 +22,7 @@ export function fundedLimitMicroUsd() {
   return integerMoney(cents) && cents <= 100_000_000 && process.env.TGPI_ATLAS_FUNDING_REFERENCE ? cents * 10_000 : 0;
 }
 export function walletCheckoutConfigured() {
-  return process.env.BILLING_ENABLED === 'true' && process.env.TGPI_ATLAS_WALLET_ENABLED === 'true' && process.env.TGPI_ATLAS_WALLET_WEBHOOKS_CONFIRMED === 'true' && fundedLimitMicroUsd() >= PROVIDER_RESERVE_MICRO_USD;
+  return process.env.TGPI_ATLAS_TAX_POLICY_CONFIRMED === 'true' && /^acct_[a-zA-Z0-9]+$/.test(process.env.TGPI_ATLAS_STRIPE_ACCOUNT_ID || '') && process.env.BILLING_ENABLED === 'true' && process.env.TGPI_ATLAS_WALLET_ENABLED === 'true' && process.env.TGPI_ATLAS_WALLET_WEBHOOKS_CONFIRMED === 'true' && fundedLimitMicroUsd() >= PROVIDER_RESERVE_MICRO_USD;
 }
 type Reader = <T>(paths: string[]) => Promise<Map<string, FirestoreDecodedDocument<T> | null>>;
 type Reservation = { token: string; requestId: string; conversationId: string; state: 'reserved' | 'complete' | 'released'; createdAt: string; settledAt?: string };
