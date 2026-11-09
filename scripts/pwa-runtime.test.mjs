@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
+import ts from "typescript";
 import manifest from "../src/app/manifest.ts";
 
 const readSource = (path) =>
@@ -91,4 +92,51 @@ test("root metadata and response headers expose the PWA safely", () => {
   assert.match(config, /X-Robots-Tag/);
   assert.match(offline, /does not store private workspace pages/);
   assert.match(offline, /noindex,nofollow/);
+});
+
+test("dismissed installation stays hidden across repeated browser events and reloads", async () => {
+  const state = [], effects = [], listeners = new Map(), storage = new Map();
+  let cursor = 0, blockStorage = false;
+  const hooks = {
+    useState(initial) { const index = cursor++; if (!(index in state)) state[index] = initial; return [state[index], value => { state[index] = typeof value === 'function' ? value(state[index]) : value; }]; },
+    useRef(initial) { const index = cursor++; return state[index] ??= { current: initial }; },
+    useEffect(effect) { const index = cursor++; if (!(index in state)) { state[index] = true; effects.push(effect); } },
+    LocalizedText: ({ text }) => text,
+    jsx: (type, props) => ({ type, props }),
+  };
+  const browserWindow = {
+    localStorage: { getItem(key) { if (blockStorage) throw new Error('blocked'); return storage.get(key); }, setItem(key, value) { if (blockStorage) throw new Error('blocked'); storage.set(key, value); }, removeItem(key) { storage.delete(key); } },
+    matchMedia: () => ({ matches: false }), setTimeout: callback => { callback(); return 1; }, clearTimeout() {},
+    addEventListener: (name, handler) => listeners.set(name, handler), removeEventListener: name => listeners.delete(name),
+  };
+  globalThis.__pwaFixture = { ...hooks, window: browserWindow, navigator: { userAgent: 'test', platform: 'test', maxTouchPoints: 0, onLine: true } };
+  const source = readSource('src/components/app-runtime/TgpiAppRuntime.tsx')
+    .replace(/import[^;]+from "react";/, 'const {useState,useRef,useEffect}=globalThis.__pwaFixture;')
+    .replace(/import[^;]+from "@\/components\/localization\/LocaleProvider";/, 'const {LocalizedText,window,navigator}=globalThis.__pwaFixture;');
+  const compiled = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX } }).outputText
+    .replace(/import[^;]+from "react\/jsx-runtime";/, 'const {jsx:_jsx,jsx:_jsxs}=globalThis.__pwaFixture;');
+  const { default: Runtime } = await import('data:text/javascript;base64,' + Buffer.from(compiled).toString('base64'));
+  const render = () => { cursor = 0; const result = Runtime(); while (effects.length) effects.shift()(); return result; };
+  const installEvent = () => { let prevented = false; listeners.get('beforeinstallprompt')({ preventDefault() { prevented = true; } }); assert.equal(prevented, true); };
+  const findDismissal = node => {
+    if (!node || typeof node !== 'object') return null;
+    if (node.type === 'button' && node.props.children?.props?.text === 'Not now') return node;
+    const children = [node.props?.children].flat(Infinity);
+    return children.map(findDismissal).find(Boolean);
+  };
+  assert.equal(render(), null);
+  installEvent();
+  let notice = render();
+  assert.equal(notice.props['data-pwa-runtime'], 'install');
+  findDismissal(notice).props.onClick();
+  installEvent();
+  assert.equal(render(), null, 'a repeated event must respect in-memory dismissal');
+  state.length = 0; listeners.clear();
+  render(); installEvent();
+  assert.equal(render(), null, 'a reload must respect persisted dismissal');
+  storage.clear(); state.length = 0; listeners.clear(); blockStorage = true;
+  render(); installEvent(); notice = render();
+  findDismissal(notice).props.onClick(); installEvent();
+  assert.equal(render(), null, 'denied storage must still respect dismissal during the visit');
+  delete globalThis.__pwaFixture;
 });

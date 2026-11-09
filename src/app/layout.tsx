@@ -102,7 +102,20 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           signInUrl="/sign-in"
           signUpUrl="/sign-up"
           afterSignOutUrl="/"
-          localization={clerkLocales[locale]}
+          localization={{
+            ...clerkLocales[locale],
+            signIn: { ...clerkLocales[locale].signIn, start: {
+              ...clerkLocales[locale].signIn?.start,
+              title: clerkLocales[locale].signIn?.start?.title?.replaceAll('{{applicationName}}', 'TGPI'),
+              titleCombined: clerkLocales[locale].signIn?.start?.titleCombined?.replaceAll('{{applicationName}}', 'TGPI'),
+              subtitle: clerkLocales[locale].signIn?.start?.subtitle?.replaceAll('{{applicationName}}', 'TGPI'),
+            } },
+            signUp: { ...clerkLocales[locale].signUp, start: {
+              ...clerkLocales[locale].signUp?.start,
+              subtitle: clerkLocales[locale].signUp?.start?.subtitle?.replaceAll('{{applicationName}}', 'TGPI'),
+              subtitleCombined: clerkLocales[locale].signUp?.start?.subtitleCombined?.replaceAll('{{applicationName}}', 'TGPI'),
+            } },
+          }}
           appearance={tgpiClerkAppearance}
         >
           <AccountLocaleSync />

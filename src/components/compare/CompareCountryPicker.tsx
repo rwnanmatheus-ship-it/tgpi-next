@@ -212,14 +212,14 @@ export default function CompareCountryPicker({
             </div>
             <div className="min-w-0">
               <p className="text-[9px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-strong)]">
-                Active decision set · {getComparisonGoalConfig(goal).shortLabel}
+                {t("Active decision set")} · {t(getComparisonGoalConfig(goal).shortLabel)}
               </p>
               <p className="mt-1 truncate text-sm font-extrabold text-[var(--tgpi-navy)]">
                 {selectedCountries.length
                   ? selectedCountries
-                      .map((country) => `${country.emoji} ${country.name}`)
+                      .map((country) => `${country.emoji} ${t(country.name)}`)
                       .join("  ·  ")
-                  : "Choose countries to continue"}
+                  : t("Choose countries to continue")}
               </p>
             </div>
           </div>
@@ -253,7 +253,7 @@ export default function CompareCountryPicker({
                 id="comparison-builder-title"
                 className="mt-1 max-w-3xl font-[var(--tgpi-font-display)] text-2xl font-semibold text-[var(--tgpi-navy)] sm:text-3xl"
               >
-                {t("Build the decision set. TGPI will expose the trade-offs.")}
+                {t("Choose countries to compare")}
               </h2>
             </div>
             <div className="flex flex-wrap items-center gap-3">

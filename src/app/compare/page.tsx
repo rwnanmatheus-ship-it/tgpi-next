@@ -50,8 +50,9 @@ export default async function ComparePage({ searchParams }: { searchParams?: Pro
 }
 
 async function ComparisonEvidence({ selected, countries }: { selected: typeof identities; countries: Array<{slug:string;name:string}> }) {
-  const state = await getIntelligence();
+  const [state, locale] = await Promise.all([getIntelligence(), getLocale()]);
+  const t = (text: string) => translate(locale, text);
   return (
-    <><GraphStatus state={state} /><div id="comparison-matrix">{INDICATOR_IDS.map(id => <section className="ig-section" key={id}><h2>{INDICATORS[id].label}</h2><p className="ig-small">{comparisonCaveat(selected.map(c => findObservation(state.snapshot, c.slug, id)))}</p><div className="ig-compare-row">{selected.map(c => <div key={c.slug}><h3 className="mb-3 text-xl font-bold"><Link href={`/countries/${c.slug}`}>{countries.find(a => a.slug === c.slug)?.name ?? c.name}</Link></h3><EvidenceCard indicator={id} countryCode={c.iso2} observation={findObservation(state.snapshot, c.slug, id)} /></div>)}</div></section>)}</div></>
+    <><GraphStatus state={state} /><div id="comparison-matrix">{INDICATOR_IDS.map(id => <section className="ig-section" key={id}><h2>{t(INDICATORS[id].label)}</h2><p className="ig-small">{t(comparisonCaveat(selected.map(c => findObservation(state.snapshot, c.slug, id))))}</p><div className="ig-compare-row">{selected.map(c => <div key={c.slug}><h3 className="mb-3 text-xl font-bold"><Link href={`/countries/${c.slug}`}>{t(countries.find(a => a.slug === c.slug)?.name ?? c.name)}</Link></h3><EvidenceCard indicator={id} countryCode={c.iso2} observation={findObservation(state.snapshot, c.slug, id)} /></div>)}</div></section>)}</div></>
   );
 }

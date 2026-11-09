@@ -42,6 +42,7 @@ export default function TgpiAppRuntime() {
   const [installPrompt, setInstallPrompt] =
     useState<BeforeInstallPromptEvent | null>(null);
   const [installDismissed, setInstallDismissed] = useState(true);
+  const installDismissedRef = useRef(false);
   const [iosInstallAvailable, setIosInstallAvailable] = useState(false);
   const [online, setOnline] = useState(true);
   const [updateAvailable, setUpdateAvailable] = useState(false);
@@ -54,6 +55,7 @@ export default function TgpiAppRuntime() {
     let installingWorker: ServiceWorker | null = null;
     const standalone = isStandaloneMode();
     const dismissed = readInstallDismissal();
+    installDismissedRef.current = standalone || dismissed;
     const isiOS =
       /iphone|ipad|ipod/i.test(navigator.userAgent) ||
       (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
@@ -66,10 +68,12 @@ export default function TgpiAppRuntime() {
 
     const onBeforeInstall = (event: Event) => {
       event.preventDefault();
+      if (installDismissedRef.current || readInstallDismissal() || isStandaloneMode()) return;
       setInstallPrompt(event as BeforeInstallPromptEvent);
       setInstallDismissed(false);
     };
     const onInstalled = () => {
+      installDismissedRef.current = true;
       setInstallPrompt(null);
       setInstallDismissed(true);
       setIosInstallAvailable(false);
@@ -184,6 +188,7 @@ export default function TgpiAppRuntime() {
   }
 
   function dismissInstall() {
+    installDismissedRef.current = true;
     persistInstallDismissal(true);
     setInstallDismissed(true);
     setIosInstallAvailable(false);
