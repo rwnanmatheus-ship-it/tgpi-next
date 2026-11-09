@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { useAuth } from '@clerk/nextjs';
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState } from 'react';
+import { containDialogFocus } from '@/lib/dialog-focus';
 import styles from './widget.module.css';
 
 const Chat = dynamic(() => import('./AtlasChat'), { loading: () => <p className={styles.loading}><LocalizedText text="Loading Atlas…" /></p>, ssr: false });
@@ -20,6 +21,13 @@ export default function AtlasWidget() {
   const [opened, setOpened] = useState(false);
   const [visited, setVisited] = useState(false);
   const [access, setAccess] = useState<{ userId: string; enabled: boolean } | null>(null);
+
+  useEffect(() => {
+    if (!opened) return;
+    const overflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => { document.body.style.overflow = overflow; };
+  }, [opened]);
 
   useEffect(() => {
     if (!opened || !userId) return;
@@ -50,7 +58,11 @@ export default function AtlasWidget() {
       <Image src="/brand/atlas/avatar.webp" alt="" width={44} height={44} />
       <span>{t("Ask Atlas")}</span>
     </button>
-    <dialog ref={dialog} id="tgpi-atlas-widget" className={styles.panel} aria-labelledby="atlas-widget-title" onClose={() => { setOpened(false); trigger.current?.focus(); }} onClick={event => { if (event.target === dialog.current) dialog.current.close(); }}>
+    <dialog ref={dialog} id="tgpi-atlas-widget" className={styles.panel} aria-labelledby="atlas-widget-title" onKeyDown={containDialogFocus} onClose={() => { setOpened(false); trigger.current?.focus({ preventScroll: true }); }} onClick={event => {
+      if (event.target !== event.currentTarget) return;
+      const rect = event.currentTarget.getBoundingClientRect();
+      if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) event.currentTarget.close();
+    }}>
       <div className={styles.frame}>
         <header className={styles.heading}><strong id="atlas-widget-title">TGPI Atlas AI</strong><Link href="/atlas" onClick={() => dialog.current?.close()}>{t("Full page ↗")}</Link><button autoFocus onClick={() => dialog.current?.close()} aria-label={t("Minimize Atlas")}>−</button></header>
         <div className={styles.content}>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { usePathname } from "next/navigation";
 import { LocalizedText } from "@/components/localization/LocaleProvider";
 
 
@@ -39,6 +40,9 @@ function isStandaloneMode() {
 }
 
 export default function TgpiAppRuntime() {
+  const pathname = usePathname();
+  // Installation belongs to the personal workspace, after discovery or study.
+  const canOfferInstall = ["/profile", "/dashboard", "/plan"].includes(pathname);
   const [installPrompt, setInstallPrompt] =
     useState<BeforeInstallPromptEvent | null>(null);
   const [installDismissed, setInstallDismissed] = useState(true);
@@ -209,9 +213,9 @@ export default function TgpiAppRuntime() {
     ? "offline"
     : updateAvailable
       ? "update"
-      : !installDismissed && installPrompt
+      : canOfferInstall && !installDismissed && installPrompt
         ? "install"
-        : iosInstallAvailable
+        : canOfferInstall && iosInstallAvailable
           ? "ios-install"
           : null;
 
@@ -248,11 +252,11 @@ export default function TgpiAppRuntime() {
     <aside
       aria-atomic="true"
       aria-live="polite"
-      className="fixed inset-x-4 bottom-[calc(6rem+env(safe-area-inset-bottom))] z-[90] mx-auto max-w-md overflow-hidden rounded-[1.4rem] border border-[#D8B35C]/35 bg-[#061525]/95 text-white shadow-[0_24px_80px_rgba(1,8,16,0.38)] backdrop-blur-xl lg:inset-x-auto lg:bottom-6 lg:right-6 lg:mx-0"
+      className="fixed inset-x-4 bottom-[calc(6rem+env(safe-area-inset-bottom))] z-[90] mx-auto max-w-md overflow-hidden rounded-[1.4rem] border border-[var(--tgpi-inverse-border)] bg-[var(--tgpi-navy)] text-white shadow-[0_24px_80px_rgba(1,8,16,0.38)] backdrop-blur-xl lg:inset-x-auto lg:bottom-6 lg:right-6 lg:mx-0"
       data-pwa-runtime={notice}
       role="status"
     >
-      <div className="h-1 bg-gradient-to-r from-[#7E5A1D] via-[var(--tgpi-gold)] to-[#F3D98B]" />
+      <div className="h-1 bg-gradient-to-r from-[var(--tgpi-gold-strong)] via-[var(--tgpi-gold)] to-[var(--tgpi-gold-light)]" />
       <div className="flex gap-4 p-4 sm:p-5">
         <span
           aria-hidden="true"
@@ -261,22 +265,22 @@ export default function TgpiAppRuntime() {
           {content.icon}
         </span>
         <div className="min-w-0 flex-1">
-          <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-[#E5C46F]">
+          <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-[var(--tgpi-gold-light)]">
             <LocalizedText text={content.eyebrow} />
           </p>
           <p className="mt-1 text-sm font-extrabold text-white"><LocalizedText text={content.title} /></p>
-          <p className="mt-1 text-xs leading-5 text-[#B4C0CC]"><LocalizedText text={content.description} /></p>
+          <p className="mt-1 text-xs leading-5 text-[var(--tgpi-inverse-muted)]"><LocalizedText text={content.description} /></p>
           <div className="mt-4 flex flex-wrap gap-2">
             {notice === "install" ? (
               <button
-                className="min-h-11 rounded-xl bg-[var(--tgpi-gold)] px-4 text-sm font-extrabold text-[#07182D] transition hover:bg-[#F0C95F] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                className="min-h-11 rounded-xl bg-[var(--tgpi-gold)] px-4 text-sm font-extrabold text-[var(--tgpi-navy)] transition hover:bg-[var(--tgpi-gold-light)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
                 onClick={() => void installApp()}
                 type="button"
               ><LocalizedText text="Install TGPI" /></button>
             ) : null}
             {notice === "update" ? (
               <button
-                className="min-h-11 rounded-xl bg-[var(--tgpi-gold)] px-4 text-sm font-extrabold text-[#07182D] transition hover:bg-[#F0C95F] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                className="min-h-11 rounded-xl bg-[var(--tgpi-gold)] px-4 text-sm font-extrabold text-[var(--tgpi-navy)] transition hover:bg-[var(--tgpi-gold-light)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
                 onClick={activateUpdate}
                 type="button"
               ><LocalizedText text="Update now" /></button>
@@ -297,7 +301,7 @@ export default function TgpiAppRuntime() {
             ) : null}
             {notice === "install" ? (
               <button
-                className="min-h-11 rounded-xl px-3 text-sm font-bold text-[#AEBBC8] transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
+                className="min-h-11 rounded-xl px-3 text-sm font-bold text-[var(--tgpi-inverse-muted)] transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
                 onClick={dismissInstall}
                 type="button"
               ><LocalizedText text="Not now" /></button>

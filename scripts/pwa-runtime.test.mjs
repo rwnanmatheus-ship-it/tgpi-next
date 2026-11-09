@@ -16,7 +16,7 @@ test("manifest installs TGPI as one standalone application", () => {
   assert.equal(value.scope, "/");
   assert.equal(value.start_url, "/profile?source=pwa");
   assert.equal(value.display, "standalone");
-  assert.equal(value.theme_color, "#04101B");
+  assert.equal(value.theme_color, "#061B33");
   assert.deepEqual(
     value.shortcuts?.map(({ url }) => url),
     [
@@ -96,12 +96,13 @@ test("root metadata and response headers expose the PWA safely", () => {
 
 test("dismissed installation stays hidden across repeated browser events and reloads", async () => {
   const state = [], effects = [], listeners = new Map(), storage = new Map();
-  let cursor = 0, blockStorage = false;
+  let cursor = 0, blockStorage = false, pathname = '/';
   const hooks = {
     useState(initial) { const index = cursor++; if (!(index in state)) state[index] = initial; return [state[index], value => { state[index] = typeof value === 'function' ? value(state[index]) : value; }]; },
     useRef(initial) { const index = cursor++; return state[index] ??= { current: initial }; },
     useEffect(effect) { const index = cursor++; if (!(index in state)) { state[index] = true; effects.push(effect); } },
     LocalizedText: ({ text }) => text,
+    usePathname: () => pathname,
     jsx: (type, props) => ({ type, props }),
   };
   const browserWindow = {
@@ -111,6 +112,7 @@ test("dismissed installation stays hidden across repeated browser events and rel
   };
   globalThis.__pwaFixture = { ...hooks, window: browserWindow, navigator: { userAgent: 'test', platform: 'test', maxTouchPoints: 0, onLine: true } };
   const source = readSource('src/components/app-runtime/TgpiAppRuntime.tsx')
+    .replace(/import[^;]+from "next\/navigation";/, 'const {usePathname}=globalThis.__pwaFixture;')
     .replace(/import[^;]+from "react";/, 'const {useState,useRef,useEffect}=globalThis.__pwaFixture;')
     .replace(/import[^;]+from "@\/components\/localization\/LocaleProvider";/, 'const {LocalizedText,window,navigator}=globalThis.__pwaFixture;');
   const compiled = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX } }).outputText
@@ -126,6 +128,10 @@ test("dismissed installation stays hidden across repeated browser events and rel
   };
   assert.equal(render(), null);
   installEvent();
+  assert.equal(render(), null, 'acquisition must remain unobstructed by installation');
+  pathname = '/courses/ia-trabalho-global/study';
+  assert.equal(render(), null, 'study must remain unobstructed by installation');
+  pathname = '/profile';
   let notice = render();
   assert.equal(notice.props['data-pwa-runtime'], 'install');
   findDismissal(notice).props.onClick();

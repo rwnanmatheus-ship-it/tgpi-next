@@ -7,7 +7,7 @@ export default function Loading() {
     <main
       aria-busy="true"
       aria-label={t("Loading TGPI")}
-      className="min-h-[62vh] bg-[var(--tgpi-canvas)] px-4 py-12 sm:px-6"
+      className="min-h-[calc(100svh-var(--tgpi-header-height))] bg-[var(--tgpi-canvas)] px-4 py-12 sm:px-6"
       role="status"
     >
       <div className="mx-auto max-w-6xl animate-pulse">
