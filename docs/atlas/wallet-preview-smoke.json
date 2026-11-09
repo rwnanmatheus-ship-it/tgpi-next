@@ -1,0 +1,119 @@
+{
+  "commit": "0a10294310a73f4d5efd64c87ab1b6bef0a0c230",
+  "base": "https://tgpi-next-pbp5vuyi0-rwnanmatheus-ship-its-projects.vercel.app",
+  "date": "2026-11-09T19:19:09.972054+00:00",
+  "authenticated": false,
+  "scope": "Initial direct requests were blocked by Vercel Deployment Protection; these are not application guard successes. Authenticated Vercel fetch subsequently verified pricing, Premium demo and wallet page HTTP 200 (member unauthenticated).",
+  "checks": [
+    {
+      "route": "/pricing",
+      "method": "GET",
+      "status": 401,
+      "expectedStatus": 200,
+      "finalUrl": "https://tgpi-next-pbp5vuyi0-rwnanmatheus-ship-its-projects.vercel.app/pricing",
+      "seconds": 5.51,
+      "cacheControl": "no-store, max-age=0",
+      "contentType": "application/json",
+      "error": true,
+      "apiBody": null
+    },
+    {
+      "route": "/premium/demo",
+      "method": "GET",
+      "status": 401,
+      "expectedStatus": 200,
+      "finalUrl": "https://tgpi-next-pbp5vuyi0-rwnanmatheus-ship-its-projects.vercel.app/premium/demo",
+      "seconds": 5.51,
+      "cacheControl": "no-store, max-age=0",
+      "contentType": "application/json",
+      "error": true,
+      "apiBody": null
+    },
+    {
+      "route": "/atlas/wallet",
+      "method": "GET",
+      "status": 401,
+      "expectedStatus": 200,
+      "finalUrl": "https://tgpi-next-pbp5vuyi0-rwnanmatheus-ship-its-projects.vercel.app/atlas/wallet",
+      "seconds": 5.51,
+      "cacheControl": "no-store, max-age=0",
+      "contentType": "application/json",
+      "error": true,
+      "apiBody": null
+    },
+    {
+      "route": "/api/atlas/wallet",
+      "method": "GET",
+      "status": 401,
+      "expectedStatus": 401,
+      "finalUrl": "https://tgpi-next-pbp5vuyi0-rwnanmatheus-ship-its-projects.vercel.app/api/atlas/wallet",
+      "seconds": 5.53,
+      "cacheControl": "no-store, max-age=0",
+      "contentType": "application/json",
+      "error": false,
+      "apiBody": "{\"access\":\"vercel curl <deployment-url>\",\"message\":\"Protected by Vercel Authentication\",\"error\":{\"message\":\"Protected deployment\",\"code\":\"401\"},\"protection\":{\"vercel_auth_callback\":\"https:\\/\\/vercel.c"
+    },
+    {
+      "route": "/api/atlas/wallet/checkout",
+      "method": "POST",
+      "status": 401,
+      "expectedStatus": 401,
+      "finalUrl": "https://tgpi-next-pbp5vuyi0-rwnanmatheus-ship-its-projects.vercel.app/api/atlas/wallet/checkout",
+      "seconds": 5.53,
+      "cacheControl": "no-store, max-age=0",
+      "contentType": "application/json",
+      "error": false,
+      "apiBody": "{\"access\":\"vercel curl <deployment-url>\",\"protection\":{\"auto_vercel_auth_redirect\":true,\"password_enabled\":false,\"vercel_auth_enabled\":true,\"vercel_auth_callback\":\"https:\\/\\/vercel.com\\/sso-api?url=ht"
+    },
+    {
+      "route": "/api/atlas/wallet/recover",
+      "method": "POST",
+      "status": 401,
+      "expectedStatus": 401,
+      "finalUrl": "https://tgpi-next-pbp5vuyi0-rwnanmatheus-ship-its-projects.vercel.app/api/atlas/wallet/recover",
+      "seconds": 5.54,
+      "cacheControl": "no-store, max-age=0",
+      "contentType": "application/json",
+      "error": false,
+      "apiBody": "{\"protection\":{\"auto_vercel_auth_redirect\":true,\"password_enabled\":false,\"vercel_auth_enabled\":true,\"vercel_auth_callback\":\"https:\\/\\/vercel.com\\/sso-api?url=https%3A%2F%2Ftgpi-next-pbp5vuyi0-rwnanmat"
+    },
+    {
+      "route": "/api/atlas/chat",
+      "method": "POST",
+      "status": 401,
+      "expectedStatus": 401,
+      "finalUrl": "https://tgpi-next-pbp5vuyi0-rwnanmatheus-ship-its-projects.vercel.app/api/atlas/chat",
+      "seconds": 4.71,
+      "cacheControl": "no-store, max-age=0",
+      "contentType": "application/json",
+      "error": false,
+      "apiBody": "{\"access\":\"vercel curl <deployment-url>\",\"message\":\"Protected by Vercel Authentication\",\"protection\":{\"vercel_auth_enabled\":true,\"vercel_auth_callback\":\"https:\\/\\/vercel.com\\/sso-api?url=https%3A%2F%2"
+    },
+    {
+      "route": "/api/stripe/webhook",
+      "method": "POST",
+      "status": 401,
+      "expectedStatus": 400,
+      "finalUrl": "https://tgpi-next-pbp5vuyi0-rwnanmatheus-ship-its-projects.vercel.app/api/stripe/webhook",
+      "seconds": 4.71,
+      "cacheControl": "no-store, max-age=0",
+      "contentType": "application/json",
+      "error": true,
+      "apiBody": "{\"error\":{\"message\":\"Protected deployment\",\"code\":\"401\"},\"access\":\"vercel curl <deployment-url>\",\"protection\":{\"vercel_auth_callback\":\"https:\\/\\/vercel.com\\/sso-api?url=https%3A%2F%2Ftgpi-next-pbp5vuy"
+    }
+  ],
+  "vercelAuthenticatedFetch": [
+    {
+      "route": "/pricing",
+      "status": 200
+    },
+    {
+      "route": "/premium/demo",
+      "status": 200
+    },
+    {
+      "route": "/atlas/wallet",
+      "status": 200
+    }
+  ]
+}

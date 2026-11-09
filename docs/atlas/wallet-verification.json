@@ -1,0 +1,41 @@
+{
+  "commit": "0a10294310a73f4d5efd64c87ab1b6bef0a0c230",
+  "automatedTests": 436,
+  "walletTests": 16,
+  "failed": 0,
+  "typescript": "passed",
+  "eslintChangedFiles": "passed",
+  "localProductionBuild": "passed (webpack)",
+  "visualFixture": "Actual component rendered to static desktop/mobile fixture; cloud browser cannot reach executor localhost (connection refused). Authenticated live UI not verified.",
+  "externalPayments": "No live/test Stripe transaction performed; provider behavior covered by isolated fixtures and actual Stripe signature validation.",
+  "aiCalls": 0,
+  "pendingActivation": [
+    "Stripe sandbox end-to-end and reversal event delivery",
+    "deployed Firestore rules and retention verification",
+    "merchant account, currency, tax and service-credit terms verification",
+    "documented provider funding from available TGPI/customer revenue"
+  ],
+  "productionDeployment": "dpl_8Tox2iNbHXvkd3yfDM2uR9fzWfxx",
+  "productionState": "READY",
+  "productionUrl": "https://www.theglobalpolymath.com",
+  "domainDeploymentIdVerified": true,
+  "previewDeployment": "dpl_5gF3NMjUTbRWaxEVXAhQYUDmcu46",
+  "productionSmoke": {
+    "requests": 68,
+    "failures": 0,
+    "http200": 57,
+    "http401Expected": 10,
+    "http400MissingSignatureExpected": 1
+  },
+  "browser": "Published /atlas/wallet redirected to /sign-in; no authenticated member session available.",
+  "runtimeErrorObservation": {
+    "from": "2026-11-09T19:11:45.271Z",
+    "until": "2026-11-09T19:21:45.271Z",
+    "levels": [
+      "error",
+      "fatal"
+    ],
+    "entries": 0
+  },
+  "stripeConnection": "Not installed/connected in this session. Relevant integration offered; user action pending."
+}
