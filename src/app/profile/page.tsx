@@ -64,7 +64,13 @@ export default async function ProfilePage({
   await archiveWorkspaceHistory(session.userId, activation).catch(() => null);
   const historyPage = await loadWorkspaceHistory(session.userId).catch(() => ({ events: [], cursor: null, coverageStartedAt: null, available: false }));
   const [billing, learning, locale] = await Promise.all([getUserBillingRecord(session.userId), loadLearningSummary(session.userId, activation), getLocale()]);
-  const resources = buildWorkspaceResources(activation, courses, getAllCountries());
+  const projectedCourses = new Map(learning.items.map(item => [`course-${item.courseId}`, item]));
+  const resources = buildWorkspaceResources(activation, courses, getAllCountries()).map(resource => {
+    const item = projectedCourses.get(resource.id);
+    if (!item) return resource;
+    const status = translate(locale, learningStatusLabels[item.status]);
+    return { ...resource, detail: item.status === "edition_changed" ? status : `${translate(locale, "{done} of {total} lesson checkpoints", { done: item.completed, total: item.total })} · ${status}` };
+  });
   const professionalResources: WorkspaceResource[] = learning.items.filter(item => item.kind === "professional").map(item => ({
     id: `course-${item.courseId}`, title: item.title, kind: "course", href: item.href, updatedAt: item.updatedAt,
     status: item.status === "completed" ? "completed" : item.status === "edition_changed" ? "edition_changed" : "in_progress",

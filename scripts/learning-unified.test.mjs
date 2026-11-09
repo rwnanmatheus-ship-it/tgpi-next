@@ -2,13 +2,20 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import { readFileSync } from 'node:fs';
 import ts from 'typescript';
-import { projectLearningProgress } from '../src/lib/learning/unified-progress.ts';
+import { projectLearningProgress, learningStatusLabels } from '../src/lib/learning/unified-progress.ts';
+import { messages } from '../src/lib/localization/messages.ts';
 import { courseLearningPolicy, credentialLabel } from '../src/lib/learning/catalog-policy.ts';
 import { parseCatalogFilters, catalogFilterParams, defaultCatalogFilters } from '../src/lib/learning/catalog-filters.ts';
 const courses=[{id:'global-english-2026',title:'English',version:'v2',modules:[{lessons:[{id:'one'},{id:'two'}]}]}];
 const record={courseVersion:'v2',completedLessonIds:['one'],lastLessonId:'two',totalLessons:2,updatedAt:'2026-11-09T10:00:00Z'};
 const pro={uid:'member-a',courseId:'pro',version:'v2',activities:{one:'answer',forged:'ignore'},state:'studying',updatedAt:'2026-11-09T12:00:00Z'};
 const input=(extra={})=>({uid:'member-a',legacy:{'global-english-2026':record},courses,professional:[pro],professionalCourses:[{id:'pro',title:'Professional',version:'v2',lessonIds:['one','two']}],...extra});
+test('every projected learning status has all six localized labels',()=>{
+ for(const label of Object.values(learningStatusLabels)) {
+  assert.ok(messages[label], `Missing dynamic status: ${label}`);
+  for(const locale of ['en','pt-BR','es','fr','de','it']) assert.ok(messages[label][locale]?.trim(), `${locale}: ${label}`);
+ }
+});
 test('one projection resumes both learning systems without changing source records',()=>{
  const source=input(),before=JSON.stringify(source),items=projectLearningProgress(source);
  assert.equal(items.length,2);assert.equal(items[0].courseId,'pro');assert.equal(items[0].completed,1);
