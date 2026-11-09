@@ -7,11 +7,15 @@ import * as contracts from '../src/lib/atlas/contracts.ts';
 import { selectAtlasContext } from '../src/lib/atlas/context.ts';
 const require = createRequire(import.meta.url);
 const ts = require('typescript');
+const walletPolicy = load('src/lib/wallet/policy.ts', {});
+const walletMock = { reserveWallet: async () => [], settleWallet: async () => true };
 function load(file, mocks) {
   const code = ts.transpileModule(readFileSync(new URL(`../${file}`, import.meta.url), 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, esModuleInterop: true } }).outputText;
   const exports = {};
   new Function('require', 'exports', code)(id => {
     if (id in mocks) return mocks[id];
+    if (id === '@/lib/wallet/policy') return walletPolicy;
+    if (id === '@/lib/wallet/store.server') return walletMock;
     if (['node:crypto', 'zod'].includes(id)) return require(id);
     throw Error(`Unexpected import: ${id}`);
   }, exports);
@@ -81,7 +85,7 @@ test('simultaneous duplicate requests reserve budget once; completed replay does
   const turn = results.find(x => x.status === 'fulfilled').value;
   await store.finishTurn('member_a', request, turn.token, 'Answer', 'complete', []);
   assert.equal((await store.beginTurn('member_a', request, 5)).replay.messages.length, 2);
-  assert.equal([...data.values()].find(x => 'reservedUsd' in x).reservedUsd, .5);
+  assert.equal([...data.values()].find(x => 'reservedUsd' in x).reservedUsd, .02);
 });
 test('delete while streaming and stale completions never resurrect or overwrite a conversation', async () => {
   const { store } = storage(); const request = input(); const turn = await store.beginTurn('member_a', request, 5);
@@ -109,8 +113,8 @@ test('temporary mode stores usage metadata only and deduplicates request IDs', a
 });
 test('global spending cap and per-user limit are enforced transactionally', async () => {
   const { store, cooldown } = storage();
-  await store.beginTurn('member_a', input({ temporary: true }), .5);
-  await assert.rejects(() => store.beginTurn('member_b', input({ temporary: true }), .5), e => e.status === 429);
+  await store.beginTurn('member_a', input({ temporary: true }), .02);
+  await assert.rejects(() => store.beginTurn('member_b', input({ temporary: true }), .02), e => e.status === 429);
   const second = storage();
   for (let n = 0; n < 10; n++) { second.cooldown(); await second.store.beginTurn('member_a', input({ temporary: true }), 100); }
   second.cooldown(); await assert.rejects(() => second.store.beginTurn('member_a', input({ temporary: true }), 100), e => e.status === 429);
@@ -165,7 +169,7 @@ test('chat streams only visible text and saves the reply after provider completi
   assert.equal(profileCalls, 0);
   assert.equal(captured.store, false);
   assert.equal(captured.stream, true);
-  assert.equal(captured.model, 'gpt-6-astra');
+  assert.equal(captured.model, 'gpt-4.1-mini-2025-04-14');
   assert.equal(saved[0], 'member_a'); assert.equal(saved[3], 'Hello Atlas'); assert.equal(saved[4], 'complete');
 });
 

@@ -1,3 +1,4 @@
+import { handleWalletEvent } from '@/lib/wallet/payments.server';
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import {
@@ -73,6 +74,8 @@ export async function POST(request: Request) {
 
     const event = stripe.webhooks.constructEvent(body, signature, secret);
 
+    await handleWalletEvent(event);
+
     switch (event.type) {
       case "checkout.session.completed":
       case "checkout.session.async_payment_succeeded":
@@ -103,7 +106,7 @@ export async function POST(request: Request) {
       ? "Invalid Stripe signature."
       : "Webhook processing failed.";
 
-    console.error("Stripe webhook error:", error);
+    console.error("Stripe webhook processing failed", { signatureError });
 
     return NextResponse.json(
       { error: message },

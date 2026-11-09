@@ -1,3 +1,5 @@
+import { reserveWallet } from '@/lib/wallet/store.server';
+import { PROVIDER_RESERVE_MICRO_USD } from '@/lib/wallet/policy';
 import 'server-only';
 import { randomUUID } from 'node:crypto';
 import { createFirestoreDeleteWrite, createFirestoreUpdateWrite, getFirestoreDocument, listFirestoreDocumentPage, runFirestoreTransaction, type JsonValue } from '@/lib/firestore-admin-rest.server';
@@ -42,7 +44,7 @@ export async function beginTurn(userId: string, input: AtlasInput, budget: numbe
     const global = docs.get(globalPath)?.data as Usage | undefined;
     if (input.temporary && usage?.requests.includes(input.requestId)) throw new AtlasError('This temporary request was already accepted. Start a new request to avoid duplicate billing.', 409);
     if ((usage?.count || 0) >= 10 || Date.now() - (usage?.lastAt || 0) < 4000) throw new AtlasError('Atlas request limit reached. Up to 10 requests per UTC day are available during validation.', 429);
-    if ((global?.reservedUsd || 0) + 0.5 > budget) throw new AtlasError('Atlas daily spending limit reached. Please return tomorrow.', 429);
+    if ((global?.reservedUsd || 0) + PROVIDER_RESERVE_MICRO_USD / 1_000_000 > budget) throw new AtlasError('Atlas daily spending limit reached. Please return tomorrow.', 429);
     const now = new Date().toISOString();
     let messages = current?.messages || [];
     const previous = messages.findIndex(x => x.role === 'user' && x.requestId === input.requestId);
@@ -55,8 +57,9 @@ export async function beginTurn(userId: string, input: AtlasInput, budget: numbe
     const history = boundedHistory(input.temporary ? [...input.history, { role: 'user', content: input.text }] : [...messages.filter(x => x.status === 'complete'), question]);
     const conversation: AtlasConversation = { id: input.conversationId, title: current?.title || input.text.slice(0, 70), messages: [...messages, question], createdAt: current?.createdAt || now, updatedAt: now, expiresAt: current?.expiresAt || expiry(30), active: { token, requestId: input.requestId, until: Date.now() + 120000 } };
     return { result: { replay: null, token, history }, writes: [
-      write(usagePath, { count: (usage?.count || 0) + 1, reservedUsd: (usage?.reservedUsd || 0) + 0.5, lastAt: Date.now(), requests: [...(usage?.requests || []), input.requestId], expiresAt: expiry(2) }),
-      write(globalPath, { count: (global?.count || 0) + 1, reservedUsd: (global?.reservedUsd || 0) + 0.5, lastAt: Date.now(), requests: [], expiresAt: expiry(2) }),
+      ...(await reserveWallet(getDocuments, userId, input.requestId, input.conversationId, token)),
+      write(usagePath, { count: (usage?.count || 0) + 1, reservedUsd: (usage?.reservedUsd || 0) + PROVIDER_RESERVE_MICRO_USD / 1_000_000, lastAt: Date.now(), requests: [...(usage?.requests || []), input.requestId], expiresAt: expiry(2) }),
+      write(globalPath, { count: (global?.count || 0) + 1, reservedUsd: (global?.reservedUsd || 0) + PROVIDER_RESERVE_MICRO_USD / 1_000_000, lastAt: Date.now(), requests: [], expiresAt: expiry(2) }),
       ...(!input.temporary ? [write(path, conversation)] : []),
     ] };
   });

@@ -1,3 +1,5 @@
+import { settleWallet } from '@/lib/wallet/store.server';
+import { ATLAS_MODEL, providerCostMicroUsd } from '@/lib/wallet/policy';
 import OpenAI from 'openai';
 import { clerkClient } from '@clerk/nextjs/server';
 import { atlasBody, atlasFailure, atlasUser, requireAtlasGeneration } from '@/lib/atlas/http.server';
@@ -38,8 +40,8 @@ export async function POST(request: Request) {
           send({ type: 'context', factors: selected.factors });
           const client = new OpenAI({ apiKey: process.env.OPENAI_API_KEY, timeout: 85000, maxRetries: 0 });
           const response = await client.responses.create({
-            model: process.env.TGPI_ATLAS_MODEL || 'gpt-6-astra', instructions, input: turn.history,
-            max_output_tokens: 1500, reasoning: { effort: 'low' }, store: false, stream: true,
+            model: process.env.TGPI_ATLAS_MODEL || ATLAS_MODEL, instructions, input: turn.history,
+            max_output_tokens: 1500, service_tier: 'default', store: false, stream: true,
           }, { signal: abort.signal });
           for await (const event of response) {
             if (event.type === 'response.output_text.delta' || event.type === 'response.refusal.delta') {
@@ -58,11 +60,12 @@ export async function POST(request: Request) {
           request.signal.removeEventListener('abort', onAbort);
           if (!turn.replay) {
             try {
+              await settleWallet(userId, input.requestId, turn.token, status === 'complete');
               const conversation = await finishTurn(userId, input, turn.token, content, status, selected.factors);
               send({ type: 'done', conversation, status });
             } catch { send({ type: 'error', message: 'The reply could not be saved. Reload before retrying.' }); }
             // No prompts, answer text, identity, credentials or raw provider errors in logs.
-            console.info('atlas_request', { status, latencyMs: Date.now() - started, inputTokens: usage?.input_tokens, outputTokens: usage?.output_tokens, estimatedUsd: usage ? usage.input_tokens * 0.00001 + usage.output_tokens * 0.00005 : undefined });
+            console.info('atlas_request', { status, latencyMs: Date.now() - started, inputTokens: usage?.input_tokens, outputTokens: usage?.output_tokens, estimatedUsd: usage ? providerCostMicroUsd(usage.input_tokens, usage.output_tokens) / 1_000_000 : undefined });
           }
           if (connected) { try { controller.close(); } catch { /* disconnected */ } }
         }

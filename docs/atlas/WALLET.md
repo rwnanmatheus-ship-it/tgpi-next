@@ -1,0 +1,37 @@
+# Atlas prepaid wallet — implementation and release boundaries
+
+## Delivered
+
+- `/atlas/wallet`: authenticated balance, reserved credits, consumption, packs (USD 5/10/25), paginated ledger, refresh/recovery, and fail-closed purchase availability. Portuguese and English copy; other locales currently use English wallet copy.
+- `/atlas/wallet/treasury`: founder-ID-only read-only treasury. No banking, withdrawals, transfers or cryptocurrency functionality. Actual payments use the existing TGPI Stripe account.
+- `/api/atlas/wallet`, `/checkout`, `/recover`: owner-scoped private/no-store APIs, exact origin validation for writes, strict request schemas. Financial records inherit the existing `tgpiLearningUsers/{document=**}` deny boundary and configured-storage guard.
+- Fixed retail charge USD 0.10 per completed reply. Premium/founder entitlements do not mint credits. No automatic top-ups. No user-entered amount, currency, destination account or owner is trusted.
+- Fixed model `gpt-4.1-mini-2025-04-14`, default service tier, 1,500 maximum output tokens, existing 16,000-byte history and 12,000-byte instructions bounds. No tools, images, web-search costs or automatic retries. USD 0.02 conservative provider reserve per accepted attempt; approved USD 0.10 daily ceiling retained.
+- Provider standard pricing checked at https://developers.openai.com/api/docs/models/gpt-4.1-mini on 2026-11-09: USD 0.40 / million input tokens and USD 1.60 / million output tokens. Bounding 30,000 input tokens plus 1,500 output tokens costs USD 0.0144; reserve leaves framing headroom. Price/model changes require re-costing.
+- Atomic Firestore transaction reserves user balance, global provider capacity, daily budget, request identity and conversation lease before provider invocation. Completed conversation replays do not charge again. Failed/interrupted replies refund credits; provider reserve remains consumed conservatively even when usage is unknown. Pending process reservations can be recovered after five minutes without restoring provider capacity.
+- Stripe Checkout mode `payment` is independent from the existing Premium subscription. Persisted checkout intent and immutable provider idempotency key prevent duplicate sessions on retry. Credits come exclusively from re-retrieved paid PaymentIntent/Charge data matching server-owned customer and exact amount/currency.
+- Duplicate webhook deliveries cannot duplicate credit. Partial/full refunds and disputes revoke credits monotonically. Refund after consumption may create a debt, blocking further use; it is never clamped to zero. Dispute wins require operational review; late events cannot silently restore a reversed payment.
+- Treasury records actual USD processor net, reversals, earned consumption revenue and conservative provider reserves separately. Unused customer credits remain liabilities. Dashboard amounts are NOT bank balance, available Stripe cash or distributable profit.
+
+## Activation state and external dependencies
+
+Published code does not imply live commerce activation. `TGPI_ATLAS_ENABLED=false`, `TGPI_ATLAS_WALLET_ENABLED=false`, provider funded cents `0` and USD `0.10` daily cap are intentionally deployed. The newly provisioned API key is a server-only sensitive Vercel secret, never client code or Git.
+
+Before paid activation:
+
+1. Verify actual deployed Firestore deny rules, Atlas TTL/retention and backup policies, then set `TGPI_ATLAS_RETENTION_CONFIRMED=true` only from that evidence.
+2. Validate Stripe test-mode checkout, signed payment/refund/dispute events and two-account isolation against real Clerk/Firestore. Current automated financial tests use isolated in-memory storage and provider fixtures; no real customer was charged.
+3. Configure the existing Stripe endpoint for `checkout.session.completed`, `checkout.session.async_payment_succeeded`, `payment_intent.succeeded`, `charge.refunded`, `charge.dispute.created`, `charge.dispute.updated`, `charge.dispute.closed`, preserving all existing subscription events. Then set `TGPI_ATLAS_WALLET_WEBHOOKS_CONFIRMED=true`. USD settlement is required; foreign-currency settlements fail closed and require a conversion-aware extension.
+4. Confirm the actual merchant account belongs to TGPI, settlement currency, applicable service-credit sale/refund terms and tax configuration. No new financial account, payout destination or tax policy was created by this release.
+5. Fund provider service capacity from available TGPI/customer revenue and document the receipt/reference in `TGPI_ATLAS_FUNDING_REFERENCE`. `TGPI_ATLAS_PROVIDER_PREPAID_CENTS` is the cumulative VERIFIED allocation available to this dedicated Atlas key, not an automatic Stripe/OpenAI transfer. Never increase it from a hypothetical receipt or pending Stripe payout. Account for provider-credit expiry and any consumption outside Atlas before recording capacity. The code also limits provider reserves against collected net less reversals.
+6. Enable the desired Clerk IDs (`TGPI_ATLAS_ALLOWED_USER_IDS`, explicit `*` only after public rollout validation), generation and wallet flags. Capacity and credits are still rechecked transactionally for every call.
+
+No live AI requests, card charges, credit purchases, tax registrations or transfers were performed. Automatic provider-funding/payout integration and automatic winning-dispute restoration are not implemented. The service cannot promise zero business risk: chargebacks, tax, infrastructure and settlement timing remain operating responsibilities. A purchase is blocked while funding/configuration is unverified rather than selling unusable credits.
+
+## Prior unpublished work audit
+
+Review branch started at `560a66f`, production at `82e4136`. Their only pending changes were production validation documentation/evidence. Existing workspace-history and Premium comparison functionality was already live. The older checkout's uncommitted `WorkspacePersonalSpace.tsx` localization changes are already superseded by the current production component (localized dates/search/actions plus additional translations); copying the older file would regress behavior, so it was preserved untouched.
+
+## Verification
+
+433 automated tests passed before the final small hardening changes; focused financial suite rerun after those changes. Full final build/test results and deployment SHA are recorded in the release evidence. Coverage includes concurrent last-credit consumption, absent funding, atomic conversation+wallet reservation, duplicate settlements/payments, interrupted/stale reservation recovery, owner/amount/currency mismatch, refunds before/after credit, disputes and checkout retry identity. Production-authenticated financial end-to-end validation remains an activation dependency.
