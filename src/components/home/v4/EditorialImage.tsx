@@ -21,6 +21,6 @@ export default function EditorialImage({ asset, alt, sizes, eager = false }: {
     <picture>
     <source media="(max-width: 767px)" srcSet={mobile.srcSet} sizes={sizes} />
     {/* getImageProps supplies Next's optimized src/srcset, dimensions and loading attributes. */}
-    <img {...desktop} alt={alt} />
+    <img {...desktop} alt={alt} decoding={eager ? "sync" : "async"} />
   </picture></>;
 }
