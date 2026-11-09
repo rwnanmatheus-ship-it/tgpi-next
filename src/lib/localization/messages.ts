@@ -1,6 +1,7 @@
 import type { Locale } from "./config";
 
 export const messages = {
+  "Compare plans": {"en": "Compare plans", "pt-BR": "Comparar planos", "es": "Comparar planes", "fr": "Comparer les offres", "de": "Tarife vergleichen", "it": "Confronta i piani"},
   "Scenario analysis": {"en": "Scenario analysis", "pt-BR": "Análise de cenários", "es": "Análisis de escenarios", "fr": "Analyse de scénarios", "de": "Szenarioanalyse", "it": "Analisi degli scenari"},
   "Saved worksheets and individual reports": {"en": "Saved worksheets and individual reports", "pt-BR": "Planilhas salvas e relatórios individuais", "es": "Hojas guardadas e informes individuales", "fr": "Fiches enregistrées et rapports individuels", "de": "Gespeicherte Arbeitsblätter und Einzelberichte", "it": "Schede salvate e rapporti individuali"},
   "Cross-scenario comparison and JSON export": {"en": "Cross-scenario comparison and JSON export", "pt-BR": "Comparação entre cenários e exportação JSON", "es": "Comparación entre escenarios y exportación JSON", "fr": "Comparaison entre scénarios et export JSON", "de": "Szenarioübergreifender Vergleich und JSON-Export", "it": "Confronto tra scenari ed esportazione JSON"},
@@ -21,7 +22,7 @@ export const messages = {
   "Food": {"en": "Food", "pt-BR": "Alimentação", "es": "Alimentación", "fr": "Alimentation", "de": "Lebensmittel", "it": "Alimentazione"},
   "Transport": {"en": "Transport", "pt-BR": "Transporte", "es": "Transporte", "fr": "Transport", "de": "Verkehr", "it": "Trasporti"},
   "Health": {"en": "Health", "pt-BR": "Saúde", "es": "Salud", "fr": "Santé", "de": "Gesundheit", "it": "Salute"},
-  "Tuition": {"en": "Tuition", "pt-BR": "Anuidade do curso", "es": "Matrícula y enseñanza", "fr": "Frais de scolarité", "de": "Studiengebühren", "it": "Retta"},
+  "Tuition": {"en": "Tuition", "pt-BR": "Custo do curso", "es": "Matrícula y enseñanza", "fr": "Frais de scolarité", "de": "Studiengebühren", "it": "Retta"},
   "Arrival": {"en": "Arrival", "pt-BR": "Chegada", "es": "Llegada", "fr": "Arrivée", "de": "Ankunft", "it": "Arrivo"},
   "Select two or three scenarios to compare.": {"en": "Select two or three scenarios to compare.", "pt-BR": "Selecione dois ou três cenários para comparar.", "es": "Selecciona dos o tres escenarios para comparar.", "fr": "Sélectionnez deux ou trois scénarios à comparer.", "de": "Wähle zwei oder drei Szenarien zum Vergleichen.", "it": "Seleziona due o tre scenari da confrontare."},
   "Different currencies: totals stay separate. No exchange rate is assumed.": {"en": "Different currencies: totals stay separate. No exchange rate is assumed.", "pt-BR": "Moedas diferentes: os totais ficam separados. Nenhuma taxa de câmbio é presumida.", "es": "Monedas diferentes: los totales se mantienen separados. No se supone ningún tipo de cambio.", "fr": "Devises différentes : les totaux restent séparés. Aucun taux de change n’est supposé.", "de": "Unterschiedliche Währungen: Die Summen bleiben getrennt. Es wird kein Wechselkurs angenommen.", "it": "Valute diverse: i totali restano separati. Non viene ipotizzato alcun tasso di cambio."},

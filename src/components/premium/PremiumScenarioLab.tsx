@@ -83,14 +83,14 @@ export function ScenarioComparison({scenarios,example=false}:{scenarios:SavedPre
       const country=new Intl.DisplayNames([locale],{type:'region'}).of(s.iso2) ?? s.countryName;
       return <article key={s.id} className={styles.card}>
         <div className={styles.cardHead}><span>{index === 0 ? t('Baseline') : t('Alternative {number}',{number:index})}</span><span>{w.currency}</span></div>
-        <h3>{country}{w.city ? ` · ${w.city}` : ''}</h3><p>{t('Scenario')} {s.slot} · {t('{count} months',{count:w.months})}</p>
+        <h3>{country}{w.city ? ` · ${w.city}` : ''}</h3><p>{example ? t('Example {number}',{number:s.slot}) : `${t('Scenario')} ${s.slot}`} · {t('{count} months',{count:w.months})}</p>
         <dl>{COST_CATEGORIES.map(category => <div key={category}><dt>{t(categories[category])}</dt><dd>{money(w.monthly[category])}</dd></div>)}<div className={styles.subtotal}><dt>{t('Known monthly costs')}</dt><dd>{money(totals.knownMonthly)}</dd></div><div><dt>{t('Tuition')}</dt><dd>{money(w.tuition)}</dd></div><div><dt>{t('Arrival')}</dt><dd>{money(w.arrival)}</dd></div><div><dt>{t('Contingency')} ({new Intl.NumberFormat(locale).format(w.bufferPercent)}%)</dt><dd>{money(totals.buffer)}</dd></div></dl>
         <div className={styles.total}><span>{t(totals.complete ? 'Total planned budget' : 'Known subtotal · incomplete')}</span><strong>{money(totals.total)}</strong></div>
         {index > 0 && readiness === 'ready' && difference !== null && <p>{t('Difference from baseline')}: <strong>{difference > 0 ? '+' : ''}{money(difference)}</strong></p>}
         {!totals.complete && <p className={styles.warning}>{t('Missing')}: {totals.missing.map(key => t(categories[key as keyof typeof categories])).join(', ')}</p>}
         <p className={styles.meta}>{t('Quote date')}: {w.quoteDate ? new Intl.DateTimeFormat(locale,{dateStyle:'medium',timeZone:'UTC'}).format(new Date(`${w.quoteDate}T00:00:00Z`)) : t('Not recorded')}</p>
         <p className={styles.meta}>{t('Source notes')}: {w.sourceNote || t('Not recorded')}</p>
-        <Link href={`/country-fit?country=${encodeURIComponent(w.country)}#research-workbench`}>{t('Review worksheet')} · {t('Scenario')} {s.slot} ↗</Link>
+        <Link href={`/country-fit?country=${encodeURIComponent(w.country)}#research-workbench`}>{example ? t('Start with my own research') : `${t('Review worksheet')} · ${t('Scenario')} ${s.slot}`} ↗</Link>
       </article>;
     })}</div>
     {scenarios.length > 0 && <div className={styles.export}><button className={styles.primary} onClick={download}>{t('Export comparison · JSON')} ↓</button><p>{t(example ? 'Illustrative examples only. These amounts are fictional and are not saved to your account.' : 'Your estimates are not verified quotes. This snapshot contains only the selected saved scenarios and their source notes.')}</p></div>}
