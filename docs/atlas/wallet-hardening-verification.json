@@ -1,0 +1,53 @@
+{
+  "commit": "fdb687dd49ebfe6188e52fa08a3f201fea06ecbf",
+  "tests": 441,
+  "walletTests": 21,
+  "failures": 0,
+  "typescript": "passed",
+  "changedFileEslint": "passed",
+  "localProductionBuild": "passed (webpack)",
+  "features": [
+    "Test and live financial namespace isolation",
+    "Stripe key, customer, session, payment and charge mode checks",
+    "No paid AI use from test credits",
+    "Independent wallet customers preserve Premium customer state",
+    "Treasury and provider monetary data validation",
+    "Wallet UI and financial disclosures in six locales"
+  ],
+  "previewDeployment": "dpl_4uw8VriBhhTy2pHGCYciuzsoHxaC",
+  "activation": "disabled; no funds or confirmations invented",
+  "externalValidationPending": [
+    "Connected Stripe administration and sandbox transaction acceptance",
+    "Authenticated two-account Firestore journey and deployed rules/retention",
+    "Verified merchant settlement currency, sale/tax/refund terms",
+    "Actual documented provider funding from available TGPI/customer revenue"
+  ],
+  "realTransactionsPerformed": 0,
+  "productionDeployment": "dpl_TMrkvD348kaa8cdCJwrom9AGC6PL",
+  "productionState": "READY",
+  "productionDomain": "https://www.theglobalpolymath.com",
+  "deploymentIdVerifiedInDomainHtml": true,
+  "productionChecks": 68,
+  "productionCheckFailures": 0,
+  "httpStatuses": {
+    "200": 57,
+    "401Expected": 10,
+    "400Expected": 1
+  },
+  "runtimeErrors": {
+    "from": "2026-11-09T19:24:21.680Z",
+    "until": "2026-11-09T19:34:21.680Z",
+    "entries": 0
+  },
+  "previewProtectedFetch": [
+    {
+      "path": "/pricing",
+      "status": 200
+    },
+    {
+      "path": "/atlas/wallet",
+      "status": 200
+    }
+  ],
+  "validationLimit": "Guest production HTTP checks and isolated automated tests do not constitute authenticated payment/Firestore acceptance."
+}
