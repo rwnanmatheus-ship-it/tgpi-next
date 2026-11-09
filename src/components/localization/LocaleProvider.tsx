@@ -81,7 +81,14 @@ export function AccountLocaleSync() {
   return null;
 }
 
-export function LocalizedText({ text }: { text: string }) {
+export function LocalizedText({ text, values, dates }: { text: string; values?: Record<string, string | number>; dates?: Record<string, string> }) {
+  const { locale, t } = useLocale();
+  const formattedDates = dates ? Object.fromEntries(Object.entries(dates).map(([key, value]) => [key, new Intl.DateTimeFormat(locale, { timeZone: 'UTC' }).format(new Date(value))])) : {};
+  return <>{t(text, { ...values, ...formattedDates })}</>;
+}
+
+/** Keep landmark names localized without making a server composition await a locale. */
+export function LocalizedRegion({ as: Tag, label, className, children }: { as: 'section' | 'nav' | 'div'; label: string; className?: string; children: ReactNode }) {
   const { t } = useLocale();
-  return <>{t(text)}</>;
+  return <Tag className={className} aria-label={t(label)}>{children}</Tag>;
 }

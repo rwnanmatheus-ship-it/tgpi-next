@@ -101,7 +101,6 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       <body>
         <LocaleProvider locale={locale}>
         <ClerkProvider
-          prefetchUI={false}
           signInUrl="/sign-in"
           signUpUrl="/sign-up"
           afterSignOutUrl="/"
