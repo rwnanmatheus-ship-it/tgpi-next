@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { publicGuides } from "@/lib/public-guides";
 import { getAllCountrySlugs } from "@/lib/countries";
 
 const siteUrl = "https://www.theglobalpolymath.com";
@@ -10,6 +11,7 @@ const publicRoutes = [
   { path: "/courses", priority: 0.85, changeFrequency: "weekly" },
   { path: "/intelligence", priority: 0.75, changeFrequency: "weekly" },
   { path: "/intelligence/research", priority: 0.75, changeFrequency: "weekly" },
+  { path: "/guides", priority: 0.7, changeFrequency: "monthly" },
   { path: "/resources", priority: 0.7, changeFrequency: "weekly" },
   { path: "/community", priority: 0.65, changeFrequency: "weekly" },
   { path: "/passport", priority: 0.65, changeFrequency: "monthly" },
@@ -45,5 +47,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  return [...pages, ...countries];
+  return [...pages, ...countries, ...publicGuides.map(guide => ({
+    url: `${siteUrl}/guides/${guide.slug}`,
+    lastModified: guide.reviewedAt,
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  }))];
 }

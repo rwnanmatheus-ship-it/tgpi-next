@@ -65,3 +65,24 @@ students. Do not label them as company premises or documentary photography.
 Google can choose a different title, snippet, favicon or image. These changes
 make assets and identity easier to understand; they do not guarantee a logo,
 thumbnail, knowledge panel, sitelinks or a deadline for search-result changes.
+
+## Public research guides
+
+`src/lib/public-guides.ts` is the reviewed editorial registry for `/guides`.
+Each entry produces a public article, internal links and a sitemap entry with
+its actual editorial review date. The existing daily production audit discovers
+these URLs from the sitemap automatically; no additional traffic job is needed.
+Do not update dates mechanically or generate country-keyword doorway pages.
+Add only distinct, useful guides with a real checklist and official source
+starting points. Review legal/immigration statements before publication.
+
+Resources links to the guide hub; articles link to each other and a relevant
+public tool. The guides are readable without registration and include a reusable
+research worksheet. They add no cookies, trackers or automatic outbound messages.
+
+Measurement remains dependent on authorized Search Console access and existing
+consent-based funnel configuration. Compare guide impressions, search clicks and
+landing-page engagement over a meaningful period; do not count this audit’s
+requests as audience growth. This release does not activate analytics, verify
+search ownership or promise traffic. Review sources and guide content when rules
+change. `npm run test:all` checks the editorial registry and discovery wiring.

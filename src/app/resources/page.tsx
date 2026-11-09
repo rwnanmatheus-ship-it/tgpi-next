@@ -189,6 +189,12 @@ export default async function ResourcesPage() {
           <ResourcesNavigation />
         </div>
         <ResourceExplorer />
+        <section className="resources-section-intro" aria-labelledby="research-guides-title">
+          <p className="resources-kicker">Free research guides</p>
+          <h2 id="research-guides-title">Turn questions into a practical checklist.</h2>
+          <p>Learn how to compare countries and investigate moving-abroad document requirements, with source starting points and a worksheet you can reuse.</p>
+          <Link href="/guides" className="resources-text-link">Read the research guides →</Link>
+        </section>
         <div className="resources-section-intro">
           <p className="resources-kicker">The TGPI ecosystem</p>
           <h2>
