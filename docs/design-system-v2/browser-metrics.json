@@ -1,0 +1,547 @@
+{
+  "previewCommit": "a58e8f1b43f5906a71bfd5a87e2424c39af90fb1",
+  "checkedAt": "2026-11-09",
+  "method": "Connected Chrome, viewport resize and DOM dimensions. A screenshot was requested at each size for ten routes. Home and Compare used DOM sizing plus selected screenshots. Global Key measurements cover the authentication gate.",
+  "results": [
+    {
+      "path": "/countries/portugal",
+      "widths": [
+        {
+          "content": 305,
+          "viewport": 305,
+          "width": 320
+        },
+        {
+          "content": 345,
+          "viewport": 345,
+          "width": 360
+        },
+        {
+          "content": 375,
+          "viewport": 375,
+          "width": 390
+        },
+        {
+          "content": 415,
+          "viewport": 415,
+          "width": 430
+        },
+        {
+          "content": 753,
+          "viewport": 753,
+          "width": 768
+        },
+        {
+          "content": 1009,
+          "viewport": 1009,
+          "width": 1024
+        },
+        {
+          "content": 1425,
+          "viewport": 1425,
+          "width": 1440
+        },
+        {
+          "content": 1905,
+          "viewport": 1905,
+          "width": 1920
+        }
+      ]
+    },
+    {
+      "path": "/country-fit",
+      "widths": [
+        {
+          "content": 305,
+          "viewport": 305,
+          "width": 320
+        },
+        {
+          "content": 345,
+          "viewport": 345,
+          "width": 360
+        },
+        {
+          "content": 375,
+          "viewport": 375,
+          "width": 390
+        },
+        {
+          "content": 415,
+          "viewport": 415,
+          "width": 430
+        },
+        {
+          "content": 753,
+          "viewport": 753,
+          "width": 768
+        },
+        {
+          "content": 1009,
+          "viewport": 1009,
+          "width": 1024
+        },
+        {
+          "content": 1425,
+          "viewport": 1425,
+          "width": 1440
+        },
+        {
+          "content": 1905,
+          "viewport": 1905,
+          "width": 1920
+        }
+      ]
+    },
+    {
+      "path": "/courses",
+      "widths": [
+        {
+          "content": 305,
+          "viewport": 305,
+          "width": 320
+        },
+        {
+          "content": 345,
+          "viewport": 345,
+          "width": 360
+        },
+        {
+          "content": 375,
+          "viewport": 375,
+          "width": 390
+        },
+        {
+          "content": 415,
+          "viewport": 415,
+          "width": 430
+        },
+        {
+          "content": 753,
+          "viewport": 753,
+          "width": 768
+        },
+        {
+          "content": 1009,
+          "viewport": 1009,
+          "width": 1024
+        },
+        {
+          "content": 1425,
+          "viewport": 1425,
+          "width": 1440
+        },
+        {
+          "content": 1905,
+          "viewport": 1905,
+          "width": 1920
+        }
+      ]
+    },
+    {
+      "path": "/courses/global-english-2026",
+      "widths": [
+        {
+          "content": 305,
+          "viewport": 305,
+          "width": 320
+        },
+        {
+          "content": 345,
+          "viewport": 345,
+          "width": 360
+        },
+        {
+          "content": 375,
+          "viewport": 375,
+          "width": 390
+        },
+        {
+          "content": 415,
+          "viewport": 415,
+          "width": 430
+        },
+        {
+          "content": 753,
+          "viewport": 753,
+          "width": 768
+        },
+        {
+          "content": 1009,
+          "viewport": 1009,
+          "width": 1024
+        },
+        {
+          "content": 1425,
+          "viewport": 1425,
+          "width": 1440
+        },
+        {
+          "content": 1905,
+          "viewport": 1905,
+          "width": 1920
+        }
+      ]
+    },
+    {
+      "path": "/pricing",
+      "widths": [
+        {
+          "content": 305,
+          "viewport": 305,
+          "width": 320
+        },
+        {
+          "content": 345,
+          "viewport": 345,
+          "width": 360
+        },
+        {
+          "content": 375,
+          "viewport": 375,
+          "width": 390
+        },
+        {
+          "content": 415,
+          "viewport": 415,
+          "width": 430
+        },
+        {
+          "content": 753,
+          "viewport": 753,
+          "width": 768
+        },
+        {
+          "content": 1009,
+          "viewport": 1009,
+          "width": 1024
+        },
+        {
+          "content": 1425,
+          "viewport": 1425,
+          "width": 1440
+        },
+        {
+          "content": 1905,
+          "viewport": 1905,
+          "width": 1920
+        }
+      ]
+    },
+    {
+      "path": "/community",
+      "widths": [
+        {
+          "content": 305,
+          "viewport": 305,
+          "width": 320
+        },
+        {
+          "content": 345,
+          "viewport": 345,
+          "width": 360
+        },
+        {
+          "content": 375,
+          "viewport": 375,
+          "width": 390
+        },
+        {
+          "content": 415,
+          "viewport": 415,
+          "width": 430
+        },
+        {
+          "content": 753,
+          "viewport": 753,
+          "width": 768
+        },
+        {
+          "content": 1009,
+          "viewport": 1009,
+          "width": 1024
+        },
+        {
+          "content": 1425,
+          "viewport": 1425,
+          "width": 1440
+        },
+        {
+          "content": 1905,
+          "viewport": 1905,
+          "width": 1920
+        }
+      ]
+    },
+    {
+      "path": "/passport",
+      "widths": [
+        {
+          "content": 305,
+          "viewport": 305,
+          "width": 320
+        },
+        {
+          "content": 345,
+          "viewport": 345,
+          "width": 360
+        },
+        {
+          "content": 375,
+          "viewport": 375,
+          "width": 390
+        },
+        {
+          "content": 415,
+          "viewport": 415,
+          "width": 430
+        },
+        {
+          "content": 753,
+          "viewport": 753,
+          "width": 768
+        },
+        {
+          "content": 1009,
+          "viewport": 1009,
+          "width": 1024
+        },
+        {
+          "content": 1425,
+          "viewport": 1425,
+          "width": 1440
+        },
+        {
+          "content": 1905,
+          "viewport": 1905,
+          "width": 1920
+        }
+      ]
+    },
+    {
+      "path": "/global-key",
+      "widths": [
+        {
+          "content": 305,
+          "viewport": 320,
+          "width": 320
+        },
+        {
+          "content": 345,
+          "viewport": 360,
+          "width": 360
+        },
+        {
+          "content": 375,
+          "viewport": 390,
+          "width": 390
+        },
+        {
+          "content": 415,
+          "viewport": 430,
+          "width": 430
+        },
+        {
+          "content": 753,
+          "viewport": 768,
+          "width": 768
+        },
+        {
+          "content": 1009,
+          "viewport": 1024,
+          "width": 1024
+        },
+        {
+          "content": 1425,
+          "viewport": 1440,
+          "width": 1440
+        },
+        {
+          "content": 1905,
+          "viewport": 1920,
+          "width": 1920
+        }
+      ]
+    },
+    {
+      "path": "/about",
+      "widths": [
+        {
+          "content": 305,
+          "viewport": 305,
+          "width": 320
+        },
+        {
+          "content": 345,
+          "viewport": 345,
+          "width": 360
+        },
+        {
+          "content": 375,
+          "viewport": 375,
+          "width": 390
+        },
+        {
+          "content": 415,
+          "viewport": 415,
+          "width": 430
+        },
+        {
+          "content": 753,
+          "viewport": 753,
+          "width": 768
+        },
+        {
+          "content": 1009,
+          "viewport": 1009,
+          "width": 1024
+        },
+        {
+          "content": 1425,
+          "viewport": 1425,
+          "width": 1440
+        },
+        {
+          "content": 1905,
+          "viewport": 1905,
+          "width": 1920
+        }
+      ]
+    },
+    {
+      "path": "/countries",
+      "widths": [
+        {
+          "content": 305,
+          "viewport": 305,
+          "width": 320
+        },
+        {
+          "content": 345,
+          "viewport": 345,
+          "width": 360
+        },
+        {
+          "content": 375,
+          "viewport": 375,
+          "width": 390
+        },
+        {
+          "content": 415,
+          "viewport": 415,
+          "width": 430
+        },
+        {
+          "content": 753,
+          "viewport": 753,
+          "width": 768
+        },
+        {
+          "content": 1009,
+          "viewport": 1009,
+          "width": 1024
+        },
+        {
+          "content": 1425,
+          "viewport": 1425,
+          "width": 1440
+        },
+        {
+          "content": 1905,
+          "viewport": 1905,
+          "width": 1920
+        }
+      ]
+    },
+    {
+      "path": "/",
+      "widths": [
+        {
+          "width": 320,
+          "content": 305,
+          "viewport": 305
+        },
+        {
+          "width": 360,
+          "content": 345,
+          "viewport": 345
+        },
+        {
+          "width": 390,
+          "content": 375,
+          "viewport": 375
+        },
+        {
+          "width": 430,
+          "content": 415,
+          "viewport": 415
+        },
+        {
+          "width": 768,
+          "content": 753,
+          "viewport": 753
+        },
+        {
+          "width": 1024,
+          "content": 1009,
+          "viewport": 1009
+        },
+        {
+          "width": 1440,
+          "content": 1425,
+          "viewport": 1425
+        },
+        {
+          "width": 1920,
+          "content": 1905,
+          "viewport": 1905
+        }
+      ]
+    },
+    {
+      "path": "/compare?country=portugal&country=canada&goal=study",
+      "widths": [
+        {
+          "width": 320,
+          "content": 305,
+          "viewport": 305
+        },
+        {
+          "width": 360,
+          "content": 345,
+          "viewport": 345
+        },
+        {
+          "width": 390,
+          "content": 375,
+          "viewport": 375
+        },
+        {
+          "width": 430,
+          "content": 415,
+          "viewport": 415
+        },
+        {
+          "width": 768,
+          "content": 753,
+          "viewport": 753
+        },
+        {
+          "width": 1024,
+          "content": 1009,
+          "viewport": 1009
+        },
+        {
+          "width": 1440,
+          "content": 1425,
+          "viewport": 1425
+        },
+        {
+          "width": 1920,
+          "content": 1905,
+          "viewport": 1905
+        }
+      ]
+    }
+  ]
+}

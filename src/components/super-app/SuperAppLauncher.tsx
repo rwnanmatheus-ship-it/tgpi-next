@@ -83,7 +83,7 @@ export default function SuperAppLauncher() {
       {countryResults.length > 0 ? <nav aria-label={t('Countries')}><h3>{t('Countries')}</h3>{countryResults.map(country => <Link key={country.slug} data-command-result href={`/countries/${country.slug}`} prefetch={false} onClick={close}><span className={styles.icon} aria-hidden="true">{country.emoji}</span><span><strong>{country.name}</strong><small>{country.capital} · {country.region}</small></span><NavigationIcon name="arrow" width={16} height={16} /></Link>)}</nav> : null}
       {loadState === 'loading' ? <p className={styles.status} role="status">{t('Connecting to TGPI intelligence…')}</p> : null}
       {loadState === 'error' ? <div className={styles.empty}><p>{t('Country intelligence is temporarily unavailable. App search remains active.')}</p><button type="button" onClick={() => setRetry(value => value + 1)}>{t('Reconnect country intelligence')}</button></div> : null}
-      {search && loadState === 'ready' && !modules.length && !countryResults.length ? <p className={styles.empty}>{t('No exact match. Open Apps to browse every TGPI capability.')}</p> : null}
+      {search && loadState === 'ready' && !modules.length && !countryResults.length ? <p className={styles.empty}>{t('No match. Try another term or clear your search.')}</p> : null}
     </div>
     <footer className={styles.footer}><span><kbd>↑</kbd> <kbd>↓</kbd> {t('Explore')}</span><span><kbd>↵</kbd> {t('Open')}</span><span>Ctrl / ⌘ K</span></footer>
   </dialog>;

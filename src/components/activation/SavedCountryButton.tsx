@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useLocale } from "@/components/localization/LocaleProvider";
 import { useActivationProgress } from "@/components/activation/ActivationProgressProvider";
 
 export default function SavedCountryButton({
@@ -11,6 +12,7 @@ export default function SavedCountryButton({
   countryName: string;
   countrySlug: string;
 }) {
+  const { t } = useLocale();
   const { isAuthenticated, isLoading, mutate, progress } =
     useActivationProgress();
   const [isSaving, setIsSaving] = useState(false);
@@ -21,9 +23,9 @@ export default function SavedCountryButton({
     return (
       <Link
         href={`/sign-in?redirect_url=/countries/${countrySlug}`}
-        className="rounded-full border border-[#D9BD70] bg-[#FFF7DE] px-4 py-2 text-sm font-bold text-[#765009] transition hover:border-[#C59632] hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C59632]"
+        className="rounded-full border border-[var(--tgpi-border)] bg-[var(--tgpi-gold-soft)] px-4 py-2 text-sm font-bold text-[var(--tgpi-gold-strong)] transition hover:border-[var(--tgpi-gold)] hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-focus)]"
       >
-        Save to my plan
+        {t("Save to my plan")}
       </Link>
     );
   }
@@ -37,9 +39,9 @@ export default function SavedCountryButton({
         saved: !isSaved,
         type: "save_country",
       });
-      setMessage(isSaved ? "Removed from your plan." : `${countryName} saved.`);
+      setMessage(isSaved ? t("Removed from your plan.") : t("{country} saved.", { country: t(countryName) }));
     } catch {
-      setMessage("Unable to update your plan.");
+      setMessage(t("Unable to update your plan."));
     } finally {
       setIsSaving(false);
     }
@@ -52,13 +54,13 @@ export default function SavedCountryButton({
         onClick={toggleSaved}
         disabled={isLoading || isSaving}
         aria-pressed={isSaved}
-        className={`rounded-full border px-4 py-2 text-sm font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C59632] disabled:cursor-wait disabled:opacity-60 ${
+        className={`rounded-full border px-4 py-2 text-sm font-bold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-focus)] disabled:cursor-wait disabled:opacity-60 ${
           isSaved
-            ? "border-[#277352] bg-[#E3F3EB] text-[#1F6548]"
-            : "border-[#D9BD70] bg-[#FFF7DE] text-[#765009] hover:border-[#C59632] hover:bg-white"
+            ? "border-[var(--tgpi-success)] bg-[var(--tgpi-success-soft)] text-[var(--tgpi-success)]"
+            : "border-[var(--tgpi-border)] bg-[var(--tgpi-gold-soft)] text-[var(--tgpi-gold-strong)] hover:border-[var(--tgpi-gold)] hover:bg-white"
         }`}
       >
-        {isSaving ? "Saving…" : isSaved ? "✓ Saved to my plan" : "+ Save to my plan"}
+        {isSaving ? t("Saving…") : isSaved ? `✓ ${t("Saved to my plan")}` : `+ ${t("Save to my plan")}`}
       </button>
       <span className="w-full text-xs leading-5 text-[var(--tgpi-muted)]" aria-live="polite">
         {message}

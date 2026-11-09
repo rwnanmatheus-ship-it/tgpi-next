@@ -42,9 +42,9 @@ Reuse the approved crest and existing editorial/country imagery. Maintain physic
 
 - TypeScript: passed.
 - Focused ESLint: passed for changed interaction components.
-- Existing test suite: 447/447 passed.
-- Additional design checks: 13/13 passed, including AA text contrast for canonical color pairs and stylesheet parsing.
+- Final full test suite: 460/460 passed, including 13 design checks for canonical AA text contrast, token alias integrity and stylesheet parsing.
 - Production compilation: passed with Next.js 16.3.4.
-- Browser matrix and release evidence: see `coverage.md` and `evidence/` (updated after preview verification).
+- Browser matrix and release evidence: see `coverage.md`, `coverage-matrix.csv`, `browser-metrics.json` and `evidence/`.
+- Follow-up review corrected the compact desktop search control and localized command descriptions, country discovery and save actions in six languages.
 
 Contrast-token checks are not an exhaustive WCAG certification. Authenticated, destructive and payment states require their own fixtures; no real payment is created for a visual release. Performance claims require measured field or lab data, not a successful build alone.
