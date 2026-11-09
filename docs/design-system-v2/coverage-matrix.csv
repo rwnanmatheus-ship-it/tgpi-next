@@ -81,7 +81,7 @@ route_template,width,source_migration,default,focus,loading,empty,error,disabled
 /authority,1920,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /billing-terms,320,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /billing-terms,360,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
-/billing-terms,390,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
+/billing-terms,390,shared tokens/shell,layout measured,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,"Production follow-up: one main landmark, no horizontal overflow; read-only state"
 /billing-terms,430,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /billing-terms,768,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /billing-terms,1024,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
@@ -97,7 +97,7 @@ route_template,width,source_migration,default,focus,loading,empty,error,disabled
 /certificate/[id],1920,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /certificates,320,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /certificates,360,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
-/certificates,390,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
+/certificates,390,shared tokens/shell,layout measured,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,"Production follow-up: one main landmark, no horizontal overflow; read-only state"
 /certificates,430,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /certificates,768,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /certificates,1024,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
@@ -145,7 +145,7 @@ route_template,width,source_migration,default,focus,loading,empty,error,disabled
 /compare,1920,shared tokens/shell,layout measured,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /cookies,320,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /cookies,360,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
-/cookies,390,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
+/cookies,390,shared tokens/shell,layout measured,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,"Production follow-up: one main landmark, no horizontal overflow; read-only state"
 /cookies,430,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /cookies,768,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /cookies,1024,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
@@ -217,7 +217,7 @@ route_template,width,source_migration,default,focus,loading,empty,error,disabled
 /courses/[id]/lessons/[lessonId],1920,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /courses/[id]/study,320,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /courses/[id]/study,360,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
-/courses/[id]/study,390,shared tokens/shell,initial diagnostic rendered in production,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,No enrollment or assessment submission
+/courses/[id]/study,390,shared tokens/shell,authenticated diagnostic measured,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Professional Study DS controls and submit semantics inspected; no enrollment or assessment submission
 /courses/[id]/study,430,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /courses/[id]/study,768,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /courses/[id]/study,1024,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
@@ -241,15 +241,15 @@ route_template,width,source_migration,default,focus,loading,empty,error,disabled
 /documents,1920,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /global-key,320,shared tokens/shell,authentication gate measured,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /global-key,360,shared tokens/shell,authentication gate measured,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
-/global-key,390,shared tokens/shell,authentication gate measured,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
+/global-key,390,shared tokens/shell,authenticated layout measured,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,"Identity view only; no identity, proof or sharing mutation"
 /global-key,430,shared tokens/shell,authentication gate measured,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /global-key,768,shared tokens/shell,authentication gate measured,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /global-key,1024,shared tokens/shell,authentication gate measured,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /global-key,1440,shared tokens/shell,authentication gate measured,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
-/global-key,1920,shared tokens/shell,authentication gate measured,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
+/global-key,1920,shared tokens/shell,authenticated layout measured,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,"Identity view only; no identity, proof or sharing mutation"
 /intelligence,320,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /intelligence,360,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
-/intelligence,390,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
+/intelligence,390,shared tokens/shell,layout measured,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,"Production follow-up: one main landmark, no horizontal overflow; read-only state"
 /intelligence,430,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /intelligence,768,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /intelligence,1024,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
@@ -257,7 +257,7 @@ route_template,width,source_migration,default,focus,loading,empty,error,disabled
 /intelligence,1920,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /intelligence/research,320,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /intelligence/research,360,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
-/intelligence/research,390,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
+/intelligence/research,390,shared tokens/shell,layout measured,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,"Production follow-up: one main landmark, no horizontal overflow; read-only state"
 /intelligence/research,430,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /intelligence/research,768,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /intelligence/research,1024,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
@@ -281,7 +281,7 @@ route_template,width,source_migration,default,focus,loading,empty,error,disabled
 /internal/design-system,1920,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /legal,320,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /legal,360,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
-/legal,390,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
+/legal,390,shared tokens/shell,layout measured,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,"Production follow-up: one main landmark, no horizontal overflow; read-only state"
 /legal,430,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /legal,768,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /legal,1024,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
@@ -321,7 +321,7 @@ route_template,width,source_migration,default,focus,loading,empty,error,disabled
 /mobile-preview,1920,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /notifications,320,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /notifications,360,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
-/notifications,390,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
+/notifications,390,shared tokens/shell,layout measured,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,"Production follow-up: one main landmark, no horizontal overflow; read-only state"
 /notifications,430,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /notifications,768,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /notifications,1024,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
@@ -353,7 +353,7 @@ route_template,width,source_migration,default,focus,loading,empty,error,disabled
 /passport,1920,shared tokens/shell,layout measured,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /plan,320,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /plan,360,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
-/plan,390,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
+/plan,390,shared tokens/shell,layout measured,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,"Production follow-up: one main landmark, no horizontal overflow; read-only state"
 /plan,430,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /plan,768,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /plan,1024,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
@@ -377,7 +377,7 @@ route_template,width,source_migration,default,focus,loading,empty,error,disabled
 /premium-waitlist,1920,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /premium/demo,320,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /premium/demo,360,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
-/premium/demo,390,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
+/premium/demo,390,shared tokens/shell,layout measured,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,"Production follow-up: one main landmark, no horizontal overflow; read-only state"
 /premium/demo,430,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /premium/demo,768,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /premium/demo,1024,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
@@ -393,7 +393,7 @@ route_template,width,source_migration,default,focus,loading,empty,error,disabled
 /pricing,1920,shared tokens/shell,layout measured,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /privacy,320,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /privacy,360,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
-/privacy,390,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
+/privacy,390,shared tokens/shell,layout measured,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,"Production follow-up: one main landmark, no horizontal overflow; read-only state"
 /privacy,430,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /privacy,768,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /privacy,1024,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
@@ -417,7 +417,7 @@ route_template,width,source_migration,default,focus,loading,empty,error,disabled
 /profile/security/[[...user-profile]],1920,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /ranking,320,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /ranking,360,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
-/ranking,390,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
+/ranking,390,shared tokens/shell,layout measured,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,"Production follow-up: one main landmark, no horizontal overflow; read-only state"
 /ranking,430,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /ranking,768,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /ranking,1024,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
@@ -425,7 +425,7 @@ route_template,width,source_migration,default,focus,loading,empty,error,disabled
 /ranking,1920,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /refunds,320,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /refunds,360,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
-/refunds,390,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
+/refunds,390,shared tokens/shell,layout measured,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,"Production follow-up: one main landmark, no horizontal overflow; read-only state"
 /refunds,430,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /refunds,768,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /refunds,1024,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
@@ -433,7 +433,7 @@ route_template,width,source_migration,default,focus,loading,empty,error,disabled
 /refunds,1920,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /resources,320,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /resources,360,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
-/resources,390,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
+/resources,390,shared tokens/shell,layout measured,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,"Production follow-up: one main landmark, no horizontal overflow; read-only state"
 /resources,430,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /resources,768,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /resources,1024,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
@@ -441,7 +441,7 @@ route_template,width,source_migration,default,focus,loading,empty,error,disabled
 /resources,1920,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /rooms,320,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /rooms,360,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
-/rooms,390,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
+/rooms,390,shared tokens/shell,layout measured,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,"Production follow-up: one main landmark, no horizontal overflow; read-only state"
 /rooms,430,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /rooms,768,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /rooms,1024,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
@@ -489,7 +489,7 @@ route_template,width,source_migration,default,focus,loading,empty,error,disabled
 /startup,1920,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /terms,320,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /terms,360,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
-/terms,390,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
+/terms,390,shared tokens/shell,layout measured,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,"Production follow-up: one main landmark, no horizontal overflow; read-only state"
 /terms,430,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /terms,768,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /terms,1024,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
@@ -529,7 +529,7 @@ route_template,width,source_migration,default,focus,loading,empty,error,disabled
 /user/[username],1920,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /verify,320,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /verify,360,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
-/verify,390,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
+/verify,390,shared tokens/shell,layout measured,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,"Production follow-up: one main landmark, no horizontal overflow; read-only state"
 /verify,430,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /verify,768,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /verify,1024,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state

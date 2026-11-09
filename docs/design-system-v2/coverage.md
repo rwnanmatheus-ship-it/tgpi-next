@@ -20,10 +20,10 @@ Widths checked: 320, 360, 390, 430, 768, 1024, 1440 and 1920 CSS pixels. All mea
 | Premium | Shared materials and primitives | Membership states remain outstanding |
 | Community | Compact hero, institutional surfaces | Eight widths; 390 capture; posting/moderation not exercised |
 | Passport/Documents | Shared materials and shell | Passport public view at eight widths; document persistence not exercised |
-| Global Key | Shared materials and shell | Authentication gate at eight widths; signed-in identity not inspected |
+| Global Key | Shared materials and shell | Authentication gate at eight widths; signed-in identity at 390 and 1920, no overflow |
 | Admin/evidence tools | Operational shell and tokens | Unauthorized Admin request returns 404; authorized view remains outstanding |
 | About | Shared typography and materials | Eight widths |
-| Other institutional/account/dynamic routes | Shared token/primitives migration | Individual browser review remains outstanding |
+| Other institutional/account/dynamic routes | Shared token/primitives migration | Additional 390 px review: Plan, Notifications, Certificates, Intelligence, Resources, policies, Verify, Premium demo, Rooms and Ranking. Other individual states remain outstanding |
 | Command search | Native modal, focus, localized matching | Mobile opening; Japan query; arrows focus result; Escape closes and restores trigger focus |
 | Primitive specimen | Buttons, fields, badges, tables, tabs, dialogs, states | Dialog opens; Tab wraps to close; Escape returns trigger focus; ArrowRight selects States tab. Preview only |
 
@@ -31,13 +31,14 @@ Widths checked: 320, 360, 390, 430, 768, 1024, 1440 and 1920 CSS pixels. All mea
 
 - Final local `npm run build` passes all 460 tests and production compilation. TypeScript, focused lint and CSS parse checks pass.
 - Canonical text pairs meet WCAG AA in automated contrast tests. This is not a complete WCAG 2.2 audit of every composition, image overlay or third-party control.
-- No Lighthouse/Core Web Vitals number is claimed. No new motion/3D dependency was added; existing optimized image assets remain in use.
+- Independent Lighthouse mobile/desktop reports and follow-up are in `finalization.md`. There is no real-user Core Web Vitals dataset.
 - Some existing research and community copy remains in its original language. The command descriptions and country exploration controls added in this release have all six locale values.
-- Screenshots are representative observations, not exhaustive state coverage. The baseline Home and after Home are at the same 1440 px viewport; the after capture includes the pre-existing install prompt.
+- Screenshots are representative observations, not exhaustive state coverage. The baseline Home and final Home are at the same 1440 px viewport. `evidence/final-home-1440.jpg` and `evidence/final-home-390.jpg` show the final public composition; installation invitations are now limited to the workspace.
 - Preview authentication and production authentication are separate environments. No payment, identity mutation or privileged action was performed for visual QA.
 
 ## Production follow-up
 
+- Final application commit `090dc2012dc45239a326fa8354432f5eb4993a8e`, deployment `dpl_B5euvm4Sp5rjMvjtL63bMtxXACKQ`, reached READY and was verified on the official domain. Final Lighthouse: desktop 99, mobile 70; accessibility, best practices and SEO 100 on both. Mobile LCP remains 6.6 s and below the target. See `finalization.md` for the independent report and limitations.
 - Production deployment `dpl_7ioSPDQC59AS6VmXZev8uGvDf4ns` reached READY and both official domains were assigned. The Canada sample and linked Portugal/Canada comparison were exercised on the official domain.
 - Existing production session enabled read-only Workspace and Atlas checks; aggregate dimensions are in `production-metrics.json`. Private account screenshots were not added to this repository.
 - Runtime error/fatal query on that deployment returned no matching records during the verification window. This is a sampled observation, not an uptime guarantee.

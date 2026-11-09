@@ -1,0 +1,139 @@
+[
+  {
+    "client": 375,
+    "h1": "Your next move,connected.",
+    "main": 1,
+    "route": "/plan",
+    "scroll": 375,
+    "width": 390
+  },
+  {
+    "client": 375,
+    "h1": "Notificações0",
+    "main": 1,
+    "route": "/notifications",
+    "scroll": 375,
+    "width": 390
+  },
+  {
+    "client": 375,
+    "h1": "Your learning. Recognized.",
+    "main": 1,
+    "route": "/certificates",
+    "scroll": 375,
+    "width": 390
+  },
+  {
+    "client": 375,
+    "h1": "Intelligence youcan investigate.",
+    "main": 1,
+    "route": "/intelligence",
+    "scroll": 375,
+    "width": 390
+  },
+  {
+    "client": 375,
+    "h1": "Um mundo mais amplo.Um próximo passo mais claro.",
+    "main": 1,
+    "route": "/resources",
+    "scroll": 375,
+    "width": 390
+  },
+  {
+    "client": 375,
+    "h1": "Política de Privacidade",
+    "main": 1,
+    "route": "/privacy",
+    "scroll": 375,
+    "width": 390
+  },
+  {
+    "client": 375,
+    "h1": "Terms of Use",
+    "main": 1,
+    "route": "/terms",
+    "scroll": 375,
+    "width": 390
+  },
+  {
+    "client": 375,
+    "h1": "TGPI Premium Billing Terms",
+    "main": 1,
+    "route": "/billing-terms",
+    "scroll": 375,
+    "width": 390
+  },
+  {
+    "client": 375,
+    "h1": "Política de Reembolso e Cancelamento",
+    "main": 1,
+    "route": "/refunds",
+    "scroll": 375,
+    "width": 390
+  },
+  {
+    "client": 375,
+    "h1": "Política de Cookies",
+    "main": 1,
+    "route": "/cookies",
+    "scroll": 375,
+    "width": 390
+  },
+  {
+    "client": 375,
+    "h1": "Legal & Company Information",
+    "main": 1,
+    "route": "/legal",
+    "scroll": 375,
+    "width": 390
+  },
+  {
+    "client": 375,
+    "h1": "Verify the claim. Inspect the evidence.",
+    "main": 1,
+    "route": "/verify",
+    "scroll": 375,
+    "width": 390
+  },
+  {
+    "client": 375,
+    "h1": "Experimente a comparação de cenários",
+    "main": 1,
+    "route": "/premium/demo",
+    "scroll": 375,
+    "width": 390
+  },
+  {
+    "client": 375,
+    "h1": "The next decisionneeds a deeper answer.",
+    "main": 1,
+    "route": "/intelligence/research",
+    "scroll": 375,
+    "width": 390
+  },
+  {
+    "client": 375,
+    "h1": "Salas globais",
+    "main": 1,
+    "route": "/rooms",
+    "scroll": 375,
+    "width": 390
+  },
+  {
+    "client": 375,
+    "h1": "Build capability.Earn your next rank.",
+    "main": 1,
+    "route": "/ranking",
+    "scroll": 375,
+    "width": 390
+  },
+  {
+    "client": 390,
+    "main": 1,
+    "route": "/members",
+    "scroll": 375,
+    "width": 390,
+    "h1": "Encontre uma perspectiva global.",
+    "notes": "Rechecked after the standalone H1 correction"
+  }
+]
