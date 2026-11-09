@@ -12,6 +12,10 @@ test('locale validation never accepts arbitrary cookie or metadata values', () =
   assert.equal(resolveLocale('pt-PT'), 'pt-BR');
   assert.equal(resolveLocale('Deutsch'), 'de');
   assert.equal(resolveLocale('fr-CA'), 'fr');
+  for (const value of ['__proto__', 'constructor', 'constructor-XX']) {
+    assert.equal(resolveLocale(value), undefined);
+    assert.equal(negotiateLocale(value + ',fr;q=0.9'), 'fr');
+  }
 });
 test('language negotiation respects weights, unsupported choices, and exclusions', () => {
   assert.equal(negotiateLocale('ja,fr-CA;q=0.8,en;q=0.3'), 'fr');

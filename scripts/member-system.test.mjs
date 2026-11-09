@@ -8,6 +8,7 @@ import { normalizeTgpiAccountProfile, canViewTgpiProfile } from '../src/lib/acco
 import { normalizeHandle, handleError, memberLookup, HANDLE_CHANGE_INTERVAL } from '../src/lib/members/identity.ts';
 import { projectPublicMember } from '../src/lib/members/public-profile.ts';
 import { selectMemberExport } from '../src/lib/members/export-selection.ts';
+import { translate } from '../src/lib/localization/messages.ts';
 import { createMemberPdf } from '../src/lib/members/member-pdf.ts';
 function loadModule(path, services) {
   const testModule = { exports: {} };
@@ -107,18 +108,24 @@ test('PDF embeds fonts, logo and QR, and grows to additional pages for long cont
 test('profile export rejects anonymous and private profiles (real route, isolated services)', async () => {
   let signedIn = false; let visibility = 'public'; let currentReads = 0;
   const route = loadModule('../src/app/api/member-export/route.ts', {
-    '@clerk/nextjs/server': { auth: async () => ({ userId: signedIn ? 'owner' : null }), currentUser: async () => { currentReads++; return {}; } },
+    '@clerk/nextjs/server': { auth: async () => ({ userId: signedIn ? 'owner' : null }), currentUser: async () => { currentReads++; return { unsafeMetadata: { tgpiLocale: 'de' } }; } },
     'node:fs/promises': { readFile: async () => Buffer.from('crest') }, 'node:path': { default: {} },
     qrcode: { toDataURL: async () => 'data:image/png;base64,test' },
     '@/lib/members/public-profile.server': { buildPublicMember: async () => ({ ...projectPublicMember(base), visibility }) },
     '@/lib/members/export-selection': { selectMemberExport },
     '@/lib/members/member-pdf': { createMemberPdf },
+    '@/lib/localization/server': { getLocaleForAccount: async (locale = 'de') => locale },
+    '@/lib/localization/messages': { translate },
   });
   const request = () => new Request('https://tgpi.test/api/member-export', { method: 'POST', body: JSON.stringify({ format: 'pdf', selected: [] }) });
-  assert.equal((await route.POST(request())).status,401); assert.equal(currentReads,0);
+  const guest = await route.POST(request());
+  assert.equal(guest.status,401); assert.equal(currentReads,0);
+  assert.equal((await guest.json()).error, 'Melden Sie sich an, um Ihr Profil zu exportieren.');
   signedIn = true; visibility = 'private'; assert.equal((await route.POST(request())).status,409);
   visibility = 'public'; const response = await route.POST(request()); assert.equal(response.status,200); assert.equal(response.headers.get('content-type'),'application/pdf'); assert.equal(response.headers.get('cache-control'),'private, no-store');
-  assert.equal((await PDFDocument.load(await response.arrayBuffer())).getPageCount(),1);
+  const pdf = await PDFDocument.load(await response.arrayBuffer());
+  assert.equal(pdf.getPageCount(),1);
+  assert.match(pdf.getTitle(), / — TGPI-Mitgliedsprofil$/);
 });
 
 test('migrating the current Clerk username writes its reservation only once', async () => {

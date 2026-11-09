@@ -9504,6 +9504,422 @@ export const messages = {
     "fr": "Explorez les dossiers de décision",
     "de": "Entscheidungsdossiers erkunden",
     "it": "Esplora i dossier decisionali"
+  },
+  "TGPI Member Profile": {
+    "en": "TGPI Member Profile",
+    "pt-BR": "Perfil de membro TGPI",
+    "es": "Perfil de miembro de TGPI",
+    "fr": "Profil de membre TGPI",
+    "de": "TGPI-Mitgliedsprofil",
+    "it": "Profilo membro TGPI"
+  },
+  "Member presentation": {
+    "en": "Member presentation",
+    "pt-BR": "Apresentação do membro",
+    "es": "Presentación del miembro",
+    "fr": "Présentation du membre",
+    "de": "Mitgliedspräsentation",
+    "it": "Presentazione del membro"
+  },
+  "Self-declared professional context": {
+    "en": "Self-declared professional context",
+    "pt-BR": "Contexto profissional autodeclarado",
+    "es": "Contexto profesional declarado",
+    "fr": "Parcours professionnel déclaré",
+    "de": "Selbst angegebener beruflicher Hintergrund",
+    "it": "Contesto professionale autodichiarato"
+  },
+  "Self-declared languages (proficiency not verified)": {
+    "en": "Self-declared languages (proficiency not verified)",
+    "pt-BR": "Idiomas autodeclarados (proficiência não verificada)",
+    "es": "Idiomas declarados (dominio sin verificar)",
+    "fr": "Langues déclarées (niveau non vérifié)",
+    "de": "Selbst angegebene Sprachen (Niveau ungeprüft)",
+    "it": "Lingue dichiarate (competenza non verificata)"
+  },
+  "International direction": {
+    "en": "International direction",
+    "pt-BR": "Objetivos internacionais",
+    "es": "Objetivos internacionales",
+    "fr": "Objectifs internationaux",
+    "de": "Internationale Ziele",
+    "it": "Obiettivi internazionali"
+  },
+  "TGPI platform progression": {
+    "en": "TGPI platform progression",
+    "pt-BR": "Progressão na plataforma TGPI",
+    "es": "Progreso en la plataforma TGPI",
+    "fr": "Progression sur la plateforme TGPI",
+    "de": "Fortschritt auf der TGPI-Plattform",
+    "it": "Progressi sulla piattaforma TGPI"
+  },
+  "{points} / {maximum} points": {
+    "en": "{points} / {maximum} points",
+    "pt-BR": "{points} / {maximum} pontos",
+    "es": "{points} / {maximum} puntos",
+    "fr": "{points} / {maximum} points",
+    "de": "{points} / {maximum} Punkte",
+    "it": "{points} / {maximum} punti"
+  },
+  "Recorded course completions": {
+    "en": "Recorded course completions",
+    "pt-BR": "Conclusões de cursos registradas",
+    "es": "Cursos completados registrados",
+    "fr": "Cours terminés enregistrés",
+    "de": "Erfasste Kursabschlüsse",
+    "it": "Completamenti dei corsi registrati"
+  },
+  "Verifiable credentials — check current status": {
+    "en": "Verifiable credentials — check current status",
+    "pt-BR": "Credenciais verificáveis — confira o status atual",
+    "es": "Credenciales verificables — consulta su estado actual",
+    "fr": "Titres vérifiables — consultez leur statut actuel",
+    "de": "Überprüfbare Nachweise — aktuellen Status prüfen",
+    "it": "Credenziali verificabili — controlla lo stato attuale"
+  },
+  "Links provided by the member": {
+    "en": "Links provided by the member",
+    "pt-BR": "Links fornecidos pelo membro",
+    "es": "Enlaces facilitados por el miembro",
+    "fr": "Liens fournis par le membre",
+    "de": "Vom Mitglied bereitgestellte Links",
+    "it": "Link forniti dal membro"
+  },
+  "Scan to check the current authorized TGPI profile.": {
+    "en": "Scan to check the current authorized TGPI profile.",
+    "pt-BR": "Escaneie para consultar o perfil TGPI atualmente autorizado.",
+    "es": "Escanea para consultar el perfil TGPI autorizado actualmente.",
+    "fr": "Scannez pour consulter le profil TGPI actuellement autorisé.",
+    "de": "Scannen Sie den Code, um das aktuell freigegebene TGPI-Profil aufzurufen.",
+    "it": "Scansiona per consultare il profilo TGPI attualmente autorizzato."
+  },
+  "Membership is not an official ID, immigration permission or academic accreditation.": {
+    "en": "Membership is not an official ID, immigration permission or academic accreditation.",
+    "pt-BR": "A condição de membro não equivale a um documento oficial, autorização de imigração ou credenciamento acadêmico.",
+    "es": "La membresía no equivale a un documento oficial, un permiso migratorio ni una acreditación académica.",
+    "fr": "L’adhésion ne vaut ni pièce d’identité officielle, ni autorisation d’immigration, ni accréditation académique.",
+    "de": "Die Mitgliedschaft ist kein amtlicher Ausweis, keine Einwanderungserlaubnis und keine akademische Akkreditierung.",
+    "it": "L’iscrizione non equivale a un documento ufficiale, a un permesso di immigrazione o a un accreditamento accademico."
+  },
+  "Downloaded copies are not revoked by later privacy changes. Unsupported font glyphs appear as ?.": {
+    "en": "Downloaded copies are not revoked by later privacy changes. Unsupported font glyphs appear as ?.",
+    "pt-BR": "Mudanças de privacidade posteriores não revogam cópias baixadas. Caracteres sem suporte aparecem como ?.",
+    "es": "Los cambios de privacidad posteriores no revocan las copias descargadas. Los caracteres no compatibles aparecen como ?.",
+    "fr": "Les modifications ultérieures de confidentialité ne révoquent pas les copies téléchargées. Les caractères non pris en charge apparaissent sous la forme ?.",
+    "de": "Spätere Datenschutzeinstellungen widerrufen keine heruntergeladenen Kopien. Nicht unterstützte Zeichen erscheinen als ?.",
+    "it": "Le modifiche successive alla privacy non revocano le copie scaricate. I caratteri non supportati appaiono come ?."
+  },
+  "Sign in to export your profile.": {
+    "en": "Sign in to export your profile.",
+    "pt-BR": "Entre para exportar seu perfil.",
+    "es": "Inicia sesión para exportar tu perfil.",
+    "fr": "Connectez-vous pour exporter votre profil.",
+    "de": "Melden Sie sich an, um Ihr Profil zu exportieren.",
+    "it": "Accedi per esportare il tuo profilo."
+  },
+  "Request not allowed.": {
+    "en": "Request not allowed.",
+    "pt-BR": "Solicitação não permitida.",
+    "es": "Solicitud no permitida.",
+    "fr": "Requête non autorisée.",
+    "de": "Anfrage nicht zulässig.",
+    "it": "Richiesta non consentita."
+  },
+  "Export request too large.": {
+    "en": "Export request too large.",
+    "pt-BR": "Solicitação de exportação muito grande.",
+    "es": "La solicitud de exportación es demasiado grande.",
+    "fr": "La demande d’exportation est trop volumineuse.",
+    "de": "Die Exportanfrage ist zu groß.",
+    "it": "La richiesta di esportazione è troppo grande."
+  },
+  "Choose PDF or image.": {
+    "en": "Choose PDF or image.",
+    "pt-BR": "Escolha PDF ou imagem.",
+    "es": "Elige PDF o imagen.",
+    "fr": "Choisissez un PDF ou une image.",
+    "de": "Wählen Sie PDF oder Bild.",
+    "it": "Scegli PDF o immagine."
+  },
+  "Session expired.": {
+    "en": "Session expired.",
+    "pt-BR": "Sessão expirada.",
+    "es": "Sesión caducada.",
+    "fr": "Session expirée.",
+    "de": "Sitzung abgelaufen.",
+    "it": "Sessione scaduta."
+  },
+  "Your profile is private. Enable Members or Public visibility and save before exporting a shareable identity.": {
+    "en": "Your profile is private. Enable Members or Public visibility and save before exporting a shareable identity.",
+    "pt-BR": "Seu perfil é privado. Selecione a visibilidade Membros ou Público e salve antes de exportar sua identidade compartilhável.",
+    "es": "Tu perfil es privado. Selecciona la visibilidad Miembros o Público y guarda antes de exportar tu identidad.",
+    "fr": "Votre profil est privé. Choisissez la visibilité Membres ou Public et enregistrez avant d’exporter votre identité.",
+    "de": "Ihr Profil ist privat. Wählen Sie die Sichtbarkeit Mitglieder oder Öffentlich und speichern Sie, bevor Sie Ihre Identität exportieren.",
+    "it": "Il tuo profilo è privato. Seleziona la visibilità Membri o Pubblico e salva prima di esportare la tua identità."
+  },
+  "Your photo could not be loaded for export. Retry or deselect Photo.": {
+    "en": "Your photo could not be loaded for export. Retry or deselect Photo.",
+    "pt-BR": "Não foi possível carregar sua foto para exportação. Tente novamente ou desmarque Foto.",
+    "es": "No se pudo cargar tu foto para exportarla. Vuelve a intentarlo o desmarca Foto.",
+    "fr": "Votre photo n’a pas pu être chargée pour l’exportation. Réessayez ou décochez Photo.",
+    "de": "Ihr Foto konnte nicht für den Export geladen werden. Versuchen Sie es erneut oder deaktivieren Sie Foto.",
+    "it": "Impossibile caricare la foto per l’esportazione. Riprova o deseleziona Foto."
+  },
+  "Invalid export format.": {
+    "en": "Invalid export format.",
+    "pt-BR": "Formato de exportação inválido.",
+    "es": "Formato de exportación no válido.",
+    "fr": "Format d’exportation invalide.",
+    "de": "Ungültiges Exportformat.",
+    "it": "Formato di esportazione non valido."
+  },
+  "Unable to export. Your saved profile is unchanged; please retry.": {
+    "en": "Unable to export. Your saved profile is unchanged; please retry.",
+    "pt-BR": "Não foi possível exportar. Seu perfil salvo permanece intacto. Tente novamente.",
+    "es": "No se pudo exportar. Tu perfil guardado sigue intacto. Vuelve a intentarlo.",
+    "fr": "Impossible d’exporter. Votre profil enregistré reste intact. Réessayez.",
+    "de": "Export nicht möglich. Ihr gespeichertes Profil bleibt erhalten. Versuchen Sie es erneut.",
+    "it": "Impossibile esportare. Il profilo salvato rimane intatto. Riprova."
+  },
+  "Photo": {
+    "en": "Photo",
+    "pt-BR": "Foto",
+    "es": "Foto",
+    "fr": "Photo",
+    "de": "Foto",
+    "it": "Foto"
+  },
+  "Career": {
+    "en": "Career",
+    "pt-BR": "Carreira",
+    "es": "Carrera",
+    "fr": "Carrière",
+    "de": "Beruf",
+    "it": "Carriera"
+  },
+  "Professional links": {
+    "en": "Professional links",
+    "pt-BR": "Links profissionais",
+    "es": "Enlaces profesionales",
+    "fr": "Liens professionnels",
+    "de": "Berufliche Links",
+    "it": "Link professionali"
+  },
+  "International goals": {
+    "en": "International goals",
+    "pt-BR": "Objetivos internacionais",
+    "es": "Objetivos internacionales",
+    "fr": "Objectifs internationaux",
+    "de": "Internationale Ziele",
+    "it": "Obiettivi internazionali"
+  },
+  "Rank, completions & credentials": {
+    "en": "Rank, completions & credentials",
+    "pt-BR": "Patente, conclusões e credenciais",
+    "es": "Rango, cursos completados y credenciales",
+    "fr": "Rang, cours terminés et titres",
+    "de": "Rang, Abschlüsse und Nachweise",
+    "it": "Grado, completamenti e credenziali"
+  },
+  "Image export is unavailable in this browser.": {
+    "en": "Image export is unavailable in this browser.",
+    "pt-BR": "A exportação de imagens está indisponível neste navegador.",
+    "es": "La exportación de imágenes no está disponible en este navegador.",
+    "fr": "L’exportation d’images est indisponible dans ce navigateur.",
+    "de": "Der Bildexport ist in diesem Browser nicht verfügbar.",
+    "it": "L’esportazione di immagini non è disponibile in questo browser."
+  },
+  "TGPI progression: {rank}": {
+    "en": "TGPI progression: {rank}",
+    "pt-BR": "Progressão TGPI: {rank}",
+    "es": "Progreso TGPI: {rank}",
+    "fr": "Progression TGPI : {rank}",
+    "de": "TGPI-Fortschritt: {rank}",
+    "it": "Progressi TGPI: {rank}"
+  },
+  "Self-declared: {career}": {
+    "en": "Self-declared: {career}",
+    "pt-BR": "Autodeclarado: {career}",
+    "es": "Declarado: {career}",
+    "fr": "Déclaré : {career}",
+    "de": "Selbst angegeben: {career}",
+    "it": "Autodichiarato: {career}"
+  },
+  "Declared languages: {languages}": {
+    "en": "Declared languages: {languages}",
+    "pt-BR": "Idiomas declarados: {languages}",
+    "es": "Idiomas declarados: {languages}",
+    "fr": "Langues déclarées : {languages}",
+    "de": "Angegebene Sprachen: {languages}",
+    "it": "Lingue dichiarate: {languages}"
+  },
+  "Direction: {goal}": {
+    "en": "Direction: {goal}",
+    "pt-BR": "Objetivo: {goal}",
+    "es": "Objetivo: {goal}",
+    "fr": "Objectif : {goal}",
+    "de": "Ziel: {goal}",
+    "it": "Obiettivo: {goal}"
+  },
+  "Recorded completion: {course}": {
+    "en": "Recorded completion: {course}",
+    "pt-BR": "Conclusão registrada: {course}",
+    "es": "Curso completado registrado: {course}",
+    "fr": "Cours terminé enregistré : {course}",
+    "de": "Erfasster Abschluss: {course}",
+    "it": "Completamento registrato: {course}"
+  },
+  "Credential: {title}": {
+    "en": "Credential: {title}",
+    "pt-BR": "Credencial: {title}",
+    "es": "Credencial: {title}",
+    "fr": "Titre : {title}",
+    "de": "Nachweis: {title}",
+    "it": "Credenziale: {title}"
+  },
+  "View the current authorized member profile": {
+    "en": "View the current authorized member profile",
+    "pt-BR": "Consultar o perfil de membro autorizado",
+    "es": "Consultar el perfil de miembro autorizado",
+    "fr": "Consulter le profil de membre autorisé",
+    "de": "Aktuell freigegebenes Mitgliedsprofil ansehen",
+    "it": "Consulta il profilo membro autorizzato"
+  },
+  "TGPI membership · Not an official ID or academic accreditation": {
+    "en": "TGPI membership · Not an official ID or academic accreditation",
+    "pt-BR": "Membro TGPI · Sem valor de identificação oficial ou credenciamento acadêmico",
+    "es": "Membresía TGPI · Sin valor de identificación oficial ni acreditación académica",
+    "fr": "Adhésion TGPI · Ni pièce d’identité officielle ni accréditation académique",
+    "de": "TGPI-Mitgliedschaft · Kein amtlicher Ausweis und keine akademische Akkreditierung",
+    "it": "Iscrizione TGPI · Non è un documento ufficiale né un accreditamento accademico"
+  },
+  "Shared files remain outside TGPI privacy controls.": {
+    "en": "Shared files remain outside TGPI privacy controls.",
+    "pt-BR": "Arquivos compartilhados ficam fora dos controles de privacidade da TGPI.",
+    "es": "Los archivos compartidos quedan fuera de los controles de privacidad de TGPI.",
+    "fr": "Les fichiers partagés échappent aux contrôles de confidentialité de TGPI.",
+    "de": "Geteilte Dateien unterliegen nicht den Datenschutzeinstellungen von TGPI.",
+    "it": "I file condivisi non sono soggetti ai controlli sulla privacy di TGPI."
+  },
+  "Unable to create your PNG.": {
+    "en": "Unable to create your PNG.",
+    "pt-BR": "Não foi possível criar seu PNG.",
+    "es": "No se pudo crear tu PNG.",
+    "fr": "Impossible de créer votre PNG.",
+    "de": "Ihr PNG konnte nicht erstellt werden.",
+    "it": "Impossibile creare il tuo PNG."
+  },
+  "Preparing your saved public data…": {
+    "en": "Preparing your saved public data…",
+    "pt-BR": "Preparando seus dados públicos salvos…",
+    "es": "Preparando tus datos públicos guardados…",
+    "fr": "Préparation de vos données publiques enregistrées…",
+    "de": "Ihre gespeicherten öffentlichen Daten werden vorbereitet…",
+    "it": "Preparazione dei dati pubblici salvati…"
+  },
+  "Print-ready PDF opened. Use its print control. If popups are blocked, download the PDF.": {
+    "en": "Print-ready PDF opened. Use its print control. If popups are blocked, download the PDF.",
+    "pt-BR": "PDF para impressão aberto. Use o comando de impressão. Se a janela for bloqueada, baixe o PDF.",
+    "es": "PDF para imprimir abierto. Usa el control de impresión. Si se bloquea la ventana, descarga el PDF.",
+    "fr": "Le PDF prêt à imprimer est ouvert. Utilisez sa commande d’impression. Si la fenêtre est bloquée, téléchargez le PDF.",
+    "de": "Die Druck-PDF wurde geöffnet. Nutzen Sie die Druckfunktion. Falls Pop-ups blockiert sind, laden Sie die PDF herunter.",
+    "it": "PDF per la stampa aperto. Usa il comando di stampa. Se le finestre sono bloccate, scarica il PDF."
+  },
+  "PDF downloaded with selectable text.": {
+    "en": "PDF downloaded with selectable text.",
+    "pt-BR": "PDF baixado com texto selecionável.",
+    "es": "PDF descargado con texto seleccionable.",
+    "fr": "PDF téléchargé avec texte sélectionnable.",
+    "de": "PDF mit auswählbarem Text heruntergeladen.",
+    "it": "PDF scaricato con testo selezionabile."
+  },
+  "High-resolution PNG downloaded.": {
+    "en": "High-resolution PNG downloaded.",
+    "pt-BR": "PNG de alta resolução baixado.",
+    "es": "PNG de alta resolución descargado.",
+    "fr": "PNG haute résolution téléchargé.",
+    "de": "Hochauflösende PNG-Datei heruntergeladen.",
+    "it": "PNG ad alta risoluzione scaricato."
+  },
+  "Export failed. Please retry.": {
+    "en": "Export failed. Please retry.",
+    "pt-BR": "A exportação falhou. Tente novamente.",
+    "es": "La exportación falló. Vuelve a intentarlo.",
+    "fr": "L’exportation a échoué. Réessayez.",
+    "de": "Export fehlgeschlagen. Versuchen Sie es erneut.",
+    "it": "Esportazione non riuscita. Riprova."
+  },
+  "Your portable presentation": {
+    "en": "Your portable presentation",
+    "pt-BR": "Sua apresentação portátil",
+    "es": "Tu presentación portátil",
+    "fr": "Votre présentation à emporter",
+    "de": "Ihre Präsentation zum Mitnehmen",
+    "it": "La tua presentazione portatile"
+  },
+  "Share the part you choose.": {
+    "en": "Share the part you choose.",
+    "pt-BR": "Compartilhe o que você escolher.",
+    "es": "Comparte lo que tú elijas.",
+    "fr": "Partagez les éléments de votre choix.",
+    "de": "Teilen Sie, was Sie auswählen.",
+    "it": "Condividi ciò che scegli."
+  },
+  "Saved public fields only. The compact card includes your name, @ID, member number, headline, selected photo and shared rank. The extended PNG and PDF include the selected groups below.": {
+    "en": "Saved public fields only. The compact card includes your name, @ID, member number, headline, selected photo and shared rank. The extended PNG and PDF include the selected groups below.",
+    "pt-BR": "Apenas campos públicos salvos. O cartão compacto inclui nome, @ID, número de membro, título, foto selecionada e patente compartilhada. O PNG estendido e o PDF incluem os grupos selecionados abaixo.",
+    "es": "Solo campos públicos guardados. La tarjeta compacta incluye nombre, @ID, número de miembro, titular, foto seleccionada y rango compartido. El PNG ampliado y el PDF incluyen los grupos seleccionados abajo.",
+    "fr": "Seuls les champs publics enregistrés sont utilisés. La carte compacte inclut le nom, l’@ID, le numéro de membre, le titre, la photo sélectionnée et le rang partagé. Le PNG détaillé et le PDF incluent les groupes sélectionnés ci-dessous.",
+    "de": "Nur gespeicherte öffentliche Felder werden verwendet. Die kompakte Karte enthält Name, @ID, Mitgliedsnummer, Profilzeile, ausgewähltes Foto und freigegebenen Rang. Die erweiterte PNG-Datei und die PDF enthalten die unten ausgewählten Gruppen.",
+    "it": "Solo campi pubblici salvati. La scheda compatta contiene nome, @ID, numero membro, titolo, foto selezionata e grado condiviso. Il PNG esteso e il PDF includono i gruppi selezionati sotto."
+  },
+  "Optional groups (public permissions still apply)": {
+    "en": "Optional groups (public permissions still apply)",
+    "pt-BR": "Grupos opcionais (a visibilidade pública continua valendo)",
+    "es": "Grupos opcionales (se mantienen los permisos públicos)",
+    "fr": "Groupes facultatifs (les droits de visibilité publique s’appliquent)",
+    "de": "Optionale Gruppen (öffentliche Freigaben gelten weiterhin)",
+    "it": "Gruppi facoltativi (valgono i permessi di visibilità pubblica)"
+  },
+  "Download card PNG": {
+    "en": "Download card PNG",
+    "pt-BR": "Baixar cartão em PNG",
+    "es": "Descargar tarjeta en PNG",
+    "fr": "Télécharger la carte PNG",
+    "de": "Karte als PNG herunterladen",
+    "it": "Scarica scheda PNG"
+  },
+  "Download extended PNG": {
+    "en": "Download extended PNG",
+    "pt-BR": "Baixar PNG estendido",
+    "es": "Descargar PNG ampliado",
+    "fr": "Télécharger le PNG détaillé",
+    "de": "Erweiterte PNG-Datei herunterladen",
+    "it": "Scarica PNG esteso"
+  },
+  "Download PDF": {
+    "en": "Download PDF",
+    "pt-BR": "Baixar PDF",
+    "es": "Descargar PDF",
+    "fr": "Télécharger le PDF",
+    "de": "PDF herunterladen",
+    "it": "Scarica PDF"
+  },
+  "Print-ready PDF": {
+    "en": "Print-ready PDF",
+    "pt-BR": "PDF para impressão",
+    "es": "PDF para imprimir",
+    "fr": "PDF prêt à imprimer",
+    "de": "Druckfertige PDF",
+    "it": "PDF per la stampa"
+  },
+  "Files already downloaded or shared outside TGPI cannot be revoked by later privacy changes. The QR contains only your profile link.": {
+    "en": "Files already downloaded or shared outside TGPI cannot be revoked by later privacy changes. The QR contains only your profile link.",
+    "pt-BR": "Arquivos já baixados ou compartilhados fora da TGPI não podem ser revogados por mudanças posteriores de privacidade. O QR contém apenas o link do seu perfil.",
+    "es": "Los cambios de privacidad posteriores no pueden revocar los archivos ya descargados o compartidos fuera de TGPI. El QR solo contiene el enlace a tu perfil.",
+    "fr": "Les modifications ultérieures de confidentialité ne révoquent pas les fichiers déjà téléchargés ou partagés hors de TGPI. Le QR contient uniquement le lien de votre profil.",
+    "de": "Spätere Datenschutzeinstellungen können bereits heruntergeladene oder außerhalb von TGPI geteilte Dateien nicht widerrufen. Der QR-Code enthält nur Ihren Profillink.",
+    "it": "Le modifiche successive alla privacy non possono revocare file già scaricati o condivisi fuori da TGPI. Il QR contiene solo il link al profilo."
   }
 } as const satisfies Record<string, Record<Locale, string>>;
 

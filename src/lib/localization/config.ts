@@ -15,8 +15,9 @@ export function isLocale(value: unknown): value is Locale {
 export function resolveLocale(value: unknown): Locale | undefined {
   if (typeof value !== 'string') return undefined;
   const normalized = value.trim().toLowerCase();
-  return localeOptions.find(option => option.code.toLowerCase() === normalized || option.name.toLowerCase() === normalized || option.profileName.toLowerCase() === normalized)?.code
-    ?? ({ en: 'en', pt: 'pt-BR', es: 'es', fr: 'fr', de: 'de', it: 'it' } as Record<string, Locale>)[normalized.split('-')[0]];
+  const match = localeOptions.find(option => option.code.toLowerCase() === normalized || option.name.toLowerCase() === normalized || option.profileName.toLowerCase() === normalized)?.code
+  const primary = normalized.split('-')[0];
+  return match ?? (primary === 'pt' ? 'pt-BR' : isLocale(primary) ? primary : undefined);
 }
 export function negotiateLocale(header: string | null): Locale {
   return (header ?? '').split(',').map((part, index) => {

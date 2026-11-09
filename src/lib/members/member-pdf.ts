@@ -3,10 +3,13 @@ import path from 'node:path';
 import fontkit from '@pdf-lib/fontkit';
 import { PDFDocument, PDFName, PDFString, rgb } from 'pdf-lib';
 import QRCode from 'qrcode';
+import type { Locale } from '../localization/config.ts';
+import { translate } from '../localization/messages.ts';
 import type { PublicMemberProfile } from './public-profile';
-export async function createMemberPdf(member: PublicMemberProfile, photo?: Uint8Array) {
+export async function createMemberPdf(member: PublicMemberProfile, photo?: Uint8Array, locale: Locale = 'en') {
+  const t = (key: string, values?: Record<string, string | number>) => translate(locale, key, values);
   const doc = await PDFDocument.create(); doc.registerFontkit(fontkit);
-  doc.setTitle(`${member.name} — TGPI Member Profile`); doc.setAuthor('TGPI — The Global Polymath Institute');
+  doc.setTitle(`${member.name} — ${t('TGPI Member Profile')}`); doc.setAuthor('TGPI — The Global Polymath Institute');
   const [fontBytes, crestBytes] = await Promise.all([
     readFile(path.join(process.cwd(), 'src/assets/fonts/DejaVuSans.ttf')),
     readFile(path.join(process.cwd(), 'src/assets/brand/tgpi-crest-print.png')),
@@ -32,7 +35,8 @@ export async function createMemberPdf(member: PublicMemberProfile, photo?: Uint8
     }
   }
   page.drawText('THE GLOBAL POLYMATH INSTITUTE', { x: 118, y: 785, font, size: 12, color: navy });
-  page.drawText('MEMBER PRESENTATION', { x: 118, y: 762, font, size: 10, color: gold });
+  const heading = t('Member presentation').toLocaleUpperCase(locale);
+  page.drawText(heading, { x: 118, y: 762, font, size: Math.min(10, 430 / font.widthOfTextAtSize(heading, 1)), color: gold });
   y = 708;
   if (photo) {
     try { const image = photo[0] === 137 ? await doc.embedPng(photo) : await doc.embedJpg(photo); const size = image.scaleToFit(64, 64); page.drawImage(image, { x: 46, y: y - 45, width: size.width, height: size.height }); y -= 86; } catch { /* The profile remains exportable with an unsupported optional photo. */ }
@@ -41,20 +45,20 @@ export async function createMemberPdf(member: PublicMemberProfile, photo?: Uint8
   if (member.headline) { y -= 10; line(member.headline, 13); }
   if (member.bio) { y -= 15; line(member.bio, 11, muted); }
   function section(title: string, values: string[]) { if (!values.length) return; y -= 18; if (y < 100) { page = doc.addPage([595.28, 841.89]); y = 790; } line(title, 12, gold); for (const v of values) line(v); }
-  section('SELF-DECLARED PROFESSIONAL CONTEXT', member.career);
-  section('SELF-DECLARED LANGUAGES (PROFICIENCY NOT VERIFIED)', member.languages);
-  section('INTERNATIONAL DIRECTION', [member.goal, ...member.countries.map(c => c.name)].filter(Boolean));
-  section('TGPI PLATFORM PROGRESSION', member.rank ? [member.rank.name, `${member.rank.points} / 10,000 points`] : []);
-  section('RECORDED COURSE COMPLETIONS', member.courses.map(c => c.title));
-  section('VERIFIABLE CREDENTIALS — CHECK CURRENT STATUS', member.certificates.map(c => `${c.title} — https://theglobalpolymath.com${c.path}`));
-  section('LINKS PROVIDED BY THE MEMBER', member.links.map(l => `${l.label}: ${l.url}`));
+  section(t('Self-declared professional context').toLocaleUpperCase(locale), member.career);
+  section(t('Self-declared languages (proficiency not verified)').toLocaleUpperCase(locale), member.languages);
+  section(t('International direction').toLocaleUpperCase(locale), [member.goal, ...member.countries.map(c => c.name)].filter(Boolean));
+  section(t('TGPI platform progression').toLocaleUpperCase(locale), member.rank ? [member.rank.name, t('{points} / {maximum} points', { points: new Intl.NumberFormat(locale).format(member.rank.points), maximum: new Intl.NumberFormat(locale).format(10000) })] : []);
+  section(t('Recorded course completions').toLocaleUpperCase(locale), member.courses.map(c => c.title));
+  section(t('Verifiable credentials — check current status').toLocaleUpperCase(locale), member.certificates.map(c => `${c.title} — https://theglobalpolymath.com${c.path}`));
+  section(t('Links provided by the member').toLocaleUpperCase(locale), member.links.map(l => `${l.label}: ${l.url}`));
   if (y < 210) { page = doc.addPage([595.28, 841.89]); y = 790; }
   y -= 20; const qr = await doc.embedPng(await QRCode.toBuffer(`https://theglobalpolymath.com${member.path}`, { width: 320, margin: 4, errorCorrectionLevel: 'M' }));
   page.drawImage(qr, { x: 42, y: y - 100, width: 100, height: 100 });
   page.node.set(PDFName.of('Annots'), doc.context.obj([doc.context.register(doc.context.obj({ Type: 'Annot', Subtype: 'Link', Rect: [42, y - 100, 142, y], Border: [0, 0, 0], A: { Type: 'Action', S: 'URI', URI: PDFString.of(`https://theglobalpolymath.com${member.path}`) } }))]));
   y -= 125;
-  line('Scan to check the current authorized TGPI profile.', 9, muted);
-  line('Membership is not an official ID, immigration permission or academic accreditation.', 8, muted);
-  line('Downloaded copies are not revoked by later privacy changes. Unsupported font glyphs appear as ?.', 8, muted);
+  line(t('Scan to check the current authorized TGPI profile.'), 9, muted);
+  line(t('Membership is not an official ID, immigration permission or academic accreditation.'), 8, muted);
+  line(t('Downloaded copies are not revoked by later privacy changes. Unsupported font glyphs appear as ?.'), 8, muted);
   return doc.save();
 }
