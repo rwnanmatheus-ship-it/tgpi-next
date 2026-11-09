@@ -1,0 +1,1007 @@
+{
+  "commit": "7b922d7eb92f746e98e29578968539e2b2e07c46",
+  "base": "https://www.theglobalpolymath.com",
+  "date": "2026-11-09T19:57:14.129325+00:00",
+  "authenticated": false,
+  "scope": "Guest HTTP checks. Redirected private pages do not verify authenticated UI or purchases.",
+  "checks": [
+    {
+      "route": "/",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/",
+      "seconds": 7.97,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/about",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/about",
+      "seconds": 7.92,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/admin",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/admin",
+      "seconds": 7.95,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/admin/learning/professional",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/admin/learning/professional",
+      "seconds": 7.95,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/admin/learning/professional/reviews",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/admin/learning/professional/reviews",
+      "seconds": 8.05,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/admin/notifications",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/admin/notifications",
+      "seconds": 8.15,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/api/atlas/status",
+      "method": "GET",
+      "status": 401,
+      "expectedStatus": 401,
+      "finalUrl": "https://www.theglobalpolymath.com/api/atlas/status",
+      "seconds": 5.17,
+      "deploymentIds": [],
+      "cacheControl": "private, no-store",
+      "contentType": "application/json",
+      "error": false,
+      "apiBody": "{\"enabled\":false}"
+    },
+    {
+      "route": "/api/atlas/wallet",
+      "method": "GET",
+      "status": 401,
+      "expectedStatus": 401,
+      "finalUrl": "https://www.theglobalpolymath.com/api/atlas/wallet",
+      "seconds": 4.92,
+      "deploymentIds": [],
+      "cacheControl": "private, no-store",
+      "contentType": "application/json",
+      "error": false,
+      "apiBody": "{\"error\":\"Sign in to use Atlas.\"}"
+    },
+    {
+      "route": "/api/billing/status",
+      "method": "GET",
+      "status": 401,
+      "expectedStatus": 401,
+      "finalUrl": "https://www.theglobalpolymath.com/api/billing/status",
+      "seconds": 4.7,
+      "deploymentIds": [],
+      "cacheControl": "private, no-store, max-age=0",
+      "contentType": "application/json",
+      "error": false,
+      "apiBody": "{\"error\":\"Authentication required.\"}"
+    },
+    {
+      "route": "/api/learning/summary",
+      "method": "GET",
+      "status": 401,
+      "expectedStatus": 401,
+      "finalUrl": "https://www.theglobalpolymath.com/api/learning/summary",
+      "seconds": 4.96,
+      "deploymentIds": [],
+      "cacheControl": "private, no-store, max-age=0",
+      "contentType": "application/json",
+      "error": false,
+      "apiBody": "{\"error\":\"authentication_required\"}"
+    },
+    {
+      "route": "/api/premium/scenarios",
+      "method": "GET",
+      "status": 401,
+      "expectedStatus": 401,
+      "finalUrl": "https://www.theglobalpolymath.com/api/premium/scenarios",
+      "seconds": 4.85,
+      "deploymentIds": [],
+      "cacheControl": "private, no-store",
+      "contentType": "application/json",
+      "error": false,
+      "apiBody": "{\"error\":\"Authentication required.\"}"
+    },
+    {
+      "route": "/api/progress",
+      "method": "GET",
+      "status": 401,
+      "expectedStatus": 401,
+      "finalUrl": "https://www.theglobalpolymath.com/api/progress",
+      "seconds": 4.53,
+      "deploymentIds": [],
+      "cacheControl": "private, no-store, max-age=0",
+      "contentType": "application/json",
+      "error": false,
+      "apiBody": "{\"error\":\"Sign in to access your TGPI progress.\"}"
+    },
+    {
+      "route": "/api/workspace/history",
+      "method": "GET",
+      "status": 401,
+      "expectedStatus": 401,
+      "finalUrl": "https://www.theglobalpolymath.com/api/workspace/history",
+      "seconds": 4.89,
+      "deploymentIds": [],
+      "cacheControl": "private, no-store",
+      "contentType": "application/json",
+      "error": false,
+      "apiBody": "{\"error\":\"Sign in to access your history.\"}"
+    },
+    {
+      "route": "/atlas",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/atlas",
+      "seconds": 5.08,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/atlas/wallet",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/atlas/wallet",
+      "seconds": 4.83,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/atlas/wallet/treasury",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/atlas/wallet/treasury",
+      "seconds": 4.76,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/authority",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/authority",
+      "seconds": 4.72,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/billing-terms",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/billing-terms",
+      "seconds": 4.62,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/certificates",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/certificates",
+      "seconds": 5.43,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/community",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/community",
+      "seconds": 5.09,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/community/moderation",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/community/moderation",
+      "seconds": 5.37,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/compare",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/compare",
+      "seconds": 5.23,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/cookies",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/cookies",
+      "seconds": 5.26,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/countries",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/countries",
+      "seconds": 5.47,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/countries/portugal",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/countries/portugal",
+      "seconds": 5.29,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/country-fit",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/country-fit",
+      "seconds": 5.23,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/courses",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/courses",
+      "seconds": 5.1,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/courses/global-english-2026",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/courses/global-english-2026",
+      "seconds": 5.08,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/courses/ia-trabalho-global",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/courses/ia-trabalho-global",
+      "seconds": 5.12,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/dashboard",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/dashboard",
+      "seconds": 4.81,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/documents",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/documents",
+      "seconds": 4.93,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/global-key",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/global-key",
+      "seconds": 5.22,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/intelligence",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/intelligence",
+      "seconds": 5.24,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/intelligence/research",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/intelligence/research",
+      "seconds": 5.15,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/internal/country-qa",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/internal/country-qa",
+      "seconds": 4.8,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/legal",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/legal",
+      "seconds": 4.78,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/login",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/login",
+      "seconds": 5.73,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/members",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/members",
+      "seconds": 5.66,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/mobile-preview",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/mobile-preview",
+      "seconds": 5.64,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/notifications",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/notifications",
+      "seconds": 5.38,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/onboarding",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/onboarding",
+      "seconds": 5.4,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/passport",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/passport",
+      "seconds": 5.28,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/plan",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/plan",
+      "seconds": 5.08,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/premium",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/premium",
+      "seconds": 5.11,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/premium-waitlist",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/premium-waitlist",
+      "seconds": 5.11,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/premium/demo",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/premium/demo",
+      "seconds": 5.09,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/pricing",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/pricing",
+      "seconds": 5.06,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/privacy",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/privacy",
+      "seconds": 4.98,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/profile",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/profile",
+      "seconds": 4.58,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/ranking",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/ranking",
+      "seconds": 4.48,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/refunds",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/refunds",
+      "seconds": 4.38,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/resources",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/resources",
+      "seconds": 4.44,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/rooms",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/rooms",
+      "seconds": 4.42,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/showcase",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/showcase",
+      "seconds": 4.41,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/sign-in",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/sign-in",
+      "seconds": 5.53,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/sign-up",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/sign-up",
+      "seconds": 5.48,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/startup",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/startup",
+      "seconds": 5.42,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/terms",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/terms",
+      "seconds": 5.54,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/upgrade",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/upgrade",
+      "seconds": 5.49,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/upgrade-success",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/upgrade-success",
+      "seconds": 5.36,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/verify",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/verify",
+      "seconds": 4.79,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/verify/global-key",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/verify/global-key",
+      "seconds": 4.99,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/welcome",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/welcome",
+      "seconds": 4.93,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/why",
+      "method": "GET",
+      "status": 200,
+      "expectedStatus": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/why",
+      "seconds": 4.74,
+      "deploymentIds": [
+        "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+      ],
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "contentType": "text/html; charset=utf-8",
+      "error": false,
+      "apiBody": null
+    },
+    {
+      "route": "/api/atlas/wallet/checkout",
+      "method": "POST",
+      "status": 401,
+      "expectedStatus": 401,
+      "finalUrl": "https://www.theglobalpolymath.com/api/atlas/wallet/checkout",
+      "seconds": 4.58,
+      "deploymentIds": [],
+      "cacheControl": "private, no-store",
+      "contentType": "application/json",
+      "error": false,
+      "apiBody": "{\"error\":\"Sign in to use Atlas.\"}"
+    },
+    {
+      "route": "/api/atlas/wallet/recover",
+      "method": "POST",
+      "status": 401,
+      "expectedStatus": 401,
+      "finalUrl": "https://www.theglobalpolymath.com/api/atlas/wallet/recover",
+      "seconds": 4.85,
+      "deploymentIds": [],
+      "cacheControl": "private, no-store",
+      "contentType": "application/json",
+      "error": false,
+      "apiBody": "{\"error\":\"Sign in to use Atlas.\"}"
+    },
+    {
+      "route": "/api/atlas/chat",
+      "method": "POST",
+      "status": 401,
+      "expectedStatus": 401,
+      "finalUrl": "https://www.theglobalpolymath.com/api/atlas/chat",
+      "seconds": 5.21,
+      "deploymentIds": [],
+      "cacheControl": "private, no-store",
+      "contentType": "application/json",
+      "error": false,
+      "apiBody": "{\"error\":\"Sign in to use Atlas.\"}"
+    },
+    {
+      "route": "/api/stripe/webhook",
+      "method": "POST",
+      "status": 400,
+      "expectedStatus": 400,
+      "finalUrl": "https://www.theglobalpolymath.com/api/stripe/webhook",
+      "seconds": 4.8,
+      "deploymentIds": [],
+      "cacheControl": "public, max-age=0, must-revalidate",
+      "contentType": "application/json",
+      "error": false,
+      "apiBody": "{\"error\":\"Missing stripe-signature header.\"}"
+    }
+  ]
+}

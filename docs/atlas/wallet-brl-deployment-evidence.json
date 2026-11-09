@@ -1,0 +1,110 @@
+{
+  "checkedAt": "2026-11-09T19:56:26.082Z",
+  "commit": "7b922d7eb92f746e98e29578968539e2b2e07c46",
+  "preview": {
+    "id": "dpl_3apnhWhRkawekajNrihzqKn3mGia",
+    "url": "tgpi-next-ktb44oj6j-rwnanmatheus-ship-its-projects.vercel.app",
+    "state": "READY",
+    "checks": [
+      {
+        "path": "/pricing",
+        "keys": [
+          "success",
+          "status",
+          "statusText",
+          "text",
+          "headers"
+        ],
+        "success": true,
+        "status": 200,
+        "textLength": 242351,
+        "applicationError": false
+      },
+      {
+        "path": "/atlas/wallet",
+        "keys": [
+          "success",
+          "status",
+          "statusText",
+          "text",
+          "headers"
+        ],
+        "success": true,
+        "status": 200,
+        "textLength": 176649,
+        "applicationError": false
+      }
+    ],
+    "buildTests": [
+      {
+        "text": "\u2139 todo 0",
+        "date": 1794254059010
+      },
+      {
+        "text": "\u2139 skipped 0",
+        "date": 1794254059010
+      },
+      {
+        "text": "\u2139 cancelled 0",
+        "date": 1794254059010
+      },
+      {
+        "text": "\u2139 fail 0",
+        "date": 1794254059010
+      },
+      {
+        "text": "\u2139 pass 447",
+        "date": 1794254059010
+      },
+      {
+        "text": "\u2139 tests 447",
+        "date": 1794254059010
+      }
+    ]
+  },
+  "production": {
+    "id": "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS",
+    "url": "tgpi-next-q5qzc8ev1-rwnanmatheus-ship-its-projects.vercel.app",
+    "state": "READY",
+    "aliases": [
+      "tgpi-next.vercel.app",
+      "www.theglobalpolymath.com",
+      "theglobalpolymath.com",
+      "tgpi-next-rwnanmatheus-ship-its-projects.vercel.app",
+      "tgpi-next-git-fix-deploy-hoje-rwnanmatheus-ship-its-projects.vercel.app"
+    ]
+  },
+  "automatedTests": {
+    "passed": 447,
+    "failed": 0,
+    "scope": "Isolated automated tests and deployment build; not an authenticated Stripe/Firestore end-to-end test."
+  },
+  "activation": {
+    "atlas": false,
+    "wallet": false,
+    "fundedProviderCents": 0,
+    "dailyBudgetUsd": 0.1,
+    "verifiedProductionStripeAccount": false,
+    "reviewedTaxPolicy": false
+  },
+  "pending": [
+    "Verify and connect the production Stripe merchant account.",
+    "Define reviewed tax and service-credit commercial policy.",
+    "Validate signed payment, refund, and dispute delivery against real Clerk/Firestore with two-account isolation.",
+    "Verify deployed database rules and retention/backup policy.",
+    "Document provider capacity funded from actual available business/customer revenue before enabling Atlas."
+  ],
+  "liveTransactionsPerformed": false,
+  "productionHttp": {
+    "date": "2026-11-09T19:57:14.129325+00:00",
+    "passed": 68,
+    "failed": 0,
+    "pageResponses": 57,
+    "expectedUnauthenticatedRejections": 10,
+    "expectedUnsignedWebhookRejections": 1,
+    "observedDeploymentIds": [
+      "dpl_8fpe7T5PZMuAisqJrWbHyzo7DVMS"
+    ],
+    "scope": "Guest HTTP checks. Redirected private pages do not verify authenticated UI or purchases."
+  }
+}

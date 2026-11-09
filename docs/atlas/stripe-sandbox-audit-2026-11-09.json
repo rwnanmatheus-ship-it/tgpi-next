@@ -1,0 +1,22 @@
+{
+  "checkedAt": "2026-11-09T19:54:49.580733+00:00",
+  "scope": "Read-only audit of the Stripe account connected to this session; not proof of the account configured in Vercel.",
+  "accountId": "acct_1TsyHc5XJqIpnEvu",
+  "livemode": false,
+  "country": "BR",
+  "defaultCurrency": "brl",
+  "chargesEnabled": false,
+  "payoutsEnabled": false,
+  "detailsSubmitted": false,
+  "capabilities": {},
+  "disabledReason": "requirements.pending_verification",
+  "webhookEndpoints": {
+    "count": 0,
+    "hasMore": false
+  },
+  "userTaxDecision": "Tax treatment has not yet been defined.",
+  "mutationsPerformed": false,
+  "livePaymentTestPerformed": false,
+  "liveAccountVerified": false,
+  "activation": "Blocked. Neither tax attestation nor approved merchant ID was configured."
+}
