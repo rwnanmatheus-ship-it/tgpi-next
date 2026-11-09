@@ -1,0 +1,619 @@
+{
+  "commit": "82e4136e648052c6ff891d68eaf0fffdc8b043f4",
+  "deployment": "dpl_CQzKqDiVRqh4GwEcPp5nowtqh5L1",
+  "date": "2026-11-09T18:31:46.946108+00:00",
+  "authenticated": false,
+  "scope": "Guest HTTP checks; protected page redirects do not establish authenticated acceptance",
+  "checks": [
+    {
+      "route": "/",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/",
+      "seconds": 7.14,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/about",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/about",
+      "seconds": 7.08,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/admin",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/admin",
+      "seconds": 6.14,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/admin/learning/professional",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/admin/learning/professional",
+      "seconds": 6.08,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/admin/learning/professional/reviews",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/admin/learning/professional/reviews",
+      "seconds": 7.26,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/admin/notifications",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/admin/notifications",
+      "seconds": 7.1,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/api/atlas/status",
+      "status": 401,
+      "finalUrl": "https://www.theglobalpolymath.com/api/atlas/status",
+      "seconds": 5.06,
+      "cacheControl": "private, no-store",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": true
+    },
+    {
+      "route": "/api/billing/status",
+      "status": 401,
+      "finalUrl": "https://www.theglobalpolymath.com/api/billing/status",
+      "seconds": 4.96,
+      "cacheControl": "private, no-store, max-age=0",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": true
+    },
+    {
+      "route": "/api/learning/summary",
+      "status": 401,
+      "finalUrl": "https://www.theglobalpolymath.com/api/learning/summary",
+      "seconds": 4.08,
+      "cacheControl": "private, no-store, max-age=0",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": true
+    },
+    {
+      "route": "/api/premium/scenarios",
+      "status": 401,
+      "finalUrl": "https://www.theglobalpolymath.com/api/premium/scenarios",
+      "seconds": 3.88,
+      "cacheControl": "private, no-store",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": true
+    },
+    {
+      "route": "/api/progress",
+      "status": 401,
+      "finalUrl": "https://www.theglobalpolymath.com/api/progress",
+      "seconds": 3.82,
+      "cacheControl": "private, no-store, max-age=0",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": true
+    },
+    {
+      "route": "/api/workspace/history",
+      "status": 401,
+      "finalUrl": "https://www.theglobalpolymath.com/api/workspace/history",
+      "seconds": 3.74,
+      "cacheControl": "private, no-store",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": true
+    },
+    {
+      "route": "/atlas",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/atlas",
+      "seconds": 5.2,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/authority",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/authority",
+      "seconds": 5.37,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/billing-terms",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/billing-terms",
+      "seconds": 5.24,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/certificates",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/certificates",
+      "seconds": 5.34,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/community",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/community",
+      "seconds": 5.05,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/community/moderation",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/community/moderation",
+      "seconds": 5.4,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/compare",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/compare",
+      "seconds": 6.48,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/cookies",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/cookies",
+      "seconds": 5.16,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/countries",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/countries",
+      "seconds": 6.35,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/countries/portugal",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/countries/portugal",
+      "seconds": 5.09,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/country-fit",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/country-fit",
+      "seconds": 4.92,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/courses",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/courses",
+      "seconds": 4.75,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/courses/global-english-2026",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/courses/global-english-2026",
+      "seconds": 5.33,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/courses/ia-trabalho-global",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/courses/ia-trabalho-global",
+      "seconds": 5.14,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/dashboard",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/dashboard",
+      "seconds": 5.12,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/documents",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/documents",
+      "seconds": 5.18,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/global-key",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/global-key",
+      "seconds": 3.97,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/intelligence",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/intelligence",
+      "seconds": 3.88,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/intelligence/research",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/intelligence/research",
+      "seconds": 5.34,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/internal/country-qa",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/internal/country-qa",
+      "seconds": 5.32,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/legal",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/legal",
+      "seconds": 5.26,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/login",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/login",
+      "seconds": 5.13,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/members",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/members",
+      "seconds": 4.96,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/mobile-preview",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/mobile-preview",
+      "seconds": 5.18,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/notifications",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/notifications",
+      "seconds": 5.07,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/onboarding",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/onboarding",
+      "seconds": 5.03,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/passport",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/passport",
+      "seconds": 5.02,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/plan",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/plan",
+      "seconds": 4.8,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/premium",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/premium",
+      "seconds": 4.86,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/premium-waitlist",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/premium-waitlist",
+      "seconds": 4.93,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/premium/demo",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/premium/demo",
+      "seconds": 5.21,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": true,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/pricing",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/pricing",
+      "seconds": 5.11,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/privacy",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/privacy",
+      "seconds": 5.19,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/profile",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/profile",
+      "seconds": 5.08,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/ranking",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/ranking",
+      "seconds": 5.06,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/refunds",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/refunds",
+      "seconds": 5.03,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/resources",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/resources",
+      "seconds": 5.45,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/rooms",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/rooms",
+      "seconds": 5.36,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/showcase",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/showcase",
+      "seconds": 5.32,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/sign-in",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/sign-in",
+      "seconds": 5.32,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/sign-up",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/sign-up",
+      "seconds": 5.25,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/startup",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/startup",
+      "seconds": 5.28,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/terms",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/terms",
+      "seconds": 5.16,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/upgrade",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/upgrade",
+      "seconds": 5.07,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/upgrade-success",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/upgrade-success",
+      "seconds": 5.1,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/verify",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/verify",
+      "seconds": 5.11,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/verify/global-key",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/verify/global-key",
+      "seconds": 5.16,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/welcome",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/welcome",
+      "seconds": 5.0,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    },
+    {
+      "route": "/why",
+      "status": 200,
+      "finalUrl": "https://www.theglobalpolymath.com/why",
+      "seconds": 5.12,
+      "cacheControl": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "applicationError": false,
+      "newDemo": null,
+      "privateApiExpected401": null
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "commit": "82e4136e648052c6ff891d68eaf0fffdc8b043f4",
+  "previewChecksCommit": "74b59b856467719de167d185faf6b001545826e1",
+  "browser": "Chrome",
+  "preview": {
+    "widths": [
+      {
+        "width": 320,
+        "horizontalOverflow": false
+      },
+      {
+        "width": 360,
+        "horizontalOverflow": false
+      },
+      {
+        "width": 390,
+        "horizontalOverflow": false
+      },
+      {
+        "width": 768,
+        "horizontalOverflow": false
+      },
+      {
+        "width": 1024,
+        "horizontalOverflow": false
+      },
+      {
+        "width": 1440,
+        "horizontalOverflow": false
+      },
+      {
+        "width": 1920,
+        "horizontalOverflow": false
+      }
+    ],
+    "localeHeadings": [
+      "pt-BR",
+      "en",
+      "es",
+      "fr",
+      "de",
+      "it"
+    ],
+    "verified": [
+      "maximum three selected examples",
+      "currency mismatch hides differences",
+      "duration mismatch warning",
+      "missing costs warning"
+    ]
+  },
+  "production": {
+    "url": "https://www.theglobalpolymath.com/premium/demo",
+    "verified": [
+      "corrected example labels",
+      "Portuguese course cost and plans labels",
+      "download completed and parsed"
+    ],
+    "download": {
+      "source": "illustrative_examples",
+      "version": 1,
+      "scenarios": 2,
+      "difference": 1320
+    }
+  },
+  "limitations": [
+    "New private Premium scenario page was not retested with an authenticated production account in this wave",
+    "No live provider failure was injected into production history",
+    "Full keyboard-only and screen-reader audit not completed"
+  ]
+}

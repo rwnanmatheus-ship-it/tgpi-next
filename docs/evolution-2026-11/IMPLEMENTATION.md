@@ -24,3 +24,6 @@ Canonical sources remain: Clerk private metadata for legacy activation; Firestor
 ## Full master prompt remains open
 
 This release is not acceptance of the entire master programme. The route matrix is an inventory, not a claim of 68-page manual verification. Remaining acceptance work includes: human curriculum review, ten complete educational end-to-end journeys, all course material downloads, full six-language editorial audit, all 12 art families, durable workspace event write/reconciliation architecture, advanced Premium scenarios and exports, actual Atlas generation/budget validation, Stripe sandbox lifecycle, test accounts for every role, deployed Firestore policy verification, screen-reader testing, WebKit/Firefox matrix and measured field performance. Do not advertise any of these as completed without evidence.
+
+
+Wave 2 adds the history preparation/acknowledgement journal and Premium comparison/export. See [WAVE-2.md](WAVE-2.md) for the superseding scope, evidence, cross-provider limits and remaining programme work.
