@@ -47,3 +47,21 @@ rules. Do not enable new tracking or publish personal information for SEO.
 When the audit fails, inspect its exact page and report before editing. A valid
 noindex or redirect belongs outside the sitemap rather than being removed just
 to make checks pass. Review content with official sources before publishing.
+
+## Institutional identity and imagery
+
+Home titles and visible introductory text identify both TGPI and The Global
+Polymath Institute. Organization structured data uses the existing public legal
+page for the operator name and corporate contact; it does not assert academic
+accreditation, a physical campus, awards or guaranteed outcomes. The About page
+explains the product and links to company information.
+
+The existing crest is the organization logo. The square 512px brand icon is
+used as the favicon. Home and About editorial images are listed in the sitemap,
+with the home image also in Open Graph, Twitter and ImageObject metadata.
+Editorial scenes are conceptual imagery, not evidence of actual offices or
+students. Do not label them as company premises or documentary photography.
+
+Google can choose a different title, snippet, favicon or image. These changes
+make assets and identity easier to understand; they do not guarantee a logo,
+thumbnail, knowledge panel, sitelinks or a deadline for search-result changes.

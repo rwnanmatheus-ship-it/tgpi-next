@@ -34,15 +34,15 @@ export default function InstitutionalHome() {
     <section className={styles.hero} aria-labelledby="home-title">
       <div className={`${styles.container} ${styles.heroGrid}`}>
         <div className={styles.heroCopy}>
-          <p className={styles.eyebrow}><LocalizedText text="TGPI · Practical education for life abroad" /></p>
+          <p className={styles.eyebrow}><LocalizedText text="TGPI · The Global Polymath Institute" /></p>
           <h1 id="home-title"><LocalizedText text="Compare countries." /><br /><em><LocalizedText text="Prepare your next chapter." /></em></h1>
-          <p className={styles.heroDescription}><LocalizedText text="Explore destinations, compare your options and build practical skills for life abroad—in one connected platform." /></p>
+          <p className={styles.heroDescription}><LocalizedText text="The Global Polymath Institute (TGPI) connects practical education, country research and preparation for international life." /></p>
           <div className={styles.actions}><HomeAccountLink className={styles.primary} placement="hero" /><Link href={routes.compare} className={styles.lightLink}><LocalizedText text="See a real comparison" />{" "}<span aria-hidden="true">→</span></Link></div>
           <p className={styles.heroNote}><LocalizedText text="For your next move, your next course—or your first question." /></p>
         </div>
         <div className={styles.heroVisual}>
           <div className={styles.heroPhoto}>
-            <EditorialImage asset="hero" alt="" eager sizes="(max-width: 767px) calc(100vw - 44px), (max-width: 1023px) calc(100vw - 64px), (max-width: 1343px) 46vw, 600px" />
+            <EditorialImage asset="hero" alt="TGPI conceptual editorial image: preparing for international life" eager sizes="(max-width: 767px) calc(100vw - 44px), (max-width: 1023px) calc(100vw - 64px), (max-width: 1343px) 46vw, 600px" />
             <span className={styles.photoCaption}><LocalizedText text="Perspective begins with preparation." /></span>
           </div>
           <HomeResearchPreview />
@@ -78,7 +78,7 @@ export default function InstitutionalHome() {
 
     <section className={`${styles.container} ${styles.section}`} aria-labelledby="capabilities-title" id="capabilities" tabIndex={-1}>
       <div className={styles.sectionIntro}><p className={styles.eyebrow}><LocalizedText text="One journey, connected" /></p><h2 id="capabilities-title"><LocalizedText text="A wider view." /><br /><LocalizedText text="A clearer next step." /></h2><p><LocalizedText text="For people considering life abroad, preparing a move or building skills that travel." /></p></div>
-      <div className={styles.capabilityGrid}>{capabilities.map(item => <article className={styles.capability} key={item.number}><div className={styles.capabilityImage}><Link href={item.href}><span className="sr-only">{t(item.cta)}</span><EditorialImage asset={item.image} alt="" sizes="(max-width: 767px) calc(100vw - 44px), (max-width: 1343px) 45vw, 625px" /></Link><span aria-hidden="true">{item.number}</span></div><div className={styles.capabilityCopy}><h3><LocalizedText text={item.title} /></h3><p>{t(item.copy)}</p><Link href={item.href} className={styles.textLink}><LocalizedText text={item.cta} /><span aria-hidden="true">↗</span></Link><details className={styles.capabilityDetails}><summary><LocalizedText text="A useful first question" />{" "}<span aria-hidden="true">+</span></summary><p>{t(item.question)}</p></details></div></article>)}</div>
+      <div className={styles.capabilityGrid}>{capabilities.map(item => <article className={styles.capability} key={item.number}><div className={styles.capabilityImage}><Link href={item.href}><span className="sr-only">{t(item.cta)}</span><EditorialImage asset={item.image} alt={item.alt} sizes="(max-width: 767px) calc(100vw - 44px), (max-width: 1343px) 45vw, 625px" /></Link><span aria-hidden="true">{item.number}</span></div><div className={styles.capabilityCopy}><h3><LocalizedText text={item.title} /></h3><p>{t(item.copy)}</p><Link href={item.href} className={styles.textLink}><LocalizedText text={item.cta} /><span aria-hidden="true">↗</span></Link><details className={styles.capabilityDetails}><summary><LocalizedText text="A useful first question" />{" "}<span aria-hidden="true">+</span></summary><p>{t(item.question)}</p></details></div></article>)}</div>
       <p className={styles.connectedNote}><Link href={routes.workspace}>{t("Your Workspace brings your activity together.")}</Link>{" "}<Link href="/global-key">{t("Your Global Key connects your TGPI identity and learning records; it is a platform identity, not a government document.")}</Link></p>
     </section>
 

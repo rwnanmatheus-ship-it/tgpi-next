@@ -39,3 +39,15 @@ test("audit checks all landing pages, detects redirects and stays same-origin", 
   assert.equal(seen.some(url => url.includes("untrusted")), false);
   assert.ok(report.checks[1].issues[0].includes("307"));
 });
+test("brand identity, image discovery and structured data stay explicit", () => {
+  const home = read("src/app/page.tsx");
+  assert.ok(home.includes("TGPI | The Global Polymath Institute"));
+  assert.ok(home.includes('"max-image-preview": "large"'));
+  const schema = read("src/components/home/HomeStructuredData.tsx");
+  assert.ok(schema.includes('legalName: "TGPI GLOBAL EDUCATION LTDA"'));
+  assert.ok(schema.includes('alternateName: ["TGPI"'));
+  assert.ok(schema.includes('"@type": "ImageObject"'));
+  assert.ok(schema.includes("primaryImageOfPage"));
+  assert.ok(read("src/app/sitemap.ts").includes("images:"));
+  assert.ok(read("src/app/layout.tsx").includes('sizes: "512x512"'));
+});

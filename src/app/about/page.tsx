@@ -6,7 +6,7 @@ import AboutNavigation from "@/components/about/AboutNavigation";
 import styles from "@/components/about/about.module.css";
 
 export const metadata: Metadata = {
-  title: "About TGPI — Practical intelligence. Global possibility.",
+  title: "About TGPI | The Global Polymath Institute",
   description: "Discover The Global Polymath Institute: practical education, country intelligence and preparation for a more intentional global life.",
   alternates: { canonical: "/about" },
   openGraph: { title: "The Global Polymath Institute", description: "Understand the world. Develop your capabilities. Choose your next step.", url: "/about", images: [{ url: "/images/about/global-perspective-v2.webp", width: 1536, height: 1024, alt: "A globe overlooking a city at blue hour — TGPI conceptual editorial image" }] },
@@ -21,6 +21,15 @@ const pillars = [
 
 export default function AboutPage() {
   return <main className={styles.page}>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "AboutPage",
+      "@id": "https://www.theglobalpolymath.com/about#webpage",
+      url: "https://www.theglobalpolymath.com/about",
+      name: "About TGPI | The Global Polymath Institute",
+      mainEntity: { "@id": "https://www.theglobalpolymath.com/#organization" },
+      isPartOf: { "@id": "https://www.theglobalpolymath.com/#website" },
+    }).replace(/</g, "\\u003c") }} />
     <div className={styles.frame}>
       <section className={styles.hero} aria-labelledby="about-title">
         <Image src="/images/about/global-perspective-v2.webp" alt="A brass globe and open notebook overlooking an international city at blue hour" fill sizes="(max-width: 1280px) 100vw, 1280px" priority className={styles.heroImage} />
@@ -35,7 +44,7 @@ export default function AboutPage() {
       <AboutNavigation />
       <section id="purpose" className={`${styles.section} ${styles.purpose}`}>
         <div><p className={styles.eyebrow}>01 / Our purpose</p><h2>The world is connected.<br />Your preparation<br />should be, too.</h2></div>
-        <div className={styles.prose}><p className={styles.largeText}>A global life begins long before the departure.</p><p>It begins with understanding your options, developing useful skills and recognising what a new country will ask of you.</p><p>TGPI is being built to connect these steps. We bring country research, practical learning and personal preparation into a shared framework, so information can become understanding — and understanding can guide action.</p><div className={styles.signature}><Image src="/brand/tgpi-crest-metal-v3.webp" width={56} height={64} alt="TGPI crest" /><span><strong>TGPI</strong><br />The Global Polymath Institute</span></div></div>
+        <div className={styles.prose}><p className={styles.largeText}>The Global Polymath Institute (TGPI) is a digital education and decision-support platform.</p><p>Operated by TGPI GLOBAL EDUCATION LTDA, the platform brings together country research, practical learning and preparation for international life.</p><p>A global life begins long before departure. TGPI connects these steps. We bring country research, practical learning and personal preparation into a shared framework, so information can become understanding — and understanding can guide action.</p><p><Link href="/legal">Company information and official contact channels →</Link></p><div className={styles.signature}><Image src="/brand/tgpi-crest-metal-v3.webp" width={56} height={64} alt="TGPI crest" /><span><strong>TGPI</strong><br />The Global Polymath Institute</span></div></div>
       </section>
       <section id="framework" className={`${styles.section} ${styles.framework}`}>
         <div className={styles.sectionHeading}><div><p className={styles.eyebrow}>02 / One connected framework</p><h2>Four pillars.<br />One global perspective.</h2></div><p>Each pillar answers a different question. Together, they give your next chapter a more deliberate foundation.</p></div>

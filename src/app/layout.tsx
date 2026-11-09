@@ -49,12 +49,12 @@ const interfaceFont = Manrope({
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.theglobalpolymath.com"),
   applicationName: "TGPI",
-  title: "TGPI — Build Your Global Identity",
+  title: "TGPI | The Global Polymath Institute",
   description: "Prepare, compare and move globally with strategic clarity using TGPI — a premium education and decision system for international life.",
   keywords: ["move abroad", "global mobility", "international life", "country comparison", "cost of living", "learn languages", "global education", "international planning", "TGPI", "The Global Polymath Institute"],
   icons: {
-    icon: "/brand/tgpi-crest-metal-v3-256.png",
-    shortcut: "/brand/tgpi-crest-metal-v3-256.png",
+    icon: { url: "/pwa/icon-512.png", sizes: "512x512", type: "image/png" },
+    shortcut: "/pwa/icon-512.png",
     apple: "/pwa/apple-touch-icon.png",
   },
   manifest: "/manifest.webmanifest",
@@ -72,7 +72,7 @@ export const metadata: Metadata = {
     "mobile-web-app-capable": "yes",
   },
   openGraph: {
-    title: "TGPI — Build Your Global Identity",
+    title: "TGPI | The Global Polymath Institute",
     description: "Compare countries, build practical skills and prepare a global life with clarity.",
     url: "https://www.theglobalpolymath.com",
     siteName: "TGPI",
@@ -81,7 +81,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "TGPI — Build Your Global Identity",
+    title: "TGPI | The Global Polymath Institute",
     description: "Compare countries, build practical skills and prepare a global life with clarity.",
   },
 };

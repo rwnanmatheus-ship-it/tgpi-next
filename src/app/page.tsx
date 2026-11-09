@@ -4,9 +4,10 @@ import HomeStructuredData from "@/components/home/HomeStructuredData";
 import { HOME_FAQ } from "@/lib/home-content";
 
 export const metadata: Metadata = {
-  title: "TGPI — Compare Countries. Prepare Your Next Chapter.",
+  title: "TGPI | The Global Polymath Institute",
   description:
-    "Compare 195 country profiles, understand cost, career, lifestyle and mobility trade-offs, prepare documents and build practical skills for international life with TGPI.",
+    "The Global Polymath Institute (TGPI) connects practical education, country research and international preparation. Compare countries and plan life abroad.",
+  robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large" } },
   keywords: [
     "compare countries",
     "best country to live",
@@ -15,10 +16,11 @@ export const metadata: Metadata = {
     "country intelligence",
     "global readiness",
     "TGPI",
+    "The Global Polymath Institute",
   ],
   alternates: { canonical: "https://www.theglobalpolymath.com" },
   openGraph: {
-    title: "TGPI — Compare Countries. Prepare Your Next Chapter.",
+    title: "TGPI | The Global Polymath Institute",
     description:
       "Country intelligence, transparent comparison, document preparation and practical learning in one connected global decision system.",
     url: "https://www.theglobalpolymath.com",
@@ -30,15 +32,16 @@ export const metadata: Metadata = {
         url: "/images/home/editorial-v5/hero-desktop.webp",
         width: 1536,
         height: 1024,
-        alt: "Planning an international next chapter with TGPI",
+        alt: "TGPI conceptual editorial image: planning an international next chapter",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "TGPI — Compare Countries. Prepare Your Next Chapter.",
+    title: "TGPI | The Global Polymath Institute",
     description:
-      "Compare countries, understand trade-offs and turn international ambition into a structured plan.",
+      "Practical education, country intelligence and preparation for international life.",
+    images: ["/images/home/editorial-v5/hero-desktop.webp"],
   },
 };
 

@@ -30,6 +30,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: `${siteUrl}${route.path}`,
     changeFrequency: route.changeFrequency,
     priority: route.priority,
+    ...(route.path === "" ? { images: [
+      `${siteUrl}/images/home/editorial-v5/hero-desktop.webp`,
+      `${siteUrl}/brand/tgpi-crest-metal-v3-256.png`,
+    ] } : route.path === "/about" ? { images: [
+      `${siteUrl}/images/about/global-perspective-v2.webp`,
+      `${siteUrl}/images/about/practical-learning-v2.webp`,
+    ] } : {}),
   }));
 
   const countries: MetadataRoute.Sitemap = getAllCountrySlugs().map((slug) => ({
