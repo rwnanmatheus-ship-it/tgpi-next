@@ -60,6 +60,21 @@ export async function requireApiUser() {
   };
 }
 
+export class TgpiPremiumRequiredError extends Error {
+  readonly status = 403;
+  constructor() { super('Premium access is required.'); }
+}
+
+/** API entitlement matches the protected page and never trusts editable user metadata. */
+export async function requirePremiumApiUser() {
+  const user = await requireApiUser();
+  const [billing, controlled] = await Promise.all([
+    getUserBillingRecord(user.uid), getControlledPremiumAccessMode(user),
+  ]);
+  if (billing.plan !== 'premium' && !controlled) throw new TgpiPremiumRequiredError();
+  return user;
+}
+
 export async function requireAdmin() {
   const session = await requireUser();
   const client = await clerkClient();

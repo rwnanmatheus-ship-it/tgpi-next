@@ -69,6 +69,7 @@ const systems = [
 ] as const;
 
 const comparisons = [
+  ["Scenario analysis", "Saved worksheets and individual reports", "Cross-scenario comparison and JSON export"],
   ["Country Fit research planning", "Available", "Available"],
   ["Country comparisons", "Up to 3 countries at a time", "Up to 3 countries at a time"],
   ["Countries of interest", "Up to 5", "Up to 5"],
@@ -171,6 +172,7 @@ export default async function PricingPage({
             >
               View membership options <span aria-hidden="true">↓</span>
             </a>
+            <div className="mt-4"><Link href="/premium/demo" className="inline-flex min-h-11 items-center rounded-xl border border-[#B58A2A] px-4 py-2 text-sm font-bold text-[#0B1F3A]"><LocalizedText text="Try the scenario comparison" /> ↗</Link></div>
             <div className="relative mt-6 hidden aspect-[3/2] lg:block overflow-hidden rounded-[24px] bg-[#0B1F3A]">
               <Image
                 src="/images/pricing/tgpi-premium-global-library-v1.webp"
@@ -389,11 +391,11 @@ export default async function PricingPage({
                         scope="row"
                         className="p-5 font-semibold text-[#0B1F3A]"
                       >
-                        {feature}
+                        <LocalizedText text={feature} />
                       </th>
-                      <td className="p-5 text-[#596576]">{free}</td>
+                      <td className="p-5 text-[#596576]"><LocalizedText text={free} /></td>
                       <td className="bg-[#0B1F3A] p-5 font-semibold text-white">
-                        {premium}
+                        <LocalizedText text={premium} />
                       </td>
                     </tr>
                   ))}

@@ -7,14 +7,14 @@ import * as activation from "../src/lib/activation-progress.ts";
 // Run the real persistence function; Clerk and archive transports are isolated test doubles.
 const fixture = { id:"global-budget",version:"1",title:"Global budget",modules:[{lessons:[{id:"costs"}]}] };
 const compiled = ts.transpileModule(readFileSync(new URL("../src/lib/activation-store.server.ts",import.meta.url),"utf8"),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText;
-function server({ archiveFails = false } = {}) {
+function server({ archiveFails = false, prepareFails = false, clerkFails = false } = {}) {
   const writes=[];
   const user={privateMetadata:{tgpiBillingV1:{plan:"premium",customerId:"test-only"},tgpiActivationV1:activation.createEmptyActivationProgress()}};
-  const client={users:{getUser:async()=>user,updateUserMetadata:async(uid,input)=>{writes.push(input);Object.assign(user.privateMetadata,input.privateMetadata);return user;}}};
+  const client={users:{getUser:async()=>user,updateUserMetadata:async(uid,input)=>{if(clerkFails) throw new Error("Clerk unavailable");writes.push(input);Object.assign(user.privateMetadata,input.privateMetadata);return user;}}};
   const exports={};
   new Function("require","exports",compiled)((id)=>{
     if(id==="server-only")return {};
-    if(id==="@/lib/workspace-history.server")return {archiveWorkspaceHistory:async()=>{if(archiveFails)throw new Error("Synthetic archive outage");}};
+    if(id==="@/lib/workspace-history.server")return {prepareWorkspaceHistory:async()=>{if(prepareFails)throw new Error("Prepare unavailable");return "receipt";},commitWorkspaceHistory:async()=>{if(archiveFails)throw new Error("Synthetic archive outage");}};
     if(id==="@clerk/nextjs/server")return {clerkClient:async()=>client};
     if(id==="@/lib/activation-progress")return activation;
     if(id==="@/data/courses")return {courses:[fixture]};
@@ -48,4 +48,16 @@ test("archive outages do not discard authoritative saved progress",async()=>{
   const {exports,user}=server({archiveFails:true});
   await exports.updateUserActivationProgress("test-user",{type:"save_country",countrySlug:"portugal",saved:true});
   assert.deepEqual(user.privateMetadata.tgpiActivationV1.savedCountries,["portugal"]);
+});
+
+
+test("a preparation outage prevents an unjournaled Clerk change",async()=>{
+ const {exports,writes}=server({prepareFails:true});
+ await assert.rejects(exports.updateUserActivationProgress("test-user",{type:"save_country",countrySlug:"portugal",saved:true}),/Prepare unavailable/);
+ assert.equal(writes.length,0);
+});
+test("a failed Clerk write does not report a successful save",async()=>{
+ const {exports,writes}=server({clerkFails:true});
+ await assert.rejects(exports.updateUserActivationProgress("test-user",{type:"save_country",countrySlug:"portugal",saved:true}),/Clerk unavailable/);
+ assert.equal(writes.length,0);
 });

@@ -1,4 +1,4 @@
-import { archiveWorkspaceHistory } from '@/lib/workspace-history.server';
+import { prepareWorkspaceHistory, commitWorkspaceHistory } from '@/lib/workspace-history.server';
 import "server-only";
 
 import { clerkClient } from "@clerk/nextjs/server";
@@ -398,6 +398,7 @@ export async function updateUserActivationProgress(
     current.courseProgress[mutation.courseId]?.lastLessonId === mutation.lessonId &&
     current.courseProgress[mutation.courseId]?.courseVersion === requireCourse(mutation.courseId).version) return current;
   const progress = applyActivationMutation(current, mutation);
+  const receipt = await prepareWorkspaceHistory(userId, current, progress);
 
   await client.users.updateUserMetadata(userId, {
     privateMetadata: {
@@ -405,7 +406,7 @@ export async function updateUserActivationProgress(
     },
   });
 
-  // Progress remains authoritative in Clerk. A failed archive is retried from retained events on the next workspace load.
-  await archiveWorkspaceHistory(userId, progress).catch(() => console.error('Workspace activity archive temporarily unavailable'));
+  // The durable receipt survives an acknowledgement failure and is reconciled from source evidence.
+  if (receipt) await commitWorkspaceHistory(userId, receipt).catch(() => console.error('Workspace history acknowledgement pending'));
   return progress;
 }

@@ -1,5 +1,5 @@
 import { getUserBillingRecord } from "@/lib/billing.server";
-import { archiveWorkspaceHistory, loadWorkspaceHistory } from '@/lib/workspace-history.server';
+import { reconcileWorkspaceHistory, loadWorkspaceHistory } from '@/lib/workspace-history.server';
 import { getGlobalRankSignals } from '@/lib/global-rank-signals';
 import { getGlobalRank } from '@/lib/global-ranks';
 import { getFirestoreDocument, isLearningStorageConfigured } from '@/lib/firestore-admin-rest.server';
@@ -61,8 +61,8 @@ export default async function ProfilePage({
   const activation = normalizeActivationProgress(
     user?.privateMetadata[TGPI_ACTIVATION_METADATA_KEY],
   );
-  await archiveWorkspaceHistory(session.userId, activation).catch(() => null);
-  const historyPage = await loadWorkspaceHistory(session.userId).catch(() => ({ events: [], cursor: null, coverageStartedAt: null, available: false }));
+  await reconcileWorkspaceHistory(session.userId, activation).catch(() => null);
+  const historyPage = await loadWorkspaceHistory(session.userId).catch(() => ({ events: [], cursor: null, coverageStartedAt: null, available: false, reconciliationPending: true }));
   const [billing, learning, locale] = await Promise.all([getUserBillingRecord(session.userId), loadLearningSummary(session.userId, activation), getLocale()]);
   const projectedCourses = new Map(learning.items.map(item => [`course-${item.courseId}`, item]));
   const resources = buildWorkspaceResources(activation, courses, getAllCountries()).map(resource => {
@@ -118,6 +118,7 @@ export default async function ProfilePage({
       history={workspaceHistory({ ...activation, activities: [...historyPage.events, ...activation.activities] })}
       historyCursor={historyPage.cursor}
       historyCoverage={historyPage.coverageStartedAt}
+      historyPending={historyPage.reconciliationPending}
       historyAvailable={historyPage.available}
       preferences={normalizeWorkspacePreferences(savedPreferences.record?.data)}
       preferencesAvailable={savedPreferences.available}

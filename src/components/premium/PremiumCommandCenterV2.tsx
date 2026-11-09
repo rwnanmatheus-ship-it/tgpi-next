@@ -1,4 +1,5 @@
 import Image from "next/image";
+import PremiumScenarioLab from './PremiumScenarioLab';
 import Link from "next/link";
 import {
   getCountryImageAlt,
@@ -214,6 +215,7 @@ export default function PremiumCommandCenterV2({
 
   return (
     <main className="min-h-screen bg-[#F5F1E8] text-[#0B1F3A]">
+      <div className="px-2 sm:px-6"><PremiumScenarioLab /></div>
       <section className="border-b border-[#D8D2C4] bg-[#FFFDF8] px-4 py-8 sm:px-6 lg:py-12">
         <div className="mx-auto max-w-7xl">
           <div

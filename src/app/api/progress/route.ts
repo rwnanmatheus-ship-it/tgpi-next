@@ -2,6 +2,7 @@ import { recordFunnelEvent, requestFunnelConsent } from "@/lib/funnel.server";
 import type { FunnelEvent } from "@/lib/funnel";
 import { scheduleNotificationReconciliation } from "@/lib/notifications/schedule.server";
 import { auth } from "@clerk/nextjs/server";
+import { WorkspaceHistoryUnavailableError } from '@/lib/workspace-history.server';
 import { NextResponse } from "next/server";
 import {
   ActivationInputError,
@@ -83,6 +84,7 @@ export async function PATCH(request: Request) {
     if (error instanceof ActivationInputError) {
       return json({ error: error.message }, error.status);
     }
+    if (error instanceof WorkspaceHistoryUnavailableError) return json({ error: error.message }, 503);
 
     if (typeof error === "object" && error !== null && "status" in error && error.status === 429) {
       return json({ error: "Progress sync is temporarily busy. Wait a moment, then retry saving your checkpoint." }, 429);

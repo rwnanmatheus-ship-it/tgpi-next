@@ -7,8 +7,8 @@ import styles from './WorkspaceCommandCenter.module.css';
 import { LocalizedText, useLocale } from "@/components/localization/LocaleProvider";
 
 const names: Record<WorkspaceModule, string> = { journey: 'My journey', library: 'Personal library', history: 'My history' };
-export default function WorkspacePersonalSpace({ resources, history, initialCursor, historyCoverage, historyAvailable, initialPreferences, storageAvailable, journey, suggestions }: {
-  resources: WorkspaceResource[]; history: ActivationActivity[]; initialCursor: string | null; historyCoverage: string | null; historyAvailable: boolean; initialPreferences: WorkspacePreferences; storageAvailable: boolean; journey: ReactNode;
+export default function WorkspacePersonalSpace({ resources, history, initialCursor, historyCoverage, historyAvailable, historyPending, initialPreferences, storageAvailable, journey, suggestions }: {
+  resources: WorkspaceResource[]; history: ActivationActivity[]; initialCursor: string | null; historyCoverage: string | null; historyAvailable: boolean; historyPending: boolean; initialPreferences: WorkspacePreferences; storageAvailable: boolean; journey: ReactNode;
   suggestions: { id: string; title: string; href: string; description: string; action: string }[];
 }) {
   const { locale, t } = useLocale();
@@ -79,6 +79,7 @@ export default function WorkspacePersonalSpace({ resources, history, initialCurs
     <div id="workspace-history">{!preferences.hidden.includes('history') ? <section className={styles.panel} aria-labelledby="history-title">
       <div className={styles.sectionHeading}><div><p className={styles.eyebrow}><LocalizedText text="Recorded activity" /></p><h2 id="history-title"><LocalizedText text="My history" /></h2></div><label><LocalizedText text="Activity type" /><select value={filter} onChange={e => { setFilter(e.target.value); setPage(1); }}><option value="all"><LocalizedText text="All activity" /></option><option value="course"><LocalizedText text="Learning" /></option><option value="comparison"><LocalizedText text="Comparisons" /></option><option value="saved_country"><LocalizedText text="Countries" /></option><option value="documents"><LocalizedText text="Preparation" /></option><option value="cost"><LocalizedText text="Budget research" /></option></select></label></div>
       <p>{historyAvailable ? historyCoverage ? t('Archive since {date}. Earlier source-backed records may be included. Filters apply to loaded events.', { date: historyDate.format(new Date(historyCoverage)) }) : t('Recorded activity') : t('The archive is unavailable. Showing up to six retained recent events from your progress store.')}</p>
+      {historyPending && <p role="status">{t("Some activity is awaiting confirmation. Pending records are preserved and are not shown as completed actions.")}</p>}
       <ol className={styles.timeline}>{events.slice(0, page * 3).map(e => <li key={e.id}><span className={styles.dot} aria-hidden="true" /><div><span className={styles.eyebrow}>{e.type.replace('_',' ')}</span><Link href={e.href}>{e.title} ↗</Link><time dateTime={e.occurredAt}>{historyDate.format(new Date(e.occurredAt))} · UTC</time></div></li>)}</ol>
       {!events.length && <p><LocalizedText text="No matching activity in the loaded records. Load earlier activity or choose another category." /></p>}
       {events.length > page * 3 && <button className={styles.quiet} onClick={() => setPage(page + 1)}><LocalizedText text="Show more loaded activity" /></button>}

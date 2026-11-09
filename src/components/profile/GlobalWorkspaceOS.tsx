@@ -26,13 +26,13 @@ type Props = {
   learning: LearningSummary;
   identity: { avatarUrl: string; firstName: string; fullName: string; globalId: string; headline: string; membership: string; profileCompletion: number; publicProfileUrl: string; handle?: string };
   model: GlobalWorkspaceModel; onboardingCompleted?: boolean; rank: GlobalRank;
-  userId: string; resources: WorkspaceResource[]; history: ActivationActivity[]; historyCursor: string | null; historyCoverage: string | null; historyAvailable: boolean; preferences: WorkspacePreferences; preferencesAvailable: boolean;
+  userId: string; resources: WorkspaceResource[]; history: ActivationActivity[]; historyCursor: string | null; historyCoverage: string | null; historyAvailable: boolean; historyPending: boolean; preferences: WorkspacePreferences; preferencesAvailable: boolean;
 };
 const labels = { completed: 'Completed', in_progress: 'In progress', needs_attention: 'Needs context', not_started: 'Not started' };
 function Progress({ value, label }: { value: number; label: string }) {
   return <div className={styles.progress}><progress max={100} value={value} aria-label={label} /><span>{value}%</span></div>;
 }
-export default async function GlobalWorkspaceOS({ learning, identity, model, onboardingCompleted, rank, userId, resources, history, historyCursor, historyCoverage, historyAvailable, preferences, preferencesAvailable }: Props) {
+export default async function GlobalWorkspaceOS({ learning, identity, model, onboardingCompleted, rank, userId, resources, history, historyCursor, historyCoverage, historyAvailable, historyPending, preferences, preferencesAvailable }: Props) {
   const locale = await getLocale();
   const t = (key: string, values?: Record<string, string | number>) => translate(locale, key, values);
   const suggestions = [...model.actions].filter(a => a.status !== 'completed').sort((a,b) => Number(b.status === 'in_progress') - Number(a.status === 'in_progress'));
@@ -64,7 +64,7 @@ export default async function GlobalWorkspaceOS({ learning, identity, model, onb
       <div id="workspace-now" className={styles.stats}>{stats.map(s => <Link href={s.href} key={s.title}><span>{t(s.title)}</span><strong>{t(s.value)}</strong><small>{t(s.detail)} ↗</small></Link>)}</div>
       <div className={styles.layout}><div>
         <ContinueLearning initial={learning} initialUid={userId} />
-        <CommunityConnections /><WorkspacePersonalSpace resources={resources} history={history} initialCursor={historyCursor} historyCoverage={historyCoverage} historyAvailable={historyAvailable} initialPreferences={preferences} storageAvailable={preferencesAvailable} journey={journey} suggestions={suggestions} />
+        <CommunityConnections /><WorkspacePersonalSpace resources={resources} history={history} initialCursor={historyCursor} historyCoverage={historyCoverage} historyAvailable={historyAvailable} historyPending={historyPending} initialPreferences={preferences} storageAvailable={preferencesAvailable} journey={journey} suggestions={suggestions} />
       </div><aside className={styles.aside} aria-label={t("Connected resources")}>
         <section className={styles.panel}><p className={styles.eyebrow}><LocalizedText text="Country Fit / live research" /></p><h2><LocalizedText text="Your priorities. The evidence." /></h2><p><LocalizedText text="Your saved shortlist is a personal choice, not a ranked compatibility result. Country Fit evaluates your context against country evidence when you open it." /></p>{model.countryFits.length ? <div className={styles.countryList}>{model.countryFits.map(fit => <Link key={fit.country.slug} href={`/country-fit?country=${fit.country.slug}`}><span>{fit.country.emoji} {fit.country.name}</span><span aria-hidden="true">↗</span></Link>)}</div> : <p><LocalizedText text="No destinations supplied yet." /></p>}<details className={styles.calculation}><summary><LocalizedText text="Preferences and analysis coverage" /></summary><p>{model.planSummary.find(s => s.label === 'Priorities')?.value}</p><p><LocalizedText text="No previous fit score or analysis timestamp is persisted by the current Country Fit service. Open it to review current evidence after changing your preferences." /></p></details><Link href="/country-fit"><LocalizedText text="Open Country Fit ↗" /></Link></section>
         <Suspense fallback={<section className={`${styles.panel} ${styles.skeleton}`} aria-busy="true"><h2><LocalizedText text="Loading certificates…" /></h2></section>}><WorkspaceCertificates userId={userId} /></Suspense>
