@@ -1,6 +1,8 @@
 import type { Locale } from "./config";
 
 export const messages = {
+  "This page is unavailable.": {"en":"This page is unavailable.","pt-BR":"Esta página não está disponível.","es":"Esta página no está disponible.","fr":"Cette page n’est pas disponible.","de":"Diese Seite ist nicht verfügbar.","it":"Questa pagina non è disponibile."},
+  "The address may have changed, or this page is not available. Choose a destination below.": {"en":"The address may have changed, or this page is not available. Choose a destination below.","pt-BR":"O endereço pode ter mudado ou a página não estar disponível. Escolha um destino abaixo.","es":"La dirección puede haber cambiado o la página no estar disponible. Elige un destino a continuación.","fr":"L’adresse a peut-être changé ou la page n’est pas disponible. Choisissez une destination ci-dessous.","de":"Die Adresse hat sich möglicherweise geändert oder die Seite ist nicht verfügbar. Wähle unten ein Ziel.","it":"L’indirizzo potrebbe essere cambiato o la pagina non essere disponibile. Scegli una destinazione qui sotto."},
   "{count} destination": {"en":"{count} destination","pt-BR":"{count} destino","es":"{count} destino","fr":"{count} destination","de":"{count} Ziel","it":"{count} destinazione"},
   "Americas": {"en":"Americas","pt-BR":"Américas","es":"Américas","fr":"Amériques","de":"Amerika","it":"Americhe"},
   "Your decisions, progress and global identity.": {"en":"Your decisions, progress and global identity.","pt-BR":"Suas decisões, progresso e identidade global.","es":"Tus decisiones, progreso e identidad global.","fr":"Vos décisions, progrès et identité mondiale.","de":"Deine Entscheidungen, Fortschritte und globale Identität.","it":"Le tue decisioni, i progressi e l’identità globale."},

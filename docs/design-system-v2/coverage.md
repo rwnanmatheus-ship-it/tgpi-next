@@ -13,9 +13,9 @@ Widths checked: 320, 360, 390, 430, 768, 1024, 1440 and 1920 CSS pixels. All mea
 | Country Fit | Tokens, shell and form surfaces | Eight widths; public planner rendered |
 | Courses | Cards, density, typography | Eight widths; 390 capture; unmatched search renders localized empty state |
 | Course detail | Shared materials and controls | Global English at eight widths |
-| Study | Focused navigation and shared tokens | Source/test verification only; authenticated lesson and assessment interactions remain outstanding |
-| Workspace/profile | Operational typography and materials | Authentication gate checked; personalized content remains outstanding |
-| Atlas/wallet | Navy materials, legibility and controls | Authentication gate checked at 390; conversation and financial states remain outstanding |
+| Study | Focused navigation and shared tokens | Professional Study initial diagnostic rendered at 390 in production; mobile dock suppressed; enrollment and assessments not submitted |
+| Workspace/profile | Operational typography and materials | Authenticated Workspace rendered at eight widths in production; no profile mutation performed |
+| Atlas/wallet | Navy materials, legibility and controls | Authenticated Atlas preview rendered at eight widths in production; this account has sending disabled; conversation and financial mutations not exercised |
 | Pricing | Palette, typography and surfaces | Eight widths; subscription/checkout behavior not exercised |
 | Premium | Shared materials and primitives | Membership states remain outstanding |
 | Community | Compact hero, institutional surfaces | Eight widths; 390 capture; posting/moderation not exercised |
@@ -35,3 +35,10 @@ Widths checked: 320, 360, 390, 430, 768, 1024, 1440 and 1920 CSS pixels. All mea
 - Some existing research and community copy remains in its original language. The command descriptions and country exploration controls added in this release have all six locale values.
 - Screenshots are representative observations, not exhaustive state coverage. The baseline Home and after Home are at the same 1440 px viewport; the after capture includes the pre-existing install prompt.
 - Preview authentication and production authentication are separate environments. No payment, identity mutation or privileged action was performed for visual QA.
+
+## Production follow-up
+
+- Production deployment `dpl_7ioSPDQC59AS6VmXZev8uGvDf4ns` reached READY and both official domains were assigned. The Canada sample and linked Portugal/Canada comparison were exercised on the official domain.
+- Existing production session enabled read-only Workspace and Atlas checks; aggregate dimensions are in `production-metrics.json`. Private account screenshots were not added to this repository.
+- Runtime error/fatal query on that deployment returned no matching records during the verification window. This is a sampled observation, not an uptime guarantee.
+- The Global English `/study` URL is not a valid professional-study route. Its 404 exposed a low-contrast inherited fallback. A shared, localized `MissingPage` now handles root and country 404 states with canonical materials and recovery links. The valid professional-study page was inspected without enrollment or assessment submission.

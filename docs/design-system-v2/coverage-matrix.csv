@@ -47,14 +47,14 @@ route_template,width,source_migration,default,focus,loading,empty,error,disabled
 /admin/notifications,1024,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /admin/notifications,1440,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /admin/notifications,1920,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
-/atlas,320,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
-/atlas,360,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
-/atlas,390,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
-/atlas,430,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
-/atlas,768,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
-/atlas,1024,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
-/atlas,1440,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
-/atlas,1920,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
+/atlas,320,shared tokens/shell,authenticated layout measured in production,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
+/atlas,360,shared tokens/shell,authenticated layout measured in production,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
+/atlas,390,shared tokens/shell,authenticated layout measured in production,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
+/atlas,430,shared tokens/shell,authenticated layout measured in production,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
+/atlas,768,shared tokens/shell,authenticated layout measured in production,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
+/atlas,1024,shared tokens/shell,authenticated layout measured in production,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
+/atlas,1440,shared tokens/shell,authenticated layout measured in production,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
+/atlas,1920,shared tokens/shell,authenticated layout measured in production,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /atlas/wallet,320,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /atlas/wallet,360,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /atlas/wallet,390,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
@@ -217,7 +217,7 @@ route_template,width,source_migration,default,focus,loading,empty,error,disabled
 /courses/[id]/lessons/[lessonId],1920,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /courses/[id]/study,320,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /courses/[id]/study,360,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
-/courses/[id]/study,390,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
+/courses/[id]/study,390,shared tokens/shell,initial diagnostic rendered in production,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,No enrollment or assessment submission
 /courses/[id]/study,430,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /courses/[id]/study,768,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /courses/[id]/study,1024,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
@@ -399,14 +399,14 @@ route_template,width,source_migration,default,focus,loading,empty,error,disabled
 /privacy,1024,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /privacy,1440,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /privacy,1920,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
-/profile,320,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
-/profile,360,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
-/profile,390,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
-/profile,430,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
-/profile,768,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
-/profile,1024,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
-/profile,1440,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
-/profile,1920,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
+/profile,320,shared tokens/shell,authenticated layout measured in production,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
+/profile,360,shared tokens/shell,authenticated layout measured in production,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
+/profile,390,shared tokens/shell,authenticated layout measured in production,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
+/profile,430,shared tokens/shell,authenticated layout measured in production,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
+/profile,768,shared tokens/shell,authenticated layout measured in production,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
+/profile,1024,shared tokens/shell,authenticated layout measured in production,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
+/profile,1440,shared tokens/shell,authenticated layout measured in production,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
+/profile,1920,shared tokens/shell,authenticated layout measured in production,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /profile/security/[[...user-profile]],320,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /profile/security/[[...user-profile]],360,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
 /profile/security/[[...user-profile]],390,shared tokens/shell,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,not exercised,Source migration does not certify every state
