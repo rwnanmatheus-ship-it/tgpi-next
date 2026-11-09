@@ -17,3 +17,8 @@
 .header>.actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
 .header>.actions>:first-child{grid-column:1/-1;width:100%;max-width:none}
 @container(max-width:300px){.header>.actions{grid-template-columns:minmax(0,1fr)}}
+
+/* Operational density: the active goal and continuation precede secondary context. */
+.header h1,.heroContent h2{font-family:var(--font-tgpi-sans),sans-serif;font-weight:700}.header h1{font-size:clamp(26px,2.5vw,36px)}.heroContent h2{font-size:clamp(23px,2.3vw,32px)}.hero{padding:24px;grid-template-columns:minmax(0,1fr) 170px}.identityLine{margin-bottom:12px}.heroContext{padding:16px}.heroContext>strong{font-size:30px}.heroContent .actions{margin-top:16px}.stats>a{padding:14px 18px}.stats strong{font-size:25px;margin:5px 0}.panel{padding:20px}.layout{grid-template-columns:minmax(0,1fr) 270px}
+@media(max-width:1350px){.layout{grid-template-columns:minmax(0,1fr)}.aside{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:767px){.hero{padding:20px;grid-template-columns:minmax(0,1fr)}.aside{grid-template-columns:minmax(0,1fr)}.stats>a{padding:12px}.header{margin-bottom:16px}}

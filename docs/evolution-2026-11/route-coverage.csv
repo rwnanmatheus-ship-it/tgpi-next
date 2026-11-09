@@ -1,0 +1,125 @@
+Route,Type,Source,Review,Acceptance
+/about,page,src/app/about/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/admin/learning/professional,page,src/app/admin/learning/professional/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/admin/learning/professional/reviews,page,src/app/admin/learning/professional/reviews/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/admin/notifications,page,src/app/admin/notifications/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/admin,page,src/app/admin/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/atlas,page,src/app/atlas/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/authority,page,src/app/authority/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/billing-terms,page,src/app/billing-terms/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/certificate/[id],page,src/app/certificate/[id]/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/certificates/[id],page,src/app/certificates/[id]/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/certificates,page,src/app/certificates/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/community/[slug],page,src/app/community/[slug]/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/community/moderation,page,src/app/community/moderation/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/community,page,src/app/community/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/compare,page,src/app/compare/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/cookies,page,src/app/cookies/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/countries/[slug],page,src/app/countries/[slug]/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/countries,page,src/app/countries/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/country-fit,page,src/app/country-fit/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/courses/[id]/certification/[assessmentId],page,src/app/courses/[id]/certification/[assessmentId]/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/courses/[id]/certification,page,src/app/courses/[id]/certification/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/courses/[id]/lessons/[lessonId],page,src/app/courses/[id]/lessons/[lessonId]/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/courses/[id],page,src/app/courses/[id]/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/courses/[id]/study,page,src/app/courses/[id]/study/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/courses,page,src/app/courses/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/dashboard,page,src/app/dashboard/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/documents,page,src/app/documents/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/global-key,page,src/app/global-key/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/intelligence,page,src/app/intelligence/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/intelligence/research,page,src/app/intelligence/research/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/internal/country-qa,page,src/app/internal/country-qa/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/legal,page,src/app/legal/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/login,page,src/app/login/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/member/[userId],page,src/app/member/[userId]/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/members,page,src/app/members/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/mobile-preview,page,src/app/mobile-preview/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/notifications,page,src/app/notifications/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/onboarding,page,src/app/onboarding/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/p/[username],page,src/app/p/[username]/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/,page,src/app/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/passport,page,src/app/passport/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/plan,page,src/app/plan/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/premium,page,src/app/premium/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/premium-waitlist,page,src/app/premium-waitlist/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/pricing,page,src/app/pricing/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/privacy,page,src/app/privacy/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/profile,page,src/app/profile/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/profile/security/[[...user-profile]],page,src/app/profile/security/[[...user-profile]]/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/ranking,page,src/app/ranking/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/refunds,page,src/app/refunds/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/resources,page,src/app/resources/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/rooms/[slug],page,src/app/rooms/[slug]/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/rooms,page,src/app/rooms/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/showcase,page,src/app/showcase/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/sign-in/[[...sign-in]],page,src/app/sign-in/[[...sign-in]]/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/sign-up/[[...sign-up]],page,src/app/sign-up/[[...sign-up]]/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/startup,page,src/app/startup/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/terms,page,src/app/terms/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/u/[uid],page,src/app/u/[uid]/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/upgrade,page,src/app/upgrade/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/upgrade-success,page,src/app/upgrade-success/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/user/[username],page,src/app/user/[username]/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/verify/[id],page,src/app/verify/[id]/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/verify/credentials/[id],page,src/app/verify/credentials/[id]/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/verify/global-key,page,src/app/verify/global-key/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/verify,page,src/app/verify/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/welcome,page,src/app/welcome/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/why,page,src/app/why/page.tsx,Static inventory; shared shell where applicable,Pending full route acceptance
+/api/account-data,api,src/app/api/account-data/route.ts,Existing contract retained,Not end-to-end verified
+/api/account-profile,api,src/app/api/account-profile/route.ts,Existing contract retained,Not end-to-end verified
+/api/admin/learning/professional/lifecycle,api,src/app/api/admin/learning/professional/lifecycle/route.ts,Existing contract retained,Not end-to-end verified
+/api/admin/learning/professional,api,src/app/api/admin/learning/professional/route.ts,Existing contract retained,Not end-to-end verified
+/api/admin/notifications,api,src/app/api/admin/notifications/route.ts,Existing contract retained,Not end-to-end verified
+/api/analytics/funnel,api,src/app/api/analytics/funnel/route.ts,Existing contract retained,Not end-to-end verified
+/api/atlas/chat,api,src/app/api/atlas/chat/route.ts,Existing contract retained,Not end-to-end verified
+/api/atlas/conversations/[id],api,src/app/api/atlas/conversations/[id]/route.ts,Existing contract retained,Not end-to-end verified
+/api/atlas/conversations,api,src/app/api/atlas/conversations/route.ts,Existing contract retained,Not end-to-end verified
+/api/atlas/status,api,src/app/api/atlas/status/route.ts,Existing contract retained,Not end-to-end verified
+/api/billing/status,api,src/app/api/billing/status/route.ts,Existing contract retained,Not end-to-end verified
+/api/community/assets/[community]/[asset],api,src/app/api/community/assets/[community]/[asset]/route.ts,Existing contract retained,Not end-to-end verified
+/api/community/assets,api,src/app/api/community/assets/route.ts,Existing contract retained,Not end-to-end verified
+/api/community/operations,api,src/app/api/community/operations/route.ts,Existing contract retained,Not end-to-end verified
+/api/community/privacy,api,src/app/api/community/privacy/route.ts,Existing contract retained,Not end-to-end verified
+/api/community,api,src/app/api/community/route.ts,Existing contract retained,Not end-to-end verified
+/api/community/status,api,src/app/api/community/status/route.ts,Existing contract retained,Not end-to-end verified
+/api/credentials/[id]/pdf,api,src/app/api/credentials/[id]/pdf/route.ts,Existing contract retained,Not end-to-end verified
+/api/credentials/[id],api,src/app/api/credentials/[id]/route.ts,Existing contract retained,Not end-to-end verified
+/api/cron/community-maintenance,api,src/app/api/cron/community-maintenance/route.ts,Existing contract retained,Not end-to-end verified
+/api/cron/global-key-anchor,api,src/app/api/cron/global-key-anchor/route.ts,Existing contract retained,Not end-to-end verified
+/api/intelligence/plan,api,src/app/api/intelligence/plan/route.ts,Existing contract retained,Not end-to-end verified
+/api/intelligence/report,api,src/app/api/intelligence/report/route.ts,Existing contract retained,Not end-to-end verified
+/api/intelligence,api,src/app/api/intelligence/route.ts,Existing contract retained,Not end-to-end verified
+/api/intelligence/satellite,api,src/app/api/intelligence/satellite/route.ts,Existing contract retained,Not end-to-end verified
+/api/intelligence/scenarios,api,src/app/api/intelligence/scenarios/route.ts,Existing contract retained,Not end-to-end verified
+/api/intelligence/sources/[country],api,src/app/api/intelligence/sources/[country]/route.ts,Existing contract retained,Not end-to-end verified
+/api/intelligence/sources,api,src/app/api/intelligence/sources/route.ts,Existing contract retained,Not end-to-end verified
+/api/intelligence/worksheet,api,src/app/api/intelligence/worksheet/route.ts,Existing contract retained,Not end-to-end verified
+/api/learning/assessments/[assessmentId],api,src/app/api/learning/assessments/[assessmentId]/route.ts,Existing contract retained,Not end-to-end verified
+/api/learning/credentials/issue,api,src/app/api/learning/credentials/issue/route.ts,Existing contract retained,Not end-to-end verified
+/api/learning/professional/[courseId]/audio,api,src/app/api/learning/professional/[courseId]/audio/route.ts,Existing contract retained,Not end-to-end verified
+/api/learning/professional/[courseId]/files,api,src/app/api/learning/professional/[courseId]/files/route.ts,Existing contract retained,Not end-to-end verified
+/api/learning/professional/[courseId]/materials,api,src/app/api/learning/professional/[courseId]/materials/route.ts,Existing contract retained,Not end-to-end verified
+/api/learning/professional/[courseId],api,src/app/api/learning/professional/[courseId]/route.ts,Existing contract retained,Not end-to-end verified
+/api/learning/professional-audio/[ownerUid]/[audioId],api,src/app/api/learning/professional-audio/[ownerUid]/[audioId]/route.ts,Existing contract retained,Not end-to-end verified
+/api/learning/professional-files/[ownerUid]/[fileId],api,src/app/api/learning/professional-files/[ownerUid]/[fileId]/route.ts,Existing contract retained,Not end-to-end verified
+/api/learning/status,api,src/app/api/learning/status/route.ts,Existing contract retained,Not end-to-end verified
+/api/learning/summary,api,src/app/api/learning/summary/route.ts,Authenticated read-only summary; 8 new regression tests,Unit/integration harness passed; runtime pending
+/api/member-export,api,src/app/api/member-export/route.ts,Existing contract retained,Not end-to-end verified
+/api/member-identity,api,src/app/api/member-identity/route.ts,Existing contract retained,Not end-to-end verified
+/api/members,api,src/app/api/members/route.ts,Existing contract retained,Not end-to-end verified
+/api/mobile/countries,api,src/app/api/mobile/countries/route.ts,Existing contract retained,Not end-to-end verified
+/api/notifications,api,src/app/api/notifications/route.ts,Existing contract retained,Not end-to-end verified
+/api/notifications/sync,api,src/app/api/notifications/sync/route.ts,Existing contract retained,Not end-to-end verified
+/api/onboarding,api,src/app/api/onboarding/route.ts,Existing contract retained,Not end-to-end verified
+/api/preferences/locale,api,src/app/api/preferences/locale/route.ts,Existing contract retained,Not end-to-end verified
+/api/progress,api,src/app/api/progress/route.ts,Existing contract retained,Not end-to-end verified
+/api/registration,api,src/app/api/registration/route.ts,Existing contract retained,Not end-to-end verified
+/api/stripe/checkout-session,api,src/app/api/stripe/checkout-session/route.ts,Existing contract retained,Not end-to-end verified
+/api/stripe/create-checkout-session,api,src/app/api/stripe/create-checkout-session/route.ts,Existing contract retained,Not end-to-end verified
+/api/stripe/create-portal-session,api,src/app/api/stripe/create-portal-session/route.ts,Existing contract retained,Not end-to-end verified
+/api/stripe/webhook,api,src/app/api/stripe/webhook/route.ts,Existing contract retained,Not end-to-end verified
+/api/webhooks/clerk,api,src/app/api/webhooks/clerk/route.ts,Existing contract retained,Not end-to-end verified
+/api/workspace/history,api,src/app/api/workspace/history/route.ts,Existing contract retained,Not end-to-end verified
+/api/workspace/preferences,api,src/app/api/workspace/preferences/route.ts,Existing contract retained,Not end-to-end verified

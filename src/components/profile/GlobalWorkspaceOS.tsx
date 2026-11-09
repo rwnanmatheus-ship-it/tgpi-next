@@ -17,10 +17,13 @@ import NavigationIcon from '@/components/navigation/NavigationIcon';
 import { SUPER_APP_MODULES } from '@/lib/super-app';
 import { getSuperAppIconName } from '@/lib/navigation-system';
 import styles from './WorkspaceCommandCenter.module.css';
+import ContinueLearning from '@/components/courses/ContinueLearning';
+import type { LearningSummary } from '@/lib/learning/unified-progress';
 import { LocalizedText } from "@/components/localization/LocaleProvider";
 
 
 type Props = {
+  learning: LearningSummary;
   identity: { avatarUrl: string; firstName: string; fullName: string; globalId: string; headline: string; membership: string; profileCompletion: number; publicProfileUrl: string; handle?: string };
   model: GlobalWorkspaceModel; onboardingCompleted?: boolean; rank: GlobalRank;
   userId: string; resources: WorkspaceResource[]; history: ActivationActivity[]; historyCursor: string | null; historyCoverage: string | null; historyAvailable: boolean; preferences: WorkspacePreferences; preferencesAvailable: boolean;
@@ -29,10 +32,9 @@ const labels = { completed: 'Completed', in_progress: 'In progress', needs_atten
 function Progress({ value, label }: { value: number; label: string }) {
   return <div className={styles.progress}><progress max={100} value={value} aria-label={label} /><span>{value}%</span></div>;
 }
-export default async function GlobalWorkspaceOS({ identity, model, onboardingCompleted, rank, userId, resources, history, historyCursor, historyCoverage, historyAvailable, preferences, preferencesAvailable }: Props) {
+export default async function GlobalWorkspaceOS({ learning, identity, model, onboardingCompleted, rank, userId, resources, history, historyCursor, historyCoverage, historyAvailable, preferences, preferencesAvailable }: Props) {
   const locale = await getLocale();
   const t = (key: string, values?: Record<string, string | number>) => translate(locale, key, values);
-  const inProgress = model.actions.filter(a => a.status === 'in_progress');
   const suggestions = [...model.actions].filter(a => a.status !== 'completed').sort((a,b) => Number(b.status === 'in_progress') - Number(a.status === 'in_progress'));
   const resume = resources.find(r => r.kind === 'course' && r.status === 'in_progress') ?? resources.find(r => r.kind === 'documents' && r.status === 'in_progress');
   const primary = resume ? { href: resume.href, action: 'Continue where you left off' } : suggestions[0];
@@ -61,7 +63,7 @@ export default async function GlobalWorkspaceOS({ identity, model, onboardingCom
       <nav className={styles.localNav} aria-label={t("Workspace sections")}><a href="#workspace-now"><LocalizedText text="Now" /></a><a href="#workspace-journey"><LocalizedText text="My journey" /></a><a href="#workspace-library"><LocalizedText text="My library" /></a><a href="#workspace-history"><LocalizedText text="My history" /></a></nav>
       <div id="workspace-now" className={styles.stats}>{stats.map(s => <Link href={s.href} key={s.title}><span>{t(s.title)}</span><strong>{t(s.value)}</strong><small>{t(s.detail)} ↗</small></Link>)}</div>
       <div className={styles.layout}><div>
-        <section className={styles.panel} aria-labelledby="resume-title"><div className={styles.sectionHeading}><div><p className={styles.eyebrow}>{t("Now / {count} activities in progress", { count: inProgress.length })}</p><h2 id="resume-title"><LocalizedText text="Continue with context." /></h2></div><Link href="/courses"><LocalizedText text="All learning ↗" /></Link></div>{resume ? <Link className={styles.resume} href={resume.href}><span><strong>{t(resume.title)}</strong><span>{t(resume.detail)}</span><span><LocalizedText text="Resume at the recorded lesson or checklist." /></span></span><span aria-hidden="true">↗</span></Link> : <div className={styles.empty}><h3><LocalizedText text="No activity to resume yet." /></h3><p><LocalizedText text="Start a learning path or save a checklist. Your next visit will connect to that record." /></p><Link href="/courses"><LocalizedText text="Find a learning path ↗" /></Link></div>}</section>
+        <ContinueLearning initial={learning} initialUid={userId} />
         <CommunityConnections /><WorkspacePersonalSpace resources={resources} history={history} initialCursor={historyCursor} historyCoverage={historyCoverage} historyAvailable={historyAvailable} initialPreferences={preferences} storageAvailable={preferencesAvailable} journey={journey} suggestions={suggestions} />
       </div><aside className={styles.aside} aria-label={t("Connected resources")}>
         <section className={styles.panel}><p className={styles.eyebrow}><LocalizedText text="Country Fit / live research" /></p><h2><LocalizedText text="Your priorities. The evidence." /></h2><p><LocalizedText text="Your saved shortlist is a personal choice, not a ranked compatibility result. Country Fit evaluates your context against country evidence when you open it." /></p>{model.countryFits.length ? <div className={styles.countryList}>{model.countryFits.map(fit => <Link key={fit.country.slug} href={`/country-fit?country=${fit.country.slug}`}><span>{fit.country.emoji} {fit.country.name}</span><span aria-hidden="true">↗</span></Link>)}</div> : <p><LocalizedText text="No destinations supplied yet." /></p>}<details className={styles.calculation}><summary><LocalizedText text="Preferences and analysis coverage" /></summary><p>{model.planSummary.find(s => s.label === 'Priorities')?.value}</p><p><LocalizedText text="No previous fit score or analysis timestamp is persisted by the current Country Fit service. Open it to review current evidence after changing your preferences." /></p></details><Link href="/country-fit"><LocalizedText text="Open Country Fit ↗" /></Link></section>

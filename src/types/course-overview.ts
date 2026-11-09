@@ -7,6 +7,7 @@ export type CourseGoal =
 export type CourseSeries = "First 30 Days" | "Career Without Borders" | "The Intelligence Toolkit" | "The Global Money Series";
 
 export interface CourseOverview {
+  learningPolicy?: import('../lib/learning/catalog-policy').CourseLearningPolicy;
   series?: CourseSeries;
   seriesOrder?: number;
   audience: string;

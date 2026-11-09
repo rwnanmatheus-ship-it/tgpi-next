@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import Link from "next/link";
 import type { ReactNode } from "react";
 
@@ -23,10 +24,10 @@ export default function AreaHero({ id, eyebrow, title, description, image = "/im
         <Image src={image} alt="" fill priority sizes="(max-width: 767px) 100vw, 70vw" className="object-cover" />
       </div>
       <div className="tgpi-area-hero-content">
-        <p className="tgpi-area-eyebrow">{eyebrow}</p>
+        <p className="tgpi-area-eyebrow"><LocalizedText text={eyebrow} /></p>
         <Heading id={id}>{title}</Heading>
-        <p className="tgpi-area-description">{description}</p>
-        {actions.length ? <div className="tgpi-area-actions">{actions.map((action, index) => <Link key={action.href} href={action.href} className={index === 0 ? "tgpi-area-primary" : "tgpi-area-secondary"}>{action.label}<span aria-hidden="true">↗</span></Link>)}</div> : null}
+        <p className="tgpi-area-description"><LocalizedText text={description} /></p>
+        {actions.length ? <div className="tgpi-area-actions">{actions.map((action, index) => <Link key={action.href} href={action.href} className={index === 0 ? "tgpi-area-primary" : "tgpi-area-secondary"}><LocalizedText text={action.label} /><span aria-hidden="true">↗</span></Link>)}</div> : null}
         {children}
       </div>
     </header>

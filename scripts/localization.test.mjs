@@ -390,7 +390,7 @@ test('workspace server presentation follows locale and preserves private identit
   const React = await import('react'), runtime = await import('react/jsx-runtime');
   const { renderToStaticMarkup } = await import('react-dom/server');
   const code = ts.transpileModule(fs.readFileSync('src/components/profile/GlobalWorkspaceOS.tsx', 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX, esModuleInterop: true } }).outputText;
-  const props = { identity: { fullName: 'Test <Learner>', membership: 'TGPI Free', profileCompletion: 0, globalId: 'TGPI-TEST', publicProfileUrl: '/member/TGPI-TEST' }, model: { actions: [], activationStats: [], journey: [], progress: [], planSummary: [], goalLabel: 'Goal not defined', completion: 0, countryFits: [] }, rank: { name: 'Pathfinder', points: 0 }, resources: [], history: [], preferences: {}, userId: 'synthetic-render-only' };
+  const props = { identity: { fullName: 'Test <Learner>', membership: 'TGPI Free', profileCompletion: 0, globalId: 'TGPI-TEST', publicProfileUrl: '/member/TGPI-TEST' }, model: { actions: [], activationStats: [], journey: [], progress: [], planSummary: [], goalLabel: 'Goal not defined', completion: 0, countryFits: [] }, rank: { name: 'Pathfinder', points: 0 }, resources: [], history: [], preferences: {}, userId: 'synthetic-render-only', learning: { items: [], unavailable: [] } };
   for (const locale of locales) {
     const exports = {}, t = (key, values) => translate(locale, key, values);
     new Function('require', 'exports', code)(name => {
@@ -405,6 +405,20 @@ test('workspace server presentation follows locale and preserves private identit
       if (name === '@/lib/navigation-system') return { getSuperAppIconName: () => 'graph' };
       if (name === '@/lib/global-ranks') return { GLOBAL_RANK_DISCLAIMER: 'Test disclaimer' };
       if (name.endsWith('.module.css')) return { __esModule: true, default: {} };
+      if (name === '@/components/courses/ContinueLearning') {
+        const child = {}, childCode = ts.transpileModule(fs.readFileSync('src/components/courses/ContinueLearning.tsx', 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX, esModuleInterop: true } }).outputText;
+        new Function('require', 'exports', childCode)(dependency => {
+          if (dependency === 'react') return React;
+          if (dependency === 'react/jsx-runtime') return runtime;
+          if (dependency === '@clerk/nextjs') return { useAuth: () => ({ userId: 'synthetic-render-only', isLoaded: true }) };
+          if (dependency === '@/components/localization/LocaleProvider') return { useLocale: () => ({ t, locale }) };
+          if (dependency === '@/lib/learning/unified-progress') return { learningStatusLabels: {} };
+          if (dependency === '@/lib/progress-sync') return { PROGRESS_SYNC_EVENT: 'synthetic-test' };
+          if (dependency === 'next/link') return { __esModule: true, default: ({ children, ...props }) => React.createElement('a', props, children) };
+          throw Error(`Unexpected continuation import: ${dependency}`);
+        }, child);
+        return { __esModule: true, default: child.default };
+      }
       if (name === './WorkspacePersonalSpace') return { __esModule: true, default: ({ journey }) => journey };
       if (name.startsWith('./') || name.startsWith('@/components/')) return { __esModule: true, default: () => null };
       throw Error(`Unexpected import: ${name}`);
@@ -416,7 +430,8 @@ test('workspace server presentation follows locale and preserves private identit
     assert.ok(html.includes('Test &lt;Learner&gt;'));
     assert.ok(html.includes('href="/notifications"'));
     assert.ok(html.includes('href="/profile/security"'));
-    assert.ok(html.includes(t('No activity to resume yet.')));
+    assert.ok(html.includes(t('One place to keep learning.')));
+    assert.ok(html.includes(t('Choose a practical course. Your completed lessons stay connected to your account.')));
   }
 });
 

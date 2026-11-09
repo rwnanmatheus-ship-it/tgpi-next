@@ -9,8 +9,11 @@ import { courses } from "@/data/courses";
 import type { Metadata } from "next";
 import { currentUser } from "@clerk/nextjs/server";
 import GlobalWorkspaceOS from "@/components/profile/GlobalWorkspaceOS";
-import ProfessionalResume from "@/components/courses/ProfessionalResume";
-import { Suspense } from "react";
+import { loadLearningSummary } from "@/lib/learning/unified-progress.server";
+import { learningStatusLabels } from "@/lib/learning/unified-progress";
+import { getLocale } from "@/lib/localization/server";
+import { translate } from "@/lib/localization/messages";
+import type { WorkspaceResource } from "@/lib/workspace-control";
 import {
   getAccountProfileCompletion,
   mergeAccountProfileWithOnboarding,
@@ -60,7 +63,13 @@ export default async function ProfilePage({
   );
   await archiveWorkspaceHistory(session.userId, activation).catch(() => null);
   const historyPage = await loadWorkspaceHistory(session.userId).catch(() => ({ events: [], cursor: null, coverageStartedAt: null, available: false }));
-  const billing = await getUserBillingRecord(session.userId);
+  const [billing, learning, locale] = await Promise.all([getUserBillingRecord(session.userId), loadLearningSummary(session.userId, activation), getLocale()]);
+  const resources = buildWorkspaceResources(activation, courses, getAllCountries());
+  const professionalResources: WorkspaceResource[] = learning.items.filter(item => item.kind === "professional").map(item => ({
+    id: `course-${item.courseId}`, title: item.title, kind: "course", href: item.href, updatedAt: item.updatedAt,
+    status: item.status === "completed" ? "completed" : item.status === "edition_changed" ? "edition_changed" : "in_progress",
+    detail: translate(locale, learningStatusLabels[item.status]),
+  }));
   const controlledAccessMode = await getControlledPremiumAccessMode(
     {
       uid: session.userId,
@@ -95,10 +104,11 @@ export default async function ProfilePage({
 
   const rank = getGlobalRank({ ...getGlobalRankSignals(activation), activationCompletion: workspaceModel.activationCompletion, planCompletion: workspaceModel.completion, profileCompletion });
   return (
-    <><Suspense fallback={null}><ProfessionalResume uid={session.userId} /></Suspense><GlobalWorkspaceOS
+    <GlobalWorkspaceOS
+      learning={learning}
       rank={rank}
       userId={session.userId}
-      resources={buildWorkspaceResources(activation, courses, getAllCountries())}
+      resources={[...resources, ...professionalResources].sort((a,b) => (b.updatedAt ?? "").localeCompare(a.updatedAt ?? ""))}
       history={workspaceHistory({ ...activation, activities: [...historyPage.events, ...activation.activities] })}
       historyCursor={historyPage.cursor}
       historyCoverage={historyPage.coverageStartedAt}
@@ -118,6 +128,6 @@ export default async function ProfilePage({
       }}
       model={workspaceModel}
       onboardingCompleted={params.onboarding === "completed"}
-    /></>
+    />
   );
 }

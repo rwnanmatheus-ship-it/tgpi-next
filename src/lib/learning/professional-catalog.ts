@@ -11,6 +11,7 @@ export function professionalCatalog(environment: string | undefined): CourseOver
       category: goal === "global-mobility" ? "Language & Mobility" : goal === "global-economics" ? "Economics & Opportunity" : goal === "decision-intelligence" ? "Decision Intelligence" : "Technology & Adaptability",
       duration: `${estimateProfessionalMinutes(course) / 60}h estimadas`, format: "8 módulos, práticas e projeto", goal,
       goalLabel: "Practical professional skills", href: `/courses/${course.id}`, image: `/images/courses/professional/${professionalArtwork[course.id].key}.webp`, imageAlt: professionalArtwork[course.id].alt,
-      level: "Fundamentos aplicados", status: "available", releaseLabel: "Acesso antecipado · português" };
+      level: "Fundamentos aplicados", status: "available", releaseLabel: "Acesso antecipado · português",
+      learningPolicy: { kind: 'professional', publicationStatus: 'early_access', accessPolicy: 'free_account', assessmentPolicy: 'quiz_project_review', credentialStatus: 'criteria_available', instructionLanguage: 'pt-BR' } };
   });
 }

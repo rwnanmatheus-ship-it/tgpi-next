@@ -2,6 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
+import { isProductRoute } from '@/lib/product-navigation';
 
 type Props = { children: ReactNode; navigation: ReactNode; footer: ReactNode; runtime: ReactNode };
 
@@ -9,5 +10,5 @@ type Props = { children: ReactNode; navigation: ReactNode; footer: ReactNode; ru
 export default function AccessAwareChrome({ children, navigation, footer, runtime }: Props) {
   const pathname = usePathname();
   const focused = ["/sign-in", "/sign-up", "/welcome", "/login"].some(route => pathname === route || pathname.startsWith(`${route}/`));
-  return <div className="tgpi-app-shell" data-focused={focused ? "true" : "false"}>{focused ? null : navigation}{children}{focused ? null : footer}{focused ? null : runtime}</div>;
+  return <div className="tgpi-app-shell" data-product={isProductRoute(pathname)} data-focused={focused ? "true" : "false"}>{focused ? null : navigation}{children}{focused || isProductRoute(pathname) ? null : footer}{focused ? null : runtime}</div>;
 }
