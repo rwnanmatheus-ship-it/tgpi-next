@@ -9920,6 +9920,782 @@ export const messages = {
     "fr": "Les modifications ultérieures de confidentialité ne révoquent pas les fichiers déjà téléchargés ou partagés hors de TGPI. Le QR contient uniquement le lien de votre profil.",
     "de": "Spätere Datenschutzeinstellungen können bereits heruntergeladene oder außerhalb von TGPI geteilte Dateien nicht widerrufen. Der QR-Code enthält nur Ihren Profillink.",
     "it": "Le modifiche successive alla privacy non possono revocare file già scaricati o condivisi fuori da TGPI. Il QR contiene solo il link al profilo."
+  },
+  "Loading your member identity…": {
+    "en": "Loading your member identity…",
+    "pt-BR": "Carregando sua identidade de membro…",
+    "es": "Cargando tu identidad de miembro…",
+    "fr": "Chargement de votre identité de membre…",
+    "de": "Ihre Mitgliedsidentität wird geladen…",
+    "it": "Caricamento dell’identità membro…"
+  },
+  "Saved separately from your personal information. One change every 30 days; old IDs remain reserved to you and keep resolving to your profile.": {
+    "en": "Saved separately from your personal information. One change every 30 days; old IDs remain reserved to you and keep resolving to your profile.",
+    "pt-BR": "Salvo separadamente dos seus dados pessoais. Uma alteração a cada 30 dias. Os IDs antigos ficam reservados para você e continuam direcionando ao seu perfil.",
+    "es": "Se guarda por separado de tus datos personales. Un cambio cada 30 días. Los ID anteriores quedan reservados para ti y siguen llevando a tu perfil.",
+    "fr": "Enregistré séparément de vos données personnelles. Un changement tous les 30 jours. Les anciens identifiants vous restent réservés et renvoient à votre profil.",
+    "de": "Wird getrennt von Ihren persönlichen Daten gespeichert. Eine Änderung alle 30 Tage. Frühere IDs bleiben für Sie reserviert und verweisen weiterhin auf Ihr Profil.",
+    "it": "Salvato separatamente dai tuoi dati personali. Una modifica ogni 30 giorni. I vecchi ID restano riservati a te e continuano a rimandare al tuo profilo."
+  },
+  "Member identity is temporarily unavailable. Your other settings remain available.": {
+    "en": "Member identity is temporarily unavailable. Your other settings remain available.",
+    "pt-BR": "A identidade de membro está temporariamente indisponível. Suas outras configurações continuam disponíveis.",
+    "es": "La identidad de miembro no está disponible temporalmente. Tus demás ajustes siguen disponibles.",
+    "fr": "L’identité de membre est temporairement indisponible. Vos autres paramètres restent accessibles.",
+    "de": "Die Mitgliedsidentität ist vorübergehend nicht verfügbar. Ihre anderen Einstellungen bleiben verfügbar.",
+    "it": "L’identità membro è temporaneamente indisponibile. Le altre impostazioni restano disponibili."
+  },
+  "Unable to load your identity. Reload to retry.": {
+    "en": "Unable to load your identity. Reload to retry.",
+    "pt-BR": "Não foi possível carregar sua identidade. Recarregue para tentar novamente.",
+    "es": "No se pudo cargar tu identidad. Recarga para volver a intentarlo.",
+    "fr": "Impossible de charger votre identité. Rechargez pour réessayer.",
+    "de": "Ihre Identität konnte nicht geladen werden. Laden Sie die Seite erneut.",
+    "it": "Impossibile caricare la tua identità. Ricarica per riprovare."
+  },
+  "Member identity is unavailable. Your profile draft is preserved.": {
+    "en": "Member identity is unavailable. Your profile draft is preserved.",
+    "pt-BR": "A identidade de membro está indisponível. O rascunho do seu perfil foi preservado.",
+    "es": "La identidad de miembro no está disponible. Se conserva el borrador de tu perfil.",
+    "fr": "L’identité de membre est indisponible. Le brouillon de votre profil est conservé.",
+    "de": "Die Mitgliedsidentität ist nicht verfügbar. Ihr Profilentwurf bleibt erhalten.",
+    "it": "L’identità membro non è disponibile. La bozza del profilo è conservata."
+  },
+  "Member identity saved. Your TGPI number is stable.": {
+    "en": "Member identity saved. Your TGPI number is stable.",
+    "pt-BR": "Identidade de membro salva. Seu número TGPI permanece o mesmo.",
+    "es": "Identidad de miembro guardada. Tu número TGPI se mantiene.",
+    "fr": "Identité de membre enregistrée. Votre numéro TGPI est conservé.",
+    "de": "Mitgliedsidentität gespeichert. Ihre TGPI-Nummer bleibt bestehen.",
+    "it": "Identità membro salvata. Il tuo numero TGPI rimane invariato."
+  },
+  "Unable to save. Your entry is preserved.": {
+    "en": "Unable to save. Your entry is preserved.",
+    "pt-BR": "Não foi possível salvar. O que você digitou foi preservado.",
+    "es": "No se pudo guardar. Se conserva lo que escribiste.",
+    "fr": "Impossible d’enregistrer. Votre saisie est conservée.",
+    "de": "Speichern nicht möglich. Ihre Eingabe bleibt erhalten.",
+    "it": "Impossibile salvare. I dati inseriti sono conservati."
+  },
+  "Your name across TGPI.": {
+    "en": "Your name across TGPI.",
+    "pt-BR": "Seu nome em toda a TGPI.",
+    "es": "Tu nombre en toda TGPI.",
+    "fr": "Votre nom dans tout TGPI.",
+    "de": "Ihr Name überall auf TGPI.",
+    "it": "Il tuo nome in tutta TGPI."
+  },
+  "Unique @ID": {
+    "en": "Unique @ID",
+    "pt-BR": "@ID exclusivo",
+    "es": "@ID único",
+    "fr": "@ID unique",
+    "de": "Eindeutige @ID",
+    "it": "@ID univoco"
+  },
+  "Please wait…": {
+    "en": "Please wait…",
+    "pt-BR": "Aguarde…",
+    "es": "Espera…",
+    "fr": "Veuillez patienter…",
+    "de": "Bitte warten…",
+    "it": "Attendi…"
+  },
+  "Change @ID": {
+    "en": "Change @ID",
+    "pt-BR": "Alterar @ID",
+    "es": "Cambiar @ID",
+    "fr": "Modifier l’@ID",
+    "de": "@ID ändern",
+    "it": "Modifica @ID"
+  },
+  "Create @ID": {
+    "en": "Create @ID",
+    "pt-BR": "Criar @ID",
+    "es": "Crear @ID",
+    "fr": "Créer un @ID",
+    "de": "@ID erstellen",
+    "it": "Crea @ID"
+  },
+  "Find another member →": {
+    "en": "Find another member →",
+    "pt-BR": "Encontrar outro membro →",
+    "es": "Buscar otro miembro →",
+    "fr": "Trouver un autre membre →",
+    "de": "Anderes Mitglied finden →",
+    "it": "Trova un altro membro →"
+  },
+  "Use 3–30 ASCII characters, starting with a letter; letters, numbers and underscores only.": {
+    "en": "Use 3–30 ASCII characters, starting with a letter; letters, numbers and underscores only.",
+    "pt-BR": "Use de 3 a 30 caracteres ASCII, começando com uma letra. Apenas letras, números e sublinhados.",
+    "es": "Usa de 3 a 30 caracteres ASCII, empezando por una letra. Solo letras, números y guiones bajos.",
+    "fr": "Utilisez de 3 à 30 caractères ASCII, en commençant par une lettre. Lettres, chiffres et tirets bas uniquement.",
+    "de": "Verwenden Sie 3 bis 30 ASCII-Zeichen und beginnen Sie mit einem Buchstaben. Nur Buchstaben, Ziffern und Unterstriche.",
+    "it": "Usa da 3 a 30 caratteri ASCII, iniziando con una lettera. Solo lettere, numeri e trattini bassi."
+  },
+  "This ID is reserved for TGPI.": {
+    "en": "This ID is reserved for TGPI.",
+    "pt-BR": "Este ID é reservado para a TGPI.",
+    "es": "Este ID está reservado para TGPI.",
+    "fr": "Cet identifiant est réservé à TGPI.",
+    "de": "Diese ID ist für TGPI reserviert.",
+    "it": "Questo ID è riservato a TGPI."
+  },
+  "This ID is already associated with a TGPI member.": {
+    "en": "This ID is already associated with a TGPI member.",
+    "pt-BR": "Este ID já está associado a um membro TGPI.",
+    "es": "Este ID ya está asociado a un miembro de TGPI.",
+    "fr": "Cet identifiant est déjà associé à un membre TGPI.",
+    "de": "Diese ID gehört bereits zu einem TGPI-Mitglied.",
+    "it": "Questo ID è già associato a un membro TGPI."
+  },
+  "This @ID is taken or permanently reserved.": {
+    "en": "This @ID is taken or permanently reserved.",
+    "pt-BR": "Este @ID já está em uso ou reservado permanentemente.",
+    "es": "Este @ID ya está en uso o reservado permanentemente.",
+    "fr": "Cet @ID est déjà utilisé ou réservé définitivement.",
+    "de": "Diese @ID ist bereits vergeben oder dauerhaft reserviert.",
+    "it": "Questo @ID è già in uso o riservato permanentemente."
+  },
+  "This member reference requires support review.": {
+    "en": "This member reference requires support review.",
+    "pt-BR": "Esta referência de membro precisa de análise do suporte.",
+    "es": "Esta referencia de miembro requiere revisión del soporte.",
+    "fr": "Cette référence de membre nécessite un examen par l’assistance.",
+    "de": "Diese Mitgliedsreferenz muss vom Support geprüft werden.",
+    "it": "Questo riferimento membro richiede una verifica dell’assistenza."
+  },
+  "Member reference requires support review.": {
+    "en": "Member reference requires support review.",
+    "pt-BR": "A referência de membro precisa de análise do suporte.",
+    "es": "La referencia de miembro requiere revisión del soporte.",
+    "fr": "La référence de membre nécessite un examen par l’assistance.",
+    "de": "Die Mitgliedsreferenz muss vom Support geprüft werden.",
+    "it": "Il riferimento membro richiede una verifica dell’assistenza."
+  },
+  "You can change your @ID once every 30 days. Previous IDs remain reserved to you.": {
+    "en": "You can change your @ID once every 30 days. Previous IDs remain reserved to you.",
+    "pt-BR": "Você pode alterar seu @ID uma vez a cada 30 dias. Os IDs anteriores continuam reservados para você.",
+    "es": "Puedes cambiar tu @ID una vez cada 30 días. Los ID anteriores siguen reservados para ti.",
+    "fr": "Vous pouvez changer votre @ID une fois tous les 30 jours. Les anciens identifiants vous restent réservés.",
+    "de": "Sie können Ihre @ID alle 30 Tage einmal ändern. Frühere IDs bleiben für Sie reserviert.",
+    "it": "Puoi cambiare il tuo @ID una volta ogni 30 giorni. I vecchi ID restano riservati a te."
+  },
+  "Identity storage is temporarily unavailable. Your other account settings can still be saved.": {
+    "en": "Identity storage is temporarily unavailable. Your other account settings can still be saved.",
+    "pt-BR": "O armazenamento de identidade está temporariamente indisponível. Você ainda pode salvar as outras configurações da conta.",
+    "es": "El almacenamiento de identidad no está disponible temporalmente. Puedes guardar los demás ajustes de la cuenta.",
+    "fr": "Le stockage de l’identité est temporairement indisponible. Vous pouvez enregistrer les autres paramètres du compte.",
+    "de": "Der Identitätsspeicher ist vorübergehend nicht verfügbar. Andere Kontoeinstellungen können weiterhin gespeichert werden.",
+    "it": "Il salvataggio dell’identità è temporaneamente indisponibile. Puoi salvare le altre impostazioni dell’account."
+  },
+  "Sign in to manage your identity.": {
+    "en": "Sign in to manage your identity.",
+    "pt-BR": "Entre para gerenciar sua identidade.",
+    "es": "Inicia sesión para gestionar tu identidad.",
+    "fr": "Connectez-vous pour gérer votre identité.",
+    "de": "Melden Sie sich an, um Ihre Identität zu verwalten.",
+    "it": "Accedi per gestire la tua identità."
+  },
+  "Identity request is too large.": {
+    "en": "Identity request is too large.",
+    "pt-BR": "A solicitação de identidade é muito grande.",
+    "es": "La solicitud de identidad es demasiado grande.",
+    "fr": "La demande d’identité est trop volumineuse.",
+    "de": "Die Identitätsanfrage ist zu groß.",
+    "it": "La richiesta di identità è troppo grande."
+  },
+  "Unable to save your ID. Please retry.": {
+    "en": "Unable to save your ID. Please retry.",
+    "pt-BR": "Não foi possível salvar seu ID. Tente novamente.",
+    "es": "No se pudo guardar tu ID. Vuelve a intentarlo.",
+    "fr": "Impossible d’enregistrer votre identifiant. Réessayez.",
+    "de": "Ihre ID konnte nicht gespeichert werden. Versuchen Sie es erneut.",
+    "it": "Impossibile salvare il tuo ID. Riprova."
+  },
+  "Enter an exact @ID or full TGPI number.": {
+    "en": "Enter an exact @ID or full TGPI number.",
+    "pt-BR": "Digite o @ID exato ou o número TGPI completo.",
+    "es": "Introduce el @ID exacto o el número TGPI completo.",
+    "fr": "Saisissez l’@ID exact ou le numéro TGPI complet.",
+    "de": "Geben Sie die genaue @ID oder vollständige TGPI-Nummer ein.",
+    "it": "Inserisci l’@ID esatto o il numero TGPI completo."
+  },
+  "Searching…": {
+    "en": "Searching…",
+    "pt-BR": "Buscando…",
+    "es": "Buscando…",
+    "fr": "Recherche…",
+    "de": "Suche läuft…",
+    "it": "Ricerca…"
+  },
+  "Member found.": {
+    "en": "Member found.",
+    "pt-BR": "Membro encontrado.",
+    "es": "Miembro encontrado.",
+    "fr": "Membre trouvé.",
+    "de": "Mitglied gefunden.",
+    "it": "Membro trovato."
+  },
+  "No discoverable member found. Check the exact ID and privacy settings.": {
+    "en": "No discoverable member found. Check the exact ID and privacy settings.",
+    "pt-BR": "Nenhum membro visível na busca foi encontrado. Confira o ID exato e as configurações de privacidade.",
+    "es": "No se encontró ningún miembro visible en la búsqueda. Revisa el ID exacto y los ajustes de privacidad.",
+    "fr": "Aucun membre visible dans la recherche n’a été trouvé. Vérifiez l’identifiant exact et les paramètres de confidentialité.",
+    "de": "Kein auffindbares Mitglied gefunden. Prüfen Sie die genaue ID und die Datenschutzeinstellungen.",
+    "it": "Nessun membro visibile nella ricerca trovato. Verifica l’ID esatto e le impostazioni sulla privacy."
+  },
+  "Unable to search. Retry shortly.": {
+    "en": "Unable to search. Retry shortly.",
+    "pt-BR": "Não foi possível buscar. Tente novamente em instantes.",
+    "es": "No se pudo buscar. Vuelve a intentarlo en breve.",
+    "fr": "Recherche impossible. Réessayez dans un instant.",
+    "de": "Suche nicht möglich. Versuchen Sie es gleich erneut.",
+    "it": "Ricerca non riuscita. Riprova tra poco."
+  },
+  "Member discovery is temporarily unavailable.": {
+    "en": "Member discovery is temporarily unavailable.",
+    "pt-BR": "A busca de membros está temporariamente indisponível.",
+    "es": "La búsqueda de miembros no está disponible temporalmente.",
+    "fr": "La recherche de membres est temporairement indisponible.",
+    "de": "Die Mitgliedersuche ist vorübergehend nicht verfügbar.",
+    "it": "La ricerca membri è temporaneamente indisponibile."
+  },
+  "Member search is temporarily unavailable.": {
+    "en": "Member search is temporarily unavailable.",
+    "pt-BR": "A pesquisa de membros está temporariamente indisponível.",
+    "es": "La consulta de miembros no está disponible temporalmente.",
+    "fr": "La recherche de membres est temporairement indisponible.",
+    "de": "Die Mitgliedersuche ist vorübergehend nicht verfügbar.",
+    "it": "La ricerca dei membri è temporaneamente indisponibile."
+  },
+  "Search limit reached. Try again in one minute.": {
+    "en": "Search limit reached. Try again in one minute.",
+    "pt-BR": "Limite de buscas atingido. Tente novamente em um minuto.",
+    "es": "Límite de búsquedas alcanzado. Inténtalo de nuevo en un minuto.",
+    "fr": "Limite de recherches atteinte. Réessayez dans une minute.",
+    "de": "Suchlimit erreicht. Versuchen Sie es in einer Minute erneut.",
+    "it": "Limite di ricerche raggiunto. Riprova tra un minuto."
+  },
+  "Sign in to search members.": {
+    "en": "Sign in to search members.",
+    "pt-BR": "Entre para buscar membros.",
+    "es": "Inicia sesión para buscar miembros.",
+    "fr": "Connectez-vous pour rechercher des membres.",
+    "de": "Melden Sie sich an, um Mitglieder zu suchen.",
+    "it": "Accedi per cercare membri."
+  },
+  "TGPI / Member discovery": {
+    "en": "TGPI / Member discovery",
+    "pt-BR": "TGPI / Busca de membros",
+    "es": "TGPI / Búsqueda de miembros",
+    "fr": "TGPI / Recherche de membres",
+    "de": "TGPI / Mitgliedersuche",
+    "it": "TGPI / Ricerca membri"
+  },
+  "Find a global perspective.": {
+    "en": "Find a global perspective.",
+    "pt-BR": "Encontre uma perspectiva global.",
+    "es": "Encuentra una perspectiva global.",
+    "fr": "Découvrez une perspective mondiale.",
+    "de": "Entdecken Sie eine globale Perspektive.",
+    "it": "Trova una prospettiva globale."
+  },
+  "Exact identifiers only. Discovery inside TGPI is separate from publication on the internet.": {
+    "en": "Exact identifiers only. Discovery inside TGPI is separate from publication on the internet.",
+    "pt-BR": "A busca usa apenas identificadores exatos. A visibilidade na TGPI é independente da publicação na internet.",
+    "es": "La búsqueda usa solo identificadores exactos. La visibilidad en TGPI es independiente de la publicación en internet.",
+    "fr": "La recherche utilise uniquement des identifiants exacts. La visibilité dans TGPI est indépendante de la publication sur Internet.",
+    "de": "Die Suche verwendet nur genaue Kennungen. Die Sichtbarkeit innerhalb von TGPI ist unabhängig von der Veröffentlichung im Internet.",
+    "it": "La ricerca usa solo identificativi esatti. La visibilità su TGPI è indipendente dalla pubblicazione su Internet."
+  },
+  "@ID or TGPI number": {
+    "en": "@ID or TGPI number",
+    "pt-BR": "@ID ou número TGPI",
+    "es": "@ID o número TGPI",
+    "fr": "@ID ou numéro TGPI",
+    "de": "@ID oder TGPI-Nummer",
+    "it": "@ID o numero TGPI"
+  },
+  "@member or TGPI-XXXX-XXXX-XXXX": {
+    "en": "@member or TGPI-XXXX-XXXX-XXXX",
+    "pt-BR": "@membro ou TGPI-XXXX-XXXX-XXXX",
+    "es": "@miembro o TGPI-XXXX-XXXX-XXXX",
+    "fr": "@membre ou TGPI-XXXX-XXXX-XXXX",
+    "de": "@mitglied oder TGPI-XXXX-XXXX-XXXX",
+    "it": "@membro o TGPI-XXXX-XXXX-XXXX"
+  },
+  "Find member": {
+    "en": "Find member",
+    "pt-BR": "Buscar membro",
+    "es": "Buscar miembro",
+    "fr": "Rechercher un membre",
+    "de": "Mitglied suchen",
+    "it": "Cerca membro"
+  },
+  "View profile →": {
+    "en": "View profile →",
+    "pt-BR": "Ver perfil →",
+    "es": "Ver perfil →",
+    "fr": "Voir le profil →",
+    "de": "Profil ansehen →",
+    "it": "Visualizza profilo →"
+  },
+  "Find members — TGPI": {
+    "en": "Find members — TGPI",
+    "pt-BR": "Buscar membros — TGPI",
+    "es": "Buscar miembros — TGPI",
+    "fr": "Rechercher des membres — TGPI",
+    "de": "Mitglieder suchen — TGPI",
+    "it": "Cerca membri — TGPI"
+  },
+  "Profile photo of {name}": {
+    "en": "Profile photo of {name}",
+    "pt-BR": "Foto de perfil de {name}",
+    "es": "Foto de perfil de {name}",
+    "fr": "Photo de profil de {name}",
+    "de": "Profilfoto von {name}",
+    "it": "Foto del profilo di {name}"
+  },
+  "Profile shared.": {
+    "en": "Profile shared.",
+    "pt-BR": "Perfil compartilhado.",
+    "es": "Perfil compartido.",
+    "fr": "Profil partagé.",
+    "de": "Profil geteilt.",
+    "it": "Profilo condiviso."
+  },
+  "Profile link copied.": {
+    "en": "Profile link copied.",
+    "pt-BR": "Link do perfil copiado.",
+    "es": "Enlace del perfil copiado.",
+    "fr": "Lien du profil copié.",
+    "de": "Profillink kopiert.",
+    "it": "Link del profilo copiato."
+  },
+  "Unable to share automatically. Copy the URL from your browser.": {
+    "en": "Unable to share automatically. Copy the URL from your browser.",
+    "pt-BR": "Não foi possível compartilhar automaticamente. Copie o endereço do navegador.",
+    "es": "No se pudo compartir automáticamente. Copia la dirección del navegador.",
+    "fr": "Partage automatique impossible. Copiez l’adresse depuis votre navigateur.",
+    "de": "Automatisches Teilen nicht möglich. Kopieren Sie die Adresse aus Ihrem Browser.",
+    "it": "Condivisione automatica non riuscita. Copia l’indirizzo dal browser."
+  },
+  "Unable to copy automatically. Open the profile and copy its address.": {
+    "en": "Unable to copy automatically. Open the profile and copy its address.",
+    "pt-BR": "Não foi possível copiar automaticamente. Abra o perfil e copie o endereço.",
+    "es": "No se pudo copiar automáticamente. Abre el perfil y copia su dirección.",
+    "fr": "Copie automatique impossible. Ouvrez le profil et copiez son adresse.",
+    "de": "Automatisches Kopieren nicht möglich. Öffnen Sie das Profil und kopieren Sie dessen Adresse.",
+    "it": "Copia automatica non riuscita. Apri il profilo e copia il suo indirizzo."
+  },
+  "Copy link": {
+    "en": "Copy link",
+    "pt-BR": "Copiar link",
+    "es": "Copiar enlace",
+    "fr": "Copier le lien",
+    "de": "Link kopieren",
+    "it": "Copia link"
+  },
+  "Share profile": {
+    "en": "Share profile",
+    "pt-BR": "Compartilhar perfil",
+    "es": "Compartir perfil",
+    "fr": "Partager le profil",
+    "de": "Profil teilen",
+    "it": "Condividi profilo"
+  },
+  "Loading your current plan…": {
+    "en": "Loading your current plan…",
+    "pt-BR": "Carregando seu plano atual…",
+    "es": "Cargando tu plan actual…",
+    "fr": "Chargement de votre formule actuelle…",
+    "de": "Ihr aktueller Tarif wird geladen…",
+    "it": "Caricamento del piano attuale…"
+  },
+  "Unable to load billing. Reload to retry.": {
+    "en": "Unable to load billing. Reload to retry.",
+    "pt-BR": "Não foi possível carregar a cobrança. Recarregue para tentar novamente.",
+    "es": "No se pudo cargar la facturación. Recarga para volver a intentarlo.",
+    "fr": "Impossible de charger la facturation. Rechargez pour réessayer.",
+    "de": "Die Abrechnung konnte nicht geladen werden. Laden Sie die Seite erneut.",
+    "it": "Impossibile caricare la fatturazione. Ricarica per riprovare."
+  },
+  "Opening secure billing…": {
+    "en": "Opening secure billing…",
+    "pt-BR": "Abrindo a área segura de cobrança…",
+    "es": "Abriendo la facturación segura…",
+    "fr": "Ouverture de la facturation sécurisée…",
+    "de": "Sichere Abrechnung wird geöffnet…",
+    "it": "Apertura della fatturazione sicura…"
+  },
+  "Unable to open billing.": {
+    "en": "Unable to open billing.",
+    "pt-BR": "Não foi possível abrir a cobrança.",
+    "es": "No se pudo abrir la facturación.",
+    "fr": "Impossible d’ouvrir la facturation.",
+    "de": "Die Abrechnung konnte nicht geöffnet werden.",
+    "it": "Impossibile aprire la fatturazione."
+  },
+  "Your membership": {
+    "en": "Your membership",
+    "pt-BR": "Sua assinatura",
+    "es": "Tu membresía",
+    "fr": "Votre adhésion",
+    "de": "Ihre Mitgliedschaft",
+    "it": "La tua iscrizione"
+  },
+  "Status: {status} · Access: {access}": {
+    "en": "Status: {status} · Access: {access}",
+    "pt-BR": "Status: {status} · Acesso: {access}",
+    "es": "Estado: {status} · Acceso: {access}",
+    "fr": "Statut : {status} · Accès : {access}",
+    "de": "Status: {status} · Zugang: {access}",
+    "it": "Stato: {status} · Accesso: {access}"
+  },
+  "Access scheduled until": {
+    "en": "Access scheduled until",
+    "pt-BR": "Acesso previsto até",
+    "es": "Acceso previsto hasta",
+    "fr": "Accès prévu jusqu’au",
+    "de": "Zugang vorgesehen bis",
+    "it": "Accesso previsto fino al"
+  },
+  "Current period ends": {
+    "en": "Current period ends",
+    "pt-BR": "Fim do período atual",
+    "es": "Fin del período actual",
+    "fr": "Fin de la période actuelle",
+    "de": "Ende des aktuellen Zeitraums",
+    "it": "Fine del periodo attuale"
+  },
+  "Date unavailable": {
+    "en": "Date unavailable",
+    "pt-BR": "Data indisponível",
+    "es": "Fecha no disponible",
+    "fr": "Date indisponible",
+    "de": "Datum nicht verfügbar",
+    "it": "Data non disponibile"
+  },
+  "Manage subscription securely →": {
+    "en": "Manage subscription securely →",
+    "pt-BR": "Gerenciar assinatura com segurança →",
+    "es": "Gestionar suscripción de forma segura →",
+    "fr": "Gérer l’abonnement en toute sécurité →",
+    "de": "Abonnement sicher verwalten →",
+    "it": "Gestisci l’abbonamento in sicurezza →"
+  },
+  "Explore Premium →": {
+    "en": "Explore Premium →",
+    "pt-BR": "Explorar Premium →",
+    "es": "Explorar Premium →",
+    "fr": "Découvrir Premium →",
+    "de": "Premium entdecken →",
+    "it": "Scopri Premium →"
+  },
+  "Inactive": {
+    "en": "Inactive",
+    "pt-BR": "Inativo",
+    "es": "Inactivo",
+    "fr": "Inactif",
+    "de": "Inaktiv",
+    "it": "Inattivo"
+  },
+  "Trial period": {
+    "en": "Trial period",
+    "pt-BR": "Período de teste",
+    "es": "Período de prueba",
+    "fr": "Période d’essai",
+    "de": "Testphase",
+    "it": "Periodo di prova"
+  },
+  "Payment overdue": {
+    "en": "Payment overdue",
+    "pt-BR": "Pagamento em atraso",
+    "es": "Pago atrasado",
+    "fr": "Paiement en retard",
+    "de": "Zahlung überfällig",
+    "it": "Pagamento in ritardo"
+  },
+  "Canceled": {
+    "en": "Canceled",
+    "pt-BR": "Cancelado",
+    "es": "Cancelado",
+    "fr": "Annulé",
+    "de": "Gekündigt",
+    "it": "Annullato"
+  },
+  "Unpaid": {
+    "en": "Unpaid",
+    "pt-BR": "Não pago",
+    "es": "Sin pagar",
+    "fr": "Impayé",
+    "de": "Unbezahlt",
+    "it": "Non pagato"
+  },
+  "Payment incomplete": {
+    "en": "Payment incomplete",
+    "pt-BR": "Pagamento incompleto",
+    "es": "Pago incompleto",
+    "fr": "Paiement incomplet",
+    "de": "Zahlung unvollständig",
+    "it": "Pagamento incompleto"
+  },
+  "Payment session expired": {
+    "en": "Payment session expired",
+    "pt-BR": "Sessão de pagamento expirada",
+    "es": "Sesión de pago caducada",
+    "fr": "Session de paiement expirée",
+    "de": "Zahlungssitzung abgelaufen",
+    "it": "Sessione di pagamento scaduta"
+  },
+  "Paused": {
+    "en": "Paused",
+    "pt-BR": "Pausado",
+    "es": "En pausa",
+    "fr": "En pause",
+    "de": "Pausiert",
+    "it": "In pausa"
+  },
+  "Subscription": {
+    "en": "Subscription",
+    "pt-BR": "Assinatura",
+    "es": "Suscripción",
+    "fr": "Abonnement",
+    "de": "Abonnement",
+    "it": "Abbonamento"
+  },
+  "No Premium access": {
+    "en": "No Premium access",
+    "pt-BR": "Sem acesso Premium",
+    "es": "Sin acceso Premium",
+    "fr": "Sans accès Premium",
+    "de": "Kein Premium-Zugang",
+    "it": "Senza accesso Premium"
+  },
+  "Founder access": {
+    "en": "Founder access",
+    "pt-BR": "Acesso do fundador",
+    "es": "Acceso del fundador",
+    "fr": "Accès du fondateur",
+    "de": "Gründerzugang",
+    "it": "Accesso del fondatore"
+  },
+  "Preview access": {
+    "en": "Preview access",
+    "pt-BR": "Acesso de prévia",
+    "es": "Acceso de vista previa",
+    "fr": "Accès en avant-première",
+    "de": "Vorschauzugang",
+    "it": "Accesso in anteprima"
+  },
+  "Unavailable": {
+    "en": "Unavailable",
+    "pt-BR": "Indisponível",
+    "es": "No disponible",
+    "fr": "Indisponible",
+    "de": "Nicht verfügbar",
+    "it": "Non disponibile"
+  },
+  "Official TGPI crest": {
+    "en": "Official TGPI crest",
+    "pt-BR": "Brasão oficial da TGPI",
+    "es": "Escudo oficial de TGPI",
+    "fr": "Blason officiel de TGPI",
+    "de": "Offizielles TGPI-Wappen",
+    "it": "Stemma ufficiale TGPI"
+  },
+  "TGPI membership is not an identity document, immigration authorization or academic accreditation.": {
+    "en": "TGPI membership is not an identity document, immigration authorization or academic accreditation.",
+    "pt-BR": "A condição de membro TGPI não equivale a um documento de identidade, autorização de imigração ou credenciamento acadêmico.",
+    "es": "La membresía TGPI no equivale a un documento de identidad, una autorización migratoria ni una acreditación académica.",
+    "fr": "L’adhésion TGPI ne vaut ni pièce d’identité, ni autorisation d’immigration, ni accréditation académique.",
+    "de": "Die TGPI-Mitgliedschaft ist kein Ausweisdokument, keine Einwanderungsgenehmigung und keine akademische Akkreditierung.",
+    "it": "L’iscrizione TGPI non equivale a un documento d’identità, a un’autorizzazione all’immigrazione o a un accreditamento accademico."
+  },
+  "Platform progression": {
+    "en": "Platform progression",
+    "pt-BR": "Progressão na plataforma",
+    "es": "Progreso en la plataforma",
+    "fr": "Progression sur la plateforme",
+    "de": "Fortschritt auf der Plattform",
+    "it": "Progressi sulla piattaforma"
+  },
+  "{points} / {maximum} points from activity and learning inside TGPI.": {
+    "en": "{points} / {maximum} points from activity and learning inside TGPI.",
+    "pt-BR": "{points} / {maximum} pontos por atividades e aprendizado na TGPI.",
+    "es": "{points} / {maximum} puntos por actividades y aprendizaje en TGPI.",
+    "fr": "{points} / {maximum} points issus des activités et de l’apprentissage sur TGPI.",
+    "de": "{points} / {maximum} Punkte durch Aktivitäten und Lernen auf TGPI.",
+    "it": "{points} / {maximum} punti dalle attività e dall’apprendimento su TGPI."
+  },
+  "Self-declared information": {
+    "en": "Self-declared information",
+    "pt-BR": "Informações autodeclaradas",
+    "es": "Información declarada",
+    "fr": "Informations déclarées",
+    "de": "Selbst angegebene Informationen",
+    "it": "Informazioni autodichiarate"
+  },
+  "Professional context": {
+    "en": "Professional context",
+    "pt-BR": "Contexto profissional",
+    "es": "Contexto profesional",
+    "fr": "Contexte professionnel",
+    "de": "Beruflicher Hintergrund",
+    "it": "Contesto professionale"
+  },
+  "Proficiency has not been verified by this declaration.": {
+    "en": "Proficiency has not been verified by this declaration.",
+    "pt-BR": "Esta declaração não comprova a proficiência.",
+    "es": "Esta declaración no verifica el dominio del idioma.",
+    "fr": "Cette déclaration ne vérifie pas le niveau de maîtrise.",
+    "de": "Diese Angabe bestätigt keine geprüften Sprachkenntnisse.",
+    "it": "Questa dichiarazione non verifica il livello di competenza."
+  },
+  "Self-declared direction": {
+    "en": "Self-declared direction",
+    "pt-BR": "Objetivo autodeclarado",
+    "es": "Objetivo declarado",
+    "fr": "Objectif déclaré",
+    "de": "Selbst angegebenes Ziel",
+    "it": "Obiettivo autodichiarato"
+  },
+  "Professional presence": {
+    "en": "Professional presence",
+    "pt-BR": "Presença profissional",
+    "es": "Presencia profesional",
+    "fr": "Présence professionnelle",
+    "de": "Berufliche Präsenz",
+    "it": "Presenza professionale"
+  },
+  "Completion recorded by TGPI": {
+    "en": "Completion recorded by TGPI",
+    "pt-BR": "Conclusão registrada pela TGPI",
+    "es": "Finalización registrada por TGPI",
+    "fr": "Achèvement enregistré par TGPI",
+    "de": "Von TGPI erfasster Abschluss",
+    "it": "Completamento registrato da TGPI"
+  },
+  "Learning milestones": {
+    "en": "Learning milestones",
+    "pt-BR": "Marcos de aprendizado",
+    "es": "Hitos de aprendizaje",
+    "fr": "Étapes d’apprentissage",
+    "de": "Lernmeilensteine",
+    "it": "Traguardi di apprendimento"
+  },
+  "Current issuer records · integrity checked": {
+    "en": "Current issuer records · integrity checked",
+    "pt-BR": "Registros atuais do emissor · integridade verificada",
+    "es": "Registros actuales del emisor · integridad verificada",
+    "fr": "Dossiers actuels de l’émetteur · intégrité vérifiée",
+    "de": "Aktuelle Ausstellerdaten · Integrität geprüft",
+    "it": "Registri attuali dell’emittente · integrità verificata"
+  },
+  "Verifiable credentials": {
+    "en": "Verifiable credentials",
+    "pt-BR": "Credenciais verificáveis",
+    "es": "Credenciales verificables",
+    "fr": "Titres vérifiables",
+    "de": "Überprüfbare Nachweise",
+    "it": "Credenziali verificabili"
+  },
+  "Verify": {
+    "en": "Verify",
+    "pt-BR": "Verificar",
+    "es": "Verificar",
+    "fr": "Vérifier",
+    "de": "Überprüfen",
+    "it": "Verifica"
+  },
+  "{name} — TGPI member": {
+    "en": "{name} — TGPI member",
+    "pt-BR": "{name} — Membro TGPI",
+    "es": "{name} — Miembro de TGPI",
+    "fr": "{name} — Membre TGPI",
+    "de": "{name} — TGPI-Mitglied",
+    "it": "{name} — Membro TGPI"
+  },
+  "Member profile — TGPI": {
+    "en": "Member profile — TGPI",
+    "pt-BR": "Perfil de membro — TGPI",
+    "es": "Perfil de miembro — TGPI",
+    "fr": "Profil de membre — TGPI",
+    "de": "Mitgliedsprofil — TGPI",
+    "it": "Profilo membro — TGPI"
+  },
+  "A privacy-controlled TGPI member identity.": {
+    "en": "A privacy-controlled TGPI member identity.",
+    "pt-BR": "Uma identidade de membro TGPI com controle de privacidade.",
+    "es": "Una identidad de miembro TGPI con control de privacidad.",
+    "fr": "Une identité de membre TGPI avec contrôle de confidentialité.",
+    "de": "Eine TGPI-Mitgliedsidentität mit Datenschutzeinstellungen.",
+    "it": "Un’identità membro TGPI con controlli sulla privacy."
+  },
+  "Owner preview · These are the selected public fields.": {
+    "en": "Owner preview · These are the selected public fields.",
+    "pt-BR": "Prévia do titular · Estes são os campos públicos selecionados.",
+    "es": "Vista previa del titular · Estos son los campos públicos seleccionados.",
+    "fr": "Aperçu du titulaire · Voici les champs publics sélectionnés.",
+    "de": "Vorschau für den Inhaber · Dies sind die ausgewählten öffentlichen Felder.",
+    "it": "Anteprima del titolare · Questi sono i campi pubblici selezionati."
+  },
+  "Your profile is currently private.": {
+    "en": "Your profile is currently private.",
+    "pt-BR": "Seu perfil está privado no momento.",
+    "es": "Tu perfil es privado actualmente.",
+    "fr": "Votre profil est actuellement privé.",
+    "de": "Ihr Profil ist derzeit privat.",
+    "it": "Il tuo profilo è attualmente privato."
+  },
+  "Privacy applies to every visit.": {
+    "en": "Privacy applies to every visit.",
+    "pt-BR": "A privacidade se aplica a cada visita.",
+    "es": "La privacidad se aplica a cada visita.",
+    "fr": "La confidentialité s’applique à chaque visite.",
+    "de": "Die Datenschutzeinstellungen gelten bei jedem Besuch.",
+    "it": "La privacy si applica a ogni visita."
+  },
+  "Manage privacy": {
+    "en": "Manage privacy",
+    "pt-BR": "Gerenciar privacidade",
+    "es": "Gestionar privacidad",
+    "fr": "Gérer la confidentialité",
+    "de": "Datenschutz verwalten",
+    "it": "Gestisci privacy"
+  },
+  "Billing request could not be verified.": {
+    "en": "Billing request could not be verified.",
+    "pt-BR": "Não foi possível verificar a solicitação de cobrança.",
+    "es": "No se pudo verificar la solicitud de facturación.",
+    "fr": "La demande de facturation n’a pas pu être vérifiée.",
+    "de": "Die Abrechnungsanfrage konnte nicht überprüft werden.",
+    "it": "Impossibile verificare la richiesta di fatturazione."
+  },
+  "No billing account was found.": {
+    "en": "No billing account was found.",
+    "pt-BR": "Nenhuma conta de cobrança foi encontrada.",
+    "es": "No se encontró ninguna cuenta de facturación.",
+    "fr": "Aucun compte de facturation n’a été trouvé.",
+    "de": "Kein Abrechnungskonto gefunden.",
+    "it": "Nessun account di fatturazione trovato."
+  },
+  "Authentication required.": {
+    "en": "Authentication required.",
+    "pt-BR": "É necessário entrar na conta.",
+    "es": "Es necesario iniciar sesión.",
+    "fr": "Connexion requise.",
+    "de": "Anmeldung erforderlich.",
+    "it": "Accesso richiesto."
+  },
+  "Could not open billing management.": {
+    "en": "Could not open billing management.",
+    "pt-BR": "Não foi possível abrir o gerenciamento de cobrança.",
+    "es": "No se pudo abrir la gestión de facturación.",
+    "fr": "Impossible d’ouvrir la gestion de la facturation.",
+    "de": "Die Abrechnungsverwaltung konnte nicht geöffnet werden.",
+    "it": "Impossibile aprire la gestione della fatturazione."
   }
 } as const satisfies Record<string, Record<Locale, string>>;
 

@@ -419,3 +419,94 @@ test('workspace server presentation follows locale and preserves private identit
     assert.ok(html.includes(t('No activity to resume yet.')));
   }
 });
+
+test('member identity, directory, sharing and public profile render in all six locales', async () => {
+  const React = await import('react');
+  const runtime = await import('react/jsx-runtime');
+  const { renderToStaticMarkup } = await import('react-dom/server');
+  const member = {
+    name: 'João <Müller>', handle: 'member_test', number: 'TGPI-1234-1234-1234',
+    avatar: '', headline: 'Original headline', bio: 'Original biography', country: '',
+    rank: { name: 'Explorer', points: 1234 }, career: ['Original profession'],
+    languages: ['English'], goal: 'Original goal', countries: [], links: [],
+    courses: [{ title: 'Original course', path: '/courses/original' }],
+    certificates: [{ title: 'Original credential', path: '/certificates/original' }],
+  };
+  const escape = value => value.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#x27;');
+  const files = {
+    MemberIdentityEditor: ['Your name across TGPI.', 'Loading your member identity…', 'Find another member →'],
+    MemberDirectory: ['Find a global perspective.', 'Enter an exact @ID or full TGPI number.', 'Find member'],
+    PublicProfileShareButton: ['Share profile', 'Copy link'],
+    PublicMemberView: ['Platform progression', 'Professional context', 'Verifiable credentials', 'Verify'],
+  };
+  for (const locale of locales) {
+    const t = (key, values) => translate(locale, key, values);
+    for (const [file, labels] of Object.entries(files)) {
+      const exports = {};
+      const code = ts.transpileModule(fs.readFileSync('src/components/profile/' + file + '.tsx', 'utf8'), {
+        compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX, esModuleInterop: true },
+      }).outputText;
+      new Function('require', 'exports', code)(name => {
+        if (name === 'react') return React;
+        if (name === 'react/jsx-runtime') return runtime;
+        if (name === 'next/navigation') return { useRouter: () => ({ refresh() {} }) };
+        if (name === 'next/link') return { __esModule: true, default: ({ children, ...props }) => React.createElement('a', props, children) };
+        if (name === '@/components/localization/LocaleProvider') return { useLocale: () => ({ locale, t }) };
+        if (name === '@/lib/localization/server') return { getLocale: async () => locale };
+        if (name === '@/lib/localization/messages') return { translate };
+        if (name === '@/lib/members/identity') return {};
+        throw Error('Unexpected import: ' + name);
+      }, exports);
+      const props = { member, title: member.name, url: '/member/' + member.number };
+      const html = renderToStaticMarkup(file === 'PublicMemberView' ? await exports.default(props) : React.createElement(exports.default, props));
+      for (const label of labels) {
+        assert.ok(messages[label], label);
+        assert.ok(html.includes(escape(t(label))), locale + ': ' + label);
+      }
+      if (file === 'PublicMemberView') {
+        assert.ok(html.includes('João &lt;Müller&gt;'));
+        assert.ok(html.includes('Original biography'));
+        assert.ok(html.includes('/certificates/original'));
+        assert.ok(html.includes(escape(t('{points} / {maximum} points from activity and learning inside TGPI.', { points: (1234).toLocaleString(locale), maximum: (10000).toLocaleString(locale) }))));
+      }
+    }
+  }
+});
+
+test('billing renders localized status, access and dates, including unknown values and invalid dates', async () => {
+  const React = await import('react');
+  const runtime = await import('react/jsx-runtime');
+  const { renderToStaticMarkup } = await import('react-dom/server');
+  const code = ts.transpileModule(fs.readFileSync('src/components/profile/AccountBillingPanel.tsx', 'utf8'), {
+    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX, esModuleInterop: true },
+  }).outputText;
+  const cases = [
+    ['past_due', 'subscription', 'Payment overdue', 'Subscription', '2026-11-15T00:00:00Z'],
+    ['active', 'preview', 'Active', 'Preview access', '2026-11-15T00:00:00Z'],
+    ['constructor', '__proto__', 'Unavailable', 'Unavailable', 'bad-date'],
+  ];
+  for (const locale of locales) for (const [status, accessMode, statusLabel, accessLabel, date] of cases) {
+    const t = (key, values) => translate(locale, key, values);
+    const exports = {};
+    let stateIndex = 0;
+    new Function('require', 'exports', code)(name => {
+      if (name === 'react') return {
+        ...React,
+        useState(initial) {
+          if (stateIndex++ === 0) return [{ plan: 'premium', status, accessMode, currentPeriodEnd: date, cancelAtPeriodEnd: true, portalAvailable: true }, () => {}];
+          return React.useState(initial);
+        },
+      };
+      if (name === 'react/jsx-runtime') return runtime;
+      if (name === '@/components/localization/LocaleProvider') return { useLocale: () => ({ locale, t }) };
+      if (name === 'next/link') return { __esModule: true, default: ({ children, ...props }) => React.createElement('a', props, children) };
+      throw Error('Unexpected import: ' + name);
+    }, exports);
+    const html = renderToStaticMarkup(React.createElement(exports.default));
+    assert.ok(html.includes(t('Status: {status} · Access: {access}', { status: t(statusLabel), access: t(accessLabel) })));
+    const formattedDate = date === 'bad-date' ? t('Date unavailable') : new Date(date).toLocaleDateString(locale, { timeZone: 'UTC' });
+    assert.ok(html.includes(formattedDate));
+    assert.ok(html.includes(t('Access scheduled until')));
+    assert.ok(html.includes(t('Manage subscription securely →')));
+  }
+});
