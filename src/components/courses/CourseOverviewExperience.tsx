@@ -277,7 +277,7 @@ function CourseOverview({ course, workshop }: { course: Course; workshop?: React
                 </div>
                 <h3 className="mt-5 text-2xl font-semibold">{t(competency.title)}</h3>
                 <p className="mt-3 text-sm leading-7 text-[var(--tgpi-muted)]">{t(competency.description)}</p>
-                <div className="mt-5 rounded-2xl border border-[var(--tgpi-gold)]/25 bg-[#FFF9E9] p-4">
+                <div className="mt-5 rounded-2xl border border-[var(--tgpi-gold)]/25 bg-[var(--tgpi-inverse)] p-4">
                   <p className="text-[9px] font-extrabold uppercase tracking-[0.16em] text-[var(--tgpi-gold-strong)]"><LocalizedText text="Can-do statement" /></p>
                   <p className="mt-2 text-sm font-extrabold leading-7 text-[var(--tgpi-navy)]">{t(competency.canDoStatement)}</p>
                 </div>
@@ -392,7 +392,7 @@ function CourseOverview({ course, workshop }: { course: Course; workshop?: React
                       <p className="mt-3 max-w-3xl text-sm leading-7 text-[var(--tgpi-muted)]">{t(courseModule.description)}</p>
                       <div className="mt-4 flex flex-wrap gap-2">
                         {moduleCompetencies.map((competency) => (
-                          <span key={competency.id} className="rounded-full border border-[var(--tgpi-gold)]/25 bg-[#FFF9E9] px-3 py-1.5 text-[9px] font-extrabold uppercase tracking-[0.12em] text-[var(--tgpi-gold-strong)]"><LocalizedText text="Capability ·" />{" "}{t(competency.title)}
+                          <span key={competency.id} className="rounded-full border border-[var(--tgpi-gold)]/25 bg-[var(--tgpi-inverse)] px-3 py-1.5 text-[9px] font-extrabold uppercase tracking-[0.12em] text-[var(--tgpi-gold-strong)]"><LocalizedText text="Capability ·" />{" "}{t(competency.title)}
                           </span>
                         ))}
                       </div>
@@ -415,7 +415,7 @@ function CourseOverview({ course, workshop }: { course: Course; workshop?: React
                             completed
                               ? "border-[#B9DDCA] bg-[#F1F8F4]"
                               : current
-                                ? "border-[var(--tgpi-gold)] bg-[#FFF9E9]"
+                                ? "border-[var(--tgpi-gold)] bg-[var(--tgpi-inverse)]"
                                 : "border-[var(--tgpi-border-soft)] bg-white hover:border-[var(--tgpi-gold)]/60"
                           }`}
                         >

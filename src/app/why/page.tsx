@@ -8,7 +8,7 @@ import { LocalizedText } from "@/components/localization/LocaleProvider";
 export default function WhyPage() {
   return (
     <TGPIPageShell>
-      <section className="overflow-hidden rounded-[42px] border border-[#D8D2C4] bg-[#FFFDF8] shadow-[0_38px_100px_rgba(11,31,58,0.11)]">
+      <section className="overflow-hidden rounded-[42px] border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] shadow-[0_38px_100px_rgba(11,31,58,0.11)]">
         <div className="grid lg:grid-cols-[0.94fr_1.06fr]">
           <div className="flex flex-col justify-center p-8 md:p-12 lg:p-14">
             <p className="text-xs font-black uppercase tracking-[0.28em] text-[#9A6A12]">
@@ -23,11 +23,11 @@ export default function WhyPage() {
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/compare"
-                className="rounded-2xl bg-[#0B1F3A] px-6 py-4 text-center text-sm font-black text-white transition hover:bg-[#132B4C]"
+                className="rounded-2xl bg-[var(--tgpi-navy-raised)] px-6 py-4 text-center text-sm font-black text-white transition hover:bg-[#132B4C]"
               ><LocalizedText text="Compare Countries" /></Link>
               <Link
                 href="/about"
-                className="rounded-2xl border border-[#B58A2A] bg-[#FFF7DE] px-6 py-4 text-center text-sm font-black text-[#6F4908] transition hover:bg-[#F7E8BA]"
+                className="rounded-2xl border border-[var(--tgpi-gold-hover)] bg-[#FFF7DE] px-6 py-4 text-center text-sm font-black text-[#6F4908] transition hover:bg-[#F7E8BA]"
               >
                 About the Institute
               </Link>
@@ -47,9 +47,9 @@ export default function WhyPage() {
         <WhyTGPIIsDifferent />
       </section>
 
-      <section className="mb-16 grid overflow-hidden rounded-[38px] border border-[#D8D2C4] bg-[#0B1F3A] text-white shadow-[0_34px_100px_rgba(11,31,58,0.2)] lg:grid-cols-[1fr_0.92fr]">
+      <section className="mb-16 grid overflow-hidden rounded-[38px] border border-[var(--tgpi-border)] bg-[var(--tgpi-navy-raised)] text-white shadow-[0_34px_100px_rgba(11,31,58,0.2)] lg:grid-cols-[1fr_0.92fr]">
         <div className="p-8 md:p-12">
-          <p className="text-xs font-black uppercase tracking-[0.24em] text-[#F0D58C]">
+          <p className="text-xs font-black uppercase tracking-[0.24em] text-[var(--tgpi-gold-light)]">
             TGPI principle
           </p>
           <h2 className="mt-5 font-serif text-4xl font-semibold leading-tight md:text-6xl">
@@ -60,7 +60,7 @@ export default function WhyPage() {
           </p>
           <Link
             href="/pricing"
-            className="mt-8 inline-flex rounded-2xl bg-[#B58A2A] px-6 py-4 text-sm font-black text-[#0B0B0B] transition hover:bg-[#C79B36]"
+            className="mt-8 inline-flex rounded-2xl bg-[var(--tgpi-gold-hover)] px-6 py-4 text-sm font-black text-[#0B0B0B] transition hover:bg-[#C79B36]"
           >
             Explore TGPI Membership
           </Link>

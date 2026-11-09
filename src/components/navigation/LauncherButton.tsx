@@ -31,8 +31,9 @@ export default function LauncherButton({ compact = false }: { compact?: boolean 
       onClick={() => window.dispatchEvent(new Event(SUPER_APP_OPEN_EVENT))}
       className={compact ? "tgpi-compact-action tgpi-compact-apps" : "tgpi-navigation-icon-button"}
     >
-      <NavigationIcon name={compact ? "menu" : "apps"} width={20} height={20} />
-      <span className="tgpi-apps-label">{t("Apps")}</span>
+      <NavigationIcon name="search" width={20} height={20} />
+      <span className="tgpi-apps-label">{t("Search TGPI")}</span>
+      {!compact ? <kbd aria-hidden="true">⌘ K</kbd> : null}
     </button>
   );
 }

@@ -37,5 +37,5 @@ export function isMobileRouteActive(pathname: string, href: string): boolean {
 }
 
 export function isFocusedMobileRoute(pathname: string): boolean {
-  return /^\/(?:sign-in|sign-up|login|upgrade|upgrade-success)(?:\/|$)/.test(pathname) || (pathname.includes("/lessons/") || /^\/courses\/[^/]+\/certification(?:\/|$)/.test(pathname));
+  return /^\/(?:sign-in|sign-up|login|upgrade|upgrade-success)(?:\/|$)/.test(pathname) || (/^\/courses\/[^/]+\/study(?:\/|$)/.test(pathname) || pathname.includes("/lessons/") || /^\/courses\/[^/]+\/certification(?:\/|$)/.test(pathname));
 }

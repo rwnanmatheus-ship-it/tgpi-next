@@ -50,14 +50,14 @@ export default async function LegalDocument({
         </header>
 
         <nav
-          className="flex gap-2 overflow-x-auto border-b border-[var(--tgpi-border)] bg-[#FFFDF8] px-5 py-4 sm:px-8"
+          className="flex gap-2 overflow-x-auto border-b border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] px-5 py-4 sm:px-8"
           aria-label={t("TGPI legal documents")}
         >
           {legalNav.map((item) => (
             <Link
               key={item.href}
               href={item.href}
-              className="shrink-0 rounded-full border border-[#D8D2C4] bg-white px-4 py-2 text-xs font-extrabold text-[#0B1F3A] transition hover:border-[#B58A2A] hover:text-[#956A13]"
+              className="shrink-0 rounded-full border border-[var(--tgpi-border)] bg-white px-4 py-2 text-xs font-extrabold text-[var(--tgpi-navy-raised)] transition hover:border-[var(--tgpi-gold-hover)] hover:text-[#956A13]"
             >
               {t(item.label)}
             </Link>
@@ -69,8 +69,8 @@ export default async function LegalDocument({
             {children}
           </div>
 
-          <aside className="mt-12 rounded-2xl border border-[#D8D2C4] bg-[#F8F5EE] p-5 text-sm leading-7 text-[#596576]">
-            <p className="font-extrabold text-[#0B1F3A]">TGPI GLOBAL EDUCATION LTDA</p>
+          <aside className="mt-12 rounded-2xl border border-[var(--tgpi-border)] bg-[var(--tgpi-canvas-alt)] p-5 text-sm leading-7 text-[#596576]">
+            <p className="font-extrabold text-[var(--tgpi-navy-raised)]">TGPI GLOBAL EDUCATION LTDA</p>
             <p>{t("CNPJ 49.709.438/0001-32 · Campinas, São Paulo, Brazil")}</p>
             <p>
               {t("Official electronic address:")}{" "}

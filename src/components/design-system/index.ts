@@ -6,3 +6,7 @@ export * from "./EditorialLabel";
 export * from "./Grid3D";
 export * from "./Section";
 export * from "./Surface3D";
+export * from './Feedback';
+export * from './Field';
+export * from './Dialog';
+export * from './Tabs';

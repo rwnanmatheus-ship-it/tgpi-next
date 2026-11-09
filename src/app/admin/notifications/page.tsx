@@ -9,7 +9,7 @@ export default async function NotificationOperationsPage() {
   return (
     <main
 
-      className="min-h-[75vh] bg-[#F8F5EE] px-4 py-10 text-[#0B1F3A]"
+      className="min-h-[75vh] bg-[var(--tgpi-canvas-alt)] px-4 py-10 text-[var(--tgpi-navy-raised)]"
     >
       <div className="mx-auto max-w-2xl">
         <p className="text-xs font-bold uppercase tracking-widest text-[#805D19]">

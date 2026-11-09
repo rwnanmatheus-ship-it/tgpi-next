@@ -80,7 +80,7 @@ export default function MonthlyCostPlanner({
             setAmount(Number(event.target.value));
             setSaved(false);
           }}
-          className="w-full rounded-xl border border-[#B8C9DF] bg-white p-3 text-base text-[#0B1F3A]"
+          className="w-full rounded-xl border border-[#B8C9DF] bg-white p-3 text-base text-[var(--tgpi-navy-raised)]"
         />
       </label>
 
@@ -91,7 +91,7 @@ export default function MonthlyCostPlanner({
           type="button"
           onClick={saveEstimate}
           disabled={isLoading || isSaving || !Number.isFinite(amount) || amount <= 0 || amount > 1000000}
-          className="mt-5 inline-flex min-h-11 items-center justify-center rounded-xl bg-[#0B1F3A] px-5 text-sm font-black text-white transition hover:bg-[#143454] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C59632] disabled:cursor-wait disabled:opacity-60"
+          className="mt-5 inline-flex min-h-11 items-center justify-center rounded-xl bg-[var(--tgpi-navy-raised)] px-5 text-sm font-black text-white transition hover:bg-[#143454] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C59632] disabled:cursor-wait disabled:opacity-60"
         >
           {isSaving
             ? "Saving…"
@@ -102,7 +102,7 @@ export default function MonthlyCostPlanner({
       ) : !isLoading ? (
         <Link
           href={`/sign-in?redirect_url=/countries/${countrySlug}%23cost-of-living`}
-          className="mt-5 inline-flex min-h-11 items-center justify-center rounded-xl bg-[#0B1F3A] px-5 text-sm font-black text-white"
+          className="mt-5 inline-flex min-h-11 items-center justify-center rounded-xl bg-[var(--tgpi-navy-raised)] px-5 text-sm font-black text-white"
         >
           Sign in to save estimate
         </Link>

@@ -43,7 +43,7 @@ export default function HomeCommandCenter() {
               <div className="flex items-center justify-between gap-3"><div><p className="text-[9px] font-extrabold uppercase tracking-[.2em] text-[var(--tgpi-gold-light)]">Workspace preview</p><p className="mt-2 font-[var(--tgpi-font-display)] text-2xl font-semibold sm:text-3xl">Global Plan · Command Center</p></div><span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl border border-white/12 bg-white/[.06] text-[var(--tgpi-gold-light)]"><NavigationIcon name="apps" /></span></div>
               <div className="mt-auto grid gap-3 sm:grid-cols-3">
                 {workspaceCards.map(([title, detail, icon]) => (
-                  <div key={title} className="rounded-2xl border border-white/12 bg-[#031426]/76 p-4 backdrop-blur-xl"><NavigationIcon name={icon as "globe" | "target" | "graph"} width={18} height={18} className="text-[var(--tgpi-gold-light)]" /><p className="mt-4 text-sm font-extrabold">{title}</p><p className="mt-2 text-[10px] leading-5 text-white/48">{detail}</p></div>
+                  <div key={title} className="rounded-2xl border border-white/12 bg-[var(--tgpi-navy-deep)]/76 p-4 backdrop-blur-xl"><NavigationIcon name={icon as "globe" | "target" | "graph"} width={18} height={18} className="text-[var(--tgpi-gold-light)]" /><p className="mt-4 text-sm font-extrabold">{title}</p><p className="mt-2 text-[10px] leading-5 text-white/48">{detail}</p></div>
                 ))}
               </div>
             </div>

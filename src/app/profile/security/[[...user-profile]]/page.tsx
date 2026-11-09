@@ -90,7 +90,7 @@ export default async function SecurityPage() {
   });
 
   return (
-    <main className="min-h-screen bg-[#F5F1E8] px-4 py-6 text-[#0B1F3A] sm:px-6 sm:py-10 lg:py-14">
+    <main className="min-h-screen bg-[#F5F1E8] px-4 py-6 text-[var(--tgpi-navy-raised)] sm:px-6 sm:py-10 lg:py-14">
       <TgpiAccountCenter
         account={{
           avatarUrl: user?.imageUrl || "",

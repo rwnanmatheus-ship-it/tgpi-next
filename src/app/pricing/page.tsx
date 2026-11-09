@@ -108,7 +108,7 @@ const faqs = [
 const eyebrow =
   "text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#956A13]";
 const heading =
-  "font-[var(--tgpi-font-display)] font-semibold leading-[1.02] tracking-[-0.035em] text-[#0B1F3A]";
+  "font-[var(--tgpi-font-display)] font-semibold leading-[1.02] tracking-[-0.035em] text-[var(--tgpi-navy-raised)]";
 
 export default async function PricingPage({
   searchParams,
@@ -124,7 +124,7 @@ export default async function PricingPage({
         {canceled === "1" && (
           <p
             role="status"
-            className="mb-5 rounded-2xl border border-[#D8D2C4] bg-white p-4 text-sm text-[#0B1F3A]"
+            className="mb-5 rounded-2xl border border-[var(--tgpi-border)] bg-white p-4 text-sm text-[var(--tgpi-navy-raised)]"
           >
             Checkout was closed. You can review the membership and try again
             when you are ready.
@@ -145,7 +145,7 @@ export default async function PricingPage({
               />
               <div>
                 <p className={eyebrow}>The Global Polymath Institute</p>
-                <p className="mt-1 text-xs font-semibold text-[#0B1F3A]">
+                <p className="mt-1 text-xs font-semibold text-[var(--tgpi-navy-raised)]">
                   Data · Education · Mobility · Decision
                 </p>
               </div>
@@ -168,12 +168,12 @@ export default async function PricingPage({
             </p>
             <a
               href="#membership"
-              className="mt-5 inline-flex min-h-11 items-center gap-3 text-sm font-bold text-[#0B1F3A] underline decoration-[#B58A2A] underline-offset-8"
+              className="mt-5 inline-flex min-h-11 items-center gap-3 text-sm font-bold text-[var(--tgpi-navy-raised)] underline decoration-[var(--tgpi-gold-hover)] underline-offset-8"
             >
               View membership options <span aria-hidden="true">↓</span>
             </a>
-            <div className="mt-4"><Link href="/premium/demo" className="inline-flex min-h-11 items-center rounded-xl border border-[#B58A2A] px-4 py-2 text-sm font-bold text-[#0B1F3A]"><LocalizedText text="Try the scenario comparison" /> ↗</Link></div>
-            <div className="relative mt-6 hidden aspect-[3/2] lg:block overflow-hidden rounded-[24px] bg-[#0B1F3A]">
+            <div className="mt-4"><Link href="/premium/demo" className="inline-flex min-h-11 items-center rounded-xl border border-[var(--tgpi-gold-hover)] px-4 py-2 text-sm font-bold text-[var(--tgpi-navy-raised)]"><LocalizedText text="Try the scenario comparison" /> ↗</Link></div>
+            <div className="relative mt-6 hidden aspect-[3/2] lg:block overflow-hidden rounded-[24px] bg-[var(--tgpi-navy-raised)]">
               <Image
                 src="/images/pricing/tgpi-premium-global-library-v1.webp"
                 alt="International research library overlooking a waterfront city, with a brass globe and warm academic lighting"
@@ -190,11 +190,11 @@ export default async function PricingPage({
           </div>
           <aside
             id="membership"
-            className="scroll-mt-28 overflow-hidden rounded-[28px] border border-[#B58A2A]/40 bg-[#0B1F3A] text-white shadow-[0_24px_70px_rgba(11,31,58,0.16)] lg:sticky lg:top-28"
+            className="scroll-mt-28 overflow-hidden rounded-[28px] border border-[var(--tgpi-gold-hover)]/40 bg-[var(--tgpi-navy-raised)] text-white shadow-[0_24px_70px_rgba(11,31,58,0.16)] lg:sticky lg:top-28"
             aria-label="Premium membership"
           >
             <div className="flex items-center justify-between gap-3 border-b border-white/15 px-6 py-4 sm:px-8">
-              <span className="text-xs font-extrabold uppercase tracking-[0.18em] text-[#F0D58C]">
+              <span className="text-xs font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-gold-light)]">
                 One complete membership
               </span>
               <span className="text-xs text-white/80">Monthly</span>
@@ -224,7 +224,7 @@ export default async function PricingPage({
                   : "Payments are temporarily unavailable. Join the early-access list."}
               </p>
               <div className="mt-7 border-t border-white/15 pt-6">
-                <p className="text-xs font-bold uppercase tracking-[0.16em] text-[#F0D58C]">
+                <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--tgpi-gold-light)]">
                   Included in your membership
                 </p>
                 <ul className="mt-4 space-y-3">
@@ -233,7 +233,7 @@ export default async function PricingPage({
                       key={feature}
                       className="flex gap-3 text-sm leading-6 text-white/90"
                     >
-                      <span aria-hidden="true" className="text-[#F0D58C]">
+                      <span aria-hidden="true" className="text-[var(--tgpi-gold-light)]">
                         ✓
                       </span>
                       <span>{feature}</span>
@@ -252,7 +252,7 @@ export default async function PricingPage({
           </aside>
         </section>
         <section
-          className="mt-10 grid gap-5 rounded-[24px] border border-[#D8D2C4] bg-white p-6 sm:grid-cols-3 sm:p-8"
+          className="mt-10 grid gap-5 rounded-[24px] border border-[var(--tgpi-border)] bg-white p-6 sm:grid-cols-3 sm:p-8"
           aria-label="Your first steps"
         >
           {[
@@ -274,7 +274,7 @@ export default async function PricingPage({
           ].map(([n, title, description]) => (
             <div key={n}>
               <p className={eyebrow}>Start here / {n}</p>
-              <h2 className="mt-3 text-base font-bold text-[#0B1F3A]">
+              <h2 className="mt-3 text-base font-bold text-[var(--tgpi-navy-raised)]">
                 {title}
               </h2>
               <p className="mt-2 text-sm leading-7 text-[#596576]">
@@ -294,7 +294,7 @@ export default async function PricingPage({
             {systems.map((system) => (
               <article
                 key={system.number}
-                className="rounded-[24px] border border-[#D8D2C4] bg-white p-6 sm:p-8"
+                className="rounded-[24px] border border-[var(--tgpi-border)] bg-white p-6 sm:p-8"
               >
                 <div className="flex justify-between gap-4">
                   <p className={eyebrow}>{system.label}</p>
@@ -310,7 +310,7 @@ export default async function PricingPage({
                 </p>
                 <Link
                   href={system.href}
-                  className="mt-5 inline-flex min-h-11 items-center gap-3 text-sm font-bold text-[#0B1F3A]"
+                  className="mt-5 inline-flex min-h-11 items-center gap-3 text-sm font-bold text-[var(--tgpi-navy-raised)]"
                 >
                   {system.action}
                   <span aria-hidden="true">→</span>
@@ -320,7 +320,7 @@ export default async function PricingPage({
           </div>
         </section>
         <section
-          className="grid overflow-hidden rounded-[28px] border border-[#D8D2C4] bg-white md:grid-cols-2"
+          className="grid overflow-hidden rounded-[28px] border border-[var(--tgpi-border)] bg-white md:grid-cols-2"
           aria-labelledby="preparation-title"
         >
           <div className="relative min-h-64 md:min-h-96">
@@ -347,7 +347,7 @@ export default async function PricingPage({
             </p>
             <a
               href="#membership"
-              className="mt-6 inline-flex min-h-11 items-center gap-3 text-sm font-bold text-[#0B1F3A]"
+              className="mt-6 inline-flex min-h-11 items-center gap-3 text-sm font-bold text-[var(--tgpi-navy-raised)]"
             >
               View your membership options <span aria-hidden="true">↑</span>
             </a>
@@ -362,7 +362,7 @@ export default async function PricingPage({
           >
             Explore free. Prepare with Premium.
           </h2>
-          <div className="mt-8 overflow-hidden rounded-[24px] border border-[#D8D2C4] bg-white">
+          <div className="mt-8 overflow-hidden rounded-[24px] border border-[var(--tgpi-border)] bg-white">
             <div
               className="overflow-x-auto"
               role="region"
@@ -379,22 +379,22 @@ export default async function PricingPage({
                       Capability
                     </th>
                     <th scope="col" className="p-5"><LocalizedText text="Free" /></th>
-                    <th scope="col" className="bg-[#0B1F3A] p-5 text-[#F0D58C]">
+                    <th scope="col" className="bg-[var(--tgpi-navy-raised)] p-5 text-[var(--tgpi-gold-light)]">
                       Premium
                     </th>
                   </tr>
                 </thead>
                 <tbody>
                   {comparisons.map(([feature, free, premium]) => (
-                    <tr key={feature} className="border-t border-[#D8D2C4]">
+                    <tr key={feature} className="border-t border-[var(--tgpi-border)]">
                       <th
                         scope="row"
-                        className="p-5 font-semibold text-[#0B1F3A]"
+                        className="p-5 font-semibold text-[var(--tgpi-navy-raised)]"
                       >
                         <LocalizedText text={feature} />
                       </th>
                       <td className="p-5 text-[#596576]"><LocalizedText text={free} /></td>
-                      <td className="bg-[#0B1F3A] p-5 font-semibold text-white">
+                      <td className="bg-[var(--tgpi-navy-raised)] p-5 font-semibold text-white">
                         <LocalizedText text={premium} />
                       </td>
                     </tr>
@@ -403,13 +403,13 @@ export default async function PricingPage({
               </table>
             </div>
           </div>
-          <div className="mt-5 flex flex-col justify-between gap-4 rounded-2xl border border-[#D8D2C4] p-5 sm:flex-row sm:items-center">
+          <div className="mt-5 flex flex-col justify-between gap-4 rounded-2xl border border-[var(--tgpi-border)] p-5 sm:flex-row sm:items-center">
             <p className="text-sm leading-6 text-[#596576]">
               Still exploring? {TGPI_FREE_PLAN.description}
             </p>
             <Link
               href="/sign-up?next=%2Fpricing%23membership"
-              className="inline-flex min-h-11 shrink-0 items-center font-bold text-[#0B1F3A] underline underline-offset-4"
+              className="inline-flex min-h-11 shrink-0 items-center font-bold text-[var(--tgpi-navy-raised)] underline underline-offset-4"
             >
               Create a free account →
             </Link>
@@ -434,10 +434,10 @@ export default async function PricingPage({
               your decision.
             </p>
           </div>
-          <div className="divide-y divide-[#D8D2C4] border-y border-[#D8D2C4]">
+          <div className="divide-y divide-[var(--tgpi-border)] border-y border-[var(--tgpi-border)]">
             {faqs.map(([question, answer]) => (
               <details key={question} className="group py-5">
-                <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-4 font-bold text-[#0B1F3A]">
+                <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-4 font-bold text-[var(--tgpi-navy-raised)]">
                   {question}
                   <span
                     aria-hidden="true"
@@ -453,10 +453,10 @@ export default async function PricingPage({
             ))}
           </div>
         </section>
-        <section className="rounded-[28px] bg-[#0B1F3A] p-7 text-white sm:p-10">
+        <section className="rounded-[28px] bg-[var(--tgpi-navy-raised)] p-7 text-white sm:p-10">
           <div className="grid gap-7 lg:grid-cols-[1fr_340px] lg:items-center">
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[#F0D58C]">
+              <p className="text-xs font-bold uppercase tracking-[0.18em] text-[var(--tgpi-gold-light)]">
                 Your next chapter starts with clarity
               </p>
               <h2 className="mt-4 font-[var(--tgpi-font-display)] text-4xl font-semibold leading-tight sm:text-5xl">

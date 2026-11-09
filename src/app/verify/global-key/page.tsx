@@ -47,11 +47,11 @@ export default async function VerifyGlobalKeyPage({
           </span>
         </header>
 
-        <section className={`relative mt-8 overflow-hidden rounded-[32px] border p-6 shadow-[0_30px_90px_rgba(0,0,0,0.38)] sm:p-10 ${verified ? "border-[#72C79D]/35 bg-[radial-gradient(circle_at_top_right,rgba(51,153,104,0.18),transparent_36%),#081727]" : historical ? "border-[#E5B94B]/35 bg-[radial-gradient(circle_at_top_right,rgba(181,138,42,0.18),transparent_36%),#081727]" : "border-[#D66B6B]/30 bg-[radial-gradient(circle_at_top_right,rgba(164,56,56,0.16),transparent_36%),#081727]"}`}>
-          <span className={`grid h-16 w-16 place-items-center rounded-2xl border text-3xl ${verified ? "border-[#72C79D]/35 bg-[#72C79D]/10" : historical ? "border-[#E5B94B]/35 bg-[#E5B94B]/10" : "border-[#D66B6B]/30 bg-[#D66B6B]/10"}`} aria-hidden="true">
+        <section className={`relative mt-8 overflow-hidden rounded-[32px] border p-6 shadow-[0_30px_90px_rgba(0,0,0,0.38)] sm:p-10 ${verified ? "border-[#72C79D]/35 bg-[radial-gradient(circle_at_top_right,rgba(51,153,104,0.18),transparent_36%),#081727]" : historical ? "border-[var(--tgpi-gold)]/35 bg-[radial-gradient(circle_at_top_right,rgba(181,138,42,0.18),transparent_36%),#081727]" : "border-[#D66B6B]/30 bg-[radial-gradient(circle_at_top_right,rgba(164,56,56,0.16),transparent_36%),#081727]"}`}>
+          <span className={`grid h-16 w-16 place-items-center rounded-2xl border text-3xl ${verified ? "border-[#72C79D]/35 bg-[#72C79D]/10" : historical ? "border-[var(--tgpi-gold)]/35 bg-[var(--tgpi-gold)]/10" : "border-[#D66B6B]/30 bg-[#D66B6B]/10"}`} aria-hidden="true">
             {verified ? "✓" : historical ? "◷" : unavailable ? "…" : "!"}
           </span>
-          <p className={`mt-7 text-[10px] font-extrabold uppercase tracking-[0.24em] ${verified ? "text-[#9EDDBD]" : historical ? "text-[#F0D58C]" : "text-[#F3A3A3]"}`}>
+          <p className={`mt-7 text-[10px] font-extrabold uppercase tracking-[0.24em] ${verified ? "text-[#9EDDBD]" : historical ? "text-[var(--tgpi-gold-light)]" : "text-[#F3A3A3]"}`}>
             {verified
               ? "Live integrity confirmed"
               : historical
@@ -83,7 +83,7 @@ export default async function VerifyGlobalKeyPage({
             <dl className="mt-8 grid gap-3 sm:grid-cols-2">
               <div className="rounded-2xl border border-white/10 bg-black/20 p-4 sm:p-5">
                 <dt className="text-[9px] font-extrabold uppercase tracking-[0.16em] text-[#7E91A4]">TGPI Global ID</dt>
-                <dd className="mt-3 break-all font-mono text-sm font-bold tracking-[0.06em] text-[#F0D58C]">{result.keyId}</dd>
+                <dd className="mt-3 break-all font-mono text-sm font-bold tracking-[0.06em] text-[var(--tgpi-gold-light)]">{result.keyId}</dd>
               </div>
               <div className="rounded-2xl border border-white/10 bg-black/20 p-4 sm:p-5">
                 <dt className="text-[9px] font-extrabold uppercase tracking-[0.16em] text-[#7E91A4]">Current revision</dt>
@@ -207,7 +207,7 @@ export default async function VerifyGlobalKeyPage({
                     </div>
                   </details>
                   <a
-                    className="mt-4 inline-flex min-h-11 items-center rounded-xl bg-[#E5B94B] px-5 text-xs font-extrabold text-[#07182D] transition hover:bg-[#F0C95F]"
+                    className="mt-4 inline-flex min-h-11 items-center rounded-xl bg-[var(--tgpi-gold)] px-5 text-xs font-extrabold text-[#07182D] transition hover:bg-[#F0C95F]"
                     href={anchor.explorerUrl}
                     rel="noreferrer"
                     target="_blank"
@@ -226,17 +226,17 @@ export default async function VerifyGlobalKeyPage({
           ) : null}
 
           <div className="mt-8 flex flex-wrap gap-3">
-            <Link className="inline-flex min-h-11 items-center rounded-xl bg-[#E5B94B] px-5 text-xs font-extrabold text-[#07182D] transition hover:bg-[#F0C95F]" href="/">
+            <Link className="inline-flex min-h-11 items-center rounded-xl bg-[var(--tgpi-gold)] px-5 text-xs font-extrabold text-[#07182D] transition hover:bg-[#F0C95F]" href="/">
               Explore TGPI
             </Link>
-            <Link className="inline-flex min-h-11 items-center rounded-xl border border-white/15 px-5 text-xs font-extrabold transition hover:border-[#E5B94B]/40" href="/sign-in">
+            <Link className="inline-flex min-h-11 items-center rounded-xl border border-white/15 px-5 text-xs font-extrabold transition hover:border-[var(--tgpi-gold)]/40" href="/sign-in">
               Open my Global Key
             </Link>
           </div>
         </section>
 
         <section className="mt-6 rounded-[24px] border border-white/10 bg-[#0A1521] p-5 sm:p-7">
-          <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#E5B94B]">Technology disclosure</p>
+          <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold)]">Technology disclosure</p>
           <p className="mt-3 text-xs leading-6 text-[#9FAFC0]">
             TGPI Integrity Chain combines an authenticated TGPI identity record with privacy-safe Merkle roots periodically written to Base Mainnet. The public chain never receives names, email addresses, Global IDs, documents or private progress. This remains a verification record—not a cryptocurrency, NFT, wallet, passport, academic accreditation or government identity.
           </p>

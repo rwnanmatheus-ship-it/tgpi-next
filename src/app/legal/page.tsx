@@ -48,30 +48,30 @@ export default function LegalPage() {
     >
       <section>
         <h2 className="text-2xl font-semibold text-[var(--tgpi-navy)]">Company identity</h2>
-        <dl className="mt-5 grid gap-4 rounded-2xl border border-[#D8D2C4] bg-[#FFFDF8] p-5 sm:grid-cols-2">
+        <dl className="mt-5 grid gap-4 rounded-2xl border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] p-5 sm:grid-cols-2">
           <div>
             <dt className="text-xs font-extrabold uppercase tracking-[0.14em] text-[#956A13]">Legal name</dt>
-            <dd className="mt-1 font-bold text-[#0B1F3A]">TGPI GLOBAL EDUCATION LTDA</dd>
+            <dd className="mt-1 font-bold text-[var(--tgpi-navy-raised)]">TGPI GLOBAL EDUCATION LTDA</dd>
           </div>
           <div>
             <dt className="text-xs font-extrabold uppercase tracking-[0.14em] text-[#956A13]">CNPJ</dt>
-            <dd className="mt-1 font-bold text-[#0B1F3A]">49.709.438/0001-32</dd>
+            <dd className="mt-1 font-bold text-[var(--tgpi-navy-raised)]">49.709.438/0001-32</dd>
           </div>
           <div>
             <dt className="text-xs font-extrabold uppercase tracking-[0.14em] text-[#956A13]">Brand</dt>
-            <dd className="mt-1 font-bold text-[#0B1F3A]">TGPI — The Global Polymath Institute</dd>
+            <dd className="mt-1 font-bold text-[var(--tgpi-navy-raised)]">TGPI — The Global Polymath Institute</dd>
           </div>
           <div>
             <dt className="text-xs font-extrabold uppercase tracking-[0.14em] text-[#956A13]">Jurisdiction</dt>
-            <dd className="mt-1 font-bold text-[#0B1F3A]">Campinas, São Paulo, Brazil</dd>
+            <dd className="mt-1 font-bold text-[var(--tgpi-navy-raised)]">Campinas, São Paulo, Brazil</dd>
           </div>
           <div>
             <dt className="text-xs font-extrabold uppercase tracking-[0.14em] text-[#956A13]"><LocalizedText text="Website" /></dt>
-            <dd className="mt-1 font-bold text-[#0B1F3A]">theglobalpolymath.com</dd>
+            <dd className="mt-1 font-bold text-[var(--tgpi-navy-raised)]">theglobalpolymath.com</dd>
           </div>
           <div>
             <dt className="text-xs font-extrabold uppercase tracking-[0.14em] text-[#956A13]">Official electronic address</dt>
-            <dd className="mt-1 font-bold text-[#0B1F3A]">
+            <dd className="mt-1 font-bold text-[var(--tgpi-navy-raised)]">
               <a
                 href="mailto:corporate@theglobalpolymath.com"
                 className="underline-offset-4 hover:underline"
@@ -82,7 +82,7 @@ export default function LegalPage() {
           </div>
           <div>
             <dt className="text-xs font-extrabold uppercase tracking-[0.14em] text-[#956A13]">Customer & billing support</dt>
-            <dd className="mt-1 font-bold text-[#0B1F3A]">
+            <dd className="mt-1 font-bold text-[var(--tgpi-navy-raised)]">
               <a
                 href="mailto:contact@theglobalpolymath.com"
                 className="underline-offset-4 hover:underline"
@@ -120,9 +120,9 @@ export default function LegalPage() {
             <Link
               key={document.href}
               href={document.href}
-              className="rounded-2xl border border-[#D8D2C4] bg-[#FFFDF8] p-5 transition hover:-translate-y-0.5 hover:border-[#B58A2A]"
+              className="rounded-2xl border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] p-5 transition hover:-translate-y-0.5 hover:border-[var(--tgpi-gold-hover)]"
             >
-              <h3 className="font-extrabold text-[#0B1F3A]">{document.title}</h3>
+              <h3 className="font-extrabold text-[var(--tgpi-navy-raised)]">{document.title}</h3>
               <p className="mt-2 text-sm leading-6 text-[#596576]">{document.description}</p>
             </Link>
           ))}

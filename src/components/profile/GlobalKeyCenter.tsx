@@ -87,7 +87,7 @@ function ChainBlock({
         aria-hidden="true"
         className={`absolute left-0 top-0 grid h-9 w-9 place-items-center rounded-xl border font-mono text-xs font-extrabold sm:h-11 sm:w-11 ${
           current
-            ? "border-[#E5B94B] bg-[#E5B94B] text-[#07182D] shadow-[0_0_28px_rgba(229,185,75,0.28)]"
+            ? "border-[var(--tgpi-gold)] bg-[var(--tgpi-gold)] text-[#07182D] shadow-[0_0_28px_rgba(229,185,75,0.28)]"
             : "border-white/15 bg-white/5 text-[#B9C7D5]"
         }`}
       >
@@ -95,18 +95,18 @@ function ChainBlock({
       </span>
       <span
         aria-hidden="true"
-        className="absolute bottom-[-24px] left-[17px] top-11 w-px bg-gradient-to-b from-[#E5B94B]/60 to-white/10 sm:left-[21px] sm:top-14"
+        className="absolute bottom-[-24px] left-[17px] top-11 w-px bg-gradient-to-b from-[var(--tgpi-gold)]/60 to-white/10 sm:left-[21px] sm:top-14"
       />
       <article
         className={`rounded-2xl border p-4 sm:p-5 ${
           current
-            ? "border-[#E5B94B]/35 bg-[#E5B94B]/[0.08]"
+            ? "border-[var(--tgpi-gold)]/35 bg-[var(--tgpi-gold)]/[0.08]"
             : "border-white/10 bg-white/[0.035]"
         }`}
       >
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <p className="text-xs font-extrabold uppercase tracking-[0.18em] text-[#E5B94B]">
+            <p className="text-xs font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-gold)]">
               {block.type === "issued" ? "Genesis block" : "Proof rotation"}
             </p>
             <h3 className="mt-1 text-sm font-extrabold text-white">
@@ -130,7 +130,7 @@ function ChainBlock({
           </div>
           <div>
             <dt className="text-[#75889B]">Block hash</dt>
-            <dd className="mt-1 font-mono text-[#F0D58C]">
+            <dd className="mt-1 font-mono text-[var(--tgpi-gold-light)]">
               {compactHash(block.hash)}
             </dd>
           </div>
@@ -265,7 +265,7 @@ function PublicAnchorPanel({
           </p>
           <div className="mt-4 grid gap-2 sm:grid-cols-2 xl:grid-cols-1 2xl:grid-cols-2">
             <a
-              className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[#E5B94B] px-4 text-xs font-extrabold text-[#07182D] transition hover:bg-[#F0C95F]"
+              className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[var(--tgpi-gold)] px-4 text-xs font-extrabold text-[#07182D] transition hover:bg-[#F0C95F]"
               href={anchor.explorerUrl}
               rel="noreferrer"
               target="_blank"
@@ -351,17 +351,17 @@ export default function GlobalKeyCenter({
       <header className="border-b border-white/10 bg-[#071421]/95 px-4 py-4 backdrop-blur sm:px-6 lg:px-10">
         <div className="mx-auto flex max-w-[1360px] flex-wrap items-center justify-between gap-3">
           <Link
-            className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 text-xs font-extrabold text-[#D5DEE7] transition hover:border-[#E5B94B]/35 hover:text-white"
+            className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 text-xs font-extrabold text-[#D5DEE7] transition hover:border-[var(--tgpi-gold)]/35 hover:text-white"
             href="/profile"
           >
             <span aria-hidden="true">←</span>{" "}<LocalizedText text="Workspace" /></Link>
           <div className="flex flex-wrap gap-2">
             <Link
-              className="inline-flex min-h-11 items-center rounded-xl border border-white/10 px-4 text-xs font-extrabold text-[#D5DEE7] transition hover:border-[#E5B94B]/35"
+              className="inline-flex min-h-11 items-center rounded-xl border border-white/10 px-4 text-xs font-extrabold text-[#D5DEE7] transition hover:border-[var(--tgpi-gold)]/35"
               href="/profile/security"
             ><LocalizedText text="Account security" /></Link>
             <a
-              className="inline-flex min-h-11 items-center rounded-xl bg-[#E5B94B] px-4 text-xs font-extrabold text-[#07182D] transition hover:bg-[#F0C95F]"
+              className="inline-flex min-h-11 items-center rounded-xl bg-[var(--tgpi-gold)] px-4 text-xs font-extrabold text-[#07182D] transition hover:bg-[#F0C95F]"
               href={verifyUrl}
               rel="noreferrer"
               target="_blank"
@@ -373,19 +373,19 @@ export default function GlobalKeyCenter({
       </header>
 
       <main className="tgpi-capability-frame py-6 sm:py-10 lg:py-14">
-        <section className="relative mt-6 overflow-hidden rounded-[32px] border border-[#E5B94B]/25 bg-[radial-gradient(circle_at_82%_18%,rgba(43,112,168,0.32),transparent_30%),radial-gradient(circle_at_10%_100%,rgba(181,138,42,0.18),transparent_32%),#081727] p-5 shadow-[0_32px_100px_rgba(0,0,0,0.38)] sm:p-8 lg:p-10">
+        <section className="relative mt-6 overflow-hidden rounded-[32px] border border-[var(--tgpi-gold)]/25 bg-[radial-gradient(circle_at_82%_18%,rgba(43,112,168,0.32),transparent_30%),radial-gradient(circle_at_10%_100%,rgba(181,138,42,0.18),transparent_32%),#081727] p-5 shadow-[0_32px_100px_rgba(0,0,0,0.38)] sm:p-8 lg:p-10">
           <div className="pointer-events-none absolute inset-0 opacity-20 [background-image:linear-gradient(rgba(255,255,255,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.08)_1px,transparent_1px)] [background-size:42px_42px]" />
           <div className="relative grid gap-8 xl:grid-cols-[minmax(0,1fr)_300px] xl:items-center">
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-3">
                 <span
-                  className="grid h-12 w-12 place-items-center rounded-2xl border border-[#E5B94B]/35 bg-[#E5B94B]/10 text-2xl shadow-[0_0_34px_rgba(229,185,75,0.14)]"
+                  className="grid h-12 w-12 place-items-center rounded-2xl border border-[var(--tgpi-gold)]/35 bg-[var(--tgpi-gold)]/10 text-2xl shadow-[0_0_34px_rgba(229,185,75,0.14)]"
                   aria-hidden="true"
                 >
                   ◇
                 </span>
                 <div>
-                  <p className="text-xs font-extrabold uppercase tracking-[0.24em] text-[#E5B94B]">
+                  <p className="text-xs font-extrabold uppercase tracking-[0.24em] text-[var(--tgpi-gold)]">
                     TGPI Global ID
                   </p>
                   <p className="mt-1 text-xs font-bold text-[#91A4B7]">
@@ -426,19 +426,19 @@ export default function GlobalKeyCenter({
                 <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#7F92A5]">
                   TGPI Global ID
                 </p>
-                <p className="mt-3 break-all font-mono text-xl font-bold tracking-[0.08em] text-[#F0D58C] sm:text-3xl">
+                <p className="mt-3 break-all font-mono text-xl font-bold tracking-[0.08em] text-[var(--tgpi-gold-light)] sm:text-3xl">
                   {keyView.keyId}
                 </p>
                 <div className="mt-5 flex flex-wrap gap-2">
                   <button
-                    className="min-h-11 rounded-xl border border-white/15 bg-white/5 px-4 text-xs font-extrabold transition hover:border-[#E5B94B]/45 hover:bg-white/10"
+                    className="min-h-11 rounded-xl border border-white/15 bg-white/5 px-4 text-xs font-extrabold transition hover:border-[var(--tgpi-gold)]/45 hover:bg-white/10"
                     onClick={() => copyValue(keyView.keyId, "Global ID")}
                     type="button"
                   >
                     Copy Global ID
                   </button>
                   <button
-                    className="min-h-11 rounded-xl border border-white/15 bg-white/5 px-4 text-xs font-extrabold transition hover:border-[#E5B94B]/45 hover:bg-white/10"
+                    className="min-h-11 rounded-xl border border-white/15 bg-white/5 px-4 text-xs font-extrabold transition hover:border-[var(--tgpi-gold)]/45 hover:bg-white/10"
                     onClick={() => copyValue(verifyUrl, "Verification link")}
                     type="button"
                   ><LocalizedText text="Copy verification link" /></button>
@@ -447,7 +447,7 @@ export default function GlobalKeyCenter({
             </div>
 
             <aside className="rounded-[28px] border border-white/10 bg-white/[0.055] p-5 sm:p-6">
-              <p className="text-xs font-bold uppercase tracking-widest text-[#F0D58C]">
+              <p className="text-xs font-bold uppercase tracking-widest text-[var(--tgpi-gold-light)]">
                 Share with confidence
               </p>
               <h2 className="mt-3 text-2xl font-semibold">
@@ -462,13 +462,13 @@ export default function GlobalKeyCenter({
                 aria-expanded={showQr}
                 aria-controls="global-id-qr"
                 onClick={() => setShowQr(!showQr)}
-                className="mt-5 min-h-12 w-full rounded-xl bg-[#E5B94B] px-4 text-sm font-bold text-[#07182D]"
+                className="mt-5 min-h-12 w-full rounded-xl bg-[var(--tgpi-gold)] px-4 text-sm font-bold text-[#07182D]"
               >
                 {showQr ? "Hide verification QR" : "Show verification QR"}
               </button>
               {showQr ? (
                 <div id="global-id-qr" className="mt-5">
-                  <div className="mx-auto w-fit max-w-full rounded-2xl bg-[#F8F5EE] p-4">
+                  <div className="mx-auto w-fit max-w-full rounded-2xl bg-[var(--tgpi-canvas-alt)] p-4">
                     <QRCodeSVG
                       bgColor="#F8F5EE"
                       fgColor="#07182D"
@@ -521,7 +521,7 @@ export default function GlobalKeyCenter({
           className="mt-6 rounded-[28px] border border-white/10 bg-[#08131F] p-5 sm:p-7"
           aria-labelledby="identity-value-title"
         >
-          <p className="text-xs font-bold uppercase tracking-widest text-[#E5B94B]">
+          <p className="text-xs font-bold uppercase tracking-widest text-[var(--tgpi-gold)]">
             Make your ID valuable
           </p>
           <h2 id="identity-value-title" className="mt-2 text-2xl font-semibold">
@@ -556,14 +556,14 @@ export default function GlobalKeyCenter({
                 href={item.href}
                 className={`${styles.actionCard} rounded-2xl border border-white/10 p-5`}
               >
-                <span className="font-mono text-sm text-[#E5B94B]">
+                <span className="font-mono text-sm text-[var(--tgpi-gold)]">
                   {item.step}
                 </span>
                 <h3 className="mt-4 text-lg font-semibold">{item.title}</h3>
                 <p className="mt-2 text-sm leading-6 text-[#B9C7D5]">
                   {item.text}
                 </p>
-                <span className="mt-5 inline-block text-sm font-semibold text-[#F0D58C]">
+                <span className="mt-5 inline-block text-sm font-semibold text-[var(--tgpi-gold-light)]">
                   {item.action} →
                 </span>
               </Link>
@@ -600,7 +600,7 @@ export default function GlobalKeyCenter({
             >
               <div className="flex flex-wrap items-end justify-between gap-4 border-b border-white/10 pb-5">
                 <div>
-                  <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#E5B94B]">
+                  <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold)]">
                     Integrity ledger
                   </p>
                   <h2
@@ -628,9 +628,9 @@ export default function GlobalKeyCenter({
             <div className="grid content-start gap-6">
               <section
                 aria-labelledby="fingerprint-title"
-                className="rounded-[28px] border border-[#E5B94B]/25 bg-[#10243A] p-5 sm:p-7"
+                className="rounded-[28px] border border-[var(--tgpi-gold)]/25 bg-[#10243A] p-5 sm:p-7"
               >
-                <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#E5B94B]">
+                <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold)]">
                   Cryptographic fingerprint
                 </p>
                 <h2
@@ -639,11 +639,11 @@ export default function GlobalKeyCenter({
                 >
                   Current proof signature
                 </h2>
-                <p className="mt-5 break-all font-mono text-sm font-bold leading-7 tracking-[0.08em] text-[#F0D58C]">
+                <p className="mt-5 break-all font-mono text-sm font-bold leading-7 tracking-[0.08em] text-[var(--tgpi-gold-light)]">
                   {keyView.fingerprint}
                 </p>
                 <button
-                  className="mt-5 min-h-11 rounded-xl border border-white/15 px-4 text-xs font-extrabold transition hover:border-[#E5B94B]/45"
+                  className="mt-5 min-h-11 rounded-xl border border-white/15 px-4 text-xs font-extrabold transition hover:border-[var(--tgpi-gold)]/45"
                   onClick={() => copyValue(keyView.fingerprint, "Fingerprint")}
                   type="button"
                 >
@@ -670,8 +670,8 @@ export default function GlobalKeyCenter({
                 <button
                   className={`mt-5 min-h-11 w-full rounded-xl px-4 text-xs font-extrabold transition disabled:cursor-wait disabled:opacity-60 ${
                     confirmRotation
-                      ? "bg-[#E5B94B] text-[#07182D] hover:bg-[#F0C95F]"
-                      : "border border-white/15 bg-white/5 text-white hover:border-[#E5B94B]/45"
+                      ? "bg-[var(--tgpi-gold)] text-[#07182D] hover:bg-[#F0C95F]"
+                      : "border border-white/15 bg-white/5 text-white hover:border-[var(--tgpi-gold)]/45"
                   }`}
                   disabled={isPending}
                   onClick={rotateProof}
@@ -695,8 +695,8 @@ export default function GlobalKeyCenter({
                 ) : null}
               </section>
 
-              <section className="rounded-[28px] border border-[#2A4B65] bg-[#0B1F3A] p-5 sm:p-7">
-                <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#E5B94B]">
+              <section className="rounded-[28px] border border-[#2A4B65] bg-[var(--tgpi-navy-raised)] p-5 sm:p-7">
+                <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold)]">
                   Security boundary
                 </p>
                 <ul className="mt-4 grid gap-3 text-xs leading-5 text-[#B8C5D1]">
@@ -728,7 +728,7 @@ export default function GlobalKeyCenter({
           aria-labelledby="connections-title"
           className="mt-6 rounded-[28px] border border-white/10 bg-[#08131F] p-5 sm:p-7"
         >
-          <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#E5B94B]">
+          <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold)]">
             One connected identity
           </p>
           <h2
@@ -740,7 +740,7 @@ export default function GlobalKeyCenter({
           <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
             {connectedSystems.map((system) => (
               <Link
-                className="group rounded-2xl border border-white/10 bg-white/[0.035] p-4 transition hover:-translate-y-0.5 hover:border-[#E5B94B]/35"
+                className="group rounded-2xl border border-white/10 bg-white/[0.035] p-4 transition hover:-translate-y-0.5 hover:border-[var(--tgpi-gold)]/35"
                 href={system.href}
                 key={system.label}
               >
@@ -750,7 +750,7 @@ export default function GlobalKeyCenter({
                   </span>
                   <span
                     aria-hidden="true"
-                    className="text-[#E5B94B] transition group-hover:translate-x-0.5"
+                    className="text-[var(--tgpi-gold)] transition group-hover:translate-x-0.5"
                   >
                     →
                   </span>
@@ -764,8 +764,8 @@ export default function GlobalKeyCenter({
           </div>
         </section>
 
-        <p className="mt-6 rounded-2xl border border-[#E5B94B]/20 bg-[#E5B94B]/[0.06] px-5 py-4 text-xs leading-6 text-[#B8C5D1]">
-          <strong className="text-[#F0D58C]">Technology disclosure:</strong>{" "}
+        <p className="mt-6 rounded-2xl border border-[var(--tgpi-gold)]/20 bg-[var(--tgpi-gold)]/[0.06] px-5 py-4 text-xs leading-6 text-[#B8C5D1]">
+          <strong className="text-[var(--tgpi-gold-light)]">Technology disclosure:</strong>{" "}
           TGPI Integrity Chain V2 combines a TGPI-operated authenticated
           identity record with periodic Merkle-root anchoring on Base Mainnet.
           The receipt is publicly auditable, but the Global Key is not a

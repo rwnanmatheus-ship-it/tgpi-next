@@ -28,7 +28,7 @@ export default function AnnouncementComposer() {
   return (
     <form
       onSubmit={submit}
-      className="mt-6 space-y-4 rounded-3xl border border-[#D8D2C4] bg-white p-6"
+      className="mt-6 space-y-4 rounded-3xl border border-[var(--tgpi-border)] bg-white p-6"
     >
       <p className="text-sm leading-6 text-slate-600">
         Publish a real product update to a verified member ID. Use a stable
@@ -68,7 +68,7 @@ export default function AnnouncementComposer() {
               name={field.name}
               maxLength={field.max}
               placeholder={field.placeholder}
-              className="mt-2 block w-full rounded-xl border border-[#D8D2C4] p-3 font-normal"
+              className="mt-2 block w-full rounded-xl border border-[var(--tgpi-border)] p-3 font-normal"
             />
           </label>
         ))}
@@ -79,12 +79,12 @@ export default function AnnouncementComposer() {
             required
             maxLength={1500}
             rows={5}
-            className="mt-2 block w-full rounded-xl border border-[#D8D2C4] p-3 font-normal"
+            className="mt-2 block w-full rounded-xl border border-[var(--tgpi-border)] p-3 font-normal"
           />
         </label>
         <button
           type="submit"
-          className="rounded-xl bg-[#0B1F3A] px-5 py-3 text-sm font-bold text-white disabled:opacity-50"
+          className="rounded-xl bg-[var(--tgpi-navy-raised)] px-5 py-3 text-sm font-bold text-white disabled:opacity-50"
         >
           {pending ? "Publishing…" : "Publish to member inbox"}
         </button>

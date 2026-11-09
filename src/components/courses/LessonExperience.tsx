@@ -161,7 +161,7 @@ function Lesson({
               </span>
               <span className="rounded-full border border-[var(--tgpi-border)] bg-white px-3 py-2 text-[10px] font-extrabold uppercase tracking-[0.16em] text-[var(--tgpi-muted)]">
                 {lesson.durationMinutes}<LocalizedText text="minutes" /></span>
-              <span className="rounded-full border border-[var(--tgpi-gold)]/30 bg-[#FFF9E9] px-3 py-2 text-[10px] font-extrabold uppercase tracking-[0.16em] text-[var(--tgpi-gold-strong)]"><LocalizedText text="Applied mastery" /></span>
+              <span className="rounded-full border border-[var(--tgpi-gold)]/30 bg-[var(--tgpi-inverse)] px-3 py-2 text-[10px] font-extrabold uppercase tracking-[0.16em] text-[var(--tgpi-gold-strong)]"><LocalizedText text="Applied mastery" /></span>
               {isCompleted ? (
                 <span className="rounded-full bg-[#E4F3EB] px-3 py-2 text-[10px] font-extrabold uppercase tracking-[0.16em] text-[var(--tgpi-success)]"><LocalizedText text="✓ Completed" /></span>
               ) : null}
@@ -265,7 +265,7 @@ function Lesson({
 
             <LessonSection eyebrow={t("03 · Rehearse")} title={lesson.practiceTask.title}>
               <p className="text-sm leading-7 text-[var(--tgpi-muted)]">{lesson.practiceTask.instruction}</p>
-              <div className="mt-5 rounded-2xl border border-dashed border-[var(--tgpi-gold)] bg-[#FFF9E9] p-5">
+              <div className="mt-5 rounded-2xl border border-dashed border-[var(--tgpi-gold)] bg-[var(--tgpi-inverse)] p-5">
                 <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-gold-strong)]"><LocalizedText text="Your rehearsal prompt" /></p>
                 <p className="mt-3 text-base font-extrabold leading-8 text-[var(--tgpi-navy)]">{lesson.practiceTask.prompt}</p>
               </div>

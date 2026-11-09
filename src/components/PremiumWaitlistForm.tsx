@@ -98,7 +98,7 @@ export default function PremiumWaitlistForm() {
 
   if (status === "success") {
     return (
-      <div className="rounded-[28px] border border-[#B58A2A] bg-[#FFF7DE] p-8 text-center">
+      <div className="rounded-[28px] border border-[var(--tgpi-gold-hover)] bg-[#FFF7DE] p-8 text-center">
         <p className="text-xs font-black uppercase tracking-[0.25em] text-[#8A5B09]">
           Early access confirmed
         </p>
@@ -113,14 +113,14 @@ export default function PremiumWaitlistForm() {
   return (
     <form
       onSubmit={handleSubmit}
-      className="rounded-[32px] border border-[#D8D2C4] bg-white p-6 shadow-[0_24px_70px_rgba(11,31,58,0.08)] md:p-9"
+      className="rounded-[32px] border border-[var(--tgpi-border)] bg-white p-6 shadow-[0_24px_70px_rgba(11,31,58,0.08)] md:p-9"
     >
       <div className="grid gap-5 md:grid-cols-2">
         <label className="text-sm font-bold text-[#303846]"><LocalizedText text="Full name" /><input
             required
             value={form.name}
             onChange={(event) => updateField("name", event.target.value)}
-            className="mt-2 w-full rounded-2xl border border-[#D8D2C4] bg-[#FFFDF8] px-4 py-3 font-normal outline-none transition focus:border-[#B58A2A]"
+            className="mt-2 w-full rounded-2xl border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] px-4 py-3 font-normal outline-none transition focus:border-[var(--tgpi-gold-hover)]"
             placeholder="Your name"
           />
         </label>
@@ -132,7 +132,7 @@ export default function PremiumWaitlistForm() {
             type="email"
             value={form.email}
             onChange={(event) => updateField("email", event.target.value)}
-            className="mt-2 w-full rounded-2xl border border-[#D8D2C4] bg-[#FFFDF8] px-4 py-3 font-normal outline-none transition focus:border-[#B58A2A]"
+            className="mt-2 w-full rounded-2xl border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] px-4 py-3 font-normal outline-none transition focus:border-[var(--tgpi-gold-hover)]"
             placeholder="you@example.com"
           />
         </label>
@@ -142,7 +142,7 @@ export default function PremiumWaitlistForm() {
           <input
             value={form.currentCountry}
             onChange={(event) => updateField("currentCountry", event.target.value)}
-            className="mt-2 w-full rounded-2xl border border-[#D8D2C4] bg-[#FFFDF8] px-4 py-3 font-normal outline-none transition focus:border-[#B58A2A]"
+            className="mt-2 w-full rounded-2xl border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] px-4 py-3 font-normal outline-none transition focus:border-[var(--tgpi-gold-hover)]"
             placeholder="Brazil"
           />
         </label>
@@ -152,7 +152,7 @@ export default function PremiumWaitlistForm() {
           <input
             value={form.targetCountry}
             onChange={(event) => updateField("targetCountry", event.target.value)}
-            className="mt-2 w-full rounded-2xl border border-[#D8D2C4] bg-[#FFFDF8] px-4 py-3 font-normal outline-none transition focus:border-[#B58A2A]"
+            className="mt-2 w-full rounded-2xl border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] px-4 py-3 font-normal outline-none transition focus:border-[var(--tgpi-gold-hover)]"
             placeholder="England, Portugal, Canada..."
           />
         </label>
@@ -160,7 +160,7 @@ export default function PremiumWaitlistForm() {
         <label className="text-sm font-bold text-[#303846]"><LocalizedText text="Primary goal" /><select
             value={form.goal}
             onChange={(event) => updateField("goal", event.target.value)}
-            className="mt-2 w-full rounded-2xl border border-[#D8D2C4] bg-[#FFFDF8] px-4 py-3 font-normal outline-none transition focus:border-[#B58A2A]"
+            className="mt-2 w-full rounded-2xl border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] px-4 py-3 font-normal outline-none transition focus:border-[var(--tgpi-gold-hover)]"
           >
             <option value="move">Move abroad</option>
             <option value="work">Work internationally</option>
@@ -175,7 +175,7 @@ export default function PremiumWaitlistForm() {
           <select
             value={form.timeline}
             onChange={(event) => updateField("timeline", event.target.value)}
-            className="mt-2 w-full rounded-2xl border border-[#D8D2C4] bg-[#FFFDF8] px-4 py-3 font-normal outline-none transition focus:border-[#B58A2A]"
+            className="mt-2 w-full rounded-2xl border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] px-4 py-3 font-normal outline-none transition focus:border-[var(--tgpi-gold-hover)]"
           >
             <option value="0-3-months"><LocalizedText text="Within 3 months" /></option>
             <option value="3-6-months">3 to 6 months</option>
@@ -198,12 +198,12 @@ export default function PremiumWaitlistForm() {
       <button
         type="submit"
         disabled={status === "submitting"}
-        className="mt-7 w-full rounded-2xl bg-[#0B1F3A] px-6 py-4 text-sm font-black text-white transition hover:bg-[#132B4C] disabled:cursor-not-allowed disabled:opacity-60"
+        className="mt-7 w-full rounded-2xl bg-[var(--tgpi-navy-raised)] px-6 py-4 text-sm font-black text-white transition hover:bg-[#132B4C] disabled:cursor-not-allowed disabled:opacity-60"
       >
         {status === "submitting" ? "Saving your place..." : "Join Premium Waitlist"}
       </button>
 
-      <p className="mt-4 text-center text-xs leading-5 text-[#667085]">
+      <p className="mt-4 text-center text-xs leading-5 text-[var(--tgpi-muted)]">
         No payment is collected. You will receive launch information and early-access priority.
       </p>
 

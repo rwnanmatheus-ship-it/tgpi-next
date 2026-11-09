@@ -329,7 +329,7 @@ export default function CountriesWorldMap({
               className={`min-h-10 shrink-0 rounded-full border px-4 text-[9px] font-extrabold uppercase tracking-[0.1em] backdrop-blur transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white disabled:cursor-wait disabled:opacity-50 ${
                 isActive
                   ? "border-[var(--tgpi-gold-light)] bg-[var(--tgpi-gold)] text-[var(--tgpi-navy)]"
-                  : "border-[#b8c9d7] bg-white text-[#183b56] hover:border-[#a67b29] hover:text-[#061b33]"
+                  : "border-[#b8c9d7] bg-white text-[#183b56] hover:border-[#a67b29] hover:text-[var(--tgpi-navy)]"
               }`}
             >
               {region.label}
@@ -340,7 +340,7 @@ export default function CountriesWorldMap({
 
       <div className="atlas-controls"><label>Locate a destination<select aria-label="Locate a destination on the atlas" value={selectedSlug} onChange={e => { previewCountry(e.target.value); setZoomLevel(1); setPan({ x: 0, y: 0 }); onRegionChange("world"); }}>{countries.map(c => <option key={c.slug} value={c.slug}>{c.name}</option>)}</select></label><div role="group" aria-label="Map zoom"><button type="button" aria-label="Zoom out" disabled={zoomLevel <= 1} onClick={() => setZoomLevel(z => Math.max(1, z - .5))}>−</button><span>{Math.round(zoomLevel * 100)}%</span><button type="button" aria-label="Zoom in" disabled={zoomLevel >= 4} onClick={() => setZoomLevel(z => Math.min(4, z + .5))}>+</button><button type="button" onClick={() => { setZoomLevel(1); setPan({ x: 0, y: 0 }); onRegionChange("world"); }}><LocalizedText text="Reset" /></button></div></div>
       <div
-        className="tgpi-map-cinematic-frame relative mt-3 h-[340px] overflow-hidden rounded-[26px] border border-white/12 bg-[#06172B] shadow-[inset_0_0_110px_rgba(56,113,158,.18),0_24px_70px_rgba(0,0,0,.2)] sm:h-[440px] lg:h-[500px]"
+        className="tgpi-map-cinematic-frame relative mt-3 h-[340px] overflow-hidden rounded-[26px] border border-white/12 bg-[var(--tgpi-navy)] shadow-[inset_0_0_110px_rgba(56,113,158,.18),0_24px_70px_rgba(0,0,0,.2)] sm:h-[440px] lg:h-[500px]"
         data-phase={cinematic.phase}
         aria-busy={cinematic.phase !== "idle"}
         style={{
@@ -578,7 +578,7 @@ export default function CountriesWorldMap({
         </div>
 
         {!mapData && !mapError ? (
-          <div className="absolute inset-0 grid place-items-center bg-[#06172B]/70 backdrop-blur-sm" role="status">
+          <div className="absolute inset-0 grid place-items-center bg-[var(--tgpi-navy)]/70 backdrop-blur-sm" role="status">
             <div className="text-center">
               <span className="mx-auto block h-9 w-9 animate-spin rounded-full border-2 border-white/15 border-t-[var(--tgpi-gold)]" />
               <p className="mt-3 text-[10px] font-extrabold uppercase tracking-[0.16em] text-white/60">Loading real borders</p>
@@ -587,7 +587,7 @@ export default function CountriesWorldMap({
         ) : null}
 
         {mapError ? (
-          <div className="absolute inset-4 grid place-items-center rounded-2xl border border-[#F0D58C]/25 bg-[#071A32]/95 p-6 text-center" role="status">
+          <div className="absolute inset-4 grid place-items-center rounded-2xl border border-[var(--tgpi-gold-light)]/25 bg-[#071A32]/95 p-6 text-center" role="status">
             <p className="max-w-sm text-sm font-bold leading-6 text-white">{mapError}</p>
           </div>
         ) : null}
@@ -639,11 +639,11 @@ export default function CountriesWorldMap({
         ) : null}
       </div>
 
-      <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[9px] font-bold uppercase tracking-[0.12em] text-[#526174]">
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[9px] font-bold uppercase tracking-[0.12em] text-[var(--tgpi-muted)]">
         <span>Select to preview · Zoom to drag</span>
         <span>Keyboard: arrows + Enter</span>
       </div>
-      <p className="mt-2 text-xs leading-5 text-[#526174]">
+      <p className="mt-2 text-xs leading-5 text-[var(--tgpi-muted)]">
         Boundary reference: Natural Earth de facto cartography. Disputed areas may vary
         by legal or political point of view.
       </p>

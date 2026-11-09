@@ -164,7 +164,7 @@ export function CountryCard({ country }: CountryCardProps) {
 
 function MetricBox({ label, value }: { label: string; value: string }) {
   return (
-    <div className="min-w-0 rounded-2xl border border-[var(--tgpi-border)] bg-[#FFFDF8] p-3">
+    <div className="min-w-0 rounded-2xl border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] p-3">
       <p className="text-[9px] font-bold uppercase tracking-[0.1em] text-[var(--tgpi-muted)]">{label}</p>
       <p className="mt-1 truncate text-sm font-extrabold text-[var(--tgpi-navy)]">{value}</p>
     </div>

@@ -115,7 +115,7 @@ export default function DocumentReviewChecklist({
                 checked={checked}
                 disabled={!isAuthenticated || isLoading || pending}
                 onChange={(event) => toggleItem(itemId, event.target.checked)}
-                className="mt-1 h-5 w-5 accent-[#0B1F3A]"
+                className="mt-1 h-5 w-5 accent-[var(--tgpi-navy-raised)]"
               />
               <span>
                 <span className="block font-black text-[#071A32]">

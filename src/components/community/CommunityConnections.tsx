@@ -35,7 +35,7 @@ export default function CommunityConnections() {
       className="rounded-[28px] border border-white/10 bg-[#08131F] p-5 sm:p-6"
       aria-labelledby="workspace-community"
     >
-      <p className="text-xs font-bold uppercase tracking-widest text-[#E5B94B]"><LocalizedText text="Global Community" /></p>
+      <p className="text-xs font-bold uppercase tracking-widest text-[var(--tgpi-gold)]"><LocalizedText text="Global Community" /></p>
       <h2 id="workspace-community" className="mt-2 text-2xl text-white"><LocalizedText text="Continue the conversation." /></h2>
       {status && (
         <p className="mt-3 text-sm text-slate-300" role="status">
@@ -44,7 +44,7 @@ export default function CommunityConnections() {
       )}
       {items.map((c) => (
         <Link
-          className="mt-3 block rounded-xl border border-white/15 p-3 text-sm text-white hover:border-[#E5B94B]"
+          className="mt-3 block rounded-xl border border-white/15 p-3 text-sm text-white hover:border-[var(--tgpi-gold)]"
           href={`/community/${c.id}`}
           key={c.id}
         >
@@ -57,7 +57,7 @@ export default function CommunityConnections() {
       {!status && !items.length && (
         <p className="mt-3 text-sm text-slate-300"><LocalizedText text="Find people navigating your next international step." /></p>
       )}
-      <div className="mt-4 flex flex-wrap gap-4 text-sm font-bold text-[#F0D58C]">
+      <div className="mt-4 flex flex-wrap gap-4 text-sm font-bold text-[var(--tgpi-gold-light)]">
         <Link href="/community"><LocalizedText text="Explore communities →" /></Link>
         <Link href="/community?view=requests"><LocalizedText text="My requests" /></Link>
         <Link href="/community?view=saved"><LocalizedText text="Saved contributions" /></Link>

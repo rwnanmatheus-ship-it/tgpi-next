@@ -14,11 +14,11 @@ export default function WorkspaceCommandButton() {
       aria-haspopup="dialog"
       aria-keyshortcuts="Control+K Meta+K"
       aria-label={t("Search TGPI apps and actions")}
-      className="group flex h-12 min-w-0 flex-1 items-center gap-3 rounded-2xl border border-white/10 bg-[#0A1521] px-4 text-left text-sm text-[#8999AB] transition hover:border-[#E5B94B]/40 hover:bg-[#0D1B2A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E5B94B] w-full max-w-[410px]"
+      className="group flex h-12 min-w-0 flex-1 items-center gap-3 rounded-2xl border border-white/10 bg-[#0A1521] px-4 text-left text-sm text-[#8999AB] transition hover:border-[var(--tgpi-gold)]/40 hover:bg-[#0D1B2A] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)] w-full max-w-[410px]"
       onClick={openCommandCenter}
       type="button"
     >
-      <span aria-hidden="true" className="text-base text-[#E5B94B]">
+      <span aria-hidden="true" className="text-base text-[var(--tgpi-gold)]">
         ⌕
       </span>
       <span className="min-w-0 flex-1 truncate group-hover:text-[#C6D0DA]"><LocalizedText text="Find an app, action or destination" /></span>

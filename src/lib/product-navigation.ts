@@ -9,6 +9,6 @@ export const productDestinations = [
   { href: '/community', label: 'Community', icon: 'compass' },
   { href: '/atlas', label: 'Ask Atlas', icon: 'spark' },
 ] as const satisfies readonly { href: string; label: string; icon: NavigationIconName }[];
-const tools = ['/profile', '/dashboard', '/courses', '/countries', '/compare', '/country-fit', '/plan', '/community', '/atlas', '/passport', '/documents', '/certificates', '/notifications', '/global-key', '/rooms'];
+const tools = ['/profile', '/dashboard', '/courses', '/countries', '/compare', '/country-fit', '/plan', '/community', '/atlas', '/passport', '/documents', '/certificates', '/notifications', '/global-key', '/rooms', '/admin', '/intelligence', '/members', '/ranking'];
 export function isProductRoute(pathname: string) { return tools.some(route => pathname === route || pathname.startsWith(`${route}/`)); }
 export function isStudyRoute(pathname: string) { return /^\/courses\/[^/]+\/(study|lessons|certification)(\/|$)/.test(pathname); }

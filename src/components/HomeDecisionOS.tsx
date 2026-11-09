@@ -223,7 +223,7 @@ function ReadinessPanel({ expanded = false }: { expanded?: boolean }) {
         <span className="text-xs font-extrabold text-amber-200">Directional signal</span>
       </div>
       <div className="mt-5 h-2 overflow-hidden rounded-full bg-white/10">
-        <div className="h-full w-[70%] rounded-full bg-gradient-to-r from-[var(--tgpi-gold)] to-[#F0D58C]" />
+        <div className="h-full w-[70%] rounded-full bg-gradient-to-r from-[var(--tgpi-gold)] to-[var(--tgpi-gold-light)]" />
       </div>
       <div className={`mt-5 grid grid-cols-2 gap-3 ${expanded ? "sm:grid-cols-4" : ""}`}>
         {readiness.map(([label, value]) => (

@@ -35,7 +35,7 @@ export default function HomeEcosystem() {
           <div className="relative min-h-[360px] overflow-hidden lg:min-h-[520px]">
             <Image src="/images/home/tgpi-documents-story.webp" alt="TGPI documents and global identity preparation workspace" fill quality={86} sizes="(max-width:1023px) 100vw, 560px" className="object-cover" />
             <div className="absolute inset-0 bg-[linear-gradient(180deg,transparent_30%,rgba(3,20,38,.93))]" />
-            <div className="absolute inset-x-5 bottom-5 rounded-2xl border border-white/15 bg-[#031426]/78 p-5 text-white backdrop-blur-xl sm:inset-x-7 sm:bottom-7">
+            <div className="absolute inset-x-5 bottom-5 rounded-2xl border border-white/15 bg-[var(--tgpi-navy-deep)]/78 p-5 text-white backdrop-blur-xl sm:inset-x-7 sm:bottom-7">
               <p className="text-[9px] font-extrabold uppercase tracking-[.2em] text-[var(--tgpi-gold-light)]">Documents + identity continuity</p><p className="mt-2 font-[var(--tgpi-font-display)] text-3xl font-semibold">Preparation that stays connected.</p>
             </div>
           </div>

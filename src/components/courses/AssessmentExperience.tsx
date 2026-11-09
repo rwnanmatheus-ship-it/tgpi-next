@@ -85,8 +85,8 @@ export default function AssessmentExperience({
   }
 
   return (
-    <main className="min-h-screen bg-[#F3EFE6] text-[#0B1F3A]">
-      <header className="sticky top-0 z-20 border-b border-[#D8D2C4] bg-[#FFFDF8]/95 px-4 py-4 backdrop-blur sm:px-6">
+    <main className="min-h-screen bg-[#F3EFE6] text-[var(--tgpi-navy-raised)]">
+      <header className="sticky top-0 z-20 border-b border-[var(--tgpi-border)] bg-[var(--tgpi-surface)]/95 px-4 py-4 backdrop-blur sm:px-6">
         <div className="mx-auto flex max-w-4xl items-center justify-between gap-4">
           <Link href={`/courses/${courseId}/certification`} className="text-xs font-extrabold text-[#6B7280]">
             ← Certification path
@@ -101,7 +101,7 @@ export default function AssessmentExperience({
       </header>
 
       <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 sm:py-14">
-        <section className="rounded-[30px] bg-[#0B1F3A] p-7 text-white shadow-[0_24px_70px_rgba(11,31,58,.16)] sm:p-10">
+        <section className="rounded-[30px] bg-[var(--tgpi-navy-raised)] p-7 text-white shadow-[0_24px_70px_rgba(11,31,58,.16)] sm:p-10">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#E8CC7B]">
               {assessment.kind === "capstone" ? "Integrated capstone" : "Module decision gate"}
@@ -127,14 +127,14 @@ export default function AssessmentExperience({
               <div className="text-5xl font-extrabold">{result.score}%</div>
             </div>
             <div className="mt-6 flex flex-wrap gap-3">
-              <Link href={`/courses/${courseId}/certification`} className="inline-flex min-h-12 items-center rounded-xl bg-[#0B1F3A] px-6 text-sm font-extrabold text-white">
+              <Link href={`/courses/${courseId}/certification`} className="inline-flex min-h-12 items-center rounded-xl bg-[var(--tgpi-navy-raised)] px-6 text-sm font-extrabold text-white">
                 Continue pathway →
               </Link>
               <button type="button" onClick={beginRetake} className="min-h-12 rounded-xl border border-[#B9A76F] bg-white/70 px-6 text-sm font-extrabold">
                 Start a new attempt
               </button>
               {credentialId ? (
-                <Link href={`/certificates/${credentialId}`} className="inline-flex min-h-12 items-center rounded-xl bg-[#C39A31] px-6 text-sm font-extrabold text-[#0B1F3A]">
+                <Link href={`/certificates/${credentialId}`} className="inline-flex min-h-12 items-center rounded-xl bg-[#C39A31] px-6 text-sm font-extrabold text-[var(--tgpi-navy-raised)]">
                   View credential
                 </Link>
               ) : null}
@@ -150,7 +150,7 @@ export default function AssessmentExperience({
           {assessment.questions.map((question, index) => {
             const itemFeedback = feedback.get(question.id);
             return (
-              <fieldset key={question.id} disabled={Boolean(result)} className="rounded-[24px] border border-[#D9D1C2] bg-[#FFFDF8] p-6 shadow-[0_12px_35px_rgba(11,31,58,.05)] sm:p-8">
+              <fieldset key={question.id} disabled={Boolean(result)} className="rounded-[24px] border border-[#D9D1C2] bg-[var(--tgpi-surface)] p-6 shadow-[0_12px_35px_rgba(11,31,58,.05)] sm:p-8">
                 <legend className="sr-only"><LocalizedText text="Question" />{" "}{index + 1}</legend>
                 <div className="flex gap-4">
                   <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#EEE6D2] text-xs font-extrabold text-[#72520F]">{index + 1}</span>
@@ -167,7 +167,7 @@ export default function AssessmentExperience({
                               value={option.id}
                               checked={selected}
                               onChange={() => setAnswers((current) => ({ ...current, [question.id]: option.id }))}
-                              className="mt-1 accent-[#0B1F3A]"
+                              className="mt-1 accent-[var(--tgpi-navy-raised)]"
                             />
                             <span>{option.label}</span>
                           </label>
@@ -210,7 +210,7 @@ export default function AssessmentExperience({
               type="button"
               disabled={!isComplete || isSubmitting}
               onClick={() => void submit()}
-              className="min-h-12 rounded-xl bg-[#0B1F3A] px-7 text-sm font-extrabold text-white disabled:cursor-not-allowed disabled:opacity-40"
+              className="min-h-12 rounded-xl bg-[var(--tgpi-navy-raised)] px-7 text-sm font-extrabold text-white disabled:cursor-not-allowed disabled:opacity-40"
             >
               {isSubmitting ? "Securing attempt…" : "Submit for scoring"}
             </button>

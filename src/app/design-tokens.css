@@ -1,0 +1,91 @@
+/* TGPI Design System 2 — canonical values; legacy names are compatibility aliases. */
+:root {
+  --tgpi-canvas: #f7f3ea;
+  --tgpi-canvas-alt: #f8f5ee;
+  --tgpi-surface: #fffcf6;
+  --tgpi-surface-strong: #ffffff;
+  --tgpi-ink: #12110f;
+  --tgpi-navy: #061b33;
+  --tgpi-navy-deep: #031426;
+  --tgpi-navy-raised: #0b1f3a;
+  --tgpi-navy-soft: #123a60;
+  --tgpi-blue: #24577f;
+  --tgpi-blue-soft: #e7eff6;
+  --tgpi-gold: #c49536;
+  --tgpi-gold-hover: #b58a2a;
+  --tgpi-gold-strong: #79571d;
+  --tgpi-gold-light: #f2d997;
+  --tgpi-gold-soft: #f5e7be;
+  --tgpi-border: #d7cdbd;
+  --tgpi-border-soft: #e8e1d5;
+  --tgpi-muted: #59636f;
+  --tgpi-inverse: #fffcf6;
+  --tgpi-inverse-muted: #bdccdd;
+  --tgpi-inverse-border: #334b64;
+  --tgpi-success: #1f6a4b;
+  --tgpi-success-soft: #e5efec;
+  --tgpi-danger: #9f2f2f;
+  --tgpi-danger-soft: #f9eae5;
+  --tgpi-warning: var(--tgpi-gold-strong);
+  --tgpi-focus: var(--tgpi-blue);
+  --tgpi-font-display: var(--font-tgpi-display), Georgia, serif;
+  --tgpi-font-sans: var(--font-tgpi-sans), ui-sans-serif, system-ui, sans-serif;
+  --tgpi-text-xs: .75rem;
+  --tgpi-text-sm: .875rem;
+  --tgpi-text-base: 1rem;
+  --tgpi-text-lg: 1.125rem;
+  --tgpi-heading-tool: clamp(1.75rem, 2.8vw, 2.75rem);
+  --tgpi-heading-editorial: clamp(2.5rem, 5.2vw, 5rem);
+  --tgpi-space-1: .25rem;
+  --tgpi-space-2: .5rem;
+  --tgpi-space-3: .75rem;
+  --tgpi-space-4: 1rem;
+  --tgpi-space-5: 1.25rem;
+  --tgpi-space-6: 1.5rem;
+  --tgpi-space-8: 2rem;
+  --tgpi-space-12: 3rem;
+  --tgpi-container: 88rem;
+  --tgpi-gutter: clamp(1rem, 3.2vw, 3rem);
+  --tgpi-section-space: clamp(3.5rem, 7vw, 6.5rem);
+  --tgpi-control-height: 2.75rem;
+  --tgpi-header-height: 5rem;
+  --tgpi-radius-sm: .625rem;
+  --tgpi-radius-md: 1rem;
+  --tgpi-radius-lg: 1.25rem;
+  --tgpi-radius-xl: 1.5rem;
+  --tgpi-shadow-sm: 0 1px 2px #061b3309, 0 4px 12px #061b3305;
+  --tgpi-shadow-soft: 0 2px 4px #061b3305, 0 16px 32px -16px #061b3324;
+  --tgpi-shadow-premium: 0 24px 64px -24px #03142640;
+  --tgpi-depth-1: var(--tgpi-shadow-sm);
+  --tgpi-depth-2: var(--tgpi-shadow-soft);
+  --tgpi-depth-3: var(--tgpi-shadow-premium);
+  --tgpi-depth-dark: 0 20px 48px -24px #03142666;
+  --tgpi-motion-fast: 140ms;
+  --tgpi-motion-control: 180ms;
+  --tgpi-motion-context: 300ms;
+  --tgpi-ease: cubic-bezier(.2, .8, .2, 1);
+  --tgpi-z-sticky: 20;
+  --tgpi-z-header: 50;
+  --tgpi-z-overlay: 80;
+  --product-canvas: var(--tgpi-canvas);
+  --product-surface: var(--tgpi-surface);
+  --product-ink: var(--tgpi-ink);
+  --product-navy: var(--tgpi-navy);
+  --product-blue: var(--tgpi-blue);
+  --product-gold: var(--tgpi-gold-strong);
+  --product-border: var(--tgpi-border);
+  --product-muted: var(--tgpi-muted);
+  --product-radius: var(--tgpi-radius-lg);
+  --product-motion: var(--tgpi-motion-control);
+  --tgpi-header-surface: var(--tgpi-surface);
+  --tgpi-header-ink: var(--tgpi-navy);
+  --tgpi-header-muted: var(--tgpi-muted);
+  --tgpi-header-line: var(--tgpi-border-soft);
+  --tgpi-header-active: var(--tgpi-blue-soft);
+  --tgpi-header-focus: var(--tgpi-focus);
+}
+@media (max-width: 1023px) { :root { --tgpi-header-height: 4rem; } }
+@media (prefers-reduced-motion: reduce) {
+  :root { --tgpi-motion-fast: 0ms; --tgpi-motion-control: 0ms; --tgpi-motion-context: 0ms; }
+}
+:root { --background:var(--tgpi-canvas); --foreground:var(--tgpi-ink); --tgpi-teal:var(--tgpi-success); --tgpi-teal-soft:var(--tgpi-success-soft); }

@@ -37,7 +37,7 @@ const statusClasses: Record<WorkspaceActionStatus, string> = {
   completed: "border-[#B9DCCA] bg-[#EDF8F1] text-[#1F6848]",
   in_progress: "border-[#DCC785] bg-[#FBF2D8] text-[#79550F]",
   needs_attention: "border-[#E5C1AE] bg-[#FFF1E9] text-[#8A421D]",
-  not_started: "border-[#D8D2C4] bg-[#F7F4ED] text-[#657082]",
+  not_started: "border-[var(--tgpi-border)] bg-[#F7F4ED] text-[#657082]",
 };
 
 const actionNumbers: Record<WorkspaceAction["id"], string> = {
@@ -124,7 +124,7 @@ function CountryCard({ country }: { country: PremiumCountryCard }) {
 
   return (
     <article
-      className="tgpi-card-3d group overflow-hidden rounded-[24px] border border-[#D8D2C4] bg-[#FFFDF8]"
+      className="tgpi-card-3d group overflow-hidden rounded-[24px] border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)]"
       data-tgpi-depth="raised"
       data-tgpi-interactive="true"
       data-tgpi-tone="paper"
@@ -143,7 +143,7 @@ function CountryCard({ country }: { country: PremiumCountryCard }) {
         />
         <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-4 text-white">
           <div>
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#F0D58C]">
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-gold-light)]">
               <LocalizedText text={country.region} />
             </p>
             <h3 className="mt-1 text-lg font-extrabold">
@@ -161,7 +161,7 @@ function CountryCard({ country }: { country: PremiumCountryCard }) {
           <p className="text-[9px] font-extrabold uppercase tracking-[0.15em] text-[#7A8390]">
             Cost plan
           </p>
-          <p className="mt-2 font-extrabold text-[#0B1F3A]">
+          <p className="mt-2 font-extrabold text-[var(--tgpi-navy-raised)]">
             {country.costEstimate
               ? formatMoney(
                   country.costEstimate.amount,
@@ -172,7 +172,7 @@ function CountryCard({ country }: { country: PremiumCountryCard }) {
         </div>
         <div className="p-4">
           <p className="text-[9px] font-extrabold uppercase tracking-[0.15em] text-[#7A8390]"><LocalizedText text="Documents" /></p>
-          <p className="mt-2 font-extrabold text-[#0B1F3A]">
+          <p className="mt-2 font-extrabold text-[var(--tgpi-navy-raised)]">
             {country.documentProgress
               ? `${country.documentProgress.completed}/${country.documentProgress.total} reviewed`
               : "Not reviewed"}
@@ -180,7 +180,7 @@ function CountryCard({ country }: { country: PremiumCountryCard }) {
         </div>
       </div>
       <Link
-        className="flex min-h-12 items-center justify-between px-4 text-xs font-extrabold text-[#79550F] transition hover:bg-[#F7F2E8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#B58A2A]"
+        className="flex min-h-12 items-center justify-between px-4 text-xs font-extrabold text-[#79550F] transition hover:bg-[#F7F2E8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--tgpi-gold-hover)]"
         href={`/countries/${country.slug}`}
       ><LocalizedText text="Open country intelligence" />{" "}<span aria-hidden="true">→</span>
       </Link>
@@ -214,12 +214,12 @@ export default function PremiumCommandCenterV2({
   );
 
   return (
-    <main className="min-h-screen bg-[#F5F1E8] text-[#0B1F3A]">
+    <main className="min-h-screen bg-[#F5F1E8] text-[var(--tgpi-navy-raised)]">
       <div className="px-2 sm:px-6"><PremiumScenarioLab /></div>
-      <section className="border-b border-[#D8D2C4] bg-[#FFFDF8] px-4 py-8 sm:px-6 lg:py-12">
+      <section className="border-b border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] px-4 py-8 sm:px-6 lg:py-12">
         <div className="mx-auto max-w-7xl">
           <div
-            className="tgpi-card-3d overflow-hidden rounded-[32px] bg-[#0B1F3A] text-white"
+            className="tgpi-card-3d overflow-hidden rounded-[32px] bg-[var(--tgpi-navy-raised)] text-white"
             data-tgpi-depth="hero"
             data-tgpi-tone="navy"
           >
@@ -233,7 +233,7 @@ export default function PremiumCommandCenterV2({
                   aria-hidden="true"
                   className="absolute -right-6 -top-10 h-56 w-56 rounded-full border border-[#D8AE49]/20"
                 />
-                <p className="relative text-[10px] font-extrabold uppercase tracking-[0.28em] text-[#F0D58C]">
+                <p className="relative text-[10px] font-extrabold uppercase tracking-[0.28em] text-[var(--tgpi-gold-light)]">
                   TGPI Premium command center
                 </p>
                 <h1 className="relative mt-5 max-w-3xl font-[var(--tgpi-font-display)] text-5xl font-semibold leading-[0.96] tracking-[-0.045em] sm:text-6xl lg:text-7xl">
@@ -246,7 +246,7 @@ export default function PremiumCommandCenterV2({
                 <div className="relative mt-8 rounded-2xl border border-white/15 bg-white/[0.06] p-5 backdrop-blur-sm sm:p-6">
                   <div className="flex flex-wrap items-start justify-between gap-4">
                     <div>
-                      <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#F0D58C]">
+                      <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold-light)]">
                         Next best action
                       </p>
                       <h2 className="mt-3 font-[var(--tgpi-font-display)] text-3xl font-semibold">
@@ -263,7 +263,7 @@ export default function PremiumCommandCenterV2({
                     </span>
                   </div>
                   <Link
-                    className="mt-5 inline-flex min-h-12 items-center justify-center rounded-xl bg-[#E5BF5A] px-6 text-sm font-extrabold text-[#0B1F3A] transition hover:-translate-y-0.5 hover:bg-[#F0D58C] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                    className="mt-5 inline-flex min-h-12 items-center justify-center rounded-xl bg-[#E5BF5A] px-6 text-sm font-extrabold text-[var(--tgpi-navy-raised)] transition hover:-translate-y-0.5 hover:bg-[var(--tgpi-gold-light)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
                     href={model.nextAction.href}
                   >
                     {model.nextAction.action} <span aria-hidden="true">→</span>
@@ -272,7 +272,7 @@ export default function PremiumCommandCenterV2({
               </div>
 
               <aside className="border-t border-white/10 bg-[#102A4C] p-7 sm:p-10 lg:border-l lg:border-t-0 lg:p-12">
-                <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#F0D58C]">
+                <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[var(--tgpi-gold-light)]">
                   {accessEyebrow}
                 </p>
                 <p className="mt-4 font-[var(--tgpi-font-display)] text-4xl font-semibold">
@@ -281,7 +281,7 @@ export default function PremiumCommandCenterV2({
                 <div className="mt-8 space-y-6 border-t border-white/15 pt-6">
                   <div className="flex items-center justify-between gap-4 text-sm">
                     <span className="text-[#AEBCCE]">Status</span>
-                    <span className="rounded-full bg-[#D8AE49] px-3 py-1 text-xs font-extrabold text-[#0B1F3A]">
+                    <span className="rounded-full bg-[#D8AE49] px-3 py-1 text-xs font-extrabold text-[var(--tgpi-navy-raised)]">
                       {membershipStatus}
                     </span>
                   </div>
@@ -302,7 +302,7 @@ export default function PremiumCommandCenterV2({
           </div>
 
           <dl
-            className="tgpi-card-3d mt-4 grid overflow-hidden rounded-[24px] border border-[#D8D2C4] bg-white sm:grid-cols-2 lg:grid-cols-4"
+            className="tgpi-card-3d mt-4 grid overflow-hidden rounded-[24px] border border-[var(--tgpi-border)] bg-white sm:grid-cols-2 lg:grid-cols-4"
             data-tgpi-depth="subtle"
             data-tgpi-tone="white"
           >
@@ -344,7 +344,7 @@ export default function PremiumCommandCenterV2({
               </p>
             </div>
             <Link
-              className="inline-flex min-h-11 items-center rounded-xl border border-[#CFC7B8] bg-white px-5 text-sm font-extrabold text-[#0B1F3A] transition hover:border-[#B58A2A]"
+              className="inline-flex min-h-11 items-center rounded-xl border border-[#CFC7B8] bg-white px-5 text-sm font-extrabold text-[var(--tgpi-navy-raised)] transition hover:border-[var(--tgpi-gold-hover)]"
               href="/countries"
             ><LocalizedText text="Explore all countries" />{" "}<span aria-hidden="true">→</span>
             </Link>
@@ -357,13 +357,13 @@ export default function PremiumCommandCenterV2({
               ))}
             </div>
           ) : (
-            <div className="mt-8 rounded-[26px] border border-dashed border-[#CFC7B8] bg-[#FFFDF8] p-7 sm:p-10">
+            <div className="mt-8 rounded-[26px] border border-dashed border-[#CFC7B8] bg-[var(--tgpi-surface)] p-7 sm:p-10">
               <p className="text-sm font-extrabold">Your shortlist is ready to be built.</p>
               <p className="mt-2 max-w-2xl text-sm leading-7 text-[#657082]">
                 Select countries in your global profile or save them while exploring. TGPI will bring them here automatically.
               </p>
               <Link
-                className="mt-5 inline-flex min-h-11 items-center rounded-xl bg-[#0B1F3A] px-5 text-sm font-extrabold text-white"
+                className="mt-5 inline-flex min-h-11 items-center rounded-xl bg-[var(--tgpi-navy-raised)] px-5 text-sm font-extrabold text-white"
                 href="/onboarding"
               >
                 Build my shortlist <span aria-hidden="true">→</span>
@@ -373,15 +373,15 @@ export default function PremiumCommandCenterV2({
         </div>
       </section>
 
-      <section className="border-y border-[#D8D2C4] bg-[#FFFDF8] px-4 py-12 sm:px-6 lg:py-16">
+      <section className="border-y border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] px-4 py-12 sm:px-6 lg:py-16">
         <div className="mx-auto max-w-7xl">
           <div className="grid gap-5 lg:grid-cols-3">
             <article
-              className="tgpi-card-3d flex min-h-80 flex-col rounded-[28px] bg-[#0B1F3A] p-7 text-white sm:p-8"
+              className="tgpi-card-3d flex min-h-80 flex-col rounded-[28px] bg-[var(--tgpi-navy-raised)] p-7 text-white sm:p-8"
               data-tgpi-depth="floating"
               data-tgpi-tone="navy"
             >
-              <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#F0D58C]">
+              <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold-light)]">
                 Latest comparison
               </p>
               <h2 className="mt-4 font-[var(--tgpi-font-display)] text-4xl font-semibold leading-tight">
@@ -398,7 +398,7 @@ export default function PremiumCommandCenterV2({
                 {formatDate(model.comparison.updatedAt)}
               </p>
               <Link
-                className="mt-auto inline-flex min-h-12 items-center pt-7 text-sm font-extrabold text-[#F0D58C]"
+                className="mt-auto inline-flex min-h-12 items-center pt-7 text-sm font-extrabold text-[var(--tgpi-gold-light)]"
                 href={model.comparison.href}
               >
                 {model.comparison.isSaved ? "Continue comparison" : "Open comparator"} <span aria-hidden="true">→</span>
@@ -406,7 +406,7 @@ export default function PremiumCommandCenterV2({
             </article>
 
             <article
-              className="tgpi-card-3d flex min-h-80 flex-col rounded-[28px] border border-[#D8D2C4] bg-white p-7 sm:p-8"
+              className="tgpi-card-3d flex min-h-80 flex-col rounded-[28px] border border-[var(--tgpi-border)] bg-white p-7 sm:p-8"
               data-tgpi-depth="raised"
               data-tgpi-tone="white"
             >
@@ -416,7 +416,7 @@ export default function PremiumCommandCenterV2({
               <p className="mt-5 font-[var(--tgpi-font-display)] text-5xl font-semibold tracking-[-0.035em]">
                 {model.cost.isPersonalEstimate ? formatMoney(model.cost.amount, model.cost.currency) : "Not set"}
               </p>
-              <p className="mt-3 text-sm font-extrabold text-[#0B1F3A]">
+              <p className="mt-3 text-sm font-extrabold text-[var(--tgpi-navy-raised)]">
                 {model.cost.countryName}
               </p>
               <p className="mt-4 text-sm leading-7 text-[#657082]">
@@ -433,7 +433,7 @@ export default function PremiumCommandCenterV2({
             </article>
 
             <article
-              className="tgpi-card-3d flex min-h-80 flex-col rounded-[28px] border border-[#D8D2C4] bg-[#F7F2E8] p-7 sm:p-8"
+              className="tgpi-card-3d flex min-h-80 flex-col rounded-[28px] border border-[var(--tgpi-border)] bg-[#F7F2E8] p-7 sm:p-8"
               data-tgpi-depth="raised"
               data-tgpi-tone="paper"
             >
@@ -459,7 +459,7 @@ export default function PremiumCommandCenterV2({
                 role="progressbar"
               >
                 <div
-                  className="h-full rounded-full bg-[#B58A2A]"
+                  className="h-full rounded-full bg-[var(--tgpi-gold-hover)]"
                   style={{ width: `${model.documents.percent}%` }}
                 />
               </div>
@@ -481,7 +481,7 @@ export default function PremiumCommandCenterV2({
         <div className="mx-auto grid max-w-7xl gap-6 lg:grid-cols-[1.15fr_.85fr]">
           <section
             aria-labelledby="action-system-title"
-            className="rounded-[30px] border border-[#D8D2C4] bg-white p-6 sm:p-8"
+            className="rounded-[30px] border border-[var(--tgpi-border)] bg-white p-6 sm:p-8"
           >
             <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#79550F]">
               Action system
@@ -495,15 +495,15 @@ export default function PremiumCommandCenterV2({
             <div className="mt-7 grid gap-3">
               {model.actions.map((action) => (
                 <Link
-                  className="group grid gap-4 rounded-2xl border border-[#E4DED2] bg-[#FFFDF8] p-5 transition hover:border-[#B58A2A] sm:grid-cols-[auto_1fr_auto] sm:items-center"
+                  className="group grid gap-4 rounded-2xl border border-[#E4DED2] bg-[var(--tgpi-surface)] p-5 transition hover:border-[var(--tgpi-gold-hover)] sm:grid-cols-[auto_1fr_auto] sm:items-center"
                   href={action.href}
                   key={action.id}
                 >
-                  <span className="font-[var(--tgpi-font-display)] text-2xl font-semibold text-[#B58A2A]">
+                  <span className="font-[var(--tgpi-font-display)] text-2xl font-semibold text-[var(--tgpi-gold-hover)]">
                     {actionNumbers[action.id]}
                   </span>
                   <span>
-                    <span className="block text-sm font-extrabold text-[#0B1F3A]">
+                    <span className="block text-sm font-extrabold text-[var(--tgpi-navy-raised)]">
                       {action.title}
                     </span>
                     <span className="mt-1 block text-xs leading-5 text-[#657082]">
@@ -518,7 +518,7 @@ export default function PremiumCommandCenterV2({
                     </span>
                     <span
                       aria-hidden="true"
-                      className="font-extrabold text-[#B58A2A] transition group-hover:translate-x-1"
+                      className="font-extrabold text-[var(--tgpi-gold-hover)] transition group-hover:translate-x-1"
                     >
                       →
                     </span>
@@ -529,17 +529,17 @@ export default function PremiumCommandCenterV2({
           </section>
 
           <div className="grid gap-6">
-            <article className="rounded-[30px] bg-[#0B1F3A] p-7 text-white sm:p-8">
+            <article className="rounded-[30px] bg-[var(--tgpi-navy-raised)] p-7 text-white sm:p-8">
               <div className="flex items-start justify-between gap-5">
                 <div>
-                  <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#F0D58C]">
+                  <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold-light)]">
                     Learning path
                   </p>
                   <h2 className="mt-3 font-[var(--tgpi-font-display)] text-3xl font-semibold">
                     {model.learning.title}
                   </h2>
                 </div>
-                <span className="font-[var(--tgpi-font-display)] text-3xl font-semibold text-[#F0D58C]">
+                <span className="font-[var(--tgpi-font-display)] text-3xl font-semibold text-[var(--tgpi-gold-light)]">
                   {model.learning.percent}%
                 </span>
               </div>
@@ -562,14 +562,14 @@ export default function PremiumCommandCenterV2({
                   : "Choose a structured learning path to build the skills behind your global plan."}
               </p>
               <Link
-                className="mt-5 inline-flex min-h-11 items-center text-sm font-extrabold text-[#F0D58C]"
+                className="mt-5 inline-flex min-h-11 items-center text-sm font-extrabold text-[var(--tgpi-gold-light)]"
                 href={model.learning.href}
               >
                 {model.learning.percent ? "Continue learning" : "Start learning path"} <span aria-hidden="true">→</span>
               </Link>
             </article>
 
-            <article className="rounded-[30px] border border-[#D8D2C4] bg-[#FFFDF8] p-7 sm:p-8">
+            <article className="rounded-[30px] border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] p-7 sm:p-8">
               <div className="flex flex-wrap items-start justify-between gap-4">
                 <div>
                   <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#79550F]"><LocalizedText text="Your global plan" /></p>
@@ -578,7 +578,7 @@ export default function PremiumCommandCenterV2({
                   </h2>
                 </div>
                 <Link
-                  className="text-xs font-extrabold text-[#79550F] underline decoration-[#B58A2A]/40 underline-offset-4"
+                  className="text-xs font-extrabold text-[#79550F] underline decoration-[var(--tgpi-gold-hover)]/40 underline-offset-4"
                   href="/onboarding"
                 ><LocalizedText text="Edit plan" /></Link>
               </div>
@@ -591,7 +591,7 @@ export default function PremiumCommandCenterV2({
                     <dt className="text-[9px] font-extrabold uppercase tracking-[0.15em] text-[#7A8390]">
                       {item.label}
                     </dt>
-                    <dd className="mt-2 text-sm font-extrabold leading-6 text-[#0B1F3A]">
+                    <dd className="mt-2 text-sm font-extrabold leading-6 text-[var(--tgpi-navy-raised)]">
                       {item.value}
                     </dd>
                   </div>
@@ -601,18 +601,18 @@ export default function PremiumCommandCenterV2({
               <div className="mt-6 border-t border-[#E4DED2] pt-6">
                 <div className="flex items-center justify-between gap-4">
                   <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#79550F]"><LocalizedText text="Recent activity" /></p>
-                  <span className="rounded-full border border-[#D8D2C4] bg-white px-3 py-1 text-[9px] font-extrabold uppercase tracking-[0.12em] text-[#657082]"><LocalizedText text="Private" /></span>
+                  <span className="rounded-full border border-[var(--tgpi-border)] bg-white px-3 py-1 text-[9px] font-extrabold uppercase tracking-[0.12em] text-[#657082]"><LocalizedText text="Private" /></span>
                 </div>
                 {model.recentActivities.length ? (
                   <div className="mt-4 grid gap-2">
                     {model.recentActivities.slice(0, 3).map((activity) => (
                       <Link
-                        className="group flex items-center justify-between gap-4 rounded-xl border border-[#E4DED2] bg-white px-4 py-3 transition hover:border-[#B58A2A]"
+                        className="group flex items-center justify-between gap-4 rounded-xl border border-[#E4DED2] bg-white px-4 py-3 transition hover:border-[var(--tgpi-gold-hover)]"
                         href={activity.href}
                         key={activity.id}
                       >
                         <span>
-                          <span className="block text-xs font-extrabold text-[#0B1F3A]">
+                          <span className="block text-xs font-extrabold text-[var(--tgpi-navy-raised)]">
                             {activity.title}
                           </span>
                           <span className="mt-1 block text-[9px] font-bold uppercase tracking-[0.12em] text-[#7A8390]">
@@ -621,7 +621,7 @@ export default function PremiumCommandCenterV2({
                         </span>
                         <span
                           aria-hidden="true"
-                          className="font-extrabold text-[#B58A2A] transition group-hover:translate-x-1"
+                          className="font-extrabold text-[var(--tgpi-gold-hover)] transition group-hover:translate-x-1"
                         >
                           →
                         </span>
@@ -639,7 +639,7 @@ export default function PremiumCommandCenterV2({
         </div>
       </section>
 
-      <section className="border-t border-[#D8D2C4] bg-[#FFFDF8] px-4 py-8 sm:px-6">
+      <section className="border-t border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] px-4 py-8 sm:px-6">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 text-xs leading-6 text-[#657082]">
           <p className="max-w-3xl">
             Your command center uses your private TGPI profile and activity to organize recommendations. It never replaces official legal, immigration, tax or financial advice.

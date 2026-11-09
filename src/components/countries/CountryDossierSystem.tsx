@@ -90,7 +90,7 @@ export function CountrySystemPath({
   return (
     <section
       id="next-step"
-      className="mt-8 scroll-mt-36 overflow-hidden rounded-[2rem] border border-[#183753] bg-[#06172B] text-white shadow-[0_28px_80px_rgba(7,26,50,0.2)]"
+      className="mt-8 scroll-mt-36 overflow-hidden rounded-[2rem] border border-[#183753] bg-[var(--tgpi-navy)] text-white shadow-[0_28px_80px_rgba(7,26,50,0.2)]"
     >
       <div className="grid gap-8 border-b border-white/10 px-6 py-8 md:grid-cols-[1.08fr_0.92fr] md:px-8 lg:px-10">
         <div>

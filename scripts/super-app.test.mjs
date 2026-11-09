@@ -62,11 +62,13 @@ test("module search resolves labels, descriptions and action keywords", () => {
 test("desktop launcher uses a native modal dialog with global keyboard access", () => {
   const source = readFileSync(new URL("../src/components/super-app/SuperAppLauncher.tsx", import.meta.url), "utf8");
   assert.match(source, /showModal\(\)/);
-  assert.match(source, /TGPI Super App modules/);
+  assert.match(source, /SUPER_APP_MODULES\.filter/);
   assert.match(source, /SUPER_APP_OPEN_EVENT/);
   assert.match(source, /event\.metaKey \|\| event\.ctrlKey/);
-  assert.match(source, /Find an app, action or destination/);
-  assert.match(source, /PlatformBannerImage/);
+  assert.match(source, /Country, capital, tool or action/);
+  assert.match(source, /ArrowDown/);
+  assert.match(source, /containDialogFocus/);
+  assert.match(source, /previousFocus\?\.focus/);
 });
 
 test("desktop navbar exposes the same global app launcher", () => {
@@ -80,7 +82,9 @@ test("desktop navbar exposes the same global app launcher", () => {
 
 test("mobile navigation consumes the same shared module registry", () => {
   const source = readFileSync(new URL("../src/components/mobile/MobileNavigation.tsx", import.meta.url), "utf8");
-  assert.match(source, /searchSuperAppModules/);
+  const command = readFileSync(new URL('../src/components/super-app/SuperAppLauncher.tsx', import.meta.url), 'utf8');
+  assert.match(command, /SUPER_APP_MODULES\.filter/);
+  assert.match(command, /searchMobileCountries/);
   assert.match(source, /<LauncherButton compact/);
   assert.match(source, /COMPACT_NAVIGATION\.map/);
   assert.doesNotMatch(source, /mobile-dock-emoji/);

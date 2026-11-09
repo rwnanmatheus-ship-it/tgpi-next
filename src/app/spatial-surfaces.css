@@ -1,21 +1,4 @@
-:root {
-  --tgpi-depth-1:
-    0 1px 0 rgba(255, 255, 255, 0.9) inset,
-    0 10px 24px rgba(6, 27, 51, 0.07),
-    0 2px 5px rgba(6, 27, 51, 0.05);
-  --tgpi-depth-2:
-    0 1px 0 rgba(255, 255, 255, 0.92) inset,
-    0 20px 48px rgba(6, 27, 51, 0.11),
-    0 5px 12px rgba(6, 27, 51, 0.06);
-  --tgpi-depth-3:
-    0 1px 0 rgba(255, 255, 255, 0.9) inset,
-    0 34px 82px rgba(6, 27, 51, 0.16),
-    0 10px 26px rgba(6, 27, 51, 0.09);
-  --tgpi-depth-dark:
-    0 1px 0 rgba(255, 255, 255, 0.1) inset,
-    0 32px 82px rgba(1, 10, 20, 0.32),
-    0 8px 20px rgba(1, 10, 20, 0.2);
-}
+
 
 .tgpi-grid-3d {
   --tgpi-grid-gap: 1.25rem;
@@ -79,8 +62,8 @@
 
 .tgpi-card-3d[data-tgpi-tone="white"] {
   --tgpi-card-background:
-    radial-gradient(circle at 0% 0%, #ffffff, transparent 42%),
-    linear-gradient(145deg, #ffffff, #fbfaf7);
+    radial-gradient(circle at 0% 0%, var(--tgpi-surface-strong), transparent 42%),
+    linear-gradient(145deg, var(--tgpi-surface-strong), var(--tgpi-surface));
 }
 
 .tgpi-card-3d[data-tgpi-tone="navy"] {

@@ -92,7 +92,7 @@ export default function PremiumActionButton({
         <button
           type="button"
           disabled
-          className="w-full rounded-2xl bg-[#B58A2A] px-6 py-4 text-sm font-black text-[#0B0B0B] opacity-60"
+          className="w-full rounded-2xl bg-[var(--tgpi-gold-hover)] px-6 py-4 text-sm font-black text-[#0B0B0B] opacity-60"
         >
           Checking Premium access...
         </button>
@@ -102,7 +102,7 @@ export default function PremiumActionButton({
     return (
       <Link
         href="/premium-waitlist"
-        className="block w-full rounded-2xl bg-[#B58A2A] px-6 py-4 text-center text-sm font-black text-[#0B0B0B] transition hover:bg-[#C79B36]"
+        className="block w-full rounded-2xl bg-[var(--tgpi-gold-hover)] px-6 py-4 text-center text-sm font-black text-[#0B0B0B] transition hover:bg-[#C79B36]"
       >
         Join Premium Waitlist
       </Link>
@@ -222,7 +222,7 @@ export default function PremiumActionButton({
           role="status"
           className="mb-4 rounded-xl border border-white/20 bg-[#07172B] p-4 text-sm leading-6 text-white"
         >
-          <p className="font-bold text-[#F0D58C]">
+          <p className="font-bold text-[var(--tgpi-gold-light)]">
             {hasFounderAccess
               ? "Founder access enabled"
               : hasPreviewAccess
@@ -260,7 +260,7 @@ export default function PremiumActionButton({
             : startCheckout
         }
         disabled={loading || checkingStatus}
-        className="w-full rounded-2xl bg-[#B58A2A] px-6 py-4 text-sm font-black text-[#0B0B0B] transition hover:bg-[#C79B36] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#F0D58C] disabled:cursor-not-allowed disabled:opacity-60"
+        className="w-full rounded-2xl bg-[var(--tgpi-gold-hover)] px-6 py-4 text-sm font-black text-[#0B0B0B] transition hover:bg-[#C79B36] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--tgpi-gold-light)] disabled:cursor-not-allowed disabled:opacity-60"
       >
         {loading
           ? shouldManageBilling
@@ -288,14 +288,14 @@ export default function PremiumActionButton({
           type="button"
           onClick={manageSubscription}
           disabled={loading || checkingStatus}
-          className="mt-3 min-h-11 w-full rounded-xl border border-white/30 bg-[#07172B] px-4 py-3 text-sm font-bold text-white transition hover:bg-[#142D4C] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#F0D58C] disabled:opacity-60"
+          className="mt-3 min-h-11 w-full rounded-xl border border-white/30 bg-[#07172B] px-4 py-3 text-sm font-bold text-white transition hover:bg-[#142D4C] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--tgpi-gold-light)] disabled:opacity-60"
         >
           Manage subscription
         </button>
       )}
       {error && (
         <p
-          className="mt-3 rounded-xl border border-[#D8D2C4] bg-[#FFFDF8] p-3 text-sm font-semibold text-[#8B1E1E]"
+          className="mt-3 rounded-xl border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] p-3 text-sm font-semibold text-[#8B1E1E]"
           role="alert"
         >
           {error}

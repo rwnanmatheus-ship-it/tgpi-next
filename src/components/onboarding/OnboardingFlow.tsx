@@ -271,8 +271,8 @@ export default function OnboardingFlow({
   const completion = getCompletion(data);
 
   return (
-    <main className="min-h-screen bg-[#F5F1E8] text-[#0B1F3A]">
-      <section className="border-b border-[#D8D2C4] bg-[#FFFDF8] px-4 pb-8 pt-10 sm:px-6 lg:pb-10 lg:pt-14">
+    <main className="min-h-screen bg-[#F5F1E8] text-[var(--tgpi-navy-raised)]">
+      <section className="border-b border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] px-4 pb-8 pt-10 sm:px-6 lg:pb-10 lg:pt-14">
         <div className="mx-auto max-w-7xl">
           <div className="max-w-3xl">
             <p className="text-[10px] font-extrabold uppercase tracking-[0.25em] text-[#956A13]">
@@ -301,8 +301,8 @@ export default function OnboardingFlow({
                         aria-hidden="true"
                         className={`absolute left-0 right-1/2 top-4 h-px ${
                           item.number <= highestStep
-                            ? "bg-[#B58A2A]"
-                            : "bg-[#D8D2C4]"
+                            ? "bg-[var(--tgpi-gold-hover)]"
+                            : "bg-[var(--tgpi-border)]"
                         }`}
                       />
                     ) : null}
@@ -311,8 +311,8 @@ export default function OnboardingFlow({
                         aria-hidden="true"
                         className={`absolute left-1/2 right-0 top-4 h-px ${
                           item.number < highestStep
-                            ? "bg-[#B58A2A]"
-                            : "bg-[#D8D2C4]"
+                            ? "bg-[var(--tgpi-gold-hover)]"
+                            : "bg-[var(--tgpi-border)]"
                         }`}
                       />
                     ) : null}
@@ -326,17 +326,17 @@ export default function OnboardingFlow({
                       <span
                         className={`grid h-8 w-8 place-items-center rounded-full border text-[11px] font-extrabold transition ${
                           isActive
-                            ? "border-[#0B1F3A] bg-[#0B1F3A] text-white shadow-[0_0_0_5px_#F5F1E8]"
+                            ? "border-[var(--tgpi-navy-raised)] bg-[var(--tgpi-navy-raised)] text-white shadow-[0_0_0_5px_#F5F1E8]"
                             : isComplete
-                              ? "border-[#B58A2A] bg-[#E5BF5A] text-[#0B1F3A]"
-                              : "border-[#CFC7B8] bg-[#FFFDF8] text-[#7A8390]"
+                              ? "border-[var(--tgpi-gold-hover)] bg-[#E5BF5A] text-[var(--tgpi-navy-raised)]"
+                              : "border-[#CFC7B8] bg-[var(--tgpi-surface)] text-[#7A8390]"
                         }`}
                       >
                         {isComplete && !isActive ? "✓" : item.number}
                       </span>
                       <span
                         className={`text-[11px] font-extrabold uppercase tracking-[0.12em] ${
-                          isActive ? "text-[#0B1F3A]" : "text-[#7A8390]"
+                          isActive ? "text-[var(--tgpi-navy-raised)]" : "text-[#7A8390]"
                         }`}
                       >
                         {item.label}
@@ -352,7 +352,7 @@ export default function OnboardingFlow({
 
       <section className="px-4 py-8 sm:px-6 lg:py-12">
         <div className="mx-auto grid max-w-7xl gap-6 xl:grid-cols-[minmax(0,1fr)_340px]">
-          <div className="rounded-[28px] border border-[#D8D2C4] bg-[#FFFDF8] p-5 shadow-[0_22px_60px_rgba(11,31,58,0.08)] sm:p-8 lg:p-10">
+          <div className="rounded-[28px] border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] p-5 shadow-[0_22px_60px_rgba(11,31,58,0.08)] sm:p-8 lg:p-10">
             {step === 1 ? <GoalStep data={data} updateData={updateData} /> : null}
             {step === 2 ? (
               <CountriesStep
@@ -369,7 +369,7 @@ export default function OnboardingFlow({
             <div className="mt-10 border-t border-[#E4DED2] pt-6">
               <div aria-live="polite" className="min-h-6">
                 {validationMessage ? (
-                  <p className="flex items-start gap-2 text-sm font-bold text-[#9F2F2F]">
+                  <p className="flex items-start gap-2 text-sm font-bold text-[var(--tgpi-danger)]">
                     <span aria-hidden="true">!</span>
                     {validationMessage}
                   </p>
@@ -385,7 +385,7 @@ export default function OnboardingFlow({
                   <button
                     type="button"
                     onClick={goBack}
-                    className="inline-flex min-h-12 flex-1 items-center justify-center rounded-xl border border-[#CFC7B8] bg-white px-5 text-sm font-extrabold text-[#0B1F3A] transition hover:border-[#B58A2A] sm:flex-none"
+                    className="inline-flex min-h-12 flex-1 items-center justify-center rounded-xl border border-[#CFC7B8] bg-white px-5 text-sm font-extrabold text-[var(--tgpi-navy-raised)] transition hover:border-[var(--tgpi-gold-hover)] sm:flex-none"
                   >
                     {step === 1 ? "Exit" : "Back"}
                   </button>
@@ -393,7 +393,7 @@ export default function OnboardingFlow({
                     type="button"
                     onClick={() => void continueFlow()}
                     disabled={isCompleting}
-                    className="inline-flex min-h-12 flex-[1.5] items-center justify-center gap-2 rounded-xl bg-[#0B1F3A] px-6 text-sm font-extrabold text-white shadow-[0_12px_30px_rgba(11,31,58,0.18)] transition hover:bg-[#143454] disabled:cursor-wait disabled:opacity-70 sm:flex-none"
+                    className="inline-flex min-h-12 flex-[1.5] items-center justify-center gap-2 rounded-xl bg-[var(--tgpi-navy-raised)] px-6 text-sm font-extrabold text-white shadow-[0_12px_30px_rgba(11,31,58,0.18)] transition hover:bg-[#143454] disabled:cursor-wait disabled:opacity-70 sm:flex-none"
                   >
                     {step === 5
                       ? isCompleting
@@ -446,21 +446,21 @@ function GoalStep({
               onClick={() => updateData({ primaryGoal: goal.value })}
               className={`group flex min-h-[138px] items-start gap-4 rounded-2xl border p-5 text-left transition ${
                 selected
-                  ? "border-[#B58A2A] bg-[#FBF2D8] shadow-[0_10px_30px_rgba(181,138,42,0.11)]"
-                  : "border-[#D8D2C4] bg-white hover:-translate-y-0.5 hover:border-[#B58A2A]"
+                  ? "border-[var(--tgpi-gold-hover)] bg-[#FBF2D8] shadow-[0_10px_30px_rgba(181,138,42,0.11)]"
+                  : "border-[var(--tgpi-border)] bg-white hover:-translate-y-0.5 hover:border-[var(--tgpi-gold-hover)]"
               }`}
             >
               <span
                 className={`grid h-11 w-11 shrink-0 place-items-center rounded-xl ${
                   selected
-                    ? "bg-[#0B1F3A] text-[#E5BF5A]"
-                    : "bg-[#F2EBDD] text-[#0B1F3A]"
+                    ? "bg-[var(--tgpi-navy-raised)] text-[#E5BF5A]"
+                    : "bg-[#F2EBDD] text-[var(--tgpi-navy-raised)]"
                 }`}
               >
                 <OnboardingIcon name={goal.icon} />
               </span>
               <span>
-                <span className="block text-base font-extrabold text-[#0B1F3A]">
+                <span className="block text-base font-extrabold text-[var(--tgpi-navy-raised)]">
                   {goal.label}
                 </span>
                 <span className="mt-2 block text-sm leading-6 text-[#657082]">
@@ -471,7 +471,7 @@ function GoalStep({
                 aria-hidden="true"
                 className={`ml-auto mt-1 grid h-5 w-5 shrink-0 place-items-center rounded-full border text-[10px] ${
                   selected
-                    ? "border-[#0B1F3A] bg-[#0B1F3A] text-white"
+                    ? "border-[var(--tgpi-navy-raised)] bg-[var(--tgpi-navy-raised)] text-white"
                     : "border-[#CFC7B8] text-transparent"
                 }`}
               >
@@ -555,7 +555,7 @@ function CountriesStep({
               setVisibleCount(24);
             }}
             placeholder="Search across 195 countries"
-            className="min-h-12 w-full rounded-xl border border-[#D8D2C4] bg-white py-3 pl-11 pr-4 text-sm text-[#0B1F3A] placeholder:text-[#8B929D] focus:border-[#B58A2A]"
+            className="min-h-12 w-full rounded-xl border border-[var(--tgpi-border)] bg-white py-3 pl-11 pr-4 text-sm text-[var(--tgpi-navy-raised)] placeholder:text-[#8B929D] focus:border-[var(--tgpi-gold-hover)]"
           />
         </label>
         <label>
@@ -566,7 +566,7 @@ function CountriesStep({
               setRegion(event.target.value);
               setVisibleCount(24);
             }}
-            className="min-h-12 w-full rounded-xl border border-[#D8D2C4] bg-white px-4 text-sm font-bold text-[#0B1F3A] focus:border-[#B58A2A]"
+            className="min-h-12 w-full rounded-xl border border-[var(--tgpi-border)] bg-white px-4 text-sm font-bold text-[var(--tgpi-navy-raised)] focus:border-[var(--tgpi-gold-hover)]"
           >
             <option value="all">All continents</option>
             {regions.map((item) => (
@@ -588,7 +588,7 @@ function CountriesStep({
                 key={slug}
                 type="button"
                 onClick={() => toggleCountry(slug)}
-                className="inline-flex min-h-10 items-center gap-2 rounded-full border border-[#D0B168] bg-[#FBF2D8] px-3 text-xs font-extrabold text-[#0B1F3A] transition hover:border-[#9A7119]"
+                className="inline-flex min-h-10 items-center gap-2 rounded-full border border-[#D0B168] bg-[#FBF2D8] px-3 text-xs font-extrabold text-[var(--tgpi-navy-raised)] transition hover:border-[#9A7119]"
                 aria-label={`Remove ${country.name}`}
               >
                 <span>{country.emoji}</span>
@@ -612,15 +612,15 @@ function CountriesStep({
               onClick={() => toggleCountry(country.slug)}
               className={`flex min-h-[92px] items-center gap-3 rounded-2xl border p-4 text-left transition ${
                 selected
-                  ? "border-[#B58A2A] bg-[#FBF2D8] shadow-[0_8px_24px_rgba(181,138,42,0.1)]"
-                  : "border-[#D8D2C4] bg-white hover:-translate-y-0.5 hover:border-[#B58A2A]"
+                  ? "border-[var(--tgpi-gold-hover)] bg-[#FBF2D8] shadow-[0_8px_24px_rgba(181,138,42,0.1)]"
+                  : "border-[var(--tgpi-border)] bg-white hover:-translate-y-0.5 hover:border-[var(--tgpi-gold-hover)]"
               }`}
             >
               <span className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-[#F2EBDD] text-2xl">
                 {country.emoji}
               </span>
               <span className="min-w-0">
-                <span className="block truncate text-sm font-extrabold text-[#0B1F3A]">
+                <span className="block truncate text-sm font-extrabold text-[var(--tgpi-navy-raised)]">
                   <LocalizedText text={country.name} />
                 </span>
                 <span className="mt-1 block truncate text-xs text-[#7A8390]">
@@ -631,7 +631,7 @@ function CountriesStep({
                 aria-hidden="true"
                 className={`ml-auto grid h-5 w-5 shrink-0 place-items-center rounded-full border text-[10px] ${
                   selected
-                    ? "border-[#0B1F3A] bg-[#0B1F3A] text-white"
+                    ? "border-[var(--tgpi-navy-raised)] bg-[var(--tgpi-navy-raised)] text-white"
                     : "border-[#CFC7B8] text-transparent"
                 }`}
               >
@@ -644,7 +644,7 @@ function CountriesStep({
 
       {filteredCountries.length === 0 ? (
         <div className="mt-6 rounded-2xl border border-dashed border-[#CFC7B8] bg-white px-5 py-10 text-center">
-          <p className="font-extrabold text-[#0B1F3A]">No countries found.</p>
+          <p className="font-extrabold text-[var(--tgpi-navy-raised)]">No countries found.</p>
           <p className="mt-2 text-sm text-[#657082]">Try another name or continent.</p>
         </div>
       ) : null}
@@ -653,7 +653,7 @@ function CountriesStep({
         <button
           type="button"
           onClick={() => setVisibleCount((count) => count + 24)}
-          className="mx-auto mt-6 flex min-h-11 items-center justify-center rounded-xl border border-[#CFC7B8] bg-white px-5 text-sm font-extrabold text-[#0B1F3A] transition hover:border-[#B58A2A]"
+          className="mx-auto mt-6 flex min-h-11 items-center justify-center rounded-xl border border-[#CFC7B8] bg-white px-5 text-sm font-extrabold text-[var(--tgpi-navy-raised)] transition hover:border-[var(--tgpi-gold-hover)]"
         ><LocalizedText text="Show more countries" /></button>
       ) : null}
     </div>
@@ -676,7 +676,7 @@ function TimingStep({
       />
 
       <fieldset className="mt-8">
-        <legend className="text-sm font-extrabold text-[#0B1F3A]">When do you plan to take action?</legend>
+        <legend className="text-sm font-extrabold text-[var(--tgpi-navy-raised)]">When do you plan to take action?</legend>
         <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {timeHorizons.map((item) => (
             <OptionCard
@@ -691,7 +691,7 @@ function TimingStep({
       </fieldset>
 
       <fieldset className="mt-9">
-        <legend className="text-sm font-extrabold text-[#0B1F3A]">
+        <legend className="text-sm font-extrabold text-[var(--tgpi-navy-raised)]">
           What monthly budget feels comfortable to you?
         </legend>
         <p className="mt-1 text-xs leading-5 text-[#7A8390]">
@@ -737,7 +737,7 @@ function ContextStep({
       />
 
       <fieldset className="mt-8">
-        <legend className="text-sm font-extrabold text-[#0B1F3A]">Which languages do you use?</legend>
+        <legend className="text-sm font-extrabold text-[var(--tgpi-navy-raised)]">Which languages do you use?</legend>
         <div className="mt-3 flex flex-wrap gap-2">
           {languageOptions.map((language) => {
             const selected = data.languages.includes(language);
@@ -749,8 +749,8 @@ function ContextStep({
                 onClick={() => toggleLanguage(language)}
                 className={`inline-flex min-h-11 items-center rounded-full border px-4 text-sm font-bold transition ${
                   selected
-                    ? "border-[#0B1F3A] bg-[#0B1F3A] text-white"
-                    : "border-[#D8D2C4] bg-white text-[#0B1F3A] hover:border-[#B58A2A]"
+                    ? "border-[var(--tgpi-navy-raised)] bg-[var(--tgpi-navy-raised)] text-white"
+                    : "border-[var(--tgpi-border)] bg-white text-[var(--tgpi-navy-raised)] hover:border-[var(--tgpi-gold-hover)]"
                 }`}
               >
                 <span
@@ -770,7 +770,7 @@ function ContextStep({
 
       <div className="mt-9 grid gap-5 sm:grid-cols-2">
         <label className="block">
-          <span className="text-sm font-extrabold text-[#0B1F3A]">Profession or field of interest</span>
+          <span className="text-sm font-extrabold text-[var(--tgpi-navy-raised)]">Profession or field of interest</span>
           <span className="mt-1 block text-xs text-[#7A8390]"><LocalizedText text="Optional" /></span>
           <input
             type="text"
@@ -778,16 +778,16 @@ function ContextStep({
             onChange={(event) => updateData({ profession: event.target.value })}
             maxLength={100}
             placeholder="E.g. technology, healthcare, design"
-            className="mt-3 min-h-12 w-full rounded-xl border border-[#D8D2C4] bg-white px-4 text-sm text-[#0B1F3A] placeholder:text-[#8B929D] focus:border-[#B58A2A]"
+            className="mt-3 min-h-12 w-full rounded-xl border border-[var(--tgpi-border)] bg-white px-4 text-sm text-[var(--tgpi-navy-raised)] placeholder:text-[#8B929D] focus:border-[var(--tgpi-gold-hover)]"
           />
         </label>
         <label className="block">
-          <span className="text-sm font-extrabold text-[#0B1F3A]"><LocalizedText text="Education level" /></span>
+          <span className="text-sm font-extrabold text-[var(--tgpi-navy-raised)]"><LocalizedText text="Education level" /></span>
           <span className="mt-1 block text-xs text-[#7A8390]"><LocalizedText text="Optional" /></span>
           <select
             value={data.educationLevel}
             onChange={(event) => updateData({ educationLevel: event.target.value })}
-            className="mt-3 min-h-12 w-full rounded-xl border border-[#D8D2C4] bg-white px-4 text-sm text-[#0B1F3A] focus:border-[#B58A2A]"
+            className="mt-3 min-h-12 w-full rounded-xl border border-[var(--tgpi-border)] bg-white px-4 text-sm text-[var(--tgpi-navy-raised)] focus:border-[var(--tgpi-gold-hover)]"
           >
             <option value=""><LocalizedText text="Select an option" /></option>
             <option value="secondary"><LocalizedText text="Secondary education" /></option>
@@ -801,7 +801,7 @@ function ContextStep({
       </div>
 
       <fieldset className="mt-9">
-        <legend className="text-sm font-extrabold text-[#0B1F3A]">What is your international experience?</legend>
+        <legend className="text-sm font-extrabold text-[var(--tgpi-navy-raised)]">What is your international experience?</legend>
         <div className="mt-3 grid gap-3 sm:grid-cols-2">
           {experienceOptions.map((item) => (
             <OptionCard
@@ -861,21 +861,21 @@ function PrioritiesStep({
               onClick={() => togglePriority(priority.value)}
               className={`flex min-h-[104px] items-center gap-4 rounded-2xl border p-5 text-left transition disabled:cursor-not-allowed disabled:opacity-45 ${
                 selected
-                  ? "border-[#B58A2A] bg-[#FBF2D8]"
-                  : "border-[#D8D2C4] bg-white hover:border-[#B58A2A]"
+                  ? "border-[var(--tgpi-gold-hover)] bg-[#FBF2D8]"
+                  : "border-[var(--tgpi-border)] bg-white hover:border-[var(--tgpi-gold-hover)]"
               }`}
             >
               <span
                 className={`grid h-10 w-10 shrink-0 place-items-center rounded-full text-xs font-extrabold ${
                   selected
-                    ? "bg-[#0B1F3A] text-[#E5BF5A]"
+                    ? "bg-[var(--tgpi-navy-raised)] text-[#E5BF5A]"
                     : "bg-[#F2EBDD] text-[#657082]"
                 }`}
               >
                 0{index + 1}
               </span>
               <span>
-                <span className="block text-sm font-extrabold text-[#0B1F3A]">
+                <span className="block text-sm font-extrabold text-[var(--tgpi-navy-raised)]">
                   {priority.label}
                 </span>
                 <span className="mt-1 block text-xs leading-5 text-[#657082]">
@@ -886,7 +886,7 @@ function PrioritiesStep({
                 aria-hidden="true"
                 className={`ml-auto grid h-5 w-5 shrink-0 place-items-center rounded-full border text-[10px] ${
                   selected
-                    ? "border-[#0B1F3A] bg-[#0B1F3A] text-white"
+                    ? "border-[var(--tgpi-navy-raised)] bg-[var(--tgpi-navy-raised)] text-white"
                     : "border-[#CFC7B8] text-transparent"
                 }`}
               >
@@ -914,11 +914,11 @@ function PlanSummary({
     .filter((country): country is OnboardingCountry => Boolean(country));
 
   return (
-    <aside className="h-fit overflow-hidden rounded-[28px] bg-[#0B1F3A] text-white shadow-[0_24px_65px_rgba(11,31,58,0.18)] xl:sticky xl:top-28">
+    <aside className="h-fit overflow-hidden rounded-[28px] bg-[var(--tgpi-navy-raised)] text-white shadow-[0_24px_65px_rgba(11,31,58,0.18)] xl:sticky xl:top-28">
       <div className="relative border-b border-white/10 p-7">
         <div aria-hidden="true" className="absolute -right-10 -top-14 h-36 w-36 rounded-full border border-[#E5BF5A]/25" />
         <div aria-hidden="true" className="absolute right-8 top-9 h-16 w-16 rounded-full border border-[#E5BF5A]/20" />
-        <p className="relative text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#F0D58C]"><LocalizedText text="Your global plan" /></p>
+        <p className="relative text-[10px] font-extrabold uppercase tracking-[0.24em] text-[var(--tgpi-gold-light)]"><LocalizedText text="Your global plan" /></p>
         <h2 className="relative mt-4 font-[var(--tgpi-font-display)] text-3xl font-semibold leading-tight">
           A view designed for you.
         </h2>
@@ -999,7 +999,7 @@ function StepHeading({
         <p className="mt-4 text-sm leading-7 text-[#657082]">{description}</p>
       </div>
       {aside ? (
-        <span className="rounded-full border border-[#D8D2C4] bg-white px-3 py-2 text-[11px] font-extrabold uppercase tracking-[0.12em] text-[#657082]">
+        <span className="rounded-full border border-[var(--tgpi-border)] bg-white px-3 py-2 text-[11px] font-extrabold uppercase tracking-[0.12em] text-[#657082]">
           {aside}
         </span>
       ) : null}
@@ -1025,22 +1025,22 @@ function OptionCard({
       onClick={onClick}
       className={`flex min-h-[100px] items-start gap-3 rounded-2xl border p-4 text-left transition ${
         selected
-          ? "border-[#B58A2A] bg-[#FBF2D8]"
-          : "border-[#D8D2C4] bg-white hover:border-[#B58A2A]"
+          ? "border-[var(--tgpi-gold-hover)] bg-[#FBF2D8]"
+          : "border-[var(--tgpi-border)] bg-white hover:border-[var(--tgpi-gold-hover)]"
       }`}
     >
       <span
         aria-hidden="true"
         className={`mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full border text-[10px] ${
           selected
-            ? "border-[#0B1F3A] bg-[#0B1F3A] text-white"
+            ? "border-[var(--tgpi-navy-raised)] bg-[var(--tgpi-navy-raised)] text-white"
             : "border-[#CFC7B8] text-transparent"
         }`}
       >
         ✓
       </span>
       <span>
-        <span className="block text-sm font-extrabold text-[#0B1F3A]">{label}</span>
+        <span className="block text-sm font-extrabold text-[var(--tgpi-navy-raised)]">{label}</span>
         <span className="mt-1 block text-xs leading-5 text-[#657082]">{detail}</span>
       </span>
     </button>
@@ -1069,7 +1069,7 @@ function SaveIndicator({ status }: { status: SaveStatus }) {
     <span
       aria-live="polite"
       className={`inline-flex shrink-0 items-center gap-2 font-bold ${
-        status === "error" ? "text-[#9F2F2F]" : "text-[#657082]"
+        status === "error" ? "text-[var(--tgpi-danger)]" : "text-[#657082]"
       }`}
     >
       <span
@@ -1078,8 +1078,8 @@ function SaveIndicator({ status }: { status: SaveStatus }) {
           status === "saved"
             ? "bg-[#277352]"
             : status === "saving"
-              ? "animate-pulse bg-[#B58A2A]"
-              : "bg-[#9F2F2F]"
+              ? "animate-pulse bg-[var(--tgpi-gold-hover)]"
+              : "bg-[var(--tgpi-danger)]"
           }`}
       />
       <span className={status === "saved" ? "inline" : "hidden"}>

@@ -44,7 +44,7 @@ export default function GlobalWorkspaceV1({
 
   return (
     <div className="grid gap-8">
-      <section className="overflow-hidden rounded-[32px] border border-[#D8D2C4] bg-[#FFFDF8] shadow-[0_24px_70px_rgba(11,31,58,0.08)]">
+      <section className="overflow-hidden rounded-[32px] border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] shadow-[0_24px_70px_rgba(11,31,58,0.08)]">
         <div className="grid lg:grid-cols-[1.12fr_.88fr]">
           <div className="p-6 sm:p-8 lg:p-10">
             <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#956A13]">
@@ -61,24 +61,24 @@ export default function GlobalWorkspaceV1({
             {primaryAction ? (
               <Link
                 href={primaryAction.href}
-                className="mt-7 inline-flex min-h-12 items-center justify-center rounded-xl bg-[#0B1F3A] px-6 text-sm font-extrabold text-white shadow-[0_12px_30px_rgba(11,31,58,0.18)] transition hover:-translate-y-0.5 hover:bg-[#143454] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B58A2A]"
+                className="mt-7 inline-flex min-h-12 items-center justify-center rounded-xl bg-[var(--tgpi-navy-raised)] px-6 text-sm font-extrabold text-white shadow-[0_12px_30px_rgba(11,31,58,0.18)] transition hover:-translate-y-0.5 hover:bg-[#143454] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold-hover)]"
               >
                 {primaryAction.action} →
               </Link>
             ) : null}
           </div>
 
-          <div className="bg-[#0B1F3A] p-6 text-white sm:p-8 lg:p-10">
+          <div className="bg-[var(--tgpi-navy-raised)] p-6 text-white sm:p-8 lg:p-10">
             <div className="flex items-end justify-between gap-5">
               <div>
-                <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#F0D58C]"><LocalizedText text="Global profile" /></p>
+                <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold-light)]"><LocalizedText text="Global profile" /></p>
                 <p className="mt-3 font-[var(--tgpi-font-display)] text-4xl font-semibold">
                   {model.completion}% complete
                 </p>
               </div>
               <Link
                 href="/onboarding"
-                className="text-xs font-extrabold text-[#F0D58C] underline decoration-[#F0D58C]/40 underline-offset-4"
+                className="text-xs font-extrabold text-[var(--tgpi-gold-light)] underline decoration-[var(--tgpi-gold-light)]/40 underline-offset-4"
               ><LocalizedText text="Edit plan" /></Link>
             </div>
             <div className="mt-5 h-2 overflow-hidden rounded-full bg-white/10">
@@ -96,7 +96,7 @@ export default function GlobalWorkspaceV1({
                   <span className="text-[#D7E0EB]">{item.label}</span>
                   <span
                     className={
-                      item.complete ? "text-[#A9E1C8]" : "text-[#F0D58C]"
+                      item.complete ? "text-[#A9E1C8]" : "text-[var(--tgpi-gold-light)]"
                     }
                   >
                     {item.complete ? "Complete" : "Add details"}
@@ -110,11 +110,11 @@ export default function GlobalWorkspaceV1({
 
       <section
         aria-labelledby="activation-progress-title"
-        className="overflow-hidden rounded-[30px] border border-[#D8D2C4] bg-white shadow-[0_20px_60px_rgba(11,31,58,0.07)]"
+        className="overflow-hidden rounded-[30px] border border-[var(--tgpi-border)] bg-white shadow-[0_20px_60px_rgba(11,31,58,0.07)]"
       >
         <div className="grid lg:grid-cols-[0.82fr_1.18fr]">
-          <div className="bg-[#0B1F3A] p-6 text-white sm:p-8">
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#F0D58C]">
+          <div className="bg-[var(--tgpi-navy-raised)] p-6 text-white sm:p-8">
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[var(--tgpi-gold-light)]">
               Activation progress
             </p>
             <h2
@@ -154,7 +154,7 @@ export default function GlobalWorkspaceV1({
                   Your work continues across devices.
                 </h2>
               </div>
-              <span className="rounded-full border border-[#D8D2C4] bg-[#F7F2E8] px-3 py-2 text-[9px] font-extrabold uppercase tracking-[0.14em] text-[#657082]"><LocalizedText text="Private" /></span>
+              <span className="rounded-full border border-[var(--tgpi-border)] bg-[#F7F2E8] px-3 py-2 text-[9px] font-extrabold uppercase tracking-[0.14em] text-[#657082]"><LocalizedText text="Private" /></span>
             </div>
 
             {model.recentActivities.length ? (
@@ -163,25 +163,25 @@ export default function GlobalWorkspaceV1({
                   <Link
                     key={activity.id}
                     href={activity.href}
-                    className="group flex items-center justify-between gap-4 rounded-2xl border border-[#E4DED2] bg-[#FFFDF8] px-4 py-3 transition hover:border-[#B58A2A]"
+                    className="group flex items-center justify-between gap-4 rounded-2xl border border-[#E4DED2] bg-[var(--tgpi-surface)] px-4 py-3 transition hover:border-[var(--tgpi-gold-hover)]"
                   >
                     <span>
-                      <span className="block text-sm font-extrabold text-[#0B1F3A]">
+                      <span className="block text-sm font-extrabold text-[var(--tgpi-navy-raised)]">
                         {activity.title}
                       </span>
                       <span className="mt-1 block text-[10px] font-bold uppercase tracking-[0.12em] text-[#7A8390]">
                         {formatActivityDate(activity.occurredAt)}
                       </span>
                     </span>
-                    <span className="font-extrabold text-[#B58A2A] transition group-hover:translate-x-1">
+                    <span className="font-extrabold text-[var(--tgpi-gold-hover)] transition group-hover:translate-x-1">
                       →
                     </span>
                   </Link>
                 ))}
               </div>
             ) : (
-              <div className="mt-5 rounded-2xl border border-dashed border-[#CFC7B8] bg-[#FFFDF8] p-6">
-                <p className="text-sm font-extrabold text-[#0B1F3A]">
+              <div className="mt-5 rounded-2xl border border-dashed border-[#CFC7B8] bg-[var(--tgpi-surface)] p-6">
+                <p className="text-sm font-extrabold text-[var(--tgpi-navy-raised)]">
                   Your activity timeline starts with one practical action.
                 </p>
                 <p className="mt-2 text-xs leading-6 text-[#657082]">
@@ -206,11 +206,11 @@ export default function GlobalWorkspaceV1({
               Your direction at a glance.
             </h2>
           </div>
-          <p className="rounded-full border border-[#D8D2C4] bg-white px-4 py-2 text-xs font-extrabold text-[#657082]">
+          <p className="rounded-full border border-[var(--tgpi-border)] bg-white px-4 py-2 text-xs font-extrabold text-[#657082]">
             {model.goalLabel}
           </p>
         </div>
-        <dl className="mt-6 grid overflow-hidden rounded-[26px] border border-[#D8D2C4] bg-white sm:grid-cols-2 xl:grid-cols-5">
+        <dl className="mt-6 grid overflow-hidden rounded-[26px] border border-[var(--tgpi-border)] bg-white sm:grid-cols-2 xl:grid-cols-5">
           {model.planSummary.map((item) => (
             <div
               key={item.label}
@@ -219,7 +219,7 @@ export default function GlobalWorkspaceV1({
               <dt className="text-[9px] font-extrabold uppercase tracking-[0.19em] text-[#7A8390]">
                 {item.label}
               </dt>
-              <dd className="mt-3 text-sm font-extrabold leading-6 text-[#0B1F3A]">
+              <dd className="mt-3 text-sm font-extrabold leading-6 text-[var(--tgpi-navy-raised)]">
                 {item.value}
               </dd>
             </div>
@@ -243,7 +243,7 @@ export default function GlobalWorkspaceV1({
           {model.selectedCountryCount >= 2 ? (
             <Link
               href={model.compareHref}
-              className="text-sm font-extrabold text-[#956A13] underline decoration-[#B58A2A]/40 underline-offset-4"
+              className="text-sm font-extrabold text-[#956A13] underline decoration-[var(--tgpi-gold-hover)]/40 underline-offset-4"
             >
               Open full comparison →
             </Link>
@@ -255,11 +255,11 @@ export default function GlobalWorkspaceV1({
             {model.countryFits.slice(0, 3).map((fit, index) => (
               <article
                 key={fit.country.slug}
-                className="group overflow-hidden rounded-[28px] border border-[#D8D2C4] bg-white shadow-[0_18px_55px_rgba(11,31,58,0.08)]"
+                className="group overflow-hidden rounded-[28px] border border-[var(--tgpi-border)] bg-white shadow-[0_18px_55px_rgba(11,31,58,0.08)]"
               >
                 <Link
                   href={`/countries/${fit.country.slug}`}
-                  className="relative block aspect-[16/9] overflow-hidden bg-[#0B1F3A]"
+                  className="relative block aspect-[16/9] overflow-hidden bg-[var(--tgpi-navy-raised)]"
                   aria-label={`Open ${fit.country.name} country intelligence report`}
                 >
                   <Image
@@ -277,8 +277,8 @@ export default function GlobalWorkspaceV1({
                         {fit.country.name}
                       </h3>
                     </div>
-                    <div className="rounded-2xl border border-[#F0D58C]/40 bg-[#071A32]/75 px-4 py-3 text-right backdrop-blur">
-                      <p className="text-[9px] font-extrabold uppercase tracking-[0.17em] text-[#F0D58C]">
+                    <div className="rounded-2xl border border-[var(--tgpi-gold-light)]/40 bg-[#071A32]/75 px-4 py-3 text-right backdrop-blur">
+                      <p className="text-[9px] font-extrabold uppercase tracking-[0.17em] text-[var(--tgpi-gold-light)]">
                         Fit status
                       </p>
                       <p className="mt-1 text-2xl font-extrabold">{fit.score ?? "Review"}</p>
@@ -308,7 +308,7 @@ export default function GlobalWorkspaceV1({
                     {fit.warning}
                   </p>
                   <div className="mt-5 flex flex-wrap gap-4 border-t border-[#E4DED2] pt-4 text-xs font-extrabold">
-                    <Link href={`/countries/${fit.country.slug}`} className="text-[#0B1F3A]">
+                    <Link href={`/countries/${fit.country.slug}`} className="text-[var(--tgpi-navy-raised)]">
                       View report →
                     </Link>
                     <Link
@@ -333,7 +333,7 @@ export default function GlobalWorkspaceV1({
             </p>
             <Link
               href="/onboarding"
-              className="mt-6 inline-flex min-h-12 items-center justify-center rounded-xl bg-[#0B1F3A] px-6 text-sm font-extrabold text-white"
+              className="mt-6 inline-flex min-h-12 items-center justify-center rounded-xl bg-[var(--tgpi-navy-raised)] px-6 text-sm font-extrabold text-white"
             >
               Choose countries
             </Link>
@@ -370,16 +370,16 @@ function ActionCard({ item }: { item: WorkspaceAction }) {
   return (
     <Link
       href={item.href}
-      className={`group flex min-h-[280px] flex-col rounded-[26px] border p-5 transition hover:-translate-y-1 hover:border-[#B58A2A] hover:shadow-[0_20px_50px_rgba(11,31,58,0.1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#B58A2A] ${
+      className={`group flex min-h-[280px] flex-col rounded-[26px] border p-5 transition hover:-translate-y-1 hover:border-[var(--tgpi-gold-hover)] hover:shadow-[0_20px_50px_rgba(11,31,58,0.1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold-hover)] ${
         item.id === "compare"
-          ? "border-[#0B1F3A] bg-[#0B1F3A] text-white"
-          : "border-[#D8D2C4] bg-[#FFFDF8] text-[#0B1F3A]"
+          ? "border-[var(--tgpi-navy-raised)] bg-[var(--tgpi-navy-raised)] text-white"
+          : "border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] text-[var(--tgpi-navy-raised)]"
       }`}
     >
       <div className="flex items-center justify-between gap-3">
         <p
           className={`text-[9px] font-extrabold uppercase tracking-[0.19em] ${
-            item.id === "compare" ? "text-[#F0D58C]" : "text-[#956A13]"
+            item.id === "compare" ? "text-[var(--tgpi-gold-light)]" : "text-[#956A13]"
           }`}
         >
           {item.eyebrow}
@@ -387,8 +387,8 @@ function ActionCard({ item }: { item: WorkspaceAction }) {
         <span
           className={`grid h-9 w-9 place-items-center rounded-full text-[10px] font-extrabold ${
             item.id === "compare"
-              ? "bg-white/10 text-[#F0D58C]"
-              : "bg-[#F0E7D4] text-[#0B1F3A]"
+              ? "bg-white/10 text-[var(--tgpi-gold-light)]"
+              : "bg-[#F0E7D4] text-[var(--tgpi-navy-raised)]"
           }`}
         >
           {actionNumbers[item.id]}
@@ -419,11 +419,11 @@ function ActionCard({ item }: { item: WorkspaceAction }) {
       </p>
       <span
         className={`mt-auto pt-6 text-xs font-extrabold ${
-          item.id === "compare" ? "text-[#F0D58C]" : "text-[#0B1F3A]"
+          item.id === "compare" ? "text-[var(--tgpi-gold-light)]" : "text-[var(--tgpi-navy-raised)]"
         }`}
       >
         {item.action}{" "}
-        <span className="inline-block text-[#B58A2A] transition group-hover:translate-x-1">
+        <span className="inline-block text-[var(--tgpi-gold-hover)] transition group-hover:translate-x-1">
           →
         </span>
       </span>

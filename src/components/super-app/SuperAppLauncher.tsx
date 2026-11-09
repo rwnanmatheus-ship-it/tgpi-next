@@ -1,236 +1,90 @@
-"use client";
-import { useLocale } from "@/components/localization/LocaleProvider";
-
-import { containDialogFocus } from "@/lib/dialog-focus";
-
-import PlatformBannerImage from "@/components/ui/PlatformBannerImage";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
-import NavigationIcon from "@/components/navigation/NavigationIcon";
-import { getSuperAppIconName } from "@/lib/navigation-system";
-import {
-  getNextSuperAppModule,
-  getSuperAppModule,
-  isSuperAppRouteActive,
-  searchSuperAppModules,
-  SUPER_APP_MODULES,
-  SUPER_APP_OPEN_EVENT,
-} from "@/lib/super-app";
-import { LocalizedText } from "@/components/localization/LocaleProvider";
-
+'use client';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
+import { useLocale } from '@/components/localization/LocaleProvider';
+import NavigationIcon from '@/components/navigation/NavigationIcon';
+import { getSuperAppIconName } from '@/lib/navigation-system';
+import { normalizeMobileSearch, searchMobileCountries, type MobileCountry } from '@/lib/mobile-experience';
+import { containDialogFocus } from '@/lib/dialog-focus';
+import { SUPER_APP_MODULES, SUPER_APP_OPEN_EVENT, isSuperAppRouteActive } from '@/lib/super-app';
+import styles from './command.module.css';
 
 export default function SuperAppLauncher() {
   const { t } = useLocale();
   const pathname = usePathname();
-  const currentModule = getSuperAppModule(pathname);
   const dialogRef = useRef<HTMLDialogElement>(null);
-  const restoreFocusRef = useRef<HTMLElement | null>(null);
   const searchRef = useRef<HTMLInputElement>(null);
-  const [open, setOpen] = useState(false);
-  const [query, setQuery] = useState("");
+  const [openRoute, setOpenRoute] = useState<string | null>(null);
+  const [query, setQuery] = useState('');
+  const [countries, setCountries] = useState<MobileCountry[]>([]);
+  const [loadState, setLoadState] = useState<'idle' | 'loading' | 'ready' | 'error'>('idle');
+  const [retry, setRetry] = useState(0);
+  const searchOpen = openRoute === pathname;
 
   useEffect(() => {
-    function openLauncher() {
-      restoreFocusRef.current =
-        document.activeElement instanceof HTMLElement
-          ? document.activeElement
-          : null;
-      setOpen(true);
-    }
-
-    function onKeyDown(event: KeyboardEvent) {
-      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
-        event.preventDefault();
-        openLauncher();
+    function openLauncher() { setQuery(''); setOpenRoute(pathname); }
+    function keydown(event: globalThis.KeyboardEvent) {
+      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+        event.preventDefault(); openLauncher();
       }
     }
-
     window.addEventListener(SUPER_APP_OPEN_EVENT, openLauncher);
-    window.addEventListener("keydown", onKeyDown);
-    return () => {
-      window.removeEventListener(SUPER_APP_OPEN_EVENT, openLauncher);
-      window.removeEventListener("keydown", onKeyDown);
-    };
-  }, []);
+    window.addEventListener('keydown', keydown);
+    return () => { window.removeEventListener(SUPER_APP_OPEN_EVENT, openLauncher); window.removeEventListener('keydown', keydown); };
+  }, [pathname]);
 
   useEffect(() => {
     const dialog = dialogRef.current;
-    if (!dialog) return;
+    if (!dialog || !searchOpen) return;
+    const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
+    const overflow = document.body.style.overflow;
+    dialog.showModal(); document.body.style.overflow = 'hidden'; searchRef.current?.focus();
+    return () => { dialog.close(); document.body.style.overflow = overflow; previousFocus?.focus({ preventScroll: true }); };
+  }, [searchOpen]);
 
-    if (open && !dialog.open) {
-      const previousOverflow = document.body.style.overflow;
-      dialog.showModal();
-      document.body.style.overflow = "hidden";
-      window.requestAnimationFrame(() => searchRef.current?.focus());
-      return () => {
-        document.body.style.overflow = previousOverflow;
-        if (dialog.open) dialog.close();
-      };
-    } else if (!open && dialog.open) {
-      dialog.close();
+  useEffect(() => {
+    if (!searchOpen) return;
+    const controller = new AbortController();
+    async function load() {
+      setLoadState('loading');
+      try {
+        const response = await fetch('/api/mobile/countries', { signal: controller.signal });
+        if (!response.ok) throw new Error('Country directory unavailable');
+        const value: unknown = await response.json();
+        if (!Array.isArray(value) || !value.every(item => item && typeof item === 'object' && ['slug','name','capital','region','emoji'].every(key => typeof (item as Record<string, unknown>)[key] === 'string'))) throw new Error('Invalid directory');
+        setCountries(value as MobileCountry[]); setLoadState('ready');
+      } catch { if (!controller.signal.aborted) setLoadState('error'); }
     }
-  }, [open]);
+    void load(); return () => controller.abort();
+  }, [searchOpen, retry]);
 
-  const nextModule = currentModule
-    ? getNextSuperAppModule(currentModule.id)
-    : SUPER_APP_MODULES[0];
-  const visibleModules = searchSuperAppModules(query);
-
-  function closeLauncher() {
-    setOpen(false);
-    setQuery("");
-    window.requestAnimationFrame(() => restoreFocusRef.current?.focus());
+  const search = normalizeMobileSearch(query);
+  const modules = SUPER_APP_MODULES.filter(module => !search || search.split(/\s+/).every(word => normalizeMobileSearch([module.label, module.shortLabel, t(module.label), t(module.shortLabel), t(module.description), ...module.keywords].join(' ')).includes(word)));
+  const countryResults = searchMobileCountries(countries.map(country => ({ ...country, name: t(country.name), region: t(country.region) })), query).slice(0, 6);
+  function close() { setOpenRoute(null); }
+  function onKeyDown(event: KeyboardEvent<HTMLDialogElement>) {
+    containDialogFocus(event);
+    if (!['ArrowDown','ArrowUp'].includes(event.key)) return;
+    const links = Array.from(dialogRef.current?.querySelectorAll<HTMLAnchorElement>('a[data-command-result]') ?? []);
+    if (!links.length) return;
+    event.preventDefault();
+    const index = links.indexOf(document.activeElement as HTMLAnchorElement);
+    const next = event.key === 'ArrowDown' ? (index + 1) % links.length : index <= 0 ? links.length - 1 : index - 1;
+    links[next].focus(); links[next].scrollIntoView({ block:'nearest' });
   }
 
-  return (
-    <>
-      <dialog
-        onKeyDown={containDialogFocus}
-        ref={dialogRef}
-        id="tgpi-super-app-launcher"
-        aria-labelledby="tgpi-super-app-title"
-        className="tgpi-app-launcher m-auto max-h-[92dvh] w-[min(760px,calc(100vw-32px))] overflow-hidden rounded-[32px] border border-white/10 bg-[#06111F] p-0 text-white shadow-[0_35px_120px_rgba(0,0,0,0.55)] backdrop:bg-[#020811]/80 backdrop:backdrop-blur-sm"
-        onCancel={(event) => {
-          event.preventDefault();
-          closeLauncher();
-        }}
-        onClick={(event) => {
-          if (event.target === event.currentTarget) closeLauncher();
-        }}
-      >
-        <div className="max-h-[92dvh] overflow-y-auto overscroll-contain">
-          <header className="relative isolate min-h-52 overflow-hidden border-b border-white/10 p-6 sm:p-8">
-            {open ? <PlatformBannerImage className="-z-20 opacity-75" /> : null}
-            <div className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(3,14,27,0.99)_0%,rgba(3,14,27,0.92)_45%,rgba(3,14,27,0.28)_100%),linear-gradient(0deg,rgba(3,14,27,0.82),transparent)]" />
-            <div className="flex items-start justify-between gap-5">
-              <div className="max-w-md">
-                <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#F0D58C]">
-                  TGPI Intelligence Operating System
-                </p>
-                <h2
-                  id="tgpi-super-app-title"
-                  className="mt-4 font-[var(--tgpi-font-display)] text-4xl font-semibold leading-none sm:text-5xl"
-                ><LocalizedText text="One system. Every global decision." /></h2>
-                <p className="mt-4 max-w-sm text-xs leading-6 text-[#C3D0DE] sm:text-sm">
-                  Move between evidence, comparison, preparation and learning
-                  without losing your context.
-                </p>
-              </div>
-              <button
-                type="button"
-                aria-label="Close TGPI Super App launcher"
-                className="grid h-11 w-11 shrink-0 place-items-center rounded-full border border-white/15 bg-[#06111F]/65 text-xl text-white backdrop-blur transition hover:border-[#E5B94B]/60 hover:bg-[#E5B94B]/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E5B94B]"
-                onClick={closeLauncher}
-              >
-                <span aria-hidden="true">×</span>
-              </button>
-            </div>
-          </header>
-
-          <div className="p-5 sm:p-7">
-            <label
-              htmlFor="tgpi-super-app-search"
-              className="flex min-h-14 items-center gap-3 rounded-2xl border border-white/10 bg-white/[0.055] px-4 text-[#C8D4E0] transition focus-within:border-[#E5B94B]/55 focus-within:bg-white/[0.075]"
-            >
-              <span aria-hidden="true" className="text-lg">⌕</span>
-              <span className="sr-only"><LocalizedText text="Find a TGPI app" /></span>
-              <input
-                ref={searchRef}
-                id="tgpi-super-app-search"
-                type="search"
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                placeholder="Find an app, action or destination…"
-                autoComplete="off"
-                className="min-w-0 flex-1 bg-transparent py-3 text-base font-semibold text-white outline-none placeholder:text-[#73869B]"
-              />
-              <kbd className="hidden rounded-lg border border-white/10 bg-black/20 px-2 py-1 text-[10px] font-bold text-[#91A2B5] sm:inline">⌘ K</kbd>
-            </label>
-
-            <nav
-              aria-label="TGPI Super App modules"
-              className="tgpi-grid-3d mt-5 grid grid-cols-2 gap-3 sm:grid-cols-3"
-            >
-              {visibleModules.map((module) => {
-                const active = isSuperAppRouteActive(pathname, module);
-                return (
-                  <Link
-                    key={module.id}
-                    data-tgpi-interactive="true"
-                    data-tgpi-tone="navy"
-                    href={module.href}
-                    aria-current={active ? "page" : undefined}
-                    className={`tgpi-card-3d group min-w-0 rounded-2xl border p-4 transition hover:-translate-y-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E5B94B] ${
-                      active
-                        ? "border-[#E5B94B]/55 bg-[#E5B94B]/12 shadow-[0_14px_32px_rgba(229,185,75,0.08)]"
-                        : "border-white/10 bg-white/[0.035] hover:border-[#E5B94B]/30 hover:bg-white/[0.065]"
-                    }`}
-                    onClick={closeLauncher}
-                  >
-                    <span className="flex items-start justify-between gap-3">
-                      <span
-                        aria-hidden="true"
-                        className="grid h-11 w-11 place-items-center rounded-2xl bg-white/[0.065] text-xl transition group-hover:scale-105"
-                      >
-                        <NavigationIcon name={getSuperAppIconName(module.id)} />
-                      </span>
-                      <span className="text-sm text-[#E5B94B]" aria-hidden="true">
-                        {active ? "●" : "↗"}
-                      </span>
-                    </span>
-                    <span className="mt-4 block truncate text-sm font-extrabold">
-                      {t(module.shortLabel)}
-                    </span>
-                    <span className="mt-1 line-clamp-2 block text-[11px] leading-5 text-[#8FA2B7]">
-                      {t(module.description)}
-                    </span>
-                  </Link>
-                );
-              })}
-            </nav>
-
-            {visibleModules.length === 0 ? (
-              <div className="mt-5 rounded-2xl border border-dashed border-white/15 px-5 py-8 text-center">
-                <p className="text-sm font-extrabold text-white">No TGPI app matches “{query.trim()}”.</p>
-                <p className="mt-2 text-xs leading-5 text-[#8799AC]">Try countries, documents, plan, learning or security.</p>
-              </div>
-            ) : null}
-
-            <section className="mt-5 grid gap-4 rounded-2xl border border-[#E5B94B]/25 bg-gradient-to-r from-[#102A46] to-[#0A1828] p-5 sm:grid-cols-[1fr_auto] sm:items-center">
-              <div className="min-w-0">
-                <p className="text-[9px] font-extrabold uppercase tracking-[0.2em] text-[#F0D58C]">
-                  Recommended next
-                </p>
-                <p className="mt-2 text-sm font-extrabold">
-                  <span className="inline-flex items-center gap-2">
-                    <NavigationIcon name={getSuperAppIconName(nextModule.id)} width={18} height={18} />
-                    Continue in {t(nextModule.label)}
-                  </span>
-                </p>
-                <p className="mt-1 text-xs leading-5 text-[#9FB0C2]">
-                  {t(nextModule.description)}
-                </p>
-              </div>
-              <Link
-                href={nextModule.href}
-                className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[#E5B94B] px-5 text-xs font-extrabold text-[#06172B] transition hover:-translate-y-0.5 hover:bg-[#F0CE72] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
-                onClick={closeLauncher}
-              >
-                Open next step →
-              </Link>
-            </section>
-
-            <p className="mt-4 text-[10px] leading-5 text-[#71859B]">
-              <span className="inline-flex items-start gap-2">
-                <NavigationIcon name="shield" width={15} height={15} className="mt-0.5 shrink-0" />
-                <span>Your private identity and progress remain protected. TGPI does
-                not turn incomplete evidence into eligibility or approval claims.</span>
-              </span>
-            </p>
-          </div>
-        </div>
-      </dialog>
-    </>
-  );
+  return <dialog id="tgpi-super-app-launcher" ref={dialogRef} className={styles.command} aria-labelledby="tgpi-super-app-title" onKeyDown={onKeyDown} onCancel={event => { event.preventDefault(); close(); }} onClick={event => { if (event.target === event.currentTarget) { const rect = event.currentTarget.getBoundingClientRect(); if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) close(); } }}>
+    <header className={styles.header}><div><p>TGPI</p><h2 id="tgpi-super-app-title">{t('Find your next move.')}</h2></div><button type="button" aria-label={t('Close search')} onClick={close}><NavigationIcon name="close" /></button></header>
+    <label className={styles.search} htmlFor="tgpi-super-app-search"><NavigationIcon name="search" /><span className="sr-only">{t('Search countries, tools or actions')}</span><input id="tgpi-super-app-search" ref={searchRef} type="search" value={query} autoComplete="off" placeholder={t('Country, capital, tool or action…')} onChange={event => setQuery(event.target.value)} /><kbd>Esc</kbd></label>
+    <div className={styles.results}>
+      <p className={styles.status} role="status">{search ? t('{tools} tools · {countries} countries found', { tools: modules.length, countries: countryResults.length }) : t('Search across the connected TGPI system.')}</p>
+      {modules.length > 0 ? <nav aria-label={t('Tools')}><h3>{t('Tools')}</h3>{modules.map(module => <Link key={module.id} data-command-result href={module.href} prefetch={false} aria-current={isSuperAppRouteActive(pathname,module) ? 'page' : undefined} onClick={close}><span className={styles.icon}><NavigationIcon name={getSuperAppIconName(module.id)} /></span><span><strong>{t(module.shortLabel)}</strong><small>{t(module.description)}</small></span><NavigationIcon name="arrow" width={16} height={16} /></Link>)}</nav> : null}
+      {countryResults.length > 0 ? <nav aria-label={t('Countries')}><h3>{t('Countries')}</h3>{countryResults.map(country => <Link key={country.slug} data-command-result href={`/countries/${country.slug}`} prefetch={false} onClick={close}><span className={styles.icon} aria-hidden="true">{country.emoji}</span><span><strong>{country.name}</strong><small>{country.capital} · {country.region}</small></span><NavigationIcon name="arrow" width={16} height={16} /></Link>)}</nav> : null}
+      {loadState === 'loading' ? <p className={styles.status} role="status">{t('Connecting to TGPI intelligence…')}</p> : null}
+      {loadState === 'error' ? <div className={styles.empty}><p>{t('Country intelligence is temporarily unavailable. App search remains active.')}</p><button type="button" onClick={() => setRetry(value => value + 1)}>{t('Reconnect country intelligence')}</button></div> : null}
+      {search && loadState === 'ready' && !modules.length && !countryResults.length ? <p className={styles.empty}>{t('No exact match. Open Apps to browse every TGPI capability.')}</p> : null}
+    </div>
+    <footer className={styles.footer}><span><kbd>↑</kbd> <kbd>↓</kbd> {t('Explore')}</span><span><kbd>↵</kbd> {t('Open')}</span><span>Ctrl / ⌘ K</span></footer>
+  </dialog>;
 }

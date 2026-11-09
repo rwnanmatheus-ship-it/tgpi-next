@@ -15,16 +15,16 @@ export const metadata: Metadata = {
 export default function PremiumWaitlistPage() {
   return (
     <TGPIPageShell>
-      <section className="overflow-hidden rounded-[42px] border border-[#D8D2C4] bg-[#FFFDF8] shadow-[0_38px_100px_rgba(11,31,58,0.11)]">
+      <section className="overflow-hidden rounded-[42px] border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] shadow-[0_38px_100px_rgba(11,31,58,0.11)]">
         <div className="grid lg:grid-cols-[0.96fr_1.04fr]">
           <div className="flex flex-col justify-center p-8 md:p-12 lg:p-14">
             <Link
               href="/pricing"
-              className="text-sm font-bold text-[#0B1F3A] transition hover:text-[#B58A2A]"
+              className="text-sm font-bold text-[var(--tgpi-navy-raised)] transition hover:text-[var(--tgpi-gold-hover)]"
             >
               ← Back to pricing
             </Link>
-            <p className="mt-10 text-xs font-black uppercase tracking-[0.3em] text-[#B58A2A]">
+            <p className="mt-10 text-xs font-black uppercase tracking-[0.3em] text-[var(--tgpi-gold-hover)]">
               TGPI Premium Founding Access
             </p>
             <h1 className="mt-5 font-serif text-5xl font-semibold leading-[0.98] tracking-[-0.04em] text-[#0B0B0B] md:text-7xl">
@@ -48,7 +48,7 @@ export default function PremiumWaitlistPage() {
 
       <section className="mx-auto grid max-w-6xl gap-10 py-12 lg:grid-cols-[0.88fr_1.12fr] lg:items-start">
         <div className="lg:sticky lg:top-28">
-          <div className="overflow-hidden rounded-[28px] border border-[#D8D2C4] bg-[#0B1F3A] text-white shadow-[0_26px_80px_rgba(11,31,58,0.2)]">
+          <div className="overflow-hidden rounded-[28px] border border-[var(--tgpi-border)] bg-[var(--tgpi-navy-raised)] text-white shadow-[0_26px_80px_rgba(11,31,58,0.2)]">
             <TGPIEditorialVisual
               variant="compare"
               id="waitlist-benefits"
@@ -56,10 +56,10 @@ export default function PremiumWaitlistPage() {
               className="aspect-[16/10] w-full border-b border-white/10"
             />
             <div className="p-7">
-              <p className="text-xs font-black uppercase tracking-[0.24em] text-[#F0D58C]">
+              <p className="text-xs font-black uppercase tracking-[0.24em] text-[var(--tgpi-gold-light)]">
                 Founding membership
               </p>
-              <p className="mt-4 text-4xl font-black text-[#F0D58C]">
+              <p className="mt-4 text-4xl font-black text-[var(--tgpi-gold-light)]">
                 US$ 19.90
                 <span className="ml-2 text-sm font-semibold text-[#C8D0DC]"><LocalizedText text="/month" /></span>
               </p>

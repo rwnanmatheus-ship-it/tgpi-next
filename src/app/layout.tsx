@@ -16,6 +16,8 @@ import "./institutional-navigation.css";
 import "leaflet/dist/leaflet.css";
 import "./country-studio.css";
 import "./product-system.css";
+import "./design-tokens.css";
+import "./design-system.css";
 import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Manrope } from "next/font/google";
 import NotificationProvider from "@/components/notifications/NotificationProvider";

@@ -38,7 +38,7 @@ export default function PublicProfileShareButton({
   return (
     <div>
       <button
-        className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[#E5B94B] px-5 text-xs font-extrabold text-[#07182D] shadow-[0_10px_26px_rgba(229,185,75,0.18)] transition hover:-translate-y-0.5 hover:bg-[#F0C95F] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#F0D58C] focus-visible:ring-offset-2 focus-visible:ring-offset-[#07182D]"
+        className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[var(--tgpi-gold)] px-5 text-xs font-extrabold text-[#07182D] shadow-[0_10px_26px_rgba(229,185,75,0.18)] transition hover:-translate-y-0.5 hover:bg-[#F0C95F] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold-light)] focus-visible:ring-offset-2 focus-visible:ring-offset-[#07182D]"
         onClick={shareProfile}
         type="button"
       >

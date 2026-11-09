@@ -23,7 +23,7 @@ export default function VerifyPage() {
 
   return (
     <main className="min-h-screen bg-[#07172D] px-4 py-10 text-white sm:px-6 sm:py-16">
-      <section className="mx-auto max-w-6xl overflow-hidden rounded-[34px] border border-white/10 bg-[#0B1F3A] shadow-[0_32px_110px_rgba(0,0,0,.32)]">
+      <section className="mx-auto max-w-6xl overflow-hidden rounded-[34px] border border-white/10 bg-[var(--tgpi-navy-raised)] shadow-[0_32px_110px_rgba(0,0,0,.32)]">
         <div className="grid lg:grid-cols-[1fr_370px]">
           <div className="p-8 sm:p-12 lg:p-14">
             <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#E8CC7B]">
@@ -52,7 +52,7 @@ export default function VerifyPage() {
                       className={
                         "cursor-pointer rounded-full border px-4 py-2 text-xs font-extrabold transition " +
                         (recordType === value
-                          ? "border-[#E5BF5A] bg-[#E5BF5A] text-[#0B1F3A]"
+                          ? "border-[#E5BF5A] bg-[#E5BF5A] text-[var(--tgpi-navy-raised)]"
                           : "border-white/15 bg-white/5 text-white")
                       }
                     >
@@ -100,7 +100,7 @@ export default function VerifyPage() {
                 <button
                   type="submit"
                   disabled={!reference.trim()}
-                  className="min-h-14 rounded-2xl bg-[#E5BF5A] px-7 text-sm font-extrabold text-[#0B1F3A] disabled:cursor-not-allowed disabled:opacity-40"
+                  className="min-h-14 rounded-2xl bg-[#E5BF5A] px-7 text-sm font-extrabold text-[var(--tgpi-navy-raised)] disabled:cursor-not-allowed disabled:opacity-40"
                 >
                   Verify record →
                 </button>

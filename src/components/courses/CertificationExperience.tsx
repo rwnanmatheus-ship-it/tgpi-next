@@ -142,7 +142,7 @@ function CertificationDashboard({
   const eligibility = status?.eligibility;
 
   return (
-    <main className="min-h-screen bg-[#F3EFE6] text-[#0B1F3A]">
+    <main className="min-h-screen bg-[#F3EFE6] text-[var(--tgpi-navy-raised)]">
       <section className="border-b border-[#D9D1C2] bg-[#07172D] px-4 py-12 text-white sm:px-6 sm:py-16">
         <div className="mx-auto max-w-6xl">
           <Link
@@ -191,7 +191,7 @@ function CertificationDashboard({
       <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14">
         {!isLoading && status && !status.storageConfigured ? (
           <div className="mb-8 rounded-2xl border border-[#D8B75D]/45 bg-[#FFF6D8] p-5 text-sm leading-7 text-[#6F5719]">
-            <strong className="block text-[#0B1F3A]">Secure record activation pending</strong>
+            <strong className="block text-[var(--tgpi-navy-raised)]">Secure record activation pending</strong>
             The assessment experience is installed, but attempts remain locked
             until the server-only learning record credentials are configured.
             No answer or credential will fall back to insecure browser storage.
@@ -226,7 +226,7 @@ function CertificationDashboard({
               ["Integrated capstone", eligibility?.capstonePassed ? "Passed" : "Pending", "40%"],
               ["Transfer reflection", eligibility?.reflectionCompleted ? "Complete" : "Pending", "10%"],
             ].map(([label, value, weight]) => (
-              <div key={label} className="rounded-[22px] border border-[#D9D1C2] bg-[#FFFDF8] p-5 shadow-[0_12px_35px_rgba(11,31,58,.05)]">
+              <div key={label} className="rounded-[22px] border border-[#D9D1C2] bg-[var(--tgpi-surface)] p-5 shadow-[0_12px_35px_rgba(11,31,58,.05)]">
                 <p className="text-[9px] font-extrabold uppercase tracking-[0.16em] text-[#956A13]">{weight} of record</p>
                 <p className="mt-4 text-2xl font-extrabold">{value}</p>
                 <p className="mt-1 text-xs font-bold text-[#6D7480]">{label}</p>
@@ -244,9 +244,9 @@ function CertificationDashboard({
               const summary = summaries.get(assessment.id);
               const ready = isAssessmentReady(assessment);
               return (
-                <article key={assessment.id} className="flex flex-col rounded-[26px] border border-[#D9D1C2] bg-[#FFFDF8] p-6 shadow-[0_16px_45px_rgba(11,31,58,.06)]">
+                <article key={assessment.id} className="flex flex-col rounded-[26px] border border-[#D9D1C2] bg-[var(--tgpi-surface)] p-6 shadow-[0_16px_45px_rgba(11,31,58,.06)]">
                   <div className="flex items-start justify-between gap-4">
-                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[#0B1F3A] text-xs font-extrabold text-[#F0D58C]">
+                    <span className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[var(--tgpi-navy-raised)] text-xs font-extrabold text-[var(--tgpi-gold-light)]">
                       {String(index + 1).padStart(2, "0")}
                     </span>
                     <span className={`rounded-full px-3 py-1.5 text-[9px] font-extrabold uppercase tracking-[0.13em] ${summary?.passedAt ? "bg-[#DDF1E7] text-[#175D41]" : ready ? "bg-[#FFF0BF] text-[#735410]" : "bg-[#E9E5DD] text-[#6D7480]"}`}>
@@ -265,7 +265,7 @@ function CertificationDashboard({
                       {summary ? `${summary.attemptCount} attempt${summary.attemptCount === 1 ? "" : "s"} · ${formatDate(summary.passedAt)}` : `${assessment.durationMinutes} min`}
                     </p>
                     {ready ? (
-                      <Link href={`/courses/${course.id}/certification/${assessment.id}`} className="inline-flex min-h-11 items-center rounded-xl bg-[#0B1F3A] px-5 text-xs font-extrabold text-white">
+                      <Link href={`/courses/${course.id}/certification/${assessment.id}`} className="inline-flex min-h-11 items-center rounded-xl bg-[var(--tgpi-navy-raised)] px-5 text-xs font-extrabold text-white">
                         {summary ? "Open gate" : "Begin"} →
                       </Link>
                     ) : (
@@ -280,7 +280,7 @@ function CertificationDashboard({
           </div>
         </section>
 
-        <section className="mt-14 overflow-hidden rounded-[30px] border border-[#D5BA6B]/50 bg-[#0B1F3A] text-white">
+        <section className="mt-14 overflow-hidden rounded-[30px] border border-[#D5BA6B]/50 bg-[var(--tgpi-navy-raised)] text-white">
           <div className="grid lg:grid-cols-[1fr_360px]">
             <div className="p-7 sm:p-10">
               <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#E8CC7B]">TGPI professional credential</p>
@@ -293,7 +293,7 @@ function CertificationDashboard({
             </div>
             <div className="border-t border-white/10 bg-white/[0.05] p-7 lg:border-l lg:border-t-0 sm:p-8">
               {eligibility?.credentialId ? (
-                <Link href={`/certificates/${eligibility.credentialId}`} className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[#E5BF5A] px-5 text-sm font-extrabold text-[#0B1F3A]">
+                <Link href={`/certificates/${eligibility.credentialId}`} className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[#E5BF5A] px-5 text-sm font-extrabold text-[var(--tgpi-navy-raised)]">
                   View issued credential →
                 </Link>
               ) : (
@@ -305,7 +305,7 @@ function CertificationDashboard({
                     type="button"
                     disabled={!eligibility?.eligible || isIssuing}
                     onClick={() => void issueCredential()}
-                    className="min-h-12 w-full rounded-xl bg-[#E5BF5A] px-5 text-sm font-extrabold text-[#0B1F3A] disabled:cursor-not-allowed disabled:opacity-40"
+                    className="min-h-12 w-full rounded-xl bg-[#E5BF5A] px-5 text-sm font-extrabold text-[var(--tgpi-navy-raised)] disabled:cursor-not-allowed disabled:opacity-40"
                   >
                     {isIssuing ? "Issuing secure record…" : "Consent & issue credential"}
                   </button>

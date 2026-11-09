@@ -38,7 +38,7 @@ export default function CountriesHero({
       <div className="relative flex h-full flex-col px-6 pb-32 pt-8 sm:px-10 sm:pb-28 sm:pt-10 lg:justify-center lg:px-14 lg:pb-24 lg:pt-8">
         <div className="max-w-[720px]">
           <div className="flex flex-wrap items-center gap-3">
-            <p className="w-fit rounded-full border border-[var(--tgpi-gold-light)]/35 bg-[#061B33]/65 px-4 py-2 text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-light)] backdrop-blur-xl">
+            <p className="w-fit rounded-full border border-[var(--tgpi-gold-light)]/35 bg-[var(--tgpi-navy)]/65 px-4 py-2 text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-light)] backdrop-blur-xl">
               TGPI Country Intelligence
             </p>
             <span className="text-[10px] font-extrabold uppercase tracking-[0.16em] text-white/55">
@@ -67,7 +67,7 @@ export default function CountriesHero({
             </a>
             <a
               href="#country-explorer"
-              className="inline-flex min-h-13 items-center justify-center rounded-2xl border border-white/22 bg-[#061B33]/55 px-7 text-sm font-extrabold text-white backdrop-blur-xl transition hover:-translate-y-0.5 hover:border-[var(--tgpi-gold-light)] hover:text-[var(--tgpi-gold-light)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
+              className="inline-flex min-h-13 items-center justify-center rounded-2xl border border-white/22 bg-[var(--tgpi-navy)]/55 px-7 text-sm font-extrabold text-white backdrop-blur-xl transition hover:-translate-y-0.5 hover:border-[var(--tgpi-gold-light)] hover:text-[var(--tgpi-gold-light)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
             >
               Build a shortlist
             </a>
@@ -81,7 +81,7 @@ export default function CountriesHero({
               <Link
                 key={preset.id}
                 href={`/countries?intent=${preset.id}#country-explorer`}
-                className="inline-flex min-h-9 shrink-0 items-center rounded-full border border-white/15 bg-[#061B33]/55 px-3 text-[11px] font-bold text-[#D7E0EB] backdrop-blur-xl transition hover:border-[var(--tgpi-gold-light)]/60 hover:bg-white/[0.1] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
+                className="inline-flex min-h-9 shrink-0 items-center rounded-full border border-white/15 bg-[var(--tgpi-navy)]/55 px-3 text-[11px] font-bold text-[#D7E0EB] backdrop-blur-xl transition hover:border-[var(--tgpi-gold-light)]/60 hover:bg-white/[0.1] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
               >
                 {preset.label}
               </Link>
@@ -90,7 +90,7 @@ export default function CountriesHero({
         </div>
       </div>
 
-      <div className="absolute inset-x-0 bottom-0 grid grid-cols-2 border-t border-white/12 bg-[#031426]/88 backdrop-blur-xl sm:grid-cols-4">
+      <div className="absolute inset-x-0 bottom-0 grid grid-cols-2 border-t border-white/12 bg-[var(--tgpi-navy-deep)]/88 backdrop-blur-xl sm:grid-cols-4">
         <HeroMetric label="Country profiles" value={String(countryCount)} />
         <HeroMetric label="World regions" value={String(regionCount)} />
         <HeroMetric label="Evidence domains" value="8" />

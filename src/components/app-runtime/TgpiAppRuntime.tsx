@@ -252,11 +252,11 @@ export default function TgpiAppRuntime() {
       data-pwa-runtime={notice}
       role="status"
     >
-      <div className="h-1 bg-gradient-to-r from-[#7E5A1D] via-[#E5B94B] to-[#F3D98B]" />
+      <div className="h-1 bg-gradient-to-r from-[#7E5A1D] via-[var(--tgpi-gold)] to-[#F3D98B]" />
       <div className="flex gap-4 p-4 sm:p-5">
         <span
           aria-hidden="true"
-          className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl border border-[#E5B94B]/25 bg-[#E5B94B]/10 text-xl text-[#F0D58C]"
+          className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl border border-[var(--tgpi-gold)]/25 bg-[var(--tgpi-gold)]/10 text-xl text-[var(--tgpi-gold-light)]"
         >
           {content.icon}
         </span>
@@ -269,35 +269,35 @@ export default function TgpiAppRuntime() {
           <div className="mt-4 flex flex-wrap gap-2">
             {notice === "install" ? (
               <button
-                className="min-h-11 rounded-xl bg-[#E5B94B] px-4 text-sm font-extrabold text-[#07182D] transition hover:bg-[#F0C95F] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                className="min-h-11 rounded-xl bg-[var(--tgpi-gold)] px-4 text-sm font-extrabold text-[#07182D] transition hover:bg-[#F0C95F] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
                 onClick={() => void installApp()}
                 type="button"
               ><LocalizedText text="Install TGPI" /></button>
             ) : null}
             {notice === "update" ? (
               <button
-                className="min-h-11 rounded-xl bg-[#E5B94B] px-4 text-sm font-extrabold text-[#07182D] transition hover:bg-[#F0C95F] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                className="min-h-11 rounded-xl bg-[var(--tgpi-gold)] px-4 text-sm font-extrabold text-[#07182D] transition hover:bg-[#F0C95F] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
                 onClick={activateUpdate}
                 type="button"
               ><LocalizedText text="Update now" /></button>
             ) : null}
             {notice === "ios-install" ? (
               <button
-                className="min-h-11 rounded-xl border border-white/15 px-4 text-sm font-extrabold text-white transition hover:border-[#E5B94B]/40 hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E5B94B]"
+                className="min-h-11 rounded-xl border border-white/15 px-4 text-sm font-extrabold text-white transition hover:border-[var(--tgpi-gold)]/40 hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
                 onClick={dismissInstall}
                 type="button"
               ><LocalizedText text="Got it" /></button>
             ) : null}
             {notice === "offline" ? (
               <button
-                className="min-h-11 rounded-xl border border-white/15 px-4 text-sm font-extrabold text-white transition hover:border-[#E5B94B]/40 hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E5B94B]"
+                className="min-h-11 rounded-xl border border-white/15 px-4 text-sm font-extrabold text-white transition hover:border-[var(--tgpi-gold)]/40 hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
                 onClick={() => window.location.reload()}
                 type="button"
               ><LocalizedText text="Try again" /></button>
             ) : null}
             {notice === "install" ? (
               <button
-                className="min-h-11 rounded-xl px-3 text-sm font-bold text-[#AEBBC8] transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#E5B94B]"
+                className="min-h-11 rounded-xl px-3 text-sm font-bold text-[#AEBBC8] transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
                 onClick={dismissInstall}
                 type="button"
               ><LocalizedText text="Not now" /></button>

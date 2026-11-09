@@ -7,7 +7,7 @@ export default function TGPIPageShell({
 }) {
   return (
     <main
-      className="tgpi-page-shell overflow-x-clip bg-[#F7F3EA] text-[#111827]"
+      className="tgpi-page-shell overflow-x-clip bg-[var(--tgpi-canvas)] text-[var(--tgpi-ink)]"
     >
       <div
         className={

@@ -9,7 +9,7 @@
   --capability-copy: var(--tgpi-muted);
   --capability-heading: var(--tgpi-navy);
   --capability-item: rgba(255, 255, 255, 0.68);
-  --capability-item-hover: #fff9e9;
+  --capability-item-hover: var(--tgpi-inverse);
   position: relative;
   isolation: isolate;
   overflow: hidden;
