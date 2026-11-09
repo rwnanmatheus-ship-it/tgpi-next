@@ -1,6 +1,8 @@
 import type { Locale } from "./config";
 
 export const messages = {
+  "{count} destination": {"en":"{count} destination","pt-BR":"{count} destino","es":"{count} destino","fr":"{count} destination","de":"{count} Ziel","it":"{count} destinazione"},
+  "Americas": {"en":"Americas","pt-BR":"Américas","es":"Américas","fr":"Amériques","de":"Amerika","it":"Americhe"},
   "Your decisions, progress and global identity.": {"en":"Your decisions, progress and global identity.","pt-BR":"Suas decisões, progresso e identidade global.","es":"Tus decisiones, progreso e identidad global.","fr":"Vos décisions, progrès et identité mondiale.","de":"Deine Entscheidungen, Fortschritte und globale Identität.","it":"Le tue decisioni, i progressi e l’identità globale."},
   "Talk through ideas and prepare your global next step.": {"en":"Talk through ideas and prepare your global next step.","pt-BR":"Explore ideias e prepare seu próximo passo internacional.","es":"Explora ideas y prepara tu próximo paso internacional.","fr":"Explorez vos idées et préparez votre prochaine étape internationale.","de":"Erkunde Ideen und bereite deinen nächsten internationalen Schritt vor.","it":"Esplora idee e prepara il tuo prossimo passo internazionale."},
   "Verify your cryptographic identity and integrity chain.": {"en":"Verify your cryptographic identity and integrity chain.","pt-BR":"Verifique sua identidade e a integridade dos seus registros.","es":"Verifica tu identidad y la integridad de tus registros.","fr":"Vérifiez votre identité et l’intégrité de vos dossiers.","de":"Prüfe deine Identität und die Integrität deiner Nachweise.","it":"Verifica la tua identità e l’integrità dei tuoi documenti."},
