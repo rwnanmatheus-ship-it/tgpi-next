@@ -8,5 +8,5 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 export default async function MembersPage() {
   await requireUser();
-  return <main className="tgpi-member-shell"><div className="mx-auto max-w-3xl"><MemberDirectory /></div></main>;
+  return <main className="tgpi-member-shell"><div className="mx-auto max-w-3xl"><MemberDirectory headingLevel={1} /></div></main>;
 }
