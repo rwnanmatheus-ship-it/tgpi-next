@@ -1,22 +1,35 @@
+import { WALLET_MODE, COMMERCE_ROOT, walletOwnerPath, assertStripeMode, assertStripeKeyMode } from './environment.server';
 import 'server-only';
 import { randomUUID } from 'node:crypto';
 import type Stripe from 'stripe';
 import { getStripeServer } from '@/lib/stripe';
-import { getOrCreateStripeCustomer } from '@/lib/billing.server';
 import { getFirestoreDocument, runFirestoreTransaction } from '@/lib/firestore-admin-rest.server';
 import { AtlasError } from '@/lib/atlas/contracts';
 import { assertWallet, emptyWallet, WALLET_PACKS, type WalletAccount, type WalletPack } from './policy';
-import { emptyTreasury, ledgerWrite, TREASURY_PATH, walletPath, walletWrite, type Treasury } from './store.server';
+import { assertTreasury, emptyTreasury, ledgerWrite, TREASURY_PATH, walletPath, walletWrite, type Treasury } from './store.server';
 
 type Intent = { id: string; uid: string; customer: string; cents: number; pack: WalletPack; origin: string; createdAt: number; expiresAt: number };
 type Payment = { creditedCents: number; revokedCents: number; netCents: number; paymentIntent: string; uid: string; charge: string };
-const intentPath = (id: string) => `tgpiLearningUsers/_atlasCommerce/intents/${id}`;
+const intentPath = (id: string) => `${COMMERCE_ROOT}/intents/${id}`;
 const identifier = (value: string | { id: string } | null) => typeof value === 'string' ? value : value?.id;
 
 export async function createWalletCheckout(uid: string, packId: WalletPack, origin: string) {
-  const pack = WALLET_PACKS.find(x => x.id === packId)!;
-  const customer = await getOrCreateStripeCustomer(uid);
-  const lockPath = `tgpiLearningUsers/${uid}/walletCheckout/active`;
+  assertStripeKeyMode();
+  const pack = WALLET_PACKS.find(x => x.id === packId);
+  if (!pack) throw new AtlasError('Invalid credit pack.', 400);
+  const customerPath = `${walletOwnerPath(uid)}/walletCustomer/stripe`;
+  const existing = (await getFirestoreDocument<{ id: string }>(customerPath))?.data;
+  // Dedicated, environment-scoped customers avoid modifying shared Premium billing in sandbox.
+  const customerRecord = existing ? await getStripeServer().customers.retrieve(existing.id) : await getStripeServer().customers.create({ metadata: { tgpiUserId: uid, product: 'atlas-wallet', walletMode: WALLET_MODE } }, { idempotencyKey: `tgpi-atlas-customer-${WALLET_MODE}-${uid}` });
+  if ('deleted' in customerRecord && customerRecord.deleted) throw Error('Wallet customer is deleted');
+  assertStripeMode(customerRecord.livemode);
+  const customer = customerRecord.id;
+  await runFirestoreTransaction(async ({ getDocuments }) => {
+    const saved = (await getDocuments<{ id: string }>([customerPath])).get(customerPath)?.data;
+    if (saved && saved.id !== customer) throw Error('Wallet customer identity mismatch');
+    return { result: null, writes: saved ? [] : [walletWrite(customerPath, { id: customer })] };
+  });
+  const lockPath = `${walletOwnerPath(uid)}/walletCheckout/active`;
   const intent = await runFirestoreTransaction<Intent>(async ({ getDocuments }) => {
     const current = (await getDocuments<Intent>([lockPath])).get(lockPath)?.data;
     // Retries use the exact persisted parameters and idempotency key, including across tabs.
@@ -35,6 +48,7 @@ export async function createWalletCheckout(uid: string, packId: WalletPack, orig
     success_url: `${intent.origin}/atlas/wallet?checkout=success`, cancel_url: `${intent.origin}/atlas/wallet?checkout=cancelled`,
     expires_at: Math.floor(intent.expiresAt / 1000),
   }, { idempotencyKey: `tgpi-atlas-wallet-v1-${intent.id}` });
+  assertStripeMode(session.livemode);
   if (session.status !== 'open' || !session.url) throw new AtlasError('This checkout has finished. Refresh your wallet before starting another.', 409);
   return session.url;
 }
@@ -45,6 +59,7 @@ export async function reconcileWalletPayment(paymentIntentId: string) {
   const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
   const id = paymentIntent.metadata.tgpiWalletIntent;
   if (!id) return;
+  assertStripeMode(paymentIntent.livemode);
   if (!/^[0-9a-f-]{36}$/.test(id)) throw Error('Invalid wallet payment reference');
   const intent = (await getFirestoreDocument<Intent>(intentPath(id)))?.data;
   if (!intent) throw Error('Wallet payment intent not found');
@@ -53,14 +68,16 @@ export async function reconcileWalletPayment(paymentIntentId: string) {
   const chargeId = identifier(paymentIntent.latest_charge);
   if (!chargeId) throw Error('Wallet charge is not available');
   const charge = await stripe.charges.retrieve(chargeId, { expand: ['balance_transaction'] });
+  assertStripeMode(charge.livemode);
   if (!charge.paid || identifier(charge.payment_intent) !== paymentIntent.id) throw Error('Wallet charge not paid');
   const balance = charge.balance_transaction as Stripe.BalanceTransaction | null;
   // Require USD settlement so treasury never mixes currencies or guesses processing fees.
   if (!balance || typeof balance === 'string' || balance.currency !== 'usd') throw Error('USD payment settlement is not ready');
-  const paymentPath = `tgpiLearningUsers/_atlasCommerce/payments/${paymentIntent.id}`;
+  if (!Number.isSafeInteger(balance.net) || !Number.isSafeInteger(charge.amount_refunded) || charge.amount_refunded < 0) throw Error('Invalid Stripe monetary values');
+  const paymentPath = `${COMMERCE_ROOT}/payments/${paymentIntent.id}`;
   const path = walletPath(intent.uid);
   await runFirestoreTransaction(async ({ getDocuments }) => {
-    const lockPath = `tgpiLearningUsers/${intent.uid}/walletCheckout/active`;
+    const lockPath = `${walletOwnerPath(intent.uid)}/walletCheckout/active`;
     const docs = await getDocuments<WalletAccount | Treasury | Payment | Intent>([path, TREASURY_PATH, paymentPath, lockPath]);
     const checkoutLock = docs.get(lockPath)?.data as Intent | undefined;
     const prior = docs.get(paymentPath)?.data as Payment | undefined;
@@ -74,6 +91,7 @@ export async function reconcileWalletPayment(paymentIntentId: string) {
     if (prior && delta === 0) return { result: null, writes: [] };
     const account = (docs.get(path)?.data as WalletAccount | undefined) || emptyWallet(); assertWallet(account);
     const treasury = (docs.get(TREASURY_PATH)?.data as Treasury | undefined) || emptyTreasury();
+    assertTreasury(treasury);
     const entryId = `${paymentIntent.id}-${revokedCents}`;
     return { result: null, writes: [
       ...(checkoutLock?.id === intent.id ? [walletWrite(lockPath, { ...checkoutLock, expiresAt: 0 })] : []),

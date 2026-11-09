@@ -15,7 +15,9 @@ function load(path, dependencies) {
   return exports;
 }
 const policy = load('src/lib/wallet/policy.ts', {});
-function harness() {
+function harness(mode = 'production') {
+  process.env.VERCEL_ENV = mode;
+  process.env.STRIPE_SECRET_KEY = mode === 'production' ? 'sk_live_fixture' : 'sk_test_fixture';
   const data = new Map(); let queue = Promise.resolve();
   const firestore = {
     createFirestoreUpdateWrite: (path, value) => ({ path, value: structuredClone(value) }),
@@ -31,16 +33,18 @@ function harness() {
     },
   };
   const dependencies = { '@/lib/firestore-admin-rest.server': firestore, '@/lib/atlas/contracts': contracts, './policy': policy, '@/lib/wallet/policy': policy };
+  const environment = load('src/lib/wallet/environment.server.ts', dependencies);
+  dependencies['./environment.server'] = environment;
   const wallet = load('src/lib/wallet/store.server.ts', dependencies);
   const store = load('src/lib/atlas/store.server.ts', { ...dependencies, './contracts': contracts, '@/lib/wallet/store.server': wallet });
-  let charge = { id: 'ch_one', paid: true, disputed: false, amount_refunded: 0, payment_intent: 'pi_one', balance_transaction: { currency: 'usd', net: 455 } };
+  let charge = { livemode: mode === 'production', id: 'ch_one', paid: true, disputed: false, amount_refunded: 0, payment_intent: 'pi_one', balance_transaction: { currency: 'usd', net: 455 } };
   const intent = { id: randomUUID(), uid: 'alice', customer: 'cus_alice', cents: 500, pack: 'starter', origin: 'https://tgpi.test', createdAt: Date.now(), expiresAt: Date.now() + 2_100_000 };
-  data.set(`tgpiLearningUsers/_atlasCommerce/intents/${intent.id}`, intent);
-  const pi = { id: 'pi_one', status: 'succeeded', currency: 'usd', amount_received: 500, customer: 'cus_alice', latest_charge: 'ch_one', metadata: { tgpiWalletIntent: intent.id } };
+  data.set(`${environment.COMMERCE_ROOT}/intents/${intent.id}`, intent);
+  const pi = { livemode: mode === 'production', id: 'pi_one', status: 'succeeded', currency: 'usd', amount_received: 500, customer: 'cus_alice', latest_charge: 'ch_one', metadata: { tgpiWalletIntent: intent.id } };
   const sessions = [];
-  const payments = load('src/lib/wallet/payments.server.ts', { ...dependencies, './store.server': wallet, '@/lib/billing.server': { getOrCreateStripeCustomer: async () => 'cus_alice' }, '@/lib/stripe': { getStripeServer: () => ({ paymentIntents: { retrieve: async () => structuredClone(pi) }, charges: { retrieve: async () => structuredClone(charge) }, checkout: { sessions: { create: async (args, options) => { sessions.push({ args, options }); return { status: 'open', url: 'https://checkout.stripe.com/session' }; } } } }) } });
+  const payments = load('src/lib/wallet/payments.server.ts', { ...dependencies, './store.server': wallet, '@/lib/billing.server': { getOrCreateStripeCustomer: async () => 'cus_alice' }, '@/lib/stripe': { getStripeServer: () => ({ customers: { create: async () => ({ id: 'cus_alice', livemode: mode === 'production' }), retrieve: async () => ({ id: 'cus_alice', livemode: mode === 'production' }) }, paymentIntents: { retrieve: async () => structuredClone(pi) }, charges: { retrieve: async () => structuredClone(charge) }, checkout: { sessions: { create: async (args, options) => { sessions.push({ args, options }); return { livemode: mode === 'production', status: 'open', url: 'https://checkout.stripe.com/session' }; } } } }) } });
   process.env.TGPI_ATLAS_PROVIDER_PREPAID_CENTS = '100'; process.env.TGPI_ATLAS_FUNDING_REFERENCE = 'test-fixture-no-real-funds';
-  return { data, wallet, store, payments, pi, charge, intent, sessions, account: () => data.get(wallet.walletPath('alice')), treasury: () => data.get(wallet.TREASURY_PATH), reserve: (requestId = randomUUID(), token = randomUUID(), conversation = randomUUID()) => firestore.runFirestoreTransaction(async ({ getDocuments }) => ({ result: token, writes: await wallet.reserveWallet(getDocuments, 'alice', requestId, conversation, token) })), seed: cents => { data.set(wallet.walletPath('alice'), { ...policy.emptyWallet(), balanceCents: cents }); data.set(wallet.TREASURY_PATH, { ...wallet.emptyTreasury(), collectedCents: 1000 }); } };
+  return { environment, data, wallet, store, payments, pi, charge, intent, sessions, account: () => data.get(wallet.walletPath('alice')), treasury: () => data.get(wallet.TREASURY_PATH), reserve: (requestId = randomUUID(), token = randomUUID(), conversation = randomUUID()) => firestore.runFirestoreTransaction(async ({ getDocuments }) => ({ result: token, writes: await wallet.reserveWallet(getDocuments, 'alice', requestId, conversation, token) })), seed: cents => { data.set(wallet.walletPath('alice'), { ...policy.emptyWallet(), balanceCents: cents }); data.set(wallet.TREASURY_PATH, { ...wallet.emptyTreasury(), collectedCents: 1000 }); } };
 }
 const input = () => ({ conversationId: randomUUID(), requestId: randomUUID(), text: 'Question', temporary: true, scopes: [], history: [] });
 test('new wallet is zero and cannot spend, including a founder or Premium account', async () => {
@@ -141,4 +145,41 @@ test('wallet checkout authenticates before provider calls and rejects injected p
   assert.equal((await route.POST(request({ pack: 'starter', cents: 1, uid: 'victim' }))).status, 400);
   enabled = false; assert.equal((await route.POST(request({ pack: 'starter' }))).status, 503); assert.equal(created, 0);
   enabled = true; assert.equal((await route.POST(request({ pack: 'starter' }))).status, 200); assert.equal(created, 1);
+});
+
+test('sandbox and production wallet owners, commerce records and treasury are disjoint', async () => {
+  const live = harness(); const sandbox = harness('preview');
+  assert.notEqual(live.wallet.walletPath('alice'), sandbox.wallet.walletPath('alice'));
+  assert.notEqual(live.wallet.TREASURY_PATH, sandbox.wallet.TREASURY_PATH);
+  assert.notEqual(live.environment.COMMERCE_ROOT, sandbox.environment.COMMERCE_ROOT);
+  await sandbox.payments.reconcileWalletPayment('pi_one'); assert.equal(sandbox.account().balanceCents, 500);
+  assert.equal(sandbox.data.has(live.wallet.walletPath('alice')), false);
+  await assert.rejects(sandbox.reserve(), /Test credits cannot fund paid AI/);
+});
+test('live environment rejects sandbox payments and sandbox rejects live payments before granting balance', async () => {
+  for (const mode of ['production', 'preview']) {
+    const h = harness(mode); h.pi.livemode = !h.pi.livemode;
+    await assert.rejects(h.payments.reconcileWalletPayment('pi_one'), /environment mismatch/); assert.equal(h.account(), undefined);
+  }
+});
+test('wrong-mode Stripe key prevents checkout creation before any customer or intent write', async () => {
+  const h = harness(); process.env.STRIPE_SECRET_KEY = 'sk_test_wrong_environment';
+  const before = structuredClone([...h.data]);
+  await assert.rejects(h.payments.createWalletCheckout('alice', 'starter', 'https://tgpi.test'), e => e.status === 503);
+  assert.deepEqual([...h.data], before); assert.equal(h.sessions.length, 0);
+});
+test('non-integer Stripe amounts and corrupted treasury never mutate customer balance', async () => {
+  const h = harness(); h.charge.balance_transaction.net = NaN;
+  await assert.rejects(h.payments.reconcileWalletPayment('pi_one'), /monetary/); assert.equal(h.account(), undefined);
+  h.seed(500); h.treasury().revenueCents = NaN;
+  await assert.rejects(h.reserve(), /treasury accounting/); assert.equal(h.account().balanceCents, 500);
+});
+test('wallet financial disclosures have matching keys across all six platform locales', () => {
+  const { walletCopy } = load('src/lib/wallet/copy.ts', {});
+  assert.deepEqual(Object.keys(walletCopy).sort(), ['de','en','es','fr','it','pt-BR']);
+  for (const copy of Object.values(walletCopy)) {
+    assert.deepEqual(Object.keys(copy).sort(), Object.keys(walletCopy.en).sort());
+    for (const value of Object.values(copy)) assert.ok(typeof value === 'string' && value.trim().length > 0);
+    assert.match(copy.chatPrice, /0[.,]10/);
+  }
 });

@@ -7,6 +7,7 @@ import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { safeAtlasLink, type AtlasConversation, type AtlasEvent, type AtlasInput, type AtlasMessage, type AtlasScope, type AtlasSummary } from '@/lib/atlas/contracts';
 import styles from './atlas.module.css';
+import { walletCopy } from '@/lib/wallet/copy';
 import { LocalizedText, useLocale } from "@/components/localization/LocaleProvider";
 
 
@@ -202,9 +203,9 @@ export default function AtlasChat({ userId, enabled = true, embedded = false }: 
       <header className={styles.header}>
         <button className={styles.historyToggle} aria-expanded={showHistory} onClick={() => setShowHistory(!showHistory)}>{t("History")}</button>
         <div><h1>Atlas <span>AI</span></h1><p>{temporary ? t('Temporary conversation') : title || t('New conversation')}</p></div>
-        <div className={styles.headerActions}><Link href="/atlas/wallet">{locale.startsWith('pt') ? 'Carteira · créditos' : 'Wallet · credits'}</Link>{saved && <><button disabled={busy} onClick={() => void openConversation(id)}>{t("Reload")}</button><button disabled={busy} onClick={() => { setAction('rename'); setRename(title); }}>{t("Rename")}</button><button disabled={busy} onClick={() => setAction('delete')}>{t("Delete")}</button></>}</div>
+        <div className={styles.headerActions}><Link href="/atlas/wallet">{walletCopy[locale].walletLink}</Link>{saved && <><button disabled={busy} onClick={() => void openConversation(id)}>{t("Reload")}</button><button disabled={busy} onClick={() => { setAction('rename'); setRename(title); }}>{t("Rename")}</button><button disabled={busy} onClick={() => setAction('delete')}>{t("Delete")}</button></>}</div>
       </header>
-      {enabled && <p className={styles.confirm}>{locale.startsWith('pt') ? 'US$ 0,10 por resposta concluída, debitado dos seus créditos. Respostas com falha ou interrompidas devolvem a reserva. Premium não inclui créditos Atlas.' : 'USD 0.10 per completed reply, deducted from your credits. Failed or interrupted replies release the reservation. Premium does not include Atlas credits.'}</p>}
+      {enabled && <p className={styles.confirm}>{walletCopy[locale].chatPrice}</p>}
       {!enabled && <div className={styles.confirm} role="status"><p><strong>{t("Atlas preview")}</strong>{' '}{t("— Explore the interface. AI replies are not available for this account yet. Messages cannot be sent during this preview.")}</p></div>}
       {action && <div className={styles.confirm}>
         {action === 'rename' ? <><label>{t("Conversation title")}<input value={rename} maxLength={70} onChange={e => setRename(e.target.value)} /></label><button disabled={busy || !rename.trim()} onClick={() => void mutate({ title: rename.trim() })}>{t("Save title")}</button></> : <><p>{t("Delete this conversation and its messages from TGPI? This cannot be undone.")}</p><button disabled={busy} onClick={() => void mutate('delete')}>{t("Confirm deletion")}</button></>}

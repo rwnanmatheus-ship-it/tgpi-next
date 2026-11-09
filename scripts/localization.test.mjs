@@ -6,6 +6,7 @@ const url = source => 'data:text/javascript;base64,' + Buffer.from(ts.transpileM
 const configUrl = url(fs.readFileSync('src/lib/localization/config.ts', 'utf8'));
 const { locales, resolveLocale, negotiateLocale, isLocale } = await import(configUrl);
 const { messages, translate } = await import(url(fs.readFileSync('src/lib/localization/messages.ts', 'utf8')));
+const { walletCopy } = await import(url(fs.readFileSync('src/lib/wallet/copy.ts', 'utf8')));
 test('locale validation never accepts arbitrary cookie or metadata values', () => {
   for (const value of [null, {}, '__proto__', '<script>', 'zh', 'pt']) assert.equal(isLocale(value), false);
   assert.equal(resolveLocale('Portuguese'), 'pt-BR');
@@ -212,6 +213,7 @@ test('Atlas preview renders in all six locales without enabling sending or makin
         if (name === 'react-markdown') return { __esModule: true, default: ({ children }) => children };
         if (name === 'remark-gfm') return { __esModule: true, default: () => {} };
         if (name.endsWith('.module.css')) return { __esModule: true, default: {} };
+        if (name === '@/lib/wallet/copy') return { walletCopy };
         if (name === '@/lib/atlas/contracts') return { safeAtlasLink: value => value };
         throw new Error(`Unexpected import: ${name}`);
       }, exports);
@@ -220,6 +222,7 @@ test('Atlas preview renders in all six locales without enabling sending or makin
       for (const key of ['New conversation', 'Help me compare two destinations.', 'Atlas preview', 'Message Atlas', 'Ask Atlas anything…', 'For your next question, share selected fields from your TGPI profile with OpenAI. Unchecking a category stops future retrieval; previous replies may still contain it. Start a new conversation for a fresh context.']) assert.ok(html.includes(escape(t(key))), `${locale}: ${key}`);
       assert.match(html, /<button type="submit" disabled=""/);
       assert.match(html, /maxLength="4000"/);
+      assert.ok(html.includes(escape(walletCopy[locale].walletLink)));
     }
   } finally { globalThis.fetch = realFetch; }
 });

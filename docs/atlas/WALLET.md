@@ -2,7 +2,7 @@
 
 ## Delivered
 
-- `/atlas/wallet`: authenticated balance, reserved credits, consumption, packs (USD 5/10/25), paginated ledger, refresh/recovery, and fail-closed purchase availability. Portuguese and English copy; other locales currently use English wallet copy.
+- `/atlas/wallet`: authenticated balance, reserved credits, consumption, packs (USD 5/10/25), paginated ledger, refresh/recovery, and fail-closed purchase availability. Wallet interface and financial disclosures in all six platform locales: English, Brazilian Portuguese, Spanish, French, German and Italian.
 - `/atlas/wallet/treasury`: founder-ID-only read-only treasury. No banking, withdrawals, transfers or cryptocurrency functionality. Actual payments use the existing TGPI Stripe account.
 - `/api/atlas/wallet`, `/checkout`, `/recover`: owner-scoped private/no-store APIs, exact origin validation for writes, strict request schemas. Financial records inherit the existing `tgpiLearningUsers/{document=**}` deny boundary and configured-storage guard.
 - Fixed retail charge USD 0.10 per completed reply. Premium/founder entitlements do not mint credits. No automatic top-ups. No user-entered amount, currency, destination account or owner is trusted.
@@ -37,3 +37,11 @@ Review branch started at `560a66f`, production at `82e4136`. Their only pending 
 436 automated tests passed in the final local production build (including 16 wallet tests). TypeScript, changed-file ESLint and whitespace checks passed. The local webpack build completed; its existing viem/ox dynamic dependency warning is unrelated to this change. A final chat price disclosure passed ESLint and is included in the deployed Vercel build. Deployment evidence is recorded separately. Coverage includes concurrent last-credit consumption, absent funding, atomic conversation+wallet reservation, duplicate settlements/payments, interrupted/stale reservation recovery, owner/amount/currency mismatch, refunds before/after credit, disputes and checkout retry identity. Production-authenticated financial end-to-end validation remains an activation dependency.
 
 Production release: `0a10294310a73f4d5efd64c87ab1b6bef0a0c230`, deployment `dpl_8Tox2iNbHXvkd3yfDM2uR9fzWfxx` READY. The primary domain HTML identifies this exact deployment. 68 production guest HTTP checks passed: 57 page responses, 10 expected authentication rejections and one expected unsigned-webhook rejection. Browser access to the wallet required sign-in. This is not an authenticated purchase or wallet UI acceptance test. Stripe connection has been offered and remains pending.
+
+## Validation follow-up — environment isolation
+
+Financial records now use a server-selected live/test namespace determined solely by `VERCEL_ENV`. Only `production` selects live records; previews, development and missing environment values select test records. Owner IDs, ledger, pending reservations, checkout locks, customer IDs, commerce intents/payments and treasury are separated. All remain under the existing recursive server-only Firestore boundary.
+
+Stripe key prefixes, retrieved customer, checkout session, PaymentIntent and Charge modes are validated. A mismatched mode fails closed. Atlas wallet customers are independent of Premium billing, preventing sandbox setup from changing a production subscription customer. Test credits can never fund a paid OpenAI call, even if someone enables generation flags in preview. No production financial data was migrated or manually credited.
+
+Additional regression tests cover namespace isolation, opposite-mode payment rejection, wrong key mode before checkout side effects, invalid monetary data and six-language financial-copy coverage. Stripe and authenticated Firestore integration acceptance still require connected administrative access. No live charges or API funding were authorized or performed by these changes.
