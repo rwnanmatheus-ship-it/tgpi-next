@@ -142,7 +142,7 @@ export default function EvidenceExplorer({ countries, initialFilters, indicatorT
               updateUrl({ limit: PAGE_SIZE });
             }}>
               <option value="all">{t("All destinations")}</option>
-              <option value="dossiers">{t("With research summaries")}</option>
+              <option value="dossiers">{t("Research summaries")}</option>
             </select>
           </label>
         </div>

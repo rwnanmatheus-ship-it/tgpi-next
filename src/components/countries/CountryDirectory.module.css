@@ -41,7 +41,7 @@
   position: absolute;
   z-index: -1;
   inset: 0;
-  background: linear-gradient(90deg, #07192d 25%, #07192de8 40%, #07192d16 82%), linear-gradient(0deg, #07192dc9, transparent 80%);
+  background: linear-gradient(90deg, #07192d 30%, #07192de8 44%, #07192d16 82%), linear-gradient(0deg, #07192dc9, transparent 80%);
   content: "";
 }
 
@@ -589,7 +589,7 @@
   .searchBar > :global(.country-autocomplete) { grid-column: 1 / -1; }
   .toolbar .searchBar select { padding-inline: 5px; font-size: 14px; }
   .heroArt { width: 85%; }
-  .hero::after { background: linear-gradient(90deg, #07192d 9%, #07192dda 51%, #07192d19), linear-gradient(0deg, #07192dc4, transparent); }
+  .hero::after { background: linear-gradient(90deg, #07192d 15%, #07192dda 51%, #07192d19), linear-gradient(0deg, #07192dc4, transparent); }
 }
 
 @media (max-width: 599px) {
@@ -604,6 +604,14 @@
   .heroCount { padding: 7px 8px; }
   .heroKicker { letter-spacing: .06em; }
   .shortcuts a { padding: 7px 8px; font-size: 12px; }
+  .toolbar .searchBar { grid-template-columns: minmax(0, 1fr); gap: 7px; }
+  .searchBar > label {
+    display: grid;
+    grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+    align-items: center;
+    gap: 6px;
+  }
+  .toolbar .searchBar select { margin-top: 0; padding-inline: 7px; font-size: 13px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
