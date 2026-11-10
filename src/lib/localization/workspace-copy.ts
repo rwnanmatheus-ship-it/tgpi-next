@@ -62,8 +62,10 @@ export function workspaceResourceCopy(resource: WorkspaceResource, t: Translate,
     const counts = resource.detail.match(/^(\d+) \/ (\d+) checklist items$/);
     if (counts) detail = t('{completed} / {total} checklist items', { completed: counts[1], total: counts[2] });
   } else if (resource.kind === 'course') {
+    const practice = resource.detail.match(/^(\d+) \/ (\d+) practice records$/);
+    if (practice) detail = t('{done} of {total} practice records', { done: practice[1], total: practice[2] }) + (resource.statusLabel ? ` · ${t(resource.statusLabel)}` : '');
     const counts = resource.detail.match(/^(\d+) \/ (\d+) lessons · (Completed|In progress)$/);
-    if (counts) detail = t('{completed} / {total} lessons · {status}', { completed: counts[1], total: counts[2], status: t(counts[3]) });
+    if (counts) detail = t('{completed} / {total} lessons · {status}', { completed: counts[1], total: counts[2], status: t(resource.statusLabel ?? counts[3]) });
   }
   return { title, detail };
 }

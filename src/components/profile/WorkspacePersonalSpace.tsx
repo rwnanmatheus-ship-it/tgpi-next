@@ -1,21 +1,25 @@
 'use client';
 import { planCopy, planActivityCopy, workspaceResourceCopy, workspaceKindLabels } from '@/lib/localization/workspace-copy';
-import { useState, type ReactNode } from 'react';
+import { useRef, useState, type ReactNode } from 'react';
 import Link from 'next/link';
 import type { ActivationActivity } from '@/lib/activation-progress';
 import { defaultWorkspacePreferences, parseWorkspaceHistoryPage, type WorkspacePreferences, type WorkspaceModule, type WorkspaceResource } from '@/lib/workspace-control';
+import { matchesWorkspaceSearch } from '@/lib/workspace-intelligence';
 import styles from './WorkspaceCommandCenter.module.css';
 import { LocalizedText, useLocale } from "@/components/localization/LocaleProvider";
 
 const names: Record<WorkspaceModule, string> = { journey: 'My journey', library: 'Personal library', history: 'My history' };
-export default function WorkspacePersonalSpace({ resources, history, initialCursor, historyCoverage, historyAvailable, historyPending, initialPreferences, storageAvailable, journey, suggestions }: {
-  resources: WorkspaceResource[]; history: ActivationActivity[]; initialCursor: string | null; historyCoverage: string | null; historyAvailable: boolean; historyPending: boolean; initialPreferences: WorkspacePreferences; storageAvailable: boolean; journey: ReactNode;
+export default function WorkspacePersonalSpace({ resources, history, initialCursor, historyCoverage, historyAvailable, historyPending, initialPreferences, storageAvailable, journey, suggestions, learning, tools }: {
+  resources: WorkspaceResource[]; history: ActivationActivity[]; initialCursor: string | null; historyCoverage: string | null; historyAvailable: boolean; historyPending: boolean; initialPreferences: WorkspacePreferences; storageAvailable: boolean; journey: ReactNode; learning?: ReactNode; tools?: ReactNode;
   suggestions: { id: string; title: string; href: string; description: string; action: string }[];
 }) {
   const { locale, t } = useLocale();
   const historyDate = new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeZone: 'UTC' });
   const [preferences, setPreferences] = useState(initialPreferences);
   const [busy, setBusy] = useState(false);
+  const saving = useRef(false);
+  const [status, setStatus] = useState('all');
+  const [sort, setSort] = useState('recent');
   const [message, setMessage] = useState('');
   const [query, setQuery] = useState('');
   const [kind, setKind] = useState('all');
@@ -34,32 +38,41 @@ export default function WorkspacePersonalSpace({ resources, history, initialCurs
       if (!response.ok) throw new Error('History could not be loaded. Retry when connected.');
       const result = parseWorkspaceHistoryPage(await response.json());
       if (!result) throw new Error('History response was not valid. Please retry.');
-      setLoadedHistory(previous => [...new Map([...previous, ...result.events].map(event => [event.id, event])).values()]);
+      setLoadedHistory(previous => [...new Map([...previous, ...result.events].map(event => [event.id, event])).values()].sort((a, b) => Date.parse(b.occurredAt) - Date.parse(a.occurredAt)));
       setCursor(result.cursor); setPage(previous => previous + 4);
     } catch (error) { setHistoryError(error instanceof Error ? error.message : 'Unable to load history.'); }
     finally { setHistoryBusy(false); }
   }
   async function save(next: WorkspacePreferences) {
+    if (saving.current || !storageAvailable) return;
+    saving.current = true;
     setBusy(true); setMessage('Saving preferences…');
     try {
       const response = await fetch('/api/workspace/preferences', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(next) });
       if (!response.ok) throw new Error('Could not save your preferences. Retry when your connection is available.');
       setPreferences(next); setMessage('Workspace preferences saved.');
     } catch (error) { setMessage(error instanceof Error ? error.message : 'Unable to save. Please retry.'); }
-    finally { setBusy(false); }
+    finally { saving.current = false; setBusy(false); }
   }
   const copy = (value: string) => planCopy(value, t, locale);
   const localizedResources = resources.map(resource => ({ ...resource, ...workspaceResourceCopy(resource, t, locale), searchSource: `${resource.title} ${resource.detail}` }));
-  const searchable = (text: string) => text.normalize('NFD').replace(/\p{M}/gu, '').toLocaleLowerCase(locale);
-  const needle = searchable(query.trim());
-  const found = localizedResources.filter(r => (kind === 'all' || r.kind === kind) && searchable(`${r.title} ${r.detail} ${r.searchSource}`).includes(needle));
+  const pinned = preferences.pinned ?? [];
+  const found = localizedResources.filter(r => (kind === 'all' || r.kind === kind) && (status === 'all' || (status === 'pinned' ? pinned.includes(r.id) : r.status === status)) && matchesWorkspaceSearch(`${r.title} ${r.detail} ${r.searchSource}`, query)).sort((a, b) => Number(pinned.includes(b.id)) - Number(pinned.includes(a.id)) || (sort === 'title' ? a.title.localeCompare(b.title, locale) : (b.updatedAt ?? '').localeCompare(a.updatedAt ?? '')));
+  function togglePin(id: string) {
+    if (!pinned.includes(id) && pinned.length >= 8) { setMessage('You can pin up to eight resources. Unpin one to make room.'); return; }
+    void save({ ...preferences, pinned: pinned.includes(id) ? pinned.filter(item => item !== id) : [...pinned, id] });
+  }
   const events = loadedHistory.filter(e => filter === 'all' || e.type === filter);
-  const nextAction = suggestions.find(s => !preferences.dismissed.includes(s.id));
+  const nextActions = suggestions.filter(s => !preferences.dismissed.includes(s.id));
+  const nextAction = nextActions[0];
   return <div id="workspace-personal" className={styles.personal} data-density={preferences.density} aria-busy={busy}>
     <section className={`${styles.panel} ${styles.next}`} aria-labelledby="next-step-title">
       <div><p className={styles.eyebrow}><LocalizedText text="Your next useful step" /></p><h2 id="next-step-title">{t(nextAction?.title ?? 'Choose your next step.')}</h2><p>{copy(nextAction?.description ?? 'Explore your saved resources or choose a new learning path.')}</p></div>
       <div className={styles.actions}><Link className={styles.primary} href={nextAction?.href ?? '/courses'}>{copy(nextAction?.action ?? 'Explore learning')} <span aria-hidden="true">↗</span></Link>{nextAction && storageAvailable && <button disabled={busy} className={styles.quiet} onClick={() => save({ ...preferences, dismissed: [...preferences.dismissed, nextAction.id].slice(-8) })}><LocalizedText text="Dismiss suggestion" /></button>}</div>
     </section>
+    {nextActions.length > 1 && <nav className={styles.priorityQueue} aria-label={t('Next priorities')}>{nextActions.slice(1, 3).map((action, index) => <Link key={action.id} href={action.href}><span className={styles.queueNumber}>0{index + 2}</span><span><small>{t('Next priorities')}</small><strong>{t(action.title)}</strong></span><span aria-hidden="true">↗</span></Link>)}</nav>}
+    {learning}
+    {tools}
     <details className={styles.customize}>
       <summary><LocalizedText text="Organize this workspace" /></summary>
       {!storageAvailable && <p><LocalizedText text="Personalization storage is unavailable. Your resources remain accessible." /></p>}
@@ -75,10 +88,11 @@ export default function WorkspacePersonalSpace({ resources, history, initialCurs
       <div className={styles.sectionHeading}><div><p className={styles.eyebrow}><LocalizedText text="Your reference shelf" /></p><h2 id="library-title"><LocalizedText text="Personal library" /></h2></div><Link href="/plan"><LocalizedText text="Open personal plan ↗" /></Link></div>
       <p><LocalizedText text="Search your saved destinations, comparisons, course records and preparation checklists." /></p>
       <div className={styles.search}><label><LocalizedText text="Find a personal resource" /><input type="search" value={query} onChange={e => { setQuery(e.target.value); setResourceLimit(8); }} placeholder={t("Country, course or comparison…")} /></label><label><LocalizedText text="Resource type" /><select value={kind} onChange={e => { setKind(e.target.value); setResourceLimit(8); }}><option value="all"><LocalizedText text="All resources" /></option><option value="country"><LocalizedText text="Countries" /></option><option value="comparison"><LocalizedText text="Comparisons" /></option><option value="course"><LocalizedText text="Learning" /></option><option value="documents"><LocalizedText text="Preparation" /></option></select></label></div>
+      <div className={styles.libraryFilters}><div className={styles.filterChips} role="group" aria-label={t('Resource status')}>{[['all','All resources'],['pinned','Pinned'],['in_progress','In progress'],['completed','Completed'],['edition_changed','New edition']].map(([value, label]) => <button type="button" key={value} aria-pressed={status === value} onClick={() => { setStatus(value); setResourceLimit(8); }}>{t(label)}</button>)}</div><label>{t('Sort resources')}<select value={sort} onChange={event => setSort(event.target.value)}><option value="recent">{t('Most recent')}</option><option value="title">{t('Alphabetical')}</option></select></label></div>
       <p role="status">{t("{count} resources in this library", { count: found.length })}</p>
-      <div className={styles.resourceGrid}>{found.slice(0, resourceLimit).map(r => <Link className={styles.resource} href={r.href} key={r.id}><span className={styles.eyebrow}>{t(workspaceKindLabels[r.kind])}</span><strong>{r.title}</strong><span>{r.detail}</span><span aria-hidden="true"><LocalizedText text="Open ↗" /></span></Link>)}</div>
+      <div className={styles.resourceGrid}>{found.slice(0, resourceLimit).map(r => <article className={styles.resource} key={r.id} data-pinned={pinned.includes(r.id)}><Link href={r.href}><span className={styles.eyebrow}>{t(workspaceKindLabels[r.kind])}</span><strong>{r.title}</strong><span>{r.detail}</span><span className={styles.resourceOpen}>{t('Open ↗')}</span></Link><div className={styles.resourceFooter}>{r.status && <span className={styles.statusBadge} data-status={r.status}>{t(r.statusLabel ?? (r.status === 'completed' ? 'Completed' : r.status === 'edition_changed' ? 'New edition' : 'In progress'))}</span>}<button type="button" disabled={busy || !storageAvailable} aria-pressed={pinned.includes(r.id)} aria-label={t(pinned.includes(r.id) ? 'Unpin {title}' : 'Pin {title}', { title: r.title })} onClick={() => togglePin(r.id)}>{t(pinned.includes(r.id) ? 'Pinned' : 'Pin resource')} <span aria-hidden="true">{pinned.includes(r.id) ? '★' : '☆'}</span></button></div></article>)}</div>
       {found.length > resourceLimit && <button className={styles.quiet} onClick={() => setResourceLimit(previous => previous + 8)}><LocalizedText text="Show more resources" /></button>}
-      {!found.length && <div className={styles.empty}><h3>{t(resources.length ? 'No matching resources.' : 'Your library starts with your first saved resource.')}</h3><p>{t(resources.length ? 'Try a different term or resource type.' : 'Save a destination or begin a learning path to see it here.')}</p><Link href="/countries"><LocalizedText text="Explore countries ↗" /></Link></div>}
+      {!found.length && <div className={styles.empty}><h3>{t(resources.length ? 'No matching resources.' : 'Your library starts with your first saved resource.')}</h3><p>{t(resources.length ? 'Try a different term or resource type.' : 'Save a destination or begin a learning path to see it here.')}</p><div className={styles.actions}><button type="button" className={styles.quiet} onClick={() => { setQuery(''); setKind('all'); setStatus('all'); }}>{t('Clear filters')}</button><Link href="/countries"><LocalizedText text="Explore countries ↗" /></Link></div></div>}
     </section> : <p><LocalizedText text="Hidden section. Restore it in “Organize this workspace”." /></p>}</div>
     <div id="workspace-history">{!preferences.hidden.includes('history') ? <section className={styles.panel} aria-labelledby="history-title">
       <div className={styles.sectionHeading}><div><p className={styles.eyebrow}><LocalizedText text="Recorded activity" /></p><h2 id="history-title"><LocalizedText text="My history" /></h2></div><label><LocalizedText text="Activity type" /><select value={filter} onChange={e => { setFilter(e.target.value); setPage(1); }}><option value="all"><LocalizedText text="All activity" /></option><option value="course"><LocalizedText text="Learning" /></option><option value="comparison"><LocalizedText text="Comparisons" /></option><option value="saved_country"><LocalizedText text="Countries" /></option><option value="documents"><LocalizedText text="Preparation" /></option><option value="cost"><LocalizedText text="Budget research" /></option></select></label></div>

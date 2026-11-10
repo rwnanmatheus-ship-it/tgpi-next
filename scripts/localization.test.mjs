@@ -420,6 +420,7 @@ test('course overview localizes controls and counts unique lessons without grant
 });
 
 test('workspace server presentation follows locale and preserves private identity and canonical destinations', async () => {
+  const intelligence = await import('../src/lib/workspace-intelligence.ts');
   const React = await import('react'), runtime = await import('react/jsx-runtime');
   const { renderToStaticMarkup } = await import('react-dom/server');
   const code = ts.transpileModule(fs.readFileSync('src/components/profile/GlobalWorkspaceOS.tsx', 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX, esModuleInterop: true } }).outputText;
@@ -430,6 +431,7 @@ test('workspace server presentation follows locale and preserves private identit
       if (name === 'react') return React;
       if (name === 'react/jsx-runtime') return runtime;
       if (name === '@/lib/localization/server') return { getLocale: async () => locale };
+      if (name === '@/lib/workspace-intelligence') return intelligence;
       if (name === '@/lib/localization/messages') return { translate };
       if (localizationDependency(name, locale)) return localizationDependency(name, locale);
       if (name === 'next/link') return { __esModule: true, default: ({ children, prefetch, ...props }) => React.createElement('a', props, children) };
@@ -460,13 +462,13 @@ test('workspace server presentation follows locale and preserves private identit
         }, child);
         return { __esModule: true, default: child.default };
       }
-      if (name === './WorkspacePersonalSpace') return { __esModule: true, default: ({ journey }) => journey };
+      if (name === './WorkspacePersonalSpace') return { __esModule: true, default: ({ journey, learning }) => React.createElement(React.Fragment, null, learning, journey) };
       if (name.startsWith('./') || name.startsWith('@/components/')) return { __esModule: true, default: () => null };
       throw Error(`Unexpected import: ${name}`);
     }, exports);
     const html = renderToStaticMarkup(await exports.default(props));
     assert.ok(html.includes(`lang="${locale}"`));
-    assert.ok(html.includes(t('Your world. In perspective.')));
+    assert.ok(html.includes(t('Global Workspace')));
     assert.ok(html.includes(`aria-label="${t('Workspace sections')}"`));
     assert.ok(html.includes('Test &lt;Learner&gt;'));
     assert.ok(html.includes('href="/notifications"'));

@@ -5,20 +5,21 @@ import { getLearningContinuation } from './learning-continuity.ts';
 
 export const WORKSPACE_MODULES = ['journey', 'library', 'history'] as const;
 export type WorkspaceModule = typeof WORKSPACE_MODULES[number];
-export type WorkspacePreferences = { version: 1; density: 'comfortable' | 'compact'; hidden: WorkspaceModule[]; dismissed: string[] };
+export type WorkspacePreferences = { version: 1; density: 'comfortable' | 'compact'; hidden: WorkspaceModule[]; dismissed: string[]; pinned?: string[] };
 export const defaultWorkspacePreferences = (): WorkspacePreferences => ({ version: 1, density: 'comfortable', hidden: [], dismissed: [] });
 export function normalizeWorkspacePreferences(raw: unknown): WorkspacePreferences {
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return defaultWorkspacePreferences();
   const value = raw as Record<string, unknown>;
-  return { version: 1, density: value.density === 'compact' ? 'compact' : 'comfortable', hidden: Array.isArray(value.hidden) ? WORKSPACE_MODULES.filter(id => value.hidden instanceof Array && value.hidden.includes(id)) : [], dismissed: Array.isArray(value.dismissed) ? [...new Set(value.dismissed.filter((id): id is string => typeof id === 'string' && /^[a-z_]+$/.test(id)))].slice(0, 8) : [] };
+  return { version: 1, density: value.density === 'compact' ? 'compact' : 'comfortable', hidden: Array.isArray(value.hidden) ? WORKSPACE_MODULES.filter(id => value.hidden instanceof Array && value.hidden.includes(id)) : [], ...(Array.isArray(value.pinned) ? { pinned: [...new Set(value.pinned.filter((id): id is string => typeof id === 'string' && /^[a-zA-Z0-9_:|.-]{1,160}$/.test(id)))].slice(0, 8) } : {}), dismissed: Array.isArray(value.dismissed) ? [...new Set(value.dismissed.filter((id): id is string => typeof id === 'string' && /^[a-z_]+$/.test(id)))].slice(0, 8) : [] };
 }
 export function parseWorkspacePreferences(raw: unknown): WorkspacePreferences | null {
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null;
   const v = raw as Record<string, unknown>;
   if (v.version !== 1 || !['comfortable','compact'].includes(String(v.density)) || !Array.isArray(v.hidden) || v.hidden.length > 3 || v.hidden.some(id => !WORKSPACE_MODULES.includes(id as WorkspaceModule)) || !Array.isArray(v.dismissed) || v.dismissed.length > 8 || v.dismissed.some(id => typeof id !== 'string' || !/^[a-z_]+$/.test(id))) return null;
+  if (v.pinned !== undefined && (!Array.isArray(v.pinned) || v.pinned.length > 8 || v.pinned.some(id => typeof id !== 'string' || !/^[a-zA-Z0-9_:|.-]{1,160}$/.test(id)))) return null;
   return normalizeWorkspacePreferences(v);
 }
-export type WorkspaceResource = { id: string; title: string; kind: 'country' | 'comparison' | 'course' | 'documents'; href: string; detail: string; updatedAt?: string; status?: 'in_progress' | 'completed' | 'edition_changed' };
+export type WorkspaceResource = { id: string; title: string; kind: 'country' | 'comparison' | 'course' | 'documents'; href: string; detail: string; updatedAt?: string; status?: 'in_progress' | 'completed' | 'edition_changed'; statusLabel?: string };
 export function buildWorkspaceResources(progress: TgpiActivationProgress, catalogue: readonly Course[], countries: readonly { slug: string; name: string }[]): WorkspaceResource[] {
   const resources: WorkspaceResource[] = [];
   for (const slug of progress.savedCountries) {

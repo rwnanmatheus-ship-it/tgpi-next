@@ -12030,7 +12030,27 @@ export const messages = {
     "fr": "Synthèse décisionnelle : {country}",
     "de": "Entscheidungsübersicht: {country}",
     "it": "Sintesi della decisione: {country}"
-  }
+  },
+
+  // Workspace navigation and personal resource controls.
+  "Where do you want to go next?": {"en": "Where do you want to go next?", "pt-BR": "Qual é seu próximo passo?", "es": "¿Cuál es tu próximo paso?", "fr": "Quelle est votre prochaine étape ?", "de": "Was ist dein nächster Schritt?", "it": "Qual è il tuo prossimo passo?"},
+  "Search tools and saved resources": {"en": "Search tools and saved resources", "pt-BR": "Buscar ferramentas e recursos salvos", "es": "Buscar herramientas y recursos guardados", "fr": "Rechercher des outils et ressources enregistrées", "de": "Tools und gespeicherte Ressourcen suchen", "it": "Cerca strumenti e risorse salvate"},
+  "Show essential tools": {"en": "Show essential tools", "pt-BR": "Mostrar ferramentas essenciais", "es": "Mostrar herramientas esenciales", "fr": "Afficher les outils essentiels", "de": "Wichtige Tools anzeigen", "it": "Mostra strumenti essenziali"},
+  "Show all tools": {"en": "Show all tools", "pt-BR": "Mostrar todas as ferramentas", "es": "Mostrar todas las herramientas", "fr": "Afficher tous les outils", "de": "Alle Tools anzeigen", "it": "Mostra tutti gli strumenti"},
+  "Your next chapter starts with your next step.": {"en": "Your next chapter starts with your next step.", "pt-BR": "Seu próximo capítulo começa com o próximo passo.", "es": "Tu próximo capítulo empieza con tu próximo paso.", "fr": "Votre prochain chapitre commence par le prochain pas.", "de": "Dein nächstes Kapitel beginnt mit dem nächsten Schritt.", "it": "Il tuo prossimo capitolo inizia dal prossimo passo."},
+  "A world of possibilities. A direction of your own.": {"en": "A world of possibilities. A direction of your own.", "pt-BR": "Um mundo de possibilidades. Uma direção só sua.", "es": "Un mundo de posibilidades. Tu propia dirección.", "fr": "Un monde de possibilités. Votre propre direction.", "de": "Eine Welt voller Möglichkeiten. Deine eigene Richtung.", "it": "Un mondo di possibilità. La tua direzione."},
+  "{count}% complete": {"en": "{count}% complete", "pt-BR": "{count}% preenchido", "es": "{count}% completado", "fr": "{count}% complété", "de": "{count}% ausgefüllt", "it": "{count}% completato"},
+  "Your plan destinations, connected to current country research.": {"en": "Your plan destinations, connected to current country research.", "pt-BR": "Os destinos do seu plano, conectados à pesquisa sobre cada país.", "es": "Los destinos de tu plan, conectados a la investigación de cada país.", "fr": "Les destinations de votre plan, liées à la recherche sur chaque pays.", "de": "Die Ziele deines Plans, verbunden mit der Länderrecherche.", "it": "Le destinazioni del tuo piano, collegate alla ricerca sui paesi."},
+  "Next priorities": {"en": "Next priorities", "pt-BR": "Próximas prioridades", "es": "Próximas prioridades", "fr": "Prochaines priorités", "de": "Nächste Prioritäten", "it": "Prossime priorità"},
+  "Resource status": {"en": "Resource status", "pt-BR": "Situação do recurso", "es": "Estado del recurso", "fr": "État de la ressource", "de": "Ressourcenstatus", "it": "Stato della risorsa"},
+  "New edition": {"en": "New edition", "pt-BR": "Nova edição", "es": "Nueva edición", "fr": "Nouvelle édition", "de": "Neue Ausgabe", "it": "Nuova edizione"},
+  "Sort resources": {"en": "Sort resources", "pt-BR": "Ordenar recursos", "es": "Ordenar recursos", "fr": "Trier les ressources", "de": "Ressourcen sortieren", "it": "Ordina risorse"},
+  "Most recent": {"en": "Most recent", "pt-BR": "Mais recentes", "es": "Más recientes", "fr": "Plus récents", "de": "Neueste zuerst", "it": "Più recenti"},
+  "Alphabetical": {"en": "Alphabetical", "pt-BR": "Ordem alfabética", "es": "Orden alfabético", "fr": "Ordre alphabétique", "de": "Alphabetisch", "it": "Ordine alfabetico"},
+  "Pin {title}": {"en": "Pin {title}", "pt-BR": "Fixar {title}", "es": "Fijar {title}", "fr": "Épingler {title}", "de": "{title} anheften", "it": "Fissa {title}"},
+  "Unpin {title}": {"en": "Unpin {title}", "pt-BR": "Desafixar {title}", "es": "Desfijar {title}", "fr": "Désépingler {title}", "de": "{title} lösen", "it": "Rimuovi {title} dai fissati"},
+  "Pin resource": {"en": "Pin resource", "pt-BR": "Fixar recurso", "es": "Fijar recurso", "fr": "Épingler la ressource", "de": "Ressource anheften", "it": "Fissa risorsa"},
+  "You can pin up to eight resources. Unpin one to make room.": {"en": "You can pin up to eight resources. Unpin one to make room.", "pt-BR": "Você pode fixar até oito recursos. Desafixe um para liberar espaço.", "es": "Puedes fijar hasta ocho recursos. Desfija uno para dejar espacio.", "fr": "Vous pouvez épingler huit ressources. Retirez-en une pour libérer une place.", "de": "Du kannst acht Ressourcen anheften. Löse eine, um Platz zu schaffen.", "it": "Puoi fissare otto risorse. Rimuovine una per fare spazio."},
 } as const satisfies Record<string, Record<Locale, string>>;
 
 export type MessageKey = keyof typeof messages;

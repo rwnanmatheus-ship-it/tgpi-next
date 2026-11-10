@@ -113,7 +113,7 @@ test('workspace resources, history and localized searches render in every locale
     assert.ok(html.includes(esc(t('{completed} / {total} lessons · {status}', { completed: 2, total: 6, status: t('In progress') }))));
     assert.ok(html.includes(esc(t('{country} preparation', { country: t('United States') }))));
     assert.ok(!html.includes('>course<'));
-    const searched = render('src/components/profile/WorkspacePersonalSpace.tsx', locale, props, [preferences, false, '', t(title), 'all', 8]);
+    const searched = render('src/components/profile/WorkspacePersonalSpace.tsx', locale, props, [preferences, false, 'all', 'recent', '', t(title), 'all', 8]);
     assert.ok(searched.includes('href="/courses/country-fit/study"'));
     assert.ok(!searched.includes('href="/compare?'));
     assert.equal(JSON.stringify(props), before);

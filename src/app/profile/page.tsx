@@ -11,10 +11,7 @@ import type { Metadata } from "next";
 import { currentUser } from "@clerk/nextjs/server";
 import GlobalWorkspaceOS from "@/components/profile/GlobalWorkspaceOS";
 import { loadLearningSummary } from "@/lib/learning/unified-progress.server";
-import { learningStatusLabels } from "@/lib/learning/unified-progress";
-import { getLocale } from "@/lib/localization/server";
-import { translate } from "@/lib/localization/messages";
-import type { WorkspaceResource } from "@/lib/workspace-control";
+import { reconcileWorkspaceLearning } from "@/lib/workspace-intelligence";
 import {
   getAccountProfileCompletion,
   mergeAccountProfileWithOnboarding,
@@ -64,19 +61,8 @@ export default async function ProfilePage({
   );
   await reconcileWorkspaceHistory(session.userId, activation).catch(() => null);
   const historyPage = await loadWorkspaceHistory(session.userId).catch(() => ({ events: [], cursor: null, coverageStartedAt: null, available: false, reconciliationPending: true }));
-  const [billing, learning, locale] = await Promise.all([getUserBillingRecord(session.userId), loadLearningSummary(session.userId, activation), getLocale()]);
-  const projectedCourses = new Map(learning.items.map(item => [`course-${item.courseId}`, item]));
-  const resources = buildWorkspaceResources(activation, courses, getAllCountries()).map(resource => {
-    const item = projectedCourses.get(resource.id);
-    if (!item) return resource;
-    const status = translate(locale, learningStatusLabels[item.status]);
-    return { ...resource, detail: item.status === "edition_changed" ? status : `${translate(locale, "{done} of {total} lesson checkpoints", { done: item.completed, total: item.total })} · ${status}` };
-  });
-  const professionalResources: WorkspaceResource[] = learning.items.filter(item => item.kind === "professional").map(item => ({
-    id: `course-${item.courseId}`, title: item.title, kind: "course", href: item.href, updatedAt: item.updatedAt,
-    status: item.status === "completed" ? "completed" : item.status === "edition_changed" ? "edition_changed" : "in_progress",
-    detail: translate(locale, learningStatusLabels[item.status]),
-  }));
+  const [billing, learning] = await Promise.all([getUserBillingRecord(session.userId), loadLearningSummary(session.userId, activation)]);
+  const resources = reconcileWorkspaceLearning(buildWorkspaceResources(activation, courses, getAllCountries()), learning);
   const controlledAccessMode = await getControlledPremiumAccessMode(
     {
       uid: session.userId,
@@ -115,7 +101,7 @@ export default async function ProfilePage({
       learning={learning}
       rank={rank}
       userId={session.userId}
-      resources={[...resources, ...professionalResources].sort((a,b) => (b.updatedAt ?? "").localeCompare(a.updatedAt ?? ""))}
+      resources={resources}
       history={workspaceHistory({ ...activation, activities: [...historyPage.events, ...activation.activities] })}
       historyCursor={historyPage.cursor}
       historyCoverage={historyPage.coverageStartedAt}
