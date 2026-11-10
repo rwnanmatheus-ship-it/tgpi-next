@@ -61,7 +61,7 @@ export default function CertificateDownloadButton({
           className + " w-full disabled:cursor-not-allowed disabled:opacity-60"
         }
       >
-        {busy ? <LocalizedText text={"Preparing PDF…"} /> : label}
+        {busy ? <LocalizedText text={"Preparing PDF…"} /> : <LocalizedText text={label} />}
       </button>
       {error ? (
         <p role="alert" className="mt-3 text-sm leading-6">
