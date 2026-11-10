@@ -26,14 +26,29 @@ export async function collectNotificationEvents(uid: string) {
   const events: NotificationEvent[] = [
     { ...welcomeEvent, occurredAt: new Date(user.createdAt).toISOString() },
     {
-      key: "product:intelligence-inbox:v2",
+      key: "product:notification-center:2026-11-v3",
+      occurredAt: "2026-11-10T00:00:00.000Z",
       category: "product",
-      title: "Your TGPI intelligence inbox is here",
-      body: "Find your account updates, learning milestones and recommended next steps in one place. Search, filter and save your reading preferences across devices.",
+      title: "Your connected notification center is ready",
+      body: "Enable device alerts, choose the updates that matter and follow your learning, community and saved country research in one place.",
       href: "/notifications",
       actionLabel: "Explore my inbox",
     },
   ];
+  const release = process.env.VERCEL_GIT_COMMIT_SHA;
+  if (
+    process.env.VERCEL_ENV === "production" &&
+    release &&
+    /^[a-f0-9]{40,64}$/.test(release)
+  )
+    events.push({
+      key: `product:release:${release}`,
+      category: "product",
+      title: "A new version of TGPI is available",
+      body: "The platform has been updated. Open your workspace to use the latest version and continue your journey.",
+      href: "/profile",
+      actionLabel: "Open my workspace",
+    });
   const onboarding = user.unsafeMetadata.tgpiOnboarding as
     | { completed?: boolean }
     | undefined;
@@ -133,17 +148,50 @@ export async function collectNotificationEvents(uid: string) {
         actionLabel: "Review official sources",
       });
   }
-  events.push(...(await communityNotificationEvents(uid)));
+  events.push(
+    ...(await communityNotificationEvents(uid)).map((event) => ({
+      ...event,
+      category: "community" as const,
+    })),
+  );
   return { events, user };
 }
 
 export async function reconcileNotifications(uid: string) {
-  const { events } = await collectNotificationEvents(uid);
+  const { events, user } = await collectNotificationEvents(uid);
+  const {
+    initializeNotificationUser,
+    automationEvents,
+    commitAutomationSnapshot,
+  } = await import("./automation.server");
+  const legacy = await initializeNotificationUser(
+    uid,
+    user.privateMetadata,
+    user.unsafeMetadata.tgpiLocale,
+  );
+  events.push(...(await automationEvents(uid, user.privateMetadata)));
   const { items: existingItems } = await listNotifications(uid);
   const existingKeys = new Set(existingItems.map((item) => item.key));
   for (const event of events) {
-    if (!existingKeys.has(event.key)) await publishNotification(uid, event);
+    if (!existingKeys.has(event.key)) {
+      const short = notificationId(uid, event.key).slice(0, 24),
+        mark = legacy.marks[short];
+      // Existing history is imported silently; subscribing never sends the backlog.
+      const old =
+        Boolean(legacy.seen?.[short] || mark) ||
+        Boolean(
+          event.occurredAt &&
+            Date.parse(event.occurredAt) < Date.now() - 48 * 3600000,
+        );
+      await publishNotification(uid, event, {
+        silent: old,
+        readAt: mark?.[0],
+        archivedAt: mark?.[1],
+        createdAt: event.occurredAt || legacy.seen?.[short],
+      });
+    }
   }
+  await commitAutomationSnapshot(uid, user.privateMetadata);
   const relevantKeys = new Set(events.map((event) => event.key));
   for (const key of [
     "next:onboarding:v1",

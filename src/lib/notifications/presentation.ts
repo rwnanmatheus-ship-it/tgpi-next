@@ -3,7 +3,8 @@ export function notificationGroup(iso: string, now: Date): string {
   const date = new Date(iso);
   if (!Number.isFinite(date.getTime())) return "Earlier";
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const yesterday = new Date(today); yesterday.setDate(yesterday.getDate() - 1);
+  const yesterday = new Date(today);
+  yesterday.setDate(yesterday.getDate() - 1);
   if (date >= today) return "Today";
   if (date >= yesterday) return "Yesterday";
   return "Earlier";
@@ -16,6 +17,12 @@ export function notificationRelativeTime(iso: string, now: Date): string {
   if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
   return `${Math.floor(seconds / 86400)}d ago`;
 }
-export function sortNotifications(items: InboxNotification[]): InboxNotification[] {
-  return [...items].sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt) || a.id.localeCompare(b.id));
+export function sortNotifications(
+  items: InboxNotification[],
+): InboxNotification[] {
+  return [...items].sort(
+    (a, b) =>
+      Date.parse(b.createdAt) - Date.parse(a.createdAt) ||
+      a.id.localeCompare(b.id),
+  );
 }

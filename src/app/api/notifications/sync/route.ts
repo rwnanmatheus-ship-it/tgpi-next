@@ -16,9 +16,8 @@ export async function POST(request: Request) {
   if (!userId) return reply({ error: "Authentication required." }, 401);
   if (request.headers.get("origin") !== new URL(request.url).origin)
     return reply({ error: "Unverified origin." }, 403);
-  if (!notificationsConfigured())
-    return reply({ ok: true, mode: "account" });
-  const path = `tgpiNotificationSync/${userId}`;
+  if (!notificationsConfigured()) return reply({ ok: true, mode: "account" });
+  const path = `tgpiLearningUsers/_notifications/sync/${userId}`;
   try {
     const claimed = await runFirestoreTransaction(async ({ getDocuments }) => {
       const doc = (await getDocuments<{ nextAt: number }>([path])).get(path);

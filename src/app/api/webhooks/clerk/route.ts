@@ -30,6 +30,10 @@ export async function POST(request: NextRequest) {
     if (event.type === "user.deleted" && event.data.id) {
       const uid = event.data.id;
       await requestCommunityErasure(uid, true);
+      if (notificationsConfigured()) {
+        const { eraseNotificationAccount } = await import("@/lib/notifications/privacy.server");
+        await eraseNotificationAccount(uid);
+      }
       after(async () => {
         try {
           await runErasureJob(privacyKey(uid), 20);

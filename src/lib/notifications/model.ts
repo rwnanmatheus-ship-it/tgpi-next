@@ -4,6 +4,7 @@ export const notificationCategories = [
   "learning",
   "planning",
   "product",
+  "community",
 ] as const;
 export type NotificationCategory = (typeof notificationCategories)[number];
 export type NotificationPreferences = {
@@ -11,12 +12,40 @@ export type NotificationPreferences = {
   emailLearning: boolean;
   emailPlanning: boolean;
   emailProduct: boolean;
+  pushEnabled: boolean;
+  pushAccount: boolean;
+  pushBilling: boolean;
+  pushLearning: boolean;
+  pushPlanning: boolean;
+  pushCommunity: boolean;
+  pushProduct: boolean;
+  showPreview: boolean;
+  quietHours: boolean;
+  quietStart: string;
+  quietEnd: string;
+  timezone: string;
+  pausedUntil: string;
+  dailyLimit: number;
 };
 export const defaultPreferences: NotificationPreferences = {
   emailImportant: true,
   emailLearning: false,
   emailPlanning: false,
   emailProduct: false,
+  pushEnabled: false,
+  pushAccount: true,
+  pushBilling: true,
+  pushLearning: true,
+  pushPlanning: true,
+  pushCommunity: true,
+  pushProduct: true,
+  showPreview: false,
+  quietHours: false,
+  quietStart: "22:00",
+  quietEnd: "08:00",
+  timezone: "UTC",
+  pausedUntil: "",
+  dailyLimit: 8,
 };
 export type NotificationEvent = {
   key: string;
@@ -49,12 +78,38 @@ export function parsePreferences(value: unknown): NotificationPreferences {
     value && typeof value === "object"
       ? (value as Record<string, unknown>)
       : {};
-  return Object.fromEntries(
+  const parsed = Object.fromEntries(
     Object.entries(defaultPreferences).map(([key, fallback]) => [
       key,
-      typeof input[key] === "boolean" ? input[key] : fallback,
+      typeof fallback === "boolean" && typeof input[key] === "boolean"
+        ? input[key]
+        : fallback,
     ]),
   ) as NotificationPreferences;
+  for (const key of ["quietStart", "quietEnd"] as const)
+    if (
+      typeof input[key] === "string" &&
+      /^([01]\d|2[0-3]):[0-5]\d$/.test(input[key])
+    )
+      parsed[key] = input[key];
+  if (typeof input.timezone === "string" && input.timezone.length < 80) {
+    try {
+      new Intl.DateTimeFormat("en", { timeZone: input.timezone });
+      parsed.timezone = input.timezone;
+    } catch {
+      /* Keep UTC for malformed zones. */
+    }
+  }
+  if (
+    typeof input.pausedUntil === "string" &&
+    Number.isFinite(Date.parse(input.pausedUntil))
+  )
+    parsed.pausedUntil = new Date(
+      Math.min(Date.parse(input.pausedUntil), Date.now() + 7 * 86400000),
+    ).toISOString();
+  if ([3, 8, 20].includes(Number(input.dailyLimit)))
+    parsed.dailyLimit = Number(input.dailyLimit);
+  return parsed;
 }
 export function wantsEmail(
   event: NotificationEvent,

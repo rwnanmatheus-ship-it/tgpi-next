@@ -1,73 +1,319 @@
 "use client";
-import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 import { useEffect, useState } from "react";
-import styles from "./NotificationInbox.module.css";
 import Link from "next/link";
 import NavigationIcon from "@/components/navigation/NavigationIcon";
 import type { NavigationIconName } from "@/lib/navigation-system";
-import { notificationCategories, type NotificationCategory, type NotificationPreferences } from "@/lib/notifications/model";
-import { notificationGroup, notificationRelativeTime, sortNotifications } from "@/lib/notifications/presentation";
+import {
+  notificationCategories,
+  type NotificationCategory,
+} from "@/lib/notifications/model";
+import {
+  notificationGroup,
+  sortNotifications,
+} from "@/lib/notifications/presentation";
+import { useLocale } from "@/components/localization/LocaleProvider";
+import {
+  notificationText,
+  localizedNotification,
+  type NotificationTextKey,
+} from "@/lib/notifications/text";
 import { useNotifications } from "./NotificationProvider";
-import { LocalizedText } from "@/components/localization/LocaleProvider";
-
-const channels: Record<NotificationCategory, { label: string; icon: NavigationIconName }> = {
-  account: { label: "Account", icon: "shield" }, billing: { label: "Membership", icon: "key" },
-  learning: { label: "Learning", icon: "book" }, planning: { label: "My plan", icon: "compass" },
-  product: { label: "TGPI updates", icon: "spark" },
+import NotificationDevices from "./NotificationDevices";
+import NotificationPreferences from "./NotificationPreferences";
+import styles from "./NotificationInbox.module.css";
+const icons: Record<NotificationCategory, NavigationIconName> = {
+  account: "shield",
+  billing: "key",
+  learning: "book",
+  planning: "compass",
+  community: "globe",
+  product: "spark",
 };
-const preferences: Record<keyof NotificationPreferences, string> = {
-  emailImportant: "Account & membership", emailLearning: "Learning & credentials",
-  emailPlanning: "Planning suggestions", emailProduct: "Product news",
-};
-const control = "inline-flex min-h-10 items-center justify-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold transition hover:bg-[var(--tgpi-navy-raised)]/5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--tgpi-gold-hover)] disabled:cursor-wait disabled:opacity-40";
 export default function NotificationInbox() {
-  const { t: localizeLabel } = useInterfaceLocale();
-
-  const inbox = useNotifications();
-  const [filter, setFilter] = useState("all");
-  const [query, setQuery] = useState("");
-  const [showPreferences, setShowPreferences] = useState(false);
-  const [now, setNow] = useState<Date | null>(null);
+  const inbox = useNotifications(),
+    { locale } = useLocale(),
+    t = (key: NotificationTextKey) => notificationText(locale, key);
+  const [filter, setFilter] = useState("all"),
+    [query, setQuery] = useState(""),
+    [showPreferences, setShowPreferences] = useState(false),
+    [now, setNow] = useState<Date | null>(null);
   useEffect(() => {
-    setNow(new Date());
-    const timer = window.setInterval(() => setNow(new Date()), 60_000);
-    return () => clearInterval(timer);
+    const first = setTimeout(() => setNow(new Date()), 0);
+    const timer = setInterval(() => setNow(new Date()), 60000);
+    return () => {
+      clearTimeout(first);
+      clearInterval(timer);
+    };
   }, []);
-  const active = inbox.items.filter(item => !item.archivedAt);
-  const unread = active.filter(item => !item.readAt).length;
-  const nextStep = active.find(item => item.key.startsWith("next:"));
-  const visible = sortNotifications(inbox.items).filter(item =>
-    (filter === "archived" ? Boolean(item.archivedAt) : !item.archivedAt && (filter === "all" || (filter === "unread" && !item.readAt) || (filter === "important" && item.important) || item.category === filter)) &&
-    `${item.title} ${item.body} ${channels[item.category].label}`.toLowerCase().includes(query.trim().toLowerCase()));
-  const groups = ["Today", "Yesterday", "Earlier"].map(label => ({ label, items: visible.filter(item => notificationGroup(item.createdAt, now || new Date(0)) === label) }));
-  const timezone = now ? Intl.DateTimeFormat().resolvedOptions().timeZone : "your local timezone";
+  const items = sortNotifications(inbox.items).map((item) =>
+    localizedNotification(item, locale),
+  );
+  const active = items.filter((item) => !item.archivedAt),
+    unread = active.filter((item) => !item.readAt).length;
+  const visible = items.filter(
+    (item) =>
+      (filter === "archived"
+        ? item.archivedAt
+        : !item.archivedAt &&
+          (filter === "all" ||
+            (filter === "unread" && !item.readAt) ||
+            (filter === "priority" && item.important) ||
+            item.category === filter)) &&
+      `${item.title} ${item.body} ${t(item.category)}`
+        .toLocaleLowerCase(locale)
+        .includes(query.trim().toLocaleLowerCase(locale)),
+  );
+  const groups = (["Today", "Yesterday", "Earlier"] as const).map((label) => ({
+    label,
+    items: visible.filter(
+      (item) => notificationGroup(item.createdAt, now || new Date(0)) === label,
+    ),
+  }));
+  const time = (value: string) =>
+    new Intl.DateTimeFormat(locale, {
+      dateStyle: "medium",
+      timeStyle: "short",
+    }).format(new Date(value));
   return (
-    <main className={`${styles.root} min-h-[80vh] px-3 py-5 sm:px-6 sm:py-8`}>
-      <div className="mx-auto max-w-[1320px]">
-        <header className={`${styles.hero} flex flex-wrap items-center justify-between gap-4`}>
-          <div><p className="text-xs font-bold uppercase tracking-[.15em] text-[#805D19]">TGPI · Activity center</p><h1 className="mt-2 text-[30px] font-extrabold tracking-tight [font-family:var(--tgpi-font-sans)] sm:text-4xl"><LocalizedText text="Notifications" /><span className="ml-3 inline-flex translate-y-[-3px] rounded-full bg-[var(--tgpi-navy-raised)] px-2.5 py-1 align-middle text-xs font-bold text-white">{unread}</span></h1><p className="mt-2 text-sm text-slate-600">Stay up to date. Pick up where you left off.</p></div>
-          <div className="flex gap-1"><button type="button" className={control} onClick={() => { setShowPreferences(!showPreferences); if (!showPreferences && window.innerWidth < 1024) window.setTimeout(() => document.getElementById("notification-preferences")?.scrollIntoView({ block: "center" }), 0); }} aria-expanded={showPreferences} aria-controls="notification-preferences"><NavigationIcon name="settings" width={18} height={18} /><LocalizedText text={"Preferences"} /></button><button type="button" className={control} disabled={inbox.loading || inbox.pending} onClick={() => void inbox.refresh()}><NavigationIcon name="bell" width={18} height={18} /><LocalizedText text={"Refresh"} /></button></div>
+    <main className={styles.root} data-tgpi-localized="true">
+      <div className={styles.shell}>
+        <header className={styles.hero}>
+          <div>
+            <p className={styles.eyebrow}>{t("eyebrow")}</p>
+            <h1>
+              {t("title")} <span>{inbox.loading ? "—" : unread}</span>
+            </h1>
+            <h2>{t("subtitle")}</h2>
+            <p>{t("intro")}</p>
+          </div>
+          <div className={styles.heroActions}>
+            <button
+              type="button"
+              onClick={() => setShowPreferences((value) => !value)}
+              aria-expanded={showPreferences}
+              aria-controls="notification-preferences"
+            >
+              <NavigationIcon name="settings" width={18} />
+              {t("preferences")}
+            </button>
+            <button
+              type="button"
+              onClick={() => void inbox.refresh()}
+              disabled={inbox.loading || inbox.pending}
+            >
+              <NavigationIcon name="bell" width={18} />
+              {t("refresh")}
+            </button>
+          </div>
         </header>
-        <div className={styles.stats} aria-label={localizeLabel("Quick notification filters")}>
-          {[{key:"unread",label:"Unread updates",value:unread,icon:"bell" as NavigationIconName},{key:"important",label:"Priority updates",value:active.filter(item=>item.important).length,icon:"shield" as NavigationIconName},{key:"all",label:"Recent updates",value:active.length,icon:"spark" as NavigationIconName}].map(stat => <button type="button" key={stat.key} aria-pressed={filter===stat.key} onClick={()=>setFilter(stat.key)} className={styles.stat}><div className={styles.statIcon}><NavigationIcon name={stat.icon} width={24} height={24}/></div><div><strong>{inbox.loading ? "—" : stat.value}</strong><span>{stat.label}</span></div></button>)}
+        <div className={styles.stats}>
+          {(
+            [
+              { key: "unread", value: unread, icon: "bell" },
+              {
+                key: "priority",
+                value: active.filter((i) => i.important).length,
+                icon: "shield",
+              },
+              { key: "all", value: active.length, icon: "spark" },
+            ] as const
+          ).map((stat) => (
+            <button
+              key={stat.key}
+              type="button"
+              className={styles.stat}
+              aria-pressed={filter === stat.key}
+              onClick={() => setFilter(stat.key)}
+            >
+              <NavigationIcon name={stat.icon} width={24} />
+              <strong>{inbox.loading ? "—" : stat.value}</strong>
+              <span>{t(stat.key)}</span>
+            </button>
+          ))}
         </div>
-        <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_300px]">
-          <nav aria-label={localizeLabel("Notification categories")} className="flex gap-1 overflow-x-auto rounded-2xl border border-[var(--tgpi-border)]/70 bg-white p-2 lg:col-span-2">
-            {[{ key: "all", label: "All notifications", icon: "bell" as NavigationIconName }, { key: "unread", label: "Unread", icon: "file" as NavigationIconName }, { key: "important", label: "Priority", icon: "target" as NavigationIconName }, ...notificationCategories.map(key => ({ key, ...channels[key] })), { key: "archived", label: "Archived", icon: "check" as NavigationIconName }].map(tab => <button key={tab.key} type="button" onClick={() => setFilter(tab.key)} aria-pressed={filter === tab.key} className={`${control} shrink-0 justify-start whitespace-nowrap ${filter === tab.key ? "bg-[var(--tgpi-navy-raised)] text-white hover:bg-[var(--tgpi-navy-raised)]" : "text-slate-600"}`}><NavigationIcon name={tab.icon} width={18} height={18} />{tab.label}{tab.key === "unread" && unread > 0 && <span className="ml-auto rounded-md bg-[var(--tgpi-gold-hover)]/15 px-1.5 text-xs">{unread}</span>}</button>)}
-          </nav>
-          <section aria-label={localizeLabel("Your notification timeline")} className={`${styles.feed} ${styles.entrance} min-w-0 overflow-hidden rounded-[22px] border border-[var(--tgpi-border)]/70 bg-white`}>
-            <div className="border-b border-[var(--tgpi-border)]/60 p-4 sm:p-5"><div className="mb-4 flex flex-wrap items-center justify-between gap-2"><h2 className="text-base font-bold [font-family:var(--tgpi-font-sans)]">{filter === "all" ? "Your activity" : filter === "important" ? "Priority updates" : filter === "archived" ? <LocalizedText text={"Archive"} /> : filter === "unread" ? "Unread updates" : channels[filter as NotificationCategory].label}</h2><button type="button" disabled={!unread || inbox.pending || inbox.loading} onClick={() => void inbox.markAllRead()} className="rounded-lg px-2 py-2 text-sm font-bold text-[#805D19] hover:bg-[var(--tgpi-canvas-alt)] disabled:opacity-40"><LocalizedText text={"Mark all recent as read"} /></button></div><label className="flex items-center gap-3 rounded-xl border border-[var(--tgpi-border)]/70 bg-[var(--tgpi-canvas-alt)]/65 px-3 py-2.5 text-slate-500"><NavigationIcon name="search" width={18} height={18} /><span className="sr-only"><LocalizedText text={"Search notifications"} /></span><input type="search" value={query} onChange={event => setQuery(event.target.value)} placeholder={localizeLabel("Search your notifications")} className="min-w-0 flex-1 bg-transparent text-sm text-[var(--tgpi-navy-raised)] outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold-hover)]" /></label></div>
-            {inbox.error && <div role="alert" className="m-4 rounded-xl border border-[var(--tgpi-gold-hover)]/40 bg-[var(--tgpi-canvas-alt)] p-4 text-sm">{inbox.error}<button type="button" onClick={() => void inbox.refresh()} className="ml-2 font-bold underline"><LocalizedText text={"Retry"} /></button></div>}
-            {inbox.loading ? <div role="status" className="space-y-5 p-6">{[1,2,3].map(n => <div key={n} className="flex gap-4 motion-safe:animate-pulse"><div className="h-12 w-12 shrink-0 rounded-full bg-[var(--tgpi-canvas-alt)]"/><div className="flex-1 space-y-3"><div className="h-3 w-3/4 rounded bg-[var(--tgpi-canvas-alt)]"/><div className="h-3 w-1/2 rounded bg-[var(--tgpi-canvas-alt)]"/></div></div>)}<span className="sr-only"><LocalizedText text={"Loading notifications"} /></span></div> : !visible.length && !inbox.error ? <div className="px-6 py-16 text-center"><NavigationIcon name="check" className="mx-auto mb-4 text-[var(--tgpi-gold-hover)]" width={36} height={36}/><h3 className="font-bold [font-family:var(--tgpi-font-sans)]">{query ? "No matching updates" : "You’re all caught up"}</h3><p className="mt-2 text-sm leading-6 text-slate-500">{query ? "Try a different search or category." : "New account and progress updates will appear here."}</p></div> : null}
-            {!inbox.loading && groups.map(group => group.items.length > 0 && <section key={group.label} aria-label={group.label}><h3 className="px-5 pb-2 pt-5 text-xs font-bold uppercase tracking-wider text-slate-500 [font-family:var(--tgpi-font-sans)]">{group.label}</h3><ul>{group.items.map(item => <li key={item.id} data-unread={!item.readAt} className={styles.row}><article className="flex gap-3 px-4 py-4 transition hover:bg-[var(--tgpi-canvas-alt)]/65 sm:gap-4 sm:px-5"><div className={`relative mt-0.5 flex h-11 w-11 shrink-0 items-center justify-center rounded-full ${item.important ? "bg-[var(--tgpi-gold-hover)]/15 text-[#805D19]" : "bg-[var(--tgpi-navy-raised)]/[.07] text-[var(--tgpi-navy-raised)]"}`}><NavigationIcon name={channels[item.category].icon} width={21} height={21}/></div><div className="min-w-0 flex-1"><div className="inbox-category mb-1 flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-slate-500"><span>{channels[item.category].label}</span>{item.important && <span className="text-[#805D19]">Priority</span>}{!item.readAt && <span aria-label={localizeLabel("Unread")} className="ml-auto h-2 w-2 rounded-full bg-[var(--tgpi-gold-hover)]"/>}</div><Link href={item.href} onClick={() => { if (!item.readAt) void inbox.mutate(item.id,"read"); }} className="block rounded focus-visible:outline-2 focus-visible:outline-[var(--tgpi-gold-hover)]"><h4 className={`text-sm leading-6 [font-family:var(--tgpi-font-sans)] ${item.readAt ? "font-semibold" : "font-extrabold"}`}>{item.title}</h4><p className="mt-1 text-[13px] leading-[1.65] text-slate-600">{item.body}</p></Link><div className="mt-2 flex flex-wrap items-center gap-x-2 gap-y-1 text-[11px]"><time suppressHydrationWarning dateTime={item.createdAt} title={now ? `${new Date(item.createdAt).toLocaleString(undefined,{dateStyle:"full",timeStyle:"long"})} · ${timezone}` : item.createdAt} className="font-semibold text-[#805D19]">{now ? `${notificationRelativeTime(item.createdAt,now)} · ${new Date(item.createdAt).toLocaleString(undefined,{month:"short",day:"numeric",year:"numeric",hour:"2-digit",minute:"2-digit"})}` : "Loading local time…"}</time>{item.timestampKind === "observed" && <span className="inbox-time-note text-slate-500" title="The time this update was first identified by your inbox, not the original event time.">· First identified</span>}</div><div className="mt-3 flex flex-wrap items-center gap-2"><Link href={item.href} onClick={() => { if (!item.readAt) void inbox.mutate(item.id,"read"); }} className="rounded-lg py-1 text-xs font-bold hover:underline">{item.actionLabel} →</Link><span className="text-[var(--tgpi-border)]" aria-hidden="true">·</span><button type="button" disabled={inbox.pending} onClick={() => void inbox.mutate(item.id,item.readAt ? "unread" : "read")} className="rounded-lg px-1 py-1 text-[11px] text-slate-500 hover:text-[var(--tgpi-navy-raised)] disabled:opacity-40">Mark {item.readAt ? <LocalizedText text={"unread"} /> : "read"}</button>{!item.archivedAt && <button type="button" disabled={inbox.pending} onClick={() => void inbox.mutate(item.id,"archive")} className="rounded-lg px-1 py-1 text-[11px] text-slate-500 hover:text-[var(--tgpi-navy-raised)] disabled:opacity-40"><LocalizedText text={"Archive"} /></button>}</div></div></article></li>)}</ul></section>)}
-            {inbox.nextCursor && <button type="button" disabled={inbox.pending} onClick={() => void inbox.loadMore()} className={`${control} my-3 w-full`}><LocalizedText text={"Load earlier updates"} /></button>}
-            <p className="border-t border-[var(--tgpi-border)]/50 px-5 py-3 text-xs leading-6 text-slate-500">Times shown in {timezone}. Older updates without an event timestamp show when they were first identified.</p>
-          </section>
-          <aside className="space-y-4 lg:sticky lg:top-24">
-            {nextStep && <section className="rounded-[22px] border border-[var(--tgpi-gold-hover)]/30 bg-[linear-gradient(145deg,#193759,#0B1F3A)] p-6 text-white shadow-[0_15px_30px_-22px_#0B1F3A]"><div className="flex items-center gap-2 text-[#E3C57B]"><NavigationIcon name="compass" width={18} height={18}/><p className="text-xs font-bold uppercase tracking-widest">Recommended for you</p></div><h2 className="mt-4 text-lg font-bold leading-7 [font-family:var(--tgpi-font-sans)]">{nextStep.title}</h2><p className="mt-2 text-xs leading-6 text-slate-300">{nextStep.body}</p><Link href={nextStep.href} className="mt-4 inline-flex rounded-xl bg-[#E3C57B] px-4 py-2.5 text-xs font-bold text-[var(--tgpi-navy-raised)]">{nextStep.actionLabel} →</Link></section>}
-            <section className="rounded-2xl border border-[var(--tgpi-border)]/70 bg-white p-5"><h2 className="text-sm font-bold [font-family:var(--tgpi-font-sans)]"><LocalizedText text={"Your private activity"} /></h2><p className="mt-2 text-xs leading-6 text-slate-500">Updates follow your account, membership, learning and personal plan.</p><Link href="/profile" className="mt-3 inline-block text-xs font-bold text-[#805D19]"><LocalizedText text="Open my workspace →" /></Link></section>
-            <section id="notification-preferences" hidden={!showPreferences} className="rounded-2xl border border-[var(--tgpi-border)]/70 bg-white p-5"><h2 className="text-sm font-bold [font-family:var(--tgpi-font-sans)]"><LocalizedText text={"Email preferences"} /></h2><p className="mt-2 text-xs leading-6 text-slate-500">Email delivery is not connected. Your choices are saved for future activation.</p><fieldset disabled={inbox.pending || inbox.loading || Boolean(inbox.error)} className="mt-4 space-y-4"><legend className="sr-only"><LocalizedText text={"Email categories"} /></legend>{Object.entries(preferences).map(([key,label]) => <label key={key} className="flex items-start gap-3 text-xs leading-5"><input type="checkbox" checked={inbox.preferences[key as keyof NotificationPreferences]} onChange={event => void inbox.savePreferences({...inbox.preferences,[key]:event.target.checked})} className="mt-0.5 h-4 w-4 accent-[var(--tgpi-navy-raised)]"/>{label}</label>)}</fieldset></section>
-            <p className="px-2 text-xs leading-6 text-slate-500">Private to your account. <Link href="/privacy" className="underline"><LocalizedText text="Privacy" /></Link><br/>Email and security sign-in delivery await their external integrations.</p>
+        <div className={styles.layout}>
+          <div className={styles.mainColumn}>
+            <nav aria-label={t("title")} className={styles.tabs}>
+              {(
+                [
+                  "all",
+                  "unread",
+                  "priority",
+                  ...notificationCategories,
+                  "archived",
+                ] as NotificationTextKey[]
+              ).map((key) => (
+                <button
+                  type="button"
+                  key={key}
+                  aria-pressed={filter === key}
+                  onClick={() => setFilter(key)}
+                >
+                  {t(key)}
+                </button>
+              ))}
+            </nav>
+            <section className={styles.feed} aria-label={t("title")}>
+              <div className={styles.feedControls}>
+                <label>
+                  <NavigationIcon name="search" width={18} />
+                  <span className="sr-only">{t("search")}</span>
+                  <input
+                    type="search"
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder={t("search")}
+                  />
+                </label>
+                <button
+                  type="button"
+                  disabled={!unread || inbox.pending}
+                  onClick={() => void inbox.markAllRead()}
+                >
+                  {t("readRecent")}
+                </button>
+              </div>
+              {inbox.error && (
+                <div role="alert" className={styles.notice}>
+                  {t("error")}{" "}
+                  <button type="button" onClick={() => void inbox.refresh()}>
+                    {t("refresh")}
+                  </button>
+                </div>
+              )}
+              {inbox.loading ? (
+                <div className={styles.empty} role="status">
+                  {t("loading")}
+                </div>
+              ) : !visible.length && !inbox.error ? (
+                <div className={styles.empty}>
+                  <NavigationIcon name="check" width={42} />
+                  <h2>{t("empty")}</h2>
+                  <p>{t("emptyBody")}</p>
+                </div>
+              ) : null}
+              {!inbox.loading &&
+                groups.map(
+                  (group) =>
+                    group.items.length > 0 && (
+                      <section key={group.label} className={styles.group}>
+                        <h2>
+                          {t(
+                            group.label.toLowerCase() as
+                              | "today"
+                              | "yesterday"
+                              | "earlier",
+                          )}
+                        </h2>
+                        <ul>
+                          {group.items.map((item) => (
+                            <li
+                              key={item.id}
+                              className={styles.row}
+                              data-unread={!item.readAt}
+                            >
+                              <article>
+                                <span className={styles.categoryIcon}>
+                                  <NavigationIcon
+                                    name={icons[item.category] || "bell"}
+                                    width={22}
+                                  />
+                                </span>
+                                <div className={styles.content}>
+                                  <div className={styles.rowMeta}>
+                                    <span>{t(item.category)}</span>
+                                    {item.important && <b>{t("priority")}</b>}
+                                    {!item.readAt && (
+                                      <i aria-label={t("unread")} />
+                                    )}
+                                  </div>
+                                  <Link
+                                    href={item.href}
+                                    onClick={() => {
+                                      if (!item.readAt)
+                                        void inbox.mutate(item.id, "read");
+                                    }}
+                                  >
+                                    <h3>{item.title}</h3>
+                                    <p>{item.body}</p>
+                                  </Link>
+                                  <time
+                                    dateTime={item.createdAt}
+                                    title={
+                                      now
+                                        ? time(item.createdAt)
+                                        : item.createdAt
+                                    }
+                                    suppressHydrationWarning
+                                  >
+                                    {now ? time(item.createdAt) : ""}
+                                    {item.timestampKind === "observed"
+                                      ? ` · ${t("observed")}`
+                                      : ""}
+                                  </time>
+                                  <div className={styles.rowActions}>
+                                    <Link
+                                      href={item.href}
+                                      onClick={() => {
+                                        if (!item.readAt)
+                                          void inbox.mutate(item.id, "read");
+                                      }}
+                                    >
+                                      {item.actionLabel} →
+                                    </Link>
+                                    <button
+                                      type="button"
+                                      disabled={inbox.pending}
+                                      onClick={() =>
+                                        void inbox.mutate(
+                                          item.id,
+                                          item.readAt ? "unread" : "read",
+                                        )
+                                      }
+                                    >
+                                      {t(item.readAt ? "unreadAction" : "read")}
+                                    </button>
+                                    {!item.archivedAt && (
+                                      <button
+                                        type="button"
+                                        disabled={inbox.pending}
+                                        onClick={() =>
+                                          void inbox.mutate(item.id, "archive")
+                                        }
+                                      >
+                                        {t("archive")}
+                                      </button>
+                                    )}
+                                  </div>
+                                </div>
+                              </article>
+                            </li>
+                          ))}
+                        </ul>
+                      </section>
+                    ),
+                )}
+              {inbox.nextCursor && (
+                <button
+                  type="button"
+                  className={styles.loadMore}
+                  disabled={inbox.pending}
+                  onClick={() => void inbox.loadMore()}
+                >
+                  {t("more")}
+                </button>
+              )}
+            </section>
+          </div>
+          <aside className={styles.sidebar}>
+            <NotificationDevices />
+            {showPreferences && <NotificationPreferences />}
+            <section className={`${styles.panel} ${styles.research}`}>
+              <NavigationIcon name="compass" width={27} />
+              <h2>{t("researchTitle")}</h2>
+              <p>{t("researchBody")}</p>
+              <Link href="/countries">{t("explore")} →</Link>
+            </section>
           </aside>
         </div>
       </div>

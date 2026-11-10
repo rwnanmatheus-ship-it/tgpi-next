@@ -1,5 +1,8 @@
 import { parsePreferences } from "@/lib/notifications/model";
-import { accountInbox, updateAccountInbox } from "@/lib/notifications/account-inbox.server";
+import {
+  accountInbox,
+  updateAccountInbox,
+} from "@/lib/notifications/account-inbox.server";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import {
@@ -23,7 +26,12 @@ export async function GET(request: Request) {
       const { state: _state, ...page } = await accountInbox(userId);
       void _state;
       return json(page);
-    } catch { return json({ error: "Unable to load account updates. Please retry." }, 503); }
+    } catch {
+      return json(
+        { error: "Unable to load account updates. Please retry." },
+        503,
+      );
+    }
   }
   try {
     const cursor = new URL(request.url).searchParams.get("cursor") || undefined;
@@ -52,14 +60,36 @@ export async function PATCH(request: Request) {
       return json({ error: "Invalid notification action." }, 400);
     const input = parsed as Record<string, unknown>;
     if (!notificationsConfigured()) {
-      if (!["preferences", "read", "unread", "archive", "read_all"].includes(String(input.action)))
+      if (
+        !["preferences", "read", "unread", "archive", "read_all"].includes(
+          String(input.action),
+        )
+      )
         return json({ error: "Invalid notification action." }, 400);
       const found = await updateAccountInbox(userId, input);
-      return found ? json({ ok: true, ...(input.action === "preferences" ? { preferences: parsePreferences(input.preferences) } : {}) }) : json({ error: "Notification not found." }, 404);
+      return found
+        ? json({
+            ok: true,
+            ...(input.action === "preferences"
+              ? { preferences: parsePreferences(input.preferences) }
+              : {}),
+          })
+        : json({ error: "Notification not found." }, 404);
     }
     if (input.action === "read_all") {
-      const { items } = await listNotifications(userId);
-      await Promise.all(items.filter(item => !item.readAt && !item.archivedAt).map(item => mutateNotification(userId, item.id, "read")));
+      const ids = Array.isArray(input.ids)
+        ? input.ids
+        : (await listNotifications(userId)).items
+            .filter((item) => !item.readAt && !item.archivedAt)
+            .map((item) => item.id);
+      if (
+        ids.length > 50 ||
+        ids.some((id) => typeof id !== "string" || !/^[a-f0-9]{64}$/.test(id))
+      )
+        return json({ error: "Invalid notification IDs." }, 400);
+      await Promise.all(
+        ids.map((id) => mutateNotification(userId, String(id), "read")),
+      );
       return json({ ok: true });
     }
     if (input.action === "preferences")

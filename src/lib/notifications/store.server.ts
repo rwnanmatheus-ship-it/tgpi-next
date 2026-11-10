@@ -15,14 +15,19 @@ import {
   type NotificationPreferences,
 } from "./model";
 
-const userPath = (uid: string) => `tgpiNotificationUsers/${uid}`;
+import {
+  notificationUserPath as userPath,
+  notificationItemPath,
+  notificationJobPath,
+} from "./paths";
+import { pushCategoryEnabled } from "./push-policy";
 export const notificationId = (uid: string, key: string) =>
   createHash("sha256").update(`${uid}:${key}`).digest("hex");
 export function notificationsConfigured() {
   return Boolean(
     process.env.TGPI_FIREBASE_CLIENT_EMAIL &&
       process.env.TGPI_FIREBASE_PRIVATE_KEY &&
-      process.env.TGPI_NOTIFICATIONS_SECURITY_RULES_CONFIRMED === "true",
+      process.env.TGPI_LEARNING_SECURITY_RULES_CONFIRMED === "true",
   );
 }
 export async function getNotificationPreferences(uid: string) {
@@ -33,20 +38,39 @@ export async function getNotificationPreferences(uid: string) {
 }
 export async function saveNotificationPreferences(uid: string, value: unknown) {
   const preferences = parsePreferences(value);
-  await runFirestoreTransaction(async () => ({
-    result: preferences,
-    writes: [
-      createFirestoreUpdateWrite(userPath(uid), {
-        preferences,
-        updatedAt: new Date().toISOString(),
-      }),
-    ],
-  }));
+  await runFirestoreTransaction(async ({ getDocuments }) => {
+    const current = (
+      await getDocuments<
+        Record<string, import("@/lib/firestore-admin-rest.server").JsonValue>
+      >([userPath(uid)])
+    ).get(userPath(uid));
+    return {
+      result: preferences,
+      writes: [
+        createFirestoreUpdateWrite(
+          userPath(uid),
+          {
+            ...current?.data,
+            preferences,
+            updatedAt: new Date().toISOString(),
+            nextSyncAt: 0,
+          },
+          current ? { updateTime: current.updateTime } : { exists: false },
+        ),
+      ],
+    };
+  });
   return preferences;
 }
 export async function publishNotification(
   uid: string,
   event: NotificationEvent,
+  options: {
+    silent?: boolean;
+    readAt?: string | null;
+    archivedAt?: string | null;
+    createdAt?: string;
+  } = {},
 ) {
   if (!notificationsConfigured())
     throw new Error("Notification storage is not configured.");
@@ -59,7 +83,7 @@ export async function publishNotification(
   )
     throw new Error("Invalid notification event.");
   const id = notificationId(uid, event.key);
-  const path = `tgpiNotificationInbox/${id}`;
+  const path = notificationItemPath(uid, id);
   return runFirestoreTransaction(async ({ getDocuments }) => {
     const docs = await getDocuments<
       InboxNotification | { preferences: NotificationPreferences }
@@ -78,18 +102,19 @@ export async function publishNotification(
       important: Boolean(event.important),
       uid,
       id,
-      createdAt: now,
-      readAt: null,
-      archivedAt: null,
+      createdAt: options.createdAt || event.occurredAt || now,
+      timestampKind: event.occurredAt ? "event" : "observed",
+      readAt: options.readAt || null,
+      archivedAt: options.archivedAt || null,
     };
     const writes = [
       createFirestoreUpdateWrite(path, { ...item }, { exists: false }),
     ];
     // The durable intent is atomic with the inbox item. No delivery is claimed until a real provider accepts it.
-    if (wantsEmail(event, preferences))
+    if (!options.silent && wantsEmail(event, preferences))
       writes.push(
         createFirestoreUpdateWrite(
-          `tgpiNotificationEmailOutbox/${id}`,
+          `${userPath(uid)}/emailIntents/${id}`,
           {
             uid,
             notificationId: id,
@@ -97,6 +122,28 @@ export async function publishNotification(
             createdAt: now,
             status: "awaiting_provider",
             attempts: 0,
+          },
+          { exists: false },
+        ),
+      );
+    if (
+      !options.silent &&
+      !item.readAt &&
+      !item.archivedAt &&
+      pushCategoryEnabled(event, preferences)
+    )
+      writes.push(
+        createFirestoreUpdateWrite(
+          notificationJobPath(id),
+          {
+            uid,
+            notificationId: id,
+            status: "pending",
+            attempts: 0,
+            nextAttemptAt: Date.now(),
+            createdAt: now,
+            expiresAt: Date.now() + 48 * 3600000,
+            deliveredDevices: [],
           },
           { exists: false },
         ),
@@ -110,33 +157,30 @@ function decodeCursor(value: string, uid: string) {
   ) as { name: string; date: string; uid: string };
   if (
     cursor.uid !== uid ||
-    !/^projects\/[^/]+\/databases\/\(default\)\/documents\/tgpiNotificationInbox\/[a-f0-9]{64}$/.test(
-      cursor.name,
+    !cursor.name.endsWith(
+      `/${userPath(uid)}/inbox/${cursor.name.split("/").at(-1)}`,
     ) ||
+    !/^[a-f0-9]{64}$/.test(cursor.name.split("/").at(-1) || "") ||
     !Number.isFinite(Date.parse(cursor.date))
   )
     throw new Error("Invalid cursor.");
   return [{ stringValue: cursor.date }, { referenceValue: cursor.name }];
 }
 export async function listNotifications(uid: string, before?: string) {
-  const documents = await runFirestoreQuery<InboxNotification>({
-    from: [{ collectionId: "tgpiNotificationInbox" }],
-    where: {
-      fieldFilter: {
-        field: { fieldPath: "uid" },
-        op: "EQUAL",
-        value: { stringValue: uid },
-      },
+  const documents = await runFirestoreQuery<InboxNotification>(
+    {
+      from: [{ collectionId: "inbox" }],
+      orderBy: [
+        { field: { fieldPath: "createdAt" }, direction: "DESCENDING" },
+        { field: { fieldPath: "__name__" }, direction: "DESCENDING" },
+      ],
+      ...(before
+        ? { startAt: { values: decodeCursor(before, uid), before: false } }
+        : {}),
+      limit: 50,
     },
-    orderBy: [
-      { field: { fieldPath: "createdAt" }, direction: "DESCENDING" },
-      { field: { fieldPath: "__name__" }, direction: "DESCENDING" },
-    ],
-    ...(before
-      ? { startAt: { values: decodeCursor(before, uid), before: false } }
-      : {}),
-    limit: 50,
-  });
+    userPath(uid),
+  );
   return {
     items: documents.map((d) => d.data),
     nextCursor:
@@ -157,7 +201,7 @@ export async function mutateNotification(
   action: "read" | "unread" | "archive",
 ) {
   if (!/^[a-f0-9]{64}$/.test(id)) throw new Error("Invalid notification ID.");
-  const path = `tgpiNotificationInbox/${id}`;
+  const path = notificationItemPath(uid, id);
   return runFirestoreTransaction(async ({ getDocuments }) => {
     const doc = (await getDocuments<InboxNotification>([path])).get(path);
     if (!doc || doc.data.uid !== uid) return { result: false, writes: [] };

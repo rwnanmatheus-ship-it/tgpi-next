@@ -42,7 +42,8 @@ self.addEventListener("activate", (event) => {
         Promise.all(
           keys
             .filter(
-              (key) => key.startsWith("tgpi-public-shell-") && key !== CACHE_NAME,
+              (key) =>
+                key.startsWith("tgpi-public-shell-") && key !== CACHE_NAME,
             )
             .map((key) => caches.delete(key)),
         ),
@@ -105,12 +106,99 @@ self.addEventListener("fetch", (event) => {
         if (cached) return cached;
         const response = await fetch(request);
         if (response.ok) {
-          event.waitUntil(
-            cacheStaticAsset(request, response.clone()),
-          );
+          event.waitUntil(cacheStaticAsset(request, response.clone()));
         }
         return response;
       }),
     );
   }
+});
+
+// Web Push uses the same public-shell worker. No private API response is cached.
+function safePushHref(value) {
+  if (
+    typeof value !== "string" ||
+    !/^\/(?!\/)/.test(value) ||
+    /[\\\u0000-\u0020\u007f]/.test(value)
+  )
+    return "/notifications";
+  try {
+    const url = new URL(value, self.location.origin);
+    return url.origin === self.location.origin ? url.href : "/notifications";
+  } catch {
+    return "/notifications";
+  }
+}
+self.addEventListener("push", (event) => {
+  event.waitUntil(
+    (async () => {
+      let data = {};
+      try {
+        data = event.data?.json() || {};
+      } catch {
+        /* Use a privacy-safe fallback. */
+      }
+      await self.registration.showNotification(
+        typeof data.title === "string" ? data.title.slice(0, 160) : "TGPI",
+        {
+          body:
+            typeof data.body === "string"
+              ? data.body.slice(0, 1000)
+              : "A new update is available in TGPI.",
+          icon: "/pwa/icon-192.png",
+          badge: "/pwa/icon-192.png",
+          tag:
+            typeof data.tag === "string"
+              ? data.tag.slice(0, 120)
+              : "tgpi-update",
+          renotify: false,
+          data: {
+            href: safePushHref(data.href),
+            id: typeof data.id === "string" ? data.id : "",
+          },
+          ...(Number.isFinite(data.timestamp)
+            ? { timestamp: data.timestamp }
+            : {}),
+        },
+      );
+      if (self.navigator.setAppBadge)
+        await self.navigator.setAppBadge().catch(() => {});
+      for (const client of await self.clients.matchAll({
+        type: "window",
+        includeUncontrolled: true,
+      }))
+        client.postMessage({ type: "TGPI_NOTIFICATION_RECEIVED" });
+    })(),
+  );
+});
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+  event.waitUntil(
+    (async () => {
+      const id = event.notification.data?.id;
+      if (typeof id === "string" && /^[a-f0-9]{64}$/.test(id)) {
+        try { await fetch("/api/notifications", { method: "PATCH", credentials: "include", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ id, action: "read" }) }); } catch { /* Navigation still works offline. */ }
+      }
+      const href = safePushHref(event.notification.data?.href);
+      const windows = await self.clients.matchAll({
+        type: "window",
+        includeUncontrolled: true,
+      });
+      const client = windows.find(
+        (item) => new URL(item.url).origin === self.location.origin,
+      );
+      if (client) {
+        await client.navigate(href);
+        await client.focus();
+      } else await self.clients.openWindow(href);
+    })(),
+  );
+});
+self.addEventListener("message", (event) => {
+  if (event.data?.type !== "TGPI_BADGE") return;
+  const count = Math.max(0, Math.min(999, Number(event.data.count) || 0));
+  if (count && self.navigator.setAppBadge)
+    event.waitUntil(self.navigator.setAppBadge(count).catch(() => {}));
+  else if (self.navigator.clearAppBadge)
+    event.waitUntil(self.navigator.clearAppBadge().catch(() => {}));
 });

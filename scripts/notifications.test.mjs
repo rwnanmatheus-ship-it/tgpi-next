@@ -12,6 +12,8 @@ import {
   safeNotificationHref,
   billingEvent,
 } from "../src/lib/notifications/model.ts";
+import * as paths from "../src/lib/notifications/paths.ts";
+import * as policy from "../src/lib/notifications/push-policy.ts";
 const require = createRequire(import.meta.url);
 function storeHarness() {
   const documents = new Map();
@@ -61,17 +63,21 @@ function storeHarness() {
         env: {
           TGPI_FIREBASE_CLIENT_EMAIL: "test",
           TGPI_FIREBASE_PRIVATE_KEY: "test",
-          TGPI_NOTIFICATIONS_SECURITY_RULES_CONFIRMED: "true",
+          TGPI_LEARNING_SECURITY_RULES_CONFIRMED: "true",
         },
       },
       require: (name) =>
-        name === "server-only"
-          ? {}
-          : name.includes("firestore-admin")
-            ? firestore
-            : name === "./model"
-              ? { parsePreferences, safeNotificationHref, wantsEmail }
-              : require(name),
+        name === "./paths"
+          ? paths
+          : name === "./push-policy"
+            ? policy
+            : name === "server-only"
+              ? {}
+              : name.includes("firestore-admin")
+                ? firestore
+                : name === "./model"
+                  ? { parsePreferences, safeNotificationHref, wantsEmail }
+                  : require(name),
     },
   );
   return { api: testModule.exports, documents, writes };
@@ -119,16 +125,19 @@ test("same event is isolated across users; foreign read and archive are denied",
   assert.equal(await api.mutateNotification("user_B", a, "archive"), false);
   assert.equal(writes.length, count);
   await api.mutateNotification("user_A", a, "read");
-  assert.ok(documents.get(`tgpiNotificationInbox/${a}`).data.readAt);
+  assert.ok(documents.get(paths.notificationItemPath("user_A", a)).data.readAt);
   await api.mutateNotification("user_A", a, "unread");
-  assert.equal(documents.get(`tgpiNotificationInbox/${a}`).data.readAt, null);
+  assert.equal(
+    documents.get(paths.notificationItemPath("user_A", a)).data.readAt,
+    null,
+  );
 });
 test("email opt-out persists and prevents the outbox intent", async () => {
   const { api, writes } = storeHarness();
   await api.saveNotificationPreferences("user_A", { emailImportant: false });
   await api.publishNotification("user_A", welcomeEvent);
   assert.equal(
-    writes.some((w) => w.path.startsWith("tgpiNotificationEmailOutbox")),
+    writes.some((w) => w.path.includes("/emailIntents/")),
     false,
   );
 });

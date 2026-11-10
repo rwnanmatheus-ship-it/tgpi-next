@@ -7,6 +7,10 @@
     {
       "path": "/api/cron/community-maintenance",
       "schedule": "*/5 * * * *"
+    },
+    {
+      "path": "/api/cron/notifications",
+      "schedule": "* * * * *"
     }
   ]
 }
