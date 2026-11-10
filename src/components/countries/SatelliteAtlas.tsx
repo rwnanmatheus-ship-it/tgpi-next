@@ -7,14 +7,16 @@ import Link from "next/link";
 import type * as Leaflet from "leaflet";
 import locations from "@/data/country-map-locations.json";
 import { BASEMAP_URL, SATELLITE_LAYERS, isSatelliteDate, satelliteTileUrl, type SatelliteCatalog, type SatelliteSensor } from "@/lib/satellite";
-import { LocalizedText } from "@/components/localization/LocaleProvider";
+import { LocalizedText, useLocale } from "@/components/localization/LocaleProvider";
 
 
 export type SatelliteCountry = { slug: string; name: string };
 const points: Record<string, { lat: number; lng: number; zoom: number }> = locations;
+type TileStatus = { text: string; date?: string };
 export default function SatelliteAtlas({ countries, selectedSlug, onCountryPreview }: {
   countries: SatelliteCountry[]; selectedSlug: string; onCountryPreview: (slug: string) => void;
 }) {
+  const { locale, t } = useLocale();
   const container = useRef<HTMLDivElement>(null);
   const engine = useRef<typeof Leaflet | null>(null);
   const preview = useRef(onCountryPreview);
@@ -26,7 +28,7 @@ export default function SatelliteAtlas({ countries, selectedSlug, onCountryPrevi
   const [selectedDate, setSelectedDate] = useState("");
   const [followLatest, setFollowLatest] = useState(false);
   const [refresh, setRefresh] = useState(0);
-  const [tileStatus, setTileStatus] = useState("Preparing satellite map…");
+  const [tileStatus, setTileStatus] = useState<TileStatus>({ text: "Preparing satellite map…" });
   const [expanded, setExpanded] = useState(false);
   const latest = catalog?.layers[sensor].latest || "";
   const previous = latest ? new Date(Date.parse(`${latest}T12:00:00Z`) - 86_400_000).toISOString().slice(0, 10) : "";
@@ -64,7 +66,7 @@ export default function SatelliteAtlas({ countries, selectedSlug, onCountryPrevi
       observer = new ResizeObserver(() => instance?.invalidateSize({ pan: false }));
       observer.observe(container.current);
       setMap(instance);
-    }).catch(() => setTileStatus("The map could not start. Reload the page to retry."));
+    }).catch(() => setTileStatus({ text: "The map could not start. Reload the page to retry." }));
     return () => { cancelled = true; observer?.disconnect(); instance?.remove(); };
   }, []);
 
@@ -77,9 +79,9 @@ export default function SatelliteAtlas({ countries, selectedSlug, onCountryPrevi
       attribution: 'Imagery: <a href="https://earthdata.nasa.gov/gibs" target="_blank" rel="noreferrer">NASA GIBS / LANCE</a>',
       keepBuffer: 1,
     });
-    layer.on("loading", () => { failed = false; setTileStatus("Loading imagery…"); });
-    layer.on("tileerror", () => { failed = true; setTileStatus("Some imagery tiles are unavailable. Try the previous day, another sensor or Terrain reference."); });
-    layer.on("load", () => { if (!failed) setTileStatus(mode === "terrain" ? "Terrain reference loaded · Historical composite, not current observations." : `Imagery tiles loaded for ${date} UTC · Coverage may be incomplete or obscured by clouds.`); });
+    layer.on("loading", () => { failed = false; setTileStatus({ text: "Loading imagery…" }); });
+    layer.on("tileerror", () => { failed = true; setTileStatus({ text: "Some imagery tiles are unavailable. Try the previous day, another sensor or Terrain reference." }); });
+    layer.on("load", () => { if (!failed) setTileStatus(mode === "terrain" ? { text: "Terrain reference loaded · Historical composite, not current observations." } : { text: "Imagery tiles loaded for {date} UTC · Coverage may be incomplete or obscured by clouds.", date }); });
     layer.addTo(map);
     return () => { layer.off(); layer.remove(); };
   }, [map, date, sensor, mode, refresh]);
@@ -91,11 +93,11 @@ export default function SatelliteAtlas({ countries, selectedSlug, onCountryPrevi
     for (const item of countries) {
       const point = points[item.slug]; if (!point) continue;
       const selected = item.slug === selectedSlug;
-      const label = document.createElement("span"); label.textContent = item.name;
+      const label = document.createElement("span"); label.textContent = t(item.name);
       L.circleMarker([point.lat, point.lng], { radius: selected ? 8 : 4, color: selected ? "#ffda80" : "#fff", weight: selected ? 3 : 1, fillColor: selected ? "#e0b356" : "#0a2842", fillOpacity: .9 }).bindTooltip(label, { direction: "top" }).on("click", () => preview.current(item.slug)).addTo(group);
     }
     return () => { group.remove(); };
-  }, [map, countries, selectedSlug]);
+  }, [map, countries, selectedSlug, locale, t]);
 
   useEffect(() => {
     const point = points[selectedSlug];
@@ -117,8 +119,8 @@ export default function SatelliteAtlas({ countries, selectedSlug, onCountryPrevi
     </div>
     <div className="satellite-actions"><button type="button" disabled={!date || mode === "terrain" || date === catalog?.layers[sensor].earliest} onClick={previousDay}><LocalizedText text={"← Previous day"} /></button><button type="button" disabled={!catalog || mode === "terrain"} onClick={() => { setSelectedDate(""); setFollowLatest(true); setRefresh(value => value + 1); }}><LocalizedText text={"Latest available"} /></button><button type="button" onClick={() => setRefresh(value => value + 1)}><LocalizedText text={"Refresh imagery"} /></button><button type="button" onClick={() => map?.setView([20, 0], 2)}><LocalizedText text={"World view"} /></button><button type="button" aria-pressed={expanded} onClick={() => setExpanded(!expanded)}>{expanded ? <LocalizedText text={"Compact map"} /> : <LocalizedText text={"Expand map"} />}</button></div>
     {catalogError && <p className="ig-caution" role="alert"><LocalizedText text={catalogError} />{catalog ? <LocalizedText text={" Last successful catalog check: {value0} UTC."} values={{value0: String(catalog.checkedAt.slice(0, 16).replace("T", " "))}} /> : ""}</p>}
-    <LocalizedElement as="div" ref={container} className="satellite-map" role="region" aria-label={`Satellite imagery for ${country?.name || "the world"}. Use arrow keys to pan and plus or minus to zoom.`} />
-    <div className="satellite-status"><p role="status">{tileStatus}</p>{country && <Link className="ig-link" href={`/countries/${country.slug}`}><LocalizedText text="Explore" />{" "}<LocalizedText text={country.name} /> →</Link>}</div>
+    <LocalizedElement as="div" ref={container} className="satellite-map" role="region" aria-label={t("Satellite imagery: {country}. Use arrow keys to pan and plus or minus to zoom.", { country: country ? t(country.name) : t("the world") })} />
+    <div className="satellite-status"><p role="status"><LocalizedText text={tileStatus.text} values={tileStatus.date ? { date: new Intl.DateTimeFormat(locale, { dateStyle: "medium", timeZone: "UTC" }).format(new Date(`${tileStatus.date}T12:00:00Z`)) } : undefined} /></p>{country && <Link className="ig-link" href={`/countries/${country.slug}`}><LocalizedText text="Explore" />{" "}<LocalizedText text={country.name} /> →</Link>}</div>
     <div className="satellite-facts"><span><strong>{mode === "terrain" ? <LocalizedText text={"Reference composite"} /> : date || <LocalizedText text={"Checking source…"} />}</strong>{mode === "terrain" ? <LocalizedText text={"Not a current capture"} /> : <LocalizedText text={"Observation day · UTC"} />}</span><span><strong>{mode === "terrain" ? <LocalizedText text={"NASA Blue Marble"} /> : SATELLITE_LAYERS[sensor].label}</strong>{mode === "terrain" ? <LocalizedText text={"Relief & bathymetry"} /> : SATELLITE_LAYERS[sensor].resolution}</span><span><strong>{catalog ? catalog.checkedAt.slice(11, 16) + " UTC" : <LocalizedText text={"Pending"} />}</strong><LocalizedText text={"Catalog checked"} />{catalog ? <LocalizedText text={" · {value0}"} values={{value0: String(catalog.checkedAt.slice(0, 10))}} /> : ""}</span></div>
     <p className="ig-small"><LocalizedText text={"Daily satellite imagery, not live video or street-level photography. The initial view uses the previous source day for broader coverage; choose Latest available to inspect the newest day. Black areas can mean no observations. Near real-time products generally arrive within a few hours of observation; today’s coverage can be partial. Clouds, night and missing passes can obscure the surface. Try another date or sensor. The selected day is not an exact capture timestamp for every pixel. Markers locate countries approximately and do not define borders."} /></p>
     <a className="ig-link" href="https://worldview.earthdata.nasa.gov/" target="_blank" rel="noreferrer"><LocalizedText text={"Inspect imagery in NASA Worldview ↗"} /></a>

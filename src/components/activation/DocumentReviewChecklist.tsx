@@ -1,7 +1,7 @@
 "use client";
 
 
-import { LocalizedText } from "@/components/localization/LocaleProvider";
+import { LocalizedText, useLocale } from "@/components/localization/LocaleProvider";
 import Link from "next/link";
 import { useState } from "react";
 import { useActivationProgress } from "@/components/activation/ActivationProgressProvider";
@@ -21,6 +21,7 @@ export default function DocumentReviewChecklist({
   countrySlug: string;
   items: DocumentItem[];
 }) {
+  const { t } = useLocale();
   const { error, isAuthenticated, isLoading, mutate, progress } =
     useActivationProgress();
   const [pendingItemId, setPendingItemId] = useState("");
@@ -114,7 +115,7 @@ export default function DocumentReviewChecklist({
                   <LocalizedText text={item.title} />
                 </span>
                 <span className="mt-1 block text-sm leading-6 text-[#5E6875]">
-                  {item.text}
+                  <LocalizedText text={item.text} />
                 </span>
               </span>
             </label>
@@ -123,12 +124,13 @@ export default function DocumentReviewChecklist({
       </div>
 
       <p className="mt-4 min-h-5 text-xs font-bold text-[#8A5A0A]" aria-live="polite">
-        {error ||
-          (completion === 100
-            ? <LocalizedText text={"{value0} document review completed."} values={{value0: String(countryName)}} />
+        {error
+          ? <LocalizedText text={error} />
+          : completion === 100
+            ? <LocalizedText text={"{value0} document review completed."} values={{value0: t(countryName)}} />
             : isAuthenticated
               ? <LocalizedText text={"Changes are saved to your private workspace."} />
-              : "")}
+              : ""}
       </p>
     </div>
   );

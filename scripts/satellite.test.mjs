@@ -1,6 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
+import {resolve} from 'node:path';
+import React from 'react';
+import {renderToStaticMarkup} from 'react-dom/server';
+import {academyLocalizationFixture} from './helpers/academy-localization.mjs';
 import {parseSatelliteCatalog, satelliteTileUrl, isSatelliteDate, SATELLITE_LAYERS} from '../src/lib/satellite.ts';
 const fixture = Object.values(SATELLITE_LAYERS).map(layer => `<Layer><ows:Identifier>${layer.id}</ows:Identifier><Dimension><Default>2026-10-23</Default><Value>2015-11-24/2026-10-23/P1D</Value></Dimension></Layer>`).join('');
 test('NASA catalog dates come from the exact registered layer, never the current clock or a granule layer', () => {
@@ -30,4 +34,56 @@ test('every TGPI destination has a valid geographic focus point', () => {
   }
   assert.ok(locations.portugal.lat>36&&locations.portugal.lat<43);
   assert.ok(locations.portugal.lng>-10&&locations.portugal.lng<-6);
+});
+
+test('satellite status, map accessibility and country tooltips follow all six languages without changing map selection', () => {
+  const {messages, locales} = academyLocalizationFixture();
+  const originalDocument = globalThis.document;
+  try {
+    for (const locale of locales) {
+      const t = (key, values) => messages.translate(locale, key, values);
+      let stateIndex = 0, refIndex = 0;
+      const effects = [], tooltips = [];
+      const map = {};
+      const group = {addTo() {return this;}, remove() {}};
+      const leaflet = {
+        layerGroup: () => group,
+        circleMarker: () => ({
+          bindTooltip(label) {tooltips.push(label); return this;},
+          on() {return this;}, addTo() {return this;},
+        }),
+      };
+      globalThis.document = {createElement: () => ({textContent: ''})};
+      const localeProvider = {
+        useLocale: () => ({locale, t}),
+        LocalizedText: ({text, values}) => typeof text === 'string' ? t(text, values) : text,
+      };
+      const fixture = academyLocalizationFixture({
+        react: {
+          ...React,
+          useRef(value) {return {current: refIndex++ === 1 ? leaflet : value};},
+          useEffect(callback) {effects.push(callback);},
+          useState(initial) {
+            const current = stateIndex++;
+            if (current === 0) return [map, () => {}];
+            if (current === 8) return [{text: 'Imagery tiles loaded for {date} UTC · Coverage may be incomplete or obscured by clouds.', date: '2026-11-10'}, () => {}];
+            return [initial, () => {}];
+          },
+        },
+        'next/link': {__esModule: true, default: props => React.createElement('a', props)},
+        '@/components/localization/LocalizedElement': {LocalizedElement: ({as, ...props}) => React.createElement(as, props)},
+        '@/components/localization/LocaleProvider': localeProvider,
+        './LocaleProvider': localeProvider,
+      });
+      const Atlas = fixture.load(resolve('src/components/countries/SatelliteAtlas.tsx')).default;
+      const html = renderToStaticMarkup(React.createElement(Atlas, {countries: [{slug: 'united-states', name: 'United States'}], selectedSlug: 'united-states', onCountryPreview() {}}));
+      const country = t('United States');
+      const date = new Intl.DateTimeFormat(locale, {dateStyle: 'medium', timeZone: 'UTC'}).format(new Date('2026-11-10T12:00:00Z'));
+      assert.ok(html.includes(t('Imagery tiles loaded for {date} UTC · Coverage may be incomplete or obscured by clouds.', {date})), locale);
+      assert.ok(html.includes(t('Satellite imagery: {country}. Use arrow keys to pan and plus or minus to zoom.', {country})), locale);
+      assert.ok(html.includes('value="united-states"'), locale);
+      effects[4]();
+      assert.deepEqual(tooltips.map(label => label.textContent), [country], locale);
+    }
+  } finally {globalThis.document = originalDocument;}
 });

@@ -112,7 +112,7 @@ export default function UpgradeStatusClient({ sessionId }: { sessionId: string }
         <div className="bg-[#0B1F3A] p-8 text-center text-white sm:p-12">
           <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#F0D58C]"><LocalizedText text={"Secure checkout verification"} /></p>
           <h1 className="mt-4 font-[var(--tgpi-font-display)] text-5xl font-semibold tracking-[-0.04em]"><LocalizedText text={"Subscription status"} /></h1>
-          <p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-[#C7D0DC]" role="status">{status}</p>
+          <p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-[#C7D0DC]" role="status"><LocalizedText text={status} /></p>
         </div>
         <div className="p-8 text-center sm:p-10">
           {confirmed ? (

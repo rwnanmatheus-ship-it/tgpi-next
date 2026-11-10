@@ -29,12 +29,12 @@ export async function createMemberPng(data: ImagePayload, compact: boolean) {
   if (data.member.handle) wrap(`@${data.member.handle}`, 34, '#f0d58c');
   wrap(data.member.number, 28, '#b9cbdf');
   if (data.member.headline) wrap(data.member.headline, 34);
-  if (data.member.rank) wrap(t('TGPI progression: {rank}', { rank: data.member.rank.name }), 30, '#f0d58c');
+  if (data.member.rank) wrap(t('TGPI progression: {rank}', { rank: t(data.member.rank.name) }), 30, '#f0d58c');
   if (!compact) {
     if (data.member.bio) wrap(data.member.bio, 28);
     if (data.member.career.length) wrap(t('Self-declared: {career}', { career: data.member.career.join(' · ') }), 28);
-    if (data.member.languages.length) wrap(t('Declared languages: {languages}', { languages: data.member.languages.join(', ') }), 28);
-    if (data.member.goal || data.member.countries.length) wrap(t('Direction: {goal}', { goal: [data.member.goal, ...data.member.countries.map(c => c.name)].filter(Boolean).join(' · ') }), 28);
+    if (data.member.languages.length) wrap(t('Declared languages: {languages}', { languages: data.member.languages.map(language => t(language)).join(', ') }), 28);
+    if (data.member.goal || data.member.countries.length) wrap(t('Direction: {goal}', { goal: [data.member.goal ? t(data.member.goal) : '', ...data.member.countries.map(c => t(c.name))].filter(Boolean).join(' · ') }), 28);
     for (const l of data.member.links) wrap(`${l.label}: ${l.url}`, 26);
     for (const c of data.member.courses) wrap(t('Recorded completion: {course}', { course: c.title }), 26);
     for (const c of data.member.certificates) wrap(`${t('Credential: {title}', { title: c.title })} · theglobalpolymath.com${c.path}`, 26);

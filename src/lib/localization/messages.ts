@@ -11687,7 +11687,48 @@ export const messages = {
     "fr": "{rank} · {points} points",
     "de": "{rank} · {points} Punkte",
     "it": "{rank} · {points} punti"
+  },
+  "Imagery tiles loaded for {date} UTC · Coverage may be incomplete or obscured by clouds.": {
+    "en": "Imagery tiles loaded for {date} UTC · Coverage may be incomplete or obscured by clouds.",
+    "pt-BR": "Imagens de {date} UTC carregadas · A cobertura pode estar incompleta ou encoberta por nuvens.",
+    "es": "Imágenes del {date} UTC cargadas · La cobertura puede estar incompleta u oculta por las nubes.",
+    "fr": "Images du {date} UTC chargées · La couverture peut être incomplète ou masquée par les nuages.",
+    "de": "Bilddaten für {date} UTC geladen · Die Abdeckung kann unvollständig oder durch Wolken verdeckt sein.",
+    "it": "Immagini del {date} UTC caricate · La copertura potrebbe essere incompleta o oscurata dalle nuvole."
+  },
+  "Satellite imagery: {country}. Use arrow keys to pan and plus or minus to zoom.": {
+    "en": "Satellite imagery: {country}. Use arrow keys to pan and plus or minus to zoom.",
+    "pt-BR": "Imagens de satélite: {country}. Use as setas para mover o mapa e mais ou menos para ampliar ou reduzir.",
+    "es": "Imágenes satelitales: {country}. Usa las flechas para mover el mapa y las teclas más o menos para cambiar el zoom.",
+    "fr": "Images satellite : {country}. Utilisez les flèches pour déplacer la carte et les touches plus ou moins pour zoomer.",
+    "de": "Satellitenbilder: {country}. Verwenden Sie die Pfeiltasten, um die Karte zu verschieben, und Plus oder Minus zum Zoomen.",
+    "it": "Immagini satellitari: {country}. Usa le frecce per spostare la mappa e i tasti più o meno per lo zoom."
+  },
+  "{count} of {limit} selected": {
+    "en": "{count} of {limit} selected",
+    "pt-BR": "{count} de {limit} selecionados",
+    "es": "{count} de {limit} seleccionados",
+    "fr": "{count} sur {limit} sélectionnés",
+    "de": "{count} von {limit} ausgewählt",
+    "it": "{count} su {limit} selezionati"
+  },
+  "Explore internationally": {
+    "en": "Explore internationally",
+    "pt-BR": "Explorar o mundo",
+    "es": "Explorar el mundo",
+    "fr": "Explorer le monde",
+    "de": "Die Welt entdecken",
+    "it": "Esplorare il mondo"
+  },
+  "Build global knowledge": {
+    "en": "Build global knowledge",
+    "pt-BR": "Ampliar conhecimentos globais",
+    "es": "Ampliar conocimientos globales",
+    "fr": "Développer ses connaissances du monde",
+    "de": "Globales Wissen aufbauen",
+    "it": "Ampliare le conoscenze globali"
   }
+
 } as const satisfies Record<string, Record<Locale, string>>;
 
 export type MessageKey = keyof typeof messages;

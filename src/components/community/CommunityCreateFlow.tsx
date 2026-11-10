@@ -102,14 +102,14 @@ export default function CommunityCreateFlow({ close }: { close: () => void }) {
     <section className={s.panel} aria-label={localizeLabel("Create community")}>
       <p className={s.step}><LocalizedText text={"STEP"} />{" "}{step}{" "}<LocalizedText text={"OF 4"} /></p>
       <h2>
-        {
+        <LocalizedText text={
           [
             "Community identity",
             "Privacy & admission",
             "Rules & participation",
             "Review & create",
           ][step - 1]
-        }
+        } />
       </h2>
       {error && (
         <p className={s.error} role="alert">
@@ -173,7 +173,7 @@ export default function CommunityCreateFlow({ close }: { close: () => void }) {
                 <option value=""><LocalizedText text={"No course connection"} /></option>
                 {catalog.map((c) => (
                   <option key={c.id} value={c.id}>
-                    {c.title}
+                    <LocalizedText text={c.title} />
                   </option>
                 ))}
               </select>

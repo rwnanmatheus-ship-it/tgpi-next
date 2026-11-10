@@ -537,7 +537,7 @@ function CountriesStep({
         eyebrow="Step 2 of 5"
         title={localizeLabel("Which countries interest you?")}
         description="Select up to five countries. TGPI will use your choices to organize comparisons and recommendations."
-        aside={`${data.targetCountries.length}/5 selected`}
+        aside={localizeLabel("{count} of {limit} selected", { count: data.targetCountries.length, limit: 5 })}
       />
 
       <div className="mt-8 grid gap-3 sm:grid-cols-[1fr_210px]">
@@ -846,7 +846,7 @@ function PrioritiesStep({
         eyebrow="Step 5 of 5"
         title={localizeLabel("What matters most in your decisions?")}
         description="Choose three to five priorities. They will shape the order of information and comparisons in your TGPI experience."
-        aside={`${data.priorities.length}/5 selected`}
+        aside={localizeLabel("{count} of {limit} selected", { count: data.priorities.length, limit: 5 })}
       />
       <div className="mt-8 grid gap-3 sm:grid-cols-2">
         {priorities.map((priority, index) => {
@@ -910,9 +910,11 @@ function PlanSummary({
   completion: number;
   data: TgpiOnboardingData;
 }) {
+  const { locale, t } = useInterfaceLocale();
   const selectedCountries = data.targetCountries
     .map((slug) => countries.find((country) => country.slug === slug))
     .filter((country): country is OnboardingCountry => Boolean(country));
+  const formatList = (items: string[]) => new Intl.ListFormat(locale, { style: "long", type: "conjunction" }).format(items);
 
   return (
     <aside className="h-fit overflow-hidden rounded-[28px] bg-[var(--tgpi-navy-raised)] text-white shadow-[0_24px_65px_rgba(11,31,58,0.18)] xl:sticky xl:top-28">
@@ -944,7 +946,7 @@ function PlanSummary({
           label="Countries of interest"
           value={
             selectedCountries.length > 0
-              ? selectedCountries.map((country) => `${country.emoji} ${country.name}`).join(", ")
+              ? formatList(selectedCountries.map((country) => `${country.emoji} ${t(country.name)}`))
               : "No countries selected"
           }
         />
@@ -956,7 +958,7 @@ function PlanSummary({
           label="Priorities"
           value={
             data.priorities.length > 0
-              ? data.priorities.map((priority) => priorityLabels[priority]).join(", ")
+              ? formatList(data.priorities.map((priority) => t(priorityLabels[priority])))
               : "Set in the final step"
           }
           last
@@ -1038,7 +1040,7 @@ function OptionCard({
       </span>
       <span>
         <span className="block text-sm font-extrabold text-[var(--tgpi-navy-raised)]"><LocalizedText text={label} /></span>
-        <span className="mt-1 block text-xs leading-5 text-[#657082]">{detail}</span>
+        <span className="mt-1 block text-xs leading-5 text-[#657082]"><LocalizedText text={detail} /></span>
       </span>
     </button>
   );
@@ -1056,7 +1058,7 @@ function SummaryItem({
   return (
     <div className={last ? "py-4" : "border-b border-white/10 py-4"}>
       <dt className="text-[9px] font-extrabold uppercase tracking-[0.2em] text-[#8FA1B5]"><LocalizedText text={label} /></dt>
-      <dd className="mt-2 text-sm font-bold leading-6 text-white">{value}</dd>
+      <dd className="mt-2 text-sm font-bold leading-6 text-white"><LocalizedText text={value} /></dd>
     </div>
   );
 }
