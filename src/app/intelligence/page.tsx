@@ -71,7 +71,7 @@ export default async function IntelligencePage({ searchParams }: { searchParams:
     <main className={styles.shell}>
       <header className={styles.hero} aria-labelledby="intelligence-title">
         <div className={styles.heroScene} aria-hidden="true">
-          <Image src={heroImage} alt="" fill sizes="100vw" quality={88} fetchPriority="high" />
+          <Image src={heroImage} alt="" fill sizes="(max-width: 767px) 100vw, 72vw" quality={88} fetchPriority="high" />
         </div>
         <div className={`${styles.wrap} ${styles.heroInner}`}>
           <div className={styles.heroCopy}>
@@ -84,7 +84,6 @@ export default async function IntelligencePage({ searchParams }: { searchParams:
               <a className={styles.darkButton} href="#methodology"><Copy text="See how we verify" /><span aria-hidden="true">↓</span></a>
             </div>
           </div>
-          <div className={styles.heroStamp} aria-hidden="true"><i /><span>TGPI</span><small><Copy text="Intelligence Graph" /></small></div>
         </div>
         <ul className={`${styles.wrap} ${styles.heroMetrics}`}>
           {stats.map(({ value, label }) => <li key={label}><strong>{value}</strong><span><Copy text={label} /></span></li>)}

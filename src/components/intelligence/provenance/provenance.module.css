@@ -23,25 +23,23 @@
   background: #040c18;
   border-bottom: 1px solid #d2ac624d;
 }
-.heroScene { position: absolute; inset: 0; z-index: -1; }
+.heroScene { position: absolute; inset: 0 0 0 28%; z-index: -1; }
 .heroScene img { object-fit: cover; object-position: 50% 50%; }
 .heroScene::after {
   content: "";
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(0deg, #060f1d 0%, #060f1d66 23%, transparent 56%),
-    linear-gradient(90deg, #050b16f5 0%, #050b16ba 37%, #050b1629 65%, transparent 88%);
+    linear-gradient(90deg, #040c18 0%, #040c18d9 16%, #040c1857 43%, transparent 70%),
+    linear-gradient(0deg, #060f1d 0%, #060f1d66 23%, transparent 56%);
 }
 .heroInner {
-  min-height: clamp(460px, 42vw, 620px);
+  min-height: clamp(410px, 32vw, 484px);
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 24px;
-  padding-block: 52px;
+  padding-block: 39px;
 }
-.heroCopy { width: min(100%, 690px); }
+.heroCopy { width: min(100%, 710px); }
 .kicker {
   display: flex;
   align-items: baseline;
@@ -63,7 +61,7 @@
 }
 .hero h1 {
   margin: 12px 0 18px;
-  font: 600 clamp(3.75rem, 7.1vw, 7rem)/.87 var(--tgpi-font-display);
+  font: 600 clamp(3.15rem, 5.25vw, 5.5rem)/.99 var(--tgpi-font-display);
   letter-spacing: -.042em;
   text-wrap: balance;
   overflow-wrap: anywhere;
@@ -89,29 +87,11 @@
 .goldButton:hover { background: #ffe9b7; }
 .darkButton { color: #fff; background: #0a1c31d9; border-color: #91acd778; }
 .darkButton:hover { background: #162e4c; border-color: #a9c7f4; }
-.heroStamp {
-  align-self: end;
-  flex: 0 0 auto;
-  display: grid;
-  grid-template-columns: 8px 1fr;
-  align-items: center;
-  gap: 1px 9px;
-  padding: 12px 16px;
-  background: #071423dc;
-  border: 1px solid #e1bd7761;
-  border-radius: 8px;
-  color: #f7dfb1;
-  letter-spacing: .15em;
-  box-shadow: 0 12px 26px #030b1570;
-}
-.heroStamp i { width: 6px; height: 6px; border-radius: 50%; background: #f3cb80; }
-.heroStamp span { font-weight: 800; font-size: .8rem; }
-.heroStamp small { grid-column: 2; font-size: .62rem; font-weight: 750; text-transform: uppercase; }
 .heroMetrics {
   position: relative;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  margin-bottom: 24px;
+  margin-bottom: 18px;
   border: 1px solid #a3b5cf45;
   border-radius: 12px;
   overflow: hidden;
@@ -122,7 +102,7 @@
   display: flex;
   align-items: center;
   gap: 12px;
-  padding: 16px clamp(14px, 2.3vw, 30px);
+  padding: 12px clamp(14px, 2.3vw, 30px);
 }
 .heroMetrics li + li { border-inline-start: 1px solid #a3b5cf33; }
 .heroMetrics strong { flex: 0 0 auto; color: #f5d693; font: 700 clamp(2.15rem, 3.6vw, 3.2rem)/.95 var(--tgpi-font-display); font-variant-numeric: lining-nums tabular-nums; }
@@ -398,10 +378,9 @@
 @media (max-width: 767px) {
   .wrap { width: calc(100% - 32px); }
   .heroInner { padding-block: 200px 27px; min-height: 0; }
-  .heroScene { bottom: auto; height: 355px; }
+  .heroScene { inset: 0 0 auto; height: 355px; }
   .heroScene img { object-position: 91% 46%; }
   .heroScene::after { background: linear-gradient(0deg, #040c18 2%, #040c18eb 25%, #040c1844 55%, transparent 82%); }
-  .heroStamp { display: none; }
   .heroLabel { margin-top: 10px; }
   .shell .hero h1 { font-size: clamp(2.6rem, 9.3vw, 4.2rem); }
   .heroMetrics { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-bottom: 15px; }
@@ -411,13 +390,15 @@
   .sectionNav a { min-height: 48px; padding-inline: 9px; }
   .sectionNav a:nth-child(even) { border-inline-end: 1px solid #e8edf4; }
   .sectionNav a:nth-child(n+3) { border-block-start: 1px solid #e8edf4; }
-  .section, .method { scroll-margin-top: 6px; }
+  :global(#main-content) .shell :is(.section, .method) { scroll-margin-top: 6px; }
   .primarySources, .methodNotes { grid-template-columns: 1fr; }
   .platformGrid, .workflow { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .workflow li:nth-child(even) { border-inline-end: 1px solid #8fa9c649; }
   .workflow li:nth-child(n+3) { border-block-start: 1px solid #8fa9c649; }
 }
 @media (max-width: 540px) {
+  .heroActions { gap: 8px; }
+  .heroActions > a { gap: 8px; padding-inline: 11px; font-size: .75rem; }
   .headingWithSeal { align-items: flex-start; }
   .filters { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .filters label:last-child { grid-column: 1 / -1; }
