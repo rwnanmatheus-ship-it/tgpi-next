@@ -1,7 +1,7 @@
 "use client";
 import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 
-import Image from "next/image";
+import CinematicImage from "@/components/ui/CinematicImage";
 import Link from "next/link";
 import { useState } from "react";
 import type { DocumentsMemberModel } from "@/lib/documents-os";
@@ -30,7 +30,7 @@ export default function DocumentsMemberExperience({ firstName, globalId, model }
       <div className="tgpi-capability-frame documents-shell">
         <nav className="documents-breadcrumb" aria-label="Breadcrumb"><Link href="/profile"><LocalizedText text="Workspace" /></Link><span aria-hidden="true">/</span><span><LocalizedText text="Documents" /></span></nav>
         <header className="documents-hero">
-          <Image src="/images/documents/tgpi-documents-hero-v2.webp" alt="" fill priority sizes="(max-width: 900px) 100vw, 85rem" quality={85} className="documents-hero-image" />
+          <CinematicImage asset="global-documents-precision" alt="" priority sizes="(max-width: 900px) 100vw, 85rem" className="documents-hero-image" />
           <div className="documents-hero-copy">
             <p className="documents-eyebrow">TGPI · Preparation intelligence</p>
             <h1>{firstName}, make your next move a prepared one.</h1>

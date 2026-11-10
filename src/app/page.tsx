@@ -29,9 +29,9 @@ export const metadata: Metadata = {
     locale: "en_US",
     images: [
       {
-        url: "/images/home/editorial-v5/hero-desktop.webp",
-        width: 1536,
-        height: 1024,
+        url: "/images/cinematic-2026/global-horizon-1600.webp",
+        width: 1600,
+        height: 900,
         alt: "TGPI conceptual editorial image: planning an international next chapter",
       },
     ],
@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     title: "TGPI | The Global Polymath Institute",
     description:
       "Practical education, country intelligence and preparation for international life.",
-    images: ["/images/home/editorial-v5/hero-desktop.webp"],
+    images: ["/images/cinematic-2026/global-horizon-1600.webp"],
   },
 };
 

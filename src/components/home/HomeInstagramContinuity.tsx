@@ -10,28 +10,28 @@ const editorialVisuals: ReadonlyArray<{
   line: string;
 }> = [
   {
-    image: "/images/home/tgpi-home-country-intelligence-banner-v2.webp",
+    image: "/images/cinematic-2026/country-research-1600.webp",
     accent: "Country intelligence",
     imageAlt: "Global knowledge observatory connecting an atlas to international architecture",
     tone: "border-[#B8CBDC] bg-[#E8F0F6] text-[#174C73]",
     line: "bg-[var(--tgpi-blue)]",
   },
   {
-    image: "/images/home/tgpi-home-compare-intelligence-banner-v2.webp",
+    image: "/images/cinematic-2026/evidence-research-1600.webp",
     accent: "Compare",
     imageAlt: "Three international pathways compared through maps and a central compass",
     tone: "border-[#D8C187] bg-[#F6ECD2] text-[#6E4D16]",
     line: "bg-[var(--tgpi-gold)]",
   },
   {
-    image: "/images/home/tgpi-home-documents-intelligence-banner-v2.webp",
+    image: "/images/cinematic-2026/documents-preparation-1600.webp",
     accent: "Documents OS",
     imageAlt: "Organized evidence archive with blank folios and international verification instruments",
     tone: "border-[#AFCBC7] bg-[#E5EFEC] text-[#285D5F]",
     line: "bg-[var(--tgpi-teal)]",
   },
   {
-    image: "/images/home/tgpi-home-learning-intelligence-banner-v2.webp",
+    image: "/images/cinematic-2026/learning-atelier-1600.webp",
     accent: "TGPI Learning",
     imageAlt: "Global learning atelier with an atlas, practical workbook and capability cards",
     tone: "border-[#D3C8B9] bg-[#F4EFE6] text-[#51483D]",

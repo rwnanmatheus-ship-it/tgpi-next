@@ -208,7 +208,7 @@ test('Atlas preview renders in all six locales without enabling sending or makin
         if (name === 'react') return React;
         if (name === 'react/jsx-runtime') return runtime;
         if (name === '@/components/localization/LocaleProvider') return { useLocale: () => ({ locale, t }), LocalizedText: ({ text }) => t(text) };
-        if (name === 'next/image') return { __esModule: true, default: ({ alt }) => React.createElement('span', { 'data-alt': alt }) };
+        if (name === 'next/image' || name === '@/components/ui/CinematicImage') return { __esModule: true, default: ({ alt }) => React.createElement('span', { 'data-alt': alt }) };
         if (name === 'next/link') return { __esModule: true, default: ({ children, prefetch, ...props }) => React.createElement('a', props, children) };
         if (name === 'react-markdown') return { __esModule: true, default: ({ children }) => children };
         if (name === 'remark-gfm') return { __esModule: true, default: () => {} };

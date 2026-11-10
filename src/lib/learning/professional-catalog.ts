@@ -1,3 +1,4 @@
+import { courseArtwork } from "../cinematic-art";
 import { professionalCourseDrafts } from "../../data/courses/professional";
 import { professionalArtwork } from "../../data/courses/professional/artwork";
 import { professionalCourseEnabled } from "./professional-runtime";
@@ -10,7 +11,7 @@ export function professionalCatalog(environment: string | undefined): CourseOver
     return { id: course.id, title: course.title, desc: "Acesso antecipado. " + course.outcomes.join(" "), audience: course.prerequisites.join(" "), benefits: course.outcomes,
       category: goal === "global-mobility" ? "Language & Mobility" : goal === "global-economics" ? "Economics & Opportunity" : goal === "decision-intelligence" ? "Decision Intelligence" : "Technology & Adaptability",
       duration: `${estimateProfessionalMinutes(course) / 60}h estimadas`, format: "8 módulos, práticas e projeto", goal,
-      goalLabel: "Practical professional skills", href: `/courses/${course.id}`, image: `/images/courses/professional/${professionalArtwork[course.id].key}.webp`, imageAlt: professionalArtwork[course.id].alt,
+      goalLabel: "Practical professional skills", href: `/courses/${course.id}`, image: courseArtwork(course.id), imageAlt: professionalArtwork[course.id].alt,
       level: "Fundamentos aplicados", status: "available", releaseLabel: "Acesso antecipado · português",
       learningPolicy: { kind: 'professional', publicationStatus: 'early_access', accessPolicy: 'free_account', assessmentPolicy: 'quiz_project_review', credentialStatus: 'criteria_available', instructionLanguage: 'pt-BR' } };
   });

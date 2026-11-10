@@ -33,11 +33,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     changeFrequency: route.changeFrequency,
     priority: route.priority,
     ...(route.path === "" ? { images: [
-      `${siteUrl}/images/home/editorial-v5/hero-desktop.webp`,
+      `${siteUrl}/images/cinematic-2026/global-horizon-1600.webp`,
       `${siteUrl}/brand/tgpi-crest-metal-v3-256.png`,
     ] } : route.path === "/about" ? { images: [
-      `${siteUrl}/images/about/global-perspective-v2.webp`,
-      `${siteUrl}/images/about/practical-learning-v2.webp`,
+      `${siteUrl}/images/cinematic-2026/country-research-1600.webp`,
+      `${siteUrl}/images/cinematic-2026/learning-atelier-1600.webp`,
     ] } : {}),
   }));
 

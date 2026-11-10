@@ -593,3 +593,8 @@
     display: none;
   }
 }
+
+/* Editorial learning scene; the actual credential and issuer mark remain unchanged. */
+.certificate-course-art { position: relative; isolation: isolate; overflow: hidden; min-height: 220px; }
+.certificate-course-photo { z-index: -2; }
+.certificate-course-art::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, #071a32a6, #071a32ed); }

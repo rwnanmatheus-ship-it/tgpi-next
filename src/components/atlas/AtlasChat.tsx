@@ -1,6 +1,7 @@
 'use client';
 
 import Image from 'next/image';
+import CinematicImage from '@/components/ui/CinematicImage';
 import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
@@ -216,6 +217,7 @@ export default function AtlasChat({ userId, enabled = true, embedded = false }: 
         if (follow.current) setHasNew(false);
       }}>
         {!messages.length ? <div className={styles.welcome}>
+          {!embedded && <div className={styles.welcomeScene} aria-hidden="true"><CinematicImage asset="atlas-intelligence" alt="" sizes="(max-width: 767px) 90vw, 720px" /></div>}
           <Image src="/brand/atlas/welcome.webp" alt={t("Atlas, the TGPI explorer owl")} width={220} height={220} priority />
           <span className={styles.eyebrow}>{t("INTELLIGENCE FOR YOUR GLOBAL LIFE")}</span>
           <h2><LocalizedText text="A world of possibilities." /><br /><em><LocalizedText text="A clearer next step." /></em></h2>

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import CinematicImage from "@/components/ui/CinematicImage";
 import Link from "next/link";
 import { requireApiUser, requireUser } from "@/lib/auth/guards";
 import {
@@ -145,6 +146,7 @@ export default async function CertificatesPage() {
             </div>
             <article className="certificate-next">
               <div className="certificate-course-art" aria-hidden="true">
+                <CinematicImage asset="learning-achievement" alt="" sizes="(max-width: 760px) 100vw, 360px" className="certificate-course-photo" />
                 <Image
                   src="/brand/tgpi-crest-metal-v3.webp"
                   alt=""

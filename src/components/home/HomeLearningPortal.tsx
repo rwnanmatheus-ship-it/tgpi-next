@@ -66,7 +66,7 @@ export default function HomeLearningPortal() {
           <div className="overflow-hidden rounded-[32px] border border-white/12 bg-[var(--tgpi-navy)] p-4 text-white shadow-[var(--tgpi-shadow-premium)] sm:p-6">
             <div className="relative aspect-[3/2] overflow-hidden rounded-[24px] border border-white/10">
               <Image
-                src="/images/home/tgpi-home-global-learning-atelier-v1.webp"
+                src="/images/cinematic-2026/learning-atelier-1600.webp"
                 alt="TGPI global learning atelier with a world atlas and practical preparation workspace"
                 fill
                 quality={86}

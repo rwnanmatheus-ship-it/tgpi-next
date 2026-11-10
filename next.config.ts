@@ -11,6 +11,7 @@ const nextConfig: NextConfig = {
   },
   async headers() {
     return [
+      { source: "/images/cinematic-2026/:path*", headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }, { key: "X-Content-Type-Options", value: "nosniff" }] },
       { source: "/member/:path*", headers: [{ key: "Cache-Control", value: "private, no-store, max-age=0" }] },
       { source: "/members", headers: [{ key: "Cache-Control", value: "private, no-store, max-age=0" }] },
       {

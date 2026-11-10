@@ -27,7 +27,7 @@ export default async function CoursesPage({ searchParams }: { searchParams: Prom
     <header className="product-page-heading"><div><p className="product-kicker">TGPI / {t('Learning')}</p><h1>{t('Search your next skill')}</h1><p>{t('Choose a useful outcome. Practice it. Keep the evidence.')}</p></div><nav className="product-page-links" aria-label={t('Learning navigation')}><Link href="/profile">{t('My workspace')} ↗</Link><Link href="/certificates">{t('Certificates')} ↗</Link></nav></header>
     <LearningPathExplorer courses={catalog} initialFilters={parseCatalogFilters(params)} />
     <section className="product-catalog-art" aria-label={t('Put learning to work')}>
-      <Image src="/images/learning/tgpi-applied-learning-v3.webp" alt="" fill sizes="(min-width: 1024px) 80vw, 100vw" />
+      <Image src="/images/cinematic-2026/learning-atelier-1600.webp" alt="" fill sizes="(min-width: 1024px) 80vw, 100vw" />
       <div><p>{t('Put learning to work')}</p><h2>{t('One course. One concrete next step.')}</h2></div>
     </section>
     <CapabilitySystemRail active="learning" />

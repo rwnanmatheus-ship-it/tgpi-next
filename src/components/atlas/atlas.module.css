@@ -21,3 +21,6 @@
 .shell button{transition:background var(--tgpi-motion-control),border-color var(--tgpi-motion-control)}
 @media(max-width:767px){.shell{display:block;border-radius:0}.header{padding:10px 12px}.header h1{font-size:20px}.headerActions button{font-size:11px}.welcome{padding:22px 18px}.welcome h2{font-size:28px}.welcome>img{width:80px;height:80px}.privacy{font-size:11px}.composerArea{max-height:50%}.context summary,.privacy summary{min-height:36px}}
 .embedded .headerActions button{min-height:40px}.embedded .welcome h2{font-size:28px}
+.welcomeScene{position:relative;isolation:isolate;width:100%;max-width:720px;height:150px;margin:0 auto 22px;overflow:hidden;border:1px solid var(--tgpi-inverse-border);border-radius:var(--tgpi-radius-lg)}
+.welcomeScene::after{content:'';position:absolute;inset:0;background:linear-gradient(0deg,var(--tgpi-navy-deep),transparent 65%)}
+@media(max-width:767px){.welcomeScene{height:110px;margin-bottom:16px}}

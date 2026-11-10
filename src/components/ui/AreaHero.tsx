@@ -1,4 +1,6 @@
 import Image from "next/image";
+import CinematicImage from './CinematicImage';
+import { cinematicKeyFromUrl } from '@/lib/cinematic-art';
 import { LocalizedText } from "@/components/localization/LocaleProvider";
 import Link from "next/link";
 import type { ReactNode } from "react";
@@ -16,12 +18,13 @@ type Props = {
 };
 
 /** Shared material and hierarchy, with area-specific content and artwork. */
-export default function AreaHero({ id, eyebrow, title, description, image = "/images/platform/global-study-v1.webp", actions = [], children, headingLevel = 1 }: Props) {
+export default function AreaHero({ id, eyebrow, title, description, image = "/images/cinematic-2026/learning-atelier-1600.webp", actions = [], children, headingLevel = 1 }: Props) {
   const Heading = headingLevel === 1 ? "h1" : "h2";
+  const artwork = cinematicKeyFromUrl(image);
   return (
     <header className="tgpi-area-hero" aria-labelledby={id}>
       <div className="tgpi-area-hero-art" aria-hidden="true">
-        <Image src={image} alt="" fill priority sizes="(max-width: 767px) 100vw, 70vw" className="object-cover" />
+        {artwork ? <CinematicImage asset={artwork} alt="" priority sizes="(max-width: 767px) 100vw, 70vw" /> : <Image src={image} alt="" fill priority sizes="(max-width: 767px) 100vw, 70vw" className="object-cover" />}
       </div>
       <div className="tgpi-area-hero-content">
         <p className="tgpi-area-eyebrow"><LocalizedText text={eyebrow} /></p>

@@ -33,7 +33,7 @@ export default async function TGPIAuthShell({ children, mode }: TGPIAuthShellPro
     <main className={styles.page} data-access-version="3" data-access-mode={mode}>
       <div className={styles.shell}>
         <section className={styles.story} aria-label={t("Global education and decision intelligence")}>
-          <Image src="/images/auth/tgpi-global-library-v1.webp" alt={t("Globe and books in a sunlit research library overlooking an international city")} fill priority sizes="(min-width: 1024px) 520px, 1px" className={styles.photo} />
+          <Image src="/images/cinematic-2026/premium-library-1600.webp" alt={t("A sunlit research library with a circular window overlooking a city")} fill priority sizes="(min-width: 1024px) 520px, 1px" className={styles.photo} />
           <div className={styles.shade} />
           <Link href="/" className={styles.brand} aria-label={t("TGPI home")}>
             <span className={styles.crest}><BrandCrest fill sizes="44px" className="object-contain" /></span>

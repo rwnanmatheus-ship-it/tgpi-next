@@ -4,7 +4,7 @@ import CommunityConnections from '@/components/community/CommunityConnections';
 import GlobalRankBadge from './GlobalRankBadge';
 import { GLOBAL_RANK_DISCLAIMER, type GlobalRank } from '@/lib/global-ranks';
 import { Suspense } from 'react';
-import Image from 'next/image';
+import CinematicImage from '@/components/ui/CinematicImage';
 import Link from 'next/link';
 import type { GlobalWorkspaceModel } from '@/lib/global-workspace';
 import type { WorkspacePreferences, WorkspaceResource } from '@/lib/workspace-control';
@@ -56,7 +56,7 @@ export default async function GlobalWorkspaceOS({ learning, identity, model, onb
       <header className={styles.header}><div><p className={styles.eyebrow}><LocalizedText text="TGPI / Global Command Center" /></p><h1><LocalizedText text="Your world. In perspective." /></h1><p>{t("Welcome back, {name}.", { name: identity.fullName })}</p></div><div className={styles.actions}><WorkspaceCommandButton /><Link className={styles.quiet} href="/notifications"><LocalizedText text="Notifications ↗" /></Link><WorkspaceSyncButton /></div></header>
       {onboardingCompleted && <p role="status" className={styles.notice}><LocalizedText text="Your global context has been saved. Your workspace now reflects your plan." /></p>}
       <section className={styles.hero} aria-labelledby="mission-title">
-        <Image src="/images/workspace/command-center-v1.webp" alt="" fill priority sizes="(min-width: 1440px) 1400px, 100vw" className={styles.heroImage} />
+        <CinematicImage asset="workspace-global-focus" alt="" priority sizes="(min-width: 1440px) 1400px, 100vw" className={styles.heroImage} />
         <div className={styles.heroContent}><div className={styles.identityLine}><span className={styles.membership}>{t(identity.membership)}</span><span><LocalizedText text="Private workspace" /></span></div><p className={styles.eyebrow}><LocalizedText text="Your current direction" /></p><h2 id="mission-title">{t(model.goalLabel === 'Goal not defined' ? 'Start with a clear direction.' : model.goalLabel)}</h2><p>{resume ? `${t(resume.title)} · ${t(resume.detail)}` : t('Connect your goals, destinations and practical preparation in one place.')}</p><div className={styles.actions}><Link className={styles.primary} href={primary?.href ?? '/onboarding'}>{t(primary?.action ?? 'Define my direction')} <span aria-hidden="true">↗</span></Link><Link href="/profile/security">{identity.handle ? `@${identity.handle}` : t('Set up your @ID')} · {identity.globalId}</Link></div></div>
         <div className={styles.heroContext}><p className={styles.eyebrow}><LocalizedText text="Plan context" /></p><strong>{model.completion}<small>%</small></strong><p><LocalizedText text="Information supplied for your journey" /></p><Progress value={model.completion} label={t("Plan context supplied")} /><Link href="#workspace-personal"><LocalizedText text="See criteria ↓" /></Link></div>
       </section>

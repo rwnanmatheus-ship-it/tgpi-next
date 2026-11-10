@@ -2,6 +2,8 @@
 import { useLocale } from "@/components/localization/LocaleProvider";
 
 import Image from "next/image";
+import CinematicImage from "@/components/ui/CinematicImage";
+import { courseArtworkKeys } from "@/lib/cinematic-art";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import ContinueLearning from "./ContinueLearning";
@@ -70,7 +72,7 @@ function Catalog({ courses, initialFilters }: Props) {
       const policy = courseLearningPolicy(course);
       return <article key={course.id} className={styles.card}>
         <Link href={course.href} className={styles.cover} aria-label={t("Explore {course}", { course: t(course.title) })}>
-          <Image src={course.image} alt="" fill sizes="(max-width: 639px) 100vw, (max-width: 1100px) 50vw, 33vw" className={styles.image} quality={88} />
+          {courseArtworkKeys[course.id] ? <CinematicImage asset={courseArtworkKeys[course.id]} alt="" sizes="(max-width: 639px) calc(100vw - 40px), (max-width: 1100px) 46vw, 400px" className={styles.image} /> : <Image src={course.image} alt="" fill sizes="(max-width: 639px) 100vw, 33vw" className={styles.image} />}
           <span className={styles.badge}>{course.status === "available" ? policy.publicationStatus === "early_access" ? t("Early access") : policy.kind === "flagship" ? t("Flagship course") : t("New · Short course") : t("In development")}</span>
           {course.series && <span className={styles.seriesBadge}>{t(course.series)}<small>{t("Chapter {number}", { number: String(course.seriesOrder).padStart(2, "0") })}</small></span>}
           <span className={styles.coverArrow} aria-hidden="true">↗</span>

@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   title: "About TGPI | The Global Polymath Institute",
   description: "Discover The Global Polymath Institute: practical education, country intelligence and preparation for a more intentional global life.",
   alternates: { canonical: "/about" },
-  openGraph: { title: "The Global Polymath Institute", description: "Understand the world. Develop your capabilities. Choose your next step.", url: "/about", images: [{ url: "/images/about/global-perspective-v2.webp", width: 1536, height: 1024, alt: "A globe overlooking a city at blue hour — TGPI conceptual editorial image" }] },
+  openGraph: { title: "The Global Polymath Institute", description: "Understand the world. Develop your capabilities. Choose your next step.", url: "/about", images: [{ url: "/images/cinematic-2026/country-research-1600.webp", width: 1600, height: 900, alt: "A research globe overlooking a city at blue hour — TGPI conceptual editorial image" }] },
 };
 
 const pillars = [
@@ -37,7 +37,7 @@ export default async function AboutPage() {
     }).replace(/</g, "\\u003c") }} />
     <div className={styles.frame}>
       <section className={styles.hero} aria-labelledby="about-title">
-        <Image src="/images/about/global-perspective-v2.webp" alt={t("A brass globe and open notebook overlooking an international city at blue hour")} fill sizes="(max-width: 1280px) 100vw, 1280px" priority className={styles.heroImage} />
+        <Image src="/images/cinematic-2026/country-research-1600.webp" alt={t("A brass globe and open notebook overlooking an international city at blue hour")} fill sizes="(max-width: 1280px) 100vw, 1280px" priority className={styles.heroImage} />
         <div className={styles.heroContent}>
           <p className={styles.eyebrow}>The Global Polymath Institute</p>
           <h1 id="about-title"><LocalizedText text="A wider world." /><br /><LocalizedText text={"A clearer"} />{" "}<em><LocalizedText text={"direction."} /></em></h1>
@@ -56,7 +56,7 @@ export default async function AboutPage() {
         <div className={styles.pillars}>{pillars.map((pillar, index) => <Link href={pillar.href} key={pillar.name} className={styles.pillar}><div className={styles.pillarTop}><span>0{index + 1}</span><span aria-hidden="true">↗</span></div><h3><LocalizedText text={pillar.name} /></h3><strong><LocalizedText text={pillar.question} /></strong><p><LocalizedText text={pillar.text} /></p><span className={styles.pillarAction}><LocalizedText text={pillar.action} /> <span aria-hidden="true">→</span></span></Link>)}</div>
       </section>
       <section id="learning" className={`${styles.section} ${styles.learning}`}>
-        <figure className={styles.learningImage}><Image src="/images/about/practical-learning-v2.webp" alt={t("Adult learners collaborating over an atlas and notes in a library")} fill sizes="(max-width: 760px) 100vw, 55vw" /><figcaption><LocalizedText text={"Learning without borders · TGPI conceptual imagery"} /></figcaption></figure>
+        <figure className={styles.learningImage}><Image src="/images/cinematic-2026/learning-atelier-1600.webp" alt={t("Adult learners collaborating over an atlas and notes in a library")} fill sizes="(max-width: 760px) 100vw, 55vw" /><figcaption><LocalizedText text={"Learning without borders · TGPI conceptual imagery"} /></figcaption></figure>
         <div className={styles.learningCopy}><p className={styles.eyebrow}><LocalizedText text={"03 / The polymath mindset"} /></p><h2><LocalizedText text={"Connect what you know."} /><br /><em><LocalizedText text={"Expand what you can do."} /></em></h2><p><LocalizedText text={"Life across borders brings language, work, culture and everyday decisions together. Preparation benefits from the same breadth."} /></p><p><LocalizedText text={"For TGPI, being a polymath means connecting disciplines and applying knowledge. It is a mindset of curiosity, adaptability and practical action."} /></p><Link href="/courses" className={styles.textLink}><LocalizedText text={"Explore practical learning"} />{" "}<span aria-hidden="true">↗</span></Link></div>
       </section>
       <section id="principles" className={`${styles.section} ${styles.principles}`}>

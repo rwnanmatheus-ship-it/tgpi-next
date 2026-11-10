@@ -1,3 +1,4 @@
+import { courseArtwork } from "@/lib/cinematic-art";
 import type { Course, CourseLesson } from "@/types/course";
 import type { CourseGoal, CourseOverview, CourseSeries } from "@/types/course-overview";
 import { assertCourseLearningReady } from "@/lib/learning-standard";
@@ -72,6 +73,6 @@ export function createSeriesOverview(definition: SeriesCourseDefinition): Course
   return { id: definition.id, title: definition.title, desc: definition.description, category: definition.category,
     audience: "For people building a practical international plan.", benefits: definition.lessons.map(item => item.objective),
     duration: "45m", format: "3 applied lessons", level: "Practical Foundation", goal: definition.goal,
-    goalLabel: definition.series, href: `/courses/${definition.id}`, image: `/images/courses/${definition.id}.webp`,
+    goalLabel: definition.series, href: `/courses/${definition.id}`, image: courseArtwork(definition.id),
     imageAlt: definition.imageAlt, status: "available", releaseLabel: "Available now", series: definition.series, seriesOrder: definition.chapter };
 }

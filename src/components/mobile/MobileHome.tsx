@@ -22,7 +22,7 @@ export default function MobileHome() {
   const [intent, setIntent] = useState(COUNTRY_DECISION_PRESETS[0]);
   return <div className="tgpi-mobile mobile-home">
     <section className="mobile-home-hero" aria-labelledby="mobile-home-title">
-      <Image src="/images/home/tgpi-home-global-knowledge-meridian-v1.webp" alt={t("TGPI global knowledge observatory")} fill sizes="(max-width:767px) 100vw, 1px" className="mobile-hero-image" />
+      <Image src="/images/cinematic-2026/global-horizon-1600.webp" alt={t("TGPI global knowledge observatory")} fill sizes="(max-width:767px) 100vw, 1px" className="mobile-hero-image" />
       <div className="mobile-hero-shade" />
       <div className="mobile-home-hero-content"><p className="mobile-eyebrow"><LocalizedText text={"EDUCATION FOR A GLOBAL LIFE"} /></p><h1 id="mobile-home-title"><LocalizedText text={"Your next chapter."} /><br /><em><LocalizedText text="A world of possibilities." /></em></h1><p><LocalizedText text={"Explore the world. Understand your options. Build the skills to move forward."} /></p><a href="#mobile-start" className="mobile-primary-button"><LocalizedText text={"Find your starting point"} />{" "}<MobileIcon name="arrow" /></a><span className="mobile-hero-note"><LocalizedText text={"195 countries. One connected journey."} /></span></div>
     </section>
