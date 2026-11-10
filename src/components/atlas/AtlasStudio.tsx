@@ -42,6 +42,7 @@ type StudioProps = {
   embedded?: boolean;
   context?: AtlasNavigationContext;
 };
+type HistoryChange = { id: string; deleted?: boolean };
 
 function newestFirst(a: StudioConversation, b: StudioConversation) {
   return b.updatedAt.localeCompare(a.updatedAt);
@@ -103,29 +104,43 @@ export default function AtlasStudio({ userId, onlineAvailable = false, embedded 
     const sync = typeof BroadcastChannel === 'undefined' ? null : new BroadcastChannel(`tgpi:atlas:${userId}`);
     channel.current = sync;
     let disposed = false;
-    function refresh(initial: boolean) {
+    function restoreDraft(items: StudioConversation[]) {
+      if (interaction.current) return;
+      try {
+        const saved = JSON.parse(sessionStorage.getItem(draftKey) || 'null') as { mode?: StudioMode; text?: string; id?: string } | null;
+        if (typeof saved?.text === 'string' && saved.text && (saved.mode === 'guide' || saved.mode === 'sponsored' || saved.mode === 'device')) {
+          setDraft(saved.text.slice(0, 4000));
+          setMode(saved.mode);
+          setConversation(items.find(item => item.id === saved.id && item.mode === saved.mode) ?? null);
+          return;
+        }
+      } catch { /* Browser draft storage is optional. */ }
+      if (items[0]) {
+        setConversation(items[0]);
+        setMode(items[0].mode);
+      }
+    }
+
+    function refresh(change?: HistoryChange) {
       void listAtlasDeviceHistory(userId).then(items => {
         if (disposed) return;
         setHistory(items);
-        if (initial && !interaction.current) {
-          try {
-            const saved = JSON.parse(sessionStorage.getItem(draftKey) || 'null') as { mode?: StudioMode; text?: string; id?: string } | null;
-            if (saved?.text && (saved.mode === 'guide' || saved.mode === 'sponsored' || saved.mode === 'device')) {
-              setDraft(saved.text.slice(0, 4000));
-              setMode(saved.mode);
-              setConversation(items.find(item => item.id === saved.id && item.mode === saved.mode) ?? null);
-              return;
-            }
-          } catch { /* Browser draft storage is optional. */ }
-          if (items[0]) {
-            setConversation(items[0]);
-            setMode(items[0].mode);
-          }
+        if (!change) restoreDraft(items);
+        else if (!controller.current) {
+          const updated = items.find(item => item.id === change.id);
+          setConversation(current => {
+            if (current?.id !== change.id) return current;
+            return updated ?? (change.deleted ? null : current);
+          });
         }
-      }).catch(() => { if (!disposed) setStorageFailed(true); });
+      }).catch(() => {
+        if (disposed) return;
+        setStorageFailed(true);
+        if (!change) restoreDraft([]);
+      });
     }
-    refresh(true);
-    if (sync) sync.onmessage = () => refresh(false);
+    refresh();
+    if (sync) sync.onmessage = (event: MessageEvent<HistoryChange>) => refresh(event.data);
     return () => {
       disposed = true;
       mounted.current = false;
@@ -306,19 +321,18 @@ export default function AtlasStudio({ userId, onlineAvailable = false, embedded 
           messages: base.messages.flatMap(message => message.id === question.id ? [message, answer] : [message]),
         };
       }
-      let finished = complete(pending);
+      let finished: StudioConversation | null = complete(pending);
       if (persisted) {
         try {
-          const saved = await updateAtlasDeviceHistory(userId, session.id, existing => existing?.messages.some(message => message.id === question.id)
-            ? complete(existing)
-            : undefined);
+          const saved = await updateAtlasDeviceHistory(userId, session.id, existing =>
+            existing?.messages.some(message => message.id === question.id) ? complete(existing) : existing);
           if (saved) {
             finished = saved;
             if (mounted.current) putInList(saved);
-            channel.current?.postMessage('changed');
-          } else if (mounted.current) {
-            setHistory(items => items.filter(item => item.id !== session.id));
-            setStorageFailed(true);
+            channel.current?.postMessage({ id: session.id } satisfies HistoryChange);
+          } else {
+            finished = null;
+            if (mounted.current) setHistory(items => items.filter(item => item.id !== session.id));
           }
         } catch { if (mounted.current) setStorageFailed(true); }
       }
@@ -352,7 +366,7 @@ export default function AtlasStudio({ userId, onlineAvailable = false, embedded 
         start();
       }
       setManage(null);
-      channel.current?.postMessage('changed');
+      channel.current?.postMessage({ id, deleted: manage === 'delete' } satisfies HistoryChange);
     } catch { if (mounted.current) setStorageFailed(true); }
     finally { controller.current = null; if (mounted.current) setBusy(false); }
   }

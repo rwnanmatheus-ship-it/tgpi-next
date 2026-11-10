@@ -105,7 +105,8 @@ async function run() {
   });
 
   try {
-    const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
+    const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
+    const page = await context.newPage();
     page.setDefaultTimeout(6500);
     const errors = [];
     page.on('pageerror', error => errors.push(error.message));
@@ -174,6 +175,38 @@ async function run() {
     await page.getByRole('button', { name: 'Confirm deletion' }).click();
     await history.getByRole('button', { name: /Trip research/ }).waitFor();
     await history.getByText('Test online transport', { exact: true }).waitFor({ state: 'hidden' });
+
+    const secondTab = await context.newPage();
+    secondTab.setDefaultTimeout(6500);
+    try {
+      await page.reload();
+      await page.getByLabel('Message history').getByText('And Canada for work?', { exact: true }).waitFor();
+      await secondTab.goto(origin + '/atlas');
+      await secondTab.getByLabel('Message history').getByText('And Canada for work?', { exact: true }).waitFor();
+      await send('Continue planning Canada');
+      await secondTab.getByLabel('Message history').getByText('Continue planning Canada', { exact: true }).waitFor();
+      await secondTab.getByRole('textbox', { name: 'Message Atlas' }).fill('Draft in the other tab');
+      await page.getByLabel('History and privacy', { exact: true }).click();
+      await page.getByRole('button', { name: 'Delete', exact: true }).click();
+      await page.getByRole('button', { name: 'Confirm deletion' }).click();
+      await secondTab.getByLabel('Message history').getByText('Continue planning Canada', { exact: true }).waitFor({ state: 'hidden' });
+      assert.equal(await secondTab.getByRole('textbox', { name: 'Message Atlas' }).inputValue(), 'Draft in the other tab');
+    } finally {
+      await secondTab.close();
+    }
+
+    const noHistoryTab = await context.newPage();
+    noHistoryTab.setDefaultTimeout(6500);
+    try {
+      await noHistoryTab.addInitScript(() => {
+        sessionStorage.setItem('tgpi:atlas:studio-draft:storage-fixture', JSON.stringify({ mode: 'guide', text: 'Recoverable draft' }));
+        indexedDB.open = () => { throw new DOMException('Storage unavailable', 'SecurityError'); };
+      });
+      await noHistoryTab.goto(origin + '/atlas?account=storage-fixture');
+      await noHistoryTab.waitForFunction(() => document.querySelector('textarea')?.value === 'Recoverable draft');
+    } finally {
+      await noHistoryTab.close();
+    }
 
     await page.addInitScript(() => {
       if (!location.search.includes('device')) return;
@@ -247,7 +280,7 @@ async function run() {
     assert.deepEqual(errors, []);
     console.log(JSON.stringify({
       passed: true, widths: [360, 390, 768, 1440],
-      checks: ['guide without provider', 'comparison memory', 'budget calculator', 'reload and search', 'rename and delete', 'temporary mode', 'account isolation',
+      checks: ['guide without provider', 'comparison memory', 'budget calculator', 'reload and search', 'rename and delete', 'same-browser tab updates and deletion', 'temporary mode', 'account isolation',
         'sponsored transport', 'on-device opt-in and inference', 'safe markdown', 'draggable launcher', 'draft recovery', 'guest sign-in', 'reduced motion', 'articulated WebGL'],
     }));
   } finally {
