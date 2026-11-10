@@ -1,6 +1,6 @@
-import CourseArrow from './CourseArrow';
 "use client";
 
+import CourseArrow from './CourseArrow';
 import { useAuth } from '@clerk/nextjs';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
