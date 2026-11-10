@@ -4,7 +4,8 @@ import { useRouter } from "next/navigation";
 import { useRef, useState, useTransition, type FormEvent } from "react";
 import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import { LocalizedText } from "@/components/localization/LocaleProvider";
-import { isGlobalKeyProofReference, readCertificateReference } from "@/lib/certificate-reference";
+import { submitVerificationReference } from "@/app/verify/actions";
+import { MAX_VERIFICATION_REFERENCE, readVerificationReference } from "@/lib/certificate-reference";
 
 type RecordType = "credential" | "global_key";
 type LookupError = "invalid" | "legacy";
@@ -47,12 +48,7 @@ export default function CredentialVerificationForm({
     event.preventDefault();
     if (pending) return;
     const value = String(new FormData(event.currentTarget).get("reference") ?? "").trim();
-    const id = recordType === "credential" ? readCertificateReference(value) : null;
-    const destination = id
-      ? "/verify/credentials/" + encodeURIComponent(id)
-      : recordType === "global_key" && isGlobalKeyProofReference(value)
-        ? "/verify/global-key?proof=" + encodeURIComponent(value)
-        : null;
+    const destination = readVerificationReference(value, window.location.origin);
 
     if (!destination) {
       setLegacy(false);
@@ -60,17 +56,17 @@ export default function CredentialVerificationForm({
       input.current?.focus();
       return;
     }
-    startTransition(() => router.push(destination));
+    startTransition(() => router.push(destination.href));
   }
 
   return (
-    <form action="/verify" method="get" onSubmit={submit} className="credential-lookup" aria-busy={pending}>
+    <form action={submitVerificationReference} onSubmit={submit} className="credential-lookup" aria-busy={pending}>
       <fieldset disabled={pending}>
         <legend className="sr-only"><LocalizedText text="Record type" /></legend>
         <div className="credential-lookup-types">
           {([
             ["credential", "Learning credential"],
-            ["global_key", "Global Key proof"],
+            ["global_key", "Global ID proof"],
           ] as const).map(([value, label]) => (
             <label key={value}>
               <input
@@ -92,7 +88,7 @@ export default function CredentialVerificationForm({
         </div>
       </fieldset>
       <label htmlFor="verification-reference">
-        <LocalizedText text={recordType === "credential" ? "Certificate ID or verification link" : "Portable Global Key proof"} />
+        <LocalizedText text={recordType === "credential" ? "Certificate ID or verification link" : "Global ID proof or verification link"} />
       </label>
       <div className="credential-lookup-entry">
         <div className="credential-lookup-field">
@@ -103,7 +99,7 @@ export default function CredentialVerificationForm({
             name="reference"
             required
             disabled={pending}
-            maxLength={2048}
+            maxLength={MAX_VERIFICATION_REFERENCE}
             aria-invalid={invalid || undefined}
             aria-describedby={invalid || legacy ? "verification-reference-error" : "verification-reference-hint"}
             placeholder={recordType === "credential" ? "TGPI-ENGABR-…" : "TGK1.A.…"}
@@ -125,7 +121,7 @@ export default function CredentialVerificationForm({
         </button>
       </div>
       <p id="verification-reference-hint" className="credential-lookup-hint">
-        <LocalizedText text={recordType === "credential" ? "Find the certificate ID next to the QR code on your document." : "Use the portable proof beginning with TGK1 from your Global Key."} />
+        <LocalizedText text={recordType === "credential" ? "Find the certificate ID next to the QR code on your document." : "Paste the official TGPI link or the proof code."} />
       </p>
       {(invalid || legacy) && (
         <p id="verification-reference-error" className="credential-lookup-error" role="alert">
@@ -133,7 +129,7 @@ export default function CredentialVerificationForm({
             ? "This older link does not contain a certificate ID. Enter the ID printed on the certificate."
             : recordType === "credential"
               ? "Enter the certificate ID printed on your document or paste its official TGPI verification link."
-              : "Enter a valid TGPI Global Key proof."} />
+              : "Enter an official TGPI verification link or a valid proof code."} />
         </p>
       )}
       {clipboardHelp && (

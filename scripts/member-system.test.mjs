@@ -42,6 +42,13 @@ test('public and export group choices intersect, never expand publication permis
   const chosen = selectMemberExport(member, ['career', 'progress', 'goals']); assert.deepEqual(chosen.career, ['Engineer']); assert.equal(chosen.rank, null); assert.equal(chosen.goal, 'Study abroad'); assert.equal(chosen.country, '');
   const membersOnly = projectPublicMember({ ...base, profile: normalizeTgpiAccountProfile({ privacy: { visibility: 'members', allowIndexing: true } }) }); assert.equal(membersOnly.indexable, false);
 });
+test('an explicit certificate selection can appear without publishing courses or rank', () => {
+  const member = projectPublicMember({ ...base, credentialShowcaseEnabled: true });
+  assert.deepEqual(member.certificates, base.certificates);
+  assert.deepEqual(member.courses, []);
+  assert.equal(member.rank, null);
+  assert.equal(projectPublicMember(base).certificates.length, 0);
+});
 function registry() {
   const docs = new Map(); let queue = Promise.resolve();
   const services = {

@@ -134,7 +134,7 @@ const settingsSections: readonly SettingsSectionDefinition[] = [
     description: "Cryptographic identity, fingerprint and verification",
     key: "global-key",
     keywords: "global key id cryptographic fingerprint proof blockchain integrity chain verify",
-    label: "Global Key",
+    label: "TGPI Global ID",
     group: "Account center",
     sticker: "🗝️",
   },
@@ -632,7 +632,7 @@ export default function TgpiAccountCenter({
   if (activeSection === "global-key") {
     activeScreen = (
       <div>
-        <ScreenHeading description="Manage the cryptographic identity, encrypted proof, Base Mainnet anchor and linked integrity history behind your stable TGPI Global ID." section="global-key" title="Global Key" />
+        <ScreenHeading description="Manage the cryptographic identity, encrypted proof, Base Mainnet anchor and linked integrity history behind your stable TGPI Global ID." section="global-key" title="TGPI Global ID" />
         <article className="tgpi-key-surface relative mt-6 overflow-hidden rounded-[28px] border border-[#173754] p-6 text-white shadow-[0_24px_65px_rgba(11,31,58,0.2)] sm:p-8">
           <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
             <span aria-hidden="true" className="tgpi-key-emblem grid h-16 w-16 shrink-0 place-items-center rounded-[22px] border border-[var(--tgpi-gold)]/35 bg-[var(--tgpi-gold)]/10 text-[var(--tgpi-gold-light)]"><SettingsIcon section="global-key" /></span>

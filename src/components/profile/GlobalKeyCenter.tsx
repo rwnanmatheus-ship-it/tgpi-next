@@ -1,690 +1,237 @@
 "use client";
 
-import { useLocale as useFormattingLocale } from "@/components/localization/LocaleProvider";
-import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
-
-import Link from "next/link";
 import Image from "next/image";
-import styles from "./GlobalKeyCenter.module.css";
-import CapabilitySystemRail from "@/components/capability/CapabilitySystemRail";
-import { QRCodeSVG } from "qrcode.react";
+import Link from "next/link";
 import { useState, useTransition } from "react";
-import {
-  rotateGlobalKeyAction,
-  type RotateGlobalKeyResult,
-} from "@/app/global-key/actions";
-import type {
-  TgpiGlobalKeyAnchorView,
-  TgpiGlobalKeyBlockView,
-  TgpiGlobalKeyView,
-} from "@/lib/global-key";
-import { LocalizedText } from "@/components/localization/LocaleProvider";
+import { QRCodeSVG } from "qrcode.react";
+import { rotateGlobalKeyAction } from "@/app/global-key/actions";
+import CapabilitySystemRail from "@/components/capability/CapabilitySystemRail";
+import { LocalizedText, useLocale } from "@/components/localization/LocaleProvider";
+import type { TgpiGlobalKeyView } from "@/lib/global-key";
+import type { GlobalKeyShareEntry } from "@/lib/global-key-share";
+import { learningStatusLabels, type LearningProgressItem } from "@/lib/learning/unified-progress";
+import GlobalIdCredentials, { type GlobalIdCredential } from "./GlobalIdCredentials";
+import GlobalIdSharing from "./GlobalIdSharing";
+import IntegritySeal from "./IntegritySeal";
+import styles from "./GlobalKeyCenter.module.css";
 
+const anchorStatus = {
+  activation_pending: "External anchoring inactive",
+  awaiting_anchor: "Awaiting public anchor",
+  confirmed: "External receipt recorded",
+} as const;
 
-type GlobalKeyCenterProps = {
-  initialKey: TgpiGlobalKeyView;
-  verifyOrigin: string;
-  memberName: string;
-};
-
-type Feedback = { message: string; tone: "error" | "success" } | null;
-
-const connectedSystems = [
-  {
-    description: "Identity, rank and next actions remain connected.",
-    href: "/profile",
-    icon: "⌂",
-    label: "Workspace",
-  },
-  {
-    description: "Shortlists and comparisons use the same member identity.",
-    href: "/compare",
-    icon: "◎",
-    label: "Decisions",
-  },
-  {
-    description: "Preparation records stay private and account-bound.",
-    href: "/passport",
-    icon: "▤",
-    label: "Documents",
-  },
-  {
-    description: "Course progress follows the authenticated Global Key.",
-    href: "/courses",
-    icon: "▱",
-    label: "Learning",
-  },
-  {
-    description: "Verified learning records bind to this same integrity layer.",
-    href: "/certificates",
-    icon: "◇",
-    label: "Certificates",
-  },
+const sections = [
+  ["identity", "Identity"],
+  ["credentials", "Learning credentials"],
+  ["sharing", "Controlled sharing"],
+  ["integrity", "Integrity history"],
 ] as const;
-
-function formatDate(locale: import('@/lib/localization/config').Locale, value: string) {
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return "Unavailable";
-  return new Intl.DateTimeFormat(locale, {
-    dateStyle: "medium",
-    timeStyle: "short",
-    timeZone: "UTC",
-  }).format(date);
-}
-
-function compactHash(hash: string) {
-  if (hash === "GENESIS") return hash;
-  return `${hash.slice(0, 10)}…${hash.slice(-8)}`;
-}
-
-function ChainBlock({
-  block,
-  current,
-}: {
-  block: TgpiGlobalKeyBlockView;
-  current: boolean;
-}) {
-  const { locale } = useFormattingLocale();
-  return (
-    <li className="relative pl-12 sm:pl-16">
-      <span
-        aria-hidden="true"
-        className={`absolute left-0 top-0 grid h-9 w-9 place-items-center rounded-xl border font-mono text-xs font-extrabold sm:h-11 sm:w-11 ${
-          current
-            ? "border-[var(--tgpi-gold)] bg-[var(--tgpi-gold)] text-[#07182D] shadow-[0_0_28px_rgba(229,185,75,0.28)]"
-            : "border-white/15 bg-white/5 text-[#B9C7D5]"
-        }`}
-      >
-        {String(block.sequence).padStart(2, "0")}
-      </span>
-      <span
-        aria-hidden="true"
-        className="absolute bottom-[-24px] left-[17px] top-11 w-px bg-gradient-to-b from-[var(--tgpi-gold)]/60 to-white/10 sm:left-[21px] sm:top-14"
-      />
-      <article
-        className={`rounded-2xl border p-4 sm:p-5 ${
-          current
-            ? "border-[var(--tgpi-gold)]/35 bg-[var(--tgpi-gold)]/[0.08]"
-            : "border-white/10 bg-white/[0.035]"
-        }`}
-      >
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <div>
-            <p className="text-xs font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-gold)]">
-              {block.type === "issued" ? <LocalizedText text={"Genesis block"} /> : <LocalizedText text={"Proof rotation"} />}
-            </p>
-            <h3 className="mt-1 text-sm font-extrabold text-white">
-              {block.type === "issued"
-                ? <LocalizedText text={"Global identity issued"} />
-                : <LocalizedText text={"Integrity revision {value0}"} values={{value0: String(block.sequence)}} />}
-            </h3>
-          </div>
-          {current ? (
-            <span className="rounded-full border border-[#72C79D]/30 bg-[#72C79D]/10 px-2.5 py-1 text-xs font-extrabold uppercase tracking-[0.12em] text-[#AFE3C7]"><LocalizedText text={"Current"} /></span>
-          ) : null}
-        </div>
-        <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
-          <div>
-            <dt className="text-[#75889B]"><LocalizedText text={"Previous hash"} /></dt>
-            <dd className="mt-1 font-mono text-[#C2CEDA]">
-              {compactHash(block.previousHash)}
-            </dd>
-          </div>
-          <div>
-            <dt className="text-[#75889B]"><LocalizedText text={"Block hash"} /></dt>
-            <dd className="mt-1 font-mono text-[var(--tgpi-gold-light)]">
-              {compactHash(block.hash)}
-            </dd>
-          </div>
-        </dl>
-        <p className="mt-3 text-xs text-[#75889B]">
-          {formatDate(locale, block.timestamp)}{" "}<LocalizedText text={"UTC"} /></p>
-      </article>
-    </li>
-  );
-}
-
-function PublicAnchorPanel({
-  anchor,
-  onCopy,
-}: {
-  anchor: TgpiGlobalKeyAnchorView;
-  onCopy: (value: string, label: string) => Promise<void>;
-}) {
-  if (anchor.status !== "confirmed") {
-    const activating = anchor.status === "activation_pending";
-    return (
-      <section
-        aria-labelledby="public-anchor-title"
-        className="mt-6 overflow-hidden rounded-[28px] border border-[#4D7190]/35 bg-[radial-gradient(circle_at_top_right,rgba(52,125,184,0.2),transparent_32%),#0A1724] p-5 sm:p-7"
-      >
-        <div className="flex flex-wrap items-start justify-between gap-5">
-          <div className="max-w-3xl">
-            <div className="flex items-center gap-3">
-              <span
-                aria-hidden="true"
-                className="grid h-11 w-11 place-items-center rounded-2xl border border-[#7FB5DC]/25 bg-[#7FB5DC]/10 text-xl"
-              >
-                ◈
-              </span>
-              <div>
-                <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#8DC4EB]"><LocalizedText text={"Base Mainnet · Public Anchor V2"} /></p>
-                <h2
-                  className="mt-1 text-xl font-extrabold text-white"
-                  id="public-anchor-title"
-                >
-                  {activating
-                    ? <LocalizedText text={"External anchoring is not active yet"} />
-                    : <LocalizedText text={"Current revision is queued for anchoring"} />}
-                </h2>
-              </div>
-            </div>
-            <p className="mt-4 text-xs leading-6 text-[#A6B8C8] sm:text-sm">
-              {activating
-                ? <LocalizedText text={"Your TGPI identity is active. External blockchain receipts are not enabled yet; identity integrity and account access continue to work independently."} />
-                : <LocalizedText text={"Your Integrity Chain remains verified now. Its current fingerprint will join the next daily Merkle batch; earlier on-chain receipts remain historically valid after a rotation."} />}
-            </p>
-          </div>
-          <span className="rounded-full border border-[#8DC4EB]/25 bg-[#8DC4EB]/10 px-3 py-2 text-xs font-extrabold uppercase tracking-[0.14em] text-[#B9DDF6]">
-            {activating ? <LocalizedText text={"Activation pending"} /> : <LocalizedText text={"Queued · daily"} />}
-          </span>
-        </div>
-      </section>
-    );
-  }
-
-  return (
-    <section
-      aria-labelledby="public-anchor-title"
-      className="mt-6 overflow-hidden rounded-[28px] border border-[#72C79D]/30 bg-[radial-gradient(circle_at_top_right,rgba(50,157,105,0.19),transparent_34%),radial-gradient(circle_at_bottom_left,rgba(38,99,154,0.2),transparent_36%),#091A25] p-5 shadow-[0_24px_70px_rgba(0,0,0,0.24)] sm:p-7"
-    >
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_minmax(320px,.6fr)] xl:items-end">
-        <div className="min-w-0">
-          <div className="flex flex-wrap items-center gap-3">
-            <span
-              aria-hidden="true"
-              className="grid h-12 w-12 place-items-center rounded-2xl border border-[#72C79D]/30 bg-[#72C79D]/10 text-2xl"
-            >
-              ⛓️
-            </span>
-            <div>
-              <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#8FD8B4]"><LocalizedText text={"Base Mainnet · Chain ID"} />{" "}{anchor.chainId}
-              </p>
-              <h2
-                className="mt-1 font-[var(--tgpi-font-display)] text-2xl font-semibold sm:text-3xl"
-                id="public-anchor-title"
-              ><LocalizedText text={"Public anchor confirmed"} /></h2>
-            </div>
-            <span className="rounded-full border border-[#72C79D]/30 bg-[#72C79D]/10 px-3 py-1.5 text-xs font-extrabold uppercase tracking-[0.14em] text-[#BCE8D1]"><LocalizedText text={"● On-chain"} /></span>
-          </div>
-          <p className="mt-4 max-w-3xl text-xs leading-6 text-[#A8BAC9] sm:text-sm"><LocalizedText text={"This revision belongs to a Merkle batch recorded outside TGPI infrastructure. Base stores only the irreversible root and batch metadata—never your Global ID, name, email, documents or private progress."} /></p>
-          <dl className="mt-5 grid gap-3 sm:grid-cols-3">
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-              <dt className="text-xs font-extrabold uppercase tracking-[0.15em] text-[#7890A3]"><LocalizedText text={"Batch"} /></dt>
-              <dd className="mt-2 break-all font-mono text-sm font-bold text-[#E2EAF0]">
-                {anchor.batchId}
-              </dd>
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-              <dt className="text-xs font-extrabold uppercase tracking-[0.15em] text-[#7890A3]"><LocalizedText text={"Base block"} /></dt>
-              <dd className="mt-2 font-mono text-sm font-bold text-white">
-                #{anchor.blockNumber}
-              </dd>
-            </div>
-            <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-              <dt className="text-xs font-extrabold uppercase tracking-[0.15em] text-[#7890A3]"><LocalizedText text={"Batch members"} /></dt>
-              <dd className="mt-2 text-sm font-extrabold text-white">
-                {anchor.memberCount}
-              </dd>
-            </div>
-          </dl>
-        </div>
-        <div className="rounded-[22px] border border-white/10 bg-black/20 p-4 sm:p-5">
-          <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-[#7890A3]"><LocalizedText text={"Merkle root"} /></p>
-          <p className="mt-3 break-all font-mono text-sm font-bold leading-5 text-[#BFE9D3]">
-            {anchor.root}
-          </p>
-          <div className="mt-4 grid gap-2 sm:grid-cols-2 xl:grid-cols-1 2xl:grid-cols-2">
-            <a
-              className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[var(--tgpi-gold)] px-4 text-xs font-extrabold text-[#07182D] transition hover:bg-[#F0C95F]"
-              href={anchor.explorerUrl}
-              rel="noreferrer"
-              target="_blank"
-            ><LocalizedText text={"Open Base receipt ↗"} /></a>
-            <button
-              className="min-h-11 rounded-xl border border-white/15 px-4 text-xs font-extrabold transition hover:border-[#72C79D]/45"
-              onClick={() => onCopy(anchor.root, "Merkle root")}
-              type="button"
-            ><LocalizedText text={"Copy root"} /></button>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
 
 export default function GlobalKeyCenter({
   initialKey,
-  verifyOrigin,
   memberName,
-}: GlobalKeyCenterProps) {
-  const { locale } = useFormattingLocale();
-  const { t: localizeLabel } = useInterfaceLocale();
-
-  const [keyView, setKeyView] = useState(initialKey);
-  const [feedback, setFeedback] = useState<Feedback>(null);
+  verifyOrigin,
+  canRotate,
+  credentials,
+  selection,
+  nextLearning,
+  initialShares,
+  profilePreviewUrl,
+}: {
+  initialKey: TgpiGlobalKeyView;
+  memberName: string;
+  verifyOrigin: string;
+  canRotate: boolean;
+  credentials: GlobalIdCredential[] | null;
+  selection: string[] | null;
+  nextLearning: LearningProgressItem | null;
+  initialShares: GlobalKeyShareEntry[] | null;
+  profilePreviewUrl: string | null;
+}) {
+  const { locale, t } = useLocale();
+  const [key, setKey] = useState(initialKey);
   const [showQr, setShowQr] = useState(false);
   const [confirmRotation, setConfirmRotation] = useState(false);
-  const [isPending, startTransition] = useTransition();
-  const verifyUrl = new URL(keyView.verifyPath, verifyOrigin).toString();
+  const [pending, startTransition] = useTransition();
+  const [feedback, setFeedback] = useState("");
+  const verifyUrl = new URL(key.verifyPath, verifyOrigin).toString();
+  const date = new Intl.DateTimeFormat(locale, { dateStyle: "medium", timeZone: "UTC" });
+  const shareable = credentials?.some(item => item.shareable);
+  const hasCredentials = Boolean(credentials?.length);
+  const action = shareable ? "Share a credential" : hasCredentials ? "View my certificates" : nextLearning ? "Continue learning" : "Explore learning";
+  const actionHref = hasCredentials ? "#credentials" : nextLearning?.href || "/courses";
 
-  async function copyValue(value: string, label: string) {
+  async function copy(value: string) {
     try {
       await navigator.clipboard.writeText(value);
-      setFeedback({ message: `${label} copied securely.`, tone: "success" });
+      setFeedback("Copied to clipboard.");
     } catch {
-      setFeedback({
-        message: `Unable to copy ${label.toLowerCase()} on this device.`,
-        tone: "error",
-      });
+      setFeedback("Copy is unavailable. Select the visible reference manually.");
     }
   }
 
-  function rotateProof() {
-    if (isPending) return;
+  function rotate() {
     if (!confirmRotation) {
       setConfirmRotation(true);
-      setFeedback({
-        message: "Confirm once more to create a new integrity block.",
-        tone: "success",
-      });
       return;
     }
-
     startTransition(async () => {
       try {
-        const result: RotateGlobalKeyResult = await rotateGlobalKeyAction();
-        if (!result.ok) {
-          setFeedback({ message: result.error, tone: "error" });
-          setConfirmRotation(false);
-          return;
-        }
-        setKeyView(result.key);
-        setConfirmRotation(false);
-        setFeedback({
-          message: "New cryptographic proof created and synchronized.",
-          tone: "success",
-        });
+        const result = await rotateGlobalKeyAction(key.revision);
+        if (!result.ok) return setFeedback(result.error);
+        setKey(result.value);
+        setShowQr(false);
+        setFeedback("New proof revision verified.");
       } catch {
+        setFeedback("Connection interrupted. Refresh to check the current proof before retrying.");
+      } finally {
         setConfirmRotation(false);
-        setFeedback({
-          message:
-            "Connection interrupted. Refresh to check the current proof before retrying.",
-          tone: "error",
-        });
       }
     });
   }
 
   return (
-    <div className={`${styles.center} min-h-screen bg-[#050C14] text-white`}>
-      <header className="border-b border-white/10 bg-[#071421]/95 px-4 py-4 backdrop-blur sm:px-6 lg:px-10">
-        <div className="mx-auto flex max-w-[1360px] flex-wrap items-center justify-between gap-3">
-          <Link
-            className="inline-flex min-h-11 items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 text-xs font-extrabold text-[#D5DEE7] transition hover:border-[var(--tgpi-gold)]/35 hover:text-white"
-            href="/profile"
-          >
-            <span aria-hidden="true">←</span>{" "}<LocalizedText text="Workspace" /></Link>
-          <div className="flex flex-wrap gap-2">
-            <Link
-              className="inline-flex min-h-11 items-center rounded-xl border border-white/10 px-4 text-xs font-extrabold text-[#D5DEE7] transition hover:border-[var(--tgpi-gold)]/35"
-              href="/profile/security"
-            ><LocalizedText text="Account security" /></Link>
-            <a
-              className="inline-flex min-h-11 items-center rounded-xl bg-[var(--tgpi-gold)] px-4 text-xs font-extrabold text-[#07182D] transition hover:bg-[#F0C95F]"
-              href={verifyUrl}
-              rel="noreferrer"
-              target="_blank"
-            ><LocalizedText text={"Verify proof ↗"} /></a>
+    <main className={styles.center}>
+      <div className={styles.shell}>
+        <nav className={styles.breadcrumb} aria-label={t("Workspace navigation")}>
+          <Link href="/profile">← <LocalizedText text="Workspace" /></Link>
+          <span aria-hidden="true">/</span><span aria-current="page"><LocalizedText text="TGPI Global ID" /></span>
+        </nav>
+        <header className={styles.hero}>
+          <div className={styles.heroMedia}>
+            <Image className={styles.heroArt} fill preload sizes="(max-width: 690px) 100vw, (max-width: 1450px) 72vw, 960px" src="/images/global-identity/integrity-observatory.webp" alt="" />
           </div>
-        </div>
-      </header>
-
-      <main className="tgpi-capability-frame py-6 sm:py-10 lg:py-14">
-        <section className="relative mt-6 overflow-hidden rounded-[32px] border border-[var(--tgpi-gold)]/25 bg-[radial-gradient(circle_at_82%_18%,rgba(43,112,168,0.32),transparent_30%),radial-gradient(circle_at_10%_100%,rgba(181,138,42,0.18),transparent_32%),#081727] p-5 shadow-[0_32px_100px_rgba(0,0,0,0.38)] sm:p-8 lg:p-10">
-          <div className="pointer-events-none absolute inset-0 opacity-20 [background-image:linear-gradient(rgba(255,255,255,.08)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.08)_1px,transparent_1px)] [background-size:42px_42px]" />
-          <div className="relative grid gap-8 xl:grid-cols-[minmax(0,1fr)_300px] xl:items-center">
-            <div className="min-w-0">
-              <div className="flex flex-wrap items-center gap-3">
-                <span
-                  className="grid h-12 w-12 place-items-center rounded-2xl border border-[var(--tgpi-gold)]/35 bg-[var(--tgpi-gold)]/10 text-2xl shadow-[0_0_34px_rgba(229,185,75,0.14)]"
-                  aria-hidden="true"
-                >
-                  ◇
-                </span>
-                <div>
-                  <p className="text-xs font-extrabold uppercase tracking-[0.24em] text-[var(--tgpi-gold)]"><LocalizedText text={"TGPI Global ID"} /></p>
-                  <p className="mt-1 text-xs font-bold text-[#91A4B7]"><LocalizedText text={"Your identity. Your progress. Your proof."} /></p>
-                </div>
-                <span className="rounded-full border border-[#72C79D]/30 bg-[#72C79D]/10 px-3 py-1.5 text-xs font-extrabold uppercase tracking-[0.14em] text-[#AFE3C7]"><LocalizedText text={"● Integrity verified"} /></span>
-              </div>
-
-              <h1 className="mt-7 max-w-4xl font-[var(--tgpi-font-display)] text-4xl font-semibold tracking-[-0.045em] sm:text-5xl lg:text-6xl"><LocalizedText text={"Your growth deserves an identity."} /></h1>
-              <p className="mt-4 max-w-3xl text-sm leading-7 text-[#AFBECC] sm:text-base"><LocalizedText text={"One permanent TGPI ID connects your learning, certificates and preparation. Keep building your skills and share a verifiable proof when you choose."} /></p>
-
-              <div
-                className={`${styles.identityCard} mt-8 rounded-[24px] border border-white/10 p-4 sm:p-6`}
-              >
-                <div className="mb-6 flex items-center gap-4">
-                  <Image
-                    src="/brand/tgpi-crest-metal-v3-256.png"
-                    alt={localizeLabel("TGPI crest")}
-                    width={48}
-                    height={58}
-                  />
-                  <div className="min-w-0">
-                    <p className="text-xs text-[#B9C7D5]"><LocalizedText text="Member identity" /></p>
-                    <p className="mt-1 break-words text-xl font-semibold text-white">
-                      {memberName}
-                    </p>
-                  </div>
-                </div>
-                <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#7F92A5]"><LocalizedText text={"TGPI Global ID"} /></p>
-                <p className="mt-3 break-all font-mono text-xl font-bold tracking-[0.08em] text-[var(--tgpi-gold-light)] sm:text-3xl">
-                  {keyView.keyId}
-                </p>
-                <div className="mt-5 flex flex-wrap gap-2">
-                  <button
-                    className="min-h-11 rounded-xl border border-white/15 bg-white/5 px-4 text-xs font-extrabold transition hover:border-[var(--tgpi-gold)]/45 hover:bg-white/10"
-                    onClick={() => copyValue(keyView.keyId, "Global ID")}
-                    type="button"
-                  ><LocalizedText text={"Copy Global ID"} /></button>
-                  <button
-                    className="min-h-11 rounded-xl border border-white/15 bg-white/5 px-4 text-xs font-extrabold transition hover:border-[var(--tgpi-gold)]/45 hover:bg-white/10"
-                    onClick={() => copyValue(verifyUrl, "Verification link")}
-                    type="button"
-                  ><LocalizedText text="Copy verification link" /></button>
-                </div>
-              </div>
-            </div>
-
-            <aside className="rounded-[28px] border border-white/10 bg-white/[0.055] p-5 sm:p-6">
-              <p className="text-xs font-bold uppercase tracking-widest text-[var(--tgpi-gold-light)]"><LocalizedText text={"Share with confidence"} /></p>
-              <h2 className="mt-3 text-2xl font-semibold"><LocalizedText text={"Proof on your terms."} /></h2>
-              <p className="mt-3 text-sm leading-6 text-[#B9C7D5]"><LocalizedText text={"Your verification link confirms the integrity of this ID. Your private learning history and account details stay private."} /></p>
-              <button
-                type="button"
-                aria-expanded={showQr}
-                aria-controls="global-id-qr"
-                onClick={() => setShowQr(!showQr)}
-                className="mt-5 min-h-12 w-full rounded-xl bg-[var(--tgpi-gold)] px-4 text-sm font-bold text-[#07182D]"
-              >
-                {showQr ? <LocalizedText text={"Hide verification QR"} /> : <LocalizedText text={"Show verification QR"} />}
-              </button>
-              {showQr ? (
-                <div id="global-id-qr" className="mt-5">
-                  <div className="mx-auto w-fit max-w-full rounded-2xl bg-[var(--tgpi-canvas-alt)] p-4">
-                    <QRCodeSVG
-                      bgColor="#F8F5EE"
-                      fgColor="#07182D"
-                      level="M"
-                      size={180}
-                      title="TGPI Global ID verification"
-                      value={verifyUrl}
-                    />
-                  </div>
-                  <p className="mt-3 text-center text-xs leading-5 text-[#B9C7D5]"><LocalizedText text={"Anyone with this QR can verify this proof."} /></p>
-                </div>
-              ) : null}
-              <Link
-                href="/profile/security"
-                className="mt-4 flex min-h-11 items-center justify-center rounded-xl border border-white/15 text-sm font-semibold"
-              ><LocalizedText text={"Manage account security →"} /></Link>
-            </aside>
+          <div className={styles.heroCopy}>
+            <p className={styles.eyebrow}><LocalizedText text="TGPI Integrity Chain" /></p>
+            <h1><LocalizedText text="TGPI Global ID" /></h1>
+            <p><LocalizedText text="Your identity, verified credentials and control over what you share." /></p>
+            <a className={styles.primaryButton} href={actionHref}><LocalizedText text={action} /> ↗</a>
           </div>
-        </section>
+        </header>
 
-        <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-          {[
-            ["Integrity", "Verified", "Your proof passed integrity checks"],
-            ["Identity", "Permanent", "Your Global ID stays with your account"],
-            [
-              "Public anchor",
-              keyView.anchor.status === "confirmed" ? "Confirmed" : "Pending",
-              "External receipt is tracked separately",
-            ],
-            ["Status", "Active", `Issued ${formatDate(locale, keyView.issuedAt)} UTC`],
-          ].map(([label, value, detail]) => (
-            <article
-              className="rounded-[22px] border border-white/10 bg-[#0A1521] p-5"
-              key={label}
-            >
-              <p className="text-xs font-extrabold uppercase tracking-[0.18em] text-[#778B9F]">
-                <LocalizedText text={label} />
-              </p>
-              <p className="mt-2 text-xl font-extrabold text-white">{value}</p>
-              <p className="mt-2 text-sm leading-5 text-[#8FA0B2]">{detail}</p>
-            </article>
+        <nav className={styles.jump} aria-label={t("Global ID sections")}>
+          {sections.map(([id, title], index) => (
+            <a key={id} href={`#${id}`}><span aria-hidden="true">0{index + 1}</span><LocalizedText text={title} /></a>
           ))}
+        </nav>
+
+        <div className={styles.overview} id="identity">
+          <section className={styles.identityCard} aria-labelledby="identity-heading">
+            <div className={styles.identityTop}>
+              <div>
+                <p className={styles.eyebrow}><LocalizedText text="Member identity" /></p>
+                <h2 id="identity-heading"><bdi>{memberName}</bdi></h2>
+                <p className={styles.identityCode}><code>{key.keyId}</code></p>
+              </div>
+              <IntegritySeal />
+            </div>
+            <dl className={styles.identityFacts}>
+              <div><dt><LocalizedText text="Status" /></dt><dd><span className={styles.verifiedDot} /> <LocalizedText text="Integrity verified" /></dd></div>
+              <div><dt><LocalizedText text="Proof revision" /></dt><dd>{String(key.revision).padStart(2, "0")}</dd></div>
+              <div><dt><LocalizedText text="Issued" /></dt><dd><time dateTime={key.issuedAt}>{date.format(new Date(key.issuedAt))}</time></dd></div>
+            </dl>
+            <div className={styles.inlineActions}>
+              <button className={styles.secondaryButton} type="button" onClick={() => void copy(key.keyId)}><LocalizedText text="Copy Global ID" /></button>
+              <a href="#sharing" className={styles.textLink}><LocalizedText text="Create temporary link" /> ↗</a>
+            </div>
+          </section>
+
+          <aside className={styles.nextCard} aria-labelledby="global-next-heading">
+            <p className={styles.eyebrow}><LocalizedText text="Recommended next" /></p>
+            <h2 id="global-next-heading"><LocalizedText text={action} /></h2>
+            {hasCredentials ? (
+              <p className={styles.muted}><LocalizedText text="{count} verified credentials linked to your ID." values={{ count: credentials!.length }} /></p>
+            ) : nextLearning ? (
+              <>
+                <p className={styles.nextTitle}>{t(nextLearning.title)}</p>
+                <p className={styles.muted}><LocalizedText text={learningStatusLabels[nextLearning.status]} /></p>
+              </>
+            ) : (
+              <p className={styles.muted}><LocalizedText text="Open the learning catalog to find a course with a certificate pathway." /></p>
+            )}
+            <a href={actionHref} className={styles.textLink}><LocalizedText text="Open next step" /> ↗</a>
+            <p className={styles.anchorLabel}><span><LocalizedText text="Base Mainnet" /></span><LocalizedText text={anchorStatus[key.anchor.status]} /></p>
+          </aside>
         </div>
 
-        <section
-          className="mt-6 rounded-[28px] border border-white/10 bg-[#08131F] p-5 sm:p-7"
-          aria-labelledby="identity-value-title"
-        >
-          <p className="text-xs font-bold uppercase tracking-widest text-[var(--tgpi-gold)]"><LocalizedText text={"Make your ID valuable"} /></p>
-          <h2 id="identity-value-title" className="mt-2 text-2xl font-semibold"><LocalizedText text={"Build a record you can stand behind."} /></h2>
-          <div className="mt-6 grid gap-4 md:grid-cols-3">
-            {[
-              {
-                step: "01",
-                title: "Develop your skills",
-                text: "Continue a practical course and build your learning record.",
-                href: "/courses",
-                action: "Explore learning",
-              },
-              {
-                step: "02",
-                title: "Earn your credentials",
-                text: "Complete eligible assessments to earn a TGPI certificate linked to your identity.",
-                href: "/certificates",
-                action: "View certificates",
-              },
-              {
-                step: "03",
-                title: "Prepare your next move",
-                text: "Organize country preparation and return to your personal workspace.",
-                href: "/passport",
-                action: "Open preparation",
-              },
-            ].map((item) => (
-              <Link
-                key={item.step}
-                href={item.href}
-                className={`${styles.actionCard} rounded-2xl border border-white/10 p-5`}
-              >
-                <span className="font-mono text-sm text-[var(--tgpi-gold)]">
-                  <LocalizedText text={item.step} />
-                </span>
-                <h3 className="mt-4 text-lg font-semibold"><LocalizedText text={item.title} /></h3>
-                <p className="mt-2 text-sm leading-6 text-[#B9C7D5]">
-                  <LocalizedText text={item.text} />
-                </p>
-                <span className="mt-5 inline-block text-sm font-semibold text-[var(--tgpi-gold-light)]">
-                  <LocalizedText text={item.action} /> →
-                </span>
-              </Link>
-            ))}
+        <div className={styles.workbench}>
+          <GlobalIdCredentials credentials={credentials} selection={selection} profilePreviewUrl={profilePreviewUrl} copy={copy} />
+          <GlobalIdSharing initialShares={initialShares} revision={key.revision} origin={verifyOrigin} copy={copy} />
+        </div>
+
+        <section className={styles.panel} id="integrity" aria-labelledby="integrity-heading">
+          <div className={styles.sectionHead}>
+            <div>
+              <p className={styles.eyebrow}><LocalizedText text="TGPI Integrity Chain" /></p>
+              <h2 id="integrity-heading"><LocalizedText text="Integrity history" /></h2>
+            </div>
+            <Link href="/profile/security" className={styles.textLink}><LocalizedText text="Account security" /> ↗</Link>
           </div>
-        </section>
-        <details
-          className={`${styles.technical} mt-6 rounded-[28px] border border-white/10 bg-[#08131F] p-5 sm:p-7`}
-        >
-          <summary className="cursor-pointer text-lg font-semibold"><LocalizedText text={"Security & integrity details"} />{" "}
-            <span className="ml-2 text-sm font-normal text-[#B9C7D5]"><LocalizedText text={"Revision"} />{" "}{keyView.revision}{" "}<LocalizedText text={"· View proof history and controls"} /></span>
-          </summary>
-          <div className="mt-6">
-            <CapabilitySystemRail
-              active="global-key"
-              theme="dark"
-              metric={{
-                label: "Integrity revision",
-                value: String(keyView.revision).padStart(2, "0"),
-                detail:
-                  "One identity connects learning, preparation and credentials.",
-              }}
-            />
-          </div>
-          <PublicAnchorPanel anchor={keyView.anchor} onCopy={copyValue} />
-
-          <div className="mt-6 grid gap-6 xl:grid-cols-[minmax(0,1.2fr)_minmax(360px,.8fr)]">
-            <section
-              aria-labelledby="chain-title"
-              className="rounded-[28px] border border-white/10 bg-[#08131F] p-5 sm:p-7"
-            >
-              <div className="flex flex-wrap items-end justify-between gap-4 border-b border-white/10 pb-5">
-                <div>
-                  <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold)]"><LocalizedText text={"Integrity ledger"} /></p>
-                  <h2
-                    id="chain-title"
-                    className="mt-2 font-[var(--tgpi-font-display)] text-3xl font-semibold"
-                  ><LocalizedText text={"Cryptographic block history"} /></h2>
-                </div>
-                <span className="rounded-full border border-white/10 bg-white/5 px-3 py-2 font-mono text-xs text-[#A8B7C5]"><LocalizedText text={"chain:v2"} /></span>
-              </div>
-              <ol className="mt-6 grid gap-6">
-                {keyView.blocks.map((block, index) => (
-                  <ChainBlock
-                    block={block}
-                    current={index === keyView.blocks.length - 1}
-                    key={block.hash}
-                  />
-                ))}
-              </ol>
-            </section>
-
-            <div className="grid content-start gap-6">
-              <section
-                aria-labelledby="fingerprint-title"
-                className="rounded-[28px] border border-[var(--tgpi-gold)]/25 bg-[#10243A] p-5 sm:p-7"
-              >
-                <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold)]"><LocalizedText text={"Cryptographic fingerprint"} /></p>
-                <h2
-                  id="fingerprint-title"
-                  className="mt-2 font-[var(--tgpi-font-display)] text-3xl font-semibold"
-                ><LocalizedText text={"Current proof signature"} /></h2>
-                <p className="mt-5 break-all font-mono text-sm font-bold leading-7 tracking-[0.08em] text-[var(--tgpi-gold-light)]">
-                  {keyView.fingerprint}
-                </p>
-                <button
-                  className="mt-5 min-h-11 rounded-xl border border-white/15 px-4 text-xs font-extrabold transition hover:border-[var(--tgpi-gold)]/45"
-                  onClick={() => copyValue(keyView.fingerprint, "Fingerprint")}
-                  type="button"
-                ><LocalizedText text={"Copy fingerprint"} /></button>
-              </section>
-
-              <section
-                aria-labelledby="rotate-title"
-                className="rounded-[28px] border border-white/10 bg-[#0A1521] p-5 sm:p-7"
-              >
-                <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#7F92A5]"><LocalizedText text={"Proof control"} /></p>
-                <h2 id="rotate-title" className="mt-2 text-xl font-extrabold"><LocalizedText text={"Rotate cryptographic proof"} /></h2>
-                <p className="mt-3 text-xs leading-6 text-[#95A5B5]"><LocalizedText text={"Rotation appends a new signed block and queues it for the next public batch. Your previous Base receipt remains a valid historical proof; your Global ID and account login do not change."} /></p>
-                <button
-                  className={`mt-5 min-h-11 w-full rounded-xl px-4 text-xs font-extrabold transition disabled:cursor-wait disabled:opacity-60 ${
-                    confirmRotation
-                      ? "bg-[var(--tgpi-gold)] text-[#07182D] hover:bg-[#F0C95F]"
-                      : "border border-white/15 bg-white/5 text-white hover:border-[var(--tgpi-gold)]/45"
-                  }`}
-                  disabled={isPending}
-                  onClick={rotateProof}
-                  type="button"
-                >
-                  {isPending
-                    ? <LocalizedText text={"Creating secure block…"} />
-                    : confirmRotation
-                      ? <LocalizedText text={"Confirm proof rotation"} />
-                      : <LocalizedText text={"Rotate proof"} />}
+          <div className={styles.integrityGrid}>
+            <div className={styles.inset}>
+              <p className={styles.smallLabel}><LocalizedText text="Cryptographic fingerprint" /></p>
+              <p><code>{key.fingerprint}</code></p>
+              <p className={styles.muted}><LocalizedText text="The public verifier checks this exact revision against the signed record." /></p>
+              <a className={styles.textLink} href={verifyUrl} rel="noreferrer" target="_blank"><LocalizedText text="Verify proof ↗" /></a>
+            </div>
+            <div className={styles.inset}>
+              <p className={styles.smallLabel}><LocalizedText text="Base Mainnet" /></p>
+              <h3><LocalizedText text={anchorStatus[key.anchor.status]} /></h3>
+              {key.anchor.status === "confirmed" ? (
+                <>
+                  <p className={styles.muted}><LocalizedText text="Base block" /> #{key.anchor.blockNumber}</p>
+                  <a className={styles.textLink} href={key.anchor.explorerUrl} rel="noreferrer" target="_blank"><LocalizedText text="Open Base receipt ↗" /></a>
+                </>
+              ) : <p className={styles.muted}><LocalizedText text="TGPI can verify the signed identity before an external receipt is recorded." /></p>}
+            </div>
+            <div className={styles.inset}>
+              <p className={styles.smallLabel}><LocalizedText text="Proof control" /></p>
+              <h3><LocalizedText text="Rotate cryptographic proof" /></h3>
+              <p className={styles.muted}><LocalizedText text="Rotation adds a signed revision and closes temporary links for the old proof." /></p>
+              <div className={styles.inlineActions}>
+                <button className={styles.secondaryButton} type="button" onClick={rotate} disabled={!canRotate || pending}>
+                  <LocalizedText text={pending ? "Creating secure block…" : confirmRotation ? "Confirm proof rotation" : "Rotate proof"} />
                 </button>
-                {confirmRotation && !isPending ? (
-                  <button
-                    className="mt-3 min-h-10 w-full text-xs font-bold text-[#95A5B5] underline underline-offset-4"
-                    onClick={() => {
-                      setConfirmRotation(false);
-                      setFeedback(null);
-                    }}
-                    type="button"
-                  ><LocalizedText text="Cancel" /></button>
-                ) : null}
-              </section>
-
-              <section className="rounded-[28px] border border-[#2A4B65] bg-[var(--tgpi-navy-raised)] p-5 sm:p-7">
-                <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold)]"><LocalizedText text={"Security boundary"} /></p>
-                <ul className="mt-4 grid gap-3 text-xs leading-5 text-[#B8C5D1]">
-                  <li><LocalizedText text={"✓ Clerk remains responsible for login, MFA, sessions and recovery."} /></li>
-                  <li><LocalizedText text={"✓ Base receives only a Merkle root and non-personal batch metadata."} /></li>
-                  <li><LocalizedText text={"✓ Private TGPI progress never enters the public proof."} /></li>
-                  <li><LocalizedText text={"✓ The key is not a password, wallet, cryptocurrency or NFT."} /></li>
-                  <li><LocalizedText text={"✓ No government, migration or academic credential is implied."} /></li>
-                </ul>
-              </section>
+                {confirmRotation && <button className={styles.secondaryButton} type="button" onClick={() => setConfirmRotation(false)} disabled={pending}><LocalizedText text="Cancel" /></button>}
+              </div>
             </div>
           </div>
-        </details>
 
-        <section
-          aria-labelledby="connections-title"
-          className="mt-6 rounded-[28px] border border-white/10 bg-[#08131F] p-5 sm:p-7"
-        >
-          <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold)]"><LocalizedText text={"One connected identity"} /></p>
-          <h2
-            id="connections-title"
-            className="mt-2 font-[var(--tgpi-font-display)] text-3xl font-semibold"
-          ><LocalizedText text={"Your TGPI, connected."} /></h2>
-          <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
-            {connectedSystems.map((system) => (
-              <Link
-                className="group rounded-2xl border border-white/10 bg-white/[0.035] p-4 transition hover:-translate-y-0.5 hover:border-[var(--tgpi-gold)]/35"
-                href={system.href}
-                key={system.label}
-              >
-                <div className="flex items-center justify-between">
-                  <span aria-hidden="true" className="text-xl">
-                    {system.icon}
-                  </span>
-                  <span
-                    aria-hidden="true"
-                    className="text-[var(--tgpi-gold)] transition group-hover:translate-x-0.5"
-                  >
-                    →
-                  </span>
-                </div>
-                <h3 className="mt-3 text-sm font-extrabold"><LocalizedText text={system.label} /></h3>
-                <p className="mt-2 text-sm leading-5 text-[#8FA0B2]">
-                  <LocalizedText text={system.description} />
-                </p>
-              </Link>
-            ))}
-          </div>
+          <details className={styles.proofDetails}>
+            <summary><LocalizedText text="Signed block history" /> <span>{key.blocks.length}</span></summary>
+            <ol className={styles.historyList}>
+              {[...key.blocks].reverse().map(block => (
+                <li key={block.hash}>
+                  <span aria-hidden="true">{String(block.sequence).padStart(2, "0")}</span>
+                  <div>
+                    <p><LocalizedText text={block.type === "issued" ? "Global identity issued" : "Proof rotation"} /> · <time dateTime={block.timestamp}>{date.format(new Date(block.timestamp))}</time></p>
+                    <code>{block.hash}</code>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </details>
+
+          <details className={styles.proofDetails}>
+            <summary><LocalizedText text="Portable proof and QR" /></summary>
+            <p className={styles.muted}><LocalizedText text="Portable proofs stay verifiable as historical records after rotation. Use a temporary link when you need expiry or revocation." /></p>
+            <div className={styles.inlineActions}>
+              <button className={styles.secondaryButton} type="button" onClick={() => void copy(verifyUrl)}><LocalizedText text="Copy verification link" /></button>
+              <button className={styles.secondaryButton} type="button" onClick={() => void copy(key.proof)}><LocalizedText text="Copy proof code" /></button>
+              <button className={styles.secondaryButton} type="button" aria-expanded={showQr} aria-controls="portable-global-id-qr" onClick={() => setShowQr(!showQr)}>
+                <LocalizedText text={showQr ? "Hide verification QR" : "Show verification QR"} />
+              </button>
+            </div>
+            <div id="portable-global-id-qr" hidden={!showQr} className={styles.qr}>
+              {showQr && <QRCodeSVG value={verifyUrl} size={232} marginSize={4} level="M" title={t("TGPI Global ID verification")} />}
+            </div>
+          </details>
         </section>
 
-        <p className="mt-6 rounded-2xl border border-[var(--tgpi-gold)]/20 bg-[var(--tgpi-gold)]/[0.06] px-5 py-4 text-xs leading-6 text-[#B8C5D1]">
-          <strong className="text-[var(--tgpi-gold-light)]"><LocalizedText text={"Technology disclosure:"} /></strong>{" "}<LocalizedText text={"TGPI Integrity Chain V2 combines a TGPI-operated authenticated identity record with periodic Merkle-root anchoring on Base Mainnet. The receipt is publicly auditable, but the Global Key is not a cryptocurrency, NFT, wallet, passport or government credential."} /></p>
-
-        <div
-          aria-live="polite"
-          className={`pointer-events-none fixed inset-x-4 bottom-5 z-50 mx-auto max-w-lg transition ${feedback ? "translate-y-0 opacity-100" : "translate-y-4 opacity-0"}`}
-          role="status"
-        >
-          {feedback ? (
-            <p
-              className={`rounded-2xl border px-4 py-3 text-center text-xs font-extrabold shadow-2xl backdrop-blur ${feedback.tone === "error" ? "border-[#E98585]/30 bg-[#3A1118]/95 text-[#FFD1D1]" : "border-[#72C79D]/30 bg-[#0B2B21]/95 text-[#C1EBD5]"}`}
-            >
-              <LocalizedText text={feedback.message} />
-            </p>
-          ) : null}
-        </div>
-      </main>
-    </div>
+        <CapabilitySystemRail active="global-key" theme="dark" />
+        <p className={styles.toast} role="status" hidden={!feedback}>{feedback && t(feedback)}</p>
+      </div>
+    </main>
   );
 }

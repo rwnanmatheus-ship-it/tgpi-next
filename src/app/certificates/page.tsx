@@ -187,7 +187,7 @@ export default async function CertificatesPage() {
         <footer className="credential-hub-footer">
           <Link href="/profile"><LocalizedText text="My workspace" /> ↗</Link>
           <Link href="/courses"><LocalizedText text="Learning" /> ↗</Link>
-          <Link href="/global-key"><LocalizedText text="Global Key" /> ↗</Link>
+          <Link href="/global-key"><LocalizedText text="TGPI Global ID" /> ↗</Link>
           <Link href="/verify"><LocalizedText text="Public verification" /> ↗</Link>
         </footer>
       </div>

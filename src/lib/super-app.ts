@@ -50,10 +50,10 @@ export const SUPER_APP_MODULES: readonly SuperAppModule[] = [
     id: "global-key",
     href: "/global-key",
     icon: "🗝️",
-    label: "Global Key",
-    shortLabel: "Global Key",
+    label: "TGPI Global ID",
+    shortLabel: "TGPI Global ID",
     description: "Verify your cryptographic identity and integrity chain.",
-    keywords: ["identity", "cryptographic", "proof", "fingerprint", "verify"],
+    keywords: ["identity", "global key", "global id", "id global", "cryptographic", "proof", "fingerprint", "verify"],
     matchPrefixes: ["/global-key", "/verify/global-key"],
   },
   {

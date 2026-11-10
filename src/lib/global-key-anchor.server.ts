@@ -12,6 +12,8 @@ import {
 } from "viem";
 import { privateKeyToAccount } from "viem/accounts";
 import { base } from "viem/chains";
+import { formatTgpiGlobalId } from "@/lib/auth/guards";
+import { isLearningStorageConfigured } from "@/lib/firestore-admin-rest.server";
 import {
   buildGlobalKeyAnchorBatch,
   createBaseAnchorExplorerUrl,
@@ -26,15 +28,11 @@ import {
   verifyGlobalKeyMerkleProof,
   type GlobalKeyAnchorCandidate,
 } from "@/lib/global-key-anchor";
-import {
-  normalizeGlobalKeyRecord,
-  verifyGlobalKeyChain,
-} from "@/lib/global-key-crypto";
+import { verifyGlobalKeyChain } from "@/lib/global-key-crypto";
+import { loadGlobalKeyLedgerPage, updateGlobalKeyLedger } from "@/lib/global-key-ledger.server";
 import { getGlobalKeySecretForSlot } from "@/lib/global-key-secrets.server";
 import {
-  TGPI_GLOBAL_KEY_ANCHOR_METADATA_KEY,
   TGPI_GLOBAL_KEY_ANCHOR_SCHEMA_VERSION,
-  TGPI_GLOBAL_KEY_METADATA_KEY,
   type TgpiGlobalKeyAnchorRecord,
   type TgpiGlobalKeyAnchorView,
 } from "@/lib/global-key";
@@ -44,7 +42,6 @@ const MAX_BATCH_SIZE = 250;
 const DEFAULT_SCAN_LIMIT = 5_000;
 const MAX_SCAN_LIMIT = 20_000;
 const CLERK_PAGE_SIZE = 500;
-const MAX_PRIVATE_METADATA_BYTES = 7_500;
 const DEFAULT_MAX_EXECUTION_COST_WEI = BigInt("100000000000000");
 const ABSOLUTE_MAX_EXECUTION_COST_WEI = BigInt("1000000000000000");
 const BASE_PUBLIC_RPC_URL = "https://mainnet.base.org";
@@ -63,6 +60,7 @@ export type BaseAnchorRunResult =
       batchId: string;
       blockNumber: string;
       failedMetadataWrites: number;
+      historicalReceipts: number;
       integrityFailures: number;
       root: string;
       scanned: number;
@@ -191,44 +189,34 @@ async function collectAnchorCandidates() {
       offset,
       orderBy: "+created_at",
     });
+    const readLedger = await loadGlobalKeyLedgerPage(page.data.map(user => user.id));
 
     for (const user of page.data) {
       scanned += 1;
-      const record = normalizeGlobalKeyRecord(
-        user.privateMetadata[TGPI_GLOBAL_KEY_METADATA_KEY],
-      );
-      if (!record) continue;
-
-      let secret: string;
+      if (user.banned || user.locked) continue;
+      let ledger;
       try {
-        secret = getGlobalKeySecretForSlot(record.keySlot);
+        ledger = readLedger(user.id, user.privateMetadata);
+        if (!ledger) continue;
+        if (!verifyGlobalKeyChain({
+          expectedKeyId: formatTgpiGlobalId(user.id),
+          record: ledger.record,
+          secret: getGlobalKeySecretForSlot(ledger.record.keySlot),
+        })) {
+          integrityFailures += 1;
+          continue;
+        }
       } catch {
         integrityFailures += 1;
         continue;
       }
-      if (
-        !verifyGlobalKeyChain({
-          expectedKeyId: record.keyId,
-          record,
-          secret,
-        })
-      ) {
-        integrityFailures += 1;
-        continue;
-      }
-
+      const { record, anchor } = ledger;
       const eventHash = record.events.at(-1)?.hash;
       if (!eventHash) {
         integrityFailures += 1;
         continue;
       }
-      if (
-        isCurrentAnchor(
-          user.privateMetadata[TGPI_GLOBAL_KEY_ANCHOR_METADATA_KEY],
-          record.revision,
-          eventHash,
-        )
-      ) {
+      if (isCurrentAnchor(anchor, record.revision, eventHash)) {
         continue;
       }
 
@@ -249,31 +237,12 @@ async function collectAnchorCandidates() {
   return { candidates, client, integrityFailures, scanned };
 }
 
-function withAnchorMetadata(
-  privateMetadata: Record<string, unknown>,
-  anchor: TgpiGlobalKeyAnchorRecord,
-) {
-  const nextMetadata = {
-    ...privateMetadata,
-    [TGPI_GLOBAL_KEY_ANCHOR_METADATA_KEY]: anchor,
-  };
-  if (
-    Buffer.byteLength(JSON.stringify(nextMetadata), "utf8") >
-    MAX_PRIVATE_METADATA_BYTES
-  ) {
-    throw new GlobalKeyAnchorError(
-      "A member record exceeded the safe private metadata limit.",
-    );
-  }
-  return nextMetadata;
-}
-
 async function mapWithConcurrency<T>(
   values: T[],
   concurrency: number,
-  work: (value: T) => Promise<"anchored" | "failed" | "rotated">,
+  work: (value: T) => Promise<"anchored" | "failed" | "historical" | "rotated">,
 ) {
-  const results: Array<"anchored" | "failed" | "rotated"> = [];
+  const results: Array<"anchored" | "failed" | "historical" | "rotated"> = [];
   let cursor = 0;
   async function worker() {
     while (cursor < values.length) {
@@ -292,7 +261,8 @@ export function isBaseMainnetAnchorConfigured() {
   if (
     process.env.VERCEL_ENV !== "production" ||
     process.env.TGPI_BASE_ANCHOR_ENABLED !== "true" ||
-    (process.env.CRON_SECRET?.trim().length || 0) < 32
+    (process.env.CRON_SECRET?.trim().length || 0) < 32 ||
+    !isLearningStorageConfigured()
   ) {
     return false;
   }
@@ -307,10 +277,7 @@ export function isBaseMainnetAnchorConfigured() {
 }
 
 export async function anchorPendingGlobalKeys(): Promise<BaseAnchorRunResult> {
-  if (
-    process.env.VERCEL_ENV !== "production" ||
-    process.env.TGPI_BASE_ANCHOR_ENABLED !== "true"
-  ) {
+  if (!isBaseMainnetAnchorConfigured()) {
     throw new GlobalKeyAnchorError(
       "Base Mainnet anchoring is not enabled for this production runtime.",
     );
@@ -337,6 +304,9 @@ export async function anchorPendingGlobalKeys(): Promise<BaseAnchorRunResult> {
     root: batch.root,
   });
   const publicClient = getPublicClient(rpcUrl);
+  if (await publicClient.getChainId() !== TGPI_BASE_CHAIN_ID) {
+    throw new GlobalKeyAnchorError("The anchor RPC is not connected to Base Mainnet.");
+  }
   const walletClient = createWalletClient({
     account,
     chain: base,
@@ -383,17 +353,7 @@ export async function anchorPendingGlobalKeys(): Promise<BaseAnchorRunResult> {
   const results = await mapWithConcurrency(batch.members, 3, async (member) => {
     try {
       const user = await client.users.getUser(member.reference);
-      const current = normalizeGlobalKeyRecord(
-        user.privateMetadata[TGPI_GLOBAL_KEY_METADATA_KEY],
-      );
-      const currentHash = current?.events.at(-1)?.hash;
-      if (
-        !current ||
-        current.revision !== member.revision ||
-        currentHash !== member.eventHash
-      ) {
-        return "rotated";
-      }
+      if (user.banned || user.locked) return "rotated";
 
       const anchor: TgpiGlobalKeyAnchorRecord = {
         anchoredAt,
@@ -412,10 +372,19 @@ export async function anchorPendingGlobalKeys(): Promise<BaseAnchorRunResult> {
         status: "confirmed",
         transactionHash: transactionHash.toLowerCase(),
       };
-      await client.users.updateUserMetadata(member.reference, {
-        privateMetadata: withAnchorMetadata(user.privateMetadata, anchor),
+      return await updateGlobalKeyLedger<"anchored" | "historical" | "rotated">(member.reference, user.privateMetadata, ledger => {
+        const record = ledger?.record;
+        if (!record || record.keyId !== member.keyId || record.events[member.revision - 1]?.hash !== member.eventHash) {
+          return { result: "rotated" };
+        }
+        if (record.revision !== member.revision) {
+          return { historicalReceipt: anchor, result: "historical" };
+        }
+        if (isCurrentAnchor(ledger.anchor, member.revision, member.eventHash)) {
+          return { result: "anchored" };
+        }
+        return { next: { record, anchor }, result: "anchored" };
       });
-      return "anchored";
     } catch (error) {
       console.error("Unable to persist a Global Key anchor receipt", {
         errorName: error instanceof Error ? error.name : "UnknownError",
@@ -430,6 +399,7 @@ export async function anchorPendingGlobalKeys(): Promise<BaseAnchorRunResult> {
     batchId,
     blockNumber: receipt.blockNumber.toString(),
     failedMetadataWrites: results.filter((result) => result === "failed").length,
+    historicalReceipts: results.filter((result) => result === "historical").length,
     integrityFailures,
     root: batch.root,
     scanned,
@@ -482,8 +452,15 @@ export async function verifyGlobalKeyBaseAnchor({
     const decoded = decodeBaseAnchorPayload(transaction.input);
     const explorerUrl = createBaseAnchorExplorerUrl(anchor.transactionHash);
     const expectedSigner = getAddress(anchor.signerAddress as Address).toLowerCase();
+    const chainId = "chainId" in transaction && transaction.chainId
+      ? transaction.chainId
+      : await publicClient.getChainId();
     if (
       receipt.status !== "success" ||
+      transaction.hash.toLowerCase() !== anchor.transactionHash ||
+      receipt.transactionHash.toLowerCase() !== anchor.transactionHash ||
+      transaction.blockHash !== receipt.blockHash ||
+      chainId !== TGPI_BASE_CHAIN_ID ||
       receipt.blockNumber.toString() !== anchor.blockNumber ||
       transaction.from.toLowerCase() !== expectedSigner ||
       transaction.to?.toLowerCase() !== expectedSigner ||

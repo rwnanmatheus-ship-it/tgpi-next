@@ -19,7 +19,7 @@ import {
 const CHAIN_CONTEXT = "tgpi-global-key-chain-v1";
 const PROOF_CONTEXT = "tgpi-global-key-proof-v1";
 const PROOF_PREFIX = "TGK1";
-const MAX_EVENTS = 12;
+const MAX_EVENTS = 128;
 const MIN_ROTATION_INTERVAL_MS = 60_000;
 const SAFE_GLOBAL_ID = /^TGPI-[A-F0-9]{4}-[A-F0-9]{4}-[A-F0-9]{4}$/;
 const SAFE_HASH = /^[A-Za-z0-9_-]{43}$/;
@@ -300,7 +300,7 @@ export function rotateGlobalKey({
   }
   if (record.events.length >= MAX_EVENTS) {
     throw new GlobalKeyIntegrityError(
-      "This V1 chain has reached its safe rotation limit.",
+      "This identity has reached its proof rotation limit.",
     );
   }
   if (!isIsoDate(now)) {
@@ -337,14 +337,26 @@ export function rotateGlobalKey({
   } satisfies TgpiGlobalKeyRecord;
 }
 
-export function getGlobalKeyFingerprint(record: TgpiGlobalKeyRecord) {
-  const currentHash = record.events.at(-1)?.hash || "";
+export function getGlobalKeyFingerprint(record: TgpiGlobalKeyRecord, revision = record.revision) {
+  const currentHash = record.events[revision - 1]?.hash || "";
   const digest = createHash("sha256")
-    .update(`${record.keyId}|${record.revision}|${currentHash}`)
+    .update(`${record.keyId}|${revision}|${currentHash}`)
     .digest("hex")
     .slice(0, 32)
     .toUpperCase();
   return digest.match(/.{1,4}/g)?.join("-") || "UNAVAILABLE";
+}
+
+export function getGlobalKeyProofStatus(
+  record: TgpiGlobalKeyRecord,
+  proof: Pick<ProofPayload, "currentHash" | "issuedAt" | "keyId" | "revision">,
+) {
+  const event = record.events[proof.revision - 1];
+  if (
+    record.keyId !== proof.keyId || record.issuedAt !== proof.issuedAt ||
+    !event || !safeEqual(event.hash, proof.currentHash)
+  ) return "invalid";
+  return record.revision === proof.revision ? "verified" : "historical";
 }
 
 export function createGlobalKeyProof({
@@ -420,7 +432,7 @@ export function readGlobalKeyProof({
 
   try {
     const packed = Buffer.from(encoded, "base64url");
-    if (packed.length < 29) return null;
+    if (packed.length < 29 || packed.toString("base64url") !== encoded) return null;
     const iv = packed.subarray(0, 12);
     const tag = packed.subarray(12, 28);
     const encrypted = packed.subarray(28);

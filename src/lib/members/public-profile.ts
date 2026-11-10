@@ -14,6 +14,7 @@ export function projectPublicMember(input: {
   name: string; avatar: string; country: string; goal: string;
   countries: PublicMemberProfile['countries']; rank: PublicMemberProfile['rank'];
   courses: PublicMemberProfile['courses']; certificates: PublicMemberProfile['certificates'];
+  credentialShowcaseEnabled?: boolean;
 }): PublicMemberProfile {
   const p = input.profile;
   const number = input.identity?.number ?? input.fallbackNumber;
@@ -27,6 +28,7 @@ export function projectPublicMember(input: {
     links: p.privacy.showLinks ? [{ label: 'Website', url: p.website }, { label: 'LinkedIn', url: p.linkedin }, { label: 'Instagram', url: p.instagram }].filter(x => x.url) : [],
     goal: p.privacy.showGoals ? input.goal : '', countries: p.privacy.showGoals ? input.countries : [],
     rank: p.privacy.showProgress ? input.rank : null,
-    courses: p.privacy.showProgress ? input.courses : [], certificates: p.privacy.showProgress ? input.certificates : [],
+    courses: p.privacy.showProgress ? input.courses : [],
+    certificates: p.privacy.showProgress || input.credentialShowcaseEnabled ? input.certificates : [],
   };
 }

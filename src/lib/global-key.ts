@@ -94,9 +94,10 @@ export type GlobalKeyVerification =
         | TgpiGlobalKeyAnchorView
         | { status: "invalid" | "unavailable" };
       fingerprint: string;
+      currentRevision: number;
       issuedAt: string;
       keyId: string;
       revision: number;
       status: "verified" | "historical";
     }
-  | { status: "invalid" | "unavailable" };
+  | { status: "invalid" | "unavailable" | "expired" | "revoked" | "superseded" };
