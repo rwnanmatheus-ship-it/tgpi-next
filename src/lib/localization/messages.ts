@@ -11856,7 +11856,40 @@ export const messages = {
   },
   "Guidance": {
     "en": "Guidance", "pt-BR": "Orientação", "es": "Orientación", "fr": "Conseils", "de": "Hinweis", "it": "Indicazioni"
-  }
+  },
+  "{country}: Evidence, Comparison & Research Plan | TGPI": {
+    "en": "{country}: Evidence, Comparison & Research Plan | TGPI",
+    "pt-BR": "{country}: evidências, comparação e plano de pesquisa | TGPI",
+    "es": "{country}: evidencias, comparación y plan de investigación | TGPI",
+    "fr": "{country} : données probantes, comparaison et plan de recherche | TGPI",
+    "de": "{country}: Belege, Vergleich und Rechercheplan | TGPI",
+    "it": "{country}: fonti, confronto e piano di ricerca | TGPI"
+  },
+  "Explore {country} through source-linked national statistics, reference years, explicit limitations and a practical personal research plan.": {
+    "en": "Explore {country} through source-linked national statistics, reference years, explicit limitations and a practical personal research plan.",
+    "pt-BR": "Explore {country} com estatísticas nacionais vinculadas às fontes, anos de referência, limites explícitos e um plano prático de pesquisa pessoal.",
+    "es": "Explora {country} con estadísticas nacionales vinculadas a sus fuentes, años de referencia, límites explícitos y un plan práctico de investigación personal.",
+    "fr": "Explorez {country} à partir de statistiques nationales sourcées, d’années de référence, de limites explicites et d’un plan de recherche personnel concret.",
+    "de": "Erkunde {country} anhand nationaler Statistiken mit Quellenangaben, Bezugsjahren, klaren Grenzen und einem praktischen persönlichen Rechercheplan.",
+    "it": "Esplora {country} con statistiche nazionali collegate alle fonti, anni di riferimento, limiti espliciti e un piano pratico di ricerca personale."
+  },
+  "Australia and New Zealand": { "en": "Australia and New Zealand", "pt-BR": "Austrália e Nova Zelândia", "es": "Australia y Nueva Zelanda", "fr": "Australie et Nouvelle-Zélande", "de": "Australien und Neuseeland", "it": "Australia e Nuova Zelanda" },
+  "Central Asia": { "en": "Central Asia", "pt-BR": "Ásia Central", "es": "Asia Central", "fr": "Asie centrale", "de": "Zentralasien", "it": "Asia centrale" },
+  "Eastern Asia": { "en": "Eastern Asia", "pt-BR": "Ásia Oriental", "es": "Asia Oriental", "fr": "Asie orientale", "de": "Ostasien", "it": "Asia orientale" },
+  "Eastern Europe": { "en": "Eastern Europe", "pt-BR": "Europa Oriental", "es": "Europa Oriental", "fr": "Europe de l’Est", "de": "Osteuropa", "it": "Europa orientale" },
+  "Latin America and the Caribbean": { "en": "Latin America and the Caribbean", "pt-BR": "América Latina e Caribe", "es": "América Latina y el Caribe", "fr": "Amérique latine et Caraïbes", "de": "Lateinamerika und die Karibik", "it": "America Latina e Caraibi" },
+  "Melanesia": { "en": "Melanesia", "pt-BR": "Melanésia", "es": "Melanesia", "fr": "Mélanésie", "de": "Melanesien", "it": "Melanesia" },
+  "Micronesia": { "en": "Micronesia", "pt-BR": "Micronésia", "es": "Micronesia", "fr": "Micronésie", "de": "Mikronesien", "it": "Micronesia" },
+  "Northern Africa": { "en": "Northern Africa", "pt-BR": "Norte da África", "es": "África Septentrional", "fr": "Afrique du Nord", "de": "Nordafrika", "it": "Africa settentrionale" },
+  "Northern America": { "en": "Northern America", "pt-BR": "América do Norte", "es": "América Septentrional", "fr": "Amérique du Nord", "de": "Nordamerika", "it": "America settentrionale" },
+  "Northern Europe": { "en": "Northern Europe", "pt-BR": "Europa do Norte", "es": "Europa Septentrional", "fr": "Europe du Nord", "de": "Nordeuropa", "it": "Europa settentrionale" },
+  "Polynesia": { "en": "Polynesia", "pt-BR": "Polinésia", "es": "Polinesia", "fr": "Polynésie", "de": "Polynesien", "it": "Polinesia" },
+  "South-eastern Asia": { "en": "South-eastern Asia", "pt-BR": "Sudeste Asiático", "es": "Asia Sudoriental", "fr": "Asie du Sud-Est", "de": "Südostasien", "it": "Sud-est asiatico" },
+  "Southern Asia": { "en": "Southern Asia", "pt-BR": "Ásia Meridional", "es": "Asia Meridional", "fr": "Asie du Sud", "de": "Südasien", "it": "Asia meridionale" },
+  "Southern Europe": { "en": "Southern Europe", "pt-BR": "Europa Meridional", "es": "Europa Meridional", "fr": "Europe du Sud", "de": "Südeuropa", "it": "Europa meridionale" },
+  "Sub-Saharan Africa": { "en": "Sub-Saharan Africa", "pt-BR": "África Subsaariana", "es": "África Subsahariana", "fr": "Afrique subsaharienne", "de": "Subsahara-Afrika", "it": "Africa subsahariana" },
+  "Western Asia": { "en": "Western Asia", "pt-BR": "Ásia Ocidental", "es": "Asia Occidental", "fr": "Asie occidentale", "de": "Westasien", "it": "Asia occidentale" },
+  "Western Europe": { "en": "Western Europe", "pt-BR": "Europa Ocidental", "es": "Europa Occidental", "fr": "Europe occidentale", "de": "Westeuropa", "it": "Europa occidentale" }
 } as const satisfies Record<string, Record<Locale, string>>;
 
 export type MessageKey = keyof typeof messages;

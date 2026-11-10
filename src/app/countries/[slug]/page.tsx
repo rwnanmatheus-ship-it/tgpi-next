@@ -18,6 +18,8 @@ import CountryResearchBrief from "@/components/intelligence/CountryResearchBrief
 import CountrySatellitePanel from "@/components/countries/CountrySatellitePanel";
 import ResearchWorkbench from "@/components/intelligence/ResearchWorkbench";
 import { LocalizedText } from "@/components/localization/LocaleProvider";
+import { getLocale } from "@/lib/localization/server";
+import { translate } from "@/lib/localization/messages";
 
 
 export const dynamic = "force-dynamic";
@@ -27,7 +29,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const country = getCountry(slug);
   if (!country) return {};
-  return { title: `${country.name}: Evidence, Comparison & Research Plan | TGPI`, description: `Explore ${country.name} through source-linked national statistics, reference years, explicit limitations and a practical personal research plan.`, alternates: { canonical: `https://www.theglobalpolymath.com/countries/${slug}` } };
+  const locale = await getLocale();
+  const name = translate(locale, country.name);
+  return {
+    title: translate(locale, "{country}: Evidence, Comparison & Research Plan | TGPI", { country: name }),
+    description: translate(locale, "Explore {country} through source-linked national statistics, reference years, explicit limitations and a practical personal research plan.", { country: name }),
+    alternates: { canonical: `https://www.theglobalpolymath.com/countries/${slug}` },
+  };
 }
 const CHECKLIST = [
   { title: "Evidence v1 — nationality and route", text: "Use the destination government's or consulate's official service to establish the correct route for your nationality, purpose and duration." },
@@ -43,14 +51,14 @@ export default async function CountryPage({ params }: Props) {
   const state = await getIntelligence();
   return <ActivationProgressProvider><main className="ig-shell country-studio"><div className="ig-container">
     <Link href="/countries" className="ig-link"><LocalizedText text={"← All countries"} /></Link>
-    <header className="country-dossier-hero" id="overview"><Image src={`/images/countries/identity/${slug}.webp`} alt={`${country.name} destination visual`} fill sizes="(max-width: 768px) 100vw, 1280px" className="object-cover" quality={88} priority /><div className="country-dossier-intro"><p className="ig-eyebrow"><LocalizedText text={"Country intelligence /"} />{" "}{identity.iso3} / <LocalizedText text={identity.region} /></p><h1>{country.emoji} <LocalizedText text={country.name} /></h1><p><LocalizedText text={"A destination. A personal plan. Your next informed decision."} /></p><div className="ig-actions"><SavedCountryButton countryName={country.name} countrySlug={slug} /><Link className="ig-button" href={`/compare?country=${slug}`}><LocalizedText text={"Compare destination →"} /></Link><a className="ig-button ig-secondary" href="#research-workbench"><LocalizedText text={"Open Decision Lab ↓"} /></a></div></div></header>
+    <header className="country-dossier-hero" id="overview"><Image src={`/images/countries/identity/${slug}.webp`} alt="" fill sizes="(max-width: 768px) 100vw, 1280px" className="object-cover" quality={88} priority /><div className="country-dossier-intro"><p className="ig-eyebrow"><LocalizedText text={"Country intelligence /"} />{" "}{identity.iso3} / <LocalizedText text={identity.region} /></p><h1>{country.emoji} <LocalizedText text={country.name} /></h1><p><LocalizedText text={"A destination. A personal plan. Your next informed decision."} /></p><div className="ig-actions"><SavedCountryButton countryName={country.name} countrySlug={slug} /><Link className="ig-button" href={`/compare?country=${slug}`}><LocalizedText text={"Compare destination →"} /></Link><a className="ig-button ig-secondary" href="#research-workbench"><LocalizedText text={"Open Decision Lab ↓"} /></a></div></div></header>
     <LocalizedElement as="nav" className="country-section-nav" aria-label="Country research sections"><a href="#overview"><LocalizedText text="Overview" /></a><a href="#research-workbench"><LocalizedText text={"Decision Lab"} /></a><a href="#research-dossier"><LocalizedText text={"Routes & education"} /></a><a href="#cost-of-living"><LocalizedText text={"Cost references"} /></a><a href="#satellite"><LocalizedText text={"Satellite"} /></a><a href="#decision-signals"><LocalizedText text={"National context"} /></a><a href="#documents-to-verify"><LocalizedText text="Preparation" /></a></LocalizedElement>
     <CountryResearchBrief country={slug} name={country.name} />
     <ResearchWorkbench country={slug} countryName={country.name} />
     <DossierEvidence country={slug} />
     <div id="cost-of-living"><CostReferences country={slug} /></div>
     <CountrySatellitePanel country={slug} name={country.name} />
-    <details className="country-provenance"><summary><LocalizedText text={"Country identity, methodology & data status"} /></summary><GraphStatus state={state} /><p className="ig-small">{identity.name} · {identity.iso2} / {identity.iso3} · M49 {identity.m49} · {identity.subregion || identity.region}</p><p className="ig-meta"><LocalizedText text={"Identity reference consulted"} />{" "}{identitySource.retrievedAt.slice(0, 10)}<LocalizedText text={". Statistical geography does not express a position on sovereignty or border disputes."} /></p><a className="ig-link" href={identitySource.url} target="_blank" rel="noreferrer"><LocalizedText text={"UN Statistics Division — M49 ↗"} /></a></details>
+    <details className="country-provenance"><summary><LocalizedText text={"Country identity, methodology & data status"} /></summary><GraphStatus state={state} /><p className="ig-small"><LocalizedText text={identity.name} /> · {identity.iso2} / {identity.iso3} · M49 {identity.m49} · <LocalizedText text={identity.subregion || identity.region} /></p><p className="ig-meta"><LocalizedText text={"Identity reference consulted"} />{" "}{identitySource.retrievedAt.slice(0, 10)}<LocalizedText text={". Statistical geography does not express a position on sovereignty or border disputes."} /></p><a className="ig-link" href={identitySource.url} target="_blank" rel="noreferrer"><LocalizedText text={"UN Statistics Division — M49 ↗"} /></a></details>
     <section id="decision-signals" className="ig-section"><p className="ig-eyebrow"><LocalizedText text={"National context / Source-linked observations"} /></p><h2><LocalizedText text={"Facts with their boundaries."} /></h2><div className="ig-evidence-grid">{INDICATOR_IDS.map(id => <EvidenceCard key={id} indicator={id} countryCode={identity.iso2} observation={findObservation(state.snapshot, slug, id)} />)}</div></section>
     <SourceWatch key={slug} country={slug} />
     <section id="strategic-fit" className="ig-section ig-panel"><h2><LocalizedText text={"What these data cannot tell you."} /></h2><p className="ig-small"><LocalizedText text={"Personal safety, salary, housing affordability, immigration eligibility, university quality and your chance of success require separate evidence. TGPI does not substitute macroeconomic indicators for these answers or issue an unsupported “best country” score."} /></p><Link className="ig-link" href={`/country-fit?country=${slug}`}><LocalizedText text={"Connect this evidence to my questions →"} /></Link></section>

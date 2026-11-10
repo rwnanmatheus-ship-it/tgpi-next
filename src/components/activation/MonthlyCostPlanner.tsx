@@ -62,7 +62,7 @@ export default function MonthlyCostPlanner({
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#315F98]"><LocalizedText text={"My monthly estimate"} /></p>
-          <p className="mt-2 text-sm leading-6 text-[#334A64]"><LocalizedText text={"Enter your own monthly estimate for"} />{" "}{countryName}{" "}<LocalizedText text={"in"} />{" "}{currency}<LocalizedText text={". Use dated local quotes; no reference budget is supplied by TGPI."} /></p>
+          <p className="mt-2 text-sm leading-6 text-[#334A64]"><LocalizedText text={"Enter your own monthly estimate for"} />{" "}<LocalizedText text={countryName} />{" "}<LocalizedText text={"in"} />{" "}{currency}<LocalizedText text={". Use dated local quotes; no reference budget is supplied by TGPI."} /></p>
         </div>
         <p className="text-2xl font-black text-[#071A32]">
           {amount > 0 ? formatAmount(locale, amount, currency) : <LocalizedText text={"Not set"} />}
@@ -108,7 +108,7 @@ export default function MonthlyCostPlanner({
       ) : null}
 
       <p className="mt-3 min-h-5 text-xs font-bold text-[#8A5A0A]" aria-live="polite">
-        {error ||
+        {error ? <LocalizedText text={error} /> :
           (saved
             ? <LocalizedText text={"Saved to your private TGPI workspace."} />
             : <LocalizedText text={"Educational estimate only. Validate current local prices before decisions."} />)}
