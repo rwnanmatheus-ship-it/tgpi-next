@@ -1,0 +1,30 @@
+// The internal operations console uses Brazilian Portuguese.
+export const healthCopy = {
+  eyebrow: "TGPI / OPERAÇÕES DO PRODUTO",
+  title: "Saúde do produto",
+  intro: "Acompanhe os serviços que sustentam a experiência TGPI e identifique onde agir primeiro.",
+  restricted: "Acesso administrativo",
+  checkedAt: "Última verificação",
+  refresh: "Verificar novamente",
+  refreshing: "Verificando…",
+  signals: "Serviços e evidências",
+  scope: "Retrato do ambiente atual. A consulta é somente leitura e ocorre ao abrir ou atualizar o painel.",
+  timing: "Tempo da consulta",
+  milliseconds: " ms",
+  timeZone: " BRT",
+  operations: "Ferramentas de operação",
+  operationsDetail: "Investigue ocorrências e abra as áreas que já fazem parte da administração TGPI.",
+  verificationScope: "O tempo exibido mede apenas a leitura ou a validação executada. Disponibilidade histórica, conversão e receita ficam fora deste retrato.",
+  states: {
+    verified: { label: "Verificado", detail: "A consulta confirmou o sinal", mark: "✓" },
+    configured: { label: "Configurado", detail: "Configuração validada localmente", mark: "•" },
+    attention: { label: "Atenção", detail: "Requer revisão ou teste", mark: "!" },
+    failed: { label: "Falha na consulta", detail: "O teste retornou um erro", mark: "×" },
+  },
+  links: [
+    { label: "Comunicados e notificações", href: "/admin/notifications" },
+    { label: "Revisão de cursos", href: "/admin/learning/professional" },
+    { label: "Vercel · logs e deploys", href: "https://vercel.com/rwnanmatheus-ship-its-projects/tgpi-next" },
+    { label: "Stripe · receita e eventos", href: "https://dashboard.stripe.com/" },
+  ],
+} as const;

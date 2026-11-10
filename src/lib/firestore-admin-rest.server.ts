@@ -378,6 +378,7 @@ async function beginTransaction() {
 export async function getFirestoreDocuments<T>(
   documentPaths: string[],
   transaction?: string,
+  signal?: AbortSignal,
 ) {
   const pathsByName = new Map(documentPaths.map(path => [firestoreDocumentName(path), path]));
   const result = new Map<string, FirestoreDecodedDocument<T> | null>();
@@ -389,6 +390,7 @@ export async function getFirestoreDocuments<T>(
       transaction,
     }),
     method: "POST",
+    signal,
   });
   const payload = (await response.json()) as Array<{
     found?: FirestoreDocument;
