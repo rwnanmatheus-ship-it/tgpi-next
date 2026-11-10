@@ -1,3 +1,4 @@
+import { comparisonPath } from './comparison-state.ts';
 import type { TgpiActivationProgress } from './activation-progress.ts';
 import type { Course } from '../types/course.ts';
 import { getLearningContinuation } from './learning-continuity.ts';
@@ -27,9 +28,8 @@ export function buildWorkspaceResources(progress: TgpiActivationProgress, catalo
   for (const comparison of progress.comparisons) {
     const selected = comparison.countrySlugs.flatMap(slug => countries.filter(c => c.slug === slug));
     if (selected.length < 2) continue;
-    const params = new URLSearchParams({ goal: comparison.goal });
-    selected.forEach(c => params.append('country', c.slug));
-    resources.push({ id: comparison.id, title: selected.map(c => c.name).join(' / '), kind: 'comparison', href: `/compare?${params}`, detail: `${comparison.goal} comparison`, updatedAt: comparison.updatedAt });
+    const href = comparisonPath(selected.map(country => country.slug), comparison.goal);
+    resources.push({ id: comparison.id, title: selected.slice(0, 3).map(c => c.name).join(' / ') + (selected.length > 3 ? ` (+${selected.length - 3})` : ''), kind: 'comparison', href, detail: `${comparison.goal} comparison`, updatedAt: comparison.updatedAt });
   }
   for (const [id, record] of Object.entries(progress.courseProgress)) {
     const continuation = getLearningContinuation(catalogue, { [id]: record });
@@ -59,7 +59,7 @@ export function parseWorkspaceHistoryPage(value: unknown): { events: TgpiActivat
   if (!page.events.every(raw => {
     if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return false;
     const event = raw as Record<string, unknown>;
-    return typeof event.id === 'string' && event.id.length > 0 && event.id.length <= 160 && typeof event.title === 'string' && event.title.length <= 120 && typeof event.href === 'string' && event.href.startsWith('/') && !event.href.startsWith('//') && event.href.length <= 180 && typeof event.type === 'string' && types.includes(event.type) && typeof event.occurredAt === 'string' && Number.isFinite(Date.parse(event.occurredAt));
+    return typeof event.id === 'string' && event.id.length > 0 && event.id.length <= 160 && typeof event.title === 'string' && event.title.length <= 120 && typeof event.href === 'string' && event.href.startsWith('/') && !event.href.startsWith('//') && event.href.length <= 650 && typeof event.type === 'string' && types.includes(event.type) && typeof event.occurredAt === 'string' && Number.isFinite(Date.parse(event.occurredAt));
   })) return null;
   return { events: page.events as TgpiActivationProgress['activities'], cursor: page.cursor as string | null };
 }

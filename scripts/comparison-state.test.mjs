@@ -65,3 +65,15 @@ test('CSV includes every selected destination, missing values, years and source 
   assert.match(csv, /"","people","","Not available"/);
   assert.equal(csvCell('=HYPERLINK("bad")'), '"\'=HYPERLINK(""bad"")"');
 });
+
+test('workspace resources and history preserve the full compact comparison URL', async()=>{
+  const { buildWorkspaceResources, parseWorkspaceHistoryPage } = await import('../src/lib/workspace-control.ts');
+  const countries=COMPARISON_CATALOG.map(slug=>({slug,name:slug}));
+  const progress=createEmptyActivationProgress();
+  progress.comparisons=[{id:'all-countries',countrySlugs:[...COMPARISON_CATALOG],goal:'work',updatedAt:'2026-11-09T22:00:00.000Z'}];
+  const [resource]=buildWorkspaceResources(progress,[],countries);
+  assert.deepEqual(decodeCountrySet(new URL(resource.href,'https://tgpi.test').searchParams.get('set')),[...COMPARISON_CATALOG]);
+  const page=parseWorkspaceHistoryPage({events:[{id:'all-countries',href:resource.href,title:'195 countries',type:'comparison',occurredAt:'2026-11-09T22:00:00.000Z'}],cursor:null});
+  assert.ok(page);
+  assert.equal(page.events[0].href,resource.href);
+});
