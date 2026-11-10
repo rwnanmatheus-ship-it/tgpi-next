@@ -9,7 +9,7 @@ export const HOME_ROUTES = {
   learning: "/courses",
   pricing: "/pricing#membership",
   premium: "/premium",
-  methodology: "/authority",
+  methodology: "/intelligence",
 } as const;
 
 export const HOME_FAQ = [

@@ -1,36 +1,190 @@
-import { localizeMetadata } from "@/lib/localization/metadata.server";
-import AreaHero from "@/components/ui/AreaHero";
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
-import { getCountryContext } from "@/lib/intelligence/country-context.server";
-import { CONTEXT_INDICATOR_IDS, CONTEXT_INDICATORS, contextEvidenceStatus } from "@/lib/intelligence/country-context";
-import { GraphStatus } from "@/components/intelligence/Evidence";
+import { Suspense } from "react";
+import { LocalizedText as Copy } from "@/components/localization/LocaleProvider";
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
+import { localizeMetadata } from "@/lib/localization/metadata.server";
 import EvidenceLesson from "@/components/intelligence/EvidenceLesson";
-import { getIntelligence, identities, identitySource } from "@/lib/intelligence/server";
-import { INDICATOR_IDS, INDICATORS, evidenceStatus } from "@/lib/intelligence/core";
+import EvidenceAtlasLink from "@/components/intelligence/provenance/EvidenceAtlasLink";
+import EvidenceCoverage from "@/components/intelligence/provenance/EvidenceCoverage";
+import ProvenanceExplorer from "@/components/intelligence/provenance/ProvenanceExplorer";
+import styles from "@/components/intelligence/provenance/provenance.module.css";
+import { identities, identitySource } from "@/lib/intelligence/server";
+import { INDICATOR_IDS } from "@/lib/intelligence/core";
+import { CONTEXT_INDICATOR_IDS } from "@/lib/intelligence/country-context";
 import { DOSSIER_CLAIMS, DOSSIER_COUNTRIES, DOSSIER_SOURCES, DOSSIER_VERSION } from "@/lib/intelligence/dossiers";
-import { LocalizedText } from "@/components/localization/LocaleProvider";
-
+import { buildSourceRecords } from "@/lib/intelligence/provenance";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
-const sourceMetadata: Metadata = { title: "Intelligence Graph — Sources & Methodology | TGPI", description: "Inspect TGPI's country evidence, data coverage, confidence rules, update process and limitations.", alternates: { canonical: "https://www.theglobalpolymath.com/intelligence" } };
-export default async function IntelligencePage() {
-  const [state, context] = await Promise.all([getIntelligence(), getCountryContext()]);
-  const coverage = new Set(state.snapshot.observations.map(o => o.country)).size;
-  return <main className="ig-shell"><div className="ig-container">
-    <AreaHero id="intelligence-title" eyebrow="TGPI / Sources & methodology" title={<><LocalizedText text={"Intelligence you"} /><br /><LocalizedText text={"can investigate."} /></>} description="Inspect source coverage, reference dates and the limits behind our research. Every decision deserves evidence you can trace." image="/images/cinematic-2026/learning-atelier-1600.webp" actions={[{href:"/countries",label:"Explore country evidence"},{href:"/compare",label:"Compare destinations"}]} />
-    <GraphStatus state={state} />
-    <section className="ig-section ig-panel"><p className="ig-eyebrow"><LocalizedText text={"Decision dossier layer /"} />{" "}{DOSSIER_VERSION}</p><h2><LocalizedText text={"Deeper evidence, with a separate review clock."} /></h2><p className="ig-small">{DOSSIER_CLAIMS.length}{" "}<LocalizedText text={"selected summaries across"} />{" "}{DOSSIER_COUNTRIES.length}{" "}<LocalizedText text={"initial destinations connect entry/residence research, institution checks and scoped cost references."} />{" "}{DOSSIER_SOURCES.filter(s => s.reviewedAt).length}{" "}<LocalizedText text={"sources have a content-review date;"} />{" "}{DOSSIER_SOURCES.filter(s => !s.reviewedAt).length}{" "}<LocalizedText text={"additional pointers remain unconfirmed. Coverage differs by country and layer. A government requirement, a university estimate and your own budget are never interchangeable."} /></p><p className="ig-small"><LocalizedText text={"Requirements are normally due for another source review after 30 days; other summaries after 90 days unless a shorter interval or reference-period boundary applies. These are TGPI operational review intervals, not guarantees of legal validity. Overdue or expired summaries are labelled. Source authority does not remove the need to confirm personal applicability."} /></p><p className="ig-small"><LocalizedText text={"Source Watch retrieves exact registered pages, with six-hour caching, time and size limits and at most one transient retry. Access restrictions and redirects are not bypassed. HTTP status, selected text markers and normalized-content fingerprints are recorded. A changed fingerprint or missing marker is a review signal, not proof of a changed law. Successful automated checks never renew editorial dates or rewrite rules. A configured daily workflow archives checks and compares available fingerprints with its previous cache when present; the initial run has no historical baseline."} /></p><p className="ig-small"><LocalizedText text={"The Decision Lab stores three independent scenarios per destination after an explicit save, and updates the legacy active worksheet for compatibility. Private tab drafts use session storage scoped to the account, country and scenario. It preserves profile, shortlist and learning metadata. Numbers, quote notes and checkpoint completions are user-authored assumptions, not verified evidence or legal approval. Changing currency clears amounts rather than silently relabelling them."} /></p><div className="ig-actions"><Link className="ig-button" href="/intelligence/research"><LocalizedText text={"Inspect dossier coverage →"} /></Link><Link className="ig-link" href="/country-fit#research-workbench"><LocalizedText text={"Open the Decision Lab"} /></Link></div></section>
-    <section className="ig-section ig-evidence-grid"><article className="ig-panel"><p className="ig-eyebrow"><LocalizedText text={"Identity coverage"} /></p><p className="ig-value">{identities.length} / 195</p><p className="ig-small"><LocalizedText text={"TGPI catalog entries mapped to UNSD M49 and ISO identifiers. Names in the interface can be familiar display aliases."} /></p><a className="ig-link" href={identitySource.url} target="_blank" rel="noreferrer"><LocalizedText text={"UNSD identity source ↗"} /></a></article><article className="ig-panel"><p className="ig-eyebrow"><LocalizedText text={"Statistical coverage"} /></p><p className="ig-value">{coverage} / 195</p><p className="ig-small"><LocalizedText text={"Countries with at least one collected observation."} />{" "}{state.snapshot.observations.length}{" "}<LocalizedText text={"observations in this revision. Coverage is not a measure of data quality or a claim that every topic is verified."} /></p></article></section>
-    <section className="ig-section ig-panel"><h2><LocalizedText text={"One source of evidence. Several useful decisions."} /></h2><div className="ig-task-grid">{[["Country dossier", "Inspect the country identity, national context, source, collection date and reference year."], ["Compare", "Compare the same indicators with their units and years visible. Missing values remain missing; different years are disclosed."], ["Country Fit", "Bring your goals and constraints to the evidence. No composite fit percentage or visa prediction is published without a defensible validated model."], ["Personal plan & learning", "Use the gaps to create research tasks, collect your own cost estimates, check official requirements and practice critical interpretation."]].map(([title, detail]) => <article className="ig-task" key={title}><h3><LocalizedText text={title} /></h3><p className="ig-small"><LocalizedText text={detail} /></p></article>)}</div></section>
-    <section className="ig-section"><h2><LocalizedText text={"The data we publish — and what they mean."} /></h2><div className="ig-evidence-grid">{INDICATOR_IDS.map(id => { const rows = state.snapshot.observations.filter(o => o.indicator === id); return <article key={id} className="ig-panel"><p className="ig-eyebrow"><LocalizedText text={"World Development Indicators"} /></p><h3><LocalizedText text={INDICATORS[id].label} /></h3><p className="ig-small"><LocalizedText text={INDICATORS[id].explanation} /></p><p className="ig-meta">{id} · <LocalizedText text={INDICATORS[id].unit} /><br />{rows.length}<LocalizedText text={"/195 available ·"} />{" "}{rows.filter(o => evidenceStatus(o) === "current").length}{" "}<LocalizedText text={"within freshness rules"} /><br /><LocalizedText text={"Reference-year threshold:"} />{" "}{INDICATORS[id].maxAge}{" "}<LocalizedText text={"years."} /></p><a href={`https://data.worldbank.org/indicator/${id}`} className="ig-link" target="_blank" rel="noreferrer"><LocalizedText text={"Indicator, upstream sources & definitions ↗"} /></a></article>; })}</div></section>
-    <section className="ig-section"><h2><LocalizedText text="Health, infrastructure & economy" /></h2><div className="ig-evidence-grid">{CONTEXT_INDICATOR_IDS.map(id => { const rows = context.snapshot.observations.filter(o => o.indicator === id); const definition = CONTEXT_INDICATORS[id]; return <article className="ig-panel" key={id}><h3><LocalizedText text={definition.label} /></h3><p className="ig-small"><LocalizedText text={definition.explanation} /></p><p className="ig-meta">{id} · <LocalizedText text={definition.unit} /><br />{rows.length}<LocalizedText text="/195 available ·" /> {rows.filter(o => contextEvidenceStatus(o) === "current").length} <LocalizedText text="within freshness rules" /><br /><LocalizedText text="Reference-year threshold:" /> {definition.maxAge} <LocalizedText text="years." /></p><a className="ig-link" href={`https://data.worldbank.org/indicator/${id}`} target="_blank" rel="noreferrer"><LocalizedText text="Indicator, upstream sources & definitions ↗" /></a></article>; })}</div></section>
-    <section className="ig-section ig-panel"><h2><LocalizedText text={"Confidence without false precision."} /></h2><p className="ig-small"><LocalizedText text={"Our labels describe evidence handling, not the probability a statement is true. “Source checked” requires a registered source, matching indicator and country identifiers, a valid numeric value, complete pagination and an acceptable reference-year age. It does not mean independent factual verification of the producer's methodology."} /></p><div className="ig-task-grid">{[["Source checked", "The collection is no more than seven days old and the reference year is within the indicator-specific threshold."], ["Older observation", "The value is traceable but older than the indicator's threshold. It is historical context, not a current-condition claim."], ["Refresh overdue", "Collection is older than seven days. Original dates remain visible and the user is directed to the primary source."], ["Not available", "The source has no usable observation or collection failed. We do not use zero, a regional average or a fabricated estimate."]].map(([title, detail]) => <article className="ig-task" key={title}><h3><LocalizedText text={title} /></h3><p className="ig-small"><LocalizedText text={detail} /></p></article>)}</div></section>
-    <section className="ig-section ig-panel"><h2><LocalizedText text={"Automatic collection. Controlled publication."} /></h2><p className="ig-small"><LocalizedText text={"The application revalidates its shared statistical cache after six hours when requested. A daily scheduled check is configured to request the published API and archive its public snapshot for 90 days. Scheduling can be delayed; this is not a real-time feed. The visible collection date, not the schedule, is the evidence of a successful refresh."} /></p><p className="ig-small"><LocalizedText text={"Nine registered World Bank indicators are collected without user data. Each series passes schema, numeric range, country, year, pagination and coverage checks independently. Failed series retain their original values and collection dates; successful series can still update. Requests are bounded to six seconds. Enrollment queries cover 2010 onward; electricity and density cover 2020 onward, selecting the latest non-null observation. Missing or older observations remain explicit."} /></p><p className="ig-small"><LocalizedText text={"Each snapshot has a content revision, methodology version and per-series response digest. Raw response digests make changes detectable; they are not a guarantee that the source is correct. Statistical revisions can change historical values."} /></p><div className="ig-actions"><a className="ig-link" href="/api/intelligence" target="_blank" rel="noreferrer"><LocalizedText text={"Inspect the public graph JSON ↗"} /></a><a className="ig-link" href="/api/intelligence/context" target="_blank" rel="noreferrer"><LocalizedText text="Health, infrastructure & economy" /> ↗</a><a className="ig-link" href="https://datahelpdesk.worldbank.org/knowledgebase/articles/889392-about-the-indicators-api-documentation" target="_blank" rel="noreferrer"><LocalizedText text={"World Bank API documentation ↗"} /></a></div></section>
-    <section className="ig-section ig-panel"><h2><LocalizedText text={"What remains outside automatic verification."} /></h2><p className="ig-small"><LocalizedText text={"The new dossier summaries do not establish personal visa eligibility, professional licensing, admission, affordability, safety or tax obligations. They are not complete legal dossiers for all 195 countries. Local housing series, programme-by-programme accreditation and work-route coverage still need expansion. A linked government page does not certify eligibility. Legacy model-generated country budgets and ratings are not used in the new research core."} /></p><p className="ig-small"><LocalizedText text={"The same source-first standard must be applied as we expand to institutions, programs, cities, documents and multilingual content. Education from TGPI is independent: no affiliation, accreditation or endorsement by Harvard, the UN, the World Bank or another university is implied."} /></p><p className="ig-small"><LocalizedText text={"Attribution: World Bank, World Development Indicators, with upstream sources named in each indicator's metadata; United Nations Statistics Division, M49. Values are displayed with rounding; no missing values are imputed. Editorial summaries attribute their individual government, agency or university source. Source-specific reuse terms and third-party rights apply; the World Bank indicator license does not license every linked page."} /></p><a className="ig-link" href="https://datacatalog.worldbank.org/public-licenses" target="_blank" rel="noreferrer"><LocalizedText text={"World Bank data licensing guidance ↗"} /></a><p className="ig-small"><LocalizedText text={"Found an issue? Send the country, indicator, source URL and reference year — no personal documents — to"} />{" "}<a className="ig-link" href="mailto:contact@theglobalpolymath.com">contact@theglobalpolymath.com</a>.</p></section>
-    <EvidenceLesson /><div className="ig-actions"><Link href="/courses" className="ig-button"><LocalizedText text="Continue learning →" /></Link><Link href="/country-fit" className="ig-button ig-secondary"><LocalizedText text={"Apply this to my plan"} /></Link></div>
-  </div><section className="ig-panel"><h2><LocalizedText text={"Visual provenance"} /></h2><p className="ig-small"><LocalizedText text={"Destination imagery includes AI-generated visual interpretations. These images illustrate the experience and do not document a specific place or verify geographic, institutional or legal facts. Atlas geometry is sourced separately from Natural Earth."} /></p></section></main>;
+const title = "Intelligence Graph — Sources & Methodology | TGPI";
+const description = "Trace the sources, dates and limits behind TGPI’s global intelligence.";
+const heroImage = "/images/intelligence/evidence-observatory-v1.webp";
+const sourceMetadata: Metadata = {
+  title,
+  description,
+  alternates: { canonical: "https://www.theglobalpolymath.com/intelligence" },
+  openGraph: { title, description, images: [{ url: heroImage }] },
+};
+
+const sections = [
+  ["source-register", "Source registry"],
+  ["methodology", "Methodology"],
+  ["coverage", "Data coverage"],
+  ["applications", "Apply the evidence"],
+] as const;
+const workflow = [
+  { title: "Identify the publisher", detail: "Register the exact page, the responsible publisher and the scope of the evidence." },
+  { title: "Validate the collection", detail: "Check identifiers, year, numeric ranges, pagination and coverage before accepting a statistical series." },
+  { title: "Separate the dates", detail: "Publish the reference period, collection date and editorial review separately. Retained data keeps its original dates." },
+  { title: "Expose gaps and changes", detail: "Label missing observations, older values and pending reviews. A changed page opens a question for review." },
+];
+const destinations = [
+  { href: "/countries", title: "Countries", detail: "Inspect the source, unit and reference year behind a destination’s indicators." },
+  { href: "/compare", title: "Compare countries", detail: "Compare equal units and check whether the reference years differ." },
+  { href: "/country-fit#research-workbench", title: "Country Fit", detail: "Turn questions about study, mobility and costs into research tasks." },
+  { href: "/plan", title: "My Plan", detail: "Use dated quotes and personal assumptions in your own scenario." },
+  { href: "/passport", title: "Documents", detail: "Prepare your documents and confirm the requirements with the competent authority." },
+  { href: "/intelligence/research", title: "Decision dossiers", detail: "Read the published research, with the scope and limits of each summary." },
+];
+
+function Registry({ source, country }: { source?: string | string[]; country?: string | string[] }) {
+  const records = buildSourceRecords(identities, new Date());
+  const selected = typeof source === "string" ? records.find(record => record.id === source) : undefined;
+  const initialCountry = selected?.country ?? (typeof country === "string" && DOSSIER_COUNTRIES.includes(country) ? country : "");
+  return <ProvenanceExplorer key={selected?.id ?? initialCountry} records={records} initialCountry={initialCountry} initialSource={selected?.id} />;
+}
+
+export default async function IntelligencePage({ searchParams }: { searchParams: Promise<{ source?: string | string[]; country?: string | string[] }> }) {
+  const params = await searchParams;
+  const reviewed = DOSSIER_SOURCES.filter(source => source.reviewedAt).length;
+  const pending = DOSSIER_SOURCES.filter(source => source.reviewIssue).length;
+  const stats = [
+    { value: identities.length, label: "Mapped country identities" },
+    { value: INDICATOR_IDS.length + CONTEXT_INDICATOR_IDS.length, label: "Statistical indicators" },
+    { value: DOSSIER_COUNTRIES.length, label: "Destinations with dossiers" },
+    { value: DOSSIER_SOURCES.length, label: "Dossier source records" },
+  ];
+
+  return (
+    <main className={styles.shell}>
+      <header className={styles.hero} aria-labelledby="intelligence-title">
+        <div className={styles.heroScene} aria-hidden="true">
+          <Image src={heroImage} alt="" fill sizes="100vw" quality={88} fetchPriority="high" />
+        </div>
+        <div className={`${styles.wrap} ${styles.heroInner}`}>
+          <div className={styles.heroCopy}>
+            <p className={styles.kicker}><span aria-hidden="true" /><Copy text="TGPI Intelligence Graph" /></p>
+            <p className={styles.heroLabel}><Copy text="Sources & methodology" /></p>
+            <h1 id="intelligence-title"><Copy text="Global intelligence," /><br /><em><Copy text="source by source." /></em></h1>
+            <p className={styles.heroDescription}><Copy text={description} /> <Copy text="Open the original source before you make your next decision." /></p>
+            <div className={styles.heroActions}>
+              <a className={styles.goldButton} href="#source-register"><Copy text="Explore the sources" /><span aria-hidden="true">↓</span></a>
+              <a className={styles.darkButton} href="#methodology"><Copy text="See how we verify" /><span aria-hidden="true">↓</span></a>
+            </div>
+          </div>
+          <div className={styles.heroStamp} aria-hidden="true"><i /><span>TGPI</span><small><Copy text="Intelligence Graph" /></small></div>
+        </div>
+        <ul className={`${styles.wrap} ${styles.heroMetrics}`}>
+          {stats.map(({ value, label }) => <li key={label}><strong>{value}</strong><span><Copy text={label} /></span></li>)}
+        </ul>
+      </header>
+
+      <LocalizedElement as="nav" aria-label="Sources and methodology sections" className={styles.sectionNav}>
+        <div className={styles.wrap}>
+          {sections.map(([id, label], index) => <a href={`#${id}`} key={id}><span aria-hidden="true">{String(index + 1).padStart(2, "0")}</span><Copy text={label} /></a>)}
+        </div>
+      </LocalizedElement>
+
+      <section className={`${styles.wrap} ${styles.section}`} id="source-register" aria-labelledby="register-title">
+        <div className={styles.headingWithSeal}>
+          <Image className={styles.seal} src="/images/intelligence/source-seal-v1.webp" alt="" width={88} height={88} />
+          <div>
+            <p className={styles.kicker}><span aria-hidden="true" /><Copy text="01 / Public evidence registry" /></p>
+            <h2 id="register-title"><Copy text="Go to the original source." /></h2>
+            <p><Copy text="See who published each reference, what TGPI reviewed and which questions remain open. Flags identify the destination covered." /></p>
+          </div>
+        </div>
+        <div className={styles.primarySources}>
+          <article>
+            <p className={styles.kicker}><span aria-hidden="true" /><Copy text="01 / Statistical identity" /></p>
+            <h3><Copy text="UN Statistics Division — M49" /></h3>
+            <p><Copy text="TGPI uses UNSD M49 and ISO identifiers to match its country catalog to statistical records." /></p>
+            <time className={styles.meta} dateTime={identitySource.retrievedAt}><Copy text="Catalog reference collected {date}" dates={{ date: identitySource.retrievedAt }} /></time>
+            <a className={styles.inlineLink} href={identitySource.url} target="_blank" rel="noreferrer"><Copy text="Inspect country identity" /> <span aria-hidden="true">↗</span></a>
+          </article>
+          <article>
+            <p className={styles.kicker}><span aria-hidden="true" /><Copy text="02 / National indicators" /></p>
+            <h3><Copy text="World Development Indicators" /></h3>
+            <p><Copy text="World Bank data brings together series from national and international producers. Each indicator links to its definitions and metadata." /></p>
+            <a className={styles.inlineLink} href="https://datatopics.worldbank.org/world-development-indicators/sources-and-methods.html" target="_blank" rel="noreferrer"><Copy text="Open World Bank methodology" /> <span aria-hidden="true">↗</span></a>
+          </article>
+          <article>
+            <p className={styles.kicker}><span aria-hidden="true" /><Copy text="03 / Editorial research" /></p>
+            <h3><Copy text="Decision dossiers" /></h3>
+            <p><Copy text="{count} summaries link to government, agency and university publications. Each summary has its own scope and review interval." values={{ count: DOSSIER_CLAIMS.length }} /></p>
+            <p className={styles.meta}><Copy text="{reviewed} sources with a review date · {pending} open review issues" values={{ reviewed, pending }} /></p>
+            <Link className={styles.inlineLink} href="/intelligence/research"><Copy text="Inspect dossier coverage →" /></Link>
+          </article>
+        </div>
+        <Registry source={params.source} country={params.country} />
+      </section>
+
+      <section className={styles.method} id="methodology" aria-labelledby="method-title">
+        <div className={`${styles.wrap} ${styles.section}`}>
+          <div className={styles.headingWithSeal}>
+            <Image className={styles.seal} src="/images/intelligence/method-seal-v1.webp" alt="" width={88} height={88} />
+            <div>
+              <p className={styles.kicker}><span aria-hidden="true" /><Copy text="02 / TGPI methodology" /></p>
+              <h2 id="method-title"><Copy text="How a source becomes evidence." /></h2>
+              <p><Copy text="TGPI checks different things at different stages. The label on each record tells you which check was completed." /></p>
+            </div>
+          </div>
+          <ol className={styles.workflow}>
+            {workflow.map((step, index) => <li key={step.title}><span aria-hidden="true">{String(index + 1).padStart(2, "0")}</span><h3><Copy text={step.title} /></h3><p><Copy text={step.detail} /></p></li>)}
+          </ol>
+          <div className={styles.methodNotes}>
+            <article><h3><Copy text="Statistical freshness" /></h3><p><Copy text="The shared cache revalidates after six hours on request. An observation can pass the freshness checks when collected within seven days and its reference year is within the series limit. A failed refresh keeps the last accepted collection." /></p><p><Copy text="Enrollment uses a window starting in 2010. Electricity access and population density use a rolling window from six years before the query year through that year." /></p></article>
+            <article><h3><Copy text="Editorial review" /> <small>v{DOSSIER_VERSION}</small></h3><p><Copy text="TGPI normally schedules a new review after 30 days for requirements and 90 days for other summaries. Shorter intervals and reference periods take priority. Confirm applicability and current rules directly with the authority." /></p></article>
+            <article><h3><Copy text="Automated source signals" /></h3><p><Copy text="Source Watch checks registered public pages and selected markers. Access restrictions and redirects are surfaced for review. A content fingerprint can reveal a text change. Editorial dates and open issues change only after a separate review." /></p></article>
+          </div>
+        </div>
+      </section>
+
+      <section className={`${styles.wrap} ${styles.section}`} id="coverage" aria-labelledby="coverage-title">
+        <div className={styles.heading}>
+          <p className={styles.kicker}><span aria-hidden="true" /><Copy text="03 / Coverage and freshness" /></p>
+          <h2 id="coverage-title"><Copy text="See what the data covers." /></h2>
+          <p><Copy text="Expand an indicator to see its producer, collection dates and how many destinations have current, older or missing observations." /></p>
+        </div>
+        <Suspense fallback={<p className={styles.empty} role="status"><Copy text="Loading statistical coverage…" /></p>}><EvidenceCoverage /></Suspense>
+      </section>
+
+      <section className={`${styles.wrap} ${styles.section} ${styles.applications}`} id="applications" aria-labelledby="applications-title">
+        <div className={styles.heading}>
+          <p className={styles.kicker}><span aria-hidden="true" /><Copy text="04 / Connected to your decision" /></p>
+          <h2 id="applications-title"><Copy text="Put evidence to work." /></h2>
+        </div>
+        <ul className={styles.platformGrid}>
+          {destinations.map(({ href, title, detail }) => <li key={href}><Link href={href} prefetch={false}><strong><Copy text={title} /><span aria-hidden="true">↗</span></strong><p><Copy text={detail} /></p></Link></li>)}
+        </ul>
+        <aside className={styles.atlas}>
+          <Image className={styles.atlasAvatar} src="/brand/atlas/avatar.webp" alt="" width={74} height={74} />
+          <div><p className={styles.kicker}><span aria-hidden="true" /><Copy text="TGPI Atlas AI" /></p><h3><Copy text="Ask better research questions." /></h3><p><Copy text="Atlas can help you interpret indicators and prepare questions for the original publisher. Check current rules directly with the responsible institution." /></p></div>
+          <EvidenceAtlasLink />
+        </aside>
+        <EvidenceLesson />
+      </section>
+
+      <section className={`${styles.wrap} ${styles.section} ${styles.disclosures}`} aria-labelledby="disclosures-title">
+        <div className={styles.heading}><h2 id="disclosures-title"><Copy text="Limits, attribution and corrections" /></h2></div>
+        <details><summary><Copy text="What TGPI evidence can establish" /></summary><p><Copy text="National observations describe countries at a point in time. Dossiers cover selected study questions. Confirm personal eligibility, admission, accreditation, costs and work rights with the responsible authority or institution." /></p><p><Copy text="TGPI operates independently and cites each institution for the information it publishes." /></p></details>
+        <details><summary><Copy text="Visual provenance and reuse" /></summary><p><Copy text="The observatory and TGPI medallions are AI-generated illustrations. Atlas geometry is sourced separately from Natural Earth. Country flags identify the scope of the record." /></p><p><Copy text="Review the reuse terms and third-party rights on each source. World Bank indicator licensing guidance applies to the corresponding statistical material." /></p><div className={styles.inlineActions}><a href="https://www.naturalearthdata.com/about/terms-of-use/" className={styles.inlineLink} target="_blank" rel="noreferrer"><Copy text="Natural Earth" /> <span aria-hidden="true">↗</span></a><a href="https://datacatalog.worldbank.org/public-licenses" className={styles.inlineLink} target="_blank" rel="noreferrer"><Copy text="World Bank data licensing guidance ↗" /></a></div></details>
+        <div className={styles.correction}><p><strong><Copy text="Report a source issue" /></strong><br /><Copy text="Send the source link, indicator or destination, and the date you checked. Share only public evidence." /></p><a href="mailto:contact@theglobalpolymath.com?subject=TGPI%20source%20review" className={styles.inlineLink}><Copy text="Contact TGPI" /> <span aria-hidden="true">↗</span></a></div>
+      </section>
+    </main>
+  );
 }
 
 export async function generateMetadata() { return localizeMetadata(sourceMetadata); }
