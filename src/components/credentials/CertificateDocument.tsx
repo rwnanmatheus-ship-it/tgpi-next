@@ -24,6 +24,7 @@ export default function CertificateDocument({
   return (
     <LocalizedElement as="article"
       className={`diploma-document${verified ? "" : " diploma-inactive"}`}
+      translate="no"
       aria-label="TGPI certificate preview"
     >
       <div className="diploma-corners" aria-hidden="true"><i /><i /><i /><i /></div>
