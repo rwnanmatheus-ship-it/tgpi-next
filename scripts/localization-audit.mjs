@@ -2,18 +2,21 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import ts from 'typescript';
+import { messageLiterals, renderedMessageText } from './helpers/localization-audit.mjs';
 
 const exports = {};
 const catalogSource = fs.readFileSync('src/lib/localization/messages.ts', 'utf8');
 new Function('exports', ts.transpileModule(catalogSource, { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText)(exports);
 const supplemental = JSON.parse(fs.readFileSync('public/locales/en.json', 'utf8'));
+const notifications = {};
+new Function('exports', ts.transpileModule(fs.readFileSync('src/lib/notifications/text.ts', 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText)(notifications);
 for (const locale of ['en', 'pt-BR', 'es', 'fr', 'de', 'it']) exports.registerSupplementalMessages(locale, JSON.parse(fs.readFileSync(`public/locales/${locale}.json`, 'utf8')));
 const registered = new Set([...Object.keys(exports.messages), ...Object.keys(supplemental)].map(key => key.toLocaleLowerCase('en')));
 const brands = new Set(['TGPI', 'The Global Polymath Institute', 'TGPI Premium', 'Global Key', 'TGPI Global ID', 'TGPI Global Key', 'Instagram', 'LinkedIn', 'TGPI GLOBAL EDUCATION LTDA', 'Renan']);
 const candidates = new Map();
 const untranslatedRendering = new Map();
 function add(raw, file, node, source, kind) {
-  const key = raw.replaceAll('&apos;', "'").replaceAll('&quot;', '"').replaceAll('&amp;', '&').replace(/\s+/g, ' ').trim();
+  const key = renderedMessageText(raw, node);
   if (!/[\p{L}]{2}/u.test(key) || brands.has(key) || /^\S+@\S+$|^https?:\/\//.test(key)) return;
   const translated = registered.has(key.toLocaleLowerCase('en')) || ['pt-BR', 'es', 'fr', 'de', 'it'].some(locale => exports.translate(locale, key) !== key);
   if (translated) {
@@ -40,8 +43,22 @@ function walk(directory) {
     function visit(node) {
       if (ts.isJsxText(node)) add(node.text, file, node, source, 'visible text');
       if (ts.isJsxAttribute(node) && ['placeholder', 'aria-label', 'alt', 'title', 'summary', 'description', 'label', 'text', 'eyebrow'].includes(node.name.text) && node.initializer && ts.isStringLiteral(node.initializer)) add(node.initializer.text, file, node, source, node.name.text);
-      if (ts.isJsxAttribute(node) && node.name.text === 'text' && node.initializer && ts.isJsxExpression(node.initializer) && node.initializer.expression && ts.isStringLiteral(node.initializer.expression)) add(node.initializer.expression.text, file, node, source, 'message');
-      if (ts.isCallExpression(node) && ['localizeLabel', 't', 'setError', 'setMessage', 'setNotice', 'window.confirm'].includes(node.expression.getText(source)) && node.arguments[0] && ts.isStringLiteral(node.arguments[0])) add(node.arguments[0].text, file, node, source, 'message');
+      if (ts.isJsxAttribute(node) && node.name.text === 'text' && node.initializer && ts.isJsxExpression(node.initializer)) {
+        for (const literal of messageLiterals(node.initializer.expression)) add(literal.text, file, literal, source, 'message');
+      }
+      if (ts.isCallExpression(node) && ['localizeLabel', 't', 'setError', 'setMessage', 'setNotice', 'window.confirm'].includes(node.expression.getText(source))) {
+        for (const literal of messageLiterals(node.arguments[0])) {
+          // Notification screens use a separate typed six-language catalog.
+          if (node.expression.getText(source) === 't' && source.text.includes('notificationText(locale, key)')) {
+            try { if (['en', 'pt-BR', 'es', 'fr', 'de', 'it'].every(locale => notifications.notificationText(locale, literal.text)?.trim())) continue; } catch { /* Report a missing namespaced key below. */ }
+          }
+          add(literal.text, file, literal, source, 'message');
+        }
+      }
+      // LocaleProvider reports a boolean recovery state; its diagnostic exceptions are never displayed.
+      if (!file.endsWith('/localization/LocaleProvider.tsx') && ts.isNewExpression(node) && node.expression.getText(source) === 'Error') {
+        for (const literal of messageLiterals(node.arguments?.[0])) add(literal.text, file, literal, source, 'error message');
+      }
       ts.forEachChild(node, visit);
     }
     visit(source);

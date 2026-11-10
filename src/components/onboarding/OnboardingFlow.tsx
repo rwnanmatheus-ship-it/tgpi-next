@@ -793,7 +793,7 @@ function ContextStep({
             <option value="technical"><LocalizedText text={"Technical or vocational training"} /></option>
             <option value="undergraduate"><LocalizedText text={"Undergraduate degree in progress"} /></option>
             <option value="graduated"><LocalizedText text={"Undergraduate degree completed"} /></option>
-            <option value="postgraduate"><LocalizedText text={"Postgraduate, master&apos;s, or doctoral degree"} /></option>
+            <option value="postgraduate"><LocalizedText text={"Postgraduate, master's, or doctoral degree"} /></option>
             <option value="other"><LocalizedText text={"Another path"} /></option>
           </select>
         </label>

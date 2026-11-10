@@ -11543,6 +11543,126 @@ export const messages = {
     "fr": "Impossible d’ouvrir la gestion de la facturation.",
     "de": "Die Abrechnungsverwaltung konnte nicht geöffnet werden.",
     "it": "Impossibile aprire la gestione della fatturazione."
+  },
+  "Final assessment": {
+    "en": "Final assessment",
+    "pt-BR": "Avaliação final",
+    "es": "Evaluación final",
+    "fr": "Évaluation finale",
+    "de": "Abschlussprüfung",
+    "it": "Valutazione finale"
+  },
+  "Unable to load learning.": {
+    "en": "Unable to load learning.",
+    "pt-BR": "Não foi possível carregar seu aprendizado.",
+    "es": "No se pudo cargar tu aprendizaje.",
+    "fr": "Impossible de charger votre apprentissage.",
+    "de": "Deine Lerninhalte konnten nicht geladen werden.",
+    "it": "Impossibile caricare il tuo apprendimento."
+  },
+  "Unable to save learning.": {
+    "en": "Unable to save learning.",
+    "pt-BR": "Não foi possível salvar seu aprendizado.",
+    "es": "No se pudo guardar tu aprendizaje.",
+    "fr": "Impossible d’enregistrer votre apprentissage.",
+    "de": "Dein Lernfortschritt konnte nicht gespeichert werden.",
+    "it": "Impossibile salvare il tuo apprendimento."
+  },
+  "Reference year": {
+    "en": "Reference year",
+    "pt-BR": "Ano de referência",
+    "es": "Año de referencia",
+    "fr": "Année de référence",
+    "de": "Bezugsjahr",
+    "it": "Anno di riferimento"
+  },
+  "Collected at": {
+    "en": "Collected at",
+    "pt-BR": "Coletado em",
+    "es": "Recopilado el",
+    "fr": "Collecté le",
+    "de": "Erfasst am",
+    "it": "Raccolto il"
+  },
+  "Use “{value}”": {
+    "en": "Use “{value}”",
+    "pt-BR": "Usar “{value}”",
+    "es": "Usar “{value}”",
+    "fr": "Utiliser « {value} »",
+    "de": "„{value}“ verwenden",
+    "it": "Usa “{value}”"
+  },
+  "Clear {field}": {
+    "en": "Clear {field}",
+    "pt-BR": "Limpar {field}",
+    "es": "Borrar {field}",
+    "fr": "Effacer {field}",
+    "de": "{field} löschen",
+    "it": "Cancella {field}"
+  },
+  "{count}/{limit} characters": {
+    "en": "{count}/{limit} characters",
+    "pt-BR": "{count}/{limit} caracteres",
+    "es": "{count}/{limit} caracteres",
+    "fr": "{count}/{limit} caractères",
+    "de": "{count}/{limit} Zeichen",
+    "it": "{count}/{limit} caratteri"
+  },
+  "{completed} / {total} lessons · {status}": {
+    "en": "{completed} / {total} lessons · {status}",
+    "pt-BR": "{completed} / {total} aulas · {status}",
+    "es": "{completed} / {total} lecciones · {status}",
+    "fr": "{completed} / {total} leçons · {status}",
+    "de": "{completed} / {total} Lektionen · {status}",
+    "it": "{completed} / {total} lezioni · {status}"
+  },
+  "{completed} / {total} checklist items": {
+    "en": "{completed} / {total} checklist items",
+    "pt-BR": "{completed} / {total} itens da lista",
+    "es": "{completed} / {total} elementos de la lista",
+    "fr": "{completed} / {total} éléments de la liste",
+    "de": "{completed} / {total} Checklistenpunkte",
+    "it": "{completed} / {total} voci della lista"
+  },
+  "{country} preparation": {
+    "en": "{country} preparation",
+    "pt-BR": "Preparação para {country}",
+    "es": "Preparación para {country}",
+    "fr": "Préparation pour {country}",
+    "de": "Vorbereitung für {country}",
+    "it": "Preparazione per {country}"
+  },
+  "{goal} comparison": {
+    "en": "{goal} comparison",
+    "pt-BR": "Comparação: {goal}",
+    "es": "Comparación: {goal}",
+    "fr": "Comparaison : {goal}",
+    "de": "Vergleich: {goal}",
+    "it": "Confronto: {goal}"
+  },
+  "{title} · Saved to your shortlist": {
+    "en": "{title} · Saved to your shortlist",
+    "pt-BR": "{title} · Salvo na sua lista de países",
+    "es": "{title} · Guardado en tu lista de países",
+    "fr": "{title} · Ajouté à votre sélection de pays",
+    "de": "{title} · In deiner Länderauswahl gespeichert",
+    "it": "{title} · Salvato nella tua selezione di paesi"
+  },
+  "Passed": {
+    "en": "Passed",
+    "pt-BR": "Aprovado",
+    "es": "Aprobado",
+    "fr": "Réussi",
+    "de": "Bestanden",
+    "it": "Superato"
+  },
+  "Correct": {
+    "en": "Correct",
+    "pt-BR": "Correto",
+    "es": "Correcto",
+    "fr": "Correct",
+    "de": "Richtig",
+    "it": "Corretto"
   }
 } as const satisfies Record<string, Record<Locale, string>>;
 

@@ -14,6 +14,11 @@ function localizationDependency(name, locale) {
   if (name === '@/components/localization/LocalizedElement') return { LocalizedElement: ({ as, ...props }) => mockReact.createElement(as, Object.fromEntries(Object.entries(props).map(([key, value]) => [key, ['aria-label', 'title', 'placeholder', 'alt'].includes(key) ? t(value) : value]))) };
   if (name === '@/components/localization/LocalizedImage') return { __esModule: true, default: ({ fill, priority, ...props }) => mockReact.createElement('img', { ...props, alt: t(props.alt) }) };
   if (name === '@/components/localization/LocalizedLink') return { __esModule: true, default: ({ prefetch, ...props }) => mockReact.createElement('a', { ...props, 'aria-label': t(props['aria-label']) }) };
+  if (name === '@/lib/localization/workspace-copy') {
+    const exports = {};
+    new Function('exports', ts.transpileModule(fs.readFileSync('src/lib/localization/workspace-copy.ts', 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText)(exports);
+    return exports;
+  }
   if (name === '@/lib/localization/authored-content' || name === '@/lib/localization/metadata.server') {
     const file = name.endsWith('authored-content') ? 'authored-content.ts' : 'metadata.server.ts';
     const exports = {};

@@ -122,9 +122,9 @@ export function normalizeBirthDate(value: unknown, now = new Date()): string {
   return value >= "1900-01-01" && value <= today ? value : "";
 }
 
-export function getAccountSalutation(identity: AccountIdentityInput, profile: TgpiAccountProfile) {
+export function getAccountSalutation(identity: AccountIdentityInput, profile: TgpiAccountProfile, translate: (text: string) => string = text => text) {
   const title = { name: "", mr: "Mr.", ms: "Ms.", mx: "Mx." }[profile.preferredTitle];
-  return [title, identity.firstName].filter(Boolean).join(" ");
+  return [title ? translate(title) : '', identity.firstName].filter(Boolean).join(" ");
 }
 
 export function getCertificateName(identity: AccountIdentityInput, profile: TgpiAccountProfile) {

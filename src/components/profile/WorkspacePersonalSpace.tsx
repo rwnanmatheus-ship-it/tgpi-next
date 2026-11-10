@@ -1,4 +1,5 @@
 'use client';
+import { planCopy, planActivityCopy, workspaceResourceCopy, workspaceKindLabels } from '@/lib/localization/workspace-copy';
 import { useState, type ReactNode } from 'react';
 import Link from 'next/link';
 import type { ActivationActivity } from '@/lib/activation-progress';
@@ -47,14 +48,17 @@ export default function WorkspacePersonalSpace({ resources, history, initialCurs
     } catch (error) { setMessage(error instanceof Error ? error.message : 'Unable to save. Please retry.'); }
     finally { setBusy(false); }
   }
-  const needle = query.trim().toLocaleLowerCase(locale);
-  const found = resources.filter(r => (kind === 'all' || r.kind === kind) && `${r.title} ${r.detail}`.toLocaleLowerCase(locale).includes(needle));
+  const copy = (value: string) => planCopy(value, t, locale);
+  const localizedResources = resources.map(resource => ({ ...resource, ...workspaceResourceCopy(resource, t, locale), searchSource: `${resource.title} ${resource.detail}` }));
+  const searchable = (text: string) => text.normalize('NFD').replace(/\p{M}/gu, '').toLocaleLowerCase(locale);
+  const needle = searchable(query.trim());
+  const found = localizedResources.filter(r => (kind === 'all' || r.kind === kind) && searchable(`${r.title} ${r.detail} ${r.searchSource}`).includes(needle));
   const events = loadedHistory.filter(e => filter === 'all' || e.type === filter);
   const nextAction = suggestions.find(s => !preferences.dismissed.includes(s.id));
   return <div id="workspace-personal" className={styles.personal} data-density={preferences.density} aria-busy={busy}>
     <section className={`${styles.panel} ${styles.next}`} aria-labelledby="next-step-title">
-      <div><p className={styles.eyebrow}><LocalizedText text="Your next useful step" /></p><h2 id="next-step-title">{t(nextAction?.title ?? 'Choose your next step.')}</h2><p>{t(nextAction?.description ?? 'Explore your saved resources or choose a new learning path.')}</p></div>
-      <div className={styles.actions}><Link className={styles.primary} href={nextAction?.href ?? '/courses'}>{t(nextAction?.action ?? 'Explore learning')} <span aria-hidden="true">↗</span></Link>{nextAction && storageAvailable && <button disabled={busy} className={styles.quiet} onClick={() => save({ ...preferences, dismissed: [...preferences.dismissed, nextAction.id].slice(-8) })}><LocalizedText text="Dismiss suggestion" /></button>}</div>
+      <div><p className={styles.eyebrow}><LocalizedText text="Your next useful step" /></p><h2 id="next-step-title">{t(nextAction?.title ?? 'Choose your next step.')}</h2><p>{copy(nextAction?.description ?? 'Explore your saved resources or choose a new learning path.')}</p></div>
+      <div className={styles.actions}><Link className={styles.primary} href={nextAction?.href ?? '/courses'}>{copy(nextAction?.action ?? 'Explore learning')} <span aria-hidden="true">↗</span></Link>{nextAction && storageAvailable && <button disabled={busy} className={styles.quiet} onClick={() => save({ ...preferences, dismissed: [...preferences.dismissed, nextAction.id].slice(-8) })}><LocalizedText text="Dismiss suggestion" /></button>}</div>
     </section>
     <details className={styles.customize}>
       <summary><LocalizedText text="Organize this workspace" /></summary>
@@ -72,7 +76,7 @@ export default function WorkspacePersonalSpace({ resources, history, initialCurs
       <p><LocalizedText text="Search your saved destinations, comparisons, course records and preparation checklists." /></p>
       <div className={styles.search}><label><LocalizedText text="Find a personal resource" /><input type="search" value={query} onChange={e => { setQuery(e.target.value); setResourceLimit(8); }} placeholder={t("Country, course or comparison…")} /></label><label><LocalizedText text="Resource type" /><select value={kind} onChange={e => { setKind(e.target.value); setResourceLimit(8); }}><option value="all"><LocalizedText text="All resources" /></option><option value="country"><LocalizedText text="Countries" /></option><option value="comparison"><LocalizedText text="Comparisons" /></option><option value="course"><LocalizedText text="Learning" /></option><option value="documents"><LocalizedText text="Preparation" /></option></select></label></div>
       <p role="status">{t("{count} resources in this library", { count: found.length })}</p>
-      <div className={styles.resourceGrid}>{found.slice(0, resourceLimit).map(r => <Link className={styles.resource} href={r.href} key={r.id}><span className={styles.eyebrow}>{r.kind}</span><strong>{t(r.title)}</strong><span>{t(r.detail)}</span><span aria-hidden="true"><LocalizedText text="Open ↗" /></span></Link>)}</div>
+      <div className={styles.resourceGrid}>{found.slice(0, resourceLimit).map(r => <Link className={styles.resource} href={r.href} key={r.id}><span className={styles.eyebrow}>{t(workspaceKindLabels[r.kind])}</span><strong>{r.title}</strong><span>{r.detail}</span><span aria-hidden="true"><LocalizedText text="Open ↗" /></span></Link>)}</div>
       {found.length > resourceLimit && <button className={styles.quiet} onClick={() => setResourceLimit(previous => previous + 8)}><LocalizedText text="Show more resources" /></button>}
       {!found.length && <div className={styles.empty}><h3>{t(resources.length ? 'No matching resources.' : 'Your library starts with your first saved resource.')}</h3><p>{t(resources.length ? 'Try a different term or resource type.' : 'Save a destination or begin a learning path to see it here.')}</p><Link href="/countries"><LocalizedText text="Explore countries ↗" /></Link></div>}
     </section> : <p><LocalizedText text="Hidden section. Restore it in “Organize this workspace”." /></p>}</div>
@@ -80,7 +84,7 @@ export default function WorkspacePersonalSpace({ resources, history, initialCurs
       <div className={styles.sectionHeading}><div><p className={styles.eyebrow}><LocalizedText text="Recorded activity" /></p><h2 id="history-title"><LocalizedText text="My history" /></h2></div><label><LocalizedText text="Activity type" /><select value={filter} onChange={e => { setFilter(e.target.value); setPage(1); }}><option value="all"><LocalizedText text="All activity" /></option><option value="course"><LocalizedText text="Learning" /></option><option value="comparison"><LocalizedText text="Comparisons" /></option><option value="saved_country"><LocalizedText text="Countries" /></option><option value="documents"><LocalizedText text="Preparation" /></option><option value="cost"><LocalizedText text="Budget research" /></option></select></label></div>
       <p>{historyAvailable ? historyCoverage ? t('Archive since {date}. Earlier source-backed records may be included. Filters apply to loaded events.', { date: historyDate.format(new Date(historyCoverage)) }) : t('Recorded activity') : t('The archive is unavailable. Showing up to six retained recent events from your progress store.')}</p>
       {historyPending && <p role="status">{t("Some activity is awaiting confirmation. Pending records are preserved and are not shown as completed actions.")}</p>}
-      <ol className={styles.timeline}>{events.slice(0, page * 3).map(e => <li key={e.id}><span className={styles.dot} aria-hidden="true" /><div><span className={styles.eyebrow}>{e.type.replace('_',' ')}</span><Link href={e.href}><LocalizedText text={e.title} /> ↗</Link><time dateTime={e.occurredAt}>{historyDate.format(new Date(e.occurredAt))}{" "}<LocalizedText text={"· UTC"} /></time></div></li>)}</ol>
+      <ol className={styles.timeline}>{events.slice(0, page * 3).map(e => <li key={e.id}><span className={styles.dot} aria-hidden="true" /><div><span className={styles.eyebrow}>{t(workspaceKindLabels[e.type])}</span><Link href={e.href}>{planActivityCopy(e.title, t, locale)} ↗</Link><time dateTime={e.occurredAt}>{historyDate.format(new Date(e.occurredAt))}{" "}<LocalizedText text={"· UTC"} /></time></div></li>)}</ol>
       {!events.length && <p><LocalizedText text="No matching activity in the loaded records. Load earlier activity or choose another category." /></p>}
       {events.length > page * 3 && <button className={styles.quiet} onClick={() => setPage(page + 1)}><LocalizedText text="Show more loaded activity" /></button>}
       {cursor && <button disabled={historyBusy} className={styles.quiet} onClick={loadHistory}>{t(historyBusy ? 'Loading history…' : 'Load earlier activity')}</button>}
