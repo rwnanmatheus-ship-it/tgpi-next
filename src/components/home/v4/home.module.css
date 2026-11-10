@@ -61,22 +61,21 @@
   position: relative;
   display: flex;
   align-items: center;
-  min-height: clamp(490px, 43vw, 660px);
-  padding-block: 54px 64px;
+  min-height: clamp(474px, 37vw, 580px);
+  padding-block: 42px 50px;
 }
 
-.heroCopy { max-width: min(650px, 60%); }
+.heroCopy { max-width: min(660px, 59%); }
 .heroBrand { display: flex; align-items: center; gap: 14px; }
 .heroBrand img { width: 38px; height: auto; }
 .hero .eyebrow { color: var(--showcase-gold); }
 .home .hero h1 {
   margin-top: 23px;
   color: var(--showcase-ivory);
-  font-size: clamp(58px, 6.4vw, 102px);
-  line-height: .91;
+  font-size: clamp(49px, 5.15vw, 78px);
+  line-height: .95;
   letter-spacing: -.047em;
   font-weight: 600;
-  text-wrap: balance;
 }
 .hero h1 em { color: var(--showcase-gold); font-style: normal; font-weight: 500; }
 .home .heroDescription { max-width: 45ch; margin-top: 24px; color: #d2ddea; font-size: clamp(15px, 1.32vw, 18px); line-height: 1.66; }
@@ -376,7 +375,7 @@
   .heroCopy { max-width: 600px; }
   .heroBrand { gap: 9px; }
   .heroBrand img { width: 28px; }
-  .home .hero h1 { font-size: clamp(46px, 10.7vw, 72px); margin-top: 15px; text-wrap: initial; }
+  .home .hero h1 { font-size: clamp(46px, 10.7vw, 72px); margin-top: 15px; }
   .home .heroDescription { margin-top: 16px; }
   .actions { margin-top: 18px; }
   .heroIndex { display: none; }
