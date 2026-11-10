@@ -1648,5 +1648,60 @@
         "bytes": 129238
       }
     ]
+  },
+  {
+    "key": "workspace-observatory",
+    "originalWidth": 1672,
+    "originalHeight": 941,
+    "variants": [
+      {
+        "file": "workspace-observatory-480.avif",
+        "width": 480,
+        "height": 270,
+        "bytes": 12951
+      },
+      {
+        "file": "workspace-observatory-480.webp",
+        "width": 480,
+        "height": 270,
+        "bytes": 20492
+      },
+      {
+        "file": "workspace-observatory-800.avif",
+        "width": 800,
+        "height": 450,
+        "bytes": 29829
+      },
+      {
+        "file": "workspace-observatory-800.webp",
+        "width": 800,
+        "height": 450,
+        "bytes": 48438
+      },
+      {
+        "file": "workspace-observatory-1200.avif",
+        "width": 1200,
+        "height": 675,
+        "bytes": 57557
+      },
+      {
+        "file": "workspace-observatory-1200.webp",
+        "width": 1200,
+        "height": 675,
+        "bytes": 94316
+      },
+      {
+        "file": "workspace-observatory-1600.avif",
+        "width": 1600,
+        "height": 900,
+        "bytes": 87051
+      },
+      {
+        "file": "workspace-observatory-1600.webp",
+        "width": 1600,
+        "height": 900,
+        "bytes": 139082
+      }
+    ]
   }
 ]

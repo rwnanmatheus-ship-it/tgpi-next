@@ -26,7 +26,7 @@ export default function WorkspaceNavigator({ resources, compareHref }: { resourc
     </div>
     <div id="workspace-search-results">
       {searching && <p className={styles.searchCount} role="status">{t('{count} results', { count: modules.length + found.length })}</p>}
-      <nav className={styles.launchGrid} aria-label={t('TGPI tools')}>{modules.map(item => <Link href={item.id === 'compare' ? compareHref : item.href} key={item.id} className={styles.launchCard}>
+      <nav className={styles.launchGrid} aria-label={t('TGPI tools')}>{modules.map(item => <Link href={item.id === 'compare' ? compareHref : item.href} key={item.id} className={styles.launchCard} data-module={item.id}>
         <span className={styles.launchIcon}><NavigationIcon name={getSuperAppIconName(item.id)} width={23} height={23} /></span><span><strong>{t(item.shortLabel)}</strong><small>{t(item.description)}</small></span><span aria-hidden="true">↗</span>
       </Link>)}</nav>
       {found.length > 0 && <div className={styles.searchResources}><h3>{t('Personal library')}</h3>{found.slice(0, 8).map(item => <Link key={item.id} href={item.href}><span>{item.title}<small>{item.detail}</small></span><span aria-hidden="true">↗</span></Link>)}{found.length > 8 && <a href="#workspace-library">{t('Show more resources')} ↓</a>}</div>}

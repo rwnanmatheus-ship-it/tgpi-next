@@ -465,6 +465,19 @@ test('workspace server presentation follows locale and preserves private identit
         }, child);
         return { __esModule: true, default: child.default };
       }
+      if (name === '@/lib/country-flag') return { countryFlagCode: () => 'pt' };
+      if (name === './WorkspaceSectionNav') {
+        const nav = {}, navCode = ts.transpileModule(fs.readFileSync('src/components/profile/WorkspaceSectionNav.tsx', 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX, esModuleInterop: true } }).outputText;
+        new Function('require', 'exports', navCode)(dependency => {
+          if (dependency === 'react') return React;
+          if (dependency === 'react/jsx-runtime') return runtime;
+          if (localizationDependency(dependency, locale)) return localizationDependency(dependency, locale);
+          if (dependency.endsWith('.module.css')) return { __esModule: true, default: {} };
+          if (dependency === '@/components/navigation/NavigationIcon') return { __esModule: true, default: () => null };
+          throw Error(`Unexpected workspace navigation import: ${dependency}`);
+        }, nav);
+        return { __esModule: true, default: nav.default };
+      }
       if (name === './WorkspacePersonalSpace') return { __esModule: true, default: ({ journey, learning }) => React.createElement(React.Fragment, null, learning, journey) };
       if (name.startsWith('./') || name.startsWith('@/components/')) return { __esModule: true, default: () => null };
       throw Error(`Unexpected import: ${name}`);
