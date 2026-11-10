@@ -7,6 +7,7 @@ import { safeReturnTo } from "../src/lib/auth/return-to.ts";
 import { hasFunnelConsent } from "../src/lib/funnel.ts";
 import { HOME_ROUTES, HOME_COURSES, HOME_FAQ } from "../src/lib/home-content.ts";
 import { HOME_GOALS, HOME_SECTIONS, homeGoal } from "../src/lib/home-journey.ts";
+import { HOME_ART_ROOT, HOME_LIBRARY, HOME_PRODUCTS, HOME_SPOTLIGHT, homeProductArt } from "../src/lib/home-showcase.ts";
 
 const read = path => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
 test("authentication preserves allowed local intent including country goal and membership anchor", () => {
@@ -28,6 +29,19 @@ test("every central Home destination resolves to a route", () => {
     assert.ok(existsSync(new URL(`../src/app${pathname === "/sign-up" ? "/sign-up/[[...sign-up]]" : pathname}/page.tsx`, import.meta.url)), pathname);
   }
 });
+test("every Home product has a live route, individual artwork and seal glyph", () => {
+  const shown = [...HOME_SPOTLIGHT, ...HOME_LIBRARY, "premium"];
+  assert.deepEqual(shown.toSorted(), Object.keys(HOME_PRODUCTS).toSorted());
+  assert.equal(new Set(Object.values(HOME_PRODUCTS).map(product => product.icon)).size, shown.length);
+  for (const id of shown) {
+    const pathname = new URL(HOME_PRODUCTS[id].href, "https://tgpi.invalid").pathname;
+    assert.ok(existsSync(new URL(`../src/app${pathname}/page.tsx`, import.meta.url)), pathname);
+    assert.ok(existsSync(new URL(`../public${homeProductArt(id)}`, import.meta.url)), id);
+  }
+  assert.ok(existsSync(new URL(`../public${homeProductArt("hero")}`, import.meta.url)));
+  assert.ok(existsSync(new URL(`../public${HOME_ART_ROOT}/seal-frame.webp`, import.meta.url)));
+});
+
 test("featured courses resolve and all responsive cinematic variants exist", () => {
   const catalog = read("src/data/courses-overview.ts");
   for (const { id } of HOME_COURSES) assert.ok(catalog.includes(`"${id}"`), id);

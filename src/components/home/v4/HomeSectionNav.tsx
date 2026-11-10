@@ -11,7 +11,7 @@ type SectionId = typeof HOME_SECTIONS[number]["id"];
 
 export default function HomeSectionNav() {
   const { t } = useLocale();
-  const [active, setActive] = useState<SectionId>("how-it-works");
+  const [active, setActive] = useState<SectionId>(HOME_SECTIONS[0].id);
   const ref = useRef<HTMLElement>(null);
   useEffect(() => {
     const home = ref.current?.closest("main");

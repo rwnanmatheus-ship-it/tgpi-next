@@ -1,0 +1,32 @@
+.theme {
+  --showcase-ink: #08111f;
+  --showcase-midnight: #070f1c;
+  --showcase-panel: #101e31;
+  --showcase-paper: #f8f7f3;
+  --showcase-ivory: #f9f5e9;
+  --showcase-gold: #e6c587;
+  --showcase-cobalt: #9bc2ff;
+  --showcase-line: #e6c58735;
+  --showcase-muted: #c3cedd;
+}
+
+.seal {
+  display: inline-grid;
+  place-items: center;
+  width: var(--product-seal-size, 52px);
+  aspect-ratio: 1;
+  flex: none;
+  border-radius: 50%;
+  color: #f6db9c;
+  background: #102035 url("/images/home/showcase-v1/seal-frame.webp") center / cover no-repeat;
+  box-shadow: 0 4px 12px #03091230;
+}
+
+.seal[data-metal="blue"] { color: #b4d7ff; }
+.seal[data-metal="silver"] { color: #e1e8f7; }
+
+.seal svg {
+  width: 42%;
+  height: auto;
+  filter: drop-shadow(0 1px 1px #020714) drop-shadow(0 0 5px currentColor);
+}

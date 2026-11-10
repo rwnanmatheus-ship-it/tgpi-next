@@ -1,3 +1,5 @@
+export const HOME_HERO_DESCRIPTION = "Compare destinations, build practical skills and document your progress with tools for studying, working and living abroad.";
+
 /** Public Home copy reflects route authorization, not the legacy pricing matrix. */
 export const HOME_ROUTES = {
   signup: "/sign-up?next=%2Fonboarding",

@@ -2,12 +2,12 @@ import { localizeMetadata } from "@/lib/localization/metadata.server";
 import type { Metadata } from "next";
 import InstitutionalHome from "@/components/home/v4/InstitutionalHome";
 import HomeStructuredData from "@/components/home/HomeStructuredData";
-import { HOME_FAQ } from "@/lib/home-content";
+import { HOME_FAQ, HOME_HERO_DESCRIPTION } from "@/lib/home-content";
+import { homeProductArt } from "@/lib/home-showcase";
 
 const sourceMetadata: Metadata = {
   title: "TGPI | The Global Polymath Institute",
-  description:
-    "Learn practical skills. Compare countries. Build your next chapter with education and intelligence in one connected platform.",
+  description: HOME_HERO_DESCRIPTION,
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large" } },
   keywords: [
     "compare countries",
@@ -22,27 +22,25 @@ const sourceMetadata: Metadata = {
   alternates: { canonical: "https://www.theglobalpolymath.com" },
   openGraph: {
     title: "TGPI | The Global Polymath Institute",
-    description:
-      "Country intelligence, transparent comparison, document preparation and practical learning in one connected global decision system.",
+    description: HOME_HERO_DESCRIPTION,
     url: "https://www.theglobalpolymath.com",
     siteName: "TGPI — The Global Polymath Institute",
     type: "website",
     locale: "en_US",
     images: [
       {
-        url: "/images/cinematic-2026/global-horizon-1600.webp",
-        width: 1600,
-        height: 900,
-        alt: "TGPI conceptual editorial image: planning an international next chapter",
+        url: homeProductArt("hero"),
+        width: 1536,
+        height: 1024,
+        alt: "TGPI",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
     title: "TGPI | The Global Polymath Institute",
-    description:
-      "Practical education, country intelligence and preparation for international life.",
-    images: ["/images/cinematic-2026/global-horizon-1600.webp"],
+    description: HOME_HERO_DESCRIPTION,
+    images: [homeProductArt("hero")],
   },
 };
 

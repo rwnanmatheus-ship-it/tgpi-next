@@ -1,4 +1,5 @@
 import { homeFaq } from "@/data/home-system";
+import { homeProductArt } from "@/lib/home-showcase";
 
 const siteUrl = "https://www.theglobalpolymath.com";
 
@@ -42,11 +43,11 @@ function getHomeStructuredData(faq: readonly { question: string; answer: string 
     {
       "@type": "ImageObject",
       "@id": `${siteUrl}/#editorial-image`,
-      url: `${siteUrl}/images/cinematic-2026/global-horizon-1600.webp`,
-      contentUrl: `${siteUrl}/images/cinematic-2026/global-horizon-1600.webp`,
-      width: 1600,
-      height: 900,
-      caption: "TGPI conceptual editorial image: preparation for international life",
+      url: `${siteUrl}${homeProductArt("hero")}`,
+      contentUrl: `${siteUrl}${homeProductArt("hero")}`,
+      width: 1536,
+      height: 1024,
+      caption: "TGPI product collection editorial artwork",
     },
     {
       "@type": "WebPage",
@@ -73,7 +74,9 @@ function getHomeStructuredData(faq: readonly { question: string; answer: string 
         "Transparent country comparison",
         "International document preparation",
         "Practical global learning",
-        "Connected Global Key",
+        "TGPI Global ID",
+        "TGPI Atlas AI access portal",
+        "TGPI Integrity Chain verification portal",
       ],
       provider: { "@id": `${siteUrl}/#organization` },
     },
