@@ -14,6 +14,7 @@ function load(file, mocks) {
   const exports = {};
   new Function('require', 'exports', code)(id => {
     if (id in mocks) return mocks[id];
+    if (id === '@/lib/atlas/sponsored.server' || id === './sponsored.server') return { isSponsoredAtlas: () => false, sponsoredConfig: () => null };
     if (id === '@/lib/wallet/policy') return walletPolicy;
     if (id === '@/lib/wallet/store.server') return walletMock;
     if (['node:crypto', 'zod'].includes(id)) return require(id);

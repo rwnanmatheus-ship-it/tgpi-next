@@ -20,7 +20,7 @@ export default function AtlasWidget() {
   const trigger = useRef<HTMLButtonElement>(null);
   const [opened, setOpened] = useState(false);
   const [visited, setVisited] = useState(false);
-  const [access, setAccess] = useState<{ userId: string; enabled: boolean } | null>(null);
+  const [access, setAccess] = useState<{ userId: string; enabled: boolean; sponsored: boolean } | null>(null);
 
   useEffect(() => {
     if (!opened) return;
@@ -33,8 +33,8 @@ export default function AtlasWidget() {
     if (!opened || !userId) return;
     const controller = new AbortController();
     void fetch('/api/atlas/status', { cache: 'no-store', signal: controller.signal })
-      .then(async response => response.ok ? response.json() as Promise<{ enabled: boolean }> : { enabled: false })
-      .then(result => setAccess({ userId, enabled: result.enabled === true }))
+      .then(async response => response.ok ? response.json() as Promise<{ enabled: boolean; sponsored?: boolean }> : { enabled: false })
+      .then(result => setAccess({ userId, enabled: result.enabled === true, sponsored: "sponsored" in result && result.sponsored === true }))
       .catch(() => { /* Stay in preview when availability cannot be confirmed. */ });
     return () => controller.abort();
   }, [opened, userId]);
@@ -66,10 +66,10 @@ export default function AtlasWidget() {
       <div className={styles.frame}>
         <header className={styles.heading}><strong id="atlas-widget-title">TGPI Atlas AI</strong><Link href="/atlas" onClick={() => dialog.current?.close()}>{t("Full page ↗")}</Link><button autoFocus onClick={() => dialog.current?.close()} aria-label={t("Minimize Atlas")}>−</button></header>
         <div className={styles.content}>
-          {!isLoaded ? <p className={styles.loading}>{t("Loading your session…")}</p> : userId && visited ? <Chat key={userId} userId={userId} enabled={access?.userId === userId && access.enabled} embedded /> : <div className={styles.guest}>
+          {!isLoaded ? <p className={styles.loading}>{t("Loading your session…")}</p> : userId && visited ? <Chat key={`${userId}:${access?.sponsored === true}`} sponsored={access?.sponsored === true} userId={userId} enabled={access?.userId === userId && access.enabled} embedded /> : <div className={styles.guest}>
             <Image src="/brand/atlas/welcome.webp" alt={t("Atlas, your global companion")} width={160} height={160} />
             <h2>{t("Intelligence for your global life.")}</h2><p>{t("Explore destinations, learning and life abroad with Atlas. Sign in to access your private space.")}</p>
-            <p>{t("Atlas is currently in preview. AI replies are not yet available.")}</p>
+
             <Link href="/sign-in?redirect_url=%2Fatlas" onClick={() => dialog.current?.close()}>{t("Sign in to TGPI →")}</Link>
           </div>}
         </div>

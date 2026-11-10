@@ -7,6 +7,7 @@ const configUrl = url(fs.readFileSync('src/lib/localization/config.ts', 'utf8'))
 const { locales, resolveLocale, negotiateLocale, isLocale } = await import(configUrl);
 const { messages, translate } = await import(url(fs.readFileSync('src/lib/localization/messages.ts', 'utf8')));
 const { walletCopy } = await import(url(fs.readFileSync('src/lib/wallet/copy.ts', 'utf8')));
+const { atlasFreeCopy } = await import(url(fs.readFileSync('src/lib/atlas/free-copy.ts', 'utf8')));
 test('locale validation never accepts arbitrary cookie or metadata values', () => {
   for (const value of [null, {}, '__proto__', '<script>', 'zh', 'pt']) assert.equal(isLocale(value), false);
   assert.equal(resolveLocale('Portuguese'), 'pt-BR');
@@ -214,6 +215,7 @@ test('Atlas preview renders in all six locales without enabling sending or makin
         if (name === 'remark-gfm') return { __esModule: true, default: () => {} };
         if (name.endsWith('.module.css')) return { __esModule: true, default: {} };
         if (name === '@/lib/wallet/copy') return { walletCopy };
+        if (name === '@/lib/atlas/free-copy') return { atlasFreeCopy };
         if (name === '@/lib/atlas/contracts') return { safeAtlasLink: value => value };
         throw new Error(`Unexpected import: ${name}`);
       }, exports);
@@ -223,6 +225,11 @@ test('Atlas preview renders in all six locales without enabling sending or makin
       assert.match(html, /<button type="submit" disabled=""/);
       assert.match(html, /maxLength="4000"/);
       assert.ok(html.includes(escape(walletCopy[locale].walletLink)));
+      const freeHtml = renderToStaticMarkup(React.createElement(exports.default, { userId: 'localization-test', enabled: true, sponsored: true }));
+      assert.ok(freeHtml.includes(escape(atlasFreeCopy[locale].banner)));
+      assert.ok(freeHtml.includes(escape(atlasFreeCopy[locale].privacy)));
+      assert.ok(!freeHtml.includes('href="/atlas/wallet"'));
+      assert.ok(!freeHtml.includes(escape(t('Search loaded history'))));
     }
   } finally { globalThis.fetch = realFetch; }
 });

@@ -1,3 +1,4 @@
+import { isSponsoredAtlas, sponsoredConfig } from './sponsored.server';
 import { ATLAS_MODEL, PROVIDER_RESERVE_MICRO_USD } from '@/lib/wallet/policy';
 import 'server-only';
 import { auth } from '@clerk/nextjs/server';
@@ -15,8 +16,10 @@ export async function atlasUser(request: Request, mutate = false) {
 }
 export function requireAtlasGeneration(userId: string) {
   const allowed = (process.env.TGPI_ATLAS_ALLOWED_USER_IDS || '').split(',').map(x => x.trim()).filter(Boolean);
-  if (process.env.TGPI_ATLAS_ENABLED !== 'true' || (!allowed.includes(userId) && !allowed.includes('*'))) throw new AtlasError('Atlas is in a private validation phase. Access is not enabled for this account yet.', 503);
-  if (!process.env.OPENAI_API_KEY || process.env.TGPI_ATLAS_RETENTION_CONFIRMED !== 'true') throw new AtlasError('Atlas configuration is awaiting validation.', 503);
+  const founder = allowed.includes('@founder') && (process.env.TGPI_FOUNDER_USER_IDS || '').split(',').map(x => x.trim()).includes(userId);
+  if (process.env.TGPI_ATLAS_ENABLED !== 'true' || (!founder && !allowed.includes(userId) && !allowed.includes('*'))) throw new AtlasError('Atlas is in a private validation phase. Access is not enabled for this account yet.', 503);
+  if (isSponsoredAtlas()) sponsoredConfig();
+  if (!process.env.OPENAI_API_KEY || (!isSponsoredAtlas() && process.env.TGPI_ATLAS_RETENTION_CONFIRMED !== 'true')) throw new AtlasError('Atlas configuration is awaiting validation.', 503);
   const budget = Number(process.env.TGPI_ATLAS_DAILY_BUDGET_USD);
   if (!Number.isFinite(budget) || budget < PROVIDER_RESERVE_MICRO_USD / 1_000_000 || budget > 1000) throw new AtlasError('Atlas spending limit is not configured.', 503);
   // The reservation below was costed for this exact model. Changes require re-costing.

@@ -8,6 +8,7 @@ function load(path, dependencies) {
   const exports = {};
   new Function('require', 'exports', ts.transpileModule(readFileSync(path, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText)(id => {
     if (id === 'server-only') return {};
+    if (id === './sponsored.server') return { isSponsoredAtlas: () => false, sponsoredConfig: () => null };
     if (id === 'node:crypto') return { randomUUID };
     if (!(id in dependencies)) throw Error('Unexpected import ' + id);
     return dependencies[id];

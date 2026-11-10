@@ -9,6 +9,7 @@ import remarkGfm from 'remark-gfm';
 import { safeAtlasLink, type AtlasConversation, type AtlasEvent, type AtlasInput, type AtlasMessage, type AtlasScope, type AtlasSummary } from '@/lib/atlas/contracts';
 import styles from './atlas.module.css';
 import { walletCopy } from '@/lib/wallet/copy';
+import { atlasFreeCopy } from '@/lib/atlas/free-copy';
 import { LocalizedText, useLocale } from "@/components/localization/LocaleProvider";
 
 
@@ -24,7 +25,7 @@ async function api<T>(url: string, init?: RequestInit): Promise<T> {
   return body as T;
 }
 
-export default function AtlasChat({ userId, enabled = true, embedded = false }: { userId: string; enabled?: boolean; embedded?: boolean }) {
+export default function AtlasChat({ userId, enabled = true, embedded = false, sponsored = false }: { userId: string; enabled?: boolean; embedded?: boolean; sponsored?: boolean }) {
   const { t, locale } = useLocale();
   const [id, setId] = useState('');
   const [messages, setMessages] = useState<AtlasMessage[]>([]);
@@ -34,7 +35,7 @@ export default function AtlasChat({ userId, enabled = true, embedded = false }: 
   const [draft, setDraft] = useState('');
   const [title, setTitle] = useState('');
   const [scopes, setScopes] = useState<AtlasScope[]>([]);
-  const [temporary, setTemporary] = useState(false);
+  const [temporary, setTemporary] = useState(sponsored);
   const [busy, setBusy] = useState(false);
   const [loadingHistory, setLoadingHistory] = useState(false);
   const [error, setError] = useState('');
@@ -64,10 +65,10 @@ export default function AtlasChat({ userId, enabled = true, embedded = false }: 
 
   useEffect(() => {
     setId(crypto.randomUUID());
-    try { setDraft(sessionStorage.getItem(draftKey) || ''); } catch { /* storage disabled */ }
-    if (enabled) void loadHistory();
+    try { if (!sponsored) setDraft(sessionStorage.getItem(draftKey) || ''); } catch { /* storage disabled */ }
+    if (enabled && !sponsored) void loadHistory();
     return () => { abort.current?.abort(); };
-  }, [draftKey, loadHistory, enabled]);
+  }, [draftKey, loadHistory, enabled, sponsored]);
 
   useEffect(() => {
     const visual = window.visualViewport;
@@ -97,10 +98,11 @@ export default function AtlasChat({ userId, enabled = true, embedded = false }: 
 
   function updateDraft(value: string) {
     setDraft(value);
-    try { if (!temporary) sessionStorage.setItem(draftKey, value); } catch { /* optional draft recovery */ }
+    try { if (!sponsored && !temporary) sessionStorage.setItem(draftKey, value); } catch { /* optional draft recovery */ }
   }
   function newConversation(isTemporary = temporary) {
     if (lock.current) return;
+    isTemporary = sponsored || isTemporary;
     setId(crypto.randomUUID()); setMessages([]); setTitle(''); setPending(null);
     setError(''); setNotice(''); setAction(null); setTemporary(isTemporary); setShowHistory(false);
     setScopes([]); follow.current = true; setHasNew(false);
@@ -184,13 +186,13 @@ export default function AtlasChat({ userId, enabled = true, embedded = false }: 
     } catch (e) { setError(e instanceof Error ? e.message : 'Could not save change.'); }
     finally { lock.current = false; setBusy(false); }
   }
-  const saved = !temporary && items.some(x => x.id === id);
+  const saved = !sponsored && !temporary && items.some(x => x.id === id);
   return <main id={embedded ? 'atlas-widget-chat' : 'atlas-main'} tabIndex={-1} ref={shell} className={`${styles.shell} ${embedded ? styles.embedded : ''}`}>
     <aside className={`${styles.sidebar} ${showHistory ? styles.sidebarOpen : ''}`} aria-label={t("Atlas conversations")}>
       <Link href="/profile" className={styles.back}><LocalizedText text="← Workspace" /></Link>
       <div className={styles.brand}><Image src="/brand/atlas/avatar.webp" width={48} height={48} alt={t("Atlas owl")} /><div><strong>TGPI ATLAS AI</strong><span>{t("Your global companion")}</span></div></div>
       <button className={styles.primary} disabled={busy} onClick={() => newConversation(false)}>{t("＋ New conversation")}</button>
-      <button disabled={busy} onClick={() => newConversation(true)}>{t("Start temporary conversation")}</button>
+      {!sponsored && <><button disabled={busy} onClick={() => newConversation(true)}>{t("Start temporary conversation")}</button>
       <label className={styles.search}>{t("Search loaded history")}<input value={query} onChange={e => setQuery(e.target.value)} placeholder={t("Search by title…")} type="search" /></label>
       <div className={styles.history}>
         {items.filter(x => x.title.toLowerCase().includes(query.toLowerCase())).map(item => <button key={item.id} disabled={busy} aria-current={item.id === id ? 'page' : undefined} onClick={() => void openConversation(item.id)}>{item.title}</button>)}
@@ -198,15 +200,16 @@ export default function AtlasChat({ userId, enabled = true, embedded = false }: 
         {cursor && <button disabled={loadingHistory || busy} onClick={() => void loadHistory(cursor)}>{t("Load more conversations")}</button>}
         {loadingHistory && <p role="status">{t("Loading history…")}</p>}
       </div>
-      <div className={styles.sideNote}><span>{t("PRIVATE VALIDATION")}</span><p>{t("One thoughtful step at a time.")}</p><Link href="/profile/security">{t("Account & privacy ↗")}</Link></div>
+      </>}
+      <div className={styles.sideNote}><span>{sponsored ? atlasFreeCopy[locale].label : t("PRIVATE VALIDATION")}</span><p>{t("One thoughtful step at a time.")}</p><Link href="/profile/security">{t("Account & privacy ↗")}</Link></div>
     </aside>
     <section className={styles.chat} aria-label={t("Conversation with Atlas")}>
       <header className={styles.header}>
-        <button className={styles.historyToggle} aria-expanded={showHistory} onClick={() => setShowHistory(!showHistory)}>{t("History")}</button>
+        <button className={styles.historyToggle} aria-expanded={showHistory} onClick={() => setShowHistory(!showHistory)}>{t(sponsored ? 'New conversation' : 'History')}</button>
         <div><h1>Atlas <span>AI</span></h1><p>{temporary ? t('Temporary conversation') : title || t('New conversation')}</p></div>
-        <div className={styles.headerActions}><Link href="/atlas/wallet">{walletCopy[locale].walletLink}</Link>{saved && <><button disabled={busy} onClick={() => void openConversation(id)}>{t("Reload")}</button><button disabled={busy} onClick={() => { setAction('rename'); setRename(title); }}>{t("Rename")}</button><button disabled={busy} onClick={() => setAction('delete')}>{t("Delete")}</button></>}</div>
+        <div className={styles.headerActions}>{!sponsored && <Link href="/atlas/wallet">{walletCopy[locale].walletLink}</Link>}{saved && <><button disabled={busy} onClick={() => void openConversation(id)}>{t("Reload")}</button><button disabled={busy} onClick={() => { setAction('rename'); setRename(title); }}>{t("Rename")}</button><button disabled={busy} onClick={() => setAction('delete')}>{t("Delete")}</button></>}</div>
       </header>
-      {enabled && <p className={styles.confirm}>{walletCopy[locale].chatPrice}</p>}
+      {enabled && <p className={styles.confirm}>{sponsored ? atlasFreeCopy[locale].banner : walletCopy[locale].chatPrice}</p>}
       {!enabled && <div className={styles.confirm} role="status"><p><strong>{t("Atlas preview")}</strong>{' '}{t("— Explore the interface. AI replies are not available for this account yet. Messages cannot be sent during this preview.")}</p></div>}
       {action && <div className={styles.confirm}>
         {action === 'rename' ? <><label>{t("Conversation title")}<input value={rename} maxLength={70} onChange={e => setRename(e.target.value)} /></label><button disabled={busy || !rename.trim()} onClick={() => void mutate({ title: rename.trim() })}>{t("Save title")}</button></> : <><p>{t("Delete this conversation and its messages from TGPI? This cannot be undone.")}</p><button disabled={busy} onClick={() => void mutate('delete')}>{t("Confirm deletion")}</button></>}
@@ -242,7 +245,7 @@ export default function AtlasChat({ userId, enabled = true, embedded = false }: 
           <p>{t("For your next question, share selected fields from your TGPI profile with OpenAI. Unchecking a category stops future retrieval; previous replies may still contain it. Start a new conversation for a fresh context.")}</p>
           <div>{choices.map(choice => <label key={choice.id}><input disabled={busy || !!pending} type="checkbox" checked={scopes.includes(choice.id)} onChange={e => setScopes(previous => e.target.checked ? [...previous, choice.id] : previous.filter(x => x !== choice.id))} />{t(choice.label)}</label>)}</div>
         </details>
-        {error && <div role="alert" className={styles.error}><p>{t(error)}</p>{pending && !busy && <div><button onClick={() => void send(pending)}>{t("Retry last question")}</button>{!temporary && <button onClick={() => void openConversation(id)}>{t("Reload conversation")}</button>}<button onClick={() => newConversation()}>{t("Start new conversation")}</button></div>}</div>}
+        {error && <div role="alert" className={styles.error}><p>{sponsored && error === 'Atlas free allowance is currently exhausted. No credits were charged.' ? atlasFreeCopy[locale].exhausted : sponsored && error === 'Atlas free access is temporarily unavailable. No credits were charged.' ? atlasFreeCopy[locale].unavailable : t(error)}</p>{pending && !busy && <div><button onClick={() => void send(pending)}>{t("Retry last question")}</button>{!temporary && <button onClick={() => void openConversation(id)}>{t("Reload conversation")}</button>}<button onClick={() => newConversation()}>{t("Start new conversation")}</button></div>}</div>}
         <form className={styles.composer} onSubmit={e => { e.preventDefault(); if (!pending) void send(); }}>
           <label className={styles.srOnly} htmlFor="atlas-message">{t("Message Atlas")}</label>
           <textarea id="atlas-message" ref={composer} value={draft} maxLength={4000} rows={2} placeholder={t("Ask Atlas anything…")} onChange={e => updateDraft(e.target.value)} onKeyDown={e => {
@@ -251,9 +254,9 @@ export default function AtlasChat({ userId, enabled = true, embedded = false }: 
           {busy ? <button type="button" disabled={!abort.current} onClick={() => abort.current?.abort()}>{t("Stop")}</button> : <button type="submit" disabled={!enabled || !draft.trim() || !!pending || !id} aria-label={t("Send message")}>{t("Send ↑")}</button>}
         </form>
         <p className={styles.status} role="status" aria-live="polite">{busy ? t('Processing your request…') : t(notice)}</p>
-        <details className={styles.privacy}><summary>{temporary ? t('Temporary · not saved in TGPI chat history') : t('Private history · 30-day access window')}{' '}{t("· Privacy & limits")}</summary>
-          <p>{t("Messages and selected profile fields are processed by OpenAI. Atlas does not update your profile or create memories. Saved chats expire 30 days after creation; deletion removes the active TGPI record. Provider retention, backup retention and asynchronous cleanup may differ.")}</p>
-          <p>{temporary ? t('Temporary messages stay in this page while it is open; TGPI retains usage metadata for rate limits, not their text.') : t('Unsent drafts are kept in this browser tab until sent or cleared. History is stored in your private account.')}{' '}{t("This validation version allows 10 requests per account per UTC day, with a shared spending cap. It has no live web research, attachments, voice or account-changing tools. Verify important or time-sensitive information.")}</p>
+        <details className={styles.privacy}><summary>{sponsored ? atlasFreeCopy[locale].temporary : temporary ? t('Temporary · not saved in TGPI chat history') : t('Private history · 30-day access window')}{' '}{t("· Privacy & limits")}</summary>
+          {sponsored ? <><p>{atlasFreeCopy[locale].privacy}</p><p>{t("This validation version allows 10 requests per account per UTC day, with a shared spending cap. It has no live web research, attachments, voice or account-changing tools. Verify important or time-sensitive information.")}</p></> : <><p>{t("Messages and selected profile fields are processed by OpenAI. Atlas does not update your profile or create memories. Saved chats expire 30 days after creation; deletion removes the active TGPI record. Provider retention, backup retention and asynchronous cleanup may differ.")}</p>
+          <p>{temporary ? t('Temporary messages stay in this page while it is open; TGPI retains usage metadata for rate limits, not their text.') : t('Unsent drafts are kept in this browser tab until sent or cleared. History is stored in your private account.')}{' '}{t("This validation version allows 10 requests per account per UTC day, with a shared spending cap. It has no live web research, attachments, voice or account-changing tools. Verify important or time-sensitive information.")}</p></>}
         </details>
       </div>
     </section>

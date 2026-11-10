@@ -1,3 +1,4 @@
+import { isSponsoredAtlas, beginSponsoredTurn } from '@/lib/atlas/sponsored.server';
 import { settleWallet } from '@/lib/wallet/store.server';
 import { ATLAS_MODEL, providerCostMicroUsd } from '@/lib/wallet/policy';
 import OpenAI from 'openai';
@@ -14,6 +15,7 @@ export async function POST(request: Request) {
     const userId = await atlasUser(request, true);
     const budget = requireAtlasGeneration(userId);
     const input = await atlasBody(request, chatSchema);
+    const sponsored = isSponsoredAtlas();
     let selected = selectAtlasContext({}, []);
     if (input.scopes.length) {
       const user = await (await clerkClient()).users.getUser(userId);
@@ -21,7 +23,7 @@ export async function POST(request: Request) {
     }
     const instructions = `${atlasInstructions}\nUSER_PROFILE_DATA: ${JSON.stringify(selected.data)}`;
     if (new TextEncoder().encode(instructions).length > 12000) throw new AtlasError('Profile context exceeds the allowed size.', 413);
-    const turn = await beginTurn(userId, input, budget);
+    const turn = sponsored ? await beginSponsoredTurn(userId, input, budget) : await beginTurn(userId, input, budget);
     const encoder = new TextEncoder();
     const abort = new AbortController();
     const onAbort = () => abort.abort();
@@ -60,8 +62,8 @@ export async function POST(request: Request) {
           request.signal.removeEventListener('abort', onAbort);
           if (!turn.replay) {
             try {
-              await settleWallet(userId, input.requestId, turn.token, status === 'complete');
-              const conversation = await finishTurn(userId, input, turn.token, content, status, selected.factors);
+              if (!sponsored) await settleWallet(userId, input.requestId, turn.token, status === 'complete');
+              const conversation = sponsored ? null : await finishTurn(userId, input, turn.token, content, status, selected.factors);
               send({ type: 'done', conversation, status });
             } catch { send({ type: 'error', message: 'The reply could not be saved. Reload before retrying.' }); }
             // No prompts, answer text, identity, credentials or raw provider errors in logs.

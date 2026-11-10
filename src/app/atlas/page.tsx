@@ -1,3 +1,4 @@
+import { isSponsoredAtlas } from '@/lib/atlas/sponsored.server';
 import type { Metadata } from 'next';
 import { auth } from '@clerk/nextjs/server';
 import AtlasChat from '@/components/atlas/AtlasChat';
@@ -13,5 +14,5 @@ export default async function AtlasPage() {
   if (!userId) return null;
   let enabled = false;
   try { requireAtlasGeneration(userId); enabled = true; } catch { /* Interface preview remains available. */ }
-  return <AtlasChat key={userId} userId={userId} enabled={enabled} />;
+  return <AtlasChat key={userId} userId={userId} enabled={enabled} sponsored={isSponsoredAtlas()} />;
 }
