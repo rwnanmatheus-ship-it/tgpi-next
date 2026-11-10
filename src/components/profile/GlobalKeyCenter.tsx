@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useState, useTransition } from "react";
 import { QRCodeSVG } from "qrcode.react";
@@ -12,6 +11,7 @@ import type { GlobalKeyShareEntry } from "@/lib/global-key-share";
 import { learningStatusLabels, type LearningProgressItem } from "@/lib/learning/unified-progress";
 import GlobalIdCredentials, { type GlobalIdCredential } from "./GlobalIdCredentials";
 import GlobalIdSharing from "./GlobalIdSharing";
+import GlobalKeyHero from "./GlobalKeyHero";
 import IntegritySeal from "./IntegritySeal";
 import styles from "./GlobalKeyCenter.module.css";
 
@@ -98,17 +98,10 @@ export default function GlobalKeyCenter({
           <Link href="/profile">← <LocalizedText text="Workspace" /></Link>
           <span aria-hidden="true">/</span><span aria-current="page"><LocalizedText text="TGPI Global ID" /></span>
         </nav>
-        <header className={styles.hero}>
-          <div className={styles.heroMedia}>
-            <Image className={styles.heroArt} fill preload sizes="(max-width: 690px) 100vw, (max-width: 1450px) 72vw, 960px" src="/images/global-identity/integrity-observatory.webp" alt="" />
-          </div>
-          <div className={styles.heroCopy}>
-            <p className={styles.eyebrow}><LocalizedText text="TGPI Integrity Chain" /></p>
-            <h1><LocalizedText text="TGPI Global ID" /></h1>
-            <p><LocalizedText text="Your identity, verified credentials and control over what you share." /></p>
-            <a className={styles.primaryButton} href={actionHref}><LocalizedText text={action} /> ↗</a>
-          </div>
-        </header>
+        <GlobalKeyHero>
+          <p><LocalizedText text="Your identity, verified credentials and control over what you share." /></p>
+          <a className={styles.primaryButton} href={actionHref}><LocalizedText text={action} /> ↗</a>
+        </GlobalKeyHero>
 
         <nav className={styles.jump} aria-label={t("Global ID sections")}>
           {sections.map(([id, title], index) => (
