@@ -16,20 +16,29 @@ export default function HomeSectionNav() {
   useEffect(() => {
     const home = ref.current?.closest("main");
     const headers = Array.from(document.querySelectorAll<HTMLElement>(".tgpi-desktop-navigation, .tgpi-compact-topbar"));
+    let frame = 0;
+    let marker = 168;
+    const sections = HOME_SECTIONS.map(section => ({ id: section.id, element: document.getElementById(section.id) }));
+    const updateActive = () => {
+      frame = 0;
+      const current = sections.filter(section => section.element && section.element.getBoundingClientRect().top <= marker).at(-1);
+      setActive(current?.id ?? HOME_SECTIONS[0].id);
+    };
+    const scheduleUpdate = () => { if (!frame) frame = window.requestAnimationFrame(updateActive); };
     const measure = () => {
       const height = Math.max(0, ...headers.map(header => header.getBoundingClientRect().height));
       home?.style.setProperty("--home-header-offset", `${height}px`);
+      const rootPadding = Number.parseFloat(window.getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+      home?.style.setProperty("--home-root-scroll-padding", `${rootPadding}px`);
+      marker = height + 88;
+      scheduleUpdate();
     };
     const resize = new ResizeObserver(measure);
     headers.forEach(header => resize.observe(header));
     measure();
-    const observer = new IntersectionObserver(entries => {
-      const visible = entries.filter(entry => entry.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-      const id = visible[0]?.target.id;
-      if (HOME_SECTIONS.some(section => section.id === id)) setActive(id as SectionId);
-    }, { rootMargin: "-25% 0px -55% 0px", threshold: 0 });
-    HOME_SECTIONS.forEach(section => { const element = document.getElementById(section.id); if (element) observer.observe(element); });
-    return () => { observer.disconnect(); resize.disconnect(); home?.style.removeProperty("--home-header-offset"); };
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", measure);
+    return () => { resize.disconnect(); window.removeEventListener("scroll", scheduleUpdate); window.removeEventListener("resize", measure); window.cancelAnimationFrame(frame); home?.style.removeProperty("--home-header-offset"); home?.style.removeProperty("--home-root-scroll-padding"); };
   }, []);
   function jump(id: string) {
     const target = document.getElementById(id);

@@ -7,7 +7,7 @@
 .home button { cursor:pointer; }
 .container { width:min(1360px,calc(100% - 72px)); margin-inline:auto; }
 .section,.demoSection,.learningSection,.trustSection,.certificateSection { padding-block:90px; }
-.home section[id] { scroll-margin-top:calc(var(--home-header-offset) + 86px); }
+:global(#main-content) .home section[id] { scroll-margin-top:max(0px, calc(var(--home-header-offset) + 86px - var(--home-root-scroll-padding, 0px))); }
 .home .eyebrow { font:700 10px/1.7 var(--tgpi-font-sans); letter-spacing:.17em; text-transform:uppercase; color:#80632b; }
 .home h2 { font-size:clamp(36px,4.3vw,62px); line-height:1.07; letter-spacing:-.035em; font-weight:600; color:var(--navy); }
 .home h2 em { font-style:normal; font-weight:500; color:#85703e; }
