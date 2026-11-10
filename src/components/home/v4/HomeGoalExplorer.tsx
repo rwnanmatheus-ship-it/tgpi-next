@@ -1,66 +1,46 @@
 "use client";
 
-import { useState } from "react";
-import { useLocale } from "@/components/localization/LocaleProvider";
-import { HOME_GOALS } from "@/lib/home-journey";
-import { HOME_ROUTES } from "@/lib/home-content";
-import { setHomeGoal, useHomeGoal } from "./HomeGoalState";
+import { useSyncExternalStore } from "react";
+import { HOME_GOALS, homeGoal } from "@/lib/home-journey";
 import styles from "./home.module.css";
+import { LocalizedText, useLocale } from "@/components/localization/LocaleProvider";
 
-const destinations = [
-  { slug: "portugal", label: "Portugal" },
-  { slug: "canada", label: "Canada" },
-  { slug: "united-states", label: "United States" },
-  { slug: "united-kingdom", label: "United Kingdom" },
-  { slug: "germany", label: "Germany" },
-  { slug: "spain", label: "Spain" },
-] as const;
+
+const changeEvent = "tgpi:home-goal";
+function subscribe(callback: () => void) {
+  window.addEventListener("popstate", callback);
+  window.addEventListener(changeEvent, callback);
+  return () => { window.removeEventListener("popstate", callback); window.removeEventListener(changeEvent, callback); };
+}
+function snapshot() { return homeGoal(new URLSearchParams(window.location.search).get("goal")); }
+function serverSnapshot() { return "study" as const; }
 
 export default function HomeGoalExplorer() {
   const { t } = useLocale();
-  const current = useHomeGoal();
-  const [country, setCountry] = useState<string>("portugal");
-  return (
-    <form action={HOME_ROUTES.fit} method="get" className={styles.goalExplorer} aria-labelledby="how-title">
-      <div className={styles.goalControls}>
-        <fieldset className={styles.goalOptions}>
-          <legend className="sr-only">{t("Choose your goal")}</legend>
-          {HOME_GOALS.map((item, index) => (
-            <label key={item.id} className={styles.goalOption}>
-              <input type="radio" name="goal" value={item.id} checked={current.id === item.id} onChange={() => setHomeGoal(item.id)} />
-              <span aria-hidden="true">0{index + 1}</span>
-              <strong>{t(item.label)}</strong>
-              <span aria-hidden="true">↗</span>
-            </label>
-          ))}
-        </fieldset>
-      </div>
-      <div className={styles.goalResult}>
-        <div aria-live="polite" aria-atomic="true">
-          <p className={styles.eyebrow}>{t("Your starting point · {goal}", { goal: t(current.label) })}</p>
-          <h3>{t(current.heading)}</h3>
-          <p className={styles.goalDescription}>{t(current.copy)}</p>
-          <ul className={styles.goalChecks}>
-            {current.checks.map(check => <li key={check}><span aria-hidden="true">✓</span>{t(check)}</li>)}
-          </ul>
-          <p className={styles.goalOutcome}>{t(current.outcome)}</p>
-        </div>
-        {current.id === "learn" ? (
-          <div className={styles.goalLaunch}>
-            <a href="#practical-learning" className={styles.primary}>{t("See my suggested courses")} <span aria-hidden="true">↓</span></a>
-          </div>
-        ) : (
-          <div className={styles.goalLaunch}>
-            <label htmlFor="home-research-country">
-              {t("Start researching")}
-              <select id="home-research-country" name="country" value={country} onChange={event => setCountry(event.target.value)}>
-                {destinations.map(({ slug, label }) => <option key={slug} value={slug}>{t(label)}</option>)}
-              </select>
-            </label>
-            <button type="submit" className={styles.primary}>{t("Build my research plan")} <span aria-hidden="true">→</span></button>
-          </div>
-        )}
-      </div>
-    </form>
-  );
+  const goal = useSyncExternalStore(subscribe, snapshot, serverSnapshot);
+  const current = HOME_GOALS.find(item => item.id === goal)!;
+  function choose(value: string) {
+    const url = new URL(window.location.href);
+    url.searchParams.set("goal", homeGoal(value));
+    window.history.replaceState(window.history.state, "", `${url.pathname}${url.search}${url.hash}`);
+    window.dispatchEvent(new Event(changeEvent));
+  }
+  return <form action={goal === "learn" ? "/courses" : "/country-fit"} method="get" className={styles.goalExplorer} aria-labelledby="goal-explorer-title">
+    <div className={styles.goalControls}>
+      <p className={styles.eyebrow}><LocalizedText text="Make the first step yours" /></p>
+      <h3 id="goal-explorer-title"><LocalizedText text="What brings you here?" /></h3>
+      <fieldset className={styles.goalOptions}><legend className="sr-only"><LocalizedText text="Choose your goal" /></legend>
+        {HOME_GOALS.map(item => <label key={item.id} className={styles.goalOption}>
+          <input type="radio" name="goal" value={item.id} checked={goal === item.id} onChange={() => choose(item.id)} />
+          <span><LocalizedText text={item.label} /></span><span aria-hidden="true">↗</span>
+        </label>)}
+      </fieldset>
+      <p className={styles.goalHint}><LocalizedText text="A starting point, not a commitment. Your choice stays in this page’s URL." /></p>
+    </div>
+    <div className={styles.goalResult}>
+      <div aria-live="polite" aria-atomic="true"><p className={styles.goalResultLabel}>{t("Your starting point · {goal}", { goal: t(current.label) })}</p><h3>{t(current.heading)}</h3><p className={styles.goalDescription}>{t(current.copy)}</p><ul>{current.checks.map(check => <li key={check}><span aria-hidden="true">✓</span>{t(check)}</li>)}</ul><p className={styles.goalOutcome}>{t(current.outcome)}</p></div>
+      <div className={styles.goalLaunch}>{goal !== "learn" && <label htmlFor="home-research-country"><LocalizedText text="Start researching" /><select id="home-research-country" name="country" defaultValue="portugal"><option value="portugal"><LocalizedText text={t("Portugal")} /></option><option value="canada"><LocalizedText text={t("Canada")} /></option></select></label>}<button type="submit" className={styles.primary}><LocalizedText text={goal === "learn" ? "View the learning catalogue" : "Build my research plan"} />{" "}<span aria-hidden="true">→</span></button></div>
+      <p className={styles.goalHint}><LocalizedText text={goal === "learn" ? "Create an account to continue your progress" : "Example destinations. Country Fit lets you explore other countries and save a plan after signing in."} /></p>
+    </div>
+  </form>;
 }

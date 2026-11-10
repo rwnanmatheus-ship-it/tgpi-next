@@ -2,13 +2,12 @@ import { localizeMetadata } from "@/lib/localization/metadata.server";
 import type { Metadata } from "next";
 import InstitutionalHome from "@/components/home/v4/InstitutionalHome";
 import HomeStructuredData from "@/components/home/HomeStructuredData";
-import { HOME_FAQ, HOME_HERO_DESCRIPTION } from "@/lib/home-content";
-import { homeGoal } from "@/lib/home-journey";
-import { homeProductArt } from "@/lib/home-showcase";
+import { HOME_FAQ } from "@/lib/home-content";
 
 const sourceMetadata: Metadata = {
   title: "TGPI | The Global Polymath Institute",
-  description: HOME_HERO_DESCRIPTION,
+  description:
+    "Learn practical skills. Compare countries. Build your next chapter with education and intelligence in one connected platform.",
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large" } },
   keywords: [
     "compare countries",
@@ -23,32 +22,32 @@ const sourceMetadata: Metadata = {
   alternates: { canonical: "https://www.theglobalpolymath.com" },
   openGraph: {
     title: "TGPI | The Global Polymath Institute",
-    description: HOME_HERO_DESCRIPTION,
+    description:
+      "Country intelligence, transparent comparison, document preparation and practical learning in one connected global decision system.",
     url: "https://www.theglobalpolymath.com",
     siteName: "TGPI — The Global Polymath Institute",
     type: "website",
     locale: "en_US",
     images: [
       {
-        url: homeProductArt("hero"),
-        width: 1536,
-        height: 1024,
-        alt: "TGPI",
+        url: "/images/cinematic-2026/global-horizon-1600.webp",
+        width: 1600,
+        height: 900,
+        alt: "TGPI conceptual editorial image: planning an international next chapter",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
     title: "TGPI | The Global Polymath Institute",
-    description: HOME_HERO_DESCRIPTION,
-    images: [homeProductArt("hero")],
+    description:
+      "Practical education, country intelligence and preparation for international life.",
+    images: ["/images/cinematic-2026/global-horizon-1600.webp"],
   },
 };
 
-export default async function HomePage({ searchParams }: { searchParams: Promise<{ goal?: string | string[] }> }) {
-  const params = await searchParams;
-  const goal = Array.isArray(params.goal) ? params.goal[0] : params.goal;
-  return <><HomeStructuredData faq={HOME_FAQ} /><InstitutionalHome initialGoal={homeGoal(goal)} /></>;
+export default function HomePage() {
+  return <><HomeStructuredData faq={HOME_FAQ} /><InstitutionalHome /></>;
 }
 
 export async function generateMetadata() { return localizeMetadata(sourceMetadata); }

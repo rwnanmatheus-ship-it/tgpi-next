@@ -1,5 +1,4 @@
 import { homeFaq } from "@/data/home-system";
-import { homeProductArt } from "@/lib/home-showcase";
 
 const siteUrl = "https://www.theglobalpolymath.com";
 
@@ -43,11 +42,11 @@ function getHomeStructuredData(faq: readonly { question: string; answer: string 
     {
       "@type": "ImageObject",
       "@id": `${siteUrl}/#editorial-image`,
-      url: `${siteUrl}${homeProductArt("hero")}`,
-      contentUrl: `${siteUrl}${homeProductArt("hero")}`,
-      width: 1536,
-      height: 1024,
-      caption: "TGPI homepage editorial illustration of an Atlantic city and bridge",
+      url: `${siteUrl}/images/cinematic-2026/global-horizon-1600.webp`,
+      contentUrl: `${siteUrl}/images/cinematic-2026/global-horizon-1600.webp`,
+      width: 1600,
+      height: 900,
+      caption: "TGPI conceptual editorial image: preparation for international life",
     },
     {
       "@type": "WebPage",
