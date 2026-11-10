@@ -12,7 +12,7 @@ html { scrollbar-gutter: stable; scroll-padding-top: 100px; }
   backdrop-filter: none;
 }
 .tgpi-desktop-navigation-frame {
-  grid-template-columns: minmax(190px, 1fr) max-content minmax(240px, 1fr);
+  grid-template-columns: minmax(190px, 1fr) max-content max-content;
   min-height: 78px;
   gap: 20px;
 }
@@ -90,6 +90,7 @@ html { scrollbar-gutter: stable; scroll-padding-top: 100px; }
   background: var(--tgpi-blue);
 }
 .tgpi-desktop-actions { gap: 8px; }
+.tgpi-desktop-actions > .tgpi-language-control { flex-shrink: 0; }
 .tgpi-navigation-icon-button,
 .tgpi-navigation-square-button,
 .tgpi-navigation-workspace-button,
