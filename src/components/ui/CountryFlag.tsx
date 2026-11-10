@@ -4,20 +4,21 @@ import styles from "./CountryFlag.module.css";
 type CountryFlagProps = {
   iso2: string;
   width?: number;
+  framed?: boolean;
 };
 
 /** Resolution-independent artwork with a shared, lightweight studio treatment.
  * Decorative: the adjacent country or language name supplies the accessible label.
  */
-export default function CountryFlag({ iso2, width = 36 }: CountryFlagProps) {
+export default function CountryFlag({ iso2, width = 36, framed = false }: CountryFlagProps) {
   const code = iso2.toLowerCase();
   if (!/^[a-z]{2}$/.test(code)) return null;
 
   return (
     <span
-      className={styles.frame}
+      className={`${styles.frame}${framed ? "" : ` ${styles.unframed}`}`}
       aria-hidden="true"
-      data-flag-frame={code}
+      data-flag-frame={framed ? code : undefined}
       style={{ width, height: width * 0.75 + 1 }}
     >
       <Image

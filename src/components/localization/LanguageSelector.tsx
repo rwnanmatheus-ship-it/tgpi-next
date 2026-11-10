@@ -32,14 +32,14 @@ export default function LanguageSelector({ compact = false }: { compact?: boolea
     <button ref={trigger} id={id} type="button" className="tgpi-language-trigger" aria-label={`${t('Interface language')}: ${selected.name}`}
       aria-expanded={open} aria-controls={`${id}-choices`} aria-describedby={error ? `${id}-error` : undefined}
       aria-busy={pending} disabled={pending} onClick={() => setOpen(value => !value)}>
-      <CountryFlag iso2={selected.iso2} width={32} />
+      <CountryFlag iso2={selected.iso2} width={32} framed />
       <span lang={locale}>{compact ? locale === 'pt-BR' ? 'PT' : locale.toUpperCase() : selected.name}</span>
       <span aria-hidden="true" className="tgpi-language-chevron">⌄</span>
     </button>
     {open && <div id={`${id}-choices`} className="tgpi-language-options" role="group" aria-label={t('Interface language')}>
       {localeOptions.map(option => <button key={option.code} type="button" className="tgpi-language-option" lang={option.code}
         aria-pressed={option.code === locale} disabled={pending} onClick={() => choose(option.code)}>
-        <CountryFlag iso2={option.iso2} width={36} />
+        <CountryFlag iso2={option.iso2} width={36} framed />
         <span>{option.name}</span><span className="tgpi-language-check" aria-hidden="true">{option.code === locale ? '✓' : ''}</span>
       </button>)}
     </div>}

@@ -81,7 +81,7 @@
 .compare-destinations { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,215px),1fr)); gap:14px; }
 .compare-destination { overflow:hidden; border:1px solid #dce3ed; border-radius:18px; background:#fff; box-shadow:0 8px 25px #071b3105; }
 .compare-destination-image { height:150px; position:relative; background:#071b31; }
-.compare-destination-image > span { position:absolute; left:18px; bottom:-16px; display:flex; padding:3px; border-radius:8px; background:#fff; box-shadow:0 4px 12px #071b3115; }
+.compare-destination-image > span { position:absolute; left:18px; bottom:-16px; display:flex; padding:3px; }
 .compare-destination-body { padding:25px 18px 18px; }
 .compare-destination h3 { font-size:24px; font-weight:700; line-height:1.15; margin:6px 0 9px; }
 .compare-destination p { font-size:11px; line-height:1.7; color:#627184; }
