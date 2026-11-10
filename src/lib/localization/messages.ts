@@ -11663,6 +11663,30 @@ export const messages = {
     "fr": "Correct",
     "de": "Richtig",
     "it": "Corretto"
+  },
+  "Languages: {count}": {
+    "en": "Languages: {count}",
+    "pt-BR": "Idiomas: {count}",
+    "es": "Idiomas: {count}",
+    "fr": "Langues : {count}",
+    "de": "Sprachen: {count}",
+    "it": "Lingue: {count}"
+  },
+  "Enabled: {count}": {
+    "en": "Enabled: {count}",
+    "pt-BR": "Ativadas: {count}",
+    "es": "Activadas: {count}",
+    "fr": "Activées : {count}",
+    "de": "Aktiviert: {count}",
+    "it": "Attivate: {count}"
+  },
+  "{rank} · {points} points": {
+    "en": "{rank} · {points} points",
+    "pt-BR": "{rank} · {points} pontos",
+    "es": "{rank} · {points} puntos",
+    "fr": "{rank} · {points} points",
+    "de": "{rank} · {points} Punkte",
+    "it": "{rank} · {points} punti"
   }
 } as const satisfies Record<string, Record<Locale, string>>;
 

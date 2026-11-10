@@ -269,16 +269,17 @@ function AccountAvatar({
   label: string;
   size?: "large" | "small";
 }) {
+  const { t } = useLocale();
   const sizeClass = size === "large" ? "h-20 w-20 text-3xl" : "h-12 w-12 text-lg";
   return (
-    <LocalizedElement as="span"
-      aria-label={`${label} profile image`}
+    <span
+      aria-label={t("Profile photo of {name}", { name: label })}
       className={`flex shrink-0 items-center justify-center rounded-full border-2 border-[#E5BF5A]/60 bg-[#163452] bg-cover bg-center font-[var(--tgpi-font-display)] font-semibold text-[var(--tgpi-gold-light)] ${sizeClass}`}
       role="img"
       style={imageUrl ? { backgroundImage: `url(${imageUrl})` } : undefined}
     >
-      {!imageUrl ? initials : <span className="sr-only"><LocalizedText text={label} /></span>}
-    </LocalizedElement>
+      {!imageUrl ? initials : <span className="sr-only">{label}</span>}
+    </span>
   );
 }
 
@@ -400,19 +401,19 @@ export default function TgpiAccountCenter({
   }, [query, locale, t]);
   const activeDefinition = settingsSections.find((section) => section.key === activeSection) ?? settingsSections[0];
   const initials = `${identity.firstName.at(0) ?? ""}${identity.lastName.at(0) ?? ""}`.toUpperCase() || "TG";
-  const fullName = profile.displayName || [identity.firstName, identity.lastName].filter(Boolean).join(" ") || "TGPI member";
+  const fullName = profile.displayName || [identity.firstName, identity.lastName].filter(Boolean).join(" ") || t("TGPI member");
   const currentCountryName = countries.find((country) => country.slug === profile.currentCountry)?.name || profile.currentCountry;
   const sectionSummaries: Record<Exclude<SettingsSection, "overview">, string> = {
-    billing: account.membership,
-    "global-key": "Global ID, verification and account security",
-    global: profile.profession || (profile.languages.length ? `${profile.languages.length} languages` : "Add your global context"),
-    identity: profile.currentCity || profile.currentCountry || "Add personal information",
-    progress: `${rank.name} · ${rank.points} points`,
-    notifications: `${Object.values(profile.notifications).filter(Boolean).length} enabled`,
+    billing: t(account.membership),
+    "global-key": t("Global ID, verification and account security"),
+    global: profile.profession || (profile.languages.length ? t("Languages: {count}", { count: profile.languages.length }) : t("Add your global context")),
+    identity: profile.currentCity || (currentCountryName ? t(currentCountryName) : t("Add personal information")),
+    progress: t("{rank} · {points} points", { rank: t(rank.name), points: rank.points.toLocaleString(locale) }),
+    notifications: t("Enabled: {count}", { count: Object.values(profile.notifications).filter(Boolean).length }),
     preferences: `${localeOptions.find(option => option.code === locale)?.name} · ${profile.preferredCurrency}`,
-    "public-profile": profile.privacy.visibility === "private" ? "Only you can view it" : "Ready to preview and share",
-    privacy: profile.privacy.visibility.charAt(0).toUpperCase() + profile.privacy.visibility.slice(1),
-    security: "Password, devices and login methods",
+    "public-profile": t(profile.privacy.visibility === "private" ? "Only you can view it" : "Ready to preview and share"),
+    privacy: t(profile.privacy.visibility.charAt(0).toUpperCase() + profile.privacy.visibility.slice(1)),
+    security: t("Password, devices and login methods"),
   };
 
   useEffect(() => {
@@ -547,7 +548,7 @@ export default function TgpiAccountCenter({
       <div className="mt-4 grid gap-3 sm:grid-cols-3">
         <Link className="tgpi-account-tile rounded-2xl border border-slate-200 p-4" href="/courses"><strong><LocalizedText text="Continue learning →" /></strong><p className="mt-2 text-sm"><LocalizedText text={"Resume from your saved lesson."} /></p></Link>
         <Link className="tgpi-account-tile rounded-2xl border border-slate-200 p-4" href="/certificates"><strong><LocalizedText text={"My credentials →"} /></strong><p className="mt-2 text-sm"><LocalizedText text={"Issued records and milestones to earn."} /></p></Link>
-        <Link className="tgpi-account-tile rounded-2xl border border-slate-200 p-4" href="/profile/security#settings-billing"><strong>{account.membership} →</strong><p className="mt-2 text-sm"><LocalizedText text={"Review plan and manage billing."} /></p></Link>
+        <Link className="tgpi-account-tile rounded-2xl border border-slate-200 p-4" href="/profile/security#settings-billing"><strong>{t(account.membership)} →</strong><p className="mt-2 text-sm"><LocalizedText text={"Review plan and manage billing."} /></p></Link>
       </div>
       <div className="mt-4 rounded-2xl border border-blue-200 bg-blue-50 p-4"><strong><LocalizedText text={"Next useful action"} /></strong><p className="mt-2 text-sm">{!profile.profession ? <LocalizedText text={"Add your professional field: it gives career research a relevant starting point."} /> : !decisionContext.countries.length ? <LocalizedText text={"Save a destination: your current plan has no country shortlist."} /> : <LocalizedText text={"Review your Country Fit context: budget, timeline and priorities guide the research questions."} />}</p><Link className="mt-2 inline-flex min-h-11 items-center font-bold" href="/country-fit"><LocalizedText text={"Update Country Fit →"} /></Link></div>
       <article className="mt-6 overflow-hidden rounded-[26px] bg-[var(--tgpi-navy-raised)] p-5 text-white sm:p-7">
@@ -556,7 +557,7 @@ export default function TgpiAccountCenter({
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-2">
               <h3 className="truncate font-[var(--tgpi-font-display)] text-3xl font-semibold">{fullName}</h3>
-              <span className="rounded-full border border-[#E5BF5A]/30 bg-[#E5BF5A]/10 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.15em] text-[var(--tgpi-gold-light)]">{account.membership}</span>
+              <span className="rounded-full border border-[#E5BF5A]/30 bg-[#E5BF5A]/10 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.15em] text-[var(--tgpi-gold-light)]">{t(account.membership)}</span>
             </div>
             <p className="mt-1 text-sm text-[#C8D2DE]">{profile.headline || <LocalizedText text={"Add a professional headline"} />}</p>
             <p className="mt-3 break-all text-xs text-[#9FAFC0]">{identity.username ? <LocalizedText text={"@{value0}"} values={{value0: String(identity.username)}} /> : <LocalizedText text={"Create your unique @ID in Personal information"} />}</p>
@@ -595,14 +596,14 @@ export default function TgpiAccountCenter({
             <span className="rounded-full bg-[#EDF0F3] px-3 py-1.5 text-xs font-extrabold text-[var(--tgpi-navy-raised)]">{decisionContext.progress}%</span>
           </div>
           <div className="mt-5 space-y-3 text-xs">
-            <div className="flex justify-between gap-4"><span className="text-[#737C89]"><LocalizedText text="Primary goal" /></span><span className="text-right font-extrabold text-[var(--tgpi-navy-raised)]">{goalLabels[decisionContext.goal] || <LocalizedText text={"Not defined"} />}</span></div>
-            <div className="flex justify-between gap-4"><span className="text-[#737C89]"><LocalizedText text={"Shortlist"} /></span><span className="max-w-[65%] text-right font-extrabold text-[var(--tgpi-navy-raised)]">{decisionContext.countries.map((country) => `${country.emoji} ${country.name}`).join(", ") || <LocalizedText text={"No countries selected"} />}</span></div>
+            <div className="flex justify-between gap-4"><span className="text-[#737C89]"><LocalizedText text="Primary goal" /></span><span className="text-right font-extrabold text-[var(--tgpi-navy-raised)]">{(goalLabels[decisionContext.goal] ? t(goalLabels[decisionContext.goal]) : "") || <LocalizedText text={"Not defined"} />}</span></div>
+            <div className="flex justify-between gap-4"><span className="text-[#737C89]"><LocalizedText text={"Shortlist"} /></span><span className="max-w-[65%] text-right font-extrabold text-[var(--tgpi-navy-raised)]">{decisionContext.countries.map((country) => `${country.emoji} ${t(country.name)}`).join(", ") || <LocalizedText text={"No countries selected"} />}</span></div>
           </div>
           <Link className="mt-5 inline-flex text-xs font-extrabold text-[#8C6414]" href="/onboarding"><LocalizedText text={"Open personal plan →"} /></Link>
         </article>
         <button className="group flex rounded-[24px] border border-[#B9CEE0] bg-[#EDF5FA] p-5 text-left transition hover:-translate-y-0.5 hover:border-[#6B91B1] sm:p-6" onClick={() => selectSection("progress")} type="button">
           <GlobalRankBadge rank={rank} size="medium" />
-          <span className="ml-4 min-w-0"><span className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#325E83]"><LocalizedText text={"Global rank"} /></span><span className="mt-2 block font-[var(--tgpi-font-display)] text-2xl font-semibold text-[var(--tgpi-navy-raised)]">{rank.name}</span><span className="mt-2 block text-xs leading-5 text-[#52677A]">{rank.points}{" "}<LocalizedText text={"points ·"} />{" "}{rank.nextRank ? <LocalizedText text={"{value0} to {value1}"} values={{value0: String(rank.pointsToNext), value1: String(rank.nextRank.name)}} /> : <LocalizedText text={"highest rank reached"} />}</span><span className="mt-3 block text-xs font-extrabold text-[#234D70]"><LocalizedText text={"Open rank journey"} />{" "}<span aria-hidden="true" className="transition group-hover:translate-x-0.5">→</span></span></span>
+          <span className="ml-4 min-w-0"><span className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#325E83]"><LocalizedText text={"Global rank"} /></span><span className="mt-2 block font-[var(--tgpi-font-display)] text-2xl font-semibold text-[var(--tgpi-navy-raised)]">{t(rank.name)}</span><span className="mt-2 block text-xs leading-5 text-[#52677A]">{rank.points}{" "}<LocalizedText text={"points ·"} />{" "}{rank.nextRank ? <LocalizedText text={"{value0} to {value1}"} values={{value0: String(rank.pointsToNext), value1: t(rank.nextRank.name)}} /> : <LocalizedText text={"highest rank reached"} />}</span><span className="mt-3 block text-xs font-extrabold text-[#234D70]"><LocalizedText text={"Open rank journey"} />{" "}<span aria-hidden="true" className="transition group-hover:translate-x-0.5">→</span></span></span>
         </button>
         <Link className="group rounded-[24px] border border-[var(--tgpi-border)] bg-[#F4E7BE] p-5 transition hover:-translate-y-0.5 hover:border-[var(--tgpi-gold-hover)] sm:p-6" href="/global-key">
           <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#73520F]"><LocalizedText text={"TGPI Global ID"} /></p>
@@ -642,7 +643,7 @@ export default function TgpiAccountCenter({
             </div>
           </div>
           <div className="mt-7 grid gap-3 border-t border-white/10 pt-6 sm:grid-cols-3">
-            {["Stable ID across your TGPI account", "Review actual proof and anchoring status", "Keep personal information off-chain"].map((item) => <p className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-xs font-bold text-[#D7E0E8]" key={item}>✓ {item}</p>)}
+            {["Stable ID across your TGPI account", "Review actual proof and anchoring status", "Keep personal information off-chain"].map((item) => <p className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-xs font-bold text-[#D7E0E8]" key={item}>✓ {t(item)}</p>)}
           </div>
           <Link className="mt-6 inline-flex min-h-11 items-center rounded-xl bg-[var(--tgpi-gold)] px-5 text-xs font-extrabold text-[#07182D] transition hover:bg-[#F0C95F]" href="/global-key"><LocalizedText text={"Open Global Key Command Center →"} /></Link>
         </article>
@@ -651,7 +652,7 @@ export default function TgpiAccountCenter({
             { title: "Account connection", value: account.emailVerified ? "Email verified" : "Verify your email", detail: "Email verification confirms access to the address; it is not legal identity verification.", section: "security" as const },
             { title: "Certificate identity", value: profile.legalFullName ? "Real name provided" : "Add your complete name", detail: "Review the name used for newly issued learning credentials.", section: "identity" as const },
             { title: "Privacy controls", value: profile.privacy.visibility === "private" ? "Private profile" : "Review profile sharing", detail: "Choose which profile details other people can see.", section: "privacy" as const },
-          ].map(card => <button className="tgpi-account-tile rounded-2xl border border-[var(--tgpi-border)] bg-white p-5 text-left" key={card.title} onClick={() => selectSection(card.section)} type="button"><span className="text-xs font-bold uppercase tracking-wider text-[#705115]"><LocalizedText text={card.title} /></span><span className="mt-2 block text-base font-extrabold text-[var(--tgpi-navy-raised)]">{card.value} →</span><span className="mt-2 block text-sm leading-6 text-[var(--tgpi-muted)]"><LocalizedText text={card.detail} /></span></button>)}
+          ].map(card => <button className="tgpi-account-tile rounded-2xl border border-[var(--tgpi-border)] bg-white p-5 text-left" key={card.title} onClick={() => selectSection(card.section)} type="button"><span className="text-xs font-bold uppercase tracking-wider text-[#705115]"><LocalizedText text={card.title} /></span><span className="mt-2 block text-base font-extrabold text-[var(--tgpi-navy-raised)]">{t(card.value)} →</span><span className="mt-2 block text-sm leading-6 text-[var(--tgpi-muted)]"><LocalizedText text={card.detail} /></span></button>)}
         </div>
         <div className="tgpi-account-grid mt-6 grid gap-4 sm:grid-cols-2">
           <article className="tgpi-account-tile rounded-[22px] border border-[var(--tgpi-border)] bg-white p-5 sm:p-6"><p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#86621A]"><LocalizedText text={"Authentication boundary"} /></p><h3 className="mt-2 text-lg font-extrabold text-[var(--tgpi-navy-raised)]"><LocalizedText text={"Clerk remains the security authority."} /></h3><p className="mt-3 text-xs leading-6 text-[var(--tgpi-muted)]"><LocalizedText text={"Passwords, MFA, passkeys, recovery and active sessions never enter the TGPI cryptographic proof."} /></p><button className="mt-4 text-xs font-extrabold text-[#76520C]" onClick={() => selectSection("security")} type="button"><LocalizedText text={"Open login security →"} /></button></article>
@@ -744,7 +745,7 @@ export default function TgpiAccountCenter({
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-3"><div className="min-w-0 flex-1"><p className="text-[9px] font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-gold-light)]"><LocalizedText text={"TGPI Global Profile"} /></p><h3 className="mt-2 break-words font-[var(--tgpi-font-display)] text-3xl font-semibold">{fullName}</h3></div>{profile.privacy.showProgress ? <GlobalRankBadge rank={rank} size="small" /> : null}</div>
                 <p className="mt-1 text-sm font-bold text-[#CFD8E3]">{profile.headline || <LocalizedText text={"Add a professional headline"} />}</p>
-                {profile.privacy.showLocation && (profile.currentCity || currentCountryName) ? <p className="mt-2 text-xs text-[#8FA0B3]">{currentCountryName}</p> : null}
+                {profile.privacy.showLocation && (profile.currentCity || currentCountryName) ? <p className="mt-2 text-xs text-[#8FA0B3]">{t(currentCountryName)}</p> : null}
               </div>
             </div>
             <p className="relative mt-6 max-w-2xl text-sm leading-7 text-[#AEBBC9]">{profile.bio || <LocalizedText text={"Add a concise biography so people understand your experience, interests and global direction."} />}</p>
@@ -857,7 +858,7 @@ export default function TgpiAccountCenter({
 
       <div className="overflow-clip rounded-[30px] border border-[var(--tgpi-border)] bg-white shadow-[0_28px_80px_rgba(11,31,58,0.1)] lg:grid lg:grid-cols-[270px_minmax(0,1fr)]">
         <aside className="hidden border-r border-[#E1DCD2] bg-[#FCFAF5] p-4 lg:flex lg:flex-col">
-          <button className="flex items-center gap-3 rounded-2xl p-3 text-left transition hover:bg-white" onClick={() => selectSection("overview")} type="button"><AccountAvatar imageUrl={account.avatarUrl} initials={initials} label={fullName} size="small" /><span className="min-w-0"><span className="block truncate text-sm font-extrabold text-[var(--tgpi-navy-raised)]">{fullName}</span><span className="mt-0.5 block truncate text-[11px] text-[#727B88]">{account.membership}</span></span></button>
+          <button className="flex items-center gap-3 rounded-2xl p-3 text-left transition hover:bg-white" onClick={() => selectSection("overview")} type="button"><AccountAvatar imageUrl={account.avatarUrl} initials={initials} label={fullName} size="small" /><span className="min-w-0"><span className="block truncate text-sm font-extrabold text-[var(--tgpi-navy-raised)]">{fullName}</span><span className="mt-0.5 block truncate text-[11px] text-[#727B88]">{t(account.membership)}</span></span></button>
           <label className="relative mt-3 block"><span className="sr-only"><LocalizedText text="Search settings" /></span><svg aria-hidden="true" className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#7A8390]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4" /></svg><input className="h-11 w-full rounded-xl border border-[var(--tgpi-border)] bg-white pl-9 pr-3 text-xs text-[var(--tgpi-navy-raised)] outline-none transition placeholder:text-[#959CA6] focus:border-[var(--tgpi-gold-hover)] focus:ring-4 focus:ring-[var(--tgpi-gold-hover)]/10" onChange={(event) => setQuery(event.target.value)} placeholder={t("Search settings")} value={query} /></label>
           <nav aria-label={t("Account settings")} className="mt-4 space-y-4">
             {settingsGroups.map((group) => { const groupSections = filteredSections.filter((section) => section.group === group); if (!groupSections.length) return null; return <div key={group}><p className="px-3 pb-1 text-[9px] font-extrabold uppercase tracking-[0.16em] text-[#9299A2]">{t(group)}</p><div className="space-y-1">{groupSections.map((section) => { const active = section.key === activeSection; return <button aria-current={active ? "page" : undefined} className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition ${active ? "bg-[var(--tgpi-navy-raised)] text-white shadow-[0_10px_24px_rgba(11,31,58,0.16)]" : "text-[#4F5B6A] hover:bg-white hover:text-[var(--tgpi-navy-raised)]"}`} key={section.key} onClick={() => selectSection(section.key)} type="button"><span aria-hidden="true" className={`grid h-8 w-8 shrink-0 place-items-center rounded-xl text-sm ${active ? "bg-white/10 text-[var(--tgpi-gold-light)]" : "bg-[#EEF1F4] text-[var(--tgpi-navy-raised)]"}`}><SettingsIcon section={section.key} /></span><span className="text-xs font-extrabold"><LocalizedText text={section.label} /></span></button>; })}</div></div>; })}

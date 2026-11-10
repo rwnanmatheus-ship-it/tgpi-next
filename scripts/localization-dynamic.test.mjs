@@ -14,13 +14,15 @@ import { messageLiterals, renderedMessageText } from './helpers/localization-aud
 const h = academyLocalizationFixture();
 const esc = value => String(value).replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll("'", '&#x27;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
 const translate = locale => (key, values) => h.messages.translate(locale, key, values);
-function render(file, locale, props, states = []) {
+function render(file, locale, props, states = [], overrides = {}) {
   let slot = 0;
   const t = translate(locale);
   const fixture = academyLocalizationFixture({
     react: { ...React, useState(initial) { const base = React.useState(initial); const index = slot++; return [index < states.length ? states[index] : base[0], base[1]]; } },
     'next/link': { __esModule: true, default: props => React.createElement('a', props) },
-    '@/components/localization/LocaleProvider': { useLocale: () => ({ locale, t }), LocalizedText: ({ text, values }) => t(text, values) },
+    '@/components/localization/LocaleProvider': { useLocale: () => ({ locale, t }), LocalizedText: ({ text, values }) => typeof text === 'string' ? t(text, values) : text },
+    './LocaleProvider': { useLocale: () => ({ locale, t }), LocalizedText: ({ text, values }) => typeof text === 'string' ? t(text, values) : text },
+    ...overrides,
   });
   return renderToStaticMarkup(React.createElement(fixture.load(resolve(file)).default, props));
 }
@@ -136,5 +138,43 @@ test('course recovery messages, conditional feedback and dynamic templates have 
       if (locale === 'fr' && key === 'Correct') assert.equal(translate(locale)(key), 'Correct');
       else assert.notEqual(translate(locale)(key), key, `${locale}: ${key}`);
     }
+  }
+});
+
+
+test('account summaries and next-rank requirements translate without changing personal content or progress', () => {
+  const { normalizeTgpiAccountProfile, normalizeAccountIdentity } = h.load(resolve('src/lib/account-profile.ts'));
+  const { getGlobalRank } = h.load(resolve('src/lib/global-ranks.ts'));
+  const rank = getGlobalRank({ activationCompletion: 30, comparisons: 0, documentReviews: 0, learningPaths: 1, planCompletion: 60, profileCompletion: 50, savedCountries: 2 });
+  const props = {
+    account: { avatarUrl: '/test-avatar.png', email: 'learner@example.test', emailVerified: true, globalId: 'TGPI-TEST', membership: 'TGPI Free', publicProfileUrl: '/members/test' },
+    children: null, countries: [{ name: 'United States', slug: 'united-states', emoji: '🇺🇸' }],
+    decisionContext: { completed: true, countries: [{ name: 'United States', slug: 'united-states', emoji: '🇺🇸' }], goal: 'work', progress: 60 },
+    initialIdentity: normalizeAccountIdentity({ firstName: 'Test', lastName: 'Member', username: 'test-member' }),
+    initialProfile: normalizeTgpiAccountProfile({ displayName: 'Save', profession: 'Private profession', currentCountry: 'united-states', languages: ['English'], privacy: { visibility: 'public' } }),
+    rank,
+  };
+  const before = JSON.stringify(props), empty = { __esModule: true, default: () => null };
+  const overrides = {
+    '@clerk/nextjs': { useUser: () => ({ user: null }) },
+    'next/navigation': { usePathname: () => '/profile/security', useRouter: () => ({}) },
+  };
+  for (const name of ['./MemberIdentityEditor', './MemberExportCenter', './MemberDirectory', './AccountBillingPanel', '@/components/localization/LanguageSelector', '@/components/profile/PublicProfileShareButton', '@/components/profile/GlobalProgressPanel', '@/components/profile/GlobalRankBadge', '@/components/profile/ProfileSearchSelect', '@/components/profile/TgpiAvatarEditor', '@/components/ui/AreaHero']) overrides[name] = empty;
+  for (const locale of h.locales) {
+    const t = translate(locale);
+    const fixture = academyLocalizationFixture({ './LocaleProvider': { useLocale: () => ({ locale, t }) } });
+    overrides['@/components/localization/LocalizedElement'] = fixture.load(resolve('src/components/localization/LocalizedElement.tsx'));
+    const html = render('src/components/profile/TgpiAccountCenter.tsx', locale, props, [], overrides);
+    for (const text of [t('TGPI Free'), t('Global ID, verification and account security'), t('Password, devices and login methods'), t('Ready to preview and share'), t('Public'), t('United States'), t('{rank} · {points} points', { rank: t(rank.name), points: rank.points.toLocaleString(locale) }), t('{value0} to {value1}', { value0: String(rank.pointsToNext), value1: t(rank.nextRank.name) }), 'Private profession', '>Save<']) assert.ok(html.includes(esc(text)) || html.includes(text), `${locale}: ${text}`);
+    assert.ok(html.includes(`aria-label="${esc(t('Profile photo of {name}', { name: 'Save' }))}"`));
+    assert.ok(html.includes(esc(t('Enabled: {count}', { count: Object.values(props.initialProfile.notifications).filter(Boolean).length }))));
+    const noProfession = { ...props, initialProfile: { ...props.initialProfile, profession: '' } };
+    const fallbackHtml = render('src/components/profile/TgpiAccountCenter.tsx', locale, noProfession, [], overrides);
+    assert.ok(fallbackHtml.includes(esc(t('Languages: {count}', { count: 1 }))));
+    const keyHtml = render('src/components/profile/TgpiAccountCenter.tsx', locale, props, ['global-key'], overrides);
+    for (const text of ['Stable ID across your TGPI account', 'Review actual proof and anchoring status', 'Keep personal information off-chain', 'Email verified']) assert.ok(keyHtml.includes(esc(t(text))), `${locale}: ${text}`);
+    const rankHtml = render('src/components/profile/GlobalProgressPanel.tsx', locale, { rank }, [], overrides);
+    assert.ok(rankHtml.includes(esc(t('Next: {value0}', { value0: t(rank.nextRank.name) }))));
+    assert.equal(JSON.stringify(props), before);
   }
 });
