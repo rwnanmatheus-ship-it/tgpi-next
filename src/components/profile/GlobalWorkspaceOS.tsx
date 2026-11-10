@@ -7,7 +7,7 @@ import CommunityConnections from '@/components/community/CommunityConnections';
 import GlobalRankBadge from './GlobalRankBadge';
 import { GLOBAL_RANK_DISCLAIMER, type GlobalRank } from '@/lib/global-ranks';
 import { Suspense } from 'react';
-import CinematicImage from '@/components/ui/CinematicImage';
+import WorkspaceIdentityStage from './WorkspaceIdentityStage';
 import Link from 'next/link';
 import type { GlobalWorkspaceModel } from '@/lib/global-workspace';
 import type { WorkspacePreferences, WorkspaceResource } from '@/lib/workspace-control';
@@ -87,10 +87,7 @@ export default async function GlobalWorkspaceOS({ learning, identity, model, onb
           <div className={styles.actions}><Link className={styles.primary} href={primary?.href ?? '/onboarding'}>{copy(primary?.action ?? 'Define my direction')} <span aria-hidden="true">↗</span></Link><Link className={styles.heroSecondary} href="/plan"><LocalizedText text="Open personal plan ↗" /></Link></div>
           {resume && <Link className={styles.resumeCaption} href={resume.href}><span><LocalizedText text="Continue where you left off" /></span><strong>{resumeCopy?.title}</strong></Link>}
         </div>
-        <div className={styles.heroVisual}>
-          <CinematicImage asset="workspace-observatory" alt="" priority sizes="(min-width: 1400px) 820px, (min-width: 768px) 58vw, 100vw" className={styles.heroImage} position="60% center" />
-          <div className={styles.visualBrand}><span className={styles.brandLockup} aria-hidden="true"><NavigationIcon name="compass" width={38} height={38} />TGPI</span><p><LocalizedText text="A world of possibilities. A direction of your own." /></p></div>
-        </div>
+        <WorkspaceIdentityStage />
       </section>
       <div className={styles.contextStrip}><div><span className={styles.contextDot} aria-hidden="true" /><strong>{t('Plan context')}</strong><span>{t('{count}% complete', { count: model.completion })}</span></div><Progress value={model.completion} label={t('Plan context supplied')} /><Link href="#workspace-journey"><LocalizedText text="See criteria ↓" /></Link></div>
       <WorkspaceSectionNav />

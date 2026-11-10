@@ -42,6 +42,6 @@ export default function WorkspaceSectionNav() {
     };
   }, []);
   return <nav className={styles.localNav} aria-label={t('Workspace sections')}>
-    {sections.map(section => <a href={`#${section.id}`} key={section.id} aria-current={active === section.id ? 'location' : undefined} onClick={() => setActive(section.id)}><NavigationIcon name={section.icon} width={17} height={17} /><span>{t(section.label)}</span></a>)}
+    {sections.map((section, index) => <a href={`#${section.id}`} key={section.id} aria-current={active === section.id ? 'location' : undefined} onClick={() => setActive(section.id)}><span className={styles.navIndex} aria-hidden="true">0{index + 1}</span><NavigationIcon name={section.icon} width={19} height={19} /><span>{t(section.label)}</span></a>)}
   </nav>;
 }

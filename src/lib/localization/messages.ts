@@ -1,6 +1,14 @@
 import type { Locale } from "./config";
 
 export const messages = {
+  "All stages": {"en": "All stages", "pt-BR": "Todas as etapas", "es": "Todas las etapas", "fr": "Toutes les étapes", "de": "Alle Etappen", "it": "Tutte le tappe"},
+  "Tool categories": {"en": "Tool categories", "pt-BR": "Categorias de ferramentas", "es": "Categorías de herramientas", "fr": "Catégories d’outils", "de": "Werkzeugkategorien", "it": "Categorie di strumenti"},
+  "Pinned resources": {"en": "Pinned resources", "pt-BR": "Recursos fixados", "es": "Recursos fijados", "fr": "Ressources épinglées", "de": "Angeheftete Ressourcen", "it": "Risorse fissate"},
+  "Keep your next steps within reach.": {"en": "Keep your next steps within reach.", "pt-BR": "Seus próximos passos sempre à mão.", "es": "Tus próximos pasos siempre a mano.", "fr": "Vos prochaines étapes à portée de main.", "de": "Deine nächsten Schritte stets griffbereit.", "it": "I tuoi prossimi passi sempre a portata di mano."},
+  "Pin a resource in your library to access it here.": {"en": "Pin a resource in your library to access it here.", "pt-BR": "Fixe um recurso na biblioteca para acessá-lo aqui.", "es": "Fija un recurso en tu biblioteca para acceder aquí.", "fr": "Épinglez une ressource dans votre bibliothèque pour la retrouver ici.", "de": "Hefte eine Ressource in deiner Bibliothek an, um hier darauf zuzugreifen.", "it": "Fissa una risorsa nella biblioteca per accedervi qui."},
+  "Resource layout": {"en": "Resource layout", "pt-BR": "Visualização dos recursos", "es": "Vista de recursos", "fr": "Affichage des ressources", "de": "Ressourcenansicht", "it": "Visualizzazione delle risorse"},
+  "Grid view": {"en": "Grid view", "pt-BR": "Grade", "es": "Cuadrícula", "fr": "Grille", "de": "Raster", "it": "Griglia"},
+  "List view": {"en": "List view", "pt-BR": "Lista", "es": "Lista", "fr": "Liste", "de": "Liste", "it": "Elenco"},
   "{count} matching records": {"en": "{count} matching records", "pt-BR": "{count} registros encontrados", "es": "{count} registros encontrados", "fr": "{count} résultats", "de": "{count} passende Einträge", "it": "{count} risultati"},
   "Certificate guide": {"en": "Certificate guide", "pt-BR": "Guia de certificados", "es": "Guía de certificados", "fr": "Guide des certificats", "de": "Zertifikatsleitfaden", "it": "Guida ai certificati"},
   "Certificate verification result": {"en": "Certificate verification result", "pt-BR": "Resultado da verificação do certificado", "es": "Resultado de la verificación del certificado", "fr": "Résultat de la vérification du certificat", "de": "Ergebnis der Zertifikatsprüfung", "it": "Esito della verifica del certificato"},
