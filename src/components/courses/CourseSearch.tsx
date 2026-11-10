@@ -17,7 +17,7 @@ export default function CourseSearch({ courses, query, onChange }: { courses: Co
   return <div ref={root} className={styles.searchBox} onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget)) setOpen(false); }}>
     <label htmlFor={`${listId}-input`} className={styles.searchLabel}>{t('What would you like to learn?')}</label>
     <div className={styles.searchInput}><span aria-hidden="true">⌕</span><input id={`${listId}-input`} role="combobox" type="search" autoComplete="off" maxLength={160} aria-autocomplete="list" aria-controls={listId} aria-expanded={open} aria-activedescendant={open && active >= 0 && matches[active] ? `${listId}-${active}` : undefined} value={query} placeholder={t('Try English, career or budget')} onFocus={() => setOpen(true)} onChange={event => { onChange(event.target.value); setActive(-1); setOpen(true); }} onKeyDown={event => {
-      if (event.key === 'Escape') { setOpen(false); setActive(-1); }
+      if (event.key === 'Escape') { event.preventDefault(); setOpen(false); setActive(-1); }
       if (event.key === 'ArrowDown' || event.key === 'ArrowUp') { event.preventDefault(); setOpen(true); setActive(previous => matches.length ? (previous + (event.key === 'ArrowDown' ? 1 : -1) + matches.length) % matches.length : -1); }
       if (event.key === 'Enter') { event.preventDefault(); if (open && active >= 0 && matches[active]) choose(matches[active]); else setOpen(false); }
     }} />{query && <button type="button" aria-label={t('Clear search')} onClick={() => { onChange(''); setActive(-1); root.current?.querySelector('input')?.focus(); }}>×</button>}</div>

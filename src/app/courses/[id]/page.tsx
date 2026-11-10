@@ -1,3 +1,5 @@
+import { getLocale } from '@/lib/localization/server';
+import { localizeAcademyCourse } from '@/lib/localization/academy-content';
 import AcademyOverview from "@/components/courses/academy/AcademyOverview";
 import { getAcademyCourse } from "@/data/courses/academy/catalog.server";
 import type { Metadata } from "next";
@@ -21,7 +23,7 @@ export async function generateMetadata({
 }: CoursePageProps): Promise<Metadata> {
   const { id } = await params;
   const academy = getAcademyCourse(id);
-  if (academy) return { title: `${academy.title} | TGPI Learning`, description: academy.description };
+  if (academy) { const localized = localizeAcademyCourse(academy, await getLocale()); return { title: `${localized.title} | TGPI Learning`, description: localized.description, alternates: { canonical: `/courses/${academy.id}` } }; }
   const professional = getProfessionalCourse(id);
   if (professional && professionalCourseEnabled(id, process.env.VERCEL_ENV || process.env.NODE_ENV)) return { title: `${professional.title} | TGPI Learning`, description: professional.outcomes.join(" ") };
   const course = getCourse(id);

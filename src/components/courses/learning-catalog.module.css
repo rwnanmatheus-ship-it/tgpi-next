@@ -4,3 +4,5 @@
 @media(prefers-reduced-motion:reduce){.card,.image{transition:none}.cover:hover .image{transform:none}}
 
 .comparePanel{scroll-margin-top:190px}
+
+.searchInput input::-webkit-search-cancel-button{display:none}.coverArrow,.suggestions li>span:last-child{font-family:Arial,sans-serif}.tools{z-index:10}
