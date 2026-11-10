@@ -87,7 +87,13 @@ function CountrySourceWatch({ country }: { country: string }) {
                   {check.httpStatus ? <Copy text={" · HTTP {value0}"} values={{ value0: check.httpStatus }} /> : null}
                   {" · "}{check.matchedMarkers}/{check.expectedMarkers} <Copy text="selected markers" />
                 </p>
-                <p className="ig-small"><Copy text={check.message} /></p>
+                {check.status === "not-checked" && source.reviewIssue ? (
+                  <div className="ig-small">
+                    <p><Copy text={source.reviewIssue.observation} /></p>
+                    <p><Copy text={source.reviewIssue.action} /></p>
+                    <p className="ig-meta"><Copy text="Observed {date}" dates={{ date: source.reviewIssue.observedAt }} /> · <Copy text="Review by {date}" dates={{ date: source.reviewIssue.reviewBy }} /></p>
+                  </div>
+                ) : <p className="ig-small"><Copy text={check.message} /></p>}
                 {check.contentSha256 ? <details className="ig-details"><summary><Copy text="Content fingerprint" /></summary><p className="ig-meta"><Copy text={"SHA-256 of normalized page text:"} /> {check.contentSha256}<Copy text={". A text change signals review, not necessarily a policy change."} /></p></details> : null}
               </article>
             );

@@ -28,7 +28,7 @@ export function buildSourceRecords(identities: readonly Pick<CountryIdentity, "s
       id, country, title, publisher, url, kind, reviewedAt, status, note, automaticCheck, reviewIssue, summaries,
       countryName: countryBySlug.get(country)?.name ?? country,
       iso2: countryBySlug.get(country)?.iso2 ?? "",
-      needsReview: Boolean(reviewIssue) || summaries.some(summary => summary.state === "review-due" || summary.state === "expired"),
+      needsReview: status === "unconfirmed" || Boolean(reviewIssue) || summaries.some(summary => summary.state === "review-due" || summary.state === "expired"),
     };
   });
 }
