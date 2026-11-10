@@ -31,7 +31,9 @@ export default function CountryDirectoryCard({ country, indicatorTotal, selected
           src={`/images/countries/identity/${country.slug}.webp`}
           alt=""
           fill
-          sizes={compact ? "(max-width: 599px) 78px, 132px" : "(max-width: 539px) 94vw, (max-width: 959px) 48vw, (max-width: 1239px) 32vw, 312px"}
+          sizes={compact
+            ? "(max-width: 599px) 100px, (max-width: 767px) 200px, 132px"
+            : "(max-width: 599px) 94vw, (max-width: 959px) 48vw, (max-width: 1239px) 32vw, 312px"}
           className={styles.photo}
         />
       </Link>
