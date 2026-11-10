@@ -19,6 +19,7 @@ const policy = load('src/lib/wallet/policy.ts', {});
 const settlementPolicy = load('src/lib/wallet/settlement.ts', {});
 function harness(mode = 'production') {
   process.env.VERCEL_ENV = mode;
+  process.env.TGPI_ATLAS_ACCESS_MODE = 'wallet';
   process.env.TGPI_ATLAS_STRIPE_ACCOUNT_ID = 'acct_fixture';
   process.env.STRIPE_SECRET_KEY = mode === 'production' ? 'sk_live_fixture' : 'sk_test_fixture';
   const data = new Map(); let queue = Promise.resolve();
@@ -218,6 +219,8 @@ test('commercial availability requires explicit tax review and merchant binding 
   Object.assign(process.env, { BILLING_ENABLED: 'true', TGPI_ATLAS_WALLET_ENABLED: 'true', TGPI_ATLAS_WALLET_WEBHOOKS_CONFIRMED: 'true' });
   delete process.env.TGPI_ATLAS_TAX_POLICY_CONFIRMED; assert.equal(h.wallet.walletCheckoutConfigured(), false);
   process.env.TGPI_ATLAS_TAX_POLICY_CONFIRMED = 'true'; assert.equal(h.wallet.walletCheckoutConfigured(), true);
+  process.env.TGPI_ATLAS_ACCESS_MODE = 'sponsored'; assert.equal(h.wallet.walletCheckoutConfigured(), false);
+  process.env.TGPI_ATLAS_ACCESS_MODE = 'wallet';
   delete process.env.TGPI_ATLAS_STRIPE_ACCOUNT_ID; assert.equal(h.wallet.walletCheckoutConfigured(), false);
 });
 test('readiness distinguishes unavailable Stripe evidence from missing configuration and never enables commerce', async () => {
