@@ -43,9 +43,9 @@ export default async function CountriesPage({ searchParams }: { searchParams?: P
         </div>
       </div>
       <div className="country-hero-art">
-        {/* Decorative conceptual cityscape; individual country photographs remain in the explorer. */}
+        {/* Decorative orbital Earth artwork; country evidence and photography remain in the explorer. */}
         <Image
-          src="/images/cinematic-2026/countries-coastal-horizon-v1.webp"
+          src="/images/cinematic-2026/countries-orbital-earth-v2.webp"
           alt=""
           fill
           sizes="(max-width: 767px) 100vw, (max-width: 1399px) 50vw, 640px"
