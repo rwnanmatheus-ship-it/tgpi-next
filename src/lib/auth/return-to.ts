@@ -1,5 +1,5 @@
 /** Deliberately narrow local destinations. Never accept protocol-relative or external redirects. */
-const destinations = new Set(["/onboarding", "/profile", "/country-fit", "/compare", "/pricing", "/courses", "/passport", "/plan", "/premium", "/welcome", "/certificates", "/global-key", "/notifications", "/settings", "/profile/security"]);
+const destinations = new Set(["/onboarding", "/profile", "/country-fit", "/compare", "/pricing", "/courses", "/passport", "/plan", "/premium", "/welcome", "/certificates", "/global-key", "/notifications", "/settings", "/profile/security", "/atlas"]);
 export function safeReturnTo(value: unknown, fallback = "/onboarding"): string {
   if (typeof value !== "string" || value.length > 1024 || !value.startsWith("/") || value.startsWith("//") || /[\\\u0000-\u0020]/.test(value)) return fallback;
   try {

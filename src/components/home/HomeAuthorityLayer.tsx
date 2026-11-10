@@ -26,7 +26,7 @@ export default function HomeAuthorityLayer() {
             ><LocalizedText text={"Intelligence needs a method—and clear boundaries."} /></h2>
             <p className="mt-5 max-w-xl text-base leading-8 text-[var(--tgpi-muted)]"><LocalizedText text={"TGPI helps people structure international decisions. It does not hide uncertainty, claim a universal best country or replace regulated professional advice."} /></p>
             <Link
-              href="/authority"
+              href="/intelligence#methodology"
               className="mt-7 inline-flex min-h-12 items-center justify-center rounded-2xl bg-[var(--tgpi-navy)] px-6 text-sm font-extrabold text-white transition hover:-translate-y-0.5 hover:bg-[var(--tgpi-navy-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
             ><LocalizedText text={"Review the decision methodology"} /></Link>
           </div>
