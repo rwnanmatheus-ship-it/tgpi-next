@@ -35,6 +35,9 @@ test('country headings, cost references and provider feedback follow six locales
     const plannerHtml = renderToStaticMarkup(React.createElement(Planner, { baseline: 0, countryName: 'Germany', countrySlug: 'germany', currency: 'EUR' }));
     assert.ok(plannerHtml.includes(escapeHtml(t('Germany'))), `${locale}: estimate country`);
     assert.ok(plannerHtml.includes(escapeHtml(t('Unable to load your TGPI progress.'))), `${locale}: provider feedback`);
+    const estimateTemplate = 'Destination: {country}. Enter your own monthly estimate in {currency}. Use dated local quotes; no reference budget is supplied by TGPI.';
+    assert.ok(plannerHtml.includes(escapeHtml(t(estimateTemplate, { country: t('Germany'), currency: 'EUR' }))), `${locale}: neutral monthly estimate`);
+    if (locale === 'pt-BR' || locale === 'fr') assert.notEqual(t(estimateTemplate), estimateTemplate, `${locale}: estimate template missing`);
     if (locale !== 'en') assert.ok(!plannerHtml.includes('>Germany<'), `${locale}: raw estimate country`);
   }
 });

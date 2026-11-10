@@ -11730,19 +11730,19 @@ export const messages = {
   },
   "Before committing to your near-term timeline, verify nationality-specific entry, residence and {activity} for {country}. TGPI does not determine eligibility.": {
   "en": "Before committing to your near-term timeline, verify nationality-specific entry, residence and {activity} for {country}. TGPI does not determine eligibility.",
-  "pt-BR": "Antes de confirmar seu prazo próximo, verifique as exigências de entrada e residência para sua nacionalidade em {country}. Confira também: {activity}. A TGPI não determina elegibilidade.",
-  "es": "Antes de comprometerte con un plazo cercano, verifica los requisitos de entrada y residencia para tu nacionalidad en {country}. Comprueba también: {activity}. TGPI no determina la elegibilidad.",
-  "fr": "Avant de confirmer votre échéance proche, vérifiez les conditions d’entrée et de séjour selon votre nationalité en {country}. Vérifiez aussi : {activity}. TGPI ne détermine pas l’admissibilité.",
-  "de": "Bevor du deinen kurzfristigen Zeitplan festlegst, prüfe die Einreise- und Aufenthaltsregeln für deine Staatsangehörigkeit in {country}. Prüfe außerdem: {activity}. TGPI entscheidet nicht über die Berechtigung.",
-  "it": "Prima di confermare una scadenza ravvicinata, verifica i requisiti di ingresso e soggiorno per la tua cittadinanza in {country}. Verifica anche: {activity}. TGPI non determina l’idoneità."
+  "pt-BR": "Destino: {country}. Antes de confirmar seu prazo próximo, verifique as exigências de entrada e residência para sua nacionalidade. Confira também: {activity}. A TGPI não determina elegibilidade.",
+  "es": "Destino: {country}. Antes de comprometerte con un plazo cercano, verifica los requisitos de entrada y residencia para tu nacionalidad. Comprueba también: {activity}. TGPI no determina la elegibilidad.",
+  "fr": "Destination : {country}. Avant de confirmer votre échéance proche, vérifiez les conditions d’entrée et de séjour selon votre nationalité. Vérifiez aussi : {activity}. TGPI ne détermine pas l’admissibilité.",
+  "de": "Zielland: {country}. Bevor du deinen kurzfristigen Zeitplan festlegst, prüfe die Einreise- und Aufenthaltsregeln für deine Staatsangehörigkeit. Prüfe außerdem: {activity}. TGPI entscheidet nicht über die Berechtigung.",
+  "it": "Destinazione: {country}. Prima di confermare una scadenza ravvicinata, verifica i requisiti di ingresso e soggiorno per la tua cittadinanza. Verifica anche: {activity}. TGPI non determina l’idoneità."
 },
   "Verify nationality-specific entry, residence and {activity} for {country}. TGPI does not determine eligibility.": {
   "en": "Verify nationality-specific entry, residence and {activity} for {country}. TGPI does not determine eligibility.",
-  "pt-BR": "Verifique as exigências de entrada e residência para sua nacionalidade em {country}. Confira também: {activity}. A TGPI não determina elegibilidade.",
-  "es": "Verifica los requisitos de entrada y residencia para tu nacionalidad en {country}. Comprueba también: {activity}. TGPI no determina la elegibilidad.",
-  "fr": "Vérifiez les conditions d’entrée et de séjour selon votre nationalité en {country}. Vérifiez aussi : {activity}. TGPI ne détermine pas l’admissibilité.",
-  "de": "Prüfe die Einreise- und Aufenthaltsregeln für deine Staatsangehörigkeit in {country}. Prüfe außerdem: {activity}. TGPI entscheidet nicht über die Berechtigung.",
-  "it": "Verifica i requisiti di ingresso e soggiorno per la tua cittadinanza in {country}. Verifica anche: {activity}. TGPI non determina l’idoneità."
+  "pt-BR": "Destino: {country}. Verifique as exigências de entrada e residência para sua nacionalidade. Confira também: {activity}. A TGPI não determina elegibilidade.",
+  "es": "Destino: {country}. Verifica los requisitos de entrada y residencia para tu nacionalidad. Comprueba también: {activity}. TGPI no determina la elegibilidad.",
+  "fr": "Destination : {country}. Vérifiez les conditions d’entrée et de séjour selon votre nationalité. Vérifiez aussi : {activity}. TGPI ne détermine pas l’admissibilité.",
+  "de": "Zielland: {country}. Prüfe die Einreise- und Aufenthaltsregeln für deine Staatsangehörigkeit. Prüfe außerdem: {activity}. TGPI entscheidet nicht über die Berechtigung.",
+  "it": "Destinazione: {country}. Verifica i requisiti di ingresso e soggiorno per la tua cittadinanza. Verifica anche: {activity}. TGPI non determina l’idoneità."
 },
   "Your stated budget band is {band}.": {
   "en": "Your stated budget band is {band}.",
@@ -11889,7 +11889,47 @@ export const messages = {
   "Southern Europe": { "en": "Southern Europe", "pt-BR": "Europa Meridional", "es": "Europa Meridional", "fr": "Europe du Sud", "de": "Südeuropa", "it": "Europa meridionale" },
   "Sub-Saharan Africa": { "en": "Sub-Saharan Africa", "pt-BR": "África Subsaariana", "es": "África Subsahariana", "fr": "Afrique subsaharienne", "de": "Subsahara-Afrika", "it": "Africa subsahariana" },
   "Western Asia": { "en": "Western Asia", "pt-BR": "Ásia Ocidental", "es": "Asia Occidental", "fr": "Asie occidentale", "de": "Westasien", "it": "Asia occidentale" },
-  "Western Europe": { "en": "Western Europe", "pt-BR": "Europa Ocidental", "es": "Europa Occidental", "fr": "Europe occidentale", "de": "Westeuropa", "it": "Europa occidentale" }
+  "Western Europe": { "en": "Western Europe", "pt-BR": "Europa Ocidental", "es": "Europa Occidental", "fr": "Europe occidentale", "de": "Westeuropa", "it": "Europa occidentale" },
+  "{name}, your next steps: {country}.": {
+    "en": "{name}, your next steps: {country}.",
+    "pt-BR": "{name}, seus próximos passos: {country}.",
+    "es": "{name}, tus próximos pasos: {country}.",
+    "fr": "{name}, vos prochaines étapes : {country}.",
+    "de": "{name}, deine nächsten Schritte: {country}.",
+    "it": "{name}, i tuoi prossimi passi: {country}."
+  },
+  "Your next steps: {country}.": {
+    "en": "Your next steps: {country}.",
+    "pt-BR": "Seus próximos passos: {country}.",
+    "es": "Tus próximos pasos: {country}.",
+    "fr": "Vos prochaines étapes : {country}.",
+    "de": "Deine nächsten Schritte: {country}.",
+    "it": "I tuoi prossimi passi: {country}."
+  },
+  "Communities discussing this destination:": {
+    "en": "Communities discussing this destination:",
+    "pt-BR": "Comunidades que falam sobre este destino:",
+    "es": "Comunidades que hablan de este destino:",
+    "fr": "Communautés qui parlent de cette destination :",
+    "de": "Communitys zu diesem Reiseziel:",
+    "it": "Comunità che parlano di questa destinazione:"
+  },
+  "Explore communities:": {
+    "en": "Explore communities:",
+    "pt-BR": "Explore comunidades:",
+    "es": "Explora comunidades:",
+    "fr": "Explorez les communautés :",
+    "de": "Communitys entdecken:",
+    "it": "Esplora le comunità:"
+  },
+  "Destination: {country}. Enter your own monthly estimate in {currency}. Use dated local quotes; no reference budget is supplied by TGPI.": {
+    "en": "Destination: {country}. Enter your own monthly estimate in {currency}. Use dated local quotes; no reference budget is supplied by TGPI.",
+    "pt-BR": "Destino: {country}. Informe sua estimativa mensal em {currency}. Use cotações locais com data; a TGPI não fornece um orçamento de referência.",
+    "es": "Destino: {country}. Indica tu estimación mensual en {currency}. Usa presupuestos locales fechados; TGPI no proporciona un presupuesto de referencia.",
+    "fr": "Destination : {country}. Saisissez votre estimation mensuelle en {currency}. Utilisez des devis locaux datés ; TGPI ne fournit aucun budget de référence.",
+    "de": "Zielland: {country}. Gib deine monatliche Schätzung in {currency} ein. Nutze datierte lokale Angebote; TGPI gibt kein Referenzbudget vor.",
+    "it": "Destinazione: {country}. Inserisci la tua stima mensile in {currency}. Usa preventivi locali datati; TGPI non fornisce un budget di riferimento."
+  }
 } as const satisfies Record<string, Record<Locale, string>>;
 
 export type MessageKey = keyof typeof messages;

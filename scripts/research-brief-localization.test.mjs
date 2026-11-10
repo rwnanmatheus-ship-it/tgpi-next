@@ -28,6 +28,9 @@ test('dynamic country research tasks use six-language authored templates while k
         ? 'Before committing to your near-term timeline, verify nationality-specific entry, residence and {activity} for {country}. TGPI does not determine eligibility.'
         : 'Verify nationality-specific entry, residence and {activity} for {country}. TGPI does not determine eligibility.';
       assert.equal(result[0].detail, t(template, { activity: t(activity), country: t('Portugal') }));
+      const germanCountry = localizedPersonalResearchPlan(context, 'Germany', t)[0].detail;
+      assert.ok(germanCountry.includes(t('Germany')), `${locale}: destination name missing`);
+      if (locale === 'pt-BR') assert.ok(!germanCountry.includes('em Alemanha'), 'Portuguese destination requires a grammatical article');
       if (locale === 'pt-BR' || locale === 'es') {
         assert.ok(result[0].detail.includes(t(activity)), `${locale}: activity missing`);
         assert.ok(!result[0].detail.includes(`a ${t(activity)}`), `${locale}: article disagrees with activity`);
@@ -62,5 +65,24 @@ test('country brief renders localized goal, timeline, country and dynamic task t
     assert.ok(html.includes('href="/country-fit?country=portugal"'));
     assert.ok(html.includes('href="#research-dossier"'));
     if (locale !== 'en') assert.ok(!html.includes('>work<') && !html.includes('>3-months<') && !html.includes('>Verify nationality-specific'), locale);
+  }
+});
+
+test('German destination headings use neutral grammar in Portuguese and French', () => {
+  for (const locale of ['pt-BR', 'fr']) {
+    const t = (key, values) => h.messages.translate(locale, key, values);
+    const template = '{name}, your next steps: {country}.';
+    assert.notEqual(t(template), template, `${locale}: heading template missing`);
+    const fixture = academyLocalizationFixture({
+      './useResearchProfile': { useResearchProfile: () => ({ user: { firstName: 'Save' }, profile: { languages: [], profession: '' }, journey: { ...base, primaryGoal: 'travel', timeHorizon: 'exploring', budgetRange: 'undecided' } }) },
+      '@/components/localization/LocaleProvider': { useLocale: () => ({ locale, t }), LocalizedText: ({ text, values }) => typeof text === 'string' ? t(text, values) : text },
+      '@/components/localization/LocalizedElement': { LocalizedElement: ({ as, ...props }) => React.createElement(as, props) },
+      'next/link': { __esModule: true, default: props => React.createElement('a', props) },
+    });
+    const Brief = fixture.load(resolve('src/components/intelligence/CountryResearchBrief.tsx')).default;
+    const html = renderToStaticMarkup(React.createElement(Brief, { country: 'germany', name: 'Germany' }));
+    const heading = html.match(/<h2>(.*?)<\/h2>/)?.[1];
+    assert.equal(heading, escapeHtml(t(template, { name: 'Save', country: t('Germany') })), locale);
+    assert.ok(!heading.includes(`em ${escapeHtml(t('Germany'))}`) && !heading.includes(`en ${escapeHtml(t('Germany'))}`), locale);
   }
 });

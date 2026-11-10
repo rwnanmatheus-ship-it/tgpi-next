@@ -27,7 +27,7 @@ export default function MonthlyCostPlanner({
   countrySlug: string;
   currency: string;
 }) {
-  const { locale } = useFormattingLocale();
+  const { locale, t } = useFormattingLocale();
   const { error, isAuthenticated, isLoading, mutate, progress } =
     useActivationProgress();
   const savedEstimate = progress.costEstimates[countrySlug];
@@ -62,7 +62,7 @@ export default function MonthlyCostPlanner({
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#315F98]"><LocalizedText text={"My monthly estimate"} /></p>
-          <p className="mt-2 text-sm leading-6 text-[#334A64]"><LocalizedText text={"Enter your own monthly estimate for"} />{" "}<LocalizedText text={countryName} />{" "}<LocalizedText text={"in"} />{" "}{currency}<LocalizedText text={". Use dated local quotes; no reference budget is supplied by TGPI."} /></p>
+          <p className="mt-2 text-sm leading-6 text-[#334A64]"><LocalizedText text={"Destination: {country}. Enter your own monthly estimate in {currency}. Use dated local quotes; no reference budget is supplied by TGPI."} values={{ country: t(countryName), currency }} /></p>
         </div>
         <p className="text-2xl font-black text-[#071A32]">
           {amount > 0 ? formatAmount(locale, amount, currency) : <LocalizedText text={"Not set"} />}
