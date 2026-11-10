@@ -1,7 +1,7 @@
 import { getUserActivationView } from "@/lib/activation-store.server";
 import { localizeMetadata } from "@/lib/localization/metadata.server";
 import { getAccountMembershipLabel } from "@/lib/account-membership.server";
-import { reconcileWorkspaceHistory, loadWorkspaceHistory } from '@/lib/workspace-history.server';
+import { loadWorkspaceHistoryForProgress } from '@/lib/workspace-history.server';
 import { getGlobalRankSignals } from '@/lib/global-rank-signals';
 import { getGlobalRank } from '@/lib/global-ranks';
 import { getFirestoreDocument, isLearningStorageConfigured } from '@/lib/firestore-admin-rest.server';
@@ -48,7 +48,7 @@ export default async function ProfilePage({
   const onboarding = normalizeOnboardingData(
     user?.unsafeMetadata.tgpiOnboarding,
   );
-  const { progress: activation, readOnly } = await getUserActivationView(session.userId, user?.privateMetadata);
+  const { progress: activation, readOnly, historyArchived } = await getUserActivationView(session.userId, user?.privateMetadata);
   const [memberIdentity, savedPreferences, historyPage, membership, learning] = await Promise.all([
     ensureMemberNumber(session.userId).catch(() => null),
     !readOnly && isLearningStorageConfigured()
@@ -56,9 +56,7 @@ export default async function ProfilePage({
           .then(record => ({ record, available: true }))
           .catch(() => ({ record: null, available: false }))
       : { record: null, available: false },
-    readOnly ? { events: [], cursor: null, coverageStartedAt: null, available: false, reconciliationPending: true } : reconcileWorkspaceHistory(session.userId, activation)
-      .catch(() => null)
-      .then(() => loadWorkspaceHistory(session.userId))
+    readOnly ? { events: [], cursor: null, coverageStartedAt: null, available: false, reconciliationPending: true } : loadWorkspaceHistoryForProgress(session.userId, activation, historyArchived)
       .catch(() => ({ events: [], cursor: null, coverageStartedAt: null, available: false, reconciliationPending: true })),
     getAccountMembershipLabel({ uid: session.userId, email, emailVerified }),
     loadLearningSummary(session.userId, activation),

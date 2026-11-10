@@ -75,3 +75,33 @@ test('failed preparation reports retryable service failure without partial data'
 test('an unchanged event creates no receipt',async()=>{
  const s=store();assert.equal(await s.prepareWorkspaceHistory('a',{activities:[event]},{activities:[event]}),null);assert.equal(s.data.size,0);
 });
+
+test('reading an archived snapshot skips redundant history transactions', async () => {
+ const s = store();
+ const progress = { activities: [event] };
+ await s.archive('a', progress);
+ s.setFailure(true);
+ const page = await s.loadWorkspaceHistoryForProgress('a', progress, true);
+ assert.equal(page.reconciliationPending, false);
+ assert.equal(page.events.length, 1);
+});
+
+test('opening legacy progress still archives its retained history', async () => {
+ const s = store();
+ const page = await s.loadWorkspaceHistoryForProgress('a', { activities: [event] }, false);
+ assert.equal(page.reconciliationPending, false);
+ assert.equal(page.events.length, 1);
+});
+
+test('writing progress reads only new history events and the coverage record', async () => {
+ const s = store();
+ const reads = [];
+ const writes = await s.workspaceHistoryWrites('a', [previous, event], {
+  getDocuments: async paths => {
+   reads.push(...paths);
+   return new Map();
+  },
+ }, [previous]);
+ assert.equal(reads.length, 2);
+ assert.equal(writes.find(write => write.value.source === 'activation_v1').value.id, event.id);
+});

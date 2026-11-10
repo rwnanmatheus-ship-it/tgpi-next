@@ -424,6 +424,7 @@ test('course overview localizes controls and counts unique lessons without grant
 
 test('workspace server presentation follows locale and preserves private identity and canonical destinations', async () => {
   const intelligence = await import('../src/lib/workspace-intelligence.ts');
+  const { activationReadOnlyCopy } = await import(url(fs.readFileSync('src/lib/localization/progress-copy.ts', 'utf8')));
   const React = await import('react'), runtime = await import('react/jsx-runtime');
   const { renderToStaticMarkup } = await import('react-dom/server');
   const code = ts.transpileModule(fs.readFileSync('src/components/profile/GlobalWorkspaceOS.tsx', 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX, esModuleInterop: true } }).outputText;
@@ -436,6 +437,7 @@ test('workspace server presentation follows locale and preserves private identit
       if (name === '@/lib/localization/server') return { getLocale: async () => locale };
       if (name === '@/lib/workspace-intelligence') return intelligence;
       if (name === '@/lib/localization/messages') return { translate };
+      if (name === '@/lib/localization/progress-copy') return { activationReadOnlyCopy };
       if (localizationDependency(name, locale)) return localizationDependency(name, locale);
       if (name === 'next/link') return { __esModule: true, default: ({ children, prefetch, ...props }) => React.createElement('a', props, children) };
       if (name === 'next/image') return { __esModule: true, default: () => null };
@@ -449,6 +451,7 @@ test('workspace server presentation follows locale and preserves private identit
           if (dependency === 'react') return React;
           if (dependency === 'react/jsx-runtime') return runtime;
           if (dependency === '@clerk/nextjs') return { useAuth: () => ({ userId: 'synthetic-render-only', isLoaded: true }) };
+          if (dependency === 'next/navigation') return { useRouter: () => ({ refresh() {} }) };
           if (localizationDependency(dependency, locale)) return localizationDependency(dependency, locale);
           if (dependency === '@/lib/learning/unified-progress') return { learningStatusLabels: {} };
           if (dependency === '@/lib/progress-sync') return { PROGRESS_SYNC_EVENT: 'synthetic-test' };
@@ -491,6 +494,12 @@ test('workspace server presentation follows locale and preserves private identit
     assert.ok(html.includes('href="/profile/security"'));
     assert.ok(html.includes(t('One place to keep learning.')));
     assert.ok(html.includes(t('Choose a practical course. Your completed lessons stay connected to your account.')));
+    assert.ok(!html.includes(activationReadOnlyCopy[locale]));
+
+    const degradedHtml = renderToStaticMarkup(await exports.default({ ...props, progressReadOnly: true }));
+    const header = degradedHtml.match(/<header[^>]*>(.*?)<\/header>/)?.[1];
+    assert.ok(header?.includes(activationReadOnlyCopy[locale]));
+    assert.ok(!degradedHtml.includes('bg-amber-50'));
   }
 });
 

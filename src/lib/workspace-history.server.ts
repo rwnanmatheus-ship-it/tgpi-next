@@ -55,9 +55,9 @@ export async function commitWorkspaceHistory(uid: string, id: string) {
 }
 
 /** Never replay a mutation or infer success from the current country/course state. */
-export async function reconcileWorkspaceHistory(uid: string, progress: TgpiActivationProgress) {
+export async function reconcileWorkspaceHistory(uid: string, progress: TgpiActivationProgress, historyArchived = false) {
   if (!isLearningStorageConfigured()) return;
-  await archiveWorkspaceHistory(uid, progress);
+  if (!historyArchived) await archiveWorkspaceHistory(uid, progress);
   const observed = new Set(workspaceHistory(progress).map(fingerprint));
   let cursor: string | undefined;
   for (let pageIndex = 0; pageIndex < 3; pageIndex++) {
@@ -77,12 +77,18 @@ export async function workspaceHistoryWrites(
   uid: string,
   events: ActivationActivity[],
   { getDocuments }: TransactionContext,
+  archivedEvents: ActivationActivity[] = [],
 ) {
   if (!events.length) return [];
   const coveragePath = `tgpiLearningUsers/${uid}/workspace/historyCoverage`;
-  const validEvents = events.filter(event => !event.href.startsWith('//'));
-  if (!validEvents.length) return [];
-  const rows = new Map(validEvents.map(event => [eventPath(uid, event), event]));
+  const archived = new Set(archivedEvents.map(event => eventPath(uid, event)));
+  const rows = new Map<string, ActivationActivity>();
+  for (const event of events) {
+    if (event.href.startsWith('//')) continue;
+    const path = eventPath(uid, event);
+    if (!archived.has(path)) rows.set(path, event);
+  }
+  if (!rows.size) return [];
   const existing = await getDocuments([...rows.keys(), coveragePath]);
   const now = new Date().toISOString();
   const writes = [...rows].filter(([path]) => !existing.get(path))
@@ -107,4 +113,18 @@ export async function loadWorkspaceHistory(uid: string, cursor?: string): Promis
     listFirestoreDocumentPage<PendingHistory>(`tgpiLearningUsers/${uid}`,'workspaceHistoryPending'),
   ]);
   return { events: page.items.map(item => item.data).filter(e => e.version === 1 && e.source === 'activation_v1'), cursor:page.nextPageToken, coverageStartedAt:coverage?.data.startedAt ?? null, available:true, reconciliationPending:pending.items.length > 0 };
+}
+
+export async function loadWorkspaceHistoryForProgress(uid: string, progress: TgpiActivationProgress, historyArchived: boolean) {
+  const page = await loadWorkspaceHistory(uid);
+  const hasLegacyHistory = !historyArchived && progress.activities.length > 0;
+  if (!page.available || (!page.reconciliationPending && !hasLegacyHistory)) return page;
+
+  try {
+    if (page.reconciliationPending) await reconcileWorkspaceHistory(uid, progress, historyArchived);
+    else await archiveWorkspaceHistory(uid, progress);
+    return await loadWorkspaceHistory(uid);
+  } catch {
+    return { ...page, reconciliationPending: true };
+  }
 }

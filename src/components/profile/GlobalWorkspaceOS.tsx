@@ -1,8 +1,8 @@
-import ActivationProgressNotice from "@/components/activation/ActivationProgressNotice";
 import { planCopy, workspaceResourceCopy } from '@/lib/localization/workspace-copy';
 
 import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import { getLocale } from '@/lib/localization/server';
+import { activationReadOnlyCopy } from '@/lib/localization/progress-copy';
 import { translate } from '@/lib/localization/messages';
 import CommunityConnections from '@/components/community/CommunityConnections';
 import GlobalRankBadge from './GlobalRankBadge';
@@ -77,9 +77,24 @@ export default async function GlobalWorkspaceOS({ learning, progressReadOnly, id
     <div className={styles.planSummary}>{model.planSummary.filter(s => s.label !== 'Budget').map(s => <div key={s.label}><span>{t(s.label)}</span><strong>{copy(s.value)}</strong></div>)}</div>
   </section>;
   return <main lang={locale} className={styles.workspace}>
-    {progressReadOnly && <ActivationProgressNotice />}
     <div className={styles.shell}>
-      <header className={styles.header}><div><p className={styles.eyebrow}><LocalizedText text="TGPI / Global Command Center" /></p><h1><LocalizedText text="Global Workspace" /></h1><p>{t("Welcome back, {name}.", { name: identity.fullName })}</p></div><div className={styles.actions}><WorkspaceCommandButton /><Link className={styles.quiet} href="/notifications"><LocalizedText text="Notifications ↗" /></Link><WorkspaceSyncButton /></div></header>
+      <header className={styles.header}>
+        <div>
+          <p className={styles.eyebrow}><LocalizedText text="TGPI / Global Command Center" /></p>
+          <h1><LocalizedText text="Global Workspace" /></h1>
+          <p>{t("Welcome back, {name}.", { name: identity.fullName })}</p>
+        </div>
+        <div className={styles.actions}>
+          <WorkspaceCommandButton />
+          <Link className={styles.quiet} href="/notifications"><LocalizedText text="Notifications ↗" /></Link>
+          <div className="grid justify-items-start">
+            <WorkspaceSyncButton notifyClients={false} />
+            <span role="status" className="max-w-52 text-xs text-slate-300">
+              {progressReadOnly ? activationReadOnlyCopy[locale] : null}
+            </span>
+          </div>
+        </div>
+      </header>
       {onboardingCompleted && <p role="status" className={styles.notice}><LocalizedText text="Your global context has been saved. Your workspace now reflects your plan." /></p>}
       <section className={styles.hero} aria-labelledby="mission-title">
         <div className={styles.heroContent}>

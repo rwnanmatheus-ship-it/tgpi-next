@@ -367,19 +367,25 @@ function readSnapshot(stored: StoredActivation) {
   }
 }
 
-export async function getUserActivationProgress(userId: string, privateMetadata?: Record<string, unknown>) {
+async function loadActivationSnapshot(userId: string, privateMetadata?: Record<string, unknown>) {
   const stored = await getFirestoreDocument<StoredActivation>(progressPath(userId));
-  return stored ? readSnapshot(stored.data) : loadLegacyProgress(userId, privateMetadata);
+  return stored
+    ? { progress: readSnapshot(stored.data), historyArchived: true }
+    : { progress: await loadLegacyProgress(userId, privateMetadata), historyArchived: false };
+}
+
+export async function getUserActivationProgress(userId: string, privateMetadata?: Record<string, unknown>) {
+  return (await loadActivationSnapshot(userId, privateMetadata)).progress;
 }
 
 /** A historical snapshot can keep the UI usable while writes remain fail-closed. */
 export async function getUserActivationView(userId: string, privateMetadata?: Record<string, unknown>) {
   try {
-    return { progress: await getUserActivationProgress(userId, privateMetadata), readOnly: false };
+    return { ...await loadActivationSnapshot(userId, privateMetadata), readOnly: false };
   } catch (error) {
     if (!(error instanceof FirestoreAdminError)) throw error;
     console.warn("Activation storage unavailable", error.status, error.code);
-    return { progress: await loadLegacyProgress(userId, privateMetadata), readOnly: true };
+    return { progress: await loadLegacyProgress(userId, privateMetadata), readOnly: true, historyArchived: false };
   }
 }
 
@@ -412,7 +418,11 @@ export async function updateUserActivationProgress(userId: string, mutation: Act
     if (isUnchanged(current, mutation)) return { result: current, writes: [] };
 
     const progress = applyActivationMutation(current, mutation);
-    const history = await workspaceHistoryWrites(userId, [...current.activities, ...progress.activities], context);
+    // Existing Firestore snapshots were committed with their history in the same transaction.
+    // During migration, also archive the retained Clerk events that leave the snapshot.
+    const history = stored
+      ? await workspaceHistoryWrites(userId, progress.activities, context, current.activities)
+      : await workspaceHistoryWrites(userId, [...current.activities, ...progress.activities], context);
     return {
       result: progress,
       writes: [
