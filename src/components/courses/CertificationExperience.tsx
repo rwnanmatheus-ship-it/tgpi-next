@@ -272,7 +272,16 @@ function CertificationDashboard({
                 <Link href={`/certificates/${eligibility.credentialId}`} className="inline-flex min-h-12 w-full items-center justify-center rounded-xl bg-[#E5BF5A] px-5 text-sm font-extrabold text-[var(--tgpi-navy-raised)]"><LocalizedText text={"View issued credential →"} /></Link>
               ) : (
                 <div>
+                  {status && !status.publicName ? (
+                    <p className="mb-3 text-xs leading-6 text-[#C8D1DE]">
+                      <LocalizedText text="Enter your complete real name for certificates." />{" "}
+                      <Link href="/profile/security#settings-identity" className="font-semibold text-white underline">
+                        <LocalizedText text="Account settings" />
+                      </Link>
+                    </p>
+                  ) : (
                   <p className="mb-3 text-xs leading-6 text-[#C8D1DE]"><LocalizedText text={"By issuing, you consent to displaying"} />{" "}<strong className="text-white">{status?.publicName || <LocalizedText text={"your profile name"} />}</strong>{" "}<LocalizedText text={"on the public verification record."} /></p>
+                  )}
                   <button
                     type="button"
                     disabled={!eligibility?.eligible || isIssuing}

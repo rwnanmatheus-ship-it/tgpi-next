@@ -171,6 +171,32 @@ test('unverified email preserves completion, later issuance is idempotent, shari
  await assert.rejects(()=>mutation(h,course,{...identity,uid:'outsider'})({action:'sharing',sharing:false}),/Start this course edition/);
 });
 
+test('academy completes work with an outdated name but signs the full name only after reconfirmation', async () => {
+ const h=harness(),course=h.catalog.academyCourses[0];
+ const old={...identity,publicName:'Previous Recorded Name'},current={...identity,publicName:'Alicia Sofia de Lima Fernandes'};
+ let status=await completeLessons(h,course,old);
+ const mutate=mutation(h,course,current);
+ status=await mutate({action:'begin',revision:status.record.revision,target:'final'});
+ status=await mutate(submittedAnswers(h,course,status));
+ h.advance(24*60*60*1000);
+ status=await mutate({action:'begin',revision:status.record.revision,target:'retention'});
+ status=await mutate(submittedAnswers(h,course,status));
+ assert.ok(status.record.completedAt);
+ assert.equal(status.record.credentialId,undefined);
+ assert.equal(status.record.consent.publicName,old.publicName);
+ await assert.rejects(()=>mutate({action:'issue'}),/Confirm the public credential name/);
+ await assert.rejects(()=>mutate({action:'issue',confirmedName:old.publicName}),/Confirm the public credential name/);
+ status=await mutate({action:'issue',confirmedName:current.publicName});
+ const id=status.record.credentialId;
+ const signed=h.documents.get(`tgpiLearningCredentials/${id}`).data;
+ assert.equal(signed.publicName,current.publicName);
+ assert.equal(signed.professionalEvidence.sharing,false);
+ assert.equal(status.record.consent.publicName,current.publicName);
+ const later=await mutation(h,course,{...current,publicName:'A Different Profile Name'})({action:'issue'});
+ assert.equal(later.record.credentialId,id);
+ assert.deepEqual(h.documents.get(`tgpiLearningCredentials/${id}`).data,signed);
+});
+
 test('route boundary uses server identity, strict origin, streamed size limit and private cache; old submissions cannot enter a human queue',()=>{
  const route=readFileSync('src/app/api/learning/academy/[courseId]/route.ts','utf8');
  assert.match(route,/requireApiUser/);assert.match(route,/new URL\(origin\)\.origin !== new URL\(request.url\)\.origin/);assert.match(route,/size > 24000/);assert.match(route,/reader.cancel/);assert.match(route,/private, no-store/);

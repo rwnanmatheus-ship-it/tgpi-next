@@ -127,8 +127,21 @@ export function getAccountSalutation(identity: AccountIdentityInput, profile: Tg
   return [title ? translate(title) : '', identity.firstName].filter(Boolean).join(" ");
 }
 
+export function isCertificateName(name: string) {
+  return name.length <= 121 &&
+    /\p{L}/u.test(name) &&
+    !/[\p{Cc}\u202a-\u202e\u2066-\u2069<>]/u.test(name) &&
+    name.trim().toLowerCase() !== "tgpi member";
+}
+
 export function getCertificateName(identity: AccountIdentityInput, profile: TgpiAccountProfile) {
-  return profile.legalFullName || [identity.firstName, identity.lastName].filter(Boolean).join(" ");
+  const declaredName = profile.legalFullName.trim();
+  if (declaredName) return isCertificateName(declaredName) ? declaredName : "";
+
+  const firstName = identity.firstName.trim();
+  const lastName = identity.lastName.trim();
+  const combined = `${firstName} ${lastName}`;
+  return isCertificateName(firstName) && isCertificateName(lastName) && isCertificateName(combined) ? combined : "";
 }
 
 function cleanUrl(value: unknown, host?: string) {

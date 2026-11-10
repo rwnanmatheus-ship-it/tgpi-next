@@ -6,6 +6,7 @@ import {
   getCourse,
   getCourseLessonCount,
 } from "@/data/courses";
+import { isCertificateName } from "@/lib/account-profile";
 import { getUserActivationProgress } from "@/lib/activation-store.server";
 import { getOrCreateGlobalKey } from "@/lib/global-key.server";
 import {
@@ -77,11 +78,6 @@ export class LearningInputError extends Error {
 
 const COURSE_ID = "global-english-2026";
 const MIN_REFLECTION_LENGTH = 120;
-
-function hasIssuablePublicName(value: string) {
-  const normalized = value.trim();
-  return normalized.length >= 2 && normalized !== "TGPI Member";
-}
 
 function courseRecordPath(userId: string, courseId: string) {
   return `tgpiLearningUsers/${userId}/courses/${courseId}`;
@@ -239,7 +235,7 @@ function credentialPayload(
     keyId: TGPI_CREDENTIAL_KEY_ID,
     learningHours: Math.round((course.estimatedMinutes / 60) * 10) / 10,
     masteryThreshold: course.assessment.masteryThreshold,
-    publicName: identity.publicName.slice(0, 120),
+    publicName: identity.publicName,
     skills: course.competencies.map((item) => ({
       id: item.id,
       level: item.level,
@@ -446,7 +442,7 @@ export async function getLearningCertificationStatus(
       record,
       progress.completedLessonIds.length,
       progress.totalLessons,
-      identity.emailVerified && hasIssuablePublicName(identity.publicName),
+      identity.emailVerified && isCertificateName(identity.publicName),
     ),
     publicName: identity.publicName,
     storageConfigured,
@@ -520,7 +516,7 @@ export async function submitLearningAssessment(
       nextRecord,
       progress.completedLessonIds.length,
       progress.totalLessons,
-      identity.emailVerified && hasIssuablePublicName(identity.publicName),
+      identity.emailVerified && isCertificateName(identity.publicName),
     );
     const writes = [];
     const attemptId = `${assessmentId}-${crypto.randomUUID()}`;
@@ -589,7 +585,7 @@ export async function issueLearningCredential(
       record,
       progress.completedLessonIds.length,
       progress.totalLessons,
-      identity.emailVerified && hasIssuablePublicName(identity.publicName),
+      identity.emailVerified && isCertificateName(identity.publicName),
     );
     if (record.credentialId) return { result: record.credentialId, writes: [] };
     if (!eligibility.eligible) {

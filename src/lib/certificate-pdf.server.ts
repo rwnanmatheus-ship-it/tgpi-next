@@ -26,6 +26,7 @@ const GOLD = rgb(0.55, 0.374, 0.125);
 const GILT = rgb(0.84, 0.69, 0.39);
 const CHAMPAGNE = rgb(0.95, 0.861, 0.63);
 const PAPER = rgb(0.993, 0.986, 0.963);
+const VELLUM = rgb(0.976, 0.949, 0.879);
 const LINE = rgb(0.855, 0.816, 0.71);
 const MUTED = rgb(0.31, 0.356, 0.407);
 const LIGHT = rgb(0.87, 0.908, 0.947);
@@ -62,7 +63,7 @@ export async function createCertificatePdf(
   const privateSharing = credential.professionalEvidence?.sharing === false;
   const document = await PDFDocument.create();
   document.registerFontkit(fontkit);
-  document.setTitle(`${credential.courseTitle} — TGPI Certificate`);
+  document.setTitle(`${credential.courseTitle} — ${say("TGPI Academic Certificate", "Certificado Acadêmico TGPI")}`);
   document.setAuthor("TGPI — The Global Polymath Institute");
   document.setSubject(`Verified learning certificate ${credential.id} for ${credential.publicName}; document design ${CERTIFICATE_DESIGN_VERSION}`);
   document.setLanguage(locale);
@@ -104,7 +105,7 @@ export async function createCertificatePdf(
       y, size: fittedSize, font: styled.font, color,
     });
   }
-  function headline(value: string, x: number, y: number, width: number, size: number, leading: number, font = display, color = INK) {
+  function headline(value: string, x: number, y: number, width: number, size: number, leading: number, font = display, color = INK, maxLines = 2) {
     const styled = textStyle(value, font);
     const fontWidth = (line: string) => styled.font.widthOfTextAtSize(line, 1);
     if (fontWidth(styled.value) * size <= width) {
@@ -114,16 +115,33 @@ export async function createCertificatePdf(
     const characters = Array.from(styled.value);
     const wordBreaks = characters.flatMap((character, index) => character === " " ? [index] : []);
     const breaks = wordBreaks.length > 0 ? wordBreaks : characters.slice(1).map((_, index) => index + 1);
-    let best = { first: styled.value, second: "", width: fontWidth(styled.value) };
+    let best = { lines: [styled.value], width: fontWidth(styled.value) };
     for (const index of breaks) {
       const first = characters.slice(0, index).join("").trim();
       const second = characters.slice(index).join("").trim();
       const measured = Math.max(fontWidth(first), fontWidth(second));
-      if (measured < best.width) best = { first, second, width: measured };
+      if (measured < best.width) best = { lines: [first, second], width: measured };
     }
-    const fittedSize = Math.min(size, width / Math.max(best.width, 1));
-    text(best.first, x, y, fittedSize, styled.font, color, width);
-    text(best.second, x, y - leading, fittedSize, styled.font, color, width);
+    // Allow unusually long legal names a third line before shrinking the type.
+    if (maxLines === 3 && width / best.width < 26) {
+      for (const [firstIndex, firstBreak] of breaks.entries()) {
+        const first = characters.slice(0, firstBreak).join("").trim();
+        const firstWidth = fontWidth(first);
+        if (firstWidth >= best.width) break;
+        for (const secondBreak of breaks.slice(firstIndex + 1)) {
+          const middle = characters.slice(firstBreak, secondBreak).join("").trim();
+          const middleWidth = fontWidth(middle);
+          if (middleWidth >= best.width) break;
+          const last = characters.slice(secondBreak).join("").trim();
+          const measured = Math.max(firstWidth, middleWidth, fontWidth(last));
+          if (measured < best.width) best = { lines: [first, middle, last], width: measured };
+        }
+      }
+    }
+    const threeLines = best.lines.length === 3;
+    const fittedSize = Math.min(threeLines ? 29 : size, width / Math.max(best.width, 1));
+    best.lines.forEach((line, index) =>
+      text(line, x, y - index * (threeLines ? 26 : leading), fittedSize, styled.font, color, width));
     return styled.hasUnsupportedGlyphs;
   }
   const segment = (x1: number, y1: number, x2: number, y2: number, color = LINE, thickness = 0.5) =>
@@ -133,6 +151,16 @@ export async function createCertificatePdf(
     text(value, railCenter, y, size, font, color, 147, "center");
   const diamond = (x: number, y: number, size: number, color: RGB) =>
     page.drawSvgPath(`M 0 ${-size} L ${size} 0 L 0 ${size} L ${-size} 0 Z`, { x, y, color });
+  function engraving(x: number, y: number, length: number, offset: (t: number) => number, color: RGB, opacity: number, vertical = false) {
+    const steps = Math.ceil(length / 2);
+    const commands = Array.from({ length: steps + 1 }, (_, index) => {
+      const t = index / steps;
+      const advance = t * length;
+      const cross = offset(t);
+      return `${index === 0 ? "M" : "L"} ${(vertical ? cross : advance).toFixed(2)} ${(vertical ? advance : cross).toFixed(2)}`;
+    });
+    page.drawSvgPath(commands.join(" "), { x, y, borderColor: color, borderWidth: 0.25, borderOpacity: opacity });
+  }
   function rosette(x: number, y: number, radius: number, color: RGB, opacity: number) {
     for (let layer = 0; layer < 5; layer++) {
       const commands = Array.from({ length: 193 }, (_, step) => {
@@ -144,67 +172,107 @@ export async function createCertificatePdf(
     }
   }
 
-  // Print-safe margins. The frame, engraving, lettering and QR modules stay vector sharp.
+  // The engraved field is decorative. Verification relies on the signed issuer record.
   page.drawRectangle({ x: 0, y: 0, width: WIDTH, height: HEIGHT, color: PAPER });
-  for (const [inset, thickness, color] of [[19, 1.05, GOLD], [23, 0.35, GILT], [29, 0.5, LINE]] as const) {
+  for (const [inset, color] of [[18, NAVY], [20.1, VELLUM], [34.7, PAPER]] as const) {
+    page.drawRectangle({ x: inset, y: inset, width: WIDTH - inset * 2, height: HEIGHT - inset * 2, color });
+  }
+  for (const [inset, thickness, color] of [[21.6, 0.55, GOLD], [32.8, 0.5, GOLD], [35.8, 0.85, NAVY], [39, 0.35, GILT]] as const) {
     page.drawRectangle({ x: inset, y: inset, width: WIDTH - inset * 2, height: HEIGHT - inset * 2, borderColor: color, borderWidth: thickness });
   }
-  for (const [x, y, dx, dy] of [[35, 35, 1, 1], [807, 35, -1, 1], [35, 560, 1, -1], [807, 560, -1, -1]]) {
-    for (let i = 0; i < 4; i++) {
-      segment(x + dx * i * 3, y + dy * i * 3, x + dx * (26 - i * 2), y + dy * i * 3, GOLD, 0.55);
-      segment(x + dx * i * 3, y + dy * i * 3, x + dx * i * 3, y + dy * (26 - i * 2), GOLD, 0.55);
-    }
-    diamond(x + dx * 14, y + dy * 14, 2.25, GILT);
+  for (let phase = 0; phase < 7; phase++) {
+    const braid = (t: number) => 4.6 * Math.sin(t * 104 * Math.PI + phase * Math.PI / 3.5);
+    const sideBraid = (t: number) => braid(t * 2 / 3);
+    for (const y of [27.2, HEIGHT - 27.2]) engraving(38, y, WIDTH - 76, braid, GOLD, 0.59);
+    for (const x of [27.2, WIDTH - 27.2]) engraving(x, HEIGHT - 38, HEIGHT - 76, sideBraid, GOLD, 0.59, true);
   }
-  rosette(470, 343, 125, GOLD, 0.10);
-  for (const radius of [49, 74, 99]) {
-    page.drawCircle({ x: 470, y: 343, size: radius, borderColor: GOLD, borderWidth: 0.55, borderOpacity: 0.105 });
+  for (const [x, y, dx, dy] of [[40, 40, 1, 1], [WIDTH - 40, 40, -1, 1], [40, HEIGHT - 40, 1, -1], [WIDTH - 40, HEIGHT - 40, -1, -1]]) {
+    const cx = x - dx * 12.8;
+    const cy = y - dy * 12.8;
+    rosette(cx, cy, 9.4, GOLD, 0.61);
+    diamond(cx, cy, 2.15, NAVY);
+    for (let i = 0; i < 3; i++) {
+      const start = 2.6 + i * 3.25;
+      const end = 22 - i * 4;
+      segment(x + dx * start, y + dy * start, x + dx * end, y + dy * start, GOLD, 0.43);
+      segment(x + dx * start, y + dy * start, x + dx * start, y + dy * end, GOLD, 0.43);
+    }
+    diamond(x + dx * 11, y + dy * 11, 1.8, GILT);
+  }
+  for (const y of [27.2, HEIGHT - 27.2]) {
+    page.drawRectangle({ x: WIDTH / 2 - 21, y: y - 5, width: 42, height: 10, color: VELLUM });
+    diamond(WIDTH / 2, y, 4.2, NAVY);
+    diamond(WIDTH / 2, y, 1.85, GILT);
+    for (const direction of [-1, 1]) {
+      diamond(WIDTH / 2 + direction * 11, y, 1.8, GOLD);
+      segment(WIDTH / 2 + direction * 15, y, WIDTH / 2 + direction * 21, y, GOLD, 0.5);
+    }
+  }
+  for (let row = 0; row < 42; row++) {
+    engraving(40, 51 + row * 12, 586, (t) => 5.4 * Math.sin(t * 6 * Math.PI + row * 0.32) + 1.8 * Math.sin(t * 13 * Math.PI), NAVY, 0.17);
+  }
+  rosette(453, 326, 153, GOLD, 0.21);
+  rosette(453, 326, 125, GOLD, 0.14);
+  rosette(116, 158, 58, GOLD, 0.12);
+  for (const radius of [47, 73, 101, 125]) {
+    page.drawCircle({ x: 453, y: 326, size: radius, borderColor: GOLD, borderWidth: 0.5, borderOpacity: 0.16 });
+  }
+  for (const size of [33, 65, 98]) {
+    page.drawEllipse({ x: 453, y: 326, xScale: size, yScale: 101, borderColor: GOLD, borderWidth: 0.44, borderOpacity: 0.15 });
+    page.drawEllipse({ x: 453, y: 326, xScale: 101, yScale: size, borderColor: GOLD, borderWidth: 0.44, borderOpacity: 0.15 });
   }
   for (const angle of [0, Math.PI / 4, Math.PI / 2, 3 * Math.PI / 4]) {
     const dx = 115 * Math.cos(angle);
     const dy = 115 * Math.sin(angle);
-    page.drawLine({ start: { x: 470 - dx, y: 343 - dy }, end: { x: 470 + dx, y: 343 + dy }, color: GOLD, thickness: 0.45, opacity: 0.075 });
+    page.drawLine({ start: { x: 453 - dx, y: 326 - dy }, end: { x: 453 + dx, y: 326 + dy }, color: GOLD, thickness: 0.45, opacity: 0.11 });
   }
 
-  page.drawRectangle({ x: 626, y: 30, width: 186, height: 535, color: NAVY });
+  page.drawRectangle({ x: 626, y: 39, width: WIDTH - 665, height: HEIGHT - 78, color: NAVY });
   for (let i = 0; i < 40; i++) {
-    page.drawRectangle({ x: 628 + i * 4.58, y: 30, width: 4.6, height: 535, color: rgb(0.15, 0.24, 0.4), opacity: 0.28 * Math.sin(i * Math.PI / 40) });
+    page.drawRectangle({ x: 627 + i * 4.37, y: 39, width: 4.38, height: HEIGHT - 78, color: rgb(0.15, 0.24, 0.4), opacity: 0.28 * Math.sin(i * Math.PI / 40) });
   }
-  segment(626, 30, 626, 565, GILT, 1.4);
-  segment(632, 37, 632, 558, GILT, 0.35);
-  segment(806, 37, 806, 558, GILT, 0.35);
-  for (const y of [548, 50]) {
+  for (let column = 0; column < 18; column++) {
+    engraving(643 + column * 8.7, HEIGHT - 45, HEIGHT - 90, (t) => 4 * Math.sin(t * 9 * Math.PI + column * 0.43), CHAMPAGNE, 0.15, true);
+  }
+  segment(626, 39, 626, HEIGHT - 39, GILT, 1.4);
+  segment(632, 44, 632, HEIGHT - 44, GILT, 0.35);
+  segment(797, 44, 797, HEIGHT - 44, GILT, 0.35);
+  for (const y of [545, 55]) {
     segment(642, y, 694, y, GILT, 0.4);
     segment(740, y, 795, y, GILT, 0.4);
     diamond(railCenter, y, 2.6, CHAMPAGNE);
   }
 
   // Issuer, formal title, recipient, and achievement in a single reading order.
-  page.drawImage(crest, { x: 62, y: 507, width: 40, height: 47 });
-  text("The Global Polymath Institute", 114, 530, 22, display, INK);
-  text(say("EDUCATION FOR A GLOBAL LIFE", "EDUCAÇÃO PARA UMA VIDA GLOBAL"), 116, 515, 7, sans, GOLD);
-  segment(62, 493, 600, 493);
-  segment(62, 493, 110, 493, GOLD, 1.25);
-  text(say("ACHIEVEMENT  /  ASSESSED LEARNING", "CONCLUSÃO  /  APRENDIZAGEM AVALIADA"), 64, 472, 7.5, sans, GOLD);
-  text(say("Certificate", "Certificado"), 60, 425, 54, display, NAVY);
-  text(say("CONFERRED UPON", "CONFERIDO A"), 64, 397, 7.2, sans, MUTED);
-  const originalNameInRecord = headline(credential.publicName, 61, 359, 538, 41, 34);
-  segment(64, 311, 600, 311);
-  diamond(66, 311, 2.5, GOLD);
+  page.drawImage(crest, { x: 62, y: 501, width: 40, height: 47 });
+  text("The Global Polymath Institute", 114, 524, 23, display, INK);
+  text(say("EDUCATION FOR A GLOBAL LIFE", "EDUCAÇÃO PARA UMA VIDA GLOBAL"), 116, 508, 7.3, sans, GOLD);
+  segment(62, 489, 600, 489, GILT, 0.6);
+  segment(62, 489, 110, 489, GOLD, 1.4);
+  diamond(599, 489, 2.35, GOLD);
+  text(say("INSTITUTIONAL RECORD  /  ASSESSED LEARNING", "REGISTRO INSTITUCIONAL  /  APRENDIZAGEM AVALIADA"), 64, 469, 7.8, sans, GOLD);
+  text(say("ACADEMIC CERTIFICATE", "CERTIFICADO ACADÊMICO"), 59, 418, 49, display, NAVY, 542);
+  segment(63, 403, 162, 403, GOLD, 1.15);
+  diamond(170, 403, 2.4, GOLD);
+  segment(178, 403, 599, 403, LINE, 0.5);
+  text(say("LEARNER'S FULL NAME", "NOME COMPLETO DO ALUNO"), 64, 382, 7.4, sans, GOLD);
+  const originalNameInRecord = headline(credential.publicName, 61, 345, 538, 42, 32, display, INK, 3);
+  segment(64, 286, 600, 286, GILT, 0.55);
+  diamond(66, 286, 2.5, GOLD);
   const recipientNotes = [
     originalNameInRecord && say("Original name spelling in the issuer record", "Grafia original do nome no registro do emissor"),
     options.personalBirthDate && /^\d{4}-\d{2}-\d{2}$/.test(options.personalBirthDate)
       && `${say("Birth date", "Nascimento")} ${certificateDate(options.personalBirthDate, locale)} (${say("provided by the holder", "informado pelo titular")})`,
   ].filter(Boolean).join("  ·  ");
-  text(recipientNotes, 64, 298, 6.5, sans, MUTED);
-  text(say("For completing the required learning and passing the course assessment in", "Pela conclusão das atividades e aprovação na avaliação do curso"), 64, 280, 8, sans, MUTED);
-  headline(credential.courseTitle, 62, 252, 539, 27, 24);
+  text(recipientNotes, 64, 275, 6.5, sans, MUTED);
+  text(say("For completing the required learning and passing the course assessment in", "Pela conclusão das atividades e aprovação na avaliação do curso"), 64, 260, 8, sans, MUTED);
+  headline(credential.courseTitle, 62, 237, 539, 26, 24);
   const skills = credential.skills?.slice(0, 4).map((skill) => skill.name).filter(Boolean).join("  ·  ");
   if (skills) {
-    text(say("DEMONSTRATED COMPETENCIES", "COMPETÊNCIAS DEMONSTRADAS"), 64, 204, 6.5, sans, GOLD);
-    headline(skills, 64, 189, 535, 8, 11, sans, MUTED);
+    text(say("DEMONSTRATED COMPETENCIES", "COMPETÊNCIAS DEMONSTRADAS"), 64, 192, 6.5, sans, GOLD);
+    headline(skills, 64, 179, 535, 8, 10, sans, MUTED);
   }
-  if (credential.documentNature) text(credential.documentNature, 64, 164, 6.8, sans, MUTED);
+  if (credential.documentNature) text(credential.documentNature, 64, 158, 6.8, sans, MUTED);
 
   page.drawRectangle({ x: 58, y: 101, width: 545, height: 51, color: rgb(0.971, 0.949, 0.891) });
   segment(58, 152, 603, 152, GILT, 0.65);
@@ -240,7 +308,7 @@ export async function createCertificatePdf(
 
   // Engraved secondary emblem and the full-resolution institutional seal supplied by TGPI.
   railText("TGPI", 520, 28, display, CHAMPAGNE);
-  railText(say("OFFICIAL CREDENTIAL", "CREDENCIAL OFICIAL"), 502, 6.9, sans, LIGHT);
+  railText(say("ISSUER CREDENTIAL", "CREDENCIAL INSTITUCIONAL"), 502, 6.9, sans, LIGHT);
   rosette(railCenter, 419, 80, CHAMPAGNE, 0.34);
   page.drawCircle({ x: railCenter, y: 419, size: 77, borderColor: GILT, borderWidth: 0.55, borderOpacity: 0.57 });
   page.drawImage(seal, { x: railCenter - 75, y: 344, width: 150, height: 150 });
@@ -292,6 +360,6 @@ export async function createCertificatePdf(
     railText(say("DOCUMENT COMPARISON CODE", "CÓDIGO DE CONFERÊNCIA"), 93, 6.1, sans, CHAMPAGNE);
     railText(credential.documentFingerprint, 77, 9, sans, WHITE);
   }
-  railText(`THEGLOBALPOLYMATH.COM  /  ${CERTIFICATE_DESIGN_VERSION}`, 37, 5.8, sans, CHAMPAGNE);
+  railText(`THEGLOBALPOLYMATH.COM  /  ${CERTIFICATE_DESIGN_VERSION}`, 44, 5.8, sans, CHAMPAGNE);
   return document.save();
 }

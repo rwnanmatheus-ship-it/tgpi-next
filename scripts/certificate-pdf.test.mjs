@@ -22,7 +22,7 @@ test("generates a valid single-page A4 landscape certificate with embedded asset
   const bytes = await createCertificatePdf(credential);
   const pdf = await PDFDocument.load(bytes);
   assert.equal(pdf.getPageCount(), 1);
-  assert.equal(pdf.getTitle(), `${credential.courseTitle} — TGPI Certificate`);
+  assert.equal(pdf.getTitle(), `${credential.courseTitle} — TGPI Academic Certificate`);
   const { width, height } = pdf.getPage(0).getSize();
   assert.ok(Math.abs(width - 841.89) < 0.1);
   assert.ok(Math.abs(height - 595.28) < 0.1);

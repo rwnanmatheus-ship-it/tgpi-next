@@ -4,7 +4,7 @@ import { PDFDocument, degrees, rgb } from "pdf-lib";
 import { createCertificatePdf } from "../src/lib/certificate-pdf.server.ts";
 const output = process.env.TGPI_QA_OUTPUT_DIR || path.join(process.cwd(), "tmp", "pdfs");
 const bytes = await createCertificatePdf({
-  id: "TGPI-TEST-SAMPLE00001", publicName: "Amostra técnica sem validade", courseTitle: "Comunicação Intercultural, Negociação e Pensamento Crítico", courseVersion: "1.0.0",
+  id: "TGPI-TEST-SAMPLE00001", publicName: "Mariana Duarte de Almeida Ferreira", courseTitle: "Comunicação Intercultural, Negociação e Pensamento Crítico", courseVersion: "1.0.0",
   documentNature: "Certificado de conclusão com avaliação de competências — TGPI",
   completedAt: "2026-10-29T17:00:00Z", issuedAt: "2026-10-29T18:00:00Z", assessmentScore: 85, masteryThreshold: 70, learningHours: 8,
   professionalEvidence: { instructionLanguage: "pt-BR", certificateLanguage: "pt-BR", sharing: false, rubricVersion: "professional-1.0" },
