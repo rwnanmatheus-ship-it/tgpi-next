@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { createHash } from "node:crypto";
-import { INDICATOR_IDS, parseWorldBankResponse, evidenceStatus, comparisonCaveat, personalResearchPlan, sourceApiUrl, formatObservation } from "../src/lib/intelligence/core.ts";
+import { INDICATOR_IDS, parseWorldBankResponse, evidenceStatus, comparisonCaveat, personalResearchPlan, sourceApiUrl, formatObservation, mergeValidatedSeries, allSeriesRecent } from "../src/lib/intelligence/core.ts";
 const identities = JSON.parse(readFileSync(new URL("../src/data/intelligence/identities.json", import.meta.url), "utf8")).countries;
 const legacy = readFileSync(new URL("../src/data/countries.ts", import.meta.url), "utf8");
 const NOW = "2026-09-02T18:00:00.000Z";
@@ -32,7 +32,7 @@ test("bundled fallback is complete, source-linked and matches its content revisi
     assert.ok(Number.isFinite(Date.parse(row.retrievedAt))); assert.ok(row.retrievedAt <= snapshot.retrievedAt);
     const key = `${row.country}:${row.indicator}`; assert.ok(!keys.has(key)); keys.add(key);
   }
-  for (const series of snapshot.series) { assert.equal(series.url, sourceApiUrl(series.indicator)); assert.match(series.responseSha256, /^[a-f0-9]{64}$/); assert.equal(series.observations, snapshot.observations.filter(o => o.indicator === series.indicator).length); }
+  for (const series of snapshot.series) { assert.equal(series.url, sourceApiUrl(series.indicator, new Date(series.retrievedAt).getUTCFullYear())); assert.match(series.responseSha256, /^[a-f0-9]{64}$/); assert.equal(series.observations, snapshot.observations.filter(o => o.indicator === series.indicator).length); }
   const signature = JSON.stringify(snapshot.observations.map(({country,indicator,value,year}) => ({country,indicator,value,year})));
   assert.equal(snapshot.revision, createHash("sha256").update(signature).digest("hex").slice(0,16));
 });
@@ -57,6 +57,49 @@ for (const [name, change] of [
   ["coverage collapse", f => { f[1].forEach((r, i) => { if (i < 100) r.value = null; }); }],
 ]) test(`publication rejects ${name}`, () => { const f = fixture(); change(f); assert.throws(() => parseWorldBankResponse(f, "IT.NET.USER.ZS", identities, NOW)); });
 test("gross enrollment can legitimately exceed 100", () => { const f = fixture("SE.TER.ENRR"); f[1][0].value = 125; assert.equal(parseWorldBankResponse(f, "SE.TER.ENRR", identities, NOW).length, 195); });
+test("enrollment range chooses newest non-null observation regardless of source ordering", () => {
+  const f = fixture("SE.TER.ENRR");
+  const first = f[1][0]; first.date = "2012";
+  f[1].push({ ...first, date: "2023", value: 110 }, { ...first, date: "2026", value: null }); f[0].total += 2;
+  const rows = parseWorldBankResponse(f, "SE.TER.ENRR", identities, NOW);
+  assert.equal(rows.find(row => row.country === identities[0].slug).year, 2023);
+  assert.equal(rows.find(row => row.country === identities[0].slug).value, 110);
+  f[1].reverse(); assert.deepEqual(parseWorldBankResponse(f, "SE.TER.ENRR", identities, NOW), rows);
+  f[1].push({ ...first }); f[0].total++;
+  assert.throws(() => parseWorldBankResponse(f, "SE.TER.ENRR", identities, NOW), /Duplicate/);
+});
+test("enrollment window is explicit and rejects observations outside it", () => {
+  const url = new URL(sourceApiUrl("SE.TER.ENRR", 2026));
+  assert.equal(url.searchParams.get("date"), "2010:2026");
+  assert.equal(url.searchParams.get("per_page"), "5000");
+  const f = fixture("SE.TER.ENRR"); f[1][0].date = "2009";
+  assert.throws(() => parseWorldBankResponse(f, "SE.TER.ENRR", identities, NOW), /year/);
+});
+test("partial collection updates successful series and preserves failed source provenance", () => {
+  const previous = JSON.parse(readFileSync(new URL("../src/data/intelligence/snapshot.json", import.meta.url), "utf8"));
+  const id = "IT.NET.USER.ZS", date = "2026-11-11T00:00:00.000Z";
+  const observations = previous.observations.filter(row => row.indicator === id).map(row => ({ ...row, retrievedAt: date }));
+  const audit = { ...previous.series.find(row => row.indicator === id), retrievedAt: date };
+  const merged = mergeValidatedSeries(previous, [{ observations, audit }]);
+  assert.equal(merged.accepted, 1);
+  assert.deepEqual(merged.observations.filter(row => row.indicator !== id), previous.observations.filter(row => row.indicator !== id));
+  assert.deepEqual(merged.series.filter(row => row.indicator !== id), previous.series.filter(row => row.indicator !== id));
+  assert.ok(merged.observations.filter(row => row.indicator === id).every(row => row.retrievedAt === date));
+  const rejected = mergeValidatedSeries(previous, [{ observations: observations.slice(0, 100), audit: { ...audit, observations: 100 } }]);
+  assert.equal(rejected.accepted, 0);
+  assert.deepEqual(rejected.observations, previous.observations);
+  assert.deepEqual(mergeValidatedSeries(previous, []).series, previous.series);
+});
+test("fresh bundle shortcut requires every registered series with a recent valid timestamp", () => {
+  const previous = JSON.parse(readFileSync(new URL("../src/data/intelligence/snapshot.json", import.meta.url), "utf8"));
+  const now = Date.parse("2026-11-11T00:00:00Z");
+  const recent = { ...previous, series: previous.series.map(row => ({ ...row, retrievedAt: new Date(now - 1000).toISOString() })) };
+  assert.equal(allSeriesRecent(recent, 21_600_000, now), true);
+  assert.equal(allSeriesRecent({ ...recent, series: recent.series.slice(1) }, 21_600_000, now), false);
+  const stale = { ...recent, series: recent.series.map((row, i) => i ? row : { ...row, retrievedAt: "2026-09-02T00:00:00Z" }) };
+  assert.equal(allSeriesRecent(stale, 7 * 86_400_000, now), false);
+  assert.equal(allSeriesRecent({ ...recent, series: recent.series.map(row => ({ ...row, retrievedAt: "invalid" })) }, 21_600_000, now), false);
+});
 test("error payload and HTML cannot become evidence", () => { for (const payload of [null, {}, "<html>503</html>", [{ message: "error" }]]) assert.throws(() => parseWorldBankResponse(payload, "IT.NET.USER.ZS", identities, NOW)); });
 const observation = { country: "portugal", indicator: "IT.NET.USER.ZS", value: 80, year: 2025, retrievedAt: NOW, sourceUpdatedAt: null };
 test("freshness distinguishes current, historical, stale and missing", () => {
@@ -82,7 +125,7 @@ test("new core and public evidence pages do not read synthetic country ratings",
 });
 test("source retrieval forbids redirects and does not accept user URLs", () => {
   const source = readFileSync(new URL("../src/lib/intelligence/server.ts", import.meta.url), "utf8");
-  assert.match(source, /redirect: "error"/); assert.match(source, /AbortSignal.timeout/); assert.match(source, /bytes > 1_000_000/); assert.doesNotMatch(source, /request\.url|searchParams/);
+  assert.match(source, /redirect: "error"/); assert.match(source, /AbortSignal.timeout/); assert.match(source, /bytes > maxBytes/); assert.doesNotMatch(source, /request\.url|searchParams/);
 });
 test("source refresh retains validated evidence instead of throwing cache revalidation errors", () => {
   const source = readFileSync(new URL("../src/lib/intelligence/server.ts", import.meta.url), "utf8");

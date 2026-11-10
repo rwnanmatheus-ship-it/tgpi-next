@@ -24,8 +24,12 @@ export type EvidenceStatus = "current" | "historical" | "stale" | "missing";
 export function indicatorUrl(id: IndicatorId, countryCode: string) {
   return `https://data.worldbank.org/indicator/${id}?locations=${countryCode}`;
 }
-export function sourceApiUrl(id: IndicatorId) {
+export function sourceApiUrl(id: IndicatorId, year = new Date().getUTCFullYear()) {
   if (!INDICATOR_IDS.includes(id)) throw new Error("Unregistered indicator");
+  if (id === "SE.TER.ENRR") {
+    if (!Number.isInteger(year) || year < 2010 || year > 2100) throw new Error("Invalid source query year");
+    return `https://api.worldbank.org/v2/country/all/indicator/${id}?source=2&format=json&date=2010:${year}&per_page=5000`;
+  }
   return `https://api.worldbank.org/v2/country/all/indicator/${id}?source=2&format=json&mrnev=1&per_page=400`;
 }
 export function evidenceStatus(observation: Observation | undefined, now = new Date()): EvidenceStatus {
@@ -51,8 +55,9 @@ function record(value: unknown): Record<string, unknown> {
 export function parseWorldBankResponse(payload: unknown, indicator: IndicatorId, identities: CountryIdentity[], retrievedAt: string): Observation[] {
   if (!INDICATOR_IDS.includes(indicator)) throw new Error("Unregistered indicator");
   if (!Array.isArray(payload) || payload.length !== 2 || !Array.isArray(payload[1])) throw new Error("Invalid source envelope");
+  const range = indicator === "SE.TER.ENRR";
   const header = record(payload[0]);
-  if (Number(header.pages) !== 1 || Number(header.page) !== 1 || Number(header.total) !== payload[1].length || payload[1].length > 400) throw new Error("Incomplete source pagination");
+  if (Number(header.pages) !== 1 || Number(header.page) !== 1 || Number(header.total) !== payload[1].length || payload[1].length > (range ? 5000 : 400)) throw new Error("Incomplete source pagination");
   const retrieved = new Date(retrievedAt);
   if (!Number.isFinite(retrieved.getTime())) throw new Error("Invalid retrieval date");
   const sourceUpdatedAt = typeof header.lastupdated === "string" && /^\d{4}-\d{2}-\d{2}$/.test(header.lastupdated) ? header.lastupdated : null;
@@ -65,16 +70,43 @@ export function parseWorldBankResponse(payload: unknown, indicator: IndicatorId,
     const country = byIso.get(String(row.countryiso3code));
     if (!country) continue; // Excludes aggregates and territories outside TGPI's declared catalog.
     if (record(row.indicator).id !== indicator) throw new Error("Source indicator mismatch");
-    if (seen.has(country)) throw new Error("Duplicate country observation");
-    seen.add(country);
+    const key = range ? `${country}:${row.date}` : country;
+    if (seen.has(key)) throw new Error("Duplicate country observation");
+    seen.add(key);
     if (row.value === null) continue; // Missing is never zero and never filled from neighboring countries.
     const year = typeof row.date === "string" && /^\d{4}$/.test(row.date) ? Number(row.date) : NaN;
-    if (!Number.isInteger(year) || year < 1960 || year > retrieved.getUTCFullYear()) throw new Error("Invalid observation year");
+    if (!Number.isInteger(year) || year < (range ? 2010 : 1960) || year > retrieved.getUTCFullYear()) throw new Error("Invalid observation year");
     if (typeof row.value !== "number" || !Number.isFinite(row.value) || row.value < 0 || row.value > INDICATORS[indicator].max) throw new Error("Invalid observation value");
-    output.push({ country, indicator, value: row.value, year, retrievedAt, sourceUpdatedAt });
+    const existing = range ? output.findIndex(row => row.country === country) : -1;
+    if (existing < 0) output.push({ country, indicator, value: row.value, year, retrievedAt, sourceUpdatedAt });
+    else if (output[existing].year < year) output[existing] = { country, indicator, value: row.value, year, retrievedAt, sourceUpdatedAt };
   }
   if (output.length < (indicator === "SP.POP.TOTL" ? 180 : 100)) throw new Error("Source coverage below publication gate");
   return output.sort((a, b) => a.country.localeCompare(b.country));
+}
+
+export type ValidatedSeries = { observations: Observation[]; audit: SeriesAudit };
+/** Replacing one source never renews another source's provenance. */
+export function mergeValidatedSeries(previous: IntelligenceSnapshot, updates: ValidatedSeries[]) {
+  const accepted = new Map(updates.filter(update => {
+    const count = previous.series.find(series => series.indicator === update.audit.indicator)?.observations ?? 0;
+    const floor = update.audit.indicator === "SP.POP.TOTL" ? 180 : 100;
+    return update.observations.length >= floor && (!count || update.observations.length >= count * 0.9);
+  }).map(update => [update.audit.indicator, update]));
+  const observations = INDICATOR_IDS.flatMap(id => accepted.get(id)?.observations ?? previous.observations.filter(row => row.indicator === id));
+  const series = INDICATOR_IDS.flatMap(id => {
+    const audit = accepted.get(id)?.audit ?? previous.series.find(row => row.indicator === id);
+    return audit ? [audit] : [];
+  });
+  return { observations, series, accepted: accepted.size };
+}
+export function allSeriesRecent(snapshot: IntelligenceSnapshot, maxAgeMs: number, now = Date.now()) {
+  return INDICATOR_IDS.every(id => {
+    const series = snapshot.series.find(row => row.indicator === id);
+    if (!series || !series.observations) return false;
+    const age = now - Date.parse(series.retrievedAt);
+    return Number.isFinite(age) && age >= 0 && age <= maxAgeMs;
+  });
 }
 
 export type ResearchContext = { primaryGoal: string; budgetRange: string; timeHorizon: string; languages: string[]; profession: string; priorities: string[] };
