@@ -3,6 +3,7 @@ import test from "node:test";
 import { PDFDocument } from "pdf-lib";
 import { normalizeTgpiAccountProfile } from "../src/lib/account-profile.ts";
 import { createCertificatePdf } from "../src/lib/certificate-pdf.server.ts";
+import { CERTIFICATE_DESIGN_VERSION } from "../src/lib/certificate-presentation.ts";
 
 const credential = {
   id: "TGPI-GLOBAL-TEST123456",
@@ -29,14 +30,16 @@ test("generates a valid single-page A4 landscape certificate with embedded asset
 });
 
 test("long names, long course titles, unsupported glyphs and invalid dates do not break PDF generation", async () => {
+  const publicName = "長い名前 José ".repeat(20);
   const bytes = await createCertificatePdf({
     ...credential,
-    publicName: "長い名前 José ".repeat(20),
+    publicName,
     courseTitle: credential.courseTitle.repeat(5),
     issuedAt: "invalid date",
   });
   const pdf = await PDFDocument.load(bytes);
   assert.equal(pdf.getPageCount(), 1);
+  assert.ok(pdf.getSubject().includes(publicName));
 });
 
 // Execute the route with isolated service boundaries to exercise access control.
@@ -156,7 +159,7 @@ test("renderer rejects revoked or unverified records even outside the download r
 test("PDF contains a clickable QR verification target and preserves the original issuance snapshot", async () => {
   const bytes = await createCertificatePdf(credential);
   const pdf = await PDFDocument.load(bytes);
-  assert.match(pdf.getSubject(), /document design 2026\.3/);
+  assert.ok(pdf.getSubject().endsWith(`document design ${CERTIFICATE_DESIGN_VERSION}`));
   const annotations = pdf.getPage(0).node.Annots();
   assert.equal(annotations.size(), 1);
   const { PDFDict, PDFName, PDFString } = await import("pdf-lib");

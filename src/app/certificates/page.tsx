@@ -11,6 +11,10 @@ import {
   listUserLearningCredentials,
 } from "@/lib/learning-records.server";
 import { courses } from "@/data/courses";
+import { coursesOverview } from "@/data/courses-overview";
+import { courseLearningPolicy } from "@/lib/learning/catalog-policy";
+import { professionalCatalog } from "@/lib/learning/professional-catalog";
+import CertificateSeal from "@/components/credentials/CertificateSeal";
 import CredentialPortfolioExplorer from "@/components/credentials/CredentialPortfolioExplorer";
 import "./certificates.css";
 import { LocalizedText } from "@/components/localization/LocaleProvider";
@@ -40,6 +44,18 @@ export default async function CertificatesPage() {
     active.flatMap((item) => item.skills.map((skill) => skill.id)),
   );
   const issued = active.some((item) => item.courseId === course?.id);
+  const earnedCourseIds = new Set(active.map((item) => item.courseId));
+  const pathways = [
+    ...new Map(
+      [...coursesOverview, ...professionalCatalog(process.env.VERCEL_ENV || process.env.NODE_ENV)]
+        .map((item) => [item.id, item]),
+    ).values(),
+  ].filter((item) =>
+    item.id !== course?.id &&
+    item.status === "available" &&
+    courseLearningPolicy(item).credentialStatus === "criteria_available" &&
+    !earnedCourseIds.has(item.id),
+  );
   const eligibility = status?.eligibility;
   const progress = Math.min(
     100,
@@ -54,14 +70,28 @@ export default async function CertificatesPage() {
           <span aria-hidden="true">/</span>
           <span><LocalizedText text="Certificates" /></span>
         </LocalizedElement>
-        <header className="certificate-header">
+        <header className="certificate-header certificate-portfolio-hero">
           <div className="min-w-0">
             <p className="certificate-eyebrow"><LocalizedText text={"TGPI · Verified learning"} /></p>
             <h1><LocalizedText text={"Your learning. Recognized."} /></h1>
             <p><LocalizedText text={"See what you have earned, discover your next milestone and share your achievement."} /></p>
+            <LocalizedElement as="nav" className="certificate-hero-actions" aria-label="Certificate sections">
+              <a href="#certificate-portfolio" className="certificate-button"><LocalizedText text="My certificates" /></a>
+              {pathways.length > 0 || (course && !issued) ? (
+                <a href="#certificate-pathways" className="certificate-button secondary"><LocalizedText text="Learning paths" /></a>
+              ) : (
+                <Link href="/courses" className="certificate-button secondary"><LocalizedText text="Explore learning" /></Link>
+              )}
+            </LocalizedElement>
           </div>
-          <Link href="/courses" className="certificate-button secondary"><LocalizedText text="Explore learning" />{" "}<span aria-hidden="true">↗</span>
-          </Link>
+          <div className="certificate-hero-art">
+            <CertificateSeal
+              className="certificate-hero-seal"
+              sizes="(max-width: 650px) 160px, 280px"
+              priority
+            />
+            <p><LocalizedText text="TGPI issuer quality seal" /></p>
+          </div>
         </header>
         <div className="certificate-overview">
           <LocalizedElement as="section"
@@ -105,6 +135,7 @@ export default async function CertificatesPage() {
             </div>
           </dl>
         </div>
+        <div id="certificate-portfolio">
         {records.status === "rejected" && (
           <div role="alert" className="certificate-notice"><LocalizedText text={"Your certificates could not be loaded. Refresh this page to try again. Your learning records have not changed."} /></div>
         )}
@@ -121,9 +152,13 @@ export default async function CertificatesPage() {
               learningHours: item.learningHours,
               skills: item.skills,
               status: item.status,
+              sharingAllowed: item.professionalEvidence?.sharing !== false,
+              automated: Boolean(item.automatedEvidence),
             }))}
           />
         )}
+        </div>
+        <div id="certificate-pathways">
         {course && !issued && (
           <section
             aria-labelledby="next-certificate-title"
@@ -205,6 +240,28 @@ export default async function CertificatesPage() {
             </article>
           </section>
         )}
+        {pathways.length > 0 && (
+          <details className="certificate-pathways">
+            <summary>
+              <span><LocalizedText text="More certificates you can earn" /></span>
+              <span className="certificate-count">{pathways.length}</span>
+            </summary>
+            <ul>
+              {pathways.map((item) => (
+                <li key={item.id}>
+                  <Link href={item.href}>
+                    <span>
+                      <strong><LocalizedText text={item.title} /></strong>
+                      <small><LocalizedText text={item.category} /></small>
+                    </span>
+                    <span aria-hidden="true">↗</span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </details>
+        )}
+        </div>
         <LocalizedElement as="section"
           className="certificate-help"
           aria-label="Certificate information"

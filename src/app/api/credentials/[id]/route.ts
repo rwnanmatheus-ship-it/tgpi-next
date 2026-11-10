@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
 import { createPortableLearningRecord } from "@/lib/credential-standard";
-import { getPublicLearningCredential } from "@/lib/learning-records.server";
-import { getUserLearningCredential } from "@/lib/learning-records.server";
+import { signPortableLearningRecord } from "@/lib/credential-signing.server";
+import { CERTIFICATE_ORIGIN } from "@/lib/certificate-presentation";
+import { getPublicLearningCredential, getUserLearningCredential } from "@/lib/learning-records.server";
 import { requireApiUser } from "@/lib/auth/guards";
 
 const SAFE_CREDENTIAL_ID = /^TGPI-[A-Z0-9_-]{8,90}$/;
-const CANONICAL_ORIGIN = "https://www.theglobalpolymath.com";
+export const runtime = "nodejs";
 
 function responseHeaders() {
   return {
@@ -32,7 +33,7 @@ export async function GET(
   if (!credential && download) {
     try {
       const identity = await requireApiUser();
-      if (await getUserLearningCredential(identity.uid, id)) credential = await getPublicLearningCredential(id, true);
+      if (await getUserLearningCredential(identity.uid, id)) credential = await getPublicLearningCredential(id, identity.uid);
     } catch { /* Private records remain unavailable to anonymous and unrelated users. */ }
   }
   if (!credential) {
@@ -42,7 +43,9 @@ export async function GET(
     );
   }
 
-  const record = createPortableLearningRecord(credential, CANONICAL_ORIGIN);
+  const record = createPortableLearningRecord(credential, CERTIFICATE_ORIGIN);
+  const snapshot = { ...record, statusCheckedAt: new Date().toISOString() };
+  const proof = signPortableLearningRecord(snapshot);
   const headers = new Headers(responseHeaders());
   if (download) {
     headers.set(
@@ -51,7 +54,7 @@ export async function GET(
     );
   }
 
-  return new NextResponse(JSON.stringify(record, null, 2), {
+  return new NextResponse(JSON.stringify(proof ? { ...snapshot, proof } : record, null, 2), {
     headers,
     status: 200,
   });

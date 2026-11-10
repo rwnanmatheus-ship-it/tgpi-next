@@ -9,17 +9,40 @@ import { useState, type FormEvent } from "react";
 
 type RecordType = "credential" | "global_key";
 
+function certificateReference(value: string) {
+  const idPattern = /^TGPI-[A-Z0-9_-]{8,90}$/i;
+  if (idPattern.test(value)) return value.toUpperCase();
+
+  try {
+    const url = new URL(value);
+    if (
+      url.protocol !== "https:" || url.username || url.password || url.port ||
+      !["theglobalpolymath.com", "www.theglobalpolymath.com"].includes(url.hostname)
+    ) return null;
+    const id = url.pathname.match(/^\/verify\/credentials\/([^/]+)\/?$/)?.[1];
+    return id && idPattern.test(id) ? id.toUpperCase() : null;
+  } catch {
+    return null;
+  }
+}
+
 export default function VerifyPage() {
   const router = useRouter();
   const [reference, setReference] = useState("");
   const [recordType, setRecordType] = useState<RecordType>("credential");
+  const [invalidCredential, setInvalidCredential] = useState(false);
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const value = reference.trim();
     if (!value) return;
     if (recordType === "credential") {
-      router.push("/verify/credentials/" + encodeURIComponent(value));
+      const id = certificateReference(value);
+      if (!id) {
+        setInvalidCredential(true);
+        return;
+      }
+      router.push("/verify/credentials/" + encodeURIComponent(id));
       return;
     }
     router.push("/verify/global-key?proof=" + encodeURIComponent(value));
@@ -45,7 +68,7 @@ export default function VerifyPage() {
                     <label
                       key={value}
                       className={
-                        "cursor-pointer rounded-full border px-4 py-2 text-xs font-extrabold transition " +
+                        "cursor-pointer rounded-full border px-4 py-2 text-xs font-extrabold transition focus-within:outline-2 focus-within:outline-offset-2 focus-within:outline-[#E5BF5A] " +
                         (recordType === value
                           ? "border-[#E5BF5A] bg-[#E5BF5A] text-[var(--tgpi-navy-raised)]"
                           : "border-white/15 bg-white/5 text-white")
@@ -59,6 +82,7 @@ export default function VerifyPage() {
                         onChange={() => {
                           setRecordType(value);
                           setReference("");
+                          setInvalidCredential(false);
                         }}
                         className="sr-only"
                       />
@@ -73,16 +97,20 @@ export default function VerifyPage() {
                 className="mt-7 block text-xs font-extrabold text-[#E7ECF2]"
               >
                 {recordType === "credential"
-                  ? <LocalizedText text={"Credential ID"} />
+                  ? <LocalizedText text="Certificate ID or verification link" />
                   : <LocalizedText text={"Portable Global Key proof"} />}
               </label>
               <div className="mt-3 flex flex-col gap-3 sm:flex-row">
                 <LocalizedElement as="input"
                   id="verification-reference"
                   value={reference}
-                  onChange={(event) =>
-                    setReference(event.target.value.slice(0, 2200))
-                  }
+                  onChange={(event) => {
+                    setReference(event.target.value);
+                    setInvalidCredential(false);
+                  }}
+                  maxLength={2200}
+                  aria-invalid={invalidCredential || undefined}
+                  aria-describedby={invalidCredential ? "verification-reference-error" : undefined}
                   placeholder={
                     recordType === "credential"
                       ? "TGPI-ENGABR-…"
@@ -90,7 +118,7 @@ export default function VerifyPage() {
                   }
                   autoComplete="off"
                   spellCheck={false}
-                  className="min-h-14 flex-1 rounded-2xl border border-white/15 bg-white/[0.06] px-5 text-sm font-bold outline-none placeholder:text-[#758296] focus:border-[#E5BF5A]"
+                  className="min-h-14 min-w-0 flex-1 rounded-2xl border border-white/15 bg-white/[0.06] px-5 text-sm font-bold outline-none placeholder:text-[#758296] focus:border-[#E5BF5A]"
                 />
                 <button
                   type="submit"
@@ -98,6 +126,11 @@ export default function VerifyPage() {
                   className="min-h-14 rounded-2xl bg-[#E5BF5A] px-7 text-sm font-extrabold text-[var(--tgpi-navy-raised)] disabled:cursor-not-allowed disabled:opacity-40"
                 ><LocalizedText text={"Verify record →"} /></button>
               </div>
+              {invalidCredential && (
+                <p id="verification-reference-error" role="alert" className="mt-3 text-sm text-[#ffc1b4]">
+                  <LocalizedText text="Enter the certificate ID printed on your document or paste its official TGPI verification link." />
+                </p>
+              )}
             </form>
           </div>
 
@@ -106,9 +139,9 @@ export default function VerifyPage() {
             <div className="mt-7 grid gap-5">
               {[
                 ["Identity", "Authenticated learner and TGPI Global Key binding"],
-                ["Evidence", "Lessons, assessment gates, capstone and reflection"],
+                ["Evidence", "Assessment record and demonstrated capabilities"],
                 ["Integrity", "Signed record checked against its current source"],
-                ["Status", "Active or revoked at the exact time of lookup"],
+                ["Status", "Active, replaced or revoked at the time of lookup"],
                 ["Portability", "Downloadable evidence record with live verification URL"],
               ].map(([title, description], index) => (
                 <div key={title} className="flex gap-4">

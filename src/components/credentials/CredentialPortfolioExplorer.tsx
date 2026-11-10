@@ -1,14 +1,13 @@
 "use client";
 
 
-import { useLocale as useFormattingLocale } from "@/components/localization/LocaleProvider";
+import { LocalizedText, useLocale } from "@/components/localization/LocaleProvider";
+import { certificateVerificationUrl } from "@/lib/certificate-presentation";
 import { LocalizedElement } from "@/components/localization/LocalizedElement";
-import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 
 import Link from "next/link";
 import CertificateDownloadButton from "@/components/credentials/CertificateDownloadButton";
 import { useDeferredValue, useState } from "react";
-import { LocalizedText } from "@/components/localization/LocaleProvider";
 
 
 export type CredentialPortfolioItem = {
@@ -19,6 +18,8 @@ export type CredentialPortfolioItem = {
   learningHours: number;
   skills: Array<{ id: string; level: string; name: string }>;
   status: "active" | "revoked" | "replaced";
+  sharingAllowed?: boolean;
+  automated?: boolean;
 };
 
 type PortfolioFilter = "all" | "active" | "revoked" | "replaced";
@@ -41,8 +42,7 @@ export default function CredentialPortfolioExplorer({
 }: {
   items: CredentialPortfolioItem[];
 }) {
-  const { locale } = useFormattingLocale();
-  const { t: localizeLabel } = useInterfaceLocale();
+  const { locale, t: localizeLabel } = useLocale();
 
   const [filter, setFilter] = useState<PortfolioFilter>("all");
   const [query, setQuery] = useState("");
@@ -69,15 +69,12 @@ export default function CredentialPortfolioExplorer({
     );
 
   async function share(item: CredentialPortfolioItem) {
-    const url = new URL(
-      `/verify/credentials/${encodeURIComponent(item.id)}`,
-      "https://www.theglobalpolymath.com",
-    ).href;
+    const url = certificateVerificationUrl(item.id);
     try {
       if (navigator.share)
         await navigator.share({
           title: `${item.courseTitle} — TGPI`,
-          text: "My TGPI learning certificate. View the current verification record.",
+          text: localizeLabel("My TGPI learning certificate. View the current verification record."),
           url,
         });
       else {
@@ -170,7 +167,7 @@ export default function CredentialPortfolioExplorer({
                 </div>
                 <h3>{item.courseTitle}</h3>
                 <p className="certificate-earned-meta">
-                  {item.assessmentScore}<LocalizedText text={"% mastery ·"} />{" "}{item.learningHours}{" "}<LocalizedText text={"hours"} /><br /><LocalizedText text="Issued" />{" "}{formatDate(locale, item.issuedAt)}
+                  {item.assessmentScore}<LocalizedText text={"% mastery ·"} />{" "}{item.learningHours}{" "}<LocalizedText text="hours" />{" "}{item.automated && <LocalizedText text="estimated workload" />}<br /><LocalizedText text="Issued" />{" "}{formatDate(locale, item.issuedAt)}
                 </p>
                 <div className="certificate-skills">
                   {item.skills.slice(0, 4).map((skill) => (
@@ -192,17 +189,19 @@ export default function CredentialPortfolioExplorer({
                         credentialId={item.id}
                         className="certificate-button secondary"
                       />
-                      <button
-                        type="button"
-                        className="certificate-button secondary"
-                        onClick={() => void share(item)}
-                      ><LocalizedText text={"Share ↗"} /></button>
+                      {item.sharingAllowed !== false && (
+                        <button
+                          type="button"
+                          className="certificate-button secondary"
+                          onClick={() => void share(item)}
+                        ><LocalizedText text="Share ↗" /></button>
+                      )}
                     </>
-                  ) : (
+                  ) : item.sharingAllowed !== false && (
                     <Link
                       className="certificate-button secondary"
                       href={`/verify/credentials/${encodeURIComponent(item.id)}`}
-                    ><LocalizedText text={"View status"} /></Link>
+                    ><LocalizedText text="View status" /></Link>
                   )}
                 </div>
               </article>

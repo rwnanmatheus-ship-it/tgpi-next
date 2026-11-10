@@ -17,6 +17,7 @@ export type CredentialTrustState =
 type PortableCredentialSource = {
   achievementType: string;
   assessmentScore: number;
+  completedAt?: string;
   courseId: string;
   courseTitle: string;
   courseVersion: string;
@@ -24,6 +25,7 @@ type PortableCredentialSource = {
   credentialSchemaVersion: number;
   credentialStandardVersion: string;
   criteriaUrl: string;
+  documentFingerprint?: string;
   evidenceSummary: string[];
   id: string;
   identityEvidence: {
@@ -102,7 +104,9 @@ export function createPortableLearningRecord(
       algorithm: "HMAC-SHA-256 server verification",
       fingerprint: credential.integrityFingerprint,
       verified: credential.integrityVerified,
+      ...(credential.documentFingerprint ? { documentFingerprint: credential.documentFingerprint } : {}),
     },
+    ...(credential.completedAt ? { completedAt: credential.completedAt } : {}),
     issuedAt: credential.issuedAt,
     issuer: {
       id: canonicalOrigin,

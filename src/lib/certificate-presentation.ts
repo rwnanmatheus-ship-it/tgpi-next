@@ -1,5 +1,5 @@
 /** Presentation changes never mutate the signed learning record. */
-export const CERTIFICATE_DESIGN_VERSION = "2026.3";
+export const CERTIFICATE_DESIGN_VERSION = "2026.4";
 export const CERTIFICATE_ORIGIN = "https://www.theglobalpolymath.com";
 export const CERTIFICATE_QUALITY_MARKS = [
   { title: "Identity linked", detail: "Bound to a TGPI Global ID" },
