@@ -5,6 +5,7 @@ import { academyMutation, academyRecordPath, numericAnswer } from './model';
 import type { AcademyChallenge, AcademyCourse, AcademyPrivateQuestion, AcademyRecord, AcademyResult } from './types';
 import { createFirestoreUpdateWrite as write, getFirestoreDocument as get, isLearningStorageConfigured, runFirestoreTransaction as transaction, type JsonValue } from '@/lib/firestore-admin-rest.server';
 import { createCredentialId, isCredentialSigningConfigured, signLearningCredential, verifyLearningCredentialIntegrity, TGPI_CREDENTIAL_KEY_ID } from '@/lib/credential-signing.server';
+import { isCertificateName } from '@/lib/account-profile';
 import { getOrCreateGlobalKey } from '@/lib/global-key.server';
 import { getUserActivationProgress } from '@/lib/activation-store.server';
 import { getProfessionalCourse } from '@/lib/learning/professional-runtime';
@@ -90,7 +91,7 @@ export async function mutateAcademy(identity: Identity, id: string, raw: unknown
   if (!parsed.success) throw new AcademyError('Check the fields and their limits before sending.');
   const input = parsed.data, course = courseFor(id), path = academyRecordPath(identity.uid, id, course.version);
   if (input.version !== course.version) throw new AcademyError('The course edition changed. Reload; your previous records are preserved.', 409);
-  if (input.action === 'issue') { await issueAcademyCredential(identity, course); return academyStatus(identity, id); }
+  if (input.action === 'issue') { await issueAcademyCredential(identity, course, input.confirmedName); return academyStatus(identity, id); }
   if (input.action === 'sharing') { await academySharing(identity, course, input.sharing); return academyStatus(identity, id); }
   const prior = input.action === 'enrol' ? await priorLearning(identity.uid, course) : null;
   await transaction(async ({ getDocuments }) => {
@@ -98,8 +99,8 @@ export async function mutateAcademy(identity: Identity, id: string, raw: unknown
     let record = doc?.data;
     if (input.action === 'enrol') {
       if (record) { assertRecord(record, identity, course); return { result: null, writes: [] }; }
-      if (identity.publicName.trim().length < 2 || identity.publicName === 'TGPI Member') throw new AcademyError('Set your certificate name in your account before starting.', 409);
-      record = { uid: identity.uid, courseId: id, version: course.version, revision: 1, enrolledAt: now, updatedAt: now, consent: { publicName: identity.publicName.slice(0, 120), acceptedAt: now }, diagnostic: input.diagnostic, notes: prior?.notes ?? {}, completed: {}, portfolio: '', sharing: false, attemptLimits: {}, ...(prior?.legacy ? { legacy: prior.legacy } : {}) };
+      if (!isCertificateName(identity.publicName)) throw new AcademyError('Set your certificate name in your account before starting.', 409);
+      record = { uid: identity.uid, courseId: id, version: course.version, revision: 1, enrolledAt: now, updatedAt: now, consent: { publicName: identity.publicName, acceptedAt: now }, diagnostic: input.diagnostic, notes: prior?.notes ?? {}, completed: {}, portfolio: '', sharing: false, attemptLimits: {}, ...(prior?.legacy ? { legacy: prior.legacy } : {}) };
       return { result: null, writes: [write(path, json(record), { exists: false })] };
     }
     assertRecord(record, identity, course);
@@ -159,13 +160,14 @@ export async function mutateAcademy(identity: Identity, id: string, raw: unknown
     return { result: null, writes: [write(path, json(record), { updateTime: doc!.updateTime })] };
   });
   const status = await academyStatus(identity, id);
-  if (status.record?.completedAt && !status.record.credentialId && identity.emailVerified && isCredentialSigningConfigured()) {
+  if (status.record?.completedAt && !status.record.credentialId && identity.emailVerified && isCredentialSigningConfigured() &&
+      isCertificateName(identity.publicName) && status.record.consent.publicName === identity.publicName) {
     await issueAcademyCredential(identity, course);
     return academyStatus(identity, id);
   }
   return status;
 }
-async function issueAcademyCredential(identity: Identity, course: AcademyCourse) {
+async function issueAcademyCredential(identity: Identity, course: AcademyCourse, confirmedName?: string) {
   if (!identity.emailVerified) throw new AcademyError('Verify your account email before certificate issuance.', 409);
   if (!isCredentialSigningConfigured()) throw new AcademyError('Secure certificate issuance is temporarily unavailable. Your completion is saved.', 503);
   const key = await getOrCreateGlobalKey(identity.uid), path = academyRecordPath(identity.uid, course.id, course.version);
@@ -174,20 +176,26 @@ async function issueAcademyCredential(identity: Identity, course: AcademyCourse)
     assertRecord(record, identity, course);
     if (record.credentialId) return { result: record.credentialId, writes: [] };
     if (!allLessons(course, record) || !record.final || record.final.score < 80 || !record.retention || record.retention.score < 80 || !record.completedAt || !record.reviewAvailableAt || Date.parse(record.retention.at) < Date.parse(record.reviewAvailableAt) || record.portfolio.trim().length < 200 || !record.consent.acceptedAt) throw new AcademyError('Complete all required practice, final assessment and spaced review before certification.', 409);
+    if (!isCertificateName(identity.publicName)) throw new AcademyError('Enter your complete real name for certificates.', 409);
+    const acceptedName = confirmedName ?? record.consent.publicName;
+    if (acceptedName !== identity.publicName) {
+      throw new AcademyError('Confirm the public credential name before issuance.', 409);
+    }
     const id = createCredentialId(course.id), now = new Date().toISOString();
+    const consent = confirmedName === undefined ? record.consent : { publicName: identity.publicName, acceptedAt: now };
     const unsigned: Omit<TgpiLearningCredential, 'verificationHash'> = {
       id, achievementType: 'Professional Certificate', assessmentScore: Math.min(record.final.score, record.retention.score), competencyIds: course.lessons.map(l => l.id), courseId: course.id, courseTitle: course.title, courseVersion: course.version,
       credentialProfile: 'TGPI Verified Learning Credential', credentialSchemaVersion: 2, credentialStandardVersion: 'tgpi-autonomous-1.0', criteriaUrl: `/courses/${course.id}#certification`,
       evidenceSummary: ['Lesson checks passed with practice records.', 'Final assessment and spaced review: at least 80%, including all essential checks and a fresh numerical case.', 'Objective responses were scored automatically. Open practice artifacts, oral performance and professional competence were not independently evaluated.', 'Estimated workload includes study, practice and assessment; it is not monitored attendance. Non-degree course; no external accreditation or license is implied.'],
       identityEvidence: { anchor: key.anchor, fingerprint: key.fingerprint, globalKeyId: key.keyId, revision: key.revision }, issuedAt: now, completedAt: record.completedAt,
       documentNature: 'Certificado de conclusão — práticas e avaliações automáticas', issuer: 'TGPI — The Global Polymath Institute', keyId: TGPI_CREDENTIAL_KEY_ID,
-      learningHours: Math.round(course.minutes / 60 * 100) / 100, masteryThreshold: 80, ownerUid: identity.uid, publicName: record.consent.publicName,
+      learningHours: Math.round(course.minutes / 60 * 100) / 100, masteryThreshold: 80, ownerUid: identity.uid, publicName: consent.publicName,
       skills: course.lessons.filter(l => !l.foundation).map(l => ({ id: l.id, level: 'foundation', name: l.title })), standardsAlignment: [], status: 'active',
       professionalEvidence: { sharing: record.sharing, instructionLanguage: course.language, certificateLanguage: 'pt-BR', rubricVersion: 'tgpi-autonomous-1.0' },
       automatedEvidence: { method: 'objective-assessment', finalScore: record.final.score, retentionScore: record.retention.score, lessonChecks: course.lessons.length, humanReviewed: false, workloadMinutes: course.minutes },
     };
     const credential = { ...unsigned, verificationHash: signLearningCredential(unsigned) };
-    return { result: id, writes: [write(`tgpiLearningCredentials/${id}`, json(credential), { exists: false }), write(`tgpiLearningUsers/${identity.uid}/credentials/${id}`, json(credential), { exists: false }), write(path, json({ ...record, credentialId: id, updatedAt: now, revision: record.revision + 1 }), { updateTime: doc!.updateTime })] };
+    return { result: id, writes: [write(`tgpiLearningCredentials/${id}`, json(credential), { exists: false }), write(`tgpiLearningUsers/${identity.uid}/credentials/${id}`, json(credential), { exists: false }), write(path, json({ ...record, consent, credentialId: id, updatedAt: now, revision: record.revision + 1 }), { updateTime: doc!.updateTime })] };
   });
   await tryPublishNotification(identity.uid, { key: `credential:${credentialId}`, category: 'learning', title: 'Your verified credential is ready', body: 'Your issued credential is available in your private certificate workspace.', href: '/certificates', actionLabel: 'View my credential', important: true });
   return credentialId;

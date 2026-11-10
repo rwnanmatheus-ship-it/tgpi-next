@@ -1,11 +1,11 @@
-# TGPI Certificate Document V4
+# TGPI Academic Certificate
 
-Edition 2026.4 renders an updated document for new and existing active credentials. The certificate reference, learner name at issuance, issue date, course version and signed assessment evidence stay the same when an owner downloads the new design.
+Edition 2026.5 gives the TGPI academic certificate a more prominent title and an engraved border. The design applies to new and existing active records when the holder downloads the document. It renders the learner name signed at issuance.
 
 ## Certificate and portfolio
 
-- The A4 landscape PDF combines ivory paper, navy panels, engraved gold ornament and the TGPI medallion supplied by the issuer. It embeds the Cormorant Garamond display face and uses vector artwork for the frame and verification QR.
-- The document presents the holder's issued name, credential reference, issuance date, TGPI Global ID and assessed learning evidence. The birth date remains optional on the owner PDF and follows the holder's existing consent setting.
+- The A4 landscape PDF uses an ivory field, a layered navy and antique gold border, fine-line security-document ornament and the TGPI medallion. Cormorant Garamond anchors the academic title and learner name. The frame and verification QR use vector artwork.
+- The document presents the holder's issued name, credential reference, issuance date, TGPI Global ID and assessed learning evidence. New issuance uses the full account name as its source. The birth date remains optional on the owner PDF and follows the holder's existing consent setting.
 - The portfolio separates issued credentials from available learning paths. The detail page presents the document, current verification status, evidence and owner actions. The lookup accepts a certificate reference or an official TGPI certificate link.
 - The QR links to the issuer's existing verification route. Its unobstructed four-module margin is preserved. The PDF download requires authentication, ownership, active status and valid credential integrity.
 

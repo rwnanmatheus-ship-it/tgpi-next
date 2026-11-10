@@ -107,7 +107,7 @@ export default async function CertificatesPage() {
             />
             <div className="min-w-0">
               <p className="certificate-eyebrow"><LocalizedText text={"Personal achievement portfolio"} /></p>
-              <h2>{identity.publicName}</h2>
+              <h2>{identity.publicName || <LocalizedText text="TGPI member" />}</h2>
               <p><LocalizedText text={"Issued by The Global Polymath Institute"} /></p>
             </div>
           </LocalizedElement>

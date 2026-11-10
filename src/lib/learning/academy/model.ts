@@ -7,7 +7,7 @@ export const academyMutation = z.discriminatedUnion('action', [
   z.object({ ...common, action: z.literal('portfolio'), revision: z.number().int().nonnegative(), text: z.string().max(12000) }).strict(),
   z.object({ ...common, action: z.literal('begin'), revision: z.number().int().nonnegative(), target: academyId }).strict(),
   z.object({ ...common, action: z.literal('submit'), challengeId: academyId, answers: z.array(z.object({ questionId: academyId, optionId: academyId }).strict()).min(1).max(40), calculation: z.string().max(40).optional() }).strict(),
-  z.object({ ...common, action: z.literal('issue') }).strict(),
+  z.object({ ...common, action: z.literal('issue'), confirmedName: z.string().min(1).max(121).optional() }).strict(),
   z.object({ ...common, action: z.literal('sharing'), sharing: z.boolean() }).strict(),
 ]);
 export function academyRecordPath(uid: string, courseId: string, version: string) {

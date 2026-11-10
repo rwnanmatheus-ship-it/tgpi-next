@@ -7,6 +7,7 @@ import { estimateProfessionalMinutes, scoreProfessionalProject, scoreProfessiona
 import { professionalQuestionBank } from "@/data/courses/professional/assessment-bank.server";
 import { createFirestoreUpdateWrite as write, getFirestoreDocument as get, isLearningStorageConfigured, runFirestoreQuery, runFirestoreTransaction as transaction, type JsonValue } from "@/lib/firestore-admin-rest.server";
 import { createCredentialId, isCredentialSigningConfigured, signLearningCredential, verifyLearningCredentialIntegrity, TGPI_CREDENTIAL_KEY_ID } from "@/lib/credential-signing.server";
+import { isCertificateName } from "@/lib/account-profile";
 import { getOrCreateGlobalKey } from "@/lib/global-key.server";
 import { tryPublishNotification } from "@/lib/notifications/store.server";
 import type { TgpiLearningCredential } from "@/types/learning";
@@ -144,7 +145,7 @@ export async function listProfessionalReviews(reviewerUid: string) {
 
 async function issueProfessionalCredential(identity: Identity, id: string, sharing: boolean) {
   const course = courseFor(id);
-  if (!identity.emailVerified || identity.publicName.trim().length < 2 || identity.publicName === "TGPI Member") throw new ProfessionalLearningError("Confirme seu e-mail e nome de certificado na conta.", 409);
+  if (!identity.emailVerified || !isCertificateName(identity.publicName)) throw new ProfessionalLearningError("Confirme seu e-mail e nome de certificado na conta.", 409);
   if (!isCredentialSigningConfigured()) throw new ProfessionalLearningError("Emissão segura indisponível.", 503);
   const key = await getOrCreateGlobalKey(identity.uid), path = professionalRecordPath(identity.uid, id, course.version);
   return transaction(async ({ getDocuments }) => {
@@ -160,7 +161,7 @@ async function issueProfessionalCredential(identity: Identity, id: string, shari
       id: credentialId, identityEvidence: { anchor: key.anchor, fingerprint: key.fingerprint, globalKeyId: key.keyId, revision: key.revision },
       issuedAt: now, completedAt: record.completedAt, documentNature: "Certificado de conclusão com avaliação de competências — TGPI",
       issuer: "TGPI — The Global Polymath Institute", keyId: TGPI_CREDENTIAL_KEY_ID,
-      learningHours: estimateProfessionalMinutes(course) / 60, masteryThreshold: course.approval.projectMinimum, ownerUid: identity.uid, publicName: identity.publicName.slice(0, 120),
+      learningHours: estimateProfessionalMinutes(course) / 60, masteryThreshold: course.approval.projectMinimum, ownerUid: identity.uid, publicName: identity.publicName,
       skills: course.project.rubric.map(item => ({ id: item.id, level: "applied", name: item.title })), standardsAlignment: [], status: "active",
       professionalEvidence: { sharing, instructionLanguage: course.instructionLanguage, certificateLanguage: course.certificateLanguage, rubricVersion: course.approval.rubricVersion },
     };

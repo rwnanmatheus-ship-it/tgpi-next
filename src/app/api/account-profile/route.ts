@@ -2,6 +2,7 @@ import { getMemberIdentity } from '@/lib/members/identity.server';
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import {
+  isCertificateName,
   normalizeAccountIdentity,
   normalizeBirthDate,
   normalizeTgpiAccountProfile,
@@ -47,7 +48,7 @@ export async function PATCH(request: Request) {
     if (input.profile?.dateOfBirth && !normalizeBirthDate(input.profile.dateOfBirth)) {
       return NextResponse.json({ error: "Choose a valid birth date, no later than today." }, { status: 400 });
     }
-    if (input.profile?.legalFullName && profile.legalFullName.split(/\s+/).length < 2) {
+    if (input.profile?.legalFullName && !isCertificateName(profile.legalFullName)) {
       return NextResponse.json({ error: "Enter your complete real name for certificates." }, { status: 400 });
     }
     if (!identity.firstName) {

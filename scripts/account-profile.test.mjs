@@ -140,6 +140,20 @@ test("uses real names for credentials and explicit titles without inferring gend
   assert.equal(getCertificateName(identity, normalizeTgpiAccountProfile({})), "Renan Fernandes");
 });
 
+test("certificate issuance excludes nicknames and partial account names while accepting declared mononyms", async () => {
+  const { getCertificateName } = await import("../src/lib/account-profile.ts");
+  const profile = normalizeTgpiAccountProfile({ displayName: "Travel Expert" });
+  const identity = { firstName: "Lia Sofia", lastName: "da Luz", username: "travel-expert" };
+  assert.equal(getCertificateName(identity, profile), "Lia Sofia da Luz");
+  assert.equal(getCertificateName({ ...identity, lastName: "" }, profile), "");
+  assert.equal(getCertificateName({ ...identity, firstName: "" }, profile), "");
+  assert.equal(getCertificateName(identity, { ...profile, legalFullName: "李" }), "李");
+  assert.equal(getCertificateName(identity, { ...profile, legalFullName: "TGPI Member" }), "");
+  assert.equal(getCertificateName(identity, { ...profile, legalFullName: "Lia\u202e Luz" }), "");
+  const longIdentity = { firstName: "A".repeat(60), lastName: "B".repeat(60) };
+  assert.equal(getCertificateName(longIdentity, profile), `${longIdentity.firstName} ${longIdentity.lastName}`);
+});
+
 test("normalizes personal context and rejects arbitrary enum values", () => {
   const profile = normalizeTgpiAccountProfile({ gender: "invalid", preferredTitle: "Dr", employmentType: "injected", yearsExperience: "999", certificateBirthDateConsent: "true" });
   assert.equal(profile.gender, ""); assert.equal(profile.preferredTitle, "name");

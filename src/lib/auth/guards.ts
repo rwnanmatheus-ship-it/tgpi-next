@@ -56,7 +56,10 @@ export async function requireApiUser() {
     email: user?.primaryEmailAddress?.emailAddress || "",
     emailVerified:
       user?.primaryEmailAddress?.verification?.status === "verified",
-    publicName: getCertificateName(normalizeAccountIdentity(user), normalizeTgpiAccountProfile(user?.unsafeMetadata.tgpiAccountProfile)) || user?.fullName || "TGPI Member",
+    publicName: getCertificateName(
+      normalizeAccountIdentity(user),
+      normalizeTgpiAccountProfile(user?.unsafeMetadata.tgpiAccountProfile),
+    ),
   };
 }
 

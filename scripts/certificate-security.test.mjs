@@ -5,6 +5,7 @@ import { createRequire } from "node:module";
 import test from "node:test";
 import ts from "typescript";
 
+import * as account from "../src/lib/account-profile.ts";
 import * as presentation from "../src/lib/certificate-presentation.ts";
 import * as standard from "../src/lib/credential-standard.ts";
 
@@ -97,6 +98,7 @@ function setup(storedCredential, authenticatedUid) {
     "server-only": {},
     "@/data/courses/english-abroad/assessment-bank.server": {},
     "@/data/courses": {},
+    "@/lib/account-profile": account,
     "@/lib/activation-store.server": {},
     "@/lib/global-key.server": {},
     "@/lib/credential-standard": standard,

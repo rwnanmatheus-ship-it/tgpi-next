@@ -497,6 +497,7 @@ export const messages = {
   "Your achievements": {"en":"Your achievements","pt-BR":"Suas conquistas","es":"Tus logros","fr":"Vos réussites","de":"Deine Erfolge","it":"I tuoi risultati"},
   "My certificates": {"en":"My certificates","pt-BR":"Meus certificados","es":"Mis certificados","fr":"Mes certificats","de":"Meine Zertifikate","it":"I miei certificati"},
   "Certificate of achievement": {"en":"Certificate of achievement","pt-BR":"Certificado de conclusão","es":"Certificado de logro","fr":"Certificat de réussite","de":"Leistungszertifikat","it":"Certificato di conseguimento"},
+  "Academic Certificate": {"en":"Academic Certificate","pt-BR":"Certificado Acadêmico","es":"Certificado Académico","fr":"Certificat académique","de":"Akademisches Zertifikat","it":"Certificato accademico"},
   "Certificate information": {"en":"Certificate information","pt-BR":"Informações do certificado","es":"Información del certificado","fr":"Informations du certificat","de":"Zertifikatsinformationen","it":"Informazioni sul certificato"},
   "Certificate actions": {"en":"Certificate actions","pt-BR":"Ações do certificado","es":"Acciones del certificado","fr":"Actions du certificat","de":"Zertifikatsaktionen","it":"Azioni del certificato"},
   "Certificate record": {"en":"Certificate record","pt-BR":"Registro do certificado","es":"Registro del certificado","fr":"Enregistrement du certificat","de":"Zertifikatseintrag","it":"Registro del certificato"},
