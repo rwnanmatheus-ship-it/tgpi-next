@@ -1,15 +1,16 @@
+import CountryFlag from "@/components/ui/CountryFlag";
 import Link from "next/link";
 import SourceReviewNotice from "./SourceReviewNotice";
 import { dossierFor, formatReference, referenceReviewState, reviewState, sourceFor } from "@/lib/intelligence/dossiers";
 import { getLocale } from "@/lib/localization/server";
 import { translate } from "@/lib/localization/messages";
 
-export default async function DossierComparison({ countries }: { countries: { slug: string; name: string }[] }) {
+export default async function DossierComparison({ countries }: { countries: { slug: string; name: string; iso2: string }[] }) {
   const locale = await getLocale();
   const t = (text: string) => translate(locale, text);
   return <div className="ig-compare-row">{countries.map(country => {
     const dossier = dossierFor(country.slug);
-    return <article className="ig-panel" key={country.slug}><h3>{country.name}</h3><SourceReviewNotice country={country.slug} />
+    return <article className="ig-panel" key={country.slug}><h3><CountryFlag iso2={country.iso2} width={24} /> {country.name}</h3><SourceReviewNotice country={country.slug} />
       {(["entry", "education"] as const).map(layer => {
         const claims = dossier.claims.filter(c => c.layer === layer);
         return <div className="ig-details" key={layer}><p className="ig-eyebrow">{t(layer === "entry" ? "Entry & residence" : "Education & recognition")}</p>
