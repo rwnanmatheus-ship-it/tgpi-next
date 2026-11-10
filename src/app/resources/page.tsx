@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Your next step, connected — TGPI Resources",
     description: "Practical education and informed international decisions.",
-    images: ["/images/resources/tgpi-resources-library-v1.webp"],
+    images: ["/images/cinematic-2026/premium-library-1600.webp"],
   },
 };
 const modules = [
@@ -162,7 +162,7 @@ export default async function ResourcesPage() {
           </div>
           <div className="resources-hero-image">
             <Image
-              src="/images/resources/tgpi-resources-library-v1.webp"
+              src="/images/cinematic-2026/premium-library-1600.webp"
               alt="Contemporary international library with learners, warm brass details and a city view"
               fill
               priority
@@ -229,7 +229,7 @@ export default async function ResourcesPage() {
             {item.image ? (
               <div className="resources-module-image">
                 <Image
-                  src={`/images/resources/tgpi-resources-${item.image}-v1.webp`}
+                  src={item.image === "city" ? "/images/cinematic-2026/arrival-city-1600.webp" : "/images/cinematic-2026/premium-library-1600.webp"}
                   alt={item.alt}
                   fill
                   sizes="(max-width: 900px) 100vw, 48vw"

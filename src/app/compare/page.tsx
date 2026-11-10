@@ -1,4 +1,5 @@
 import "./compare.css";
+import CinematicImage from "@/components/ui/CinematicImage";
 import DecisionLabs from "@/components/compare/DecisionLabs";
 import DecisionOverview from "@/components/compare/DecisionOverview";
 import { getLocale } from "@/lib/localization/server";
@@ -34,7 +35,7 @@ export default async function ComparePage({ searchParams }: { searchParams?: Pro
   const goal = isComparisonGoal(params?.goal) ? params.goal : "overall";
   const countries = getAllCountries().map(({ slug, name, emoji, region }) => ({ slug, name, emoji, region, iso2: identities.find(c => c.slug === slug)?.iso2, iso3: identities.find(c => c.slug === slug)?.iso3 })).sort((a, b) => a.name.localeCompare(b.name));
   return <ActivationProgressProvider><main className="ig-shell compare-command"><div className="ig-container">
-    <header className="product-page-heading"><div><p className="product-kicker">TGPI / {t("Decision Intelligence")}</p><h1 id="compare-title">{t("Compare the world.")}</h1><p>{t("Put up to three countries side by side. Inspect the sources, dates and gaps, then connect the trade-offs to your own priorities.")}</p></div><nav className="product-page-links" aria-label={t("Connected learning tools")}><Link href="/countries">{t("Explore destinations")} ↗</Link><Link href="/plan">{t("My plan")} ↗</Link></nav></header>
+    <header className="product-page-heading compare-page-heading"><div><p className="product-kicker">TGPI / {t("Decision Intelligence")}</p><h1 id="compare-title">{t("Compare the world.")}</h1><p>{t("Put up to three countries side by side. Inspect the sources, dates and gaps, then connect the trade-offs to your own priorities.")}</p></div><nav className="product-page-links" aria-label={t("Connected learning tools")}><Link href="/countries">{t("Explore destinations")} ↗</Link><Link href="/plan">{t("My plan")} ↗</Link></nav><div className="compare-research-art" aria-hidden="true"><CinematicImage asset="decision-comparison" alt="" priority sizes="(max-width: 767px) calc(100vw - 40px), 340px" /></div></header>
     <CompareCountryPicker key={`${slugs.join(",")}:${goal}`} countries={countries} initialSlugs={slugs} initialGoal={goal} hasExplicitSelection={requested.length > 0} />
     <PersonalResearchContext />
     <nav className="compare-nav" aria-label={t("Comparison sections")}>{[["#comparison-builder", "Build my comparison"], ["#decision-overview", "Overview"], ["#decision-details", "Detailed comparison"], ["#comparison-matrix", "Sources & evidence"], ["#decision-labs", "Decision Lab"], ["#decision-actions", "Next steps"]].map(([href, label]) => <a key={href} href={href}><LocalizedText text={label} /></a>)}</nav>

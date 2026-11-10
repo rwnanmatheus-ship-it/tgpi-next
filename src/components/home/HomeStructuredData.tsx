@@ -42,10 +42,10 @@ function getHomeStructuredData(faq: readonly { question: string; answer: string 
     {
       "@type": "ImageObject",
       "@id": `${siteUrl}/#editorial-image`,
-      url: `${siteUrl}/images/home/editorial-v5/hero-desktop.webp`,
-      contentUrl: `${siteUrl}/images/home/editorial-v5/hero-desktop.webp`,
-      width: 1536,
-      height: 1024,
+      url: `${siteUrl}/images/cinematic-2026/global-horizon-1600.webp`,
+      contentUrl: `${siteUrl}/images/cinematic-2026/global-horizon-1600.webp`,
+      width: 1600,
+      height: 900,
       caption: "TGPI conceptual editorial image: preparation for international life",
     },
     {

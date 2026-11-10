@@ -1,0 +1,1652 @@
+[
+  {
+    "key": "global-horizon",
+    "originalWidth": 1672,
+    "originalHeight": 941,
+    "variants": [
+      {
+        "file": "global-horizon-480.avif",
+        "width": 480,
+        "height": 270,
+        "bytes": 16321
+      },
+      {
+        "file": "global-horizon-480.webp",
+        "width": 480,
+        "height": 270,
+        "bytes": 28614
+      },
+      {
+        "file": "global-horizon-800.avif",
+        "width": 800,
+        "height": 450,
+        "bytes": 38910
+      },
+      {
+        "file": "global-horizon-800.webp",
+        "width": 800,
+        "height": 450,
+        "bytes": 68028
+      },
+      {
+        "file": "global-horizon-1200.avif",
+        "width": 1200,
+        "height": 675,
+        "bytes": 73941
+      },
+      {
+        "file": "global-horizon-1200.webp",
+        "width": 1200,
+        "height": 675,
+        "bytes": 128520
+      },
+      {
+        "file": "global-horizon-1600.avif",
+        "width": 1600,
+        "height": 900,
+        "bytes": 112556
+      },
+      {
+        "file": "global-horizon-1600.webp",
+        "width": 1600,
+        "height": 900,
+        "bytes": 196276
+      }
+    ]
+  },
+  {
+    "key": "learning-atelier",
+    "originalWidth": 1672,
+    "originalHeight": 941,
+    "variants": [
+      {
+        "file": "learning-atelier-480.avif",
+        "width": 480,
+        "height": 270,
+        "bytes": 17917
+      },
+      {
+        "file": "learning-atelier-480.webp",
+        "width": 480,
+        "height": 270,
+        "bytes": 32270
+      },
+      {
+        "file": "learning-atelier-800.avif",
+        "width": 800,
+        "height": 450,
+        "bytes": 36081
+      },
+      {
+        "file": "learning-atelier-800.webp",
+        "width": 800,
+        "height": 450,
+        "bytes": 65122
+      },
+      {
+        "file": "learning-atelier-1200.avif",
+        "width": 1200,
+        "height": 675,
+        "bytes": 62270
+      },
+      {
+        "file": "learning-atelier-1200.webp",
+        "width": 1200,
+        "height": 675,
+        "bytes": 107946
+      },
+      {
+        "file": "learning-atelier-1600.avif",
+        "width": 1600,
+        "height": 900,
+        "bytes": 89827
+      },
+      {
+        "file": "learning-atelier-1600.webp",
+        "width": 1600,
+        "height": 900,
+        "bytes": 155494
+      }
+    ]
+  },
+  {
+    "key": "country-research",
+    "originalWidth": 1672,
+    "originalHeight": 941,
+    "variants": [
+      {
+        "file": "country-research-480.avif",
+        "width": 480,
+        "height": 270,
+        "bytes": 17197
+      },
+      {
+        "file": "country-research-480.webp",
+        "width": 480,
+        "height": 270,
+        "bytes": 30366
+      },
+      {
+        "file": "country-research-800.avif",
+        "width": 800,
+        "height": 450,
+        "bytes": 41824
+      },
+      {
+        "file": "country-research-800.webp",
+        "width": 800,
+        "height": 450,
+        "bytes": 72254
+      },
+      {
+        "file": "country-research-1200.avif",
+        "width": 1200,
+        "height": 675,
+        "bytes": 82494
+      },
+      {
+        "file": "country-research-1200.webp",
+        "width": 1200,
+        "height": 675,
+        "bytes": 143326
+      },
+      {
+        "file": "country-research-1600.avif",
+        "width": 1600,
+        "height": 900,
+        "bytes": 125607
+      },
+      {
+        "file": "country-research-1600.webp",
+        "width": 1600,
+        "height": 900,
+        "bytes": 218220
+      }
+    ]
+  },
+  {
+    "key": "documents-preparation",
+    "originalWidth": 1672,
+    "originalHeight": 941,
+    "variants": [
+      {
+        "file": "documents-preparation-480.avif",
+        "width": 480,
+        "height": 270,
+        "bytes": 12933
+      },
+      {
+        "file": "documents-preparation-480.webp",
+        "width": 480,
+        "height": 270,
+        "bytes": 24968
+      },
+      {
+        "file": "documents-preparation-800.avif",
+        "width": 800,
+        "height": 450,
+        "bytes": 31070
+      },
+      {
+        "file": "documents-preparation-800.webp",
+        "width": 800,
+        "height": 450,
+        "bytes": 56766
+      },
+      {
+        "file": "documents-preparation-1200.avif",
+        "width": 1200,
+        "height": 675,
+        "bytes": 64936
+      },
+      {
+        "file": "documents-preparation-1200.webp",
+        "width": 1200,
+        "height": 675,
+        "bytes": 116788
+      },
+      {
+        "file": "documents-preparation-1600.avif",
+        "width": 1600,
+        "height": 900,
+        "bytes": 105334
+      },
+      {
+        "file": "documents-preparation-1600.webp",
+        "width": 1600,
+        "height": 900,
+        "bytes": 183234
+      }
+    ]
+  },
+  {
+    "key": "workspace-focus",
+    "originalWidth": 1672,
+    "originalHeight": 941,
+    "variants": [
+      {
+        "file": "workspace-focus-480.avif",
+        "width": 480,
+        "height": 270,
+        "bytes": 8431
+      },
+      {
+        "file": "workspace-focus-480.webp",
+        "width": 480,
+        "height": 270,
+        "bytes": 14818
+      },
+      {
+        "file": "workspace-focus-800.avif",
+        "width": 800,
+        "height": 450,
+        "bytes": 18869
+      },
+      {
+        "file": "workspace-focus-800.webp",
+        "width": 800,
+        "height": 450,
+        "bytes": 31522
+      },
+      {
+        "file": "workspace-focus-1200.avif",
+        "width": 1200,
+        "height": 675,
+        "bytes": 35687
+      },
+      {
+        "file": "workspace-focus-1200.webp",
+        "width": 1200,
+        "height": 675,
+        "bytes": 59496
+      },
+      {
+        "file": "workspace-focus-1600.avif",
+        "width": 1600,
+        "height": 900,
+        "bytes": 54762
+      },
+      {
+        "file": "workspace-focus-1600.webp",
+        "width": 1600,
+        "height": 900,
+        "bytes": 88122
+      }
+    ]
+  },
+  {
+    "key": "community-conversation",
+    "originalWidth": 1672,
+    "originalHeight": 941,
+    "variants": [
+      {
+        "file": "community-conversation-480.avif",
+        "width": 480,
+        "height": 270,
+        "bytes": 16359
+      },
+      {
+        "file": "community-conversation-480.webp",
+        "width": 480,
+        "height": 270,
+        "bytes": 30206
+      },
+      {
+        "file": "community-conversation-800.avif",
+        "width": 800,
+        "height": 450,
+        "bytes": 36444
+      },
+      {
+        "file": "community-conversation-800.webp",
+        "width": 800,
+        "height": 450,
+        "bytes": 64256
+      },
+      {
+        "file": "community-conversation-1200.avif",
+        "width": 1200,
+        "height": 675,
+        "bytes": 65201
+      },
+      {
+        "file": "community-conversation-1200.webp",
+        "width": 1200,
+        "height": 675,
+        "bytes": 110488
+      },
+      {
+        "file": "community-conversation-1600.avif",
+        "width": 1600,
+        "height": 900,
+        "bytes": 95204
+      },
+      {
+        "file": "community-conversation-1600.webp",
+        "width": 1600,
+        "height": 900,
+        "bytes": 160102
+      }
+    ]
+  },
+  {
+    "key": "premium-library",
+    "originalWidth": 1672,
+    "originalHeight": 941,
+    "variants": [
+      {
+        "file": "premium-library-480.avif",
+        "width": 480,
+        "height": 270,
+        "bytes": 15917
+      },
+      {
+        "file": "premium-library-480.webp",
+        "width": 480,
+        "height": 270,
+        "bytes": 27498
+      },
+      {
+        "file": "premium-library-800.avif",
+        "width": 800,
+        "height": 450,
+        "bytes": 34848
+      },
+      {
+        "file": "premium-library-800.webp",
+        "width": 800,
+        "height": 450,
+        "bytes": 63084
+      },
+      {
+        "file": "premium-library-1200.avif",
+        "width": 1200,
+        "height": 675,
+        "bytes": 67017
+      },
+      {
+        "file": "premium-library-1200.webp",
+        "width": 1200,
+        "height": 675,
+        "bytes": 119880
+      },
+      {
+        "file": "premium-library-1600.avif",
+        "width": 1600,
+        "height": 900,
+        "bytes": 103202
+      },
+      {
+        "file": "premium-library-1600.webp",
+        "width": 1600,
+        "height": 900,
+        "bytes": 179856
+      }
+    ]
+  },
+  {
+    "key": "arrival-city",
+    "originalWidth": 1672,
+    "originalHeight": 941,
+    "variants": [
+      {
+        "file": "arrival-city-480.avif",
+        "width": 480,
+        "height": 270,
+        "bytes": 17672
+      },
+      {
+        "file": "arrival-city-480.webp",
+        "width": 480,
+        "height": 270,
+        "bytes": 31060
+      },
+      {
+        "file": "arrival-city-800.avif",
+        "width": 800,
+        "height": 450,
+        "bytes": 40033
+      },
+      {
+        "file": "arrival-city-800.webp",
+        "width": 800,
+        "height": 450,
+        "bytes": 72236
+      },
+      {
+        "file": "arrival-city-1200.avif",
+        "width": 1200,
+        "height": 675,
+        "bytes": 74544
+      },
+      {
+        "file": "arrival-city-1200.webp",
+        "width": 1200,
+        "height": 675,
+        "bytes": 131526
+      },
+      {
+        "file": "arrival-city-1600.avif",
+        "width": 1600,
+        "height": 900,
+        "bytes": 110681
+      },
+      {
+        "file": "arrival-city-1600.webp",
+        "width": 1600,
+        "height": 900,
+        "bytes": 191716
+      }
+    ]
+  },
+  {
+    "key": "housing-abroad",
+    "originalWidth": 1672,
+    "originalHeight": 941,
+    "variants": [
+      {
+        "file": "housing-abroad-480.avif",
+        "width": 480,
+        "height": 270,
+        "bytes": 14799
+      },
+      {
+        "file": "housing-abroad-480.webp",
+        "width": 480,
+        "height": 270,
+        "bytes": 25594
+      },
+      {
+        "file": "housing-abroad-800.avif",
+        "width": 800,
+        "height": 450,
+        "bytes": 31829
+      },
+      {
+        "file": "housing-abroad-800.webp",
+        "width": 800,
+        "height": 450,
+        "bytes": 54664
+      },
+      {
+        "file": "housing-abroad-1200.avif",
+        "width": 1200,
+        "height": 675,
+        "bytes": 57866
+      },
+      {
+        "file": "housing-abroad-1200.webp",
+        "width": 1200,
+        "height": 675,
+        "bytes": 96124
+      },
+      {
+        "file": "housing-abroad-1600.avif",
+        "width": 1600,
+        "height": 900,
+        "bytes": 84939
+      },
+      {
+        "file": "housing-abroad-1600.webp",
+        "width": 1600,
+        "height": 900,
+        "bytes": 141616
+      }
+    ]
+  },
+  {
+    "key": "budget-planning",
+    "originalWidth": 1672,
+    "originalHeight": 941,
+    "variants": [
+      {
+        "file": "budget-planning-480.avif",
+        "width": 480,
+        "height": 270,
+        "bytes": 13310
+      },
+      {
+        "file": "budget-planning-480.webp",
+        "width": 480,
+        "height": 270,
+        "bytes": 23790
+      },
+      {
+        "file": "budget-planning-800.avif",
+        "width": 800,
+        "height": 450,
+        "bytes": 27112
+      },
+      {
+        "file": "budget-planning-800.webp",
+        "width": 800,
+        "height": 450,
+        "bytes": 47264
+      },
+      {
+        "file": "budget-planning-1200.avif",
+        "width": 1200,
+        "height": 675,
+        "bytes": 47904
+      },
+      {
+        "file": "budget-planning-1200.webp",
+        "width": 1200,
+        "height": 675,
+        "bytes": 83004
+      },
+      {
+        "file": "budget-planning-1600.avif",
+        "width": 1600,
+        "height": 900,
+        "bytes": 70368
+      },
+      {
+        "file": "budget-planning-1600.webp",
+        "width": 1600,
+        "height": 900,
+        "bytes": 118804
+      }
+    ]
+  },
+  {
+    "key": "evidence-research",
+    "originalWidth": 1672,
+    "originalHeight": 941,
+    "variants": [
+      {
+        "file": "evidence-research-480.avif",
+        "width": 480,
+        "height": 270,
+        "bytes": 12589
+      },
+      {
+        "file": "evidence-research-480.webp",
+        "width": 480,
+        "height": 270,
+        "bytes": 22402
+      },
+      {
+        "file": "evidence-research-800.avif",
+        "width": 800,
+        "height": 450,
+        "bytes": 25146
+      },
+      {
+        "file": "evidence-research-800.webp",
+        "width": 800,
+        "height": 450,
+        "bytes": 43642
+      },
+      {
+        "file": "evidence-research-1200.avif",
+        "width": 1200,
+        "height": 675,
+        "bytes": 44508
+      },
+      {
+        "file": "evidence-research-1200.webp",
+        "width": 1200,
+        "height": 675,
+        "bytes": 75934
+      },
+      {
+        "file": "evidence-research-1600.avif",
+        "width": 1600,
+        "height": 900,
+        "bytes": 65716
+      },
+      {
+        "file": "evidence-research-1600.webp",
+        "width": 1600,
+        "height": 900,
+        "bytes": 112878
+      }
+    ]
+  },
+  {
+    "key": "global-economy",
+    "originalWidth": 1672,
+    "originalHeight": 941,
+    "variants": [
+      {
+        "file": "global-economy-480.avif",
+        "width": 480,
+        "height": 270,
+        "bytes": 15131
+      },
+      {
+        "file": "global-economy-480.webp",
+        "width": 480,
+        "height": 270,
+        "bytes": 27242
+      },
+      {
+        "file": "global-economy-800.avif",
+        "width": 800,
+        "height": 450,
+        "bytes": 37705
+      },
+      {
+        "file": "global-economy-800.webp",
+        "width": 800,
+        "height": 450,
+        "bytes": 66776
+      },
+      {
+        "file": "global-economy-1200.avif",
+        "width": 1200,
+        "height": 675,
+        "bytes": 76514
+      },
+      {
+        "file": "global-economy-1200.webp",
+        "width": 1200,
+        "height": 675,
+        "bytes": 136922
+      },
+      {
+        "file": "global-economy-1600.avif",
+        "width": 1600,
+        "height": 900,
+        "bytes": 120736
+      },
+      {
+        "file": "global-economy-1600.webp",
+        "width": 1600,
+        "height": 900,
+        "bytes": 219926
+      }
+    ]
+  },
+  {
+    "key": "ai-workflow",
+    "originalWidth": 1672,
+    "originalHeight": 941,
+    "variants": [
+      {
+        "file": "ai-workflow-480.avif",
+        "width": 480,
+        "height": 270,
+        "bytes": 15099
+      },
+      {
+        "file": "ai-workflow-480.webp",
+        "width": 480,
+        "height": 270,
+        "bytes": 26174
+      },
+      {
+        "file": "ai-workflow-800.avif",
+        "width": 800,
+        "height": 450,
+        "bytes": 30593
+      },
+      {
+        "file": "ai-workflow-800.webp",
+        "width": 800,
+        "height": 450,
+        "bytes": 52174
+      },
+      {
+        "file": "ai-workflow-1200.avif",
+        "width": 1200,
+        "height": 675,
+        "bytes": 53545
+      },
+      {
+        "file": "ai-workflow-1200.webp",
+        "width": 1200,
+        "height": 675,
+        "bytes": 90702
+      },
+      {
+        "file": "ai-workflow-1600.avif",
+        "width": 1600,
+        "height": 900,
+        "bytes": 80481
+      },
+      {
+        "file": "ai-workflow-1600.webp",
+        "width": 1600,
+        "height": 900,
+        "bytes": 132768
+      }
+    ]
+  },
+  {
+    "key": "english-dialogue",
+    "originalWidth": 1672,
+    "originalHeight": 941,
+    "variants": [
+      {
+        "file": "english-dialogue-480.avif",
+        "width": 480,
+        "height": 270,
+        "bytes": 13304
+      },
+      {
+        "file": "english-dialogue-480.webp",
+        "width": 480,
+        "height": 270,
+        "bytes": 23598
+      },
+      {
+        "file": "english-dialogue-800.avif",
+        "width": 800,
+        "height": 450,
+        "bytes": 27656
+      },
+      {
+        "file": "english-dialogue-800.webp",
+        "width": 800,
+        "height": 450,
+        "bytes": 45610
+      },
+      {
+        "file": "english-dialogue-1200.avif",
+        "width": 1200,
+        "height": 675,
+        "bytes": 48058
+      },
+      {
+        "file": "english-dialogue-1200.webp",
+        "width": 1200,
+        "height": 675,
+        "bytes": 78252
+      },
+      {
+        "file": "english-dialogue-1600.avif",
+        "width": 1600,
+        "height": 900,
+        "bytes": 70370
+      },
+      {
+        "file": "english-dialogue-1600.webp",
+        "width": 1600,
+        "height": 900,
+        "bytes": 112514
+      }
+    ]
+  },
+  {
+    "key": "spreadsheets",
+    "originalWidth": 1672,
+    "originalHeight": 941,
+    "variants": [
+      {
+        "file": "spreadsheets-480.avif",
+        "width": 480,
+        "height": 270,
+        "bytes": 13439
+      },
+      {
+        "file": "spreadsheets-480.webp",
+        "width": 480,
+        "height": 270,
+        "bytes": 24392
+      },
+      {
+        "file": "spreadsheets-800.avif",
+        "width": 800,
+        "height": 450,
+        "bytes": 29251
+      },
+      {
+        "file": "spreadsheets-800.webp",
+        "width": 800,
+        "height": 450,
+        "bytes": 51192
+      },
+      {
+        "file": "spreadsheets-1200.avif",
+        "width": 1200,
+        "height": 675,
+        "bytes": 52261
+      },
+      {
+        "file": "spreadsheets-1200.webp",
+        "width": 1200,
+        "height": 675,
+        "bytes": 89438
+      },
+      {
+        "file": "spreadsheets-1600.avif",
+        "width": 1600,
+        "height": 900,
+        "bytes": 77184
+      },
+      {
+        "file": "spreadsheets-1600.webp",
+        "width": 1600,
+        "height": 900,
+        "bytes": 130450
+      }
+    ]
+  },
+  {
+    "key": "international-career",
+    "originalWidth": 1672,
+    "originalHeight": 941,
+    "variants": [
+      {
+        "file": "international-career-480.avif",
+        "width": 480,
+        "height": 270,
+        "bytes": 13778
+      },
+      {
+        "file": "international-career-480.webp",
+        "width": 480,
+        "height": 270,
+        "bytes": 23782
+      },
+      {
+        "file": "international-career-800.avif",
+        "width": 800,
+        "height": 450,
+        "bytes": 28598
+      },
+      {
+        "file": "international-career-800.webp",
+        "width": 800,
+        "height": 450,
+        "bytes": 49142
+      },
+      {
+        "file": "international-career-1200.avif",
+        "width": 1200,
+        "height": 675,
+        "bytes": 50485
+      },
+      {
+        "file": "international-career-1200.webp",
+        "width": 1200,
+        "height": 675,
+        "bytes": 83076
+      },
+      {
+        "file": "international-career-1600.avif",
+        "width": 1600,
+        "height": 900,
+        "bytes": 74107
+      },
+      {
+        "file": "international-career-1600.webp",
+        "width": 1600,
+        "height": 900,
+        "bytes": 121424
+      }
+    ]
+  },
+  {
+    "key": "data-analysis",
+    "originalWidth": 1672,
+    "originalHeight": 941,
+    "variants": [
+      {
+        "file": "data-analysis-480.avif",
+        "width": 480,
+        "height": 270,
+        "bytes": 13647
+      },
+      {
+        "file": "data-analysis-480.webp",
+        "width": 480,
+        "height": 270,
+        "bytes": 24654
+      },
+      {
+        "file": "data-analysis-800.avif",
+        "width": 800,
+        "height": 450,
+        "bytes": 27537
+      },
+      {
+        "file": "data-analysis-800.webp",
+        "width": 800,
+        "height": 450,
+        "bytes": 47742
+      },
+      {
+        "file": "data-analysis-1200.avif",
+        "width": 1200,
+        "height": 675,
+        "bytes": 47036
+      },
+      {
+        "file": "data-analysis-1200.webp",
+        "width": 1200,
+        "height": 675,
+        "bytes": 78520
+      },
+      {
+        "file": "data-analysis-1600.avif",
+        "width": 1600,
+        "height": 900,
+        "bytes": 67649
+      },
+      {
+        "file": "data-analysis-1600.webp",
+        "width": 1600,
+        "height": 900,
+        "bytes": 110544
+      }
+    ]
+  },
+  {
+    "key": "project-management",
+    "originalWidth": 1672,
+    "originalHeight": 941,
+    "variants": [
+      {
+        "file": "project-management-480.avif",
+        "width": 480,
+        "height": 270,
+        "bytes": 15192
+      },
+      {
+        "file": "project-management-480.webp",
+        "width": 480,
+        "height": 270,
+        "bytes": 26946
+      },
+      {
+        "file": "project-management-800.avif",
+        "width": 800,
+        "height": 450,
+        "bytes": 31687
+      },
+      {
+        "file": "project-management-800.webp",
+        "width": 800,
+        "height": 450,
+        "bytes": 54964
+      },
+      {
+        "file": "project-management-1200.avif",
+        "width": 1200,
+        "height": 675,
+        "bytes": 56373
+      },
+      {
+        "file": "project-management-1200.webp",
+        "width": 1200,
+        "height": 675,
+        "bytes": 94978
+      },
+      {
+        "file": "project-management-1600.avif",
+        "width": 1600,
+        "height": 900,
+        "bytes": 82755
+      },
+      {
+        "file": "project-management-1600.webp",
+        "width": 1600,
+        "height": 900,
+        "bytes": 135950
+      }
+    ]
+  },
+  {
+    "key": "international-marketing",
+    "originalWidth": 1672,
+    "originalHeight": 941,
+    "variants": [
+      {
+        "file": "international-marketing-480.avif",
+        "width": 480,
+        "height": 270,
+        "bytes": 17329
+      },
+      {
+        "file": "international-marketing-480.webp",
+        "width": 480,
+        "height": 270,
+        "bytes": 31760
+      },
+      {
+        "file": "international-marketing-800.avif",
+        "width": 800,
+        "height": 450,
+        "bytes": 34961
+      },
+      {
+        "file": "international-marketing-800.webp",
+        "width": 800,
+        "height": 450,
+        "bytes": 64044
+      },
+      {
+        "file": "international-marketing-1200.avif",
+        "width": 1200,
+        "height": 675,
+        "bytes": 63201
+      },
+      {
+        "file": "international-marketing-1200.webp",
+        "width": 1200,
+        "height": 675,
+        "bytes": 114362
+      },
+      {
+        "file": "international-marketing-1600.avif",
+        "width": 1600,
+        "height": 900,
+        "bytes": 92559
+      },
+      {
+        "file": "international-marketing-1600.webp",
+        "width": 1600,
+        "height": 900,
+        "bytes": 162644
+      }
+    ]
+  },
+  {
+    "key": "digital-security",
+    "originalWidth": 1672,
+    "originalHeight": 941,
+    "variants": [
+      {
+        "file": "digital-security-480.avif",
+        "width": 480,
+        "height": 270,
+        "bytes": 8036
+      },
+      {
+        "file": "digital-security-480.webp",
+        "width": 480,
+        "height": 270,
+        "bytes": 13930
+      },
+      {
+        "file": "digital-security-800.avif",
+        "width": 800,
+        "height": 450,
+        "bytes": 15715
+      },
+      {
+        "file": "digital-security-800.webp",
+        "width": 800,
+        "height": 450,
+        "bytes": 26858
+      },
+      {
+        "file": "digital-security-1200.avif",
+        "width": 1200,
+        "height": 675,
+        "bytes": 28793
+      },
+      {
+        "file": "digital-security-1200.webp",
+        "width": 1200,
+        "height": 675,
+        "bytes": 49414
+      },
+      {
+        "file": "digital-security-1600.avif",
+        "width": 1600,
+        "height": 900,
+        "bytes": 44299
+      },
+      {
+        "file": "digital-security-1600.webp",
+        "width": 1600,
+        "height": 900,
+        "bytes": 72890
+      }
+    ]
+  },
+  {
+    "key": "python-automation",
+    "originalWidth": 1672,
+    "originalHeight": 941,
+    "variants": [
+      {
+        "file": "python-automation-480.avif",
+        "width": 480,
+        "height": 270,
+        "bytes": 15248
+      },
+      {
+        "file": "python-automation-480.webp",
+        "width": 480,
+        "height": 270,
+        "bytes": 28146
+      },
+      {
+        "file": "python-automation-800.avif",
+        "width": 800,
+        "height": 450,
+        "bytes": 30631
+      },
+      {
+        "file": "python-automation-800.webp",
+        "width": 800,
+        "height": 450,
+        "bytes": 55130
+      },
+      {
+        "file": "python-automation-1200.avif",
+        "width": 1200,
+        "height": 675,
+        "bytes": 53016
+      },
+      {
+        "file": "python-automation-1200.webp",
+        "width": 1200,
+        "height": 675,
+        "bytes": 90538
+      },
+      {
+        "file": "python-automation-1600.avif",
+        "width": 1600,
+        "height": 900,
+        "bytes": 75362
+      },
+      {
+        "file": "python-automation-1600.webp",
+        "width": 1600,
+        "height": 900,
+        "bytes": 127714
+      }
+    ]
+  },
+  {
+    "key": "communication-negotiation",
+    "originalWidth": 1672,
+    "originalHeight": 941,
+    "variants": [
+      {
+        "file": "communication-negotiation-480.avif",
+        "width": 480,
+        "height": 270,
+        "bytes": 14300
+      },
+      {
+        "file": "communication-negotiation-480.webp",
+        "width": 480,
+        "height": 270,
+        "bytes": 25602
+      },
+      {
+        "file": "communication-negotiation-800.avif",
+        "width": 800,
+        "height": 450,
+        "bytes": 30247
+      },
+      {
+        "file": "communication-negotiation-800.webp",
+        "width": 800,
+        "height": 450,
+        "bytes": 51116
+      },
+      {
+        "file": "communication-negotiation-1200.avif",
+        "width": 1200,
+        "height": 675,
+        "bytes": 52794
+      },
+      {
+        "file": "communication-negotiation-1200.webp",
+        "width": 1200,
+        "height": 675,
+        "bytes": 87332
+      },
+      {
+        "file": "communication-negotiation-1600.avif",
+        "width": 1600,
+        "height": 900,
+        "bytes": 76106
+      },
+      {
+        "file": "communication-negotiation-1600.webp",
+        "width": 1600,
+        "height": 900,
+        "bytes": 123188
+      }
+    ]
+  },
+  {
+    "key": "remote-work",
+    "originalWidth": 1672,
+    "originalHeight": 941,
+    "variants": [
+      {
+        "file": "remote-work-480.avif",
+        "width": 480,
+        "height": 270,
+        "bytes": 12574
+      },
+      {
+        "file": "remote-work-480.webp",
+        "width": 480,
+        "height": 270,
+        "bytes": 21644
+      },
+      {
+        "file": "remote-work-800.avif",
+        "width": 800,
+        "height": 450,
+        "bytes": 26004
+      },
+      {
+        "file": "remote-work-800.webp",
+        "width": 800,
+        "height": 450,
+        "bytes": 44640
+      },
+      {
+        "file": "remote-work-1200.avif",
+        "width": 1200,
+        "height": 675,
+        "bytes": 45578
+      },
+      {
+        "file": "remote-work-1200.webp",
+        "width": 1200,
+        "height": 675,
+        "bytes": 77478
+      },
+      {
+        "file": "remote-work-1600.avif",
+        "width": 1600,
+        "height": 900,
+        "bytes": 67139
+      },
+      {
+        "file": "remote-work-1600.webp",
+        "width": 1600,
+        "height": 900,
+        "bytes": 111368
+      }
+    ]
+  },
+  {
+    "key": "study-abroad",
+    "originalWidth": 1672,
+    "originalHeight": 941,
+    "variants": [
+      {
+        "file": "study-abroad-480.avif",
+        "width": 480,
+        "height": 270,
+        "bytes": 17778
+      },
+      {
+        "file": "study-abroad-480.webp",
+        "width": 480,
+        "height": 270,
+        "bytes": 32822
+      },
+      {
+        "file": "study-abroad-800.avif",
+        "width": 800,
+        "height": 450,
+        "bytes": 36709
+      },
+      {
+        "file": "study-abroad-800.webp",
+        "width": 800,
+        "height": 450,
+        "bytes": 67544
+      },
+      {
+        "file": "study-abroad-1200.avif",
+        "width": 1200,
+        "height": 675,
+        "bytes": 64760
+      },
+      {
+        "file": "study-abroad-1200.webp",
+        "width": 1200,
+        "height": 675,
+        "bytes": 119488
+      },
+      {
+        "file": "study-abroad-1600.avif",
+        "width": 1600,
+        "height": 900,
+        "bytes": 94538
+      },
+      {
+        "file": "study-abroad-1600.webp",
+        "width": 1600,
+        "height": 900,
+        "bytes": 170688
+      }
+    ]
+  },
+  {
+    "key": "atlas-intelligence",
+    "originalWidth": 1672,
+    "originalHeight": 941,
+    "variants": [
+      {
+        "file": "atlas-intelligence-480.avif",
+        "width": 480,
+        "height": 270,
+        "bytes": 11065
+      },
+      {
+        "file": "atlas-intelligence-480.webp",
+        "width": 480,
+        "height": 270,
+        "bytes": 18714
+      },
+      {
+        "file": "atlas-intelligence-800.avif",
+        "width": 800,
+        "height": 450,
+        "bytes": 22546
+      },
+      {
+        "file": "atlas-intelligence-800.webp",
+        "width": 800,
+        "height": 450,
+        "bytes": 36840
+      },
+      {
+        "file": "atlas-intelligence-1200.avif",
+        "width": 1200,
+        "height": 675,
+        "bytes": 39145
+      },
+      {
+        "file": "atlas-intelligence-1200.webp",
+        "width": 1200,
+        "height": 675,
+        "bytes": 63546
+      },
+      {
+        "file": "atlas-intelligence-1600.avif",
+        "width": 1600,
+        "height": 900,
+        "bytes": 56004
+      },
+      {
+        "file": "atlas-intelligence-1600.webp",
+        "width": 1600,
+        "height": 900,
+        "bytes": 90604
+      }
+    ]
+  },
+  {
+    "key": "decision-comparison",
+    "originalWidth": 1672,
+    "originalHeight": 941,
+    "variants": [
+      {
+        "file": "decision-comparison-480.avif",
+        "width": 480,
+        "height": 270,
+        "bytes": 17172
+      },
+      {
+        "file": "decision-comparison-480.webp",
+        "width": 480,
+        "height": 270,
+        "bytes": 31808
+      },
+      {
+        "file": "decision-comparison-800.avif",
+        "width": 800,
+        "height": 450,
+        "bytes": 39214
+      },
+      {
+        "file": "decision-comparison-800.webp",
+        "width": 800,
+        "height": 450,
+        "bytes": 72018
+      },
+      {
+        "file": "decision-comparison-1200.avif",
+        "width": 1200,
+        "height": 675,
+        "bytes": 74947
+      },
+      {
+        "file": "decision-comparison-1200.webp",
+        "width": 1200,
+        "height": 675,
+        "bytes": 136528
+      },
+      {
+        "file": "decision-comparison-1600.avif",
+        "width": 1600,
+        "height": 900,
+        "bytes": 115043
+      },
+      {
+        "file": "decision-comparison-1600.webp",
+        "width": 1600,
+        "height": 900,
+        "bytes": 214552
+      }
+    ]
+  },
+  {
+    "key": "community-global-exchange",
+    "originalWidth": 1672,
+    "originalHeight": 941,
+    "variants": [
+      {
+        "file": "community-global-exchange-480.avif",
+        "width": 480,
+        "height": 270,
+        "bytes": 14384
+      },
+      {
+        "file": "community-global-exchange-480.webp",
+        "width": 480,
+        "height": 270,
+        "bytes": 25530
+      },
+      {
+        "file": "community-global-exchange-800.avif",
+        "width": 800,
+        "height": 450,
+        "bytes": 31071
+      },
+      {
+        "file": "community-global-exchange-800.webp",
+        "width": 800,
+        "height": 450,
+        "bytes": 54292
+      },
+      {
+        "file": "community-global-exchange-1200.avif",
+        "width": 1200,
+        "height": 675,
+        "bytes": 55143
+      },
+      {
+        "file": "community-global-exchange-1200.webp",
+        "width": 1200,
+        "height": 675,
+        "bytes": 95812
+      },
+      {
+        "file": "community-global-exchange-1600.avif",
+        "width": 1600,
+        "height": 900,
+        "bytes": 81230
+      },
+      {
+        "file": "community-global-exchange-1600.webp",
+        "width": 1600,
+        "height": 900,
+        "bytes": 137798
+      }
+    ]
+  },
+  {
+    "key": "global-documents-precision",
+    "originalWidth": 1672,
+    "originalHeight": 941,
+    "variants": [
+      {
+        "file": "global-documents-precision-480.avif",
+        "width": 480,
+        "height": 270,
+        "bytes": 7985
+      },
+      {
+        "file": "global-documents-precision-480.webp",
+        "width": 480,
+        "height": 270,
+        "bytes": 13580
+      },
+      {
+        "file": "global-documents-precision-800.avif",
+        "width": 800,
+        "height": 450,
+        "bytes": 18133
+      },
+      {
+        "file": "global-documents-precision-800.webp",
+        "width": 800,
+        "height": 450,
+        "bytes": 31470
+      },
+      {
+        "file": "global-documents-precision-1200.avif",
+        "width": 1200,
+        "height": 675,
+        "bytes": 40809
+      },
+      {
+        "file": "global-documents-precision-1200.webp",
+        "width": 1200,
+        "height": 675,
+        "bytes": 74750
+      },
+      {
+        "file": "global-documents-precision-1600.avif",
+        "width": 1600,
+        "height": 900,
+        "bytes": 71983
+      },
+      {
+        "file": "global-documents-precision-1600.webp",
+        "width": 1600,
+        "height": 900,
+        "bytes": 129836
+      }
+    ]
+  },
+  {
+    "key": "learning-achievement",
+    "originalWidth": 1672,
+    "originalHeight": 941,
+    "variants": [
+      {
+        "file": "learning-achievement-480.avif",
+        "width": 480,
+        "height": 270,
+        "bytes": 12719
+      },
+      {
+        "file": "learning-achievement-480.webp",
+        "width": 480,
+        "height": 270,
+        "bytes": 21048
+      },
+      {
+        "file": "learning-achievement-800.avif",
+        "width": 800,
+        "height": 450,
+        "bytes": 26282
+      },
+      {
+        "file": "learning-achievement-800.webp",
+        "width": 800,
+        "height": 450,
+        "bytes": 43294
+      },
+      {
+        "file": "learning-achievement-1200.avif",
+        "width": 1200,
+        "height": 675,
+        "bytes": 46327
+      },
+      {
+        "file": "learning-achievement-1200.webp",
+        "width": 1200,
+        "height": 675,
+        "bytes": 75656
+      },
+      {
+        "file": "learning-achievement-1600.avif",
+        "width": 1600,
+        "height": 900,
+        "bytes": 67304
+      },
+      {
+        "file": "learning-achievement-1600.webp",
+        "width": 1600,
+        "height": 900,
+        "bytes": 109296
+      }
+    ]
+  },
+  {
+    "key": "workspace-global-focus",
+    "originalWidth": 1672,
+    "originalHeight": 941,
+    "variants": [
+      {
+        "file": "workspace-global-focus-480.avif",
+        "width": 480,
+        "height": 270,
+        "bytes": 10931
+      },
+      {
+        "file": "workspace-global-focus-480.webp",
+        "width": 480,
+        "height": 270,
+        "bytes": 18936
+      },
+      {
+        "file": "workspace-global-focus-800.avif",
+        "width": 800,
+        "height": 450,
+        "bytes": 25185
+      },
+      {
+        "file": "workspace-global-focus-800.webp",
+        "width": 800,
+        "height": 450,
+        "bytes": 43678
+      },
+      {
+        "file": "workspace-global-focus-1200.avif",
+        "width": 1200,
+        "height": 675,
+        "bytes": 50569
+      },
+      {
+        "file": "workspace-global-focus-1200.webp",
+        "width": 1200,
+        "height": 675,
+        "bytes": 84914
+      },
+      {
+        "file": "workspace-global-focus-1600.avif",
+        "width": 1600,
+        "height": 900,
+        "bytes": 77757
+      },
+      {
+        "file": "workspace-global-focus-1600.webp",
+        "width": 1600,
+        "height": 900,
+        "bytes": 129238
+      }
+    ]
+  }
+]

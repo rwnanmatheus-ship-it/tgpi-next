@@ -11,7 +11,7 @@ interface CountriesHeroProps {
 }
 
 const HERO_IMAGE =
-  "/images/countries/tgpi-country-intelligence-observatory-v1.webp";
+  "/images/cinematic-2026/country-research-1600.webp";
 
 export default function CountriesHero({
   countryCount,

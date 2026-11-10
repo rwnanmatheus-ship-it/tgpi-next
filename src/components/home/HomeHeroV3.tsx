@@ -16,7 +16,7 @@ export default function HomeHeroV3() {
 
       <div className="relative mx-auto max-w-[1400px] overflow-hidden rounded-[28px] border border-white/12 bg-[#06182d] shadow-[0_40px_130px_rgba(0,0,0,.45)] sm:rounded-[38px]">
         <Image
-          src="/images/home/tgpi-home-global-knowledge-meridian-v1.webp"
+          src="/images/cinematic-2026/global-horizon-1600.webp"
           alt="TGPI global intelligence environment connecting countries, comparison and personal preparation"
           fill
           priority

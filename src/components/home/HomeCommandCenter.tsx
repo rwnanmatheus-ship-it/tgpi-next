@@ -37,7 +37,7 @@ export default function HomeCommandCenter() {
 
         <div className="tgpi-card-3d relative min-w-0 overflow-hidden rounded-[32px] border border-white/14 bg-[#071a32] p-3 shadow-[0_40px_110px_rgba(0,0,0,.34)] sm:p-5" data-tgpi-depth="hero" data-tgpi-tone="navy">
           <div className="relative aspect-[16/10] min-h-[430px] overflow-hidden rounded-[24px] border border-white/10 sm:min-h-0">
-            <Image src="/images/pricing/tgpi-premium-command-center.webp" alt="TGPI personal command center interface" fill quality={88} sizes="(max-width:1023px) 92vw, 720px" className="object-cover object-center opacity-62" />
+            <Image src="/images/cinematic-2026/workspace-focus-1600.webp" alt="TGPI personal command center interface" fill quality={88} sizes="(max-width:1023px) 92vw, 720px" className="object-cover object-center opacity-62" />
             <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(3,20,38,.96),rgba(3,20,38,.52)),linear-gradient(0deg,rgba(3,20,38,.94),transparent_65%)]" />
             <div className="absolute inset-0 flex flex-col p-4 sm:p-6">
               <div className="flex items-center justify-between gap-3"><div><p className="text-[9px] font-extrabold uppercase tracking-[.2em] text-[var(--tgpi-gold-light)]">Workspace preview</p><p className="mt-2 font-[var(--tgpi-font-display)] text-2xl font-semibold sm:text-3xl">Global Plan · Command Center</p></div><span className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl border border-white/12 bg-white/[.06] text-[var(--tgpi-gold-light)]"><NavigationIcon name="apps" /></span></div>

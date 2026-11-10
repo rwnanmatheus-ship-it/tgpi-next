@@ -1,3 +1,4 @@
+import { cinematicKeys, cinematicWidths, cinematicUrl } from "../src/lib/cinematic-art.ts";
 import { matchesPremiumOffer } from "../src/lib/commercial-offer.ts";
 import assert from "node:assert/strict";
 import test from "node:test";
@@ -27,10 +28,10 @@ test("every central Home destination resolves to a route", () => {
     assert.ok(existsSync(new URL(`../src/app${pathname === "/sign-up" ? "/sign-up/[[...sign-up]]" : pathname}/page.tsx`, import.meta.url)), pathname);
   }
 });
-test("featured course ids exist in the published catalogue and all generated crops exist", () => {
+test("featured courses resolve and all responsive cinematic variants exist", () => {
   const catalog = read("src/data/courses-overview.ts");
   for (const { id } of HOME_COURSES) assert.ok(catalog.includes(`"${id}"`), id);
-  for (const asset of ["hero", "decision", "preparation", "learning", ...HOME_COURSES.map(c => c.asset)]) for (const crop of ["desktop", "mobile"]) assert.ok(existsSync(new URL(`../public/images/home/editorial-v5/${asset}-${crop}.webp`, import.meta.url)));
+  for (const asset of cinematicKeys) for (const width of cinematicWidths) for (const format of ["avif", "webp"]) assert.ok(existsSync(new URL(`../public${cinematicUrl(asset, width, format)}`, import.meta.url)), `${asset}/${width}/${format}`);
 });
 test("Home provides one H1 and FAQ structured data uses the same answers", () => {
   const home = read("src/components/home/v4/InstitutionalHome.tsx");

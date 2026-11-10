@@ -3,6 +3,7 @@ import { useLocale as useInterfaceLocale } from "@/components/localization/Local
 import { useCallback, useEffect, useState, useRef } from "react";
 import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
+import CinematicImage from "@/components/ui/CinematicImage";
 import Link from "next/link";
 import dynamic from "next/dynamic";
 import {
@@ -201,18 +202,19 @@ export default function CommunityApp({
   return (
     <main className={s.shell}>
       <header className={s.hero}>
-        <Image
-          src={
-            c?.coverId
-              ? `/api/community/assets/${c.id}/${c.coverId}`
-              : "/images/community/global-commons.webp"
-          }
-          unoptimized={Boolean(c?.coverId)}
-          alt="AI-generated editorial illustration of an international learning commons"
-          fill
-          sizes="(max-width:760px) 100vw, 1200px"
-          priority
-        />
+        {c?.coverId ? (
+          <Image
+            src={`/api/community/assets/${c.id}/${c.coverId}`}
+            unoptimized
+            alt=""
+            fill
+            sizes="(max-width:760px) 100vw, 1200px"
+            priority
+          />
+        ) : (
+          <CinematicImage asset="community-global-exchange" alt="" priority
+            sizes="(max-width:760px) 100vw, 1200px" position="65% center" />
+        )}
         <span className={s.eyebrow}>TGPI · Global Community</span>
         <h1>{c?.name || "Your world. Shared experience."}</h1>
         <p>
@@ -374,7 +376,7 @@ export default function CommunityApp({
                       <div className={s.empty}>
                         <div className={s.editorial}>
                           <Image
-                            src="/images/community/new-horizons.webp"
+                            src="/images/cinematic-2026/global-horizon-1600.webp"
                             alt="AI-generated city horizon at dawn"
                             fill
                             sizes="600px"
@@ -856,7 +858,7 @@ export default function CommunityApp({
             <h2>Experience into action.</h2>
             <div className={s.editorial}>
               <Image
-                src="/images/community/life-across-borders.webp"
+                src="/images/cinematic-2026/arrival-city-1600.webp"
                 alt="AI-generated editorial illustration of a conversation at a neighborhood cafe"
                 fill
                 sizes="240px"
@@ -870,7 +872,7 @@ export default function CommunityApp({
           <section className={s.panel}>
             <div className={s.editorial}>
               <Image
-                src="/images/community/shared-knowledge.webp"
+                src="/images/cinematic-2026/learning-atelier-1600.webp"
                 alt="AI-generated editorial illustration of collaborative study"
                 fill
                 sizes="240px"

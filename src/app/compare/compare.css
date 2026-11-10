@@ -28,3 +28,12 @@
 .compare-next-grid a { display:flex; align-items:center; justify-content:space-between; min-height:80px; padding:20px; border:1px solid #dce1e7; border-radius:18px; background:white; font-size:14px; font-weight:800; }
 @media(max-width:767px) { .compare-command .tgpi-area-hero-content { padding:28px 20px; }.compare-command .tgpi-area-hero { min-height:330px; }.compare-heading { flex-direction:column; align-items:start; gap:10px; }.compare-section { margin-top:24px; }.compare-destination-image { height:180px; }.compare-nav { gap:6px; }.compare-nav a { padding:8px 12px; } }
 @media(prefers-reduced-motion:reduce) { .compare-command *, .compare-command *::before, .compare-command *::after { scroll-behavior:auto!important; transition:none!important; animation:none!important; } }
+
+/* Editorial art stays separate from country evidence and comparison controls. */
+.compare-command .compare-page-heading { display:grid; grid-template-columns:minmax(0,1fr) 340px; column-gap:32px; align-items:center; }
+.compare-page-heading .product-page-links { grid-column:1; }
+.compare-research-art { position:relative; grid-column:2; grid-row:1 / span 2; aspect-ratio:16 / 9; overflow:hidden; border-radius:18px; background:#061b33; }
+@media (max-width:767px) {
+  .compare-command .compare-page-heading { grid-template-columns:minmax(0,1fr); gap:16px; }
+  .compare-research-art { grid-column:1; grid-row:auto; width:100%; max-width:480px; }
+}

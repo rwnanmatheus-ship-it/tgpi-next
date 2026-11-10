@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     url: "/pricing",
     images: [
       {
-        url: "/images/pricing/tgpi-premium-global-library-v1.webp",
+        url: "/images/cinematic-2026/premium-library-1600.webp",
         width: 1536,
         height: 1024,
         alt: "TGPI global education and international decision intelligence",
@@ -166,7 +166,7 @@ export default async function PricingPage({
             <div className="mt-4"><Link href="/premium/demo" className="inline-flex min-h-11 items-center rounded-xl border border-[var(--tgpi-gold-hover)] px-4 py-2 text-sm font-bold text-[var(--tgpi-navy-raised)]"><LocalizedText text="Try the scenario comparison" /> ↗</Link></div>
             <div className="relative mt-6 hidden aspect-[3/2] lg:block overflow-hidden rounded-[24px] bg-[var(--tgpi-navy-raised)]">
               <Image
-                src="/images/pricing/tgpi-premium-global-library-v1.webp"
+                src="/images/cinematic-2026/premium-library-1600.webp"
                 alt={t("International research library overlooking a waterfront city, with a brass globe and warm academic lighting")}
                 fill
                 priority
@@ -302,7 +302,7 @@ export default async function PricingPage({
         >
           <div className="relative min-h-64 md:min-h-96">
             <Image
-              src="/images/pricing/tgpi-premium-preparation-v1.webp"
+              src="/images/cinematic-2026/documents-preparation-1600.webp"
               alt={t("Sunlit international study space with a notebook and globe overlooking a European city")}
               fill
               sizes="(max-width: 768px) 100vw, 640px"

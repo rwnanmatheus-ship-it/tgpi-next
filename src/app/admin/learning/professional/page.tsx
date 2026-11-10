@@ -1,3 +1,4 @@
+import { courseArtwork } from "@/lib/cinematic-art";
 
 import { LocalizedText } from "@/components/localization/LocaleProvider";
 import Image from "next/image";
@@ -21,7 +22,7 @@ export default async function ProfessionalCurriculumReview() {
     <div className="mt-10 space-y-10">{professionalCourseDrafts.map(course => {
       const artwork = professionalArtwork[course.id];
       return <article id={course.id} key={course.id} className="scroll-mt-6 overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
-        <div className="grid md:grid-cols-2"><Image src={`/images/courses/professional/${artwork.key}.webp`} alt={artwork.alt} width={1600} height={900} sizes="(min-width: 768px) 50vw, 100vw" className="h-full w-full object-cover" /><div className="p-6"><p className="text-sm font-semibold text-amber-800">Rascunho · {course.version}</p><h2 className="mt-2 text-2xl font-semibold">{course.title}</h2><ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-6">{course.outcomes.map(outcome => <li key={outcome}>{outcome}</li>)}</ul><p className="mt-4 text-xs text-slate-600">Imagens geradas de pessoas fictícias. Não representam professores ou alunos reais.</p></div></div>
+        <div className="grid md:grid-cols-2"><Image src={courseArtwork(course.id)} alt={artwork.alt} width={1600} height={900} sizes="(min-width: 768px) 50vw, 100vw" className="h-full w-full object-cover" /><div className="p-6"><p className="text-sm font-semibold text-amber-800">Rascunho · {course.version}</p><h2 className="mt-2 text-2xl font-semibold">{course.title}</h2><ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-6">{course.outcomes.map(outcome => <li key={outcome}>{outcome}</li>)}</ul><p className="mt-4 text-xs text-slate-600">Imagens geradas de pessoas fictícias. Não representam professores ou alunos reais.</p></div></div>
         <div className="space-y-6 p-6">
           <section><h3 className="font-semibold">Requisitos e ferramentas</h3><ul className="mt-2 list-disc pl-5 text-sm leading-7">{[...course.prerequisites, ...course.tools].map(item => <li key={item}>{item}</li>)}</ul></section>
           <section><h3 className="font-semibold">Diagnóstico de entrada</h3><p className="mt-2 text-sm leading-7">{course.diagnostic}</p></section>
