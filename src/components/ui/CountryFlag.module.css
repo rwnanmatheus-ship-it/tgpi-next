@@ -32,7 +32,10 @@
   background: #f6f5ef;
 }
 
-.unframed .artwork { background: transparent; }
+.unframed .artwork {
+  background: transparent;
+  filter: drop-shadow(0 2px 2px #071b3129);
+}
 
 /* Light only: the original vector geometry is never warped or cropped. */
 .frame::after {
@@ -46,15 +49,17 @@
   pointer-events: none;
 }
 
-.unframed::after { inset: 0; box-shadow: none; }
+.unframed::after { display: none; }
 
 @media (forced-colors: active) {
   .frame { border-color: CanvasText; background: Canvas; box-shadow: none; }
   .artwork { forced-color-adjust: none; }
+  .unframed .artwork { filter: none; }
   .frame::after { display: none; }
 }
 
 @media print {
   .frame { background: transparent; border-color: #aaa; box-shadow: none; }
   .frame::after { display: none; }
+  .unframed .artwork { filter: none; }
 }

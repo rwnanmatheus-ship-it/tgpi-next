@@ -1,4 +1,6 @@
 "use client";
+import CountryFlag from "@/components/ui/CountryFlag";
+import { countryFlagCode } from "@/lib/country-flag";
 
 import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
@@ -204,7 +206,7 @@ export default function CountriesWorldJourney({ countries }: CountriesWorldJourn
                     onClick={() => setSelectedSlug(country.slug)}
                     className={`flex min-h-10 min-w-0 items-center gap-2 rounded-xl border px-3 text-left text-xs font-extrabold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)] ${isSelected ? "border-[var(--tgpi-gold)] bg-[var(--tgpi-gold-soft)] text-[var(--tgpi-navy)]" : "border-[var(--tgpi-border)] bg-white text-[var(--tgpi-navy)] hover:border-[var(--tgpi-gold)]"}`}
                   >
-                    <span aria-hidden="true">{country.emoji}</span>
+                    <span aria-hidden="true"><CountryFlag iso2={countryFlagCode(country.emoji)} width={40} /></span>
                     <span className="truncate"><LocalizedText text={country.name} /></span>
                   </button>
                 );
@@ -228,7 +230,7 @@ export default function CountriesWorldJourney({ countries }: CountriesWorldJourn
               <div className="flex items-end justify-between gap-3">
                 <div className="min-w-0">
                   <p className="text-[9px] font-extrabold uppercase tracking-[0.14em] text-[var(--tgpi-gold-light)]"><LocalizedText text={selectedCountry.region} /> · <LocalizedText text={selectedCountry.capital} /></p>
-                  <h3 className="mt-1 truncate font-[var(--tgpi-font-display)] text-3xl font-semibold text-white">{selectedCountry.emoji} <LocalizedText text={selectedCountry.name} /></h3>
+                  <h3 className="mt-1 truncate font-[var(--tgpi-font-display)] text-3xl font-semibold text-white"><CountryFlag iso2={countryFlagCode(selectedCountry.emoji)} width={32} /> <LocalizedText text={selectedCountry.name} /></h3>
                 </div>
                 <div className="shrink-0 rounded-xl border border-[var(--tgpi-gold-light)]/35 bg-[var(--tgpi-navy-deep)]/80 px-3 py-2 text-center backdrop-blur">
                   <p className="text-[7px] font-extrabold uppercase tracking-[0.12em] text-[var(--tgpi-gold-light)]"><LocalizedText text={"TGPI signal"} /></p>

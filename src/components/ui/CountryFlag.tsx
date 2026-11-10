@@ -7,7 +7,7 @@ type CountryFlagProps = {
   framed?: boolean;
 };
 
-/** Resolution-independent artwork with a shared, lightweight studio treatment.
+/** Exact vector artwork with embedded photographic fabric lighting.
  * Decorative: the adjacent country or language name supplies the accessible label.
  */
 export default function CountryFlag({ iso2, width = 36, framed = false }: CountryFlagProps) {
@@ -19,11 +19,11 @@ export default function CountryFlag({ iso2, width = 36, framed = false }: Countr
       className={`${styles.frame}${framed ? "" : ` ${styles.unframed}`}`}
       aria-hidden="true"
       data-flag-frame={framed ? code : undefined}
-      style={{ width, height: width * 0.75 + 1 }}
+      style={{ width, height: width * 0.75 + (framed ? 1 : 0) }}
     >
       <Image
         className={styles.artwork}
-        src={`/images/country-flags/${code}.svg`}
+        src={`/images/country-flags/${framed ? "" : "studio/"}${code}.svg`}
         alt=""
         width={width}
         height={width * 0.75}

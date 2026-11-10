@@ -1,3 +1,5 @@
+import CountryFlag from "@/components/ui/CountryFlag";
+import { countryFlagCode } from "@/lib/country-flag";
 import Link from "next/link";
 import type { Country } from "@/data/countries";
 import { LocalizedText } from "@/components/localization/LocaleProvider";
@@ -16,7 +18,7 @@ export default function CountryCard({ country }: CountryCardProps) {
       <div className="border-b border-slate-800 p-6">
         <div className="mb-4 flex items-start justify-between gap-4">
           <div>
-            <div className="text-5xl">{country.emoji}</div>
+            <div className="text-5xl"><CountryFlag iso2={countryFlagCode(country.emoji)} width={40} /></div>
             <h3 className="mt-4 text-2xl font-bold text-yellow-400">
               <LocalizedText text={country.name} />
             </h3>

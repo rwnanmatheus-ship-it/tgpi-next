@@ -1,4 +1,6 @@
 "use client";
+import CountryFlag from "@/components/ui/CountryFlag";
+import { countryFlagCode } from "@/lib/country-flag";
 
 import { useEffect, useState } from "react";
 import { countries } from "@/data/countries";
@@ -40,7 +42,7 @@ export default function RecommendedCountries() {
               key={country.slug}
               className="rounded-xl border border-slate-800 bg-slate-950 p-4"
             >
-              <div className="text-2xl">{country.emoji}</div>
+              <div className="text-2xl"><CountryFlag iso2={countryFlagCode(country.emoji)} width={40} /></div>
               <h3 className="mt-2 font-bold text-white"><LocalizedText text={country.name} /></h3>
               <p className="mt-1 text-sm text-slate-400">
                 <LocalizedText text={country.shortDescription} />

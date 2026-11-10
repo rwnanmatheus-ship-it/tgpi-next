@@ -1,4 +1,6 @@
 "use client";
+import CountryFlag from "@/components/ui/CountryFlag";
+import { countryFlagCode } from "@/lib/country-flag";
 
 import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
@@ -606,7 +608,7 @@ export default function CountriesWorldMap({
             </div>
             <div className="min-w-0">
               <p className="text-[8px] font-extrabold uppercase tracking-[0.14em] text-[var(--tgpi-gold-light)]"><LocalizedText text={"Intelligence preview"} /></p>
-              <p className="mt-0.5 truncate text-sm font-extrabold">{selectedCountry.emoji} <LocalizedText text={selectedCountry.name} /></p>
+              <p className="mt-0.5 truncate text-sm font-extrabold"><CountryFlag iso2={countryFlagCode(selectedCountry.emoji)} width={32} /> <LocalizedText text={selectedCountry.name} /></p>
               <button type="button" className="atlas-open-country" onClick={() => openCountry(selectedCountry.slug)}><LocalizedText text={"Open country dossier →"} /></button>
             </div>
           </div>

@@ -1,4 +1,5 @@
 "use client";
+import CountryFlag from "@/components/ui/CountryFlag";
 
 import { useId, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
@@ -26,6 +27,6 @@ export default function CountrySearchInput({ countries, query, onChange }: Props
       if (e.key === "Enter" && expanded && selected >= 0) { e.preventDefault(); choose(suggestions[selected].slug); }
     }} /></div>
     <span id={`${id}-hint`} className="sr-only">{t("Type a letter. Use arrow keys to choose a country and Enter to open it.")}</span>
-    {expanded && <div className="country-suggestion-panel"><p>{t("Starts with your search")}</p><ul id={`${id}-options`} role="listbox" aria-label={t("Suggested countries")}>{suggestions.map((c, i) => <li id={`${id}-${c.slug}`} key={c.slug} role="option" aria-selected={selected === i} onMouseDown={e => e.preventDefault()} onClick={() => choose(c.slug)} onMouseEnter={() => setActive(i)}><span aria-hidden="true">{c.emoji}</span><strong>{localizedCountryName(c, locale)}</strong><small translate="no">{c.iso3}</small><span aria-hidden="true">↗</span></li>)}</ul></div>}
+    {expanded && <div className="country-suggestion-panel"><p>{t("Starts with your search")}</p><ul id={`${id}-options`} role="listbox" aria-label={t("Suggested countries")}>{suggestions.map((c, i) => <li id={`${id}-${c.slug}`} key={c.slug} role="option" aria-selected={selected === i} onMouseDown={e => e.preventDefault()} onClick={() => choose(c.slug)} onMouseEnter={() => setActive(i)}><CountryFlag iso2={c.iso2} width={36} /><strong>{localizedCountryName(c, locale)}</strong><small translate="no">{c.iso3}</small><span aria-hidden="true">↗</span></li>)}</ul></div>}
   </div>;
 }

@@ -1,4 +1,6 @@
 "use client";
+import CountryFlag from "@/components/ui/CountryFlag";
+import { countryFlagCode } from "@/lib/country-flag";
 
 import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
@@ -429,7 +431,7 @@ function CountryIndexRow({
     >
       <div className="flex items-start justify-between gap-4">
         <div className="flex min-w-0 items-start gap-3">
-          <span aria-hidden="true" className="text-2xl">{country.emoji}</span>
+          <span aria-hidden="true" className="text-2xl"><CountryFlag iso2={countryFlagCode(country.emoji)} width={40} /></span>
           <div className="min-w-0">
             <p className="text-[9px] font-extrabold uppercase tracking-[0.12em] text-[var(--tgpi-gold-strong)]"><LocalizedText text={country.region} /> · <LocalizedText text={country.capital} /></p>
             <h3 className="mt-1 truncate font-[var(--tgpi-font-display)] text-2xl font-semibold text-[var(--tgpi-navy)]"><LocalizedText text={country.name} /></h3>

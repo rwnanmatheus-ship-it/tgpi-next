@@ -221,3 +221,13 @@
 @media(prefers-reduced-motion:reduce){.country-studio .ig-country-image img{transition:none!important;}}
 .country-atlas-toggle{padding:16px 20px!important;}.country-atlas-toggle>.ig-spread h2{font-size:20px;margin:0;}.country-atlas-toggle>.ig-spread .ig-eyebrow{margin:0 0 4px;font-size:10px;}
 .country-passport-details>summary{cursor:pointer;font-size:13px;font-weight:700;color:#244c65;padding:4px 0;}.country-passport-details[open]>.country-source-grid{margin-top:18px;}
+
+/* One country identity, aligned with its photograph in gallery and list views. */
+.country-card-identity {display:flex;align-items:center;gap:15px;margin:0 0 12px;min-width:0;}
+.country-card-identity>div {min-width:0;}
+.country-studio .country-card-identity h3 {margin:5px 0 0;overflow-wrap:anywhere;}
+.country-card-identity .ig-eyebrow {margin:0;font-size:9px;line-height:1.6;letter-spacing:.1em;}
+.country-dossier-identity {display:flex;align-items:center;gap:24px;margin:16px 0;}
+.country-dossier-identity h1 {min-width:0;margin:0;overflow-wrap:anywhere;}
+@media(max-width:767px){.country-dossier-identity{align-items:flex-start;gap:16px;}.country-dossier-identity>span{width:64px!important;height:48px!important;margin-top:4px;}.country-dossier-identity h1{font-size:clamp(30px,7vw,42px);}}
+@media(max-width:599px){.country-results-list .country-card-identity{gap:10px;flex-wrap:wrap;}.country-results-list .country-card-identity>span{width:40px!important;height:30px!important;}.country-results-list .country-card-identity>div{flex:1;min-width:90px;}}

@@ -1,3 +1,5 @@
+import CountryFlag from "@/components/ui/CountryFlag";
+import { countryFlagCode } from "@/lib/country-flag";
 // src/components/countries/CountryCard.tsx
 
 import Image from "@/components/localization/LocalizedImage";
@@ -84,7 +86,7 @@ export function CountryCard({ country }: CountryCardProps) {
           ) : (
             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(200,162,74,0.32),transparent_34%),radial-gradient(circle_at_bottom_left,rgba(18,58,111,0.24),transparent_40%),linear-gradient(135deg,#102D50,#071A32_55%,#041426)]">
               <span aria-hidden="true" className="absolute -right-5 -top-8 text-[9rem] opacity-15 grayscale">
-                {country.emoji}
+                <CountryFlag iso2={countryFlagCode(country.emoji)} width={160} />
               </span>
               <span aria-hidden="true" className="absolute left-5 top-16 font-[var(--tgpi-font-display)] text-7xl font-semibold text-white/10">
                 {country.slug.slice(0, 2).toUpperCase()}
@@ -110,7 +112,7 @@ export function CountryCard({ country }: CountryCardProps) {
           </div>
 
           <div className="absolute inset-x-5 bottom-4">
-            <div className="mb-1 text-2xl drop-shadow-2xl">{country.emoji}</div>
+            <div className="mb-1 text-2xl drop-shadow-2xl"><CountryFlag iso2={countryFlagCode(country.emoji)} width={40} /></div>
             <h3 className="truncate font-[var(--tgpi-font-display)] text-[1.7rem] font-semibold tracking-[-0.02em] text-white drop-shadow-xl">
               <LocalizedText text={country.name} />
             </h3>
