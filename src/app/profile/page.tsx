@@ -1,5 +1,5 @@
 import { localizeMetadata } from "@/lib/localization/metadata.server";
-import { getUserBillingRecord } from "@/lib/billing.server";
+import { getAccountMembershipLabel } from "@/lib/account-membership.server";
 import { reconcileWorkspaceHistory, loadWorkspaceHistory } from '@/lib/workspace-history.server';
 import { getGlobalRankSignals } from '@/lib/global-rank-signals';
 import { getGlobalRank } from '@/lib/global-ranks';
@@ -25,7 +25,6 @@ import { formatTgpiGlobalId, requireUser } from "@/lib/auth/guards";
 import { getAllCountries } from "@/lib/countries";
 import { buildGlobalWorkspaceModel } from "@/lib/global-workspace";
 import { normalizeOnboardingData } from "@/lib/onboarding";
-import { getControlledPremiumAccessMode } from "@/lib/premium-access.server";
 
 const sourceMetadata: Metadata = {
   title: "Workspace Intelligence Home — TGPI",
@@ -45,12 +44,8 @@ export default async function ProfilePage({
     searchParams,
   ]);
   if (!user) throw new Error("Your account could not be loaded. Please retry.");
-  const [memberIdentity, savedPreferences] = await Promise.all([
-    ensureMemberNumber(session.userId).catch(() => null),
-    isLearningStorageConfigured() ? getFirestoreDocument(`tgpiLearningUsers/${session.userId}/workspace/preferences`).then(record => ({ record, available: true })).catch(() => ({ record: null, available: false })) : Promise.resolve({ record: null, available: false }),
-  ]);
   const name = user?.fullName || user?.firstName || "Global explorer";
-  const email = user?.primaryEmailAddress?.emailAddress || "No primary email";
+  const email = user?.primaryEmailAddress?.emailAddress;
   const emailVerified = user?.primaryEmailAddress?.verification?.status === "verified";
   const globalId = formatTgpiGlobalId(session.userId);
   const onboarding = normalizeOnboardingData(
@@ -59,28 +54,25 @@ export default async function ProfilePage({
   const activation = normalizeActivationProgress(
     user?.privateMetadata[TGPI_ACTIVATION_METADATA_KEY],
   );
-  await reconcileWorkspaceHistory(session.userId, activation).catch(() => null);
-  const historyPage = await loadWorkspaceHistory(session.userId).catch(() => ({ events: [], cursor: null, coverageStartedAt: null, available: false, reconciliationPending: true }));
-  const [billing, learning] = await Promise.all([getUserBillingRecord(session.userId), loadLearningSummary(session.userId, activation)]);
-  const resources = reconcileWorkspaceLearning(buildWorkspaceResources(activation, courses, getAllCountries()), learning);
-  const controlledAccessMode = await getControlledPremiumAccessMode(
-    {
-      uid: session.userId,
-      email,
-      emailVerified,
-    },
-  );
-  const membership =
-    controlledAccessMode === "founder"
-      ? "TGPI Founder"
-      : controlledAccessMode === "preview"
-        ? "Premium Preview"
-        : billing.plan === "premium"
-          ? "TGPI Premium"
-          : "TGPI Free";
+  const [memberIdentity, savedPreferences, historyPage, membership, learning] = await Promise.all([
+    ensureMemberNumber(session.userId).catch(() => null),
+    isLearningStorageConfigured()
+      ? getFirestoreDocument(`tgpiLearningUsers/${session.userId}/workspace/preferences`)
+          .then(record => ({ record, available: true }))
+          .catch(() => ({ record: null, available: false }))
+      : { record: null, available: false },
+    reconcileWorkspaceHistory(session.userId, activation)
+      .catch(() => null)
+      .then(() => loadWorkspaceHistory(session.userId))
+      .catch(() => ({ events: [], cursor: null, coverageStartedAt: null, available: false, reconciliationPending: true })),
+    getAccountMembershipLabel({ uid: session.userId, email, emailVerified }),
+    loadLearningSummary(session.userId, activation),
+  ]);
+  const countries = getAllCountries();
+  const resources = reconcileWorkspaceLearning(buildWorkspaceResources(activation, courses, countries), learning);
   const workspaceModel = buildGlobalWorkspaceModel(
     onboarding,
-    getAllCountries(),
+    countries,
     activation,
     courses,
   );

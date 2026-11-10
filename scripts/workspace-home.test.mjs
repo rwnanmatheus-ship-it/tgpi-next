@@ -1,7 +1,11 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import { createRequire } from "node:module";
 import test from "node:test";
 import { buildGlobalWorkspaceModel } from "../src/lib/global-workspace.ts";
+
+const require = createRequire(import.meta.url);
+const ts = require("typescript");
 
 const countries = [
   { slug: "portugal", name: "Portugal", emoji: "🇵🇹" },
@@ -141,4 +145,60 @@ test("Command Center preserves shared navigation and direct module links", () =>
   assert.match(command, /SUPER_APP_OPEN_EVENT/);
   assert.match(command, /aria-haspopup="dialog"/);
   assert.match(command, /Control\+K Meta\+K/);
+});
+
+test("workspace membership displays confirmed plans and stays neutral during a billing outage", async () => {
+  const source = readFileSync(new URL("../src/lib/account-membership.server.ts", import.meta.url), "utf8");
+  const { outputText } = ts.transpileModule(source, {
+    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
+  });
+  const exports = {};
+  const identity = { uid: "workspace-member" };
+  let accessMode = null;
+  let plan = "free";
+  let billingError = null;
+  const reads = [];
+  const warnings = [];
+  const dependencies = {
+    "server-only": {},
+    "@/lib/billing.server": {
+      getUserBillingRecord: async (uid) => {
+        reads.push(uid);
+        if (billingError) throw billingError;
+        return { plan };
+      },
+    },
+    "@/lib/firestore-admin-rest.server": {
+      isFirestoreQuotaError: (error) => error.code === "RESOURCE_EXHAUSTED",
+    },
+    "@/lib/premium-access.server": {
+      getControlledPremiumAccessMode: async (member) => {
+        assert.equal(member, identity);
+        return accessMode;
+      },
+    },
+  };
+  new Function("require", "exports", "console", outputText)((id) => {
+    assert.ok(Object.hasOwn(dependencies, id), `Unexpected import: ${id}`);
+    return dependencies[id];
+  }, exports, { warn: (...args) => warnings.push(args) });
+
+  const { getAccountMembershipLabel } = exports;
+  assert.equal(await getAccountMembershipLabel(identity), "TGPI Free");
+  plan = "premium";
+  assert.equal(await getAccountMembershipLabel(identity), "TGPI Premium");
+
+  billingError = Object.assign(new Error("Quota exceeded."), { code: "RESOURCE_EXHAUSTED", status: 429 });
+  assert.equal(await getAccountMembershipLabel(identity), "Could not verify membership status.");
+  assert.equal(warnings.at(-1)[1], "firestore_quota");
+
+  billingError = new TypeError("fetch failed");
+  assert.equal(await getAccountMembershipLabel(identity), "Could not verify membership status.");
+  assert.equal(warnings.at(-1)[1], "billing_lookup_failed");
+
+  accessMode = "founder";
+  assert.equal(await getAccountMembershipLabel(identity), "TGPI Founder");
+  accessMode = "preview";
+  assert.equal(await getAccountMembershipLabel(identity), "Premium Preview");
+  assert.deepEqual(reads, Array(4).fill(identity.uid));
 });

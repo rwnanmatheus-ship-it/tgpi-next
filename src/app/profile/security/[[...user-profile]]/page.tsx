@@ -1,5 +1,5 @@
 import { localizeMetadata } from "@/lib/localization/metadata.server";
-import { getUserBillingRecord } from "@/lib/billing.server";
+import { getAccountMembershipLabel } from "@/lib/account-membership.server";
 import { ensureMemberNumber } from '@/lib/members/identity.server';
 import { courses } from "@/data/courses";
 import { getGlobalRankSignals } from "@/lib/global-rank-signals";
@@ -22,7 +22,6 @@ import { getAllCountries } from "@/lib/countries";
 import { getGlobalRank } from "@/lib/global-ranks";
 import { buildGlobalWorkspaceModel } from "@/lib/global-workspace";
 import { normalizeOnboardingData } from "@/lib/onboarding";
-import { getControlledPremiumAccessMode } from "@/lib/premium-access.server";
 
 const sourceMetadata: Metadata = {
   title: "Account & identity — TGPI Global Key",
@@ -45,10 +44,13 @@ function getDecisionProgress(onboarding: ReturnType<typeof normalizeOnboardingDa
 
 export default async function SecurityPage() {
   const [session, user] = await Promise.all([requireUser(), currentUser()]);
-  const memberIdentity = await ensureMemberNumber(session.userId).catch(() => null);
   const email = user?.primaryEmailAddress?.emailAddress || "No primary email";
   const emailVerified =
     user?.primaryEmailAddress?.verification?.status === "verified";
+  const [memberIdentity, membership] = await Promise.all([
+    ensureMemberNumber(session.userId).catch(() => null),
+    getAccountMembershipLabel({ uid: session.userId, email, emailVerified }),
+  ]);
   const onboarding = normalizeOnboardingData(
     user?.unsafeMetadata.tgpiOnboarding,
   );
@@ -64,20 +66,6 @@ export default async function SecurityPage() {
   const activation = normalizeActivationProgress(
     user?.privateMetadata[TGPI_ACTIVATION_METADATA_KEY],
   );
-  const billing = await getUserBillingRecord(session.userId);
-  const controlledAccessMode = await getControlledPremiumAccessMode({
-    uid: session.userId,
-    email,
-    emailVerified,
-  });
-  const membership =
-    controlledAccessMode === "founder"
-      ? "TGPI Founder"
-      : controlledAccessMode === "preview"
-        ? "Premium Preview"
-        : billing.plan === "premium"
-          ? "TGPI Premium"
-          : "TGPI Free";
   const countries = getAllCountries();
   const countryBySlug = new Map(
     countries.map((country) => [country.slug, country]),
