@@ -11730,19 +11730,19 @@ export const messages = {
   },
   "Before committing to your near-term timeline, verify nationality-specific entry, residence and {activity} for {country}. TGPI does not determine eligibility.": {
   "en": "Before committing to your near-term timeline, verify nationality-specific entry, residence and {activity} for {country}. TGPI does not determine eligibility.",
-  "pt-BR": "Antes de confirmar seu prazo próximo, verifique as exigências de entrada e residência para sua nacionalidade e a {activity} em {country}. A TGPI não determina elegibilidade.",
-  "es": "Antes de comprometerte con un plazo cercano, verifica los requisitos de entrada y residencia para tu nacionalidad y la {activity} en {country}. TGPI no determina la elegibilidad.",
-  "fr": "Avant de confirmer votre échéance proche, vérifiez les conditions d’entrée et de séjour selon votre nationalité ainsi que {activity} en {country}. TGPI ne détermine pas l’admissibilité.",
-  "de": "Bevor du deinen kurzfristigen Zeitplan festlegst, prüfe die Einreise- und Aufenthaltsregeln für deine Staatsangehörigkeit sowie {activity} in {country}. TGPI entscheidet nicht über die Berechtigung.",
-  "it": "Prima di confermare una scadenza ravvicinata, verifica i requisiti di ingresso e soggiorno per la tua cittadinanza e {activity} in {country}. TGPI non determina l’idoneità."
+  "pt-BR": "Antes de confirmar seu prazo próximo, verifique as exigências de entrada e residência para sua nacionalidade em {country}. Confira também: {activity}. A TGPI não determina elegibilidade.",
+  "es": "Antes de comprometerte con un plazo cercano, verifica los requisitos de entrada y residencia para tu nacionalidad en {country}. Comprueba también: {activity}. TGPI no determina la elegibilidad.",
+  "fr": "Avant de confirmer votre échéance proche, vérifiez les conditions d’entrée et de séjour selon votre nationalité en {country}. Vérifiez aussi : {activity}. TGPI ne détermine pas l’admissibilité.",
+  "de": "Bevor du deinen kurzfristigen Zeitplan festlegst, prüfe die Einreise- und Aufenthaltsregeln für deine Staatsangehörigkeit in {country}. Prüfe außerdem: {activity}. TGPI entscheidet nicht über die Berechtigung.",
+  "it": "Prima di confermare una scadenza ravvicinata, verifica i requisiti di ingresso e soggiorno per la tua cittadinanza in {country}. Verifica anche: {activity}. TGPI non determina l’idoneità."
 },
   "Verify nationality-specific entry, residence and {activity} for {country}. TGPI does not determine eligibility.": {
   "en": "Verify nationality-specific entry, residence and {activity} for {country}. TGPI does not determine eligibility.",
-  "pt-BR": "Verifique as exigências de entrada e residência para sua nacionalidade e a {activity} em {country}. A TGPI não determina elegibilidade.",
-  "es": "Verifica los requisitos de entrada y residencia para tu nacionalidad y la {activity} en {country}. TGPI no determina la elegibilidad.",
-  "fr": "Vérifiez les conditions d’entrée et de séjour selon votre nationalité ainsi que {activity} en {country}. TGPI ne détermine pas l’admissibilité.",
-  "de": "Prüfe die Einreise- und Aufenthaltsregeln für deine Staatsangehörigkeit sowie {activity} in {country}. TGPI entscheidet nicht über die Berechtigung.",
-  "it": "Verifica i requisiti di ingresso e soggiorno per la tua cittadinanza e {activity} in {country}. TGPI non determina l’idoneità."
+  "pt-BR": "Verifique as exigências de entrada e residência para sua nacionalidade em {country}. Confira também: {activity}. A TGPI não determina elegibilidade.",
+  "es": "Verifica los requisitos de entrada y residencia para tu nacionalidad en {country}. Comprueba también: {activity}. TGPI no determina la elegibilidad.",
+  "fr": "Vérifiez les conditions d’entrée et de séjour selon votre nationalité en {country}. Vérifiez aussi : {activity}. TGPI ne détermine pas l’admissibilité.",
+  "de": "Prüfe die Einreise- und Aufenthaltsregeln für deine Staatsangehörigkeit in {country}. Prüfe außerdem: {activity}. TGPI entscheidet nicht über die Berechtigung.",
+  "it": "Verifica i requisiti di ingresso e soggiorno per la tua cittadinanza in {country}. Verifica anche: {activity}. TGPI non determina l’idoneità."
 },
   "Your stated budget band is {band}.": {
   "en": "Your stated budget band is {band}.",

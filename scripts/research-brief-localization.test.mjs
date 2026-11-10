@@ -28,6 +28,10 @@ test('dynamic country research tasks use six-language authored templates while k
         ? 'Before committing to your near-term timeline, verify nationality-specific entry, residence and {activity} for {country}. TGPI does not determine eligibility.'
         : 'Verify nationality-specific entry, residence and {activity} for {country}. TGPI does not determine eligibility.';
       assert.equal(result[0].detail, t(template, { activity: t(activity), country: t('Portugal') }));
+      if (locale === 'pt-BR' || locale === 'es') {
+        assert.ok(result[0].detail.includes(t(activity)), `${locale}: activity missing`);
+        assert.ok(!result[0].detail.includes(`a ${t(activity)}`), `${locale}: article disagrees with activity`);
+      }
       assert.ok(result[1].detail.includes(t('Collect dated housing, insurance, transport and education quotes in one currency; include deposits and a contingency. National statistics cannot establish affordability.')), locale);
       if (context.profession) assert.ok(result[2].detail.includes('Save'), `${locale} altered member profession`);
       if (context.languages.length) {
