@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 export default function WhyTGPIIsDifferent() {
   const blocks = [
     {
@@ -21,7 +23,7 @@ export default function WhyTGPIIsDifferent() {
           key={block.title}
           className="rounded-2xl border border-slate-800 bg-slate-900 p-6"
         >
-          <h3 className="text-xl font-bold text-yellow-400">{block.title}</h3>
+          <h3 className="text-xl font-bold text-yellow-400"><LocalizedText text={block.title} /></h3>
           <p className="mt-3 text-sm leading-6 text-slate-300">{block.text}</p>
         </div>
       ))}

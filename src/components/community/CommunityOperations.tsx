@@ -1,4 +1,8 @@
 "use client";
+
+
+import { useLocale as useFormattingLocale } from "@/components/localization/LocaleProvider";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import { useEffect, useState } from "react";
 import s from "./Community.module.css";
 type Status = {
@@ -12,6 +16,7 @@ type Status = {
   pendingSample: { state: string; processed: number; retrying: boolean }[];
 };
 export default function CommunityOperations() {
+  const { locale } = useFormattingLocale();
   const [status, setStatus] = useState<Status | null>(null),
     [error, setError] = useState(""),
     [busy, setBusy] = useState(false);
@@ -39,48 +44,37 @@ export default function CommunityOperations() {
   }, []);
   return (
     <section className={s.panel}>
-      <h2>Privacy & retention operations</h2>
-      <p>
-        Resumable removal jobs and scheduled retention. Existing billing,
-        learning and identity systems are outside this cleanup scope.
-      </p>
+      <h2><LocalizedText text={"Privacy & retention operations"} /></h2>
+      <p><LocalizedText text={"Resumable removal jobs and scheduled retention. Existing billing, learning and identity systems are outside this cleanup scope."} /></p>
       {error && (
         <p className={s.error} role="alert">
-          {error}
+          <LocalizedText text={error} />
         </p>
       )}
       {status && (
         <>
-          <p>
-            Scheduler:{" "}
+          <p><LocalizedText text={"Scheduler:"} />{" "}
             {status.schedulerConfigured
-              ? "configured · every five minutes"
-              : "configuration required"}
+              ? <LocalizedText text={"configured · every five minutes"} />
+              : <LocalizedText text={"configuration required"} />}
           </p>
-          <p>
-            Last run:{" "}
+          <p><LocalizedText text={"Last run:"} />{" "}
             {status.lastRunAt
-              ? new Date(status.lastRunAt).toLocaleString()
-              : "Not run yet"}
+              ? new Date(status.lastRunAt).toLocaleString(locale)
+              : <LocalizedText text={"Not run yet"} />}
           </p>
-          <p>
-            Last full retention cycle:{" "}
+          <p><LocalizedText text={"Last full retention cycle:"} />{" "}
             {status.lastCompletedAt
-              ? new Date(status.lastCompletedAt).toLocaleString()
-              : "Not completed yet"}
+              ? new Date(status.lastCompletedAt).toLocaleString(locale)
+              : <LocalizedText text={"Not completed yet"} />}
           </p>
           <p>
-            {status.processed} records inspected · {status.deleted} expired
-            records removed
-          </p>
+            {status.processed}{" "}<LocalizedText text={"records inspected ·"} />{" "}{status.deleted}{" "}<LocalizedText text={"expired records removed"} /></p>
           <p>
-            {status.pendingSample.length} pending jobs in the current sample ·{" "}
-            {status.identityErrors} identity service failures recorded
-          </p>
+            {status.pendingSample.length}{" "}<LocalizedText text={"pending jobs in the current sample ·"} />{" "}
+            {status.identityErrors}{" "}<LocalizedText text={"identity service failures recorded"} /></p>
           {status.retrying && (
-            <p className={s.notice}>
-              The last run paused. It will resume from its checkpoint.
-            </p>
+            <p className={s.notice}><LocalizedText text={"The last run paused. It will resume from its checkpoint."} /></p>
           )}
         </>
       )}
@@ -100,7 +94,7 @@ export default function CommunityOperations() {
           }
         }}
       >
-        {busy ? "Processing batch…" : "Run maintenance batch"}
+        {busy ? <LocalizedText text={"Processing batch…"} /> : <LocalizedText text={"Run maintenance batch"} />}
       </button>
     </section>
   );

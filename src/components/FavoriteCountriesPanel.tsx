@@ -1,5 +1,7 @@
 "use client";
 
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import { useEffect, useState } from "react";
 import { getFavoriteCountries } from "@/lib/favorites";
 
@@ -17,14 +19,10 @@ export default function FavoriteCountriesPanel() {
 
   return (
     <section className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
-      <h2 className="mb-4 text-xl font-bold text-yellow-400">
-        Favorite Countries
-      </h2>
+      <h2 className="mb-4 text-xl font-bold text-yellow-400"><LocalizedText text={"Favorite Countries"} /></h2>
 
       {favorites.length === 0 ? (
-        <p className="text-sm text-slate-400">
-          You have not favorited any countries yet.
-        </p>
+        <p className="text-sm text-slate-400"><LocalizedText text={"You have not favorited any countries yet."} /></p>
       ) : (
         <div className="flex flex-wrap gap-3">
           {favorites.map((country) => (

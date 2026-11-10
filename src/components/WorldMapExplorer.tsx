@@ -25,13 +25,8 @@ export default function WorldMapExplorer() {
   return (
     <section className="mt-12 rounded-3xl border border-yellow-700/20 bg-gradient-to-b from-yellow-500/10 to-slate-950 p-8">
       <div className="mb-8">
-        <h2 className="text-3xl font-bold text-yellow-400">
-          Global Discovery Map
-        </h2>
-        <p className="mt-2 max-w-3xl text-slate-300">
-          A visual exploration layer by region. Use it to navigate the global
-          structure of TGPI and jump into country pathways.
-        </p>
+        <h2 className="text-3xl font-bold text-yellow-400"><LocalizedText text={"Global Discovery Map"} /></h2>
+        <p className="mt-2 max-w-3xl text-slate-300"><LocalizedText text={"A visual exploration layer by region. Use it to navigate the global structure of TGPI and jump into country pathways."} /></p>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
@@ -42,10 +37,10 @@ export default function WorldMapExplorer() {
           >
             <div className="mb-4">
               <h3 className="text-2xl font-bold text-yellow-400">
-                {region.title}
+                <LocalizedText text={region.title} />
               </h3>
               <p className="mt-2 text-sm leading-7 text-slate-300">
-                {region.description}
+                <LocalizedText text={region.description} />
               </p>
             </div>
 

@@ -24,10 +24,8 @@ export default function TGPISidebar() {
   return (
     <aside className="hidden min-h-screen w-64 border-r border-white/10 bg-[#020617] p-5 lg:block">
       <Link href="/" className="mb-8 block">
-        <p className="text-xl font-bold text-white">TGPI</p>
-        <p className="text-[10px] uppercase tracking-[0.25em] text-slate-500">
-          Global Institute
-        </p>
+        <p className="text-xl font-bold text-white"><LocalizedText text={"TGPI"} /></p>
+        <p className="text-[10px] uppercase tracking-[0.25em] text-slate-500"><LocalizedText text={"Global Institute"} /></p>
       </Link>
 
       <nav className="space-y-2">
@@ -52,9 +50,7 @@ export default function TGPISidebar() {
 
       <div className="mt-8 rounded-2xl border border-yellow-500/20 bg-yellow-500/10 p-4">
         <p className="font-semibold text-yellow-400"><LocalizedText text="Premium Plan" /></p>
-        <p className="mt-2 text-xs text-slate-400">
-          Unlock certificates, AI tools, and global identity.
-        </p>
+        <p className="mt-2 text-xs text-slate-400"><LocalizedText text={"Unlock certificates, AI tools, and global identity."} /></p>
 
         <Link
           href="/premium"

@@ -1,6 +1,6 @@
 "use client";
 import LanguageSelector from "@/components/localization/LanguageSelector";
-import { useLocale } from "@/components/localization/LocaleProvider";
+import { useLocale , LocalizedText } from "@/components/localization/LocaleProvider";
 import Link from "next/link";
 import BrandCrest from "@/components/BrandCrest";
 
@@ -66,8 +66,8 @@ export default function GlobalFooter() {
             <Link href="/" aria-label={t("TGPI home")} className="inline-flex max-w-full items-center gap-3 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#F1D796]">
               <BrandCrest alt={t("TGPI institutional crest")} width={1041} height={1274} sizes="66px" className="h-20 w-auto shrink-0 object-contain" />
               <span className="min-w-0">
-                <span className="block text-2xl font-semibold tracking-[0.12em] text-white">TGPI</span>
-                <span className="mt-1 block text-[11px] font-semibold leading-5 tracking-[0.08em] text-[#E5C887]">The Global Polymath Institute</span>
+                <span className="block text-2xl font-semibold tracking-[0.12em] text-white"><LocalizedText text={"TGPI"} /></span>
+                <span className="mt-1 block text-[11px] font-semibold leading-5 tracking-[0.08em] text-[#E5C887]"><LocalizedText text={"The Global Polymath Institute"} /></span>
               </span>
             </Link>
             <p className="mt-4 max-w-sm text-sm leading-6 text-[#B7C7D9]">{t("An independent institute connecting practical education, decision intelligence and global adaptability.")}</p>
@@ -89,7 +89,7 @@ export default function GlobalFooter() {
           <p className="text-sm font-medium leading-6 text-[#DCE5EE]">{t("Built in Brazil. Connected to the world.")}</p>
           <div className="flex flex-wrap items-center gap-x-6 gap-y-1">
             <a href="mailto:contact@theglobalpolymath.com" className={linkStyle}>{t("Contact TGPI")}<span aria-hidden="true" className="ml-2">↗</span></a>
-            <a href="https://www.instagram.com/theglobalpolymath/" target="_blank" rel="noopener noreferrer" className={linkStyle}>Instagram<span className="sr-only">{t("(opens in a new tab)")}</span><span aria-hidden="true" className="ml-2">↗</span></a>
+            <a href="https://www.instagram.com/theglobalpolymath/" target="_blank" rel="noopener noreferrer" className={linkStyle}><LocalizedText text={"Instagram"} /><span className="sr-only">{t("(opens in a new tab)")}</span><span aria-hidden="true" className="ml-2">↗</span></a>
           </div>
         </div>
 

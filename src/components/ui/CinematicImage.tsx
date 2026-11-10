@@ -1,3 +1,5 @@
+
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import type { CSSProperties } from 'react';
 import { cinematicSrcSet, cinematicUrl, type CinematicKey } from '@/lib/cinematic-art';
 
@@ -21,7 +23,7 @@ export default function CinematicImage({ asset, alt, sizes, priority = false, fi
       <source type="image/avif" srcSet={avif} sizes={sizes} />
       <source type="image/webp" srcSet={webp} sizes={sizes} />
       {/* Encoded ahead of deployment; Next optimization would re-encode these same variants. */}
-      <img src={cinematicUrl(asset, 800)} srcSet={webp} sizes={sizes} alt={alt} width={1600} height={900}
+      <LocalizedElement as="img" src={cinematicUrl(asset, 800)} srcSet={webp} sizes={sizes} alt={alt} width={1600} height={900}
         loading={priority ? 'eager' : 'lazy'} fetchPriority={priority ? 'high' : 'auto'} decoding="async"
         className={className} data-tgpi-art={asset}
         style={{ ...(fill ? { position: 'absolute', inset: 0, height: '100%', width: '100%' } : { width: '100%', height: 'auto' }), objectFit: 'cover', objectPosition: position }} />

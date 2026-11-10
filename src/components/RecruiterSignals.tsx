@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import { calculateReputation } from "@/lib/calculate-reputation";
 import { prettifyIntent } from "@/lib/identity";
 import type { UserData } from "@/types";
@@ -28,7 +30,7 @@ export default function RecruiterSignals({ user }: RecruiterSignalsProps) {
 
   return (
     <section className="rounded-3xl border border-slate-800 bg-slate-900 p-8">
-      <h2 className="text-2xl font-bold text-yellow-400">Recruiter Signals</h2>
+      <h2 className="text-2xl font-bold text-yellow-400"><LocalizedText text={"Recruiter Signals"} /></h2>
 
       <div className="mt-6 grid gap-4 md:grid-cols-2">
         {signals.map((signal) => (
@@ -36,7 +38,7 @@ export default function RecruiterSignals({ user }: RecruiterSignalsProps) {
             key={signal}
             className="rounded-2xl border border-slate-800 bg-slate-950 p-5"
           >
-            <p className="text-sm leading-7 text-slate-300">✔ {signal}</p>
+            <p className="text-sm leading-7 text-slate-300">✔ <LocalizedText text={signal} /></p>
           </div>
         ))}
       </div>

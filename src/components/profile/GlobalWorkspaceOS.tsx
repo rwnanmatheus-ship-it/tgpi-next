@@ -1,3 +1,5 @@
+
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import { getLocale } from '@/lib/localization/server';
 import { translate } from '@/lib/localization/messages';
 import CommunityConnections from '@/components/community/CommunityConnections';
@@ -30,7 +32,7 @@ type Props = {
 };
 const labels = { completed: 'Completed', in_progress: 'In progress', needs_attention: 'Needs context', not_started: 'Not started' };
 function Progress({ value, label }: { value: number; label: string }) {
-  return <div className={styles.progress}><progress max={100} value={value} aria-label={label} /><span>{value}%</span></div>;
+  return <div className={styles.progress}><LocalizedElement as="progress" max={100} value={value} aria-label={label} /><span>{value}%</span></div>;
 }
 export default async function GlobalWorkspaceOS({ learning, identity, model, onboardingCompleted, rank, userId, resources, history, historyCursor, historyCoverage, historyAvailable, historyPending, preferences, preferencesAvailable }: Props) {
   const locale = await getLocale();
@@ -57,7 +59,7 @@ export default async function GlobalWorkspaceOS({ learning, identity, model, onb
       {onboardingCompleted && <p role="status" className={styles.notice}><LocalizedText text="Your global context has been saved. Your workspace now reflects your plan." /></p>}
       <section className={styles.hero} aria-labelledby="mission-title">
         <CinematicImage asset="workspace-global-focus" alt="" priority sizes="(min-width: 1440px) 1400px, 100vw" className={styles.heroImage} />
-        <div className={styles.heroContent}><div className={styles.identityLine}><span className={styles.membership}>{t(identity.membership)}</span><span><LocalizedText text="Private workspace" /></span></div><p className={styles.eyebrow}><LocalizedText text="Your current direction" /></p><h2 id="mission-title">{t(model.goalLabel === 'Goal not defined' ? 'Start with a clear direction.' : model.goalLabel)}</h2><p>{resume ? `${t(resume.title)} · ${t(resume.detail)}` : t('Connect your goals, destinations and practical preparation in one place.')}</p><div className={styles.actions}><Link className={styles.primary} href={primary?.href ?? '/onboarding'}>{t(primary?.action ?? 'Define my direction')} <span aria-hidden="true">↗</span></Link><Link href="/profile/security">{identity.handle ? `@${identity.handle}` : t('Set up your @ID')} · {identity.globalId}</Link></div></div>
+        <div className={styles.heroContent}><div className={styles.identityLine}><span className={styles.membership}>{t(identity.membership)}</span><span><LocalizedText text="Private workspace" /></span></div><p className={styles.eyebrow}><LocalizedText text="Your current direction" /></p><h2 id="mission-title">{t(model.goalLabel === 'Goal not defined' ? 'Start with a clear direction.' : model.goalLabel)}</h2><p>{resume ? <LocalizedText text={"{value0} · {value1}"} values={{value0: String(t(resume.title)), value1: String(t(resume.detail))}} /> : t('Connect your goals, destinations and practical preparation in one place.')}</p><div className={styles.actions}><Link className={styles.primary} href={primary?.href ?? '/onboarding'}>{t(primary?.action ?? 'Define my direction')} <span aria-hidden="true">↗</span></Link><Link href="/profile/security">{identity.handle ? <LocalizedText text={"@{value0}"} values={{value0: String(identity.handle)}} /> : t('Set up your @ID')} · {identity.globalId}</Link></div></div>
         <div className={styles.heroContext}><p className={styles.eyebrow}><LocalizedText text="Plan context" /></p><strong>{model.completion}<small>%</small></strong><p><LocalizedText text="Information supplied for your journey" /></p><Progress value={model.completion} label={t("Plan context supplied")} /><Link href="#workspace-personal"><LocalizedText text="See criteria ↓" /></Link></div>
       </section>
       <nav className={styles.localNav} aria-label={t("Workspace sections")}><a href="#workspace-now"><LocalizedText text="Now" /></a><a href="#workspace-journey"><LocalizedText text="My journey" /></a><a href="#workspace-library"><LocalizedText text="My library" /></a><a href="#workspace-history"><LocalizedText text="My history" /></a></nav>

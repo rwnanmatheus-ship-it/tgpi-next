@@ -16,7 +16,7 @@ export default function GlobalRoomsList() {
             href={`/rooms/${room}`}
             className="rounded-2xl border border-slate-800 bg-slate-950 p-4 hover:border-yellow-500"
           >
-            <p className="text-white font-semibold capitalize">{room}</p>
+            <p className="text-white font-semibold capitalize"><LocalizedText text={room} /></p>
           </Link>
         ))}
       </div>

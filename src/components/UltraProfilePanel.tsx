@@ -1,9 +1,11 @@
 "use client";
+
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 
 
 import { LocalizedText } from "@/components/localization/LocaleProvider";
-import Image from "next/image";
+import Image from "@/components/localization/LocalizedImage";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import TGPIIdentityCard from "@/components/TGPIIdentityCard";
@@ -82,8 +84,7 @@ export default function UltraProfilePanel() {
               {profile?.displayName || profile?.name || <LocalizedText text={"TGPI Member"} />}
             </h1>
             <p className="text-slate-400">@{profile?.username || <LocalizedText text={"username"} />}</p>
-            <div className="mt-2 text-xs">
-              TGPI ID:{" "}
+            <div className="mt-2 text-xs"><LocalizedText text={"TGPI ID:"} />{" "}
               <span className="font-bold text-yellow-400">
                 {profile?.tgpiId || "TGPI-ID"}
               </span>
@@ -126,9 +127,9 @@ export default function UltraProfilePanel() {
 
         {tab === "overview" && (
           <div className="grid gap-6 md:grid-cols-3">
-            <div className="rounded-2xl border border-white/10 p-6">XP: {profile?.xp || 0}</div>
+            <div className="rounded-2xl border border-white/10 p-6"><LocalizedText text={"XP:"} />{" "}{profile?.xp || 0}</div>
             <div className="rounded-2xl border border-white/10 p-6"><LocalizedText text={"Level:"} />{" "}{profile?.level || 1}</div>
-            <div className="rounded-2xl border border-white/10 p-6">Streak: {profile?.streak || 0}</div>
+            <div className="rounded-2xl border border-white/10 p-6"><LocalizedText text={"Streak:"} />{" "}{profile?.streak || 0}</div>
           </div>
         )}
 
@@ -146,19 +147,19 @@ export default function UltraProfilePanel() {
               placeholder={localizeLabel("Username")}
               className="rounded-xl border border-white/20 bg-black p-4"
             />
-            <input
+            <LocalizedElement as="input"
               value={form.country || ""}
               onChange={(event) => updateForm("country", event.target.value)}
               placeholder="Country 🌎"
               className="rounded-xl border border-white/20 bg-black p-4"
             />
-            <input
+            <LocalizedElement as="input"
               value={form.languagePreference || ""}
               onChange={(event) => updateForm("languagePreference", event.target.value)}
               placeholder="Languages 🌐"
               className="rounded-xl border border-white/20 bg-black p-4"
             />
-            <textarea
+            <LocalizedElement as="textarea"
               value={form.bio || ""}
               onChange={(event) => updateForm("bio", event.target.value)}
               placeholder="Bio ✍🏼"
@@ -168,19 +169,13 @@ export default function UltraProfilePanel() {
         )}
 
         {tab === "goals" && (
-          <div className="rounded-2xl border border-white/10 p-6">
-            🎯 Strategic goals coming soon
-          </div>
+          <div className="rounded-2xl border border-white/10 p-6"><LocalizedText text={"🎯 Strategic goals coming soon"} /></div>
         )}
         {tab === "activity" && (
-          <div className="rounded-2xl border border-white/10 p-6">
-            📊 User activity coming soon
-          </div>
+          <div className="rounded-2xl border border-white/10 p-6"><LocalizedText text={"📊 User activity coming soon"} /></div>
         )}
         {tab === "settings" && (
-          <div className="rounded-2xl border border-white/10 p-6">
-            ⚙️ Settings coming soon
-          </div>
+          <div className="rounded-2xl border border-white/10 p-6"><LocalizedText text={"⚙️ Settings coming soon"} /></div>
         )}
 
         <button

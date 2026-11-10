@@ -1,3 +1,4 @@
+import { localizeMetadata } from "@/lib/localization/metadata.server";
 import { getLocale } from "@/lib/localization/server";
 import { translate } from "@/lib/localization/messages";
 import { LocalizedText } from "@/components/localization/LocaleProvider";
@@ -7,7 +8,7 @@ import Link from "next/link";
 import AboutNavigation from "@/components/about/AboutNavigation";
 import styles from "@/components/about/about.module.css";
 
-export const metadata: Metadata = {
+const sourceMetadata: Metadata = {
   title: "About TGPI | The Global Polymath Institute",
   description: "Discover The Global Polymath Institute: practical education, country intelligence and preparation for a more intentional global life.",
   alternates: { canonical: "/about" },
@@ -39,7 +40,7 @@ export default async function AboutPage() {
       <section className={styles.hero} aria-labelledby="about-title">
         <Image src="/images/cinematic-2026/country-research-1600.webp" alt={t("A brass globe and open notebook overlooking an international city at blue hour")} fill sizes="(max-width: 1280px) 100vw, 1280px" priority className={styles.heroImage} />
         <div className={styles.heroContent}>
-          <p className={styles.eyebrow}>The Global Polymath Institute</p>
+          <p className={styles.eyebrow}><LocalizedText text={"The Global Polymath Institute"} /></p>
           <h1 id="about-title"><LocalizedText text="A wider world." /><br /><LocalizedText text={"A clearer"} />{" "}<em><LocalizedText text={"direction."} /></em></h1>
           <p className={styles.heroLead}><LocalizedText text={"Practical education and intelligence for people building a life beyond borders."} /></p>
           <div className={styles.actions}><Link href="/sign-up" className={styles.primary}><LocalizedText text="Start your TGPI journey" />{" "}<span aria-hidden="true">↗</span></Link><a href="#purpose" className={styles.secondary}><LocalizedText text={"Discover the institute"} />{" "}<span aria-hidden="true">↓</span></a></div>
@@ -49,7 +50,7 @@ export default async function AboutPage() {
       <AboutNavigation />
       <section id="purpose" className={`${styles.section} ${styles.purpose}`}>
         <div><p className={styles.eyebrow}><LocalizedText text={"01 / Our purpose"} /></p><h2><LocalizedText text={"The world is connected."} /><br /><LocalizedText text={"Your preparation"} /><br /><LocalizedText text={"should be, too."} /></h2></div>
-        <div className={styles.prose}><p className={styles.largeText}><LocalizedText text={"The Global Polymath Institute (TGPI) is a digital education and decision-support platform."} /></p><p><LocalizedText text={"Operated by TGPI GLOBAL EDUCATION LTDA, the platform brings together country research, practical learning and preparation for international life."} /></p><p><LocalizedText text={"A global life begins long before departure. TGPI connects these steps. We bring country research, practical learning and personal preparation into a shared framework, so information can become understanding — and understanding can guide action."} /></p><p><Link href="/legal"><LocalizedText text={"Company information and official contact channels →"} /></Link></p><div className={styles.signature}><Image src="/brand/tgpi-crest-metal-v3.webp" width={56} height={64} alt={t("TGPI crest")} /><span><strong>TGPI</strong><br />The Global Polymath Institute</span></div></div>
+        <div className={styles.prose}><p className={styles.largeText}><LocalizedText text={"The Global Polymath Institute (TGPI) is a digital education and decision-support platform."} /></p><p><LocalizedText text={"Operated by TGPI GLOBAL EDUCATION LTDA, the platform brings together country research, practical learning and preparation for international life."} /></p><p><LocalizedText text={"A global life begins long before departure. TGPI connects these steps. We bring country research, practical learning and personal preparation into a shared framework, so information can become understanding — and understanding can guide action."} /></p><p><Link href="/legal"><LocalizedText text={"Company information and official contact channels →"} /></Link></p><div className={styles.signature}><Image src="/brand/tgpi-crest-metal-v3.webp" width={56} height={64} alt={t("TGPI crest")} /><span><strong><LocalizedText text={"TGPI"} /></strong><br /><LocalizedText text={"The Global Polymath Institute"} /></span></div></div>
       </section>
       <section id="framework" className={`${styles.section} ${styles.framework}`}>
         <div className={styles.sectionHeading}><div><p className={styles.eyebrow}><LocalizedText text={"02 / One connected framework"} /></p><h2><LocalizedText text={"Four pillars."} /><br /><LocalizedText text={"One global perspective."} /></h2></div><p><LocalizedText text={"Each pillar answers a different question. Together, they give your next chapter a more deliberate foundation."} /></p></div>
@@ -68,7 +69,9 @@ export default async function AboutPage() {
           <details><summary><LocalizedText text={"Clear scope. Honest expectations."} />{" "}<span aria-hidden="true">+</span></summary><p><LocalizedText text={"TGPI is an education and decision-support platform. It does not guarantee visas, employment or relocation outcomes, and does not replace qualified legal or immigration advice."} /></p></details>
         </div>
       </section>
-      <section className={styles.closing}><p className={styles.eyebrow}><LocalizedText text={"Your next chapter"} /></p><h2><LocalizedText text={"Understand more."} /><br /><em><LocalizedText text={"Move forward with purpose."} /></em></h2><p><LocalizedText text={"Explore the world through your priorities. Build the capabilities to take your next step."} /></p><div className={styles.actions}><Link href="/sign-up" className={styles.primary}><LocalizedText text={"Create your account"} />{" "}<span aria-hidden="true">↗</span></Link><Link href="/pricing" className={styles.secondary}><LocalizedText text="Explore TGPI Premium" />{" "}<span aria-hidden="true">→</span></Link></div><span className={styles.wordmark}>TGPI</span></section>
+      <section className={styles.closing}><p className={styles.eyebrow}><LocalizedText text={"Your next chapter"} /></p><h2><LocalizedText text={"Understand more."} /><br /><em><LocalizedText text={"Move forward with purpose."} /></em></h2><p><LocalizedText text={"Explore the world through your priorities. Build the capabilities to take your next step."} /></p><div className={styles.actions}><Link href="/sign-up" className={styles.primary}><LocalizedText text={"Create your account"} />{" "}<span aria-hidden="true">↗</span></Link><Link href="/pricing" className={styles.secondary}><LocalizedText text="Explore TGPI Premium" />{" "}<span aria-hidden="true">→</span></Link></div><span className={styles.wordmark}><LocalizedText text={"TGPI"} /></span></section>
     </div>
   </main>;
 }
+
+export async function generateMetadata() { return localizeMetadata(sourceMetadata); }

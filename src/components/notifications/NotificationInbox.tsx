@@ -1,4 +1,6 @@
 "use client";
+
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import NavigationIcon from "@/components/navigation/NavigationIcon";
@@ -11,7 +13,7 @@ import {
   notificationGroup,
   sortNotifications,
 } from "@/lib/notifications/presentation";
-import { useLocale } from "@/components/localization/LocaleProvider";
+import { useLocale , LocalizedText } from "@/components/localization/LocaleProvider";
 import {
   notificationText,
   localizedNotification,
@@ -234,10 +236,10 @@ export default function NotificationInbox() {
                                         void inbox.mutate(item.id, "read");
                                     }}
                                   >
-                                    <h3>{item.title}</h3>
+                                    <h3><LocalizedText text={item.title} /></h3>
                                     <p>{item.body}</p>
                                   </Link>
-                                  <time
+                                  <LocalizedElement as="time"
                                     dateTime={item.createdAt}
                                     title={
                                       now
@@ -248,9 +250,9 @@ export default function NotificationInbox() {
                                   >
                                     {now ? time(item.createdAt) : ""}
                                     {item.timestampKind === "observed"
-                                      ? ` · ${t("observed")}`
+                                      ? <LocalizedText text={" · {value0}"} values={{value0: String(t("observed"))}} />
                                       : ""}
-                                  </time>
+                                  </LocalizedElement>
                                   <div className={styles.rowActions}>
                                     <Link
                                       href={item.href}

@@ -1,4 +1,6 @@
 'use client';
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import { useEffect, useId, useRef, type ReactNode } from 'react';
 import { containDialogFocus } from '@/lib/dialog-focus';
 import { Button } from './Button';
@@ -14,5 +16,5 @@ export function Dialog({ open, onClose, title, closeLabel, children, placement =
     document.body.style.overflow = 'hidden';
     return () => { dialog.close(); document.body.style.overflow = overflow; active?.focus({ preventScroll: true }); };
   }, [open]);
-  return <dialog ref={ref} className="ds-dialog" data-placement={placement} aria-labelledby={titleId} onKeyDown={containDialogFocus} onCancel={event => { event.preventDefault(); onClose(); }} onClick={event => { if (event.target !== event.currentTarget) return; const rect = event.currentTarget.getBoundingClientRect(); if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) onClose(); }}><header><h2 id={titleId}>{title}</h2><Button variant="ghost" onClick={onClose} aria-label={closeLabel}>×</Button></header>{children}</dialog>;
+  return <dialog ref={ref} className="ds-dialog" data-placement={placement} aria-labelledby={titleId} onKeyDown={containDialogFocus} onCancel={event => { event.preventDefault(); onClose(); }} onClick={event => { if (event.target !== event.currentTarget) return; const rect = event.currentTarget.getBoundingClientRect(); if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) onClose(); }}><header><h2 id={titleId}><LocalizedText text={title} /></h2><Button variant="ghost" onClick={onClose} aria-label={closeLabel}>×</Button></header>{children}</dialog>;
 }

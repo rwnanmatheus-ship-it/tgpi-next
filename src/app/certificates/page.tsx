@@ -1,5 +1,8 @@
+import { localizeMetadata } from "@/lib/localization/metadata.server";
+
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import type { Metadata } from "next";
-import Image from "next/image";
+import Image from "@/components/localization/LocalizedImage";
 import CinematicImage from "@/components/ui/CinematicImage";
 import Link from "next/link";
 import { requireApiUser, requireUser } from "@/lib/auth/guards";
@@ -13,7 +16,7 @@ import "./certificates.css";
 import { LocalizedText } from "@/components/localization/LocaleProvider";
 
 
-export const metadata: Metadata = {
+const sourceMetadata: Metadata = {
   title: "My certificates — TGPI",
   description:
     "Your achievements, next certificates and verified learning progress in one place.",
@@ -46,25 +49,22 @@ export default async function CertificatesPage() {
   return (
     <main className="certificate-center">
       <div className="certificate-shell">
-        <nav aria-label="Breadcrumb" className="certificate-breadcrumb">
+        <LocalizedElement as="nav" aria-label="Breadcrumb" className="certificate-breadcrumb">
           <Link href="/profile"><LocalizedText text="Workspace" /></Link>
           <span aria-hidden="true">/</span>
           <span><LocalizedText text="Certificates" /></span>
-        </nav>
+        </LocalizedElement>
         <header className="certificate-header">
           <div className="min-w-0">
-            <p className="certificate-eyebrow">TGPI · Verified learning</p>
-            <h1>Your learning. Recognized.</h1>
-            <p>
-              See what you have earned, discover your next milestone and share
-              your achievement.
-            </p>
+            <p className="certificate-eyebrow"><LocalizedText text={"TGPI · Verified learning"} /></p>
+            <h1><LocalizedText text={"Your learning. Recognized."} /></h1>
+            <p><LocalizedText text={"See what you have earned, discover your next milestone and share your achievement."} /></p>
           </div>
           <Link href="/courses" className="certificate-button secondary"><LocalizedText text="Explore learning" />{" "}<span aria-hidden="true">↗</span>
           </Link>
         </header>
         <div className="certificate-overview">
-          <section
+          <LocalizedElement as="section"
             className="certificate-identity"
             aria-label="Your certificate portfolio"
           >
@@ -76,13 +76,11 @@ export default async function CertificatesPage() {
               priority
             />
             <div className="min-w-0">
-              <p className="certificate-eyebrow">
-                Personal achievement portfolio
-              </p>
+              <p className="certificate-eyebrow"><LocalizedText text={"Personal achievement portfolio"} /></p>
               <h2>{identity.publicName}</h2>
-              <p>Issued by The Global Polymath Institute</p>
+              <p><LocalizedText text={"Issued by The Global Polymath Institute"} /></p>
             </div>
-          </section>
+          </LocalizedElement>
           <dl className="certificate-stats">
             <div>
               <dt><LocalizedText text={"Certificates earned"} /></dt>
@@ -108,16 +106,10 @@ export default async function CertificatesPage() {
           </dl>
         </div>
         {records.status === "rejected" && (
-          <div role="alert" className="certificate-notice">
-            Your certificates could not be loaded. Refresh this page to try
-            again. Your learning records have not changed.
-          </div>
+          <div role="alert" className="certificate-notice"><LocalizedText text={"Your certificates could not be loaded. Refresh this page to try again. Your learning records have not changed."} /></div>
         )}
         {status && !status.credentialConfigured && (
-          <div className="certificate-notice" role="status">
-            Certificate issuance is temporarily unavailable. You can continue
-            learning; issuance requires TGPI server activation.
-          </div>
+          <div className="certificate-notice" role="status"><LocalizedText text={"Certificate issuance is temporarily unavailable. You can continue learning; issuance requires TGPI server activation."} /></div>
         )}
         {records.status === "fulfilled" && (
           <CredentialPortfolioExplorer
@@ -139,10 +131,10 @@ export default async function CertificatesPage() {
           >
             <div className="certificate-section-heading">
               <div>
-                <p className="certificate-eyebrow">Your next milestone</p>
+                <p className="certificate-eyebrow"><LocalizedText text={"Your next milestone"} /></p>
                 <h2 id="next-certificate-title"><LocalizedText text={"Certificates you can earn"} /></h2>
               </div>
-              <span className="certificate-count">1 available path</span>
+              <span className="certificate-count"><LocalizedText text={"1 available path"} /></span>
             </div>
             <article className="certificate-next">
               <div className="certificate-course-art" aria-hidden="true">
@@ -153,28 +145,21 @@ export default async function CertificatesPage() {
                   width={90}
                   height={106}
                 />
-                <span>
-                  PROFESSIONAL
-                  <br />
-                  CERTIFICATE
-                </span>
-                <p>TGPI Verified Learning</p>
+                <span><LocalizedText text={"PROFESSIONAL"} /><br /><LocalizedText text={"CERTIFICATE"} /></span>
+                <p><LocalizedText text={"TGPI Verified Learning"} /></p>
               </div>
               <div className="certificate-course-content">
                 <span className="certificate-status">
                   {!status
-                    ? "Progress unavailable"
+                    ? <LocalizedText text={"Progress unavailable"} />
                     : eligibility?.eligible
-                      ? "Ready for certification"
+                      ? <LocalizedText text={"Ready for certification"} />
                       : progress
                         ? <LocalizedText text={"In progress"} />
-                        : "Available to earn"}
+                        : <LocalizedText text={"Available to earn"} />}
                 </span>
                 <h3><LocalizedText text={course.title} /></h3>
-                <p>
-                  Build practical English skills for life abroad. Complete your
-                  learning and required assessments to earn your certificate.
-                </p>
+                <p><LocalizedText text={"Build practical English skills for life abroad. Complete your learning and required assessments to earn your certificate."} /></p>
                 {status ? (
                   <>
                     <div className="certificate-progress-label">
@@ -184,23 +169,18 @@ export default async function CertificatesPage() {
                         {eligibility?.totalLessons}
                       </strong>
                     </div>
-                    <progress
+                    <LocalizedElement as="progress"
                       value={progress}
                       max={100}
                       aria-label="Course lesson completion"
                     >
                       {progress}%
-                    </progress>
+                    </LocalizedElement>
                     <p className="certificate-progress-note">
-                      {progress}% of lessons · Assessment and identity
-                      requirements are checked separately.
-                    </p>
+                      {progress}<LocalizedText text={"% of lessons · Assessment and identity requirements are checked separately."} /></p>
                   </>
                 ) : (
-                  <p role="status">
-                    We could not confirm your progress. Open the certification
-                    path to retry.
-                  </p>
+                  <p role="status"><LocalizedText text={"We could not confirm your progress. Open the certification path to retry."} /></p>
                 )}
                 <div className="certificate-course-actions">
                   <Link
@@ -208,50 +188,44 @@ export default async function CertificatesPage() {
                     className="certificate-button"
                   >
                     {eligibility?.eligible
-                      ? "Review and issue certificate"
+                      ? <LocalizedText text={"Review and issue certificate"} />
                       : progress === 100
-                        ? "Review certification requirements"
+                        ? <LocalizedText text={"Review certification requirements"} />
                         : progress
                           ? <LocalizedText text={"Continue learning"} />
-                          : "View course"}
+                          : <LocalizedText text={"View course"} />}
                     <span aria-hidden="true">→</span>
                   </Link>
                   <Link
                     href={`/courses/${course.id}/certification`}
                     className="certificate-text-link"
-                  >
-                    View requirements
-                  </Link>
+                  ><LocalizedText text={"View requirements"} /></Link>
                 </div>
               </div>
             </article>
           </section>
         )}
-        <section
+        <LocalizedElement as="section"
           className="certificate-help"
           aria-label="Certificate information"
         >
           <div>
-            <h2>Built to be shared. Easy to verify.</h2>
-            <p>
-              Download your certificate as a PDF or share its public
-              verification link. Only issued certificates appear as earned;
-              revoked records remain clearly marked.
-            </p>
+            <h2><LocalizedText text={"Built to be shared. Easy to verify."} /></h2>
+            <p><LocalizedText text={"Download your certificate as a PDF or share its public verification link. Only issued certificates appear as earned; revoked records remain clearly marked."} /></p>
           </div>
-          <Link href="/verify" className="certificate-button secondary">
-            Verify a certificate ↗
-          </Link>
-        </section>
-        <nav
+          <Link href="/verify" className="certificate-button secondary"><LocalizedText text={"Verify a certificate ↗"} /></Link>
+        </LocalizedElement>
+        <LocalizedElement as="nav"
           className="certificate-footer-links"
           aria-label="Connected workspace"
         >
           <Link href="/courses"><LocalizedText text="Learning" /></Link>
-          <Link href="/global-key">Global Key</Link>
+          <Link href="/global-key"><LocalizedText text={"Global Key"} /></Link>
           <Link href="/profile"><LocalizedText text="My workspace" /></Link>
-        </nav>
+        </LocalizedElement>
       </div>
     </main>
   );
 }
+
+export async function generateMetadata() { return localizeMetadata(sourceMetadata); }

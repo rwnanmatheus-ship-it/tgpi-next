@@ -86,6 +86,7 @@ test('sponsored route streams a completed answer without invoking paid accountin
   class Provider { responses = { create: async () => { providerCalls++; return (async function* () { yield { type: 'response.output_text.delta', delta: 'Test answer' }; yield { type: 'response.completed', response: { usage: { input_tokens: 10, output_tokens: 3 } } }; })(); } }; }
   const paid = async () => { paidCalls++; throw Error('Paid path must not run'); };
   const route = load('src/app/api/atlas/chat/route.ts', {
+    '@/lib/localization/server': { getLocale: async () => 'de' },
     openai: Provider, '@clerk/nextjs/server': {}, '@/lib/atlas/sponsored.server': h,
     '@/lib/atlas/http.server': { atlasUser: async () => 'alice', requireAtlasGeneration: () => 2, atlasBody: async () => input(), atlasFailure: () => Response.json({}, { status: 503 }) },
     '@/lib/atlas/contracts': contracts, '@/lib/atlas/context': { atlasInstructions: 'Test', selectAtlasContext: () => ({ data: {}, factors: [] }) },

@@ -18,10 +18,8 @@ export default function TGPITopNav() {
         <Link href="/" className="flex items-center gap-3">
           <span className="text-2xl text-yellow-400">◎</span>
           <div>
-            <p className="text-xl font-bold text-white">TGPI</p>
-            <p className="text-[10px] uppercase tracking-[0.25em] text-slate-400">
-              The Global Polymath Institute
-            </p>
+            <p className="text-xl font-bold text-white"><LocalizedText text={"TGPI"} /></p>
+            <p className="text-[10px] uppercase tracking-[0.25em] text-slate-400"><LocalizedText text={"The Global Polymath Institute"} /></p>
           </div>
         </Link>
 
@@ -32,7 +30,7 @@ export default function TGPITopNav() {
               href={item.href}
               className="text-sm font-medium text-slate-300 transition hover:text-yellow-400"
             >
-              {item.label}
+              <LocalizedText text={item.label} />
             </Link>
           ))}
         </nav>

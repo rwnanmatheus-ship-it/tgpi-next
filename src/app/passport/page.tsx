@@ -1,3 +1,4 @@
+import { localizeMetadata } from "@/lib/localization/metadata.server";
 import "./documents.css";
 import { isLearningStorageConfigured } from "@/lib/firestore-admin-rest.server";
 import { listUserLearningCredentials } from "@/lib/learning-records.server";
@@ -14,7 +15,7 @@ import { getAllCountries } from "@/lib/countries";
 import { buildDocumentsMemberModel } from "@/lib/documents-os";
 import { normalizeOnboardingData } from "@/lib/onboarding";
 
-export const metadata: Metadata = {
+const sourceMetadata: Metadata = {
   alternates: { canonical: "/passport" },
   title: "Documents OS | TGPI Global Readiness",
   description:
@@ -59,3 +60,5 @@ export default async function PassportPage() {
     />
   );
 }
+
+export async function generateMetadata() { return localizeMetadata(sourceMetadata); }

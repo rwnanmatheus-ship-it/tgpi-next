@@ -16,9 +16,7 @@ export default function PrivacySettings() {
           type="checkbox"
           checked={showDocument}
           onChange={() => setShowDocument(!showDocument)}
-        />
-        Show document verification publicly
-      </label>
+        /><LocalizedText text={"Show document verification publicly"} /></label>
     </div>
   );
 }

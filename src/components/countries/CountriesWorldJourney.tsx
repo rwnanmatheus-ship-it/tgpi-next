@@ -1,7 +1,9 @@
 "use client";
+
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 
-import Image from "next/image";
+import Image from "@/components/localization/LocalizedImage";
 import Link from "next/link";
 import { useDeferredValue, useMemo, useState } from "react";
 import CountriesWorldMap from "@/components/countries/CountriesWorldMap";
@@ -117,24 +119,18 @@ export default function CountriesWorldJourney({ countries }: CountriesWorldJourn
     >
       <div className="grid gap-5 border-b border-[var(--tgpi-border)] p-6 sm:p-8 lg:grid-cols-[1fr_.54fr] lg:items-end">
         <div>
-          <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-strong)]">
-            TGPI Interactive World Atlas
-          </p>
+          <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-strong)]"><LocalizedText text={"TGPI Interactive World Atlas"} /></p>
           <h2
             id="world-journey-title"
             className="mt-3 max-w-4xl font-[var(--tgpi-font-display)] text-[clamp(2.65rem,5vw,4.35rem)] font-semibold leading-[0.92] tracking-[-0.04em] text-[var(--tgpi-navy)]"
-          >
-            Move from territory to decision in one frame.
-          </h2>
+          ><LocalizedText text={"Move from territory to decision in one frame."} /></h2>
         </div>
         <div>
-          <p className="text-sm leading-7 text-[var(--tgpi-muted)]">
-            Inspect real country boundaries, preview each destination and move from geography to an evidence-backed dossier in one continuous system.
-          </p>
+          <p className="text-sm leading-7 text-[var(--tgpi-muted)]"><LocalizedText text={"Inspect real country boundaries, preview each destination and move from geography to an evidence-backed dossier in one continuous system."} /></p>
           <div className="mt-3 flex flex-wrap gap-2 text-[9px] font-extrabold uppercase tracking-[0.12em]">
-            <span className="rounded-full bg-[var(--tgpi-blue-soft)] px-3 py-2 text-[var(--tgpi-blue)]">Natural Earth · 50m</span>
-            <span className="rounded-full bg-[var(--tgpi-teal-soft)] px-3 py-2 text-[var(--tgpi-teal)]">{countries.length}/{countries.length} profiles mapped</span>
-            <span className="rounded-full bg-[var(--tgpi-gold-soft)] px-3 py-2 text-[var(--tgpi-gold-strong)]">Intent-aware preloading</span>
+            <span className="rounded-full bg-[var(--tgpi-blue-soft)] px-3 py-2 text-[var(--tgpi-blue)]"><LocalizedText text={"Natural Earth · 50m"} /></span>
+            <span className="rounded-full bg-[var(--tgpi-teal-soft)] px-3 py-2 text-[var(--tgpi-teal)]">{countries.length}/{countries.length}{" "}<LocalizedText text={"profiles mapped"} /></span>
+            <span className="rounded-full bg-[var(--tgpi-gold-soft)] px-3 py-2 text-[var(--tgpi-gold-strong)]"><LocalizedText text={"Intent-aware preloading"} /></span>
           </div>
         </div>
       </div>
@@ -144,10 +140,10 @@ export default function CountriesWorldJourney({ countries }: CountriesWorldJourn
           <div aria-hidden="true" className="absolute inset-0 bg-[radial-gradient(circle_at_50%_18%,rgba(36,87,127,.42),transparent_45%),radial-gradient(circle_at_8%_85%,rgba(46,103,104,.22),transparent_34%)]" />
           <div className="relative flex flex-wrap items-start justify-between gap-4">
             <div>
-              <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-gold-light)]">Geographic intelligence layer</p>
-              <p className="mt-2 max-w-xl text-sm leading-6 text-white/65">Hover or focus to preview. Select a territory to activate the geospatial link and enter its full country dossier.</p>
+              <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-gold-light)]"><LocalizedText text={"Geographic intelligence layer"} /></p>
+              <p className="mt-2 max-w-xl text-sm leading-6 text-white/65"><LocalizedText text={"Hover or focus to preview. Select a territory to activate the geospatial link and enter its full country dossier."} /></p>
             </div>
-            <span className="rounded-full border border-white/15 bg-white/[0.06] px-3 py-2 text-[9px] font-extrabold uppercase tracking-[0.12em] text-white/65">Real boundaries · Accessible motion</span>
+            <span className="rounded-full border border-white/15 bg-white/[0.06] px-3 py-2 text-[9px] font-extrabold uppercase tracking-[0.12em] text-white/65"><LocalizedText text={"Real boundaries · Accessible motion"} /></span>
           </div>
           <div className="relative">
             <CountriesWorldMap
@@ -160,17 +156,15 @@ export default function CountriesWorldJourney({ countries }: CountriesWorldJourn
           </div>
         </div>
 
-        <aside className="flex flex-col bg-[var(--tgpi-surface)] p-5 sm:p-7 lg:p-8" aria-label="Selected country intelligence preview">
+        <LocalizedElement as="aside" className="flex flex-col bg-[var(--tgpi-surface)] p-5 sm:p-7 lg:p-8" aria-label="Selected country intelligence preview">
           <div>
             <div className="flex items-center justify-between gap-4">
-              <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-gold-strong)]">Country navigator</p>
+              <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-gold-strong)]"><LocalizedText text={"Country navigator"} /></p>
               <button
                 type="button"
                 onClick={showNextDestination}
                 className="min-h-9 rounded-xl border border-[var(--tgpi-border)] bg-white px-3 text-[9px] font-extrabold uppercase tracking-[0.1em] text-[var(--tgpi-navy)] transition hover:border-[var(--tgpi-gold)] hover:bg-[var(--tgpi-gold-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
-              >
-                Surprise me
-              </button>
+              ><LocalizedText text={"Surprise me"} /></button>
             </div>
             <label htmlFor="world-country-search" className="sr-only"><LocalizedText text={"Search all countries"} /></label>
             <div className="relative mt-3">
@@ -193,14 +187,14 @@ export default function CountriesWorldJourney({ countries }: CountriesWorldJourn
 
           <div className="mt-4 flex items-end justify-between gap-3" aria-live="polite">
             <div>
-              <p className="text-xs font-extrabold text-[var(--tgpi-navy)]">{normalizedQuery ? `Results for “${deferredQuery.trim()}”` : activeRegion.label}</p>
+              <p className="text-xs font-extrabold text-[var(--tgpi-navy)]">{normalizedQuery ? <LocalizedText text={"Results for “{value0}”"} values={{value0: String(deferredQuery.trim())}} /> : activeRegion.label}</p>
               <p className="mt-1 text-[9px] font-bold uppercase tracking-[0.12em] text-[var(--tgpi-muted)]">{contextCountries.length}{" "}<LocalizedText text={"destinations"} /></p>
             </div>
-            <a href="#country-explorer" className="text-[10px] font-extrabold text-[var(--tgpi-gold-strong)] underline decoration-[var(--tgpi-gold)] underline-offset-4">Advanced index</a>
+            <a href="#country-explorer" className="text-[10px] font-extrabold text-[var(--tgpi-gold-strong)] underline decoration-[var(--tgpi-gold)] underline-offset-4"><LocalizedText text={"Advanced index"} /></a>
           </div>
 
           {visibleCountries.length ? (
-            <nav aria-label="Country destinations" className="mt-3 grid grid-cols-2 gap-2">
+            <LocalizedElement as="nav" aria-label="Country destinations" className="mt-3 grid grid-cols-2 gap-2">
               {visibleCountries.map((country) => {
                 const isSelected = country.slug === selectedCountry.slug;
                 return (
@@ -215,9 +209,9 @@ export default function CountriesWorldJourney({ countries }: CountriesWorldJourn
                   </button>
                 );
               })}
-            </nav>
+            </LocalizedElement>
           ) : (
-            <p className="mt-3 rounded-2xl border border-dashed border-[var(--tgpi-border)] bg-white p-4 text-sm leading-6 text-[var(--tgpi-muted)]">No country matches this search. Try a capital, language or currency code.</p>
+            <p className="mt-3 rounded-2xl border border-dashed border-[var(--tgpi-border)] bg-white p-4 text-sm leading-6 text-[var(--tgpi-muted)]"><LocalizedText text={"No country matches this search. Try a capital, language or currency code."} /></p>
           )}
 
           <article className="relative mt-5 min-h-[260px] overflow-hidden rounded-[24px] border border-white/15 bg-[var(--tgpi-navy-deep)] text-white shadow-[0_24px_60px_rgba(7,26,50,.2)]">
@@ -233,11 +227,11 @@ export default function CountriesWorldJourney({ countries }: CountriesWorldJourn
             <div className="relative flex min-h-[260px] flex-col justify-end p-5">
               <div className="flex items-end justify-between gap-3">
                 <div className="min-w-0">
-                  <p className="text-[9px] font-extrabold uppercase tracking-[0.14em] text-[var(--tgpi-gold-light)]">{selectedCountry.region} · {selectedCountry.capital}</p>
+                  <p className="text-[9px] font-extrabold uppercase tracking-[0.14em] text-[var(--tgpi-gold-light)]"><LocalizedText text={selectedCountry.region} /> · <LocalizedText text={selectedCountry.capital} /></p>
                   <h3 className="mt-1 truncate font-[var(--tgpi-font-display)] text-3xl font-semibold text-white">{selectedCountry.emoji} <LocalizedText text={selectedCountry.name} /></h3>
                 </div>
                 <div className="shrink-0 rounded-xl border border-[var(--tgpi-gold-light)]/35 bg-[var(--tgpi-navy-deep)]/80 px-3 py-2 text-center backdrop-blur">
-                  <p className="text-[7px] font-extrabold uppercase tracking-[0.12em] text-[var(--tgpi-gold-light)]">TGPI signal</p>
+                  <p className="text-[7px] font-extrabold uppercase tracking-[0.12em] text-[var(--tgpi-gold-light)]"><LocalizedText text={"TGPI signal"} /></p>
                   <p className="font-[var(--tgpi-font-display)] text-2xl font-semibold">{selectedCountry.tgpiScore}</p>
                 </div>
               </div>
@@ -252,7 +246,7 @@ export default function CountriesWorldJourney({ countries }: CountriesWorldJourn
               </div>
             </div>
           </article>
-        </aside>
+        </LocalizedElement>
       </div>
     </section>
   );
@@ -261,7 +255,7 @@ export default function CountriesWorldJourney({ countries }: CountriesWorldJourn
 function JourneyMetric({ label, value }: { label: string; value: string }) {
   return (
     <div className="min-w-0 rounded-xl border border-white/12 bg-[var(--tgpi-navy-deep)]/64 p-2.5 backdrop-blur">
-      <p className="text-[7px] font-extrabold uppercase tracking-[0.1em] text-white/55">{label}</p>
+      <p className="text-[7px] font-extrabold uppercase tracking-[0.1em] text-white/55"><LocalizedText text={label} /></p>
       <p className="mt-1 truncate text-[11px] font-extrabold text-white">{value}</p>
     </div>
   );

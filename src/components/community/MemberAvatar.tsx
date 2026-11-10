@@ -1,7 +1,7 @@
 "use client";
-import Image from "next/image";
+import Image from "@/components/localization/LocalizedImage";
 import { useState } from "react";
-import Link from "next/link";
+import Link from "@/components/localization/LocalizedLink";
 import s from "./Community.module.css";
 export default function MemberAvatar({
   uid,

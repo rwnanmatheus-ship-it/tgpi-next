@@ -1,5 +1,7 @@
 "use client";
-import { useLocale } from "@/components/localization/LocaleProvider";
+
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
+import { useLocale , LocalizedText } from "@/components/localization/LocaleProvider";
 
 import { useClerk, useUser } from "@clerk/nextjs";
 import Link from "next/link";
@@ -60,7 +62,7 @@ export default function TgpiAccountMenu() {
     }}>
       <button ref={trigger} type="button" aria-label={t("Account settings for {name}", { name })} aria-expanded={open} aria-controls="tgpi-account-popover" onClick={() => { if (!open) { setIdentityLoading(true); setIdentityError(false); } setOpen(!open); }} className="grid h-10 w-10 place-items-center overflow-hidden rounded-full border-2 border-[var(--tgpi-gold-hover)]/50 bg-[var(--tgpi-navy-raised)] text-sm font-bold text-[var(--tgpi-gold-light)] shadow-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--tgpi-gold-hover)]">
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        {user.imageUrl ? <img src={user.imageUrl} alt="" className="h-full w-full object-cover" /> : name.slice(0, 1)}
+        {user.imageUrl ? <LocalizedElement as="img" src={user.imageUrl} alt="" className="h-full w-full object-cover" /> : name.slice(0, 1)}
       </button>
       {open && <section id="tgpi-account-popover" aria-label={t("Your TGPI account")} className="absolute right-0 top-14 z-50 max-h-[min(80dvh,680px)] w-[min(360px,calc(100vw-32px))] overflow-y-auto rounded-[24px] border border-[var(--tgpi-border)] bg-[#FFFDFA] p-3 text-[var(--tgpi-navy-raised)] shadow-[0_28px_80px_rgba(11,31,58,.24)]">
         <div className="rounded-2xl bg-[linear-gradient(135deg,#0B1F3A,#183D61)] p-5 text-white">
@@ -81,8 +83,8 @@ export default function TgpiAccountMenu() {
           setSigningOut(true); setError("");
           try { await signOut({ redirectUrl: "/" }); }
           catch { setSigningOut(false); setError(t(t('Unable to sign out. Please try again.'))); }
-        }} className="mt-2 min-h-11 w-full rounded-xl px-4 text-left text-sm font-bold text-[#8C2929] hover:bg-[#F5F1E8] disabled:opacity-50">{signingOut ? t(t('Signing out…')) : t(t('Sign out'))}</button>
-        {error && <p role="alert" className="px-4 text-xs text-[#8C2929]">{error}</p>}
+        }} className="mt-2 min-h-11 w-full rounded-xl px-4 text-left text-sm font-bold text-[#8C2929] hover:bg-[#F5F1E8] disabled:opacity-50">{signingOut ? t('Signing out…') : t('Sign out')}</button>
+        {error && <p role="alert" className="px-4 text-xs text-[#8C2929]"><LocalizedText text={error} /></p>}
       </section>}
     </div>
   );

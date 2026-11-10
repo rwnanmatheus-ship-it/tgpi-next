@@ -59,7 +59,7 @@ export default function CommunityCreateFlow({ close }: { close: () => void }) {
   ) {
     return (
       <label>
-        {label}
+        <LocalizedText text={label} />
         {area ? (
           <textarea
             value={value[key]}
@@ -100,7 +100,7 @@ export default function CommunityCreateFlow({ close }: { close: () => void }) {
   }
   return (
     <section className={s.panel} aria-label={localizeLabel("Create community")}>
-      <p className={s.step}><LocalizedText text={"STEP"} />{" "}{step} OF 4</p>
+      <p className={s.step}><LocalizedText text={"STEP"} />{" "}{step}{" "}<LocalizedText text={"OF 4"} /></p>
       <h2>
         {
           [
@@ -113,7 +113,7 @@ export default function CommunityCreateFlow({ close }: { close: () => void }) {
       </h2>
       {error && (
         <p className={s.error} role="alert">
-          {error}
+          <LocalizedText text={error} />
         </p>
       )}
       <form
@@ -152,29 +152,25 @@ export default function CommunityCreateFlow({ close }: { close: () => void }) {
               {field("language", "Languages")}
               {field("theme", "Topic or journey stage")}
             </div>
-            <label>
-              Journey Circle (optional)
-              <select
+            <label><LocalizedText text={"Journey Circle (optional)"} /><select
                 value={value.journey}
                 onChange={(e) =>
                   setValue({ ...value, journey: e.target.value })
                 }
               >
-                <option value="">Any stage</option>
+                <option value=""><LocalizedText text={"Any stage"} /></option>
                 {journeyStages.map((stage) => (
-                  <option key={stage}>{stage}</option>
+                  <option value={stage} key={stage}><LocalizedText text={stage} /></option>
                 ))}
               </select>
             </label>
-            <label>
-              Course study group (optional)
-              <select
+            <label><LocalizedText text={"Course study group (optional)"} /><select
                 value={value.courseId}
                 onChange={(e) =>
                   setValue({ ...value, courseId: e.target.value })
                 }
               >
-                <option value="">No course connection</option>
+                <option value=""><LocalizedText text={"No course connection"} /></option>
                 {catalog.map((c) => (
                   <option key={c.id} value={c.id}>
                     {c.title}
@@ -182,16 +178,12 @@ export default function CommunityCreateFlow({ close }: { close: () => void }) {
                 ))}
               </select>
             </label>
-            <p className={s.notice}>
-              Check Explore for related communities before creating yours.
-            </p>
+            <p className={s.notice}><LocalizedText text={"Check Explore for related communities before creating yours."} /></p>
           </>
         )}
         {step === 2 && (
           <>
-            <label>
-              Visibility
-              <select
+            <label><LocalizedText text={"Visibility"} /><select
                 value={value.visibility}
                 onChange={(e) =>
                   setValue({
@@ -202,37 +194,24 @@ export default function CommunityCreateFlow({ close }: { close: () => void }) {
                   })
                 }
               >
-                <option value="public">
-                  Public — visitors can read content
-                </option>
-                <option value="private">
-                  Private — content and members restricted
-                </option>
-                <option value="hidden">
-                  Hidden — not discoverable; invitation required
-                </option>
+                <option value="public"><LocalizedText text={"Public — visitors can read content"} /></option>
+                <option value="private"><LocalizedText text={"Private — content and members restricted"} /></option>
+                <option value="hidden"><LocalizedText text={"Hidden — not discoverable; invitation required"} /></option>
               </select>
             </label>
-            <label>
-              Admission
-              <select
+            <label><LocalizedText text={"Admission"} /><select
                 value={value.admission}
                 disabled={value.visibility === "hidden"}
                 onChange={(e) =>
                   setValue({ ...value, admission: e.target.value })
                 }
               >
-                <option value="instant">Instant — after accepting rules</option>
-                <option value="approval">
-                  Approval — moderators review requests
-                </option>
-                <option value="invite">Invitation only</option>
+                <option value="instant"><LocalizedText text={"Instant — after accepting rules"} /></option>
+                <option value="approval"><LocalizedText text={"Approval — moderators review requests"} /></option>
+                <option value="invite"><LocalizedText text={"Invitation only"} /></option>
               </select>
             </label>
-            <p>
-              Private communities may allow instant entry. Privacy never
-              requires Premium.
-            </p>
+            <p><LocalizedText text={"Private communities may allow instant entry. Privacy never requires Premium."} /></p>
           </>
         )}
         {step === 3 && (
@@ -240,10 +219,7 @@ export default function CommunityCreateFlow({ close }: { close: () => void }) {
             {field("rules", "Numbered rules", true, 5000)}
             {field("entryQuestion", "Entry question (optional)", false, 500)}
             {field("welcome", "Welcome message (optional)", true, 1000)}
-            <p className={s.notice}>
-              Local rules complement TGPI policies. Do not request private
-              documents or sensitive migration information.
-            </p>
+            <p className={s.notice}><LocalizedText text={"Local rules complement TGPI policies. Do not request private documents or sensitive migration information."} /></p>
           </>
         )}
         {step === 4 && (
@@ -251,15 +227,13 @@ export default function CommunityCreateFlow({ close }: { close: () => void }) {
             <h3>{value.name}</h3>
             <p>{value.description}</p>
             <p>
-              {value.visibility} · {value.admission} · {value.language}
+              <LocalizedText text={value.visibility} /> · <LocalizedText text={value.admission} /> · {value.language}
             </p>
             <p className={s.rules}>{value.rules}</p>
             <p>
               {value.visibility === "public"
-                ? "Visitors can read publications."
-                : "Only active members can read publications."}{" "}
-              The community starts without empty channels or simulated activity.
-            </p>
+                ? <LocalizedText text={"Visitors can read publications."} />
+                : <LocalizedText text={"Only active members can read publications."} />}{" "}<LocalizedText text={"The community starts without empty channels or simulated activity."} /></p>
           </>
         )}
         <div className={s.actions}>

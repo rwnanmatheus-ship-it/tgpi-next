@@ -1,6 +1,10 @@
 "use client";
+
+
+import { useLocale as useFormattingLocale } from "@/components/localization/LocaleProvider";
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
-import Image from "next/image";
+import Image from "@/components/localization/LocalizedImage";
 import { useState, useEffect, useRef } from "react";
 import MemberAvatar from "./MemberAvatar";
 import ImageUpload from "./CommunityImageUpload";
@@ -32,6 +36,7 @@ export default function CommunityPost({
   busy: boolean;
   action: Action;
 }) {
+  const { locale } = useFormattingLocale();
   const { t: localizeLabel } = useInterfaceLocale();
 
   const messagesRef = useRef<HTMLDivElement>(null);
@@ -129,19 +134,19 @@ export default function CommunityPost({
           handle={p.handle}
         />
         <div className={s.meta}>
-          <span className={s.badge}>{p.kind}</span>
+          <span className={s.badge}><LocalizedText text={p.kind} /></span>
           {p.state === "pending" && (
             <span className={s.badge}><LocalizedText text={"Awaiting moderation"} /></span>
           )}
           {p.pinned && <span className={s.badge}><LocalizedText text={"Pinned"} /></span>}
           {p.kind === "question" && (
             <span className={s.badge}>
-              {p.accepted ? "Answered" : "Open question"}
+              {p.accepted ? <LocalizedText text={"Answered"} /> : <LocalizedText text={"Open question"} />}
             </span>
           )}
           <Link href={`/u/${p.author}`}>{p.authorName}</Link>
           <time dateTime={p.createdAt}>
-            {new Date(p.createdAt).toLocaleDateString()}
+            {new Date(p.createdAt).toLocaleDateString(locale)}
           </time>
           {p.updatedAt !== p.createdAt && <span><LocalizedText text={"Edited"} /></span>}
         </div>
@@ -160,9 +165,7 @@ export default function CommunityPost({
                 onChange={(e) => setTitle(e.target.value)}
               />
             </label>
-            <label>
-              Content
-              <textarea
+            <label><LocalizedText text={"Content"} /><textarea
                 required
                 maxLength={16000}
                 value={body}
@@ -207,9 +210,7 @@ export default function CommunityPost({
             href={p.source}
             target="_blank"
             rel="noopener noreferrer nofollow ugc"
-          >
-            View source ↗
-          </a>
+          ><LocalizedText text={"View source ↗"} /></a>
         )}
         <div className={s.actions}>
           <button
@@ -221,7 +222,7 @@ export default function CommunityPost({
             }}
             aria-expanded={replies !== null}
           >
-            {replies === null ? "Open replies" : "Close replies"}
+            {replies === null ? <LocalizedText text={"Open replies"} /> : <LocalizedText text={"Close replies"} />}
           </button>
           {active(membership) && p.state !== "pending" && (
             <button
@@ -251,9 +252,7 @@ export default function CommunityPost({
                 );
               } catch {}
             }}
-          >
-            Discussion link
-          </Link>
+          ><LocalizedText text={"Discussion link"} /></Link>
           {moderator && p.state === "pending" && (
             <button
               className={s.button}
@@ -261,9 +260,7 @@ export default function CommunityPost({
               onClick={() =>
                 void action({ action: "approve-post", post: p.id })
               }
-            >
-              Approve publication
-            </button>
+            ><LocalizedText text={"Approve publication"} /></button>
           )}
           {uid && (
             <>
@@ -274,7 +271,7 @@ export default function CommunityPost({
                   void action({ action: "save", post: p.id, saved: !p.saved })
                 }
               >
-                {p.saved ? "Unsave" : <LocalizedText text={"Save"} />}
+                {p.saved ? <LocalizedText text={"Unsave"} /> : <LocalizedText text={"Save"} />}
               </button>
               {uid !== p.author && active(membership) && (
                 <>
@@ -329,7 +326,7 @@ export default function CommunityPost({
               className={s.secondary}
               onClick={() => setEditing(!editing)}
             >
-              {editing ? "Cancel editing" : "Edit"}
+              {editing ? <LocalizedText text={"Cancel editing"} /> : <LocalizedText text={"Edit"} />}
             </button>
           )}
           {(own || moderator) && (
@@ -337,7 +334,7 @@ export default function CommunityPost({
               className={s.secondary}
               disabled={busy}
               onClick={() => {
-                if (window.confirm("Remove this publication?"))
+                if (window.confirm(localizeLabel("Remove this publication?")))
                   void action({ action: "delete", post: p.id });
               }}
             ><LocalizedText text={"Remove"} /></button>
@@ -348,7 +345,7 @@ export default function CommunityPost({
               disabled={busy}
               onClick={() => void action({ action: "pin", post: p.id })}
             >
-              {p.pinned ? "Unpin" : "Pin"}
+              {p.pinned ? <LocalizedText text={"Unpin"} /> : <LocalizedText text={"Pin"} />}
             </button>
           )}
         </div>
@@ -356,12 +353,9 @@ export default function CommunityPost({
       {conversation && (
         <header className={s.chatHeader}>
           <div>
-            <span className={s.eyebrow}>TGPI · Community conversation</span>
-            <h2>Share your world</h2>
-            <p>
-              Ask, connect and exchange experiences. Messages refresh every 12
-              seconds while this page is visible.
-            </p>
+            <span className={s.eyebrow}><LocalizedText text={"TGPI · Community conversation"} /></span>
+            <h2><LocalizedText text={"Share your world"} /></h2>
+            <p><LocalizedText text={"Ask, connect and exchange experiences. Messages refresh every 12 seconds while this page is visible."} /></p>
           </div>
           <button
             type="button"
@@ -376,13 +370,13 @@ export default function CommunityPost({
               }
             }}
           >
-            {refreshing ? "Refreshing…" : <LocalizedText text={"Refresh"} />}
+            {refreshing ? <LocalizedText text={"Refreshing…"} /> : <LocalizedText text={"Refresh"} />}
           </button>
         </header>
       )}
       {error && (
         <p className={s.error} role="alert">
-          {error}
+          <LocalizedText text={error} />
         </p>
       )}
       {expanded && replies !== null && (
@@ -416,7 +410,7 @@ export default function CommunityPost({
                     handle={r.handle}
                   />
                   <time className={s.meta} dateTime={r.createdAt}>
-                    {new Date(r.createdAt).toLocaleString([], {
+                    {new Date(r.createdAt).toLocaleString(locale, {
                       dateStyle: "medium",
                       timeStyle: "short",
                     })}
@@ -425,7 +419,7 @@ export default function CommunityPost({
                   <p className={s.messageBody}>{r.body}</p>
                   <div className={s.imageGrid}>
                     {r.attachments?.map((image) => (
-                      <a
+                      <LocalizedElement as="a"
                         key={image.id}
                         href={`/api/community/assets/${p.community}/${image.id}`}
                         target="_blank"
@@ -440,7 +434,7 @@ export default function CommunityPost({
                           height={450}
                           loading="lazy"
                         />
-                      </a>
+                      </LocalizedElement>
                     ))}
                   </div>
                   <details className={s.messageOptions}>
@@ -492,7 +486,7 @@ export default function CommunityPost({
                           disabled={busy}
                           onClick={async () => {
                             if (
-                              window.confirm("Remove this reply?") &&
+                              window.confirm(localizeLabel("Remove this reply?")) &&
                               (await action({
                                 action: "delete-comment",
                                 post: p.id,
@@ -527,10 +521,7 @@ export default function CommunityPost({
               ))}
           </div>
           {historyExpanded && (
-            <p className={s.notice}>
-              Reading earlier messages. Use Refresh to return to the latest
-              conversation.
-            </p>
+            <p className={s.notice}><LocalizedText text={"Reading earlier messages. Use Refresh to return to the latest conversation."} /></p>
           )}
           {next && (
             <button className={s.secondary} onClick={() => void load(true)}><LocalizedText text={"Load more replies"} /></button>
@@ -556,7 +547,7 @@ export default function CommunityPost({
                 }
               }}
             >
-              <label><LocalizedText text={"Your reply"} /><textarea
+              <label><LocalizedText text={"Your reply"} /><LocalizedElement as="textarea"
                   required={!images.length}
                   placeholder="Share an experience, ask a question or mention @someone…"
                   rows={3}
@@ -621,7 +612,7 @@ export default function CommunityPost({
                   busy || uploading || (!reply.trim() && !images.length)
                 }
               >
-                {busy ? "Sending…" : <LocalizedText text={"Send message"} />}
+                {busy ? <LocalizedText text={"Sending…"} /> : <LocalizedText text={"Send message"} />}
               </button>
             </form>
           )}

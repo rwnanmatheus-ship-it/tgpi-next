@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import type { UserData } from "@/types";
 
 type SmartFeedProps = {
@@ -13,12 +15,12 @@ export default function SmartFeed({ user }: SmartFeedProps) {
 
   return (
     <section className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-      <h2 className="font-bold text-yellow-400">Your Global Feed</h2>
+      <h2 className="font-bold text-yellow-400"><LocalizedText text={"Your Global Feed"} /></h2>
 
       <div className="mt-4 space-y-2">
         {feed.map((item) => (
           <p key={item} className="text-sm text-slate-300">
-            • {item}
+            • <LocalizedText text={item} />
           </p>
         ))}
       </div>

@@ -6,16 +6,19 @@ import ts from 'typescript';
 const exports = {};
 const catalogSource = fs.readFileSync('src/lib/localization/messages.ts', 'utf8');
 new Function('exports', ts.transpileModule(catalogSource, { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText)(exports);
-const registered = new Set(Object.keys(exports.messages).map(key => key.toLocaleLowerCase('en')));
-const brands = new Set(['TGPI', 'The Global Polymath Institute', 'TGPI Premium', 'Global Key', 'TGPI Global ID', 'TGPI Global Key', 'Instagram', 'LinkedIn', 'TGPI GLOBAL EDUCATION LTDA']);
+const supplemental = JSON.parse(fs.readFileSync('public/locales/en.json', 'utf8'));
+for (const locale of ['en', 'pt-BR', 'es', 'fr', 'de', 'it']) exports.registerSupplementalMessages(locale, JSON.parse(fs.readFileSync(`public/locales/${locale}.json`, 'utf8')));
+const registered = new Set([...Object.keys(exports.messages), ...Object.keys(supplemental)].map(key => key.toLocaleLowerCase('en')));
+const brands = new Set(['TGPI', 'The Global Polymath Institute', 'TGPI Premium', 'Global Key', 'TGPI Global ID', 'TGPI Global Key', 'Instagram', 'LinkedIn', 'TGPI GLOBAL EDUCATION LTDA', 'Renan']);
 const candidates = new Map();
 const untranslatedRendering = new Map();
 function add(raw, file, node, source, kind) {
-  const key = raw.replace(/\s+/g, ' ').trim();
+  const key = raw.replaceAll('&apos;', "'").replaceAll('&quot;', '"').replaceAll('&amp;', '&').replace(/\s+/g, ' ').trim();
   if (!/[\p{L}]{2}/u.test(key) || brands.has(key) || /^\S+@\S+$|^https?:\/\//.test(key)) return;
   const translated = registered.has(key.toLocaleLowerCase('en')) || ['pt-BR', 'es', 'fr', 'de', 'it'].some(locale => exports.translate(locale, key) !== key);
   if (translated) {
-    if (['visible text', 'placeholder', 'aria-label', 'alt'].includes(kind)) {
+    const attributeOwner = ts.isJsxAttribute(node) ? node.parent.parent.tagName?.getText(source) : undefined;
+    if (['visible text', 'placeholder', 'aria-label', 'alt'].includes(kind) && !['LocalizedElement', 'Image', 'NextImage', 'CinematicImage', 'EditorialImage', 'Link'].includes(attributeOwner)) {
       const position = source.getLineAndCharacterOfPosition(node.getStart(source));
       const record = untranslatedRendering.get(key) ?? { key, occurrences: [] };
       record.occurrences.push({ file, line: position.line + 1, kind });
@@ -32,7 +35,7 @@ function walk(directory) {
   for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
     const file = path.join(directory, entry.name);
     if (entry.isDirectory()) { if (!file.includes('/api/')) walk(file); continue; }
-    if (!file.endsWith('.tsx')) continue;
+    if (!file.endsWith('.tsx') || file.endsWith('/opengraph-image.tsx')) continue;
     const source = ts.createSourceFile(file, fs.readFileSync(file, 'utf8'), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
     function visit(node) {
       if (ts.isJsxText(node)) add(node.text, file, node, source, 'visible text');
@@ -46,10 +49,11 @@ function walk(directory) {
 }
 walk('src/app');
 walk('src/components');
+walk('src/modules');
 const entries = [...candidates.values()].sort((a, b) => a.key.localeCompare(b.key));
 const report = {
   scope: 'Static TSX literals only. Dynamic curriculum, API responses, templates, data files and user content require separate review.',
-  registeredMessages: Object.keys(exports.messages).length,
+  registeredMessages: registered.size,
   remainingCandidates: entries.length,
   entries,
   registeredButNotWired: [...untranslatedRendering.values()],
@@ -63,3 +67,5 @@ else {
   for (const entry of entries) for (const file of new Set(entry.occurrences.map(item => item.file))) counts.set(file, (counts.get(file) ?? 0) + 1);
   for (const [file, count] of [...counts].sort((a, b) => b[1] - a[1]).slice(0, 20)) console.log(`${count}\t${file}`);
 }
+
+if (process.argv.includes("--check") && (report.remainingCandidates || report.registeredButNotWired.length)) process.exitCode = 1;

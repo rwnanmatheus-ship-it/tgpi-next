@@ -30,7 +30,7 @@ export default function PostComposer({
         aria-expanded={open}
         onClick={() => setOpen(!open)}
       >
-        {open ? "Close composer" : "Share an experience or ask a question"}
+        {open ? <LocalizedText text={"Close composer"} /> : <LocalizedText text={"Share an experience or ask a question"} />}
       </button>
       {open && (
         <form
@@ -59,13 +59,11 @@ export default function PostComposer({
             }
           }}
         >
-          <label>
-            Format
-            <select value={kind} onChange={(e) => setKind(e.target.value)}>
+          <label><LocalizedText text={"Format"} /><select value={kind} onChange={(e) => setKind(e.target.value)}>
               <option value="discussion"><LocalizedText text={"Discussion"} /></option>
               <option value="question"><LocalizedText text="Question" /></option>
               <option value="experience"><LocalizedText text="Experience" /></option>
-              <option value="guide">Guide</option>
+              <option value="guide"><LocalizedText text={"Guide"} /></option>
             </select>
           </label>
           <label><LocalizedText text="Title" /><input
@@ -76,7 +74,7 @@ export default function PostComposer({
             />
           </label>
           <label>
-            {kind === "question" ? "Question and context" : "Your contribution"}
+            {kind === "question" ? <LocalizedText text={"Question and context"} /> : <LocalizedText text={"Your contribution"} />}
             <textarea
               required
               maxLength={16000}
@@ -86,39 +84,29 @@ export default function PostComposer({
             />
           </label>
           <div className={s.split}>
-            <label>
-              Country / city
-              <input
+            <label><LocalizedText text={"Country / city"} /><input
                 maxLength={100}
                 value={destination}
                 onChange={(e) => setDestination(e.target.value)}
               />
             </label>
-            <label>
-              Period, currency and context
-              <input
+            <label><LocalizedText text={"Period, currency and context"} /><input
                 maxLength={1000}
                 value={context}
                 onChange={(e) => setContext(e.target.value)}
               />
             </label>
           </div>
-          <label>
-            HTTPS source (optional)
-            <input
+          <label><LocalizedText text={"HTTPS source (optional)"} /><input
               type="url"
               maxLength={500}
               value={source}
               onChange={(e) => setSource(e.target.value)}
             />
           </label>
-          <p className={s.notice}>
-            Identify personal experiences and estimates. Include dates, currency
-            and sources when relevant. Never publish private documents.
-          </p>
+          <p className={s.notice}><LocalizedText text={"Identify personal experiences and estimates. Include dates, currency and sources when relevant. Never publish private documents."} /></p>
           {images.map((x) => (
-            <p className={s.meta} key={x.id}>
-              Photo attached: {x.alt}
+            <p className={s.meta} key={x.id}><LocalizedText text={"Photo attached:"} />{" "}{x.alt}
             </p>
           ))}
           {images.length < 4 && (
@@ -130,7 +118,7 @@ export default function PostComposer({
             />
           )}
           <button className={s.button} disabled={busy}>
-            {busy ? "Publishing…" : "Publish"}
+            {busy ? <LocalizedText text={"Publishing…"} /> : <LocalizedText text={"Publish"} />}
           </button>
         </form>
       )}

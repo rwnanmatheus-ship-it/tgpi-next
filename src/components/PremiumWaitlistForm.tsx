@@ -1,4 +1,6 @@
 "use client";
+
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 
 import { FormEvent, useState } from "react";
@@ -102,13 +104,9 @@ export default function PremiumWaitlistForm() {
   if (status === "success") {
     return (
       <div className="rounded-[28px] border border-[var(--tgpi-gold-hover)] bg-[#FFF7DE] p-8 text-center">
-        <p className="text-xs font-black uppercase tracking-[0.25em] text-[#8A5B09]">
-          Early access confirmed
-        </p>
-        <h2 className="mt-4 font-serif text-3xl font-semibold text-[#0B0B0B]">
-          Your place is registered.
-        </h2>
-        <p className="mt-4 leading-7 text-[#5A4A28]">{message}</p>
+        <p className="text-xs font-black uppercase tracking-[0.25em] text-[#8A5B09]"><LocalizedText text={"Early access confirmed"} /></p>
+        <h2 className="mt-4 font-serif text-3xl font-semibold text-[#0B0B0B]"><LocalizedText text={"Your place is registered."} /></h2>
+        <p className="mt-4 leading-7 text-[#5A4A28]"><LocalizedText text={message} /></p>
       </div>
     );
   }
@@ -119,7 +117,7 @@ export default function PremiumWaitlistForm() {
       className="rounded-[32px] border border-[var(--tgpi-border)] bg-white p-6 shadow-[0_24px_70px_rgba(11,31,58,0.08)] md:p-9"
     >
       <div className="grid gap-5 md:grid-cols-2">
-        <label className="text-sm font-bold text-[#303846]"><LocalizedText text="Full name" /><input
+        <label className="text-sm font-bold text-[#303846]"><LocalizedText text="Full name" /><LocalizedElement as="input"
             required
             value={form.name}
             onChange={(event) => updateField("name", event.target.value)}
@@ -128,9 +126,7 @@ export default function PremiumWaitlistForm() {
           />
         </label>
 
-        <label className="text-sm font-bold text-[#303846]">
-          Email
-          <input
+        <label className="text-sm font-bold text-[#303846]"><LocalizedText text={"Email"} /><LocalizedElement as="input"
             required
             type="email"
             value={form.email}
@@ -148,9 +144,7 @@ export default function PremiumWaitlistForm() {
           />
         </label>
 
-        <label className="text-sm font-bold text-[#303846]">
-          Main target country
-          <input
+        <label className="text-sm font-bold text-[#303846]"><LocalizedText text={"Main target country"} /><LocalizedElement as="input"
             value={form.targetCountry}
             onChange={(event) => updateField("targetCountry", event.target.value)}
             className="mt-2 w-full rounded-2xl border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] px-4 py-3 font-normal outline-none transition focus:border-[var(--tgpi-gold-hover)]"
@@ -164,23 +158,21 @@ export default function PremiumWaitlistForm() {
             className="mt-2 w-full rounded-2xl border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] px-4 py-3 font-normal outline-none transition focus:border-[var(--tgpi-gold-hover)]"
           >
             <option value="move"><LocalizedText text={"Move abroad"} /></option>
-            <option value="work">Work internationally</option>
+            <option value="work"><LocalizedText text={"Work internationally"} /></option>
             <option value="study"><LocalizedText text="Study abroad" /></option>
-            <option value="remote">Build a remote global life</option>
-            <option value="documents">Prepare documents</option>
+            <option value="remote"><LocalizedText text={"Build a remote global life"} /></option>
+            <option value="documents"><LocalizedText text={"Prepare documents"} /></option>
           </select>
         </label>
 
-        <label className="text-sm font-bold text-[#303846]">
-          Expected timeline
-          <select
+        <label className="text-sm font-bold text-[#303846]"><LocalizedText text={"Expected timeline"} /><select
             value={form.timeline}
             onChange={(event) => updateField("timeline", event.target.value)}
             className="mt-2 w-full rounded-2xl border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] px-4 py-3 font-normal outline-none transition focus:border-[var(--tgpi-gold-hover)]"
           >
             <option value="0-3-months"><LocalizedText text="Within 3 months" /></option>
-            <option value="3-6-months">3 to 6 months</option>
-            <option value="6-12-months">6 to 12 months</option>
+            <option value="3-6-months"><LocalizedText text={"3 to 6 months"} /></option>
+            <option value="6-12-months"><LocalizedText text={"6 to 12 months"} /></option>
             <option value="12-plus-months"><LocalizedText text={"More than 12 months"} /></option>
             <option value="researching"><LocalizedText text={"Still researching"} /></option>
           </select>
@@ -201,16 +193,14 @@ export default function PremiumWaitlistForm() {
         disabled={status === "submitting"}
         className="mt-7 w-full rounded-2xl bg-[var(--tgpi-navy-raised)] px-6 py-4 text-sm font-black text-white transition hover:bg-[#132B4C] disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {status === "submitting" ? "Saving your place..." : <LocalizedText text={"Join Premium Waitlist"} />}
+        {status === "submitting" ? <LocalizedText text={"Saving your place..."} /> : <LocalizedText text={"Join Premium Waitlist"} />}
       </button>
 
-      <p className="mt-4 text-center text-xs leading-5 text-[var(--tgpi-muted)]">
-        No payment is collected. You will receive launch information and early-access priority.
-      </p>
+      <p className="mt-4 text-center text-xs leading-5 text-[var(--tgpi-muted)]"><LocalizedText text={"No payment is collected. You will receive launch information and early-access priority."} /></p>
 
       {message && status === "error" && (
         <p className="mt-4 text-center text-sm font-semibold text-[#8B1E1E]" role="alert">
-          {message}
+          <LocalizedText text={message} />
         </p>
       )}
     </form>

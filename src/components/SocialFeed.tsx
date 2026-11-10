@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 export default function SocialFeed() {
   const posts = [
     "User is planning move to Canada",
@@ -7,7 +9,7 @@ export default function SocialFeed() {
 
   return (
     <section className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-      <h2 className="text-yellow-400 font-bold">Global Feed</h2>
+      <h2 className="text-yellow-400 font-bold"><LocalizedText text={"Global Feed"} /></h2>
 
       <div className="mt-4 space-y-3">
         {posts.map((p, i) => (

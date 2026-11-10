@@ -1,3 +1,5 @@
+import { getLocale as getFormattingLocale } from "@/lib/localization/server";
+import { localizeMetadata } from "@/lib/localization/metadata.server";
 import type { Metadata } from "next";
 import PremiumCommandCenterV2 from "@/components/premium/PremiumCommandCenterV2";
 import { courses } from "@/data/courses";
@@ -10,7 +12,7 @@ import { getAllCountries } from "@/lib/countries";
 import { normalizeOnboardingData } from "@/lib/onboarding";
 import { buildPremiumCommandCenterModel } from "@/lib/premium-command-center";
 
-export const metadata: Metadata = {
+const sourceMetadata: Metadata = {
   title: "Premium command center — TGPI",
   description:
     "Your protected TGPI workspace for connected country intelligence, comparisons, learning and global planning.",
@@ -24,13 +26,13 @@ function formatStatus(status: string) {
     .join(" ");
 }
 
-function formatPeriodEnd(value: string) {
+function formatPeriodEnd(locale: import('@/lib/localization/config').Locale, value: string) {
   if (!value) return "Managed securely through Stripe";
 
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return "Managed securely through Stripe";
 
-  return new Intl.DateTimeFormat("en-US", {
+  return new Intl.DateTimeFormat(locale, {
     day: "numeric",
     month: "long",
     timeZone: "UTC",
@@ -39,6 +41,7 @@ function formatPeriodEnd(value: string) {
 }
 
 export default async function PremiumPage() {
+  const locale = await getFormattingLocale();
   const { accessMode, billing, user } = await requirePremium();
   const isFounderAccess = accessMode === "founder";
   const isPreviewAccess = accessMode === "preview";
@@ -60,9 +63,9 @@ export default async function PremiumPage() {
     : isPreviewAccess
       ? "Temporary founder/test access for this Vercel Preview. No payment or subscription was created."
       : billing.cancelAtPeriodEnd
-      ? `Access available until ${formatPeriodEnd(billing.currentPeriodEnd)}.`
+      ? `Access available until ${formatPeriodEnd(locale, billing.currentPeriodEnd)}.`
       : billing.currentPeriodEnd
-        ? `Next renewal: ${formatPeriodEnd(billing.currentPeriodEnd)}.`
+        ? `Next renewal: ${formatPeriodEnd(locale, billing.currentPeriodEnd)}.`
         : "Managed securely through Stripe.";
 
   return (
@@ -81,3 +84,5 @@ export default async function PremiumPage() {
     />
   );
 }
+
+export async function generateMetadata() { return localizeMetadata(sourceMetadata); }

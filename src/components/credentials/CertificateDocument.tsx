@@ -1,4 +1,6 @@
-import Image from "next/image";
+
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
+import Image from "@/components/localization/LocalizedImage";
 import CertificateQr from "./CertificateQr";
 import CertificateSeal from "./CertificateSeal";
 import {
@@ -19,7 +21,7 @@ export default function CertificateDocument({
   verified: boolean;
 }) {
   return (
-    <article
+    <LocalizedElement as="article"
       className={`diploma-document${verified ? "" : " diploma-inactive"}`}
       aria-label="TGPI certificate preview"
     >
@@ -33,32 +35,27 @@ export default function CertificateDocument({
             priority
           />
           <div>
-            <strong>TGPI</strong>
-            <span>The Global Polymath Institute</span>
+            <strong><LocalizedText text={"TGPI"} /></strong>
+            <span><LocalizedText text={"The Global Polymath Institute"} /></span>
             <small><LocalizedText text="Education for a global life" /></small>
           </div>
         </div>
-        <span className="diploma-brand-edition"><LocalizedText text={"Verified learning"} /><br />
-          Professional achievement
-        </span>
+        <span className="diploma-brand-edition"><LocalizedText text={"Verified learning"} /><br /><LocalizedText text={"Professional achievement"} /></span>
       </header>
       {!verified && (
         <div className="diploma-inactive-banner" role="status">
           {credential.status === "revoked"
-            ? "REVOKED - This certificate is no longer active"
-            : credential.status === "replaced" ? "REPLACED - Open the replacement record" : "INTEGRITY REVIEW - This record is not verified"}
+            ? <LocalizedText text={"REVOKED - This certificate is no longer active"} />
+            : credential.status === "replaced" ? <LocalizedText text={"REPLACED - Open the replacement record"} /> : <LocalizedText text={"INTEGRITY REVIEW - This record is not verified"} />}
         </div>
       )}
       <div className="diploma-body">
         <div className="diploma-main">
           <p className="diploma-eyebrow"><LocalizedText text={"Certificate of achievement"} /></p>
-          <h2>{credential.documentNature || "Professional Certificate"}</h2>
-          <p className="diploma-label">Awarded to</p>
+          <h2>{credential.documentNature || <LocalizedText text={"Professional Certificate"} />}</h2>
+          <p className="diploma-label"><LocalizedText text={"Awarded to"} /></p>
           <p className="diploma-name">{credential.publicName}</p>
-          <p className="diploma-description">
-            For successful completion of the applied learning and assessed
-            performance in
-          </p>
+          <p className="diploma-description"><LocalizedText text={"For successful completion of the applied learning and assessed performance in"} /></p>
           <h3 className="diploma-course">{credential.courseTitle}</h3>
           <p className="diploma-skills">
             {credential.skills
@@ -69,8 +66,8 @@ export default function CertificateDocument({
         </div>
         <aside className="diploma-verification">
           <CertificateSeal verified={verified} />
-          <p className="diploma-seal-caption">TGPI issuer quality seal</p>
-          <a
+          <p className="diploma-seal-caption"><LocalizedText text={"TGPI issuer quality seal"} /></p>
+          <LocalizedElement as="a"
             className="diploma-qr"
             href={certificateVerificationUrl(credential.id)}
             aria-label="Open live verification"
@@ -79,15 +76,15 @@ export default function CertificateDocument({
               url={certificateVerificationUrl(credential.id)}
               id={credential.id}
             />
-          </a>
+          </LocalizedElement>
           <p className="diploma-qr-caption"><LocalizedText text="Scan to verify" /><br />
-            <span>Live status · Issuer record</span>
+            <span><LocalizedText text={"Live status · Issuer record"} /></span>
           </p>
         </aside>
       </div>
       <dl className="diploma-identifiers">
         <div className="diploma-global-id">
-          <dt>TGPI Global ID</dt>
+          <dt><LocalizedText text={"TGPI Global ID"} /></dt>
           <dd>{credential.identityEvidence.globalKeyId}</dd>
         </div>
         <div className="diploma-certificate-id">
@@ -103,8 +100,8 @@ export default function CertificateDocument({
           <dd>{credential.assessmentScore}%</dd>
         </div>
         <div>
-          <dt>Volume</dt>
-          <dd>{credential.learningHours} hours</dd>
+          <dt><LocalizedText text={"Volume"} /></dt>
+          <dd>{credential.learningHours}{" "}<LocalizedText text={"hours"} /></dd>
         </div>
       </dl>
       <footer className="diploma-footer">
@@ -113,24 +110,18 @@ export default function CertificateDocument({
             <div key={mark.title}>
               <span aria-hidden="true">{verified ? "✓" : "·"}</span>
               <div>
-                <strong>{mark.title}</strong>
-                <small>{mark.detail}</small>
+                <strong><LocalizedText text={mark.title} /></strong>
+                <small><LocalizedText text={mark.detail} /></small>
               </div>
             </div>
           ))}
         </div>
-        <p>
-          TGPI-issued professional learning certificate. Not a government
-          degree, professional license or third-party accreditation.
-        </p>
+        <p><LocalizedText text={"TGPI-issued professional learning certificate. Not a government degree, professional license or third-party accreditation."} /></p>
         <div className="diploma-edition">
-          <span>
-            Document edition {CERTIFICATE_DESIGN_VERSION} · Original achievement
-            preserved
-          </span>
-          <span>theglobalpolymath.com</span>
+          <span><LocalizedText text={"Document edition"} />{" "}{CERTIFICATE_DESIGN_VERSION}{" "}<LocalizedText text={"· Original achievement preserved"} /></span>
+          <span><LocalizedText text={"theglobalpolymath.com"} /></span>
         </div>
       </footer>
-    </article>
+    </LocalizedElement>
   );
 }

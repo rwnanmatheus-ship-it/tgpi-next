@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { useLocale } from "@/components/localization/LocaleProvider";
+import { useLocale , LocalizedText } from "@/components/localization/LocaleProvider";
 import { useActivationProgress } from "@/components/activation/ActivationProgressProvider";
 
 export default function SavedCountryButton({
@@ -60,10 +60,10 @@ export default function SavedCountryButton({
             : "border-[var(--tgpi-border)] bg-[var(--tgpi-gold-soft)] text-[var(--tgpi-gold-strong)] hover:border-[var(--tgpi-gold)] hover:bg-white"
         }`}
       >
-        {isSaving ? t("Saving…") : isSaved ? `✓ ${t("Saved to my plan")}` : `+ ${t("Save to my plan")}`}
+        {isSaving ? t("Saving…") : isSaved ? <LocalizedText text={"✓ {value0}"} values={{value0: String(t("Saved to my plan"))}} /> : <LocalizedText text={"+ {value0}"} values={{value0: String(t("Save to my plan"))}} />}
       </button>
       <span className="w-full text-xs leading-5 text-[var(--tgpi-muted)]" aria-live="polite">
-        {message}
+        <LocalizedText text={message} />
       </span>
     </div>
   );

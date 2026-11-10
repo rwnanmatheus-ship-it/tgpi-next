@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 export default function ProductValueStrip() {
   const items = [
     "Global Education",
@@ -15,7 +17,7 @@ export default function ProductValueStrip() {
             key={item}
             className="rounded-full border border-yellow-500/30 bg-yellow-500/10 px-4 py-2 text-sm text-yellow-200"
           >
-            {item}
+            <LocalizedText text={item} />
           </span>
         ))}
       </div>

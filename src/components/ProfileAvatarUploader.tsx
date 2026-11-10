@@ -2,7 +2,7 @@
 
 
 import { LocalizedText } from "@/components/localization/LocaleProvider";
-import Image from "next/image";
+import Image from "@/components/localization/LocalizedImage";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 
 export default function ProfileAvatarUploader({
@@ -69,12 +69,10 @@ export default function ProfileAvatarUploader({
             onClick={() => inputRef.current?.click()}
             className="rounded-2xl bg-gradient-to-r from-yellow-500 to-amber-400 px-5 py-3 font-semibold text-black transition hover:brightness-105"
           >
-            {loading ? <LocalizedText text={"Saving..."} /> : "Upload new photo"}
+            {loading ? <LocalizedText text={"Saving..."} /> : <LocalizedText text={"Upload new photo"} />}
           </button>
 
-          <p className="text-sm text-slate-400">
-            Premium recommendation: square image, clear face or logo, maximum 2MB.
-          </p>
+          <p className="text-sm text-slate-400"><LocalizedText text={"Premium recommendation: square image, clear face or logo, maximum 2MB."} /></p>
 
           <input
             ref={inputRef}

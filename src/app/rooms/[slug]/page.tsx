@@ -1,5 +1,7 @@
 "use client";
 
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import { useParams } from "next/navigation";
 import LiveChat from "@/components/LiveChat";
 import SocialFeed from "@/components/SocialFeed";
@@ -11,8 +13,7 @@ export default function RoomPage() {
   return (
     <main className="min-h-screen bg-black text-white p-6">
       <h1 className="text-3xl text-yellow-400 font-bold capitalize">
-        {slug} Room
-      </h1>
+        {slug}{" "}<LocalizedText text={"Room"} /></h1>
 
       <div className="mt-2">
         <OnlineNow />

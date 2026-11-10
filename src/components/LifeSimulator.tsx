@@ -1,6 +1,8 @@
 "use client";
 
 
+
+import { useLocale as useFormattingLocale } from "@/components/localization/LocaleProvider";
 import { LocalizedText } from "@/components/localization/LocaleProvider";
 import { useMemo, useState } from "react";
 
@@ -15,9 +17,9 @@ type LifeSimulatorProps = {
   items: CostItem[];
 };
 
-function formatAmount(value: number, currency: string) {
+function formatAmount(locale: import('@/lib/localization/config').Locale, value: number, currency: string) {
   try {
-    return new Intl.NumberFormat("en-US", {
+    return new Intl.NumberFormat(locale, {
       style: "currency",
       currency,
       maximumFractionDigits: 2,
@@ -32,6 +34,7 @@ export default function LifeSimulator({
   currencyCode,
   items,
 }: LifeSimulatorProps) {
+  const { locale } = useFormattingLocale();
   const rentItem =
     items.find((item) =>
       item.label.toLowerCase().includes("shared rent estimate")
@@ -94,26 +97,17 @@ export default function LifeSimulator({
   return (
     <section className="mb-8 rounded-3xl border border-yellow-700/20 bg-gradient-to-b from-yellow-500/10 to-slate-950 p-8">
       <div className="mb-6">
-        <h2 className="mb-2 text-3xl font-bold text-yellow-400">
-          Life Simulator
-        </h2>
-        <p className="max-w-3xl text-slate-300">
-          Simulate a basic monthly life scenario in {countryName} using local
-          reference prices. This helps users estimate affordability before
-          travel, study, relocation, or integration decisions.
-        </p>
+        <h2 className="mb-2 text-3xl font-bold text-yellow-400"><LocalizedText text={"Life Simulator"} /></h2>
+        <p className="max-w-3xl text-slate-300"><LocalizedText text={"Simulate a basic monthly life scenario in"} />{" "}{countryName}{" "}<LocalizedText text={"using local reference prices. This helps users estimate affordability before travel, study, relocation, or integration decisions."} /></p>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[1.05fr_.95fr]">
         <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
-          <h3 className="mb-4 text-xl font-semibold text-yellow-400">
-            Simulation Inputs
-          </h3>
+          <h3 className="mb-4 text-xl font-semibold text-yellow-400"><LocalizedText text={"Simulation Inputs"} /></h3>
 
           <div className="grid gap-4">
             <div>
-              <label className="mb-2 block text-sm text-slate-300">
-                Monthly Income ({currencyCode})
+              <label className="mb-2 block text-sm text-slate-300"><LocalizedText text={"Monthly Income ("} />{currencyCode})
               </label>
               <input
                 type="number"
@@ -126,9 +120,7 @@ export default function LifeSimulator({
             </div>
 
             <div>
-              <label className="mb-2 block text-sm text-slate-300">
-                Weekly Transport Rides
-              </label>
+              <label className="mb-2 block text-sm text-slate-300"><LocalizedText text={"Weekly Transport Rides"} /></label>
               <input
                 type="number"
                 min="0"
@@ -140,9 +132,7 @@ export default function LifeSimulator({
             </div>
 
             <div>
-              <label className="mb-2 block text-sm text-slate-300">
-                Casual Meals Per Month
-              </label>
+              <label className="mb-2 block text-sm text-slate-300"><LocalizedText text={"Casual Meals Per Month"} /></label>
               <input
                 type="number"
                 min="0"
@@ -156,68 +146,62 @@ export default function LifeSimulator({
         </div>
 
         <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
-          <h3 className="mb-4 text-xl font-semibold text-yellow-400">
-            Estimated Monthly Scenario
-          </h3>
+          <h3 className="mb-4 text-xl font-semibold text-yellow-400"><LocalizedText text={"Estimated Monthly Scenario"} /></h3>
 
           <div className="grid gap-3">
             <div className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950 p-4">
               <span className="text-slate-300"><LocalizedText text={"Income"} /></span>
               <span className="font-semibold text-white">
-                {formatAmount(simulation.income, currencyCode)}
+                {formatAmount(locale, simulation.income, currencyCode)}
               </span>
             </div>
 
             <div className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950 p-4">
-              <span className="text-slate-300">Rent Estimate</span>
+              <span className="text-slate-300"><LocalizedText text={"Rent Estimate"} /></span>
               <span className="font-semibold text-white">
-                {formatAmount(simulation.rent, currencyCode)}
+                {formatAmount(locale, simulation.rent, currencyCode)}
               </span>
             </div>
 
             <div className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950 p-4">
-              <span className="text-slate-300">Transport Estimate</span>
+              <span className="text-slate-300"><LocalizedText text={"Transport Estimate"} /></span>
               <span className="font-semibold text-white">
-                {formatAmount(simulation.transport, currencyCode)}
+                {formatAmount(locale, simulation.transport, currencyCode)}
               </span>
             </div>
 
             <div className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950 p-4">
-              <span className="text-slate-300">Meals Estimate</span>
+              <span className="text-slate-300"><LocalizedText text={"Meals Estimate"} /></span>
               <span className="font-semibold text-white">
-                {formatAmount(simulation.mealsCost, currencyCode)}
+                {formatAmount(locale, simulation.mealsCost, currencyCode)}
               </span>
             </div>
 
             <div className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950 p-4">
-              <span className="text-slate-300">Mobile Plan</span>
+              <span className="text-slate-300"><LocalizedText text={"Mobile Plan"} /></span>
               <span className="font-semibold text-white">
-                {formatAmount(simulation.mobile, currencyCode)}
+                {formatAmount(locale, simulation.mobile, currencyCode)}
               </span>
             </div>
 
             <div className="flex items-center justify-between rounded-xl border border-yellow-700/20 bg-yellow-500/5 p-4">
-              <span className="text-yellow-200">Estimated Monthly Cost</span>
+              <span className="text-yellow-200"><LocalizedText text={"Estimated Monthly Cost"} /></span>
               <span className="font-bold text-yellow-300">
-                {formatAmount(simulation.estimatedMonthlyCost, currencyCode)}
+                {formatAmount(locale, simulation.estimatedMonthlyCost, currencyCode)}
               </span>
             </div>
 
             <div className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950 p-4">
-              <span className="text-slate-300">Remaining</span>
+              <span className="text-slate-300"><LocalizedText text={"Remaining"} /></span>
               <span className={`text-xl font-bold ${remainingTone}`}>
-                {formatAmount(simulation.remaining, currencyCode)}
+                {formatAmount(locale, simulation.remaining, currencyCode)}
               </span>
             </div>
           </div>
 
           <div className="mt-6 rounded-2xl border border-slate-800 bg-slate-950 p-5">
-            <h4 className="mb-2 font-semibold text-yellow-400">TGPI Insight</h4>
-            <p className="text-sm leading-7 text-slate-300">
-              This is a simplified educational simulation built from reference
-              local prices. It is designed to help users visualize basic monthly
-              affordability before deeper planning.
-            </p>
+            <h4 className="mb-2 font-semibold text-yellow-400"><LocalizedText text={"TGPI Insight"} /></h4>
+            <p className="text-sm leading-7 text-slate-300"><LocalizedText text={"This is a simplified educational simulation built from reference local prices. It is designed to help users visualize basic monthly affordability before deeper planning."} /></p>
           </div>
         </div>
       </div>

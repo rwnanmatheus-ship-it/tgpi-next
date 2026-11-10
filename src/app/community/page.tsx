@@ -1,7 +1,8 @@
+import { localizeMetadata } from "@/lib/localization/metadata.server";
 import { currentUser } from "@clerk/nextjs/server";
 import type { Metadata } from "next";
 import CommunityApp from "@/components/community/CommunityApp";
-export const metadata: Metadata = {
+const sourceMetadata: Metadata = {
   alternates: { canonical: "/community" },
   title: "Global Community | TGPI",
   description:
@@ -34,3 +35,5 @@ export default async function CommunityPage({
     />
   );
 }
+
+export async function generateMetadata() { return localizeMetadata(sourceMetadata); }

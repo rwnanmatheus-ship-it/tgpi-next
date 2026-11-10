@@ -1,6 +1,8 @@
 "use client";
 
 
+
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import { LocalizedText } from "@/components/localization/LocaleProvider";
 import { useState } from "react";
 import type { FormEvent } from "react";
@@ -36,7 +38,7 @@ export default function GlobalProfileForm() {
         ["basic", "intermediate", "advanced"] as const
       ),
       budget: readOption(formData, "budget", ["low", "medium", "high"] as const),
-      continentInterest: String(formData.get("continent") ?? "").trim(),
+      continentInterest: String(formData.get("continent")).trim(),
     };
 
     try {
@@ -52,7 +54,7 @@ export default function GlobalProfileForm() {
       <select name="goal" className="input">
         <option value="work"><LocalizedText text={"Work"} /></option>
         <option value="study"><LocalizedText text={"Study"} /></option>
-        <option value="live">Live</option>
+        <option value="live"><LocalizedText text={"Live"} /></option>
       </select>
 
       <select name="englishLevel" className="input">
@@ -62,19 +64,19 @@ export default function GlobalProfileForm() {
       </select>
 
       <select name="budget" className="input">
-        <option value="low">Low Budget</option>
-        <option value="medium">Medium Budget</option>
-        <option value="high">High Budget</option>
+        <option value="low"><LocalizedText text={"Low Budget"} /></option>
+        <option value="medium"><LocalizedText text={"Medium Budget"} /></option>
+        <option value="high"><LocalizedText text={"High Budget"} /></option>
       </select>
 
-      <input
+      <LocalizedElement as="input"
         name="continent"
         placeholder="Preferred Continent"
         className="input"
       />
 
       <button type="submit" disabled={loading} className="btn-primary">
-        {loading ? <LocalizedText text={"Saving..."} /> : "Save Profile"}
+        {loading ? <LocalizedText text={"Saving..."} /> : <LocalizedText text={"Save Profile"} />}
       </button>
     </form>
   );

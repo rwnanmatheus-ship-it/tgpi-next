@@ -1,13 +1,15 @@
 "use client";
 
 
+
+import { useLocale as useFormattingLocale } from "@/components/localization/LocaleProvider";
 import { LocalizedText } from "@/components/localization/LocaleProvider";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useActivationProgress } from "@/components/activation/ActivationProgressProvider";
 
-function formatAmount(amount: number, currency: string) {
-  return new Intl.NumberFormat("en-US", {
+function formatAmount(locale: import('@/lib/localization/config').Locale, amount: number, currency: string) {
+  return new Intl.NumberFormat(locale, {
     currency,
     maximumFractionDigits: 0,
     style: "currency",
@@ -25,6 +27,7 @@ export default function MonthlyCostPlanner({
   countrySlug: string;
   currency: string;
 }) {
+  const { locale } = useFormattingLocale();
   const { error, isAuthenticated, isLoading, mutate, progress } =
     useActivationProgress();
   const savedEstimate = progress.costEstimates[countrySlug];
@@ -58,15 +61,11 @@ export default function MonthlyCostPlanner({
     <div className="mt-6 rounded-[1.25rem] border border-[#B8C9DF] bg-[#EEF5FF] p-5">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#315F98]">
-            My monthly estimate
-          </p>
-          <p className="mt-2 text-sm leading-6 text-[#334A64]">
-            Enter your own monthly estimate for {countryName} in {currency}. Use dated local quotes; no reference budget is supplied by TGPI.
-          </p>
+          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-[#315F98]"><LocalizedText text={"My monthly estimate"} /></p>
+          <p className="mt-2 text-sm leading-6 text-[#334A64]"><LocalizedText text={"Enter your own monthly estimate for"} />{" "}{countryName}{" "}<LocalizedText text={"in"} />{" "}{currency}<LocalizedText text={". Use dated local quotes; no reference budget is supplied by TGPI."} /></p>
         </div>
         <p className="text-2xl font-black text-[#071A32]">
-          {amount > 0 ? formatAmount(amount, currency) : "Not set"}
+          {amount > 0 ? formatAmount(locale, amount, currency) : <LocalizedText text={"Not set"} />}
         </p>
       </div>
 
@@ -86,7 +85,7 @@ export default function MonthlyCostPlanner({
         />
       </label>
 
-      <p className="mt-3 text-xs text-[#657082]">Your estimate is stored in its stated currency. Older estimates in another currency are not converted or relabeled.</p>
+      <p className="mt-3 text-xs text-[#657082]"><LocalizedText text={"Your estimate is stored in its stated currency. Older estimates in another currency are not converted or relabeled."} /></p>
 
       {isAuthenticated ? (
         <button
@@ -98,23 +97,21 @@ export default function MonthlyCostPlanner({
           {isSaving
             ? <LocalizedText text={"Saving…"} />
             : saved || (savedEstimate?.amount === amount && savedEstimate?.currency === currency)
-              ? "✓ Estimate saved"
-              : "Save monthly estimate"}
+              ? <LocalizedText text={"✓ Estimate saved"} />
+              : <LocalizedText text={"Save monthly estimate"} />}
         </button>
       ) : !isLoading ? (
         <Link
           href={`/sign-in?redirect_url=/countries/${countrySlug}%23cost-of-living`}
           className="mt-5 inline-flex min-h-11 items-center justify-center rounded-xl bg-[var(--tgpi-navy-raised)] px-5 text-sm font-black text-white"
-        >
-          Sign in to save estimate
-        </Link>
+        ><LocalizedText text={"Sign in to save estimate"} /></Link>
       ) : null}
 
       <p className="mt-3 min-h-5 text-xs font-bold text-[#8A5A0A]" aria-live="polite">
         {error ||
           (saved
-            ? "Saved to your private TGPI workspace."
-            : "Educational estimate only. Validate current local prices before decisions.")}
+            ? <LocalizedText text={"Saved to your private TGPI workspace."} />
+            : <LocalizedText text={"Educational estimate only. Validate current local prices before decisions."} />)}
       </p>
     </div>
   );

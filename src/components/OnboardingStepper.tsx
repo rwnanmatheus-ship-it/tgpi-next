@@ -34,7 +34,7 @@ export default function OnboardingStepper({
             >
               <p className="text-xs uppercase tracking-[0.2em] text-slate-400"><LocalizedText text={"Step"} />{" "}{stepNumber}
               </p>
-              <p className="mt-2 text-lg font-bold text-white">{step}</p>
+              <p className="mt-2 text-lg font-bold text-white"><LocalizedText text={step} /></p>
             </div>
           );
         })}

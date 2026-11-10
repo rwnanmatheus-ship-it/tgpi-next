@@ -31,10 +31,8 @@ export default function CountryDocumentChecklist({
   return (
     <section className="mb-8 rounded-3xl border border-yellow-700/20 bg-gradient-to-b from-yellow-500/10 to-slate-950 p-8">
       <div className="mb-6">
-        <h2 className="mb-2 text-3xl font-bold text-yellow-400">
-          Document Checklist
-        </h2>
-        <p className="max-w-3xl text-slate-300">{checklist.description}</p>
+        <h2 className="mb-2 text-3xl font-bold text-yellow-400"><LocalizedText text={"Document Checklist"} /></h2>
+        <p className="max-w-3xl text-slate-300"><LocalizedText text={checklist.description} /></p>
       </div>
 
       <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-3">
@@ -44,7 +42,7 @@ export default function CountryDocumentChecklist({
             className="rounded-2xl border border-slate-800 bg-slate-900 p-6"
           >
             <h3 className="mb-4 text-xl font-semibold text-yellow-400">
-              {categoryLabels[category] || category}
+              <LocalizedText text={categoryLabels[category] || category} />
             </h3>
 
             <div className="space-y-3">
@@ -55,7 +53,7 @@ export default function CountryDocumentChecklist({
                 >
                   <div className="flex items-start justify-between gap-3">
                     <p className="text-sm leading-6 text-slate-200">
-                      {item.label}
+                      <LocalizedText text={item.label} />
                     </p>
                     {item.required ? (
                       <span className="rounded-full border border-yellow-500/30 bg-yellow-500/10 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-yellow-300"><LocalizedText text={"Required"} /></span>

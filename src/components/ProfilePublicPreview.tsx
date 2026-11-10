@@ -1,5 +1,7 @@
 "use client";
 
+
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import { LocalizedText } from "@/components/localization/LocaleProvider";
 
 
@@ -35,10 +37,8 @@ export default function ProfilePublicPreview({
   return (
     <section className="rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.015))] p-6 shadow-[0_0_35px_rgba(250,204,21,0.03)]">
       <div className="mb-5">
-        <h2 className="text-2xl font-bold text-yellow-400">Public Profile Preview</h2>
-        <p className="mt-2 text-sm text-slate-400">
-          This is how your profile can appear to other users inside TGPI.
-        </p>
+        <h2 className="text-2xl font-bold text-yellow-400"><LocalizedText text={"Public Profile Preview"} /></h2>
+        <p className="mt-2 text-sm text-slate-400"><LocalizedText text={"This is how your profile can appear to other users inside TGPI."} /></p>
       </div>
 
       <div className="rounded-[24px] border border-white/10 bg-white/[0.03] p-6">
@@ -46,14 +46,14 @@ export default function ProfilePublicPreview({
           <div className="flex h-20 w-20 items-center justify-center overflow-hidden rounded-full border border-yellow-500/25 bg-black text-2xl font-bold text-yellow-400">
             {avatar ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={avatar} alt={displayName} className="h-full w-full object-cover" />
+              <LocalizedElement as="img" src={avatar} alt={displayName} className="h-full w-full object-cover" />
             ) : (
               <span>{displayName?.slice(0, 1)?.toUpperCase() || "U"}</span>
             )}
           </div>
 
           <div className="flex-1">
-            <h3 className="text-2xl font-bold text-white">{displayName || "Unnamed User"}</h3>
+            <h3 className="text-2xl font-bold text-white">{displayName || <LocalizedText text={"Unnamed User"} />}</h3>
             <p className="mt-1 text-slate-300">@{username || "globaluser"}</p>
 
             {bio ? (
@@ -71,8 +71,7 @@ export default function ProfilePublicPreview({
 
               {showProgress ? (
                 <span className="rounded-full border border-yellow-500/25 bg-yellow-500/10 px-4 py-2 text-sm text-yellow-200">
-                  {readinessLabel} Readiness
-                </span>
+                  <LocalizedText text={readinessLabel} />{" "}<LocalizedText text={"Readiness"} /></span>
               ) : null}
 
               {showGoals && goal ? (

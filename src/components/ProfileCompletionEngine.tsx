@@ -1,5 +1,7 @@
 "use client";
 
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import {
   buildProfileCompletionItems,
   getCompletionScore,
@@ -25,18 +27,14 @@ export default function ProfileCompletionEngine({
   return (
     <section className="rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.015))] p-6 shadow-[0_0_35px_rgba(250,204,21,0.03)]">
       <div className="mb-5">
-        <h2 className="text-2xl font-bold text-yellow-400">
-          Completion Engine
-        </h2>
-        <p className="mt-2 text-sm text-slate-400">
-          Fill the most important profile areas to unlock a stronger TGPI experience.
-        </p>
+        <h2 className="text-2xl font-bold text-yellow-400"><LocalizedText text={"Completion Engine"} /></h2>
+        <p className="mt-2 text-sm text-slate-400"><LocalizedText text={"Fill the most important profile areas to unlock a stronger TGPI experience."} /></p>
       </div>
 
       <div className="mb-6 rounded-3xl border border-white/10 bg-white/[0.03] p-5">
         <div className="flex items-end gap-3">
           <p className="text-5xl font-bold text-white">{score}</p>
-          <p className="pb-2 text-sm text-slate-400">/100 complete</p>
+          <p className="pb-2 text-sm text-slate-400"><LocalizedText text={"/100 complete"} /></p>
         </div>
 
         <div className="mt-4 h-3 w-full overflow-hidden rounded-full bg-slate-800">
@@ -56,9 +54,9 @@ export default function ProfileCompletionEngine({
             >
               <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                 <div>
-                  <p className="font-semibold text-white">{item.label}</p>
+                  <p className="font-semibold text-white"><LocalizedText text={item.label} /></p>
                   <p className="mt-1 text-sm text-slate-400">
-                    {item.description}
+                    <LocalizedText text={item.description} />
                   </p>
                 </div>
 
@@ -66,16 +64,12 @@ export default function ProfileCompletionEngine({
                   type="button"
                   onClick={() => onOpenTab(item.tab)}
                   className="rounded-2xl border border-yellow-500/30 bg-yellow-500/10 px-4 py-2 text-sm font-semibold text-yellow-300 transition hover:bg-yellow-500/15"
-                >
-                  Complete now
-                </button>
+                ><LocalizedText text={"Complete now"} /></button>
               </div>
             </div>
           ))
         ) : (
-          <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-4 text-sm text-emerald-200">
-            Your profile is highly complete. Great job.
-          </div>
+          <div className="rounded-2xl border border-emerald-500/20 bg-emerald-500/10 p-4 text-sm text-emerald-200"><LocalizedText text={"Your profile is highly complete. Great job."} /></div>
         )}
       </div>
     </section>

@@ -1,4 +1,6 @@
 "use client";
+
+import { useLocale as useFormattingLocale } from "@/components/localization/LocaleProvider";
 import { useEffect, useState } from "react";
 import type { GlobalSession, Page } from "@/lib/community/model";
 import { api, type Action } from "./api";
@@ -18,6 +20,7 @@ export default function GlobalSessions({
   action: Action;
   busy: boolean;
 }) {
+  const { locale, t: localizeLabel } = useFormattingLocale();
   const [events, setEvents] = useState<
       (GlobalSession & { attending: boolean })[]
     >([]),
@@ -52,15 +55,13 @@ export default function GlobalSessions({
   return (
     <section className={s.panel}>
       <h2><LocalizedText text="Global Sessions" /></h2>
-      <p className={s.notice}>
-        Meetups and experience exchanges. Times use your device timezone.
-      </p>
+      <p className={s.notice}><LocalizedText text={"Meetups and experience exchanges. Times use your device timezone."} /></p>
       {error && (
         <p className={s.error} role="alert">
-          {error}
+          <LocalizedText text={error} />
         </p>
       )}
-      {loading && <p role="status">Loading sessions…</p>}
+      {loading && <p role="status"><LocalizedText text={"Loading sessions…"} /></p>}
       {!loading && !events.length && !error && (
         <p><LocalizedText text={"No sessions have been scheduled yet."} /></p>
       )}
@@ -70,23 +71,21 @@ export default function GlobalSessions({
           <p className={s.body}>{e.description}</p>
           <p>
             <time dateTime={e.startsAt}>
-              {new Date(e.startsAt).toLocaleString(undefined, {
+              {new Date(e.startsAt).toLocaleString(locale, {
                 dateStyle: "medium",
                 timeStyle: "short",
               })}
             </time>
             <br />
-            <span className={s.notice}>
-              Original:{" "}
-              {new Date(e.startsAt).toLocaleString("en", {
+            <span className={s.notice}><LocalizedText text={"Original:"} />{" "}
+              {new Date(e.startsAt).toLocaleString(locale, {
                 timeZone: e.timeZone,
               })}{" "}
               · {e.timeZone}
             </span>
           </p>
           <p>
-            {e.attendeeCount}/{e.capacity} places
-            {e.cancelled ? " · Cancelled" : ""}
+            {e.attendeeCount}/{e.capacity}{" "}<LocalizedText text={"places"} />{e.cancelled ? <LocalizedText text={" · Cancelled"} /> : ""}
           </p>
           {joined && !e.cancelled && (
             <div className={s.actions}>
@@ -104,7 +103,7 @@ export default function GlobalSessions({
                     await load();
                 }}
               >
-                {e.attending ? "Cancel registration" : "Register"}
+                {e.attending ? <LocalizedText text={"Cancel registration"} /> : <LocalizedText text={"Register"} />}
               </button>
               {e.url && e.attending && (
                 <a
@@ -120,7 +119,7 @@ export default function GlobalSessions({
                   disabled={busy}
                   onClick={async () => {
                     if (
-                      window.confirm("Cancel session?") &&
+                      window.confirm(localizeLabel("Cancel session?")) &&
                       (await action({ action: "cancel-event", event: e.id }))
                     )
                       await load();
@@ -141,7 +140,7 @@ export default function GlobalSessions({
             onClick={() => setOpen(!open)}
             aria-expanded={open}
           >
-            {open ? "Close event form" : "Schedule session"}
+            {open ? <LocalizedText text={"Close event form"} /> : <LocalizedText text={"Schedule session"} />}
           </button>
           {open && (
             <form
@@ -174,9 +173,7 @@ export default function GlobalSessions({
                   onChange={(e) => setTitle(e.target.value)}
                 />
               </label>
-              <label>
-                Description
-                <textarea
+              <label><LocalizedText text={"Description"} /><textarea
                   required
                   maxLength={4000}
                   value={description}
@@ -190,9 +187,7 @@ export default function GlobalSessions({
                   onChange={(e) => setDate(e.target.value)}
                 />
               </label>
-              <label>
-                Capacity
-                <input
+              <label><LocalizedText text={"Capacity"} /><input
                   type="number"
                   min={1}
                   max={1000}

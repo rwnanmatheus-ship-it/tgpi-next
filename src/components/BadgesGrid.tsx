@@ -7,9 +7,7 @@ export default function BadgesGrid({ badges }: { badges: Badge[] }) {
     return (
       <div className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
         <h2 className="text-2xl font-bold text-yellow-400"><LocalizedText text="Badges" /></h2>
-        <p className="mt-3 text-slate-400">
-          Start exploring countries and courses to unlock your first badge.
-        </p>
+        <p className="mt-3 text-slate-400"><LocalizedText text={"Start exploring countries and courses to unlock your first badge."} /></p>
       </div>
     );
   }
@@ -26,10 +24,10 @@ export default function BadgesGrid({ badges }: { badges: Badge[] }) {
           >
             <div className="text-3xl">{badge.icon}</div>
             <h3 className="mt-3 text-lg font-semibold text-white">
-              {badge.title}
+              <LocalizedText text={badge.title} />
             </h3>
             <p className="mt-2 text-sm text-slate-400">
-              {badge.description}
+              <LocalizedText text={badge.description} />
             </p>
           </div>
         ))}

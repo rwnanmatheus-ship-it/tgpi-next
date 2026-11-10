@@ -1,5 +1,7 @@
 "use client";
 
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import { useState } from "react";
 import { tgpiBrain } from "@/core/ai/tgpi-brain";
 
@@ -14,10 +16,8 @@ export default function DashboardAIAdvisor() {
   return (
     <section className="rounded-2xl border border-yellow-500/20 bg-gradient-to-br from-yellow-500/10 to-black p-5">
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-lg font-bold text-white">AI Advisor</h2>
-        <span className="rounded-full bg-yellow-500 px-3 py-1 text-xs font-bold text-black">
-          CORE AI
-        </span>
+        <h2 className="text-lg font-bold text-white"><LocalizedText text={"AI Advisor"} /></h2>
+        <span className="rounded-full bg-yellow-500 px-3 py-1 text-xs font-bold text-black"><LocalizedText text={"CORE AI"} /></span>
       </div>
 
       <div className="rounded-2xl border border-white/10 bg-black/40 p-4 text-sm text-slate-300">
@@ -28,23 +28,17 @@ export default function DashboardAIAdvisor() {
         <button
           onClick={() => run("upgrade-dashboard")}
           className="w-full rounded-xl border border-white/10 px-4 py-3 text-left text-sm hover:border-yellow-500/40"
-        >
-          Improve my dashboard
-        </button>
+        ><LocalizedText text={"Improve my dashboard"} /></button>
 
         <button
           onClick={() => run("show-identity")}
           className="w-full rounded-xl border border-white/10 px-4 py-3 text-left text-sm hover:border-yellow-500/40"
-        >
-          Show global identity
-        </button>
+        ><LocalizedText text={"Show global identity"} /></button>
 
         <button
           onClick={() => run("premium-mode")}
           className="w-full rounded-xl border border-white/10 px-4 py-3 text-left text-sm hover:border-yellow-500/40"
-        >
-          Activate premium view
-        </button>
+        ><LocalizedText text={"Activate premium view"} /></button>
       </div>
     </section>
   );

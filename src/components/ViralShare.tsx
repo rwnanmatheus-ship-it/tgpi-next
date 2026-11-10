@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 export default function ViralShare() {
   const url = "https://theglobalpolymath.com";
 
@@ -7,17 +9,13 @@ export default function ViralShare() {
         href={`https://twitter.com/intent/tweet?url=${url}`}
         target="_blank"
         className="bg-blue-500 px-4 py-2 rounded-xl text-white"
-      >
-        Twitter
-      </a>
+      ><LocalizedText text={"Twitter"} /></a>
 
       <a
         href={`https://wa.me/?text=${url}`}
         target="_blank"
         className="bg-green-500 px-4 py-2 rounded-xl text-white"
-      >
-        WhatsApp
-      </a>
+      ><LocalizedText text={"WhatsApp"} /></a>
     </div>
   );
 }

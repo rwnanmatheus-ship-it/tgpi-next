@@ -1,5 +1,6 @@
+import { localizeMetadata } from "@/lib/localization/metadata.server";
 import type { Metadata } from "next";
-import Image from "next/image";
+import Image from "@/components/localization/LocalizedImage";
 import Link from "next/link";
 import { auth } from "@clerk/nextjs/server";
 import ResourceExplorer, {
@@ -10,7 +11,7 @@ import "./resources.css";
 import { LocalizedText } from "@/components/localization/LocaleProvider";
 
 
-export const metadata: Metadata = {
+const sourceMetadata: Metadata = {
   title: "Resources — Explore, Learn & Prepare | TGPI",
   description:
     "Source-linked country research, comparisons, practical learning, document preparation and your connected TGPI Workspace.",
@@ -136,26 +137,18 @@ export default async function ResourcesPage() {
       <div className="resources-frame">
         <section className="resources-hero" aria-labelledby="resources-title">
           <div className="resources-hero-copy">
-            <p className="resources-kicker">
-              The Global Polymath Institute / Resources
-            </p>
+            <p className="resources-kicker"><LocalizedText text={"The Global Polymath Institute / Resources"} /></p>
             <h1 id="resources-title"><LocalizedText text="A wider world." /><br />
               <em><LocalizedText text="A clearer next step." /></em>
             </h1>
-            <p>
-              Explore your options. Build practical skills. Prepare with
-              purpose. Find the TGPI tools that turn international possibilities
-              into informed next steps.
-            </p>
+            <p><LocalizedText text={"Explore your options. Build practical skills. Prepare with purpose. Find the TGPI tools that turn international possibilities into informed next steps."} /></p>
             <div className="resources-actions">
-              <a className="resources-button" href="#resource-objectives">
-                Explore the resources ↓
-              </a>
+              <a className="resources-button" href="#resource-objectives"><LocalizedText text={"Explore the resources ↓"} /></a>
               <Link
                 className="resources-button resources-button-secondary"
                 href={startHref}
               >
-                {startLabel} ↗
+                <LocalizedText text={startLabel} /> ↗
               </Link>
             </div>
             <p className="resources-hero-note"><LocalizedText text={"Data · Education · Mobility · Decision"} /></p>
@@ -175,9 +168,7 @@ export default async function ResourcesPage() {
                 width={42}
                 height={42}
               />
-              <span><LocalizedText text={"Practical education."} /><br />
-                Global perspective.
-              </span>
+              <span><LocalizedText text={"Practical education."} /><br /><LocalizedText text={"Global perspective."} /></span>
             </div>
           </div>
         </section>
@@ -186,22 +177,15 @@ export default async function ResourcesPage() {
         </div>
         <ResourceExplorer />
         <section className="resources-section-intro" aria-labelledby="research-guides-title">
-          <p className="resources-kicker">Free research guides</p>
-          <h2 id="research-guides-title">Turn questions into a practical checklist.</h2>
-          <p>Learn how to compare countries and investigate moving-abroad document requirements, with source starting points and a worksheet you can reuse.</p>
-          <Link href="/guides" className="resources-text-link">Read the research guides →</Link>
+          <p className="resources-kicker"><LocalizedText text={"Free research guides"} /></p>
+          <h2 id="research-guides-title"><LocalizedText text={"Turn questions into a practical checklist."} /></h2>
+          <p><LocalizedText text={"Learn how to compare countries and investigate moving-abroad document requirements, with source starting points and a worksheet you can reuse."} /></p>
+          <Link href="/guides" className="resources-text-link"><LocalizedText text={"Read the research guides →"} /></Link>
         </section>
         <div className="resources-section-intro">
-          <p className="resources-kicker">The TGPI ecosystem</p>
-          <h2>
-            Different tools.
-            <br />
-            One connected direction.
-          </h2>
-          <p>
-            Start where you are. Each resource gives you a practical action and
-            a route to the next one.
-          </p>
+          <p className="resources-kicker"><LocalizedText text={"The TGPI ecosystem"} /></p>
+          <h2><LocalizedText text={"Different tools."} /><br /><LocalizedText text={"One connected direction."} /></h2>
+          <p><LocalizedText text={"Start where you are. Each resource gives you a practical action and a route to the next one."} /></p>
         </div>
         {modules.map((item, index) => (
           <section
@@ -211,19 +195,19 @@ export default async function ResourcesPage() {
             aria-labelledby={`${item.id}-title`}
           >
             <div className="resources-module-copy">
-              <p className="resources-kicker">{item.eyebrow}</p>
-              <h2 id={`${item.id}-title`}>{item.title}</h2>
-              <p>{item.description}</p>
+              <p className="resources-kicker"><LocalizedText text={item.eyebrow} /></p>
+              <h2 id={`${item.id}-title`}><LocalizedText text={item.title} /></h2>
+              <p><LocalizedText text={item.description} /></p>
               <div className="resources-application">
-                <h3>Put it into practice</h3>
-                <p>{item.application}</p>
+                <h3><LocalizedText text={"Put it into practice"} /></h3>
+                <p><LocalizedText text={item.application} /></p>
               </div>
-              <p className="resources-access">{item.access}</p>
+              <p className="resources-access"><LocalizedText text={item.access} /></p>
               <Link href={item.href} className="resources-button">
-                {item.cta} ↗
+                <LocalizedText text={item.cta} /> ↗
               </Link>
               <Link href={item.nextHref} className="resources-text-link">
-                {item.next} →
+                <LocalizedText text={item.next} /> →
               </Link>
             </div>
             {item.image ? (
@@ -239,13 +223,13 @@ export default async function ResourcesPage() {
               <div className="resources-tool-preview">
                 <p className="resources-kicker">
                   {item.id === "compare"
-                    ? "A better research question"
-                    : "A practical preparation sequence"}
+                    ? <LocalizedText text={"A better research question"} />
+                    : <LocalizedText text={"A practical preparation sequence"} />}
                 </p>
                 <h3>
                   {item.id === "compare"
-                    ? "What would change my decision?"
-                    : "Prepare with context."}
+                    ? <LocalizedText text={"What would change my decision?"} />
+                    : <LocalizedText text={"Prepare with context."} />}
                 </h3>
                 <ol>
                   {(item.id === "compare"
@@ -262,25 +246,19 @@ export default async function ResourcesPage() {
                   ).map((text, i) => (
                     <li key={text}>
                       <span aria-hidden="true">0{i + 1}</span>
-                      {text}
+                      <LocalizedText text={text} />
                     </li>
                   ))}
                 </ol>
-                <p className="resources-preview-note">
-                  Workflow overview · Open the tool to begin.
-                </p>
+                <p className="resources-preview-note"><LocalizedText text={"Workflow overview · Open the tool to begin."} /></p>
               </div>
             )}
           </section>
         ))}
         <section className="resources-journey" aria-labelledby="journey-title">
-          <p className="resources-kicker">A connected example</p>
-          <h2 id="journey-title">
-            Considering life abroad?
-            <br />
-            Follow the questions.
-          </h2>
-          <p>A suggested workflow, not a personalized recommendation.</p>
+          <p className="resources-kicker"><LocalizedText text={"A connected example"} /></p>
+          <h2 id="journey-title"><LocalizedText text={"Considering life abroad?"} /><br /><LocalizedText text={"Follow the questions."} /></h2>
+          <p><LocalizedText text={"A suggested workflow, not a personalized recommendation."} /></p>
           <ol>
             {[
               {
@@ -306,22 +284,17 @@ export default async function ResourcesPage() {
             ].map((step, i) => (
               <li key={step.href}>
                 <span>0{i + 1}</span>
-                <h3>{step.title}</h3>
-                <Link href={step.href}>{step.text} ↗</Link>
+                <h3><LocalizedText text={step.title} /></h3>
+                <Link href={step.href}><LocalizedText text={step.text} /> ↗</Link>
               </li>
             ))}
           </ol>
         </section>
         <section className="resources-plans" aria-labelledby="access-title">
           <div>
-            <p className="resources-kicker">Access that makes sense</p>
-            <h2 id="access-title"><LocalizedText text={"Start exploring."} /><br />
-              Choose your depth.
-            </h2>
-            <p>
-              Public tools help you investigate. Your account connects the
-              journey. Premium adds a consolidated command center.
-            </p>
+            <p className="resources-kicker"><LocalizedText text={"Access that makes sense"} /></p>
+            <h2 id="access-title"><LocalizedText text={"Start exploring."} /><br /><LocalizedText text={"Choose your depth."} /></h2>
+            <p><LocalizedText text={"Public tools help you investigate. Your account connects the journey. Premium adds a consolidated command center."} /></p>
           </div>
           <div className="resources-plan-grid">
             {[TGPI_FREE_PLAN, TGPI_PREMIUM_PLAN].map((plan) => (
@@ -332,12 +305,12 @@ export default async function ResourcesPage() {
                 <p className="resources-kicker">{plan.name}</p>
                 <h3>
                   {plan.price}
-                  <small>{plan.cadence}</small>
+                  <small><LocalizedText text={plan.cadence} /></small>
                 </h3>
-                <p>{plan.description}</p>
+                <p><LocalizedText text={plan.description} /></p>
                 <ul>
                   {plan.features.map((feature) => (
-                    <li key={feature}>{feature}</li>
+                    <li key={feature}><LocalizedText text={feature} /></li>
                   ))}
                 </ul>
                 <Link
@@ -346,7 +319,7 @@ export default async function ResourcesPage() {
                 >
                   {plan.slug === "free"
                     ? startLabel
-                    : "View membership & access"}{" "}
+                    : <LocalizedText text={"View membership & access"} />}{" "}
                   ↗
                 </Link>
               </article>
@@ -355,14 +328,14 @@ export default async function ResourcesPage() {
         </section>
         <section className="resources-faq" aria-labelledby="faq-title">
           <p className="resources-kicker"><LocalizedText text={"Before you begin"} /></p>
-          <h2 id="faq-title">A little more clarity.</h2>
+          <h2 id="faq-title"><LocalizedText text={"A little more clarity."} /></h2>
           {faqs.map(([question, answer]) => (
             <details key={question}>
               <summary>
-                {question}
+                <LocalizedText text={question} />
                 <span aria-hidden="true">+</span>
               </summary>
-              <p>{answer}</p>
+              <p><LocalizedText text={answer} /></p>
             </details>
           ))}
         </section>
@@ -373,21 +346,16 @@ export default async function ResourcesPage() {
             width={76}
             height={76}
           />
-          <p className="resources-kicker">
-            Your next chapter starts with a next step
-          </p>
-          <h2>
-            Give your possibilities
-            <br />a direction.
-          </h2>
-          <p>
-            Bring research, learning and preparation into your TGPI journey.
-          </p>
+          <p className="resources-kicker"><LocalizedText text={"Your next chapter starts with a next step"} /></p>
+          <h2><LocalizedText text={"Give your possibilities"} /><br /><LocalizedText text={"a direction."} /></h2>
+          <p><LocalizedText text={"Bring research, learning and preparation into your TGPI journey."} /></p>
           <Link className="resources-button" href={startHref}>
-            {startLabel} ↗
+            <LocalizedText text={startLabel} /> ↗
           </Link>
         </section>
       </div>
     </main>
   );
 }
+
+export async function generateMetadata() { return localizeMetadata(sourceMetadata); }

@@ -1,4 +1,6 @@
 "use client";
+
+import { useLocale as useFormattingLocale } from "@/components/localization/LocaleProvider";
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import type { Playbook } from "@/lib/community/features";
@@ -28,6 +30,7 @@ export default function CommunityPlaybooks({
   action: Action;
   busy: boolean;
 }) {
+  const { locale } = useFormattingLocale();
   const [books, setBooks] = useState<Book[]>([]),
     [next, setNext] = useState<string | null>(null),
     [loading, setLoading] = useState(true),
@@ -73,17 +76,14 @@ export default function CommunityPlaybooks({
   }, [community]);
   return (
     <section className={s.panel}>
-      <h2>Community playbooks</h2>
-      <p>
-        Practical reading paths, with original authors and source discussions
-        preserved.
-      </p>
-      {error && <p role="alert">{error}</p>}
+      <h2><LocalizedText text={"Community playbooks"} /></h2>
+      <p><LocalizedText text={"Practical reading paths, with original authors and source discussions preserved."} /></p>
+      {error && <p role="alert"><LocalizedText text={error} /></p>}
       {books.map((b) => (
         <article className={s.reply} key={b.id}>
           <h3>{b.title}</h3>
           <p>{b.description}</p>
-          <p className={s.meta}><LocalizedText text={"Updated"} />{" "}{new Date(b.updatedAt).toLocaleDateString()}
+          <p className={s.meta}><LocalizedText text={"Updated"} />{" "}{new Date(b.updatedAt).toLocaleDateString(locale)}
           </p>
           <ol>
             {b.sources.map((p) => (
@@ -95,18 +95,16 @@ export default function CommunityPlaybooks({
               </li>
             ))}
           </ol>
-          {!b.sources.length && <p>No source is currently available to you.</p>}
+          {!b.sources.length && <p><LocalizedText text={"No source is currently available to you."} /></p>}
         </article>
       ))}
-      {!loading && !books.length && <p>No playbooks yet.</p>}
+      {!loading && !books.length && <p><LocalizedText text={"No playbooks yet."} /></p>}
       {next && (
-        <button className={s.secondary} onClick={() => void load(next)}>
-          Load more playbooks
-        </button>
+        <button className={s.secondary} onClick={() => void load(next)}><LocalizedText text={"Load more playbooks"} /></button>
       )}
       {manage && (
         <details>
-          <summary>Curate a playbook</summary>
+          <summary><LocalizedText text={"Curate a playbook"} /></summary>
           <form
             onSubmit={async (e) => {
               e.preventDefault();
@@ -134,16 +132,14 @@ export default function CommunityPlaybooks({
                 onChange={(e) => setTitle(e.target.value)}
               />
             </label>
-            <label>
-              Purpose
-              <textarea
+            <label><LocalizedText text={"Purpose"} /><textarea
                 maxLength={2000}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
               />
             </label>
             <fieldset>
-              <legend>Select up to 20 loaded publications</legend>
+              <legend><LocalizedText text={"Select up to 20 loaded publications"} /></legend>
               {posts
                 .filter((p) => p.state !== "pending")
                 .map((p) => (
@@ -166,9 +162,7 @@ export default function CommunityPlaybooks({
             <button
               className={s.button}
               disabled={busy || !chosen.length || chosen.length > 20}
-            >
-              Save playbook
-            </button>
+            ><LocalizedText text={"Save playbook"} /></button>
           </form>
         </details>
       )}

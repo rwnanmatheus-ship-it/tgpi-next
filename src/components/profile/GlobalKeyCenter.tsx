@@ -1,4 +1,6 @@
 "use client";
+
+import { useLocale as useFormattingLocale } from "@/components/localization/LocaleProvider";
 import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 
 import Link from "next/link";
@@ -60,10 +62,10 @@ const connectedSystems = [
   },
 ] as const;
 
-function formatDate(value: string) {
+function formatDate(locale: import('@/lib/localization/config').Locale, value: string) {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return "Unavailable";
-  return new Intl.DateTimeFormat("en", {
+  return new Intl.DateTimeFormat(locale, {
     dateStyle: "medium",
     timeStyle: "short",
     timeZone: "UTC",
@@ -82,6 +84,7 @@ function ChainBlock({
   block: TgpiGlobalKeyBlockView;
   current: boolean;
 }) {
+  const { locale } = useFormattingLocale();
   return (
     <li className="relative pl-12 sm:pl-16">
       <span
@@ -108,37 +111,34 @@ function ChainBlock({
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <p className="text-xs font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-gold)]">
-              {block.type === "issued" ? "Genesis block" : "Proof rotation"}
+              {block.type === "issued" ? <LocalizedText text={"Genesis block"} /> : <LocalizedText text={"Proof rotation"} />}
             </p>
             <h3 className="mt-1 text-sm font-extrabold text-white">
               {block.type === "issued"
-                ? "Global identity issued"
-                : `Integrity revision ${block.sequence}`}
+                ? <LocalizedText text={"Global identity issued"} />
+                : <LocalizedText text={"Integrity revision {value0}"} values={{value0: String(block.sequence)}} />}
             </h3>
           </div>
           {current ? (
-            <span className="rounded-full border border-[#72C79D]/30 bg-[#72C79D]/10 px-2.5 py-1 text-xs font-extrabold uppercase tracking-[0.12em] text-[#AFE3C7]">
-              Current
-            </span>
+            <span className="rounded-full border border-[#72C79D]/30 bg-[#72C79D]/10 px-2.5 py-1 text-xs font-extrabold uppercase tracking-[0.12em] text-[#AFE3C7]"><LocalizedText text={"Current"} /></span>
           ) : null}
         </div>
         <dl className="mt-4 grid gap-3 text-sm sm:grid-cols-2">
           <div>
-            <dt className="text-[#75889B]">Previous hash</dt>
+            <dt className="text-[#75889B]"><LocalizedText text={"Previous hash"} /></dt>
             <dd className="mt-1 font-mono text-[#C2CEDA]">
               {compactHash(block.previousHash)}
             </dd>
           </div>
           <div>
-            <dt className="text-[#75889B]">Block hash</dt>
+            <dt className="text-[#75889B]"><LocalizedText text={"Block hash"} /></dt>
             <dd className="mt-1 font-mono text-[var(--tgpi-gold-light)]">
               {compactHash(block.hash)}
             </dd>
           </div>
         </dl>
         <p className="mt-3 text-xs text-[#75889B]">
-          {formatDate(block.timestamp)} UTC
-        </p>
+          {formatDate(locale, block.timestamp)}{" "}<LocalizedText text={"UTC"} /></p>
       </article>
     </li>
   );
@@ -168,27 +168,25 @@ function PublicAnchorPanel({
                 ◈
               </span>
               <div>
-                <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#8DC4EB]">
-                  Base Mainnet · Public Anchor V2
-                </p>
+                <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#8DC4EB]"><LocalizedText text={"Base Mainnet · Public Anchor V2"} /></p>
                 <h2
                   className="mt-1 text-xl font-extrabold text-white"
                   id="public-anchor-title"
                 >
                   {activating
-                    ? "External anchoring is not active yet"
-                    : "Current revision is queued for anchoring"}
+                    ? <LocalizedText text={"External anchoring is not active yet"} />
+                    : <LocalizedText text={"Current revision is queued for anchoring"} />}
                 </h2>
               </div>
             </div>
             <p className="mt-4 text-xs leading-6 text-[#A6B8C8] sm:text-sm">
               {activating
-                ? "Your TGPI identity is active. External blockchain receipts are not enabled yet; identity integrity and account access continue to work independently."
-                : "Your Integrity Chain remains verified now. Its current fingerprint will join the next daily Merkle batch; earlier on-chain receipts remain historically valid after a rotation."}
+                ? <LocalizedText text={"Your TGPI identity is active. External blockchain receipts are not enabled yet; identity integrity and account access continue to work independently."} />
+                : <LocalizedText text={"Your Integrity Chain remains verified now. Its current fingerprint will join the next daily Merkle batch; earlier on-chain receipts remain historically valid after a rotation."} />}
             </p>
           </div>
           <span className="rounded-full border border-[#8DC4EB]/25 bg-[#8DC4EB]/10 px-3 py-2 text-xs font-extrabold uppercase tracking-[0.14em] text-[#B9DDF6]">
-            {activating ? "Activation pending" : "Queued · daily"}
+            {activating ? <LocalizedText text={"Activation pending"} /> : <LocalizedText text={"Queued · daily"} />}
           </span>
         </div>
       </section>
@@ -210,47 +208,31 @@ function PublicAnchorPanel({
               ⛓️
             </span>
             <div>
-              <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#8FD8B4]">
-                Base Mainnet · Chain ID {anchor.chainId}
+              <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#8FD8B4]"><LocalizedText text={"Base Mainnet · Chain ID"} />{" "}{anchor.chainId}
               </p>
               <h2
                 className="mt-1 font-[var(--tgpi-font-display)] text-2xl font-semibold sm:text-3xl"
                 id="public-anchor-title"
-              >
-                Public anchor confirmed
-              </h2>
+              ><LocalizedText text={"Public anchor confirmed"} /></h2>
             </div>
-            <span className="rounded-full border border-[#72C79D]/30 bg-[#72C79D]/10 px-3 py-1.5 text-xs font-extrabold uppercase tracking-[0.14em] text-[#BCE8D1]">
-              ● On-chain
-            </span>
+            <span className="rounded-full border border-[#72C79D]/30 bg-[#72C79D]/10 px-3 py-1.5 text-xs font-extrabold uppercase tracking-[0.14em] text-[#BCE8D1]"><LocalizedText text={"● On-chain"} /></span>
           </div>
-          <p className="mt-4 max-w-3xl text-xs leading-6 text-[#A8BAC9] sm:text-sm">
-            This revision belongs to a Merkle batch recorded outside TGPI
-            infrastructure. Base stores only the irreversible root and batch
-            metadata—never your Global ID, name, email, documents or private
-            progress.
-          </p>
+          <p className="mt-4 max-w-3xl text-xs leading-6 text-[#A8BAC9] sm:text-sm"><LocalizedText text={"This revision belongs to a Merkle batch recorded outside TGPI infrastructure. Base stores only the irreversible root and batch metadata—never your Global ID, name, email, documents or private progress."} /></p>
           <dl className="mt-5 grid gap-3 sm:grid-cols-3">
             <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-              <dt className="text-xs font-extrabold uppercase tracking-[0.15em] text-[#7890A3]">
-                Batch
-              </dt>
+              <dt className="text-xs font-extrabold uppercase tracking-[0.15em] text-[#7890A3]"><LocalizedText text={"Batch"} /></dt>
               <dd className="mt-2 break-all font-mono text-sm font-bold text-[#E2EAF0]">
                 {anchor.batchId}
               </dd>
             </div>
             <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-              <dt className="text-xs font-extrabold uppercase tracking-[0.15em] text-[#7890A3]">
-                Base block
-              </dt>
+              <dt className="text-xs font-extrabold uppercase tracking-[0.15em] text-[#7890A3]"><LocalizedText text={"Base block"} /></dt>
               <dd className="mt-2 font-mono text-sm font-bold text-white">
                 #{anchor.blockNumber}
               </dd>
             </div>
             <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
-              <dt className="text-xs font-extrabold uppercase tracking-[0.15em] text-[#7890A3]">
-                Batch members
-              </dt>
+              <dt className="text-xs font-extrabold uppercase tracking-[0.15em] text-[#7890A3]"><LocalizedText text={"Batch members"} /></dt>
               <dd className="mt-2 text-sm font-extrabold text-white">
                 {anchor.memberCount}
               </dd>
@@ -258,9 +240,7 @@ function PublicAnchorPanel({
           </dl>
         </div>
         <div className="rounded-[22px] border border-white/10 bg-black/20 p-4 sm:p-5">
-          <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-[#7890A3]">
-            Merkle root
-          </p>
+          <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-[#7890A3]"><LocalizedText text={"Merkle root"} /></p>
           <p className="mt-3 break-all font-mono text-sm font-bold leading-5 text-[#BFE9D3]">
             {anchor.root}
           </p>
@@ -270,16 +250,12 @@ function PublicAnchorPanel({
               href={anchor.explorerUrl}
               rel="noreferrer"
               target="_blank"
-            >
-              Open Base receipt ↗
-            </a>
+            ><LocalizedText text={"Open Base receipt ↗"} /></a>
             <button
               className="min-h-11 rounded-xl border border-white/15 px-4 text-xs font-extrabold transition hover:border-[#72C79D]/45"
               onClick={() => onCopy(anchor.root, "Merkle root")}
               type="button"
-            >
-              Copy root
-            </button>
+            ><LocalizedText text={"Copy root"} /></button>
           </div>
         </div>
       </div>
@@ -292,6 +268,7 @@ export default function GlobalKeyCenter({
   verifyOrigin,
   memberName,
 }: GlobalKeyCenterProps) {
+  const { locale } = useFormattingLocale();
   const { t: localizeLabel } = useInterfaceLocale();
 
   const [keyView, setKeyView] = useState(initialKey);
@@ -368,9 +345,7 @@ export default function GlobalKeyCenter({
               href={verifyUrl}
               rel="noreferrer"
               target="_blank"
-            >
-              Verify proof ↗
-            </a>
+            ><LocalizedText text={"Verify proof ↗"} /></a>
           </div>
         </div>
       </header>
@@ -388,26 +363,14 @@ export default function GlobalKeyCenter({
                   ◇
                 </span>
                 <div>
-                  <p className="text-xs font-extrabold uppercase tracking-[0.24em] text-[var(--tgpi-gold)]">
-                    TGPI Global ID
-                  </p>
-                  <p className="mt-1 text-xs font-bold text-[#91A4B7]">
-                    Your identity. Your progress. Your proof.
-                  </p>
+                  <p className="text-xs font-extrabold uppercase tracking-[0.24em] text-[var(--tgpi-gold)]"><LocalizedText text={"TGPI Global ID"} /></p>
+                  <p className="mt-1 text-xs font-bold text-[#91A4B7]"><LocalizedText text={"Your identity. Your progress. Your proof."} /></p>
                 </div>
-                <span className="rounded-full border border-[#72C79D]/30 bg-[#72C79D]/10 px-3 py-1.5 text-xs font-extrabold uppercase tracking-[0.14em] text-[#AFE3C7]">
-                  ● Integrity verified
-                </span>
+                <span className="rounded-full border border-[#72C79D]/30 bg-[#72C79D]/10 px-3 py-1.5 text-xs font-extrabold uppercase tracking-[0.14em] text-[#AFE3C7]"><LocalizedText text={"● Integrity verified"} /></span>
               </div>
 
-              <h1 className="mt-7 max-w-4xl font-[var(--tgpi-font-display)] text-4xl font-semibold tracking-[-0.045em] sm:text-5xl lg:text-6xl">
-                Your growth deserves an identity.
-              </h1>
-              <p className="mt-4 max-w-3xl text-sm leading-7 text-[#AFBECC] sm:text-base">
-                One permanent TGPI ID connects your learning, certificates and
-                preparation. Keep building your skills and share a verifiable
-                proof when you choose.
-              </p>
+              <h1 className="mt-7 max-w-4xl font-[var(--tgpi-font-display)] text-4xl font-semibold tracking-[-0.045em] sm:text-5xl lg:text-6xl"><LocalizedText text={"Your growth deserves an identity."} /></h1>
+              <p className="mt-4 max-w-3xl text-sm leading-7 text-[#AFBECC] sm:text-base"><LocalizedText text={"One permanent TGPI ID connects your learning, certificates and preparation. Keep building your skills and share a verifiable proof when you choose."} /></p>
 
               <div
                 className={`${styles.identityCard} mt-8 rounded-[24px] border border-white/10 p-4 sm:p-6`}
@@ -426,9 +389,7 @@ export default function GlobalKeyCenter({
                     </p>
                   </div>
                 </div>
-                <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#7F92A5]">
-                  TGPI Global ID
-                </p>
+                <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#7F92A5]"><LocalizedText text={"TGPI Global ID"} /></p>
                 <p className="mt-3 break-all font-mono text-xl font-bold tracking-[0.08em] text-[var(--tgpi-gold-light)] sm:text-3xl">
                   {keyView.keyId}
                 </p>
@@ -437,9 +398,7 @@ export default function GlobalKeyCenter({
                     className="min-h-11 rounded-xl border border-white/15 bg-white/5 px-4 text-xs font-extrabold transition hover:border-[var(--tgpi-gold)]/45 hover:bg-white/10"
                     onClick={() => copyValue(keyView.keyId, "Global ID")}
                     type="button"
-                  >
-                    Copy Global ID
-                  </button>
+                  ><LocalizedText text={"Copy Global ID"} /></button>
                   <button
                     className="min-h-11 rounded-xl border border-white/15 bg-white/5 px-4 text-xs font-extrabold transition hover:border-[var(--tgpi-gold)]/45 hover:bg-white/10"
                     onClick={() => copyValue(verifyUrl, "Verification link")}
@@ -450,16 +409,9 @@ export default function GlobalKeyCenter({
             </div>
 
             <aside className="rounded-[28px] border border-white/10 bg-white/[0.055] p-5 sm:p-6">
-              <p className="text-xs font-bold uppercase tracking-widest text-[var(--tgpi-gold-light)]">
-                Share with confidence
-              </p>
-              <h2 className="mt-3 text-2xl font-semibold">
-                Proof on your terms.
-              </h2>
-              <p className="mt-3 text-sm leading-6 text-[#B9C7D5]">
-                Your verification link confirms the integrity of this ID. Your
-                private learning history and account details stay private.
-              </p>
+              <p className="text-xs font-bold uppercase tracking-widest text-[var(--tgpi-gold-light)]"><LocalizedText text={"Share with confidence"} /></p>
+              <h2 className="mt-3 text-2xl font-semibold"><LocalizedText text={"Proof on your terms."} /></h2>
+              <p className="mt-3 text-sm leading-6 text-[#B9C7D5]"><LocalizedText text={"Your verification link confirms the integrity of this ID. Your private learning history and account details stay private."} /></p>
               <button
                 type="button"
                 aria-expanded={showQr}
@@ -467,7 +419,7 @@ export default function GlobalKeyCenter({
                 onClick={() => setShowQr(!showQr)}
                 className="mt-5 min-h-12 w-full rounded-xl bg-[var(--tgpi-gold)] px-4 text-sm font-bold text-[#07182D]"
               >
-                {showQr ? "Hide verification QR" : "Show verification QR"}
+                {showQr ? <LocalizedText text={"Hide verification QR"} /> : <LocalizedText text={"Show verification QR"} />}
               </button>
               {showQr ? (
                 <div id="global-id-qr" className="mt-5">
@@ -481,17 +433,13 @@ export default function GlobalKeyCenter({
                       value={verifyUrl}
                     />
                   </div>
-                  <p className="mt-3 text-center text-xs leading-5 text-[#B9C7D5]">
-                    Anyone with this QR can verify this proof.
-                  </p>
+                  <p className="mt-3 text-center text-xs leading-5 text-[#B9C7D5]"><LocalizedText text={"Anyone with this QR can verify this proof."} /></p>
                 </div>
               ) : null}
               <Link
                 href="/profile/security"
                 className="mt-4 flex min-h-11 items-center justify-center rounded-xl border border-white/15 text-sm font-semibold"
-              >
-                Manage account security →
-              </Link>
+              ><LocalizedText text={"Manage account security →"} /></Link>
             </aside>
           </div>
         </section>
@@ -505,14 +453,14 @@ export default function GlobalKeyCenter({
               keyView.anchor.status === "confirmed" ? "Confirmed" : "Pending",
               "External receipt is tracked separately",
             ],
-            ["Status", "Active", `Issued ${formatDate(keyView.issuedAt)} UTC`],
+            ["Status", "Active", `Issued ${formatDate(locale, keyView.issuedAt)} UTC`],
           ].map(([label, value, detail]) => (
             <article
               className="rounded-[22px] border border-white/10 bg-[#0A1521] p-5"
               key={label}
             >
               <p className="text-xs font-extrabold uppercase tracking-[0.18em] text-[#778B9F]">
-                {label}
+                <LocalizedText text={label} />
               </p>
               <p className="mt-2 text-xl font-extrabold text-white">{value}</p>
               <p className="mt-2 text-sm leading-5 text-[#8FA0B2]">{detail}</p>
@@ -524,12 +472,8 @@ export default function GlobalKeyCenter({
           className="mt-6 rounded-[28px] border border-white/10 bg-[#08131F] p-5 sm:p-7"
           aria-labelledby="identity-value-title"
         >
-          <p className="text-xs font-bold uppercase tracking-widest text-[var(--tgpi-gold)]">
-            Make your ID valuable
-          </p>
-          <h2 id="identity-value-title" className="mt-2 text-2xl font-semibold">
-            Build a record you can stand behind.
-          </h2>
+          <p className="text-xs font-bold uppercase tracking-widest text-[var(--tgpi-gold)]"><LocalizedText text={"Make your ID valuable"} /></p>
+          <h2 id="identity-value-title" className="mt-2 text-2xl font-semibold"><LocalizedText text={"Build a record you can stand behind."} /></h2>
           <div className="mt-6 grid gap-4 md:grid-cols-3">
             {[
               {
@@ -560,14 +504,14 @@ export default function GlobalKeyCenter({
                 className={`${styles.actionCard} rounded-2xl border border-white/10 p-5`}
               >
                 <span className="font-mono text-sm text-[var(--tgpi-gold)]">
-                  {item.step}
+                  <LocalizedText text={item.step} />
                 </span>
-                <h3 className="mt-4 text-lg font-semibold">{item.title}</h3>
+                <h3 className="mt-4 text-lg font-semibold"><LocalizedText text={item.title} /></h3>
                 <p className="mt-2 text-sm leading-6 text-[#B9C7D5]">
-                  {item.text}
+                  <LocalizedText text={item.text} />
                 </p>
                 <span className="mt-5 inline-block text-sm font-semibold text-[var(--tgpi-gold-light)]">
-                  {item.action} →
+                  <LocalizedText text={item.action} /> →
                 </span>
               </Link>
             ))}
@@ -576,11 +520,8 @@ export default function GlobalKeyCenter({
         <details
           className={`${styles.technical} mt-6 rounded-[28px] border border-white/10 bg-[#08131F] p-5 sm:p-7`}
         >
-          <summary className="cursor-pointer text-lg font-semibold">
-            Security & integrity details{" "}
-            <span className="ml-2 text-sm font-normal text-[#B9C7D5]">
-              Revision {keyView.revision} · View proof history and controls
-            </span>
+          <summary className="cursor-pointer text-lg font-semibold"><LocalizedText text={"Security & integrity details"} />{" "}
+            <span className="ml-2 text-sm font-normal text-[#B9C7D5]"><LocalizedText text={"Revision"} />{" "}{keyView.revision}{" "}<LocalizedText text={"· View proof history and controls"} /></span>
           </summary>
           <div className="mt-6">
             <CapabilitySystemRail
@@ -603,19 +544,13 @@ export default function GlobalKeyCenter({
             >
               <div className="flex flex-wrap items-end justify-between gap-4 border-b border-white/10 pb-5">
                 <div>
-                  <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold)]">
-                    Integrity ledger
-                  </p>
+                  <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold)]"><LocalizedText text={"Integrity ledger"} /></p>
                   <h2
                     id="chain-title"
                     className="mt-2 font-[var(--tgpi-font-display)] text-3xl font-semibold"
-                  >
-                    Cryptographic block history
-                  </h2>
+                  ><LocalizedText text={"Cryptographic block history"} /></h2>
                 </div>
-                <span className="rounded-full border border-white/10 bg-white/5 px-3 py-2 font-mono text-xs text-[#A8B7C5]">
-                  chain:v2
-                </span>
+                <span className="rounded-full border border-white/10 bg-white/5 px-3 py-2 font-mono text-xs text-[#A8B7C5]"><LocalizedText text={"chain:v2"} /></span>
               </div>
               <ol className="mt-6 grid gap-6">
                 {keyView.blocks.map((block, index) => (
@@ -633,15 +568,11 @@ export default function GlobalKeyCenter({
                 aria-labelledby="fingerprint-title"
                 className="rounded-[28px] border border-[var(--tgpi-gold)]/25 bg-[#10243A] p-5 sm:p-7"
               >
-                <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold)]">
-                  Cryptographic fingerprint
-                </p>
+                <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold)]"><LocalizedText text={"Cryptographic fingerprint"} /></p>
                 <h2
                   id="fingerprint-title"
                   className="mt-2 font-[var(--tgpi-font-display)] text-3xl font-semibold"
-                >
-                  Current proof signature
-                </h2>
+                ><LocalizedText text={"Current proof signature"} /></h2>
                 <p className="mt-5 break-all font-mono text-sm font-bold leading-7 tracking-[0.08em] text-[var(--tgpi-gold-light)]">
                   {keyView.fingerprint}
                 </p>
@@ -649,27 +580,16 @@ export default function GlobalKeyCenter({
                   className="mt-5 min-h-11 rounded-xl border border-white/15 px-4 text-xs font-extrabold transition hover:border-[var(--tgpi-gold)]/45"
                   onClick={() => copyValue(keyView.fingerprint, "Fingerprint")}
                   type="button"
-                >
-                  Copy fingerprint
-                </button>
+                ><LocalizedText text={"Copy fingerprint"} /></button>
               </section>
 
               <section
                 aria-labelledby="rotate-title"
                 className="rounded-[28px] border border-white/10 bg-[#0A1521] p-5 sm:p-7"
               >
-                <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#7F92A5]">
-                  Proof control
-                </p>
-                <h2 id="rotate-title" className="mt-2 text-xl font-extrabold">
-                  Rotate cryptographic proof
-                </h2>
-                <p className="mt-3 text-xs leading-6 text-[#95A5B5]">
-                  Rotation appends a new signed block and queues it for the next
-                  public batch. Your previous Base receipt remains a valid
-                  historical proof; your Global ID and account login do not
-                  change.
-                </p>
+                <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[#7F92A5]"><LocalizedText text={"Proof control"} /></p>
+                <h2 id="rotate-title" className="mt-2 text-xl font-extrabold"><LocalizedText text={"Rotate cryptographic proof"} /></h2>
+                <p className="mt-3 text-xs leading-6 text-[#95A5B5]"><LocalizedText text={"Rotation appends a new signed block and queues it for the next public batch. Your previous Base receipt remains a valid historical proof; your Global ID and account login do not change."} /></p>
                 <button
                   className={`mt-5 min-h-11 w-full rounded-xl px-4 text-xs font-extrabold transition disabled:cursor-wait disabled:opacity-60 ${
                     confirmRotation
@@ -681,10 +601,10 @@ export default function GlobalKeyCenter({
                   type="button"
                 >
                   {isPending
-                    ? "Creating secure block…"
+                    ? <LocalizedText text={"Creating secure block…"} />
                     : confirmRotation
-                      ? "Confirm proof rotation"
-                      : "Rotate proof"}
+                      ? <LocalizedText text={"Confirm proof rotation"} />
+                      : <LocalizedText text={"Rotate proof"} />}
                 </button>
                 {confirmRotation && !isPending ? (
                   <button
@@ -699,28 +619,13 @@ export default function GlobalKeyCenter({
               </section>
 
               <section className="rounded-[28px] border border-[#2A4B65] bg-[var(--tgpi-navy-raised)] p-5 sm:p-7">
-                <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold)]">
-                  Security boundary
-                </p>
+                <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold)]"><LocalizedText text={"Security boundary"} /></p>
                 <ul className="mt-4 grid gap-3 text-xs leading-5 text-[#B8C5D1]">
-                  <li>
-                    ✓ Clerk remains responsible for login, MFA, sessions and
-                    recovery.
-                  </li>
-                  <li>
-                    ✓ Base receives only a Merkle root and non-personal batch
-                    metadata.
-                  </li>
-                  <li>
-                    ✓ Private TGPI progress never enters the public proof.
-                  </li>
-                  <li>
-                    ✓ The key is not a password, wallet, cryptocurrency or NFT.
-                  </li>
-                  <li>
-                    ✓ No government, migration or academic credential is
-                    implied.
-                  </li>
+                  <li><LocalizedText text={"✓ Clerk remains responsible for login, MFA, sessions and recovery."} /></li>
+                  <li><LocalizedText text={"✓ Base receives only a Merkle root and non-personal batch metadata."} /></li>
+                  <li><LocalizedText text={"✓ Private TGPI progress never enters the public proof."} /></li>
+                  <li><LocalizedText text={"✓ The key is not a password, wallet, cryptocurrency or NFT."} /></li>
+                  <li><LocalizedText text={"✓ No government, migration or academic credential is implied."} /></li>
                 </ul>
               </section>
             </div>
@@ -731,15 +636,11 @@ export default function GlobalKeyCenter({
           aria-labelledby="connections-title"
           className="mt-6 rounded-[28px] border border-white/10 bg-[#08131F] p-5 sm:p-7"
         >
-          <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold)]">
-            One connected identity
-          </p>
+          <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold)]"><LocalizedText text={"One connected identity"} /></p>
           <h2
             id="connections-title"
             className="mt-2 font-[var(--tgpi-font-display)] text-3xl font-semibold"
-          >
-            Your TGPI, connected.
-          </h2>
+          ><LocalizedText text={"Your TGPI, connected."} /></h2>
           <div className="mt-6 grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
             {connectedSystems.map((system) => (
               <Link
@@ -758,9 +659,9 @@ export default function GlobalKeyCenter({
                     →
                   </span>
                 </div>
-                <h3 className="mt-3 text-sm font-extrabold">{system.label}</h3>
+                <h3 className="mt-3 text-sm font-extrabold"><LocalizedText text={system.label} /></h3>
                 <p className="mt-2 text-sm leading-5 text-[#8FA0B2]">
-                  {system.description}
+                  <LocalizedText text={system.description} />
                 </p>
               </Link>
             ))}
@@ -768,12 +669,7 @@ export default function GlobalKeyCenter({
         </section>
 
         <p className="mt-6 rounded-2xl border border-[var(--tgpi-gold)]/20 bg-[var(--tgpi-gold)]/[0.06] px-5 py-4 text-xs leading-6 text-[#B8C5D1]">
-          <strong className="text-[var(--tgpi-gold-light)]">Technology disclosure:</strong>{" "}
-          TGPI Integrity Chain V2 combines a TGPI-operated authenticated
-          identity record with periodic Merkle-root anchoring on Base Mainnet.
-          The receipt is publicly auditable, but the Global Key is not a
-          cryptocurrency, NFT, wallet, passport or government credential.
-        </p>
+          <strong className="text-[var(--tgpi-gold-light)]"><LocalizedText text={"Technology disclosure:"} /></strong>{" "}<LocalizedText text={"TGPI Integrity Chain V2 combines a TGPI-operated authenticated identity record with periodic Merkle-root anchoring on Base Mainnet. The receipt is publicly auditable, but the Global Key is not a cryptocurrency, NFT, wallet, passport or government credential."} /></p>
 
         <div
           aria-live="polite"
@@ -784,7 +680,7 @@ export default function GlobalKeyCenter({
             <p
               className={`rounded-2xl border px-4 py-3 text-center text-xs font-extrabold shadow-2xl backdrop-blur ${feedback.tone === "error" ? "border-[#E98585]/30 bg-[#3A1118]/95 text-[#FFD1D1]" : "border-[#72C79D]/30 bg-[#0B2B21]/95 text-[#C1EBD5]"}`}
             >
-              {feedback.message}
+              <LocalizedText text={feedback.message} />
             </p>
           ) : null}
         </div>

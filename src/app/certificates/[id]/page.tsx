@@ -1,3 +1,4 @@
+import { localizeMetadata } from "@/lib/localization/metadata.server";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import CredentialRecordView from "@/components/credentials/CredentialRecordView";
@@ -7,7 +8,7 @@ import {
   getUserLearningCredential,
 } from "@/lib/learning-records.server";
 
-export const metadata: Metadata = {
+const sourceMetadata: Metadata = {
   title: "My verified certificate — TGPI",
   description:
     "View your achievement, download the latest certificate PDF and share its live verification record.",
@@ -29,3 +30,5 @@ export default async function CredentialPage({
   if (!credential) notFound();
   return <CredentialRecordView credential={credential} owner />;
 }
+
+export async function generateMetadata() { return localizeMetadata(sourceMetadata); }

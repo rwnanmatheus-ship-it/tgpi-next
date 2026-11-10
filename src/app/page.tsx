@@ -1,9 +1,10 @@
+import { localizeMetadata } from "@/lib/localization/metadata.server";
 import type { Metadata } from "next";
 import InstitutionalHome from "@/components/home/v4/InstitutionalHome";
 import HomeStructuredData from "@/components/home/HomeStructuredData";
 import { HOME_FAQ } from "@/lib/home-content";
 
-export const metadata: Metadata = {
+const sourceMetadata: Metadata = {
   title: "TGPI | The Global Polymath Institute",
   description:
     "The Global Polymath Institute (TGPI) connects practical education, country research and international preparation. Compare countries and plan life abroad.",
@@ -48,3 +49,5 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return <><HomeStructuredData faq={HOME_FAQ} /><InstitutionalHome /></>;
 }
+
+export async function generateMetadata() { return localizeMetadata(sourceMetadata); }

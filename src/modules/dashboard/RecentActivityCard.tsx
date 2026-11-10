@@ -18,7 +18,7 @@ export default function RecentActivityCard() {
             key={item}
             className="rounded-2xl border border-white/10 bg-black/30 p-4 text-sm text-slate-300"
           >
-            {item}
+            <LocalizedText text={item} />
           </div>
         ))}
       </div>

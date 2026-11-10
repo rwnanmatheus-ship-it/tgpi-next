@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 type DestinationPickerProps = {
   value: string;
   onChange: (value: string) => void;
@@ -18,14 +20,9 @@ export default function DestinationPicker({
 }: DestinationPickerProps) {
   return (
     <section className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-      <h2 className="text-2xl font-bold text-yellow-400">
-        Choose Your Destination
-      </h2>
+      <h2 className="text-2xl font-bold text-yellow-400"><LocalizedText text={"Choose Your Destination"} /></h2>
 
-      <p className="mt-3 text-sm leading-7 text-slate-300">
-        Your destination is the anchor of your TGPI journey. It shapes your
-        pathway, network, and identity.
-      </p>
+      <p className="mt-3 text-sm leading-7 text-slate-300"><LocalizedText text={"Your destination is the anchor of your TGPI journey. It shapes your pathway, network, and identity."} /></p>
 
       <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {destinations.map((destination) => {
@@ -42,8 +39,7 @@ export default function DestinationPicker({
               }`}
             >
               <p className="text-lg font-bold text-white">{destination}</p>
-              <p className="mt-2 text-sm text-slate-400">
-                Build readiness for {destination}.
+              <p className="mt-2 text-sm text-slate-400"><LocalizedText text={"Build readiness for"} />{" "}{destination}.
               </p>
             </button>
           );

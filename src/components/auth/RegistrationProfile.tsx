@@ -30,18 +30,18 @@ export default function RegistrationProfile({ firstName, lastName, currentCountr
     } catch (cause) { setError(cause instanceof Error ? cause.message : "Unable to connect. Please try again."); }
     finally { submitting.current = false; setBusy(false); }
   }
-  return <div><header className={styles.profileHeader}><h2>Make TGPI yours.</h2><p>Add a few details so your profile and global plan start with you.</p></header>
+  return <div><header className={styles.profileHeader}><h2><LocalizedText text={"Make TGPI yours."} /></h2><p><LocalizedText text={"Add a few details so your profile and global plan start with you."} /></p></header>
     <form className={styles.form} onSubmit={submit} aria-busy={busy}>
       <div className={styles.names}>
         <label className={styles.field} htmlFor="firstName"><LocalizedText text="First name" /><input id="firstName" name="firstName" autoComplete="given-name" defaultValue={firstName} required maxLength={60} /></label>
         <label className={styles.field} htmlFor="lastName"><LocalizedText text="Last name" /><input id="lastName" name="lastName" autoComplete="family-name" defaultValue={lastName} required maxLength={60} /></label>
       </div>
-      <label className={styles.field} htmlFor="currentCountry"><LocalizedText text="Country of residence" /><select id="currentCountry" name="currentCountry" autoComplete="country" defaultValue={currentCountry} required><option value="" disabled>Select your country</option>{countries.map(country => <option key={country.code} value={country.code}>{country.name}</option>)}</select></label>
-      <label className={styles.field} htmlFor="preferredLanguage"><LocalizedText text="Preferred language" /><select id="preferredLanguage" name="preferredLanguage" defaultValue={preferredLanguage || "English"}>{registrationLanguages.map(language => <option key={language}>{language}</option>)}</select></label>
-      <p className={styles.hint}>Used to personalize your profile and recommendations. Language availability varies by content. You can update these details in Settings.</p>
-      <label className={styles.consent}><input name="terms" type="checkbox" required /><span>I agree to the <Link href="/terms" target="_blank" rel="noopener noreferrer"><LocalizedText text={"Terms of use"} /></Link> and acknowledge the <Link href="/privacy" target="_blank" rel="noopener noreferrer"><LocalizedText text={"Privacy policy"} /></Link>.</span></label>
-      {error ? <p className={styles.error} role="alert">{error}</p> : null}
-      <button className={styles.submit} type="submit" disabled={busy}>{busy ? "Saving your profile…" : "Continue to my global plan →"}</button>
+      <label className={styles.field} htmlFor="currentCountry"><LocalizedText text="Country of residence" /><select id="currentCountry" name="currentCountry" autoComplete="country" defaultValue={currentCountry} required><option value="" disabled><LocalizedText text={"Select your country"} /></option>{countries.map(country => <option key={country.code} value={country.code}><LocalizedText text={country.name} /></option>)}</select></label>
+      <label className={styles.field} htmlFor="preferredLanguage"><LocalizedText text="Preferred language" /><select id="preferredLanguage" name="preferredLanguage" defaultValue={preferredLanguage || "English"}>{registrationLanguages.map(language => <option value={language} key={language}><LocalizedText text={language} /></option>)}</select></label>
+      <p className={styles.hint}><LocalizedText text={"Used to personalize your profile and recommendations. Language availability varies by content. You can update these details in Settings."} /></p>
+      <label className={styles.consent}><input name="terms" type="checkbox" required /><span><LocalizedText text={"I agree to the"} />{" "}<Link href="/terms" target="_blank" rel="noopener noreferrer"><LocalizedText text={"Terms of use"} /></Link>{" "}<LocalizedText text={"and acknowledge the"} />{" "}<Link href="/privacy" target="_blank" rel="noopener noreferrer"><LocalizedText text={"Privacy policy"} /></Link>.</span></label>
+      {error ? <p className={styles.error} role="alert"><LocalizedText text={error} /></p> : null}
+      <button className={styles.submit} type="submit" disabled={busy}>{busy ? <LocalizedText text={"Saving your profile…"} /> : <LocalizedText text={"Continue to my global plan →"} />}</button>
     </form>
   </div>;
 }

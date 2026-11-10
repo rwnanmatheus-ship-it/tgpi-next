@@ -1,3 +1,4 @@
+import { localizeMetadata } from "@/lib/localization/metadata.server";
 import { courses } from "@/data/courses";
 import type { Metadata } from "next";
 import { currentUser } from "@clerk/nextjs/server";
@@ -13,7 +14,7 @@ import { normalizeOnboardingData } from "@/lib/onboarding";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
+const sourceMetadata: Metadata = {
   title: "Personal Global Plan — TGPI",
   description:
     "Connect your Country Fit, comparisons, documents and learning progress in one private TGPI action plan.",
@@ -42,3 +43,5 @@ export default async function PersonalPlanPage() {
     />
   );
 }
+
+export async function generateMetadata() { return localizeMetadata(sourceMetadata); }

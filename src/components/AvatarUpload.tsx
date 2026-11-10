@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image from "@/components/localization/LocalizedImage";
 import { useEffect, useState } from "react";
 import { updateProfile } from "firebase/auth";
 import { auth } from "@/lib/firebase";
@@ -72,9 +72,7 @@ export default function AvatarUpload() {
 
         <div>
           <p className="text-sm font-medium text-slate-300"><LocalizedText text="Profile photo" /></p>
-          <p className="mt-1 text-xs text-slate-400">
-            Personalize your TGPI identity.
-          </p>
+          <p className="mt-1 text-xs text-slate-400"><LocalizedText text={"Personalize your TGPI identity."} /></p>
         </div>
       </div>
 
@@ -92,7 +90,7 @@ export default function AvatarUpload() {
       ) : null}
 
       {message ? (
-        <p className="mt-3 text-sm text-yellow-300">{message}</p>
+        <p className="mt-3 text-sm text-yellow-300"><LocalizedText text={message} /></p>
       ) : null}
     </div>
   );

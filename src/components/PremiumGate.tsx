@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import LockedFeatureCard from "@/components/LockedFeatureCard";
 import { hasPremiumAccess, TGPIPlan } from "@/lib/entitlements";
 
@@ -55,14 +57,12 @@ export default function PremiumGate({
 
         {highlights.length > 0 && (
           <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
-            <h4 className="mb-3 text-sm font-semibold uppercase tracking-wide text-yellow-400">
-              Premium Highlights
-            </h4>
+            <h4 className="mb-3 text-sm font-semibold uppercase tracking-wide text-yellow-400"><LocalizedText text={"Premium Highlights"} /></h4>
 
             <div className="space-y-2">
               {highlights.map((item) => (
                 <p key={item} className="text-sm text-slate-300">
-                  • {item}
+                  • <LocalizedText text={item} />
                 </p>
               ))}
             </div>

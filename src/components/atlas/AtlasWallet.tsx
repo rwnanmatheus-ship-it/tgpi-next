@@ -1,7 +1,9 @@
 'use client';
+
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import Link from 'next/link';
 import { useCallback, useEffect, useState } from 'react';
-import { useLocale } from '@/components/localization/LocaleProvider';
+import { useLocale , LocalizedText } from '@/components/localization/LocaleProvider';
 import type { WalletAccount, WalletEntry, WalletPack } from '@/lib/wallet/policy';
 import styles from './wallet.module.css';
 import { walletCopy } from '@/lib/wallet/copy';
@@ -40,15 +42,15 @@ export default function AtlasWallet() {
     } catch (e) { setError(e instanceof Error ? e.message : c.failed); setBusy(false); }
   }
   return <main className={styles.page}>
-    <nav><Link href="/atlas">← {c.back}</Link><span>TGPI / ATLAS</span></nav>
-    <header><p className={styles.eyebrow}>ATLAS WALLET</p><h1>{c.title}</h1><p>{c.subtitle}</p></header>
+    <nav><Link href="/atlas">← {c.back}</Link><span><LocalizedText text={"TGPI / ATLAS"} /></span></nav>
+    <header><p className={styles.eyebrow}><LocalizedText text={"ATLAS WALLET"} /></p><h1><LocalizedText text={c.title} /></h1><p>{c.subtitle}</p></header>
     {wallet?.mode === 'test' && <p className={styles.notice} role="status">{c.testing}</p>}
-    {error && <p role="alert" className={styles.notice}>{error}</p>}
+    {error && <p role="alert" className={styles.notice}><LocalizedText text={error} /></p>}
     {!wallet && !error && <p role="status">{c.loading}</p>}
-    <section className={styles.balance} aria-label={c.available}>
-      <div><p>{c.available}</p><strong>{wallet ? money(wallet.balanceCents) : '—'}</strong><span>USD · {wallet ? money(wallet.turnPriceCents) : 'US$ 0.10'} {c.price}</span></div>
+    <LocalizedElement as="section" className={styles.balance} aria-label={c.available}>
+      <div><p>{c.available}</p><strong>{wallet ? money(wallet.balanceCents) : '—'}</strong><span><LocalizedText text={"USD ·"} />{" "}{wallet ? money(wallet.turnPriceCents) : <LocalizedText text={"US$ 0.10"} />} {c.price}</span></div>
       <dl><div><dt>{c.reserved}</dt><dd>{wallet ? money(wallet.reservedCents) : '—'}</dd></div><div><dt>{c.spent}</dt><dd>{wallet ? money(wallet.spentCents) : '—'}</dd></div></dl>
-    </section>
+    </LocalizedElement>
     {wallet && wallet.balanceCents < 0 && <p role="alert" className={styles.notice}>{c.debt}</p>}
     {wallet && !wallet.checkoutEnabled && <p className={styles.notice}>{c.closed}</p>}
     <section><h2>{c.add}</h2><div className={styles.packs}>{(wallet?.packs || [{ id: 'starter' as const, cents: 500 }, { id: 'explorer' as const, cents: 1000 }, { id: 'global' as const, cents: 2500 }]).map(pack => <article key={pack.id}><span>{c.creditLabel}</span><h3>{money(pack.cents)}</h3><button disabled={busy || !wallet?.checkoutEnabled} onClick={() => void checkout(pack.id)}>{c.add} ↗</button></article>)}</div><p className={styles.fine}>{c.terms}</p></section>

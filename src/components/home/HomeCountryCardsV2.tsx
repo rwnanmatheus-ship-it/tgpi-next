@@ -1,3 +1,5 @@
+
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import Link from "next/link";
 import TGPIEditorialVisual, {
   type TGPIVisualVariant,
@@ -66,12 +68,8 @@ export default function HomeCountryCardsV2() {
             <h2
               id="home-country-intelligence-title"
               className="mt-4 font-[var(--tgpi-font-display)] text-[clamp(2.8rem,5vw,4.8rem)] font-semibold leading-[0.95] text-white"
-            >
-              Move from inspiration to a structured comparison.
-            </h2>
-            <p className="mt-5 max-w-2xl text-base leading-8 text-[#dce4ee] sm:text-lg">
-              Inspect source-linked observations, their reference years and their limitations before building your personal plan.
-            </p>
+            ><LocalizedText text={"Move from inspiration to a structured comparison."} /></h2>
+            <p className="mt-5 max-w-2xl text-base leading-8 text-[#dce4ee] sm:text-lg"><LocalizedText text={"Inspect source-linked observations, their reference years and their limitations before building your personal plan."} /></p>
           </div>
           <Link
             href="/countries"
@@ -79,7 +77,7 @@ export default function HomeCountryCardsV2() {
           ><LocalizedText text="Explore all countries" /></Link>
         </div>
 
-        <div
+        <LocalizedElement as="div"
           className="-mx-4 mt-10 flex snap-x snap-mandatory gap-4 overflow-x-auto px-4 pb-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:-mx-6 sm:px-6 lg:mx-0 lg:grid lg:grid-cols-3 lg:overflow-visible lg:px-0"
           aria-label="Featured TGPI country intelligence"
         >
@@ -111,11 +109,9 @@ export default function HomeCountryCardsV2() {
                     <span>{country.signal}</span>
                   </div>
                   <div className="absolute inset-x-4 bottom-4 rounded-2xl border border-white/15 bg-[#071a32]/86 p-4 backdrop-blur-xl">
-                    <p className="text-[9px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-light)]">
-                      Main decision pressure
-                    </p>
+                    <p className="text-[9px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-light)]"><LocalizedText text={"Main decision pressure"} /></p>
                     <p className="mt-2 font-[var(--tgpi-font-display)] text-2xl font-semibold leading-tight text-white">
-                      {country.pressure}
+                      <LocalizedText text={country.pressure} />
                     </p>
                   </div>
                 </div>
@@ -151,7 +147,7 @@ export default function HomeCountryCardsV2() {
               </div>
             </article>
           ))}
-        </div>
+        </LocalizedElement>
 
         <div className="mt-7 grid gap-3 sm:flex">
           <Link

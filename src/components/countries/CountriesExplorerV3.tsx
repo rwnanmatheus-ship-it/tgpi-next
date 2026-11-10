@@ -1,4 +1,6 @@
 "use client";
+
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 
 import Link from "next/link";
@@ -260,14 +262,14 @@ export default function CountriesExplorerV3({ countries, goals, regions }: Count
         <div className="grid gap-3 lg:grid-cols-[1fr_auto_auto]">
           <label className="relative block">
             <span className="sr-only"><LocalizedText text="Search countries" /></span>
-            <input value={query} onChange={(event) => { setQuery(event.target.value); setActivePreset(null); }} placeholder="Search countries, regions, languages or currencies" className="h-12 w-full rounded-2xl border border-[var(--tgpi-border)] bg-white px-4 pr-12 text-sm text-[var(--tgpi-navy)] outline-none transition placeholder:text-[var(--tgpi-muted)] focus:border-[var(--tgpi-gold)] focus:ring-2 focus:ring-[var(--tgpi-gold)]/20" />
+            <LocalizedElement as="input" value={query} onChange={(event) => { setQuery(event.target.value); setActivePreset(null); }} placeholder="Search countries, regions, languages or currencies" className="h-12 w-full rounded-2xl border border-[var(--tgpi-border)] bg-white px-4 pr-12 text-sm text-[var(--tgpi-navy)] outline-none transition placeholder:text-[var(--tgpi-muted)] focus:border-[var(--tgpi-gold)] focus:ring-2 focus:ring-[var(--tgpi-gold)]/20" />
             <span className="pointer-events-none absolute right-4 top-1/2 -translate-y-1/2 text-[var(--tgpi-gold-strong)]">⌕</span>
           </label>
           <div role="group" aria-label={localizeLabel("Country results view")} className="grid grid-cols-2 rounded-2xl border border-[var(--tgpi-border)] bg-white p-1">
-            <button type="button" aria-pressed={view === "visual"} onClick={() => setView("visual")} className={`min-h-10 rounded-xl px-4 text-xs font-extrabold transition ${view === "visual" ? "bg-[var(--tgpi-blue-soft)] text-[var(--tgpi-blue)]" : "text-[var(--tgpi-muted)] hover:text-[var(--tgpi-navy)]"}`}>Visual</button>
-            <button type="button" aria-pressed={view === "index"} onClick={() => setView("index")} className={`min-h-10 rounded-xl px-4 text-xs font-extrabold transition ${view === "index" ? "bg-[var(--tgpi-teal-soft)] text-[var(--tgpi-teal)]" : "text-[var(--tgpi-muted)] hover:text-[var(--tgpi-navy)]"}`}>Index</button>
+            <button type="button" aria-pressed={view === "visual"} onClick={() => setView("visual")} className={`min-h-10 rounded-xl px-4 text-xs font-extrabold transition ${view === "visual" ? "bg-[var(--tgpi-blue-soft)] text-[var(--tgpi-blue)]" : "text-[var(--tgpi-muted)] hover:text-[var(--tgpi-navy)]"}`}><LocalizedText text={"Visual"} /></button>
+            <button type="button" aria-pressed={view === "index"} onClick={() => setView("index")} className={`min-h-10 rounded-xl px-4 text-xs font-extrabold transition ${view === "index" ? "bg-[var(--tgpi-teal-soft)] text-[var(--tgpi-teal)]" : "text-[var(--tgpi-muted)] hover:text-[var(--tgpi-navy)]"}`}><LocalizedText text={"Index"} /></button>
           </div>
-          <button type="button" onClick={() => setFiltersOpen(true)} className="inline-flex min-h-12 items-center justify-center rounded-2xl bg-[var(--tgpi-navy)] px-5 text-sm font-extrabold text-white transition hover:bg-[var(--tgpi-navy-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"><LocalizedText text={"Filters"} />{activeFilters.length ? ` ${activeFilters.length}` : ""}
+          <button type="button" onClick={() => setFiltersOpen(true)} className="inline-flex min-h-12 items-center justify-center rounded-2xl bg-[var(--tgpi-navy)] px-5 text-sm font-extrabold text-white transition hover:bg-[var(--tgpi-navy-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"><LocalizedText text={"Filters"} />{activeFilters.length ? <LocalizedText text={" {value0}"} values={{value0: String(activeFilters.length)}} /> : ""}
           </button>
         </div>
       </div>
@@ -277,9 +279,9 @@ export default function CountriesExplorerV3({ countries, goals, regions }: Count
           const active = activePreset === preset.id;
           return (
             <button key={preset.id} type="button" onClick={() => applyPreset(preset)} className={`min-w-[68vw] snap-center rounded-[18px] border p-4 text-left transition sm:min-w-0 ${active ? "border-[var(--tgpi-gold)] bg-[var(--tgpi-navy)] text-white shadow-[var(--tgpi-shadow-premium)]" : "border-[var(--tgpi-border)] bg-white text-[var(--tgpi-navy)] hover:-translate-y-0.5 hover:border-[var(--tgpi-gold)]"}`}>
-              <span className={`text-[9px] font-extrabold uppercase tracking-[0.14em] ${active ? "text-[var(--tgpi-gold-light)]" : "text-[var(--tgpi-gold-strong)]"}`}>Lens {String(index + 1).padStart(2, "0")}</span>
-              <span className="mt-2 block font-[var(--tgpi-font-display)] text-lg font-semibold leading-tight">{preset.label}</span>
-              <span className={`mt-2 hidden text-[11px] leading-5 xl:block ${active ? "text-white/65" : "text-[var(--tgpi-muted)]"}`}>{preset.summary}</span>
+              <span className={`text-[9px] font-extrabold uppercase tracking-[0.14em] ${active ? "text-[var(--tgpi-gold-light)]" : "text-[var(--tgpi-gold-strong)]"}`}><LocalizedText text={"Lens"} />{" "}{String(index + 1).padStart(2, "0")}</span>
+              <span className="mt-2 block font-[var(--tgpi-font-display)] text-lg font-semibold leading-tight"><LocalizedText text={preset.label} /></span>
+              <span className={`mt-2 hidden text-[11px] leading-5 xl:block ${active ? "text-white/65" : "text-[var(--tgpi-muted)]"}`}><LocalizedText text={preset.summary} /></span>
             </button>
           );
         })}
@@ -287,14 +289,13 @@ export default function CountriesExplorerV3({ countries, goals, regions }: Count
 
       <div aria-live="polite" className="mt-5 flex flex-col gap-4 rounded-[24px] border border-[var(--tgpi-border)] bg-white p-5 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <p className="text-sm text-[var(--tgpi-muted)]">
-            Showing <span className="font-extrabold text-[var(--tgpi-navy)]">{Math.min(visibleCountries.length, filteredCountries.length)}</span>{" "}<LocalizedText text="of" />{" "}<span className="font-extrabold text-[var(--tgpi-navy)]">{filteredCountries.length}</span>{" "}<LocalizedText text={"countries"} /></p>
+          <p className="text-sm text-[var(--tgpi-muted)]"><LocalizedText text={"Showing"} />{" "}<span className="font-extrabold text-[var(--tgpi-navy)]">{Math.min(visibleCountries.length, filteredCountries.length)}</span>{" "}<LocalizedText text="of" />{" "}<span className="font-extrabold text-[var(--tgpi-navy)]">{filteredCountries.length}</span>{" "}<LocalizedText text={"countries"} /></p>
           {activeFilters.length ? <div className="mt-3 flex flex-wrap gap-2">{activeFilters.map((filter) => <span key={filter} className="rounded-full border border-[var(--tgpi-border)] bg-[var(--tgpi-canvas)] px-3 py-2 text-xs font-bold text-[var(--tgpi-navy)]">{filter}</span>)}</div> : null}
         </div>
         {hasActiveControls ? <button type="button" onClick={clearFilters} className="min-h-11 rounded-xl px-3 text-sm font-extrabold text-[var(--tgpi-gold-strong)] transition hover:bg-[var(--tgpi-gold-soft)]"><LocalizedText text={"Clear all"} /></button> : null}
       </div>
 
-      {compareNotice ? <p role="status" className="mt-4 rounded-2xl border border-[#A23B32]/25 bg-[#FFF1EF] px-4 py-3 text-sm font-bold text-[#7F2E28]">{compareNotice}</p> : null}
+      {compareNotice ? <p role="status" className="mt-4 rounded-2xl border border-[#A23B32]/25 bg-[#FFF1EF] px-4 py-3 text-sm font-bold text-[#7F2E28]"><LocalizedText text={compareNotice} /></p> : null}
 
       <div id="countries-results" aria-busy={isFiltering} className={`scroll-mt-40 transition-opacity ${isFiltering ? "opacity-65" : "opacity-100"}`}>
         {filteredCountries.length ? (
@@ -305,7 +306,7 @@ export default function CountriesExplorerV3({ countries, goals, regions }: Count
                 return (
                   <div key={country.slug} className={`relative rounded-[28px] [contain-intrinsic-size:0_520px] [content-visibility:auto] ${selected ? "ring-2 ring-[var(--tgpi-gold)] ring-offset-4 ring-offset-[var(--tgpi-canvas)]" : ""}`}>
                     <div className="mb-3 flex items-center justify-between gap-3 px-1">
-                      <p className="text-[10px] font-extrabold uppercase tracking-[0.12em] text-[var(--tgpi-muted)]">Decision profile</p>
+                      <p className="text-[10px] font-extrabold uppercase tracking-[0.12em] text-[var(--tgpi-muted)]"><LocalizedText text={"Decision profile"} /></p>
                       <CompareButton country={country} selected={selected} onToggle={toggleCountry} />
                     </div>
                     <CountryCard country={country} />
@@ -328,16 +329,15 @@ export default function CountriesExplorerV3({ countries, goals, regions }: Count
         ) : (
           <div className="mt-8 rounded-[28px] border border-[var(--tgpi-border)] bg-white p-8 text-center shadow-[var(--tgpi-shadow-soft)]">
             <p className="font-[var(--tgpi-font-display)] text-3xl font-semibold text-[var(--tgpi-navy)]"><LocalizedText text={"No country matches every selected filter."} /></p>
-            <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-[var(--tgpi-muted)]">Lower the minimum safety score, expand the region or remove one preference to reopen the country pool.</p>
+            <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-[var(--tgpi-muted)]"><LocalizedText text={"Lower the minimum safety score, expand the region or remove one preference to reopen the country pool."} /></p>
             <button type="button" onClick={clearFilters} className="mt-6 rounded-2xl bg-[var(--tgpi-navy)] px-6 py-3 text-sm font-extrabold text-white"><LocalizedText text="Reset filters" /></button>
           </div>
         )}
 
         {visibleCountries.length < filteredCountries.length ? (
           <div className="mt-7 flex flex-col items-center rounded-[22px] border border-[var(--tgpi-border)] bg-white p-5 text-center">
-            <p className="text-sm text-[var(--tgpi-muted)]">{filteredCountries.length - visibleCountries.length} more profiles match this view.</p>
-            <button type="button" onClick={() => setVisibleCount((current) => current + RESULTS_INCREMENT)} className="mt-4 inline-flex min-h-12 items-center justify-center rounded-2xl bg-[var(--tgpi-navy)] px-6 text-sm font-extrabold text-white transition hover:-translate-y-0.5 hover:bg-[var(--tgpi-navy-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"><LocalizedText text={"Load"} />{" "}{Math.min(RESULTS_INCREMENT, filteredCountries.length - visibleCountries.length)} more countries
-            </button>
+            <p className="text-sm text-[var(--tgpi-muted)]">{filteredCountries.length - visibleCountries.length}{" "}<LocalizedText text={"more profiles match this view."} /></p>
+            <button type="button" onClick={() => setVisibleCount((current) => current + RESULTS_INCREMENT)} className="mt-4 inline-flex min-h-12 items-center justify-center rounded-2xl bg-[var(--tgpi-navy)] px-6 text-sm font-extrabold text-white transition hover:-translate-y-0.5 hover:bg-[var(--tgpi-navy-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"><LocalizedText text={"Load"} />{" "}{Math.min(RESULTS_INCREMENT, filteredCountries.length - visibleCountries.length)}{" "}<LocalizedText text={"more countries"} /></button>
           </div>
         ) : null}
       </div>
@@ -346,7 +346,7 @@ export default function CountriesExplorerV3({ countries, goals, regions }: Count
         <div className="fixed inset-0 z-[70] bg-black/55 backdrop-blur-sm" role="presentation" onMouseDown={(event) => { if (event.currentTarget === event.target) setFiltersOpen(false); }}>
           <section role="dialog" aria-modal="true" aria-label={localizeLabel("Country filters")} className="absolute inset-x-0 bottom-0 max-h-[92dvh] overflow-y-auto rounded-t-[32px] bg-[var(--tgpi-canvas)] p-5 shadow-2xl md:inset-y-0 md:left-auto md:right-0 md:max-h-none md:w-[460px] md:rounded-none md:rounded-l-[32px]">
             <div className="sticky top-0 z-10 flex items-center justify-between border-b border-[var(--tgpi-border)] bg-[var(--tgpi-canvas)] pb-4">
-              <div><p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold-strong)]">Smart filters</p><h2 className="mt-1 font-[var(--tgpi-font-display)] text-3xl font-semibold text-[var(--tgpi-navy)]">Refine your shortlist</h2></div>
+              <div><p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold-strong)]"><LocalizedText text={"Smart filters"} /></p><h2 className="mt-1 font-[var(--tgpi-font-display)] text-3xl font-semibold text-[var(--tgpi-navy)]"><LocalizedText text={"Refine your shortlist"} /></h2></div>
               <button ref={closeButtonRef} type="button" onClick={() => setFiltersOpen(false)} className="grid h-11 w-11 place-items-center rounded-full border border-[var(--tgpi-border)] bg-white text-[var(--tgpi-navy)]" aria-label={localizeLabel("Close filters")}>×</button>
             </div>
             <div className="grid gap-4 py-5">
@@ -360,7 +360,7 @@ export default function CountriesExplorerV3({ countries, goals, regions }: Count
             </div>
             <div className="sticky bottom-0 grid gap-3 border-t border-[var(--tgpi-border)] bg-[var(--tgpi-canvas)] pt-4 sm:grid-cols-2">
               <button type="button" onClick={clearFilters} className="min-h-12 rounded-2xl border border-[var(--tgpi-border)] bg-white text-sm font-extrabold text-[var(--tgpi-navy)]"><LocalizedText text="Reset" /></button>
-              <button type="button" onClick={() => setFiltersOpen(false)} className="min-h-12 rounded-2xl bg-[var(--tgpi-navy)] text-sm font-extrabold text-white"><LocalizedText text={"Show"} />{" "}{filteredCountries.length} results</button>
+              <button type="button" onClick={() => setFiltersOpen(false)} className="min-h-12 rounded-2xl bg-[var(--tgpi-navy)] text-sm font-extrabold text-white"><LocalizedText text={"Show"} />{" "}{filteredCountries.length}{" "}<LocalizedText text={"results"} /></button>
             </div>
           </section>
         </div>
@@ -391,7 +391,7 @@ function CompareButton({
   onToggle: (slug: string) => void;
 }) {
   return (
-    <button
+    <LocalizedElement as="button"
       type="button"
       aria-pressed={selected}
       aria-label={`${selected ? "Remove" : "Add"} ${country.name} ${selected ? "from" : "to"} comparison`}
@@ -402,8 +402,8 @@ function CompareButton({
           : "border-[var(--tgpi-border)] bg-white text-[var(--tgpi-navy)] hover:border-[var(--tgpi-gold)]"
       }`}
     >
-      {selected ? "Added ✓" : <LocalizedText text={"+ Compare"} />}
-    </button>
+      {selected ? <LocalizedText text={"Added ✓"} /> : <LocalizedText text={"+ Compare"} />}
+    </LocalizedElement>
   );
 }
 
@@ -433,13 +433,13 @@ function CountryIndexRow({
         <div className="flex min-w-0 items-start gap-3">
           <span aria-hidden="true" className="text-2xl">{country.emoji}</span>
           <div className="min-w-0">
-            <p className="text-[9px] font-extrabold uppercase tracking-[0.12em] text-[var(--tgpi-gold-strong)]"><LocalizedText text={country.region} /> · {country.capital}</p>
+            <p className="text-[9px] font-extrabold uppercase tracking-[0.12em] text-[var(--tgpi-gold-strong)]"><LocalizedText text={country.region} /> · <LocalizedText text={country.capital} /></p>
             <h3 className="mt-1 truncate font-[var(--tgpi-font-display)] text-2xl font-semibold text-[var(--tgpi-navy)]"><LocalizedText text={country.name} /></h3>
-            <p className="mt-1 truncate text-xs font-semibold text-[var(--tgpi-muted)]">{country.language} · {country.currencyCode}</p>
+            <p className="mt-1 truncate text-xs font-semibold text-[var(--tgpi-muted)]"><LocalizedText text={country.language} /> · {country.currencyCode}</p>
           </div>
         </div>
         <div className="shrink-0 rounded-xl bg-[var(--tgpi-navy)] px-3 py-2 text-center text-white">
-          <p className="text-[7px] font-extrabold uppercase tracking-[0.1em] text-[var(--tgpi-gold-light)]">Signal</p>
+          <p className="text-[7px] font-extrabold uppercase tracking-[0.1em] text-[var(--tgpi-gold-light)]"><LocalizedText text={"Signal"} /></p>
           <p className="font-[var(--tgpi-font-display)] text-2xl font-semibold leading-none">{country.tgpiScore}</p>
         </div>
       </div>
@@ -461,16 +461,16 @@ function CountryIndexRow({
 function IndexMetric({ label, value }: { label: string; value: string }) {
   return (
     <div className="min-w-0 rounded-xl border border-[var(--tgpi-border)] bg-[var(--tgpi-canvas)] p-2.5">
-      <p className="text-[7px] font-extrabold uppercase tracking-[0.1em] text-[var(--tgpi-muted)]">{label}</p>
+      <p className="text-[7px] font-extrabold uppercase tracking-[0.1em] text-[var(--tgpi-muted)]"><LocalizedText text={label} /></p>
       <p className="mt-1 truncate text-[11px] font-extrabold text-[var(--tgpi-navy)]">{value}</p>
     </div>
   );
 }
 
 function SelectField({ label, value, onChange, options, format }: { label: string; value: string; onChange: (value: string) => void; options: string[]; format: (value: string) => string }) {
-  return <label className="block"><span className="mb-2 block text-xs font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-muted)]">{label}</span><select value={value} onChange={(event) => onChange(event.target.value)} className="h-12 w-full rounded-2xl border border-[var(--tgpi-border)] bg-white px-4 text-sm font-semibold text-[var(--tgpi-navy)] outline-none focus:border-[var(--tgpi-gold)]">{options.map((option) => <option key={option} value={option}>{format(option)}</option>)}</select></label>;
+  return <label className="block"><span className="mb-2 block text-xs font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-muted)]"><LocalizedText text={label} /></span><select value={value} onChange={(event) => onChange(event.target.value)} className="h-12 w-full rounded-2xl border border-[var(--tgpi-border)] bg-white px-4 text-sm font-semibold text-[var(--tgpi-navy)] outline-none focus:border-[var(--tgpi-gold)]">{options.map((option) => <option key={option} value={option}><LocalizedText text={format(option)} /></option>)}</select></label>;
 }
 
 function RangeField({ label, value, onChange }: { label: string; value: number; onChange: (value: number) => void }) {
-  return <label className="block rounded-2xl border border-[var(--tgpi-border)] bg-white p-4"><span className="flex items-center justify-between text-xs font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-muted)]"><span>{label}</span><span className="text-[var(--tgpi-gold-strong)]">{value}+</span></span><input type="range" min="0" max="100" step="5" value={value} onChange={(event) => onChange(Number(event.target.value))} className="mt-4 w-full accent-[var(--tgpi-gold)]" /></label>;
+  return <label className="block rounded-2xl border border-[var(--tgpi-border)] bg-white p-4"><span className="flex items-center justify-between text-xs font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-muted)]"><span><LocalizedText text={label} /></span><span className="text-[var(--tgpi-gold-strong)]">{value}+</span></span><input type="range" min="0" max="100" step="5" value={value} onChange={(event) => onChange(Number(event.target.value))} className="mt-4 w-full accent-[var(--tgpi-gold)]" /></label>;
 }

@@ -20,7 +20,7 @@ export default function SaveSuccessCard({
 
         <div>
           <p className="font-semibold text-emerald-300"><LocalizedText text={"Saved successfully"} /></p>
-          <p className="mt-1 text-sm text-emerald-100/90">{message}</p>
+          <p className="mt-1 text-sm text-emerald-100/90"><LocalizedText text={message} /></p>
         </div>
       </div>
     </div>

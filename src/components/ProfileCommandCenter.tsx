@@ -1,4 +1,6 @@
 "use client";
+
+import { useLocale as useFormattingLocale } from "@/components/localization/LocaleProvider";
 import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 
 import Link from "next/link";
@@ -55,10 +57,10 @@ type ProfileDoc = {
   streak?: number;
 };
 
-function formatDate(date?: string) {
+function formatDate(locale: import('@/lib/localization/config').Locale, date?: string) {
   if (!date) return "—";
   try {
-    return new Intl.DateTimeFormat("en-US", {
+    return new Intl.DateTimeFormat(locale, {
       dateStyle: "medium",
       timeStyle: "short",
     }).format(new Date(date));
@@ -103,8 +105,8 @@ function Block({
   return (
     <section className="rounded-3xl border border-slate-800 bg-slate-950 p-6">
       <div className="mb-5">
-        <h2 className="text-2xl font-bold text-yellow-400">{title}</h2>
-        {subtitle ? <p className="mt-2 text-sm text-slate-400">{subtitle}</p> : null}
+        <h2 className="text-2xl font-bold text-yellow-400"><LocalizedText text={title} /></h2>
+        {subtitle ? <p className="mt-2 text-sm text-slate-400"><LocalizedText text={subtitle} /></p> : null}
       </div>
       {children}
     </section>
@@ -122,14 +124,15 @@ function Stat({
 }) {
   return (
     <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-      <p className="text-xs uppercase tracking-[0.18em] text-slate-400">{label}</p>
+      <p className="text-xs uppercase tracking-[0.18em] text-slate-400"><LocalizedText text={label} /></p>
       <p className="mt-3 text-2xl font-bold text-white">{value}</p>
-      {hint ? <p className="mt-2 text-sm text-slate-400">{hint}</p> : null}
+      {hint ? <p className="mt-2 text-sm text-slate-400"><LocalizedText text={hint} /></p> : null}
     </div>
   );
 }
 
 export default function ProfileCommandCenter({ mode }: { mode: ViewMode }) {
+  const { locale } = useFormattingLocale();
   const { t: localizeLabel } = useInterfaceLocale();
 
   const [loading, setLoading] = useState(true);
@@ -198,7 +201,7 @@ export default function ProfileCommandCenter({ mode }: { mode: ViewMode }) {
       <main className="min-h-screen bg-black px-6 py-10 text-white">
         <div className="mx-auto max-w-7xl">
           <div className="rounded-3xl border border-slate-800 bg-slate-950 p-10">
-            <p className="text-lg text-slate-300">Loading your TGPI command center...</p>
+            <p className="text-lg text-slate-300"><LocalizedText text={"Loading your TGPI command center..."} /></p>
           </div>
         </div>
       </main>
@@ -210,22 +213,14 @@ export default function ProfileCommandCenter({ mode }: { mode: ViewMode }) {
       <main className="min-h-screen bg-black px-6 py-10 text-white">
         <div className="mx-auto max-w-4xl">
           <section className="rounded-3xl border border-yellow-700/20 bg-gradient-to-br from-yellow-500/10 to-slate-950 p-10">
-            <p className="mb-3 inline-block rounded-full border border-yellow-500/30 bg-yellow-500/10 px-4 py-2 text-sm text-yellow-200">
-              TGPI Access
-            </p>
-            <h1 className="text-4xl font-bold text-yellow-400">
-              Sign in to access your command center
-            </h1>
-            <p className="mt-4 max-w-2xl text-slate-300">
-              Your profile and dashboard are becoming one intelligent, editable, and strategic environment.
-            </p>
+            <p className="mb-3 inline-block rounded-full border border-yellow-500/30 bg-yellow-500/10 px-4 py-2 text-sm text-yellow-200"><LocalizedText text={"TGPI Access"} /></p>
+            <h1 className="text-4xl font-bold text-yellow-400"><LocalizedText text={"Sign in to access your command center"} /></h1>
+            <p className="mt-4 max-w-2xl text-slate-300"><LocalizedText text={"Your profile and dashboard are becoming one intelligent, editable, and strategic environment."} /></p>
             <div className="mt-8">
               <Link
                 href="/login"
                 className="rounded-xl bg-yellow-500 px-6 py-3 font-semibold text-black transition hover:bg-yellow-400"
-              >
-                Go to Login
-              </Link>
+              ><LocalizedText text={"Go to Login"} /></Link>
             </div>
           </section>
         </div>
@@ -242,7 +237,7 @@ export default function ProfileCommandCenter({ mode }: { mode: ViewMode }) {
           <div className="grid gap-8 xl:grid-cols-[1.2fr_.8fr]">
             <div>
               <p className="mb-4 inline-block rounded-full border border-yellow-500/30 bg-yellow-500/10 px-4 py-2 text-sm text-yellow-200">
-                {mode === "profile" ? "TGPI Profile Command Center" : "TGPI Dashboard Command Center"}
+                {mode === "profile" ? <LocalizedText text={"TGPI Profile Command Center"} /> : <LocalizedText text={"TGPI Dashboard Command Center"} />}
               </p>
 
               <h1 className="text-4xl font-bold text-white md:text-5xl">{displayName}</h1>
@@ -251,7 +246,7 @@ export default function ProfileCommandCenter({ mode }: { mode: ViewMode }) {
 
               <p className="mt-5 max-w-3xl text-sm leading-7 text-slate-300">
                 {profile?.bio ||
-                  "Your TGPI command center connects identity, progress, decisions, memory, and global planning in one premium environment."}
+                  <LocalizedText text={"Your TGPI command center connects identity, progress, decisions, memory, and global planning in one premium environment."} />}
               </p>
 
               <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -270,9 +265,7 @@ export default function ProfileCommandCenter({ mode }: { mode: ViewMode }) {
               />
 
               <div className="rounded-2xl border border-slate-800 bg-slate-900 p-5">
-                <p className="mb-4 text-xs uppercase tracking-[0.18em] text-slate-400">
-                  Account Layer
-                </p>
+                <p className="mb-4 text-xs uppercase tracking-[0.18em] text-slate-400"><LocalizedText text={"Account Layer"} /></p>
 
                 <div className="space-y-3 text-sm">
                   <div className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950 p-3">
@@ -281,7 +274,7 @@ export default function ProfileCommandCenter({ mode }: { mode: ViewMode }) {
                   </div>
 
                   <div className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950 p-3">
-                    <span className="text-slate-400">XP</span>
+                    <span className="text-slate-400"><LocalizedText text={"XP"} /></span>
                     <span className="font-semibold text-white">{profile?.xp ?? 0}</span>
                   </div>
 
@@ -291,12 +284,12 @@ export default function ProfileCommandCenter({ mode }: { mode: ViewMode }) {
                   </div>
 
                   <div className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950 p-3">
-                    <span className="text-slate-400">Streak</span>
-                    <span className="font-semibold text-white">{profile?.streak ?? 0} days</span>
+                    <span className="text-slate-400"><LocalizedText text={"Streak"} /></span>
+                    <span className="font-semibold text-white">{profile?.streak ?? 0}{" "}<LocalizedText text={"days"} /></span>
                   </div>
 
                   <div className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950 p-3">
-                    <span className="text-slate-400">UID</span>
+                    <span className="text-slate-400"><LocalizedText text={"UID"} /></span>
                     <span className="max-w-[180px] truncate font-mono text-xs text-slate-300">
                       {uid}
                     </span>
@@ -325,17 +318,15 @@ export default function ProfileCommandCenter({ mode }: { mode: ViewMode }) {
                     .slice(0, 8)
                     .map((item, index) => (
                       <div
-                        key={`${item.action}-${item.date}-${index}`}
+                        key={`$<LocalizedText text={item.action} />-${item.date}-${index}`}
                         className="rounded-2xl border border-slate-800 bg-slate-900 p-4"
                       >
-                        <p className="font-medium text-white">{item.action}</p>
-                        <p className="mt-1 text-sm text-slate-400">{formatDate(item.date)}</p>
+                        <p className="font-medium text-white"><LocalizedText text={item.action} /></p>
+                        <p className="mt-1 text-sm text-slate-400">{formatDate(locale, item.date)}</p>
                       </div>
                     ))
                 ) : (
-                  <div className="rounded-2xl border border-slate-800 bg-slate-900 p-4 text-sm text-slate-400">
-                    No activity tracked yet.
-                  </div>
+                  <div className="rounded-2xl border border-slate-800 bg-slate-900 p-4 text-sm text-slate-400"><LocalizedText text={"No activity tracked yet."} /></div>
                 )}
               </div>
             </Block>
@@ -355,19 +346,17 @@ export default function ProfileCommandCenter({ mode }: { mode: ViewMode }) {
                         <p className="font-medium text-white">
                           {item.amount} {item.from} → {item.to}
                         </p>
-                        <p className="text-sm text-slate-400">{formatDate(item.date)}</p>
+                        <p className="text-sm text-slate-400">{formatDate(locale, item.date)}</p>
                       </div>
                       <p className="mt-2 text-sm text-slate-300">
                         {typeof item.result === "number"
-                          ? `Result: ${item.result.toFixed(2)} ${item.to}`
-                          : "Result value not stored"}
+                          ? <LocalizedText text={"Result: {value0} {value1}"} values={{value0: String(item.result.toFixed(2)), value1: String(item.to)}} />
+                          : <LocalizedText text={"Result value not stored"} />}
                       </p>
                     </div>
                   ))
                 ) : (
-                  <div className="rounded-2xl border border-slate-800 bg-slate-900 p-4 text-sm text-slate-400">
-                    No conversions saved yet.
-                  </div>
+                  <div className="rounded-2xl border border-slate-800 bg-slate-900 p-4 text-sm text-slate-400"><LocalizedText text={"No conversions saved yet."} /></div>
                 )}
               </div>
             </Block>
@@ -389,39 +378,31 @@ export default function ProfileCommandCenter({ mode }: { mode: ViewMode }) {
                   className="block rounded-2xl border border-slate-800 bg-slate-900 p-4 transition hover:border-yellow-500/40"
                 >
                   <p className="font-semibold text-white"><LocalizedText text="Explore Countries" /></p>
-                  <p className="mt-1 text-sm text-slate-400">
-                    Compare destinations and strengthen your decision signals.
-                  </p>
+                  <p className="mt-1 text-sm text-slate-400"><LocalizedText text={"Compare destinations and strengthen your decision signals."} /></p>
                 </Link>
 
                 <Link
                   href="/premium"
                   className="block rounded-2xl border border-slate-800 bg-slate-900 p-4 transition hover:border-yellow-500/40"
                 >
-                  <p className="font-semibold text-white">Upgrade Plan</p>
-                  <p className="mt-1 text-sm text-slate-400">
-                    Unlock deeper product value and premium intelligence.
-                  </p>
+                  <p className="font-semibold text-white"><LocalizedText text={"Upgrade Plan"} /></p>
+                  <p className="mt-1 text-sm text-slate-400"><LocalizedText text={"Unlock deeper product value and premium intelligence."} /></p>
                 </Link>
 
                 <Link
                   href="/ranking"
                   className="block rounded-2xl border border-slate-800 bg-slate-900 p-4 transition hover:border-yellow-500/40"
                 >
-                  <p className="font-semibold text-white">View Ranking</p>
-                  <p className="mt-1 text-sm text-slate-400">
-                    Understand your position inside TGPI progression.
-                  </p>
+                  <p className="font-semibold text-white"><LocalizedText text={"View Ranking"} /></p>
+                  <p className="mt-1 text-sm text-slate-400"><LocalizedText text={"Understand your position inside TGPI progression."} /></p>
                 </Link>
 
                 <Link
                   href="/community"
                   className="block rounded-2xl border border-slate-800 bg-slate-900 p-4 transition hover:border-yellow-500/40"
                 >
-                  <p className="font-semibold text-white">Open Community</p>
-                  <p className="mt-1 text-sm text-slate-400">
-                    Move from solo exploration to networked global discovery.
-                  </p>
+                  <p className="font-semibold text-white"><LocalizedText text={"Open Community"} /></p>
+                  <p className="mt-1 text-sm text-slate-400"><LocalizedText text={"Move from solo exploration to networked global discovery."} /></p>
                 </Link>
               </div>
             </Block>

@@ -24,20 +24,14 @@ export default function HomeLaunchClose() {
       <div className="mx-auto max-w-[1180px] overflow-hidden rounded-[34px] border border-white/10 bg-[var(--tgpi-navy)] shadow-[var(--tgpi-shadow-premium)]">
         <div className="grid lg:grid-cols-[1.08fr_.92fr]">
           <div className="p-7 sm:p-10 lg:p-14">
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[var(--tgpi-gold-light)]">
-              TGPI Premium
-            </p>
-            <h2 className="mt-4 max-w-2xl font-[var(--tgpi-font-display)] text-[clamp(2.8rem,5vw,4.8rem)] font-semibold leading-[0.95] text-white">
-              Turn exploration into a living global plan.
-            </h2>
-            <p className="mt-5 max-w-xl text-base leading-8 text-[#dce4ee]">
-              TGPI Premium keeps the intelligence, preparation and capability behind your international objective connected as your plan evolves.
-            </p>
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[var(--tgpi-gold-light)]"><LocalizedText text={"TGPI Premium"} /></p>
+            <h2 className="mt-4 max-w-2xl font-[var(--tgpi-font-display)] text-[clamp(2.8rem,5vw,4.8rem)] font-semibold leading-[0.95] text-white"><LocalizedText text={"Turn exploration into a living global plan."} /></h2>
+            <p className="mt-5 max-w-xl text-base leading-8 text-[#dce4ee]"><LocalizedText text={"TGPI Premium keeps the intelligence, preparation and capability behind your international objective connected as your plan evolves."} /></p>
             <div className="mt-7 grid gap-3 sm:grid-cols-2">
               {benefits.map((benefit) => (
                 <div key={benefit} className="rounded-2xl border border-white/15 bg-white/5 p-4 text-sm font-semibold text-white">
                   <span className="mr-2 text-[var(--tgpi-gold-light)]">✓</span>
-                  {benefit}
+                  <LocalizedText text={benefit} />
                 </div>
               ))}
             </div>
@@ -49,7 +43,7 @@ export default function HomeLaunchClose() {
 
           <div className="border-t border-white/10 bg-[linear-gradient(145deg,#102d50,#071a32)] p-6 sm:p-8 lg:border-l lg:border-t-0 lg:p-10">
             <div className="h-full rounded-[28px] border border-white/15 bg-white/5 p-6 text-white backdrop-blur-xl">
-              <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-light)]">One objective · five connected layers</p>
+              <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-light)]"><LocalizedText text={"One objective · five connected layers"} /></p>
               <div className="mt-6 grid gap-3">
                 {workspaceLayers.map(([label, value, description], index) => (
                   <div key={label} className="grid grid-cols-[auto_1fr] gap-4 rounded-2xl border border-white/10 bg-black/10 p-4">
@@ -57,16 +51,14 @@ export default function HomeLaunchClose() {
                       0{index + 1}
                     </span>
                     <div>
-                      <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-white/45">{label}</p>
+                      <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-white/45"><LocalizedText text={label} /></p>
                       <p className="mt-1 font-[var(--tgpi-font-display)] text-xl font-semibold text-white">{value}</p>
-                      <p className="mt-1 text-xs leading-5 text-white/45">{description}</p>
+                      <p className="mt-1 text-xs leading-5 text-white/45"><LocalizedText text={description} /></p>
                     </div>
                   </div>
                 ))}
               </div>
-              <p className="mt-6 text-sm leading-7 text-white/60">
-                Start free. TGPI Premium is {TGPI_PREMIUM_PLAN.price}{TGPI_PREMIUM_PLAN.cadence}, billed monthly. Review the terms before checkout.
-              </p>
+              <p className="mt-6 text-sm leading-7 text-white/60"><LocalizedText text={"Start free. TGPI Premium is"} />{" "}{TGPI_PREMIUM_PLAN.price}<LocalizedText text={TGPI_PREMIUM_PLAN.cadence} /><LocalizedText text={", billed monthly. Review the terms before checkout."} /></p>
             </div>
           </div>
         </div>

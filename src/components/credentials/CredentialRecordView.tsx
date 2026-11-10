@@ -1,4 +1,6 @@
 
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
+
 import { LocalizedText } from "@/components/localization/LocaleProvider";
 import Link from "next/link";
 import CertificateDocument from "./CertificateDocument";
@@ -36,7 +38,7 @@ export default function CredentialRecordView({
   return (
     <main className="credential-record">
       <div className="credential-record-shell">
-        <nav
+        <LocalizedElement as="nav"
           aria-label="Certificate navigation"
           className="credential-record-breadcrumb"
         >
@@ -45,35 +47,35 @@ export default function CredentialRecordView({
           </Link>
           <span aria-hidden="true">/</span>
           <span><LocalizedText text={"Certificate record"} /></span>
-        </nav>
+        </LocalizedElement>
         <header className="credential-record-heading">
           <div>
-            <p className="credential-eyebrow">TGPI · Verified learning</p>
+            <p className="credential-eyebrow"><LocalizedText text={"TGPI · Verified learning"} /></p>
             <h1>
               {owner
-                ? "Your achievement, in one place."
-                : "Verify a learning achievement."}
+                ? <LocalizedText text={"Your achievement, in one place."} />
+                : <LocalizedText text={"Verify a learning achievement."} />}
             </h1>
             <p>
               {owner
-                ? "Download, share and manage your certificate."
-                : "Check the learner, issuer and current certificate status."}
+                ? <LocalizedText text={"Download, share and manage your certificate."} />
+                : <LocalizedText text={"Check the learner, issuer and current certificate status."} />}
             </p>
           </div>
-          <span
+          <LocalizedElement as="span"
             className={`credential-state ${verified ? "verified" : "review"}`}
             aria-label="Current lifecycle status"
           >
             {verified ? "✓ " : "! "}
-            {label}
-          </span>
+            <LocalizedText text={label} />
+          </LocalizedElement>
         </header>
         <div
           className={`credential-status-note ${verified ? "verified" : "review"}`}
           role="status"
         >
-          <strong>{label}</strong>
-          <span>{description}</span>
+          <strong><LocalizedText text={label} /></strong>
+          <span><LocalizedText text={description} /></span>
         </div>
         <CredentialActions
           credentialId={credential.id}
@@ -84,58 +86,49 @@ export default function CredentialRecordView({
           owner={owner}
         />
         <CertificateDocument credential={credential} verified={verified} />
-        {credential.replacedBy && <p className="credential-status-note"><Link href={`${owner ? "/certificates/" : "/verify/credentials/"}${encodeURIComponent(credential.replacedBy)}`}>Abrir certificado substituto →</Link></p>}
+        {credential.replacedBy && <p className="credential-status-note"><Link href={`${owner ? "/certificates/" : "/verify/credentials/"}${encodeURIComponent(credential.replacedBy)}`}><LocalizedText text={"Abrir certificado substituto →"} /></Link></p>}
         {owner && (
           <section className="credential-refresh-note">
             <div className="credential-refresh-icon" aria-hidden="true">
               ↻
             </div>
             <div>
-              <h2>Refresh an earlier certificate</h2>
-              <p>
-                The download always uses the latest document edition (
-                {CERTIFICATE_DESIGN_VERSION}). Your certificate ID, original
-                issue date and learning evidence stay the same. No course retake
-                is required.
-              </p>
+              <h2><LocalizedText text={"Refresh an earlier certificate"} /></h2>
+              <p><LocalizedText text={"The download always uses the latest document edition ("} />{CERTIFICATE_DESIGN_VERSION}<LocalizedText text={"). Your certificate ID, original issue date and learning evidence stay the same. No course retake is required."} /></p>
             </div>
           </section>
         )}
-        <section
+        <LocalizedElement as="section"
           className="credential-evidence-grid"
           aria-label="Learning evidence"
         >
           <article>
             <p className="credential-eyebrow"><LocalizedText text={"Assessment"} /></p>
-            <h2>{credential.assessmentScore}% mastery</h2>
+            <h2>{credential.assessmentScore}<LocalizedText text={"% mastery"} /></h2>
             <p>
-              {credential.masteryThreshold}% required ·{" "}
+              {credential.masteryThreshold}<LocalizedText text={"% required ·"} />{" "}
               {credential.learningHours}{" "}<LocalizedText text={"learning hours"} /></p>
           </article>
           <article>
             <p className="credential-eyebrow"><LocalizedText text={"Identity"} /></p>
-            <h2>TGPI Global ID</h2>
+            <h2><LocalizedText text={"TGPI Global ID"} /></h2>
             <p className="credential-mono">
               {credential.identityEvidence.globalKeyId}
             </p>
           </article>
           <article>
-            <p className="credential-eyebrow">Portability</p>
-            <h2>Share worldwide</h2>
-            <p>
-              English-language PDF, public QR verification and portable
-              evidence. Acceptance depends on the receiving institution.
-            </p>
+            <p className="credential-eyebrow"><LocalizedText text={"Portability"} /></p>
+            <h2><LocalizedText text={"Share worldwide"} /></h2>
+            <p><LocalizedText text={"English-language PDF, public QR verification and portable evidence. Acceptance depends on the receiving institution."} /></p>
           </article>
-        </section>
+        </LocalizedElement>
         <details className="credential-details">
-          <summary>
-            Learning evidence & verification details{" "}
+          <summary><LocalizedText text={"Learning evidence & verification details"} />{" "}
             <span aria-hidden="true">＋</span>
           </summary>
           <div className="credential-details-content">
             <section>
-              <h2>Demonstrated capabilities</h2>
+              <h2><LocalizedText text={"Demonstrated capabilities"} /></h2>
               <ul className="credential-skill-list">
                 {credential.skills.map((skill) => (
                   <li key={skill.id}>
@@ -146,7 +139,7 @@ export default function CredentialRecordView({
               </ul>
             </section>
             <section>
-              <h2>Evidence dossier</h2>
+              <h2><LocalizedText text={"Evidence dossier"} /></h2>
               <ul className="credential-evidence-list">
                 {credential.evidenceSummary.map((item) => (
                   <li key={item}>{item}</li>
@@ -154,67 +147,58 @@ export default function CredentialRecordView({
               </ul>
             </section>
             <section>
-              <h2>Trust chain</h2>
+              <h2><LocalizedText text={"Trust chain"} /></h2>
               <dl className="credential-trust-data">
                 <div>
-                  <dt>Issuer</dt>
+                  <dt><LocalizedText text={"Issuer"} /></dt>
                   <dd>{credential.issuer}</dd>
                 </div>
                 <div>
-                  <dt>Record fingerprint</dt>
+                  <dt><LocalizedText text={"Record fingerprint"} /></dt>
                   <dd className="credential-mono">
                     {credential.integrityFingerprint}
                   </dd>
                 </div>
                 <div>
-                  <dt>Identity revision</dt>
+                  <dt><LocalizedText text={"Identity revision"} /></dt>
                   <dd>{credential.identityEvidence.revision}</dd>
                 </div>
                 <div>
-                  <dt>Public anchor</dt>
+                  <dt><LocalizedText text={"Public anchor"} /></dt>
                   <dd>
                     {credential.identityEvidence.anchor.status === "confirmed"
-                      ? "Confirmed on Base Mainnet"
-                      : "Identity anchor activation pending"}
+                      ? <LocalizedText text={"Confirmed on Base Mainnet"} />
+                      : <LocalizedText text={"Identity anchor activation pending"} />}
                   </dd>
                 </div>
               </dl>
             </section>
             <section>
-              <h2>International format references</h2>
-              <p>
-                These are implementation alignment targets. They do not mean
-                this credential is externally accredited or certified by these
-                organizations.
-              </p>
+              <h2><LocalizedText text={"International format references"} /></h2>
+              <p><LocalizedText text={"These are implementation alignment targets. They do not mean this credential is externally accredited or certified by these organizations."} /></p>
               <ul className="credential-standard-list">
                 {credential.standardsAlignment.map((standard) => (
                   <li key={standard}>
                     {standard}
-                    <span>Implementation target</span>
+                    <span><LocalizedText text={"Implementation target"} /></span>
                   </li>
                 ))}
               </ul>
-              <p>
-                The TGPI quality seal is the institute&apos;s own issuer mark, based
-                on its identity, assessment and record-verification checks. This
-                professional learning certificate is not a government degree or
-                professional license.
-              </p>
+              <p><LocalizedText text={"The TGPI quality seal is the institute's own issuer mark, based on its identity, assessment and record-verification checks. This professional learning certificate is not a government degree or professional license."} /></p>
             </section>
           </div>
         </details>
-        <nav className="credential-record-footer" aria-label="Next steps">
+        <LocalizedElement as="nav" className="credential-record-footer" aria-label="Next steps">
           <Link
             className="credential-button"
             href={owner ? "/certificates" : "/verify"}
           >
-            {owner ? "← Back to my certificates" : "Verify another record"}
+            {owner ? <LocalizedText text={"← Back to my certificates"} /> : <LocalizedText text={"Verify another record"} />}
           </Link>
           {owner && (
             <Link className="credential-button" href="/courses"><LocalizedText text={"Continue learning ↗"} /></Link>
           )}
-        </nav>
+        </LocalizedElement>
       </div>
     </main>
   );

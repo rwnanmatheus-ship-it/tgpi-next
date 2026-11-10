@@ -1,4 +1,8 @@
-import Image from "next/image";
+
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+import Image from "@/components/localization/LocalizedImage";
 
 export type TGPIVisualVariant =
   | "hero"
@@ -126,7 +130,7 @@ export default function TGPIEditorialVisual({
     : ariaLabel ?? visual.alt;
 
   return (
-    <div
+    <LocalizedElement as="div"
       className={`group relative isolate overflow-hidden bg-[var(--tgpi-navy-raised)] ${className}`}
       role="img"
       aria-label={accessibleLabel}
@@ -148,9 +152,7 @@ export default function TGPIEditorialVisual({
 
       {variant !== "hero" && showContext && (
         <div className="absolute inset-x-5 bottom-5 z-10 rounded-[22px] border border-white/18 bg-[#071426]/72 px-5 py-4 text-white shadow-[0_18px_48px_rgba(0,0,0,0.24)] backdrop-blur-md md:inset-x-6 md:bottom-6">
-          <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[var(--tgpi-gold-light)]">
-            Real-world decision pressure
-          </p>
+          <p className="text-[10px] font-black uppercase tracking-[0.22em] text-[var(--tgpi-gold-light)]"><LocalizedText text={"Real-world decision pressure"} /></p>
           <p className="mt-2 font-serif text-xl font-semibold leading-tight md:text-2xl">
             {visual.context}
           </p>
@@ -159,6 +161,6 @@ export default function TGPIEditorialVisual({
           </p>
         </div>
       )}
-    </div>
+    </LocalizedElement>
   );
 }

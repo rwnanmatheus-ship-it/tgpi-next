@@ -40,14 +40,14 @@ export default function SaveStatusCard({
               isSuccess ? "text-emerald-300" : "text-red-300"
             }`}
           >
-            {isSuccess ? <LocalizedText text={"Saved successfully"} /> : "Save failed"}
+            {isSuccess ? <LocalizedText text={"Saved successfully"} /> : <LocalizedText text={"Save failed"} />}
           </p>
           <p
             className={`mt-1 text-sm ${
               isSuccess ? "text-emerald-100/90" : "text-red-100/90"
             }`}
           >
-            {message}
+            <LocalizedText text={message} />
           </p>
         </div>
       </div>

@@ -1,5 +1,5 @@
 "use client";
-import { useLocale } from "@/components/localization/LocaleProvider";
+import { useLocale , LocalizedText } from "@/components/localization/LocaleProvider";
 import Link from "next/link";
 import BrandCrest from "@/components/BrandCrest";
 
@@ -16,8 +16,8 @@ export default function BrandSignature({ compact = false }: { compact?: boolean 
         <BrandCrest width={44} height={54} sizes="44px" priority alt="" />
       </span>
       <span className="tgpi-brand-wordmark">
-        <strong>TGPI</strong>
-        <span>The Global Polymath Institute</span>
+        <strong><LocalizedText text={"TGPI"} /></strong>
+        <span><LocalizedText text={"The Global Polymath Institute"} /></span>
       </span>
     </Link>
   );

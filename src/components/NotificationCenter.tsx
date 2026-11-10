@@ -18,7 +18,7 @@ export default function NotificationCenter() {
       <div className="mt-4 space-y-3">
         {notifications.map((n, i) => (
           <div key={i} className="text-sm text-slate-300">
-            🔔 {n}
+            🔔 <LocalizedText text={n} />
           </div>
         ))}
       </div>

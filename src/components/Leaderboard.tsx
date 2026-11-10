@@ -31,21 +31,15 @@ export default function Leaderboard() {
     <section className="rounded-3xl border border-slate-800 bg-slate-900 p-8">
       <div className="flex items-center justify-between gap-4">
         <div>
-          <h2 className="text-2xl font-bold text-yellow-400">
-            Weekly Leaderboard
-          </h2>
-          <p className="mt-2 text-slate-400">
-            See who is growing fastest inside TGPI.
-          </p>
+          <h2 className="text-2xl font-bold text-yellow-400"><LocalizedText text={"Weekly Leaderboard"} /></h2>
+          <p className="mt-2 text-slate-400"><LocalizedText text={"See who is growing fastest inside TGPI."} /></p>
         </div>
       </div>
 
       {loading ? (
-        <p className="mt-6 text-slate-400">Loading leaderboard...</p>
+        <p className="mt-6 text-slate-400"><LocalizedText text={"Loading leaderboard..."} /></p>
       ) : !entries.length ? (
-        <p className="mt-6 text-slate-400">
-          No leaderboard data yet.
-        </p>
+        <p className="mt-6 text-slate-400"><LocalizedText text={"No leaderboard data yet."} /></p>
       ) : (
         <div className="mt-6 space-y-4">
           {entries.map((user, index) => (
@@ -69,9 +63,8 @@ export default function Leaderboard() {
 
               <div className="text-right">
                 <p className="text-xl font-bold text-yellow-400">
-                  {user.xp} XP
-                </p>
-                <p className="text-sm text-slate-400">Global ranking</p>
+                  {user.xp}{" "}<LocalizedText text={"XP"} /></p>
+                <p className="text-sm text-slate-400"><LocalizedText text={"Global ranking"} /></p>
               </div>
             </div>
           ))}

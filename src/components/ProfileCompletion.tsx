@@ -15,8 +15,7 @@ export default function ProfileCompletion() {
       </div>
 
       <p className="text-sm text-slate-300 mt-2">
-        {progress}% complete
-      </p>
+        {progress}<LocalizedText text={"% complete"} /></p>
     </div>
   );
 }

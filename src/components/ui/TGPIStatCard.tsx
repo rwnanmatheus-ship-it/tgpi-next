@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 export default function TGPIStatCard({
   title,
   value,
@@ -9,9 +11,9 @@ export default function TGPIStatCard({
 }) {
   return (
     <div className="p-5 rounded-2xl border border-white/10 bg-white/5">
-      <p className="text-slate-400 text-sm">{title}</p>
+      <p className="text-slate-400 text-sm"><LocalizedText text={title} /></p>
       <p className="text-2xl font-bold text-yellow-400">{value}</p>
-      {subtitle && <p className="text-xs text-slate-500">{subtitle}</p>}
+      {subtitle && <p className="text-xs text-slate-500"><LocalizedText text={subtitle} /></p>}
     </div>
   );
 }

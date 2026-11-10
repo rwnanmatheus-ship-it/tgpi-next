@@ -1,5 +1,7 @@
 "use client";
 
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import { useState } from "react";
 
 export default function ConnectButton() {
@@ -10,7 +12,7 @@ export default function ConnectButton() {
       onClick={() => setConnected(true)}
       className="mt-6 rounded-xl bg-yellow-500 px-6 py-3 font-semibold text-black hover:bg-yellow-400"
     >
-      {connected ? "Connected ✓" : "Connect"}
+      {connected ? <LocalizedText text={"Connected ✓"} /> : <LocalizedText text={"Connect"} />}
     </button>
   );
 }

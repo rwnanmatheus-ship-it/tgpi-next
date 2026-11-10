@@ -12,9 +12,7 @@ export default function GlobalIdentityError({ retry }: { retry: () => void }) {
         aria-labelledby="identity-error-title"
         className="mx-auto max-w-xl rounded-3xl border border-white/15 bg-[#0B1F3A] p-6 shadow-xl sm:p-10"
       >
-        <p className="text-xs font-bold uppercase tracking-widest text-[#E5B94B]">
-          TGPI Global ID
-        </p>
+        <p className="text-xs font-bold uppercase tracking-widest text-[#E5B94B]"><LocalizedText text={"TGPI Global ID"} /></p>
         <h1 id="identity-error-title" className="mt-4 text-3xl font-semibold">{t("Your identity could not be loaded.")}</h1>
         <p role="alert" className="mt-4 text-base leading-7 text-[#CBD5E1]">{t("We could not confirm your identity record right now. Try again. If this continues, return to your workspace or check your account access.")}</p>
         <div className="mt-7 flex flex-wrap gap-3">

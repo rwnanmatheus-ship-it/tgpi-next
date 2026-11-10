@@ -81,20 +81,17 @@ export default function CommunityChat({
   }
   return (
     <section aria-label={localizeLabel("Community chat")}>
-      {loading && <p role="status">Opening community conversation…</p>}
+      {loading && <p role="status"><LocalizedText text={"Opening community conversation…"} /></p>}
       {error && (
         <div className={s.status}>
-          <p role="alert">{error}</p>
+          <p role="alert"><LocalizedText text={error} /></p>
           <button className={s.secondary} onClick={() => void load()}><LocalizedText text="Try again" /></button>
         </div>
       )}
       {missing && (
         <div className={s.panel}>
           <h2><LocalizedText text={"Community conversation"} /></h2>
-          <p>
-            A shared space for introductions, questions and everyday
-            experiences.
-          </p>
+          <p><LocalizedText text={"A shared space for introductions, questions and everyday experiences."} /></p>
           {manages(membership) && canSend ? (
             <button
               className={s.button}
@@ -112,10 +109,10 @@ export default function CommunityChat({
                   await load();
               }}
             >
-              {busy ? "Opening…" : "Open community conversation"}
+              {busy ? <LocalizedText text={"Opening…"} /> : <LocalizedText text={"Open community conversation"} />}
             </button>
           ) : (
-            <p>The community team has not opened this conversation yet.</p>
+            <p><LocalizedText text={"The community team has not opened this conversation yet."} /></p>
           )}
         </div>
       )}
@@ -130,18 +127,11 @@ export default function CommunityChat({
         />
       )}
       {post && !canSend && (
-        <p className={s.notice}>
-          Sending is paused. Check your membership, the community rules and
-          archive status.
-        </p>
+        <p className={s.notice}><LocalizedText text={"Sending is paused. Check your membership, the community rules and archive status."} /></p>
       )}
-      <p className={s.notice}>
-        Manage community alerts in{" "}
-        <Link href="/community?view=preferences"><LocalizedText text={"Community preferences"} /></Link>{" "}
-        and delivery channels in{" "}
-        <Link href="/profile#settings-notifications"><LocalizedText text={"Notification settings"} /></Link>
-        . Replies and @mentions follow your saved preferences.
-      </p>
+      <p className={s.notice}><LocalizedText text={"Manage community alerts in"} />{" "}
+        <Link href="/community?view=preferences"><LocalizedText text={"Community preferences"} /></Link>{" "}<LocalizedText text={"and delivery channels in"} />{" "}
+        <Link href="/profile#settings-notifications"><LocalizedText text={"Notification settings"} /></Link><LocalizedText text={". Replies and @mentions follow your saved preferences."} /></p>
     </section>
   );
 }

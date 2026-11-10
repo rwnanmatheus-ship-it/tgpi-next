@@ -1,4 +1,6 @@
 "use client";
+
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 
 import { announceProgressSaved } from "@/lib/progress-sync";
@@ -276,19 +278,13 @@ export default function OnboardingFlow({
       <section className="border-b border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] px-4 pb-8 pt-10 sm:px-6 lg:pb-10 lg:pt-14">
         <div className="mx-auto max-w-7xl">
           <div className="max-w-3xl">
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.25em] text-[#956A13]">
-              TGPI Global Onboarding
-            </p>
-            <h1 className="mt-4 font-[var(--tgpi-font-display)] text-5xl font-semibold leading-[0.98] tracking-[-0.045em] sm:text-6xl">
-              Build your global plan.
-            </h1>
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.25em] text-[#956A13]"><LocalizedText text={"TGPI Global Onboarding"} /></p>
+            <h1 className="mt-4 font-[var(--tgpi-font-display)] text-5xl font-semibold leading-[0.98] tracking-[-0.045em] sm:text-6xl"><LocalizedText text={"Build your global plan."} /></h1>
             <p className="mt-5 max-w-2xl text-base leading-8 text-[#657082]">
-              {firstName}, tell us what matters to you. TGPI will shape your
-              experience to turn curiosity into clear next steps.
-            </p>
+              {firstName}<LocalizedText text={", tell us what matters to you. TGPI will shape your experience to turn curiosity into clear next steps."} /></p>
           </div>
 
-          <nav aria-label="Global plan steps" className="mt-9 overflow-x-auto pb-2">
+          <LocalizedElement as="nav" aria-label="Global plan steps" className="mt-9 overflow-x-auto pb-2">
             <ol className="grid min-w-[680px] grid-cols-5">
               {steps.map((item, index) => {
                 const isActive = item.number === step;
@@ -340,14 +336,14 @@ export default function OnboardingFlow({
                           isActive ? "text-[var(--tgpi-navy-raised)]" : "text-[#7A8390]"
                         }`}
                       >
-                        {item.label}
+                        <LocalizedText text={item.label} />
                       </span>
                     </button>
                   </li>
                 );
               })}
             </ol>
-          </nav>
+          </LocalizedElement>
         </div>
       </section>
 
@@ -372,7 +368,7 @@ export default function OnboardingFlow({
                 {validationMessage ? (
                   <p className="flex items-start gap-2 text-sm font-bold text-[var(--tgpi-danger)]">
                     <span aria-hidden="true">!</span>
-                    {validationMessage}
+                    <LocalizedText text={validationMessage} />
                   </p>
                 ) : null}
               </div>
@@ -380,7 +376,7 @@ export default function OnboardingFlow({
               <div className="mt-4 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex items-center gap-3 text-xs text-[#657082]">
                   <SaveIndicator status={saveStatus} />
-                  <span>Only experience preferences are saved.</span>
+                  <span><LocalizedText text={"Only experience preferences are saved."} /></span>
                 </div>
                 <div className="flex gap-3">
                   <button
@@ -388,7 +384,7 @@ export default function OnboardingFlow({
                     onClick={goBack}
                     className="inline-flex min-h-12 flex-1 items-center justify-center rounded-xl border border-[#CFC7B8] bg-white px-5 text-sm font-extrabold text-[var(--tgpi-navy-raised)] transition hover:border-[var(--tgpi-gold-hover)] sm:flex-none"
                   >
-                    {step === 1 ? "Exit" : <LocalizedText text={"Back"} />}
+                    {step === 1 ? <LocalizedText text={"Exit"} /> : <LocalizedText text={"Back"} />}
                   </button>
                   <button
                     type="button"
@@ -398,10 +394,10 @@ export default function OnboardingFlow({
                   >
                     {step === 5
                       ? isCompleting
-                        ? "Saving plan..."
+                        ? <LocalizedText text={"Saving plan..."} />
                         : data.completed
-                          ? "Update my plan"
-                          : "Complete my plan"
+                          ? <LocalizedText text={"Update my plan"} />
+                          : <LocalizedText text={"Complete my plan"} />
                       : <LocalizedText text={"Continue"} />}
                     <span aria-hidden="true">→</span>
                   </button>
@@ -462,10 +458,10 @@ function GoalStep({
               </span>
               <span>
                 <span className="block text-base font-extrabold text-[var(--tgpi-navy-raised)]">
-                  {goal.label}
+                  <LocalizedText text={goal.label} />
                 </span>
                 <span className="mt-2 block text-sm leading-6 text-[#657082]">
-                  {goal.description}
+                  <LocalizedText text={goal.description} />
                 </span>
               </span>
               <span
@@ -546,7 +542,7 @@ function CountriesStep({
 
       <div className="mt-8 grid gap-3 sm:grid-cols-[1fr_210px]">
         <label className="relative block">
-          <span className="sr-only">Search for a country</span>
+          <span className="sr-only"><LocalizedText text={"Search for a country"} /></span>
           <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-[#7A8390]">
             <OnboardingIcon name="search" />
           </span>
@@ -587,7 +583,7 @@ function CountriesStep({
             const country = countries.find((item) => item.slug === slug);
             if (!country) return null;
             return (
-              <button
+              <LocalizedElement as="button"
                 key={slug}
                 type="button"
                 onClick={() => toggleCountry(slug)}
@@ -597,7 +593,7 @@ function CountriesStep({
                 <span>{country.emoji}</span>
                 <LocalizedText text={country.name} />
                 <span aria-hidden="true" className="text-[#8A641F]">×</span>
-              </button>
+              </LocalizedElement>
             );
           })}
         </div>
@@ -696,12 +692,8 @@ function TimingStep({
       </fieldset>
 
       <fieldset className="mt-9">
-        <legend className="text-sm font-extrabold text-[var(--tgpi-navy-raised)]">
-          What monthly budget feels comfortable to you?
-        </legend>
-        <p className="mt-1 text-xs leading-5 text-[#7A8390]">
-          We use US dollars only as a consistent reference across countries.
-        </p>
+        <legend className="text-sm font-extrabold text-[var(--tgpi-navy-raised)]"><LocalizedText text={"What monthly budget feels comfortable to you?"} /></legend>
+        <p className="mt-1 text-xs leading-5 text-[#7A8390]"><LocalizedText text={"We use US dollars only as a consistent reference across countries."} /></p>
         <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {budgets.map((item) => (
             <OptionCard
@@ -779,7 +771,7 @@ function ContextStep({
         <label className="block">
           <span className="text-sm font-extrabold text-[var(--tgpi-navy-raised)]"><LocalizedText text={"Profession or field of interest"} /></span>
           <span className="mt-1 block text-xs text-[#7A8390]"><LocalizedText text="Optional" /></span>
-          <input
+          <LocalizedElement as="input"
             type="text"
             value={data.profession}
             onChange={(event) => updateData({ profession: event.target.value })}
@@ -798,11 +790,11 @@ function ContextStep({
           >
             <option value=""><LocalizedText text="Select an option" /></option>
             <option value="secondary"><LocalizedText text="Secondary education" /></option>
-            <option value="technical">Technical or vocational training</option>
-            <option value="undergraduate">Undergraduate degree in progress</option>
-            <option value="graduated">Undergraduate degree completed</option>
-            <option value="postgraduate">Postgraduate, master&apos;s, or doctoral degree</option>
-            <option value="other">Another path</option>
+            <option value="technical"><LocalizedText text={"Technical or vocational training"} /></option>
+            <option value="undergraduate"><LocalizedText text={"Undergraduate degree in progress"} /></option>
+            <option value="graduated"><LocalizedText text={"Undergraduate degree completed"} /></option>
+            <option value="postgraduate"><LocalizedText text={"Postgraduate, master&apos;s, or doctoral degree"} /></option>
+            <option value="other"><LocalizedText text={"Another path"} /></option>
           </select>
         </label>
       </div>
@@ -885,10 +877,10 @@ function PrioritiesStep({
               </span>
               <span>
                 <span className="block text-sm font-extrabold text-[var(--tgpi-navy-raised)]">
-                  {priority.label}
+                  <LocalizedText text={priority.label} />
                 </span>
                 <span className="mt-1 block text-xs leading-5 text-[#657082]">
-                  {priority.description}
+                  <LocalizedText text={priority.description} />
                 </span>
               </span>
               <span
@@ -928,12 +920,10 @@ function PlanSummary({
         <div aria-hidden="true" className="absolute -right-10 -top-14 h-36 w-36 rounded-full border border-[#E5BF5A]/25" />
         <div aria-hidden="true" className="absolute right-8 top-9 h-16 w-16 rounded-full border border-[#E5BF5A]/20" />
         <p className="relative text-[10px] font-extrabold uppercase tracking-[0.24em] text-[var(--tgpi-gold-light)]"><LocalizedText text="Your global plan" /></p>
-        <h2 className="relative mt-4 font-[var(--tgpi-font-display)] text-3xl font-semibold leading-tight">
-          A view designed for you.
-        </h2>
+        <h2 className="relative mt-4 font-[var(--tgpi-font-display)] text-3xl font-semibold leading-tight"><LocalizedText text={"A view designed for you."} /></h2>
         <div className="relative mt-6">
           <div className="flex items-center justify-between text-xs font-bold text-[#C7D0DC]">
-            <span>Plan completion</span>
+            <span><LocalizedText text={"Plan completion"} /></span>
             <span>{completion}%</span>
           </div>
           <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/10">
@@ -977,9 +967,7 @@ function PlanSummary({
         <p className="flex gap-3 text-xs leading-5 text-[#C7D0DC]">
           <span className="mt-0.5 text-[#E5BF5A]" aria-hidden="true">
             <OnboardingIcon name="lock" />
-          </span>
-          Your plan guides your experience. It does not replace legal, immigration, or financial advice.
-        </p>
+          </span><LocalizedText text={"Your plan guides your experience. It does not replace legal, immigration, or financial advice."} /></p>
       </div>
     </aside>
   );
@@ -1000,12 +988,12 @@ function StepHeading({
     <div className="flex flex-wrap items-start justify-between gap-4">
       <div className="max-w-2xl">
         <p className="text-[10px] font-extrabold uppercase tracking-[0.23em] text-[#956A13]">
-          {eyebrow}
+          <LocalizedText text={eyebrow} />
         </p>
         <h2 className="mt-3 font-[var(--tgpi-font-display)] text-4xl font-semibold leading-[1.04] tracking-[-0.035em] sm:text-[2.7rem]">
-          {title}
+          <LocalizedText text={title} />
         </h2>
-        <p className="mt-4 text-sm leading-7 text-[#657082]">{description}</p>
+        <p className="mt-4 text-sm leading-7 text-[#657082]"><LocalizedText text={description} /></p>
       </div>
       {aside ? (
         <span className="rounded-full border border-[var(--tgpi-border)] bg-white px-3 py-2 text-[11px] font-extrabold uppercase tracking-[0.12em] text-[#657082]">
@@ -1049,7 +1037,7 @@ function OptionCard({
         ✓
       </span>
       <span>
-        <span className="block text-sm font-extrabold text-[var(--tgpi-navy-raised)]">{label}</span>
+        <span className="block text-sm font-extrabold text-[var(--tgpi-navy-raised)]"><LocalizedText text={label} /></span>
         <span className="mt-1 block text-xs leading-5 text-[#657082]">{detail}</span>
       </span>
     </button>
@@ -1067,7 +1055,7 @@ function SummaryItem({
 }) {
   return (
     <div className={last ? "py-4" : "border-b border-white/10 py-4"}>
-      <dt className="text-[9px] font-extrabold uppercase tracking-[0.2em] text-[#8FA1B5]">{label}</dt>
+      <dt className="text-[9px] font-extrabold uppercase tracking-[0.2em] text-[#8FA1B5]"><LocalizedText text={label} /></dt>
       <dd className="mt-2 text-sm font-bold leading-6 text-white">{value}</dd>
     </div>
   );

@@ -77,9 +77,7 @@ export default function CredentialActions({
           className="credential-button"
         ><LocalizedText text={"Share certificate ↗"} /></button>
         {owner && (
-          <Link href={verificationUrl} className="credential-button">
-            Open live verification
-          </Link>
+          <Link href={verificationUrl} className="credential-button"><LocalizedText text={"Open live verification"} /></Link>
         )}
       </div>
       <div className="credential-secondary-actions print:hidden">
@@ -89,14 +87,14 @@ export default function CredentialActions({
             void copyValue(verificationUrl, "Verification link copied.")
           }
         ><LocalizedText text="Copy verification link" /></button>
-        <a href={downloadUrl}>Export evidence JSON</a>
+        <a href={downloadUrl}><LocalizedText text={"Export evidence JSON"} /></a>
       </div>
       <p
         role="status"
         aria-live="polite"
         className="credential-action-message print:hidden"
       >
-        {message}
+        <LocalizedText text={message} />
       </p>
     </section>
   );

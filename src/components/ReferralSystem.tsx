@@ -5,13 +5,9 @@ export default function ReferralSystem() {
 
   return (
     <section className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-      <h2 className="text-xl font-bold text-yellow-400">
-        Invite & Earn
-      </h2>
+      <h2 className="text-xl font-bold text-yellow-400"><LocalizedText text={"Invite & Earn"} /></h2>
 
-      <p className="mt-2 text-sm text-slate-300">
-        Invite others and grow your global network.
-      </p>
+      <p className="mt-2 text-sm text-slate-300"><LocalizedText text={"Invite others and grow your global network."} /></p>
 
       <div className="mt-4 flex gap-3">
         <input

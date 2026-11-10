@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 export default function PublicProofWall() {
   const items = [
     "Profiles are being activated for Canada and Portugal",
@@ -9,14 +11,9 @@ export default function PublicProofWall() {
 
   return (
     <section className="rounded-[2rem] border border-yellow-700/20 bg-gradient-to-br from-yellow-500/10 via-slate-950 to-slate-900 p-8">
-      <h2 className="text-3xl font-bold text-yellow-400">
-        Public Proof Wall
-      </h2>
+      <h2 className="text-3xl font-bold text-yellow-400"><LocalizedText text={"Public Proof Wall"} /></h2>
 
-      <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-300">
-        TGPI is not just a concept. It is becoming a living public layer of
-        international preparation, identity, and proof.
-      </p>
+      <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-300"><LocalizedText text={"TGPI is not just a concept. It is becoming a living public layer of international preparation, identity, and proof."} /></p>
 
       <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {items.map((item) => (
@@ -24,7 +21,7 @@ export default function PublicProofWall() {
             key={item}
             className="rounded-2xl border border-slate-800 bg-slate-900 p-5"
           >
-            <p className="text-sm leading-7 text-slate-300">• {item}</p>
+            <p className="text-sm leading-7 text-slate-300">• <LocalizedText text={item} /></p>
           </div>
         ))}
       </div>

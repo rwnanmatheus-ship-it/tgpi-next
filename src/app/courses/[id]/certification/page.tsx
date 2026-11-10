@@ -1,3 +1,4 @@
+import { localizeMetadata } from "@/lib/localization/metadata.server";
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import CertificationExperience from "@/components/courses/CertificationExperience";
@@ -8,7 +9,7 @@ import {
 import { getCourse } from "@/data/courses";
 import { requireUser } from "@/lib/auth/guards";
 
-export const metadata: Metadata = {
+const sourceMetadata: Metadata = {
   title: "Certification path | TGPI Learning",
   robots: { follow: false, index: false },
 };
@@ -29,3 +30,5 @@ export default async function CertificationPage({
   );
   return <CertificationExperience assessments={assessments} course={course} />;
 }
+
+export async function generateMetadata() { return localizeMetadata(sourceMetadata); }

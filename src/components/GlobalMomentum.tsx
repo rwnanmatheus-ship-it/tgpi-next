@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 type GlobalMomentumProps = {
   score: number;
   readiness: number;
@@ -29,19 +31,15 @@ export default function GlobalMomentum({
     <section className="rounded-3xl border border-yellow-700/20 bg-gradient-to-br from-yellow-500/10 via-slate-950 to-slate-900 p-8 text-white">
       <div className="flex flex-wrap items-start justify-between gap-6">
         <div>
-          <p className="mb-3 inline-flex rounded-full border border-yellow-600/30 bg-yellow-500/5 px-4 py-2 text-sm text-yellow-200">
-            TGPI Global Momentum
-          </p>
+          <p className="mb-3 inline-flex rounded-full border border-yellow-600/30 bg-yellow-500/5 px-4 py-2 text-sm text-yellow-200"><LocalizedText text={"TGPI Global Momentum"} /></p>
 
           <h2 className="text-3xl font-bold text-yellow-400">{momentum}/100</h2>
-          <p className="mt-2 text-slate-300">{status}</p>
+          <p className="mt-2 text-slate-300"><LocalizedText text={status} /></p>
         </div>
 
         <div className="rounded-2xl border border-slate-800 bg-slate-900 px-5 py-4 text-center">
-          <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
-            Momentum State
-          </p>
-          <p className="mt-2 text-lg font-bold text-white">{status}</p>
+          <p className="text-xs uppercase tracking-[0.2em] text-slate-400"><LocalizedText text={"Momentum State"} /></p>
+          <p className="mt-2 text-lg font-bold text-white"><LocalizedText text={status} /></p>
         </div>
       </div>
 
@@ -58,11 +56,7 @@ export default function GlobalMomentum({
           />
         </div>
 
-        <p className="mt-4 text-sm leading-7 text-slate-400">
-          Momentum reflects how strongly your TGPI identity is turning into real
-          international positioning. It rises through exploration, certificates,
-          readiness, and visible progress.
-        </p>
+        <p className="mt-4 text-sm leading-7 text-slate-400"><LocalizedText text={"Momentum reflects how strongly your TGPI identity is turning into real international positioning. It rises through exploration, certificates, readiness, and visible progress."} /></p>
       </div>
     </section>
   );

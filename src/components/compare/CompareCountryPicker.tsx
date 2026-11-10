@@ -295,7 +295,7 @@ export default function CompareCountryPicker({
                   onChange={(event) => updateSlot(index, event.target.value)}
                   className="h-12 w-full rounded-2xl border border-[var(--tgpi-border)] bg-white px-4 text-sm font-bold text-[var(--tgpi-navy)] outline-none transition focus:border-[var(--tgpi-gold)] focus:ring-2 focus:ring-[var(--tgpi-gold)]/25"
                 >
-                  <option value="">{t("Choose a country")}</option>
+                  <option value=""><LocalizedText text={t("Choose a country")} /></option>
                   {countries.filter(country => slots.includes(country.slug) || countrySearchScore(searchTerms.get(country.slug) ?? [], search) > 0).map((country) => {
                     const usedElsewhere = slots.some(
                       (selected, selectedIndex) =>
@@ -355,8 +355,8 @@ export default function CompareCountryPicker({
               <p aria-live="polite" className="text-sm font-semibold text-[var(--tgpi-muted)]">
                 {notice ||
                   (selectedSlugs.length >= 2
-                    ? `${selectedSlugs.length} countries ready for the ${getComparisonGoalConfig(goal).shortLabel.toLowerCase()} lens.`
-                    : `Choose ${2 - selectedSlugs.length} more ${selectedSlugs.length === 1 ? "country" : "countries"}.`)}
+                    ? <LocalizedText text={"{value0} countries ready for the {value1} lens."} values={{value0: String(selectedSlugs.length), value1: String(getComparisonGoalConfig(goal).shortLabel.toLowerCase())}} />
+                    : <LocalizedText text={"Choose {value0} more {value1}."} values={{value0: String(2 - selectedSlugs.length), value1: String(selectedSlugs.length === 1 ? "country" : "countries")}} />)}
               </p>
               {copyStatus ? (
                 <p aria-live="polite" className="mt-1 text-xs font-bold text-[var(--tgpi-gold-strong)]">

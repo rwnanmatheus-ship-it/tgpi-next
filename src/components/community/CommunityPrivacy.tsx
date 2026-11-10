@@ -1,4 +1,8 @@
 "use client";
+
+
+import { useLocale as useFormattingLocale } from "@/components/localization/LocaleProvider";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
 import s from "./Community.module.css";
@@ -34,6 +38,7 @@ async function privacyRequest(body?: object): Promise<Status> {
   return data;
 }
 export default function CommunityPrivacy() {
+  const { locale } = useFormattingLocale();
   const [status, setStatus] = useState<Status | null>(null),
     [confirmation, setConfirmation] = useState(""),
     [busy, setBusy] = useState(false),
@@ -69,64 +74,46 @@ export default function CommunityPrivacy() {
   }, [running, refresh]);
   return (
     <section className={s.panel} aria-labelledby="community-data-title">
-      <h2 id="community-data-title">Community data & privacy</h2>
-      <p>
-        Remove your community posts, replies, uploaded images, saved items and
-        preferences. Your TGPI account, learning records, certificates and
-        billing are preserved.
-      </p>
-      <p className={s.notice}>
-        Ownership must be transferred or the community archived first. Removal
-        is irreversible once processing starts. Security decisions are
-        pseudonymized; other members’ blocks and participation restrictions
-        remain effective.
-      </p>
+      <h2 id="community-data-title"><LocalizedText text={"Community data & privacy"} /></h2>
+      <p><LocalizedText text={"Remove your community posts, replies, uploaded images, saved items and preferences. Your TGPI account, learning records, certificates and billing are preserved."} /></p>
+      <p className={s.notice}><LocalizedText text={"Ownership must be transferred or the community archived first. Removal is irreversible once processing starts. Security decisions are pseudonymized; other members’ blocks and participation restrictions remain effective."} /></p>
       <details>
-        <summary>Retention policy</summary>
+        <summary><LocalizedText text={"Retention policy"} /></summary>
         <ul>
-          <li>Unattached and replaced images: removed after 24 hours.</li>
-          <li>Removed threads and replies: purged after 30 days.</li>
-          <li>
-            Closed reports, audit records, activity events and privacy receipts:
-            90 days.
-          </li>
-          <li>
-            Pending reports and active security restrictions are kept while
-            needed for moderation.
-          </li>
+          <li><LocalizedText text={"Unattached and replaced images: removed after 24 hours."} /></li>
+          <li><LocalizedText text={"Removed threads and replies: purged after 30 days."} /></li>
+          <li><LocalizedText text={"Closed reports, audit records, activity events and privacy receipts: 90 days."} /></li>
+          <li><LocalizedText text={"Pending reports and active security restrictions are kept while needed for moderation."} /></li>
         </ul>
       </details>
       {error && (
         <p className={s.error} role="alert">
-          {error}
+          <LocalizedText text={error} />
         </p>
       )}
-      {!status && !error && <p role="status">Loading privacy status…</p>}
+      {!status && !error && <p role="status"><LocalizedText text={"Loading privacy status…"} /></p>}
       {status?.job && (
         <div className={s.status} role="status">
           <strong>
             {status.job.state === "complete"
-              ? "Community data removal completed"
+              ? <LocalizedText text={"Community data removal completed"} />
               : status.job.retrying
-                ? "Removal paused for automatic retry"
-                : "Community data removal in progress"}
+                ? <LocalizedText text={"Removal paused for automatic retry"} />
+                : <LocalizedText text={"Community data removal in progress"} />}
           </strong>
           <p>
-            {status.job.processed} records processed.{" "}
+            {status.job.processed}{" "}<LocalizedText text={"records processed."} />{" "}
             {status.job.finishedAt &&
-              new Date(status.job.finishedAt).toLocaleString()}
+              new Date(status.job.finishedAt).toLocaleString(locale)}
           </p>
           {running && (
-            <p>
-              Access to your community data is paused while processing. You can
-              leave this page; the scheduled worker resumes automatically.
-            </p>
+            <p><LocalizedText text={"Access to your community data is paused while processing. You can leave this page; the scheduled worker resumes automatically."} /></p>
           )}
         </div>
       )}
       {!!status?.ownedActive.length && (
         <div className={s.notice}>
-          <p>Transfer ownership or archive these communities:</p>
+          <p><LocalizedText text={"Transfer ownership or archive these communities:"} /></p>
           <ul>
             {status.ownedActive.map((c) => (
               <li key={c.id}>
@@ -138,7 +125,7 @@ export default function CommunityPrivacy() {
       )}
       {status && !running && (
         <details>
-          <summary>Remove my community data</summary>
+          <summary><LocalizedText text={"Remove my community data"} /></summary>
           <form
             onSubmit={async (e) => {
               e.preventDefault();
@@ -155,9 +142,7 @@ export default function CommunityPrivacy() {
               }
             }}
           >
-            <label>
-              Type ERASE MY COMMUNITY DATA to confirm
-              <input
+            <label><LocalizedText text={"Type ERASE MY COMMUNITY DATA to confirm"} /><input
                 autoComplete="off"
                 value={confirmation}
                 onChange={(e) => setConfirmation(e.target.value)}
@@ -172,7 +157,7 @@ export default function CommunityPrivacy() {
                 Boolean(status.ownedActive.length)
               }
             >
-              {busy ? "Submitting…" : "Permanently remove community data"}
+              {busy ? <LocalizedText text={"Submitting…"} /> : <LocalizedText text={"Permanently remove community data"} />}
             </button>
           </form>
         </details>
@@ -181,9 +166,7 @@ export default function CommunityPrivacy() {
         className={s.secondary}
         disabled={busy}
         onClick={() => void refresh()}
-      >
-        Refresh privacy status
-      </button>
+      ><LocalizedText text={"Refresh privacy status"} /></button>
     </section>
   );
 }

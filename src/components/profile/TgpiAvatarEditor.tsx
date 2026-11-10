@@ -1,4 +1,6 @@
 "use client";
+
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 
 import { useUser } from "@clerk/nextjs";
@@ -92,10 +94,10 @@ export default function TgpiAvatarEditor({ displayName, initialImageUrl, initial
   return <section aria-labelledby="profile-photo-title" className="tgpi-account-tile rounded-[24px] border border-[var(--tgpi-border)] bg-white p-5 sm:p-7">
     <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
       <div className="flex shrink-0 items-end gap-3" aria-label={localizeLabel("Profile photo preview")}>
-        <div role="img" aria-label={`${displayName}, circular preview`} className="grid h-28 w-28 place-items-center rounded-full border-4 border-[#F4E7BE] bg-[var(--tgpi-navy-raised)] bg-cover bg-center text-3xl font-bold text-[var(--tgpi-gold-light)] shadow-[0_12px_28px_#0b1f3a26]" style={photo ? { backgroundImage: `url(${photo})` } : undefined}>{!photo ? initials : null}</div>
-        <div role="img" aria-label={`${displayName}, card preview`} className="grid h-16 w-16 place-items-center rounded-2xl border border-[var(--tgpi-border)] bg-[var(--tgpi-navy-raised)] bg-cover bg-center font-bold text-[var(--tgpi-gold-light)]" style={photo ? { backgroundImage: `url(${photo})` } : undefined}>{!photo ? initials : null}</div>
+        <LocalizedElement as="div" role="img" aria-label={`${displayName}, circular preview`} className="grid h-28 w-28 place-items-center rounded-full border-4 border-[#F4E7BE] bg-[var(--tgpi-navy-raised)] bg-cover bg-center text-3xl font-bold text-[var(--tgpi-gold-light)] shadow-[0_12px_28px_#0b1f3a26]" style={photo ? { backgroundImage: `url(${photo})` } : undefined}>{!photo ? initials : null}</LocalizedElement>
+        <LocalizedElement as="div" role="img" aria-label={`${displayName}, card preview`} className="grid h-16 w-16 place-items-center rounded-2xl border border-[var(--tgpi-border)] bg-[var(--tgpi-navy-raised)] bg-cover bg-center font-bold text-[var(--tgpi-gold-light)]" style={photo ? { backgroundImage: `url(${photo})` } : undefined}>{!photo ? initials : null}</LocalizedElement>
       </div>
-      <div className="min-w-0 flex-1"><h3 id="profile-photo-title" className="text-lg font-extrabold text-[var(--tgpi-navy-raised)]"><LocalizedText text={"Your profile photo"} /></h3><p className="mt-1 text-sm leading-6 text-[var(--tgpi-muted)]">Choose, frame and preview before saving. JPG, PNG or WebP up to 5 MB. The same crop appears in navigation and profile cards.</p>
+      <div className="min-w-0 flex-1"><h3 id="profile-photo-title" className="text-lg font-extrabold text-[var(--tgpi-navy-raised)]"><LocalizedText text={"Your profile photo"} /></h3><p className="mt-1 text-sm leading-6 text-[var(--tgpi-muted)]"><LocalizedText text={"Choose, frame and preview before saving. JPG, PNG or WebP up to 5 MB. The same crop appears in navigation and profile cards."} /></p>
         <input ref={inputRef} type="file" accept="image/jpeg,image/png,image/webp" className="sr-only" disabled={!isLoaded || busy} onChange={event => selectFile(event.target.files?.[0])} />
         <div className="mt-4 flex flex-wrap gap-3"><button className="min-h-11 rounded-xl bg-[var(--tgpi-navy-raised)] px-4 text-sm font-bold text-white disabled:opacity-50" disabled={!isLoaded || busy} onClick={() => inputRef.current?.click()} type="button"><LocalizedText text={"Choose photo"} /></button>{!file && photo ? <button className="min-h-11 rounded-xl border border-[var(--tgpi-border)] px-4 text-sm font-bold text-[#863D35] disabled:opacity-50" disabled={!isLoaded || busy} onClick={remove} type="button"><LocalizedText text={"Remove photo"} /></button> : null}</div>
       </div>
@@ -106,10 +108,10 @@ export default function TgpiAvatarEditor({ displayName, initialImageUrl, initial
         { label: "Zoom", value: zoom, set: setZoom, min: 1, max: 3, step: .01 },
         { label: "Horizontal position", value: x, set: setX, min: 0, max: 100, step: 1 },
         { label: "Vertical position", value: y, set: setY, min: 0, max: 100, step: 1 },
-      ].map(control => <label key={control.label} className="block text-sm font-bold text-[var(--tgpi-navy-raised)]">{control.label}<input type="range" min={control.min} max={control.max} step={control.step} value={control.value} onChange={event => control.set(Number(event.target.value))} className="mt-3 block w-full accent-[var(--tgpi-navy-raised)]" /></label>)}
-        <div className="flex flex-wrap gap-3"><button type="button" disabled={!bitmap || busy} onClick={save} className="min-h-11 rounded-xl bg-[var(--tgpi-navy-raised)] px-5 text-sm font-bold text-white disabled:opacity-50">{busy ? <LocalizedText text={"Saving…"} /> : "Save cropped photo"}</button><button type="button" disabled={busy} onClick={cancel} className="min-h-11 rounded-xl border border-[var(--tgpi-border)] bg-white px-4 text-sm font-bold text-[var(--tgpi-navy-raised)]"><LocalizedText text="Cancel" /></button></div>
+      ].map(control => <label key={control.label} className="block text-sm font-bold text-[var(--tgpi-navy-raised)]"><LocalizedText text={control.label} /><input type="range" min={control.min} max={control.max} step={control.step} value={control.value} onChange={event => control.set(Number(event.target.value))} className="mt-3 block w-full accent-[var(--tgpi-navy-raised)]" /></label>)}
+        <div className="flex flex-wrap gap-3"><button type="button" disabled={!bitmap || busy} onClick={save} className="min-h-11 rounded-xl bg-[var(--tgpi-navy-raised)] px-5 text-sm font-bold text-white disabled:opacity-50">{busy ? <LocalizedText text={"Saving…"} /> : <LocalizedText text={"Save cropped photo"} />}</button><button type="button" disabled={busy} onClick={cancel} className="min-h-11 rounded-xl border border-[var(--tgpi-border)] bg-white px-4 text-sm font-bold text-[var(--tgpi-navy-raised)]"><LocalizedText text="Cancel" /></button></div>
       </div>
     </fieldset> : null}
-    <p aria-live="polite" role="status" className={`mt-3 text-sm font-bold ${error ? "text-[#A32626]" : "text-[#277352]"}`}>{message}</p>
+    <p aria-live="polite" role="status" className={`mt-3 text-sm font-bold ${error ? "text-[#A32626]" : "text-[#277352]"}`}><LocalizedText text={message} /></p>
   </section>;
 }

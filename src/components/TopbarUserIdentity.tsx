@@ -1,5 +1,9 @@
 "use client";
 
+
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import { useEffect, useState } from "react";
 import { auth } from "@/lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
@@ -43,14 +47,14 @@ export default function TopbarUserIdentity() {
       <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border border-yellow-500/20 bg-black text-sm font-bold text-yellow-400">
         {avatar ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={avatar} alt={name} className="h-full w-full object-cover" />
+          <LocalizedElement as="img" src={avatar} alt={name} className="h-full w-full object-cover" />
         ) : (
           <span>{name?.slice(0, 1)?.toUpperCase() || "U"}</span>
         )}
       </div>
 
       <div className="max-w-[180px]">
-        <p className="truncate text-sm font-semibold text-white">{name || "User"}</p>
+        <p className="truncate text-sm font-semibold text-white">{name || <LocalizedText text={"User"} />}</p>
         <p className="truncate text-xs text-slate-400">{email}</p>
       </div>
     </div>

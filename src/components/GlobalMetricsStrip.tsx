@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 type MetricProps = {
   label: string;
   value: string;
@@ -17,7 +19,7 @@ export default function GlobalMetricsStrip() {
 function Metric({ label, value }: MetricProps) {
   return (
     <div className="rounded-xl border border-slate-800 bg-slate-900 p-4">
-      <p className="text-xs text-slate-400">{label}</p>
+      <p className="text-xs text-slate-400"><LocalizedText text={label} /></p>
       <p className="text-lg font-bold text-yellow-400">{value}</p>
     </div>
   );

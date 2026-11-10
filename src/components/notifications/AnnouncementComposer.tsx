@@ -1,4 +1,8 @@
 "use client";
+
+
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import { useState } from "react";
 export default function AnnouncementComposer() {
   const [pending, setPending] = useState(false);
@@ -30,10 +34,7 @@ export default function AnnouncementComposer() {
       onSubmit={submit}
       className="mt-6 space-y-4 rounded-3xl border border-[var(--tgpi-border)] bg-white p-6"
     >
-      <p className="text-sm leading-6 text-slate-600">
-        Publish a real product update to a verified member ID. Use a stable
-        campaign key to prevent duplicates.
-      </p>
+      <p className="text-sm leading-6 text-slate-600"><LocalizedText text={"Publish a real product update to a verified member ID. Use a stable campaign key to prevent duplicates."} /></p>
       <fieldset disabled={pending} className="space-y-4">
         {[
           {
@@ -62,8 +63,8 @@ export default function AnnouncementComposer() {
           },
         ].map((field) => (
           <label key={field.name} className="block text-sm font-bold">
-            {field.label}
-            <input
+            <LocalizedText text={field.label} />
+            <LocalizedElement as="input"
               required
               name={field.name}
               maxLength={field.max}
@@ -72,9 +73,7 @@ export default function AnnouncementComposer() {
             />
           </label>
         ))}
-        <label className="block text-sm font-bold">
-          Message
-          <textarea
+        <label className="block text-sm font-bold"><LocalizedText text={"Message"} /><textarea
             name="body"
             required
             maxLength={1500}
@@ -86,11 +85,11 @@ export default function AnnouncementComposer() {
           type="submit"
           className="rounded-xl bg-[var(--tgpi-navy-raised)] px-5 py-3 text-sm font-bold text-white disabled:opacity-50"
         >
-          {pending ? "Publishing…" : "Publish to member inbox"}
+          {pending ? <LocalizedText text={"Publishing…"} /> : <LocalizedText text={"Publish to member inbox"} />}
         </button>
       </fieldset>
       <p role="status" className="text-sm leading-6">
-        {message}
+        <LocalizedText text={message} />
       </p>
     </form>
   );

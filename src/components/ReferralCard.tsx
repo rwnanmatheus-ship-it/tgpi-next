@@ -57,52 +57,44 @@ export default function ReferralCard() {
   return (
     <div className="rounded-3xl border border-yellow-700/20 bg-gradient-to-br from-yellow-500/10 via-slate-950 to-slate-900 p-6">
       <h2 className="text-2xl font-bold text-yellow-400"><LocalizedText text="Invite Friends" /></h2>
-      <p className="mt-3 text-slate-300">
-        Bring other users to TGPI and grow your global network.
-      </p>
+      <p className="mt-3 text-slate-300"><LocalizedText text={"Bring other users to TGPI and grow your global network."} /></p>
 
       <div className="mt-4 rounded-2xl border border-slate-800 bg-slate-900 p-4">
-        <p className="text-sm text-slate-400">Current referrals</p>
+        <p className="text-sm text-slate-400"><LocalizedText text={"Current referrals"} /></p>
         <p className="mt-2 text-3xl font-bold text-yellow-400">{referrals}</p>
       </div>
 
       <div className="mt-6 rounded-2xl border border-slate-800 bg-slate-950 p-4">
-        <p className="text-xs text-slate-400">Your referral link</p>
+        <p className="text-xs text-slate-400"><LocalizedText text={"Your referral link"} /></p>
         <p className="mt-2 break-all text-sm text-white">
-          {referralLink || "Sign in to generate your referral link."}
+          {referralLink || <LocalizedText text={"Sign in to generate your referral link."} />}
         </p>
       </div>
 
       <div className="mt-6 grid gap-4 md:grid-cols-3">
         <div className="rounded-2xl border border-slate-800 bg-slate-900 p-4">
-          <p className="text-sm text-slate-400">1 friend</p>
-          <p className="mt-2 text-lg font-semibold text-yellow-400">+50 XP</p>
+          <p className="text-sm text-slate-400"><LocalizedText text={"1 friend"} /></p>
+          <p className="mt-2 text-lg font-semibold text-yellow-400"><LocalizedText text={"+50 XP"} /></p>
         </div>
 
         <div className="rounded-2xl border border-slate-800 bg-slate-900 p-4">
-          <p className="text-sm text-slate-400">3 friends</p>
-          <p className="mt-2 text-lg font-semibold text-yellow-400">
-            Explorer Badge
-          </p>
+          <p className="text-sm text-slate-400"><LocalizedText text={"3 friends"} /></p>
+          <p className="mt-2 text-lg font-semibold text-yellow-400"><LocalizedText text={"Explorer Badge"} /></p>
         </div>
 
         <div className="rounded-2xl border border-slate-800 bg-slate-900 p-4">
-          <p className="text-sm text-slate-400">5 friends</p>
-          <p className="mt-2 text-lg font-semibold text-yellow-400">
-            Premium Trial
-          </p>
+          <p className="text-sm text-slate-400"><LocalizedText text={"5 friends"} /></p>
+          <p className="mt-2 text-lg font-semibold text-yellow-400"><LocalizedText text={"Premium Trial"} /></p>
         </div>
       </div>
 
       <button
         onClick={copyLink}
         className="mt-6 rounded-xl bg-yellow-500 px-6 py-3 font-semibold text-black transition hover:bg-yellow-400"
-      >
-        Copy Referral Link
-      </button>
+      ><LocalizedText text={"Copy Referral Link"} /></button>
 
       {message ? (
-        <p className="mt-4 text-sm text-yellow-300">{message}</p>
+        <p className="mt-4 text-sm text-yellow-300"><LocalizedText text={message} /></p>
       ) : null}
     </div>
   );

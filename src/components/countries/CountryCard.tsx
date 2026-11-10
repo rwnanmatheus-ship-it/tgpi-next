@@ -1,7 +1,7 @@
 // src/components/countries/CountryCard.tsx
 
-import Image from "next/image";
-import Link from "next/link";
+import Image from "@/components/localization/LocalizedImage";
+import Link from "@/components/localization/LocalizedLink";
 import type { CountryExplorerItem } from "@/lib/countries";
 import { LocalizedText } from "@/components/localization/LocaleProvider";
 
@@ -100,12 +100,12 @@ export function CountryCard({ country }: CountryCardProps) {
               <LocalizedText text={country.region} />
             </span>
             <span className="rounded-full border border-white/30 bg-white/90 px-3 py-1 text-[10px] font-bold text-[var(--tgpi-navy)] backdrop-blur">
-              {getVisualBadgeLabel(country)}
+              <LocalizedText text={getVisualBadgeLabel(country)} />
             </span>
           </div>
 
           <div className="absolute right-4 top-4 rounded-2xl border border-[var(--tgpi-gold-light)]/60 bg-[#071A32]/95 px-3 py-2 text-center text-white backdrop-blur-xl">
-            <p className="text-[9px] font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-gold-light)]">TGPI score</p>
+            <p className="text-[9px] font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-gold-light)]"><LocalizedText text={"TGPI score"} /></p>
             <p className="mt-0.5 font-[var(--tgpi-font-display)] text-3xl font-semibold leading-none">{country.tgpiScore}</p>
           </div>
 
@@ -115,7 +115,7 @@ export function CountryCard({ country }: CountryCardProps) {
               <LocalizedText text={country.name} />
             </h3>
             <p className="mt-1 truncate text-[10px] font-extrabold uppercase tracking-[0.2em] text-white/80">
-              {country.capital} · {country.currencyCode}
+              <LocalizedText text={country.capital} /> · {country.currencyCode}
             </p>
           </div>
         </div>
@@ -123,13 +123,13 @@ export function CountryCard({ country }: CountryCardProps) {
         <div className="space-y-3.5 p-5">
           <div className="flex items-start justify-between gap-4">
             <div className="min-w-0">
-              <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-gold-strong)]">Best for</p>
+              <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-gold-strong)]"><LocalizedText text={"Best for"} /></p>
               <p className="mt-1.5 line-clamp-2 font-[var(--tgpi-font-display)] text-xl font-semibold leading-tight text-[var(--tgpi-navy)]">
-                {country.mainGoal}
+                <LocalizedText text={country.mainGoal} />
               </p>
             </div>
             <span className={`shrink-0 rounded-full border px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.12em] ${scoreTone.className}`}>
-              {scoreTone.label}
+              <LocalizedText text={scoreTone.label} />
             </span>
           </div>
 
@@ -141,16 +141,16 @@ export function CountryCard({ country }: CountryCardProps) {
 
           <div className="flex items-center justify-between gap-3 rounded-2xl border border-[var(--tgpi-border)] bg-[var(--tgpi-canvas)] px-4 py-3">
             <div className="min-w-0">
-              <p className="text-[9px] font-extrabold uppercase tracking-[0.13em] text-[var(--tgpi-gold-strong)]">Adaptation signal</p>
-              <p className="mt-1 truncate text-xs font-bold text-[var(--tgpi-navy)]">{getRiskLabel(country)}</p>
+              <p className="text-[9px] font-extrabold uppercase tracking-[0.13em] text-[var(--tgpi-gold-strong)]"><LocalizedText text={"Adaptation signal"} /></p>
+              <p className="mt-1 truncate text-xs font-bold text-[var(--tgpi-navy)]"><LocalizedText text={getRiskLabel(country)} /></p>
             </div>
-            <span className="shrink-0 rounded-full border border-[var(--tgpi-border)] bg-white px-3 py-1 text-[9px] font-extrabold uppercase tracking-[0.08em] text-[var(--tgpi-navy)]">{getDifficultyTone(country.difficulty)}</span>
+            <span className="shrink-0 rounded-full border border-[var(--tgpi-border)] bg-white px-3 py-1 text-[9px] font-extrabold uppercase tracking-[0.08em] text-[var(--tgpi-navy)]"><LocalizedText text={getDifficultyTone(country.difficulty)} /></span>
           </div>
 
           <div className="flex items-center justify-between gap-4 border-t border-[var(--tgpi-border)] pt-4">
             <div className="min-w-0">
               <p className="text-[10px] font-extrabold uppercase tracking-[0.16em] text-[var(--tgpi-muted)]"><LocalizedText text={"Primary language"} /></p>
-              <p className="mt-1 line-clamp-1 text-sm font-bold text-[var(--tgpi-navy)]">{country.language}</p>
+              <p className="mt-1 line-clamp-1 text-sm font-bold text-[var(--tgpi-navy)]"><LocalizedText text={country.language} /></p>
             </div>
             <span className="inline-flex min-h-11 shrink-0 items-center rounded-xl bg-[var(--tgpi-navy)] px-4 text-xs font-extrabold text-white transition group-hover:bg-[var(--tgpi-gold)] group-hover:text-[var(--tgpi-navy)]"><LocalizedText text={"Open profile →"} /></span>
           </div>
@@ -163,7 +163,7 @@ export function CountryCard({ country }: CountryCardProps) {
 function MetricBox({ label, value }: { label: string; value: string }) {
   return (
     <div className="min-w-0 rounded-2xl border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] p-3">
-      <p className="text-[9px] font-bold uppercase tracking-[0.1em] text-[var(--tgpi-muted)]">{label}</p>
+      <p className="text-[9px] font-bold uppercase tracking-[0.1em] text-[var(--tgpi-muted)]"><LocalizedText text={label} /></p>
       <p className="mt-1 truncate text-sm font-extrabold text-[var(--tgpi-navy)]">{value}</p>
     </div>
   );

@@ -156,6 +156,7 @@ test('chat streams only visible text and saves the reply after provider completi
   }
   const request = input();
   const route = load('src/app/api/atlas/chat/route.ts', {
+    '@/lib/localization/server': { getLocale: async () => 'de' },
     openai: Provider,
     '@clerk/nextjs/server': { clerkClient: async () => ({ users: { getUser: async () => { profileCalls++; throw Error('must not fetch without consent'); } } }) },
     '@/lib/atlas/http.server': { atlasUser: async () => 'member_a', requireAtlasGeneration: () => 5, atlasBody: async () => request, atlasFailure: () => Response.json({}, { status: 503 }) },
@@ -169,6 +170,7 @@ test('chat streams only visible text and saves the reply after provider completi
   assert.match(body, /"type":"delta"/);
   assert.equal(profileCalls, 0);
   assert.equal(captured.store, false);
+  assert.match(captured.instructions, /Selected interface language: de/);
   assert.equal(captured.stream, true);
   assert.equal(captured.model, 'gpt-4.1-mini-2025-04-14');
   assert.equal(saved[0], 'member_a'); assert.equal(saved[3], 'Hello Atlas'); assert.equal(saved[4], 'complete');
@@ -178,6 +180,7 @@ test('provider failures expose no raw error and persist a retryable failure', as
   let saved;
   class Provider { responses = { create: async () => { throw Error('secret account billing detail'); } }; }
   const route = load('src/app/api/atlas/chat/route.ts', {
+    '@/lib/localization/server': { getLocale: async () => 'de' },
     openai: Provider, '@clerk/nextjs/server': {},
     '@/lib/atlas/http.server': { atlasUser: async () => 'member_a', requireAtlasGeneration: () => 5, atlasBody: async () => input(), atlasFailure: () => Response.json({}, { status: 503 }) },
     '@/lib/atlas/contracts': contracts, '@/lib/atlas/context': { selectAtlasContext, atlasInstructions: 'Test instructions' },

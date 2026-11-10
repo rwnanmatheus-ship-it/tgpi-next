@@ -16,14 +16,9 @@ export default function PatentLadder({ xp }: { xp: number }) {
 
   return (
     <section className="rounded-3xl border border-slate-800 bg-slate-900 p-8">
-      <h2 className="text-2xl font-bold text-yellow-400">
-        TGPI Patent Ladder
-      </h2>
+      <h2 className="text-2xl font-bold text-yellow-400"><LocalizedText text={"TGPI Patent Ladder"} /></h2>
 
-      <p className="mt-3 text-sm leading-7 text-slate-300">
-        Your patent reflects your visible level of movement, progress, and
-        strategic global readiness.
-      </p>
+      <p className="mt-3 text-sm leading-7 text-slate-300"><LocalizedText text={"Your patent reflects your visible level of movement, progress, and strategic global readiness."} /></p>
 
       <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {ladder.map((item) => (
@@ -35,7 +30,7 @@ export default function PatentLadder({ xp }: { xp: number }) {
                 : "border-slate-800 bg-slate-950"
             }`}
           >
-            <p className="text-sm text-slate-400"><LocalizedText text={"Starts at"} />{" "}{item.minXp} XP</p>
+            <p className="text-sm text-slate-400"><LocalizedText text={"Starts at"} />{" "}{item.minXp}{" "}<LocalizedText text={"XP"} /></p>
             <p className="mt-2 text-lg font-bold text-white">{item.name}</p>
           </div>
         ))}

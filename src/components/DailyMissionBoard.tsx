@@ -23,9 +23,7 @@ export default function DailyMissionBoard() {
       <h2 className="mb-4 text-xl font-bold text-yellow-400"><LocalizedText text="Daily Missions" /></h2>
 
       {missions.length === 0 ? (
-        <p className="text-sm text-slate-400">
-          Great job. Your current missions are complete.
-        </p>
+        <p className="text-sm text-slate-400"><LocalizedText text={"Great job. Your current missions are complete."} /></p>
       ) : (
         <div className="space-y-3">
           {missions.map((mission) => (
@@ -33,7 +31,7 @@ export default function DailyMissionBoard() {
               key={mission}
               className="rounded-xl border border-slate-800 bg-slate-950 p-4 text-sm text-slate-300"
             >
-              • {mission}
+              • <LocalizedText text={mission} />
             </div>
           ))}
         </div>

@@ -1,4 +1,6 @@
 "use client";
+
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 
 
@@ -83,18 +85,18 @@ export function ResourcesNavigation() {
     return () => observer.disconnect();
   }, []);
   return (
-    <nav className="resources-nav" aria-label="Resource objectives">
+    <LocalizedElement as="nav" className="resources-nav" aria-label="Resource objectives">
       {objectives.map((item) => (
         <a
           key={item.id}
           href={`#${item.id}`}
           aria-current={active === item.id ? "location" : undefined}
         >
-          {item.label}
+          <LocalizedText text={item.label} />
           <span aria-hidden="true">↗</span>
         </a>
       ))}
-    </nav>
+    </LocalizedElement>
   );
 }
 
@@ -112,10 +114,7 @@ export default function ResourceExplorer() {
       <div>
         <p className="resources-kicker"><LocalizedText text={"Your starting point"} /></p>
         <h2 id="resource-selector-title"><LocalizedText text={"What would you like to do first?"} /></h2>
-        <p>
-          Select an objective to see a suggested starting tool. This guide does
-          not use personal data or calculate a country recommendation.
-        </p>
+        <p><LocalizedText text={"Select an objective to see a suggested starting tool. This guide does not use personal data or calculate a country recommendation."} /></p>
       </div>
       <div>
         <div
@@ -130,7 +129,7 @@ export default function ResourceExplorer() {
               aria-pressed={selected === objective.id}
               onClick={() => setSelected(objective.id)}
             >
-              {objective.label}
+              <LocalizedText text={objective.label} />
             </button>
           ))}
         </div>
@@ -139,14 +138,14 @@ export default function ResourceExplorer() {
           aria-live="polite"
           aria-atomic="true"
         >
-          <p className="resources-kicker">Suggested route</p>
-          <h3>{item.title}</h3>
-          <p>{item.description}</p>
+          <p className="resources-kicker"><LocalizedText text={"Suggested route"} /></p>
+          <h3><LocalizedText text={item.title} /></h3>
+          <p><LocalizedText text={item.description} /></p>
           <Link className="resources-button" href={item.href}>
-            {item.action} <span aria-hidden="true">↗</span>
+            <LocalizedText text={item.action} /> <span aria-hidden="true">↗</span>
           </Link>
           <Link className="resources-text-link" href={item.nextHref}>
-            {item.next} →
+            <LocalizedText text={item.next} /> →
           </Link>
         </div>
       </div>

@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import Link from "next/link";
 export default function Hero3D() {
   return (
@@ -5,17 +7,11 @@ export default function Hero3D() {
       <div className="absolute inset-0 bg-gradient-to-br from-[#090B10] via-[var(--tgpi-ink)] to-black" />
 
       <div className="relative z-10 max-w-3xl">
-        <h1 className="text-5xl font-bold text-white leading-tight">
-          Build Your Global Identity
-        </h1>
+        <h1 className="text-5xl font-bold text-white leading-tight"><LocalizedText text={"Build Your Global Identity"} /></h1>
 
-        <p className="mt-6 text-lg text-slate-300">
-          Prepare, connect and move across countries with clarity and strategy.
-        </p>
+        <p className="mt-6 text-lg text-slate-300"><LocalizedText text={"Prepare, connect and move across countries with clarity and strategy."} /></p>
 
-        <Link href="/country-fit" className="mt-8 inline-flex min-h-12 items-center rounded-2xl bg-[var(--tgpi-gold)] px-6 py-3 font-semibold text-[var(--tgpi-navy)] transition hover:scale-105">
-          Start Now
-        </Link>
+        <Link href="/country-fit" className="mt-8 inline-flex min-h-12 items-center rounded-2xl bg-[var(--tgpi-gold)] px-6 py-3 font-semibold text-[var(--tgpi-navy)] transition hover:scale-105"><LocalizedText text={"Start Now"} /></Link>
       </div>
     </section>
   );

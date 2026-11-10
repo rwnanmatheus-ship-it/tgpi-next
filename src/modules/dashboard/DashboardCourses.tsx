@@ -14,9 +14,7 @@ export default function DashboardCourses() {
     <section className="rounded-2xl border border-white/10 bg-white/5 p-5">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-lg font-bold text-white"><LocalizedText text="Continue Learning" /></h2>
-        <Link href="/courses" className="text-sm text-yellow-400">
-          View all
-        </Link>
+        <Link href="/courses" className="text-sm text-yellow-400"><LocalizedText text={"View all"} /></Link>
       </div>
 
       <div className="grid gap-4 md:grid-cols-4">
@@ -30,7 +28,7 @@ export default function DashboardCourses() {
             </div>
 
             <p className="font-semibold text-white"><LocalizedText text={course.title} /></p>
-            <p className="mt-1 text-xs text-slate-400">{course.level}</p>
+            <p className="mt-1 text-xs text-slate-400"><LocalizedText text={course.level} /></p>
 
             <div className="mt-3 h-2 rounded-full bg-white/10">
               <div

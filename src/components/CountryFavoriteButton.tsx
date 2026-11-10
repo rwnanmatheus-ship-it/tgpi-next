@@ -42,7 +42,7 @@ export default function CountryFavoriteButton({ country }: Props) {
           : "border border-yellow-500/40 bg-yellow-500/5 text-yellow-300 hover:bg-yellow-500/10"
       }`}
     >
-      {loading ? <LocalizedText text={"Saving..."} /> : active ? "★ Favorited" : "☆ Add to Favorites"}
+      {loading ? <LocalizedText text={"Saving..."} /> : active ? <LocalizedText text={"★ Favorited"} /> : <LocalizedText text={"☆ Add to Favorites"} />}
     </button>
   );
 }

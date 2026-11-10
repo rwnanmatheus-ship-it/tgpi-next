@@ -16,10 +16,7 @@ export default function RoomsPage() {
         <section className="rounded-[2rem] border border-yellow-700/20 bg-gradient-to-br from-yellow-500/10 via-slate-950 to-slate-900 p-10">
           <h1 className="text-4xl font-bold text-yellow-400"><LocalizedText text="Global Rooms" /></h1>
 
-          <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-300">
-            Join country-based rooms to talk with people preparing for the same
-            destination. Rooms turn TGPI into a living global movement network.
-          </p>
+          <p className="mt-4 max-w-3xl text-sm leading-7 text-slate-300"><LocalizedText text={"Join country-based rooms to talk with people preparing for the same destination. Rooms turn TGPI into a living global movement network."} /></p>
         </section>
 
         <section className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
@@ -30,7 +27,7 @@ export default function RoomsPage() {
               className="rounded-3xl border border-slate-800 bg-slate-900 p-6 transition hover:border-yellow-500"
             >
               <h2 className="text-xl font-bold text-yellow-400">
-                {room.title}
+                <LocalizedText text={room.title} />
               </h2>
               <p className="mt-3 text-sm leading-7 text-slate-300">
                 {room.subtitle}

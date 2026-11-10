@@ -1,5 +1,7 @@
 "use client";
 
+
+import { useLocale as useFormattingLocale } from "@/components/localization/LocaleProvider";
 import Link from "next/link";
 import { LocalizedText } from "@/components/localization/LocaleProvider";
 
@@ -14,13 +16,12 @@ export default function UserCertificates({
 }: {
   certificates: CertificateItem[];
 }) {
+  const { locale } = useFormattingLocale();
   if (!certificates || certificates.length === 0) {
     return (
       <section className="rounded-3xl border border-slate-800 bg-slate-900 p-8">
         <h2 className="text-2xl font-bold text-yellow-400"><LocalizedText text="Your Certificates" /></h2>
-        <p className="mt-3 text-slate-400">
-          Complete courses to unlock your first TGPI certificate.
-        </p>
+        <p className="mt-3 text-slate-400"><LocalizedText text={"Complete courses to unlock your first TGPI certificate."} /></p>
       </section>
     );
   }
@@ -39,7 +40,7 @@ export default function UserCertificates({
               <h3 className="text-lg font-semibold text-white">
                 {certificate.courseId}
               </h3>
-              <p className="mt-1 text-sm text-slate-400"><LocalizedText text="Issued on" />{" "}{new Date(certificate.issuedAt).toLocaleDateString()}
+              <p className="mt-1 text-sm text-slate-400"><LocalizedText text="Issued on" />{" "}{new Date(certificate.issuedAt).toLocaleDateString(locale)}
               </p>
             </div>
 

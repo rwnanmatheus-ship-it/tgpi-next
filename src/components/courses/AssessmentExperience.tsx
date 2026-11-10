@@ -1,4 +1,6 @@
 "use client";
+
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 
 import Link from "next/link";
@@ -24,7 +26,7 @@ export default function AssessmentExperience({
   assessment: LearningAssessment;
   courseId: string;
 }) {
-  const { t: localizeLabel } = useInterfaceLocale();
+  const { locale, t: localizeLabel } = useInterfaceLocale();
 
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [reflection, setReflection] = useState("");
@@ -91,9 +93,7 @@ export default function AssessmentExperience({
     <main className="min-h-screen bg-[#F3EFE6] text-[var(--tgpi-navy-raised)]">
       <header className="sticky top-0 z-20 border-b border-[var(--tgpi-border)] bg-[var(--tgpi-surface)]/95 px-4 py-4 backdrop-blur sm:px-6">
         <div className="mx-auto flex max-w-4xl items-center justify-between gap-4">
-          <Link href={`/courses/${courseId}/certification`} className="text-xs font-extrabold text-[#6B7280]">
-            ← Certification path
-          </Link>
+          <Link href={`/courses/${courseId}/certification`} className="text-xs font-extrabold text-[#6B7280]"><LocalizedText text={"← Certification path"} /></Link>
           <div className="flex items-center gap-3">
             <span className="text-xs font-extrabold">{answered}/{assessment.questions.length}</span>
             <div className="h-2 w-24 overflow-hidden rounded-full bg-[#E3DED5] sm:w-40">
@@ -107,32 +107,28 @@ export default function AssessmentExperience({
         <section className="rounded-[30px] bg-[var(--tgpi-navy-raised)] p-7 text-white shadow-[0_24px_70px_rgba(11,31,58,.16)] sm:p-10">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#E8CC7B]">
-              {assessment.kind === "capstone" ? "Integrated capstone" : "Module decision gate"}
+              {assessment.kind === "capstone" ? <LocalizedText text={"Integrated capstone"} /> : <LocalizedText text={"Module decision gate"} />}
             </p>
-            <span className="rounded-full border border-white/15 px-3 py-1.5 text-[9px] font-extrabold uppercase tracking-[0.13em]">
-              Protected scoring · {assessment.masteryThreshold}% mastery
-            </span>
+            <span className="rounded-full border border-white/15 px-3 py-1.5 text-[9px] font-extrabold uppercase tracking-[0.13em]"><LocalizedText text={"Protected scoring ·"} />{" "}{assessment.masteryThreshold}<LocalizedText text={"% mastery"} /></span>
           </div>
           <h1 className="mt-5 font-[var(--tgpi-font-display)] text-4xl font-semibold leading-none tracking-[-0.03em] sm:text-5xl">
-            {assessment.title}
+            <LocalizedText text={assessment.title} />
           </h1>
-          <p className="mt-5 max-w-2xl text-sm leading-7 text-[#C8D1DE]">{assessment.description}</p>
+          <p className="mt-5 max-w-2xl text-sm leading-7 text-[#C8D1DE]"><LocalizedText text={assessment.description} /></p>
         </section>
 
         {result ? (
           <section className={`mt-7 rounded-[26px] border p-7 sm:p-9 ${result.passed ? "border-[#86BCA1] bg-[#EAF7F0]" : "border-[#D8B75D] bg-[#FFF6D8]"}`} aria-live="polite">
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#72520F]"><LocalizedText text="Attempt" />{" "}{result.attemptNumber} scored</p>
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#72520F]"><LocalizedText text="Attempt" />{" "}{result.attemptNumber}{" "}<LocalizedText text={"scored"} /></p>
             <div className="mt-3 flex flex-wrap items-end justify-between gap-4">
               <div>
-                <h2 className="text-3xl font-semibold">{result.passed ? "Mastery threshold reached" : "Review the capability, then retry"}</h2>
-                <p className="mt-2 text-sm leading-7 text-[#5F6875]">{result.correctAnswers}{" "}<LocalizedText text="of" />{" "}{result.totalQuestions} decisions correct. Your best result remains in your private learning record. Detailed answer feedback is released only after mastery.</p>
+                <h2 className="text-3xl font-semibold">{result.passed ? <LocalizedText text={"Mastery threshold reached"} /> : <LocalizedText text={"Review the capability, then retry"} />}</h2>
+                <p className="mt-2 text-sm leading-7 text-[#5F6875]">{result.correctAnswers}{" "}<LocalizedText text="of" />{" "}{result.totalQuestions}{" "}<LocalizedText text={"decisions correct. Your best result remains in your private learning record. Detailed answer feedback is released only after mastery."} /></p>
               </div>
               <div className="text-5xl font-extrabold">{result.score}%</div>
             </div>
             <div className="mt-6 flex flex-wrap gap-3">
-              <Link href={`/courses/${courseId}/certification`} className="inline-flex min-h-12 items-center rounded-xl bg-[var(--tgpi-navy-raised)] px-6 text-sm font-extrabold text-white">
-                Continue pathway →
-              </Link>
+              <Link href={`/courses/${courseId}/certification`} className="inline-flex min-h-12 items-center rounded-xl bg-[var(--tgpi-navy-raised)] px-6 text-sm font-extrabold text-white"><LocalizedText text={"Continue pathway →"} /></Link>
               <button type="button" onClick={beginRetake} className="min-h-12 rounded-xl border border-[#B9A76F] bg-white/70 px-6 text-sm font-extrabold"><LocalizedText text={"Start a new attempt"} /></button>
               {credentialId ? (
                 <Link href={`/certificates/${credentialId}`} className="inline-flex min-h-12 items-center rounded-xl bg-[#C39A31] px-6 text-sm font-extrabold text-[var(--tgpi-navy-raised)]"><LocalizedText text={"View credential"} /></Link>
@@ -142,7 +138,7 @@ export default function AssessmentExperience({
         ) : null}
 
         {error ? (
-          <div role="alert" className="mt-7 rounded-2xl border border-[#D7A9A4] bg-[#FFF1EF] p-5 text-sm font-bold text-[#8D2F28]">{error}</div>
+          <div role="alert" className="mt-7 rounded-2xl border border-[#D7A9A4] bg-[#FFF1EF] p-5 text-sm font-bold text-[#8D2F28]"><LocalizedText text={error} /></div>
         ) : null}
 
         <section className="mt-8 grid gap-6" aria-label={localizeLabel("Assessment questions")}>
@@ -168,14 +164,14 @@ export default function AssessmentExperience({
                               onChange={() => setAnswers((current) => ({ ...current, [question.id]: option.id }))}
                               className="mt-1 accent-[var(--tgpi-navy-raised)]"
                             />
-                            <span>{option.label}</span>
+                            <span><span lang="en" translate="no">{option.label}</span></span>
                           </label>
                         );
                       })}
                     </div>
                     {itemFeedback ? (
                       <div className={`mt-5 rounded-2xl p-4 text-sm leading-7 ${itemFeedback.correct ? "bg-[#E5F4EC] text-[#175D41]" : "bg-[#FFF0ED] text-[#823B34]"}`}>
-                        <strong>{itemFeedback.correct ? "Sound decision." : "Decision needs revision."}</strong>{" "}{itemFeedback.explanation}
+                        <strong>{itemFeedback.correct ? <LocalizedText text={"Sound decision."} /> : <LocalizedText text={"Decision needs revision."} />}</strong>{" "}<LocalizedText text={itemFeedback.explanationTranslations?.[locale] || itemFeedback.explanation} />
                       </div>
                     ) : null}
                   </div>
@@ -187,9 +183,9 @@ export default function AssessmentExperience({
 
         {assessment.reflectionPrompt ? (
           <section className="mt-6 rounded-[24px] border border-[#D5BA6B] bg-[#FFF7DE] p-6 sm:p-8">
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#8A6416]">Transfer reflection · 10% of final record</p>
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#8A6416]"><LocalizedText text={"Transfer reflection · 10% of final record"} /></p>
             <label htmlFor="transfer-reflection" className="mt-4 block text-lg font-extrabold leading-8">{assessment.reflectionPrompt}</label>
-            <textarea
+            <LocalizedElement as="textarea"
               id="transfer-reflection"
               disabled={Boolean(result)}
               value={reflection}
@@ -198,20 +194,20 @@ export default function AssessmentExperience({
               className="mt-5 w-full rounded-2xl border border-[#CDBA84] bg-white p-4 text-sm leading-7 outline-none focus:border-[#8A6416]"
               placeholder="Write a specific plan using the situations, decisions and capabilities you practiced…"
             />
-            <p className="mt-2 text-right text-xs font-bold text-[#756641]">{reflection.trim().length}/120 minimum</p>
+            <p className="mt-2 text-right text-xs font-bold text-[#756641]">{reflection.trim().length}<LocalizedText text={"/120 minimum"} /></p>
           </section>
         ) : null}
 
         {!result ? (
           <div className="mt-8 flex flex-wrap items-center justify-between gap-4 rounded-[24px] border border-[#D9D1C2] bg-white p-5">
-            <p className="text-xs font-bold leading-6 text-[#69717E]">Submission is final for this attempt. You may retry after reviewing the related learning scenarios.</p>
+            <p className="text-xs font-bold leading-6 text-[#69717E]"><LocalizedText text={"Submission is final for this attempt. You may retry after reviewing the related learning scenarios."} /></p>
             <button
               type="button"
               disabled={!isComplete || isSubmitting}
               onClick={() => void submit()}
               className="min-h-12 rounded-xl bg-[var(--tgpi-navy-raised)] px-7 text-sm font-extrabold text-white disabled:cursor-not-allowed disabled:opacity-40"
             >
-              {isSubmitting ? "Securing attempt…" : "Submit for scoring"}
+              {isSubmitting ? <LocalizedText text={"Securing attempt…"} /> : <LocalizedText text={"Submit for scoring"} />}
             </button>
           </div>
         ) : null}

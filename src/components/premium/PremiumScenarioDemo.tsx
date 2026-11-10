@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
-import { useLocale } from '@/components/localization/LocaleProvider';
+import { useLocale , LocalizedText } from '@/components/localization/LocaleProvider';
 import { ScenarioComparison } from './PremiumScenarioLab';
 import { emptyWorksheet } from '@/lib/intelligence/research-plan';
 import type { SavedPremiumScenario } from '@/lib/premium-scenarios';
@@ -23,7 +23,7 @@ export default function PremiumScenarioDemo() {
       <p className={styles.eyebrow}>{t('Premium · Interactive example')}</p>
       <div className={styles.heading}><div><h1 id="scenario-demo-title" className="text-3xl font-semibold">{t('Try the scenario comparison')}</h1><p>{t('Explore how the comparison handles currencies, durations and missing costs before using your own research.')}</p></div><Link className={styles.secondary} href="/premium">{t('Open my Premium workspace')} ↗</Link></div>
       <p className={styles.notice}>{t('Illustrative examples only. These amounts are fictional and are not saved to your account.')}</p>
-      <fieldset className={styles.picker}><legend>{t('Select up to three examples')}</legend>{examples.map((s,index)=><label className={styles.option} key={s.id}><input type="checkbox" checked={selected.includes(s.id)} disabled={!selected.includes(s.id)&&selected.length>=3} onChange={event=>setSelected(current=>event.target.checked?[...current,s.id].slice(0,3):current.filter(id=>id!==s.id))}/><span><strong>{t('Example {number}',{number:index+1})} · {names.of(s.iso2)}</strong><small>{t(labels[index])} · {s.worksheet.currency} · {t('{count} months',{count:s.worksheet.months})}</small></span></label>)}</fieldset>
+      <fieldset className={styles.picker}><legend>{t('Select up to three examples')}</legend>{examples.map((s,index)=><label className={styles.option} key={s.id}><input type="checkbox" checked={selected.includes(s.id)} disabled={!selected.includes(s.id)&&selected.length>=3} onChange={event=>setSelected(current=>event.target.checked?[...current,s.id].slice(0,3):current.filter(id=>id!==s.id))}/><span><strong>{t('Example {number}',{number:index+1})} · {names.of(s.iso2)}</strong><small>{t(labels[index])} · <LocalizedText text={s.worksheet.currency} /> · {t('{count} months',{count:s.worksheet.months})}</small></span></label>)}</fieldset>
       <ScenarioComparison scenarios={selected.flatMap(id=>examples.filter(s=>s.id===id))} example />
       <div className={styles.export}><Link className={styles.primary} href="/country-fit#research-workbench">{t('Start with my own research')} ↗</Link><Link className={styles.secondary} href="/pricing">{t('Compare plans')} ↗</Link></div>
     </section>

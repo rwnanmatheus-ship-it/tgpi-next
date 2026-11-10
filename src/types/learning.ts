@@ -41,6 +41,7 @@ export type LearningAssessmentResult = {
   feedback: Array<{
     correct: boolean;
     explanation: string;
+    explanationTranslations?: Partial<Record<import('@/lib/localization/config').Locale, string>>;
     questionId: string;
   }>;
   passed: boolean;

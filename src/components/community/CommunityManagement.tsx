@@ -1,4 +1,6 @@
 "use client";
+
+import { useLocale as useFormattingLocale } from "@/components/localization/LocaleProvider";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import type {
@@ -33,6 +35,7 @@ export default function CommunityManagement({
   action: Action;
   busy: boolean;
 }) {
+  const { locale, t: localizeLabel } = useFormattingLocale();
   const [section, setSection] = useState("members"),
     [items, setItems] = useState<
       (Membership | Invite | Report | Audit | ParticipationAppeal | Post)[]
@@ -84,10 +87,10 @@ export default function CommunityManagement({
       </div>
       {error && (
         <p role="alert" className={s.error}>
-          {error}
+          <LocalizedText text={error} />
         </p>
       )}
-      {!items.length && <p>No records in this page.</p>}
+      {!items.length && <p><LocalizedText text={"No records in this page."} /></p>}
       {section === "appeals" &&
         items.map((x) => {
           const a = x as ParticipationAppeal;
@@ -96,7 +99,7 @@ export default function CommunityManagement({
               <Link href={`/u/${a.uid}`}><LocalizedText text="Member profile" /></Link>
               <p>{a.body}</p>
               <p>
-                {a.state} · {a.decision}
+                <LocalizedText text={a.state} /> · <LocalizedText text={a.decision} />
               </p>
               {a.state === "pending" && (
                 <button
@@ -118,9 +121,7 @@ export default function CommunityManagement({
                       });
                     }
                   }}
-                >
-                  Review appeal
-                </button>
+                ><LocalizedText text={"Review appeal"} /></button>
               )}
             </article>
           );
@@ -136,14 +137,12 @@ export default function CommunityManagement({
                 className={s.button}
                 disabled={busy}
                 onClick={() => void act({ action: "approve-post", post: p.id })}
-              >
-                Approve publication
-              </button>
+              ><LocalizedText text={"Approve publication"} /></button>
               <button
                 className={s.secondary}
                 disabled={busy}
                 onClick={() => {
-                  if (window.confirm("Remove this publication?"))
+                  if (window.confirm(localizeLabel("Remove this publication?")))
                     void act({ action: "delete", post: p.id });
                 }}
               ><LocalizedText text={"Remove publication"} /></button>
@@ -155,9 +154,9 @@ export default function CommunityManagement({
           const member = x as Membership;
           return (
             <div className={s.reply} key={member.uid}>
-              <Link href={`/u/${member.uid}`}>View member profile</Link>
+              <Link href={`/u/${member.uid}`}><LocalizedText text={"View member profile"} /></Link>
               <p className={s.meta}>
-                {member.role} · {member.state}
+                <LocalizedText text={member.role} /> · <LocalizedText text={member.state} />
               </p>
               {member.answers && <p className={s.body}>{member.answers}</p>}
               {member.reason && <p><LocalizedText text={"Decision:"} />{" "}{member.reason}</p>}
@@ -214,9 +213,9 @@ export default function CommunityManagement({
           return (
             <div className={s.reply} key={r.id}>
               <p>{r.reason}</p>
-              <p className={s.meta}>{r.status}</p>
-              {r.decision && <p>{r.decision}</p>}
-              <a href={`#post-${r.post}`}>Locate publication below</a>
+              <p className={s.meta}><LocalizedText text={r.status} /></p>
+              {r.decision && <p><LocalizedText text={r.decision} /></p>}
+              <a href={`#post-${r.post}`}><LocalizedText text={"Locate publication below"} /></a>
               {r.status === "pending" && (
                 <button
                   className={s.secondary}
@@ -232,9 +231,7 @@ export default function CommunityManagement({
                         reason,
                       });
                   }}
-                >
-                  Record decision
-                </button>
+                ><LocalizedText text={"Record decision"} /></button>
               )}
             </div>
           );
@@ -281,9 +278,7 @@ export default function CommunityManagement({
             <button className={s.button} disabled={busy}><LocalizedText text={"Create invitation"} /></button>
           </form>
           {invite && (
-            <label>
-              Private invitation — copy now; shown only once
-              <input
+            <label><LocalizedText text={"Private invitation — copy now; shown only once"} /><input
                 readOnly
                 value={invite}
                 onFocus={(e) => e.target.select()}
@@ -295,17 +290,15 @@ export default function CommunityManagement({
             return (
               <div className={s.reply} key={i.id}>
                 <p>
-                  {new Date(i.expiresAt).toLocaleString()} · {i.uses}/
-                  {i.maxUses} uses · {i.revoked ? "Revoked" : <LocalizedText text={"Active"} />}
+                  {new Date(i.expiresAt).toLocaleString(locale)} · {i.uses}/
+                  {i.maxUses}{" "}<LocalizedText text={"uses ·"} />{" "}{i.revoked ? <LocalizedText text={"Revoked"} /> : <LocalizedText text={"Active"} />}
                 </p>
                 {!i.revoked && (
                   <button
                     className={s.secondary}
                     disabled={busy}
                     onClick={() => void act({ action: "revoke", invite: i.id })}
-                  >
-                    Revoke
-                  </button>
+                  ><LocalizedText text={"Revoke"} /></button>
                 )}
               </div>
             );
@@ -330,7 +323,7 @@ export default function CommunityManagement({
       )}
       {m.role === "owner" && (
         <details>
-          <summary>Publication settings and community images</summary>
+          <summary><LocalizedText text={"Publication settings and community images"} /></summary>
           <form
             key={`${c.postApproval}-${c.slowModeSeconds}`}
             onSubmit={(e) => {
@@ -348,12 +341,8 @@ export default function CommunityManagement({
                 name="approval"
                 type="checkbox"
                 defaultChecked={c.postApproval}
-              />
-              Require moderator approval for new publications
-            </label>
-            <label>
-              Slow mode: seconds between publications
-              <input
+              /><LocalizedText text={"Require moderator approval for new publications"} /></label>
+            <label><LocalizedText text={"Slow mode: seconds between publications"} /><input
                 name="slow"
                 type="number"
                 min={0}
@@ -399,9 +388,7 @@ export default function CommunityManagement({
               );
               if (rules) void act({ action: "rules", rules });
             }}
-          >
-            Edit rules
-          </button>
+          ><LocalizedText text={"Edit rules"} /></button>
           <button
             className={s.secondary}
             disabled={busy}
@@ -416,7 +403,7 @@ export default function CommunityManagement({
                 void act({ action: "archive" });
             }}
           >
-            {c.archived ? "Reopen" : <LocalizedText text={"Archive"} />}
+            {c.archived ? <LocalizedText text={"Reopen"} /> : <LocalizedText text={"Archive"} />}
           </button>
         </div>
       )}

@@ -1,5 +1,7 @@
 "use client";
 
+
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import { LocalizedText } from "@/components/localization/LocaleProvider";
 import { useEffect, useState } from "react";
 import {
@@ -53,14 +55,11 @@ export default function Preferences({
     <>
       <CommunityPrivacy />
       <section className={s.panel}>
-        <h2>Your community interests</h2>
-        <p>
-          Recommendations use only the interests you enter here. Your private
-          Country Fit answers are not published or imported.
-        </p>
+        <h2><LocalizedText text={"Your community interests"} /></h2>
+        <p><LocalizedText text={"Recommendations use only the interests you enter here. Your private Country Fit answers are not published or imported."} /></p>
         {error && (
           <p className={s.error} role="alert">
-            {error}
+            <LocalizedText text={error} />
           </p>
         )}
         <form
@@ -80,9 +79,7 @@ export default function Preferences({
             }
           }}
         >
-          <label>
-            Destinations, topics and languages, separated by commas
-            <input
+          <label><LocalizedText text={"Destinations, topics and languages, separated by commas"} /><LocalizedElement as="input"
               maxLength={1000}
               value={interests}
               onChange={(e) => setInterests(e.target.value)}
@@ -96,13 +93,11 @@ export default function Preferences({
               onChange={(e) =>
                 setValue({ ...value, personalized: e.target.checked })
               }
-            />
-            Show explanations when communities match these interests
-          </label>
+            /><LocalizedText text={"Show explanations when communities match these interests"} /></label>
           <button className={s.button} disabled={busy}><LocalizedText text={"Save preferences"} /></button>
         </form>
         <details>
-          <summary>Notification preferences per community</summary>
+          <summary><LocalizedText text={"Notification preferences per community"} /></summary>
           {Object.entries(value.communityNotifications || {}).map(
             ([id, mode]) => (
               <label key={id}>
@@ -126,9 +121,7 @@ export default function Preferences({
               </label>
             ),
           )}
-          <label>
-            Community identifier
-            <input
+          <label><LocalizedText text={"Community identifier"} /><LocalizedElement as="input"
               placeholder="community-slug"
               onBlur={(e) => {
                 const id = e.target.value.trim();
@@ -143,10 +136,7 @@ export default function Preferences({
               }}
             />
           </label>
-          <p className={s.notice}>
-            Add a community identifier, choose its preference and select Save
-            preferences. Delivery is capped at ten community updates per hour.
-          </p>
+          <p className={s.notice}><LocalizedText text={"Add a community identifier, choose its preference and select Save preferences. Delivery is capped at ten community updates per hour."} /></p>
           <button
             className={s.secondary}
             disabled={busy}
@@ -189,9 +179,7 @@ export default function Preferences({
                   setError((e as Error).message);
                 }
               }}
-            >
-              Load more blocked members
-            </button>
+            ><LocalizedText text={"Load more blocked members"} /></button>
           )}
         </details>
         {[...value.hidden, ...value.muted].length > 0 && (
@@ -206,9 +194,7 @@ export default function Preferences({
                 muted: [],
               })
             }
-          >
-            Restore hidden and muted communities
-          </button>
+          ><LocalizedText text={"Restore hidden and muted communities"} /></button>
         )}
       </section>
     </>

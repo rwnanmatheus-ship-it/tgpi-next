@@ -1,8 +1,10 @@
 "use client";
+
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 import { useCallback, useEffect, useState, useRef } from "react";
 import { useUser } from "@clerk/nextjs";
-import Image from "next/image";
+import Image from "@/components/localization/LocalizedImage";
 import CinematicImage from "@/components/ui/CinematicImage";
 import Link from "next/link";
 import dynamic from "next/dynamic";
@@ -215,11 +217,11 @@ export default function CommunityApp({
           <CinematicImage asset="community-global-exchange" alt="" priority
             sizes="(max-width:760px) 100vw, 1200px" position="65% center" />
         )}
-        <span className={s.eyebrow}>TGPI · Global Community</span>
-        <h1>{c?.name || "Your world. Shared experience."}</h1>
+        <span className={s.eyebrow}><LocalizedText text={"TGPI · Global Community"} /></span>
+        <h1>{c?.name || <LocalizedText text={"Your world. Shared experience."} />}</h1>
         <p>
           {c?.description ||
-            "Connect with people navigating life across borders."}
+            <LocalizedText text={"Connect with people navigating life across borders."} />}
         </p>
         <div className={s.actions}>
           <Link className={s.button} href="/community"><LocalizedText text="Explore communities" /></Link>
@@ -274,14 +276,14 @@ export default function CommunityApp({
             ))
           )}
           {globalAdmin && (
-            <Link href="/community/moderation">Global moderation</Link>
+            <Link href="/community/moderation"><LocalizedText text={"Global moderation"} /></Link>
           )}
           <Link href="/profile"><LocalizedText text="Workspace" /></Link>
           <Link href="/countries"><LocalizedText text={"Destinations"} /></Link>
           <Link href="/members"><LocalizedText text={"Find members"} /></Link>
           {id && <a href="#community-rules"><LocalizedText text="About & rules" /></a>}
         </nav>
-        <section className={s.content} aria-label="Community content">
+        <LocalizedElement as="section" className={s.content} aria-label="Community content">
           {error && (
             <div className={s.error} role="alert">
               <LocalizedText text={error} />
@@ -319,7 +321,7 @@ export default function CommunityApp({
                         setQuery(search);
                       }}
                     >
-                      <label style={{ flex: 1, margin: 0 }}><LocalizedText text={"Search communities"} /><input
+                      <label style={{ flex: 1, margin: 0 }}><LocalizedText text={"Search communities"} /><LocalizedElement as="input"
                           type="search"
                           value={search}
                           onChange={(e) => setSearch(e.target.value)}
@@ -328,15 +330,12 @@ export default function CommunityApp({
                       </label>
                       <button className={s.secondary}><LocalizedText text={"Search"} /></button>
                     </form>
-                    <p className={s.notice}>
-                      Search by the first word of a destination, topic or
-                      language.
-                    </p>
+                    <p className={s.notice}><LocalizedText text={"Search by the first word of a destination, topic or language."} /></p>
                     <div className={s.grid}>
                       {filtered.map((c) => (
                         <article className={s.card} key={c.id}>
                           <span className={s.badge}>
-                            {c.visibility} · {c.admission}
+                            <LocalizedText text={c.visibility} /> · <LocalizedText text={c.admission} />
                           </span>
                           <h2>
                             <Link href={`/community/${c.id}`}>{c.name}</Link>
@@ -346,10 +345,10 @@ export default function CommunityApp({
                             <p className={s.status}>{c.recommendation}</p>
                           )}
                           <p className={s.meta}>
-                            {c.destination || "Across borders"} · {c.language}
+                            {c.destination || <LocalizedText text={"Across borders"} />} · {c.language}
                           </p>
                           <p className={s.meta}>
-                            {c.memberCount} members · {c.theme}
+                            {c.memberCount}{" "}<LocalizedText text={"members ·"} />{" "}{c.theme}
                           </p>
                           {c.membership && (
                             <p className={s.badge}>{c.membership.state}</p>
@@ -357,17 +356,13 @@ export default function CommunityApp({
                           <Link
                             className={s.secondary}
                             href={`/community/${c.id}`}
-                          >
-                            Visit community
-                          </Link>
+                          ><LocalizedText text={"Visit community"} /></Link>
                           {user && view === "explore" && (
                             <button
                               className={s.secondary}
                               disabled={busy}
                               onClick={() => void hideCommunity(c.id)}
-                            >
-                              Hide recommendation
-                            </button>
+                            ><LocalizedText text={"Hide recommendation"} /></button>
                           )}
                         </article>
                       ))}
@@ -384,13 +379,13 @@ export default function CommunityApp({
                         </div>
                         <h2>
                           {view === "requests"
-                            ? "No pending requests."
-                            : "Find your next circle."}
+                            ? <LocalizedText text={"No pending requests."} />
+                            : <LocalizedText text={"Find your next circle."} />}
                         </h2>
                         <p>
                           {view === "requests"
-                            ? "Your requests and decisions are saved with your membership."
-                            : "Explore by destination or create a community around your next step."}
+                            ? <LocalizedText text={"Your requests and decisions are saved with your membership."} />
+                            : <LocalizedText text={"Explore by destination or create a community around your next step."} />}
                         </p>
                       </div>
                     )}
@@ -403,20 +398,14 @@ export default function CommunityApp({
                 <section>
                   <h2>
                     {view === "questions"
-                      ? "Questions that need you"
+                      ? <LocalizedText text={"Questions that need you"} />
                       : view === "atlas"
-                        ? "Experience Atlas"
-                        : "Your circles, in chronological order"}
+                        ? <LocalizedText text={"Experience Atlas"} />
+                        : <LocalizedText text={"Your circles, in chronological order"} />}
                   </h2>
-                  <p className={s.notice}>
-                    Recent contributions from up to eight active communities on
-                    your first membership page. Load more within each community
-                    to explore its full archive.
-                  </p>
+                  <p className={s.notice}><LocalizedText text={"Recent contributions from up to eight active communities on your first membership page. Load more within each community to explore its full archive."} /></p>
                   {view === "atlas" && (
-                    <label>
-                      Destination or topic
-                      <input
+                    <label><LocalizedText text={"Destination or topic"} /><input
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                       />
@@ -451,8 +440,8 @@ export default function CommunityApp({
                     ))}
                   {!loading && !feed.length && !error && (
                     <div className={s.empty}>
-                      <h3>Choose your first circle.</h3>
-                      <p>Join a community to bring its conversations here.</p>
+                      <h3><LocalizedText text={"Choose your first circle."} /></h3>
+                      <p><LocalizedText text={"Join a community to bring its conversations here."} /></p>
                       <button
                         className={s.button}
                         onClick={() => setView("explore")}
@@ -465,9 +454,7 @@ export default function CommunityApp({
                 <section>
                   <h2><LocalizedText text="Saved contributions" /></h2>
                   {!loading && !saved.length && !error && (
-                    <p className={s.empty}>
-                      No accessible saved contributions yet.
-                    </p>
+                    <p className={s.empty}><LocalizedText text={"No accessible saved contributions yet."} /></p>
                   )}
                   {saved.map((p) => (
                     <article className={s.panel} key={`${p.community}-${p.id}`}>
@@ -477,9 +464,7 @@ export default function CommunityApp({
                         <Link
                           className={s.secondary}
                           href={`/community/${p.community}?post=${p.id}`}
-                        >
-                          Open discussion
-                        </Link>
+                        ><LocalizedText text={"Open discussion"} /></Link>
                         <button
                           className={s.secondary}
                           disabled={busy}
@@ -491,9 +476,7 @@ export default function CommunityApp({
                               saved: false,
                             })
                           }
-                        >
-                          Unsave
-                        </button>
+                        ><LocalizedText text={"Unsave"} /></button>
                       </div>
                     </article>
                   ))}
@@ -513,7 +496,7 @@ export default function CommunityApp({
                     )}
                     {admin && (
                       <details className={s.brandEditor}>
-                        <summary>Change community photo or cover</summary>
+                        <summary><LocalizedText text={"Change community photo or cover"} /></summary>
                         <div className={s.split}>
                           <ImageUpload
                             community={c.id}
@@ -529,29 +512,26 @@ export default function CommunityApp({
                       </details>
                     )}
                     <div className={s.meta}>
-                      <span className={s.badge}>{c.visibility}</span>
-                      <span className={s.badge}>{c.admission}</span>
-                      <span>{c.memberCount} members</span>
+                      <span className={s.badge}><LocalizedText text={c.visibility} /></span>
+                      <span className={s.badge}><LocalizedText text={c.admission} /></span>
+                      <span>{c.memberCount}{" "}<LocalizedText text={"members"} /></span>
                       <span>
                         {c.destination} · {c.language}
                       </span>
                     </div>
                     {c.journey && (
-                      <p className={s.badge}>Journey Circle · {c.journey}</p>
+                      <p className={s.badge}><LocalizedText text={"Journey Circle ·"} />{" "}{c.journey}</p>
                     )}
                     {c.courseId && (
                       <p>
-                        <Link href={`/courses/${c.courseId}`}>
-                          Open connected TGPI course →
-                        </Link>
+                        <Link href={`/courses/${c.courseId}`}><LocalizedText text={"Open connected TGPI course →"} /></Link>
                       </p>
                     )}
                     {c.archived && (
                       <p className={s.status}><LocalizedText text={"This community is archived."} /></p>
                     )}
                     {m && (
-                      <p className={s.status}>
-                        Your participation: {m.state} · {m.role}
+                      <p className={s.status}><LocalizedText text={"Your participation:"} />{" "}<LocalizedText text={m.state} /> · <LocalizedText text={m.role} />
                         {m.reason && (
                           <>
                             <br />
@@ -573,9 +553,7 @@ export default function CommunityApp({
                             );
                             if (body) void action({ action: "appeal", body });
                           }}
-                        >
-                          Appeal participation decision
-                        </button>
+                        ><LocalizedText text={"Appeal participation decision"} /></button>
                       )}
                     {joined && c.welcome && (
                       <p className={s.body}>{c.welcome}</p>
@@ -594,7 +572,7 @@ export default function CommunityApp({
                           ) : (
                             <>
                               <details>
-                                <summary>Read the rules before joining</summary>
+                                <summary><LocalizedText text={"Read the rules before joining"} /></summary>
                                 <p className={s.rules}>{c.rules}</p>
                               </details>
                               <label>
@@ -604,14 +582,12 @@ export default function CommunityApp({
                                   onChange={(e) =>
                                     setAccepted(e.target.checked)
                                   }
-                                />
-                                I have read and accept the current rules
-                              </label>
+                                /><LocalizedText text={"I have read and accept the current rules"} /></label>
                               {(c.entryQuestion ||
                                 c.admission === "approval") && (
                                 <label>
                                   {c.entryQuestion ||
-                                    "Introduction for moderators (optional)"}
+                                    <LocalizedText text={"Introduction for moderators (optional)"} />}
                                   <textarea
                                     maxLength={2000}
                                     value={answers}
@@ -637,12 +613,12 @@ export default function CommunityApp({
                                 }
                               >
                                 {token
-                                  ? "Accept invitation"
+                                  ? <LocalizedText text={"Accept invitation"} />
                                   : c.admission === "approval"
-                                    ? "Request to join"
+                                    ? <LocalizedText text={"Request to join"} />
                                     : c.admission === "invite"
-                                      ? "Invitation required"
-                                      : "Join community"}
+                                      ? <LocalizedText text={"Invitation required"} />
+                                      : <LocalizedText text={"Join community"} />}
                               </button>
                             </>
                           )}
@@ -654,9 +630,7 @@ export default function CommunityApp({
                           className={s.secondary}
                           disabled={busy}
                           onClick={() => void hideCommunity(c.id, true)}
-                        >
-                          Mute community notifications
-                        </button>
+                        ><LocalizedText text={"Mute community notifications"} /></button>
                         <button
                           className={s.secondary}
                           disabled={busy}
@@ -677,7 +651,7 @@ export default function CommunityApp({
                             onClick={() => setManage(!manage)}
                             aria-expanded={manage}
                           >
-                            {manage ? "Close management" : "Manage community"}
+                            {manage ? <LocalizedText text={"Close management"} /> : <LocalizedText text={"Manage community"} />}
                           </button>
                         )}
                         {m?.role !== "owner" && (
@@ -685,7 +659,7 @@ export default function CommunityApp({
                             className={s.secondary}
                             disabled={busy}
                             onClick={() => {
-                              if (window.confirm("Leave this community?"))
+                              if (window.confirm(localizeLabel("Leave this community?")))
                                 void action({ action: "leave" });
                             }}
                           ><LocalizedText text={"Leave community"} /></button>
@@ -702,9 +676,7 @@ export default function CommunityApp({
                               )
                                 void action({ action: "accept-transfer" });
                             }}
-                          >
-                            Accept ownership
-                          </button>
+                          ><LocalizedText text={"Accept ownership"} /></button>
                         )}
                       </div>
                     )}
@@ -719,10 +691,7 @@ export default function CommunityApp({
                   )}
                   {joined && m?.acceptedVersion !== c.rulesVersion && (
                     <section className={s.status}>
-                      <p>
-                        Community rules have changed. Review them before
-                        contributing.
-                      </p>
+                      <p><LocalizedText text={"Community rules have changed. Review them before contributing."} /></p>
                       <p className={s.rules}>{c.rules}</p>
                       <button
                         className={s.button}
@@ -733,9 +702,7 @@ export default function CommunityApp({
                             acceptedVersion: c.rulesVersion,
                           })
                         }
-                      >
-                        Accept updated rules
-                      </button>
+                      ><LocalizedText text={"Accept updated rules"} /></button>
                     </section>
                   )}
                   {joined && (
@@ -750,16 +717,14 @@ export default function CommunityApp({
                     <Composer community={c.id} action={action} busy={busy} />
                   )}
                   {(joined || c.visibility === "public") && (
-                    <label>
-                      Publication filter
-                      <select
+                    <label><LocalizedText text={"Publication filter"} /><select
                         value={postFilter}
                         onChange={(e) => setPostFilter(e.target.value)}
                       >
-                        <option value="all">All contributions</option>
+                        <option value="all"><LocalizedText text={"All contributions"} /></option>
                         <option value="open"><LocalizedText text={"Unanswered questions"} /></option>
-                        <option value="experience">Experience Atlas</option>
-                        <option value="guide">Guides</option>
+                        <option value="experience"><LocalizedText text={"Experience Atlas"} /></option>
+                        <option value="guide"><LocalizedText text={"Guides"} /></option>
                         <option value="discussion"><LocalizedText text={"Discussions"} /></option>
                       </select>
                     </label>
@@ -788,17 +753,17 @@ export default function CommunityApp({
                     <div className={s.empty}>
                       <h2>
                         {joined
-                          ? "Start with an introduction."
+                          ? <LocalizedText text={"Start with an introduction."} />
                           : c.visibility === "public"
-                            ? "A new conversation starts here."
-                            : "A space for its members."}
+                            ? <LocalizedText text={"A new conversation starts here."} />
+                            : <LocalizedText text={"A space for its members."} />}
                       </h2>
                       <p>
                         {joined
-                          ? "Share your destination, what you are learning and where you could help."
+                          ? <LocalizedText text={"Share your destination, what you are learning and where you could help."} />
                           : c.visibility === "public"
-                            ? "No publications yet."
-                            : "Complete the admission process to read and contribute."}
+                            ? <LocalizedText text={"No publications yet."} />
+                            : <LocalizedText text={"Complete the admission process to read and contribute."} />}
                       </p>
                     </div>
                   )}
@@ -824,10 +789,7 @@ export default function CommunityApp({
                     <h2><LocalizedText text="About & rules" /></h2>
                     <p className={s.body}>{c.about}</p>
                     <p className={s.rules}>{c.rules}</p>
-                    <p className={s.notice}>
-                      Member experiences are not official immigration, legal,
-                      medical or financial advice. Verify sources and dates.
-                    </p>
+                    <p className={s.notice}><LocalizedText text={"Member experiences are not official immigration, legal, medical or financial advice. Verify sources and dates."} /></p>
                   </section>
                 </>
               )}
@@ -839,7 +801,7 @@ export default function CommunityApp({
               )}
             </>
           )}
-        </section>
+        </LocalizedElement>
         <aside className={s.context}>
           <section className={s.panel}>
             <div className={s.identity}>
@@ -849,13 +811,9 @@ export default function CommunityApp({
                 height={42}
                 alt={localizeLabel("TGPI crest")}
               />
-              <span className={s.meta}>
-                THE GLOBAL
-                <br />
-                POLYMATH INSTITUTE
-              </span>
+              <span className={s.meta}><LocalizedText text={"THE GLOBAL"} /><br /><LocalizedText text={"POLYMATH INSTITUTE"} /></span>
             </div>
-            <h2>Experience into action.</h2>
+            <h2><LocalizedText text={"Experience into action."} /></h2>
             <div className={s.editorial}>
               <Image
                 src="/images/cinematic-2026/arrival-city-1600.webp"
@@ -864,9 +822,7 @@ export default function CommunityApp({
                 sizes="240px"
               />
             </div>
-            <p>
-              Find a destination. Ask a useful question. Share what helped you.
-            </p>
+            <p><LocalizedText text={"Find a destination. Ask a useful question. Share what helped you."} /></p>
             <Link className={s.secondary} href="/countries"><LocalizedText text={"Explore destinations"} /></Link>
           </section>
           <section className={s.panel}>
@@ -878,8 +834,8 @@ export default function CommunityApp({
                 sizes="240px"
               />
             </div>
-            <h3>Build your next step</h3>
-            <p>Connect your research with a practical plan.</p>
+            <h3><LocalizedText text={"Build your next step"} /></h3>
+            <p><LocalizedText text={"Connect your research with a practical plan."} /></p>
             <Link href="/profile"><LocalizedText text={"Open your Workspace →"} /></Link>
           </section>
         </aside>

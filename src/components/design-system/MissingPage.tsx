@@ -1,6 +1,6 @@
 'use client';
 
-import { useLocale } from '@/components/localization/LocaleProvider';
+import { useLocale , LocalizedText } from '@/components/localization/LocaleProvider';
 import { Button } from './Button';
 import { Container } from './Container';
 import { EditorialCard } from './EditorialCard';
@@ -13,7 +13,7 @@ export function MissingPage({ country = false }: { country?: boolean }) {
     <main className="tgpi-section bg-[var(--tgpi-canvas)] text-[var(--tgpi-ink)]">
       <Container>
         <EditorialCard className="mx-auto max-w-2xl text-center">
-          <p className="mb-5 text-sm font-bold tracking-widest text-[var(--tgpi-gold-strong)]">TGPI / 404</p>
+          <p className="mb-5 text-sm font-bold tracking-widest text-[var(--tgpi-gold-strong)]"><LocalizedText text={"TGPI / 404"} /></p>
           <EditorialHeading as="h1" size="md" tone="navy">
             {t(country ? 'Country Pathway Not Found' : 'This page is unavailable.')}
           </EditorialHeading>

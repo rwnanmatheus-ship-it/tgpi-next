@@ -15,9 +15,7 @@ export default function ConnectionSuggestions({
 
   return (
     <section className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-      <h2 className="text-xl font-bold text-yellow-400">
-        Suggested Connections
-      </h2>
+      <h2 className="text-xl font-bold text-yellow-400"><LocalizedText text={"Suggested Connections"} /></h2>
 
       <div className="mt-4 space-y-3">
         {suggestions.map((user, index) => (
@@ -28,13 +26,11 @@ export default function ConnectionSuggestions({
             <div>
               <p className="font-semibold">{user.name ?? <LocalizedText text={"TGPI Member"} />}</p>
               <p className="text-sm text-slate-400">
-                {user.targetCountry ?? "Target country not defined"}
+                {user.targetCountry ?? <LocalizedText text={"Target country not defined"} />}
               </p>
             </div>
 
-            <button className="rounded-lg bg-yellow-500 px-3 py-1 text-sm font-bold text-black">
-              Connect
-            </button>
+            <button className="rounded-lg bg-yellow-500 px-3 py-1 text-sm font-bold text-black"><LocalizedText text={"Connect"} /></button>
           </div>
         ))}
       </div>

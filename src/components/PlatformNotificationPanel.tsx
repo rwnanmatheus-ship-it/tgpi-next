@@ -20,14 +20,11 @@ export default function PlatformNotificationPanel({
       <div className="mb-5 flex items-center justify-between">
         <div>
           <h2 className="text-2xl font-bold text-yellow-400"><LocalizedText text={"Notificações"} /></h2>
-          <p className="mt-2 text-sm text-slate-400">
-            Atualizações da sua conta, da plataforma e do seu progresso.
-          </p>
+          <p className="mt-2 text-sm text-slate-400"><LocalizedText text={"Atualizações da sua conta, da plataforma e do seu progresso."} /></p>
         </div>
 
         <span className="rounded-full border border-yellow-500/25 bg-yellow-500/10 px-3 py-1 text-xs font-semibold text-yellow-200">
-          {notifications.filter((item) => item.unread).length} novas
-        </span>
+          {notifications.filter((item) => item.unread).length}{" "}<LocalizedText text={"novas"} /></span>
       </div>
 
       <div className="space-y-3">
@@ -44,17 +41,15 @@ export default function PlatformNotificationPanel({
                   }`}
                 />
                 <div className="flex-1">
-                  <p className="font-semibold text-white">{item.title}</p>
-                  <p className="mt-1 text-sm text-slate-400">{item.description}</p>
+                  <p className="font-semibold text-white"><LocalizedText text={item.title} /></p>
+                  <p className="mt-1 text-sm text-slate-400"><LocalizedText text={item.description} /></p>
                   <p className="mt-2 text-xs text-slate-500">{item.time}</p>
                 </div>
               </div>
             </div>
           ))
         ) : (
-          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-sm text-slate-400">
-            Nenhuma notificação por enquanto.
-          </div>
+          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-sm text-slate-400"><LocalizedText text={"Nenhuma notificação por enquanto."} /></div>
         )}
       </div>
     </section>

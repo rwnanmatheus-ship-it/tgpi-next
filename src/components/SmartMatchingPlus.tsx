@@ -52,12 +52,9 @@ export default function SmartMatchingPlus({
 
   return (
     <section className="rounded-3xl border border-slate-800 bg-slate-900 p-8">
-      <h2 className="text-2xl font-bold text-yellow-400">Smart Matching 2.0</h2>
+      <h2 className="text-2xl font-bold text-yellow-400"><LocalizedText text={"Smart Matching 2.0"} /></h2>
 
-      <p className="mt-3 text-sm leading-7 text-slate-300">
-        TGPI compares destination, intent, and progression level to suggest
-        stronger international connections.
-      </p>
+      <p className="mt-3 text-sm leading-7 text-slate-300"><LocalizedText text={"TGPI compares destination, intent, and progression level to suggest stronger international connections."} /></p>
 
       <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {matches.length ? (
@@ -70,11 +67,10 @@ export default function SmartMatchingPlus({
                 {match.name || match.username || <LocalizedText text={"TGPI Member"} />}
               </p>
               <p className="mt-2 text-sm text-slate-400">
-                {match.targetCountry || "No target country"} •{" "}
-                {match.travelIntent || "No intent"}
+                {match.targetCountry || <LocalizedText text={"No target country"} />} •{" "}
+                {match.travelIntent || <LocalizedText text={"No intent"} />}
               </p>
-              <p className="mt-2 text-sm text-yellow-300">
-                Match score: {match.score}
+              <p className="mt-2 text-sm text-yellow-300"><LocalizedText text={"Match score:"} />{" "}{match.score}
               </p>
 
               {match.username ? (
@@ -86,10 +82,7 @@ export default function SmartMatchingPlus({
             </div>
           ))
         ) : (
-          <p className="text-sm text-slate-300">
-            Better matches will appear as more users define their target country
-            and travel intent.
-          </p>
+          <p className="text-sm text-slate-300"><LocalizedText text={"Better matches will appear as more users define their target country and travel intent."} /></p>
         )}
       </div>
     </section>

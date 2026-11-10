@@ -1,4 +1,7 @@
-import Image from "next/image";
+import { getLocale as getFormattingLocale } from "@/lib/localization/server";
+
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
+import Image from "@/components/localization/LocalizedImage";
 import PremiumScenarioLab from './PremiumScenarioLab';
 import Link from "next/link";
 import {
@@ -56,28 +59,28 @@ const comparisonGoalLabels = {
   work: "Working globally",
 } as const;
 
-function formatMoney(amount: number, currency: string) {
+function formatMoney(locale: import('@/lib/localization/config').Locale, amount: number, currency: string) {
   if (!amount) return "Not estimated";
 
   try {
-    return new Intl.NumberFormat("en-US", {
+    return new Intl.NumberFormat(locale, {
       currency,
       maximumFractionDigits: 0,
       style: "currency",
     }).format(amount);
   } catch {
-    return `${currency} ${new Intl.NumberFormat("en-US", {
+    return `${currency} ${new Intl.NumberFormat(locale, {
       maximumFractionDigits: 0,
     }).format(amount)}`;
   }
 }
 
-function formatDate(value?: string) {
+function formatDate(locale: import('@/lib/localization/config').Locale, value?: string) {
   if (!value) return "Ready to start";
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return "Recently updated";
 
-  return new Intl.DateTimeFormat("en-US", {
+  return new Intl.DateTimeFormat(locale, {
     day: "numeric",
     month: "short",
     timeZone: "UTC",
@@ -97,10 +100,10 @@ function ProgressBar({ label, value }: { label: string; value: number }) {
   return (
     <div>
       <div className="flex items-center justify-between gap-4 text-xs font-extrabold">
-        <span>{label}</span>
+        <span><LocalizedText text={label} /></span>
         <span>{value}%</span>
       </div>
-      <div
+      <LocalizedElement as="div"
         aria-label={`${label}: ${value}%`}
         aria-valuemax={100}
         aria-valuemin={0}
@@ -112,12 +115,13 @@ function ProgressBar({ label, value }: { label: string; value: number }) {
           className="h-full rounded-full bg-[#E5BF5A]"
           style={{ width: `${value}%` }}
         />
-      </div>
+      </LocalizedElement>
     </div>
   );
 }
 
-function CountryCard({ country }: { country: PremiumCountryCard }) {
+async function CountryCard({ country }: { country: PremiumCountryCard }) {
+  const locale = await getFormattingLocale();
   const countryData = getCountry(country.slug);
 
   if (!countryData) return null;
@@ -152,30 +156,28 @@ function CountryCard({ country }: { country: PremiumCountryCard }) {
             </h3>
           </div>
           <span className="rounded-full border border-white/25 bg-[#081A31]/70 px-3 py-1 text-xs font-extrabold backdrop-blur-sm">
-            {country.fitScore === null ? "Evidence review" : `${country.fitScore}% fit`}
+            {country.fitScore === null ? <LocalizedText text={"Evidence review"} /> : <LocalizedText text={"{value0}% fit"} values={{value0: String(country.fitScore)}} />}
           </span>
         </div>
       </div>
       <div className="grid grid-cols-2 divide-x divide-[#E4DED2] border-b border-[#E4DED2] text-xs">
         <div className="p-4">
-          <p className="text-[9px] font-extrabold uppercase tracking-[0.15em] text-[#7A8390]">
-            Cost plan
-          </p>
+          <p className="text-[9px] font-extrabold uppercase tracking-[0.15em] text-[#7A8390]"><LocalizedText text={"Cost plan"} /></p>
           <p className="mt-2 font-extrabold text-[var(--tgpi-navy-raised)]">
             {country.costEstimate
-              ? formatMoney(
+              ? formatMoney(locale,
                   country.costEstimate.amount,
                   country.costEstimate.currency,
                 )
-              : "Not saved"}
+              : <LocalizedText text={"Not saved"} />}
           </p>
         </div>
         <div className="p-4">
           <p className="text-[9px] font-extrabold uppercase tracking-[0.15em] text-[#7A8390]"><LocalizedText text="Documents" /></p>
           <p className="mt-2 font-extrabold text-[var(--tgpi-navy-raised)]">
             {country.documentProgress
-              ? `${country.documentProgress.completed}/${country.documentProgress.total} reviewed`
-              : "Not reviewed"}
+              ? <LocalizedText text={"{value0}/{value1} reviewed"} values={{value0: String(country.documentProgress.completed), value1: String(country.documentProgress.total)}} />
+              : <LocalizedText text={"Not reviewed"} />}
           </p>
         </div>
       </div>
@@ -188,13 +190,14 @@ function CountryCard({ country }: { country: PremiumCountryCard }) {
   );
 }
 
-export default function PremiumCommandCenterV2({
+export default async function PremiumCommandCenterV2({
   accessMode,
   firstName,
   membershipStatus,
   model,
   periodLabel,
 }: PremiumCommandCenterV2Props) {
+  const locale = await getFormattingLocale();
   const isControlledAccess = accessMode !== "subscription";
   const accessEyebrow =
     accessMode === "founder"
@@ -233,56 +236,49 @@ export default function PremiumCommandCenterV2({
                   aria-hidden="true"
                   className="absolute -right-6 -top-10 h-56 w-56 rounded-full border border-[#D8AE49]/20"
                 />
-                <p className="relative text-[10px] font-extrabold uppercase tracking-[0.28em] text-[var(--tgpi-gold-light)]">
-                  TGPI Premium command center
-                </p>
+                <p className="relative text-[10px] font-extrabold uppercase tracking-[0.28em] text-[var(--tgpi-gold-light)]"><LocalizedText text={"TGPI Premium command center"} /></p>
                 <h1 className="relative mt-5 max-w-3xl font-[var(--tgpi-font-display)] text-5xl font-semibold leading-[0.96] tracking-[-0.045em] sm:text-6xl lg:text-7xl">
-                  {firstName}, your next global move starts here.
-                </h1>
-                <p className="relative mt-6 max-w-2xl text-base leading-8 text-[#CAD4E1] sm:text-lg">
-                  Your country intelligence, decisions and preparation are now connected in one private operating system.
-                </p>
+                  {firstName}<LocalizedText text={", your next global move starts here."} /></h1>
+                <p className="relative mt-6 max-w-2xl text-base leading-8 text-[#CAD4E1] sm:text-lg"><LocalizedText text={"Your country intelligence, decisions and preparation are now connected in one private operating system."} /></p>
 
                 <div className="relative mt-8 rounded-2xl border border-white/15 bg-white/[0.06] p-5 backdrop-blur-sm sm:p-6">
                   <div className="flex flex-wrap items-start justify-between gap-4">
                     <div>
-                      <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold-light)]">
-                        Next best action
-                      </p>
+                      <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold-light)]"><LocalizedText text={"Next best action"} /></p>
                       <h2 className="mt-3 font-[var(--tgpi-font-display)] text-3xl font-semibold">
-                        {model.nextAction.title}
+                        <LocalizedText text={model.nextAction.title} />
                       </h2>
                       <p className="mt-3 max-w-2xl text-sm leading-6 text-[#D7E0EB]">
-                        {model.nextAction.description}
+                        <LocalizedText text={model.nextAction.description} />
                       </p>
                     </div>
                     <span
                       className={`rounded-full border px-3 py-1.5 text-[10px] font-extrabold uppercase tracking-[0.12em] ${statusClasses[model.nextAction.status]}`}
                     >
-                      {statusLabels[model.nextAction.status]}
+                      <LocalizedText text={statusLabels[model.nextAction.status]} />
                     </span>
                   </div>
                   <Link
                     className="mt-5 inline-flex min-h-12 items-center justify-center rounded-xl bg-[#E5BF5A] px-6 text-sm font-extrabold text-[var(--tgpi-navy-raised)] transition hover:-translate-y-0.5 hover:bg-[var(--tgpi-gold-light)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
                     href={model.nextAction.href}
                   >
-                    {model.nextAction.action} <span aria-hidden="true">→</span>
+                    <LocalizedText text={model.nextAction.action} /> <span aria-hidden="true">→</span>
                   </Link>
                 </div>
               </div>
 
               <aside className="border-t border-white/10 bg-[#102A4C] p-7 sm:p-10 lg:border-l lg:border-t-0 lg:p-12">
                 <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[var(--tgpi-gold-light)]">
-                  {accessEyebrow}
+                  <LocalizedText text={accessEyebrow} />
                 </p>
                 <p className="mt-4 font-[var(--tgpi-font-display)] text-4xl font-semibold">
-                  {accessTitle}
+                  <LocalizedText text={accessTitle} />
                 </p>
                 <div className="mt-8 space-y-6 border-t border-white/15 pt-6">
                   <div className="flex items-center justify-between gap-4 text-sm">
-                    <span className="text-[#AEBCCE]">Status</span>
+                    <span className="text-[#AEBCCE]"><LocalizedText text={"Status"} /></span>
                     <span className="rounded-full bg-[#D8AE49] px-3 py-1 text-xs font-extrabold text-[var(--tgpi-navy-raised)]">
-                      {membershipStatus}
+                      <LocalizedText text={membershipStatus} />
                     </span>
                   </div>
                   <ProgressBar label="Workspace progress" value={model.readiness} />
@@ -294,8 +290,8 @@ export default function PremiumCommandCenterV2({
                   href={isControlledAccess ? "/profile/security" : "/pricing"}
                 >
                   {isControlledAccess
-                    ? "Review account security"
-                    : "Manage billing"}
+                    ? <LocalizedText text={"Review account security"} />
+                    : <LocalizedText text={"Manage billing"} />}
                 </Link>
               </aside>
             </div>
@@ -312,7 +308,7 @@ export default function PremiumCommandCenterV2({
                 key={stat.label}
               >
                 <dt className="text-[9px] font-extrabold uppercase tracking-[0.18em] text-[#7A8390]">
-                  {stat.label}
+                  <LocalizedText text={stat.label} />
                 </dt>
                 <dd className="mt-2 font-[var(--tgpi-font-display)] text-3xl font-semibold">
                   {stat.value}
@@ -330,18 +326,12 @@ export default function PremiumCommandCenterV2({
         <div className="mx-auto max-w-7xl">
           <div className="flex flex-wrap items-end justify-between gap-5">
             <div>
-              <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#79550F]">
-                Decision board
-              </p>
+              <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#79550F]"><LocalizedText text={"Decision board"} /></p>
               <h2
                 className="mt-3 font-[var(--tgpi-font-display)] text-4xl font-semibold tracking-[-0.035em] sm:text-5xl"
                 id="shortlist-title"
-              >
-                Your countries in focus.
-              </h2>
-              <p className="mt-4 max-w-2xl text-sm leading-7 text-[#657082]">
-                Keep the strongest options visible while you compare evidence, costs and preparation requirements.
-              </p>
+              ><LocalizedText text={"Your countries in focus."} /></h2>
+              <p className="mt-4 max-w-2xl text-sm leading-7 text-[#657082]"><LocalizedText text={"Keep the strongest options visible while you compare evidence, costs and preparation requirements."} /></p>
             </div>
             <Link
               className="inline-flex min-h-11 items-center rounded-xl border border-[#CFC7B8] bg-white px-5 text-sm font-extrabold text-[var(--tgpi-navy-raised)] transition hover:border-[var(--tgpi-gold-hover)]"
@@ -358,15 +348,12 @@ export default function PremiumCommandCenterV2({
             </div>
           ) : (
             <div className="mt-8 rounded-[26px] border border-dashed border-[#CFC7B8] bg-[var(--tgpi-surface)] p-7 sm:p-10">
-              <p className="text-sm font-extrabold">Your shortlist is ready to be built.</p>
-              <p className="mt-2 max-w-2xl text-sm leading-7 text-[#657082]">
-                Select countries in your global profile or save them while exploring. TGPI will bring them here automatically.
-              </p>
+              <p className="text-sm font-extrabold"><LocalizedText text={"Your shortlist is ready to be built."} /></p>
+              <p className="mt-2 max-w-2xl text-sm leading-7 text-[#657082]"><LocalizedText text={"Select countries in your global profile or save them while exploring. TGPI will bring them here automatically."} /></p>
               <Link
                 className="mt-5 inline-flex min-h-11 items-center rounded-xl bg-[var(--tgpi-navy-raised)] px-5 text-sm font-extrabold text-white"
                 href="/onboarding"
-              >
-                Build my shortlist <span aria-hidden="true">→</span>
+              ><LocalizedText text={"Build my shortlist"} />{" "}<span aria-hidden="true">→</span>
               </Link>
             </div>
           )}
@@ -381,27 +368,25 @@ export default function PremiumCommandCenterV2({
               data-tgpi-depth="floating"
               data-tgpi-tone="navy"
             >
-              <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold-light)]">
-                Latest comparison
-              </p>
+              <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold-light)]"><LocalizedText text={"Latest comparison"} /></p>
               <h2 className="mt-4 font-[var(--tgpi-font-display)] text-4xl font-semibold leading-tight">
-                {comparisonTitle}
+                <LocalizedText text={comparisonTitle} />
               </h2>
               <p className="mt-4 text-sm leading-7 text-[#CAD4E1]">
                 {model.comparison.isSaved
-                  ? `Your saved ${comparisonGoalLabels[model.comparison.goal].toLowerCase()} comparison is ready to continue.`
+                  ? <LocalizedText text={"Your saved {value0} comparison is ready to continue."} values={{value0: String(comparisonGoalLabels[model.comparison.goal].toLowerCase())}} />
                   : model.comparison.countryNames.length >= 2
-                    ? `TGPI prepared a ${comparisonGoalLabels[model.comparison.goal].toLowerCase()} comparison from your shortlist.`
-                    : "Choose at least two countries to create a meaningful side-by-side decision."}
+                    ? <LocalizedText text={"TGPI prepared a {value0} comparison from your shortlist."} values={{value0: String(comparisonGoalLabels[model.comparison.goal].toLowerCase())}} />
+                    : <LocalizedText text={"Choose at least two countries to create a meaningful side-by-side decision."} />}
               </p>
               <p className="mt-4 text-[10px] font-bold uppercase tracking-[0.14em] text-[#AEBCCE]">
-                {formatDate(model.comparison.updatedAt)}
+                {formatDate(locale, model.comparison.updatedAt)}
               </p>
               <Link
                 className="mt-auto inline-flex min-h-12 items-center pt-7 text-sm font-extrabold text-[var(--tgpi-gold-light)]"
                 href={model.comparison.href}
               >
-                {model.comparison.isSaved ? "Continue comparison" : "Open comparator"} <span aria-hidden="true">→</span>
+                {model.comparison.isSaved ? <LocalizedText text={"Continue comparison"} /> : <LocalizedText text={"Open comparator"} />} <span aria-hidden="true">→</span>
               </Link>
             </article>
 
@@ -412,21 +397,21 @@ export default function PremiumCommandCenterV2({
             >
               <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#79550F]"><LocalizedText text={"Monthly cost plan"} /></p>
               <p className="mt-5 font-[var(--tgpi-font-display)] text-5xl font-semibold tracking-[-0.035em]">
-                {model.cost.isPersonalEstimate ? formatMoney(model.cost.amount, model.cost.currency) : "Not set"}
+                {model.cost.isPersonalEstimate ? formatMoney(locale, model.cost.amount, model.cost.currency) : <LocalizedText text={"Not set"} />}
               </p>
               <p className="mt-3 text-sm font-extrabold text-[var(--tgpi-navy-raised)]">
                 {model.cost.countryName}
               </p>
               <p className="mt-4 text-sm leading-7 text-[#657082]">
                 {model.cost.isPersonalEstimate
-                  ? "Your saved monthly estimate. Revisit it when housing, city or lifestyle assumptions change."
-                  : "No verified local budget is connected. Create your own estimate using dated local quotes."}
+                  ? <LocalizedText text={"Your saved monthly estimate. Revisit it when housing, city or lifestyle assumptions change."} />
+                  : <LocalizedText text={"No verified local budget is connected. Create your own estimate using dated local quotes."} />}
               </p>
               <Link
                 className="mt-auto inline-flex min-h-12 items-center pt-7 text-sm font-extrabold text-[#79550F]"
                 href={model.cost.href}
               >
-                {model.cost.isPersonalEstimate ? "Review cost plan" : "Create cost estimate"} <span aria-hidden="true">→</span>
+                {model.cost.isPersonalEstimate ? <LocalizedText text={"Review cost plan"} /> : <LocalizedText text={"Create cost estimate"} />} <span aria-hidden="true">→</span>
               </Link>
             </article>
 
@@ -435,20 +420,18 @@ export default function PremiumCommandCenterV2({
               data-tgpi-depth="raised"
               data-tgpi-tone="paper"
             >
-              <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#79550F]">
-                Document review progress
-              </p>
+              <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#79550F]"><LocalizedText text={"Document review progress"} /></p>
               <div className="mt-5 flex items-end justify-between gap-4">
                 <p className="font-[var(--tgpi-font-display)] text-5xl font-semibold">
                   {model.documents.percent}%
                 </p>
                 <p className="text-xs font-extrabold text-[#657082]">
                   {model.documents.total
-                    ? `${model.documents.completed}/${model.documents.total} reviewed`
-                    : "Checklist not started"}
+                    ? <LocalizedText text={"{value0}/{value1} reviewed"} values={{value0: String(model.documents.completed), value1: String(model.documents.total)}} />
+                    : <LocalizedText text={"Checklist not started"} />}
                 </p>
               </div>
-              <div
+              <LocalizedElement as="div"
                 aria-label={`Document review progress: ${model.documents.percent}%`}
                 aria-valuemax={100}
                 aria-valuemin={0}
@@ -460,15 +443,13 @@ export default function PremiumCommandCenterV2({
                   className="h-full rounded-full bg-[var(--tgpi-gold-hover)]"
                   style={{ width: `${model.documents.percent}%` }}
                 />
-              </div>
-              <p className="mt-5 text-sm leading-7 text-[#657082]">
-                Review the practical document checklist for {model.documents.countryName}. Always validate legal requirements with official authorities.
-              </p>
+              </LocalizedElement>
+              <p className="mt-5 text-sm leading-7 text-[#657082]"><LocalizedText text={"Review the practical document checklist for"} />{" "}{model.documents.countryName}<LocalizedText text={". Always validate legal requirements with official authorities."} /></p>
               <Link
                 className="mt-auto inline-flex min-h-12 items-center pt-7 text-sm font-extrabold text-[#79550F]"
                 href={model.documents.href}
               >
-                {model.documents.total ? "Continue checklist" : "Start document review"} <span aria-hidden="true">→</span>
+                {model.documents.total ? <LocalizedText text={"Continue checklist"} /> : <LocalizedText text={"Start document review"} />} <span aria-hidden="true">→</span>
               </Link>
             </article>
           </div>
@@ -481,15 +462,11 @@ export default function PremiumCommandCenterV2({
             aria-labelledby="action-system-title"
             className="rounded-[30px] border border-[var(--tgpi-border)] bg-white p-6 sm:p-8"
           >
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#79550F]">
-              Action system
-            </p>
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#79550F]"><LocalizedText text={"Action system"} /></p>
             <h2
               className="mt-3 font-[var(--tgpi-font-display)] text-4xl font-semibold"
               id="action-system-title"
-            >
-              Five moves. One connected strategy.
-            </h2>
+            ><LocalizedText text={"Five moves. One connected strategy."} /></h2>
             <div className="mt-7 grid gap-3">
               {model.actions.map((action) => (
                 <Link
@@ -502,17 +479,17 @@ export default function PremiumCommandCenterV2({
                   </span>
                   <span>
                     <span className="block text-sm font-extrabold text-[var(--tgpi-navy-raised)]">
-                      {action.title}
+                      <LocalizedText text={action.title} />
                     </span>
                     <span className="mt-1 block text-xs leading-5 text-[#657082]">
-                      {action.description}
+                      <LocalizedText text={action.description} />
                     </span>
                   </span>
                   <span className="flex items-center justify-between gap-3 sm:justify-end">
                     <span
                       className={`rounded-full border px-3 py-1 text-[9px] font-extrabold uppercase tracking-[0.1em] ${statusClasses[action.status]}`}
                     >
-                      {statusLabels[action.status]}
+                      <LocalizedText text={statusLabels[action.status]} />
                     </span>
                     <span
                       aria-hidden="true"
@@ -532,14 +509,14 @@ export default function PremiumCommandCenterV2({
                 <div>
                   <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold-light)]"><LocalizedText text={"Learning path"} /></p>
                   <h2 className="mt-3 font-[var(--tgpi-font-display)] text-3xl font-semibold">
-                    {model.learning.title}
+                    <LocalizedText text={model.learning.title} />
                   </h2>
                 </div>
                 <span className="font-[var(--tgpi-font-display)] text-3xl font-semibold text-[var(--tgpi-gold-light)]">
                   {model.learning.percent}%
                 </span>
               </div>
-              <div
+              <LocalizedElement as="div"
                 aria-label={`Learning progress: ${model.learning.percent}%`}
                 aria-valuemax={100}
                 aria-valuemin={0}
@@ -551,17 +528,17 @@ export default function PremiumCommandCenterV2({
                   className="h-full rounded-full bg-[#E5BF5A]"
                   style={{ width: `${model.learning.percent}%` }}
                 />
-              </div>
+              </LocalizedElement>
               <p className="mt-4 text-sm leading-7 text-[#CAD4E1]">
                 {model.learning.totalLessons
-                  ? `${model.learning.completedLessons} of ${model.learning.totalLessons} lessons completed. Build practical capability alongside your country decisions.`
-                  : "Choose a structured learning path to build the skills behind your global plan."}
+                  ? <LocalizedText text={"{value0} of {value1} lessons completed. Build practical capability alongside your country decisions."} values={{value0: String(model.learning.completedLessons), value1: String(model.learning.totalLessons)}} />
+                  : <LocalizedText text={"Choose a structured learning path to build the skills behind your global plan."} />}
               </p>
               <Link
                 className="mt-5 inline-flex min-h-11 items-center text-sm font-extrabold text-[var(--tgpi-gold-light)]"
                 href={model.learning.href}
               >
-                {model.learning.percent ? <LocalizedText text={"Continue learning"} /> : "Start learning path"} <span aria-hidden="true">→</span>
+                {model.learning.percent ? <LocalizedText text={"Continue learning"} /> : <LocalizedText text={"Start learning path"} />} <span aria-hidden="true">→</span>
               </Link>
             </article>
 
@@ -569,9 +546,7 @@ export default function PremiumCommandCenterV2({
               <div className="flex flex-wrap items-start justify-between gap-4">
                 <div>
                   <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#79550F]"><LocalizedText text="Your global plan" /></p>
-                  <h2 className="mt-3 font-[var(--tgpi-font-display)] text-3xl font-semibold">
-                    The context behind every recommendation.
-                  </h2>
+                  <h2 className="mt-3 font-[var(--tgpi-font-display)] text-3xl font-semibold"><LocalizedText text={"The context behind every recommendation."} /></h2>
                 </div>
                 <Link
                   className="text-xs font-extrabold text-[#79550F] underline decoration-[var(--tgpi-gold-hover)]/40 underline-offset-4"
@@ -585,7 +560,7 @@ export default function PremiumCommandCenterV2({
                     key={item.label}
                   >
                     <dt className="text-[9px] font-extrabold uppercase tracking-[0.15em] text-[#7A8390]">
-                      {item.label}
+                      <LocalizedText text={item.label} />
                     </dt>
                     <dd className="mt-2 text-sm font-extrabold leading-6 text-[var(--tgpi-navy-raised)]">
                       {item.value}
@@ -609,10 +584,10 @@ export default function PremiumCommandCenterV2({
                       >
                         <span>
                           <span className="block text-xs font-extrabold text-[var(--tgpi-navy-raised)]">
-                            {activity.title}
+                            <LocalizedText text={activity.title} />
                           </span>
                           <span className="mt-1 block text-[9px] font-bold uppercase tracking-[0.12em] text-[#7A8390]">
-                            {formatDate(activity.occurredAt)}
+                            {formatDate(locale, activity.occurredAt)}
                           </span>
                         </span>
                         <span
@@ -625,9 +600,7 @@ export default function PremiumCommandCenterV2({
                     ))}
                   </div>
                 ) : (
-                  <p className="mt-4 rounded-xl border border-dashed border-[#CFC7B8] bg-white p-4 text-xs leading-6 text-[#657082]">
-                    Your timeline will begin when you save a country, compare options, review documents, estimate costs or start a course.
-                  </p>
+                  <p className="mt-4 rounded-xl border border-dashed border-[#CFC7B8] bg-white p-4 text-xs leading-6 text-[#657082]"><LocalizedText text={"Your timeline will begin when you save a country, compare options, review documents, estimate costs or start a course."} /></p>
                 )}
               </div>
             </article>
@@ -637,11 +610,8 @@ export default function PremiumCommandCenterV2({
 
       <section className="border-t border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] px-4 py-8 sm:px-6">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 text-xs leading-6 text-[#657082]">
-          <p className="max-w-3xl">
-            Your command center uses your private TGPI profile and activity to organize recommendations. It never replaces official legal, immigration, tax or financial advice.
-          </p>
-          <Link className="font-extrabold text-[#79550F]" href="/profile/security">
-            Review privacy & security <span aria-hidden="true">→</span>
+          <p className="max-w-3xl"><LocalizedText text={"Your command center uses your private TGPI profile and activity to organize recommendations. It never replaces official legal, immigration, tax or financial advice."} /></p>
+          <Link className="font-extrabold text-[#79550F]" href="/profile/security"><LocalizedText text={"Review privacy & security"} />{" "}<span aria-hidden="true">→</span>
           </Link>
         </div>
       </section>

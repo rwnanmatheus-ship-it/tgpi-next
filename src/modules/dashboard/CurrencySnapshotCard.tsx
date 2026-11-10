@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 const currencies = [
   { code: "USD", label: "US Dollar", value: "1.00" },
   { code: "EUR", label: "Euro", value: "0.92" },
@@ -8,7 +10,7 @@ const currencies = [
 export default function CurrencySnapshotCard() {
   return (
     <section className="rounded-3xl border border-white/10 bg-white/5 p-6">
-      <h2 className="text-lg font-bold text-white">Currency Snapshot</h2>
+      <h2 className="text-lg font-bold text-white"><LocalizedText text={"Currency Snapshot"} /></h2>
 
       <div className="mt-4 space-y-3">
         {currencies.map((item) => (
@@ -18,7 +20,7 @@ export default function CurrencySnapshotCard() {
           >
             <div>
               <p className="font-bold text-yellow-400">{item.code}</p>
-              <p className="text-xs text-slate-400">{item.label}</p>
+              <p className="text-xs text-slate-400"><LocalizedText text={item.label} /></p>
             </div>
 
             <p className="font-semibold text-white">{item.value}</p>

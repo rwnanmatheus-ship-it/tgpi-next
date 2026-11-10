@@ -42,29 +42,27 @@ export default function ModerationConsole() {
     <main className={s.shell}>
       <CommunityOperations />
       <header className={s.panel}>
-        <p className={s.eyebrow}>TGPI administration</p>
+        <p className={s.eyebrow}><LocalizedText text={"TGPI administration"} /></p>
         <h1><LocalizedText text={"Community moderation"} /></h1>
         <Link href="/community"><LocalizedText text={"Return to community"} /></Link>
       </header>
       {error && (
         <p role="alert" className={s.error}>
-          {error}
+          <LocalizedText text={error} />
         </p>
       )}
       {items.map((r) => (
         <article className={s.panel} key={r.id}>
           <h2>
-            {r.community} · {r.kind || "content report"}
+            {r.community} · {r.kind || <LocalizedText text={"content report"} />}
           </h2>
           <p>{r.reason}</p>
           <p>
-            {r.status} · {r.decision}
+            <LocalizedText text={r.status} /> · <LocalizedText text={r.decision} />
           </p>
-          {r.target && <p>Target: {r.target}</p>}
+          {r.target && <p><LocalizedText text={"Target:"} />{" "}{r.target}</p>}
           {r.post && (
-            <Link href={`/community/${r.community}?post=${r.post}`}>
-              Open source with current access
-            </Link>
+            <Link href={`/community/${r.community}?post=${r.post}`}><LocalizedText text={"Open source with current access"} /></Link>
           )}
           <div className={s.actions}>
             <button
@@ -87,9 +85,7 @@ export default function ModerationConsole() {
                   setBusy(false);
                 }
               }}
-            >
-              Review community management
-            </button>
+            ><LocalizedText text={"Review community management"} /></button>
             {r.status === "pending" && (
               <button
                 className={s.button}
@@ -117,18 +113,14 @@ export default function ModerationConsole() {
                     setBusy(false);
                   }
                 }}
-              >
-                Record decision
-              </button>
+              ><LocalizedText text={"Record decision"} /></button>
             )}
           </div>
         </article>
       ))}
-      {!items.length && !error && <p>No reports in this page.</p>}
+      {!items.length && !error && <p><LocalizedText text={"No reports in this page."} /></p>}
       {next && (
-        <button className={s.secondary} onClick={() => void load(next)}>
-          Load more reports
-        </button>
+        <button className={s.secondary} onClick={() => void load(next)}><LocalizedText text={"Load more reports"} /></button>
       )}
       {community && (
         <CommunityManagement

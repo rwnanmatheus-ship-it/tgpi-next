@@ -1,5 +1,7 @@
 "use client";
 
+
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import { useState } from "react";
 import { LocalizedText } from "@/components/localization/LocaleProvider";
 
@@ -20,8 +22,7 @@ export default function MiniChat({
 
   return (
     <section className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-      <h2 className="text-xl font-bold text-yellow-400">
-        Chat with {targetName}
+      <h2 className="text-xl font-bold text-yellow-400"><LocalizedText text={"Chat with"} />{" "}{targetName}
       </h2>
 
       <div className="mt-4 h-40 overflow-y-auto space-y-2">
@@ -33,7 +34,7 @@ export default function MiniChat({
       </div>
 
       <div className="mt-4 flex gap-2">
-        <input
+        <LocalizedElement as="input"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           className="flex-1 rounded bg-slate-800 px-3 py-2 text-white"

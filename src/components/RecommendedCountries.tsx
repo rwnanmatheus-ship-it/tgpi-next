@@ -29,14 +29,10 @@ export default function RecommendedCountries() {
 
   return (
     <section className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
-      <h2 className="mb-4 text-xl font-bold text-yellow-400">
-        Recommended Countries
-      </h2>
+      <h2 className="mb-4 text-xl font-bold text-yellow-400"><LocalizedText text={"Recommended Countries"} /></h2>
 
       {recommended.length === 0 ? (
-        <p className="text-sm text-slate-400">
-          Recommendations will improve as you favorite countries and set goals.
-        </p>
+        <p className="text-sm text-slate-400"><LocalizedText text={"Recommendations will improve as you favorite countries and set goals."} /></p>
       ) : (
         <div className="grid gap-4 md:grid-cols-3">
           {recommended.map((country) => (
@@ -47,7 +43,7 @@ export default function RecommendedCountries() {
               <div className="text-2xl">{country.emoji}</div>
               <h3 className="mt-2 font-bold text-white"><LocalizedText text={country.name} /></h3>
               <p className="mt-1 text-sm text-slate-400">
-                {country.shortDescription}
+                <LocalizedText text={country.shortDescription} />
               </p>
             </div>
           ))}

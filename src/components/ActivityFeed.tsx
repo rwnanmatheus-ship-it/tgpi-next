@@ -14,7 +14,7 @@ export default function ActivityFeed() {
       <div className="mt-4 space-y-3">
         {items.map((item, i) => (
           <p key={i} className="text-sm text-slate-300">
-            • {item}
+            • <LocalizedText text={item} />
           </p>
         ))}
       </div>

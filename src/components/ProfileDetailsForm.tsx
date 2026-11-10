@@ -1,5 +1,7 @@
 "use client";
 
+
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import { useEffect, useState } from "react";
 import { auth, db } from "@/lib/firebase";
 import { doc, getDoc, setDoc } from "firebase/firestore";
@@ -122,9 +124,7 @@ export default function ProfileDetailsForm() {
 
   if (!loaded) {
     return (
-      <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6 text-slate-300">
-        Loading profile form...
-      </div>
+      <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6 text-slate-300"><LocalizedText text={"Loading profile form..."} /></div>
     );
   }
 
@@ -132,9 +132,7 @@ export default function ProfileDetailsForm() {
     <section className="rounded-3xl border border-slate-800 bg-slate-950 p-6">
       <div className="mb-5">
         <h2 className="text-2xl font-bold text-yellow-400"><LocalizedText text={"Edit Your Profile"} /></h2>
-        <p className="mt-2 text-sm text-slate-400">
-          Complete your information to turn TGPI into a more accurate and useful global platform for you.
-        </p>
+        <p className="mt-2 text-sm text-slate-400"><LocalizedText text={"Complete your information to turn TGPI into a more accurate and useful global platform for you."} /></p>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">
@@ -157,7 +155,7 @@ export default function ProfileDetailsForm() {
         </div>
 
         <div className="md:col-span-2">
-          <label className="mb-2 block text-sm text-slate-300">Bio</label>
+          <label className="mb-2 block text-sm text-slate-300"><LocalizedText text={"Bio"} /></label>
           <textarea
             rows={4}
             value={form.bio}
@@ -191,13 +189,13 @@ export default function ProfileDetailsForm() {
             onChange={(e) => updateField("preferredCurrency", e.target.value)}
             className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-white outline-none focus:border-yellow-500"
           >
-            <option value="USD">USD</option>
-            <option value="BRL">BRL</option>
-            <option value="EUR">EUR</option>
-            <option value="JPY">JPY</option>
-            <option value="EGP">EGP</option>
-            <option value="GBP">GBP</option>
-            <option value="CAD">CAD</option>
+            <option value="USD"><LocalizedText text={"USD"} /></option>
+            <option value="BRL"><LocalizedText text={"BRL"} /></option>
+            <option value="EUR"><LocalizedText text={"EUR"} /></option>
+            <option value="JPY"><LocalizedText text={"JPY"} /></option>
+            <option value="EGP"><LocalizedText text={"EGP"} /></option>
+            <option value="GBP"><LocalizedText text={"GBP"} /></option>
+            <option value="CAD"><LocalizedText text={"CAD"} /></option>
           </select>
         </div>
 
@@ -216,7 +214,7 @@ export default function ProfileDetailsForm() {
         </div>
 
         <div>
-          <label className="mb-2 block text-sm text-slate-300">English Level</label>
+          <label className="mb-2 block text-sm text-slate-300"><LocalizedText text={"English Level"} /></label>
           <select
             value={form.englishLevel}
             onChange={(e) =>
@@ -232,7 +230,7 @@ export default function ProfileDetailsForm() {
         </div>
 
         <div>
-          <label className="mb-2 block text-sm text-slate-300">Budget Level</label>
+          <label className="mb-2 block text-sm text-slate-300"><LocalizedText text={"Budget Level"} /></label>
           <select
             value={form.budget}
             onChange={(e) => updateField("budget", e.target.value as FormState["budget"])}
@@ -246,8 +244,8 @@ export default function ProfileDetailsForm() {
         </div>
 
         <div className="md:col-span-2">
-          <label className="mb-2 block text-sm text-slate-300">Continent of Interest</label>
-          <input
+          <label className="mb-2 block text-sm text-slate-300"><LocalizedText text={"Continent of Interest"} /></label>
+          <LocalizedElement as="input"
             value={form.continentInterest}
             onChange={(e) => updateField("continentInterest", e.target.value)}
             className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-white outline-none focus:border-yellow-500"
@@ -262,7 +260,7 @@ export default function ProfileDetailsForm() {
           onClick={handleSave}
           className="rounded-xl bg-yellow-500 px-6 py-3 font-semibold text-black transition hover:bg-yellow-400"
         >
-          {loading ? <LocalizedText text={"Saving..."} /> : "Save Profile"}
+          {loading ? <LocalizedText text={"Saving..."} /> : <LocalizedText text={"Save Profile"} />}
         </button>
       </div>
     </section>

@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 const stats = [
   ["Countries Explored", "24"],
   ["Courses in Progress", "8"],
@@ -13,7 +15,7 @@ export default function StatsCards() {
           key={title}
           className="rounded-2xl border border-white/10 bg-white/5 p-5"
         >
-          <p className="text-sm text-slate-400">{title}</p>
+          <p className="text-sm text-slate-400"><LocalizedText text={title} /></p>
           <p className="mt-2 text-2xl font-bold text-yellow-400">{value}</p>
         </div>
       ))}

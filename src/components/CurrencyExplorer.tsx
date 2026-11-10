@@ -1,5 +1,9 @@
 "use client";
 
+
+
+import { useLocale as useFormattingLocale } from "@/components/localization/LocaleProvider";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import { useEffect, useMemo, useState } from "react";
 
 type CurrencyExplorerProps = {
@@ -31,9 +35,9 @@ const currencyOptions = [
   "CNY",
 ];
 
-function formatAmount(value: number, currency: string) {
+function formatAmount(locale: import('@/lib/localization/config').Locale, value: number, currency: string) {
   try {
-    return new Intl.NumberFormat("en-US", {
+    return new Intl.NumberFormat(locale, {
       style: "currency",
       currency,
       maximumFractionDigits: 2,
@@ -53,6 +57,7 @@ export default function CurrencyExplorer({
   userPreferredCurrency = "USD",
   onRateLoaded,
 }: CurrencyExplorerProps) {
+  const { locale } = useFormattingLocale();
   const [targetCurrency, setTargetCurrency] = useState(userPreferredCurrency || "USD");
   const [amount, setAmount] = useState("100");
   const [rate, setRate] = useState<number | null>(null);
@@ -138,27 +143,17 @@ export default function CurrencyExplorer({
   return (
     <section className="mb-8 rounded-3xl border border-yellow-700/20 bg-gradient-to-b from-yellow-500/10 to-slate-950 p-8">
       <div className="mb-6">
-        <h2 className="mb-2 text-3xl font-bold text-yellow-400">
-          Currency Explorer
-        </h2>
-        <p className="max-w-3xl text-slate-300">
-          Compare the {countryName} currency with your preferred currency or any
-          other supported currency, and simulate practical conversions directly
-          on the page.
-        </p>
+        <h2 className="mb-2 text-3xl font-bold text-yellow-400"><LocalizedText text={"Currency Explorer"} /></h2>
+        <p className="max-w-3xl text-slate-300"><LocalizedText text={"Compare the"} />{" "}{countryName}{" "}<LocalizedText text={"currency with your preferred currency or any other supported currency, and simulate practical conversions directly on the page."} /></p>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[1.1fr_.9fr]">
         <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
-          <h3 className="mb-4 text-xl font-semibold text-yellow-400">
-            Live Conversion
-          </h3>
+          <h3 className="mb-4 text-xl font-semibold text-yellow-400"><LocalizedText text={"Live Conversion"} /></h3>
 
           <div className="grid gap-4 md:grid-cols-2">
             <div>
-              <label className="mb-2 block text-sm text-slate-300">
-                Country Currency
-              </label>
+              <label className="mb-2 block text-sm text-slate-300"><LocalizedText text={"Country Currency"} /></label>
               <input
                 value={baseCurrency}
                 disabled
@@ -167,9 +162,7 @@ export default function CurrencyExplorer({
             </div>
 
             <div>
-              <label className="mb-2 block text-sm text-slate-300">
-                Convert To
-              </label>
+              <label className="mb-2 block text-sm text-slate-300"><LocalizedText text={"Convert To"} /></label>
               <select
                 value={targetCurrency}
                 onChange={(event) => setTargetCurrency(event.target.value)}
@@ -184,8 +177,7 @@ export default function CurrencyExplorer({
             </div>
 
             <div className="md:col-span-2">
-              <label className="mb-2 block text-sm text-slate-300">
-                Amount in {baseCurrency}
+              <label className="mb-2 block text-sm text-slate-300"><LocalizedText text={"Amount in"} />{" "}{baseCurrency}
               </label>
               <input
                 type="number"
@@ -200,14 +192,12 @@ export default function CurrencyExplorer({
 
           <div className="mt-6 rounded-2xl border border-slate-800 bg-slate-950 p-5">
             {loading ? (
-              <p className="text-slate-300">Loading exchange rate...</p>
+              <p className="text-slate-300"><LocalizedText text={"Loading exchange rate..."} /></p>
             ) : error ? (
-              <p className="text-red-300">{error}</p>
+              <p className="text-red-300"><LocalizedText text={error} /></p>
             ) : (
               <>
-                <p className="mb-2 text-sm text-slate-400">
-                  Latest available reference rate
-                  {date ? ` • ${date}` : ""}
+                <p className="mb-2 text-sm text-slate-400"><LocalizedText text={"Latest available reference rate"} />{date ? <LocalizedText text={" • {value0}"} values={{value0: String(date)}} /> : ""}
                 </p>
 
                 <p className="mb-3 text-lg text-slate-200">
@@ -218,7 +208,7 @@ export default function CurrencyExplorer({
                 </p>
 
                 <p className="text-3xl font-bold text-white">
-                  {formatAmount(converted, targetCurrency)}
+                  {formatAmount(locale, converted, targetCurrency)}
                 </p>
               </>
             )}
@@ -226,15 +216,13 @@ export default function CurrencyExplorer({
         </div>
 
         <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
-          <h3 className="mb-4 text-xl font-semibold text-yellow-400">
-            Quick Reference
-          </h3>
+          <h3 className="mb-4 text-xl font-semibold text-yellow-400"><LocalizedText text={"Quick Reference"} /></h3>
 
           <div className="grid gap-3">
             {loading ? (
-              <p className="text-slate-300">Preparing examples...</p>
+              <p className="text-slate-300"><LocalizedText text={"Preparing examples..."} /></p>
             ) : error ? (
-              <p className="text-red-300">Could not generate quick references.</p>
+              <p className="text-red-300"><LocalizedText text={"Could not generate quick references."} /></p>
             ) : (
               quickExamples.map((item) => (
                 <div
@@ -245,7 +233,7 @@ export default function CurrencyExplorer({
                     {item.base} {baseCurrency}
                   </span>
                   <span className="font-semibold text-yellow-300">
-                    {formatAmount(item.converted, targetCurrency)}
+                    {formatAmount(locale, item.converted, targetCurrency)}
                   </span>
                 </div>
               ))
@@ -253,14 +241,8 @@ export default function CurrencyExplorer({
           </div>
 
           <div className="mt-6 rounded-2xl border border-yellow-700/20 bg-yellow-500/5 p-5">
-            <h4 className="mb-2 font-semibold text-yellow-400">
-              TGPI Insight
-            </h4>
-            <p className="text-sm leading-7 text-slate-300">
-              This tool helps users understand everyday value, compare local
-              purchasing context, and make more informed decisions for travel,
-              study, relocation, and cultural preparation.
-            </p>
+            <h4 className="mb-2 font-semibold text-yellow-400"><LocalizedText text={"TGPI Insight"} /></h4>
+            <p className="text-sm leading-7 text-slate-300"><LocalizedText text={"This tool helps users understand everyday value, compare local purchasing context, and make more informed decisions for travel, study, relocation, and cultural preparation."} /></p>
           </div>
         </div>
       </div>

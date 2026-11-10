@@ -1,5 +1,7 @@
 "use client";
 
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import { useEffect, useState } from "react";
 
 function readAndUpdateStreak() {
@@ -30,8 +32,8 @@ export default function DailyStreak() {
 
   return (
     <div className="rounded-2xl border border-yellow-500/20 bg-yellow-500/10 p-4">
-      <p className="text-sm text-yellow-300">Daily Momentum</p>
-      <p className="text-xl font-bold text-white">{streak} day streak</p>
+      <p className="text-sm text-yellow-300"><LocalizedText text={"Daily Momentum"} /></p>
+      <p className="text-xl font-bold text-white">{streak}{" "}<LocalizedText text={"day streak"} /></p>
     </div>
   );
 }

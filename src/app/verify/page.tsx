@@ -1,6 +1,8 @@
 "use client";
 
 
+
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import { LocalizedText } from "@/components/localization/LocaleProvider";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
@@ -28,22 +30,13 @@ export default function VerifyPage() {
       <section className="mx-auto max-w-6xl overflow-hidden rounded-[34px] border border-white/10 bg-[var(--tgpi-navy-raised)] shadow-[0_32px_110px_rgba(0,0,0,.32)]">
         <div className="grid lg:grid-cols-[1fr_370px]">
           <div className="p-8 sm:p-12 lg:p-14">
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#E8CC7B]">
-              TGPI Public Trust Registry
-            </p>
-            <h1 className="mt-5 max-w-3xl font-[var(--tgpi-font-display)] text-[clamp(3.2rem,7vw,6.4rem)] font-semibold leading-[.9] tracking-[-0.05em]">
-              Verify the claim. Inspect the evidence.
-            </h1>
-            <p className="mt-6 max-w-2xl text-base leading-8 text-[#C8D1DE]">
-              Confirm the live status, issuer, assessed skills, identity binding
-              and integrity state behind a TGPI learning credential.
-            </p>
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#E8CC7B]"><LocalizedText text={"TGPI Public Trust Registry"} /></p>
+            <h1 className="mt-5 max-w-3xl font-[var(--tgpi-font-display)] text-[clamp(3.2rem,7vw,6.4rem)] font-semibold leading-[.9] tracking-[-0.05em]"><LocalizedText text={"Verify the claim. Inspect the evidence."} /></h1>
+            <p className="mt-6 max-w-2xl text-base leading-8 text-[#C8D1DE]"><LocalizedText text={"Confirm the live status, issuer, assessed skills, identity binding and integrity state behind a TGPI learning credential."} /></p>
 
             <form onSubmit={submit} className="mt-10">
               <fieldset>
-                <legend className="text-xs font-extrabold text-[#E7ECF2]">
-                  Record type
-                </legend>
+                <legend className="text-xs font-extrabold text-[#E7ECF2]"><LocalizedText text={"Record type"} /></legend>
                 <div className="mt-3 flex flex-wrap gap-3">
                   {([
                     ["credential", "Learning credential"],
@@ -69,7 +62,7 @@ export default function VerifyPage() {
                         }}
                         className="sr-only"
                       />
-                      {label}
+                      <LocalizedText text={label} />
                     </label>
                   ))}
                 </div>
@@ -80,11 +73,11 @@ export default function VerifyPage() {
                 className="mt-7 block text-xs font-extrabold text-[#E7ECF2]"
               >
                 {recordType === "credential"
-                  ? "Credential ID"
-                  : "Portable Global Key proof"}
+                  ? <LocalizedText text={"Credential ID"} />
+                  : <LocalizedText text={"Portable Global Key proof"} />}
               </label>
               <div className="mt-3 flex flex-col gap-3 sm:flex-row">
-                <input
+                <LocalizedElement as="input"
                   id="verification-reference"
                   value={reference}
                   onChange={(event) =>
@@ -103,9 +96,7 @@ export default function VerifyPage() {
                   type="submit"
                   disabled={!reference.trim()}
                   className="min-h-14 rounded-2xl bg-[#E5BF5A] px-7 text-sm font-extrabold text-[var(--tgpi-navy-raised)] disabled:cursor-not-allowed disabled:opacity-40"
-                >
-                  Verify record →
-                </button>
+                ><LocalizedText text={"Verify record →"} /></button>
               </div>
             </form>
           </div>
@@ -125,18 +116,15 @@ export default function VerifyPage() {
                     {String(index + 1).padStart(2, "0")}
                   </span>
                   <div>
-                    <p className="text-sm font-extrabold">{title}</p>
+                    <p className="text-sm font-extrabold"><LocalizedText text={title} /></p>
                     <p className="mt-1 text-xs leading-6 text-[#9EABBC]">
-                      {description}
+                      <LocalizedText text={description} />
                     </p>
                   </div>
                 </div>
               ))}
             </div>
-            <p className="mt-8 border-t border-white/10 pt-6 text-xs leading-6 text-[#9EABBC]">
-              Verification confirms a TGPI-issued learning record. It does not
-              convert that record into government or third-party accreditation.
-            </p>
+            <p className="mt-8 border-t border-white/10 pt-6 text-xs leading-6 text-[#9EABBC]"><LocalizedText text={"Verification confirms a TGPI-issued learning record. It does not convert that record into government or third-party accreditation."} /></p>
           </aside>
         </div>
       </section>

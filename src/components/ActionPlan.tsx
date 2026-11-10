@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 export default function ActionPlan() {
   const steps = [
     "Complete your profile",
@@ -8,14 +10,12 @@ export default function ActionPlan() {
 
   return (
     <section className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-      <h2 className="text-xl font-bold text-yellow-400">
-        Your Action Plan
-      </h2>
+      <h2 className="text-xl font-bold text-yellow-400"><LocalizedText text={"Your Action Plan"} /></h2>
 
       <ul className="mt-4 space-y-2">
         {steps.map((s, i) => (
           <li key={i} className="text-sm text-slate-300">
-            • {s}
+            • <LocalizedText text={s} />
           </li>
         ))}
       </ul>

@@ -28,10 +28,7 @@ export default function ProfileShareCard({
     <section className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
       <h2 className="text-xl font-bold text-yellow-400"><LocalizedText text={"Share Your Global Profile"} /></h2>
 
-      <p className="mt-3 text-sm leading-7 text-slate-300">
-        Turn your TGPI identity into a public signal. Share your profile with
-        people, communities, and opportunities outside the platform.
-      </p>
+      <p className="mt-3 text-sm leading-7 text-slate-300"><LocalizedText text={"Turn your TGPI identity into a public signal. Share your profile with people, communities, and opportunities outside the platform."} /></p>
 
       <div className="mt-6 flex flex-col gap-3 md:flex-row">
         <input
@@ -44,7 +41,7 @@ export default function ProfileShareCard({
           onClick={handleCopy}
           className="rounded-xl bg-yellow-500 px-6 py-3 text-sm font-bold text-black transition hover:bg-yellow-400"
         >
-          {copied ? "Copied" : "Copy Profile Link"}
+          {copied ? <LocalizedText text={"Copied"} /> : <LocalizedText text={"Copy Profile Link"} />}
         </button>
       </div>
     </section>

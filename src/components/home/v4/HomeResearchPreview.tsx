@@ -1,4 +1,6 @@
 'use client';
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import { useState } from 'react';
 import Link from 'next/link';
 import { useLocale } from '@/components/localization/LocaleProvider';
@@ -15,7 +17,7 @@ export default function HomeResearchPreview() {
   return <aside className={styles.researchPreview} aria-label={t('Example Country Fit research plan')}>
     <div className={styles.previewTop}><span>{t('Country Fit')}</span><span className={styles.exampleBadge}>{t('Example plan')}</span></div>
     <p className={styles.previewTitle}>{t('A move starts with better questions.')}</p>
-    <label className={styles.previewDestination} htmlFor="home-preview-country"><span>{t('Work abroad')}</span><select id="home-preview-country" aria-label={t('Choose a country')} value={country.slug} onChange={event => setSlug(event.target.value)}>{destinations.map(item => <option key={item.slug} value={item.slug}>{t(item.name)}</option>)}</select></label>
+    <label className={styles.previewDestination} htmlFor="home-preview-country"><span>{t('Work abroad')}</span><select id="home-preview-country" aria-label={t('Choose a country')} value={country.slug} onChange={event => setSlug(event.target.value)}>{destinations.map(item => <option key={item.slug} value={item.slug}><LocalizedText text={t(item.name)} /></option>)}</select></label>
     <ol>{tasks.map((task,index) => <li key={task.id}><span aria-hidden="true">0{index+1}</span><Link href={task.href.startsWith('#') ? `/countries/${country.slug}${task.href}` : task.href}>{t(task.title)}<span aria-hidden="true">↗</span></Link></li>)}</ol>
     <Link className={styles.previewLink} href={`/country-fit?country=${country.slug}&goal=work`}>{t('Try this research plan')} <span aria-hidden="true">→</span></Link>
   </aside>;

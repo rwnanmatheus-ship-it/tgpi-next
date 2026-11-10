@@ -1,5 +1,7 @@
 "use client";
 
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 type Props = {
   title: string;
   subtitle?: string;
@@ -14,12 +16,12 @@ export default function PageContainer({ title, subtitle, children }: Props) {
         {/* HEADER PADRÃO */}
         <div className="mb-10">
           <h1 className="text-4xl font-bold text-yellow-400">
-            {title}
+            <LocalizedText text={title} />
           </h1>
 
           {subtitle && (
             <p className="mt-3 text-slate-400">
-              {subtitle}
+              <LocalizedText text={subtitle} />
             </p>
           )}
         </div>

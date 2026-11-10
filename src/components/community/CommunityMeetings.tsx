@@ -1,4 +1,6 @@
 "use client";
+
+import { useLocale as useFormattingLocale } from "@/components/localization/LocaleProvider";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import type { GlobalSession, Page } from "@/lib/community/model";
@@ -18,6 +20,7 @@ export default function CommunityMeetings({
   action: Action;
   busy: boolean;
 }) {
+  const { locale } = useFormattingLocale();
   const [items, setItems] = useState<Session[]>([]),
     [loading, setLoading] = useState(true),
     [error, setError] = useState("");
@@ -40,14 +43,11 @@ export default function CommunityMeetings({
   return (
     <section className={s.panel}>
       <h2><LocalizedText text="Global Sessions" /></h2>
-      <p>
-        Upcoming exchanges from up to eight of your active communities. Times
-        are shown in your current time zone.
-      </p>
+      <p><LocalizedText text={"Upcoming exchanges from up to eight of your active communities. Times are shown in your current time zone."} /></p>
       {loading && <p role="status"><LocalizedText text={"Loading…"} /></p>}
       {error && (
         <p className={s.error} role="alert">
-          {error}
+          <LocalizedText text={error} />
         </p>
       )}
       {items.map((e) => (
@@ -56,18 +56,16 @@ export default function CommunityMeetings({
           <h3>{e.title}</h3>
           <p>{e.description}</p>
           <time dateTime={e.startsAt}>
-            {new Date(e.startsAt).toLocaleString()}
+            {new Date(e.startsAt).toLocaleString(locale)}
           </time>
-          <p className={s.meta}>
-            Original time:{" "}
-            {new Date(e.startsAt).toLocaleString(undefined, {
+          <p className={s.meta}><LocalizedText text={"Original time:"} />{" "}
+            {new Date(e.startsAt).toLocaleString(locale, {
               timeZone: e.timeZone,
             })}{" "}
             · {e.timeZone}
           </p>
           <p>
-            {e.attendeeCount}/{e.capacity} attending
-          </p>
+            {e.attendeeCount}/{e.capacity}{" "}<LocalizedText text={"attending"} /></p>
           <button
             className={s.secondary}
             disabled={busy}
@@ -85,7 +83,7 @@ export default function CommunityMeetings({
               }
             }}
           >
-            {e.attending ? "Cancel RSVP" : "Attend session"}
+            {e.attending ? <LocalizedText text={"Cancel RSVP"} /> : <LocalizedText text={"Attend session"} />}
           </button>
           {e.attending && e.url && (
             <a
@@ -98,10 +96,7 @@ export default function CommunityMeetings({
         </article>
       ))}
       {!loading && !items.length && !error && (
-        <p>
-          No upcoming sessions in these communities. Events appear here when
-          their organizers schedule them.
-        </p>
+        <p><LocalizedText text={"No upcoming sessions in these communities. Events appear here when their organizers schedule them."} /></p>
       )}
     </section>
   );

@@ -1,5 +1,7 @@
 "use client";
 
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 type TabKey = "overview" | "edit" | "goals" | "activity" | "settings";
 
 const tabs: { key: TabKey; label: string }[] = [
@@ -34,7 +36,7 @@ export default function ProfileTabs({
                   : "border border-white/8 bg-white/[0.03] text-white hover:border-yellow-500/30 hover:text-yellow-300"
               }`}
             >
-              {tab.label}
+              <LocalizedText text={tab.label} />
             </button>
           );
         })}

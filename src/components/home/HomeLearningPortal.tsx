@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "@/components/localization/LocalizedImage";
 import Link from "next/link";
 import { coursesOverview } from "@/data/courses-overview";
 import { LocalizedText } from "@/components/localization/LocaleProvider";
@@ -20,18 +20,12 @@ export default function HomeLearningPortal() {
       <div className="mx-auto max-w-[1280px]">
         <div className="grid gap-10 xl:grid-cols-[0.78fr_1.22fr] xl:items-center">
           <div>
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[var(--tgpi-gold-strong)]">
-              TGPI Learning
-            </p>
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[var(--tgpi-gold-strong)]"><LocalizedText text={"TGPI Learning"} /></p>
             <h2
               id="home-learning-title"
               className="mt-4 font-[var(--tgpi-font-display)] text-[clamp(2.8rem,5vw,4.8rem)] font-semibold leading-[0.95] text-[var(--tgpi-ink)]"
-            >
-              Education that closes the gap between information and action.
-            </h2>
-            <p className="mt-5 max-w-2xl text-base leading-8 text-[var(--tgpi-muted)] sm:text-lg">
-              TGPI Learning develops the practical capability revealed by your global objective—from communication and independence to cultural safety and career action.
-            </p>
+            ><LocalizedText text={"Education that closes the gap between information and action."} /></h2>
+            <p className="mt-5 max-w-2xl text-base leading-8 text-[var(--tgpi-muted)] sm:text-lg"><LocalizedText text={"TGPI Learning develops the practical capability revealed by your global objective—from communication and independence to cultural safety and career action."} /></p>
 
             <div className="mt-7 grid gap-3 sm:grid-cols-2">
               {learningOutcomes.map(([title, description], index) => (
@@ -41,10 +35,10 @@ export default function HomeLearningPortal() {
                       0{index + 1}
                     </span>
                     <h3 className="font-[var(--tgpi-font-display)] text-2xl font-semibold text-[var(--tgpi-navy)]">
-                      {title}
+                      <LocalizedText text={title} />
                     </h3>
                   </div>
-                  <p className="mt-3 text-sm leading-7 text-[var(--tgpi-muted)]">{description}</p>
+                  <p className="mt-3 text-sm leading-7 text-[var(--tgpi-muted)]"><LocalizedText text={description} /></p>
                 </div>
               ))}
             </div>
@@ -57,9 +51,7 @@ export default function HomeLearningPortal() {
               <Link
                 href="/courses/global-english-2026"
                 className="inline-flex min-h-14 items-center justify-center rounded-2xl border border-[var(--tgpi-gold)] bg-white px-6 text-sm font-extrabold text-[var(--tgpi-navy)] transition hover:-translate-y-0.5 hover:bg-[var(--tgpi-gold-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
-              >
-                Start English for Life Abroad
-              </Link>
+              ><LocalizedText text={"Start English for Life Abroad"} /></Link>
             </div>
           </div>
 
@@ -77,15 +69,9 @@ export default function HomeLearningPortal() {
               <div className="absolute inset-x-4 bottom-4 rounded-[20px] border border-white/15 bg-[#041426]/76 p-4 backdrop-blur-xl sm:inset-x-5 sm:bottom-5 sm:p-5">
                 <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
                   <div>
-                    <p className="text-[9px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-light)]">
-                      First complete capability path
-                    </p>
-                    <p className="mt-2 font-[var(--tgpi-font-display)] text-3xl font-semibold text-white">
-                      English for Life Abroad
-                    </p>
-                    <p className="mt-2 text-xs leading-6 text-white/60">
-                      Practical communication for housing, safety, work and daily independence.
-                    </p>
+                    <p className="text-[9px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-light)]"><LocalizedText text={"First complete capability path"} /></p>
+                    <p className="mt-2 font-[var(--tgpi-font-display)] text-3xl font-semibold text-white"><LocalizedText text={"English for Life Abroad"} /></p>
+                    <p className="mt-2 text-xs leading-6 text-white/60"><LocalizedText text={"Practical communication for housing, safety, work and daily independence."} /></p>
                   </div>
                   <Link
                     href="/courses/global-english-2026"
@@ -109,7 +95,7 @@ export default function HomeLearningPortal() {
                     <span className="text-[var(--tgpi-gold-light)] transition group-hover:translate-x-1">→</span>
                   </div>
                   <p className="mt-4 text-sm font-extrabold leading-6 text-white"><LocalizedText text={course.title} /></p>
-                  <p className="mt-2 text-xs leading-5 text-white/45">{course.status === "available" ? <LocalizedText text={"Available now"} /> : "Capability roadmap"}</p>
+                  <p className="mt-2 text-xs leading-5 text-white/45">{course.status === "available" ? <LocalizedText text={"Available now"} /> : <LocalizedText text={"Capability roadmap"} />}</p>
                 </Link>
               ))}
             </div>

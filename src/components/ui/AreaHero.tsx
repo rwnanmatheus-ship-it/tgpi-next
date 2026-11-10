@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "@/components/localization/LocalizedImage";
 import CinematicImage from './CinematicImage';
 import { cinematicKeyFromUrl } from '@/lib/cinematic-art';
 import { LocalizedText } from "@/components/localization/LocaleProvider";
@@ -28,7 +28,7 @@ export default function AreaHero({ id, eyebrow, title, description, image = "/im
       </div>
       <div className="tgpi-area-hero-content">
         <p className="tgpi-area-eyebrow"><LocalizedText text={eyebrow} /></p>
-        <Heading id={id}>{title}</Heading>
+        <Heading id={id}><LocalizedText text={title} /></Heading>
         <p className="tgpi-area-description"><LocalizedText text={description} /></p>
         {actions.length ? <div className="tgpi-area-actions">{actions.map((action, index) => <Link key={action.href} href={action.href} className={index === 0 ? "tgpi-area-primary" : "tgpi-area-secondary"}><LocalizedText text={action.label} /><span aria-hidden="true">↗</span></Link>)}</div> : null}
         {children}

@@ -1,29 +1,21 @@
-# Platform interface languages
+# Platform languages
 
-The interface locale is independent of citizenship and spoken/learning languages. Supported values are `en`, `pt-BR`, `es`, `fr`, `de`, and `it`.
+Supported interface locales: `en`, `pt-BR`, `es`, `fr`, `de`, `it`. Language is independent of citizenship and learning-language selection.
 
-The root layout first reads the validated `tgpi_locale` HTTP-only cookie. Without an explicit device choice, it restores the account preference and then falls back to weighted browser language negotiation. This prevents stale identity metadata from reverting a newly selected language and avoids an unnecessary Clerk request when the cookie is present. `POST /api/preferences/locale` requires a same-origin request and an allowlisted locale. For a signed-in member it deep-merges the single `unsafeMetadata.tgpiLocale` preference with Clerk; for a guest it writes the cookie only. This preference is never an authorization signal. A signed-in account restores an explicit choice once per identity on a new device. Interface changes refresh server components while preserving client state.
+`getLocale` resolves a validated device cookie, then account preference, then weighted browser language negotiation. The same resolver loads the selected supplemental dictionary for server pages and metadata. `LocaleProvider` registers the SSR dictionary before descendants render. Changing language loads the next dictionary, persists the preference through the same-origin preference API, updates client context and refreshes server components. A storage signal synchronizes other tabs. Authentication changes refresh server state instead of overwriting account preferences from stale browser state.
 
-`LocaleProvider`, `useLocale`, and `LocalizedText` connect client and server-rendered UI to a reviewed static catalog. English source messages remain the keys; identifiers, slugs, saved form values, curriculum records, member contributions, assessment answers, billing amounts and signed credential snapshots must not be translated in storage.
+`LocalizedText` and `useLocale().t` translate authored presentation text. `LocalizedElement`, `LocalizedImage` and `LocalizedLink` translate accessible attributes while retaining values, events, refs and navigation. `localizeAuthoredContent` is restricted to versioned TGPI-authored curriculum; it preserves identifiers, code and target-language practice. Never pass profiles, conversations, member submissions or signed credential records to this helper.
 
-## Coverage and limits
+Public dictionaries live in `public/locales/{locale}.json`, with common control strings in `src/lib/localization/messages.ts`. Protected assessment translations live in `src/lib/localization/assessment-messages.json` and are imported through a `server-only` module. Do not put private assessment checkpoints into public dictionaries. Runtime translation does not call an external API.
 
-This release establishes the six-language infrastructure and translates the global navigation, account menu, authentication controls, footer, home navigation and many labels across the country explorer, learning catalog, profile, preparation, community and workspace. The language picker uses bundled SVG flags with native language names, keyboard-accessible buttons, outside-click dismissal and Escape dismissal. Flag illustrations are visual cues only and never set citizenship. Catalogue cards translate titles, descriptions, categories, series and visible outcomes, while series filter values remain stable source identifiers. The global journey and capability rail share the same locale.
+## Extending authored copy
 
-The four home goal journeys now translate their complete guidance, checklists and outcome text; the six home FAQs translate both questions and full answers. Country names use reviewed generated CLDR display names. The same fallback serves unknown strings in their original language.
+1. Add complete six-language entries, retaining exact placeholders, factual qualifications, brands and numerical meaning. Source keys may be English or the legacy authored language.
+2. Wire the rendering through localization. Translate labels while keeping option values, routes and stored identifiers stable. Use whole-sentence placeholders when inserting dynamic values.
+3. Use `Intl` with the selected locale for dates and numbers. Currency codes and original amounts remain unchanged.
+4. Run `npm run check:localization`, `npm run test:localization`, `npm run typecheck`, and `npm run build`. Confirm the selector and page reload in the browser. Builds fail for new unregistered literal copy or registered literals rendered without localization.
+5. Bump `src/lib/localization/catalog-version.ts` when dictionary assets change.
 
-It is **not a complete translation of every page, lesson, country dossier, legal document, notification payload or error message**. The full selector explicitly explains that some content remains in its original language. Source curriculum, certification questions and community contributions require a separate content-localization workflow and must preserve their assessment and provenance semantics. Do not advertise 100% platform translation until those migrations are complete.
+`scripts/localization-inventory.mjs --json` inventories authored source candidates for review. `scripts/localization-translate.mjs --input=... --output=... --budget-usd=...` is an optional, explicitly authorized offline authoring job using a configured OpenAI key. It checkpoints validated batches, enforces a budget and placeholder equality, disables provider storage, and never prints credentials. It must not run during builds or requests. `scripts/localization-compile.mjs checkpoint.json ...` validates and merges public entries; protected assessment checkpoints are rejected. Review inventory scope before sending any source text to an external service.
 
-The home presentation, access shell, and evidence cards now translate their static explanatory text, while evidence values and collection dates use the selected locale. Source names, statistical values, source links, and licensing identifiers remain authoritative. Sign-in and sign-up include their own language picker.
-
-## Extending coverage
-
-1. Add the complete English source string and translations for all six locales to `src/lib/localization/messages.ts`.
-2. Render presentation strings with `LocalizedText`, or `useLocale().t` in a client component. Use `getLocale` and `translate` for server strings and attributes. Never call client hooks from server components.
-3. Keep identifiers and form option values stable; translate their labels only. Preserve the `use client` directive before imports.
-4. Translate accessible names and search presentation strings alongside visible labels. Use `Intl` for locale-sensitive dates, numbers and currencies when migrating individual features.
-5. Run `npm run test:localization`, `npm run typecheck`, the applicable lint checks and required prebuild tests. Verify the full browser → preference API → cookie → refreshed UI flow and a page reload. Verify account restoration separately with a signed-in test member.
-
-The shared journey-continuation block translates its destination label, guidance and accessible name without changing route targets.
-
-Atlas UI and recovery coverage: chat controls, starter prompts, consent and retention notices, known service failures, shared-field labels, global/workspace/identity loading and error screens, and country-not-found guidance now use all six locales. Clicking a starter inserts its translated text; existing message bodies, conversation titles, draft text, IDs and scopes are preserved. Translating the interface does not enable AI generation or translate existing conversations. Error recovery uses Next 16 `retry()` to re-fetch failed route content. Preview rendering is tested for each locale with sending disabled and no API calls. Authenticated chat/storage flows still require separate account testing.
+See `docs/localization/COVERAGE.md` for release scope, intentional preservation and validation limits.

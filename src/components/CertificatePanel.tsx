@@ -22,9 +22,7 @@ export default function CertificatePanel() {
   return (
     <section className="rounded-3xl border border-slate-800 bg-slate-900 p-8">
       <h2 className="text-2xl font-bold text-yellow-400"><LocalizedText text="Certificates" /></h2>
-      <p className="mt-2 text-slate-400">
-        Your completed learning achievements inside TGPI.
-      </p>
+      <p className="mt-2 text-slate-400"><LocalizedText text={"Your completed learning achievements inside TGPI."} /></p>
 
       <div className="mt-6 space-y-4">
         {certificates.map((certificate) => (
@@ -35,7 +33,7 @@ export default function CertificatePanel() {
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
                 <h3 className="text-lg font-semibold text-white">
-                  {certificate.title}
+                  <LocalizedText text={certificate.title} />
                 </h3>
                 <p className="mt-1 text-sm text-slate-400"><LocalizedText text="Issued on" />{" "}{certificate.issuedAt}
                 </p>

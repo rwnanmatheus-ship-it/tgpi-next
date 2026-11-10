@@ -25,7 +25,7 @@
     "test:capability-system": "node --experimental-strip-types --test scripts/capability-system.test.mjs",
     "test:navigation-system": "node --experimental-strip-types --test scripts/navigation-system.test.mjs",
     "test:home": "node --experimental-strip-types --test scripts/home-conversion.test.mjs",
-    "prebuild": "npm run test:all",
+    "prebuild": "npm run test:all && npm run check:localization",
     "test:notifications": "node --experimental-strip-types --test scripts/notifications.test.mjs scripts/notification-account.test.mjs scripts/notification-timeline.test.mjs scripts/notification-push.test.mjs",
     "test:certificate-pdf": "node --experimental-strip-types --test scripts/certificate-pdf.test.mjs",
     "test:community": "node --test scripts/community.test.mjs scripts/community-lifecycle.test.mjs scripts/community-lifecycle-api.test.mjs",
@@ -37,7 +37,8 @@
     "test:all": "node --experimental-strip-types --test --test-concurrency=2 scripts/*.test.mjs",
     "test:premium-scenarios": "node --experimental-strip-types --test scripts/premium-scenarios.test.mjs",
     "test:seo": "node --test scripts/seo.test.mjs",
-    "verify:seo": "node scripts/seo-audit.mjs"
+    "verify:seo": "node scripts/seo-audit.mjs",
+    "check:localization": "node scripts/localization-audit.mjs --check"
   },
   "dependencies": {
     "@clerk/localizations": "^4.24.2",

@@ -1,7 +1,9 @@
 "use client";
+
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import { useEffect, useState } from "react";
 import { useUser } from "@clerk/nextjs";
-import { useLocale } from "@/components/localization/LocaleProvider";
+import { useLocale , LocalizedText } from "@/components/localization/LocaleProvider";
 import { notificationText } from "@/lib/notifications/text";
 import {
   clearLocalPush,
@@ -158,19 +160,19 @@ export default function NotificationDevices() {
           {config.devices.map((device) => (
             <li key={device.id}>
               <span>
-                <strong>{device.label}</strong>
+                <strong><LocalizedText text={device.label} /></strong>
                 <small>
                   {new Date(device.updatedAt).toLocaleDateString(locale)}
                 </small>
               </span>
-              <button
+              <LocalizedElement as="button"
                 type="button"
                 disabled={busy}
                 onClick={() => void action("remove", device.id)}
                 aria-label={`${t("remove")} ${device.label}`}
               >
                 {t("remove")}
-              </button>
+              </LocalizedElement>
             </li>
           ))}
         </ul>

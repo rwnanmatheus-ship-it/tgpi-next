@@ -11482,6 +11482,17 @@ const catalog: Readonly<Record<string, Readonly<Record<Locale, string>>>> = mess
 function normalizeMessage(text: string): string {
   return text.normalize('NFC').replace(/\s+/g, ' ').trim().toLowerCase();
 }
+export type SupplementalMessages = Readonly<Record<string, string>>;
+const supplemental = new Map<Locale, ReadonlyMap<string, string>>();
+const supplementalSources = new Map<Locale, SupplementalMessages>();
+/** Dictionaries are compiled offline and loaded only for languages used this visit. */
+export function registerSupplementalMessages(locale: Locale, entries: SupplementalMessages) {
+  if (supplementalSources.get(locale) === entries) return;
+  const normalized = new Map<string, string>();
+  for (const [source, translated] of Object.entries(entries)) normalized.set(normalizeMessage(source), translated);
+  supplemental.set(locale, normalized);
+  supplementalSources.set(locale, entries);
+}
 const normalizedMessages = new Map(Object.entries(catalog).map(([key, value]) => [normalizeMessage(key), value]));
 // Legacy screens sometimes use a translated source string. Only unambiguous aliases
 // are accepted; canonical keys always win over aliases from another language.
@@ -11502,12 +11513,16 @@ function findMessage(key: string): Readonly<Record<Locale, string>> | undefined 
 function messageTemplate(locale: Locale, key: string): string {
   const direct = findMessage(key);
   if (direct) return direct[locale];
+  const extra = supplemental.get(locale)?.get(normalizeMessage(key));
+  if (extra !== undefined) return extra;
   // Keep decorative arrows, section numbers and punctuation outside the message.
   // Matching is anchored and requires the whole remaining phrase to be registered.
   const decorated = key.match(/^(\d{1,2}\s*[—–/]\s*|[\s\p{S}→←↗↓↑•✓●·—–/]*)(.*?)([\s→←↗↓↑·:./!?…]*)$/u);
   if (decorated && decorated[2]) {
     const core = findMessage(decorated[2]);
     if (core) return decorated[1] + core[locale] + decorated[3];
+    const extraCore = supplemental.get(locale)?.get(normalizeMessage(decorated[2]));
+    if (extraCore !== undefined) return decorated[1] + extraCore + decorated[3];
   }
   return key;
 }

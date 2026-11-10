@@ -1,4 +1,6 @@
-import Image from "next/image";
+
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
+import Image from "@/components/localization/LocalizedImage";
 import type { GlobalRank, GlobalRankDefinition } from "@/lib/global-ranks";
 
 const sizes = {
@@ -17,7 +19,7 @@ export default function GlobalRankBadge({
   const config = sizes[size];
 
   return (
-    <span
+    <LocalizedElement as="span"
       aria-label={`${rank.name} TGPI rank emblem`}
       className={`relative block shrink-0 drop-shadow-[0_14px_24px_rgba(0,0,0,0.28)] ${config.className}`}
       role="img"
@@ -29,6 +31,6 @@ export default function GlobalRankBadge({
         src={rank.image}
         width={config.pixels}
       />
-    </span>
+    </LocalizedElement>
   );
 }

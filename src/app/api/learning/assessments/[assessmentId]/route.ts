@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { assessmentTranslations } from "@/lib/localization/assessment.server";
 import { requireApiUser, TgpiAuthenticationError } from "@/lib/auth/guards";
 import { FirestoreAdminError } from "@/lib/firestore-admin-rest.server";
 import {
@@ -49,7 +50,7 @@ export async function POST(
       assessmentId,
       input,
     );
-    return json(outcome);
+    return json({ ...outcome, result: { ...outcome.result, feedback: outcome.result.feedback.map(item => ({ ...item, explanationTranslations: assessmentTranslations(item.explanation) })) } });
   } catch (error) {
     if (error instanceof SyntaxError) {
       return json({ error: "Assessment submission is not valid JSON." }, 400);

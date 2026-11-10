@@ -39,7 +39,7 @@ export default function HomeGoalExplorer() {
     </div>
     <div className={styles.goalResult}>
       <div aria-live="polite" aria-atomic="true"><p className={styles.goalResultLabel}>{t("Your starting point · {goal}", { goal: t(current.label) })}</p><h3>{t(current.heading)}</h3><p className={styles.goalDescription}>{t(current.copy)}</p><ul>{current.checks.map(check => <li key={check}><span aria-hidden="true">✓</span>{t(check)}</li>)}</ul><p className={styles.goalOutcome}>{t(current.outcome)}</p></div>
-      <div className={styles.goalLaunch}><label htmlFor="home-research-country"><LocalizedText text="Start researching" /><select id="home-research-country" name="country" defaultValue="portugal"><option value="portugal">{t("Portugal")}</option><option value="canada">{t("Canada")}</option></select></label><button type="submit" className={styles.primary}><LocalizedText text="Build my research plan" />{" "}<span aria-hidden="true">→</span></button></div>
+      <div className={styles.goalLaunch}><label htmlFor="home-research-country"><LocalizedText text="Start researching" /><select id="home-research-country" name="country" defaultValue="portugal"><option value="portugal"><LocalizedText text={t("Portugal")} /></option><option value="canada"><LocalizedText text={t("Canada")} /></option></select></label><button type="submit" className={styles.primary}><LocalizedText text="Build my research plan" />{" "}<span aria-hidden="true">→</span></button></div>
       <p className={styles.goalHint}><LocalizedText text="Example destinations. Country Fit lets you explore other countries and save a plan after signing in." /></p>
     </div>
   </form>;

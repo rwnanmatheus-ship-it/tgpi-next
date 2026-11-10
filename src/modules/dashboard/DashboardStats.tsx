@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 const stats = [
   { title: "Countries Explored", value: "24", subtitle: "of 195 countries" },
   { title: "Courses in Progress", value: "8", subtitle: "keep learning" },
@@ -14,9 +16,9 @@ export default function DashboardStats() {
           key={item.title}
           className="rounded-2xl border border-white/10 bg-white/5 p-5"
         >
-          <p className="text-sm text-slate-400">{item.title}</p>
+          <p className="text-sm text-slate-400"><LocalizedText text={item.title} /></p>
           <p className="mt-2 text-3xl font-bold text-white">{item.value}</p>
-          <p className="mt-1 text-xs text-yellow-400">{item.subtitle}</p>
+          <p className="mt-1 text-xs text-yellow-400"><LocalizedText text={item.subtitle} /></p>
         </div>
       ))}
     </section>

@@ -1,5 +1,7 @@
 "use client";
 
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import { useState } from "react";
 
 export default function FollowButton() {
@@ -12,7 +14,7 @@ export default function FollowButton() {
         following ? "bg-slate-700" : "bg-yellow-500 text-black"
       }`}
     >
-      {following ? "Following" : "Follow"}
+      {following ? <LocalizedText text={"Following"} /> : <LocalizedText text={"Follow"} />}
     </button>
   );
 }

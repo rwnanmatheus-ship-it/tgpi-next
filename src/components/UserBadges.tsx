@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 export default function UserBadges() {
   return (
     <div className="flex gap-2 flex-wrap">
@@ -11,7 +13,7 @@ export default function UserBadges() {
 function Badge({ label }: { label: string }) {
   return (
     <span className="bg-yellow-500/10 text-yellow-300 px-3 py-1 rounded-full text-xs">
-      {label}
+      <LocalizedText text={label} />
     </span>
   );
 }

@@ -13,18 +13,12 @@ export default function Missions() {
 
   return (
     <section className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-      <h2 className="text-yellow-400 font-bold text-xl">
-        🧠 Global Missions
-      </h2>
+      <h2 className="text-yellow-400 font-bold text-xl"><LocalizedText text={"🧠 Global Missions"} /></h2>
 
-      <p className="text-sm text-slate-400 mt-2">
-        Test your readiness and gain XP.
-      </p>
+      <p className="text-sm text-slate-400 mt-2"><LocalizedText text={"Test your readiness and gain XP."} /></p>
 
       <div className="mt-4 space-y-3">
-        <p className="text-white">
-          Do you need a visa to move abroad?
-        </p>
+        <p className="text-white"><LocalizedText text={"Do you need a visa to move abroad?"} /></p>
 
         <div className="flex gap-2">
           <button
@@ -38,8 +32,7 @@ export default function Missions() {
           ><LocalizedText text={"No"} /></button>
         </div>
 
-        <p className="text-yellow-400 font-bold mt-2">
-          XP: {score}
+        <p className="text-yellow-400 font-bold mt-2"><LocalizedText text={"XP:"} />{" "}{score}
         </p>
       </div>
     </section>

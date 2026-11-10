@@ -1,4 +1,8 @@
 "use client";
+
+
+import { useLocale as useFormattingLocale } from "@/components/localization/LocaleProvider";
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 
 import Link from "next/link";
@@ -20,11 +24,11 @@ export type CredentialPortfolioItem = {
 type PortfolioFilter = "all" | "active" | "revoked" | "replaced";
 type PortfolioSort = "newest" | "score" | "title";
 
-function formatDate(value: string) {
+function formatDate(locale: import('@/lib/localization/config').Locale, value: string) {
   const date = new Date(value);
   return Number.isNaN(date.getTime())
     ? "Date unavailable"
-    : new Intl.DateTimeFormat("en", {
+    : new Intl.DateTimeFormat(locale, {
         day: "numeric",
         month: "short",
         year: "numeric",
@@ -37,6 +41,7 @@ export default function CredentialPortfolioExplorer({
 }: {
   items: CredentialPortfolioItem[];
 }) {
+  const { locale } = useFormattingLocale();
   const { t: localizeLabel } = useInterfaceLocale();
 
   const [filter, setFilter] = useState<PortfolioFilter>("all");
@@ -95,15 +100,14 @@ export default function CredentialPortfolioExplorer({
           <h2 id="credential-portfolio-title"><LocalizedText text={"My certificates"} /></h2>
         </div>
         <span className="certificate-count">
-          {items.filter((item) => item.status === "active").length} earned
-        </span>
+          {items.filter((item) => item.status === "active").length}{" "}<LocalizedText text={"earned"} /></span>
       </div>
       {items.length > 0 ? (
         <>
           <div className="certificate-tools">
             <label>
               <span><LocalizedText text={"Search certificates"} /></span>
-              <input
+              <LocalizedElement as="input"
                 type="search"
                 value={query}
                 maxLength={120}
@@ -119,7 +123,7 @@ export default function CredentialPortfolioExplorer({
                   setSort(event.target.value as PortfolioSort)
                 }
               >
-                <option value="newest">Newest first</option>
+                <option value="newest"><LocalizedText text={"Newest first"} /></option>
                 <option value="score"><LocalizedText text={"Highest mastery"} /></option>
                 <option value="title"><LocalizedText text={"Course title"} /></option>
               </select>
@@ -140,7 +144,7 @@ export default function CredentialPortfolioExplorer({
                 aria-pressed={filter === option.value}
                 onClick={() => setFilter(option.value)}
               >
-                {option.label}
+                <LocalizedText text={option.label} />
                 <span>
                   {option.value === "all"
                     ? items.length
@@ -151,23 +155,22 @@ export default function CredentialPortfolioExplorer({
             ))}
           </div>
           <p role="status" aria-live="polite" className="certificate-feedback">
-            {message}
+            <LocalizedText text={message} />
           </p>
           <div className="certificate-earned-grid">
             {visible.map((item) => (
               <article className="certificate-earned" key={item.id}>
                 <div className="certificate-earned-top">
-                  <span>TGPI · Professional learning</span>
+                  <span><LocalizedText text={"TGPI · Professional learning"} /></span>
                   <span
                     className={`certificate-status${item.status === "revoked" ? " revoked" : ""}`}
                   >
-                    {item.status === "active" ? "Earned" : item.status === "replaced" ? "Replaced" : "Revoked"}
+                    {item.status === "active" ? <LocalizedText text={"Earned"} /> : item.status === "replaced" ? <LocalizedText text={"Replaced"} /> : <LocalizedText text={"Revoked"} />}
                   </span>
                 </div>
                 <h3>{item.courseTitle}</h3>
                 <p className="certificate-earned-meta">
-                  {item.assessmentScore}% mastery · {item.learningHours} hours
-                  <br /><LocalizedText text="Issued" />{" "}{formatDate(item.issuedAt)}
+                  {item.assessmentScore}<LocalizedText text={"% mastery ·"} />{" "}{item.learningHours}{" "}<LocalizedText text={"hours"} /><br /><LocalizedText text="Issued" />{" "}{formatDate(locale, item.issuedAt)}
                 </p>
                 <div className="certificate-skills">
                   {item.skills.slice(0, 4).map((skill) => (
@@ -199,9 +202,7 @@ export default function CredentialPortfolioExplorer({
                     <Link
                       className="certificate-button secondary"
                       href={`/verify/credentials/${encodeURIComponent(item.id)}`}
-                    >
-                      View status
-                    </Link>
+                    ><LocalizedText text={"View status"} /></Link>
                   )}
                 </div>
               </article>
@@ -227,11 +228,8 @@ export default function CredentialPortfolioExplorer({
             ✧
           </span>
           <div>
-            <h3>Your first achievement starts here.</h3>
-            <p>
-              Issued certificates will appear here with download and sharing
-              options. Explore your next certificate below.
-            </p>
+            <h3><LocalizedText text={"Your first achievement starts here."} /></h3>
+            <p><LocalizedText text={"Issued certificates will appear here with download and sharing options. Explore your next certificate below."} /></p>
           </div>
         </div>
       )}

@@ -1,9 +1,13 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import Link from "next/link";
 import { COUNTRY_SYSTEM_PATH } from "@/data/country-page-system";
 
 export default function CountriesSystemRail() {
   return (
-    <nav
+    <LocalizedElement as="nav"
       aria-label="TGPI country decision system"
       className="mt-4 overflow-hidden rounded-[26px] border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] shadow-[var(--tgpi-shadow-soft)]"
     >
@@ -19,21 +23,21 @@ export default function CountriesSystemRail() {
             </span>
             <span className="block min-w-0 sm:mt-3">
               <span className="block text-[9px] font-extrabold uppercase tracking-[0.14em] text-[var(--tgpi-gold-strong)]">
-                {step.label}
+                <LocalizedText text={step.label} />
               </span>
               <span className="mt-1 block text-sm font-extrabold text-[var(--tgpi-navy)]">
-                {step.title}
+                <LocalizedText text={step.title} />
                 <span className="ml-1 text-[var(--tgpi-gold-strong)] transition group-hover:translate-x-0.5">
                   →
                 </span>
               </span>
               <span className="mt-1 hidden text-xs leading-5 text-[var(--tgpi-muted)] lg:block">
-                {step.description}
+                <LocalizedText text={step.description} />
               </span>
             </span>
           </Link>
         ))}
       </div>
-    </nav>
+    </LocalizedElement>
   );
 }

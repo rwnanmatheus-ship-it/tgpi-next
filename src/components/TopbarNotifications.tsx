@@ -70,14 +70,11 @@ export default function TopbarNotifications() {
           <div className="mb-4 flex items-center justify-between">
             <div>
               <p className="text-sm font-semibold text-white"><LocalizedText text="Notifications" /></p>
-              <p className="mt-1 text-xs text-slate-400">
-                Quick updates from your account and the platform
-              </p>
+              <p className="mt-1 text-xs text-slate-400"><LocalizedText text={"Quick updates from your account and the platform"} /></p>
             </div>
 
             <span className="rounded-full border border-yellow-500/25 bg-yellow-500/10 px-3 py-1 text-[11px] font-semibold text-yellow-200">
-              {unreadCount} new
-            </span>
+              {unreadCount}{" "}<LocalizedText text={"new"} /></span>
           </div>
 
           <div className="space-y-3">
@@ -93,9 +90,9 @@ export default function TopbarNotifications() {
                     }`}
                   />
                   <div className="flex-1">
-                    <p className="text-sm font-semibold text-white">{item.title}</p>
+                    <p className="text-sm font-semibold text-white"><LocalizedText text={item.title} /></p>
                     <p className="mt-1 text-xs leading-5 text-slate-400">
-                      {item.description}
+                      <LocalizedText text={item.description} />
                     </p>
                     <p className="mt-2 text-[11px] text-slate-500">{item.time}</p>
                   </div>

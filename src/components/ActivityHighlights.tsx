@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 type ActivityHighlightsProps = {
   countriesExplored: number;
   certificatesEarned: number;
@@ -28,9 +30,7 @@ export default function ActivityHighlights({
 
   return (
     <section className="rounded-3xl border border-slate-800 bg-slate-900 p-8">
-      <h2 className="text-2xl font-bold text-yellow-400">
-        Activity Highlights
-      </h2>
+      <h2 className="text-2xl font-bold text-yellow-400"><LocalizedText text={"Activity Highlights"} /></h2>
 
       <div className="mt-6 grid gap-4 md:grid-cols-2">
         {actions.map((item) => (
@@ -38,7 +38,7 @@ export default function ActivityHighlights({
             key={item}
             className="rounded-2xl border border-slate-800 bg-slate-950 p-5"
           >
-            <p className="text-sm leading-7 text-slate-300">{item}</p>
+            <p className="text-sm leading-7 text-slate-300"><LocalizedText text={item} /></p>
           </div>
         ))}
       </div>

@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 export default function TrustLayerCard({
   verified,
   plan,
@@ -15,9 +17,7 @@ export default function TrustLayerCard({
 
   return (
     <section className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-      <h2 className="text-xl font-bold text-yellow-400">
-        Trust Layer
-      </h2>
+      <h2 className="text-xl font-bold text-yellow-400"><LocalizedText text={"Trust Layer"} /></h2>
 
       <div className="mt-4 space-y-3">
         {lines.map((line) => (
@@ -25,7 +25,7 @@ export default function TrustLayerCard({
             key={line}
             className="rounded-2xl border border-slate-800 bg-slate-950 p-4"
           >
-            <p className="text-sm text-slate-300">✔ {line}</p>
+            <p className="text-sm text-slate-300">✔ <LocalizedText text={line} /></p>
           </div>
         ))}
       </div>

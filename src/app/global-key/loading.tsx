@@ -1,6 +1,6 @@
 'use client';
 
-import { useLocale } from '@/components/localization/LocaleProvider';
+import { useLocale , LocalizedText } from '@/components/localization/LocaleProvider';
 export default function GlobalIdentityLoading() {
   const { t } = useLocale();
   return (
@@ -10,9 +10,7 @@ export default function GlobalIdentityLoading() {
       className="min-h-[65vh] bg-[#050C14] px-4 py-10 text-white"
     >
       <div className="mx-auto max-w-5xl rounded-3xl border border-white/10 bg-[#0B1F3A] p-6 sm:p-10">
-        <p className="text-xs font-bold uppercase tracking-widest text-[#E5B94B]">
-          TGPI Global ID
-        </p>
+        <p className="text-xs font-bold uppercase tracking-widest text-[#E5B94B]"><LocalizedText text={"TGPI Global ID"} /></p>
         <h1
           id="identity-loading-title"
           role="status"

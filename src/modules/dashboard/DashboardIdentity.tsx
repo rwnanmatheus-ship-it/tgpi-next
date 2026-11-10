@@ -33,10 +33,8 @@ export default function DashboardIdentity() {
   return (
     <section className="rounded-2xl border border-yellow-500/20 bg-gradient-to-br from-[#07111f] to-black p-5">
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="font-bold text-white">Your Global Profile</h2>
-        <Link href="/profile" className="text-xs text-yellow-400">
-          View full profile
-        </Link>
+        <h2 className="font-bold text-white"><LocalizedText text={"Your Global Profile"} /></h2>
+        <Link href="/profile" className="text-xs text-yellow-400"><LocalizedText text={"View full profile"} /></Link>
       </div>
 
       <div className="flex items-center gap-4">
@@ -52,10 +50,10 @@ export default function DashboardIdentity() {
 
         <div>
           <p className="text-xl font-bold text-white">
-            {profile?.displayName || profile?.name || "TGPI Member"}
+            {profile?.displayName || profile?.name || <LocalizedText text={"TGPI Member"} />}
           </p>
           <p className="text-sm text-slate-400">
-            @{profile?.username || "username"}
+            @{profile?.username || <LocalizedText text={"username"} />}
           </p>
           <p className="mt-2 text-xs text-yellow-400">
             {profile?.tgpiId || "TGPI-ID"}
@@ -70,15 +68,15 @@ export default function DashboardIdentity() {
         </div>
         <div className="rounded-xl border border-white/10 bg-white/5 p-3">
           <p className="text-lg font-bold">8</p>
-          <p className="text-xs text-slate-400">Courses</p>
+          <p className="text-xs text-slate-400"><LocalizedText text={"Courses"} /></p>
         </div>
         <div className="rounded-xl border border-white/10 bg-white/5 p-3">
           <p className="text-lg font-bold">17</p>
-          <p className="text-xs text-slate-400">Achievements</p>
+          <p className="text-xs text-slate-400"><LocalizedText text={"Achievements"} /></p>
         </div>
         <div className="rounded-xl border border-white/10 bg-white/5 p-3">
           <p className="text-lg font-bold">184h</p>
-          <p className="text-xs text-slate-400">Hours</p>
+          <p className="text-xs text-slate-400"><LocalizedText text={"Hours"} /></p>
         </div>
       </div>
     </section>

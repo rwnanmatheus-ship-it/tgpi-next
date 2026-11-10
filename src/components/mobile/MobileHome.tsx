@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image from "@/components/localization/LocalizedImage";
 import Link from "next/link";
 import { useState } from "react";
 import { Show } from "@clerk/nextjs";

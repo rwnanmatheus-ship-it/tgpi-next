@@ -5,7 +5,23 @@ import ts from 'typescript';
 const url = source => 'data:text/javascript;base64,' + Buffer.from(ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 } }).outputText).toString('base64');
 const configUrl = url(fs.readFileSync('src/lib/localization/config.ts', 'utf8'));
 const { locales, resolveLocale, negotiateLocale, isLocale } = await import(configUrl);
-const { messages, translate } = await import(url(fs.readFileSync('src/lib/localization/messages.ts', 'utf8')));
+const { messages, translate, registerSupplementalMessages } = await import(url(fs.readFileSync('src/lib/localization/messages.ts', 'utf8')));
+for (const locale of locales) registerSupplementalMessages(locale, JSON.parse(fs.readFileSync(`public/locales/${locale}.json`, 'utf8')));
+const mockReact = await import('react');
+function localizationDependency(name, locale) {
+  const t = (text, values) => typeof text === 'string' ? translate(locale, text, values) : text;
+  if (name === '@/components/localization/LocaleProvider') return { useLocale: () => ({ locale, t }), LocalizedText: ({ text, values }) => t(text, values) };
+  if (name === '@/components/localization/LocalizedElement') return { LocalizedElement: ({ as, ...props }) => mockReact.createElement(as, Object.fromEntries(Object.entries(props).map(([key, value]) => [key, ['aria-label', 'title', 'placeholder', 'alt'].includes(key) ? t(value) : value]))) };
+  if (name === '@/components/localization/LocalizedImage') return { __esModule: true, default: ({ fill, priority, ...props }) => mockReact.createElement('img', { ...props, alt: t(props.alt) }) };
+  if (name === '@/components/localization/LocalizedLink') return { __esModule: true, default: ({ prefetch, ...props }) => mockReact.createElement('a', { ...props, 'aria-label': t(props['aria-label']) }) };
+  if (name === '@/lib/localization/authored-content' || name === '@/lib/localization/metadata.server') {
+    const file = name.endsWith('authored-content') ? 'authored-content.ts' : 'metadata.server.ts';
+    const exports = {};
+    const compiled = ts.transpileModule(fs.readFileSync('src/lib/localization/' + file, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
+    new Function('require', 'exports', compiled)(dependency => dependency === 'server-only' ? {} : dependency === './server' ? { getLocale: async () => locale } : { translate }, exports);
+    return exports;
+  }
+}
 const { walletCopy } = await import(url(fs.readFileSync('src/lib/wallet/copy.ts', 'utf8')));
 const { atlasFreeCopy } = await import(url(fs.readFileSync('src/lib/atlas/free-copy.ts', 'utf8')));
 test('locale validation never accepts arbitrary cookie or metadata values', () => {
@@ -208,7 +224,7 @@ test('Atlas preview renders in all six locales without enabling sending or makin
       new Function('require', 'exports', code)(name => {
         if (name === 'react') return React;
         if (name === 'react/jsx-runtime') return runtime;
-        if (name === '@/components/localization/LocaleProvider') return { useLocale: () => ({ locale, t }), LocalizedText: ({ text }) => t(text) };
+        if (localizationDependency(name, locale)) return localizationDependency(name, locale);
         if (name === 'next/image' || name === '@/components/ui/CinematicImage') return { __esModule: true, default: ({ alt }) => React.createElement('span', { 'data-alt': alt }) };
         if (name === 'next/link') return { __esModule: true, default: ({ children, prefetch, ...props }) => React.createElement('a', props, children) };
         if (name === 'react-markdown') return { __esModule: true, default: ({ children }) => children };
@@ -248,7 +264,7 @@ test('cookies and refund policies translate every paragraph without changing lin
         if (name === 'react/jsx-runtime') return runtime;
         if (name === '@/lib/localization/server') return { getLocale: async () => locale };
         if (name === '@/lib/localization/messages') return { translate };
-        if (name === '@/components/localization/LocaleProvider') return { useLocale: () => ({ t: (key, values) => translate(locale, key, values) }), LocalizedText: ({ text }) => translate(locale, text) };
+        if (localizationDependency(name, locale)) return localizationDependency(name, locale);
         if (name === '@/lib/funnel') return { FUNNEL_CONSENT_COOKIE: 'tgpi_analytics_consent', hasFunnelConsent: () => false };
         if (name === 'next/link') return { __esModule: true, default: ({ children, prefetch, ...props }) => React.createElement('a', props, children) };
         if (name === '@/components/legal/LegalDocument') return { __esModule: true, default: () => null };
@@ -331,7 +347,7 @@ test('practice interface follows all six locales while English rehearsal input k
     new Function('require', 'exports', code)(name => {
       if (name === 'react') return React;
       if (name === 'react/jsx-runtime') return runtime;
-      if (name === '@/components/localization/LocaleProvider') return { useLocale: () => ({ locale, t }), LocalizedText: ({ text }) => t(text) };
+      if (localizationDependency(name, locale)) return localizationDependency(name, locale);
       throw Error(name);
     }, exports);
     for (const applied of [false, true]) {
@@ -374,7 +390,7 @@ test('course overview localizes controls and counts unique lessons without grant
       if (name === 'react') return React;
       if (name === 'react/jsx-runtime') return runtime;
       if (name === 'next/link') return { __esModule: true, default: ({ children, prefetch, ...props }) => React.createElement('a', props, children) };
-      if (name === '@/components/localization/LocaleProvider') return { useLocale: () => ({ locale, t }), LocalizedText: ({ text }) => t(text) };
+      if (localizationDependency(name, locale)) return localizationDependency(name, locale);
       if (name === '@/components/activation/ActivationProgressProvider') return { __esModule: true, default: ({ children }) => children, useActivationProgress: () => ({ error: '', isAuthenticated: false, isLoading: false, mutate: () => { throw Error('Render cannot write progress'); }, progress: { courseProgress: { [course.id]: { completedLessonIds: [lesson.id, lesson.id, 'removed-lesson'] } } } }) };
       if (name === '@/data/courses') return data;
       if (name === '@/lib/learning-standard') return standards;
@@ -410,7 +426,7 @@ test('workspace server presentation follows locale and preserves private identit
       if (name === 'react/jsx-runtime') return runtime;
       if (name === '@/lib/localization/server') return { getLocale: async () => locale };
       if (name === '@/lib/localization/messages') return { translate };
-      if (name === '@/components/localization/LocaleProvider') return { LocalizedText: ({ text }) => t(text) };
+      if (localizationDependency(name, locale)) return localizationDependency(name, locale);
       if (name === 'next/link') return { __esModule: true, default: ({ children, prefetch, ...props }) => React.createElement('a', props, children) };
       if (name === 'next/image') return { __esModule: true, default: () => null };
       if (name === '@/lib/super-app') return { SUPER_APP_MODULES: [] };
@@ -423,7 +439,7 @@ test('workspace server presentation follows locale and preserves private identit
           if (dependency === 'react') return React;
           if (dependency === 'react/jsx-runtime') return runtime;
           if (dependency === '@clerk/nextjs') return { useAuth: () => ({ userId: 'synthetic-render-only', isLoaded: true }) };
-          if (dependency === '@/components/localization/LocaleProvider') return { useLocale: () => ({ t, locale }) };
+          if (localizationDependency(dependency, locale)) return localizationDependency(dependency, locale);
           if (dependency === '@/lib/learning/unified-progress') return { learningStatusLabels: {} };
           if (dependency === '@/lib/progress-sync') return { PROGRESS_SYNC_EVENT: 'synthetic-test' };
           if (dependency === 'next/link') return { __esModule: true, default: ({ children, prefetch, ...props }) => React.createElement('a', props, children) };
@@ -478,7 +494,7 @@ test('member identity, directory, sharing and public profile render in all six l
         if (name === 'react/jsx-runtime') return runtime;
         if (name === 'next/navigation') return { useRouter: () => ({ refresh() {} }) };
         if (name === 'next/link') return { __esModule: true, default: ({ children, prefetch, ...props }) => React.createElement('a', props, children) };
-        if (name === '@/components/localization/LocaleProvider') return { useLocale: () => ({ locale, t }) };
+        if (localizationDependency(name, locale)) return localizationDependency(name, locale);
         if (name === '@/lib/localization/server') return { getLocale: async () => locale };
         if (name === '@/lib/localization/messages') return { translate };
         if (name === '@/lib/members/identity') return {};
@@ -525,7 +541,7 @@ test('billing renders localized status, access and dates, including unknown valu
         },
       };
       if (name === 'react/jsx-runtime') return runtime;
-      if (name === '@/components/localization/LocaleProvider') return { useLocale: () => ({ locale, t }) };
+      if (localizationDependency(name, locale)) return localizationDependency(name, locale);
       if (name === 'next/link') return { __esModule: true, default: ({ children, prefetch, ...props }) => React.createElement('a', props, children) };
       throw Error('Unexpected import: ' + name);
     }, exports);
@@ -564,7 +580,7 @@ test('public pricing, institute and mobile journeys render the selected language
       const load = name => {
         if (name === 'react') return React;
         if (name === 'react/jsx-runtime') return jsxRuntime;
-        if (name === '@/components/localization/LocaleProvider') return { useLocale: () => ({ locale, t }), LocalizedText: ({ text, values }) => t(text, values) };
+        if (localizationDependency(name, locale)) return localizationDependency(name, locale);
         if (name === '@/lib/localization/server') return { getLocale: async () => locale };
         if (name === '@/lib/localization/messages') return { translate };
         if (name.endsWith('.css')) return { default: new Proxy({}, { get: (_target, key) => String(key) }) };
@@ -605,4 +621,49 @@ test('public pricing, institute and mobile journeys render the selected language
       assert.ok(!mobile.includes('>Your next chapter.<'), locale + ': no untranslated mobile hero');
     }
   }
+});
+
+
+test('supplemental catalogs have identical keys, complete values and stable placeholders in all six languages', () => {
+  const dictionaries = Object.fromEntries(locales.map(locale => [locale, JSON.parse(fs.readFileSync(`public/locales/${locale}.json`, 'utf8'))]));
+  const keys = Object.keys(dictionaries.en).sort();
+  assert.ok(keys.length > 7900);
+  for (const locale of locales) {
+    assert.deepEqual(Object.keys(dictionaries[locale]).sort(), keys);
+    for (const key of keys) {
+      const text = dictionaries[locale][key];
+      assert.ok(typeof text === 'string' && text.trim(), locale + ': ' + key);
+      assert.deepEqual(text.match(/\{\w+\}/g)?.sort() ?? [], key.match(/\{\w+\}/g)?.sort() ?? [], locale + ': ' + key);
+      assert.ok(!text.includes('sk-proj-'));
+    }
+  }
+});
+
+test('authored content translation preserves course identity, grading keys, code and target-language practice', () => {
+  const source = { id: 'Save', slug: 'course-demo', title: 'Save', version: '1.0', currencyCode: 'USD', code: 'print("Save")', correctOptionId: 'Save', modules: [{ id: 'm1', title: 'Next steps', lessons: [{ id: 'l1', phrase: 'Save', example: 'Save', explanation: 'Next steps', options: [{ id: 'a', label: 'Save' }] }] }] };
+  for (const locale of locales) {
+    const { localizeAuthoredContent } = localizationDependency('@/lib/localization/authored-content', locale);
+    const translated = localizeAuthoredContent(source, locale, { languagePractice: true });
+    assert.equal(translated.title, translate(locale, source.title));
+    for (const key of ['id', 'slug', 'version', 'currencyCode', 'code', 'correctOptionId']) assert.equal(translated[key], source[key]);
+    assert.equal(translated.modules[0].lessons[0].phrase, 'Save');
+    assert.equal(translated.modules[0].lessons[0].options[0].label, 'Save');
+    assert.equal(translated.modules[0].lessons[0].explanation, translate(locale, 'Next steps'));
+    assert.equal(source.title, 'Save');
+  }
+});
+
+test('protected assessment translations remain server-only and complete without adding answer metadata', () => {
+  const source = fs.readFileSync('src/lib/localization/assessment.server.ts', 'utf8');
+  assert.match(source, /import 'server-only'/);
+  const bank = JSON.parse(fs.readFileSync('src/lib/localization/assessment-messages.json', 'utf8'));
+  assert.ok(Object.keys(bank).length > 500);
+  for (const translations of Object.values(bank)) {
+    assert.deepEqual(Object.keys(translations).sort(), [...locales].sort());
+    for (const locale of locales) assert.ok(translations[locale].trim());
+  }
+  for (const locale of locales) assert.ok(!fs.readFileSync(`public/locales/${locale}.json`, 'utf8').includes('correctOptionId'));
+  const provider = fs.readFileSync('src/components/localization/LocaleProvider.tsx', 'utf8');
+  assert.ok(provider.indexOf('await ensureLocaleMessages(next)') < provider.indexOf("fetch('/api/preferences/locale'"));
+  assert.match(fs.readFileSync('src/app/layout.tsx', 'utf8'), /<html lang=\{locale\} translate="no"/);
 });

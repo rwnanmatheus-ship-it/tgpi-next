@@ -1,3 +1,4 @@
+import { localizeMetadata } from "@/lib/localization/metadata.server";
 
 import { LocalizedText } from "@/components/localization/LocaleProvider";
 import type { Metadata } from "next";
@@ -6,7 +7,7 @@ import PremiumWaitlistForm from "@/components/PremiumWaitlistForm";
 import TGPIEditorialVisual from "@/components/TGPIEditorialVisual";
 import TGPIPageShell from "@/components/TGPIPageShell";
 
-export const metadata: Metadata = {
+const sourceMetadata: Metadata = {
   title: "TGPI Premium Early Access",
   description:
     "Join the TGPI Premium waitlist for launch priority and early access to the global decision system.",
@@ -22,17 +23,9 @@ export default function PremiumWaitlistPage() {
               href="/pricing"
               className="text-sm font-bold text-[var(--tgpi-navy-raised)] transition hover:text-[var(--tgpi-gold-hover)]"
             ><LocalizedText text={"← Back to pricing"} /></Link>
-            <p className="mt-10 text-xs font-black uppercase tracking-[0.3em] text-[var(--tgpi-gold-hover)]">
-              TGPI Premium Founding Access
-            </p>
-            <h1 className="mt-5 font-serif text-5xl font-semibold leading-[0.98] tracking-[-0.04em] text-[#0B0B0B] md:text-7xl">
-              Secure priority for the first TGPI Premium release.
-            </h1>
-            <p className="mt-6 text-lg leading-8 text-[#566070]">
-              Join the founding list while payments remain disabled. Tell TGPI where
-              you are going and which outcome matters most so the first membership
-              experience begins around real global decisions.
-            </p>
+            <p className="mt-10 text-xs font-black uppercase tracking-[0.3em] text-[var(--tgpi-gold-hover)]"><LocalizedText text={"TGPI Premium Founding Access"} /></p>
+            <h1 className="mt-5 font-serif text-5xl font-semibold leading-[0.98] tracking-[-0.04em] text-[#0B0B0B] md:text-7xl"><LocalizedText text={"Secure priority for the first TGPI Premium release."} /></h1>
+            <p className="mt-6 text-lg leading-8 text-[#566070]"><LocalizedText text={"Join the founding list while payments remain disabled. Tell TGPI where you are going and which outcome matters most so the first membership experience begins around real global decisions."} /></p>
           </div>
 
           <TGPIEditorialVisual
@@ -54,22 +47,16 @@ export default function PremiumWaitlistPage() {
               className="aspect-[16/10] w-full border-b border-white/10"
             />
             <div className="p-7">
-              <p className="text-xs font-black uppercase tracking-[0.24em] text-[var(--tgpi-gold-light)]">
-                Founding membership
-              </p>
-              <p className="mt-4 text-4xl font-black text-[var(--tgpi-gold-light)]">
-                US$ 19.90
-                <span className="ml-2 text-sm font-semibold text-[#C8D0DC]"><LocalizedText text="/month" /></span>
+              <p className="text-xs font-black uppercase tracking-[0.24em] text-[var(--tgpi-gold-light)]"><LocalizedText text={"Founding membership"} /></p>
+              <p className="mt-4 text-4xl font-black text-[var(--tgpi-gold-light)]"><LocalizedText text={"US$ 19.90"} /><span className="ml-2 text-sm font-semibold text-[#C8D0DC]"><LocalizedText text="/month" /></span>
               </p>
               <ul className="mt-6 space-y-3 text-sm leading-6 text-[#E7EDF5]">
-                <li>✓ Complete Country Fit and Global Readiness</li>
-                <li>✓ Unlimited comparisons and saved countries</li>
-                <li>✓ International plan, goals and checklists</li>
-                <li>✓ Premium courses, certificates and updates</li>
+                <li><LocalizedText text={"✓ Complete Country Fit and Global Readiness"} /></li>
+                <li><LocalizedText text={"✓ Unlimited comparisons and saved countries"} /></li>
+                <li><LocalizedText text={"✓ International plan, goals and checklists"} /></li>
+                <li><LocalizedText text={"✓ Premium courses, certificates and updates"} /></li>
               </ul>
-              <p className="mt-6 border-t border-white/10 pt-5 text-xs leading-6 text-[#B8C4D2]">
-                Joining the waitlist does not create a subscription or charge.
-              </p>
+              <p className="mt-6 border-t border-white/10 pt-5 text-xs leading-6 text-[#B8C4D2]"><LocalizedText text={"Joining the waitlist does not create a subscription or charge."} /></p>
             </div>
           </div>
         </div>
@@ -79,3 +66,5 @@ export default function PremiumWaitlistPage() {
     </TGPIPageShell>
   );
 }
+
+export async function generateMetadata() { return localizeMetadata(sourceMetadata); }

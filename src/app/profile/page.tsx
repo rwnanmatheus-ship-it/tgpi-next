@@ -1,3 +1,4 @@
+import { localizeMetadata } from "@/lib/localization/metadata.server";
 import { getUserBillingRecord } from "@/lib/billing.server";
 import { reconcileWorkspaceHistory, loadWorkspaceHistory } from '@/lib/workspace-history.server';
 import { getGlobalRankSignals } from '@/lib/global-rank-signals';
@@ -29,7 +30,7 @@ import { buildGlobalWorkspaceModel } from "@/lib/global-workspace";
 import { normalizeOnboardingData } from "@/lib/onboarding";
 import { getControlledPremiumAccessMode } from "@/lib/premium-access.server";
 
-export const metadata: Metadata = {
+const sourceMetadata: Metadata = {
   title: "Workspace Intelligence Home — TGPI",
   description:
     "See your global decision journey, prioritized actions, country shortlist, private progress and connected TGPI identity in one workspace.",
@@ -138,3 +139,5 @@ export default async function ProfilePage({
     />
   );
 }
+
+export async function generateMetadata() { return localizeMetadata(sourceMetadata); }

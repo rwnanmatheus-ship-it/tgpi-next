@@ -1,3 +1,4 @@
+import { getLocale } from "@/lib/localization/server";
 import { isSponsoredAtlas, beginSponsoredTurn } from '@/lib/atlas/sponsored.server';
 import { settleWallet } from '@/lib/wallet/store.server';
 import { ATLAS_MODEL, providerCostMicroUsd } from '@/lib/wallet/policy';
@@ -21,7 +22,8 @@ export async function POST(request: Request) {
       const user = await (await clerkClient()).users.getUser(userId);
       selected = selectAtlasContext(user.unsafeMetadata, input.scopes);
     }
-    const instructions = `${atlasInstructions}\nUSER_PROFILE_DATA: ${JSON.stringify(selected.data)}`;
+    const locale = await getLocale();
+    const instructions = `${atlasInstructions}\nSelected interface language: ${locale}. Respond in this language unless the user explicitly requests another language or the task requires quoting original language material.\nUSER_PROFILE_DATA: ${JSON.stringify(selected.data)}`;
     if (new TextEncoder().encode(instructions).length > 12000) throw new AtlasError('Profile context exceeds the allowed size.', 413);
     const turn = sponsored ? await beginSponsoredTurn(userId, input, budget) : await beginTurn(userId, input, budget);
     const encoder = new TextEncoder();

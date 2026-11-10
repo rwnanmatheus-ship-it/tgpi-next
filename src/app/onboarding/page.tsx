@@ -1,3 +1,4 @@
+import { localizeMetadata } from "@/lib/localization/metadata.server";
 import type { Metadata } from "next";
 import { currentUser } from "@clerk/nextjs/server";
 import OnboardingFlow from "@/components/onboarding/OnboardingFlow";
@@ -5,7 +6,7 @@ import { getAllCountries } from "@/lib/countries";
 import { normalizeOnboardingData } from "@/lib/onboarding";
 import type { OnboardingCountry } from "@/types/onboarding";
 
-export const metadata: Metadata = {
+const sourceMetadata: Metadata = {
   title: "Build your global plan — TGPI",
   description:
     "Personalize your TGPI experience with your goals, countries of interest, context, and global priorities.",
@@ -50,3 +51,5 @@ export default async function OnboardingPage() {
     />
   );
 }
+
+export async function generateMetadata() { return localizeMetadata(sourceMetadata); }

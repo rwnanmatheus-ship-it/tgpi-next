@@ -1,5 +1,7 @@
 "use client";
 
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import { useState } from "react";
 
 export default function CertificateDownloadButton({
@@ -59,11 +61,11 @@ export default function CertificateDownloadButton({
           className + " w-full disabled:cursor-not-allowed disabled:opacity-60"
         }
       >
-        {busy ? "Preparing PDF…" : label}
+        {busy ? <LocalizedText text={"Preparing PDF…"} /> : label}
       </button>
       {error ? (
         <p role="alert" className="mt-3 text-sm leading-6">
-          {error}
+          <LocalizedText text={error} />
         </p>
       ) : null}
     </div>

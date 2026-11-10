@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 type PremiumStatusBadgeProps = {
   plan?: string;
   isVerified?: boolean;
@@ -18,7 +20,7 @@ export default function PremiumStatusBadge({
             : "border border-slate-700 bg-slate-900 text-slate-300"
         }`}
       >
-        {isPremium ? "Premium Member" : "Free Member"}
+        {isPremium ? <LocalizedText text={"Premium Member"} /> : <LocalizedText text={"Free Member"} />}
       </span>
 
       <span
@@ -28,7 +30,7 @@ export default function PremiumStatusBadge({
             : "border border-slate-700 bg-slate-900 text-slate-300"
         }`}
       >
-        {isVerified ? "Verified Identity" : "Standard Identity"}
+        {isVerified ? <LocalizedText text={"Verified Identity"} /> : <LocalizedText text={"Standard Identity"} />}
       </span>
     </div>
   );

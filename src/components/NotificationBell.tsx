@@ -1,6 +1,6 @@
 "use client";
 import { useLocale } from "@/components/localization/LocaleProvider";
-import Link from "next/link";
+import Link from "@/components/localization/LocalizedLink";
 import NavigationIcon from "@/components/navigation/NavigationIcon";
 import { useNotifications } from "@/components/notifications/NotificationProvider";
 export default function NotificationBell() {

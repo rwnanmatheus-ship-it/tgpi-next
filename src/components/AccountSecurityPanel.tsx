@@ -1,5 +1,7 @@
 "use client";
 
+
+import { useLocale as useFormattingLocale } from "@/components/localization/LocaleProvider";
 import Link from "next/link";
 import { SignOutButton } from "@clerk/nextjs";
 import { LocalizedText } from "@/components/localization/LocaleProvider";
@@ -10,10 +12,10 @@ type Props = {
   updatedAt?: string;
 };
 
-function formatDate(date?: string) {
+function formatDate(locale: import('@/lib/localization/config').Locale, date?: string) {
   if (!date) return "—";
   try {
-    return new Intl.DateTimeFormat("en-US", {
+    return new Intl.DateTimeFormat(locale, {
       dateStyle: "medium",
       timeStyle: "short",
     }).format(new Date(date));
@@ -23,13 +25,12 @@ function formatDate(date?: string) {
 }
 
 export default function AccountSecurityPanel({ email = "", updatedAt = "" }: Props) {
+  const { locale } = useFormattingLocale();
   return (
     <section className="rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.015))] p-6 shadow-[0_0_35px_rgba(250,204,21,0.03)]">
       <div className="mb-5">
         <h2 className="text-2xl font-bold text-yellow-400"><LocalizedText text={"Account & Security"} /></h2>
-        <p className="mt-2 text-sm text-slate-400">
-          Core account information and essential controls for launch readiness.
-        </p>
+        <p className="mt-2 text-sm text-slate-400"><LocalizedText text={"Core account information and essential controls for launch readiness."} /></p>
       </div>
 
       <div className="space-y-3">
@@ -39,16 +40,14 @@ export default function AccountSecurityPanel({ email = "", updatedAt = "" }: Pro
         </div>
 
         <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-          <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Last Saved Update</p>
-          <p className="mt-2 text-white">{formatDate(updatedAt)}</p>
+          <p className="text-xs uppercase tracking-[0.18em] text-slate-400"><LocalizedText text={"Last Saved Update"} /></p>
+          <p className="mt-2 text-white">{formatDate(locale, updatedAt)}</p>
         </div>
 
         <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-          <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Password & Access</p>
-          <p className="mt-2 text-sm leading-7 text-slate-300">
-            Manage passwords, passkeys, connected accounts, multi-factor authentication and active devices through your TGPI Global Key.
-          </p>
-          <Link href="/profile/security" className="mt-3 inline-flex text-sm font-bold text-yellow-300">Open security center</Link>
+          <p className="text-xs uppercase tracking-[0.18em] text-slate-400"><LocalizedText text={"Password & Access"} /></p>
+          <p className="mt-2 text-sm leading-7 text-slate-300"><LocalizedText text={"Manage passwords, passkeys, connected accounts, multi-factor authentication and active devices through your TGPI Global Key."} /></p>
+          <Link href="/profile/security" className="mt-3 inline-flex text-sm font-bold text-yellow-300"><LocalizedText text={"Open security center"} /></Link>
         </div>
 
         <SignOutButton redirectUrl="/">

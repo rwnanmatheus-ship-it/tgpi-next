@@ -1,7 +1,9 @@
 "use client";
+
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 
-import Image from "next/image";
+import Image from "@/components/localization/LocalizedImage";
 import { startTransition, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import type { CountryExplorerItem } from "@/lib/countries";
@@ -315,7 +317,7 @@ export default function CountriesWorldMap({
 
   return (
     <div className="relative mt-5 country-atlas">
-      <div
+      <LocalizedElement as="div"
         role="group"
         aria-label="Zoom the world map by region"
         className="flex gap-2 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
@@ -335,13 +337,13 @@ export default function CountriesWorldMap({
                   : "border-[#b8c9d7] bg-white text-[#183b56] hover:border-[#a67b29] hover:text-[var(--tgpi-navy)]"
               }`}
             >
-              {region.label}
+              <LocalizedText text={region.label} />
             </button>
           );
         })}
-      </div>
+      </LocalizedElement>
 
-      <div className="atlas-controls"><label>Locate a destination<select aria-label="Locate a destination on the atlas" value={selectedSlug} onChange={e => { previewCountry(e.target.value); setZoomLevel(1); setPan({ x: 0, y: 0 }); onRegionChange("world"); }}>{countries.map(c => <option key={c.slug} value={c.slug}>{c.name}</option>)}</select></label><div role="group" aria-label={localizeLabel("Map zoom")}><button type="button" aria-label={localizeLabel("Zoom out")} disabled={zoomLevel <= 1} onClick={() => setZoomLevel(z => Math.max(1, z - .5))}>−</button><span>{Math.round(zoomLevel * 100)}%</span><button type="button" aria-label={localizeLabel("Zoom in")} disabled={zoomLevel >= 4} onClick={() => setZoomLevel(z => Math.min(4, z + .5))}>+</button><button type="button" onClick={() => { setZoomLevel(1); setPan({ x: 0, y: 0 }); onRegionChange("world"); }}><LocalizedText text="Reset" /></button></div></div>
+      <div className="atlas-controls"><label><LocalizedText text={"Locate a destination"} /><LocalizedElement as="select" aria-label="Locate a destination on the atlas" value={selectedSlug} onChange={e => { previewCountry(e.target.value); setZoomLevel(1); setPan({ x: 0, y: 0 }); onRegionChange("world"); }}>{countries.map(c => <option key={c.slug} value={c.slug}><LocalizedText text={c.name} /></option>)}</LocalizedElement></label><div role="group" aria-label={localizeLabel("Map zoom")}><button type="button" aria-label={localizeLabel("Zoom out")} disabled={zoomLevel <= 1} onClick={() => setZoomLevel(z => Math.max(1, z - .5))}>−</button><span>{Math.round(zoomLevel * 100)}%</span><button type="button" aria-label={localizeLabel("Zoom in")} disabled={zoomLevel >= 4} onClick={() => setZoomLevel(z => Math.min(4, z + .5))}>+</button><button type="button" onClick={() => { setZoomLevel(1); setPan({ x: 0, y: 0 }); onRegionChange("world"); }}><LocalizedText text="Reset" /></button></div></div>
       <div
         className="tgpi-map-cinematic-frame relative mt-3 h-[340px] overflow-hidden rounded-[26px] border border-white/12 bg-[var(--tgpi-navy)] shadow-[inset_0_0_110px_rgba(56,113,158,.18),0_24px_70px_rgba(0,0,0,.2)] sm:h-[440px] lg:h-[500px]"
         data-phase={cinematic.phase}
@@ -363,12 +365,8 @@ export default function CountriesWorldMap({
             onPointerMove={event => { if (!drag.current) return; const dx = event.clientX - drag.current.x, dy = event.clientY - drag.current.y; if (Math.abs(dx) + Math.abs(dy) > 8) moved.current = true; const scale = 1000 / event.currentTarget.getBoundingClientRect().width; setPan({ x: Math.max(-1800, Math.min(1800, drag.current.px + dx * scale)), y: Math.max(-900, Math.min(900, drag.current.py + dy * scale)) }); }}
             onPointerUp={() => { drag.current = null; }} onPointerCancel={() => { drag.current = null; }}
           >
-          <title id="tgpi-world-map-title">TGPI interactive country map</title>
-          <desc id="tgpi-world-map-description">
-            Real country boundaries. Hover or focus a territory to preview it, then
-            select to preview or press Enter to open its country intelligence page. Use arrow keys
-            to move between countries.
-          </desc>
+          <title id="tgpi-world-map-title"><LocalizedText text={"TGPI interactive country map"} /></title>
+          <desc id="tgpi-world-map-description"><LocalizedText text={"Real country boundaries. Hover or focus a territory to preview it, then select to preview or press Enter to open its country intelligence page. Use arrow keys to move between countries."} /></desc>
           <defs><linearGradient id="tgpi-land-relief" x1="0" y1="0" x2=".7" y2="1"><stop offset="0" stopColor="#6e9a92"/><stop offset=".35" stopColor="#315f68"/><stop offset=".7" stopColor="#234659"/><stop offset="1" stopColor="#122d45"/></linearGradient>
             <linearGradient id="tgpi-map-water" x1="0" y1="0" x2="1" y2="1">
               <stop offset="0" stopColor="#09213B" />
@@ -419,7 +417,7 @@ export default function CountriesWorldMap({
                 feature.label[0] < 150;
 
               return (
-                <path
+                <LocalizedElement as="path"
                   key={`${feature.isoA3}-${feature.name}`}
                   d={feature.path}
                   data-country-slug={country?.slug}
@@ -444,8 +442,8 @@ export default function CountriesWorldMap({
                         : ""
                   }`}
                 >
-                  <title>{country ? `${country.name} — open profile` : feature.name}</title>
-                </path>
+                  <title>{country ? <LocalizedText text={"{value0} — open profile"} values={{value0: String(country.name)}} /> : feature.name}</title>
+                </LocalizedElement>
               );
             })}
 
@@ -461,7 +459,7 @@ export default function CountriesWorldMap({
                     const isSelected = country.slug === selectedSlug;
 
                     return (
-                      <path
+                      <LocalizedElement as="path"
                         key={`pacific-${feature.isoA3}-${feature.name}`}
                         d={feature.path}
                         transform="translate(1000 0)"
@@ -483,7 +481,7 @@ export default function CountriesWorldMap({
                         }`}
                       >
                         <title><LocalizedText text={country.name} />{" "}<LocalizedText text={"— open profile"} /></title>
-                      </path>
+                      </LocalizedElement>
                     );
                   })
               : null}
@@ -584,14 +582,14 @@ export default function CountriesWorldMap({
           <div className="absolute inset-0 grid place-items-center bg-[var(--tgpi-navy)]/70 backdrop-blur-sm" role="status">
             <div className="text-center">
               <span className="mx-auto block h-9 w-9 animate-spin rounded-full border-2 border-white/15 border-t-[var(--tgpi-gold)]" />
-              <p className="mt-3 text-[10px] font-extrabold uppercase tracking-[0.16em] text-white/60">Loading real borders</p>
+              <p className="mt-3 text-[10px] font-extrabold uppercase tracking-[0.16em] text-white/60"><LocalizedText text={"Loading real borders"} /></p>
             </div>
           </div>
         ) : null}
 
         {mapError ? (
           <div className="absolute inset-4 grid place-items-center rounded-2xl border border-[var(--tgpi-gold-light)]/25 bg-[#071A32]/95 p-6 text-center" role="status">
-            <p className="max-w-sm text-sm font-bold leading-6 text-white">{mapError}</p>
+            <p className="max-w-sm text-sm font-bold leading-6 text-white"><LocalizedText text={mapError} /></p>
           </div>
         ) : null}
 
@@ -607,17 +605,16 @@ export default function CountriesWorldMap({
               />
             </div>
             <div className="min-w-0">
-              <p className="text-[8px] font-extrabold uppercase tracking-[0.14em] text-[var(--tgpi-gold-light)]">Intelligence preview</p>
+              <p className="text-[8px] font-extrabold uppercase tracking-[0.14em] text-[var(--tgpi-gold-light)]"><LocalizedText text={"Intelligence preview"} /></p>
               <p className="mt-0.5 truncate text-sm font-extrabold">{selectedCountry.emoji} <LocalizedText text={selectedCountry.name} /></p>
-              <button type="button" className="atlas-open-country" onClick={() => openCountry(selectedCountry.slug)}>Open country dossier →</button>
+              <button type="button" className="atlas-open-country" onClick={() => openCountry(selectedCountry.slug)}><LocalizedText text={"Open country dossier →"} /></button>
             </div>
           </div>
         ) : null}
 
         {mapData ? (
           <div className="pointer-events-none absolute right-3 top-3 rounded-full border border-white/10 bg-[#041426]/75 px-3 py-2 text-[9px] font-extrabold uppercase tracking-[0.12em] text-white/65 backdrop-blur">
-            {interactiveCountries.length}/{countries.length} profiles mapped
-          </div>
+            {interactiveCountries.length}/{countries.length}{" "}<LocalizedText text={"profiles mapped"} /></div>
         ) : null}
 
         {cinematic.phase !== "idle" ? (
@@ -630,10 +627,10 @@ export default function CountriesWorldMap({
             </div>
             <div className="absolute inset-x-4 bottom-4 rounded-2xl border border-[var(--tgpi-gold-light)]/30 bg-[#020A14]/86 p-4 text-white shadow-2xl backdrop-blur-md sm:inset-x-auto sm:bottom-5 sm:left-5 sm:w-[360px]">
               <div className="flex items-center justify-between gap-3">
-                <p className="text-[9px] font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-gold-light)]">TGPI Geospatial Link</p>
+                <p className="text-[9px] font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-gold-light)]"><LocalizedText text={"TGPI Geospatial Link"} /></p>
                 <span className="font-mono text-[9px] text-white/45">{cinematic.phase === "locking" ? "01" : cinematic.phase === "resolving" ? "02" : "03"}/03</span>
               </div>
-              <p className="mt-2 font-[var(--tgpi-font-display)] text-xl font-semibold">{CINEMATIC_PHASE_COPY[cinematic.phase]}</p>
+              <p className="mt-2 font-[var(--tgpi-font-display)] text-xl font-semibold"><LocalizedText text={CINEMATIC_PHASE_COPY[cinematic.phase]} /></p>
               <div className="mt-3 h-1 overflow-hidden rounded-full bg-white/10">
                 <div className="tgpi-map-progress h-full rounded-full bg-[var(--tgpi-gold-light)]" />
               </div>
@@ -643,13 +640,10 @@ export default function CountriesWorldMap({
       </div>
 
       <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[9px] font-bold uppercase tracking-[0.12em] text-[var(--tgpi-muted)]">
-        <span>Select to preview · Zoom to drag</span>
-        <span>Keyboard: arrows + Enter</span>
+        <span><LocalizedText text={"Select to preview · Zoom to drag"} /></span>
+        <span><LocalizedText text={"Keyboard: arrows + Enter"} /></span>
       </div>
-      <p className="mt-2 text-xs leading-5 text-[var(--tgpi-muted)]">
-        Boundary reference: Natural Earth de facto cartography. Disputed areas may vary
-        by legal or political point of view.
-      </p>
+      <p className="mt-2 text-xs leading-5 text-[var(--tgpi-muted)]"><LocalizedText text={"Boundary reference: Natural Earth de facto cartography. Disputed areas may vary by legal or political point of view."} /></p>
     </div>
   );
 }

@@ -1,5 +1,7 @@
 "use client";
 
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 type Props = {
   hasAvatar: boolean;
   hasDisplayName: boolean;
@@ -37,10 +39,8 @@ export default function LaunchReadyChecklist({
   return (
     <section className="rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.015))] p-6 shadow-[0_0_35px_rgba(250,204,21,0.03)]">
       <div className="mb-5">
-        <h2 className="text-2xl font-bold text-yellow-400">Launch QA Checklist</h2>
-        <p className="mt-2 text-sm text-slate-400">
-          Final visual and functional checks before considering the page launch-ready.
-        </p>
+        <h2 className="text-2xl font-bold text-yellow-400"><LocalizedText text={"Launch QA Checklist"} /></h2>
+        <p className="mt-2 text-sm text-slate-400"><LocalizedText text={"Final visual and functional checks before considering the page launch-ready."} /></p>
       </div>
 
       <div className="space-y-3">
@@ -64,7 +64,7 @@ export default function LaunchReadyChecklist({
                 {item.done ? "✓" : "•"}
               </div>
               <p className={item.done ? "text-emerald-200" : "text-slate-300"}>
-                {item.label}
+                <LocalizedText text={item.label} />
               </p>
             </div>
           </div>

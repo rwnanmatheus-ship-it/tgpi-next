@@ -29,9 +29,7 @@ export default function CountryComparison() {
     <section className="rounded-3xl border border-yellow-700/20 bg-gradient-to-br from-yellow-500/10 to-slate-950 p-8">
       <div className="mb-6">
         <h2 className="text-3xl font-bold text-yellow-400"><LocalizedText text="Compare Countries" /></h2>
-        <p className="mt-2 text-slate-300">
-          Evaluate two pathways side by side and make smarter global decisions.
-        </p>
+        <p className="mt-2 text-slate-300"><LocalizedText text={"Evaluate two pathways side by side and make smarter global decisions."} /></p>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">
@@ -62,7 +60,7 @@ export default function CountryComparison() {
 
       <div className="mt-6 overflow-hidden rounded-2xl border border-slate-800">
         <div className="grid grid-cols-3 bg-slate-900 p-4 text-sm font-semibold text-yellow-300">
-          <div>Category</div>
+          <div><LocalizedText text={"Category"} /></div>
           <div>{firstCountry?.name || <LocalizedText text={"Country A"} />}</div>
           <div>{secondCountry?.name || <LocalizedText text={"Country B"} />}</div>
         </div>
@@ -72,9 +70,9 @@ export default function CountryComparison() {
             key={row.label}
             className="grid grid-cols-3 border-t border-slate-800 bg-slate-950 p-4 text-sm text-slate-300"
           >
-            <div className="font-medium text-white">{row.label}</div>
-            <div>{row.first}</div>
-            <div>{row.second}</div>
+            <div className="font-medium text-white"><LocalizedText text={row.label} /></div>
+            <div><LocalizedText text={row.first} /></div>
+            <div><LocalizedText text={row.second} /></div>
           </div>
         ))}
       </div>

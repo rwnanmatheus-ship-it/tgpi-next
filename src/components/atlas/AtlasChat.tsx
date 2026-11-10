@@ -1,6 +1,6 @@
 'use client';
 
-import Image from 'next/image';
+import Image from "@/components/localization/LocalizedImage";
 import CinematicImage from '@/components/ui/CinematicImage';
 import Link from 'next/link';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -190,12 +190,12 @@ export default function AtlasChat({ userId, enabled = true, embedded = false, sp
   return <main id={embedded ? 'atlas-widget-chat' : 'atlas-main'} tabIndex={-1} ref={shell} className={`${styles.shell} ${embedded ? styles.embedded : ''}`}>
     <aside className={`${styles.sidebar} ${showHistory ? styles.sidebarOpen : ''}`} aria-label={t("Atlas conversations")}>
       <Link href="/profile" className={styles.back}><LocalizedText text="← Workspace" /></Link>
-      <div className={styles.brand}><Image src="/brand/atlas/avatar.webp" width={48} height={48} alt={t("Atlas owl")} /><div><strong>TGPI ATLAS AI</strong><span>{t("Your global companion")}</span></div></div>
+      <div className={styles.brand}><Image src="/brand/atlas/avatar.webp" width={48} height={48} alt={t("Atlas owl")} /><div><strong><LocalizedText text={"TGPI ATLAS AI"} /></strong><span>{t("Your global companion")}</span></div></div>
       <button className={styles.primary} disabled={busy} onClick={() => newConversation(false)}>{t("＋ New conversation")}</button>
       {!sponsored && <><button disabled={busy} onClick={() => newConversation(true)}>{t("Start temporary conversation")}</button>
       <label className={styles.search}>{t("Search loaded history")}<input value={query} onChange={e => setQuery(e.target.value)} placeholder={t("Search by title…")} type="search" /></label>
       <div className={styles.history}>
-        {items.filter(x => x.title.toLowerCase().includes(query.toLowerCase())).map(item => <button key={item.id} disabled={busy} aria-current={item.id === id ? 'page' : undefined} onClick={() => void openConversation(item.id)}>{item.title}</button>)}
+        {items.filter(x => x.title.toLowerCase().includes(query.toLowerCase())).map(item => <button key={item.id} disabled={busy} aria-current={item.id === id ? 'page' : undefined} onClick={() => void openConversation(item.id)}><LocalizedText text={item.title} /></button>)}
         {!items.length && !loadingHistory && <p>{t("No saved conversations loaded.")}</p>}
         {cursor && <button disabled={loadingHistory || busy} onClick={() => void loadHistory(cursor)}>{t("Load more conversations")}</button>}
         {loadingHistory && <p role="status">{t("Loading history…")}</p>}
@@ -206,7 +206,7 @@ export default function AtlasChat({ userId, enabled = true, embedded = false, sp
     <section className={styles.chat} aria-label={t("Conversation with Atlas")}>
       <header className={styles.header}>
         <button className={styles.historyToggle} aria-expanded={showHistory} onClick={() => setShowHistory(!showHistory)}>{t(sponsored ? 'New conversation' : 'History')}</button>
-        <div><h1>Atlas <span>AI</span></h1><p>{temporary ? t('Temporary conversation') : title || t('New conversation')}</p></div>
+        <div><h1><LocalizedText text={"Atlas"} />{" "}<span><LocalizedText text={"AI"} /></span></h1><p>{temporary ? t('Temporary conversation') : title || t('New conversation')}</p></div>
         <div className={styles.headerActions}>{!sponsored && <Link href="/atlas/wallet">{walletCopy[locale].walletLink}</Link>}{saved && <><button disabled={busy} onClick={() => void openConversation(id)}>{t("Reload")}</button><button disabled={busy} onClick={() => { setAction('rename'); setRename(title); }}>{t("Rename")}</button><button disabled={busy} onClick={() => setAction('delete')}>{t("Delete")}</button></>}</div>
       </header>
       {enabled && <p className={styles.confirm}>{sponsored ? atlasFreeCopy[locale].banner : walletCopy[locale].chatPrice}</p>}
@@ -227,7 +227,7 @@ export default function AtlasChat({ userId, enabled = true, embedded = false, sp
           <p>{t("Ask about a destination, explore an idea, or work through a decision. We can start wherever you are.")}</p>
           <div className={styles.starters}>{starters.map(prompt => <button key={prompt} onClick={() => { updateDraft(t(prompt)); composer.current?.focus(); }}>{t(prompt)}<span aria-hidden="true">↗</span></button>)}</div>
         </div> : <div className={styles.messageColumn}>{messages.map(message => <article key={message.id} className={message.role === 'user' ? styles.userMessage : styles.assistantMessage}>
-          <div className={styles.messageLabel}>{message.role === 'assistant' && <Image src="/brand/atlas/avatar.webp" alt="" width={30} height={30} />}<strong>{message.role === 'user' ? t('You') : 'Atlas'}</strong></div>
+          <div className={styles.messageLabel}>{message.role === 'assistant' && <Image src="/brand/atlas/avatar.webp" alt="" width={30} height={30} />}<strong>{message.role === 'user' ? t('You') : <LocalizedText text={"Atlas"} />}</strong></div>
           <div className={styles.prose}><ReactMarkdown remarkPlugins={[remarkGfm]} skipHtml urlTransform={safeAtlasLink} components={{ img: () => null, a: ({ href, children }) => href ? <Link href={href}>{children}</Link> : <span>{children}</span> }}>{message.content}</ReactMarkdown></div>
           {message.role === 'assistant' && <>
             {!!message.factors?.length && <p className={styles.factors}>{t("Profile fields shared:")}{' '}{message.factors.map(factor => t(factor)).join(' · ')}</p>}

@@ -1,3 +1,5 @@
+
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import Link from "next/link";
 import { LocalizedText } from "@/components/localization/LocaleProvider";
 
@@ -24,7 +26,7 @@ export function CountryDossierNavigation({
   countryName,
 }: CountryDossierNavigationProps) {
   return (
-    <nav
+    <LocalizedElement as="nav"
       aria-label={`${countryName} intelligence dossier chapters`}
       className="sticky top-[72px] z-30 mt-5 rounded-2xl border border-[#D8D0C0]/90 bg-[rgba(255,253,248,0.92)] p-2 shadow-[0_16px_45px_rgba(7,26,50,0.1)] backdrop-blur-xl"
     >
@@ -44,7 +46,7 @@ export function CountryDossierNavigation({
           </a>
         ))}
       </div>
-    </nav>
+    </LocalizedElement>
   );
 }
 
@@ -94,18 +96,10 @@ export function CountrySystemPath({
     >
       <div className="grid gap-8 border-b border-white/10 px-6 py-8 md:grid-cols-[1.08fr_0.92fr] md:px-8 lg:px-10">
         <div>
-          <p className="text-[10px] font-extrabold uppercase tracking-[0.3em] text-[#E6C565]">
-            TGPI Connected Decision Route
-          </p>
-          <h2 className="mt-3 max-w-2xl font-[var(--tgpi-font-display)] text-3xl font-semibold leading-tight md:text-5xl">
-            Turn {countryName} from a profile into a prepared decision.
-          </h2>
+          <p className="text-[10px] font-extrabold uppercase tracking-[0.3em] text-[#E6C565]"><LocalizedText text={"TGPI Connected Decision Route"} /></p>
+          <h2 className="mt-3 max-w-2xl font-[var(--tgpi-font-display)] text-3xl font-semibold leading-tight md:text-5xl"><LocalizedText text={"Turn"} />{" "}{countryName}{" "}<LocalizedText text={"from a profile into a prepared decision."} /></h2>
         </div>
-        <p className="self-end text-sm leading-7 text-[#B7C4D4] md:text-base">
-          Country Intelligence is the first layer. The TGPI system then connects
-          comparison, evidence, capability and identity so research continues as
-          action.
-        </p>
+        <p className="self-end text-sm leading-7 text-[#B7C4D4] md:text-base"><LocalizedText text={"Country Intelligence is the first layer. The TGPI system then connects comparison, evidence, capability and identity so research continues as action."} /></p>
       </div>
 
       <div className="grid md:grid-cols-2 xl:grid-cols-4">
@@ -127,13 +121,13 @@ export function CountrySystemPath({
               </span>
             </div>
             <p className="mt-10 text-[10px] font-bold uppercase tracking-[0.22em] text-[#91A9C2]">
-              {step.eyebrow}
+              <LocalizedText text={step.eyebrow} />
             </p>
             <h3 className="mt-3 text-xl font-extrabold text-white">
-              {step.title}
+              <LocalizedText text={step.title} />
             </h3>
             <p className="mt-3 text-sm leading-6 text-[#B7C4D4]">
-              {step.description}
+              <LocalizedText text={step.description} />
             </p>
           </Link>
         ))}

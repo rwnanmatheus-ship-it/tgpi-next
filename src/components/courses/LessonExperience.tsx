@@ -1,5 +1,6 @@
 "use client";
 
+import { localizeAuthoredContent } from "@/lib/localization/authored-content";
 import Link from "next/link";
 import ActiveRecallPractice from "@/components/courses/ActiveRecallPractice";
 import {
@@ -35,14 +36,18 @@ export default function LessonExperience(props: LessonExperienceProps) {
 }
 
 function Lesson({
-  course,
-  courseModule,
-  lesson,
+  course: originalCourse,
+  courseModule: originalModule,
+  lesson: originalLesson,
   lessonIndex,
   nextLesson,
   previousLesson,
 }: LessonExperienceProps) {
   const { locale, t } = useLocale();
+  const options = { languagePractice: originalCourse.id === "global-english-2026" };
+  const course = useMemo(() => localizeAuthoredContent(originalCourse, locale, { languagePractice: originalCourse.id === "global-english-2026" }), [originalCourse, locale]);
+  const courseModule = localizeAuthoredContent(originalModule, locale, options);
+  const lesson = localizeAuthoredContent(originalLesson, locale, options);
   const { error, isAuthenticated, isLoading, mutate, progress } = useActivationProgress();
   const [selectedOptionId, setSelectedOptionId] = useState("");
   const [checkpointResult, setCheckpointResult] = useState<
@@ -167,20 +172,20 @@ function Lesson({
               ) : null}
             </div>
             <p className="mt-6 text-xs font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-strong)]">
-              {courseModule.title}
+              <LocalizedText text={courseModule.title} />
             </p>
             <h1 className="mt-3 max-w-4xl text-[clamp(2.2rem,4vw,3.8rem)] font-semibold leading-[0.94] tracking-[-0.05em]">
-              {lesson.title}
+              <LocalizedText text={lesson.title} />
             </h1>
             <p className="mt-5 max-w-3xl text-base leading-8 text-[var(--tgpi-muted)] sm:text-lg">
-              {lesson.summary}
+              <LocalizedText text={lesson.summary} />
             </p>
 
             <div className="mt-8 grid overflow-hidden rounded-2xl border border-[var(--tgpi-gold)]/30 bg-[#FFF7DE] sm:grid-cols-2">
               <div className="p-5">
                 <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-strong)]"><LocalizedText text="Performance objective" /></p>
                 <p className="mt-2 text-sm font-extrabold leading-7 text-[#6F5A31]">
-                  {lesson.objective}
+                  <LocalizedText text={lesson.objective} />
                 </p>
               </div>
               <div className="border-t border-[var(--tgpi-gold)]/20 bg-white/35 p-5 sm:border-l sm:border-t-0">
@@ -195,7 +200,7 @@ function Lesson({
           <div className="mt-7 grid gap-7">
             <LessonSection eyebrow={t("01 · Orient")} title={t("Enter the scenario")}>
               <div className="rounded-2xl border-l-4 border-[var(--tgpi-gold)] bg-[var(--tgpi-navy)] p-6 text-base font-bold leading-8 text-white/80 sm:p-7">
-                {lesson.scenario}
+                <LocalizedText text={lesson.scenario} />
               </div>
             </LessonSection>
 
@@ -207,7 +212,7 @@ function Lesson({
                       {String(index + 1).padStart(2, "0")}
                     </span>
                     <h3 className="mt-4 text-xl font-semibold text-[var(--tgpi-navy)]">“{item.phrase}”</h3>
-                    <p className="mt-2 text-sm leading-7 text-[var(--tgpi-muted)]">{item.meaning}</p>
+                    <p className="mt-2 text-sm leading-7 text-[var(--tgpi-muted)]"><LocalizedText text={item.meaning} /></p>
                     <p className="mt-4 rounded-xl bg-[var(--tgpi-canvas)] p-3 text-sm font-bold leading-6 text-[var(--tgpi-navy)]">
                       {item.example}
                     </p>
@@ -241,7 +246,7 @@ function Lesson({
                 {lesson.coachNotes.map((note) => (
                   <li key={note} className="flex gap-4 rounded-2xl border border-[var(--tgpi-border-soft)] bg-white p-4 text-sm font-bold leading-7 text-[var(--tgpi-muted)]">
                     <span className="mt-0.5 grid h-7 w-7 shrink-0 place-items-center rounded-full bg-[#E4F3EB] text-xs text-[var(--tgpi-success)]" aria-hidden="true">✓</span>
-                    {note}
+                    <LocalizedText text={note} />
                   </li>
                 ))}
               </ul>
@@ -258,13 +263,13 @@ function Lesson({
                   </div>
                 </div>
                 <p className="border-t border-[#E8C5C5] px-5 py-4 text-xs font-bold leading-6 text-[var(--tgpi-muted)]">
-                  {lesson.commonMistake.reason}
+                  <LocalizedText text={lesson.commonMistake.reason} />
                 </p>
               </div>
             </LessonSection>
 
             <LessonSection eyebrow={t("03 · Rehearse")} title={lesson.practiceTask.title}>
-              <p className="text-sm leading-7 text-[var(--tgpi-muted)]">{lesson.practiceTask.instruction}</p>
+              <p className="text-sm leading-7 text-[var(--tgpi-muted)]"><LocalizedText text={lesson.practiceTask.instruction} /></p>
               <div className="mt-5 rounded-2xl border border-dashed border-[var(--tgpi-gold)] bg-[var(--tgpi-inverse)] p-5">
                 <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-gold-strong)]"><LocalizedText text="Your rehearsal prompt" /></p>
                 <p className="mt-3 text-base font-extrabold leading-8 text-[var(--tgpi-navy)]">{lesson.practiceTask.prompt}</p>
@@ -275,10 +280,10 @@ function Lesson({
                   {course.assessment.rubric.map((dimension) => (
                     <div key={dimension.id} className="rounded-2xl border border-[var(--tgpi-border-soft)] bg-white p-4">
                       <div className="flex items-center justify-between gap-3">
-                        <p className="text-sm font-extrabold text-[var(--tgpi-navy)]">{dimension.title}</p>
+                        <p className="text-sm font-extrabold text-[var(--tgpi-navy)]"><LocalizedText text={dimension.title} /></p>
                         <span className="text-[10px] font-extrabold text-[var(--tgpi-gold-strong)]">{dimension.weight}%</span>
                       </div>
-                      <p className="mt-2 text-xs leading-6 text-[var(--tgpi-muted)]">{dimension.description}</p>
+                      <p className="mt-2 text-xs leading-6 text-[var(--tgpi-muted)]"><LocalizedText text={dimension.description} /></p>
                     </div>
                   ))}
                 </div>
@@ -311,7 +316,7 @@ function Lesson({
                           }}
                           className="mt-1 h-5 w-5 shrink-0 accent-[var(--tgpi-navy)]"
                         />
-                        <span className="text-sm font-bold leading-7 text-[var(--tgpi-navy)]">{option.label}</span>
+                        <span className="text-sm font-bold leading-7 text-[var(--tgpi-navy)]">{course.id === "global-english-2026" ? option.label : t(option.label)}</span>
                       </label>
                     );
                   })}
@@ -331,7 +336,7 @@ function Lesson({
                 {checkpointResult !== "idle" ? (
                   <div className={`rounded-2xl border p-4 text-sm font-bold leading-7 ${checkpointResult === "correct" ? "border-[#B9DDCA] bg-[#F1F8F4] text-[#175D41]" : "border-[#E8C5C5] bg-[#FFF5F5] text-[#7F2828]"}`}>
                     <p>{checkpointResult === "correct" ? t("Correct — this is the clearest response.") : t("Not yet. Review the options and try again.")}</p>
-                    {checkpointResult === "correct" ? <p className="mt-1 font-medium">{lesson.checkpoint.explanation}</p> : null}
+                    {checkpointResult === "correct" ? <p className="mt-1 font-medium"><LocalizedText text={lesson.checkpoint.explanation} /></p> : null}
                   </div>
                 ) : null}
               </div>
@@ -402,16 +407,16 @@ function Lesson({
               {course.learningStandard.phases.map((phase, index) => (
                 <li key={phase.id} className="flex items-center gap-3 text-sm font-bold text-[var(--tgpi-muted)]">
                   <span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-[var(--tgpi-canvas)] text-[10px] font-extrabold text-[var(--tgpi-gold-strong)]">{String(index + 1).padStart(2, "0")}</span>
-                  {phase.title}
+                  <LocalizedText text={phase.title} />
                 </li>
               ))}
             </ol>
             <a href="#checkpoint" className="mt-6 inline-flex min-h-12 w-full items-center justify-center rounded-xl border border-[var(--tgpi-gold)] bg-[#FFF7DE] px-4 text-sm font-extrabold text-[var(--tgpi-navy)] transition hover:bg-[var(--tgpi-gold-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"><LocalizedText text="Practice & checkpoint ↓" /></a>
             <nav aria-label={t("Course syllabus")} className="mt-6 max-h-72 overflow-y-auto border-t border-[var(--tgpi-border)] pt-4">
               {course.modules.map((module) => <div key={module.id} className="mb-4">
-                <p className="mb-2 text-xs font-bold">{module.title}</p>
+                <p className="mb-2 text-xs font-bold"><LocalizedText text={module.title} /></p>
                 {module.lessons.map((item) => <Link key={item.id} href={`/courses/${course.id}/lessons/${item.id}`} aria-current={item.id === lesson.id ? "page" : undefined} className={`mb-1 block rounded-lg px-3 py-2 text-xs leading-5 focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)] ${item.id === lesson.id ? "bg-[var(--tgpi-navy)] text-white" : "hover:bg-[var(--tgpi-canvas)]"}`}>
-                  {completedLessonIds.includes(item.id) ? "✓ " : ""}{item.title}
+                  {completedLessonIds.includes(item.id) ? "✓ " : ""}<LocalizedText text={item.title} />
                 </Link>)}
               </div>)}
             </nav>
@@ -460,7 +465,7 @@ function LessonNavigationLink({
       className={`rounded-2xl border border-[var(--tgpi-border)] bg-white p-5 transition hover:-translate-y-0.5 hover:border-[var(--tgpi-gold)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)] ${isPrevious ? "text-left" : "text-right"}`}
     >
       <span className="block text-[9px] font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-gold-strong)]">{isPrevious ? t("← Previous lesson") : t("Next lesson →")}</span>
-      <span className="mt-2 block text-sm font-extrabold text-[var(--tgpi-navy)]">{lesson.title}</span>
+      <span className="mt-2 block text-sm font-extrabold text-[var(--tgpi-navy)]"><LocalizedText text={lesson.title} /></span>
     </Link>
   );
 }

@@ -37,7 +37,7 @@ export default async function TGPIAuthShell({ children, mode }: TGPIAuthShellPro
           <div className={styles.shade} />
           <Link href="/" className={styles.brand} aria-label={t("TGPI home")}>
             <span className={styles.crest}><BrandCrest fill sizes="44px" className="object-contain" /></span>
-            <span><strong>TGPI</strong><small>The Global Polymath Institute</small></span>
+            <span><strong><LocalizedText text={"TGPI"} /></strong><small><LocalizedText text={"The Global Polymath Institute"} /></small></span>
           </Link>
           <div className={styles.storyCopy}>
             <span className={styles.eyebrow}><span className={styles.signal} />{" "}<LocalizedText text="Education for a global life" /></span>
@@ -51,7 +51,7 @@ export default async function TGPIAuthShell({ children, mode }: TGPIAuthShellPro
         </section>
         <section className={styles.panel} aria-label={t(joining ? "Create your TGPI account" : "Sign in to your TGPI account")}>
           <div className={styles.formWrap}>
-            <div className={styles.mobileBrand}><Link href="/" aria-label={t("TGPI home")}><BrandCrest width={30} height={36} /><strong>TGPI</strong></Link><span>{t("Global education & intelligence")}</span></div>
+            <div className={styles.mobileBrand}><Link href="/" aria-label={t("TGPI home")}><BrandCrest width={30} height={36} /><strong><LocalizedText text={"TGPI"} /></strong></Link><span>{t("Global education & intelligence")}</span></div>
             <div className={styles.panelTop}><span className={styles.accessLabel}>{t(joining ? "Your global journey starts here" : "Your global workspace")}</span><Link href="/" className={styles.back}>{t("← Home")}</Link></div>
             {joining ? <ol className={styles.steps} aria-label={t("Registration steps")}><li aria-current={mode === "sign-up" ? "step" : undefined}><span>1</span>{" "}{t("Secure access")}</li><li aria-current={mode === "welcome" ? "step" : undefined}><span>2</span>{" "}{t("Your profile")}</li></ol> : null}
             <div className="mb-4 flex justify-end"><LanguageSelector compact /></div>

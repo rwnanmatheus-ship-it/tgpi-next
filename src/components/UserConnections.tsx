@@ -9,7 +9,7 @@ export default function UserConnections({
 }) {
   return (
     <section className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-      <h2 className="text-yellow-400 font-bold">Connections</h2>
+      <h2 className="text-yellow-400 font-bold"><LocalizedText text={"Connections"} /></h2>
 
       <p className="mt-3 text-sm text-slate-300"><LocalizedText text={"Followers:"} />{" "}{followers?.length || 0}
       </p>

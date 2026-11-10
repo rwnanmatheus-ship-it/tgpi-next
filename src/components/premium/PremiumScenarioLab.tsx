@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useUser } from '@clerk/nextjs';
 import Link from 'next/link';
-import { useLocale } from '@/components/localization/LocaleProvider';
+import { useLocale , LocalizedText } from '@/components/localization/LocaleProvider';
 import { COST_CATEGORIES, worksheetTotals } from '@/lib/intelligence/research-plan';
 import { exportScenarioComparison, parsePremiumScenarioPage, scenarioComparisonReadiness, scenarioTotalDifference, type SavedPremiumScenario } from '@/lib/premium-scenarios';
 import styles from './PremiumScenarioLab.module.css';
@@ -64,7 +64,7 @@ function ScenarioLibrary() {
 function ScenarioOption({scenario:s,checked,disabled,onChange}:{scenario:SavedPremiumScenario;checked:boolean;disabled:boolean;onChange:(checked:boolean)=>void}) {
   const {locale,t} = useLocale();
   const name = new Intl.DisplayNames([locale],{type:'region'}).of(s.iso2) ?? s.countryName;
-  return <label className={styles.option}><input type="checkbox" checked={checked} disabled={disabled} onChange={e => onChange(e.target.checked)} /><span><strong>{name}{s.worksheet.city ? ` · ${s.worksheet.city}` : ''}</strong><small>{t('Scenario')} {s.slot} · {s.worksheet.currency} · {t('{count} months',{count:s.worksheet.months})}</small></span></label>;
+  return <label className={styles.option}><input type="checkbox" checked={checked} disabled={disabled} onChange={e => onChange(e.target.checked)} /><span><strong>{name}{s.worksheet.city ? <LocalizedText text={" · {value0}"} values={{value0: String(s.worksheet.city)}} /> : ''}</strong><small>{t('Scenario')} {s.slot} · <LocalizedText text={s.worksheet.currency} /> · {t('{count} months',{count:s.worksheet.months})}</small></span></label>;
 }
 
 export function ScenarioComparison({scenarios,example=false}:{scenarios:SavedPremiumScenario[];example?:boolean}) {
@@ -82,15 +82,15 @@ export function ScenarioComparison({scenarios,example=false}:{scenarios:SavedPre
       const money=(amount:number|null) => amount === null ? t('Missing') : new Intl.NumberFormat(locale,{style:'currency',currency:w.currency}).format(amount);
       const country=new Intl.DisplayNames([locale],{type:'region'}).of(s.iso2) ?? s.countryName;
       return <article key={s.id} className={styles.card}>
-        <div className={styles.cardHead}><span>{index === 0 ? t('Baseline') : t('Alternative {number}',{number:index})}</span><span>{w.currency}</span></div>
-        <h3>{country}{w.city ? ` · ${w.city}` : ''}</h3><p>{example ? t('Example {number}',{number:s.slot}) : `${t('Scenario')} ${s.slot}`} · {t('{count} months',{count:w.months})}</p>
+        <div className={styles.cardHead}><span>{index === 0 ? t('Baseline') : t('Alternative {number}',{number:index})}</span><span><LocalizedText text={w.currency} /></span></div>
+        <h3>{country}{w.city ? <LocalizedText text={" · {value0}"} values={{value0: String(w.city)}} /> : ''}</h3><p>{example ? t('Example {number}',{number:s.slot}) : <LocalizedText text={"{value0} {value1}"} values={{value0: String(t('Scenario')), value1: String(s.slot)}} />} · {t('{count} months',{count:w.months})}</p>
         <dl>{COST_CATEGORIES.map(category => <div key={category}><dt>{t(categories[category])}</dt><dd>{money(w.monthly[category])}</dd></div>)}<div className={styles.subtotal}><dt>{t('Known monthly costs')}</dt><dd>{money(totals.knownMonthly)}</dd></div><div><dt>{t('Tuition')}</dt><dd>{money(w.tuition)}</dd></div><div><dt>{t('Arrival')}</dt><dd>{money(w.arrival)}</dd></div><div><dt>{t('Contingency')} ({new Intl.NumberFormat(locale).format(w.bufferPercent)}%)</dt><dd>{money(totals.buffer)}</dd></div></dl>
         <div className={styles.total}><span>{t(totals.complete ? 'Total planned budget' : 'Known subtotal · incomplete')}</span><strong>{money(totals.total)}</strong></div>
         {index > 0 && readiness === 'ready' && difference !== null && <p>{t('Difference from baseline')}: <strong>{difference > 0 ? '+' : ''}{money(difference)}</strong></p>}
         {!totals.complete && <p className={styles.warning}>{t('Missing')}: {totals.missing.map(key => t(categories[key as keyof typeof categories])).join(', ')}</p>}
         <p className={styles.meta}>{t('Quote date')}: {w.quoteDate ? new Intl.DateTimeFormat(locale,{dateStyle:'medium',timeZone:'UTC'}).format(new Date(`${w.quoteDate}T00:00:00Z`)) : t('Not recorded')}</p>
         <p className={styles.meta}>{t('Source notes')}: {w.sourceNote || t('Not recorded')}</p>
-        <Link href={`/country-fit?country=${encodeURIComponent(w.country)}#research-workbench`}>{example ? t('Start with my own research') : `${t('Review worksheet')} · ${t('Scenario')} ${s.slot}`} ↗</Link>
+        <Link href={`/country-fit?country=${encodeURIComponent(w.country)}#research-workbench`}>{example ? t('Start with my own research') : <LocalizedText text={"{value0} · {value1} {value2}"} values={{value0: String(t('Review worksheet')), value1: String(t('Scenario')), value2: String(s.slot)}} />} ↗</Link>
       </article>;
     })}</div>
     {scenarios.length > 0 && <div className={styles.export}><button className={styles.primary} onClick={download}>{t('Export comparison · JSON')} ↓</button><p>{t(example ? 'Illustrative examples only. These amounts are fictional and are not saved to your account.' : 'Your estimates are not verified quotes. This snapshot contains only the selected saved scenarios and their source notes.')}</p></div>}

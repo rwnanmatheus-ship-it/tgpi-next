@@ -1,5 +1,7 @@
 "use client";
 
+
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import Link from "next/link";
 import { useState } from "react";
 import { LocalizedText } from "@/components/localization/LocaleProvider";
@@ -46,65 +48,47 @@ export default function HomeDecisionOS() {
       <div className="tgpi-container relative">
         <div className="grid gap-10 xl:grid-cols-[0.68fr_1.32fr] xl:items-center">
           <div>
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.25em] text-[var(--tgpi-gold-light)]">
-              Product demonstration
-            </p>
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.25em] text-[var(--tgpi-gold-light)]"><LocalizedText text={"Product demonstration"} /></p>
             <h2
               id="home-decision-os-title"
               className="mt-5 max-w-xl font-[var(--tgpi-font-display)] text-[clamp(3rem,5vw,5rem)] font-semibold leading-[0.94] tracking-[-0.055em] text-white"
-            >
-              See how one country question becomes a system.
-            </h2>
-            <p className="mt-6 max-w-xl text-base leading-8 text-[#CAD6E4] sm:text-lg">
-              A shortlist becomes a comparison. The comparison exposes readiness gaps. Those gaps connect to documents, learning and the next practical action.
-            </p>
+            ><LocalizedText text={"See how one country question becomes a system."} /></h2>
+            <p className="mt-6 max-w-xl text-base leading-8 text-[#CAD6E4] sm:text-lg"><LocalizedText text={"A shortlist becomes a comparison. The comparison exposes readiness gaps. Those gaps connect to documents, learning and the next practical action."} /></p>
 
-            <div className="mt-7 flex flex-wrap gap-2" aria-label="TGPI connected capabilities">
+            <LocalizedElement as="div" className="mt-7 flex flex-wrap gap-2" aria-label="TGPI connected capabilities">
               {["Country fit", "Trade-offs", "Readiness", "Documents", "Learning evidence"].map((item) => (
                 <span
                   key={item}
                   className="rounded-full border border-white/12 bg-white/5 px-3 py-2 text-[9px] font-extrabold uppercase tracking-[0.14em] text-white/65"
                 >
-                  {item}
+                  <LocalizedText text={item} />
                 </span>
               ))}
-            </div>
+            </LocalizedElement>
 
             <div className="mt-8 grid gap-3 sm:flex">
               <Link
                 href="/compare"
                 className="inline-flex min-h-14 items-center justify-center rounded-2xl bg-[var(--tgpi-gold)] px-6 text-sm font-extrabold text-[var(--tgpi-navy)] shadow-[0_18px_45px_rgba(0,0,0,.24)] transition duration-300 hover:-translate-y-0.5 hover:bg-[var(--tgpi-gold-light)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
-              >
-                Build a real comparison
-              </Link>
+              ><LocalizedText text={"Build a real comparison"} /></Link>
               <Link
                 href="/sign-up"
                 className="inline-flex min-h-14 items-center justify-center rounded-2xl border border-white/20 bg-white/5 px-6 text-sm font-extrabold text-white transition duration-300 hover:-translate-y-0.5 hover:border-[var(--tgpi-gold-light)] hover:text-[var(--tgpi-gold-light)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold-light)]"
-              >
-                Create a Global Key
-              </Link>
+              ><LocalizedText text={"Create a Global Key"} /></Link>
             </div>
-            <p className="mt-5 text-xs leading-6 text-white/42">
-              The data below is an illustrative product preview, not a personal recommendation.
-            </p>
+            <p className="mt-5 text-xs leading-6 text-white/42"><LocalizedText text={"The data below is an illustrative product preview, not a personal recommendation."} /></p>
           </div>
 
           <div className="rounded-[30px] border border-white/15 bg-[#0D2746]/94 p-4 shadow-[0_40px_100px_rgba(0,0,0,.34)] backdrop-blur-xl sm:p-6">
             <div className="flex flex-col gap-4 border-b border-white/10 pb-5 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold-light)]">
-                  Illustrative objective
-                </p>
-                <p className="mt-2 font-[var(--tgpi-font-display)] text-3xl font-semibold text-white">
-                  Study and build a career abroad
-                </p>
+                <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold-light)]"><LocalizedText text={"Illustrative objective"} /></p>
+                <p className="mt-2 font-[var(--tgpi-font-display)] text-3xl font-semibold text-white"><LocalizedText text={"Study and build a career abroad"} /></p>
               </div>
-              <span className="w-fit rounded-full border border-[var(--tgpi-gold)]/35 bg-[var(--tgpi-gold)]/10 px-4 py-2 text-[10px] font-extrabold uppercase tracking-[0.16em] text-[var(--tgpi-gold-light)]">
-                Connected preview
-              </span>
+              <span className="w-fit rounded-full border border-[var(--tgpi-gold)]/35 bg-[var(--tgpi-gold)]/10 px-4 py-2 text-[10px] font-extrabold uppercase tracking-[0.16em] text-[var(--tgpi-gold-light)]"><LocalizedText text={"Connected preview"} /></span>
             </div>
 
-            <div className="mt-5 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" role="tablist" aria-label="TGPI Decision OS preview">
+            <LocalizedElement as="div" className="mt-5 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden" role="tablist" aria-label="TGPI Decision OS preview">
               {tabs.map((tab) => (
                 <button
                   key={tab}
@@ -116,10 +100,10 @@ export default function HomeDecisionOS() {
                   onClick={() => setActiveTab(tab)}
                   className={`min-h-11 shrink-0 rounded-xl px-4 text-xs font-extrabold transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)] ${activeTab === tab ? "bg-[var(--tgpi-gold)] text-[var(--tgpi-navy)]" : "border border-white/10 bg-white/5 text-white/70 hover:border-white/25 hover:text-white"}`}
                 >
-                  {tab}
+                  <LocalizedText text={tab} />
                 </button>
               ))}
-            </div>
+            </LocalizedElement>
 
             <div
               id="tgpi-preview-panel"
@@ -175,16 +159,10 @@ function CountryPanel({ expanded = false }: { expanded?: boolean }) {
     <div className="rounded-[24px] border border-white/10 bg-white/[0.055] p-5">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-white/45">
-            Example shortlist
-          </p>
-          <p className="mt-2 text-sm leading-6 text-[#C8D3E0]">
-            Structured around education, language, budget and mobility.
-          </p>
+          <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-white/45"><LocalizedText text={"Example shortlist"} /></p>
+          <p className="mt-2 text-sm leading-6 text-[#C8D3E0]"><LocalizedText text={"Structured around education, language, budget and mobility."} /></p>
         </div>
-        <span className="rounded-full border border-white/10 bg-black/10 px-3 py-2 text-[9px] font-extrabold uppercase tracking-[0.14em] text-white/45">
-          Demo
-        </span>
+        <span className="rounded-full border border-white/10 bg-black/10 px-3 py-2 text-[9px] font-extrabold uppercase tracking-[0.14em] text-white/45"><LocalizedText text={"Demo"} /></span>
       </div>
       <div className={`mt-5 grid gap-3 ${expanded ? "md:grid-cols-3" : ""}`}>
         {countries.map((country, index) => (
@@ -215,12 +193,10 @@ function ReadinessPanel({ expanded = false }: { expanded?: boolean }) {
     <div className="rounded-[24px] border border-white/10 bg-white/[0.055] p-5">
       <div className="flex items-end justify-between gap-4">
         <div>
-          <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-white/45">
-            Example readiness
-          </p>
+          <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-white/45"><LocalizedText text={"Example readiness"} /></p>
           <p className="mt-2 font-[var(--tgpi-font-display)] text-5xl font-semibold text-white">70%</p>
         </div>
-        <span className="text-xs font-extrabold text-amber-200">Directional signal</span>
+        <span className="text-xs font-extrabold text-amber-200"><LocalizedText text={"Directional signal"} /></span>
       </div>
       <div className="mt-5 h-2 overflow-hidden rounded-full bg-white/10">
         <div className="h-full w-[70%] rounded-full bg-gradient-to-r from-[var(--tgpi-gold)] to-[var(--tgpi-gold-light)]" />
@@ -228,7 +204,7 @@ function ReadinessPanel({ expanded = false }: { expanded?: boolean }) {
       <div className={`mt-5 grid grid-cols-2 gap-3 ${expanded ? "sm:grid-cols-4" : ""}`}>
         {readiness.map(([label, value]) => (
           <div key={label} className="rounded-xl border border-white/10 bg-black/10 p-3">
-            <p className="text-[10px] uppercase tracking-[0.15em] text-white/40">{label}</p>
+            <p className="text-[10px] uppercase tracking-[0.15em] text-white/40"><LocalizedText text={label} /></p>
             <p className="mt-1 text-sm font-extrabold text-white">{value}</p>
           </div>
         ))}
@@ -240,21 +216,13 @@ function ReadinessPanel({ expanded = false }: { expanded?: boolean }) {
 function RecommendationPanel() {
   return (
     <div className="rounded-[24px] border border-white/10 bg-white/[0.055] p-5">
-      <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-white/45">
-        System recommendation
-      </p>
-      <p className="mt-3 font-[var(--tgpi-font-display)] text-3xl font-semibold text-white">
-        Strengthen evidence before narrowing the shortlist.
-      </p>
-      <p className="mt-4 text-sm leading-7 text-white/55">
-        Country options are promising, but translation and language evidence remain the most visible preparation gaps.
-      </p>
+      <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-white/45"><LocalizedText text={"System recommendation"} /></p>
+      <p className="mt-3 font-[var(--tgpi-font-display)] text-3xl font-semibold text-white"><LocalizedText text={"Strengthen evidence before narrowing the shortlist."} /></p>
+      <p className="mt-4 text-sm leading-7 text-white/55"><LocalizedText text={"Country options are promising, but translation and language evidence remain the most visible preparation gaps."} /></p>
       <Link
         href="/passport"
         className="mt-6 inline-flex min-h-12 items-center justify-center rounded-2xl bg-[var(--tgpi-gold)] px-5 text-sm font-extrabold text-[var(--tgpi-navy)]"
-      >
-        Open Documents OS
-      </Link>
+      ><LocalizedText text={"Open Documents OS"} /></Link>
     </div>
   );
 }
@@ -262,17 +230,15 @@ function RecommendationPanel() {
 function DocumentPanel() {
   return (
     <div className="rounded-[24px] border border-white/10 bg-white/[0.055] p-5">
-      <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-white/45">
-        Evidence categories
-      </p>
+      <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-white/45"><LocalizedText text={"Evidence categories"} /></p>
       <div className="mt-5 space-y-3">
         {documents.map(([label, status]) => (
           <div key={label} className="flex items-center justify-between rounded-2xl border border-white/10 bg-black/10 p-4">
-            <span className="text-sm font-bold text-white">{label}</span>
+            <span className="text-sm font-bold text-white"><LocalizedText text={label} /></span>
             <span
               className={`rounded-full px-3 py-1 text-[10px] font-extrabold uppercase tracking-[0.12em] ${status === "Ready" ? "bg-emerald-400/10 text-emerald-200" : status === "Next" ? "bg-amber-400/10 text-amber-200" : "bg-white/10 text-white/60"}`}
             >
-              {status}
+              <LocalizedText text={status} />
             </span>
           </div>
         ))}
@@ -285,9 +251,7 @@ function LearningPanel() {
   return (
     <div className="grid gap-4 md:grid-cols-[1.08fr_.92fr]">
       <div className="rounded-[24px] border border-white/10 bg-white/[0.055] p-5">
-        <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-white/45">
-          Capability path
-        </p>
+        <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-white/45"><LocalizedText text={"Capability path"} /></p>
         <div className="mt-5 space-y-3">
           {learning.map(([label, status], index) => (
             <div key={label} className="grid grid-cols-[auto_1fr] items-center gap-4 rounded-2xl border border-white/10 bg-black/10 p-4">
@@ -295,23 +259,17 @@ function LearningPanel() {
                 0{index + 1}
               </span>
               <span>
-                <span className="block text-sm font-extrabold text-white">{label}</span>
-                <span className="mt-1 block text-xs text-white/45">{status}</span>
+                <span className="block text-sm font-extrabold text-white"><LocalizedText text={label} /></span>
+                <span className="mt-1 block text-xs text-white/45"><LocalizedText text={status} /></span>
               </span>
             </div>
           ))}
         </div>
       </div>
       <div className="rounded-[24px] border border-[var(--tgpi-gold)]/25 bg-[var(--tgpi-gold)]/10 p-5">
-        <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-light)]">
-          Connected learning
-        </p>
-        <p className="mt-3 font-[var(--tgpi-font-display)] text-3xl font-semibold text-white">
-          Build the capability your decision reveals.
-        </p>
-        <p className="mt-4 text-sm leading-7 text-white/60">
-          TGPI Learning turns readiness gaps into practical lessons, exercises and evidence of progress.
-        </p>
+        <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-light)]"><LocalizedText text={"Connected learning"} /></p>
+        <p className="mt-3 font-[var(--tgpi-font-display)] text-3xl font-semibold text-white"><LocalizedText text={"Build the capability your decision reveals."} /></p>
+        <p className="mt-4 text-sm leading-7 text-white/60"><LocalizedText text={"TGPI Learning turns readiness gaps into practical lessons, exercises and evidence of progress."} /></p>
         <Link
           href="/courses"
           className="mt-6 inline-flex min-h-12 items-center justify-center rounded-2xl bg-[var(--tgpi-gold)] px-5 text-sm font-extrabold text-[var(--tgpi-navy)]"
@@ -329,9 +287,9 @@ function NextActionPanel() {
     >
       <div className="flex items-center justify-between gap-4">
         <div>
-          <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-white/45">Next layer</p>
-          <p className="mt-2 text-lg font-extrabold text-white">Document preparation</p>
-          <p className="mt-1 text-sm text-white/45">Evidence · Verification · Timeline</p>
+          <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-white/45"><LocalizedText text={"Next layer"} /></p>
+          <p className="mt-2 text-lg font-extrabold text-white"><LocalizedText text={"Document preparation"} /></p>
+          <p className="mt-1 text-sm text-white/45"><LocalizedText text={"Evidence · Verification · Timeline"} /></p>
         </div>
         <span className="text-2xl text-[var(--tgpi-gold-light)] transition group-hover:translate-x-1">→</span>
       </div>

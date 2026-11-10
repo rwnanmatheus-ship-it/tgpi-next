@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 export default function UserOnline({ online }: { online: boolean }) {
   return (
     <span
@@ -5,7 +7,7 @@ export default function UserOnline({ online }: { online: boolean }) {
         online ? "bg-green-500/20 text-green-400" : "bg-slate-700 text-slate-300"
       }`}
     >
-      {online ? "Online" : "Offline"}
+      {online ? <LocalizedText text={"Online"} /> : <LocalizedText text={"Offline"} />}
     </span>
   );
 }

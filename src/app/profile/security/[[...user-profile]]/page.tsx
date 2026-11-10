@@ -1,3 +1,4 @@
+import { localizeMetadata } from "@/lib/localization/metadata.server";
 import { getUserBillingRecord } from "@/lib/billing.server";
 import { ensureMemberNumber } from '@/lib/members/identity.server';
 import { courses } from "@/data/courses";
@@ -23,7 +24,7 @@ import { buildGlobalWorkspaceModel } from "@/lib/global-workspace";
 import { normalizeOnboardingData } from "@/lib/onboarding";
 import { getControlledPremiumAccessMode } from "@/lib/premium-access.server";
 
-export const metadata: Metadata = {
+const sourceMetadata: Metadata = {
   title: "Account & identity — TGPI Global Key",
   description:
     "Manage the identity, preferences and decision context connected to your TGPI Global Key.",
@@ -131,3 +132,5 @@ export default async function SecurityPage() {
     </main>
   );
 }
+
+export async function generateMetadata() { return localizeMetadata(sourceMetadata); }

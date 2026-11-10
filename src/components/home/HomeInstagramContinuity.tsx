@@ -1,4 +1,8 @@
-import Image from "next/image";
+
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+import Image from "@/components/localization/LocalizedImage";
 import Link from "next/link";
 import { homeSearchTopics } from "@/data/home-system";
 
@@ -50,43 +54,31 @@ export default function HomeInstagramContinuity() {
         <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
           <div className="max-w-4xl">
             <div className="flex flex-wrap items-center gap-3">
-              <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[var(--tgpi-gold-strong)]">
-                Organic intelligence network
-              </p>
+              <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[var(--tgpi-gold-strong)]"><LocalizedText text={"Organic intelligence network"} /></p>
               <span className="h-px w-10 bg-[var(--tgpi-gold)]" />
-              <span className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-muted)]">
-                Questions → evidence → action
-              </span>
+              <span className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-muted)]"><LocalizedText text={"Questions → evidence → action"} /></span>
             </div>
             <h2
               id="home-intelligence-library-title"
               className="mt-5 max-w-[920px] font-[var(--tgpi-font-display)] text-[clamp(2.75rem,5vw,4.7rem)] font-semibold leading-[0.94] tracking-[-0.045em] text-[var(--tgpi-ink)]"
-            >
-              Turn every global question into a deeper decision.
-            </h2>
-            <p className="mt-5 max-w-3xl text-base leading-8 text-[var(--tgpi-muted)] sm:text-lg">
-              TGPI connects discoverable editorial questions to country profiles, comparison, preparation and learning—so useful content continues inside the product.
-            </p>
+            ><LocalizedText text={"Turn every global question into a deeper decision."} /></h2>
+            <p className="mt-5 max-w-3xl text-base leading-8 text-[var(--tgpi-muted)] sm:text-lg"><LocalizedText text={"TGPI connects discoverable editorial questions to country profiles, comparison, preparation and learning—so useful content continues inside the product."} /></p>
           </div>
           <div className="flex flex-wrap gap-3 lg:justify-end">
             <Link
               href="/resources"
               className="inline-flex min-h-12 items-center justify-center rounded-2xl bg-[var(--tgpi-navy)] px-6 text-sm font-extrabold text-white transition hover:-translate-y-0.5 hover:bg-[var(--tgpi-navy-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
-            >
-              Explore resources
-            </Link>
+            ><LocalizedText text={"Explore resources"} /></Link>
             <a
               href="https://www.instagram.com/theglobalpolymath/"
               target="_blank"
               rel="noreferrer"
               className="inline-flex min-h-12 items-center justify-center rounded-2xl border border-[var(--tgpi-border)] bg-white px-6 text-sm font-extrabold text-[var(--tgpi-navy)] transition hover:-translate-y-0.5 hover:border-[var(--tgpi-gold)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
-            >
-              Instagram ↗
-            </a>
+            ><LocalizedText text={"Instagram ↗"} /></a>
           </div>
         </div>
 
-        <div
+        <LocalizedElement as="div"
           className="-mx-4 mt-12 flex snap-x snap-mandatory gap-5 overflow-x-auto px-4 pb-5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden sm:-mx-6 sm:px-6 lg:mx-0 lg:grid lg:grid-cols-2 lg:overflow-visible lg:px-0"
           aria-label="TGPI global decision intelligence topics"
         >
@@ -116,7 +108,7 @@ export default function HomeInstagramContinuity() {
                     <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(3,20,38,.02),rgba(3,20,38,.12)_62%,rgba(3,20,38,.48))]" />
                     <div className="absolute left-4 top-4 flex items-center gap-2 rounded-full border border-white/20 bg-[var(--tgpi-navy-deep)]/78 px-3 py-2 text-[9px] font-extrabold uppercase tracking-[0.16em] text-white backdrop-blur-md">
                       <span className={`h-1.5 w-1.5 rounded-full ${visual.line}`} />
-                      {visual.accent}
+                      <LocalizedText text={visual.accent} />
                     </div>
                     <span className="absolute bottom-4 left-4 grid h-10 w-10 place-items-center rounded-full border border-white/20 bg-[var(--tgpi-navy-deep)]/80 text-[10px] font-extrabold text-[var(--tgpi-gold-light)] backdrop-blur-md">
                       0{index + 1}
@@ -126,32 +118,26 @@ export default function HomeInstagramContinuity() {
                   <div className="flex flex-col p-6 sm:p-7 lg:p-8">
                     <div className="flex items-center justify-between gap-4">
                       <p className={`w-fit rounded-full border px-3 py-2 text-[9px] font-extrabold uppercase tracking-[0.17em] ${visual.tone}`}>
-                      {topic.eyebrow}
+                      <LocalizedText text={topic.eyebrow} />
                       </p>
                       <span className="text-lg text-[var(--tgpi-gold-strong)] transition group-hover:translate-x-1" aria-hidden="true">→</span>
                     </div>
                     <h3 className="mt-5 font-[var(--tgpi-font-display)] text-[clamp(2rem,3vw,2.75rem)] font-semibold leading-[0.98] tracking-[-0.035em] text-[var(--tgpi-navy)]">
-                      {topic.title}
+                      <LocalizedText text={topic.title} />
                     </h3>
-                    <p className="mt-4 text-sm leading-7 text-[var(--tgpi-muted)]">{topic.description}</p>
-                    <span className="mt-auto inline-flex items-center gap-2 border-t border-[var(--tgpi-border-soft)] pt-6 text-xs font-extrabold text-[var(--tgpi-navy)]">
-                      Continue inside TGPI
-                      <span className="text-[var(--tgpi-gold-strong)] transition group-hover:translate-x-1">→</span>
+                    <p className="mt-4 text-sm leading-7 text-[var(--tgpi-muted)]"><LocalizedText text={topic.description} /></p>
+                    <span className="mt-auto inline-flex items-center gap-2 border-t border-[var(--tgpi-border-soft)] pt-6 text-xs font-extrabold text-[var(--tgpi-navy)]"><LocalizedText text={"Continue inside TGPI"} /><span className="text-[var(--tgpi-gold-strong)] transition group-hover:translate-x-1">→</span>
                     </span>
                   </div>
                 </article>
               </Link>
             );
           })}
-        </div>
+        </LocalizedElement>
 
         <div className="mt-8 rounded-[24px] border border-[var(--tgpi-border)] bg-[linear-gradient(90deg,var(--tgpi-blue-soft),var(--tgpi-gold-soft))] px-5 py-4 text-sm leading-7 text-[var(--tgpi-muted)] sm:flex sm:items-center sm:justify-between sm:gap-6">
-          <p>
-            Social discovery creates attention. TGPI turns that attention into structured research, learning and a next action.
-          </p>
-          <Link href="/why" className="mt-3 inline-flex shrink-0 font-extrabold text-[var(--tgpi-navy)] sm:mt-0">
-            See the TGPI approach →
-          </Link>
+          <p><LocalizedText text={"Social discovery creates attention. TGPI turns that attention into structured research, learning and a next action."} /></p>
+          <Link href="/why" className="mt-3 inline-flex shrink-0 font-extrabold text-[var(--tgpi-navy)] sm:mt-0"><LocalizedText text={"See the TGPI approach →"} /></Link>
         </div>
       </div>
     </section>

@@ -1,3 +1,5 @@
+import { localizeMetadata } from "@/lib/localization/metadata.server";
+import { getSupplementalMessages } from "@/lib/localization/catalog.server";
 import "./localization.css";
 import { getLocale } from "@/lib/localization/server";
 import { LocaleProvider, AccountLocaleSync, LocalizedText } from "@/components/localization/LocaleProvider";
@@ -46,7 +48,7 @@ const interfaceFont = Manrope({
   display: "swap",
 });
 
-export const metadata: Metadata = {
+const sourceMetadata: Metadata = {
   metadataBase: new URL("https://www.theglobalpolymath.com"),
   applicationName: "TGPI",
   title: "TGPI | The Global Polymath Institute",
@@ -86,6 +88,8 @@ export const metadata: Metadata = {
   },
 };
 
+export async function generateMetadata(): Promise<Metadata> { return localizeMetadata(sourceMetadata); }
+
 export const viewport: Viewport = {
   themeColor: "#061B33",
   colorScheme: "light",
@@ -97,9 +101,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const locale = await getLocale();
   const clerkLocales = { en: enUS, "pt-BR": ptBR, es: esES, fr: frFR, de: deDE, it: itIT };
   return (
-    <html lang={locale} className={`${displayFont.variable} ${interfaceFont.variable}`}>
+    <html lang={locale} translate="no" className={`${displayFont.variable} ${interfaceFont.variable}`}>
       <body>
-        <LocaleProvider locale={locale}>
+        <LocaleProvider locale={locale} messages={await getSupplementalMessages(locale)}>
         <ClerkProvider
           signInUrl="/sign-in"
           signUpUrl="/sign-up"

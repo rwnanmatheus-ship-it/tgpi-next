@@ -1,8 +1,11 @@
+import { localizeMetadata } from "@/lib/localization/metadata.server";
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import { getLocale } from '@/lib/localization/server';
 import { translate } from '@/lib/localization/messages';
 import type { Metadata } from 'next';
 import CapabilitySystemRail from '@/components/capability/CapabilitySystemRail';
-import Image from 'next/image';
+import Image from "@/components/localization/LocalizedImage";
 import Link from 'next/link';
 import LearningPathExplorer from '@/components/courses/LearningPathExplorer';
 import { professionalCatalog } from '@/lib/learning/professional-catalog';
@@ -10,7 +13,7 @@ import TGPIPageShell from '@/components/TGPIPageShell';
 import { coursesOverview } from '@/data/courses-overview';
 import { parseCatalogFilters } from '@/lib/learning/catalog-filters';
 
-export const metadata: Metadata = {
+const sourceMetadata: Metadata = {
   alternates: { canonical: "/courses" },
   title: 'TGPI Learning — Practical Skills for a Global Life',
   description: 'Explore practical learning, resume your courses and understand the assessment and credential requirements for each pathway.',
@@ -24,7 +27,7 @@ export default async function CoursesPage({ searchParams }: { searchParams: Prom
   const raw = await searchParams;
   const params = new URLSearchParams(Object.entries(raw).flatMap(([key,value]) => typeof value === 'string' ? [[key,value]] : []));
   return <TGPIPageShell width="capability">
-    <header className="product-page-heading"><div><p className="product-kicker">TGPI / {t('Learning')}</p><h1>{t('Search your next skill')}</h1><p>{t('Choose a useful outcome. Practice it. Keep the evidence.')}</p></div><nav className="product-page-links" aria-label={t('Learning navigation')}><Link href="/profile">{t('My workspace')} ↗</Link><Link href="/certificates">{t('Certificates')} ↗</Link></nav></header>
+    <header className="product-page-heading"><div><p className="product-kicker"><LocalizedText text={"TGPI /"} />{" "}{t('Learning')}</p><h1>{t('Search your next skill')}</h1><p>{t('Choose a useful outcome. Practice it. Keep the evidence.')}</p></div><nav className="product-page-links" aria-label={t('Learning navigation')}><Link href="/profile">{t('My workspace')} ↗</Link><Link href="/certificates">{t('Certificates')} ↗</Link></nav></header>
     <LearningPathExplorer courses={catalog} initialFilters={parseCatalogFilters(params)} />
     <section className="product-catalog-art" aria-label={t('Put learning to work')}>
       <Image src="/images/cinematic-2026/learning-atelier-1600.webp" alt="" fill sizes="(min-width: 1024px) 80vw, 100vw" />
@@ -33,3 +36,5 @@ export default async function CoursesPage({ searchParams }: { searchParams: Prom
     <CapabilitySystemRail active="learning" />
   </TGPIPageShell>;
 }
+
+export async function generateMetadata() { return localizeMetadata(sourceMetadata); }

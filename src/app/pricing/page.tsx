@@ -1,3 +1,4 @@
+import { localizeMetadata } from "@/lib/localization/metadata.server";
 import { getLocale } from "@/lib/localization/server";
 import { translate } from "@/lib/localization/messages";
 import type { Metadata } from "next";
@@ -10,7 +11,7 @@ import { TGPI_FREE_PLAN, TGPI_PREMIUM_PLAN } from "@/lib/subscription-plans";
 import { LocalizedText } from "@/components/localization/LocaleProvider";
 
 
-export const metadata: Metadata = {
+const sourceMetadata: Metadata = {
   title: "TGPI Premium — Choose your country. Build your plan.",
   description:
     "Country research, personal planning and a protected Premium Command Center. TGPI Premium: US$ 19.90/month. Subscribe securely or access your membership.",
@@ -146,7 +147,7 @@ export default async function PricingPage({
                 className="h-12 w-12 object-contain"
               />
               <div>
-                <p className={eyebrow}>The Global Polymath Institute</p>
+                <p className={eyebrow}><LocalizedText text={"The Global Polymath Institute"} /></p>
                 <p className="mt-1 text-xs font-semibold text-[var(--tgpi-navy-raised)]"><LocalizedText text={"Data · Education · Mobility · Decision"} /></p>
               </div>
             </div>
@@ -343,9 +344,7 @@ export default async function PricingPage({
                   <tr className="bg-[#F1EBDD]">
                     <th scope="col" className="p-5"><LocalizedText text={"Capability"} /></th>
                     <th scope="col" className="p-5"><LocalizedText text="Free" /></th>
-                    <th scope="col" className="bg-[var(--tgpi-navy-raised)] p-5 text-[var(--tgpi-gold-light)]">
-                      Premium
-                    </th>
+                    <th scope="col" className="bg-[var(--tgpi-navy-raised)] p-5 text-[var(--tgpi-gold-light)]"><LocalizedText text={"Premium"} /></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -423,3 +422,5 @@ export default async function PricingPage({
     </TGPIPageShell>
   );
 }
+
+export async function generateMetadata() { return localizeMetadata(sourceMetadata); }

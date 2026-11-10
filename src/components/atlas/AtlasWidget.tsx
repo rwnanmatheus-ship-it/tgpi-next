@@ -2,7 +2,7 @@
 import { useLocale, LocalizedText } from "@/components/localization/LocaleProvider";
 
 import dynamic from 'next/dynamic';
-import Image from 'next/image';
+import Image from "@/components/localization/LocalizedImage";
 import Link from 'next/link';
 import { useAuth } from '@clerk/nextjs';
 import { usePathname } from 'next/navigation';
@@ -64,7 +64,7 @@ export default function AtlasWidget() {
       if (event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom) event.currentTarget.close();
     }}>
       <div className={styles.frame}>
-        <header className={styles.heading}><strong id="atlas-widget-title">TGPI Atlas AI</strong><Link href="/atlas" onClick={() => dialog.current?.close()}>{t("Full page ↗")}</Link><button autoFocus onClick={() => dialog.current?.close()} aria-label={t("Minimize Atlas")}>−</button></header>
+        <header className={styles.heading}><strong id="atlas-widget-title"><LocalizedText text={"TGPI Atlas AI"} /></strong><Link href="/atlas" onClick={() => dialog.current?.close()}>{t("Full page ↗")}</Link><button autoFocus onClick={() => dialog.current?.close()} aria-label={t("Minimize Atlas")}>−</button></header>
         <div className={styles.content}>
           {!isLoaded ? <p className={styles.loading}>{t("Loading your session…")}</p> : userId && visited ? <Chat key={`${userId}:${access?.sponsored === true}`} sponsored={access?.sponsored === true} userId={userId} enabled={access?.userId === userId && access.enabled} embedded /> : <div className={styles.guest}>
             <Image src="/brand/atlas/welcome.webp" alt={t("Atlas, your global companion")} width={160} height={160} />

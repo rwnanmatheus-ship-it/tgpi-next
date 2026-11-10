@@ -23,7 +23,7 @@ export default function UserCertificatesCard() {
     <section className="rounded-2xl border border-white/10 bg-white/5 p-5">
       <div className="mb-5 flex items-center justify-between">
         <h2 className="text-lg font-bold"><LocalizedText text={"Meus Certificados"} /></h2>
-        <span className="text-xs text-yellow-400">TGPI Verified</span>
+        <span className="text-xs text-yellow-400"><LocalizedText text={"TGPI Verified"} /></span>
       </div>
 
       <div className="space-y-3">
@@ -32,7 +32,7 @@ export default function UserCertificatesCard() {
             key={cert.title}
             className="rounded-xl border border-white/10 bg-black/30 p-4"
           >
-            <p className="font-semibold">{cert.title}</p>
+            <p className="font-semibold"><LocalizedText text={cert.title} /></p>
             <p className="mt-1 text-sm text-slate-400">{cert.level}</p>
             <p
               className={`mt-2 text-xs font-bold ${

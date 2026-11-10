@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image from "@/components/localization/LocalizedImage";
 
 export default function Avatar({
   name,

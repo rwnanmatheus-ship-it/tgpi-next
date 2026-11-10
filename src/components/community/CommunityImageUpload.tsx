@@ -1,7 +1,7 @@
 "use client";
 
 import { LocalizedText } from "@/components/localization/LocaleProvider";
-import Image from "next/image";
+import Image from "@/components/localization/LocalizedImage";
 import { useState, useEffect } from "react";
 import s from "./Community.module.css";
 export default function CommunityImageUpload({
@@ -38,7 +38,7 @@ export default function CommunityImageUpload({
       <label>
         {["post", "comment"].includes(kind)
           ? <LocalizedText text={"Attach a photo"} />
-          : `Community ${kind}`}
+          : <LocalizedText text={"Community {value0}"} values={{value0: String(kind)}} />}
         <input
           type="file"
           accept="image/jpeg,image/png,image/webp"
@@ -65,9 +65,7 @@ export default function CommunityImageUpload({
           onChange={(e) => setAlt(e.target.value)}
         />
       </label>
-      <p className={s.notice}>
-        JPEG, PNG or WebP · under 3 MB. Do not upload personal documents.
-      </p>
+      <p className={s.notice}><LocalizedText text={"JPEG, PNG or WebP · under 3 MB. Do not upload personal documents."} /></p>
       <button
         type="button"
         className={s.secondary}
@@ -97,11 +95,11 @@ export default function CommunityImageUpload({
           }
         }}
       >
-        {busy ? "Uploading…" : "Upload image"}
+        {busy ? <LocalizedText text={"Uploading…"} /> : <LocalizedText text={"Upload image"} />}
       </button>
       {error && (
         <p className={s.error} role="alert">
-          {error}
+          <LocalizedText text={error} />
         </p>
       )}
     </div>

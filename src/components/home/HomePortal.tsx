@@ -1,3 +1,5 @@
+
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import Link from "next/link";
 import { homeIntents, homeSystemStages } from "@/data/home-system";
 import { LocalizedText } from "@/components/localization/LocaleProvider";
@@ -13,22 +15,14 @@ export default function HomePortal() {
       <div className="mx-auto max-w-[1280px]">
         <div className="grid gap-7 lg:grid-cols-[1fr_auto] lg:items-end">
           <div className="max-w-4xl">
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[var(--tgpi-gold-strong)]">
-              Enter by intention
-            </p>
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[var(--tgpi-gold-strong)]"><LocalizedText text={"Enter by intention"} /></p>
             <h2
               id="home-portal-title"
               className="mt-4 font-[var(--tgpi-font-display)] text-[clamp(2.8rem,5vw,4.8rem)] font-semibold leading-[0.95] text-[var(--tgpi-ink)]"
-            >
-              Start with the decision in front of you.
-            </h2>
-            <p className="mt-5 max-w-3xl text-base leading-8 text-[var(--tgpi-muted)] sm:text-lg">
-              You do not need to understand the entire platform first. Choose your current objective and TGPI connects the next relevant layer.
-            </p>
+            ><LocalizedText text={"Start with the decision in front of you."} /></h2>
+            <p className="mt-5 max-w-3xl text-base leading-8 text-[var(--tgpi-muted)] sm:text-lg"><LocalizedText text={"You do not need to understand the entire platform first. Choose your current objective and TGPI connects the next relevant layer."} /></p>
           </div>
-          <span className="w-fit rounded-full border border-[var(--tgpi-border)] bg-white px-4 py-2 text-xs font-extrabold text-[var(--tgpi-navy)] shadow-[var(--tgpi-shadow-sm)]">
-            Explore publicly · connect progress later
-          </span>
+          <span className="w-fit rounded-full border border-[var(--tgpi-border)] bg-white px-4 py-2 text-xs font-extrabold text-[var(--tgpi-navy)] shadow-[var(--tgpi-shadow-sm)]"><LocalizedText text={"Explore publicly · connect progress later"} /></span>
         </div>
 
         <div className="mt-10 grid gap-4 md:grid-cols-2">
@@ -46,20 +40,20 @@ export default function HomePortal() {
               <div className="relative">
                 <div className="flex items-center justify-between gap-4">
                   <p className="text-[10px] font-extrabold uppercase tracking-[0.21em] text-[var(--tgpi-gold-strong)]">
-                    {intent.label}
+                    <LocalizedText text={intent.label} />
                   </p>
                   <span className="grid h-10 w-10 place-items-center rounded-full border border-[var(--tgpi-border)] bg-white text-xs font-extrabold text-[var(--tgpi-navy)]">
                     0{index + 1}
                   </span>
                 </div>
                 <h3 className="mt-8 max-w-xl font-[var(--tgpi-font-display)] text-3xl font-semibold leading-tight text-[var(--tgpi-navy)] sm:text-4xl">
-                  {intent.title}
+                  <LocalizedText text={intent.title} />
                 </h3>
                 <p className="mt-4 max-w-xl text-sm leading-7 text-[var(--tgpi-muted)]">
-                  {intent.description}
+                  <LocalizedText text={intent.description} />
                 </p>
                 <span className="mt-7 inline-flex items-center gap-2 text-sm font-extrabold text-[var(--tgpi-navy)]">
-                  {intent.action}
+                  <LocalizedText text={intent.action} />
                   <span className="text-[var(--tgpi-gold-strong)] transition group-hover:translate-x-1">→</span>
                 </span>
               </div>
@@ -72,25 +66,17 @@ export default function HomePortal() {
           <div className="relative">
             <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-end">
               <div className="max-w-3xl">
-                <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[var(--tgpi-gold-light)]">
-                  TGPI product architecture
-                </p>
-                <h3 className="mt-4 font-[var(--tgpi-font-display)] text-4xl font-semibold leading-[0.96] sm:text-5xl">
-                  One decision. Five connected layers.
-                </h3>
-                <p className="mt-4 max-w-2xl text-sm leading-7 text-[#C9D5E3] sm:text-base">
-                  Every product has a distinct job, but none is designed as an isolated destination.
-                </p>
+                <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[var(--tgpi-gold-light)]"><LocalizedText text={"TGPI product architecture"} /></p>
+                <h3 className="mt-4 font-[var(--tgpi-font-display)] text-4xl font-semibold leading-[0.96] sm:text-5xl"><LocalizedText text={"One decision. Five connected layers."} /></h3>
+                <p className="mt-4 max-w-2xl text-sm leading-7 text-[#C9D5E3] sm:text-base"><LocalizedText text={"Every product has a distinct job, but none is designed as an isolated destination."} /></p>
               </div>
               <Link
                 href="/why"
                 className="inline-flex min-h-12 w-fit items-center justify-center rounded-2xl border border-white/20 bg-white/5 px-6 text-sm font-extrabold text-white transition hover:border-[var(--tgpi-gold-light)] hover:text-[var(--tgpi-gold-light)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold-light)]"
-              >
-                Why the system exists
-              </Link>
+              ><LocalizedText text={"Why the system exists"} /></Link>
             </div>
 
-            <nav
+            <LocalizedElement as="nav"
               className="-mx-1 mt-8 flex snap-x snap-mandatory gap-3 overflow-x-auto px-1 pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden lg:grid lg:grid-cols-5 lg:overflow-visible lg:pb-0"
               aria-label="TGPI product architecture"
             >
@@ -111,21 +97,21 @@ export default function HomePortal() {
                     <span className="text-[var(--tgpi-gold-light)]/60 transition group-hover:translate-x-1">→</span>
                   </div>
                   <p className="mt-7 text-[9px] font-extrabold uppercase tracking-[0.18em] text-white/45">
-                    {stage.product}
+                    <LocalizedText text={stage.product} />
                   </p>
                   <h4 className="mt-2 font-[var(--tgpi-font-display)] text-3xl font-semibold text-white">
-                    {stage.title}
+                    <LocalizedText text={stage.title} />
                   </h4>
                   <p className="mt-3 min-h-[5.25rem] text-xs leading-6 text-white/55">
-                    {stage.description}
+                    <LocalizedText text={stage.description} />
                   </p>
                   <div className="mt-5 border-t border-white/10 pt-4">
                     <p className="text-[9px] font-extrabold uppercase tracking-[0.16em] text-[var(--tgpi-gold-light)]"><LocalizedText text="Designed outcome" /></p>
-                    <p className="mt-2 text-xs font-bold leading-5 text-white/75">{stage.outcome}</p>
+                    <p className="mt-2 text-xs font-bold leading-5 text-white/75"><LocalizedText text={stage.outcome} /></p>
                   </div>
                 </Link>
               ))}
-            </nav>
+            </LocalizedElement>
           </div>
         </div>
       </div>

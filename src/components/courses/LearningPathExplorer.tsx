@@ -1,7 +1,7 @@
 "use client";
 import { useLocale } from "@/components/localization/LocaleProvider";
 
-import Image from "next/image";
+import Image from "@/components/localization/LocalizedImage";
 import CinematicImage from "@/components/ui/CinematicImage";
 import { courseArtworkKeys } from "@/lib/cinematic-art";
 import Link from "next/link";
@@ -57,13 +57,13 @@ function Catalog({ courses, initialFilters }: Props) {
     <div className={styles.tools}>
       <div className={styles.searchRow}>
         <label className={styles.search}><span><LocalizedText text={t("Search courses")} /></span><input type="search" value={query} onChange={event => update({ query: event.target.value })} placeholder={t("Try English, career or budget")} /></label>
-        <label className={styles.select}><span><LocalizedText text={t("Course series")} /></span><select aria-label={t("Course series")} value={series} onChange={event => update({ series: event.target.value })}><option value="all">{t("All series")}</option>{seriesNames.map(name => <option key={name} value={name}>{t(name)}</option>)}</select></label>
-        <label className={styles.select}><span><LocalizedText text={t("Availability")} /></span><select aria-label={t("Availability")} value={availability} onChange={event => update({ availability: event.target.value })}><option value="available">{t("Available now")} ({liveCount})</option><option value="planned">{t("In development")}</option><option value="all">{t("Full library")}</option></select></label>
+        <label className={styles.select}><span><LocalizedText text={t("Course series")} /></span><select aria-label={t("Course series")} value={series} onChange={event => update({ series: event.target.value })}><option value="all"><LocalizedText text={t("All series")} /></option>{seriesNames.map(name => <option key={name} value={name}><LocalizedText text={t(name)} /></option>)}</select></label>
+        <label className={styles.select}><span><LocalizedText text={t("Availability")} /></span><select aria-label={t("Availability")} value={availability} onChange={event => update({ availability: event.target.value })}><option value="available">{t("Available now")} ({liveCount})</option><option value="planned"><LocalizedText text={t("In development")} /></option><option value="all"><LocalizedText text={t("Full library")} /></option></select></label>
       </div>
       <div className={styles.filters} role="group" aria-label={t("Filter by learning goal")}>{goals.map(([value,label]) => <button key={value} type="button" aria-pressed={goal === value} onClick={() => update({ goal: value })}>{t(label)}</button>)}</div>
       <div className={styles.policyFilters}>
-        <label>{t('Credential pathway')}<select value={credential} onChange={event => update({ credential: event.target.value })}><option value="all">{t('All credential types')}</option><option value="criteria_available">{t('Credential pathway')}</option><option value="none">{t('Practice')}</option></select></label>
-        <label>{t('Course language')}<select value={language} onChange={event => update({ language: event.target.value })}><option value="all">{t('All languages')}</option><option value="pt-BR">Português</option><option value="en">English</option></select></label>
+        <label>{t('Credential pathway')}<select value={credential} onChange={event => update({ credential: event.target.value })}><option value="all"><LocalizedText text={t('All credential types')} /></option><option value="criteria_available"><LocalizedText text={t('Credential pathway')} /></option><option value="none"><LocalizedText text={t('Practice')} /></option></select></label>
+        <label>{t('Course language')}<select value={language} onChange={event => update({ language: event.target.value })}><option value="all"><LocalizedText text={t('All languages')} /></option><option value="pt-BR"><LocalizedText text={"Português"} /></option><option value="en"><LocalizedText text={"English"} /></option></select></label>
       </div>
     </div>
     <div className={styles.resultRow}><p role="status">{t("Course results: {count}", { count: visible.length })}</p><Link href="/certificates"><LocalizedText text="My certificates ↗" /></Link></div>

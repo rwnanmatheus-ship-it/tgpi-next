@@ -1,5 +1,6 @@
-import Image from "next/image";
-import Link from "next/link";
+import { getLocale as getFormattingLocale } from "@/lib/localization/server";
+import Image from "@/components/localization/LocalizedImage";
+import Link from "@/components/localization/LocalizedLink";
 import {
   getCountryImageAlt,
   getCountryImageUrl,
@@ -32,10 +33,11 @@ const statusLabels: Record<WorkspaceActionStatus, string> = {
   not_started: "Not started",
 };
 
-export default function GlobalWorkspaceV1({
+export default async function GlobalWorkspaceV1({
   firstName,
   model,
 }: GlobalWorkspaceV1Props) {
+  const locale = await getFormattingLocale();
   const primaryAction =
     model.actions.find((action) => action.status === "in_progress") ??
     model.actions.find((action) => action.status === "not_started") ??
@@ -47,23 +49,17 @@ export default function GlobalWorkspaceV1({
       <section className="overflow-hidden rounded-[32px] border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] shadow-[0_24px_70px_rgba(11,31,58,0.08)]">
         <div className="grid lg:grid-cols-[1.12fr_.88fr]">
           <div className="p-6 sm:p-8 lg:p-10">
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#956A13]">
-              Your plan, activated
-            </p>
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#956A13]"><LocalizedText text={"Your plan, activated"} /></p>
             <h2 className="mt-4 max-w-3xl font-[var(--tgpi-font-display)] text-4xl font-semibold leading-[1.02] tracking-[-0.035em] sm:text-5xl">
-              {firstName}, move from interest to an informed next step.
-            </h2>
-            <p className="mt-5 max-w-2xl text-sm leading-7 text-[#657082] sm:text-base sm:leading-8">
-              TGPI has organized your goal, shortlist and priorities into one
-              practical decision workspace.
-            </p>
+              {firstName}<LocalizedText text={", move from interest to an informed next step."} /></h2>
+            <p className="mt-5 max-w-2xl text-sm leading-7 text-[#657082] sm:text-base sm:leading-8"><LocalizedText text={"TGPI has organized your goal, shortlist and priorities into one practical decision workspace."} /></p>
 
             {primaryAction ? (
               <Link
                 href={primaryAction.href}
                 className="mt-7 inline-flex min-h-12 items-center justify-center rounded-xl bg-[var(--tgpi-navy-raised)] px-6 text-sm font-extrabold text-white shadow-[0_12px_30px_rgba(11,31,58,0.18)] transition hover:-translate-y-0.5 hover:bg-[#143454] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold-hover)]"
               >
-                {primaryAction.action} →
+                <LocalizedText text={primaryAction.action} /> →
               </Link>
             ) : null}
           </div>
@@ -73,8 +69,7 @@ export default function GlobalWorkspaceV1({
               <div>
                 <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold-light)]"><LocalizedText text="Global profile" /></p>
                 <p className="mt-3 font-[var(--tgpi-font-display)] text-4xl font-semibold">
-                  {model.completion}% complete
-                </p>
+                  {model.completion}<LocalizedText text={"% complete"} /></p>
               </div>
               <Link
                 href="/onboarding"
@@ -93,13 +88,13 @@ export default function GlobalWorkspaceV1({
                   key={item.label}
                   className="flex items-center justify-between gap-4 rounded-xl border border-white/10 bg-white/[0.045] px-4 py-3 text-xs font-bold"
                 >
-                  <span className="text-[#D7E0EB]">{item.label}</span>
+                  <span className="text-[#D7E0EB]"><LocalizedText text={item.label} /></span>
                   <span
                     className={
                       item.complete ? "text-[#A9E1C8]" : "text-[var(--tgpi-gold-light)]"
                     }
                   >
-                    {item.complete ? "Complete" : "Add details"}
+                    {item.complete ? <LocalizedText text={"Complete"} /> : <LocalizedText text={"Add details"} />}
                   </span>
                 </div>
               ))}
@@ -114,15 +109,12 @@ export default function GlobalWorkspaceV1({
       >
         <div className="grid lg:grid-cols-[0.82fr_1.18fr]">
           <div className="bg-[var(--tgpi-navy-raised)] p-6 text-white sm:p-8">
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[var(--tgpi-gold-light)]">
-              Activation progress
-            </p>
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[var(--tgpi-gold-light)]"><LocalizedText text={"Activation progress"} /></p>
             <h2
               id="activation-progress-title"
               className="mt-3 font-[var(--tgpi-font-display)] text-4xl font-semibold"
             >
-              {model.activationCompletion}% of your action system activated.
-            </h2>
+              {model.activationCompletion}<LocalizedText text={"% of your action system activated."} /></h2>
             <div className="mt-5 h-2 overflow-hidden rounded-full bg-white/10">
               <div
                 className="h-full rounded-full bg-[#E5BF5A]"
@@ -136,7 +128,7 @@ export default function GlobalWorkspaceV1({
                   className="rounded-2xl border border-white/10 bg-white/[0.05] p-4"
                 >
                   <dt className="text-[9px] font-extrabold uppercase tracking-[0.16em] text-[#C7D0DC]">
-                    {item.label}
+                    <LocalizedText text={item.label} />
                   </dt>
                   <dd className="mt-2 text-2xl font-extrabold text-white">
                     {item.value}
@@ -150,9 +142,7 @@ export default function GlobalWorkspaceV1({
             <div className="flex items-end justify-between gap-4">
               <div>
                 <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#956A13]"><LocalizedText text="Recent activity" /></p>
-                <h2 className="mt-2 font-[var(--tgpi-font-display)] text-3xl font-semibold">
-                  Your work continues across devices.
-                </h2>
+                <h2 className="mt-2 font-[var(--tgpi-font-display)] text-3xl font-semibold"><LocalizedText text={"Your work continues across devices."} /></h2>
               </div>
               <span className="rounded-full border border-[var(--tgpi-border)] bg-[#F7F2E8] px-3 py-2 text-[9px] font-extrabold uppercase tracking-[0.14em] text-[#657082]"><LocalizedText text="Private" /></span>
             </div>
@@ -167,10 +157,10 @@ export default function GlobalWorkspaceV1({
                   >
                     <span>
                       <span className="block text-sm font-extrabold text-[var(--tgpi-navy-raised)]">
-                        {activity.title}
+                        <LocalizedText text={activity.title} />
                       </span>
                       <span className="mt-1 block text-[10px] font-bold uppercase tracking-[0.12em] text-[#7A8390]">
-                        {formatActivityDate(activity.occurredAt)}
+                        {formatActivityDate(locale, activity.occurredAt)}
                       </span>
                     </span>
                     <span className="font-extrabold text-[var(--tgpi-gold-hover)] transition group-hover:translate-x-1">
@@ -181,12 +171,8 @@ export default function GlobalWorkspaceV1({
               </div>
             ) : (
               <div className="mt-5 rounded-2xl border border-dashed border-[#CFC7B8] bg-[var(--tgpi-surface)] p-6">
-                <p className="text-sm font-extrabold text-[var(--tgpi-navy-raised)]">
-                  Your activity timeline starts with one practical action.
-                </p>
-                <p className="mt-2 text-xs leading-6 text-[#657082]">
-                  Save a country, compare a shortlist, review documents, estimate costs or begin a learning path.
-                </p>
+                <p className="text-sm font-extrabold text-[var(--tgpi-navy-raised)]"><LocalizedText text={"Your activity timeline starts with one practical action."} /></p>
+                <p className="mt-2 text-xs leading-6 text-[#657082]"><LocalizedText text={"Save a country, compare a shortlist, review documents, estimate costs or begin a learning path."} /></p>
               </div>
             )}
           </div>
@@ -200,12 +186,10 @@ export default function GlobalWorkspaceV1({
             <h2
               id="global-plan-summary-title"
               className="mt-3 font-[var(--tgpi-font-display)] text-4xl font-semibold tracking-[-0.035em]"
-            >
-              Your direction at a glance.
-            </h2>
+            ><LocalizedText text={"Your direction at a glance."} /></h2>
           </div>
           <p className="rounded-full border border-[var(--tgpi-border)] bg-white px-4 py-2 text-xs font-extrabold text-[#657082]">
-            {model.goalLabel}
+            <LocalizedText text={model.goalLabel} />
           </p>
         </div>
         <dl className="mt-6 grid overflow-hidden rounded-[26px] border border-[var(--tgpi-border)] bg-white sm:grid-cols-2 xl:grid-cols-5">
@@ -215,7 +199,7 @@ export default function GlobalWorkspaceV1({
               className="border-b border-[#E4DED2] p-5 last:border-b-0 sm:border-r sm:last:border-r-0 xl:border-b-0"
             >
               <dt className="text-[9px] font-extrabold uppercase tracking-[0.19em] text-[#7A8390]">
-                {item.label}
+                <LocalizedText text={item.label} />
               </dt>
               <dd className="mt-3 text-sm font-extrabold leading-6 text-[var(--tgpi-navy-raised)]">
                 {item.value}
@@ -228,23 +212,17 @@ export default function GlobalWorkspaceV1({
       <section aria-labelledby="country-fit-title">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#956A13]">
-              Country Fit Preview
-            </p>
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#956A13]"><LocalizedText text={"Country Fit Preview"} /></p>
             <h2
               id="country-fit-title"
               className="mt-3 font-[var(--tgpi-font-display)] text-4xl font-semibold tracking-[-0.035em]"
-            >
-              Your shortlist, organized by fit.
-            </h2>
+            ><LocalizedText text={"Your shortlist, organized by fit."} /></h2>
           </div>
           {model.selectedCountryCount >= 2 ? (
             <Link
               href={model.compareHref}
               className="text-sm font-extrabold text-[#956A13] underline decoration-[var(--tgpi-gold-hover)]/40 underline-offset-4"
-            >
-              Open full comparison →
-            </Link>
+            ><LocalizedText text={"Open full comparison →"} /></Link>
           ) : null}
         </div>
 
@@ -276,21 +254,16 @@ export default function GlobalWorkspaceV1({
                       </h3>
                     </div>
                     <div className="rounded-2xl border border-[var(--tgpi-gold-light)]/40 bg-[#071A32]/75 px-4 py-3 text-right backdrop-blur">
-                      <p className="text-[9px] font-extrabold uppercase tracking-[0.17em] text-[var(--tgpi-gold-light)]">
-                        Fit status
-                      </p>
-                      <p className="mt-1 text-2xl font-extrabold">{fit.score ?? "Review"}</p>
+                      <p className="text-[9px] font-extrabold uppercase tracking-[0.17em] text-[var(--tgpi-gold-light)]"><LocalizedText text={"Fit status"} /></p>
+                      <p className="mt-1 text-2xl font-extrabold">{fit.score ?? <LocalizedText text={"Review"} />}</p>
                     </div>
                   </div>
                 </Link>
                 <div className="p-5">
                   <div className="flex items-center justify-between gap-4">
-                    <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#956A13]">
-                      Shortlist 0{index + 1}
+                    <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#956A13]"><LocalizedText text={"Shortlist 0"} />{index + 1}
                     </p>
-                    <p className="text-xs font-bold text-[#657082]">
-                      Personal budget needed
-                    </p>
+                    <p className="text-xs font-bold text-[#657082]"><LocalizedText text={"Personal budget needed"} /></p>
                   </div>
                   <div className="mt-4 flex flex-wrap gap-2">
                     {fit.reasons.map((reason) => (
@@ -298,17 +271,15 @@ export default function GlobalWorkspaceV1({
                         key={reason}
                         className="rounded-full bg-[#F0E7D4] px-3 py-2 text-[10px] font-extrabold text-[#5C420F]"
                       >
-                        {reason}
+                        <LocalizedText text={reason} />
                       </span>
                     ))}
                   </div>
                   <p className="mt-4 text-xs leading-6 text-[#657082]">
-                    {fit.warning}
+                    <LocalizedText text={fit.warning} />
                   </p>
                   <div className="mt-5 flex flex-wrap gap-4 border-t border-[#E4DED2] pt-4 text-xs font-extrabold">
-                    <Link href={`/countries/${fit.country.slug}`} className="text-[var(--tgpi-navy-raised)]">
-                      View report →
-                    </Link>
+                    <Link href={`/countries/${fit.country.slug}`} className="text-[var(--tgpi-navy-raised)]"><LocalizedText text={"View report →"} /></Link>
                     <Link
                       href={`/countries/${fit.country.slug}#documents-to-verify`}
                       className="text-[#956A13]"
@@ -320,35 +291,24 @@ export default function GlobalWorkspaceV1({
           </div>
         ) : (
           <div className="mt-6 rounded-[28px] border border-dashed border-[#CFC7B8] bg-white p-8 text-center">
-            <h3 className="font-[var(--tgpi-font-display)] text-3xl font-semibold">
-              Build your first country shortlist.
-            </h3>
-            <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-[#657082]">
-              Select countries in your global profile to unlock fit signals,
-              cost references and personalized comparison links.
-            </p>
+            <h3 className="font-[var(--tgpi-font-display)] text-3xl font-semibold"><LocalizedText text={"Build your first country shortlist."} /></h3>
+            <p className="mx-auto mt-3 max-w-2xl text-sm leading-7 text-[#657082]"><LocalizedText text={"Select countries in your global profile to unlock fit signals, cost references and personalized comparison links."} /></p>
             <Link
               href="/onboarding"
               className="mt-6 inline-flex min-h-12 items-center justify-center rounded-xl bg-[var(--tgpi-navy-raised)] px-6 text-sm font-extrabold text-white"
             ><LocalizedText text={"Choose countries"} /></Link>
           </div>
         )}
-        <p className="mt-4 text-xs leading-6 text-[#7A8390]">
-          Shortlist order follows your saved preferences, not a country ranking. No fit percentage is published until the required evidence is available.
-        </p>
+        <p className="mt-4 text-xs leading-6 text-[#7A8390]"><LocalizedText text={"Shortlist order follows your saved preferences, not a country ranking. No fit percentage is published until the required evidence is available."} /></p>
       </section>
 
       <section aria-labelledby="next-actions-title">
         <div>
-          <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#956A13]">
-            Next Best Actions
-          </p>
+          <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#956A13]"><LocalizedText text={"Next Best Actions"} /></p>
           <h2
             id="next-actions-title"
             className="mt-3 font-[var(--tgpi-font-display)] text-4xl font-semibold tracking-[-0.035em]"
-          >
-            Five ways to move your plan forward.
-          </h2>
+          ><LocalizedText text={"Five ways to move your plan forward."} /></h2>
         </div>
         <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-5">
           {model.actions.map((item) => (
@@ -376,7 +336,7 @@ function ActionCard({ item }: { item: WorkspaceAction }) {
             item.id === "compare" ? "text-[var(--tgpi-gold-light)]" : "text-[#956A13]"
           }`}
         >
-          {item.eyebrow}
+          <LocalizedText text={item.eyebrow} />
         </p>
         <span
           className={`grid h-9 w-9 place-items-center rounded-full text-[10px] font-extrabold ${
@@ -399,24 +359,24 @@ function ActionCard({ item }: { item: WorkspaceAction }) {
                 : "bg-[#F0EDE7] text-[#657082]"
         }`}
       >
-        {statusLabels[item.status]}
+        <LocalizedText text={statusLabels[item.status]} />
       </span>
       <h3 className="mt-5 font-[var(--tgpi-font-display)] text-2xl font-semibold leading-[1.08]">
-        {item.title}
+        <LocalizedText text={item.title} />
       </h3>
       <p
         className={`mt-4 text-xs leading-6 ${
           item.id === "compare" ? "text-[#C7D0DC]" : "text-[#657082]"
         }`}
       >
-        {item.description}
+        <LocalizedText text={item.description} />
       </p>
       <span
         className={`mt-auto pt-6 text-xs font-extrabold ${
           item.id === "compare" ? "text-[var(--tgpi-gold-light)]" : "text-[var(--tgpi-navy-raised)]"
         }`}
       >
-        {item.action}{" "}
+        <LocalizedText text={item.action} />{" "}
         <span className="inline-block text-[var(--tgpi-gold-hover)] transition group-hover:translate-x-1">
           →
         </span>
@@ -425,11 +385,11 @@ function ActionCard({ item }: { item: WorkspaceAction }) {
   );
 }
 
-function formatActivityDate(value: string) {
+function formatActivityDate(locale: import('@/lib/localization/config').Locale, value: string) {
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return "Recent activity";
 
-  return new Intl.DateTimeFormat("en", {
+  return new Intl.DateTimeFormat(locale, {
     day: "numeric",
     month: "short",
     year: "numeric",

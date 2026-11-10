@@ -4,7 +4,8 @@ import { createContext, useContext, useCallback, useMemo, useRef, useState, useE
 import { useRouter } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
 import { type Locale } from '@/lib/localization/config';
-import { translate } from '@/lib/localization/messages';
+import { translate, registerSupplementalMessages, type SupplementalMessages } from '@/lib/localization/messages';
+import { localeCatalogVersion } from '@/lib/localization/catalog-version';
 import { localeSyncKey, readLocaleSignal } from '@/lib/localization/preference';
 
 type LocaleContextValue = {
@@ -16,7 +17,23 @@ type LocaleContextValue = {
 };
 const LocaleContext = createContext<LocaleContextValue | null>(null);
 
-export function LocaleProvider({ locale, children }: { locale: Locale; children: ReactNode }) {
+const loadedCatalogs = new Map<Locale, Promise<void>>();
+async function ensureLocaleMessages(locale: Locale) {
+  const cached = loadedCatalogs.get(locale);
+  if (cached) return cached;
+  const loading = fetch(`/locales/${locale}.json?v=${localeCatalogVersion}`).then(async response => {
+    if (!response.ok) throw new Error('Language catalog unavailable');
+    const entries: unknown = await response.json();
+    if (!entries || typeof entries !== 'object' || Array.isArray(entries) || Object.values(entries).some(value => typeof value !== 'string')) throw new Error('Invalid language catalog');
+    registerSupplementalMessages(locale, entries as SupplementalMessages);
+  }).catch(error => { loadedCatalogs.delete(locale); throw error; });
+  loadedCatalogs.set(locale, loading);
+  return loading;
+}
+
+export function LocaleProvider({ locale, messages, children }: { locale: Locale; messages?: SupplementalMessages; children: ReactNode }) {
+  // Initialize before descendants render so SSR and hydration share the same copy.
+  if (messages) { registerSupplementalMessages(locale, messages); loadedCatalogs.set(locale, Promise.resolve()); }
   const router = useRouter();
   const [refreshing, startTransition] = useTransition();
   const [appliedLocale, setAppliedLocale] = useState(locale);
@@ -27,8 +44,10 @@ export function LocaleProvider({ locale, children }: { locale: Locale; children:
       if (event.key !== localeSyncKey) return;
       const selected = readLocaleSignal(event.newValue);
       if (!selected) return;
-      setAppliedLocale(selected);
-      startTransition(() => router.refresh());
+      void ensureLocaleMessages(selected).then(() => {
+        setAppliedLocale(selected);
+        startTransition(() => router.refresh());
+      }).catch(() => setError(true));
     };
     window.addEventListener('storage', synchronize);
     return () => window.removeEventListener('storage', synchronize);
@@ -42,6 +61,7 @@ export function LocaleProvider({ locale, children }: { locale: Locale; children:
     setPending(true);
     setError(false);
     try {
+      await ensureLocaleMessages(next);
       const response = await fetch('/api/preferences/locale', {
         method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ locale: next }),
       });
@@ -81,10 +101,10 @@ export function AccountLocaleSync() {
   return null;
 }
 
-export function LocalizedText({ text, values, dates }: { text: string; values?: Record<string, string | number>; dates?: Record<string, string> }) {
+export function LocalizedText({ text, values, dates }: { text: ReactNode; values?: Record<string, string | number>; dates?: Record<string, string> }) {
   const { locale, t } = useLocale();
   const formattedDates = dates ? Object.fromEntries(Object.entries(dates).map(([key, value]) => [key, new Intl.DateTimeFormat(locale, { timeZone: 'UTC' }).format(new Date(value))])) : {};
-  return <>{t(text, { ...values, ...formattedDates })}</>;
+  return <>{typeof text === 'string' ? t(text, { ...values, ...formattedDates }) : text}</>;
 }
 
 /** Keep landmark names localized without making a server composition await a locale. */

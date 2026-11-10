@@ -43,7 +43,7 @@ export default function LanguageSelector({ compact = false }: { compact?: boolea
         <span>{option.name}</span><span className="tgpi-language-check" aria-hidden="true">{option.code === locale ? '✓' : ''}</span>
       </button>)}
     </div>}
-    {!compact && <p className="tgpi-language-note">{t('Some content is still displayed in its original language.')}</p>}
+    {!compact && <p className="tgpi-language-note">{t('Your language applies across TGPI.')}</p>}
     {error && <span role="alert" id={`${id}-error`} className="tgpi-language-error">{t('Unable to save language. Please try again.')}</span>}
     <span role="status" className="sr-only">{pending ? t('Saving…') : ''}</span>
   </div>;

@@ -1,5 +1,7 @@
 "use client";
 
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import Link from "next/link";
 import { useState } from "react";
 import { useActivationProgress } from "@/components/activation/ActivationProgressProvider";
@@ -56,20 +58,12 @@ export default function DocumentReviewChecklist({
     <div className="rounded-[1.5rem] border border-[#D8D0C0] bg-white/90 p-6 shadow-[0_18px_55px_rgba(7,26,50,0.08)]">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#8A641F]">
-            Protected progress
-          </p>
-          <h2 className="mt-2 text-2xl font-black text-[#071A32]">
-            Documents to verify
-          </h2>
-          <p className="mt-2 max-w-xl text-sm leading-6 text-[#5E6875]">
-            Use official sources before legal, visa, tax or relocation decisions.
-          </p>
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-[#8A641F]"><LocalizedText text={"Protected progress"} /></p>
+          <h2 className="mt-2 text-2xl font-black text-[#071A32]"><LocalizedText text={"Documents to verify"} /></h2>
+          <p className="mt-2 max-w-xl text-sm leading-6 text-[#5E6875]"><LocalizedText text={"Use official sources before legal, visa, tax or relocation decisions."} /></p>
         </div>
         <div className="rounded-2xl border border-[#D9BD70] bg-[#FFF7DE] px-4 py-3 text-right">
-          <p className="text-[9px] font-black uppercase tracking-[0.16em] text-[#765009]">
-            Review progress
-          </p>
+          <p className="text-[9px] font-black uppercase tracking-[0.16em] text-[#765009]"><LocalizedText text={"Review progress"} /></p>
           <p className="mt-1 text-xl font-black text-[#071A32]">
             {completedCount}/{items.length}
           </p>
@@ -85,13 +79,11 @@ export default function DocumentReviewChecklist({
 
       {!isAuthenticated && !isLoading ? (
         <div className="mt-5 rounded-2xl border border-[#B8C9DF] bg-[#EEF5FF] p-4 text-sm leading-6 text-[#334A64]">
-          <p>Sign in to keep this checklist synchronized with your TGPI workspace.</p>
+          <p><LocalizedText text={"Sign in to keep this checklist synchronized with your TGPI workspace."} /></p>
           <Link
             href={`/sign-in?redirect_url=/countries/${countrySlug}%23documents-to-verify`}
             className="mt-3 inline-flex font-black text-[#123A6F] underline underline-offset-4"
-          >
-            Sign in to save progress →
-          </Link>
+          ><LocalizedText text={"Sign in to save progress →"} /></Link>
         </div>
       ) : null}
 
@@ -119,7 +111,7 @@ export default function DocumentReviewChecklist({
               />
               <span>
                 <span className="block font-black text-[#071A32]">
-                  {item.title}
+                  <LocalizedText text={item.title} />
                 </span>
                 <span className="mt-1 block text-sm leading-6 text-[#5E6875]">
                   {item.text}
@@ -133,9 +125,9 @@ export default function DocumentReviewChecklist({
       <p className="mt-4 min-h-5 text-xs font-bold text-[#8A5A0A]" aria-live="polite">
         {error ||
           (completion === 100
-            ? `${countryName} document review completed.`
+            ? <LocalizedText text={"{value0} document review completed."} values={{value0: String(countryName)}} />
             : isAuthenticated
-              ? "Changes are saved to your private workspace."
+              ? <LocalizedText text={"Changes are saved to your private workspace."} />
               : "")}
       </p>
     </div>

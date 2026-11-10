@@ -1,5 +1,6 @@
 "use client";
 
+import { localizeAuthoredContent } from "@/lib/localization/authored-content";
 import Link from "next/link";
 import { useEffect, useMemo, useRef, type ReactNode } from "react";
 import ActivationProgressProvider, {
@@ -25,8 +26,9 @@ export default function CourseOverviewExperience({ course, workshop }: { course:
   );
 }
 
-function CourseOverview({ course, workshop }: { course: Course; workshop?: ReactNode }) {
+function CourseOverview({ course: originalCourse, workshop }: { course: Course; workshop?: ReactNode }) {
   const { locale, t } = useLocale();
+  const course = useMemo(() => localizeAuthoredContent(originalCourse, locale, { languagePractice: originalCourse.id === "global-english-2026" }), [originalCourse, locale]);
   const { error, isAuthenticated, isLoading, mutate, progress } = useActivationProgress();
   const startRequested = useRef(false);
   const lessons = useMemo(() => getCourseLessons(course), [course]);

@@ -1,3 +1,4 @@
+import { localizeMetadata } from "@/lib/localization/metadata.server";
 import type { Metadata } from "next";
 import { currentUser } from "@clerk/nextjs/server";
 import { headers } from "next/headers";
@@ -5,7 +6,7 @@ import GlobalKeyCenter from "@/components/profile/GlobalKeyCenter";
 import { requireUser } from "@/lib/auth/guards";
 import { getOrCreateGlobalKey } from "@/lib/global-key.server";
 
-export const metadata: Metadata = {
+const sourceMetadata: Metadata = {
   title: "Global ID — TGPI",
   description:
     "Your permanent TGPI identity, learning credentials, verification and account security.",
@@ -44,3 +45,5 @@ export default async function GlobalKeyPage() {
     />
   );
 }
+
+export async function generateMetadata() { return localizeMetadata(sourceMetadata); }

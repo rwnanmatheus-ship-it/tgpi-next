@@ -1,4 +1,4 @@
-import Image, { type ImageProps } from "next/image";
+import Image, { type ImageProps } from "@/components/localization/LocalizedImage";
 
 type BrandCrestProps = Omit<ImageProps, "src" | "alt"> & {
   alt?: string;

@@ -1,9 +1,11 @@
 
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
+
 import { LocalizedText } from "@/components/localization/LocaleProvider";
 /** TGPI's own issuer mark, never a third-party accreditation emblem. */
 export default function CertificateSeal({ verified }: { verified: boolean }) {
   return (
-    <svg
+    <LocalizedElement as="svg"
       viewBox="0 0 160 160"
       role="img"
       aria-label={
@@ -57,9 +59,7 @@ export default function CertificateSeal({ verified }: { verified: boolean }) {
         fontFamily="Georgia,serif"
         fontSize="28"
         fill="#E9D397"
-      >
-        TGPI
-      </text>
+      ><LocalizedText text={"TGPI"} /></text>
       <text
         x="80"
         y="94"
@@ -69,7 +69,7 @@ export default function CertificateSeal({ verified }: { verified: boolean }) {
         letterSpacing="1.5"
         fill="white"
       >
-        {verified ? "VERIFIED" : "REVIEW"}
+        {verified ? <LocalizedText text={"VERIFIED"} /> : <LocalizedText text={"REVIEW"} />}
       </text>
       <text
         x="80"
@@ -80,6 +80,6 @@ export default function CertificateSeal({ verified }: { verified: boolean }) {
         letterSpacing="1"
         fill="#E9D397"
       ><LocalizedText text={"LEARNING"} /></text>
-    </svg>
+    </LocalizedElement>
   );
 }

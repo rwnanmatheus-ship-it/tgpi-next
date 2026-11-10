@@ -1,4 +1,6 @@
 "use client";
+
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import {
   createContext,
   useCallback,
@@ -16,7 +18,7 @@ import {
   defaultPreferences,
   parsePreferences,
 } from "@/lib/notifications/model";
-import { useLocale } from "@/components/localization/LocaleProvider";
+import { useLocale , LocalizedText } from "@/components/localization/LocaleProvider";
 import {
   localizedNotification,
   notificationText,
@@ -355,14 +357,14 @@ function NotificationSession({
       {children}
       {toast && (
         <div className={styles.toast} role="status" data-tgpi-localized="true">
-          <button
+          <LocalizedElement as="button"
             type="button"
             onClick={() => setToast(null)}
             aria-label="Close"
           >
             ×
-          </button>
-          <strong>{localizedNotification(toast, locale).title}</strong>
+          </LocalizedElement>
+          <strong><LocalizedText text={localizedNotification(toast, locale).title} /></strong>
           <p>{localizedNotification(toast, locale).body}</p>
           <Link
             href={toast.href}
