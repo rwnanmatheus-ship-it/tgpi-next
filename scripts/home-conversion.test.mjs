@@ -11,7 +11,7 @@ import { HOME_ART_ROOT, HOME_LIBRARY, HOME_PRODUCTS, homeProductArt } from "../s
 
 const read = path => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
 test("authentication preserves allowed local intent including country goal and membership anchor", () => {
-  for (const path of ["/country-fit?country=portugal&goal=work", "/pricing#membership", "/onboarding", "/compare?country=canada&country=portugal"]) assert.equal(safeReturnTo(path), path);
+  for (const path of ["/country-fit?country=portugal&goal=work", "/pricing#membership", "/onboarding", "/courses/global-english-2026/study", "/compare?country=canada&country=portugal"]) assert.equal(safeReturnTo(path), path);
 });
 test("authentication rejects external, malformed and privileged redirect targets", () => {
   for (const path of ["https://evil.example", "//evil.example", "/\\evil.example", "/admin", "/api/stripe/create-checkout-session", "/%2f%2fevil.example", "/profile\n", "javascript:alert(1)", null, { next: "/profile" }, "/profile/../admin"]) assert.equal(safeReturnTo(path), "/onboarding");

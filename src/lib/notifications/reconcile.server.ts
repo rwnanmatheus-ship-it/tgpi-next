@@ -1,12 +1,9 @@
+import { getUserActivationProgress } from "@/lib/activation-store.server";
 import { getUserBillingRecord } from "@/lib/billing.server";
 import { communityNotificationEvents } from "@/lib/community/store.server";
 import "server-only";
 import { TGPI_PREMIUM_PRICE_ID } from "@/lib/stripe";
 import { clerkClient } from "@clerk/nextjs/server";
-import {
-  normalizeActivationProgress,
-  TGPI_ACTIVATION_METADATA_KEY,
-} from "@/lib/activation-progress";
 import { listUserLearningCredentials } from "@/lib/learning-records.server";
 import { billingEvent, welcomeEvent, type NotificationEvent } from "./model";
 import {
@@ -19,9 +16,7 @@ import {
 export async function collectNotificationEvents(uid: string) {
   const client = await clerkClient();
   const user = await client.users.getUser(uid);
-  const progress = normalizeActivationProgress(
-    user.privateMetadata[TGPI_ACTIVATION_METADATA_KEY],
-  );
+  const progress = await getUserActivationProgress(uid, user.privateMetadata);
   const billing = await getUserBillingRecord(uid);
   const events: NotificationEvent[] = [
     { ...welcomeEvent, occurredAt: new Date(user.createdAt).toISOString() },
@@ -154,11 +149,11 @@ export async function collectNotificationEvents(uid: string) {
       category: "community" as const,
     })),
   );
-  return { events, user };
+  return { events, user, progress };
 }
 
 export async function reconcileNotifications(uid: string) {
-  const { events, user } = await collectNotificationEvents(uid);
+  const { events, user, progress } = await collectNotificationEvents(uid);
   const {
     initializeNotificationUser,
     automationEvents,
@@ -169,7 +164,7 @@ export async function reconcileNotifications(uid: string) {
     user.privateMetadata,
     user.unsafeMetadata.tgpiLocale,
   );
-  events.push(...(await automationEvents(uid, user.privateMetadata)));
+  events.push(...(await automationEvents(uid, progress)));
   const { items: existingItems } = await listNotifications(uid);
   const existingKeys = new Set(existingItems.map((item) => item.key));
   for (const event of events) {
@@ -191,7 +186,7 @@ export async function reconcileNotifications(uid: string) {
       });
     }
   }
-  await commitAutomationSnapshot(uid, user.privateMetadata);
+  await commitAutomationSnapshot(uid, progress);
   const relevantKeys = new Set(events.map((event) => event.key));
   for (const key of [
     "next:onboarding:v1",

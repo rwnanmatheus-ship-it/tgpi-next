@@ -29,6 +29,8 @@ export async function POST(request: NextRequest) {
   try {
     if (event.type === "user.deleted" && event.data.id) {
       const uid = event.data.id;
+      const { eraseUserActivationProgress } = await import("@/lib/activation-store.server");
+      await eraseUserActivationProgress(uid);
       await requestCommunityErasure(uid, true);
       if (notificationsConfigured()) {
         const { eraseNotificationAccount } = await import("@/lib/notifications/privacy.server");

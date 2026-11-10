@@ -6,8 +6,9 @@ import { requireUser } from "@/lib/auth/guards";
 
 const sourceMetadata = { title: "Meu percurso profissional | TGPI", robots: { index: false, follow: false } };
 export default async function ProfessionalStudyPage({ params }: { params: Promise<{ id: string }> }) {
-  await requireUser();
-  const { id } = await params, course = getAcademyCourse(id);
+  const { id } = await params;
+  await requireUser(`/courses/${id}/study`);
+  const course = getAcademyCourse(id);
   if (!course) notFound();
   return <AcademyStudy course={course} />;
 }

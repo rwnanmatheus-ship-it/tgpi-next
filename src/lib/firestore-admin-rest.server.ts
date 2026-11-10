@@ -43,7 +43,7 @@ export type FirestoreWrite =
       delete: string;
     };
 
-type TransactionContext = {
+export type TransactionContext = {
   getDocuments: <T>(
     documentPaths: string[],
   ) => Promise<Map<string, FirestoreDecodedDocument<T> | null>>;

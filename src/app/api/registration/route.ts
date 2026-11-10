@@ -1,12 +1,11 @@
 import { recordFunnelEvent, requestFunnelConsent } from "@/lib/funnel.server";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
-import { normalizeTgpiAccountProfile } from "@/lib/account-profile";
 import { validateRegistration } from "@/lib/auth/registration";
 
 export async function POST(request: Request) {
-  const { userId } = await auth();
-  if (!userId) return NextResponse.json({ error: "Sign in again to complete your profile." }, { status: 401 });
+  const { userId, sessionId } = await auth();
+  if (!userId || !sessionId) return NextResponse.json({ error: "Sign in again to complete your profile." }, { status: 401 });
   if (request.headers.get("origin") !== new URL(request.url).origin) return NextResponse.json({ error: "This request is not allowed." }, { status: 403 });
   if (!request.headers.get("content-type")?.startsWith("application/json")) return NextResponse.json({ error: "Send a valid profile." }, { status: 415 });
   // Bound the streamed body before decoding; Content-Length alone is untrusted.
@@ -28,15 +27,15 @@ export async function POST(request: Request) {
     const client = await clerkClient();
     const user = await client.users.getUser(userId);
     if (!user.emailAddresses.some(email => email.id === user.primaryEmailAddressId && email.verification?.status === "verified")) return NextResponse.json({ error: "Verify your primary email before completing registration." }, { status: 403 });
+    if (user.privateMetadata.tgpiRegistration) return NextResponse.json({ saved: true }, { headers: { "Cache-Control": "no-store" } });
     const now = new Date().toISOString();
     const country = new Intl.DisplayNames(["en"], { type: "region" }).of(input.currentCountry) || input.currentCountry;
-    const profile = normalizeTgpiAccountProfile(user.unsafeMetadata.tgpiAccountProfile);
-    await client.users.updateUser(userId, {
-      firstName: input.firstName, lastName: input.lastName,
-      unsafeMetadata: { ...user.unsafeMetadata, tgpiAccountProfile: { ...profile, currentCountry: country, preferredLanguage: input.preferredLanguage, updatedAt: now } },
-      privateMetadata: { ...user.privateMetadata, tgpiRegistration: { completedAt: now, termsVersion: "2026-10-17", termsAcceptedAt: now } },
+    await client.users.updateUser(userId, { firstName: input.firstName, lastName: input.lastName });
+    await client.users.updateUserMetadata(userId, {
+      unsafeMetadata: { tgpiAccountProfile: { currentCountry: country, preferredLanguage: input.preferredLanguage, updatedAt: now } },
+      privateMetadata: { tgpiRegistration: { completedAt: now, termsVersion: "2026-10-17", termsAcceptedAt: now } },
     });
-    if (!user.privateMetadata.tgpiRegistration) recordFunnelEvent("signup_completed", requestFunnelConsent(request));
+    recordFunnelEvent("signup_completed", requestFunnelConsent(request));
     return NextResponse.json({ saved: true }, { headers: { "Cache-Control": "no-store" } });
   } catch (error) {
     if (error instanceof SyntaxError) return NextResponse.json({ error: "Send a valid profile." }, { status: 400 });

@@ -35,38 +35,41 @@ async function readResponse(response: Response) {
 
 const pendingReads = new Map<string, Promise<TgpiActivationProgress>>();
 
-export function fetchActivationProgress(userId: string) {
-  const existing = pendingReads.get(userId);
+export function fetchActivationProgress(sessionId: string) {
+  const existing = pendingReads.get(sessionId);
   if (existing) return existing;
-  const request = loadActivationProgress().finally(() => { pendingReads.delete(userId); });
-  pendingReads.set(userId, request);
+  const request = loadActivationProgress(sessionId).finally(() => {
+    if (pendingReads.get(sessionId) === request) pendingReads.delete(sessionId);
+  });
+  pendingReads.set(sessionId, request);
   return request;
 }
 
-async function loadActivationProgress() {
+async function loadActivationProgress(sessionId: string) {
   const response = await fetch("/api/progress", {
     cache: "no-store",
     credentials: "same-origin",
-    headers: { Accept: "application/json" },
+    headers: { Accept: "application/json", "X-TGPI-Session": sessionId },
   });
 
   return readResponse(response);
 }
 
-export async function mutateActivationProgress(mutation: ActivationMutation) {
-  const write = () => fetch("/api/progress", {
+export async function mutateActivationProgress(mutation: ActivationMutation, sessionId: string) {
+  const response = await fetch("/api/progress", {
     body: JSON.stringify(mutation),
     cache: "no-store",
     credentials: "same-origin",
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
+      "X-TGPI-Session": sessionId,
     },
     method: "PATCH",
   });
 
-  const response = navigator.locks ? await navigator.locks.request("tgpi-progress-write", write) : await write();
   const progress = await readResponse(response);
+  pendingReads.delete(sessionId);
   announceProgressSaved();
   return progress;
 }

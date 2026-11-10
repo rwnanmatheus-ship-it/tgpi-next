@@ -1,10 +1,11 @@
+import { getUserActivationProgress } from "@/lib/activation-store.server";
 import 'server-only';
 import type { User } from '@clerk/nextjs/server';
 import { courses } from '@/data/courses';
 import { getAllCountries } from '@/lib/countries';
 import { mergeAccountProfileWithOnboarding, normalizeAccountIdentity } from '@/lib/account-profile';
 import { normalizeOnboardingData } from '@/lib/onboarding';
-import { normalizeActivationProgress, TGPI_ACTIVATION_METADATA_KEY, getCourseProgressStatus } from '@/lib/activation-progress';
+import { getCourseProgressStatus } from '@/lib/activation-progress';
 import { formatTgpiGlobalId } from '@/lib/auth/guards';
 import { getGlobalRankSignals } from '@/lib/global-rank-signals';
 import { getGlobalRank } from '@/lib/global-ranks';
@@ -17,7 +18,7 @@ const goals: Record<string, string> = { work: 'Work globally', live: 'Live abroa
 export async function buildPublicMember(user: User) {
   const onboarding = normalizeOnboardingData(user.unsafeMetadata.tgpiOnboarding);
   const profile = mergeAccountProfileWithOnboarding(user.unsafeMetadata.tgpiAccountProfile, onboarding);
-  const activation = normalizeActivationProgress(user.privateMetadata[TGPI_ACTIVATION_METADATA_KEY]);
+  const activation = await getUserActivationProgress(user.id, user.privateMetadata);
   const countries = getAllCountries();
   const model = buildGlobalWorkspaceModel(onboarding, countries, activation, courses);
   const rank = getGlobalRank({ ...getGlobalRankSignals(activation), activationCompletion: model.activationCompletion, planCompletion: model.completion, profileCompletion: 0 });

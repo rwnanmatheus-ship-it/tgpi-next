@@ -1,3 +1,4 @@
+import { safeReturnTo } from "@/lib/auth/return-to";
 import { getUserBillingRecord } from "@/lib/billing.server";
 import "server-only";
 import { getCertificateName, normalizeAccountIdentity, normalizeTgpiAccountProfile } from "@/lib/account-profile";
@@ -29,11 +30,11 @@ export function formatTgpiGlobalId(userId: string) {
   return `TGPI-${groups}`;
 }
 
-export async function requireUser() {
+export async function requireUser(returnTo?: string) {
   const session = await auth();
 
-  if (!session.userId) {
-    redirect("/sign-in");
+  if (!session.userId || !session.sessionId) {
+    redirect(returnTo ? `/sign-in?next=${encodeURIComponent(safeReturnTo(returnTo, "/profile"))}` : "/sign-in");
   }
 
   return {
@@ -42,14 +43,18 @@ export async function requireUser() {
   };
 }
 
-export async function requireApiUser() {
+export async function requireApiUser(request?: Request) {
   const session = await auth();
 
-  if (!session.userId) {
+  if (!session.userId || !session.sessionId) {
     throw new TgpiAuthenticationError();
   }
 
+  if (request && request.headers.get("x-tgpi-session") !== session.sessionId) {
+    throw new TgpiAuthenticationError();
+  }
   const user = await currentUser();
+  if (!user || user.id !== session.userId) throw new TgpiAuthenticationError();
 
   return {
     uid: session.userId,

@@ -1,3 +1,4 @@
+import { getUserActivationProgress } from "@/lib/activation-store.server";
 import { localizeMetadata } from "@/lib/localization/metadata.server";
 import { getAccountMembershipLabel } from "@/lib/account-membership.server";
 import { ensureMemberNumber } from '@/lib/members/identity.server';
@@ -12,10 +13,6 @@ import {
   mergeAccountProfileWithOnboarding,
   normalizeAccountIdentity,
 } from "@/lib/account-profile";
-import {
-  normalizeActivationProgress,
-  TGPI_ACTIVATION_METADATA_KEY,
-} from "@/lib/activation-progress";
 import { tgpiClerkAppearance } from "@/lib/auth/clerk-appearance";
 import { formatTgpiGlobalId, requireUser } from "@/lib/auth/guards";
 import { getAllCountries } from "@/lib/countries";
@@ -47,9 +44,10 @@ export default async function SecurityPage() {
   const email = user?.primaryEmailAddress?.emailAddress || "No primary email";
   const emailVerified =
     user?.primaryEmailAddress?.verification?.status === "verified";
-  const [memberIdentity, membership] = await Promise.all([
+  const [memberIdentity, membership, activation] = await Promise.all([
     ensureMemberNumber(session.userId).catch(() => null),
     getAccountMembershipLabel({ uid: session.userId, email, emailVerified }),
+    getUserActivationProgress(session.userId, user?.privateMetadata).catch(() => null),
   ]);
   const onboarding = normalizeOnboardingData(
     user?.unsafeMetadata.tgpiOnboarding,
@@ -63,24 +61,23 @@ export default async function SecurityPage() {
     lastName: user?.lastName,
     username: memberIdentity?.handle || "",
   });
-  const activation = normalizeActivationProgress(
-    user?.privateMetadata[TGPI_ACTIVATION_METADATA_KEY],
-  );
   const countries = getAllCountries();
   const countryBySlug = new Map(
     countries.map((country) => [country.slug, country]),
   );
-  const workspaceModel = buildGlobalWorkspaceModel(onboarding, countries, activation, courses);
-  const rank = getGlobalRank({
+  const workspaceModel = activation ? buildGlobalWorkspaceModel(onboarding, countries, activation, courses) : null;
+  const rank = activation && workspaceModel ? getGlobalRank({
     ...getGlobalRankSignals(activation),
     activationCompletion: workspaceModel.activationCompletion,
     planCompletion: workspaceModel.completion,
     profileCompletion: getAccountProfileCompletion(identity, profile),
-  });
+  }) : null;
 
   return (
     <main className="min-h-screen bg-[#F5F1E8] px-4 py-6 text-[var(--tgpi-navy-raised)] sm:px-6 sm:py-10 lg:py-14">
       <TgpiAccountCenter
+        key={session.sessionId}
+        sessionId={session.sessionId}
         account={{
           avatarUrl: user?.imageUrl || "",
           email,

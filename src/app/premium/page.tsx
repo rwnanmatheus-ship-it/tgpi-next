@@ -1,12 +1,9 @@
+import { getUserActivationProgress } from "@/lib/activation-store.server";
 import { getLocale as getFormattingLocale } from "@/lib/localization/server";
 import { localizeMetadata } from "@/lib/localization/metadata.server";
 import type { Metadata } from "next";
 import PremiumCommandCenterV2 from "@/components/premium/PremiumCommandCenterV2";
 import { courses } from "@/data/courses";
-import {
-  normalizeActivationProgress,
-  TGPI_ACTIVATION_METADATA_KEY,
-} from "@/lib/activation-progress";
 import { requirePremium } from "@/lib/auth/guards";
 import { getAllCountries } from "@/lib/countries";
 import { normalizeOnboardingData } from "@/lib/onboarding";
@@ -48,9 +45,7 @@ export default async function PremiumPage() {
   const onboarding = normalizeOnboardingData(
     user.unsafeMetadata.tgpiOnboarding,
   );
-  const activation = normalizeActivationProgress(
-    user.privateMetadata[TGPI_ACTIVATION_METADATA_KEY],
-  );
+  const activation = await getUserActivationProgress(user.id, user.privateMetadata);
   const model = buildPremiumCommandCenterModel(
     onboarding,
     activation,

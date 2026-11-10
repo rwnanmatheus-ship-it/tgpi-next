@@ -1,8 +1,8 @@
+import { getUserActivationProgress } from "@/lib/activation-store.server";
 import type { Metadata } from "next";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import DocumentsExperience from "@/components/documents/DocumentsExperience";
 import identityData from "@/data/intelligence/identities.json";
-import { normalizeActivationProgress, TGPI_ACTIVATION_METADATA_KEY } from "@/lib/activation-progress";
 import { formatTgpiGlobalId } from "@/lib/auth/guards";
 import { getAllCountries } from "@/lib/countries";
 import { buildDocumentsMemberModel, resolveDocumentGoal } from "@/lib/documents-os";
@@ -36,7 +36,7 @@ export default async function PassportPage({ searchParams }: PageProps<"/passpor
   ]);
   const model = buildDocumentsMemberModel(
     normalizeOnboardingData(user?.unsafeMetadata.tgpiOnboarding),
-    normalizeActivationProgress(user?.privateMetadata[TGPI_ACTIVATION_METADATA_KEY]),
+    await getUserActivationProgress(session.userId, user?.privateMetadata),
     getAllCountries(),
     user?.primaryEmailAddress?.verification?.status === "verified",
     credentials,

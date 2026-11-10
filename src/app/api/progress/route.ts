@@ -2,7 +2,7 @@ import { recordFunnelEvent, requestFunnelConsent } from "@/lib/funnel.server";
 import type { FunnelEvent } from "@/lib/funnel";
 import { scheduleNotificationReconciliation } from "@/lib/notifications/schedule.server";
 import { auth } from "@clerk/nextjs/server";
-import { WorkspaceHistoryUnavailableError } from '@/lib/workspace-history.server';
+import { FirestoreAdminError } from "@/lib/firestore-admin-rest.server";
 import { NextResponse } from "next/server";
 import {
   ActivationInputError,
@@ -15,45 +15,46 @@ const MAX_BODY_SIZE = 16_000;
 
 function json(data: unknown, status = 200) {
   return NextResponse.json(data, {
-    headers: { "Cache-Control": "private, no-store, max-age=0" },
+    headers: { "Cache-Control": "private, no-store, max-age=0", Vary: "Cookie, X-TGPI-Session" },
     status,
   });
 }
 
-function hasSameOrigin(request: Request) {
-  const origin = request.headers.get("origin");
-  if (!origin) return false;
-
-  try {
-    return new URL(origin).host === new URL(request.url).host;
-  } catch {
-    return false;
-  }
-}
-
-export async function GET() {
+export async function GET(request: Request) {
   const session = await auth();
-  if (!session.userId) {
+  if (!session.userId || !session.sessionId) {
     return json({ error: "Sign in to access your TGPI progress." }, 401);
+  }
+
+  const expectedSession = request.headers.get("x-tgpi-session");
+  if (expectedSession && expectedSession !== session.sessionId) {
+    return json({ error: "Your session changed. Reload before continuing." }, 401);
   }
 
   try {
     const progress = await getUserActivationProgress(session.userId);
     return json({ progress });
   } catch (error) {
-    console.error("Unable to load TGPI activation progress", error);
-    return json({ error: "Unable to load your TGPI progress right now." }, 500);
+    console.error("Unable to load TGPI activation progress", error instanceof Error ? error.name : "unknown");
+    return json({ error: "Unable to load your confirmed TGPI progress. Try again in a moment." }, 503);
   }
 }
 
 export async function PATCH(request: Request) {
   const session = await auth();
-  if (!session.userId) {
+  if (!session.userId || !session.sessionId) {
     return json({ error: "Sign in to save your TGPI progress." }, 401);
   }
 
-  if (!hasSameOrigin(request)) {
+  if (request.headers.get("origin") !== new URL(request.url).origin) {
     return json({ error: "This progress request could not be verified." }, 403);
+  }
+
+  if (request.headers.get("x-tgpi-session") !== session.sessionId) {
+    return json({ error: "Your session changed. Reload before saving." }, 401);
+  }
+  if (request.headers.get("content-type")?.split(";")[0].trim().toLowerCase() !== "application/json") {
+    return json({ error: "JSON content is required." }, 415);
   }
 
   try {
@@ -84,12 +85,14 @@ export async function PATCH(request: Request) {
     if (error instanceof ActivationInputError) {
       return json({ error: error.message }, error.status);
     }
-    if (error instanceof WorkspaceHistoryUnavailableError) return json({ error: error.message }, 503);
 
     if (typeof error === "object" && error !== null && "status" in error && error.status === 429) {
       return json({ error: "Progress sync is temporarily busy. Wait a moment, then retry saving your checkpoint." }, 429);
     }
-    console.error("Unable to update TGPI activation progress", error);
+    if (error instanceof FirestoreAdminError) {
+      return json({ error: "Could not confirm this save. Refresh your progress and try again." }, 503);
+    }
+    console.error("Unable to update TGPI activation progress", error instanceof Error ? error.name : "unknown");
     return json({ error: "Unable to save your TGPI progress right now." }, 500);
   }
 }

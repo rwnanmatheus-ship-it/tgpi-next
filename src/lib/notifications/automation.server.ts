@@ -8,10 +8,7 @@ import {
   type JsonValue,
 } from "@/lib/firestore-admin-rest.server";
 import { getCountryBySlug } from "@/data/countries";
-import {
-  normalizeActivationProgress,
-  TGPI_ACTIVATION_METADATA_KEY,
-} from "@/lib/activation-progress";
+import type { TgpiActivationProgress } from "@/lib/activation-progress";
 import type { NotificationEvent } from "./model";
 import { notificationRoot, notificationUserPath } from "./paths";
 import { decodeAccountInboxState } from "./account-inbox.server";
@@ -55,12 +52,9 @@ export async function initializeNotificationUser(
 }
 export async function automationEvents(
   uid: string,
-  metadata: Record<string, unknown>,
+  progress: TgpiActivationProgress,
   now = new Date(),
 ): Promise<NotificationEvent[]> {
-  const progress = normalizeActivationProgress(
-    metadata[TGPI_ACTIVATION_METADATA_KEY],
-  );
   const events: NotificationEvent[] = [];
   const watched = [
     ...new Set([
@@ -123,11 +117,8 @@ export async function automationEvents(
 }
 export async function commitAutomationSnapshot(
   uid: string,
-  metadata: Record<string, unknown>,
+  progress: TgpiActivationProgress,
 ) {
-  const progress = normalizeActivationProgress(
-    metadata[TGPI_ACTIVATION_METADATA_KEY],
-  );
   const fingerprints: Record<string, string> = {};
   for (const slug of [
     ...new Set([

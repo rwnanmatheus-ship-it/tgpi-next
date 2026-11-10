@@ -1,20 +1,20 @@
 'use client';
 import CourseArrow from '../CourseArrow';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { useUser } from '@clerk/nextjs';
+import { useAuth } from '@clerk/nextjs';
 import Link from 'next/link';
 import { useLocale } from '@/components/localization/LocaleProvider';
 import { localizeAcademyCourse } from '@/lib/localization/academy-content';
 import type { AcademyCourse, AcademyStatus } from '@/lib/learning/academy/types';
 import styles from './academy.module.css';
-import { PROGRESS_SYNC_EVENT } from '@/lib/progress-sync';
+import { announceProgressSaved, PROGRESS_SYNC_CHANNEL } from '@/lib/progress-sync';
 
 export default function AcademyStudy({ course }: { course: AcademyCourse }) {
-  const { user, isLoaded } = useUser();
-  if (!isLoaded || !user) return null;
-  return <StudySession key={`${user.id}:${course.id}:${course.version}`} course={course} />;
+  const { sessionId, isLoaded } = useAuth();
+  if (!isLoaded || !sessionId) return null;
+  return <StudySession key={`${sessionId}:${course.id}:${course.version}`} course={course} sessionId={sessionId} />;
 }
-function StudySession({ course: original }: { course: AcademyCourse }) {
+function StudySession({ course: original, sessionId }: { course: AcademyCourse; sessionId: string }) {
   const { locale, t } = useLocale();
   const course = useMemo(() => localizeAcademyCourse(original, locale), [original, locale]);
   const [status, setStatus] = useState<AcademyStatus | null>(null), [selected, setSelected] = useState(course.lessons[0].id);
@@ -32,7 +32,7 @@ function StudySession({ course: original }: { course: AcademyCourse }) {
   const load = useCallback(async () => {
     setError('');
     try {
-      const response = await fetch(endpoint, { cache: 'no-store' });
+      const response = await fetch(endpoint, { cache: 'no-store', headers: { 'X-TGPI-Session': sessionId } });
       const data = await response.json();
       if (!response.ok) throw new Error(data.error || 'Unable to load learning.');
       if (!alive.current) return;
@@ -40,7 +40,7 @@ function StudySession({ course: original }: { course: AcademyCourse }) {
       const first = next.challenge?.target ?? course.lessons.find(l => !next.record?.completed[l.id])?.id ?? 'portfolio';
       setSelected(first); setNote(next.record?.notes[first] ?? ''); setPortfolio(next.record?.portfolio ?? ''); setLoaded(true);
     } catch (e) { if (alive.current) setError(e instanceof Error ? e.message : 'Unable to load learning.'); }
-  }, [endpoint, course.lessons]);
+  }, [endpoint, course.lessons, sessionId]);
   // The edition is immutable for this mounted session; language changes only affect presentation.
   useEffect(() => { alive.current = true; void load(); return () => { alive.current = false; }; }, [endpoint]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { const warn = (event: BeforeUnloadEvent) => { if (dirtyRef.current) { event.preventDefault(); event.returnValue = ''; } }; window.addEventListener('beforeunload', warn); return () => window.removeEventListener('beforeunload', warn); }, []);
@@ -48,17 +48,54 @@ function StudySession({ course: original }: { course: AcademyCourse }) {
     if (inFlight.current) return false;
     inFlight.current = true; setBusy(true); setError('');
     try {
-      const response = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...input, version: course.version }) });
+      const response = await fetch(endpoint, { method: 'POST', headers: { 'Content-Type': 'application/json', 'X-TGPI-Session': sessionId }, body: JSON.stringify({ ...input, version: course.version }) });
       const data = await response.json(); if (!response.ok) throw new Error(data.error || 'Unable to save learning.');
       if (!alive.current) return false;
       setStatus(data as AcademyStatus);
-      window.dispatchEvent(new Event(PROGRESS_SYNC_EVENT));
+      announceProgressSaved();
       if (input.action === 'enrol') { setNote(data.record?.notes[selected] ?? ''); setPortfolio(data.record?.portfolio ?? ''); }
       if (input.action === 'begin' || input.action === 'submit') { setAnswers({}); setCalculation(''); }
       return true;
     } catch (e) { if (alive.current) setError(e instanceof Error ? e.message : 'Unable to save learning.'); return false; }
     finally { inFlight.current = false; if (alive.current) setBusy(false); }
   }
+  useEffect(() => {
+    if (!loaded) return;
+    let active = true;
+    let reading = false;
+    const refresh = async () => {
+      const current = stateRef.current;
+      if (!current || current.challenge || dirtyRef.current || inFlight.current || reading ||
+          !navigator.onLine || document.visibilityState !== 'visible') return;
+      reading = true;
+      try {
+        const response = await fetch(endpoint, { cache: 'no-store', headers: { 'X-TGPI-Session': sessionId } });
+        if (!response.ok) return;
+        const next = await response.json() as AcademyStatus;
+        if (!active || dirtyRef.current || inFlight.current || stateRef.current !== current ||
+            (next.record?.revision ?? 0) <= (current.record?.revision ?? 0)) return;
+        setStatus(next);
+        setNote(next.record?.notes[selected] ?? '');
+        setPortfolio(next.record?.portfolio ?? '');
+      } catch {
+        // Keep the last confirmed record on a transient refresh failure.
+      } finally { reading = false; }
+    };
+    const channel = typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel(PROGRESS_SYNC_CHANNEL) : null;
+    if (channel) channel.onmessage = refresh;
+    window.addEventListener('focus', refresh);
+    window.addEventListener('online', refresh);
+    document.addEventListener('visibilitychange', refresh);
+    const timer = window.setInterval(refresh, 60_000);
+    return () => {
+      active = false;
+      channel?.close();
+      window.removeEventListener('focus', refresh);
+      window.removeEventListener('online', refresh);
+      document.removeEventListener('visibilitychange', refresh);
+      window.clearInterval(timer);
+    };
+  }, [endpoint, loaded, selected, sessionId]);
   const mutationRef = useRef(mutate); mutationRef.current = mutate;
   useEffect(() => {
     if (!dirty || !record || error || busy) return;

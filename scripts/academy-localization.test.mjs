@@ -140,7 +140,7 @@ test('switching the study presentation language keeps selected answers and local
     let slot = 0;
     const fixture = academyLocalizationFixture({
       react: { ...React, useState(initial) { const base = React.useState(initial); return [states[slot++], base[1]]; } },
-      '@clerk/nextjs': { useUser: () => ({ isLoaded: true, user: { id: 'synthetic-learner' } }) },
+      '@clerk/nextjs': { useAuth: () => ({ isLoaded: true, sessionId: 'synthetic-session' }) },
       'next/link': { __esModule: true, default: props => React.createElement('a', props) },
       '@/components/localization/LocaleProvider': { useLocale: () => ({ locale, t: (text, values) => h.messages.translate(locale, text, values) }) },
     });

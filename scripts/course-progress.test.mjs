@@ -18,7 +18,7 @@ new Function("require", "exports", compiled)((id) => {
   if (id === "@/lib/countries") return { getCountry: () => undefined };
   if (id === "@/lib/tgpi-comparison") return { isComparisonGoal: () => false };
   if (id === "@clerk/nextjs/server") return {};
-  if (id === "@/lib/workspace-history.server") return { prepareWorkspaceHistory: async () => null, commitWorkspaceHistory: async () => undefined };
+  if (id === "@/lib/workspace-history.server" || id === "@/lib/firestore-admin-rest.server") return {};
   throw new Error(`Unexpected import ${id}`);
 }, exports);
 const { applyActivationMutation, parseActivationMutation } = exports;

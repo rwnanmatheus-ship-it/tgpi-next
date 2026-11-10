@@ -1,7 +1,8 @@
-import { prepareWorkspaceHistory, commitWorkspaceHistory } from '@/lib/workspace-history.server';
 import "server-only";
 
 import { clerkClient } from "@clerk/nextjs/server";
+import { createFirestoreDeleteWrite, createFirestoreUpdateWrite, FirestoreAdminError, getFirestoreDocument, isLearningStorageConfigured, runFirestoreTransaction } from "@/lib/firestore-admin-rest.server";
+import { workspaceHistoryWrites } from "@/lib/workspace-history.server";
 import {
   activationLimits,
   comparisonPath,
@@ -19,7 +20,8 @@ import { courses } from "@/data/courses";
 import { isComparisonGoal } from "@/lib/tgpi-comparison";
 
 const SAFE_ID = /^[a-z0-9][a-z0-9-]{0,79}$/;
-const MAX_ACTIVATION_METADATA_BYTES = 6_000;
+const progressPath = (uid: string) => `tgpiLearningUsers/${uid}/workspace/activationProgress`;
+type StoredActivation = { snapshot: string };
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return Boolean(value) && typeof value === "object" && !Array.isArray(value);
@@ -188,19 +190,6 @@ function trimRecord<T extends { updatedAt: string }>(
   );
 }
 
-function ensureStorageLimit(progress: TgpiActivationProgress) {
-  const size = Buffer.byteLength(JSON.stringify(serializeActivationProgressForStorage(progress)), "utf8");
-
-  if (size > MAX_ACTIVATION_METADATA_BYTES) {
-    throw new ActivationInputError(
-      "Your TGPI progress has reached the V1 storage limit. Remove an older saved item before continuing.",
-    );
-  }
-
-  return progress;
-}
-
-
 export function applyActivationMutation(
   current: TgpiActivationProgress,
   mutation: ActivationMutation,
@@ -360,45 +349,75 @@ export function applyActivationMutation(
     );
   }
 
-  return ensureStorageLimit(normalizeActivationProgress(next));
+  return normalizeActivationProgress(next);
 }
 
-export async function getUserActivationProgress(userId: string) {
-  const client = await clerkClient();
-  const user = await client.users.getUser(userId);
-  return normalizeActivationProgress(
-    user.privateMetadata[TGPI_ACTIVATION_METADATA_KEY],
-  );
+async function loadLegacyProgress(userId: string, privateMetadata?: Record<string, unknown>) {
+  const metadata = privateMetadata ?? (await (await clerkClient()).users.getUser(userId)).privateMetadata;
+  return normalizeActivationProgress(metadata[TGPI_ACTIVATION_METADATA_KEY]);
 }
 
-export async function updateUserActivationProgress(
-  userId: string,
-  mutation: ActivationMutation,
-) {
-  const client = await clerkClient();
-  const user = await client.users.getUser(userId);
-  const current = normalizeActivationProgress(
-    user.privateMetadata[TGPI_ACTIVATION_METADATA_KEY],
-  );
-  if (mutation.type === "visit_lesson" &&
-    current.courseProgress[mutation.courseId]?.lastLessonId === mutation.lessonId &&
-    current.courseProgress[mutation.courseId]?.courseVersion === requireCourse(mutation.courseId).version) return current;
+function readSnapshot(stored: StoredActivation) {
+  try {
+    const value: unknown = JSON.parse(stored.snapshot);
+    if (!isRecord(value) || value.version !== 1) throw new Error("Invalid progress snapshot.");
+    return normalizeActivationProgress(value);
+  } catch {
+    throw new FirestoreAdminError("The stored activation snapshot could not be read.", 503);
+  }
+}
+
+export async function getUserActivationProgress(userId: string, privateMetadata?: Record<string, unknown>) {
+  const stored = await getFirestoreDocument<StoredActivation>(progressPath(userId));
+  return stored ? readSnapshot(stored.data) : loadLegacyProgress(userId, privateMetadata);
+}
+
+function isUnchanged(current: TgpiActivationProgress, mutation: ActivationMutation) {
+  if (mutation.type === "visit_lesson" || mutation.type === "complete_lesson" || mutation.type === "start_course") {
+    const course = current.courseProgress[mutation.courseId];
+    if (!course || course.courseVersion !== requireCourse(mutation.courseId).version) return false;
+    if (mutation.type === "visit_lesson") return course.lastLessonId === mutation.lessonId;
+    if (mutation.type === "complete_lesson") return course.completedLessonIds.includes(mutation.lessonId);
+    return true;
+  }
   if (mutation.type === "update_documents") {
     const review = current.documentReviews[mutation.countrySlug];
-    if (review?.totalItems === documentReviewItems.length &&
+    return Boolean(review?.totalItems === documentReviewItems.length &&
       review.completedItemIds.every(id => documentReviewItems.some(item => item.id === id)) &&
-      review.completedItemIds.includes(mutation.itemId) === mutation.complete) return current;
+      review.completedItemIds.includes(mutation.itemId) === mutation.complete);
   }
-  const progress = applyActivationMutation(current, mutation);
-  const receipt = await prepareWorkspaceHistory(userId, current, progress);
+  return false;
+}
 
-  await client.users.updateUserMetadata(userId, {
-    privateMetadata: {
-      [TGPI_ACTIVATION_METADATA_KEY]: serializeActivationProgressForStorage(progress),
-    },
+export async function updateUserActivationProgress(userId: string, mutation: ActivationMutation) {
+  const path = progressPath(userId);
+  let legacy: Promise<TgpiActivationProgress> | undefined;
+
+  return runFirestoreTransaction(async context => {
+    const stored = (await context.getDocuments<StoredActivation>([path])).get(path);
+    // The first successful writer migrates the legacy snapshot. Transaction retries
+    // always re-read Firestore before applying the operation to the current record.
+    const current = stored ? readSnapshot(stored.data) : await (legacy ??= loadLegacyProgress(userId));
+    if (isUnchanged(current, mutation)) return { result: current, writes: [] };
+
+    const progress = applyActivationMutation(current, mutation);
+    const history = await workspaceHistoryWrites(userId, [...current.activities, ...progress.activities], context);
+    return {
+      result: progress,
+      writes: [
+        createFirestoreUpdateWrite(path, { snapshot: JSON.stringify(serializeActivationProgressForStorage(progress)) }),
+        ...history,
+      ],
+    };
   });
+}
 
-  // The durable receipt survives an acknowledgement failure and is reconciled from source evidence.
-  if (receipt) await commitWorkspaceHistory(userId, receipt).catch(() => console.error('Workspace history acknowledgement pending'));
-  return progress;
+
+export async function eraseUserActivationProgress(userId: string) {
+  if (!isLearningStorageConfigured()) return;
+  const path = progressPath(userId);
+  await runFirestoreTransaction(async ({ getDocuments }) => {
+    const stored = (await getDocuments([path])).get(path);
+    return { result: null, writes: stored ? [createFirestoreDeleteWrite(path)] : [] };
+  });
 }

@@ -57,7 +57,8 @@ type TgpiAccountCenterProps = {
   decisionContext: DecisionContext;
   initialIdentity: AccountIdentityInput;
   initialProfile: TgpiAccountProfile;
-  rank: GlobalRank;
+  sessionId: string;
+  rank: GlobalRank | null;
 };
 type SaveState = "idle" | "saving" | "saved" | "error";
 type SettingsSection =
@@ -373,6 +374,7 @@ export default function TgpiAccountCenter({
   initialIdentity,
   initialProfile,
   rank,
+  sessionId,
 }: TgpiAccountCenterProps) {
   const { t: localizeLabel } = useInterfaceLocale();
 
@@ -409,7 +411,7 @@ export default function TgpiAccountCenter({
     "global-key": t("Global ID, verification and account security"),
     global: profile.profession || (profile.languages.length ? t("Languages: {count}", { count: profile.languages.length }) : t("Add your global context")),
     identity: profile.currentCity || (currentCountryName ? t(currentCountryName) : t("Add personal information")),
-    progress: t("{rank} · {points} points", { rank: t(rank.name), points: rank.points.toLocaleString(locale) }),
+    progress: rank ? t("{rank} · {points} points", { rank: t(rank.name), points: rank.points.toLocaleString(locale) }) : t("Unavailable"),
     notifications: t("Enabled: {count}", { count: Object.values(profile.notifications).filter(Boolean).length }),
     preferences: `${localeOptions.find(option => option.code === locale)?.name} · ${profile.preferredCurrency}`,
     "public-profile": t(profile.privacy.visibility === "private" ? "Only you can view it" : "Ready to preview and share"),
@@ -420,8 +422,8 @@ export default function TgpiAccountCenter({
   useEffect(() => {
     const nextSnapshot = JSON.stringify({ identity: initialIdentity, profile: initialProfile });
     if (nextSnapshot === incomingSnapshot.current) return;
-    incomingSnapshot.current = nextSnapshot;
     if (!isDirty) {
+      incomingSnapshot.current = nextSnapshot;
       savedSnapshot.current = nextSnapshot;
       setIdentity(initialIdentity);
       setProfile(initialProfile);
@@ -518,7 +520,7 @@ export default function TgpiAccountCenter({
     try {
       const response = await fetch("/api/account-profile", {
         body: JSON.stringify(payload),
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", "X-TGPI-Session": sessionId },
         method: "PATCH",
       });
       const result = (await response.json()) as {
@@ -532,6 +534,7 @@ export default function TgpiAccountCenter({
       setIdentity(result.identity);
       setProfile(result.profile);
       savedSnapshot.current = JSON.stringify({ identity: result.identity, profile: result.profile });
+      incomingSnapshot.current = JSON.stringify({ identity: initialIdentity, profile: initialProfile });
       setSaveState("saved");
       setMessage("Saved across your TGPI account and decision tools.");
       announceProgressSaved();
@@ -602,10 +605,10 @@ export default function TgpiAccountCenter({
           </div>
           <Link className="mt-5 inline-flex text-xs font-extrabold text-[#8C6414]" href="/onboarding"><LocalizedText text={"Open personal plan →"} /></Link>
         </article>
-        <button className="group flex rounded-[24px] border border-[#B9CEE0] bg-[#EDF5FA] p-5 text-left transition hover:-translate-y-0.5 hover:border-[#6B91B1] sm:p-6" onClick={() => selectSection("progress")} type="button">
+        {rank && <button className="group flex rounded-[24px] border border-[#B9CEE0] bg-[#EDF5FA] p-5 text-left transition hover:-translate-y-0.5 hover:border-[#6B91B1] sm:p-6" onClick={() => selectSection("progress")} type="button">
           <GlobalRankBadge rank={rank} size="medium" />
           <span className="ml-4 min-w-0"><span className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#325E83]"><LocalizedText text={"Global rank"} /></span><span className="mt-2 block font-[var(--tgpi-font-display)] text-2xl font-semibold text-[var(--tgpi-navy-raised)]">{t(rank.name)}</span><span className="mt-2 block text-xs leading-5 text-[#52677A]">{rank.points}{" "}<LocalizedText text={"points ·"} />{" "}{rank.nextRank ? <LocalizedText text={"{value0} to {value1}"} values={{value0: String(rank.pointsToNext), value1: t(rank.nextRank.name)}} /> : <LocalizedText text={"highest rank reached"} />}</span><span className="mt-3 block text-xs font-extrabold text-[#234D70]"><LocalizedText text={"Open rank journey"} />{" "}<span aria-hidden="true" className="transition group-hover:translate-x-0.5">→</span></span></span>
-        </button>
+        </button>}
         <Link className="group rounded-[24px] border border-[var(--tgpi-border)] bg-[#F4E7BE] p-5 transition hover:-translate-y-0.5 hover:border-[var(--tgpi-gold-hover)] sm:p-6" href="/global-key">
           <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#73520F]"><LocalizedText text={"TGPI Global ID"} /></p>
           <p className="mt-3 break-all font-[var(--tgpi-font-display)] text-xl font-semibold text-[var(--tgpi-navy-raised)]">{account.globalId}</p>
@@ -726,7 +729,7 @@ export default function TgpiAccountCenter({
   }
 
   if (activeSection === "progress") {
-    activeScreen = <GlobalProgressPanel rank={rank} headingLevel={2} />;
+    activeScreen = rank ? <GlobalProgressPanel rank={rank} headingLevel={2} /> : <p role="status"><LocalizedText text="Unavailable" /></p>;
   }
 
   if (activeSection === "public-profile") {
@@ -744,7 +747,7 @@ export default function TgpiAccountCenter({
             <div className="relative flex flex-col gap-5 sm:flex-row sm:items-center">
               <AccountAvatar imageUrl={account.avatarUrl} initials={initials} label={fullName} />
               <div className="min-w-0 flex-1">
-                <div className="flex items-center gap-3"><div className="min-w-0 flex-1"><p className="text-[9px] font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-gold-light)]"><LocalizedText text={"TGPI Global Profile"} /></p><h3 className="mt-2 break-words font-[var(--tgpi-font-display)] text-3xl font-semibold">{fullName}</h3></div>{profile.privacy.showProgress ? <GlobalRankBadge rank={rank} size="small" /> : null}</div>
+                <div className="flex items-center gap-3"><div className="min-w-0 flex-1"><p className="text-[9px] font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-gold-light)]"><LocalizedText text={"TGPI Global Profile"} /></p><h3 className="mt-2 break-words font-[var(--tgpi-font-display)] text-3xl font-semibold">{fullName}</h3></div>{profile.privacy.showProgress && rank ? <GlobalRankBadge rank={rank} size="small" /> : null}</div>
                 <p className="mt-1 text-sm font-bold text-[#CFD8E3]">{profile.headline || <LocalizedText text={"Add a professional headline"} />}</p>
                 {profile.privacy.showLocation && (profile.currentCity || currentCountryName) ? <p className="mt-2 text-xs text-[#8FA0B3]">{t(currentCountryName)}</p> : null}
               </div>

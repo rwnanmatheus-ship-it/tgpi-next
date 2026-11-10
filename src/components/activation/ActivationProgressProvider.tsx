@@ -41,12 +41,16 @@ export default function ActivationProgressProvider({
 }: {
   children: ReactNode;
 }) {
-  const { isLoaded, userId } = useAuth();
+  const { isLoaded, sessionId } = useAuth();
+  return <ActivationProgressSession key={sessionId ?? "anonymous"} sessionId={sessionId ?? null} isLoaded={isLoaded}>{children}</ActivationProgressSession>;
+}
+
+function ActivationProgressSession({ children, sessionId, isLoaded }: { children: ReactNode; sessionId: string | null; isLoaded: boolean }) {
   const [progress, setProgress] = useState(createEmptyActivationProgress);
-  const [loadedUserId, setLoadedUserId] = useState("");
+  const [loadedSessionId, setLoadedSessionId] = useState("");
   const [error, setError] = useState("");
-  const activeUserId = useRef(userId);
-  useEffect(() => { activeUserId.current = userId; }, [userId]);
+  const mounted = useRef(false);
+  useEffect(() => { mounted.current = true; return () => { mounted.current = false; }; }, []);
   const revision = useRef(0);
   const mutationQueue = useRef<Promise<unknown>>(Promise.resolve());
 
@@ -55,12 +59,12 @@ export default function ActivationProgressProvider({
 
     if (!isLoaded) return () => undefined;
 
-    if (!userId) {
+    if (!sessionId) {
       return () => undefined;
     }
 
     const requestRevision = revision.current;
-    fetchActivationProgress(userId)
+    fetchActivationProgress(sessionId)
       .then((next) => {
         if (!active) return;
         if (revision.current !== requestRevision) return;
@@ -76,24 +80,24 @@ export default function ActivationProgressProvider({
         );
       })
       .finally(() => {
-        if (active) setLoadedUserId(userId);
+        if (active) setLoadedSessionId(sessionId);
       });
 
     return () => {
       active = false;
     };
-  }, [isLoaded, userId]);
+  }, [isLoaded, sessionId]);
 
   useEffect(() => {
-    if (!userId) return;
+    if (!sessionId) return;
     let active = true;
     const refresh = () => {
       if (document.visibilityState !== "visible" || !navigator.onLine) return;
       const requestRevision = revision.current;
-      fetchActivationProgress(userId).then(next => {
-        if (!active || activeUserId.current !== userId || requestRevision !== revision.current) return;
+      fetchActivationProgress(sessionId).then(next => {
+        if (!active || !mounted.current || requestRevision !== revision.current) return;
         setProgress(next);
-        setLoadedUserId(userId);
+        setLoadedSessionId(sessionId);
         setError("");
       }).catch(() => { /* Keep the last confirmed snapshot during a transient failure. */ });
     };
@@ -102,17 +106,18 @@ export default function ActivationProgressProvider({
     window.addEventListener("focus", refresh);
     window.addEventListener(PROGRESS_SYNC_EVENT, refresh);
     window.addEventListener("online", refresh);
+    document.addEventListener("visibilitychange", refresh);
     const interval = window.setInterval(refresh, 60_000);
-    return () => { active = false; channel?.close(); window.removeEventListener("focus", refresh); window.removeEventListener(PROGRESS_SYNC_EVENT, refresh); window.removeEventListener("online", refresh); clearInterval(interval); };
-  }, [userId]);
+    return () => { active = false; channel?.close(); window.removeEventListener("focus", refresh); window.removeEventListener(PROGRESS_SYNC_EVENT, refresh); window.removeEventListener("online", refresh); document.removeEventListener("visibilitychange", refresh); clearInterval(interval); };
+  }, [sessionId]);
 
   const mutate = useCallback((mutation: ActivationMutation) => {
-    const requestUserId = userId;
-    if (!requestUserId) return Promise.reject(new ActivationApiError("Sign in to save your learning progress.", 401));
+    const requestSessionId = sessionId;
+    if (!requestSessionId) return Promise.reject(new ActivationApiError("Sign in to save your learning progress.", 401));
     revision.current += 1;
     const execute = () => {
-      if (activeUserId.current !== requestUserId) throw new ActivationApiError("Your session changed. Reload before saving.", 401);
-      return mutateActivationProgress(mutation);
+      if (!mounted.current) throw new ActivationApiError("Your session changed. Reload before saving.", 401);
+      return mutateActivationProgress(mutation, requestSessionId);
     };
     const request = mutationQueue.current.then(
       execute,
@@ -120,9 +125,9 @@ export default function ActivationProgressProvider({
     );
     const handledRequest = request.then(
       (next) => {
-        if (activeUserId.current !== requestUserId) throw new ActivationApiError("Your session changed. Reload before saving.", 401);
+        if (!mounted.current) throw new ActivationApiError("Your session changed. Reload before saving.", 401);
         revision.current += 1;
-        setLoadedUserId(requestUserId);
+        setLoadedSessionId(requestSessionId);
         setProgress(next);
         setError("");
         return next;
@@ -132,24 +137,24 @@ export default function ActivationProgressProvider({
           caught instanceof ActivationApiError
             ? caught.message
             : "Unable to update your TGPI progress.";
-        if (activeUserId.current === requestUserId) setError(message);
+        if (mounted.current) setError(message);
         throw caught;
       },
     );
 
     mutationQueue.current = handledRequest.catch(() => undefined);
     return handledRequest;
-  }, [userId]);
+  }, [sessionId]);
 
   const value = useMemo(
     () => ({
       error,
-      isAuthenticated: Boolean(userId),
-      isLoading: !isLoaded || Boolean(userId && loadedUserId !== userId),
+      isAuthenticated: Boolean(sessionId),
+      isLoading: !isLoaded || Boolean(sessionId && loadedSessionId !== sessionId),
       mutate,
-      progress: userId && loadedUserId === userId ? progress : EMPTY_PROGRESS,
+      progress: sessionId && loadedSessionId === sessionId ? progress : EMPTY_PROGRESS,
     }),
-    [error, isLoaded, loadedUserId, mutate, progress, userId],
+    [error, isLoaded, loadedSessionId, mutate, progress, sessionId],
   );
 
   return (

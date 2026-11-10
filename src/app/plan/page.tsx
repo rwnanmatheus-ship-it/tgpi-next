@@ -1,3 +1,4 @@
+import { getUserActivationProgress } from "@/lib/activation-store.server";
 import { localizeMetadata } from "@/lib/localization/metadata.server";
 import { loadLearningSummary } from "@/lib/learning/unified-progress.server";
 import { connectPlanLearning } from "@/lib/personal-plan";
@@ -5,10 +6,6 @@ import { courses } from "@/data/courses";
 import type { Metadata } from "next";
 import { currentUser } from "@clerk/nextjs/server";
 import PersonalPlanDashboard from "@/components/plan/PersonalPlanDashboard";
-import {
-  normalizeActivationProgress,
-  TGPI_ACTIVATION_METADATA_KEY,
-} from "@/lib/activation-progress";
 import { requireUser } from "@/lib/auth/guards";
 import { getAllCountries } from "@/lib/countries";
 import { buildGlobalWorkspaceModel } from "@/lib/global-workspace";
@@ -28,9 +25,7 @@ export default async function PersonalPlanPage() {
   const onboarding = normalizeOnboardingData(
     user?.unsafeMetadata.tgpiOnboarding,
   );
-  const activation = normalizeActivationProgress(
-    user?.privateMetadata[TGPI_ACTIVATION_METADATA_KEY],
-  );
+  const activation = await getUserActivationProgress(session.userId, user?.privateMetadata);
   const learning = await loadLearningSummary(session.userId, activation);
   const model = connectPlanLearning(buildGlobalWorkspaceModel(
     onboarding,

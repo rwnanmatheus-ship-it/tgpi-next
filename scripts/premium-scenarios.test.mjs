@@ -41,9 +41,10 @@ test('scenario repository queries only its owner and excludes invalid records',a
 });
 function guard({uid='member-a',plan='free',controlled=null,fail=false}={}) {
  return moduleAt('../src/lib/auth/guards.ts',{
+  '@/lib/auth/return-to':{safeReturnTo:value=>value},
   '@/lib/billing.server':{getUserBillingRecord:async()=>{if(fail)throw Error('Billing unavailable');return {plan};}},
   '@/lib/account-profile':{getCertificateName:()=>'',normalizeAccountIdentity:()=>({}),normalizeTgpiAccountProfile:()=>({})},
-  '@clerk/nextjs/server':{auth:async()=>({userId:uid}),currentUser:async()=>({unsafeMetadata:{plan:'premium'},fullName:'Test'})},
+  '@clerk/nextjs/server':{auth:async()=>({userId:uid,sessionId:uid ? "test-session" : null}),currentUser:async()=>({id:uid,unsafeMetadata:{plan:'premium'},fullName:'Test'})},
   'next/navigation':{},'@/lib/premium-access.server':{getControlledPremiumAccessMode:async()=>controlled},
  });
 }

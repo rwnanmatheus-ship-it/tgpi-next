@@ -1,3 +1,4 @@
+import { getUserActivationProgress } from "@/lib/activation-store.server";
 import { localizeMetadata } from "@/lib/localization/metadata.server";
 import { getAccountMembershipLabel } from "@/lib/account-membership.server";
 import { reconcileWorkspaceHistory, loadWorkspaceHistory } from '@/lib/workspace-history.server';
@@ -17,10 +18,6 @@ import {
   mergeAccountProfileWithOnboarding,
   normalizeAccountIdentity,
 } from "@/lib/account-profile";
-import {
-  normalizeActivationProgress,
-  TGPI_ACTIVATION_METADATA_KEY,
-} from "@/lib/activation-progress";
 import { formatTgpiGlobalId, requireUser } from "@/lib/auth/guards";
 import { getAllCountries } from "@/lib/countries";
 import { buildGlobalWorkspaceModel } from "@/lib/global-workspace";
@@ -51,9 +48,7 @@ export default async function ProfilePage({
   const onboarding = normalizeOnboardingData(
     user?.unsafeMetadata.tgpiOnboarding,
   );
-  const activation = normalizeActivationProgress(
-    user?.privateMetadata[TGPI_ACTIVATION_METADATA_KEY],
-  );
+  const activation = await getUserActivationProgress(session.userId, user?.privateMetadata);
   const [memberIdentity, savedPreferences, historyPage, membership, learning] = await Promise.all([
     ensureMemberNumber(session.userId).catch(() => null),
     isLearningStorageConfigured()

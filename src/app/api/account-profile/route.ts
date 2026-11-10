@@ -15,7 +15,7 @@ const MAX_BODY_SIZE = 24_000;
 export async function PATCH(request: Request) {
   const session = await auth();
 
-  if (!session.userId) {
+  if (!session.userId || !session.sessionId || request.headers.get("x-tgpi-session") !== session.sessionId) {
     return NextResponse.json(
       { error: "Your session has expired. Sign in again to save your account." },
       { status: 401 },
@@ -23,8 +23,12 @@ export async function PATCH(request: Request) {
   }
 
   const origin = request.headers.get("origin");
-  if (origin && origin !== new URL(request.url).origin) {
+  if (origin !== new URL(request.url).origin) {
     return NextResponse.json({ error: "This request is not allowed." }, { status: 403 });
+  }
+
+  if (request.headers.get("content-type")?.split(";")[0].trim().toLowerCase() !== "application/json") {
+    return NextResponse.json({ error: "JSON content is required." }, { status: 415 });
   }
 
   try {
@@ -64,31 +68,31 @@ export async function PATCH(request: Request) {
       user.unsafeMetadata.tgpiOnboarding,
     );
     const existing = normalizeTgpiAccountProfile(user.unsafeMetadata.tgpiAccountProfile);
-    if (input.profile?.updatedAt && existing.updatedAt && input.profile.updatedAt !== existing.updatedAt) {
+    if (input.profile?.updatedAt !== existing.updatedAt) {
       return NextResponse.json({ error: "This profile changed in another session. Copy your edits, reload and review the latest version before saving." }, { status: 409 });
     }
-    const now = new Date().toISOString();
+    const previousTimestamp = Date.parse(existing.updatedAt ?? "");
+    const now = new Date(Math.max(Date.now(), (previousTimestamp || 0) + 1)).toISOString();
     // Merge normalized known fields so older clients cannot erase newly added information.
     const savedProfile = { ...normalizeTgpiAccountProfile({
-      ...normalizeTgpiAccountProfile(user.unsafeMetadata.tgpiAccountProfile),
+      ...existing,
       ...input.profile,
     }), updatedAt: now };
-    const syncedOnboarding = {
-      ...onboarding,
-      languages: savedProfile.languages,
-      profession: savedProfile.profession,
-      educationLevel: savedProfile.educationLevel,
-      updatedAt: now,
-    };
-
     const memberIdentity = await getMemberIdentity(session.userId).catch(() => null);
-    await client.users.updateUser(session.userId, {
-      firstName: identity.firstName,
-      lastName: identity.lastName,
+    if (identity.firstName !== user.firstName || identity.lastName !== (user.lastName || "")) {
+      await client.users.updateUser(session.userId, {
+        firstName: identity.firstName,
+        lastName: identity.lastName,
+      });
+    }
+    const sharedFields = { languages: savedProfile.languages, profession: savedProfile.profession, educationLevel: savedProfile.educationLevel };
+    const changedPlan = sharedFields.profession !== onboarding.profession ||
+      sharedFields.educationLevel !== onboarding.educationLevel ||
+      JSON.stringify(sharedFields.languages) !== JSON.stringify(onboarding.languages);
+    await client.users.updateUserMetadata(session.userId, {
       unsafeMetadata: {
-        ...user.unsafeMetadata,
         tgpiAccountProfile: savedProfile,
-        tgpiOnboarding: syncedOnboarding,
+        ...(changedPlan ? { tgpiOnboarding: { ...sharedFields, updatedAt: now } } : {}),
       },
     });
 
@@ -103,7 +107,7 @@ export async function PATCH(request: Request) {
         "documents",
         "learning",
       ],
-    });
+    }, { headers: { "Cache-Control": "private, no-store" } });
   } catch (error) {
     if (error instanceof SyntaxError) {
       return NextResponse.json(
