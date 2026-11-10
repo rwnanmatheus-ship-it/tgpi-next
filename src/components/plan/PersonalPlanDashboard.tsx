@@ -41,7 +41,7 @@ export default function PersonalPlanDashboard({ firstName, model, learning: lear
     </article>;
   }
   return <main className="plan-shell"><div className="plan-container">
-    <PlanHero eyebrow="TGPI / Personal Global Plan" title="Your next move," accent="connected." description="One clear plan for your destinations, decisions and progress. Start with what matters next." asset="workspace-global-focus">
+    <PlanHero eyebrow="TGPI / Personal Global Plan" title="Your next move," accent="connected." description="One clear plan for your destinations, decisions and progress. Start with what matters next." asset="workspace-global-focus" framing="learning">
       <div className="plan-actions"><a className="plan-button primary" href="#actions">{t('Best next actions')} <span aria-hidden="true">↓</span></a><Link className="plan-button" href="/country-fit">{t('Refine Country Fit')} ↗</Link></div>
     </PlanHero>
     <div className="plan-stats">{[

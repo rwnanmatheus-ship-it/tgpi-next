@@ -3,3 +3,54 @@
 @media(min-width:1700px){.plan-hero h1{font-size:3.7rem}}@media(max-width:1100px){.plan-shell{padding:24px 20px 100px}.plan-stats{grid-template-columns:repeat(2,minmax(0,1fr))}.plan-journey{grid-template-columns:repeat(2,minmax(0,1fr))}.plan-destinations{grid-template-columns:repeat(2,minmax(0,1fr))}.plan-hero-copy{padding:28px}.plan-grid{grid-template-columns:1fr 1fr}.plan-hero h1{font-size:2.5rem}.plan-tabs button{padding:12px;font-size:11px}}
 @media(max-width:760px){.plan-shell{padding:16px 14px 100px}.plan-hero{grid-template-columns:1fr;border-radius:20px}.plan-hero-copy{padding:26px 23px}.plan-hero h1{font-size:2.3rem;line-height:1.12}.plan-hero-art{min-height:210px;order:-1}.plan-hero-art::after{background:linear-gradient(0deg,#071b31,transparent 30%)}.plan-art-caption{bottom:20px;left:20px;right:20px;font-size:9px}.plan-hero-meta{margin-top:22px;gap:14px}.plan-hero .plan-actions{margin-top:20px}.plan-hero .plan-button{flex:1}.plan-tabs{top:68px;margin:18px 0;border-radius:12px}.plan-tabs button{flex:0 0 auto;font-size:12px}.plan-grid{grid-template-columns:1fr}.plan-panel{padding:21px}.plan-stat{padding:14px}.plan-stat strong{font-size:22px}.plan-stat span{font-size:10px}.plan-journey{gap:10px}.plan-stage{padding:15px}.plan-stage h3{font-size:17px}.plan-destinations,.plan-evidence-grid{grid-template-columns:1fr}.plan-action{gap:12px}.plan-action-number{width:30px;height:30px}.plan-budget-heading{align-items:stretch;flex-direction:column}.plan-budget-heading>label{min-width:0}.plan-section-head{align-items:flex-start;flex-direction:column}.plan-shell .ig-form-grid{grid-template-columns:1fr}.plan-fit-header{align-items:flex-start}.plan-history li{align-items:flex-start;flex-direction:column;gap:7px}.plan-profile>div{gap:10px}.plan-fit-header strong{font-size:17px}.plan-shell .ig-task-grid{grid-template-columns:1fr}.plan-shell .ig-panel{padding:20px}.plan-shell .research-slot-bar>div{width:100%;display:flex}.plan-shell .research-slot-bar button{flex:1}.plan-save-bar .plan-button{width:100%}}
 @media(prefers-reduced-motion:reduce){.plan-shell *{scroll-behavior:auto;transition:none!important;animation:none!important}}
+
+/* Personal plan: the compact split hero used by Learning, with an image-specific focal point. */
+.plan-hero-learning {
+  grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);
+  min-height:360px;
+  border-color:#234562;
+  background:#0b2037;
+}
+.plan-hero-learning .plan-hero-copy { min-width:0; padding:28px 32px; align-content:center; }
+.plan-hero-learning h1 { font-size:clamp(30px,3vw,40px); line-height:1.08; margin:16px 0; }
+.plan-hero-learning .plan-actions { margin-top:20px; gap:12px; }
+.plan-hero-learning .plan-button { min-height:46px; border-radius:9px; }
+.plan-hero-learning .plan-hero-meta { margin-top:20px; padding-top:16px; border-top:1px solid #ffffff23; }
+.plan-hero-learning .plan-hero-art {
+  --plan-art-position:72% 56%;
+  width:100%;
+  min-width:0;
+  min-height:360px;
+  overflow:hidden;
+}
+.plan-hero-learning .plan-hero-art img { transform:scale(1.08); transform-origin:var(--plan-art-position); }
+.plan-hero-learning .plan-hero-art::after { pointer-events:none; background:linear-gradient(0deg,#061a30c7,transparent 42%); }
+.plan-hero-learning .plan-art-caption {
+  display:block;
+  bottom:24px;
+  left:27px;
+  right:27px;
+  padding:0;
+  border:0;
+  background:transparent;
+  backdrop-filter:none;
+  font-size:20px;
+  line-height:1.3;
+  letter-spacing:-.02em;
+}
+.plan-hero-learning .plan-art-caption>span:last-child { margin-left:0; font-size:inherit; }
+@media(max-width:1100px) {
+  .plan-hero-learning { grid-template-columns:1fr; }
+  .plan-hero-learning .plan-hero-copy { padding:28px; }
+  .plan-hero-learning h1 { font-size:34px; }
+  .plan-hero-learning .plan-hero-art { min-height:0; aspect-ratio:16/9; max-height:360px; }
+}
+@media(max-width:760px) {
+  .plan-hero-learning .plan-hero-copy { padding:24px; }
+  .plan-hero-learning h1 { font-size:30px; margin:13px 0; }
+  .plan-hero-learning .plan-hero-copy>p:not(.plan-kicker),
+  .plan-hero-learning .plan-hero-meta { display:none; }
+  .plan-hero-learning .plan-actions { margin-top:18px; }
+  .plan-hero-learning .plan-hero-art { order:0; min-height:180px; max-height:none; }
+  .plan-hero-learning .plan-art-caption { bottom:18px; left:24px; right:24px; font-size:18px; }
+}
