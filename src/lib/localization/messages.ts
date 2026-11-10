@@ -11929,6 +11929,14 @@ export const messages = {
     "fr": "Destination : {country}. Saisissez votre estimation mensuelle en {currency}. Utilisez des devis locaux datés ; TGPI ne fournit aucun budget de référence.",
     "de": "Zielland: {country}. Gib deine monatliche Schätzung in {currency} ein. Nutze datierte lokale Angebote; TGPI gibt kein Referenzbudget vor.",
     "it": "Destinazione: {country}. Inserisci la tua stima mensile in {currency}. Usa preventivi locali datati; TGPI non fornisce un budget di riferimento."
+  },
+  "Decision brief: {country}": {
+    "en": "Decision brief: {country}",
+    "pt-BR": "Resumo decisório: {country}",
+    "es": "Resumen de decisión: {country}",
+    "fr": "Synthèse décisionnelle : {country}",
+    "de": "Entscheidungsübersicht: {country}",
+    "it": "Sintesi della decisione: {country}"
   }
 } as const satisfies Record<string, Record<Locale, string>>;
 

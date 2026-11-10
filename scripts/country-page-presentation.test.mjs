@@ -8,6 +8,23 @@ import { academyLocalizationFixture } from './helpers/academy-localization.mjs';
 const base = academyLocalizationFixture();
 const escapeHtml = value => String(value).replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll("'", '&#x27;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
 
+test('research download heading keeps the destination name in grammatical order across six locales', () => {
+  for (const locale of base.locales) {
+    const t = (key, values) => base.messages.translate(locale, key, values);
+    const fixture = academyLocalizationFixture({
+      '@clerk/nextjs': { useUser: () => ({ isLoaded: true, user: null }) },
+      '@/components/localization/LocaleProvider': {
+        LocalizedText: ({ text, values }) => typeof text === 'string' ? t(text, values) : text,
+        useLocale: () => ({ locale, t }),
+      },
+    });
+    const ReportCard = fixture.load(resolve('src/components/intelligence/ResearchReportCard.tsx')).default;
+    const html = renderToStaticMarkup(React.createElement(ReportCard, { country: 'germany', name: 'Germany' }));
+    assert.ok(html.includes(escapeHtml(t('Decision brief: {country}', { country: t('Germany') }))), `${locale}: report heading`);
+    if (locale === 'pt-BR') assert.ok(!html.includes('Seu Alemanha resumo'), 'Portuguese word order');
+  }
+});
+
 test('country headings, cost references and provider feedback follow six locales while published amounts remain exact', () => {
   for (const locale of base.locales) {
     const t = (key, values) => base.messages.translate(locale, key, values);
