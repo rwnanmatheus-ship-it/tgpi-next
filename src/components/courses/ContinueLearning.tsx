@@ -1,3 +1,4 @@
+import CourseArrow from './CourseArrow';
 "use client";
 
 import { useAuth } from '@clerk/nextjs';
@@ -54,7 +55,7 @@ export default function ContinueLearning({ initial, initialUid }: { initial?: Le
       <span className="product-kicker">{t(learningStatusLabels[item.status])}</span><strong>{t(item.title)}</strong>
       <span>{t(item.kind === 'professional' ? '{done} of {total} practice records' : '{done} of {total} lesson checkpoints', { done: item.completed, total: item.total })}</span>
       {item.status !== 'edition_changed' && <progress max={Math.max(1, item.total)} value={item.completed} aria-label={t(item.title)} />}
-      <span className="product-learning-action">{t(item.status === 'completed' ? 'Review course' : 'Continue learning')} <span aria-hidden="true">↗</span></span>
+      <span className="product-learning-action">{t(item.status === 'completed' ? 'Review course' : 'Continue learning')} <CourseArrow /></span>
     </Link>)}</div> : data && !unavailable ? <p>{t('Choose a practical course. Your completed lessons stay connected to your account.')}</p> : null}
   </section>;
 }

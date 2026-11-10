@@ -1,4 +1,5 @@
 'use client';
+import CourseArrow from './CourseArrow';
 import { useId, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
@@ -21,6 +22,6 @@ export default function CourseSearch({ courses, query, onChange }: { courses: Co
       if (event.key === 'ArrowDown' || event.key === 'ArrowUp') { event.preventDefault(); setOpen(true); setActive(previous => matches.length ? (previous + (event.key === 'ArrowDown' ? 1 : -1) + matches.length) % matches.length : -1); }
       if (event.key === 'Enter') { event.preventDefault(); if (open && active >= 0 && matches[active]) choose(matches[active]); else setOpen(false); }
     }} />{query && <button type="button" aria-label={t('Clear search')} onClick={() => { onChange(''); setActive(-1); root.current?.querySelector('input')?.focus(); }}>×</button>}</div>
-    {open && <div className={styles.suggestions}><p className={styles.suggestionHeading}>{t(query ? 'Matching courses' : 'Explore a new skill')}</p><ul id={listId} role="listbox" aria-label={t('Course suggestions')}>{matches.map((course,index) => <li key={course.id} id={`${listId}-${index}`} role="option" aria-selected={active === index} onMouseDown={event => event.preventDefault()} onClick={() => choose(course)} onMouseMove={() => setActive(index)}><Image src={courseArtwork(course.id, course.image)} alt="" width={72} height={48} sizes="72px" /><span><strong>{t(course.title)}</strong><small>{t(course.category)} · {course.duration}</small></span><span aria-hidden="true">↗</span></li>)}</ul>{!matches.length && <p className={styles.suggestionHeading}>{t('No courses match these filters.')}</p>}<p className={styles.searchHint}>{t('Use arrow keys to explore. Enter opens a course.')}</p></div>}
+    {open && <div className={styles.suggestions}><p className={styles.suggestionHeading}>{t(query ? 'Matching courses' : 'Explore a new skill')}</p><ul id={listId} role="listbox" aria-label={t('Course suggestions')}>{matches.map((course,index) => <li key={course.id} id={`${listId}-${index}`} role="option" aria-selected={active === index} onMouseDown={event => event.preventDefault()} onClick={() => choose(course)} onMouseMove={() => setActive(index)}><Image src={courseArtwork(course.id, course.image)} alt="" width={72} height={48} sizes="72px" /><span><strong>{t(course.title)}</strong><small>{t(course.category)} · {course.duration}</small></span><CourseArrow /></li>)}</ul>{!matches.length && <p className={styles.suggestionHeading}>{t('No courses match these filters.')}</p>}<p className={styles.searchHint}>{t('Use arrow keys to explore. Enter opens a course.')}</p></div>}
   </div>;
 }
