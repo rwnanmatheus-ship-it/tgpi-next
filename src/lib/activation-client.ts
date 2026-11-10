@@ -21,6 +21,7 @@ async function readResponse(response: Response) {
   const payload = (await response.json()) as {
     error?: string;
     progress?: TgpiActivationProgress;
+    readOnly?: boolean;
   };
 
   if (!response.ok || !payload.progress) {
@@ -30,10 +31,10 @@ async function readResponse(response: Response) {
     );
   }
 
-  return payload.progress;
+  return { progress: payload.progress, readOnly: payload.readOnly === true };
 }
 
-const pendingReads = new Map<string, Promise<TgpiActivationProgress>>();
+const pendingReads = new Map<string, ReturnType<typeof loadActivationProgress>>();
 
 export function fetchActivationProgress(sessionId: string) {
   const existing = pendingReads.get(sessionId);
@@ -68,7 +69,7 @@ export async function mutateActivationProgress(mutation: ActivationMutation, ses
     method: "PATCH",
   });
 
-  const progress = await readResponse(response);
+  const { progress } = await readResponse(response);
   pendingReads.delete(sessionId);
   announceProgressSaved();
   return progress;

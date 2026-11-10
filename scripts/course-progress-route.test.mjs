@@ -14,7 +14,7 @@ function route(userId) {
     if (id === "@/lib/notifications/schedule.server") return { scheduleNotificationReconciliation: () => undefined };
     if (id === "next/cache") return { unstable_cache: () => { throw new Error("Request-scoped Clerk client cannot run in a cache scope"); } };
     if (id === "next/server") return { NextResponse: { json: (body, init) => Response.json(body, init) } };
-    if (id === "@/lib/activation-store.server") return { parseActivationMutation: value => value, updateUserActivationProgress: async uid => { assert.equal(uid, userId); return expected; }, getUserActivationProgress: async (uid) => { assert.equal(uid, userId); return expected; } };
+    if (id === "@/lib/activation-store.server") return { parseActivationMutation: value => value, updateUserActivationProgress: async uid => { assert.equal(uid, userId); return expected; }, getUserActivationView: async (uid) => { assert.equal(uid, userId); return { progress: expected, readOnly: false }; } };
     throw new Error(`Unexpected dependency ${id}`);
   }, exports);
   return exports;

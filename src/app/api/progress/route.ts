@@ -6,7 +6,7 @@ import { FirestoreAdminError } from "@/lib/firestore-admin-rest.server";
 import { NextResponse } from "next/server";
 import {
   ActivationInputError,
-  getUserActivationProgress,
+  getUserActivationView,
   parseActivationMutation,
   updateUserActivationProgress,
 } from "@/lib/activation-store.server";
@@ -32,8 +32,8 @@ export async function GET(request: Request) {
   }
 
   try {
-    const progress = await getUserActivationProgress(session.userId);
-    return json({ progress });
+    const { progress, readOnly } = await getUserActivationView(session.userId);
+    return json({ progress, ...(readOnly ? { readOnly } : {}) });
   } catch (error) {
     console.error("Unable to load TGPI activation progress", error instanceof Error ? error.name : "unknown");
     return json({ error: "Unable to load your confirmed TGPI progress. Try again in a moment." }, 503);

@@ -1,4 +1,5 @@
-import { getUserActivationProgress } from "@/lib/activation-store.server";
+import ActivationProgressNotice from "@/components/activation/ActivationProgressNotice";
+import { getUserActivationView } from "@/lib/activation-store.server";
 import type { Metadata } from "next";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import DocumentsExperience from "@/components/documents/DocumentsExperience";
@@ -34,20 +35,24 @@ export default async function PassportPage({ searchParams }: PageProps<"/passpor
       ? listUserLearningCredentials(session.userId).then(records => records.filter(record => record.status === "active").length, () => null)
       : null,
   ]);
+  const { progress, readOnly } = await getUserActivationView(session.userId, user?.privateMetadata);
   const model = buildDocumentsMemberModel(
     normalizeOnboardingData(user?.unsafeMetadata.tgpiOnboarding),
-    await getUserActivationProgress(session.userId, user?.privateMetadata),
+    progress,
     getAllCountries(),
     user?.primaryEmailAddress?.verification?.status === "verified",
     credentials,
   );
 
-  return <DocumentsExperience
-    countries={directory}
-    initialGoal={goal ?? model.goal}
-    initialCountry={initialCountry}
-    member={{ globalId: formatTgpiGlobalId(session.userId), model }}
-  />;
+  return <>
+    {readOnly && <ActivationProgressNotice />}
+    <DocumentsExperience
+      countries={directory}
+      initialGoal={goal ?? model.goal}
+      initialCountry={initialCountry}
+      member={{ globalId: formatTgpiGlobalId(session.userId), model }}
+    />
+  </>;
 }
 
 export async function generateMetadata() {

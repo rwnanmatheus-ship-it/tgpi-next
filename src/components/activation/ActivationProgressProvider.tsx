@@ -1,6 +1,8 @@
 "use client";
 
 import { PROGRESS_SYNC_CHANNEL, PROGRESS_SYNC_EVENT } from "@/lib/progress-sync";
+import { useLocale } from "@/components/localization/LocaleProvider";
+import { activationReadOnlyCopy } from "@/lib/localization/progress-copy";
 import { useAuth } from "@clerk/nextjs";
 import {
   createContext,
@@ -46,13 +48,21 @@ export default function ActivationProgressProvider({
 }
 
 function ActivationProgressSession({ children, sessionId, isLoaded }: { children: ReactNode; sessionId: string | null; isLoaded: boolean }) {
+  const { locale } = useLocale();
   const [progress, setProgress] = useState(createEmptyActivationProgress);
   const [loadedSessionId, setLoadedSessionId] = useState("");
   const [error, setError] = useState("");
   const mounted = useRef(false);
   useEffect(() => { mounted.current = true; return () => { mounted.current = false; }; }, []);
   const revision = useRef(0);
+  const confirmed = useRef(false);
   const mutationQueue = useRef<Promise<unknown>>(Promise.resolve());
+
+  const applySnapshot = useCallback(({ progress, readOnly }: Awaited<ReturnType<typeof fetchActivationProgress>>) => {
+    if (!readOnly || !confirmed.current) setProgress(progress);
+    if (!readOnly) confirmed.current = true;
+    setError(readOnly ? activationReadOnlyCopy.en : "");
+  }, []);
 
   useEffect(() => {
     let active = true;
@@ -68,8 +78,7 @@ function ActivationProgressSession({ children, sessionId, isLoaded }: { children
       .then((next) => {
         if (!active) return;
         if (revision.current !== requestRevision) return;
-        setProgress(next);
-        setError("");
+        applySnapshot(next);
       })
       .catch((caught: unknown) => {
         if (!active) return;
@@ -86,7 +95,7 @@ function ActivationProgressSession({ children, sessionId, isLoaded }: { children
     return () => {
       active = false;
     };
-  }, [isLoaded, sessionId]);
+  }, [applySnapshot, isLoaded, sessionId]);
 
   useEffect(() => {
     if (!sessionId) return;
@@ -96,9 +105,8 @@ function ActivationProgressSession({ children, sessionId, isLoaded }: { children
       const requestRevision = revision.current;
       fetchActivationProgress(sessionId).then(next => {
         if (!active || !mounted.current || requestRevision !== revision.current) return;
-        setProgress(next);
+        applySnapshot(next);
         setLoadedSessionId(sessionId);
-        setError("");
       }).catch(() => { /* Keep the last confirmed snapshot during a transient failure. */ });
     };
     const channel = typeof BroadcastChannel !== "undefined" ? new BroadcastChannel(PROGRESS_SYNC_CHANNEL) : null;
@@ -109,7 +117,7 @@ function ActivationProgressSession({ children, sessionId, isLoaded }: { children
     document.addEventListener("visibilitychange", refresh);
     const interval = window.setInterval(refresh, 60_000);
     return () => { active = false; channel?.close(); window.removeEventListener("focus", refresh); window.removeEventListener(PROGRESS_SYNC_EVENT, refresh); window.removeEventListener("online", refresh); document.removeEventListener("visibilitychange", refresh); clearInterval(interval); };
-  }, [sessionId]);
+  }, [applySnapshot, sessionId]);
 
   const mutate = useCallback((mutation: ActivationMutation) => {
     const requestSessionId = sessionId;
@@ -127,6 +135,7 @@ function ActivationProgressSession({ children, sessionId, isLoaded }: { children
       (next) => {
         if (!mounted.current) throw new ActivationApiError("Your session changed. Reload before saving.", 401);
         revision.current += 1;
+        confirmed.current = true;
         setLoadedSessionId(requestSessionId);
         setProgress(next);
         setError("");
@@ -148,13 +157,13 @@ function ActivationProgressSession({ children, sessionId, isLoaded }: { children
 
   const value = useMemo(
     () => ({
-      error,
+      error: error === activationReadOnlyCopy.en ? activationReadOnlyCopy[locale] : error,
       isAuthenticated: Boolean(sessionId),
       isLoading: !isLoaded || Boolean(sessionId && loadedSessionId !== sessionId),
       mutate,
       progress: sessionId && loadedSessionId === sessionId ? progress : EMPTY_PROGRESS,
     }),
-    [error, isLoaded, loadedSessionId, mutate, progress, sessionId],
+    [error, isLoaded, loadedSessionId, locale, mutate, progress, sessionId],
   );
 
   return (

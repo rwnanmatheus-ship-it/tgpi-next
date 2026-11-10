@@ -1,4 +1,5 @@
-import { getUserActivationProgress } from "@/lib/activation-store.server";
+import ActivationProgressNotice from "@/components/activation/ActivationProgressNotice";
+import { getUserActivationView } from "@/lib/activation-store.server";
 import { createEmptyActivationProgress } from "@/lib/activation-progress";
 import { localizeMetadata } from "@/lib/localization/metadata.server";
 
@@ -25,10 +26,10 @@ export default async function RankingPage() {
   const onboarding = normalizeOnboardingData(user?.unsafeMetadata.tgpiOnboarding);
   const profile = mergeAccountProfileWithOnboarding(user?.unsafeMetadata.tgpiAccountProfile, onboarding);
   const identity = normalizeAccountIdentity({firstName:user?.firstName,lastName:user?.lastName,username:user?.username || ""});
-  const activation = user ? await getUserActivationProgress(user.id, user.privateMetadata) : createEmptyActivationProgress();
+  const { progress: activation, readOnly } = user ? await getUserActivationView(user.id, user.privateMetadata) : { progress: createEmptyActivationProgress(), readOnly: false };
   const model = buildGlobalWorkspaceModel(onboarding, getAllCountries(), activation, courses);
   const rank = getGlobalRank({...getGlobalRankSignals(activation), activationCompletion:model.activationCompletion, planCompletion:model.completion, profileCompletion:getAccountProfileCompletion(identity,profile)});
-  return <main className="min-h-screen bg-[var(--tgpi-canvas-alt)] px-4 py-8 sm:px-6 sm:py-12"><div className="mx-auto max-w-6xl"><LocalizedElement as="nav" aria-label="Progress navigation" className="mb-6 flex flex-wrap gap-3 text-sm font-bold text-[var(--tgpi-navy-raised)]"><Link className="rounded-xl border border-[var(--tgpi-border)] bg-white px-4 py-3" href="/profile"><LocalizedText text="← Workspace" /></Link><Link className="rounded-xl border border-[var(--tgpi-border)] bg-white px-4 py-3" href="/profile/security"><LocalizedText text="Account settings" /></Link></LocalizedElement><GlobalProgressPanel rank={rank}/></div></main>;
+  return <>{readOnly && <ActivationProgressNotice />}<main className="min-h-screen bg-[var(--tgpi-canvas-alt)] px-4 py-8 sm:px-6 sm:py-12"><div className="mx-auto max-w-6xl"><LocalizedElement as="nav" aria-label="Progress navigation" className="mb-6 flex flex-wrap gap-3 text-sm font-bold text-[var(--tgpi-navy-raised)]"><Link className="rounded-xl border border-[var(--tgpi-border)] bg-white px-4 py-3" href="/profile"><LocalizedText text="← Workspace" /></Link><Link className="rounded-xl border border-[var(--tgpi-border)] bg-white px-4 py-3" href="/profile/security"><LocalizedText text="Account settings" /></Link></LocalizedElement><GlobalProgressPanel rank={rank}/></div></main></>;
 }
 
 export async function generateMetadata() { return localizeMetadata(sourceMetadata); }

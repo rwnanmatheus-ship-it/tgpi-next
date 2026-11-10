@@ -1,3 +1,4 @@
+import ActivationProgressNotice from "@/components/activation/ActivationProgressNotice";
 import { planCopy, workspaceResourceCopy } from '@/lib/localization/workspace-copy';
 
 import { LocalizedElement } from "@/components/localization/LocalizedElement";
@@ -32,6 +33,7 @@ import { LocalizedText } from "@/components/localization/LocaleProvider";
 
 type Props = {
   learning: LearningSummary;
+  progressReadOnly: boolean;
   identity: { avatarUrl: string; firstName: string; fullName: string; globalId: string; headline: string; membership: string; profileCompletion: number; publicProfileUrl: string; handle?: string };
   model: GlobalWorkspaceModel; onboardingCompleted?: boolean; rank: GlobalRank;
   userId: string; resources: WorkspaceResource[]; history: ActivationActivity[]; historyCursor: string | null; historyCoverage: string | null; historyAvailable: boolean; historyPending: boolean; preferences: WorkspacePreferences; preferencesAvailable: boolean;
@@ -45,7 +47,7 @@ function ProgressOrbit({ value }: { value: number }) {
   const progress = Math.max(0, Math.min(100, Number.isFinite(value) ? value : 0));
   return <svg className={styles.progressOrbit} viewBox="0 0 80 80" aria-hidden="true" focusable="false"><circle cx="40" cy="40" r="33" className={styles.orbitTrack} /><circle cx="40" cy="40" r="33" pathLength="100" strokeDasharray={`${progress} 100`} className={styles.orbitValue} /><path d="m32 40 6 6 12-14" className={styles.orbitCheck} opacity={progress === 100 ? 1 : 0} /><circle cx="40" cy="40" r="3" fill="currentColor" opacity={progress === 100 ? 0 : 1} /></svg>;
 }
-export default async function GlobalWorkspaceOS({ learning, identity, model, onboardingCompleted, rank, userId, resources, history, historyCursor, historyCoverage, historyAvailable, historyPending, preferences, preferencesAvailable }: Props) {
+export default async function GlobalWorkspaceOS({ learning, progressReadOnly, identity, model, onboardingCompleted, rank, userId, resources, history, historyCursor, historyCoverage, historyAvailable, historyPending, preferences, preferencesAvailable }: Props) {
   const locale = await getLocale();
   const t = (key: string, values?: Record<string, string | number>) => translate(locale, key, values);
   const copy = (value: string) => planCopy(value, t, locale);
@@ -75,6 +77,7 @@ export default async function GlobalWorkspaceOS({ learning, identity, model, onb
     <div className={styles.planSummary}>{model.planSummary.filter(s => s.label !== 'Budget').map(s => <div key={s.label}><span>{t(s.label)}</span><strong>{copy(s.value)}</strong></div>)}</div>
   </section>;
   return <main lang={locale} className={styles.workspace}>
+    {progressReadOnly && <ActivationProgressNotice />}
     <div className={styles.shell}>
       <header className={styles.header}><div><p className={styles.eyebrow}><LocalizedText text="TGPI / Global Command Center" /></p><h1><LocalizedText text="Global Workspace" /></h1><p>{t("Welcome back, {name}.", { name: identity.fullName })}</p></div><div className={styles.actions}><WorkspaceCommandButton /><Link className={styles.quiet} href="/notifications"><LocalizedText text="Notifications ↗" /></Link><WorkspaceSyncButton /></div></header>
       {onboardingCompleted && <p role="status" className={styles.notice}><LocalizedText text="Your global context has been saved. Your workspace now reflects your plan." /></p>}

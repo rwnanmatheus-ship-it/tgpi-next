@@ -372,6 +372,17 @@ export async function getUserActivationProgress(userId: string, privateMetadata?
   return stored ? readSnapshot(stored.data) : loadLegacyProgress(userId, privateMetadata);
 }
 
+/** A historical snapshot can keep the UI usable while writes remain fail-closed. */
+export async function getUserActivationView(userId: string, privateMetadata?: Record<string, unknown>) {
+  try {
+    return { progress: await getUserActivationProgress(userId, privateMetadata), readOnly: false };
+  } catch (error) {
+    if (!(error instanceof FirestoreAdminError)) throw error;
+    console.warn("Activation storage unavailable", error.status, error.code);
+    return { progress: await loadLegacyProgress(userId, privateMetadata), readOnly: true };
+  }
+}
+
 function isUnchanged(current: TgpiActivationProgress, mutation: ActivationMutation) {
   if (mutation.type === "visit_lesson" || mutation.type === "complete_lesson" || mutation.type === "start_course") {
     const course = current.courseProgress[mutation.courseId];

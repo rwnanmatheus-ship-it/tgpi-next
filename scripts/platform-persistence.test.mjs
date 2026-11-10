@@ -8,6 +8,7 @@ import { COMPARISON_CATALOG } from "../src/lib/comparison-catalog.ts";
 
 // Run the production store against an optimistic transaction double. Concurrent
 // planners see the same snapshot, so the losing commit must replay its mutation.
+class FirestoreAdminError extends Error { status = 429; code = "RESOURCE_EXHAUSTED"; }
 const fixture = { id: "global-budget", version: "1", title: "Global budget", modules: [{ lessons: [{ id: "costs" }, { id: "income" }] }] };
 const compiled = ts.transpileModule(readFileSync(new URL("../src/lib/activation-store.server.ts", import.meta.url), "utf8"), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
 
@@ -25,9 +26,10 @@ function server({ archiveFails = false, commitFails = false, readFails = false }
       },
     };
     if (id === "@/lib/firestore-admin-rest.server") return {
+      FirestoreAdminError,
       createFirestoreUpdateWrite: (path, data) => ({ path, data }),
       getFirestoreDocument: async path => {
-        if (readFails) throw new Error("Read unavailable");
+        if (readFails) throw new FirestoreAdminError("Read unavailable");
         return documents.get(path);
       },
       runFirestoreTransaction: async plan => {
@@ -100,9 +102,15 @@ test("archive or commit failures leave both progress and history unchanged", asy
   }
 });
 
-test("Firestore read outages never return an older Clerk snapshot", async () => {
-  const { exports } = server({ readFails: true });
+test("Firestore read outages return the Clerk copy only as a read-only view", async () => {
+  const { exports, metadata, writes } = server({ readFails: true, commitFails: true });
+  metadata.tgpiActivationV1.savedCountries = ["spain"];
   await assert.rejects(exports.getUserActivationProgress("test-user"), /Read unavailable/);
+  const view = await exports.getUserActivationView("test-user");
+  assert.equal(view.readOnly, true);
+  assert.deepEqual(view.progress.savedCountries, ["spain"]);
+  await assert.rejects(exports.updateUserActivationProgress("test-user", savePortugal), /Commit unavailable/);
+  assert.equal(writes.length, 0);
 });
 
 test("all 195 countries survive actual comparison validation, storage and read-back", async()=>{

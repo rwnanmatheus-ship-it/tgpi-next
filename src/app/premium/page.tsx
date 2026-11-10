@@ -1,4 +1,5 @@
-import { getUserActivationProgress } from "@/lib/activation-store.server";
+import ActivationProgressNotice from "@/components/activation/ActivationProgressNotice";
+import { getUserActivationView } from "@/lib/activation-store.server";
 import { getLocale as getFormattingLocale } from "@/lib/localization/server";
 import { localizeMetadata } from "@/lib/localization/metadata.server";
 import type { Metadata } from "next";
@@ -45,7 +46,7 @@ export default async function PremiumPage() {
   const onboarding = normalizeOnboardingData(
     user.unsafeMetadata.tgpiOnboarding,
   );
-  const activation = await getUserActivationProgress(user.id, user.privateMetadata);
+  const { progress: activation, readOnly } = await getUserActivationView(user.id, user.privateMetadata);
   const model = buildPremiumCommandCenterModel(
     onboarding,
     activation,
@@ -64,19 +65,22 @@ export default async function PremiumPage() {
         : "Managed securely through Stripe.";
 
   return (
-    <PremiumCommandCenterV2
-      accessMode={accessMode}
-      firstName={name}
-      membershipStatus={
-        isFounderAccess
-          ? "Founder"
-          : isPreviewAccess
-            ? "Preview"
-            : formatStatus(billing.status)
-      }
-      model={model}
-      periodLabel={periodLabel}
-    />
+    <>
+      {readOnly && <ActivationProgressNotice />}
+      <PremiumCommandCenterV2
+        accessMode={accessMode}
+        firstName={name}
+        membershipStatus={
+          isFounderAccess
+            ? "Founder"
+            : isPreviewAccess
+              ? "Preview"
+              : formatStatus(billing.status)
+        }
+        model={model}
+        periodLabel={periodLabel}
+      />
+    </>
   );
 }
 

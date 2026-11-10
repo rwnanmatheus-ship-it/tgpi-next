@@ -1,4 +1,5 @@
-import { getUserActivationProgress } from "@/lib/activation-store.server";
+import ActivationProgressNotice from "@/components/activation/ActivationProgressNotice";
+import { getUserActivationView } from "@/lib/activation-store.server";
 import { localizeMetadata } from "@/lib/localization/metadata.server";
 import { loadLearningSummary } from "@/lib/learning/unified-progress.server";
 import { connectPlanLearning } from "@/lib/personal-plan";
@@ -25,7 +26,7 @@ export default async function PersonalPlanPage() {
   const onboarding = normalizeOnboardingData(
     user?.unsafeMetadata.tgpiOnboarding,
   );
-  const activation = await getUserActivationProgress(session.userId, user?.privateMetadata);
+  const { progress: activation, readOnly } = await getUserActivationView(session.userId, user?.privateMetadata);
   const learning = await loadLearningSummary(session.userId, activation);
   const model = connectPlanLearning(buildGlobalWorkspaceModel(
     onboarding,
@@ -35,12 +36,15 @@ export default async function PersonalPlanPage() {
   ), learning);
 
   return (
-    <PersonalPlanDashboard
-      firstName={user?.firstName || user?.fullName || "Global explorer"}
-      model={model}
-      learning={learning}
-      timeHorizon={onboarding.timeHorizon}
-    />
+    <>
+      {readOnly && <ActivationProgressNotice />}
+      <PersonalPlanDashboard
+        firstName={user?.firstName || user?.fullName || "Global explorer"}
+        model={model}
+        learning={learning}
+        timeHorizon={onboarding.timeHorizon}
+      />
+    </>
   );
 }
 

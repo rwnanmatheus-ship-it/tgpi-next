@@ -12,7 +12,7 @@ test("personal plan has one canonical protected route", () => {
   const page = readFileSync(new URL("../src/app/plan/page.tsx", import.meta.url), "utf8");
   assert.match(page, /requireUser\(\)/);
   assert.match(page, /normalizeOnboardingData/);
-  assert.match(page, /getUserActivationProgress\(session.userId/);
+  assert.match(page, /getUserActivationView\(session.userId/);
   assert.match(page, /buildGlobalWorkspaceModel/);
 });
 

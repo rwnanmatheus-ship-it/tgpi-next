@@ -1,4 +1,4 @@
-import { getUserActivationProgress } from "@/lib/activation-store.server";
+import { getUserActivationView } from "@/lib/activation-store.server";
 import { localizeMetadata } from "@/lib/localization/metadata.server";
 import { getAccountMembershipLabel } from "@/lib/account-membership.server";
 import { reconcileWorkspaceHistory, loadWorkspaceHistory } from '@/lib/workspace-history.server';
@@ -48,15 +48,15 @@ export default async function ProfilePage({
   const onboarding = normalizeOnboardingData(
     user?.unsafeMetadata.tgpiOnboarding,
   );
-  const activation = await getUserActivationProgress(session.userId, user?.privateMetadata);
+  const { progress: activation, readOnly } = await getUserActivationView(session.userId, user?.privateMetadata);
   const [memberIdentity, savedPreferences, historyPage, membership, learning] = await Promise.all([
     ensureMemberNumber(session.userId).catch(() => null),
-    isLearningStorageConfigured()
+    !readOnly && isLearningStorageConfigured()
       ? getFirestoreDocument(`tgpiLearningUsers/${session.userId}/workspace/preferences`)
           .then(record => ({ record, available: true }))
           .catch(() => ({ record: null, available: false }))
       : { record: null, available: false },
-    reconcileWorkspaceHistory(session.userId, activation)
+    readOnly ? { events: [], cursor: null, coverageStartedAt: null, available: false, reconciliationPending: true } : reconcileWorkspaceHistory(session.userId, activation)
       .catch(() => null)
       .then(() => loadWorkspaceHistory(session.userId))
       .catch(() => ({ events: [], cursor: null, coverageStartedAt: null, available: false, reconciliationPending: true })),
@@ -86,6 +86,7 @@ export default async function ProfilePage({
   return (
     <GlobalWorkspaceOS
       learning={learning}
+      progressReadOnly={readOnly}
       rank={rank}
       userId={session.userId}
       resources={resources}
