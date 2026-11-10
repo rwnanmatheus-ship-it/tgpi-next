@@ -1,93 +1,82 @@
-import EditorialImage from "./EditorialImage";
-import HomeGoalExplorer from "./HomeGoalExplorer";
-import HomeSectionNav from "./HomeSectionNav";
 import Link from "next/link";
 import { coursesOverview } from "@/data/courses-overview";
-import { getCourse } from "@/data/courses";
-import snapshot from "@/data/intelligence/snapshot.json";
-import { findObservation, type IntelligenceSnapshot } from "@/lib/intelligence/core";
-import { EvidenceCard } from "@/components/intelligence/Evidence";
-import { HOME_COURSES, HOME_FAQ, HOME_ROUTES as routes } from "@/lib/home-content";
+import { academyManifest } from "@/data/courses/academy/manifest";
+import { HOME_FAQ, HOME_ROUTES as routes } from "@/lib/home-content";
 import { TGPI_PREMIUM_PLAN } from "@/lib/subscription-plans";
-import HomeAccountLink from "./HomeAccountLink";
-import HomeResearchPreview from "./HomeResearchPreview";
-import styles from "./home.module.css";
 import { LocalizedText, LocalizedRegion } from "@/components/localization/LocaleProvider";
+import CinematicImage from "@/components/ui/CinematicImage";
+import HomeAccountLink from "./HomeAccountLink";
+import HomeGoalExplorer from "./HomeGoalExplorer";
+import HomeSectionNav from "./HomeSectionNav";
+import HomeProductExplorer from "./HomeProductExplorer";
+import HomeCourseFinder from "./HomeCourseFinder";
+import HomeCertificatePreview from "./HomeCertificatePreview";
+import styles from "./home.module.css";
 
-
-const capabilities = [
-  { number: "01", title: "Explore countries", copy: "Understand destinations through country profiles, source-linked observations and visible evidence gaps.", href: routes.countries, cta: "Explore countries", question: "Which requirements depend on my nationality, destination and timeline? Use the profile as a starting point, then verify with the competent authority.", image: "decision", alt: "Maps and notebooks arranged to evaluate international options" },
-  { number: "02", title: "Compare your options", copy: "Put up to three countries side by side. Investigate the trade-offs that matter to your own situation.", href: routes.compare, cta: "Compare countries", question: "Are these observations comparable? Check the source, reference year, definition and missing evidence before drawing a conclusion.", image: "country", alt: "A researcher comparing books and evidence in a contemporary library" },
-  { number: "03", title: "Organize your preparation", copy: "Connect your destination, research questions and document tasks. Keep your next actions in view.", href: routes.documents, cta: "Explore preparation", question: "What must I verify before committing money? Start with the legal route, deadlines, dated cost estimates and document requirements.", image: "preparation", alt: "A neutral folder, checklist and notebook ready for personal planning" },
-  { number: "04", title: "Build practical skills", copy: "Learn through applied scenarios in English, country decisions, relocation budgeting and international careers.", href: routes.learning, cta: "Explore learning", question: "Which everyday situation do I want to handle better? Choose a practical course and use an account to continue your learning progress.", image: "learning", alt: "Adults sharing ideas and learning together in a contemporary workspace" },
+const ecosystem = [
+  { title: "Country intelligence", copy: "Explore countries", href: routes.countries, mark: "01" },
+  { title: "Country Fit", copy: "Build your Country Fit plan", href: routes.fit, mark: "02" },
+  { title: "Compare", copy: "Compare your options", href: routes.compare, mark: "03" },
+  { title: "TGPI Academy", copy: "Explore learning", href: routes.learning, mark: "04" },
+  { title: "Atlas AI", copy: "Think through your next step", href: "/atlas", mark: "05" },
+  { title: "TGPI Global Documents", copy: "Explore preparation", href: "/documents", mark: "06" },
+  { title: "Global Key", copy: "Your identity inside TGPI", href: "/global-key", mark: "07" },
+  { title: "Community", copy: "Connect around shared goals", href: "/community", mark: "08" },
 ] as const;
 
 export default function InstitutionalHome() {
   const t = (text: string) => <LocalizedText text={text} />;
-  const featured = HOME_COURSES.flatMap(item => {
-    const overview = coursesOverview.find(course => course.id === item.id && course.status === "available");
-    const course = getCourse(item.id);
-    return overview && course && course.modules.some(module => module.lessons.length) ? [{ ...item, overview }] : [];
+  // Only catalogue metadata crosses the interactive boundary, never lesson or assessment content.
+  const ids = ["global-english-2026", "country-fit", "relocation-budget", "international-career", "ai-workflow-foundations", "critical-thinking"];
+  const featured = ids.flatMap(id => {
+    const course = coursesOverview.find(item => item.id === id && item.status === "available");
+    return course ? [{ id, title: course.title, href: course.href, image: course.image, imageAlt: course.imageAlt,
+      description: course.desc, duration: course.duration, group: id === "global-english-2026" ? "language" : ["country-fit", "relocation-budget"].includes(id) ? "mobility" : "career",
+      certificate: course.learningPolicy?.credentialStatus === "criteria_available" }] : [];
   });
+  const courseCount = Object.keys(academyManifest).length;
 
   return <main className={styles.home}>
     <section className={styles.hero} aria-labelledby="home-title">
       <div className={`${styles.container} ${styles.heroGrid}`}>
         <div className={styles.heroCopy}>
-          <p className={styles.eyebrow}><LocalizedText text="TGPI · The Global Polymath Institute" /></p>
-          <h1 id="home-title"><LocalizedText text="Compare countries." /><br /><em><LocalizedText text="Prepare your next chapter." /></em></h1>
-          <p className={styles.heroDescription}><LocalizedText text="The Global Polymath Institute (TGPI) connects practical education, country research and preparation for international life." /></p>
-          <div className={styles.actions}><HomeAccountLink className={styles.primary} placement="hero" /><Link href={routes.compare} className={styles.lightLink}><LocalizedText text="See a real comparison" />{" "}<span aria-hidden="true">→</span></Link></div>
-          <p className={styles.heroNote}><LocalizedText text="For your next move, your next course—or your first question." /></p>
+          <p className={styles.eyebrow}>{t("TGPI · The Global Polymath Institute")}</p>
+          <h1 id="home-title">{t("Your future.")}<br /><em>{t("A world of possibilities.")}</em></h1>
+          <p className={styles.heroDescription}>{t("Learn practical skills. Compare countries. Build your next chapter with education and intelligence in one connected platform.")}</p>
+          <div className={styles.actions}><HomeAccountLink className={styles.primary} placement="hero" /><Link href="#product-demo" className={styles.lightLink}>{t("Discover your possibilities")} <span aria-hidden="true">↗</span></Link></div>
+          <p className={styles.heroNote}>{t("Free to begin. Built to move forward.")}</p>
+          <div className={styles.heroProof}><span>{t("Applied learning")}</span><span>{t("Verifiable certificates")}</span><span>{t("Connected tools")}</span></div>
         </div>
         <div className={styles.heroVisual}>
-          <div className={styles.heroPhoto}>
-            <EditorialImage asset="hero" alt="TGPI conceptual editorial image: preparing for international life" eager sizes="(max-width: 767px) calc(100vw - 44px), (max-width: 1023px) calc(100vw - 64px), (max-width: 1343px) 46vw, 600px" />
-            <span className={styles.photoCaption}><LocalizedText text="Perspective begins with preparation." /></span>
-          </div>
-          <HomeResearchPreview />
+          <div className={styles.heroPhoto}><CinematicImage asset="global-horizon" alt="TGPI conceptual editorial image: preparing for international life" priority sizes="(max-width: 1023px) 94vw, 52vw" position="60% center" /><div className={styles.heroImageLabel}><span>{t("THE WORLD IS YOUR NEXT CHAPTER")}</span><span aria-hidden="true">↗</span></div></div>
+          <div className={styles.heroDock}><div><span className={styles.statusDot} aria-hidden="true" />{t("One platform. Your next chapter.")}</div><div className={styles.heroDockLinks}><Link href="/courses">{t("Learn")} <span aria-hidden="true">↗</span></Link><Link href="/countries">{t("Explore")} <span aria-hidden="true">↗</span></Link><Link href="/profile">{t("My workspace")} <span aria-hidden="true">↗</span></Link></div></div>
         </div>
       </div>
-      <LocalizedRegion as="div" className={`${styles.container} ${styles.journeyStrip}`} label="Your TGPI journey"><span><LocalizedText text="Research with perspective." /></span><span><LocalizedText text="Decide with context." /></span><span><LocalizedText text="Prepare with purpose." /></span></LocalizedRegion>
+      <div className={`${styles.container} ${styles.brandStrip}`}><p>{t("Education gives you capability. Intelligence gives you direction.")}</p><div><strong>{courseCount}</strong><span>{t("expanded learning paths")}</span></div><div><strong>01</strong><span>{t("connected ecosystem")}</span></div><Link href="#certification">{t("Explore TGPI certification")} <span aria-hidden="true">↗</span></Link></div>
     </section>
 
     <HomeSectionNav />
 
     <section className={`${styles.container} ${styles.section}`} aria-labelledby="how-title" id="how-it-works" tabIndex={-1}>
-      <div className={styles.sectionIntro}><p className={styles.eyebrow}><LocalizedText text="A practical way forward" /></p><h2 id="how-title"><LocalizedText text="From possibility" /><br /><LocalizedText text="to a considered plan." /></h2><p><LocalizedText text="You do not need every answer to begin. Start with the question that matters to you." /></p></div>
+      <div className={styles.splitIntro}><div><p className={styles.eyebrow}>{t("Your ambition. A clearer direction.")}</p><h2 id="how-title">{t("Where do you want")}<br /><em>{t("to go next?")}</em></h2></div><p>{t("Choose what matters now. TGPI connects your objective to the tools, questions and learning that help you take the next step.")}</p></div>
       <HomeGoalExplorer />
-      <ol className={styles.steps}>
-        <li><span className={styles.stepNumber}>01</span><h3><LocalizedText text="Define your goal." /></h3><p><LocalizedText text="Study, work, live abroad or simply explore. Add your budget, language and timeline to give the research direction." /></p><Link href={routes.fit}><LocalizedText text="Build your Country Fit plan" />{" "}<span aria-hidden="true">↗</span></Link></li>
-        <li><span className={styles.stepNumber}>02</span><h3><LocalizedText text="Explore the trade-offs." /></h3><p><LocalizedText text="Compare your options with source context and visible gaps. Leave with a shortlist and questions worth investigating." /></p><Link href={routes.compare}><LocalizedText text="Compare your options" />{" "}<span aria-hidden="true">↗</span></Link></li>
-        <li><span className={styles.stepNumber}>03</span><h3><LocalizedText text="Prepare your next step." /></h3><p><LocalizedText text="Organize document tasks and develop practical skills. With an account, return to your plan and learning progress." /></p><Link href={routes.documents}><LocalizedText text="Explore preparation" />{" "}<span aria-hidden="true">↗</span></Link></li>
-      </ol>
     </section>
 
     <section className={styles.demoSection} aria-labelledby="demo-title" id="product-demo" tabIndex={-1}>
-      <div className={styles.container}>
-        <div className={styles.demoIntro}><div><p className={styles.eyebrow}><LocalizedText text="See the product working" /></p><h2 id="demo-title"><LocalizedText text="Two options." /><br /><LocalizedText text="Better questions." /></h2></div><div><p>{t("Considering Portugal and Canada for study? Start with comparable evidence. Then check the institution, your legal route and a city-level budget.")}</p><Link href={routes.compare} className={styles.textLink}><LocalizedText text="Open this public comparison" />{" "}<span aria-hidden="true">↗</span></Link></div></div>
-        <div className={styles.demoFrame}>
-          <div className={styles.demoBar}><span><LocalizedText text="TGPI / Compare" /></span><span><LocalizedText text="Public product sample" /></span></div>
-          <div className={styles.evidenceGrid}>
-            {[{ slug: "portugal", name: "Portugal", code: "PT" }, { slug: "canada", name: "Canada", code: "CA" }].map(country => <div key={country.slug} className={styles.evidenceCountry}><h3><Link href={`/countries/${country.slug}`}><LocalizedText text={country.name} /> <span aria-hidden="true">↗</span></Link></h3><EvidenceCard countryCode={country.code} indicator="SE.TER.ENRR" observation={findObservation(snapshot as IntelligenceSnapshot, country.slug, "SE.TER.ENRR")} /></div>)}
-          </div>
-          <p className={styles.demoDisclaimer}><LocalizedText text="Real observations from TGPI’s bundled snapshot · Collected {date}. The same evidence component is used in Compare. Enrolment describes national context; it does not measure education quality or your chances of admission. Open Compare for refreshed coverage." dates={{ date: snapshot.retrievedAt }} /></p>
-        </div>
-      </div>
+      <div className={styles.container}><div className={styles.splitIntro}><div><p className={styles.eyebrow}>{t("Meet your global toolkit")}</p><h2 id="demo-title">{t("Less scattered research.")}<br /><em>{t("More connected progress.")}</em></h2></div><p>{t("Explore how the platform works. Each tool leads to a real part of TGPI, ready for your own context.")}</p></div><HomeProductExplorer /></div>
     </section>
 
     <section className={`${styles.container} ${styles.section}`} aria-labelledby="capabilities-title" id="capabilities" tabIndex={-1}>
-      <div className={styles.sectionIntro}><p className={styles.eyebrow}><LocalizedText text="One journey, connected" /></p><h2 id="capabilities-title"><LocalizedText text="A wider view." /><br /><LocalizedText text="A clearer next step." /></h2><p><LocalizedText text="For people considering life abroad, preparing a move or building skills that travel." /></p></div>
-      <div className={styles.capabilityGrid}>{capabilities.map(item => <article className={styles.capability} key={item.number}><div className={styles.capabilityImage}><Link href={item.href}><span className="sr-only">{t(item.cta)}</span><EditorialImage asset={item.image} alt={item.alt} sizes="(max-width: 767px) calc(100vw - 44px), (max-width: 1343px) 45vw, 625px" /></Link><span aria-hidden="true">{item.number}</span></div><div className={styles.capabilityCopy}><h3><LocalizedText text={item.title} /></h3><p>{t(item.copy)}</p><Link href={item.href} className={styles.textLink}><LocalizedText text={item.cta} /><span aria-hidden="true">↗</span></Link><details className={styles.capabilityDetails}><summary><LocalizedText text="A useful first question" />{" "}<span aria-hidden="true">+</span></summary><p>{t(item.question)}</p></details></div></article>)}</div>
-      <p className={styles.connectedNote}><Link href={routes.workspace}>{t("Your Workspace brings your activity together.")}</Link>{" "}<Link href="/global-key">{t("Your Global Key connects your TGPI identity and learning records; it is a platform identity, not a government document.")}</Link></p>
+      <div className={styles.ecosystemIntro}><div><p className={styles.eyebrow}>{t("The TGPI ecosystem")}</p><h2 id="capabilities-title">{t("Everything has a next step.")}</h2></div><Link href="/profile" className={styles.textLink}>{t("Open your workspace")} <span aria-hidden="true">↗</span></Link></div>
+      <div className={styles.ecosystemGrid}>{ecosystem.map(item => <Link href={item.href} className={styles.ecosystemItem} key={item.title}><span className={styles.ecosystemNumber}>{item.mark}</span><div><h3>{t(item.title)}</h3><p>{t(item.copy)}</p></div><span className={styles.ecosystemArrow} aria-hidden="true">↗</span></Link>)}</div>
     </section>
 
     <section className={styles.learningSection} aria-labelledby="learning-title" id="practical-learning" tabIndex={-1}>
-      <div className={styles.container}>
-        <div className={styles.demoIntro}><div><p className={styles.eyebrow}><LocalizedText text="Practical education" /></p><h2 id="learning-title"><LocalizedText text="Learn for the moments" /><br /><LocalizedText text="that matter." /></h2></div><div><p><LocalizedText text="Applied lessons for real decisions and everyday situations. Explore a course, then sign in to learn and save your progress." /></p><Link href={routes.learning} className={styles.textLink}><LocalizedText text="View the learning catalogue" />{" "}<span aria-hidden="true">↗</span></Link></div></div>
-        <div className={styles.courseGrid}>{featured.map(course => <article className={styles.course} key={course.id}><Link href={course.overview.href} className={styles.courseImage}><span className="sr-only">{t(course.overview.title)}</span><EditorialImage asset={course.asset} alt="" sizes="(max-width: 767px) calc(100vw - 44px), (max-width: 1343px) 29vw, 412px" /></Link><div className={styles.courseCopy}><p className={styles.courseMeta}>{t(course.overview.category)} · {t(course.overview.duration)}</p><h3><Link href={course.overview.href}>{t(course.overview.title)}</Link></h3><p>{t(course.objective)}</p><Link href={course.overview.href} className={styles.textLink}><LocalizedText text="Explore this course" />{" "}<span aria-hidden="true">↗</span></Link></div></article>)}</div>
-        <aside className={styles.credentialNote}><span className={styles.credentialMark} aria-hidden="true">✓</span><div><h3><LocalizedText text="Learning you can document." /></h3><p>{t("Where verified certification is available, complete the lesson, assessment, reflection and identity requirements before issuance. TGPI credentials have a public verification record; they are not academic degrees or professional licences.")}</p><Link href="/certificates" className={styles.textLink}><LocalizedText text="Understand your certificates" />{" "}<span aria-hidden="true">↗</span></Link></div></aside>
-      </div>
+      <div className={styles.container}><div className={styles.splitIntro}><div><p className={styles.eyebrow}>{t("TGPI Academy · Applied education")}</p><h2 id="learning-title">{t("Knowledge that goes")}<br /><em>{t("where you go.")}</em></h2></div><div><p>{t("Build language, decision and professional skills through lessons, practical scenarios and assessments. Your progress stays connected to your account.")}</p><Link href={routes.learning} className={styles.textLink}>{t("View the learning catalogue")} <span aria-hidden="true">↗</span></Link></div></div><HomeCourseFinder courses={featured} /></div>
+    </section>
+
+    <section className={styles.certificateSection} aria-labelledby="certificate-title" id="certification" tabIndex={-1}>
+      <div className={`${styles.container} ${styles.certificateGrid}`}><HomeCertificatePreview /><div className={styles.certificateCopy}><p className={styles.eyebrow}>{t("TGPI certification")}</p><h2 id="certificate-title">{t("Your effort.")}<br /><em>{t("Made visible.")}</em></h2><p>{t("A distinctive certificate for the learning you complete. Your full name, course, workload and verification details come together in a document you can download and share.")}</p><ol className={styles.certificateSteps}><li><span>01</span><div><h3>{t("Learn and demonstrate")}</h3><p>{t("Complete the course activities and its assessment requirements.")}</p></div></li><li><span>02</span><div><h3>{t("Connect your identity")}</h3><p>{t("Confirm your identity and the sharing settings required for issuance.")}</p></div></li><li><span>03</span><div><h3>{t("Present your achievement")}</h3><p>{t("Download your PDF and use the verification record available for your certificate.")}</p></div></li></ol><Link href="/certificates" className={styles.darkButton}>{t("Explore TGPI certification")} <span aria-hidden="true">↗</span></Link><p className={styles.certificateLegal}>{t("TGPI certificates document assessed learning. They are not academic degrees, professional licences or a claim of external accreditation.")}</p></div></div>
     </section>
 
     <section className={`${styles.container} ${styles.section}`} aria-labelledby="membership-title" id="membership" tabIndex={-1}>

@@ -44,7 +44,7 @@ export default function HomeSectionNav() {
       <span className={styles.sectionNavLabel}><LocalizedText text="Inside TGPI" /></span>
       <ol className={styles.sectionNavLinks}>{HOME_SECTIONS.map((section, i) => <li key={section.id}><a href={`#${section.id}`} aria-current={active === section.id ? "location" : undefined}><span aria-hidden="true">0{i + 1}</span>{t(section.short)}</a></li>)}</ol>
       <label className={styles.sectionNavSelect}><span className="sr-only"><LocalizedText text="Jump to a section" /></span><select value={active} onChange={event => jump(event.target.value)}>{HOME_SECTIONS.map((section, i) => <option key={section.id} value={section.id}>0{i + 1} · {t(section.label)}</option>)}</select></label>
-      <span className={styles.sectionCount} aria-hidden="true">0{index + 1}<span> / 06</span></span>
+      <span className={styles.sectionCount} aria-hidden="true">0{index + 1}<span> / {String(HOME_SECTIONS.length).padStart(2, "0")}</span></span>
     </div>
   </nav>;
 }

@@ -7,7 +7,7 @@ import { HOME_FAQ } from "@/lib/home-content";
 const sourceMetadata: Metadata = {
   title: "TGPI | The Global Polymath Institute",
   description:
-    "The Global Polymath Institute (TGPI) connects practical education, country research and international preparation. Compare countries and plan life abroad.",
+    "Learn practical skills. Compare countries. Build your next chapter with education and intelligence in one connected platform.",
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large" } },
   keywords: [
     "compare countries",

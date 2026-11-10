@@ -6,7 +6,8 @@ const url = source => 'data:text/javascript;base64,' + Buffer.from(ts.transpileM
 const configUrl = url(fs.readFileSync('src/lib/localization/config.ts', 'utf8'));
 const { locales, resolveLocale, negotiateLocale, isLocale } = await import(configUrl);
 const { messages, translate, registerSupplementalMessages } = await import(url(fs.readFileSync('src/lib/localization/messages.ts', 'utf8')));
-for (const locale of locales) registerSupplementalMessages(locale, JSON.parse(fs.readFileSync(`public/locales/${locale}.json`, 'utf8')));
+const supplementalCatalogs = Object.fromEntries(locales.map(locale => [locale, JSON.parse(fs.readFileSync(`public/locales/${locale}.json`, 'utf8'))]));
+for (const locale of locales) registerSupplementalMessages(locale, supplementalCatalogs[locale]);
 const mockReact = await import('react');
 function localizationDependency(name, locale) {
   const t = (text, values) => typeof text === 'string' ? translate(locale, text, values) : text;
@@ -150,9 +151,11 @@ test('all language options ship self-contained vector flags with no remote depen
 
 test('home and access presentation copy cannot silently bypass the translation catalog', () => {
   const brandCopy = new Set(['TGPI', 'TGPI Premium', 'The Global Polymath Institute', 'US$ 0']);
-  for (const path of ['src/components/home/v4/InstitutionalHome.tsx', 'src/components/auth/TGPIAuthShell.tsx']) {
+  for (const path of ['src/components/home/v4/InstitutionalHome.tsx', 'src/components/home/v4/HomeProductExplorer.tsx', 'src/components/home/v4/HomeCourseFinder.tsx', 'src/components/home/v4/HomeCertificatePreview.tsx', 'src/components/auth/TGPIAuthShell.tsx']) {
     const source = ts.createSourceFile(path, fs.readFileSync(path, 'utf8'), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
-    function registered(key) { assert.ok(Object.hasOwn(messages, key), `${path}: missing ${key}`); }
+    function registered(key) {
+      for (const locale of locales) assert.ok(messages[key]?.[locale]?.trim() || supplementalCatalogs[locale][key]?.trim(), `${path}: missing ${locale}: ${key}`);
+    }
     function visit(node) {
       if (ts.isJsxText(node)) {
         const value = node.text.replace(/\s+/g, ' ').trim();

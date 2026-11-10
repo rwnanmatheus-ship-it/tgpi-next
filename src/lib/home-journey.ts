@@ -15,6 +15,7 @@ export const HOME_SECTIONS = [
   { id: "product-demo", label: "See the product", short: "Product" },
   { id: "capabilities", label: "Explore the platform", short: "Explore" },
   { id: "practical-learning", label: "Practical education", short: "Learn" },
+  { id: "certification", label: "TGPI certification", short: "Certificates" },
   { id: "membership", label: "Free & Premium", short: "Membership" },
   { id: "questions", label: "Questions & support", short: "Questions" },
 ] as const;
