@@ -3,10 +3,10 @@ import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import Image from "@/components/localization/LocalizedImage";
 import CertificateQr from "./CertificateQr";
 import CertificateSeal from "./CertificateSeal";
+import { CertificateIssueDate, CertificatePrivacyText } from "./CertificatePresentationText";
 import {
   CERTIFICATE_DESIGN_VERSION,
   CERTIFICATE_QUALITY_MARKS,
-  certificateDate,
   certificateVerificationUrl,
 } from "@/lib/certificate-presentation";
 import type { PublicTgpiLearningCredential } from "@/types/learning";
@@ -20,11 +20,13 @@ export default function CertificateDocument({
   credential: PublicTgpiLearningCredential;
   verified: boolean;
 }) {
+  const privateSharing = credential.professionalEvidence?.sharing === false;
   return (
     <LocalizedElement as="article"
       className={`diploma-document${verified ? "" : " diploma-inactive"}`}
       aria-label="TGPI certificate preview"
     >
+      <div className="diploma-corners" aria-hidden="true"><i /><i /><i /><i /></div>
       <header className="diploma-brand">
         <div className="diploma-brand-main">
           <Image
@@ -50,6 +52,13 @@ export default function CertificateDocument({
         </div>
       )}
       <div className="diploma-body">
+        <svg className="diploma-engraving" viewBox="0 0 300 300" aria-hidden="true">
+          <circle cx="150" cy="150" r="135" />
+          <circle cx="150" cy="150" r="142" />
+          {[50, 95].map((radius) => <ellipse key={`v${radius}`} cx="150" cy="150" rx={radius} ry="135" />)}
+          {[35, 85].map((radius) => <ellipse key={`h${radius}`} cx="150" cy="150" rx="135" ry={radius} />)}
+          <path d="M15 150H285M150 15V285" />
+        </svg>
         <div className="diploma-main">
           <p className="diploma-eyebrow"><LocalizedText text={"Certificate of achievement"} /></p>
           <h2>{credential.documentNature || <LocalizedText text={"Professional Certificate"} />}</h2>
@@ -78,7 +87,7 @@ export default function CertificateDocument({
             />
           </LocalizedElement>
           <p className="diploma-qr-caption"><LocalizedText text="Scan to verify" /><br />
-            <span><LocalizedText text={"Live status · Issuer record"} /></span>
+            <span>{privateSharing ? <CertificatePrivacyText detail /> : <LocalizedText text="Live status · Issuer record" />}</span>
           </p>
         </aside>
       </div>
@@ -93,7 +102,7 @@ export default function CertificateDocument({
         </div>
         <div>
           <dt><LocalizedText text="Issued" /></dt>
-          <dd>{certificateDate(credential.issuedAt)}</dd>
+          <dd><CertificateIssueDate value={credential.issuedAt} /></dd>
         </div>
         <div>
           <dt><LocalizedText text={credential.automatedEvidence ? "Automatic assessment" : "Mastery"} /></dt>
@@ -110,8 +119,8 @@ export default function CertificateDocument({
             <div key={mark.title}>
               <span aria-hidden="true">{verified ? "✓" : "·"}</span>
               <div>
-                <strong><LocalizedText text={mark.title} /></strong>
-                <small><LocalizedText text={mark.detail} /></small>
+                <strong>{privateSharing && mark.title === "Public verification" ? <CertificatePrivacyText /> : <LocalizedText text={mark.title} />}</strong>
+                <small>{privateSharing && mark.title === "Public verification" ? <CertificatePrivacyText detail /> : <LocalizedText text={mark.detail} />}</small>
               </div>
             </div>
           ))}
@@ -125,3 +134,4 @@ export default function CertificateDocument({
     </LocalizedElement>
   );
 }
+
