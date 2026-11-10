@@ -150,6 +150,12 @@ export type PublicTgpiLearningCredential = Omit<
   TgpiLearningCredential,
   "ownerUid" | "verificationHash"
 > & {
+  documentFingerprint?: string;
   integrityFingerprint: string;
   integrityVerified: boolean;
+  portableProof?: {
+    algorithm: "Ed25519";
+    keyId: string;
+    publicKeyUrl: string;
+  };
 };

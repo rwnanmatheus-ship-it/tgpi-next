@@ -10,6 +10,7 @@ import { LocalizedText } from "@/components/localization/LocaleProvider";
 type CredentialActionsProps = {
   canDownload?: boolean;
   owner?: boolean;
+  sharingAllowed?: boolean;
   credentialId: string;
   courseTitle: string;
   downloadUrl: string;
@@ -19,6 +20,7 @@ type CredentialActionsProps = {
 export default function CredentialActions({
   canDownload = true,
   owner = true,
+  sharingAllowed = true,
   credentialId,
   courseTitle,
   downloadUrl,
@@ -71,22 +73,24 @@ export default function CredentialActions({
             className="credential-button primary"
           />
         )}
-        <button
-          type="button"
-          onClick={() => void shareCredential()}
-          className="credential-button"
-        ><LocalizedText text={"Share certificate ↗"} /></button>
-        {owner && (
+        {sharingAllowed && canDownload && (
+          <button
+            type="button"
+            onClick={() => void shareCredential()}
+            className="credential-button"
+          ><LocalizedText text="Share certificate ↗" /></button>
+        )}
+        {owner && sharingAllowed && (
           <Link href={verificationUrl} className="credential-button"><LocalizedText text={"Open live verification"} /></Link>
         )}
       </div>
       <div className="credential-secondary-actions print:hidden">
-        <button
-          type="button"
-          onClick={() =>
-            void copyValue(verificationUrl, "Verification link copied.")
-          }
-        ><LocalizedText text="Copy verification link" /></button>
+        {sharingAllowed && (
+          <button
+            type="button"
+            onClick={() => void copyValue(verificationUrl, "Verification link copied.")}
+          ><LocalizedText text="Copy verification link" /></button>
+        )}
         <a href={downloadUrl}><LocalizedText text={"Export evidence JSON"} /></a>
       </div>
       <p

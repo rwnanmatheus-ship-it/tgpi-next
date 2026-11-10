@@ -14,7 +14,9 @@ import {
   TGPI_VERIFIED_LEARNING_SCHEMA_VERSION,
 } from "@/lib/credential-standard";
 import {
+  createCredentialDocumentFingerprint,
   createCredentialId,
+  getCredentialPortableProofMetadata,
   isCredentialSigningConfigured,
   signLearningCredential,
   TGPI_CREDENTIAL_KEY_ID,
@@ -653,32 +655,39 @@ export async function getUserLearningCredential(
   credentialId: string,
 ) {
   if (!isLearningStorageConfigured() || credentialId.length > 100) return null;
-  return (
-    await getFirestoreDocument<TgpiLearningCredential>(
-      userCredentialPath(userId, credentialId),
-    )
-  )?.data || null;
+  const document = await getFirestoreDocument<TgpiLearningCredential>(
+    userCredentialPath(userId, credentialId),
+  );
+  if (document?.data.ownerUid !== userId || document.data.id !== credentialId) return null;
+  return document.data;
 }
 
 export async function getPublicLearningCredential(
   credentialId: string,
-  includeOwnerPrivate = false,
+  ownerUid?: string,
 ): Promise<PublicTgpiLearningCredential | null> {
   if (!isLearningStorageConfigured() || credentialId.length > 100) return null;
   const document = await getFirestoreDocument<TgpiLearningCredential>(
     credentialPath(credentialId),
   );
-  if (!document) return null;
-  if (document.data.professionalEvidence?.sharing === false && !includeOwnerPrivate) return null;
-  const { ownerUid: _ownerUid, verificationHash: _verificationHash, ...credential } =
-    document.data;
-  void _ownerUid;
-  void _verificationHash;
+  if (document?.data.id !== credentialId) return null;
+  const { ownerUid: recordedOwner, verificationHash, ...credential } = document.data;
+  const { professionalEvidence } = credential;
+  if (ownerUid && recordedOwner !== ownerUid) return null;
+  if (!ownerUid && professionalEvidence && professionalEvidence.sharing !== true) return null;
+  const integrityVerified = verifyLearningCredentialIntegrity(document.data);
+  // Sharing consent must itself be authentic before any public holder data leaves the server.
+  if (!integrityVerified && !ownerUid) return null;
+
   return {
     ...credential,
-    integrityFingerprint: createHash("sha256")
-      .update(document.data.verificationHash)
-      .digest("base64url"),
-    integrityVerified: verifyLearningCredentialIntegrity(document.data),
+    ...(integrityVerified ? {
+      documentFingerprint: createCredentialDocumentFingerprint(document.data),
+      portableProof: getCredentialPortableProofMetadata(),
+    } : {}),
+    integrityFingerprint: typeof verificationHash === "string"
+      ? createHash("sha256").update(verificationHash).digest("base64url")
+      : "",
+    integrityVerified,
   };
 }

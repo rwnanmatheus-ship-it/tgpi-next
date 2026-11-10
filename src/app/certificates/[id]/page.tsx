@@ -26,7 +26,7 @@ export default async function CredentialPage({
   if (!/^TGPI-[A-Z0-9_-]{8,90}$/.test(id)) notFound();
   const owned = await getUserLearningCredential(session.userId, id);
   if (!owned) notFound();
-  const credential = await getPublicLearningCredential(id, true);
+  const credential = await getPublicLearningCredential(id, session.userId);
   if (!credential) notFound();
   return <CredentialRecordView credential={credential} owner />;
 }

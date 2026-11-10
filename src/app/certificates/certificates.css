@@ -598,3 +598,188 @@
 .certificate-course-art { position: relative; isolation: isolate; overflow: hidden; min-height: 220px; }
 .certificate-course-photo { z-index: -2; }
 .certificate-course-art::after { content: ""; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, #071a32a6, #071a32ed); }
+
+.certificate-portfolio-hero {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(240px, .6fr);
+  min-height: 330px;
+  overflow: hidden;
+  gap: 18px;
+  padding: clamp(26px, 4vw, 52px);
+  border: 1px solid #a9803d;
+  border-radius: 20px;
+  background: radial-gradient(ellipse at 78% 27%, #284c70, transparent 57%),
+    linear-gradient(125deg, #07172b, #122946 75%, #081a32);
+  color: #fef9ec;
+  box-shadow: 0 14px 38px #07172b24;
+}
+.certificate-portfolio-hero::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 8px;
+  border: 1px solid #d1aa5d52;
+  border-radius: 13px;
+  pointer-events: none;
+}
+.certificate-portfolio-hero h1 {
+  max-width: 13ch;
+  font: 600 clamp(44px, 6.5vw, 86px)/.93 var(--tgpi-font-display), Georgia, serif;
+  letter-spacing: -.025em;
+  text-wrap: balance;
+}
+.certificate-portfolio-hero .certificate-eyebrow {
+  color: #f1d99a !important;
+}
+.certificate-portfolio-hero p {
+  color: #dbe4ed;
+}
+.certificate-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+}
+.certificate-hero-actions .certificate-button:not(.secondary) {
+  background: #ead196;
+  color: #142a45;
+  box-shadow: 0 3px 0 #9c7536;
+}
+.certificate-hero-actions .certificate-button.secondary {
+  border-color: #e6d3ab68;
+  background: #ffffff0d;
+  color: #fef9ec;
+  box-shadow: none;
+}
+.certificate-hero-art {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  justify-items: center;
+  gap: 4px;
+  min-width: 0;
+  text-align: center;
+}
+.certificate-hero-art::before,
+.certificate-hero-art::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  z-index: -1;
+  width: min(100%, 306px);
+  aspect-ratio: 1;
+  border: 1px solid #e6c16e49;
+  border-radius: 50%;
+}
+.certificate-hero-art::after {
+  top: 4%;
+  width: min(92%, 278px);
+  background: repeating-conic-gradient(from 45deg, #ebca7933 0deg 1deg, transparent 1deg 5deg);
+  mask-image: radial-gradient(transparent 63%, #000 64%);
+}
+.certificate-hero-seal {
+  width: min(100%, 280px);
+  height: auto;
+  filter: drop-shadow(0 14px 17px #0009);
+}
+.certificate-hero-art p {
+  color: #f1d99a;
+  font-size: 10px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.certificate-center :is(#certificate-portfolio, #certificate-pathways) {
+  scroll-margin-top: 110px;
+}
+.certificate-pathways {
+  margin: 22px 0;
+  border: 1px solid #d8d2c4;
+  border-radius: 16px;
+  background: #fffdf7;
+}
+.certificate-pathways summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  cursor: pointer;
+  font-weight: 750;
+}
+.certificate-pathways summary::-webkit-details-marker {
+  display: none;
+}
+.certificate-pathways summary > span:first-child::before {
+  content: "+";
+  margin-right: 9px;
+  color: #846119;
+}
+.certificate-pathways[open] summary > span:first-child::before {
+  content: "−";
+}
+.certificate-pathways ul {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  padding: 0 16px 16px;
+}
+.certificate-pathways li {
+  min-width: 0;
+}
+.certificate-pathways a {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px solid #e4dbc8;
+  border-radius: 10px;
+  background: #fff;
+  font-size: 13px;
+  line-height: 1.4;
+}
+.certificate-pathways a:hover {
+  border-color: #a9803d;
+}
+.certificate-pathways small {
+  display: block;
+  margin-top: 4px;
+  color: #526074;
+  font-size: 11px;
+}
+.certificate-pathways a > span:last-child {
+  flex: 0 0 auto;
+  color: #846119;
+}
+.certificate-center summary:focus-visible {
+  outline: 3px solid #b58a2a;
+  outline-offset: 4px;
+}
+
+@media (max-width: 650px) {
+  .certificate-portfolio-hero {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 14px;
+  }
+  .certificate-portfolio-hero h1 {
+    max-width: 16ch;
+  }
+  .certificate-hero-actions .certificate-button {
+    padding-inline: 12px;
+  }
+  .certificate-hero-seal {
+    width: 160px;
+  }
+  .certificate-hero-art::before {
+    width: 172px;
+  }
+  .certificate-hero-art::after {
+    width: 154px;
+  }
+  .certificate-pathways ul {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

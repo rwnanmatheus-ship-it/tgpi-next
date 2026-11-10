@@ -35,6 +35,8 @@ export default function CredentialRecordView({
       ? "This certificate is no longer active. Its original issuance remains in the history."
       : "The record could not pass every integrity check. Do not present it as verified.";
   const verificationUrl = certificateVerificationUrl(credential.id);
+  const sharingAllowed = credential.professionalEvidence?.sharing !== false;
+  const canPrint = owner && verified;
   return (
     <main className="credential-record">
       <div className="credential-record-shell">
@@ -83,11 +85,41 @@ export default function CredentialRecordView({
           downloadUrl={`/api/credentials/${encodeURIComponent(credential.id)}?download=1`}
           verificationUrl={verificationUrl}
           canDownload={verified}
+          sharingAllowed={sharingAllowed}
           owner={owner}
         />
-        <CertificateDocument credential={credential} verified={verified} />
+        <LocalizedElement as="nav" className="credential-jump-nav" aria-label="Certificate sections">
+          <a href="#certificate-document"><LocalizedText text="Certificate" /></a>
+          <a href="#certificate-evidence"><LocalizedText text="Learning evidence" /></a>
+          {canPrint && <a href="#certificate-print"><LocalizedText text="Print & display" /></a>}
+        </LocalizedElement>
+        {verified && sharingAllowed && (
+          <section className="credential-comparison">
+            <span className="credential-comparison-mark" aria-hidden="true">⌖</span>
+            <div>
+              <h2><LocalizedText text="Verify against the original" /></h2>
+              <p><LocalizedText text="Compare the learner, course, date and certificate ID against this issuer record." /></p>
+            </div>
+            {credential.documentFingerprint && (
+              <dl>
+                <dt><LocalizedText text="Document fingerprint" /></dt>
+                <dd className="credential-mono">{credential.documentFingerprint}</dd>
+              </dl>
+            )}
+          </section>
+        )}
+        <div id="certificate-document">
+          <CertificateDocument credential={credential} verified={verified} verificationUrl={verificationUrl} />
+        </div>
+        {canPrint && (
+          <section id="certificate-print" className="credential-print-guide">
+            <div><span aria-hidden="true">01</span><h2><LocalizedText text="A4 · Landscape" /></h2><p><LocalizedText text="Download the PDF and print at actual size using high quality settings." /></p></div>
+            <div><span aria-hidden="true">02</span><h2><LocalizedText text="Made to frame" /></h2><p><LocalizedText text="Use matte white paper, 180–250 g/m², if supported by your printer. Keep the full border visible." /></p></div>
+            <div><span aria-hidden="true">03</span><h2><LocalizedText text="Scan to verify" /></h2><p><LocalizedText text="Keep the QR code unobstructed so it remains readable after framing." /></p></div>
+          </section>
+        )}
         {credential.replacedBy && <p className="credential-status-note"><Link href={`${owner ? "/certificates/" : "/verify/credentials/"}${encodeURIComponent(credential.replacedBy)}`}><LocalizedText text={"Abrir certificado substituto →"} /></Link></p>}
-        {owner && (
+        {canPrint && (
           <section className="credential-refresh-note">
             <div className="credential-refresh-icon" aria-hidden="true">
               ↻
@@ -100,6 +132,7 @@ export default function CredentialRecordView({
         )}
         <LocalizedElement as="section"
           className="credential-evidence-grid"
+          id="certificate-evidence"
           aria-label="Learning evidence"
         >
           <article>
@@ -118,8 +151,8 @@ export default function CredentialRecordView({
           </article>
           <article>
             <p className="credential-eyebrow"><LocalizedText text={"Portability"} /></p>
-            <h2><LocalizedText text={"Share worldwide"} /></h2>
-            <p><LocalizedText text={credential.automatedEvidence ? "Automatic objective assessments; estimated workload; sharing controlled by the holder." : "English-language PDF, public QR verification and portable evidence. Acceptance depends on the receiving institution."} /></p>
+            <h2>{sharingAllowed ? <LocalizedText text="Portable evidence" /> : <LocalizedText text="Private certificate" />}</h2>
+            <p><LocalizedText text={sharingAllowed ? "Use the official verification link to check the current issuer record." : "Only you can view this certificate while sharing is disabled."} /></p>
           </article>
         </LocalizedElement>
         <details className="credential-details">
@@ -158,6 +191,16 @@ export default function CredentialRecordView({
                   <dd className="credential-mono">
                     {credential.integrityFingerprint}
                   </dd>
+                </div>
+                {verified && credential.portableProof && (
+                  <div>
+                    <dt><LocalizedText text="Portable proof" /></dt>
+                    <dd><a className="credential-inline-link" href={credential.portableProof.publicKeyUrl}>{credential.portableProof.algorithm} · {credential.portableProof.keyId}</a></dd>
+                  </div>
+                )}
+                <div>
+                  <dt><LocalizedText text="Course edition" /></dt>
+                  <dd>{credential.courseVersion}</dd>
                 </div>
                 <div>
                   <dt><LocalizedText text={"Identity revision"} /></dt>
