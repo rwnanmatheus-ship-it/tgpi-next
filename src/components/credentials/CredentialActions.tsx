@@ -41,25 +41,21 @@ export default function CredentialActions({
 
   async function shareCredential() {
     const shareData = {
-      text:
-        "TGPI learning credential: " +
-        courseTitle +
-        " · verify the live record before relying on its status.",
+      text: localizeLabel("My TGPI learning certificate. View the current verification record."),
       title: courseTitle + " — TGPI",
       url: verificationUrl,
     };
 
-    try {
-      if (navigator.share) {
+    if (navigator.share && (!navigator.canShare || navigator.canShare(shareData))) {
+      try {
         await navigator.share(shareData);
         setMessage("Credential shared.");
         return;
+      } catch (error) {
+        if (error instanceof DOMException && error.name === "AbortError") return;
       }
-      await copyValue(verificationUrl, "Verification link copied for sharing.");
-    } catch (error) {
-      if (error instanceof DOMException && error.name === "AbortError") return;
-      setMessage("Sharing is unavailable on this device.");
     }
+    await copyValue(verificationUrl, "Verification link copied for sharing.");
   }
 
   return (
@@ -85,6 +81,9 @@ export default function CredentialActions({
         )}
       </div>
       <div className="credential-secondary-actions print:hidden">
+        <button type="button" onClick={() => void copyValue(credentialId, "Certificate ID copied.")}>
+          <LocalizedText text="Copy certificate ID" />
+        </button>
         {sharingAllowed && (
           <button
             type="button"

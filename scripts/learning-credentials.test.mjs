@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
+import { isGlobalKeyProofReference, readCertificateReference } from "../src/lib/certificate-reference.ts";
 import {
   createPortableLearningRecord,
   getCredentialTrustState,
@@ -37,6 +38,28 @@ const credential = {
   standardsAlignment: [...TGPI_CREDENTIAL_ALIGNMENT_TARGETS],
   status: "active",
 };
+
+test("verification accepts current and legacy TGPI certificate links while rejecting unrelated references", () => {
+  for (const reference of [
+    "  tgpi-engabr-test123 ",
+    "https://www.theglobalpolymath.com/verify/credentials/TGPI-ENGABR-TEST123",
+    "https://theglobalpolymath.com/verify/tgpi-engabr-test123/",
+  ]) assert.equal(readCertificateReference(reference), credential.id);
+
+  for (const reference of [
+    "TGPI-AAAA-BBBB-CCCC",
+    "https://www.theglobalpolymath.com/verify/TGPI-AAAA-BBBB-CCCC",
+    "https://theglobalpolymath.com.example/verify/credentials/TGPI-ENGABR-TEST123",
+    "https://person@theglobalpolymath.com/verify/credentials/TGPI-ENGABR-TEST123",
+    "https://theglobalpolymath.com/verify/credentials/%2fTGPI-ENGABR-TEST123",
+    "http://theglobalpolymath.com/verify/credentials/TGPI-ENGABR-TEST123",
+    "https://theglobalpolymath.com/certificates/TGPI-ENGABR-TEST123",
+  ]) assert.equal(readCertificateReference(reference), null);
+
+  assert.equal(isGlobalKeyProofReference("TGK1.A." + "x".repeat(80)), true);
+  assert.equal(isGlobalKeyProofReference("TGK1.A." + "x".repeat(2049)), false);
+  assert.equal(isGlobalKeyProofReference("TGK1.C.invalid"), false);
+});
 
 test("builds a privacy-safe portable learning record", () => {
   const record = createPortableLearningRecord(

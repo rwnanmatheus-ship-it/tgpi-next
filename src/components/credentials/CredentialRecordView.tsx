@@ -4,6 +4,8 @@ import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import { LocalizedText } from "@/components/localization/LocaleProvider";
 import Link from "next/link";
 import CertificateDocument from "./CertificateDocument";
+import CertificateSeal from "./CertificateSeal";
+import { CertificateIssueDate } from "./CertificatePresentationText";
 import CredentialActions from "./CredentialActions";
 import { getCredentialTrustState } from "@/lib/credential-standard";
 import {
@@ -35,7 +37,7 @@ export default function CredentialRecordView({
       ? "This certificate is no longer active. Its original issuance remains in the history."
       : "The record could not pass every integrity check. Do not present it as verified.";
   const verificationUrl = certificateVerificationUrl(credential.id);
-  const sharingAllowed = credential.professionalEvidence?.sharing !== false;
+  const sharingAllowed = credential.integrityVerified && (!credential.professionalEvidence || credential.professionalEvidence.sharing === true);
   const canPrint = owner && verified;
   return (
     <main className="credential-record">
@@ -51,34 +53,37 @@ export default function CredentialRecordView({
           <span><LocalizedText text={"Certificate record"} /></span>
         </LocalizedElement>
         <header className="credential-record-heading">
-          <div>
-            <p className="credential-eyebrow"><LocalizedText text={"TGPI · Verified learning"} /></p>
-            <h1>
-              {owner
-                ? <LocalizedText text={"Your achievement, in one place."} />
-                : <LocalizedText text={"Verify a learning achievement."} />}
-            </h1>
-            <p>
-              {owner
-                ? <LocalizedText text={"Download, share and manage your certificate."} />
-                : <LocalizedText text={"Check the learner, issuer and current certificate status."} />}
-            </p>
+          <div className="credential-heading-copy">
+            <p className="credential-eyebrow"><LocalizedText text={owner ? "TGPI · Verified learning" : "TGPI Public Trust Registry"} /></p>
+            <h1><LocalizedText text={owner ? "Your achievement, in one place." : "Certificate verification result"} /></h1>
+            <LocalizedElement as="span"
+              className={`credential-state ${verified ? "verified" : "review"}`}
+              data-state={trustState}
+              aria-label="Current lifecycle status"
+            >
+              <span aria-hidden="true">{verified ? "✓ " : "! "}</span>
+              <LocalizedText text={label} />
+            </LocalizedElement>
+            <p className="credential-heading-status"><LocalizedText text={description} /></p>
           </div>
-          <LocalizedElement as="span"
-            className={`credential-state ${verified ? "verified" : "review"}`}
-            aria-label="Current lifecycle status"
-          >
-            {verified ? "✓ " : "! "}
-            <LocalizedText text={label} />
-          </LocalizedElement>
+          <div className="credential-heading-medal" aria-hidden="true">
+            <CertificateSeal sizes="(max-width: 640px) 80px, 154px" />
+          </div>
         </header>
-        <div
-          className={`credential-status-note ${verified ? "verified" : "review"}`}
-          role="status"
-        >
-          <strong><LocalizedText text={label} /></strong>
-          <span><LocalizedText text={description} /></span>
-        </div>
+        <section className="credential-record-summary" aria-labelledby="credential-record-summary-title">
+          <h2 id="credential-record-summary-title"><LocalizedText text="Issuer record" /></h2>
+          <dl>
+            <div><dt><LocalizedText text="Learner" /></dt><dd><bdi>{credential.publicName}</bdi></dd></div>
+            <div><dt><LocalizedText text="Course" /></dt><dd>{credential.courseTitle}</dd></div>
+            <div><dt><LocalizedText text="Issued" /></dt><dd><CertificateIssueDate value={credential.issuedAt} /></dd></div>
+            <div><dt><LocalizedText text="Certificate ID" /></dt><dd className="credential-mono">{credential.id}</dd></div>
+          </dl>
+          {credential.replacedBy && (
+            <Link className="credential-inline-link" href={`${owner ? "/certificates/" : "/verify/credentials/"}${encodeURIComponent(credential.replacedBy)}`}>
+              <LocalizedText text="Abrir certificado substituto →" />
+            </Link>
+          )}
+        </section>
         <CredentialActions
           credentialId={credential.id}
           courseTitle={credential.courseTitle}
@@ -118,7 +123,6 @@ export default function CredentialRecordView({
             <div><span aria-hidden="true">03</span><h2><LocalizedText text="Scan to verify" /></h2><p><LocalizedText text="Keep the QR code unobstructed so it remains readable after framing." /></p></div>
           </section>
         )}
-        {credential.replacedBy && <p className="credential-status-note"><Link href={`${owner ? "/certificates/" : "/verify/credentials/"}${encodeURIComponent(credential.replacedBy)}`}><LocalizedText text={"Abrir certificado substituto →"} /></Link></p>}
         {canPrint && (
           <section className="credential-refresh-note">
             <div className="credential-refresh-icon" aria-hidden="true">
@@ -140,7 +144,7 @@ export default function CredentialRecordView({
             <h2>{credential.assessmentScore}<LocalizedText text={"% mastery"} /></h2>
             <p>
               {credential.masteryThreshold}<LocalizedText text={"% required ·"} />{" "}
-              {credential.learningHours}{" "}<LocalizedText text={"learning hours"} /></p>
+              {credential.learningHours}{" "}<LocalizedText text={credential.automatedEvidence ? "hours of estimated workload" : "learning hours"} /></p>
           </article>
           <article>
             <p className="credential-eyebrow"><LocalizedText text={"Identity"} /></p>

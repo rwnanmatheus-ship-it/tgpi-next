@@ -1,288 +1,200 @@
-import { localizeMetadata } from "@/lib/localization/metadata.server";
-
-import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import type { Metadata } from "next";
-import Image from "@/components/localization/LocalizedImage";
-import CinematicImage from "@/components/ui/CinematicImage";
 import Link from "next/link";
-import { requireApiUser, requireUser } from "@/lib/auth/guards";
-import {
-  getLearningCertificationStatus,
-  listUserLearningCredentials,
-} from "@/lib/learning-records.server";
-import { courses } from "@/data/courses";
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
+import CredentialPortfolioExplorer from "@/components/credentials/CredentialPortfolioExplorer";
+import CredentialSealStage from "@/components/credentials/CredentialSealStage";
 import { coursesOverview } from "@/data/courses-overview";
+import { requireUser } from "@/lib/auth/guards";
+import { getCredentialTrustState } from "@/lib/credential-standard";
+import { verifyLearningCredentialIntegrity } from "@/lib/credential-signing.server";
+import { isLearningStorageConfigured } from "@/lib/firestore-admin-rest.server";
+import { listUserLearningCredentials } from "@/lib/learning-records.server";
 import { courseLearningPolicy } from "@/lib/learning/catalog-policy";
 import { professionalCatalog } from "@/lib/learning/professional-catalog";
-import CertificateSeal from "@/components/credentials/CertificateSeal";
-import CredentialPortfolioExplorer from "@/components/credentials/CredentialPortfolioExplorer";
+import { learningStatusLabels } from "@/lib/learning/unified-progress";
+import { loadLearningSummary } from "@/lib/learning/unified-progress.server";
+import { localizeMetadata } from "@/lib/localization/metadata.server";
+import "@/components/credentials/credential-hub.css";
 import "./certificates.css";
-import { LocalizedText } from "@/components/localization/LocaleProvider";
-
 
 const sourceMetadata: Metadata = {
   title: "My certificates — TGPI",
-  description:
-    "Your achievements, next certificates and verified learning progress in one place.",
+  description: "Your achievements, next certificates and verified learning progress in one place.",
   robots: { index: false, follow: false },
 };
 export const dynamic = "force-dynamic";
 
 export default async function CertificatesPage() {
-  await requireUser();
-  const identity = await requireApiUser();
-  const course = courses.find((item) => item.id === "global-english-2026");
-  const [records, certification] = await Promise.allSettled([
-    listUserLearningCredentials(identity.uid),
-    getLearningCertificationStatus(identity, "global-english-2026"),
+  const { userId } = await requireUser();
+  const [records, learning] = await Promise.allSettled([
+    listUserLearningCredentials(userId),
+    loadLearningSummary(userId),
   ]);
+  const recordsAvailable = isLearningStorageConfigured() && records.status === "fulfilled";
   const credentials = records.status === "fulfilled" ? records.value : [];
-  const status =
-    certification.status === "fulfilled" ? certification.value : null;
-  const active = credentials.filter((item) => item.status === "active");
-  const skills = new Set(
-    active.flatMap((item) => item.skills.map((skill) => skill.id)),
+  const portfolio = credentials.map((item) => {
+    const integrityVerified = verifyLearningCredentialIntegrity(item);
+    return {
+      assessmentScore: item.assessmentScore,
+      courseTitle: item.courseTitle,
+      id: item.id,
+      issuedAt: item.issuedAt,
+      learningHours: item.learningHours,
+      skills: item.skills,
+      trustState: getCredentialTrustState({ status: item.status, integrityVerified }),
+      sharingAllowed: integrityVerified && (!item.professionalEvidence || item.professionalEvidence.sharing === true),
+      automated: Boolean(item.automatedEvidence),
+    };
+  });
+  const earned = portfolio.filter((item) => item.trustState === "active_verified");
+  const skills = new Set(earned.flatMap((item) => item.skills.map((skill) => skill.id)));
+  const workload = Math.round(earned.reduce((sum, item) => sum + item.learningHours, 0) * 10) / 10;
+  const issuedCourseIds = new Set(credentials.filter((item) => item.status === "active").map((item) => item.courseId));
+  const pathways = [...new Map(
+    [...coursesOverview, ...professionalCatalog(process.env.VERCEL_ENV || process.env.NODE_ENV)]
+      .map((item) => [item.id, item]),
+  ).values()].filter((item) =>
+    item.status === "available" && courseLearningPolicy(item).credentialStatus === "criteria_available" && !issuedCourseIds.has(item.id),
   );
-  const issued = active.some((item) => item.courseId === course?.id);
-  const earnedCourseIds = new Set(active.map((item) => item.courseId));
-  const pathways = [
-    ...new Map(
-      [...coursesOverview, ...professionalCatalog(process.env.VERCEL_ENV || process.env.NODE_ENV)]
-        .map((item) => [item.id, item]),
-    ).values(),
-  ].filter((item) =>
-    item.id !== course?.id &&
-    item.status === "available" &&
-    courseLearningPolicy(item).credentialStatus === "criteria_available" &&
-    !earnedCourseIds.has(item.id),
-  );
-  const eligibility = status?.eligibility;
-  const progress = Math.min(
-    100,
-    Math.max(0, Math.round(eligibility?.checkpointCompletion || 0)),
-  );
+  const pathwayIds = new Set(pathways.map((item) => item.id));
+  const learningItems = learning.status === "fulfilled" ? learning.value.items : [];
+  const progressUnavailable = learning.status === "rejected" || Boolean(learning.value.unavailable.length);
+  const pendingPaths = learningItems.filter((item) => pathwayIds.has(item.courseId) && item.status !== "completed");
+  const nextPath = pendingPaths.find((item) => item.status === "certificate_pending" || item.status === "approved")
+    ?? pendingPaths[0];
+  const otherPaths = pendingPaths.filter((item) => item.courseId !== nextPath?.courseId);
+  const suggestedPaths = pathways.filter((item) => !pendingPaths.some((path) => path.courseId === item.id));
 
   return (
-    <main className="certificate-center">
-      <div className="certificate-shell">
-        <LocalizedElement as="nav" aria-label="Breadcrumb" className="certificate-breadcrumb">
-          <Link href="/profile"><LocalizedText text="Workspace" /></Link>
-          <span aria-hidden="true">/</span>
-          <span><LocalizedText text="Certificates" /></span>
-        </LocalizedElement>
-        <header className="certificate-header certificate-portfolio-hero">
-          <div className="min-w-0">
-            <p className="certificate-eyebrow"><LocalizedText text={"TGPI · Verified learning"} /></p>
-            <h1><LocalizedText text={"Your learning. Recognized."} /></h1>
-            <p><LocalizedText text={"See what you have earned, discover your next milestone and share your achievement."} /></p>
-            <LocalizedElement as="nav" className="certificate-hero-actions" aria-label="Certificate sections">
-              <a href="#certificate-portfolio" className="certificate-button"><LocalizedText text="My certificates" /></a>
-              {pathways.length > 0 || (course && !issued) ? (
-                <a href="#certificate-pathways" className="certificate-button secondary"><LocalizedText text="Learning paths" /></a>
-              ) : (
-                <Link href="/courses" className="certificate-button secondary"><LocalizedText text="Explore learning" /></Link>
-              )}
-            </LocalizedElement>
+    <main className="credential-hub certificate-center">
+      <div className="credential-hub-shell">
+        <div className="credential-hub-bar">
+          <p><span aria-hidden="true">✦</span> <LocalizedText text="The Global Polymath Institute" /></p>
+          <Link href="/profile"><LocalizedText text="Workspace" /> <span aria-hidden="true">↗</span></Link>
+        </div>
+        <header className="credential-hub-hero">
+          <div className="credential-hub-hero-copy">
+            <p className="credential-hub-kicker"><span aria-hidden="true" /> <LocalizedText text="TGPI · Verified learning" /></p>
+            <h1><LocalizedText text="My certificates" /></h1>
+            <p className="credential-hub-lead"><LocalizedText text="Turn assessed learning into achievements you can show and verify." /></p>
+            <div className="credential-hub-actions">
+              {earned.length > 0
+                ? <a className="credential-hub-button" href="#certificate-portfolio"><LocalizedText text="View my certificates" /> <span aria-hidden="true">↓</span></a>
+                : <a className="credential-hub-button" href="#certificate-pathways"><LocalizedText text="Find my next certificate" /> <span aria-hidden="true">↓</span></a>}
+              <Link href="/verify" className="credential-hub-button secondary"><LocalizedText text="Verify a certificate ↗" /></Link>
+            </div>
           </div>
-          <div className="certificate-hero-art">
-            <CertificateSeal
-              className="certificate-hero-seal"
-              sizes="(max-width: 650px) 160px, 280px"
-              priority
-            />
-            <p><LocalizedText text="TGPI issuer quality seal" /></p>
-          </div>
+          <CredentialSealStage />
         </header>
-        <div className="certificate-overview">
-          <LocalizedElement as="section"
-            className="certificate-identity"
-            aria-label="Your certificate portfolio"
-          >
-            <Image
-              src="/brand/tgpi-crest-metal-v3.webp"
-              alt="TGPI"
-              width={76}
-              height={86}
-              priority
-            />
-            <div className="min-w-0">
-              <p className="certificate-eyebrow"><LocalizedText text={"Personal achievement portfolio"} /></p>
-              <h2>{identity.publicName || <LocalizedText text="TGPI member" />}</h2>
-              <p><LocalizedText text={"Issued by The Global Polymath Institute"} /></p>
+        <dl className="certificate-stats">
+          {([
+            ["Certificates earned", earned.length],
+            ["Verified skills", skills.size],
+            ["Certified workload (hours)", workload],
+          ] as const).map(([label, value], index) => (
+            <div key={label}>
+              <span aria-hidden="true">0{index + 1}</span>
+              <dt><LocalizedText text={label} /></dt>
+              <dd>{recordsAvailable ? value : "—"}</dd>
             </div>
-          </LocalizedElement>
-          <dl className="certificate-stats">
-            <div>
-              <dt><LocalizedText text={"Certificates earned"} /></dt>
-              <dd>{records.status === "fulfilled" ? active.length : "—"}</dd>
-            </div>
-            <div>
-              <dt><LocalizedText text={"Verified skills"} /></dt>
-              <dd>{records.status === "fulfilled" ? skills.size : "—"}</dd>
-            </div>
-            <div>
-              <dt><LocalizedText text={"Learning hours"} /></dt>
-              <dd>
-                {records.status === "fulfilled"
-                  ? Math.round(
-                      active.reduce(
-                        (sum, item) => sum + item.learningHours,
-                        0,
-                      ) * 10,
-                    ) / 10
-                  : "—"}
-              </dd>
-            </div>
-          </dl>
-        </div>
-        <div id="certificate-portfolio">
-        {records.status === "rejected" && (
-          <div role="alert" className="certificate-notice"><LocalizedText text={"Your certificates could not be loaded. Refresh this page to try again. Your learning records have not changed."} /></div>
-        )}
-        {status && !status.credentialConfigured && (
-          <div className="certificate-notice" role="status"><LocalizedText text={"Certificate issuance is temporarily unavailable. You can continue learning; issuance requires TGPI server activation."} /></div>
-        )}
-        {records.status === "fulfilled" && (
-          <CredentialPortfolioExplorer
-            items={credentials.map((item) => ({
-              assessmentScore: item.assessmentScore,
-              courseTitle: item.courseTitle,
-              id: item.id,
-              issuedAt: item.issuedAt,
-              learningHours: item.learningHours,
-              skills: item.skills,
-              status: item.status,
-              sharingAllowed: item.professionalEvidence?.sharing !== false,
-              automated: Boolean(item.automatedEvidence),
-            }))}
-          />
-        )}
-        </div>
-        <div id="certificate-pathways">
-        {course && !issued && (
-          <section
-            aria-labelledby="next-certificate-title"
-            className="certificate-next-section"
-          >
-            <div className="certificate-section-heading">
-              <div>
-                <p className="certificate-eyebrow"><LocalizedText text={"Your next milestone"} /></p>
-                <h2 id="next-certificate-title"><LocalizedText text={"Certificates you can earn"} /></h2>
-              </div>
-              <span className="certificate-count"><LocalizedText text={"1 available path"} /></span>
-            </div>
-            <article className="certificate-next">
-              <div className="certificate-course-art" aria-hidden="true">
-                <CinematicImage asset="learning-achievement" alt="" sizes="(max-width: 760px) 100vw, 360px" className="certificate-course-photo" />
-                <Image
-                  src="/brand/tgpi-crest-metal-v3.webp"
-                  alt=""
-                  width={90}
-                  height={106}
-                />
-                <span><LocalizedText text={"PROFESSIONAL"} /><br /><LocalizedText text={"CERTIFICATE"} /></span>
-                <p><LocalizedText text={"TGPI Verified Learning"} /></p>
-              </div>
-              <div className="certificate-course-content">
-                <span className="certificate-status">
-                  {!status
-                    ? <LocalizedText text={"Progress unavailable"} />
-                    : eligibility?.eligible
-                      ? <LocalizedText text={"Ready for certification"} />
-                      : progress
-                        ? <LocalizedText text={"In progress"} />
-                        : <LocalizedText text={"Available to earn"} />}
-                </span>
-                <h3><LocalizedText text={course.title} /></h3>
-                <p><LocalizedText text={"Build practical English skills for life abroad. Complete your learning and required assessments to earn your certificate."} /></p>
-                {status ? (
-                  <>
-                    <div className="certificate-progress-label">
-                      <span><LocalizedText text={"Lessons completed"} /></span>
-                      <strong>
-                        {eligibility?.lessonsCompleted} /{" "}
-                        {eligibility?.totalLessons}
-                      </strong>
-                    </div>
-                    <LocalizedElement as="progress"
-                      value={progress}
-                      max={100}
-                      aria-label="Course lesson completion"
-                    >
-                      {progress}%
-                    </LocalizedElement>
-                    <p className="certificate-progress-note">
-                      {progress}<LocalizedText text={"% of lessons · Assessment and identity requirements are checked separately."} /></p>
-                  </>
-                ) : (
-                  <p role="status"><LocalizedText text={"We could not confirm your progress. Open the certification path to retry."} /></p>
-                )}
-                <div className="certificate-course-actions">
-                  <Link
-                    href={`/courses/${course.id}${eligibility?.eligible || progress === 100 ? "/certification" : ""}`}
-                    className="certificate-button"
-                  >
-                    {eligibility?.eligible
-                      ? <LocalizedText text={"Review and issue certificate"} />
-                      : progress === 100
-                        ? <LocalizedText text={"Review certification requirements"} />
-                        : progress
-                          ? <LocalizedText text={"Continue learning"} />
-                          : <LocalizedText text={"View course"} />}
-                    <span aria-hidden="true">→</span>
-                  </Link>
-                  <Link
-                    href={`/courses/${course.id}/certification`}
-                    className="certificate-text-link"
-                  ><LocalizedText text={"View requirements"} /></Link>
-                </div>
-              </div>
-            </article>
-          </section>
-        )}
-        {pathways.length > 0 && (
-          <details className="certificate-pathways">
-            <summary>
-              <span><LocalizedText text="More certificates you can earn" /></span>
-              <span className="certificate-count">{pathways.length}</span>
-            </summary>
-            <ul>
-              {pathways.map((item) => (
-                <li key={item.id}>
-                  <Link href={item.href}>
-                    <span>
-                      <strong><LocalizedText text={item.title} /></strong>
-                      <small><LocalizedText text={item.category} /></small>
-                    </span>
-                    <span aria-hidden="true">↗</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </details>
-        )}
-        </div>
-        <LocalizedElement as="section"
-          className="certificate-help"
-          aria-label="Certificate information"
-        >
-          <div>
-            <h2><LocalizedText text={"Built to be shared. Easy to verify."} /></h2>
-            <p><LocalizedText text={"Download your certificate as a PDF or share its public verification link. Only issued certificates appear as earned; revoked records remain clearly marked."} /></p>
+          ))}
+        </dl>
+        <LocalizedElement as="nav" aria-label="Certificate sections" className="credential-hub-tabs">
+          <a href="#certificate-portfolio"><span aria-hidden="true">▤</span> <LocalizedText text="Portfolio" /></a>
+          <a href="#certificate-pathways"><span aria-hidden="true">◎</span> <LocalizedText text="Learning paths" /></a>
+          <a href="#certificate-guide"><span aria-hidden="true">◇</span> <LocalizedText text="Certificate guide" /></a>
+          <Link href="/verify"><span aria-hidden="true">↗</span> <LocalizedText text="Public verification" /></Link>
+        </LocalizedElement>
+        <div className="certificate-grid">
+          <div id="certificate-portfolio" className="certificate-primary-column">
+            {recordsAvailable ? (
+              <CredentialPortfolioExplorer items={portfolio} />
+            ) : (
+              <section aria-labelledby="credential-portfolio-title">
+                <div className="certificate-section-heading"><h2 id="credential-portfolio-title"><LocalizedText text="My certificates" /></h2></div>
+                <p role="alert" className="certificate-notice"><LocalizedText text="Your certificates could not be loaded. Refresh this page to try again. Your learning records have not changed." /></p>
+              </section>
+            )}
           </div>
-          <Link href="/verify" className="certificate-button secondary"><LocalizedText text={"Verify a certificate ↗"} /></Link>
-        </LocalizedElement>
-        <LocalizedElement as="nav"
-          className="certificate-footer-links"
-          aria-label="Connected workspace"
-        >
-          <Link href="/courses"><LocalizedText text="Learning" /></Link>
-          <Link href="/global-key"><LocalizedText text={"Global Key"} /></Link>
-          <Link href="/profile"><LocalizedText text="My workspace" /></Link>
-        </LocalizedElement>
+          <section id="certificate-pathways" className="certificate-pathway-panel" aria-labelledby="certificate-pathways-title">
+            <div className="credential-hub-section-heading">
+              <p className="credential-hub-kicker"><LocalizedText text="Your next milestone" /></p>
+              <h2 id="certificate-pathways-title"><LocalizedText text="Learning paths" /></h2>
+            </div>
+            {nextPath ? (
+              <article className="certificate-next">
+                <span className="certificate-status"><LocalizedText text={learningStatusLabels[nextPath.status]} /></span>
+                <h3><LocalizedText text={nextPath.title} /></h3>
+                {nextPath.total > 0 && (
+                  <div className="certificate-progress">
+                    <p><LocalizedText text="Tracked learning steps" /> <strong>{nextPath.completed} / {nextPath.total}</strong></p>
+                    <LocalizedElement as="progress" value={nextPath.completed} max={nextPath.total} aria-label="Tracked learning steps" />
+                  </div>
+                )}
+                <Link href={nextPath.href} className="credential-hub-button"><LocalizedText text="Open learning path" /> <span aria-hidden="true">→</span></Link>
+              </article>
+            ) : (
+              <p className="certificate-pathway-hint"><LocalizedText text={progressUnavailable ? "Some learning progress is temporarily unavailable." : "Choose a course with a certificate pathway to start your next achievement."} /></p>
+            )}
+            {(otherPaths.length > 0 || suggestedPaths.length > 0) && (
+              <details className="certificate-pathways" open={!nextPath}>
+                <summary><LocalizedText text="More certificates you can earn" /> <span>{otherPaths.length + suggestedPaths.length}</span></summary>
+                <ul>
+                  {otherPaths.map((item) => (
+                    <li key={item.courseId}>
+                      <Link href={item.href}>
+                        <span><strong><LocalizedText text={item.title} /></strong><small><LocalizedText text={learningStatusLabels[item.status]} /></small></span>
+                        <span aria-hidden="true">↗</span>
+                      </Link>
+                    </li>
+                  ))}
+                  {suggestedPaths.map((item) => (
+                    <li key={item.id}>
+                      <Link href={item.href}>
+                        <span><strong><LocalizedText text={item.title} /></strong><small><LocalizedText text={item.category} /></small></span>
+                        <span aria-hidden="true">↗</span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            )}
+            <Link href="/courses" className="certificate-text-link"><LocalizedText text="Explore learning" /> <span aria-hidden="true">↗</span></Link>
+          </section>
+        </div>
+        <section id="certificate-guide" className="certificate-guide" aria-labelledby="certificate-guide-title">
+          <div className="credential-hub-section-heading">
+            <p className="credential-hub-kicker"><LocalizedText text="TGPI · Verified learning" /></p>
+            <h2 id="certificate-guide-title"><LocalizedText text="Certificate guide" /></h2>
+          </div>
+          <div>
+            <details>
+              <summary><LocalizedText text="How do I earn a certificate?" /></summary>
+              <p><LocalizedText text="Open a learning path to see its completion, assessment and identity requirements." /></p>
+            </details>
+            <details>
+              <summary><LocalizedText text="How do I share my certificate?" /></summary>
+              <p><LocalizedText text="Download the latest PDF from an active record. If public sharing is enabled, you can also send the live verification link." /></p>
+            </details>
+            <details>
+              <summary><LocalizedText text="What can someone verify?" /></summary>
+              <p><LocalizedText text="The registry shows the status, learner, course and evidence of publicly shared certificates." /></p>
+              <Link href="/verify" className="certificate-text-link"><LocalizedText text="Verify a certificate ↗" /></Link>
+            </details>
+          </div>
+        </section>
+        <footer className="credential-hub-footer">
+          <Link href="/profile"><LocalizedText text="My workspace" /> ↗</Link>
+          <Link href="/courses"><LocalizedText text="Learning" /> ↗</Link>
+          <Link href="/global-key"><LocalizedText text="Global Key" /> ↗</Link>
+          <Link href="/verify"><LocalizedText text="Public verification" /> ↗</Link>
+        </footer>
       </div>
     </main>
   );
 }
 
-export async function generateMetadata() { return localizeMetadata(sourceMetadata); }
+export async function generateMetadata() {
+  return localizeMetadata(sourceMetadata);
+}

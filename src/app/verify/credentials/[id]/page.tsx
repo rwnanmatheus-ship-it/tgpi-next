@@ -1,7 +1,10 @@
 import { localizeMetadata } from "@/lib/localization/metadata.server";
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import CredentialRecordView from "@/components/credentials/CredentialRecordView";
+import CredentialVerificationProblem from "@/components/credentials/CredentialVerificationProblem";
+import { normalizeCertificateId } from "@/lib/certificate-reference";
+import { isLearningStorageConfigured } from "@/lib/firestore-admin-rest.server";
 import { getPublicLearningCredential } from "@/lib/learning-records.server";
 
 const sourceMetadata: Metadata = {
@@ -18,8 +21,17 @@ export default async function VerifyLearningCredentialPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  if (!/^TGPI-[A-Z0-9_-]{8,90}$/.test(id)) notFound();
-  const credential = await getPublicLearningCredential(id);
+  const normalizedId = normalizeCertificateId(id);
+  if (!normalizedId) notFound();
+  if (id !== normalizedId) redirect("/verify/credentials/" + encodeURIComponent(normalizedId));
+  if (!isLearningStorageConfigured()) return <CredentialVerificationProblem unavailable />;
+  let credential;
+  try {
+    credential = await getPublicLearningCredential(normalizedId);
+  } catch (error) {
+    console.error("Certificate registry lookup failed", error instanceof Error ? error.name : "Unknown error");
+    return <CredentialVerificationProblem unavailable />;
+  }
   if (!credential) notFound();
   return <CredentialRecordView credential={credential} owner={false} />;
 }
