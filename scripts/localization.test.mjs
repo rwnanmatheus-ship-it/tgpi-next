@@ -447,6 +447,14 @@ test('workspace server presentation follows locale and preserves private identit
           if (localizationDependency(dependency, locale)) return localizationDependency(dependency, locale);
           if (dependency === '@/lib/learning/unified-progress') return { learningStatusLabels: {} };
           if (dependency === '@/lib/progress-sync') return { PROGRESS_SYNC_EVENT: 'synthetic-test' };
+          if (dependency === './CourseArrow') {
+            const arrow = {}, arrowCode = ts.transpileModule(fs.readFileSync('src/components/courses/CourseArrow.tsx', 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX } }).outputText;
+            new Function('require', 'exports', arrowCode)(name => {
+              if (name === 'react/jsx-runtime') return runtime;
+              throw Error(`Unexpected course icon import: ${name}`);
+            }, arrow);
+            return arrow;
+          }
           if (dependency === 'next/link') return { __esModule: true, default: ({ children, prefetch, ...props }) => React.createElement('a', props, children) };
           throw Error(`Unexpected continuation import: ${dependency}`);
         }, child);

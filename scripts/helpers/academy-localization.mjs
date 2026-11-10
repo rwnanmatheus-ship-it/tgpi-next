@@ -7,7 +7,7 @@ import ts from 'typescript';
 export function academyLocalizationFixture(overrides = {}) {
   const cache = new Map(), native = createRequire(import.meta.url);
   function load(input) {
-    const file = /\.(tsx?|json)$/.test(input) ? input : existsSync(input + '.ts') ? input + '.ts' : resolve(input, 'index.ts');
+    const file = /\.(tsx?|json)$/.test(input) ? input : existsSync(input + '.ts') ? input + '.ts' : existsSync(input + '.tsx') ? input + '.tsx' : resolve(input, 'index.ts');
     if (cache.has(file)) return cache.get(file);
     if (file.endsWith('.json')) { const value = JSON.parse(readFileSync(file, 'utf8')); cache.set(file, value); return value; }
     const result = {}; cache.set(file, result);
