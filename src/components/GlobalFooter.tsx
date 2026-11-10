@@ -64,7 +64,7 @@ export default function GlobalFooter() {
         <div className="grid gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,2fr)] lg:gap-12">
           <div className="min-w-0">
             <Link href="/" aria-label={t("TGPI home")} className="inline-flex max-w-full items-center gap-3 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#F1D796]">
-              <BrandCrest width={1041} height={1274} sizes="66px" className="h-20 w-auto shrink-0 object-contain" />
+              <BrandCrest alt={t("TGPI institutional crest")} width={1041} height={1274} sizes="66px" className="h-20 w-auto shrink-0 object-contain" />
               <span className="min-w-0">
                 <span className="block text-2xl font-semibold tracking-[0.12em] text-white">TGPI</span>
                 <span className="mt-1 block text-[11px] font-semibold leading-5 tracking-[0.08em] text-[#E5C887]">The Global Polymath Institute</span>

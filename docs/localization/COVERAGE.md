@@ -10,7 +10,7 @@ The current changes complete the privacy policy and expand learning-interface lo
 
 ## November 2026 interface correction
 
-Added 551 complete six-language entries and connected static interface copy across the public, account, country, community, notification and learning surfaces. Pricing benefits, comparison rows, billing FAQs, About pillars and mobile intent content now render through the catalog. Supported attributes in client controls translate with the same context. Unknown copy remains in its source language; no external translation API, DOM mutation or AI billing is introduced.
+Added 574 complete six-language entries and connected static interface copy across the public, account, country, community, notification and learning surfaces. Pricing benefits, comparison rows, billing FAQs, About pillars and mobile intent content now render through the catalog. Supported attributes in client controls translate with the same context. Unknown copy remains in its source language; no external translation API, DOM mutation or AI billing is introduced.
 
 Catalog lookup accepts whitespace differences and unambiguous existing-language aliases. Decorative arrows and section numbers are preserved separately. Values, identifiers, user contributions, assessment responses and credential facts are unchanged. Account avatar names are explicitly excluded from translation.
 

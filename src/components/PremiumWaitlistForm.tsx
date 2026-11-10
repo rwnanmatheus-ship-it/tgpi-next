@@ -201,7 +201,7 @@ export default function PremiumWaitlistForm() {
         disabled={status === "submitting"}
         className="mt-7 w-full rounded-2xl bg-[var(--tgpi-navy-raised)] px-6 py-4 text-sm font-black text-white transition hover:bg-[#132B4C] disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {status === "submitting" ? "Saving your place..." : "Join Premium Waitlist"}
+        {status === "submitting" ? "Saving your place..." : <LocalizedText text={"Join Premium Waitlist"} />}
       </button>
 
       <p className="mt-4 text-center text-xs leading-5 text-[var(--tgpi-muted)]">

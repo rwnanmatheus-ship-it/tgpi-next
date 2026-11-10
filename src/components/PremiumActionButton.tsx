@@ -1,7 +1,7 @@
 "use client";
 
 
-import { LocalizedText } from "@/components/localization/LocaleProvider";
+import { LocalizedText, useLocale } from "@/components/localization/LocaleProvider";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
@@ -37,6 +37,7 @@ export default function PremiumActionButton({
   billingEnabled: boolean;
   showMembershipStatus?: boolean;
 }) {
+  const { locale } = useLocale();
   const { isLoaded, isSignedIn, userId } = useAuth();
   const router = useRouter();
   const requestInFlight = useRef(false);
@@ -95,9 +96,7 @@ export default function PremiumActionButton({
           type="button"
           disabled
           className="w-full rounded-2xl bg-[var(--tgpi-gold-hover)] px-6 py-4 text-sm font-black text-[#0B0B0B] opacity-60"
-        >
-          Checking Premium access...
-        </button>
+        ><LocalizedText text={"Checking Premium access..."} /></button>
       );
     }
 
@@ -105,9 +104,7 @@ export default function PremiumActionButton({
       <Link
         href="/premium-waitlist"
         className="block w-full rounded-2xl bg-[var(--tgpi-gold-hover)] px-6 py-4 text-center text-sm font-black text-[#0B0B0B] transition hover:bg-[#C79B36]"
-      >
-        Join Premium Waitlist
-      </Link>
+      ><LocalizedText text={"Join Premium Waitlist"} /></Link>
     );
   }
 
@@ -226,31 +223,29 @@ export default function PremiumActionButton({
         >
           <p className="font-bold text-[var(--tgpi-gold-light)]">
             {hasFounderAccess
-              ? "Founder access enabled"
+              ? <LocalizedText text={"Founder access enabled"} />
               : hasPreviewAccess
-                ? "Preview access enabled"
+                ? <LocalizedText text={"Preview access enabled"} />
                 : hasPremiumAccess
-                  ? "Your Premium membership is active"
+                  ? <LocalizedText text={"Your Premium membership is active"} />
                   : shouldManageBilling
-                    ? "Your subscription needs attention"
-                    : "Ready for your Premium next step"}
+                    ? <LocalizedText text={"Your subscription needs attention"} />
+                    : <LocalizedText text={"Ready for your Premium next step"} />}
           </p>
           {hasPremiumAccess &&
             billing.accessMode === "subscription" &&
             billing.currentPeriodEnd &&
             !Number.isNaN(Date.parse(billing.currentPeriodEnd)) && (
               <p className="mt-1 text-xs text-white/80">
-                {billing.cancelAtPeriodEnd ? "Access until" : "Next renewal"}:{" "}
-                {new Intl.DateTimeFormat("en-US", {
+                {billing.cancelAtPeriodEnd ? <LocalizedText text={"Access until"} /> : <LocalizedText text={"Next renewal"} />}:{" "}
+                {new Intl.DateTimeFormat(locale, {
                   dateStyle: "medium",
                   timeZone: "UTC",
                 }).format(new Date(billing.currentPeriodEnd))}
               </p>
             )}
           {hasControlledAccess && (
-            <p className="mt-1 text-xs text-white/80">
-              Authorized access. No paid subscription is implied.
-            </p>
+            <p className="mt-1 text-xs text-white/80"><LocalizedText text={"Authorized access. No paid subscription is implied."} /></p>
           )}
         </div>
       )}
@@ -266,23 +261,23 @@ export default function PremiumActionButton({
       >
         {loading
           ? shouldManageBilling
-            ? "Opening billing management..."
-            : "Opening secure checkout..."
+            ? <LocalizedText text={"Opening billing management..."} />
+            : <LocalizedText text={"Opening secure checkout..."} />
           : checkingStatus
             ? <LocalizedText text={"Checking membership..."} />
             : hasFounderAccess
-              ? "Open TGPI Founder Access"
+              ? <LocalizedText text={"Open TGPI Founder Access"} />
               : hasPreviewAccess
-                ? "Open TGPI Premium Preview"
+                ? <LocalizedText text={"Open TGPI Premium Preview"} />
                 : hasPremiumAccess
-                  ? "Open Premium workspace"
+                  ? <LocalizedText text={"Open Premium workspace"} />
                   : isSignedIn && !billing
-                    ? "Retry membership check"
+                    ? <LocalizedText text={"Retry membership check"} />
                     : shouldManageBilling
                       ? <LocalizedText text={"Manage subscription"} />
                       : isSignedIn
-                        ? "Continue to secure checkout"
-                        : "Sign in to subscribe"}
+                        ? <LocalizedText text={"Continue to secure checkout"} />
+                        : <LocalizedText text={"Sign in to subscribe"} />}
       </button>
 
       {hasPremiumAccess && billing?.portalAvailable && !hasControlledAccess && (
@@ -298,7 +293,7 @@ export default function PremiumActionButton({
           className="mt-3 rounded-xl border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] p-3 text-sm font-semibold text-[#8B1E1E]"
           role="alert"
         >
-          {error}
+          <LocalizedText text={error} />
         </p>
       )}
     </div>

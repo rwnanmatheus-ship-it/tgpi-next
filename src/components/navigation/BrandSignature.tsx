@@ -1,13 +1,16 @@
+"use client";
+import { useLocale } from "@/components/localization/LocaleProvider";
 import Link from "next/link";
 import BrandCrest from "@/components/BrandCrest";
 
 /** The approved crest and one stable, responsive institutional signature. */
 export default function BrandSignature({ compact = false }: { compact?: boolean }) {
+  const { t } = useLocale();
   return (
     <Link
       href="/"
       className={`tgpi-brand-signature ${compact ? "tgpi-brand-signature-compact" : ""}`}
-      aria-label="TGPI — The Global Polymath Institute home"
+      aria-label={t("TGPI — The Global Polymath Institute home")}
     >
       <span className="tgpi-brand-symbol">
         <BrandCrest width={44} height={54} sizes="44px" priority alt="" />

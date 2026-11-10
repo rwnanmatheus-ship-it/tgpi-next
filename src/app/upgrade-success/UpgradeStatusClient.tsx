@@ -122,7 +122,7 @@ export default function UpgradeStatusClient({ sessionId }: { sessionId: string }
           ) : null}
           <div className="mt-7 flex flex-wrap justify-center gap-3">
             <Link href={confirmed ? "/premium" : "/profile"} className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#0B1F3A] px-6 text-sm font-extrabold text-white">
-              {confirmed ? "Open Premium workspace" : "Go to workspace"}
+              {confirmed ? <LocalizedText text={"Open Premium workspace"} /> : "Go to workspace"}
             </Link>
             <Link href="/pricing" className="inline-flex min-h-12 items-center justify-center rounded-xl border border-[#D8D2C4] bg-white px-6 text-sm font-extrabold"><LocalizedText text={"Back to pricing"} /></Link>
           </div>
