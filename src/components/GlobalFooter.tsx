@@ -7,7 +7,7 @@ import BrandCrest from "@/components/BrandCrest";
 const footerGroups = [
   { title: "Explore & decide", links: [
     ["Countries", "/countries"], ["Compare countries", "/compare"],
-    ["Country Fit", "/country-fit"], ["Sources & methodology", "/authority"],
+    ["Country Fit", "/country-fit"], ["Sources & methodology", "/intelligence"],
   ] },
   { title: "Learn & prepare", links: [
     ["Learning", "/courses"], ["Documents", "/passport"],

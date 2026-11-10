@@ -18,6 +18,12 @@ const choices: { id: AtlasScope; label: string }[] = [
   { id: 'career', label: 'Career & education' }, { id: 'budget', label: 'Budget range' },
 ];
 const starters = ['Help me compare two destinations.', 'How should I prepare to study abroad?', 'Help me build a language-learning routine.'];
+const evidenceStarters = [
+  "How do I read a reference year and collection date?",
+  "How can I compare two indicators responsibly?",
+  "What should I check with the original publisher?",
+];
+
 async function api<T>(url: string, init?: RequestInit): Promise<T> {
   const response = await fetch(url, { ...init, cache: 'no-store', headers: { 'Content-Type': 'application/json', ...init?.headers } });
   const body = await response.json();
@@ -25,7 +31,7 @@ async function api<T>(url: string, init?: RequestInit): Promise<T> {
   return body as T;
 }
 
-export default function AtlasChat({ userId, enabled = true, embedded = false, sponsored = false }: { userId: string; enabled?: boolean; embedded?: boolean; sponsored?: boolean }) {
+export default function AtlasChat({ userId, enabled = true, embedded = false, sponsored = false, evidenceGuide = false }: { userId: string; enabled?: boolean; embedded?: boolean; sponsored?: boolean; evidenceGuide?: boolean }) {
   const { t, locale } = useLocale();
   const [id, setId] = useState('');
   const [messages, setMessages] = useState<AtlasMessage[]>([]);
@@ -225,7 +231,8 @@ export default function AtlasChat({ userId, enabled = true, embedded = false, sp
           <span className={styles.eyebrow}>{t("INTELLIGENCE FOR YOUR GLOBAL LIFE")}</span>
           <h2><LocalizedText text="A world of possibilities." /><br /><em><LocalizedText text="A clearer next step." /></em></h2>
           <p>{t("Ask about a destination, explore an idea, or work through a decision. We can start wherever you are.")}</p>
-          <div className={styles.starters}>{starters.map(prompt => <button key={prompt} onClick={() => { updateDraft(t(prompt)); composer.current?.focus(); }}>{t(prompt)}<span aria-hidden="true">↗</span></button>)}</div>
+          {evidenceGuide ? <Link href="/intelligence#methodology" className={styles.back}>{t("Sources & methodology")} <span aria-hidden="true">↗</span></Link> : null}
+          <div className={styles.starters}>{(evidenceGuide ? evidenceStarters : starters).map(prompt => <button key={prompt} onClick={() => { updateDraft(t(prompt)); composer.current?.focus(); }}>{t(prompt)}<span aria-hidden="true">↗</span></button>)}</div>
         </div> : <div className={styles.messageColumn}>{messages.map(message => <article key={message.id} className={message.role === 'user' ? styles.userMessage : styles.assistantMessage}>
           <div className={styles.messageLabel}>{message.role === 'assistant' && <Image src="/brand/atlas/avatar.webp" alt="" width={30} height={30} />}<strong>{message.role === 'user' ? t('You') : <LocalizedText text={"Atlas"} />}</strong></div>
           <div className={styles.prose}><ReactMarkdown remarkPlugins={[remarkGfm]} skipHtml urlTransform={safeAtlasLink} components={{ img: () => null, a: ({ href, children }) => href ? <Link href={href}>{children}</Link> : <span>{children}</span> }}>{message.content}</ReactMarkdown></div>
