@@ -661,6 +661,7 @@ export async function getUserLearningCredential(
 export async function getPublicLearningCredential(
   credentialId: string,
   ownerUid?: string,
+  expectedPublicOwner?: string,
 ): Promise<PublicTgpiLearningCredential | null> {
   if (!isLearningStorageConfigured() || credentialId.length > 100) return null;
   const document = await getFirestoreDocument<TgpiLearningCredential>(
@@ -669,7 +670,7 @@ export async function getPublicLearningCredential(
   if (document?.data.id !== credentialId) return null;
   const { ownerUid: recordedOwner, verificationHash, ...credential } = document.data;
   const { professionalEvidence } = credential;
-  if (ownerUid && recordedOwner !== ownerUid) return null;
+  if ((ownerUid && recordedOwner !== ownerUid) || (expectedPublicOwner && recordedOwner !== expectedPublicOwner)) return null;
   if (!ownerUid && professionalEvidence && professionalEvidence.sharing !== true) return null;
   const integrityVerified = verifyLearningCredentialIntegrity(document.data);
   // Sharing consent must itself be authentic before any public holder data leaves the server.

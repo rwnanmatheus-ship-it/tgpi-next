@@ -3,17 +3,63 @@ import test from "node:test";
 import {
   createGlobalKeyProof,
   getGlobalKeyFingerprint,
+  getGlobalKeyProofStatus,
   issueGlobalKey,
   normalizeGlobalKeyRecord,
   readGlobalKeyProof,
   rotateGlobalKey,
   verifyGlobalKeyChain,
 } from "../src/lib/global-key-crypto.ts";
+import { readVerificationReference } from "../src/lib/certificate-reference.ts";
 
 const secret = "tgpi-test-secret-material-with-more-than-24-characters";
 const keyId = "TGPI-A1B2-C3D4-E5F6";
 const userId = "user_test_private_subject";
 const issuedAt = "2026-09-08T10:00:00.000Z";
+
+test("verification accepts a copied official Global ID URL, a portable proof and an expiring link", () => {
+  const record = issueGlobalKey({ keyId, keySlot: "b", now: issuedAt, secret });
+  const proof = createGlobalKeyProof({ record, secret, userId });
+  const href = `/verify/global-key?proof=${proof}`;
+  const share = `TGS1.${"a".repeat(43)}`;
+  const shareHref = `/verify/global-key#share=${share}`;
+  for (const value of [proof, `https://www.theglobalpolymath.com${href}`]) {
+    assert.deepEqual(readVerificationReference(value), { kind: "proof", href });
+  }
+  for (const value of [share, `https://theglobalpolymath.com${shareHref}`]) {
+    assert.deepEqual(readVerificationReference(value), { kind: "share", href: shareHref });
+  }
+  for (const value of [
+    keyId,
+    `http://theglobalpolymath.com${href}`,
+    `https://lookalike.example${href}`,
+    `https://member@theglobalpolymath.com${href}`,
+    `https://theglobalpolymath.com${href}&proof=${proof}`,
+    `https://theglobalpolymath.com${href}#share=${share}`,
+  ]) assert.equal(readVerificationReference(value), null);
+});
+
+test("historical verification requires the exact signed revision and gives its original fingerprint", () => {
+  const record = issueGlobalKey({ keyId, keySlot: "b", now: issuedAt, secret });
+  const original = readGlobalKeyProof({ proof: createGlobalKeyProof({ record, secret, userId }), secret });
+  const rotated = rotateGlobalKey({ record, secret, now: "2026-09-08T10:02:00.000Z" });
+  assert.equal(getGlobalKeyProofStatus(record, original), "verified");
+  assert.equal(getGlobalKeyProofStatus(rotated, original), "historical");
+  assert.equal(getGlobalKeyFingerprint(rotated, original.revision), getGlobalKeyFingerprint(record));
+  assert.equal(getGlobalKeyProofStatus(rotated, { ...original, revision: 3 }), "invalid");
+  const fork = issueGlobalKey({ keyId, keySlot: "b", now: issuedAt, secret });
+  const forkProof = readGlobalKeyProof({ proof: createGlobalKeyProof({ record: fork, secret, userId }), secret });
+  assert.equal(getGlobalKeyProofStatus(rotated, forkProof), "invalid");
+});
+
+test("the transactional ledger supports histories beyond the original Clerk metadata limit", () => {
+  let record = issueGlobalKey({ keyId, keySlot: "b", now: issuedAt, secret });
+  for (let minute = 1; minute <= 14; minute += 1) {
+    record = rotateGlobalKey({ record, secret, now: new Date(Date.parse(issuedAt) + minute * 60_000).toISOString() });
+  }
+  assert.equal(record.revision, 15);
+  assert.ok(verifyGlobalKeyChain({ expectedKeyId: keyId, record, secret }));
+});
 
 test("issues a normalized, verifiable genesis block", () => {
   const record = issueGlobalKey({ keyId, keySlot: "b", now: issuedAt, secret });

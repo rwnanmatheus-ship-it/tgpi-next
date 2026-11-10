@@ -47,7 +47,7 @@ export const TGPI_CAPABILITY_AREAS: readonly CapabilityArea[] = [
     description: "Bind progress to a private identity and integrity chain.",
     href: "/global-key",
     id: "global-key",
-    label: "Global Key",
+    label: "TGPI Global ID",
     number: "04",
     phase: "Anchor",
   },

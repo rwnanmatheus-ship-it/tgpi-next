@@ -1,14 +1,18 @@
 import assert from "node:assert/strict";
-import { createHash } from "node:crypto";
+import { createHash, timingSafeEqual } from "node:crypto";
 import { readFileSync } from "node:fs";
 import test from "node:test";
+import ts from "typescript";
+import { getAddress, isAddress } from "viem";
 import {
   buildGlobalKeyAnchorBatch,
+  createBaseAnchorExplorerUrl,
   createGlobalKeyAnchorLeaf,
   decodeBaseAnchorPayload,
   encodeBaseAnchorPayload,
   hashGlobalKeyAnchorBatchId,
   normalizeGlobalKeyAnchorRecord,
+  TGPI_BASE_CHAIN_ID,
   verifyGlobalKeyMerkleProof,
 } from "../src/lib/global-key-anchor.ts";
 import {
@@ -252,6 +256,84 @@ test("production anchor runtime has authentication, environment and spend guards
   assert.match(anchorServerSource, /TGPI_BASE_ANCHOR_ENABLED/);
   assert.match(anchorServerSource, /ABSOLUTE_MAX_EXECUTION_COST_WEI/);
   assert.match(anchorServerSource, /value: BigInt\(0\)/);
+});
+
+function loadServerModule(source, dependencies, env) {
+  const { outputText } = ts.transpileModule(source, {
+    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
+  });
+  const exports = {};
+  new Function("require", "exports", "process", "console", outputText)(name => {
+    assert.ok(name in dependencies, `Unexpected dependency ${name}`);
+    return dependencies[name];
+  }, exports, { env }, { error() {} });
+  return exports;
+}
+
+test("an authorized production cron skips disabled anchoring without calling the signer", async () => {
+  const secret = "cron-fixture-secret-never-used-in-production";
+  let attempted = 0;
+  const dependencies = {
+    "node:crypto": { timingSafeEqual },
+    "@/lib/global-key-anchor.server": {
+      GlobalKeyAnchorError: class extends Error {},
+      anchorPendingGlobalKeys: async () => { attempted += 1; return { status: "no_changes" }; },
+    },
+  };
+  const { GET } = loadServerModule(cronRouteSource, dependencies, { CRON_SECRET: secret, VERCEL_ENV: "production" });
+  const url = "https://www.theglobalpolymath.com/api/cron/global-key-anchor";
+  assert.equal((await GET(new Request(url))).status, 401);
+  const response = await GET(new Request(url, { headers: { Authorization: `Bearer ${secret}` } }));
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get("Cache-Control"), "no-store");
+  assert.deepEqual(await response.json(), { status: "disabled", anchored: 0 });
+  assert.equal(attempted, 0);
+});
+
+test("the server verifies Base receipts against their actual transaction, block and chain", async () => {
+  const batch = buildGlobalKeyAnchorBatch({ batchId, candidates });
+  const member = batch.members[0];
+  const signerAddress = "0x1234567890abcdef1234567890abcdef12345678";
+  const hash = `0x${"ab".repeat(32)}`;
+  const blockHash = `0x${"cd".repeat(32)}`;
+  const anchorValue = {
+    anchoredAt, batchId, blockNumber: "35000123", chainId: TGPI_BASE_CHAIN_ID,
+    eventHash: member.eventHash, leaf: member.leaf, memberCount: batch.members.length,
+    merkleProof: member.merkleProof, network: "base-mainnet", revision: member.revision,
+    root: batch.root, schemaVersion: 1, signerAddress, status: "confirmed", transactionHash: hash,
+  };
+  const transaction = {
+    hash, blockHash, chainId: TGPI_BASE_CHAIN_ID, from: signerAddress, to: signerAddress,
+    input: encodeBaseAnchorPayload(anchorValue),
+  };
+  const receipt = { transactionHash: hash, blockHash, blockNumber: 35000123n, status: "success" };
+  const { verifyGlobalKeyBaseAnchor } = loadServerModule(anchorServerSource, {
+    "server-only": {},
+    "@clerk/nextjs/server": {},
+    "viem": {
+      getAddress, isAddress, http: () => ({}),
+      createPublicClient: () => ({ getTransaction: async () => transaction, getTransactionReceipt: async () => receipt }),
+    },
+    "viem/accounts": {},
+    "viem/chains": { base: { id: TGPI_BASE_CHAIN_ID } },
+    "@/lib/auth/guards": {},
+    "@/lib/firestore-admin-rest.server": {},
+    "@/lib/global-key-anchor": {
+      createBaseAnchorExplorerUrl, createGlobalKeyAnchorLeaf, decodeBaseAnchorPayload,
+      hashGlobalKeyAnchorBatchId, normalizeGlobalKeyAnchorRecord, TGPI_BASE_CHAIN_ID, verifyGlobalKeyMerkleProof,
+    },
+    "@/lib/global-key-crypto": {},
+    "@/lib/global-key-ledger.server": {},
+    "@/lib/global-key-secrets.server": {},
+    "@/lib/global-key": {},
+  }, { TGPI_BASE_ANCHOR_TRUSTED_SIGNERS: signerAddress });
+  const check = () => verifyGlobalKeyBaseAnchor({ anchorValue, eventHash: member.eventHash, keyId: member.keyId, revision: member.revision });
+  assert.equal((await check()).status, "confirmed");
+  transaction.chainId = 1;
+  assert.equal((await check()).status, "invalid");
+  transaction.chainId = TGPI_BASE_CHAIN_ID;
+  receipt.blockHash = `0x${"ef".repeat(32)}`;
+  assert.equal((await check()).status, "invalid");
 });
 
 test("Vercel schedules one daily production anchor batch", () => {
