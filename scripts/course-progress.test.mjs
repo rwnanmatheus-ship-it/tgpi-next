@@ -4,6 +4,7 @@ import test from "node:test";
 import ts from "typescript";
 import { createEmptyActivationProgress, normalizeActivationProgress } from "../src/lib/activation-progress.ts";
 import * as activation from "../src/lib/activation-progress.ts";
+import * as documentReview from "../src/lib/document-review.ts";
 
 // Exercise the real server reducer and parser, replacing only infrastructure/data imports.
 const fixture = { id: "global-english-2026", version: "2.0.0", title: "Global English", modules: [{ lessons: [{ id: "arrival", checkpoint: { correctOptionId: "a" } }, { id: "housing", checkpoint: { correctOptionId: "b" } }] }] };
@@ -11,6 +12,7 @@ const exports = {};
 const compiled = ts.transpileModule(readFileSync(new URL("../src/lib/activation-store.server.ts", import.meta.url), "utf8"), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
 new Function("require", "exports", compiled)((id) => {
   if (id === "server-only") return {};
+  if (id === "@/lib/document-review") return documentReview;
   if (id === "@/lib/activation-progress") return activation;
   if (id === "@/data/courses") return { courses: [fixture] };
   if (id === "@/lib/countries") return { getCountry: () => undefined };

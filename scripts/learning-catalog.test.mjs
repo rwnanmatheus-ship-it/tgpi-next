@@ -71,6 +71,7 @@ test('all fourteen courses retain completion after compact storage and normaliza
   new Function('require', 'exports', source)(id => {
     if (id === 'server-only' || id === '@clerk/nextjs/server') return {};
     if (id === '@/lib/activation-progress') return activation;
+    if (id === '@/lib/document-review') return load('lib/document-review');
     if (id === '@/data/courses') return { courses };
     if (id === '@/lib/countries') return { getCountry: () => undefined };
     if (id === '@/lib/tgpi-comparison') return { isComparisonGoal: () => false };

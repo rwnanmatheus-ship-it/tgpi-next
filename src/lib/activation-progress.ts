@@ -33,6 +33,7 @@ export type SavedComparison = {
 
 export type DocumentReviewProgress = {
   completedItemIds: string[];
+  legacyCompletedItemIds?: string[];
   totalItems: number;
   updatedAt: string;
 };
@@ -204,10 +205,12 @@ function normalizeDocumentReviews(value: unknown) {
       .filter(([, item]) => isRecord(item))
       .map(([countrySlug, item]) => {
         const review = item as Record<string, unknown>;
+        const legacyCompletedItemIds = safeStringArray(review.legacyCompletedItemIds, 12);
         return [
           countrySlug.slice(0, 80),
           {
             completedItemIds: safeStringArray(review.completedItemIds, 12),
+            ...(legacyCompletedItemIds.length ? { legacyCompletedItemIds } : {}),
             totalItems: Math.min(
               Math.max(Number(review.totalItems) || 0, 0),
               12,

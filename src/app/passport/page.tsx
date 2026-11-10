@@ -1,64 +1,55 @@
-import { localizeMetadata } from "@/lib/localization/metadata.server";
-import "./documents.css";
-import { isLearningStorageConfigured } from "@/lib/firestore-admin-rest.server";
-import { listUserLearningCredentials } from "@/lib/learning-records.server";
 import type { Metadata } from "next";
 import { auth, currentUser } from "@clerk/nextjs/server";
-import DocumentsGuestExperience from "@/components/documents/DocumentsGuestExperience";
-import DocumentsMemberExperience from "@/components/documents/DocumentsMemberExperience";
-import {
-  normalizeActivationProgress,
-  TGPI_ACTIVATION_METADATA_KEY,
-} from "@/lib/activation-progress";
+import DocumentsExperience from "@/components/documents/DocumentsExperience";
+import identityData from "@/data/intelligence/identities.json";
+import { normalizeActivationProgress, TGPI_ACTIVATION_METADATA_KEY } from "@/lib/activation-progress";
 import { formatTgpiGlobalId } from "@/lib/auth/guards";
 import { getAllCountries } from "@/lib/countries";
-import { buildDocumentsMemberModel } from "@/lib/documents-os";
+import { buildDocumentsMemberModel, resolveDocumentGoal } from "@/lib/documents-os";
+import { isLearningStorageConfigured } from "@/lib/firestore-admin-rest.server";
+import { listUserLearningCredentials } from "@/lib/learning-records.server";
+import { localizeMetadata } from "@/lib/localization/metadata.server";
 import { normalizeOnboardingData } from "@/lib/onboarding";
+import "./documents.css";
 
 const sourceMetadata: Metadata = {
   alternates: { canonical: "/passport" },
-  title: "Documents OS | TGPI Global Readiness",
-  description:
-    "Build a country-aware document readiness strategy connected to your TGPI identity, global goals, learning and verified achievements.",
+  title: "TGPI Global Documents | International Preparation",
+  description: "Prepare documents for study, work, travel and relocation with destination checklists, research briefs and a date calculator.",
   robots: { index: true, follow: true },
 };
 
-export default async function PassportPage() {
-  const countries = getAllCountries();
-  const session = await auth();
+const directory = identityData.countries.map(({ slug, name, iso2, iso3, region }) => ({ slug, name, iso2, iso3, region }));
 
-  if (!session.userId) {
-    return <DocumentsGuestExperience countryCount={countries.length} />;
-  }
+export default async function PassportPage({ searchParams }: PageProps<"/passport">) {
+  const [session, params] = await Promise.all([auth(), searchParams]);
+  const goal = resolveDocumentGoal(params.goal);
+  const initialCountry = directory.find(country => country.slug === params.country)?.slug;
 
-  const user = await currentUser();
-  const onboarding = normalizeOnboardingData(
-    user?.unsafeMetadata.tgpiOnboarding,
-  );
-  const activation = normalizeActivationProgress(
-    user?.privateMetadata[TGPI_ACTIVATION_METADATA_KEY],
-  );
-  const emailVerified =
-    user?.primaryEmailAddress?.verification?.status === "verified";
-  const credentials = isLearningStorageConfigured() ? await listUserLearningCredentials(session.userId).then(
-    (records) => records.filter((record) => record.status === "active").length,
-    () => null,
-  ) : null;
+  if (!session.userId) return <DocumentsExperience countries={directory} initialGoal={goal ?? "travel"} initialCountry={initialCountry} />;
+
+  const [user, credentials] = await Promise.all([
+    currentUser(),
+    isLearningStorageConfigured()
+      ? listUserLearningCredentials(session.userId).then(records => records.filter(record => record.status === "active").length, () => null)
+      : null,
+  ]);
   const model = buildDocumentsMemberModel(
-    onboarding,
-    activation,
-    countries,
-    emailVerified,
+    normalizeOnboardingData(user?.unsafeMetadata.tgpiOnboarding),
+    normalizeActivationProgress(user?.privateMetadata[TGPI_ACTIVATION_METADATA_KEY]),
+    getAllCountries(),
+    user?.primaryEmailAddress?.verification?.status === "verified",
     credentials,
   );
 
-  return (
-    <DocumentsMemberExperience
-      firstName={user?.firstName || user?.fullName || "Global explorer"}
-      globalId={formatTgpiGlobalId(session.userId)}
-      model={model}
-    />
-  );
+  return <DocumentsExperience
+    countries={directory}
+    initialGoal={goal ?? model.goal}
+    initialCountry={initialCountry}
+    member={{ globalId: formatTgpiGlobalId(session.userId), model }}
+  />;
 }
 
-export async function generateMetadata() { return localizeMetadata(sourceMetadata); }
+export async function generateMetadata() {
+  return localizeMetadata(sourceMetadata);
+}

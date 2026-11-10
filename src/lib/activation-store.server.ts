@@ -14,11 +14,11 @@ import {
   type TgpiActivationProgress,
 } from "@/lib/activation-progress";
 import { getCountry } from "@/lib/countries";
+import { documentReviewItems, summarizeDocumentReview, updateDocumentReview } from "@/lib/document-review";
 import { courses } from "@/data/courses";
 import { isComparisonGoal } from "@/lib/tgpi-comparison";
 
 const SAFE_ID = /^[a-z0-9][a-z0-9-]{0,79}$/;
-const SAFE_ITEM_ID = /^[a-z0-9][a-z0-9-]{0,79}$/;
 const MAX_ACTIVATION_METADATA_BYTES = 6_000;
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -94,13 +94,13 @@ export function parseActivationMutation(value: unknown): ActivationMutation {
     const country = requireCountrySlug(value.countrySlug);
     if (
       typeof value.itemId !== "string" ||
-      !SAFE_ITEM_ID.test(value.itemId) ||
+      !documentReviewItems.some(item => item.id === value.itemId) ||
       typeof value.complete !== "boolean"
     ) {
       throw new ActivationInputError("Document checklist update is not valid.");
     }
     const totalItems = Number(value.totalItems);
-    if (!Number.isInteger(totalItems) || totalItems < 1 || totalItems > 12) {
+    if (totalItems !== documentReviewItems.length) {
       throw new ActivationInputError("Document checklist size is not valid.");
     }
     return {
@@ -269,24 +269,14 @@ export function applyActivationMutation(
 
   if (mutation.type === "update_documents") {
     const previous = next.documentReviews[mutation.countrySlug];
-    const completedItemIds = mutation.complete
-      ? Array.from(
-          new Set([...(previous?.completedItemIds || []), mutation.itemId]),
-        ).slice(0, mutation.totalItems)
-      : (previous?.completedItemIds || []).filter(
-          (itemId) => itemId !== mutation.itemId,
-        );
-    next.documentReviews[mutation.countrySlug] = {
-      completedItemIds,
-      totalItems: mutation.totalItems,
-      updatedAt: now,
-    };
+    const review = updateDocumentReview(previous, mutation.itemId, mutation.complete, now);
+    next.documentReviews[mutation.countrySlug] = review;
     next.documentReviews = trimRecord(
       next.documentReviews,
       activationLimits.countryRecords,
     );
     const country = getCountry(mutation.countrySlug);
-    const complete = completedItemIds.length >= mutation.totalItems;
+    const complete = summarizeDocumentReview(review).status === 'completed';
     next.activities = addActivationActivity(
       next,
       {
@@ -393,6 +383,12 @@ export async function updateUserActivationProgress(
   if (mutation.type === "visit_lesson" &&
     current.courseProgress[mutation.courseId]?.lastLessonId === mutation.lessonId &&
     current.courseProgress[mutation.courseId]?.courseVersion === requireCourse(mutation.courseId).version) return current;
+  if (mutation.type === "update_documents") {
+    const review = current.documentReviews[mutation.countrySlug];
+    if (review?.totalItems === documentReviewItems.length &&
+      review.completedItemIds.every(id => documentReviewItems.some(item => item.id === id)) &&
+      review.completedItemIds.includes(mutation.itemId) === mutation.complete) return current;
+  }
   const progress = applyActivationMutation(current, mutation);
   const receipt = await prepareWorkspaceHistory(userId, current, progress);
 

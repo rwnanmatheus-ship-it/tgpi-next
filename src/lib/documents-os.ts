@@ -2,7 +2,7 @@ import type {
   ActivationStatus,
   TgpiActivationProgress,
 } from "@/lib/activation-progress";
-import { getDocumentReviewStatus } from "@/lib/activation-progress";
+import { summarizeDocumentReview } from "@/lib/document-review";
 import type { Country } from "@/lib/countries";
 import type { TgpiOnboardingData } from "@/types/onboarding";
 
@@ -14,7 +14,6 @@ export type DocumentGoalPath = {
   label: string;
   title: string;
   description: string;
-  outcome: string;
   records: string[];
 };
 
@@ -35,6 +34,7 @@ export type DocumentReadinessLayer = {
   href: string;
   label: string;
   status: ActivationStatus;
+  count?: number;
 };
 
 export type DocumentsMemberModel = {
@@ -49,6 +49,7 @@ export type DocumentsMemberModel = {
   goalLabel: string;
   layers: DocumentReadinessLayer[];
   nextAction: {
+    country?: string;
     description: string;
     href: string;
     label: string;
@@ -63,40 +64,36 @@ export const documentGoalPaths: DocumentGoalPath[] = [
     eyebrow: "Mobility file",
     goal: "travel",
     label: "Travel",
-    title: "Arrive prepared, not surprised.",
+    title: "Prepare for an international trip",
     description:
-      "Organize entry requirements, passport validity, insurance and evidence before a trip becomes urgent.",
-    outcome: "A destination-specific preparation map",
+      "Check the rules for your passport, dates and planned activities before you make travel commitments.",
     records: ["Identity", "Entry", "Health", "Travel evidence"],
   },
   {
     eyebrow: "Education file",
     goal: "study",
     label: "Study",
-    title: "Build an application-ready academic file.",
+    title: "Prepare an academic application",
     description:
-      "Connect identity, academic history, translations and funding evidence to your study objective.",
-    outcome: "A structured academic readiness path",
+      "Ask your institution which academic records, translations and proof of language it accepts, and when they are due.",
     records: ["Identity", "Academic", "Language", "Funding"],
   },
   {
     eyebrow: "Career file",
     goal: "work",
     label: "Work",
-    title: "Turn experience into portable evidence.",
+    title: "Prepare for international work",
     description:
-      "Map identity, qualifications, employment records and professional requirements for a global move.",
-    outcome: "A country-aware professional evidence map",
+      "Confirm which documents your employer, immigration authority or professional regulator needs for your occupation.",
     records: ["Identity", "Career", "Qualifications", "Eligibility"],
   },
   {
     eyebrow: "Relocation file",
     goal: "live",
     label: "Live abroad",
-    title: "Prepare the life behind the move.",
+    title: "Prepare for a move abroad",
     description:
-      "Coordinate civil, financial, housing and residency records around a destination and timeline.",
-    outcome: "A complete relocation readiness view",
+      "Ask the receiving authorities which civil, financial and residency records they accept for your household.",
     records: ["Identity", "Civil", "Financial", "Residency"],
   },
 ];
@@ -108,14 +105,29 @@ const goalLabels: Record<DocumentGoal, string> = {
   work: "Work internationally",
 };
 
+export function resolveDocumentGoal(value: unknown): DocumentGoal | undefined {
+  return value === 'live' || value === 'study' || value === 'travel' || value === 'work' ? value : undefined;
+}
+
+export function documentsHref({ country, goal }: { country?: string; goal?: DocumentGoal } = {}) {
+  const query = new URLSearchParams();
+  if (country) query.set('country', country);
+  if (goal) query.set('goal', goal);
+  return `/passport${query.size ? `?${query}` : ''}`;
+}
+
+export function documentWindowDays(expiration: string, submission: string): number | null {
+  const parse = (value: string) => {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return NaN;
+    const date = new Date(`${value}T00:00:00.000Z`);
+    return Number.isFinite(date.getTime()) && date.toISOString().slice(0, 10) === value ? date.getTime() : NaN;
+  };
+  const days = (parse(expiration) - parse(submission)) / 86_400_000;
+  return Number.isFinite(days) ? days : null;
+}
+
 function normalizeGoal(goal: TgpiOnboardingData["primaryGoal"]): DocumentGoal {
-  if (goal === "live" || goal === "study" || goal === "travel" || goal === "work") {
-    return goal;
-  }
-
-  if (goal === "learn") return "study";
-
-  return "travel";
+  return resolveDocumentGoal(goal) ?? (goal === 'learn' ? 'study' : 'travel');
 }
 
 function buildCountryProgress(
@@ -137,23 +149,14 @@ function buildCountryProgress(
     if (!country) return [];
 
     const review = activation.documentReviews[slug];
-    const completedItems = review?.completedItemIds.length || 0;
-    const totalItems = review?.totalItems || 0;
-
     return [
       {
-        completedItems: Math.min(completedItems, totalItems),
+        ...summarizeDocumentReview(review),
         updatedAt: review?.updatedAt,
         emoji: country.emoji,
         href: `/countries/${country.slug}#documents-to-verify`,
         name: country.name,
-        percentage:
-          totalItems > 0
-            ? Math.min(100, Math.round((completedItems / totalItems) * 100))
-            : 0,
         slug: country.slug,
-        status: totalItems > 0 ? getDocumentReviewStatus(review) : "not_started",
-        totalItems,
       },
     ];
   });
@@ -199,7 +202,7 @@ export function buildDocumentsMemberModel(
     0,
   );
 
-  let nextAction = {
+  let nextAction: DocumentsMemberModel['nextAction'] = {
     description:
       "Verify your primary email before connecting personal readiness records to your account.",
     href: "/profile/security",
@@ -230,14 +233,15 @@ export function buildDocumentsMemberModel(
       countryProgress[0];
 
     nextAction = {
-      description: `Review the country-specific checklist for ${priorityCountry.name} and record what is already prepared.`,
-      href: priorityCountry.href,
+      country: priorityCountry.name,
+      description: 'Review the country checklist for {country} and record what you have confirmed.',
+      href: `${documentsHref({ country: priorityCountry.slug, goal })}#preparation-paths`,
       label:
         priorityCountry.status === "completed" ? "Review again" : "Continue review",
       title:
         priorityCountry.status === "completed"
           ? "Keep your research current"
-          : `Advance your ${priorityCountry.name} file`,
+          : 'Advance your {country} file',
     };
   }
 
@@ -261,8 +265,9 @@ export function buildDocumentsMemberModel(
     {
       description:
         countryProgress.length > 0
-          ? `${countryProgress.length} destination${countryProgress.length === 1 ? "" : "s"} connected to your workspace.`
+          ? 'Your workspace has {count} connected destinations.'
           : "No destination has been connected yet.",
+      count: countryProgress.length,
       href: "/countries",
       label: "Country intelligence",
       status: countryProgress.length > 0 ? "completed" : "not_started",
@@ -270,8 +275,9 @@ export function buildDocumentsMemberModel(
     {
       description:
         startedCountryReviews > 0
-          ? `${completedItems} checklist item${completedItems === 1 ? "" : "s"} reviewed across your targets.`
+          ? 'You have reviewed {count} checklist items across your destinations.'
           : "Start a country checklist to map preparation gaps.",
+      count: completedItems,
       href: countryProgress.find((country) => country.status !== "completed")?.href || countryProgress[0]?.href || "/countries",
       label: "Document review",
       status:
@@ -295,7 +301,8 @@ export function buildDocumentsMemberModel(
       href: "/certificates",
       label: "Verified credentials",
       status: credentialCount === null ? "needs_attention" : credentialCount > 0 ? "completed" : "not_started",
-      description: credentialCount === null ? "Certificate records could not be confirmed. Open certificates to retry." : `${credentialCount} active, issued certificate${credentialCount === 1 ? "" : "s"}. These are learning achievements, separate from legal documents.`,
+      description: credentialCount === null ? "Certificate records could not be confirmed. Open certificates to retry." : 'Active certificates in your TGPI learning record ({count}).',
+      count: credentialCount ?? undefined,
     },
   ];
 

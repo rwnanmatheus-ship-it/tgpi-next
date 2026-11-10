@@ -54,7 +54,7 @@ async function loadActivationProgress() {
 }
 
 export async function mutateActivationProgress(mutation: ActivationMutation) {
-  const response = await fetch("/api/progress", {
+  const write = () => fetch("/api/progress", {
     body: JSON.stringify(mutation),
     cache: "no-store",
     credentials: "same-origin",
@@ -65,6 +65,7 @@ export async function mutateActivationProgress(mutation: ActivationMutation) {
     method: "PATCH",
   });
 
+  const response = navigator.locks ? await navigator.locks.request("tgpi-progress-write", write) : await write();
   const progress = await readResponse(response);
   announceProgressSaved();
   return progress;

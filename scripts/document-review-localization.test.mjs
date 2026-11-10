@@ -1,16 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import React from 'react';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { academyLocalizationFixture } from './helpers/academy-localization.mjs';
 
 const h = academyLocalizationFixture();
-const source = readFileSync('src/app/countries/[slug]/page.tsx', 'utf8');
-const items = Array.from(source.matchAll(/\{ title: "([^"]+)", text: "([^"]+)" \}/g), ([, title, text]) => ({ title, text }));
-const { createProgressItemId } = h.load(resolve('src/lib/activation-progress.ts'));
-const itemIds = items.map((item, index) => createProgressItemId(item.title, index));
+const { documentReviewItems: items } = h.load(resolve('src/lib/document-review.ts'));
+const itemIds = items.map(item => item.id);
 const escape = value => String(value).replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll("'", '&#x27;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
 
 function render(locale, state) {
@@ -25,7 +22,7 @@ function render(locale, state) {
   });
   const Checklist = fixture.load(resolve('src/components/activation/DocumentReviewChecklist.tsx')).default;
   return renderToStaticMarkup(React.createElement(Checklist, {
-    countryName: 'United States', countrySlug: 'united-states', items,
+    countryName: 'United States', countrySlug: 'united-states',
   }));
 }
 

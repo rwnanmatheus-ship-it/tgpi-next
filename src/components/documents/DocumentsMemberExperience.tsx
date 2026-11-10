@@ -1,75 +1,168 @@
 "use client";
 
-import { LocalizedElement } from "@/components/localization/LocalizedElement";
-import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
-
-import CinematicImage from "@/components/ui/CinematicImage";
+import { useState, type ReactNode } from "react";
 import Link from "next/link";
-import { useState } from "react";
+import { useLocale } from "@/components/localization/LocaleProvider";
+import NavigationIcon from "@/components/navigation/NavigationIcon";
+import CountryFlag from "@/components/ui/CountryFlag";
+import { countryFlagCode } from "@/lib/country-flag";
+import { localizedCountryName, localizedCountryScore, normalizeCountrySearch, type SearchableCountry } from "@/lib/country-search";
 import type { DocumentsMemberModel } from "@/lib/documents-os";
-import CapabilitySystemRail from "@/components/capability/CapabilitySystemRail";
-import WorkspaceSyncButton from "@/components/profile/WorkspaceSyncButton";
-import { LocalizedText } from "@/components/localization/LocaleProvider";
-
+import type { NavigationIconName } from "@/lib/navigation-system";
 
 const statusLabels = { completed: "Reviewed", in_progress: "In progress", needs_attention: "Check required", not_started: "Not started" } as const;
+const priority = { in_progress: 0, needs_attention: 1, not_started: 2, completed: 3 } as const;
+const layerIcons = ["shield", "target", "globe", "file", "book", "certificate"] as const;
 type Filter = "all" | "pending" | "completed";
 
-export default function DocumentsMemberExperience({ firstName, globalId, model }: {
-  firstName: string; globalId: string; model: DocumentsMemberModel;
-}) {
-  const { t: localizeLabel } = useInterfaceLocale();
+export function DocumentsMemberOverview({ model }: { model: DocumentsMemberModel }) {
+  const { t, locale } = useLocale();
+  const format = new Intl.NumberFormat(locale);
+  const metrics: { value: number | null; label: string; icon: NavigationIconName }[] = [
+    { value: model.countries.length, label: "Connected destinations", icon: "globe" },
+    { value: model.totalItems - model.completedItems, label: "Research items remaining", icon: "file" },
+    { value: model.completedCourses, label: "Courses completed", icon: "book" },
+    { value: model.credentialCount, label: "Active certificates", icon: "certificate" },
+  ];
+  const values = model.nextAction.country ? { country: t(model.nextAction.country) } : undefined;
 
+  return <>
+    <dl className="documents-stats" aria-label={t("Your preparation overview")}>
+      {metrics.map(({ value, label, icon }) => <div className="documents-stat" key={label}>
+        <dt>{t(label)}</dt>
+        <dd>{value === null ? "—" : format.format(value)}</dd>
+        <span className="documents-icon"><NavigationIcon name={icon} width={20} height={20} /></span>
+      </div>)}
+    </dl>
+    <section className="documents-next" aria-labelledby="documents-next-title">
+      <div className="documents-next-copy">
+        <span className="documents-icon"><NavigationIcon name="target" /></span>
+        <div>
+          <p className="documents-eyebrow">{t("Recommended next step")}</p>
+          <h2 id="documents-next-title">{t(model.nextAction.title, values)}</h2>
+          <p>{t(model.nextAction.description, values)}</p>
+        </div>
+      </div>
+      <Link className="documents-button" href={model.nextAction.href} prefetch={false}>
+        {t(model.nextAction.label)} <NavigationIcon name="arrow" width={18} height={18} />
+      </Link>
+    </section>
+  </>;
+}
+
+export function DocumentsDestinations({ model, directory }: { model: DocumentsMemberModel; directory: SearchableCountry[] }) {
+  const { t, locale } = useLocale();
   const [filter, setFilter] = useState<Filter>("all");
   const [search, setSearch] = useState("");
-  const countries = model.countries.filter(country =>
-    country.name.toLowerCase().includes(search.trim().toLowerCase()) &&
-    (filter === "all" || (filter === "completed" ? country.status === "completed" : country.status !== "completed")),
-  );
-  const remaining = Math.max(0, model.totalItems - model.completedItems);
+  const [sort, setSort] = useState<"priority" | "recent">("priority");
+  const dateFormat = new Intl.DateTimeFormat(locale, { dateStyle: "medium", timeZone: "UTC" });
+  const countries = model.countries
+    .map(country => {
+      const identity = directory.find(item => item.slug === country.slug);
+      const name = identity ? localizedCountryName(identity, locale) : t(country.name);
+      const flag = identity?.iso2 ?? countryFlagCode(country.emoji);
+      const score = identity ? localizedCountryScore(identity, search, locale)
+        : Number(normalizeCountrySearch(name).includes(normalizeCountrySearch(search)));
+      return { ...country, name, flag, score };
+    })
+    .filter(country => country.score > 0 &&
+      (filter === "all" || (filter === "completed" ? country.status === "completed" : country.status !== "completed")))
+    .sort((a, b) => b.score - a.score
+      || (sort === "priority" ? priority[a.status] - priority[b.status] : (b.updatedAt ?? "").localeCompare(a.updatedAt ?? ""))
+      || a.name.localeCompare(b.name, locale));
+
   return (
-    <main className="documents-os">
-      <div className="tgpi-capability-frame documents-shell">
-        <LocalizedElement as="nav" className="documents-breadcrumb" aria-label="Breadcrumb"><Link href="/profile"><LocalizedText text="Workspace" /></Link><span aria-hidden="true">/</span><span><LocalizedText text="Documents" /></span></LocalizedElement>
-        <header className="documents-hero">
-          <CinematicImage asset="global-documents-precision" alt="" priority sizes="(max-width: 900px) 100vw, 85rem" className="documents-hero-image" />
-          <div className="documents-hero-copy">
-            <p className="documents-eyebrow"><LocalizedText text={"TGPI · Preparation intelligence"} /></p>
-            <h1>{firstName}<LocalizedText text={", make your next move a prepared one."} /></h1>
-            <p className="documents-intro"><LocalizedText text={"Your destination files, planning context and learning evidence. Connected to one identity, with a clear next step."} /></p>
-            <div className="documents-actions"><Link className="documents-button" href={model.nextAction.href}><LocalizedText text={model.nextAction.label} /> <span aria-hidden="true">↗</span></Link><a className="documents-button secondary" href="#destination-files"><LocalizedText text={"View my files ↓"} /></a></div>
-            <div className="documents-identity"><Link href="/global-key">{globalId}</Link><span><LocalizedText text={model.goalLabel} /></span></div>
-          </div>
-          <aside className="documents-score" aria-label={localizeLabel("Preparation score")}>
-            <p className="documents-eyebrow"><LocalizedText text={"Preparation signals"} /></p><strong>{model.readinessScore}<small>/100</small></strong>
-            <LocalizedElement as="progress" max={100} value={model.readinessScore} aria-label="Preparation signals achieved" />
-            <p><LocalizedText text={"A planning indicator based on your profile and checklist activity. Review the breakdown below."} /></p>
-            <WorkspaceSyncButton />
-          </aside>
-        </header>
-        <LocalizedElement as="nav" className="documents-jump" aria-label="Documents sections"><a href="#destination-files"><LocalizedText text="Destination files" /></a><a href="#readiness-architecture"><LocalizedText text="Readiness architecture" /></a><a href="#preparation-signals"><LocalizedText text={"Score breakdown"} /></a><Link href="/profile/settings"><LocalizedText text={"Planning settings ↗"} /></Link></LocalizedElement>
-        <LocalizedElement as="section" className="documents-stats" aria-label="Your preparation overview">
-          {[[model.countries.length, "Connected destinations"], [remaining, "Research items remaining"], [model.completedCourses, "Courses completed"], [model.credentialCount ?? "—", "Active certificates"]].map(([value, label]) => <div key={label}><strong>{value}</strong><span><LocalizedText text={label} /></span></div>)}
-        </LocalizedElement>
-        <section className="documents-next" aria-labelledby="next-step-title"><div><p className="documents-eyebrow"><LocalizedText text={"Recommended next step"} /></p><h2 id="next-step-title"><LocalizedText text={model.nextAction.title} /></h2><p><LocalizedText text={model.nextAction.description} /></p></div><Link className="documents-button" href={model.nextAction.href}><LocalizedText text={model.nextAction.label} /> →</Link></section>
-        <section id="destination-files" className="documents-section">
-          <div className="documents-section-heading"><div><p className="documents-eyebrow"><LocalizedText text={"Your research portfolio"} /></p><h2><LocalizedText text="Destination files" /></h2><p><LocalizedText text={"See what you have reviewed and where preparation still needs attention."} /></p></div><Link className="documents-text-link" href="/countries"><LocalizedText text={"Add a destination ↗"} /></Link></div>
-          <div className="documents-toolbar"><LocalizedElement as="div" className="documents-filters" role="group" aria-label="Filter destination files">{([ ["all", "All files"], ["pending", "To review"], ["completed", "Reviewed"] ] as const).map(([value, label]) => <button type="button" aria-pressed={filter === value} key={value} onClick={() => setFilter(value)}><LocalizedText text={label} /></button>)}</LocalizedElement><label className="documents-search"><span className="sr-only"><LocalizedText text={"Search your destinations"} /></span><input type="search" value={search} onChange={event => setSearch(event.target.value)} placeholder={localizeLabel("Search destinations…")} /></label></div>
-          <p className="documents-result-count" role="status">{countries.length}{" "}<LocalizedText text="of" />{" "}{model.countries.length}{" "}<LocalizedText text={"destination files ·"} />{" "}{model.completedItems}/{model.totalItems}{" "}<LocalizedText text={"research items reviewed"} /></p>
-          <div className="documents-country-grid">{countries.map(country => <article className="documents-country" key={country.slug}>
-            <div className="documents-country-heading"><span aria-hidden="true" className="documents-flag">{country.emoji}</span><span className="documents-status" data-status={country.status}><LocalizedText text={statusLabels[country.status]} /></span></div>
-            <h3><LocalizedText text={country.name} /></h3><p>{country.totalItems ? <LocalizedText text={"{value0} of {value1} research items reviewed"} values={{value0: String(country.completedItems), value1: String(country.totalItems)}} /> : <LocalizedText text={"Open the checklist to establish your preparation baseline."} />}</p>
-            <div className="documents-progress-label"><span><LocalizedText text={"Checklist progress"} /></span><strong>{country.percentage}%</strong></div><LocalizedElement as="progress" value={country.percentage} max={100} aria-label={`${country.name} checklist progress`} />
-            <p className="documents-updated">{country.updatedAt ? <LocalizedText text={"Last checklist change: {value0}"} values={{value0: String(new Date(country.updatedAt).toISOString().slice(0, 10))}} /> : <LocalizedText text={"No checklist activity recorded"} />}</p>
-            <Link className="documents-country-link" href={country.href}>{country.status === "not_started" ? <LocalizedText text={"Start research"} /> : <LocalizedText text={"Open checklist"} />}<span aria-hidden="true">↗</span></Link>
-          </article>)}</div>
-          {countries.length === 0 && <div className="documents-empty"><h3>{model.countries.length ? <LocalizedText text={"No files match this view."} /> : <LocalizedText text={"Your first destination starts here."} />}</h3><p>{model.countries.length ? <LocalizedText text={"Try another name or show all files."} /> : <LocalizedText text={"Choose a destination to connect its document checklist to your plan."} />}</p>{model.countries.length ? <button className="documents-button" type="button" onClick={() => { setSearch(""); setFilter("all"); }}><LocalizedText text={"Show all files"} /></button> : <Link className="documents-button" href="/countries"><LocalizedText text={"Choose a destination →"} /></Link>}</div>}
-        </section>
-        <section id="readiness-architecture" className="documents-section"><div className="documents-section-heading"><div><p className="documents-eyebrow"><LocalizedText text="Readiness architecture" /></p><h2><LocalizedText text={"Six layers. Clear priorities."} /></h2><p><LocalizedText text={"Open any layer to strengthen the evidence behind your global plan."} /></p></div><span className="documents-completion">{model.layers.filter(layer => layer.status === "completed").length}<LocalizedText text={"/6 layers with progress achieved"} /></span></div><div className="documents-layer-grid">{model.layers.map((layer, index) => <Link className="documents-layer" key={layer.label} href={layer.href}><div className="documents-layer-top"><span className="documents-layer-number">0{index + 1}</span><span className="documents-status" data-status={layer.status}>{layer.status === "completed" ? <LocalizedText text={"Connected"} /> : statusLabels[layer.status]}</span></div><h3><LocalizedText text={layer.label} /><span aria-hidden="true">↗</span></h3><p><LocalizedText text={layer.description} /></p></Link>)}</div></section>
-        <section id="preparation-signals" className="documents-section documents-breakdown"><div><p className="documents-eyebrow"><LocalizedText text={"Transparent by design"} /></p><h2><LocalizedText text={"Understand your score."} /></h2><p><LocalizedText text={"Each confirmed signal adds its stated weight. Learning achievements are shown separately and never imply immigration eligibility."} /></p><p className="documents-sync-note"><LocalizedText text={"Saved changes refresh this workspace and other open TGPI tabs. Changes from another device reconcile while this page is visible, up to every 60 seconds."} /></p></div><ul>{model.signals.map(signal => <li key={signal.label}><span aria-hidden="true" className={signal.achieved ? "achieved" : ""}>{signal.achieved ? "✓" : "○"}</span><span><LocalizedText text={signal.label} /></span><strong>{signal.achieved ? signal.weight : 0}/{signal.weight}</strong></li>)}</ul></section>
-        <CapabilitySystemRail active="documents" metric={{ label: "Connected preparation", value: `${model.readinessScore}%`, detail: "Identity, country research, learning and credentials — each with its own evidence." }} />
-        <footer className="documents-privacy"><div><p className="documents-eyebrow"><LocalizedText text={"Private preparation workspace"} /></p><h2><LocalizedText text={"Track preparation. Protect your documents."} /></h2><p><LocalizedText text={"This workspace stores checklist activity, not passport scans or legal files. Checklist completion records your research; it does not verify a document or grant a visa. Confirm requirements with the relevant official authority."} /></p></div><Link className="documents-text-link" href="/profile/security"><LocalizedText text={"Manage account security ↗"} /></Link></footer>
+    <section id="destination-files" className="documents-section" aria-labelledby="documents-files-title">
+      <div className="documents-section-heading">
+        <div>
+          <p className="documents-eyebrow">{t("Your research portfolio")}</p>
+          <h2 id="documents-files-title">{t("Destination files")}</h2>
+          <p>{t("See what you have reviewed and where preparation still needs attention.")}</p>
+        </div>
+        <Link className="documents-text-link" href="/countries">{t("Add a destination ↗")}</Link>
       </div>
-    </main>
+      {model.countries.length > 0 && <>
+        <div className="documents-toolbar">
+          <div className="documents-filters" role="group" aria-label={t("Filter destination files")}>
+            {([["all", "All files"], ["pending", "To review"], ["completed", "Reviewed"]] as const).map(([value, label]) =>
+              <button type="button" aria-pressed={filter === value} key={value} onClick={() => setFilter(value)}>{t(label)}</button>)}
+          </div>
+          <label className="documents-search">
+            <span className="sr-only">{t("Search your destinations")}</span>
+            <input type="search" value={search} onChange={event => setSearch(event.target.value)} placeholder={t("Search destinations…")} />
+          </label>
+          <label className="documents-sort">
+            <span className="sr-only">{t("Sort destination files")}</span>
+            <select value={sort} onChange={event => setSort(event.target.value === "recent" ? "recent" : "priority")}>
+              <option value="priority">{t("Preparation priority")}</option>
+              <option value="recent">{t("Most recent activity")}</option>
+            </select>
+          </label>
+        </div>
+        <p className="documents-result-count" role="status">
+          {t("{count} of {total} destination files", { count: countries.length, total: model.countries.length })}
+        </p>
+      </>}
+
+      {countries.length ? <div className="documents-country-grid">
+        {countries.map(country => {
+          const date = country.updatedAt ? new Date(country.updatedAt) : null;
+          return <article className="documents-country" key={country.slug}>
+            <div className="documents-country-heading">
+              <CountryFlag iso2={country.flag} width={49} />
+              <span className="documents-status" data-status={country.status}>{t(statusLabels[country.status])}</span>
+            </div>
+            <h3>{country.name}</h3>
+            <p>{t("{value0} of {value1} research items reviewed", { value0: country.completedItems, value1: country.totalItems })}</p>
+            <div className="documents-progress-label"><span>{t("Checklist progress")}</span><strong>{country.percentage}%</strong></div>
+            <progress value={country.percentage} max={100} aria-label={t("Checklist progress for {country}", { country: country.name })} />
+            <p className="documents-updated">{date && Number.isFinite(date.getTime())
+              ? t("Last checklist change: {value0}", { value0: dateFormat.format(date) })
+              : t("No checklist activity recorded")}</p>
+            <Link className="documents-country-link" href={country.href} prefetch={false}>
+              {t(country.status === "not_started" ? "Start research" : "Open checklist")}<span aria-hidden="true">↗</span>
+            </Link>
+          </article>;
+        })}
+      </div> : <div className="documents-empty">
+        <span className="documents-icon"><NavigationIcon name="globe" /></span>
+        <h3>{t(model.countries.length ? "No files match this view." : "Your first destination starts here.")}</h3>
+        <p>{t(model.countries.length ? "Try another name or show all files." : "Choose a destination to connect its document checklist to your plan.")}</p>
+        {model.countries.length ? <button className="documents-button secondary" type="button" onClick={() => { setSearch(""); setFilter("all"); }}>{t("Show all files")}</button>
+          : <a className="documents-button secondary" href="#preparation-paths">{t("Open research studio")} <span aria-hidden="true">↑</span></a>}
+      </div>}
+    </section>
   );
+}
+
+export function DocumentsReadiness({ model, syncButton }: { model: DocumentsMemberModel; syncButton: ReactNode }) {
+  const { t } = useLocale();
+  return <>
+    <details id="readiness-architecture" className="documents-readiness">
+      <summary>{t("Readiness architecture")}</summary>
+      <div className="documents-layer-grid">
+        {model.layers.map((layer, index) => <Link className="documents-layer" key={layer.label} href={layer.href} prefetch={false}>
+          <div className="documents-layer-top">
+            <span className="documents-icon"><NavigationIcon name={layerIcons[index]} width={20} height={20} /></span>
+            <span className="documents-status" data-status={layer.status}>{t(layer.status === "completed" ? "Connected" : statusLabels[layer.status])}</span>
+          </div>
+          <h3>{t(layer.label)} <span aria-hidden="true">↗</span></h3>
+          <p>{t(layer.description, layer.count === undefined ? undefined : { count: layer.count })}</p>
+        </Link>)}
+      </div>
+    </details>
+    <section id="preparation-signals" className="documents-breakdown" aria-labelledby="documents-score-title">
+      <div>
+        <p className="documents-eyebrow">{t("Preparation signals")}</p>
+        <h3 id="documents-score-title">{t("Understand your score.")}</h3>
+        <div className="documents-score"><strong>{model.readinessScore}</strong><span>/ 100</span></div>
+        <p>{t("A planning indicator based on your profile and checklist activity. Review the breakdown below.")}</p>
+        <div className="documents-sync">{syncButton}</div>
+      </div>
+      <ul>{model.signals.map(signal => <li key={signal.label}>
+        <span className="documents-signal-dot" data-achieved={signal.achieved} aria-hidden="true" />
+        <span>{t(signal.label)}</span><strong>{signal.achieved ? signal.weight : 0}/{signal.weight}</strong>
+      </li>)}</ul>
+    </section>
+  </>;
 }

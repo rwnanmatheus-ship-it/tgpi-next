@@ -23,11 +23,7 @@ test("every capability experience renders the shared system rail", () => {
   const targets = [
     ["src/app/courses/page.tsx", 'active="learning"'],
     [
-      "src/components/documents/DocumentsGuestExperience.tsx",
-      'active="documents"',
-    ],
-    [
-      "src/components/documents/DocumentsMemberExperience.tsx",
+      "src/components/documents/DocumentsExperience.tsx",
       'active="documents"',
     ],
     ["src/components/profile/GlobalKeyCenter.tsx", 'active="global-key"'],
@@ -42,7 +38,7 @@ test("every capability experience renders the shared system rail", () => {
 
 test("documents compatibility route preserves the established Passport URL", () => {
   const route = source("src/app/documents/page.tsx");
-  assert.match(route, /permanentRedirect\("\/passport"\)/);
+  assert.match(route, /permanentRedirect\(documentsHref\(/);
 });
 
 test("capability layout protects 100 percent zoom and narrow screens", () => {

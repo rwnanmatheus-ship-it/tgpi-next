@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 import ts from "typescript";
 import * as activation from "../src/lib/activation-progress.ts";
+import * as documentReview from "../src/lib/document-review.ts";
 import { COMPARISON_CATALOG } from "../src/lib/comparison-catalog.ts";
 
 // Run the real persistence function; Clerk and archive transports are isolated test doubles.
@@ -17,6 +18,7 @@ function server({ archiveFails = false, prepareFails = false, clerkFails = false
     if(id==="server-only")return {};
     if(id==="@/lib/workspace-history.server")return {prepareWorkspaceHistory:async()=>{if(prepareFails)throw new Error("Prepare unavailable");return "receipt";},commitWorkspaceHistory:async()=>{if(archiveFails)throw new Error("Synthetic archive outage");}};
     if(id==="@clerk/nextjs/server")return {clerkClient:async()=>client};
+    if (id === "@/lib/document-review") return documentReview;
     if(id==="@/lib/activation-progress")return activation;
     if(id==="@/data/courses")return {courses:[fixture]};
     if(id==="@/lib/countries")return {getCountry:slug=>COMPARISON_CATALOG.includes(slug)?{slug,name:slug}:undefined};
@@ -75,4 +77,32 @@ test("all 195 countries survive actual comparison validation, storage and read-b
   for(const comparison of restored.comparisons) assert.deepEqual(comparison.countrySlugs,[...COMPARISON_CATALOG]);
   assert.ok(restored.activities.every(item=>item.href.includes("set=v1.")));
   assert.throws(()=>exports.parseActivationMutation({type:"record_comparison",countrySlugs:[...COMPARISON_CATALOG,"portugal"],goal:"work"}));
+});
+
+test("canonical document checkpoints survive a retry and retain older saved checkpoints", async () => {
+  const {exports,user,writes}=server();
+  user.privateMetadata.tgpiActivationV1.documentReviews.portugal = {
+    completedItemIds: ["legacy-passport", "legacy-funding", "legacy-study", "legacy-housing"],
+    totalItems: 4,
+    updatedAt: "2026-10-10T00:00:00.000Z",
+  };
+  const payload = {
+    type: "update_documents",
+    countrySlug: "portugal",
+    itemId: documentReview.documentReviewItems[0].id,
+    complete: true,
+    totalItems: documentReview.documentReviewItems.length,
+  };
+  assert.throws(() => exports.parseActivationMutation({ ...payload, itemId: "unlisted-item" }), /not valid/);
+  assert.throws(() => exports.parseActivationMutation({ ...payload, totalItems: 1 }), /size is not valid/);
+  const mutation = exports.parseActivationMutation(payload);
+  await exports.updateUserActivationProgress("test-user", mutation);
+  await exports.updateUserActivationProgress("test-user", mutation);
+  assert.equal(writes.length, 1);
+  const restored = await exports.getUserActivationProgress("test-user");
+  const review = restored.documentReviews.portugal;
+  assert.deepEqual(review.completedItemIds, [payload.itemId]);
+  assert.equal(review.legacyCompletedItemIds.length, 4);
+  assert.equal(documentReview.summarizeDocumentReview(review).percentage, 25);
+  assert.match(restored.activities[0].title, /document review updated/);
 });

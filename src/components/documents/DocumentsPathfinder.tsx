@@ -1,109 +1,154 @@
 "use client";
-import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 
+import { useCallback, useState } from "react";
 import Link from "next/link";
-import { useState } from "react";
-import {
-  documentGoalPaths,
-  type DocumentGoal,
-} from "@/lib/documents-os";
-import { LocalizedText } from "@/components/localization/LocaleProvider";
+import { useActivationProgress } from "@/components/activation/ActivationProgressProvider";
+import DocumentReviewChecklist from "@/components/activation/DocumentReviewChecklist";
+import CountrySearchInput from "@/components/countries/CountrySearchInput";
+import { useLocale } from "@/components/localization/LocaleProvider";
+import NavigationIcon from "@/components/navigation/NavigationIcon";
+import CountryFlag from "@/components/ui/CountryFlag";
+import { localizedCountryName, type SearchableCountry } from "@/lib/country-search";
+import { documentReviewItems } from "@/lib/document-review";
+import { documentGoalPaths, documentsHref, type DocumentGoal } from "@/lib/documents-os";
 
+const goalIcons = { travel: "compass", study: "book", work: "file", live: "home" } as const;
 
-export default function DocumentsPathfinder() {
-  const { t: localizeLabel } = useInterfaceLocale();
+type Props = {
+  countries: SearchableCountry[];
+  initialGoal: DocumentGoal;
+  initialCountry?: string;
+  shortlist?: string[];
+};
 
-  const [selectedGoal, setSelectedGoal] = useState<DocumentGoal>("travel");
-  const selectedPath =
-    documentGoalPaths.find((path) => path.goal === selectedGoal) ||
-    documentGoalPaths[0];
+export default function DocumentsPathfinder({ countries, initialGoal, initialCountry, shortlist = [] }: Props) {
+  const { locale, t } = useLocale();
+  const { progress } = useActivationProgress();
+  const [goal, setGoal] = useState(initialGoal);
+  const [countrySlug, setCountrySlug] = useState(initialCountry);
+  const [query, setQuery] = useState("");
+  const [shareStatus, setShareStatus] = useState<"copied" | "unavailable">();
+  const country = countries.find(item => item.slug === countrySlug);
+  const path = documentGoalPaths.find(item => item.goal === goal) ?? documentGoalPaths[0];
+  const quickPicks = [...new Set([...shortlist, "portugal", "canada", "japan", "spain"])]
+    .flatMap(slug => countries.find(item => item.slug === slug) ?? [])
+    .slice(0, 4);
+  const destinationName = country ? localizedCountryName(country, locale) : "";
+  const researchHref = `${documentsHref({ country: country?.slug, goal })}#preparation-paths`;
+
+  const chooseCountry = useCallback((slug: string) => {
+    setCountrySlug(slug);
+    setQuery("");
+    setShareStatus(undefined);
+  }, []);
+
+  function downloadBrief() {
+    if (!country) return;
+    const reviewed = new Set(progress.documentReviews[country.slug]?.completedItemIds);
+    const text = [
+      "TGPI Global Documents",
+      t("Research brief for {country}", { country: destinationName }),
+      t(path.label),
+      "",
+      t(path.description),
+      "",
+      t("Documents to verify"),
+      ...documentReviewItems.map(item => `[${reviewed.has(item.id) ? "x" : " "}] ${t(item.title)}\n    ${t(item.text)}`),
+      "",
+      t("Open country sources"),
+      new URL(`/countries/${country.slug}#country-sources`, window.location.origin).href,
+      t("Confirm applicable requirements with the receiving authority."),
+    ].join("\n");
+    const url = URL.createObjectURL(new Blob([text], { type: "text/plain;charset=utf-8" }));
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `tgpi-documents-${country.slug}-${goal}.txt`;
+    link.click();
+    window.setTimeout(() => URL.revokeObjectURL(url), 5_000);
+  }
+
+  async function copyResearchLink() {
+    try {
+      await navigator.clipboard.writeText(new URL(researchHref, window.location.origin).href);
+      setShareStatus("copied");
+    } catch {
+      setShareStatus("unavailable");
+    }
+  }
 
   return (
-    <section
-      aria-labelledby="documents-pathfinder-title"
-      className="mt-8 overflow-hidden rounded-[32px] border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] shadow-[var(--tgpi-shadow-premium)]"
-    >
-      <div className="border-b border-[var(--tgpi-border)] px-5 py-7 sm:px-8 lg:px-10">
-        <p className="text-xs font-extrabold uppercase tracking-[0.24em] text-[var(--tgpi-gold-strong)]"><LocalizedText text={"Find your document path"} /></p>
-        <div className="mt-3 grid gap-4 lg:grid-cols-[1fr_.72fr] lg:items-end">
-          <h2
-            id="documents-pathfinder-title"
-            className="font-[var(--tgpi-font-display)] text-4xl font-semibold leading-[0.98] tracking-[-0.035em] text-[var(--tgpi-navy)] sm:text-5xl"
-          ><LocalizedText text={"Start with the outcome. TGPI maps the evidence."} /></h2>
-          <p className="text-base leading-7 text-[var(--tgpi-muted)]"><LocalizedText text={"A document matters because of the decision it supports. Choose your objective to see how TGPI structures the research — without asking you to upload sensitive legal files."} /></p>
-        </div>
-
-        <div className="mt-7 grid grid-cols-2 gap-2 lg:grid-cols-4" role="group" aria-label={localizeLabel("Choose a global objective")}>
-          {documentGoalPaths.map((path) => {
-            const selected = path.goal === selectedGoal;
-
-            return (
-              <button
-                key={path.goal}
-                type="button"
-                aria-pressed={selected}
-                onClick={() => setSelectedGoal(path.goal)}
-                className={`min-h-12 rounded-2xl border px-4 text-sm font-extrabold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--tgpi-gold-strong)] ${
-                  selected
-                    ? "border-[var(--tgpi-navy)] bg-[var(--tgpi-navy)] text-white"
-                    : "border-[var(--tgpi-border)] bg-white text-[var(--tgpi-navy)] hover:border-[var(--tgpi-gold)]"
-                }`}
-              >
-                <LocalizedText text={path.label} />
-              </button>
-            );
-          })}
+    <section id="preparation-paths" className="documents-section" aria-labelledby="documents-studio-title">
+      <div className="documents-section-heading">
+        <div>
+          <p className="documents-eyebrow">{t("Research studio")}</p>
+          <h2 id="documents-studio-title">{t("Build your document plan")}</h2>
+          <p>{t("Choose your purpose and destination to open the research checklist, find sources and create a brief.")}</p>
         </div>
       </div>
 
-      <div className="grid lg:grid-cols-[.82fr_1.18fr]">
-        <div className="bg-[var(--tgpi-navy)] p-6 text-white sm:p-8 lg:p-10">
-          <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold)]">
-            <LocalizedText text={selectedPath.eyebrow} />
-          </p>
-          <h3 className="mt-4 font-[var(--tgpi-font-display)] text-4xl font-semibold leading-none tracking-[-0.035em]">
-            <LocalizedText text={selectedPath.title} />
-          </h3>
-          <p className="mt-5 text-base leading-7 text-white/70">
-            <LocalizedText text={selectedPath.description} />
-          </p>
-          <div className="mt-8 rounded-2xl border border-white/12 bg-white/[0.06] p-5">
-            <p className="text-xs font-extrabold uppercase tracking-[0.2em] text-white/50"><LocalizedText text="Designed outcome" /></p>
-            <p className="mt-2 text-base font-extrabold text-white">
-              <LocalizedText text={selectedPath.outcome} />
-            </p>
-          </div>
-        </div>
-
-        <div className="p-6 sm:p-8 lg:p-10">
-          <p className="text-xs font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-muted)]"><LocalizedText text={"Your readiness layers"} /></p>
-          <div className="mt-5 grid gap-3 sm:grid-cols-2">
-            {selectedPath.records.map((record, index) => (
-              <article
-                key={record}
-                className="rounded-[22px] border border-[var(--tgpi-border)] bg-[var(--tgpi-canvas)] p-5"
-              >
-                <div className="flex items-center justify-between gap-4">
-                  <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-[var(--tgpi-gold-soft)] text-xs font-black text-[var(--tgpi-gold-strong)]">
-                    0{index + 1}
-                  </span>
-                  <span className="text-xs font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-muted)]"><LocalizedText text={"Research layer"} /></span>
-                </div>
-                <h4 className="mt-5 text-lg font-extrabold text-[var(--tgpi-navy)]">
-                  {record}
-                </h4>
-              </article>
+      <div className="documents-studio">
+        <div className="documents-controls">
+          <p className="documents-eyebrow">{t("Choose a global objective")}</p>
+          <div className="documents-goals" role="group" aria-label={t("Choose a global objective")}>
+            {documentGoalPaths.map(option => (
+              <button key={option.goal} type="button" data-goal={option.goal} aria-pressed={goal === option.goal} onClick={() => {
+                setGoal(option.goal);
+                setShareStatus(undefined);
+              }}>
+                <span className="documents-icon"><NavigationIcon name={goalIcons[option.goal]} width={19} height={19} /></span>
+                <span>{t(option.label)}</span>
+              </button>
             ))}
           </div>
-          <div className="mt-6 flex flex-wrap items-center justify-between gap-4 rounded-[22px] border border-[var(--tgpi-gold)]/40 bg-[var(--tgpi-gold-soft)] p-5">
-            <p className="max-w-lg text-sm leading-6 text-[#4A3B1B]"><LocalizedText text={"Create a private TGPI workspace to connect this path to countries, learning and verified achievements."} /></p>
-            <Link
-              href="/sign-up?redirect_url=/passport"
-              className="inline-flex min-h-12 items-center justify-center rounded-2xl bg-[var(--tgpi-navy)] px-5 text-sm font-extrabold text-white transition hover:-translate-y-0.5"
-            ><LocalizedText text={"Build my document strategy"} /></Link>
+          <CountrySearchInput countries={countries} query={query} onChange={setQuery} onSelect={chooseCountry} />
+          <div className="documents-quick-picks" role="group" aria-label={t("Quick destinations")}>
+            {quickPicks.map(item => <button key={item.slug} type="button" aria-pressed={item.slug === country?.slug} onClick={() => chooseCountry(item.slug)}>
+              <CountryFlag iso2={item.iso2} width={25} />
+              {localizedCountryName(item, locale)}
+            </button>)}
           </div>
         </div>
+
+        <div className="documents-route-preview" data-goal={goal}>
+          <div className="documents-route-title">
+            <span className="documents-icon"><NavigationIcon name={goalIcons[goal]} /></span>
+            <p className="documents-eyebrow">{t(path.eyebrow)}</p>
+          </div>
+          <h3>{t(path.title)}</h3>
+          <p>{t(path.description)}</p>
+          <ul className="documents-record-tags">
+            {path.records.map(record => <li key={record}>{t(record)}</li>)}
+          </ul>
+          {country ? <div className="documents-route-destination" aria-live="polite">
+            <CountryFlag iso2={country.iso2} width={41} />
+            <div><span>{t("Selected destination")}</span><strong>{destinationName}</strong></div>
+          </div> : <p className="documents-route-destination">{t("Select a destination to see its checklist.")}</p>}
+        </div>
       </div>
+
+      {country && <div className="documents-research-grid">
+        <DocumentReviewChecklist
+          key={country.slug}
+          countryName={destinationName}
+          countrySlug={country.slug}
+          embedded
+          signInHref={`/sign-in?next=${encodeURIComponent(researchHref)}`}
+        />
+        <aside className="documents-research-actions">
+          <span className="documents-icon"><NavigationIcon name="file" /></span>
+          <h3>{t("Take your research with you")}</h3>
+          <p>{t("Download a text brief with your research questions, checklist and a link to the country sources.")}</p>
+          <button className="documents-button" type="button" onClick={downloadBrief}>{t("Download research brief")}</button>
+          <button className="documents-button secondary" type="button" onClick={() => void copyResearchLink()}>{t("Copy research link")}</button>
+          {shareStatus && <p className="documents-share-status" role="status">
+            {shareStatus === "copied" ? t("Research link copied.") : <Link className="documents-text-link" href={researchHref}>{t("Open shareable research link")}</Link>}
+          </p>}
+          <div className="documents-source-links">
+            <Link className="documents-text-link" href={`/countries/${country.slug}#country-sources`} prefetch={false}>{t("Open country sources")} <span aria-hidden="true">↗</span></Link>
+            <Link className="documents-text-link" href={`/country-fit?country=${country.slug}&goal=${goal}`} prefetch={false}>{t("Continue in Country Fit")} <span aria-hidden="true">↗</span></Link>
+          </div>
+        </aside>
+      </div>}
     </section>
   );
 }
