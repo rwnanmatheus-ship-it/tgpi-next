@@ -156,7 +156,7 @@ test("renderer rejects revoked or unverified records even outside the download r
 test("PDF contains a clickable QR verification target and preserves the original issuance snapshot", async () => {
   const bytes = await createCertificatePdf(credential);
   const pdf = await PDFDocument.load(bytes);
-  assert.match(pdf.getSubject(), /document design 2026\.2/);
+  assert.match(pdf.getSubject(), /document design 2026\.3/);
   const annotations = pdf.getPage(0).node.Annots();
   assert.equal(annotations.size(), 1);
   const { PDFDict, PDFName, PDFString } = await import("pdf-lib");
@@ -182,3 +182,4 @@ test("birth date is included only on the owner PDF with explicit consent", async
   assert.equal((await PDFDocument.load(bytes)).getPageCount(), 1);
   assert.equal("dateOfBirth" in credential, false);
 });
+

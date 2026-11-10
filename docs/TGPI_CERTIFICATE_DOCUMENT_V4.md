@@ -1,6 +1,14 @@
 # TGPI Certificate Document V4
 
-The signed learning record stays unchanged. The presentation layer renders the current document edition (`2026.2`) whenever an owner downloads an existing active certificate.
+The signed learning record stays unchanged. The presentation layer renders the current document edition (`2026.3`) whenever an owner downloads an existing active certificate.
+
+## Edition 2026.3
+
+- Engraved architectural frame, subtle globe watermark, serif achievement typography and a layered metallic issuer medallion with laurels and ribbons.
+- High-contrast vector QR, four-module quiet zone, gold corner accents and the original clickable verification destination.
+- Matching responsive document presentation, including a stacked mobile layout and locale-aware issuance dates. Private sharing labels are available in all six interface languages.
+- PDF labels consistently follow the stored Portuguese or English document language. Automated assessments and holder-controlled sharing are identified accurately.
+- Original signed names, IDs, dates, scores and learning volume remain unchanged. Updating the design never issues or modifies a credential.
 
 ## Document
 
@@ -20,3 +28,4 @@ Download latest PDF refreshes the visual document. It preserves the existing cer
 - Actual issued-record rendering was inspected at A4 landscape size; text extraction confirmed learner name, Global ID, certificate ID and learning metrics.
 - The QR in the rendered PDF was independently decoded and matched its original public verification URL.
 - Next.js output tracing includes the original print crest and both fonts.
+

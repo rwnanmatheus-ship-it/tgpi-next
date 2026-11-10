@@ -7,6 +7,7 @@ import {
   PDFName,
   PDFString,
   rgb,
+  degrees,
   type PDFFont,
   type RGB,
 } from "pdf-lib";
@@ -37,6 +38,8 @@ export async function createCertificatePdf(
   }
   const document = await PDFDocument.create();
   const portuguese = credential.professionalEvidence?.certificateLanguage === "pt-BR";
+  const locale = portuguese ? "pt-BR" : "en";
+  const choose = (en: string, pt: string) => portuguese ? pt : en;
   const privateSharing = credential.professionalEvidence?.sharing === false;
   document.registerFontkit(fontkit);
   document.setTitle(`${credential.courseTitle} — TGPI Certificate`);
@@ -144,134 +147,86 @@ export async function createCertificatePdf(
       text(value, x, top - index * leading, fontSize, font, navy, maxWidth),
     );
   }
-  page.drawRectangle({
-    x: 0,
-    y: 0,
-    width: 842,
-    height: 596,
-    color: rgb(0.984, 0.975, 0.949),
-  });
-  page.drawRectangle({
-    x: 19,
-    y: 19,
-    width: 804,
-    height: 557,
-    borderColor: gold,
-    borderWidth: 1,
-  });
-  page.drawRectangle({
-    x: 25,
-    y: 25,
-    width: 792,
-    height: 545,
-    borderColor: line,
-    borderWidth: 0.4,
-  });
-  page.drawRectangle({ x: 26, y: 480, width: 790, height: 89, color: navy });
-  page.drawRectangle({ x: 26, y: 477, width: 790, height: 3, color: gold });
-  page.drawImage(crest, { x: 54, y: 491, width: 54, height: 66 });
-  text("TGPI", 126, 530, 26, serif, white);
-  text(
-    "THE GLOBAL POLYMATH INSTITUTE",
-    127,
-    507,
-    11,
-    sans,
-    rgb(0.9, 0.8, 0.53),
-  );
-  text(
-    "EDUCATION FOR A GLOBAL LIFE",
-    127,
-    492,
-    7.5,
-    sans,
-    rgb(0.78, 0.83, 0.9),
-  );
-  text("VERIFIED LEARNING", 648, 532, 9, sans, white, 155);
-  text("PROFESSIONAL ACHIEVEMENT", 648, 516, 7, sans, rgb(0.9, 0.8, 0.53), 155);
-  text(portuguese ? "CONCLUSÃO E COMPETÊNCIAS AVALIADAS" : "CERTIFICATE OF ACHIEVEMENT", 58, 450, 9, sans, gold);
-  if (credential.documentNature) wrapped(credential.documentNature, 56, 424, 550, 19, serif, 2, 22);
-  else text("Professional Certificate", 56, 414, 29, serif);
-  text(portuguese ? "CONFERIDO A" : "AWARDED TO", 58, 383, 8, sans, muted);
-  wrapped(credential.publicName, 56, 350, 550, 28, serif, 2, 30);
+  // An engraved, vector-only frame stays sharp at any print resolution.
+  page.drawRectangle({ x: 0, y: 0, width: 841.89, height: 595.28, color: rgb(0.985, 0.977, 0.953) });
+  for (const [inset, thickness, shade] of [[17, 1.3, gold], [21, 0.35, gold], [28, 0.45, line]] as const) {
+    page.drawRectangle({ x: inset, y: inset, width: 841.89 - inset * 2, height: 595.28 - inset * 2, borderWidth: thickness, borderColor: shade });
+  }
+  for (const [x, y, dx, dy] of [[33, 33, 1, 1], [809, 33, -1, 1], [33, 562, 1, -1], [809, 562, -1, -1]]) {
+    for (let n = 0; n < 3; n++) {
+      const d = n * 4;
+      page.drawLine({ start: { x: x + dx * d, y: y + dy * d }, end: { x: x + dx * 22, y: y + dy * d }, thickness: n === 0 ? 1.2 : 0.4, color: gold });
+      page.drawLine({ start: { x: x + dx * d, y: y + dy * d }, end: { x: x + dx * d, y: y + dy * 22 }, thickness: n === 0 ? 1.2 : 0.4, color: gold });
+    }
+  }
+  // Fine globe engraving: decoration only, never part of the credential evidence.
+  const globeX = 505, globeY = 326;
+  for (const radius of [114, 82, 44]) {
+    page.drawEllipse({ x: globeX, y: globeY, xScale: radius, yScale: 114, borderColor: gold, borderWidth: 0.4, borderOpacity: 0.08 });
+    page.drawEllipse({ x: globeX, y: globeY, xScale: 114, yScale: radius * 0.65, borderColor: gold, borderWidth: 0.4, borderOpacity: 0.08 });
+  }
+  page.drawRectangle({ x: 38, y: 484, width: 766, height: 73, color: navy });
+  for (let i = 0; i < 60; i++) {
+    page.drawRectangle({ x: 38 + i * 12.77, y: 484, width: 12.8, height: 73, color: rgb(0.14, 0.25, 0.4), opacity: 0.25 * i / 60 });
+  }
+  page.drawRectangle({ x: 38, y: 482, width: 766, height: 2, color: gold });
+  page.drawImage(crest, { x: 57, y: 492, width: 44, height: 54 });
+  text("TGPI", 118, 523, 24, serif, white);
+  text("THE GLOBAL POLYMATH INSTITUTE", 119, 507, 9, sans, rgb(0.93, 0.83, 0.57));
+  text(choose("EDUCATION FOR A GLOBAL LIFE", "EDUCAÇÃO PARA UMA VIDA GLOBAL"), 119, 494, 6.4, sans, rgb(0.8, 0.85, 0.91));
+  text(choose("VERIFIED LEARNING", "APRENDIZAGEM VERIFICADA"), 632, 527, 7.5, sans, white, 149);
+  text(choose("PROFESSIONAL ACHIEVEMENT", "CONQUISTA PROFISSIONAL"), 632, 512, 6.4, sans, rgb(0.93, 0.83, 0.57), 149);
+  text(choose("CERTIFICATE OF ACHIEVEMENT", "CONCLUSÃO E COMPETÊNCIAS AVALIADAS"), 59, 458, 8, sans, gold);
+  wrapped(credential.documentNature || choose("Professional Certificate", "Certificado Profissional"), 57, 428, 548, credential.documentNature ? 19 : 28, serif, 2, 22);
+  text(choose("AWARDED TO", "CONFERIDO A"), 59, 382, 7.5, sans, muted);
+  wrapped(credential.publicName, 57, 352, 548, 29, serif, 2, 30);
+  page.drawLine({ start: { x: 59, y: 312 }, end: { x: 604, y: 312 }, thickness: 0.45, color: line });
+  page.drawLine({ start: { x: 59, y: 312 }, end: { x: 122, y: 312 }, thickness: 1.5, color: gold });
   if (options.personalBirthDate && /^\d{4}-\d{2}-\d{2}$/.test(options.personalBirthDate)) {
-    text(`Date of birth: ${options.personalBirthDate} (holder-provided)`, 58, 304, 8, sans, muted, 548);
+    text(choose("Date of birth: ", "Data de nascimento: ") + certificateDate(options.personalBirthDate, locale) + choose(" (holder-provided)", " (informada pelo titular)"), 59, 299, 7.5, sans, muted, 546);
   }
-  text(
-    portuguese ? "Pela conclusão das atividades e aprovação na avaliação do curso" : "For successful completion of the applied learning and assessed performance in",
-    58,
-    286,
-    9,
-    sans,
-    muted,
-    548,
-  );
-  wrapped(credential.courseTitle, 56, 260, 550, 19, serif, 2, 23);
-  const skills = credential.skills
-    ?.slice(0, 4)
-    .map((skill) => skill.name)
-    .join("  /  ");
-  text(
-    skills || "Applied learning · Assessment evidence · Practical capability",
-    58,
-    209,
-    8,
-    sans,
-    muted,
-    548,
-  );
-
-  text(
-    `Required mastery: ${credential.masteryThreshold}% · Detailed evidence and current status available through the QR`,
-    58,
-    190,
-    7.5,
-    sans,
-    muted,
-    548,
-  );
-
-  // Own issuer quality seal. No third-party accreditation or conformity claim.
-  const cx = 715,
-    cy = 402;
-  for (let i = 0; i < 48; i++) {
-    const angle = (i * Math.PI) / 24;
-    page.drawLine({
-      start: { x: cx + 42 * Math.cos(angle), y: cy + 42 * Math.sin(angle) },
-      end: { x: cx + 48 * Math.cos(angle), y: cy + 48 * Math.sin(angle) },
-      thickness: i % 2 ? 0.7 : 1.5,
-      color: gold,
-    });
+  text(choose("For successful completion of the applied learning and assessed performance in", "Pela conclusão das atividades e aprovação na avaliação do curso"), 59, 278, 8.5, sans, muted, 546);
+  wrapped(credential.courseTitle, 57, 252, 548, 19, serif, 2, 22);
+  text(credential.skills?.slice(0, 4).map((skill) => skill.name).join("  /  ") || choose("Applied learning · Assessment evidence · Practical capability", "Aprendizagem aplicada · Evidências de avaliação · Competências práticas"), 59, 202, 7.5, sans, muted, 545);
+  if (Number.isFinite(credential.masteryThreshold)) {
+    text(choose("Required mastery: ", "Domínio exigido: ") + `${credential.masteryThreshold}%` + choose(" · Assessment evidence in the issuer record", " · Evidências de avaliação no registro do emissor"), 59, 186, 7, sans, muted, 545);
   }
-  page.drawCircle({
-    x: cx,
-    y: cy,
-    size: 40,
-    color: rgb(0.95, 0.9, 0.77),
-    borderColor: gold,
-    borderWidth: 1,
-  });
-  page.drawCircle({
-    x: cx,
-    y: cy,
-    size: 35,
-    color: navy,
-    borderColor: gold,
-    borderWidth: 0.7,
-  });
-  centered("TGPI", cx, cy + 5, 17, serif, rgb(0.94, 0.83, 0.56));
-  centered("VERIFIED", cx, cy - 9, 7, sans, white);
-  centered("LEARNING", cx, cy - 19, 6, sans, rgb(0.94, 0.83, 0.56));
-  centered("TGPI ISSUER QUALITY SEAL", cx, 342, 6.8, sans, gold);
+
+  // Metallic issuer medallion. Layered paths, beading and laurels remain vector.
+  const cx = 713, cy = 406;
+  page.drawSvgPath("M 0 0 L 22 0 L 15 45 L 5 34 L -5 39 Z", { x: cx - 27, y: cy - 22, color: navy, borderColor: gold, borderWidth: 0.6 });
+  page.drawSvgPath("M 0 0 L 22 0 L 27 39 L 17 34 L 7 45 Z", { x: cx + 5, y: cy - 22, color: navy, borderColor: gold, borderWidth: 0.6 });
+  for (let i = 0; i < 96; i++) {
+    const a = i * Math.PI / 48;
+    page.drawLine({ start: { x: cx + 43 * Math.cos(a), y: cy + 43 * Math.sin(a) }, end: { x: cx + (i % 2 ? 49 : 52) * Math.cos(a), y: cy + (i % 2 ? 49 : 52) * Math.sin(a) }, thickness: i % 2 ? 0.55 : 1.2, color: i % 3 ? gold : rgb(0.9, 0.76, 0.42) });
+  }
+  for (let r = 44; r > 34; r -= 0.4) {
+    const light = (Math.sin((r - 34) * 0.9) + 1) / 2;
+    page.drawCircle({ x: cx, y: cy, size: r, color: rgb(0.64 + light * 0.32, 0.45 + light * 0.4, 0.17 + light * 0.42) });
+  }
+  page.drawCircle({ x: cx, y: cy, size: 34, color: navy, borderColor: rgb(0.98, 0.91, 0.7), borderWidth: 0.65 });
+  page.drawCircle({ x: cx, y: cy, size: 30, borderColor: gold, borderWidth: 0.4 });
+  for (let i = 0; i < 56; i++) {
+    const a = i * Math.PI / 28;
+    page.drawCircle({ x: cx + 40 * Math.cos(a), y: cy + 40 * Math.sin(a), size: 0.5, color: rgb(0.99, 0.93, 0.73) });
+  }
+  for (const side of [-1, 1]) for (let i = 0; i < 6; i++) {
+    const a = (210 + i * 15) * Math.PI / 180;
+    page.drawEllipse({ x: cx + side * 25 * Math.cos(a), y: cy + 25 * Math.sin(a), xScale: 3.4, yScale: 1.3, rotate: degrees(side * (i * 15 - 35)), color: rgb(0.88, 0.74, 0.4) });
+  }
+  centered("TGPI", cx, cy + 3, 16, serif, rgb(0.96, 0.86, 0.61));
+  centered(choose("VERIFIED", "VERIFICADO"), cx, cy - 9, 5.2, sans, white);
+  centered(choose("LEARNING", "APRENDIZAGEM"), cx, cy + 20, 4.8, sans, rgb(0.94, 0.83, 0.56));
+  centered(choose("TGPI ISSUER QUALITY SEAL", "SELO DO EMISSOR TGPI"), cx, 338, 6.3, sans, gold);
 
   const verificationUrl = certificateVerificationUrl(credential.id);
   const qr = QRCode.create(verificationUrl, { errorCorrectionLevel: "M" });
-  const qrSize = 111,
+  const qrSize = 105,
     quiet = 4,
     total = qr.modules.size + quiet * 2,
     unit = qrSize / total,
-    qrX = 659.5,
-    qrY = 209;
+    qrX = 660.5,
+    qrY = 212;
   page.drawRectangle({
     x: qrX - 6,
     y: qrY - 6,
@@ -291,8 +246,12 @@ export async function createCertificatePdf(
           height: unit + 0.005,
           color: navy,
         });
-  centered(portuguese ? "LINK DE VERIFICAÇÃO" : "SCAN TO VERIFY", cx, 188, 8, sans, navy);
-  centered(privateSharing ? (portuguese ? "Privado até o titular compartilhar" : "Private until shared by holder") : "Live status · Issuer record", cx, 174, 7, sans, muted);
+  for (const [x, y, dx, dy] of [[qrX - 7, qrY - 7, 1, 1], [qrX + qrSize + 7, qrY - 7, -1, 1], [qrX - 7, qrY + qrSize + 7, 1, -1], [qrX + qrSize + 7, qrY + qrSize + 7, -1, -1]]) {
+    page.drawLine({ start: { x, y }, end: { x: x + dx * 12, y }, thickness: 1.5, color: gold });
+    page.drawLine({ start: { x, y }, end: { x, y: y + dy * 12 }, thickness: 1.5, color: gold });
+  }
+  centered(choose("SCAN TO VERIFY", "ESCANEIE PARA VERIFICAR"), cx, 188, 7, sans, navy);
+  centered(privateSharing ? (portuguese ? "Privado até o titular compartilhar" : "Private until shared by holder") : choose("Live status · Issuer record", "Status atual · Registro do emissor"), cx, 174, 7, sans, muted);
   const linkAnnotation = document.context.obj({
     Type: PDFName.of("Annot"),
     Subtype: PDFName.of("Link"),
@@ -311,25 +270,25 @@ export async function createCertificatePdf(
       x: 58,
       w: 223,
       label: "TGPI GLOBAL ID",
-      value: credential.identityEvidence?.globalKeyId || "Not recorded",
+      value: credential.identityEvidence?.globalKeyId || choose("Not recorded", "Não registrado"),
     },
-    { x: 293, w: 190, label: "CERTIFICATE ID", value: credential.id },
+    { x: 293, w: 190, label: choose("CERTIFICATE ID", "ID DO CERTIFICADO"), value: credential.id },
     {
       x: 495,
       w: 118,
       label: portuguese ? "EMISSÃO" : "ISSUED",
-      value: certificateDate(credential.issuedAt),
+      value: certificateDate(credential.issuedAt, locale),
     },
     {
       x: 625,
       w: 70,
-      label: credential.automatedEvidence ? "AVALIAÇÃO" : portuguese ? "PROJETO" : "MASTERY",
+      label: credential.automatedEvidence ? choose("ASSESSMENT", "AVALIAÇÃO") : choose("MASTERY", "DOMÍNIO"),
       value: `${credential.assessmentScore}%`,
     },
     {
       x: 707,
       w: 79,
-      label: portuguese ? "CARGA ESTIMADA" : "VOLUME",
+      label: credential.automatedEvidence ? choose("EST. WORKLOAD", "CARGA ESTIMADA") : choose("VOLUME", "CARGA HORÁRIA"),
       value: `${credential.learningHours} ${portuguese ? "horas" : "hours"}`,
     },
   ];
@@ -343,7 +302,7 @@ export async function createCertificatePdf(
     text(column.label, column.x, 140, 7, sans, gold, column.w);
     text(column.value, column.x, 122, 10, sans, navy, column.w);
   }
-  if (credential.completedAt) text(`Conclusão: ${certificateDate(credential.completedAt)} · Curso ${credential.courseVersion} · Idioma: ${credential.professionalEvidence?.certificateLanguage || "pt-BR"}`, 58, 108, 6.5, sans, muted, 727);
+  if (credential.completedAt) text(`${choose("Completed", "Conclusão")}: ${certificateDate(credential.completedAt, locale)} · ${choose("Course version", "Versão do curso")} ${credential.courseVersion} · ${choose("Language", "Idioma")}: ${locale}`, 58, 108, 6.5, sans, muted, 727);
   page.drawRectangle({
     x: 44,
     y: 65,
@@ -351,7 +310,7 @@ export async function createCertificatePdf(
     height: 37,
     color: rgb(0.94, 0.93, 0.89),
   });
-  const marks = portuguese ? ["CONTA VINCULADA", credential.automatedEvidence ? "AVALIAÇÃO AUTOMÁTICA" : "PROJETO AVALIADO", privateSharing ? "TITULAR CONTROLA O ACESSO" : "VERIFICAÇÃO PÚBLICA"] : ["IDENTITY LINKED", "ASSESSED LEARNING", "PUBLIC VERIFICATION"];
+  const marks = portuguese ? ["CONTA VINCULADA", credential.automatedEvidence ? "AVALIAÇÃO AUTOMÁTICA" : "PROJETO AVALIADO", privateSharing ? "TITULAR CONTROLA O ACESSO" : "VERIFICAÇÃO PÚBLICA"] : ["IDENTITY LINKED", credential.automatedEvidence ? "AUTOMATIC ASSESSMENT" : "ASSESSED LEARNING", privateSharing ? "HOLDER-CONTROLLED ACCESS" : "PUBLIC VERIFICATION"];
   marks.forEach((value, index) => {
     const x = 63 + index * 244;
     page.drawCircle({ x: x + 5, y: 84, size: 7, color: navy });
@@ -368,7 +327,7 @@ export async function createCertificatePdf(
     727,
   );
   text(
-    `Document edition ${CERTIFICATE_DESIGN_VERSION} · Original achievement and issuance date preserved`,
+    `${choose("Document edition", "Edição do documento")} ${CERTIFICATE_DESIGN_VERSION} · ${choose("Original achievement and issuance date preserved", "Conquista e data de emissão originais preservadas")}`,
     58,
     35,
     6,
@@ -379,3 +338,4 @@ export async function createCertificatePdf(
   text("theglobalpolymath.com", 665, 35, 6.5, sans, gold, 125);
   return document.save();
 }
+
