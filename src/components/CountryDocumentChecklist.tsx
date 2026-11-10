@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import type { CountryChecklist } from "@/lib/country-document-checklists";
 
 type CountryDocumentChecklistProps = {
@@ -56,9 +58,7 @@ export default function CountryDocumentChecklist({
                       {item.label}
                     </p>
                     {item.required ? (
-                      <span className="rounded-full border border-yellow-500/30 bg-yellow-500/10 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-yellow-300">
-                        Required
-                      </span>
+                      <span className="rounded-full border border-yellow-500/30 bg-yellow-500/10 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-yellow-300"><LocalizedText text={"Required"} /></span>
                     ) : null}
                   </div>
                 </div>

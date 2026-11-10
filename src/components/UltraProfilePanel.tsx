@@ -1,5 +1,8 @@
 "use client";
+import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { onAuthStateChanged } from "firebase/auth";
@@ -21,6 +24,8 @@ type CommandCenterProfile = UserData & {
 };
 
 export default function UltraProfilePanel() {
+  const { t: localizeLabel } = useInterfaceLocale();
+
   const [profile, setProfile] = useState<CommandCenterProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState<Tab>("overview");
@@ -58,7 +63,7 @@ export default function UltraProfilePanel() {
     setForm((current) => ({ ...current, [field]: value }));
   }
 
-  if (loading) return <div className="p-10 text-white">Loading...</div>;
+  if (loading) return <div className="p-10 text-white"><LocalizedText text={"Loading..."} /></div>;
 
   return (
     <div className="min-h-screen bg-black px-6 py-10 text-white">
@@ -74,9 +79,9 @@ export default function UltraProfilePanel() {
           />
           <div>
             <h1 className="text-3xl font-bold text-yellow-400">
-              {profile?.displayName || profile?.name || "TGPI Member"}
+              {profile?.displayName || profile?.name || <LocalizedText text={"TGPI Member"} />}
             </h1>
-            <p className="text-slate-400">@{profile?.username || "username"}</p>
+            <p className="text-slate-400">@{profile?.username || <LocalizedText text={"username"} />}</p>
             <div className="mt-2 text-xs">
               TGPI ID:{" "}
               <span className="font-bold text-yellow-400">
@@ -91,10 +96,10 @@ export default function UltraProfilePanel() {
         <div className="rounded-3xl border border-yellow-500/20 bg-gradient-to-br from-[#0a1a2f] to-black p-6">
           <div className="grid gap-6 md:grid-cols-2">
             <div className="space-y-2 text-sm">
-              <p>🌎 Country: {profile?.country || profile?.currentCountry}</p>
-              <p>🌐 Languages: {profile?.languagePreference}</p>
-              <p>🎯 Goal: {profile?.goal || profile?.travelIntent}</p>
-              <p>⭐ Plan: {profile?.plan}</p>
+              <p><LocalizedText text={"🌎 Country:"} />{" "}{profile?.country || profile?.currentCountry}</p>
+              <p><LocalizedText text={"🌐 Languages:"} />{" "}{profile?.languagePreference}</p>
+              <p><LocalizedText text={"🎯 Goal:"} />{" "}{profile?.goal || profile?.travelIntent}</p>
+              <p><LocalizedText text={"⭐ Plan:"} />{" "}{profile?.plan}</p>
             </div>
             <div className="flex items-center justify-center text-6xl">🌍</div>
           </div>
@@ -122,7 +127,7 @@ export default function UltraProfilePanel() {
         {tab === "overview" && (
           <div className="grid gap-6 md:grid-cols-3">
             <div className="rounded-2xl border border-white/10 p-6">XP: {profile?.xp || 0}</div>
-            <div className="rounded-2xl border border-white/10 p-6">Level: {profile?.level || 1}</div>
+            <div className="rounded-2xl border border-white/10 p-6"><LocalizedText text={"Level:"} />{" "}{profile?.level || 1}</div>
             <div className="rounded-2xl border border-white/10 p-6">Streak: {profile?.streak || 0}</div>
           </div>
         )}
@@ -132,13 +137,13 @@ export default function UltraProfilePanel() {
             <input
               value={form.displayName || ""}
               onChange={(event) => updateForm("displayName", event.target.value)}
-              placeholder="Name"
+              placeholder={localizeLabel("Name")}
               className="rounded-xl border border-white/20 bg-black p-4"
             />
             <input
               value={form.username || ""}
               onChange={(event) => updateForm("username", event.target.value)}
-              placeholder="Username"
+              placeholder={localizeLabel("Username")}
               className="rounded-xl border border-white/20 bg-black p-4"
             />
             <input
@@ -182,9 +187,7 @@ export default function UltraProfilePanel() {
           type="button"
           onClick={handleSave}
           className="rounded-xl bg-yellow-500 px-6 py-3 font-bold text-black"
-        >
-          Save
-        </button>
+        ><LocalizedText text={"Save"} /></button>
       </div>
     </div>
   );

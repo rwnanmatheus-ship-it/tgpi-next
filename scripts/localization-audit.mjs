@@ -9,9 +9,20 @@ new Function('exports', ts.transpileModule(catalogSource, { compilerOptions: { m
 const registered = new Set(Object.keys(exports.messages).map(key => key.toLocaleLowerCase('en')));
 const brands = new Set(['TGPI', 'The Global Polymath Institute', 'TGPI Premium', 'Global Key', 'TGPI Global ID', 'TGPI Global Key', 'Instagram', 'LinkedIn', 'TGPI GLOBAL EDUCATION LTDA']);
 const candidates = new Map();
+const untranslatedRendering = new Map();
 function add(raw, file, node, source, kind) {
   const key = raw.replace(/\s+/g, ' ').trim();
-  if (!/[\p{L}]{2}/u.test(key) || registered.has(key.toLocaleLowerCase('en')) || brands.has(key) || /^\S+@\S+$|^https?:\/\//.test(key)) return;
+  if (!/[\p{L}]{2}/u.test(key) || brands.has(key) || /^\S+@\S+$|^https?:\/\//.test(key)) return;
+  const translated = registered.has(key.toLocaleLowerCase('en')) || ['pt-BR', 'es', 'fr', 'de', 'it'].some(locale => exports.translate(locale, key) !== key);
+  if (translated) {
+    if (['visible text', 'placeholder', 'aria-label', 'alt'].includes(kind)) {
+      const position = source.getLineAndCharacterOfPosition(node.getStart(source));
+      const record = untranslatedRendering.get(key) ?? { key, occurrences: [] };
+      record.occurrences.push({ file, line: position.line + 1, kind });
+      untranslatedRendering.set(key, record);
+    }
+    return;
+  }
   const record = candidates.get(key) ?? { key, occurrences: [] };
   const position = source.getLineAndCharacterOfPosition(node.getStart(source));
   record.occurrences.push({ file, line: position.line + 1, kind });
@@ -26,7 +37,8 @@ function walk(directory) {
     function visit(node) {
       if (ts.isJsxText(node)) add(node.text, file, node, source, 'visible text');
       if (ts.isJsxAttribute(node) && ['placeholder', 'aria-label', 'alt', 'title', 'summary', 'description', 'label', 'text', 'eyebrow'].includes(node.name.text) && node.initializer && ts.isStringLiteral(node.initializer)) add(node.initializer.text, file, node, source, node.name.text);
-      if (ts.isCallExpression(node) && ['t', 'setError', 'setMessage', 'setNotice', 'window.confirm'].includes(node.expression.getText(source)) && node.arguments[0] && ts.isStringLiteral(node.arguments[0])) add(node.arguments[0].text, file, node, source, 'message');
+      if (ts.isJsxAttribute(node) && node.name.text === 'text' && node.initializer && ts.isJsxExpression(node.initializer) && node.initializer.expression && ts.isStringLiteral(node.initializer.expression)) add(node.initializer.expression.text, file, node, source, 'message');
+      if (ts.isCallExpression(node) && ['localizeLabel', 't', 'setError', 'setMessage', 'setNotice', 'window.confirm'].includes(node.expression.getText(source)) && node.arguments[0] && ts.isStringLiteral(node.arguments[0])) add(node.arguments[0].text, file, node, source, 'message');
       ts.forEachChild(node, visit);
     }
     visit(source);
@@ -40,10 +52,12 @@ const report = {
   registeredMessages: Object.keys(exports.messages).length,
   remainingCandidates: entries.length,
   entries,
+  registeredButNotWired: [...untranslatedRendering.values()],
 };
 if (process.argv.includes('--json')) process.stdout.write(JSON.stringify(report, null, 2) + '\n');
 else {
   console.log(`${report.registeredMessages} registered messages; ${report.remainingCandidates} remaining interface candidates.`);
+  console.log(`${report.registeredButNotWired.length} registered strings still rendered outside localization (review component attributes individually).`);
   console.log(report.scope);
   const counts = new Map();
   for (const entry of entries) for (const file of new Set(entry.occurrences.map(item => item.file))) counts.set(file, (counts.get(file) ?? 0) + 1);

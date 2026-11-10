@@ -1,4 +1,6 @@
 "use client";
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import { useEffect, useState } from "react";
 import {
   parseCommunityPreferences,
@@ -97,9 +99,7 @@ export default function Preferences({
             />
             Show explanations when communities match these interests
           </label>
-          <button className={s.button} disabled={busy}>
-            Save preferences
-          </button>
+          <button className={s.button} disabled={busy}><LocalizedText text={"Save preferences"} /></button>
         </form>
         <details>
           <summary>Notification preferences per community</summary>
@@ -119,9 +119,9 @@ export default function Preferences({
                     })
                   }
                 >
-                  <option value="all">All essential updates</option>
-                  <option value="mentions">Mentions only</option>
-                  <option value="none">None</option>
+                  <option value="all"><LocalizedText text={"All essential updates"} /></option>
+                  <option value="mentions"><LocalizedText text={"Mentions only"} /></option>
+                  <option value="none"><LocalizedText text={"None"} /></option>
                 </select>
               </label>
             ),
@@ -151,12 +151,10 @@ export default function Preferences({
             className={s.secondary}
             disabled={busy}
             onClick={() => void action({ action: "preferences", ...value })}
-          >
-            Save notification preferences
-          </button>
+          ><LocalizedText text={"Save notification preferences"} /></button>
         </details>
         <details>
-          <summary>Blocked members</summary>
+          <summary><LocalizedText text={"Blocked members"} /></summary>
           {blocks.map((b) => (
             <div className={s.reply} key={b.uid}>
               <span>{b.uid}</span>
@@ -173,9 +171,7 @@ export default function Preferences({
                   )
                     setBlocks((p) => p.filter((x) => x.uid !== b.uid));
                 }}
-              >
-                Unblock
-              </button>
+              ><LocalizedText text={"Unblock"} /></button>
             </div>
           ))}
           {blockNext && (

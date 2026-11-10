@@ -28,10 +28,10 @@ export default function TGPIIdentityCard({ profile }: TGPIIdentityCardProps) {
 
       <div className="grid gap-6 md:grid-cols-2">
         <div className="space-y-3 text-sm">
-          <p><strong>Name:</strong> {profile?.displayName || profile?.name || "Not defined"}</p>
-          <p><strong>Username:</strong> @{profile?.username || "username"}</p>
+          <p><strong><LocalizedText text={"Name:"} /></strong> {profile?.displayName || profile?.name || "Not defined"}</p>
+          <p><strong><LocalizedText text={"Username:"} /></strong> @{profile?.username || <LocalizedText text={"username"} />}</p>
           <p><strong>ID:</strong> {tgpiId}</p>
-          <p><strong>Country:</strong> {profile?.country || profile?.currentCountry || "Not defined"}</p>
+          <p><strong><LocalizedText text={"Country:"} /></strong> {profile?.country || profile?.currentCountry || "Not defined"}</p>
           <p><strong><LocalizedText text="Languages:" /></strong> {profile?.languagePreference || "Not defined"}</p>
           <p><strong><LocalizedText text="Goal:" /></strong> {profile?.goal || profile?.travelIntent || "Not defined"}</p>
           <p className="mt-4 font-bold text-yellow-400">ELITE MEMBER</p>

@@ -62,7 +62,7 @@ export default function PostComposer({
           <label>
             Format
             <select value={kind} onChange={(e) => setKind(e.target.value)}>
-              <option value="discussion">Discussion</option>
+              <option value="discussion"><LocalizedText text={"Discussion"} /></option>
               <option value="question"><LocalizedText text="Question" /></option>
               <option value="experience"><LocalizedText text="Experience" /></option>
               <option value="guide">Guide</option>

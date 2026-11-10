@@ -46,9 +46,7 @@ export default function TGPITopNav() {
           <Link
             href="/login"
             className="rounded-xl border border-white/10 px-4 py-2 text-sm font-semibold text-white transition hover:bg-white/5"
-          >
-            Create account
-          </Link>
+          ><LocalizedText text={"Create account"} /></Link>
         </div>
       </div>
     </header>

@@ -50,8 +50,8 @@ export default function GlobalProfileForm() {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <select name="goal" className="input">
-        <option value="work">Work</option>
-        <option value="study">Study</option>
+        <option value="work"><LocalizedText text={"Work"} /></option>
+        <option value="study"><LocalizedText text={"Study"} /></option>
         <option value="live">Live</option>
       </select>
 
@@ -74,7 +74,7 @@ export default function GlobalProfileForm() {
       />
 
       <button type="submit" disabled={loading} className="btn-primary">
-        {loading ? "Saving..." : "Save Profile"}
+        {loading ? <LocalizedText text={"Saving..."} /> : "Save Profile"}
       </button>
     </form>
   );

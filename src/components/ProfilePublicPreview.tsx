@@ -59,7 +59,7 @@ export default function ProfilePublicPreview({
             {bio ? (
               <p className="mt-3 text-sm leading-7 text-slate-300">{bio}</p>
             ) : (
-              <p className="mt-3 text-sm leading-7 text-slate-500">No public bio yet.</p>
+              <p className="mt-3 text-sm leading-7 text-slate-500"><LocalizedText text={"No public bio yet."} /></p>
             )}
 
             <div className="mt-4 flex flex-wrap gap-3">

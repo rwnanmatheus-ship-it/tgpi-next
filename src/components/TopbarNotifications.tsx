@@ -1,4 +1,5 @@
 "use client";
+import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
@@ -38,6 +39,8 @@ const mockNotifications: NotificationItem[] = [
 ];
 
 export default function TopbarNotifications() {
+  const { t: localizeLabel } = useInterfaceLocale();
+
   const [open, setOpen] = useState(false);
 
   const unreadCount = useMemo(
@@ -51,7 +54,7 @@ export default function TopbarNotifications() {
         type="button"
         onClick={() => setOpen((prev) => !prev)}
         className="relative flex h-11 w-11 items-center justify-center rounded-2xl border border-white/10 bg-[#02122d] text-white transition hover:border-yellow-500/30 hover:text-yellow-300"
-        aria-label="Open notifications"
+        aria-label={localizeLabel("Open notifications")}
       >
         <span className="text-lg">🔔</span>
 
@@ -105,9 +108,7 @@ export default function TopbarNotifications() {
             href="/notifications"
             onClick={() => setOpen(false)}
             className="mt-4 block rounded-2xl border border-yellow-500/25 bg-yellow-500/10 px-4 py-3 text-center text-sm font-semibold text-yellow-200 transition hover:bg-yellow-500/15"
-          >
-            View all notifications
-          </Link>
+          ><LocalizedText text={"View all notifications"} /></Link>
         </div>
       ) : null}
     </div>

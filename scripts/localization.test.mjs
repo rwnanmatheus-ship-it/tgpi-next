@@ -209,7 +209,7 @@ test('Atlas preview renders in all six locales without enabling sending or makin
         if (name === 'react/jsx-runtime') return runtime;
         if (name === '@/components/localization/LocaleProvider') return { useLocale: () => ({ locale, t }), LocalizedText: ({ text }) => t(text) };
         if (name === 'next/image') return { __esModule: true, default: ({ alt }) => React.createElement('span', { 'data-alt': alt }) };
-        if (name === 'next/link') return { __esModule: true, default: ({ children, ...props }) => React.createElement('a', props, children) };
+        if (name === 'next/link') return { __esModule: true, default: ({ children, prefetch, ...props }) => React.createElement('a', props, children) };
         if (name === 'react-markdown') return { __esModule: true, default: ({ children }) => children };
         if (name === 'remark-gfm') return { __esModule: true, default: () => {} };
         if (name.endsWith('.module.css')) return { __esModule: true, default: {} };
@@ -243,7 +243,7 @@ test('cookies and refund policies translate every paragraph without changing lin
         if (name === '@/lib/localization/messages') return { translate };
         if (name === '@/components/localization/LocaleProvider') return { useLocale: () => ({ t: (key, values) => translate(locale, key, values) }), LocalizedText: ({ text }) => translate(locale, text) };
         if (name === '@/lib/funnel') return { FUNNEL_CONSENT_COOKIE: 'tgpi_analytics_consent', hasFunnelConsent: () => false };
-        if (name === 'next/link') return { __esModule: true, default: ({ children, ...props }) => React.createElement('a', props, children) };
+        if (name === 'next/link') return { __esModule: true, default: ({ children, prefetch, ...props }) => React.createElement('a', props, children) };
         if (name === '@/components/legal/LegalDocument') return { __esModule: true, default: () => null };
         if (name === '@/components/analytics/AnalyticsPreferences') return { __esModule: true, default: load('src/components/analytics/AnalyticsPreferences.tsx').default };
         throw new Error(`Unexpected import: ${name}`);
@@ -287,12 +287,14 @@ test('cookies and refund policies translate every paragraph without changing lin
   }
 });
 
-test('account language is resolved on the server; stale browser state cannot overwrite it', async () => {
+test('explicit device language wins; account preference restores on a new device', async () => {
   const source = fs.readFileSync('src/lib/localization/preference.ts', 'utf8').replace("'./config'", JSON.stringify(configUrl));
   const { preferredLocale, readLocaleSignal } = await import(url(source));
-  assert.equal(preferredLocale('Deutsch', 'pt-BR', 'en'), 'de');
-  assert.equal(preferredLocale('French', 'en', 'pt-BR'), 'fr');
+  assert.equal(preferredLocale('Deutsch', 'pt-BR', 'en'), 'pt-BR');
+  assert.equal(preferredLocale('French', 'en', 'pt-BR'), 'en');
   assert.equal(preferredLocale('unsupported', 'it', 'en'), 'it');
+  assert.equal(preferredLocale('French', undefined, 'en'), 'fr');
+  assert.equal(preferredLocale('Deutsch', 'invalid', 'en'), 'de');
   assert.equal(preferredLocale(null, '<script>', 'es'), 'es');
   assert.equal(readLocaleSignal(JSON.stringify({ locale: 'pt-BR', at: 123 })), 'pt-BR');
   for (const raw of [null, '{', JSON.stringify({ locale: 'zh' }), JSON.stringify({ locale: {} }), ' '.repeat(129)]) assert.equal(readLocaleSignal(raw), undefined);
@@ -364,7 +366,7 @@ test('course overview localizes controls and counts unique lessons without grant
     new Function('require', 'exports', code)(name => {
       if (name === 'react') return React;
       if (name === 'react/jsx-runtime') return runtime;
-      if (name === 'next/link') return { __esModule: true, default: ({ children, ...props }) => React.createElement('a', props, children) };
+      if (name === 'next/link') return { __esModule: true, default: ({ children, prefetch, ...props }) => React.createElement('a', props, children) };
       if (name === '@/components/localization/LocaleProvider') return { useLocale: () => ({ locale, t }), LocalizedText: ({ text }) => t(text) };
       if (name === '@/components/activation/ActivationProgressProvider') return { __esModule: true, default: ({ children }) => children, useActivationProgress: () => ({ error: '', isAuthenticated: false, isLoading: false, mutate: () => { throw Error('Render cannot write progress'); }, progress: { courseProgress: { [course.id]: { completedLessonIds: [lesson.id, lesson.id, 'removed-lesson'] } } } }) };
       if (name === '@/data/courses') return data;
@@ -402,7 +404,7 @@ test('workspace server presentation follows locale and preserves private identit
       if (name === '@/lib/localization/server') return { getLocale: async () => locale };
       if (name === '@/lib/localization/messages') return { translate };
       if (name === '@/components/localization/LocaleProvider') return { LocalizedText: ({ text }) => t(text) };
-      if (name === 'next/link') return { __esModule: true, default: ({ children, ...props }) => React.createElement('a', props, children) };
+      if (name === 'next/link') return { __esModule: true, default: ({ children, prefetch, ...props }) => React.createElement('a', props, children) };
       if (name === 'next/image') return { __esModule: true, default: () => null };
       if (name === '@/lib/super-app') return { SUPER_APP_MODULES: [] };
       if (name === '@/lib/navigation-system') return { getSuperAppIconName: () => 'graph' };
@@ -417,7 +419,7 @@ test('workspace server presentation follows locale and preserves private identit
           if (dependency === '@/components/localization/LocaleProvider') return { useLocale: () => ({ t, locale }) };
           if (dependency === '@/lib/learning/unified-progress') return { learningStatusLabels: {} };
           if (dependency === '@/lib/progress-sync') return { PROGRESS_SYNC_EVENT: 'synthetic-test' };
-          if (dependency === 'next/link') return { __esModule: true, default: ({ children, ...props }) => React.createElement('a', props, children) };
+          if (dependency === 'next/link') return { __esModule: true, default: ({ children, prefetch, ...props }) => React.createElement('a', props, children) };
           throw Error(`Unexpected continuation import: ${dependency}`);
         }, child);
         return { __esModule: true, default: child.default };
@@ -468,7 +470,7 @@ test('member identity, directory, sharing and public profile render in all six l
         if (name === 'react') return React;
         if (name === 'react/jsx-runtime') return runtime;
         if (name === 'next/navigation') return { useRouter: () => ({ refresh() {} }) };
-        if (name === 'next/link') return { __esModule: true, default: ({ children, ...props }) => React.createElement('a', props, children) };
+        if (name === 'next/link') return { __esModule: true, default: ({ children, prefetch, ...props }) => React.createElement('a', props, children) };
         if (name === '@/components/localization/LocaleProvider') return { useLocale: () => ({ locale, t }) };
         if (name === '@/lib/localization/server') return { getLocale: async () => locale };
         if (name === '@/lib/localization/messages') return { translate };
@@ -517,7 +519,7 @@ test('billing renders localized status, access and dates, including unknown valu
       };
       if (name === 'react/jsx-runtime') return runtime;
       if (name === '@/components/localization/LocaleProvider') return { useLocale: () => ({ locale, t }) };
-      if (name === 'next/link') return { __esModule: true, default: ({ children, ...props }) => React.createElement('a', props, children) };
+      if (name === 'next/link') return { __esModule: true, default: ({ children, prefetch, ...props }) => React.createElement('a', props, children) };
       throw Error('Unexpected import: ' + name);
     }, exports);
     const html = renderToStaticMarkup(React.createElement(exports.default));
@@ -526,5 +528,74 @@ test('billing renders localized status, access and dates, including unknown valu
     assert.ok(html.includes(formattedDate));
     assert.ok(html.includes(t('Access scheduled until')));
     assert.ok(html.includes(t('Manage subscription securely →')));
+  }
+});
+
+test('catalog resolves authored whitespace, accents and decorative labels without guessing unknown copy', () => {
+  assert.equal(translate('pt-BR', '  Choose your country.\n'), 'Escolha seu país.');
+  assert.equal(translate('de', '  Save   '), 'Speichern');
+  assert.equal(translate('pt-BR', '01 / Our purpose'), '01 / Nosso propósito');
+  assert.equal(translate('es', 'Create a free account →'), 'Crear cuenta gratuita →');
+  assert.equal(translate('fr', 'Save:'), 'Enregistrer:');
+  assert.equal(translate('en', 'Escolha seu país.'), 'Choose your country.');
+  assert.equal(translate('de', 'Jane Smith'), 'Jane Smith');
+  assert.equal(translate('it', 'user_123/US$ 19.90'), 'user_123/US$ 19.90');
+  assert.equal(translate('pt-BR', 'Unregistered complete sentence.'), 'Unregistered complete sentence.');
+});
+
+test('public pricing, institute and mobile journeys render the selected language while routes and prices remain stable', async () => {
+  const React = await import('react');
+  const { renderToStaticMarkup } = await import('react-dom/server');
+  const jsxRuntime = await import('react/jsx-runtime');
+  for (const locale of locales) {
+    const t = (key, values) => translate(locale, key, values);
+    const cache = new Map();
+    function module(file) {
+      if (cache.has(file)) return cache.get(file);
+      const exports = {};
+      const compiled = ts.transpileModule(fs.readFileSync(file, 'utf8'), { compilerOptions: { jsx: ts.JsxEmit.ReactJSX, module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
+      const load = name => {
+        if (name === 'react') return React;
+        if (name === 'react/jsx-runtime') return jsxRuntime;
+        if (name === '@/components/localization/LocaleProvider') return { useLocale: () => ({ locale, t }), LocalizedText: ({ text, values }) => t(text, values) };
+        if (name === '@/lib/localization/server') return { getLocale: async () => locale };
+        if (name === '@/lib/localization/messages') return { translate };
+        if (name.endsWith('.css')) return { default: new Proxy({}, { get: (_target, key) => String(key) }) };
+        if (name === 'next/link') return { default: ({ children, prefetch, ...props }) => React.createElement('a', props, children) };
+        if (name === 'next/image') return { default: ({ fill, priority, sizes, ...props }) => React.createElement('img', props) };
+        if (name === '@/lib/subscription-plans') return module('src/lib/subscription-plans.ts');
+        if (name === '@/components/pricing/PricingOutcomeSelector') return module('src/components/pricing/PricingOutcomeSelector.tsx');
+        if (name === '@/components/about/AboutNavigation') return module('src/components/about/AboutNavigation.tsx');
+        if (name === '@/data/country-page-system') return module('src/data/country-page-system.ts');
+        if (name === '@clerk/nextjs') return { Show: ({ children, when }) => when === 'signed-out' ? children : null };
+        if (name === '@/components/TGPIPageShell') return { default: ({ children }) => React.createElement('main', {}, children) };
+        if (['@/components/PremiumActionButton', './MobileMicroLesson', './MobileIcon'].includes(name)) return { default: () => null };
+        throw new Error('Unmocked dependency: ' + name);
+      };
+      new Function('require', 'exports', compiled)(load, exports);
+      cache.set(file, exports);
+      return exports;
+    }
+    const Pricing = module('src/app/pricing/page.tsx').default;
+    const pricing = renderToStaticMarkup(await Pricing({ searchParams: Promise.resolve({}) }));
+    assert.ok(pricing.includes(t('Choose your country.')), locale + ': pricing hero');
+    assert.ok(pricing.includes(t('Everything available with your free account')), locale + ': membership benefits');
+    assert.ok(pricing.includes(t('Can I cancel my subscription?')), locale + ': billing FAQ');
+    assert.ok(pricing.includes(t('What should Premium help you achieve?')), locale + ': interactive outcome selector');
+    assert.ok(pricing.includes('US$ 19.90'), locale + ': currency/amount must not be converted');
+    assert.ok(pricing.includes('href="/country-fit"'), locale + ': canonical navigation');
+    const About = module('src/app/about/page.tsx').default;
+    const about = renderToStaticMarkup(await About());
+    assert.ok(about.includes(t('The world is connected.')), locale + ': institute text');
+    assert.ok(about.includes(t('Understand the context.')), locale + ': data-driven pillar');
+    assert.ok(about.includes(t('Our purpose')), locale + ': section navigation');
+    const Mobile = module('src/components/mobile/MobileHome.tsx').default;
+    const mobile = renderToStaticMarkup(React.createElement(Mobile));
+    assert.ok(mobile.includes(t('Your next chapter.')), locale + ': mobile hero');
+    assert.ok(mobile.includes(t('Research programs, accreditation, language requirements and study authorization.')), locale + ': dynamic mobile intent');
+    if (locale !== 'en') {
+      assert.ok(!pricing.includes('>Choose your country.<'), locale + ': no untranslated hero');
+      assert.ok(!mobile.includes('>Your next chapter.<'), locale + ': no untranslated mobile hero');
+    }
   }
 });

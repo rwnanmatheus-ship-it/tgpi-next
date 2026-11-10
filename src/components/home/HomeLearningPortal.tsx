@@ -90,9 +90,7 @@ export default function HomeLearningPortal() {
                   <Link
                     href="/courses/global-english-2026"
                     className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-xl bg-[var(--tgpi-gold)] px-4 text-xs font-extrabold text-[var(--tgpi-navy)]"
-                  >
-                    Open course
-                  </Link>
+                  ><LocalizedText text={"Open course"} /></Link>
                 </div>
               </div>
             </div>
@@ -111,7 +109,7 @@ export default function HomeLearningPortal() {
                     <span className="text-[var(--tgpi-gold-light)] transition group-hover:translate-x-1">→</span>
                   </div>
                   <p className="mt-4 text-sm font-extrabold leading-6 text-white"><LocalizedText text={course.title} /></p>
-                  <p className="mt-2 text-xs leading-5 text-white/45">{course.status === "available" ? "Available now" : "Capability roadmap"}</p>
+                  <p className="mt-2 text-xs leading-5 text-white/45">{course.status === "available" ? <LocalizedText text={"Available now"} /> : "Capability roadmap"}</p>
                 </Link>
               ))}
             </div>

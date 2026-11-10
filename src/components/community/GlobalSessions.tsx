@@ -62,7 +62,7 @@ export default function GlobalSessions({
       )}
       {loading && <p role="status">Loading sessions…</p>}
       {!loading && !events.length && !error && (
-        <p>No sessions have been scheduled yet.</p>
+        <p><LocalizedText text={"No sessions have been scheduled yet."} /></p>
       )}
       {events.map((e) => (
         <article className={s.reply} key={e.id}>
@@ -125,18 +125,14 @@ export default function GlobalSessions({
                     )
                       await load();
                   }}
-                >
-                  Cancel session
-                </button>
+                ><LocalizedText text={"Cancel session"} /></button>
               )}
             </div>
           )}
         </article>
       ))}
       {next && (
-        <button className={s.secondary} onClick={() => void load(true)}>
-          Load more sessions
-        </button>
+        <button className={s.secondary} onClick={() => void load(true)}><LocalizedText text={"Load more sessions"} /></button>
       )}
       {manage && (
         <>
@@ -171,9 +167,7 @@ export default function GlobalSessions({
                 }
               }}
             >
-              <label>
-                Session title
-                <input
+              <label><LocalizedText text={"Session title"} /><input
                   required
                   maxLength={180}
                   value={title}
@@ -189,9 +183,7 @@ export default function GlobalSessions({
                   onChange={(e) => setDescription(e.target.value)}
                 />
               </label>
-              <label>
-                Date and time in your timezone
-                <input
+              <label><LocalizedText text={"Date and time in your timezone"} /><input
                   type="datetime-local"
                   required
                   value={date}
@@ -209,17 +201,13 @@ export default function GlobalSessions({
                   onChange={(e) => setCapacity(Number(e.target.value))}
                 />
               </label>
-              <label>
-                Meeting URL (HTTPS)
-                <input
+              <label><LocalizedText text={"Meeting URL (HTTPS)"} /><input
                   type="url"
                   value={url}
                   onChange={(e) => setUrl(e.target.value)}
                 />
               </label>
-              <button className={s.button} disabled={busy}>
-                Create session
-              </button>
+              <button className={s.button} disabled={busy}><LocalizedText text={"Create session"} /></button>
             </form>
           )}
         </>

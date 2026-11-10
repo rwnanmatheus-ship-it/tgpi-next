@@ -78,9 +78,7 @@ export default function TermsPage() {
           Payments are processed through Stripe. Your card issuer or payment provider may
           apply exchange rates, taxes, fees or other charges that TGPI does not control.
           Detailed billing rules are available in the{" "}
-          <Link href="/billing-terms" className="font-bold text-[#956A13] hover:underline">
-            Billing Terms
-          </Link>.
+          <Link href="/billing-terms" className="font-bold text-[#956A13] hover:underline"><LocalizedText text={"Billing Terms"} /></Link>.
         </p>
       </section>
 

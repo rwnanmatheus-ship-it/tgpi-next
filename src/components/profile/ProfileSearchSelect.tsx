@@ -1,5 +1,7 @@
 "use client";
 
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import { useId, useState } from "react";
 import { filterProfileOptions } from "@/lib/profile-options";
 
@@ -30,7 +32,7 @@ export default function ProfileSearchSelect({ value, options, onChange, label, a
     </div>
     {open ? <ul id={`${id}-list`} role="listbox" aria-label={label} className="absolute z-40 mt-2 max-h-64 w-full overflow-auto rounded-2xl border border-[var(--tgpi-border)] bg-white p-1 shadow-[0_18px_40px_#0b1f3a26]">
       {choices.map((option, index) => <li id={`${id}-${index}`} key={option.value} role="option" aria-selected={option.value === value} className={`cursor-pointer rounded-xl px-3 py-3 text-sm font-semibold ${index === active || option.value === value ? "bg-[var(--tgpi-navy-raised)] text-white" : "text-[var(--tgpi-navy-raised)] hover:bg-[#EEF2F5]"}`} onPointerDown={event => event.preventDefault()} onClick={() => choose(option.value)}>{option.label}</li>)}
-      {!choices.length ? <li className="p-3 text-sm text-[var(--tgpi-muted)]">No matching result. Try another spelling.</li> : null}
+      {!choices.length ? <li className="p-3 text-sm text-[var(--tgpi-muted)]"><LocalizedText text={"No matching result. Try another spelling."} /></li> : null}
     </ul> : null}
   </div>;
 }

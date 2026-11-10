@@ -1,4 +1,7 @@
 "use client";
+import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { journeyStages } from "@/lib/community/features";
@@ -22,6 +25,8 @@ const empty = {
   welcome: "",
 };
 export default function CommunityCreateFlow({ close }: { close: () => void }) {
+  const { t: localizeLabel } = useInterfaceLocale();
+
   const router = useRouter(),
     [catalog, setCatalog] = useState<{ id: string; title: string }[]>([]),
     [value, setValue] = useState(empty),
@@ -94,8 +99,8 @@ export default function CommunityCreateFlow({ close }: { close: () => void }) {
     }
   }
   return (
-    <section className={s.panel} aria-label="Create community">
-      <p className={s.step}>STEP {step} OF 4</p>
+    <section className={s.panel} aria-label={localizeLabel("Create community")}>
+      <p className={s.step}><LocalizedText text={"STEP"} />{" "}{step} OF 4</p>
       <h2>
         {
           [
@@ -264,21 +269,17 @@ export default function CommunityCreateFlow({ close }: { close: () => void }) {
               type="button"
               disabled={busy}
               onClick={() => setStep(step - 1)}
-            >
-              Back
-            </button>
+            ><LocalizedText text={"Back"} /></button>
           )}
           <button className={s.button} disabled={busy}>
-            {busy ? "Saving…" : step < 4 ? "Continue" : "Create community"}
+            {busy ? <LocalizedText text={"Saving…"} /> : step < 4 ? <LocalizedText text={"Continue"} /> : <LocalizedText text={"Create community"} />}
           </button>
           <button
             type="button"
             className={s.secondary}
             disabled={busy}
             onClick={() => void saveDraft()}
-          >
-            Save draft & close
-          </button>
+          ><LocalizedText text={"Save draft & close"} /></button>
         </div>
       </form>
     </section>

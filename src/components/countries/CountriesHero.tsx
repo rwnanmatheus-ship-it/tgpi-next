@@ -1,7 +1,8 @@
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import { COUNTRY_DECISION_PRESETS } from "@/data/country-page-system";
-import { LocalizedText } from "@/components/localization/LocaleProvider";
+import { LocalizedText, useLocale } from "@/components/localization/LocaleProvider";
 
 
 interface CountriesHeroProps {
@@ -16,6 +17,8 @@ export default function CountriesHero({
   countryCount,
   regionCount,
 }: CountriesHeroProps) {
+  const { t } = useLocale();
+
   return (
     <section
       aria-labelledby="countries-hero-title"
@@ -23,7 +26,7 @@ export default function CountriesHero({
     >
       <Image
         src={HERO_IMAGE}
-        alt="Global country intelligence observatory with an illuminated world atlas and international architecture"
+        alt={t("Global country intelligence observatory with an illuminated world atlas and international architecture")}
         fill
         priority
         quality={88}
@@ -38,43 +41,31 @@ export default function CountriesHero({
       <div className="relative flex h-full flex-col px-6 pb-32 pt-8 sm:px-10 sm:pb-28 sm:pt-10 lg:justify-center lg:px-14 lg:pb-24 lg:pt-8">
         <div className="max-w-[720px]">
           <div className="flex flex-wrap items-center gap-3">
-            <p className="w-fit rounded-full border border-[var(--tgpi-gold-light)]/35 bg-[var(--tgpi-navy)]/65 px-4 py-2 text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-light)] backdrop-blur-xl">
-              TGPI Country Intelligence
-            </p>
-            <span className="text-[10px] font-extrabold uppercase tracking-[0.16em] text-white/55">
-              Global research system
-            </span>
+            <p className="w-fit rounded-full border border-[var(--tgpi-gold-light)]/35 bg-[var(--tgpi-navy)]/65 px-4 py-2 text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-light)] backdrop-blur-xl"><LocalizedText text={"TGPI Country Intelligence"} /></p>
+            <span className="text-[10px] font-extrabold uppercase tracking-[0.16em] text-white/55"><LocalizedText text={"Global research system"} /></span>
           </div>
 
           <h1
             id="countries-hero-title"
             className="mt-5 max-w-3xl font-[var(--tgpi-font-display)] text-[clamp(3.05rem,6vw,5.35rem)] font-semibold leading-[0.88] tracking-[-0.055em] text-white"
-          >
-            Understand a country before you choose a future.
-          </h1>
+          ><LocalizedText text={"Understand a country before you choose a future."} /></h1>
 
-          <p className="mt-5 max-w-2xl text-base leading-7 text-[#D2DCE7] sm:text-lg sm:leading-8"><LocalizedText text="Explore" />{" "}{countryCount} country systems through cost, safety, language,
-            education, careers, culture and mobility—then carry the decision into
-            comparison, documents and learning.
+          <p className="mt-5 max-w-2xl text-base leading-7 text-[#D2DCE7] sm:text-lg sm:leading-8"><LocalizedText text="Explore {count} countries through cost, safety, language, education, careers, culture and mobility—then carry the decision into comparison, documents and learning." values={{ count: countryCount }} />
           </p>
 
           <div className="mt-7 grid gap-3 sm:flex">
             <a
               href="#world-journey"
               className="inline-flex min-h-13 items-center justify-center rounded-2xl bg-[var(--tgpi-gold)] px-7 text-sm font-extrabold text-[var(--tgpi-navy)] transition hover:-translate-y-0.5 hover:bg-[#D4AA49] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
-            >
-              Open the world atlas
-            </a>
+            ><LocalizedText text={"Open the world atlas"} /></a>
             <a
               href="#country-explorer"
               className="inline-flex min-h-13 items-center justify-center rounded-2xl border border-white/22 bg-[var(--tgpi-navy)]/55 px-7 text-sm font-extrabold text-white backdrop-blur-xl transition hover:-translate-y-0.5 hover:border-[var(--tgpi-gold-light)] hover:text-[var(--tgpi-gold-light)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
-            >
-              Build a shortlist
-            </a>
+            ><LocalizedText text={"Build a shortlist"} /></a>
           </div>
 
           <nav
-            aria-label="Explore countries by decision objective"
+            aria-label={t("Explore countries by decision objective")}
             className="mt-6 flex max-w-2xl gap-2 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
           >
             {COUNTRY_DECISION_PRESETS.map((preset) => (
@@ -83,7 +74,7 @@ export default function CountriesHero({
                 href={`/countries?intent=${preset.id}#country-explorer`}
                 className="inline-flex min-h-9 shrink-0 items-center rounded-full border border-white/15 bg-[var(--tgpi-navy)]/55 px-3 text-[11px] font-bold text-[#D7E0EB] backdrop-blur-xl transition hover:border-[var(--tgpi-gold-light)]/60 hover:bg-white/[0.1] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
               >
-                {preset.label}
+                <LocalizedText text={preset.label} />
               </Link>
             ))}
           </nav>
@@ -104,10 +95,10 @@ function HeroMetric({ label, value }: { label: string; value: string }) {
   return (
     <div className="border-r border-white/10 px-4 py-3 last:border-r-0 sm:px-5 sm:py-4">
       <p className="text-[8px] font-extrabold uppercase tracking-[0.14em] text-white/45">
-        {label}
+        <LocalizedText text={label} />
       </p>
       <p className="mt-1 font-[var(--tgpi-font-display)] text-xl font-semibold text-white sm:text-2xl">
-        {value}
+        <LocalizedText text={value} />
       </p>
     </div>
   );

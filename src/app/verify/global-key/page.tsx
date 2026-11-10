@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { verifyPublicGlobalKey } from "@/lib/global-key.server";
@@ -42,9 +44,7 @@ export default async function VerifyGlobalKeyPage({
           <Link className="text-xs font-extrabold text-[#C5D0DB] transition hover:text-white" href="/">
             TGPI — The Global Polymath Institute
           </Link>
-          <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[9px] font-extrabold uppercase tracking-[0.15em] text-[#8FA0B2]">
-            Public verification
-          </span>
+          <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1.5 text-[9px] font-extrabold uppercase tracking-[0.15em] text-[#8FA0B2]"><LocalizedText text={"Public verification"} /></span>
         </header>
 
         <section className={`relative mt-8 overflow-hidden rounded-[32px] border p-6 shadow-[0_30px_90px_rgba(0,0,0,0.38)] sm:p-10 ${verified ? "border-[#72C79D]/35 bg-[radial-gradient(circle_at_top_right,rgba(51,153,104,0.18),transparent_36%),#081727]" : historical ? "border-[var(--tgpi-gold)]/35 bg-[radial-gradient(circle_at_top_right,rgba(181,138,42,0.18),transparent_36%),#081727]" : "border-[#D66B6B]/30 bg-[radial-gradient(circle_at_top_right,rgba(164,56,56,0.16),transparent_36%),#081727]"}`}>

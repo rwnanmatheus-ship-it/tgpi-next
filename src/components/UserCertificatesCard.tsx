@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 export default function UserCertificatesCard() {
   const certificates = [
     {
@@ -20,7 +22,7 @@ export default function UserCertificatesCard() {
   return (
     <section className="rounded-2xl border border-white/10 bg-white/5 p-5">
       <div className="mb-5 flex items-center justify-between">
-        <h2 className="text-lg font-bold">Meus Certificados</h2>
+        <h2 className="text-lg font-bold"><LocalizedText text={"Meus Certificados"} /></h2>
         <span className="text-xs text-yellow-400">TGPI Verified</span>
       </div>
 

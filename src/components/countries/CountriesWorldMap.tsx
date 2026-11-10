@@ -1,4 +1,5 @@
 "use client";
+import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 
 import Image from "next/image";
 import { startTransition, useEffect, useMemo, useRef, useState } from "react";
@@ -115,6 +116,8 @@ export default function CountriesWorldMap({
   onCountryPreview,
   onRegionChange,
 }: CountriesWorldMapProps) {
+  const { t: localizeLabel } = useInterfaceLocale();
+
   const router = useRouter();
   const [zoomLevel, setZoomLevel] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
@@ -338,7 +341,7 @@ export default function CountriesWorldMap({
         })}
       </div>
 
-      <div className="atlas-controls"><label>Locate a destination<select aria-label="Locate a destination on the atlas" value={selectedSlug} onChange={e => { previewCountry(e.target.value); setZoomLevel(1); setPan({ x: 0, y: 0 }); onRegionChange("world"); }}>{countries.map(c => <option key={c.slug} value={c.slug}>{c.name}</option>)}</select></label><div role="group" aria-label="Map zoom"><button type="button" aria-label="Zoom out" disabled={zoomLevel <= 1} onClick={() => setZoomLevel(z => Math.max(1, z - .5))}>−</button><span>{Math.round(zoomLevel * 100)}%</span><button type="button" aria-label="Zoom in" disabled={zoomLevel >= 4} onClick={() => setZoomLevel(z => Math.min(4, z + .5))}>+</button><button type="button" onClick={() => { setZoomLevel(1); setPan({ x: 0, y: 0 }); onRegionChange("world"); }}><LocalizedText text="Reset" /></button></div></div>
+      <div className="atlas-controls"><label>Locate a destination<select aria-label="Locate a destination on the atlas" value={selectedSlug} onChange={e => { previewCountry(e.target.value); setZoomLevel(1); setPan({ x: 0, y: 0 }); onRegionChange("world"); }}>{countries.map(c => <option key={c.slug} value={c.slug}>{c.name}</option>)}</select></label><div role="group" aria-label={localizeLabel("Map zoom")}><button type="button" aria-label={localizeLabel("Zoom out")} disabled={zoomLevel <= 1} onClick={() => setZoomLevel(z => Math.max(1, z - .5))}>−</button><span>{Math.round(zoomLevel * 100)}%</span><button type="button" aria-label={localizeLabel("Zoom in")} disabled={zoomLevel >= 4} onClick={() => setZoomLevel(z => Math.min(4, z + .5))}>+</button><button type="button" onClick={() => { setZoomLevel(1); setPan({ x: 0, y: 0 }); onRegionChange("world"); }}><LocalizedText text="Reset" /></button></div></div>
       <div
         className="tgpi-map-cinematic-frame relative mt-3 h-[340px] overflow-hidden rounded-[26px] border border-white/12 bg-[var(--tgpi-navy)] shadow-[inset_0_0_110px_rgba(56,113,158,.18),0_24px_70px_rgba(0,0,0,.2)] sm:h-[440px] lg:h-[500px]"
         data-phase={cinematic.phase}
@@ -479,7 +482,7 @@ export default function CountriesWorldMap({
                             : "fill-[url(#tgpi-land-relief)] stroke-[#94BBD5]/45"
                         }`}
                       >
-                        <title><LocalizedText text={country.name} /> — open profile</title>
+                        <title><LocalizedText text={country.name} />{" "}<LocalizedText text={"— open profile"} /></title>
                       </path>
                     );
                   })

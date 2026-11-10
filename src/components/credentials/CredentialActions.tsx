@@ -1,4 +1,5 @@
 "use client";
+import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 
 import Link from "next/link";
 import CertificateDownloadButton from "@/components/credentials/CertificateDownloadButton";
@@ -23,6 +24,8 @@ export default function CredentialActions({
   downloadUrl,
   verificationUrl,
 }: CredentialActionsProps) {
+  const { t: localizeLabel } = useInterfaceLocale();
+
   const [message, setMessage] = useState("");
 
   async function copyValue(value: string, successMessage: string) {
@@ -58,7 +61,7 @@ export default function CredentialActions({
   }
 
   return (
-    <section className="credential-actions" aria-label="Certificate actions">
+    <section className="credential-actions" aria-label={localizeLabel("Certificate actions")}>
       <div className="credential-action-buttons print:hidden">
         {owner && (
           <CertificateDownloadButton
@@ -72,9 +75,7 @@ export default function CredentialActions({
           type="button"
           onClick={() => void shareCredential()}
           className="credential-button"
-        >
-          Share certificate ↗
-        </button>
+        ><LocalizedText text={"Share certificate ↗"} /></button>
         {owner && (
           <Link href={verificationUrl} className="credential-button">
             Open live verification

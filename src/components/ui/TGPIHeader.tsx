@@ -1,10 +1,15 @@
 "use client";
+import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import TgpiAccountMenu from "@/components/profile/TgpiAccountMenu";
 import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
 
 export default function TGPIHeader() {
+  const { t: localizeLabel } = useInterfaceLocale();
+
   const { user } = useUser();
 
   return (
@@ -15,12 +20,12 @@ export default function TGPIHeader() {
       />
 
       <div className="flex items-center gap-4">
-        <Link href="/notifications" className="grid h-10 w-10 place-items-center rounded-full border border-white/10" aria-label="Open notifications">◌</Link>
+        <Link href="/notifications" className="grid h-10 w-10 place-items-center rounded-full border border-white/10" aria-label={localizeLabel("Open notifications")}>◌</Link>
 
         <div className="flex items-center gap-2 rounded-xl bg-white/5 px-3 py-2">
           <TgpiAccountMenu />
           <div>
-            <p className="text-sm">{user?.fullName || user?.firstName || "TGPI member"}</p>
+            <p className="text-sm">{user?.fullName || user?.firstName || <LocalizedText text={"TGPI member"} />}</p>
             <p className="text-xs text-slate-400">{user?.username ? `@${user.username}` : "Create your @ID"}</p>
           </div>
         </div>

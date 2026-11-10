@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import type { UserData } from "@/types";
 
 type LiveRankingUser = Pick<UserData, "uid" | "name" | "globalScore">;
@@ -19,7 +21,7 @@ export default function LiveRanking({ users }: LiveRankingProps) {
             key={user.uid ?? `${user.name ?? "user"}-${index}`}
             className="flex justify-between rounded-xl border border-slate-800 p-3"
           >
-            <span>{user.name ?? "TGPI Member"}</span>
+            <span>{user.name ?? <LocalizedText text={"TGPI Member"} />}</span>
             <span className="text-yellow-400">{user.globalScore ?? 0}</span>
           </div>
         ))}

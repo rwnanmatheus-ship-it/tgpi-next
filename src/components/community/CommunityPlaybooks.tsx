@@ -83,8 +83,7 @@ export default function CommunityPlaybooks({
         <article className={s.reply} key={b.id}>
           <h3>{b.title}</h3>
           <p>{b.description}</p>
-          <p className={s.meta}>
-            Updated {new Date(b.updatedAt).toLocaleDateString()}
+          <p className={s.meta}><LocalizedText text={"Updated"} />{" "}{new Date(b.updatedAt).toLocaleDateString()}
           </p>
           <ol>
             {b.sources.map((p) => (

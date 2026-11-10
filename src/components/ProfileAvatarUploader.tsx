@@ -1,5 +1,7 @@
 "use client";
 
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import Image from "next/image";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 
@@ -43,9 +45,7 @@ export default function ProfileAvatarUploader({
 
   return (
     <section className="rounded-3xl border border-white/10 bg-gradient-to-br from-slate-950 to-slate-900 p-5 shadow-[0_0_40px_rgba(255,215,0,0.04)]">
-      <p className="mb-4 text-xs uppercase tracking-[0.2em] text-slate-400">
-        Profile Photo
-      </p>
+      <p className="mb-4 text-xs uppercase tracking-[0.2em] text-slate-400"><LocalizedText text={"Profile Photo"} /></p>
 
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
         <div className="relative flex h-24 w-24 items-center justify-center overflow-hidden rounded-full border border-yellow-500/25 bg-black text-3xl font-bold text-yellow-400 shadow-[0_0_30px_rgba(250,204,21,0.08)]">
@@ -69,7 +69,7 @@ export default function ProfileAvatarUploader({
             onClick={() => inputRef.current?.click()}
             className="rounded-2xl bg-gradient-to-r from-yellow-500 to-amber-400 px-5 py-3 font-semibold text-black transition hover:brightness-105"
           >
-            {loading ? "Saving..." : "Upload new photo"}
+            {loading ? <LocalizedText text={"Saving..."} /> : "Upload new photo"}
           </button>
 
           <p className="text-sm text-slate-400">

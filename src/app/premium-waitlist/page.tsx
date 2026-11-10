@@ -21,9 +21,7 @@ export default function PremiumWaitlistPage() {
             <Link
               href="/pricing"
               className="text-sm font-bold text-[var(--tgpi-navy-raised)] transition hover:text-[var(--tgpi-gold-hover)]"
-            >
-              ← Back to pricing
-            </Link>
+            ><LocalizedText text={"← Back to pricing"} /></Link>
             <p className="mt-10 text-xs font-black uppercase tracking-[0.3em] text-[var(--tgpi-gold-hover)]">
               TGPI Premium Founding Access
             </p>

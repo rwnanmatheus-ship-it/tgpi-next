@@ -2,9 +2,9 @@ import { isLocale, resolveLocale, type Locale } from './config';
 
 export const localeSyncKey = 'tgpi:locale:changed';
 
-/** Authenticated account preferences are authoritative; cookies also support visitors. */
+/** An explicit choice on this device wins; the account restores it on a new device. */
 export function preferredLocale(accountValue: unknown, cookieValue: unknown, fallback: Locale): Locale {
-  return resolveLocale(accountValue) ?? (isLocale(cookieValue) ? cookieValue : fallback);
+  return (isLocale(cookieValue) ? cookieValue : undefined) ?? resolveLocale(accountValue) ?? fallback;
 }
 
 /** Storage events carry a language only, never identity or profile information. */

@@ -1,4 +1,5 @@
 "use client";
+import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 
 import Link from "next/link";
 import Image from "next/image";
@@ -291,6 +292,8 @@ export default function GlobalKeyCenter({
   verifyOrigin,
   memberName,
 }: GlobalKeyCenterProps) {
+  const { t: localizeLabel } = useInterfaceLocale();
+
   const [keyView, setKeyView] = useState(initialKey);
   const [feedback, setFeedback] = useState<Feedback>(null);
   const [showQr, setShowQr] = useState(false);
@@ -412,7 +415,7 @@ export default function GlobalKeyCenter({
                 <div className="mb-6 flex items-center gap-4">
                   <Image
                     src="/brand/tgpi-crest-metal-v3-256.png"
-                    alt="TGPI crest"
+                    alt={localizeLabel("TGPI crest")}
                     width={48}
                     height={58}
                   />

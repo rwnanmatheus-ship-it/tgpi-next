@@ -149,12 +149,10 @@ export function CountryCard({ country }: CountryCardProps) {
 
           <div className="flex items-center justify-between gap-4 border-t border-[var(--tgpi-border)] pt-4">
             <div className="min-w-0">
-              <p className="text-[10px] font-extrabold uppercase tracking-[0.16em] text-[var(--tgpi-muted)]">Primary language</p>
+              <p className="text-[10px] font-extrabold uppercase tracking-[0.16em] text-[var(--tgpi-muted)]"><LocalizedText text={"Primary language"} /></p>
               <p className="mt-1 line-clamp-1 text-sm font-bold text-[var(--tgpi-navy)]">{country.language}</p>
             </div>
-            <span className="inline-flex min-h-11 shrink-0 items-center rounded-xl bg-[var(--tgpi-navy)] px-4 text-xs font-extrabold text-white transition group-hover:bg-[var(--tgpi-gold)] group-hover:text-[var(--tgpi-navy)]">
-              Open profile →
-            </span>
+            <span className="inline-flex min-h-11 shrink-0 items-center rounded-xl bg-[var(--tgpi-navy)] px-4 text-xs font-extrabold text-white transition group-hover:bg-[var(--tgpi-gold)] group-hover:text-[var(--tgpi-navy)]"><LocalizedText text={"Open profile →"} /></span>
           </div>
         </div>
       </Link>

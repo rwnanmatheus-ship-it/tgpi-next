@@ -1,4 +1,5 @@
 "use client";
+import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
 import MemberAvatar from "./MemberAvatar";
@@ -31,6 +32,8 @@ export default function CommunityPost({
   busy: boolean;
   action: Action;
 }) {
+  const { t: localizeLabel } = useInterfaceLocale();
+
   const messagesRef = useRef<HTMLDivElement>(null);
   const stickToBottom = useRef(true);
   const [historyExpanded, setHistoryExpanded] = useState(false);
@@ -128,9 +131,9 @@ export default function CommunityPost({
         <div className={s.meta}>
           <span className={s.badge}>{p.kind}</span>
           {p.state === "pending" && (
-            <span className={s.badge}>Awaiting moderation</span>
+            <span className={s.badge}><LocalizedText text={"Awaiting moderation"} /></span>
           )}
-          {p.pinned && <span className={s.badge}>Pinned</span>}
+          {p.pinned && <span className={s.badge}><LocalizedText text={"Pinned"} /></span>}
           {p.kind === "question" && (
             <span className={s.badge}>
               {p.accepted ? "Answered" : "Open question"}
@@ -140,7 +143,7 @@ export default function CommunityPost({
           <time dateTime={p.createdAt}>
             {new Date(p.createdAt).toLocaleDateString()}
           </time>
-          {p.updatedAt !== p.createdAt && <span>Edited</span>}
+          {p.updatedAt !== p.createdAt && <span><LocalizedText text={"Edited"} /></span>}
         </div>
         {editing ? (
           <form
@@ -232,8 +235,7 @@ export default function CommunityPost({
                   helpful: !p.reacted,
                 })
               }
-            >
-              Helpful · {p.helpfulCount || 0}
+            ><LocalizedText text={"Helpful ·"} />{" "}{p.helpfulCount || 0}
             </button>
           )}
           <Link
@@ -272,7 +274,7 @@ export default function CommunityPost({
                   void action({ action: "save", post: p.id, saved: !p.saved })
                 }
               >
-                {p.saved ? "Unsave" : "Save"}
+                {p.saved ? "Unsave" : <LocalizedText text={"Save"} />}
               </button>
               {uid !== p.author && active(membership) && (
                 <>
@@ -291,9 +293,7 @@ export default function CommunityPost({
                           blocked: true,
                         });
                     }}
-                  >
-                    Block member
-                  </button>
+                  ><LocalizedText text={"Block member"} /></button>
                   <button
                     className={s.secondary}
                     disabled={busy}
@@ -308,9 +308,7 @@ export default function CommunityPost({
                           reason,
                         });
                     }}
-                  >
-                    Report member
-                  </button>
+                  ><LocalizedText text={"Report member"} /></button>
                 </>
               )}
               <button
@@ -323,9 +321,7 @@ export default function CommunityPost({
                   if (reason)
                     void action({ action: "report", post: p.id, reason });
                 }}
-              >
-                Report
-              </button>
+              ><LocalizedText text={"Report"} /></button>
             </>
           )}
           {own && active(membership) && (
@@ -344,9 +340,7 @@ export default function CommunityPost({
                 if (window.confirm("Remove this publication?"))
                   void action({ action: "delete", post: p.id });
               }}
-            >
-              Remove
-            </button>
+            ><LocalizedText text={"Remove"} /></button>
           )}
           {moderator && (
             <button
@@ -382,7 +376,7 @@ export default function CommunityPost({
               }
             }}
           >
-            {refreshing ? "Refreshing…" : "Refresh"}
+            {refreshing ? "Refreshing…" : <LocalizedText text={"Refresh"} />}
           </button>
         </header>
       )}
@@ -392,8 +386,8 @@ export default function CommunityPost({
         </p>
       )}
       {expanded && replies !== null && (
-        <section aria-label="Replies">
-          {!replies.length && <p>No replies yet.</p>}
+        <section aria-label={localizeLabel("Replies")}>
+          {!replies.length && <p><LocalizedText text={"No replies yet."} /></p>}
           <div
             className={s.chatMessages}
             ref={messagesRef}
@@ -426,7 +420,7 @@ export default function CommunityPost({
                       dateStyle: "medium",
                       timeStyle: "short",
                     })}
-                    {r.updatedAt !== r.createdAt ? " · Edited" : ""}
+                    {r.updatedAt !== r.createdAt ? <LocalizedText text={" · Edited"} /> : ""}
                   </time>
                   <p className={s.messageBody}>{r.body}</p>
                   <div className={s.imageGrid}>
@@ -450,10 +444,10 @@ export default function CommunityPost({
                     ))}
                   </div>
                   <details className={s.messageOptions}>
-                    <summary>Message options</summary>
+                    <summary><LocalizedText text={"Message options"} /></summary>
                     <div className={s.actions}>
                       {p.accepted === r.id ? (
-                        <span className={s.badge}>Accepted answer</span>
+                        <span className={s.badge}><LocalizedText text={"Accepted answer"} /></span>
                       ) : (
                         p.kind === "question" &&
                         own && (
@@ -467,9 +461,7 @@ export default function CommunityPost({
                                 comment: r.id,
                               })
                             }
-                          >
-                            Accept answer
-                          </button>
+                          ><LocalizedText text={"Accept answer"} /></button>
                         )
                       )}
                       {uid === r.author && (
@@ -492,9 +484,7 @@ export default function CommunityPost({
                             )
                               await load();
                           }}
-                        >
-                          Edit reply
-                        </button>
+                        ><LocalizedText text={"Edit reply"} /></button>
                       )}
                       {(uid === r.author || moderator) && (
                         <button
@@ -511,9 +501,7 @@ export default function CommunityPost({
                             )
                               await load();
                           }}
-                        >
-                          Remove reply
-                        </button>
+                        ><LocalizedText text={"Remove reply"} /></button>
                       )}
                       {uid && (
                         <button
@@ -531,9 +519,7 @@ export default function CommunityPost({
                                 reason,
                               });
                           }}
-                        >
-                          Report reply
-                        </button>
+                        ><LocalizedText text={"Report reply"} /></button>
                       )}
                     </div>
                   </details>
@@ -547,9 +533,7 @@ export default function CommunityPost({
             </p>
           )}
           {next && (
-            <button className={s.secondary} onClick={() => void load(true)}>
-              Load more replies
-            </button>
+            <button className={s.secondary} onClick={() => void load(true)}><LocalizedText text={"Load more replies"} /></button>
           )}
           {active(membership) && (
             <form
@@ -572,9 +556,7 @@ export default function CommunityPost({
                 }
               }}
             >
-              <label>
-                Your reply
-                <textarea
+              <label><LocalizedText text={"Your reply"} /><textarea
                   required={!images.length}
                   placeholder="Share an experience, ask a question or mention @someone…"
                   rows={3}
@@ -616,15 +598,13 @@ export default function CommunityPost({
                           prev.filter((x) => x.id !== image.id),
                         )
                       }
-                    >
-                      Remove attachment
-                    </button>
+                    ><LocalizedText text={"Remove attachment"} /></button>
                   </figure>
                 ))}
               </div>
               {images.length < 4 && (
                 <details>
-                  <summary>Attach a photo</summary>
+                  <summary><LocalizedText text={"Attach a photo"} /></summary>
                   <ImageUpload
                     community={p.community}
                     kind="comment"
@@ -641,7 +621,7 @@ export default function CommunityPost({
                   busy || uploading || (!reply.trim() && !images.length)
                 }
               >
-                {busy ? "Sending…" : "Send message"}
+                {busy ? "Sending…" : <LocalizedText text={"Send message"} />}
               </button>
             </form>
           )}

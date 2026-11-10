@@ -1,5 +1,7 @@
 "use client";
 
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
@@ -267,7 +269,7 @@ export default function PremiumActionButton({
             ? "Opening billing management..."
             : "Opening secure checkout..."
           : checkingStatus
-            ? "Checking membership..."
+            ? <LocalizedText text={"Checking membership..."} />
             : hasFounderAccess
               ? "Open TGPI Founder Access"
               : hasPreviewAccess
@@ -277,7 +279,7 @@ export default function PremiumActionButton({
                   : isSignedIn && !billing
                     ? "Retry membership check"
                     : shouldManageBilling
-                      ? "Manage subscription"
+                      ? <LocalizedText text={"Manage subscription"} />
                       : isSignedIn
                         ? "Continue to secure checkout"
                         : "Sign in to subscribe"}
@@ -289,9 +291,7 @@ export default function PremiumActionButton({
           onClick={manageSubscription}
           disabled={loading || checkingStatus}
           className="mt-3 min-h-11 w-full rounded-xl border border-white/30 bg-[#07172B] px-4 py-3 text-sm font-bold text-white transition hover:bg-[#142D4C] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--tgpi-gold-light)] disabled:opacity-60"
-        >
-          Manage subscription
-        </button>
+        ><LocalizedText text={"Manage subscription"} /></button>
       )}
       {error && (
         <p

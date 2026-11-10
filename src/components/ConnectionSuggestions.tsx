@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import type { UserData } from "@/types";
 
 type ConnectionSuggestion = Pick<UserData, "uid" | "name" | "targetCountry">;
@@ -24,7 +26,7 @@ export default function ConnectionSuggestions({
             className="flex items-center justify-between rounded-xl border border-slate-800 p-4"
           >
             <div>
-              <p className="font-semibold">{user.name ?? "TGPI Member"}</p>
+              <p className="font-semibold">{user.name ?? <LocalizedText text={"TGPI Member"} />}</p>
               <p className="text-sm text-slate-400">
                 {user.targetCountry ?? "Target country not defined"}
               </p>

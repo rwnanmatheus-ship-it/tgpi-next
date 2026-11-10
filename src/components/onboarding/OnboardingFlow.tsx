@@ -1,4 +1,5 @@
 "use client";
+import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 
 import { announceProgressSaved } from "@/lib/progress-sync";
 
@@ -387,7 +388,7 @@ export default function OnboardingFlow({
                     onClick={goBack}
                     className="inline-flex min-h-12 flex-1 items-center justify-center rounded-xl border border-[#CFC7B8] bg-white px-5 text-sm font-extrabold text-[var(--tgpi-navy-raised)] transition hover:border-[var(--tgpi-gold-hover)] sm:flex-none"
                   >
-                    {step === 1 ? "Exit" : "Back"}
+                    {step === 1 ? "Exit" : <LocalizedText text={"Back"} />}
                   </button>
                   <button
                     type="button"
@@ -401,7 +402,7 @@ export default function OnboardingFlow({
                         : data.completed
                           ? "Update my plan"
                           : "Complete my plan"
-                      : "Continue"}
+                      : <LocalizedText text={"Continue"} />}
                     <span aria-hidden="true">→</span>
                   </button>
                 </div>
@@ -496,6 +497,8 @@ function CountriesStep({
   updateData: (patch: Partial<TgpiOnboardingData>) => void;
   setValidationMessage: (message: string) => void;
 }) {
+  const { t: localizeLabel } = useInterfaceLocale();
+
   const [query, setQuery] = useState("");
   const [region, setRegion] = useState("all");
   const [visibleCount, setVisibleCount] = useState(24);
@@ -536,7 +539,7 @@ function CountriesStep({
     <div>
       <StepHeading
         eyebrow="Step 2 of 5"
-        title="Which countries interest you?"
+        title={localizeLabel("Which countries interest you?")}
         description="Select up to five countries. TGPI will use your choices to organize comparisons and recommendations."
         aside={`${data.targetCountries.length}/5 selected`}
       />
@@ -554,12 +557,12 @@ function CountriesStep({
               setQuery(event.target.value);
               setVisibleCount(24);
             }}
-            placeholder="Search across 195 countries"
+            placeholder={localizeLabel("Search across 195 countries")}
             className="min-h-12 w-full rounded-xl border border-[var(--tgpi-border)] bg-white py-3 pl-11 pr-4 text-sm text-[var(--tgpi-navy-raised)] placeholder:text-[#8B929D] focus:border-[var(--tgpi-gold-hover)]"
           />
         </label>
         <label>
-          <span className="sr-only">Filter by continent</span>
+          <span className="sr-only"><LocalizedText text={"Filter by continent"} /></span>
           <select
             value={region}
             onChange={(event) => {
@@ -568,7 +571,7 @@ function CountriesStep({
             }}
             className="min-h-12 w-full rounded-xl border border-[var(--tgpi-border)] bg-white px-4 text-sm font-bold text-[var(--tgpi-navy-raised)] focus:border-[var(--tgpi-gold-hover)]"
           >
-            <option value="all">All continents</option>
+            <option value="all"><LocalizedText text={"All continents"} /></option>
             {regions.map((item) => (
               <option key={item} value={item}>
                 {regionLabels[item] || item}
@@ -579,7 +582,7 @@ function CountriesStep({
       </div>
 
       {data.targetCountries.length > 0 ? (
-        <div className="mt-5 flex flex-wrap gap-2" aria-label="Selected countries">
+        <div className="mt-5 flex flex-wrap gap-2" aria-label={localizeLabel("Selected countries")}>
           {data.targetCountries.map((slug) => {
             const country = countries.find((item) => item.slug === slug);
             if (!country) return null;
@@ -644,8 +647,8 @@ function CountriesStep({
 
       {filteredCountries.length === 0 ? (
         <div className="mt-6 rounded-2xl border border-dashed border-[#CFC7B8] bg-white px-5 py-10 text-center">
-          <p className="font-extrabold text-[var(--tgpi-navy-raised)]">No countries found.</p>
-          <p className="mt-2 text-sm text-[#657082]">Try another name or continent.</p>
+          <p className="font-extrabold text-[var(--tgpi-navy-raised)]"><LocalizedText text={"No countries found."} /></p>
+          <p className="mt-2 text-sm text-[#657082]"><LocalizedText text={"Try another name or continent."} /></p>
         </div>
       ) : null}
 
@@ -667,16 +670,18 @@ function TimingStep({
   data: TgpiOnboardingData;
   updateData: (patch: Partial<TgpiOnboardingData>) => void;
 }) {
+  const { t: localizeLabel } = useInterfaceLocale();
+
   return (
     <div>
       <StepHeading
         eyebrow="Step 3 of 5"
-        title="What is your plan's timeline?"
+        title={localizeLabel("What is your plan's timeline?")}
         description="Your timeline and budget help TGPI distinguish exploration, preparation, and decision-making."
       />
 
       <fieldset className="mt-8">
-        <legend className="text-sm font-extrabold text-[var(--tgpi-navy-raised)]">When do you plan to take action?</legend>
+        <legend className="text-sm font-extrabold text-[var(--tgpi-navy-raised)]"><LocalizedText text={"When do you plan to take action?"} /></legend>
         <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {timeHorizons.map((item) => (
             <OptionCard
@@ -720,6 +725,8 @@ function ContextStep({
   data: TgpiOnboardingData;
   updateData: (patch: Partial<TgpiOnboardingData>) => void;
 }) {
+  const { t: localizeLabel } = useInterfaceLocale();
+
   function toggleLanguage(language: string) {
     updateData({
       languages: data.languages.includes(language)
@@ -732,12 +739,12 @@ function ContextStep({
     <div>
       <StepHeading
         eyebrow="Step 4 of 5"
-        title="What is your current context?"
+        title={localizeLabel("What is your current context?")}
         description="This information makes recommendations more useful without asking for documents or sensitive data."
       />
 
       <fieldset className="mt-8">
-        <legend className="text-sm font-extrabold text-[var(--tgpi-navy-raised)]">Which languages do you use?</legend>
+        <legend className="text-sm font-extrabold text-[var(--tgpi-navy-raised)]"><LocalizedText text={"Which languages do you use?"} /></legend>
         <div className="mt-3 flex flex-wrap gap-2">
           {languageOptions.map((language) => {
             const selected = data.languages.includes(language);
@@ -770,7 +777,7 @@ function ContextStep({
 
       <div className="mt-9 grid gap-5 sm:grid-cols-2">
         <label className="block">
-          <span className="text-sm font-extrabold text-[var(--tgpi-navy-raised)]">Profession or field of interest</span>
+          <span className="text-sm font-extrabold text-[var(--tgpi-navy-raised)]"><LocalizedText text={"Profession or field of interest"} /></span>
           <span className="mt-1 block text-xs text-[#7A8390]"><LocalizedText text="Optional" /></span>
           <input
             type="text"
@@ -801,7 +808,7 @@ function ContextStep({
       </div>
 
       <fieldset className="mt-9">
-        <legend className="text-sm font-extrabold text-[var(--tgpi-navy-raised)]">What is your international experience?</legend>
+        <legend className="text-sm font-extrabold text-[var(--tgpi-navy-raised)]"><LocalizedText text={"What is your international experience?"} /></legend>
         <div className="mt-3 grid gap-3 sm:grid-cols-2">
           {experienceOptions.map((item) => (
             <OptionCard
@@ -827,6 +834,8 @@ function PrioritiesStep({
   data: TgpiOnboardingData;
   updateData: (patch: Partial<TgpiOnboardingData>) => void;
 }) {
+  const { t: localizeLabel } = useInterfaceLocale();
+
   function togglePriority(priority: OnboardingPriority) {
     const selected = data.priorities.includes(priority);
 
@@ -843,7 +852,7 @@ function PrioritiesStep({
     <div>
       <StepHeading
         eyebrow="Step 5 of 5"
-        title="What matters most in your decisions?"
+        title={localizeLabel("What matters most in your decisions?")}
         description="Choose three to five priorities. They will shape the order of information and comparisons in your TGPI experience."
         aside={`${data.priorities.length}/5 selected`}
       />
@@ -1082,15 +1091,9 @@ function SaveIndicator({ status }: { status: SaveStatus }) {
               : "bg-[var(--tgpi-danger)]"
           }`}
       />
-      <span className={status === "saved" ? "inline" : "hidden"}>
-        Progress saved
-      </span>
-      <span className={status === "saving" ? "inline" : "hidden"}>
-        Saving...
-      </span>
-      <span className={status === "error" ? "inline" : "hidden"}>
-        Unable to save
-      </span>
+      <span className={status === "saved" ? "inline" : "hidden"}><LocalizedText text={"Progress saved"} /></span>
+      <span className={status === "saving" ? "inline" : "hidden"}><LocalizedText text={"Saving..."} /></span>
+      <span className={status === "error" ? "inline" : "hidden"}><LocalizedText text={"Unable to save"} /></span>
     </span>
   );
 }

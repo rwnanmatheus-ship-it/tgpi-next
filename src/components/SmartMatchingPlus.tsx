@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import Link from "next/link";
 import type { UserData } from "@/types";
 
@@ -65,7 +67,7 @@ export default function SmartMatchingPlus({
               className="rounded-2xl border border-slate-800 bg-slate-950 p-5"
             >
               <p className="text-lg font-bold text-white">
-                {match.name || match.username || "TGPI Member"}
+                {match.name || match.username || <LocalizedText text={"TGPI Member"} />}
               </p>
               <p className="mt-2 text-sm text-slate-400">
                 {match.targetCountry || "No target country"} •{" "}
@@ -79,9 +81,7 @@ export default function SmartMatchingPlus({
                 <Link
                   href={`/user/${match.username}`}
                   className="mt-4 inline-block rounded-xl bg-yellow-500 px-4 py-2 text-sm font-bold text-black"
-                >
-                  Open Profile
-                </Link>
+                ><LocalizedText text={"Open Profile"} /></Link>
               ) : null}
             </div>
           ))

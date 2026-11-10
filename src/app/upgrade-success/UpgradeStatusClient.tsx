@@ -1,5 +1,7 @@
 "use client";
 
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -109,7 +111,7 @@ export default function UpgradeStatusClient({ sessionId }: { sessionId: string }
       <section className="mx-auto max-w-4xl overflow-hidden rounded-[32px] border border-[#D8D2C4] bg-[#FFFDF8] shadow-[0_28px_80px_rgba(11,31,58,0.11)]">
         <div className="bg-[#0B1F3A] p-8 text-center text-white sm:p-12">
           <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#F0D58C]">Secure checkout verification</p>
-          <h1 className="mt-4 font-[var(--tgpi-font-display)] text-5xl font-semibold tracking-[-0.04em]">Subscription status</h1>
+          <h1 className="mt-4 font-[var(--tgpi-font-display)] text-5xl font-semibold tracking-[-0.04em]"><LocalizedText text={"Subscription status"} /></h1>
           <p className="mx-auto mt-5 max-w-2xl text-base leading-8 text-[#C7D0DC]" role="status">{status}</p>
         </div>
         <div className="p-8 text-center sm:p-10">
@@ -122,7 +124,7 @@ export default function UpgradeStatusClient({ sessionId }: { sessionId: string }
             <Link href={confirmed ? "/premium" : "/profile"} className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#0B1F3A] px-6 text-sm font-extrabold text-white">
               {confirmed ? "Open Premium workspace" : "Go to workspace"}
             </Link>
-            <Link href="/pricing" className="inline-flex min-h-12 items-center justify-center rounded-xl border border-[#D8D2C4] bg-white px-6 text-sm font-extrabold">Back to pricing</Link>
+            <Link href="/pricing" className="inline-flex min-h-12 items-center justify-center rounded-xl border border-[#D8D2C4] bg-white px-6 text-sm font-extrabold"><LocalizedText text={"Back to pricing"} /></Link>
           </div>
         </div>
       </section>

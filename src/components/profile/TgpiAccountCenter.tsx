@@ -1,4 +1,5 @@
 "use client";
+import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 import { useLocale } from "@/components/localization/LocaleProvider";
 import { localeOptions } from "@/lib/localization/config";
 import LanguageSelector from "@/components/localization/LanguageSelector";
@@ -274,7 +275,7 @@ function AccountAvatar({
       role="img"
       style={imageUrl ? { backgroundImage: `url(${imageUrl})` } : undefined}
     >
-      {!imageUrl ? initials : <span className="sr-only"><LocalizedText text={label} /></span>}
+      {!imageUrl ? initials : <span className="sr-only">{label}</span>}
     </span>
   );
 }
@@ -369,6 +370,8 @@ export default function TgpiAccountCenter({
   initialProfile,
   rank,
 }: TgpiAccountCenterProps) {
+  const { t: localizeLabel } = useInterfaceLocale();
+
   const { locale, t } = useLocale();
   const { user } = useUser();
   const pathname = usePathname();
@@ -538,7 +541,7 @@ export default function TgpiAccountCenter({
 
   const overviewScreen = (
     <div>
-      <ScreenHeading description="Your private preparation center: identity, learning and decisions, with distinct progress signals." section="overview" title="Account overview" />
+      <ScreenHeading description="Your private preparation center: identity, learning and decisions, with distinct progress signals." section="overview" title={localizeLabel("Account overview")} />
       <div className="mt-4 grid gap-3 sm:grid-cols-3">
         <Link className="tgpi-account-tile rounded-2xl border border-slate-200 p-4" href="/courses"><strong><LocalizedText text="Continue learning →" /></strong><p className="mt-2 text-sm">Resume from your saved lesson.</p></Link>
         <Link className="tgpi-account-tile rounded-2xl border border-slate-200 p-4" href="/certificates"><strong>My credentials →</strong><p className="mt-2 text-sm">Issued records and milestones to earn.</p></Link>
@@ -557,13 +560,13 @@ export default function TgpiAccountCenter({
             <p className="mt-3 break-all text-xs text-[#9FAFC0]">{identity.username ? `@${identity.username}` : "Create your unique @ID in Personal information"}</p>
           </div>
           <div className="flex flex-wrap gap-2">
-            <button className="min-h-11 rounded-xl bg-white px-5 text-xs font-extrabold text-[var(--tgpi-navy-raised)] transition hover:bg-[#F4E7BE]" onClick={() => selectSection("identity")} type="button">Edit profile</button>
-            <button className="min-h-11 rounded-xl border border-white/15 bg-white/5 px-5 text-xs font-extrabold text-white transition hover:bg-white/10" onClick={() => selectSection("public-profile")} type="button">View public profile</button>
+            <button className="min-h-11 rounded-xl bg-white px-5 text-xs font-extrabold text-[var(--tgpi-navy-raised)] transition hover:bg-[#F4E7BE]" onClick={() => selectSection("identity")} type="button"><LocalizedText text={"Edit profile"} /></button>
+            <button className="min-h-11 rounded-xl border border-white/15 bg-white/5 px-5 text-xs font-extrabold text-white transition hover:bg-white/10" onClick={() => selectSection("public-profile")} type="button"><LocalizedText text={"View public profile"} /></button>
           </div>
         </div>
         <div className="mt-6 grid gap-3 border-t border-white/10 pt-5 sm:grid-cols-[1fr_auto] sm:items-center">
           <div>
-            <div className="flex items-center justify-between gap-4 text-xs font-bold"><span>Profile completeness</span><span className="text-[var(--tgpi-gold-light)]">{completion}%</span></div>
+            <div className="flex items-center justify-between gap-4 text-xs font-bold"><span><LocalizedText text={"Profile completeness"} /></span><span className="text-[var(--tgpi-gold-light)]">{completion}%</span></div>
             <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/15"><div className="h-full rounded-full bg-[#E5BF5A] transition-[width] duration-500" style={{ width: `${completion}%` }} /></div>
           </div>
           <p className="text-xs text-[#AEBBC9]">{account.emailVerified ? "Verified identity" : "Email verification required"}</p>
@@ -591,7 +594,7 @@ export default function TgpiAccountCenter({
           </div>
           <div className="mt-5 space-y-3 text-xs">
             <div className="flex justify-between gap-4"><span className="text-[#737C89]"><LocalizedText text="Primary goal" /></span><span className="text-right font-extrabold text-[var(--tgpi-navy-raised)]">{goalLabels[decisionContext.goal] || "Not defined"}</span></div>
-            <div className="flex justify-between gap-4"><span className="text-[#737C89]">Shortlist</span><span className="max-w-[65%] text-right font-extrabold text-[var(--tgpi-navy-raised)]">{decisionContext.countries.map((country) => `${country.emoji} ${country.name}`).join(", ") || "No countries selected"}</span></div>
+            <div className="flex justify-between gap-4"><span className="text-[#737C89]"><LocalizedText text={"Shortlist"} /></span><span className="max-w-[65%] text-right font-extrabold text-[var(--tgpi-navy-raised)]">{decisionContext.countries.map((country) => `${country.emoji} ${country.name}`).join(", ") || "No countries selected"}</span></div>
           </div>
           <Link className="mt-5 inline-flex text-xs font-extrabold text-[#8C6414]" href="/onboarding">Open personal plan →</Link>
         </article>
@@ -612,8 +615,8 @@ export default function TgpiAccountCenter({
         <div className="mt-3 grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
           {connectedSystems.map((system) => (
             <Link className="group rounded-[20px] border border-[var(--tgpi-border)] bg-white p-4 transition hover:-translate-y-0.5 hover:border-[var(--tgpi-gold-hover)] hover:shadow-[0_14px_30px_rgba(11,31,58,0.08)]" href={system.href} key={system.label}>
-              <div className="flex items-center justify-between gap-3"><span aria-hidden="true" className="grid h-9 w-9 place-items-center rounded-xl bg-[#EEF2F5] text-base text-[var(--tgpi-navy-raised)]">{system.icon}</span><span aria-hidden="true" className="text-[#956A13] transition group-hover:translate-x-0.5">→</span></div><h3 className="mt-3 text-sm font-extrabold text-[var(--tgpi-navy-raised)]">{system.label}</h3>
-              <p className="mt-2 text-xs leading-5 text-[#697386]">{system.text}</p>
+              <div className="flex items-center justify-between gap-3"><span aria-hidden="true" className="grid h-9 w-9 place-items-center rounded-xl bg-[#EEF2F5] text-base text-[var(--tgpi-navy-raised)]">{system.icon}</span><span aria-hidden="true" className="text-[#956A13] transition group-hover:translate-x-0.5">→</span></div><h3 className="mt-3 text-sm font-extrabold text-[var(--tgpi-navy-raised)]"><LocalizedText text={system.label} /></h3>
+              <p className="mt-2 text-xs leading-5 text-[#697386]"><LocalizedText text={system.text} /></p>
             </Link>
           ))}
         </div>
@@ -659,7 +662,7 @@ export default function TgpiAccountCenter({
   if (activeSection === "identity") {
     activeScreen = (
       <div>
-        <ScreenHeading description="Keep your TGPI identity useful, current and safe without storing sensitive documents." section="identity" title="Personal information" />
+        <ScreenHeading description="Keep your TGPI identity useful, current and safe without storing sensitive documents." section="identity" title={localizeLabel("Personal information")} />
         <div className="mt-6">
           <TgpiAvatarEditor
             displayName={fullName}
@@ -673,7 +676,7 @@ export default function TgpiAccountCenter({
             <Field label="Last name"><input autoComplete="family-name" className="tgpi-account-input" maxLength={60} onChange={(event) => updateIdentity({ lastName: event.target.value })} value={identity.lastName} /></Field>
             <div className="sm:col-span-2"><Field label="Complete real name" description="Enter all given names and surnames exactly as you want them on new certificates. This is self-declared, not document-verified."><input autoComplete="name" className="tgpi-account-input" maxLength={120} onChange={event => updateProfile({ legalFullName: event.target.value })} placeholder={fullName} value={profile.legalFullName} /></Field></div>
             <Field label="Date of birth" description="Private. Only added to your downloaded PDF if you enable the option below."><input type="date" className="tgpi-account-input" autoComplete="bday" min="1900-01-01" max={new Date().toISOString().slice(0, 10)} onChange={event => updateProfile({ dateOfBirth: event.target.value })} value={profile.dateOfBirth} /></Field>
-            <Field label="Gender" description="Choose how you identify. This does not determine country or career recommendations."><select className="tgpi-account-input" value={profile.gender} onChange={event => updateProfile({ gender: event.target.value as TgpiAccountProfile["gender"] })}><option value=""><LocalizedText text="Select an option" /></option><option value="man">Man</option><option value="woman">Woman</option><option value="other"><LocalizedText text="Other" /></option><option value="undisclosed">Prefer not to say</option></select></Field>
+            <Field label="Gender" description="Choose how you identify. This does not determine country or career recommendations."><select className="tgpi-account-input" value={profile.gender} onChange={event => updateProfile({ gender: event.target.value as TgpiAccountProfile["gender"] })}><option value=""><LocalizedText text="Select an option" /></option><option value="man"><LocalizedText text={"Man"} /></option><option value="woman"><LocalizedText text={"Woman"} /></option><option value="other"><LocalizedText text="Other" /></option><option value="undisclosed"><LocalizedText text={"Prefer not to say"} /></option></select></Field>
             <Field label="How should TGPI address you?" description="Independent of gender; choose what feels right."><select className="tgpi-account-input" value={profile.preferredTitle} onChange={event => updateProfile({ preferredTitle: event.target.value as TgpiAccountProfile["preferredTitle"] })}><option value="name">By my name</option><option value="mr">Mr.</option><option value="ms">Ms.</option><option value="mx">Mx.</option></select></Field>
             <div className="rounded-2xl border border-[var(--tgpi-border)] bg-[var(--tgpi-canvas-alt)] p-4"><p className="text-xs font-bold text-[var(--tgpi-muted)]">Personal greeting preview</p><p className="mt-2 text-xl font-semibold text-[var(--tgpi-navy-raised)]">{getAccountSalutation(identity, profile)}</p></div>
             <div className="sm:col-span-2"><Field label="Display name" description="Your public presentation; certificate names remain separate."><input className="tgpi-account-input" autoComplete="nickname" maxLength={120} value={profile.displayName} onChange={e => updateProfile({ displayName: e.target.value })} /></Field></div>
@@ -684,7 +687,7 @@ export default function TgpiAccountCenter({
             <Field label="Nationality / country of citizenship" description="Your citizenship can differ from where you live. It helps frame document and immigration research."><ProfileSearchSelect label="Nationality" value={profile.nationality} options={countries.map(country => ({ label: country.name, value: country.name }))} onChange={value => updateProfile({ nationality: value })} /></Field>
             <Field label="Profession" description="Used as context for career research, qualification recognition and your personal plan."><ProfileSearchSelect label="Profession" value={profile.profession} options={professionSuggestions.map(profession => ({ label: profession, value: profession }))} allowCustom onChange={value => updateProfile({ profession: value })} /></Field>
             <Field label="Professional experience"><select className="tgpi-account-input" value={profile.yearsExperience} onChange={event => updateProfile({ yearsExperience: event.target.value })}><option value="">Select your experience</option><option value="0">Getting started</option><option value="1-2">1–2 years</option><option value="3-5">3–5 years</option><option value="6-10">6–10 years</option><option value="11+">11+ years</option></select></Field>
-            <Field label="Current professional situation"><select className="tgpi-account-input" value={profile.employmentType} onChange={event => updateProfile({ employmentType: event.target.value })}><option value=""><LocalizedText text="Select an option" /></option><option value="employed">Employed</option><option value="self-employed">Self-employed</option><option value="entrepreneur">Entrepreneur</option><option value="student">Student</option><option value="seeking-work">Seeking work</option><option value="retired">Retired</option></select></Field>
+            <Field label="Current professional situation"><select className="tgpi-account-input" value={profile.employmentType} onChange={event => updateProfile({ employmentType: event.target.value })}><option value=""><LocalizedText text="Select an option" /></option><option value="employed"><LocalizedText text={"Employed"} /></option><option value="self-employed"><LocalizedText text={"Self-employed"} /></option><option value="entrepreneur"><LocalizedText text={"Entrepreneur"} /></option><option value="student"><LocalizedText text={"Student"} /></option><option value="seeking-work"><LocalizedText text={"Seeking work"} /></option><option value="retired">Retired</option></select></Field>
             <Field label="Timezone"><input className="tgpi-account-input" list="tgpi-timezones" maxLength={80} onChange={(event) => updateProfile({ timezone: event.target.value })} placeholder="America/Sao_Paulo" value={profile.timezone} /><datalist id="tgpi-timezones">{timezoneOptions.map((timezone) => <option key={timezone} value={timezone} />)}</datalist></Field>
           </div>
         </div>
@@ -704,7 +707,7 @@ export default function TgpiAccountCenter({
   if (activeSection === "global") {
     activeScreen = (
       <div>
-        <ScreenHeading description="This context synchronizes with Country Fit, Compare, your personal plan and learning paths." section="global" title="Global profile" />
+        <ScreenHeading description="This context synchronizes with Country Fit, Compare, your personal plan and learning paths." section="global" title={localizeLabel("Global profile")} />
         <div className="mt-6 rounded-[22px] border border-[var(--tgpi-border)] bg-white p-5 sm:p-7">
           <div className="grid gap-5 sm:grid-cols-2">
             <Field label="Profession or field"><ProfileSearchSelect label="Profession or field" value={profile.profession} options={professionSuggestions.map(profession => ({ label: profession, value: profession }))} allowCustom onChange={value => updateProfile({ profession: value })} /></Field>
@@ -725,10 +728,10 @@ export default function TgpiAccountCenter({
   if (activeSection === "public-profile") {
     activeScreen = (
       <div>
-        <ScreenHeading description="Preview the saved public fields, manage your member identity and export an authorized presentation." section="public-profile" title="Public profile" />
+        <ScreenHeading description="Preview the saved public fields, manage your member identity and export an authorized presentation." section="public-profile" title={localizeLabel("Public profile")} />
         <MemberIdentityEditor />
         <MemberExportCenter />
-        <details className="mt-4"><summary className="cursor-pointer py-3 font-bold">Find a TGPI member</summary><MemberDirectory /></details>
+        <details className="mt-4"><summary className="cursor-pointer py-3 font-bold"><LocalizedText text={"Find a TGPI member"} /></summary><MemberDirectory /></details>
         <Link className="tgpi-member-button mt-4" href={`${account.publicProfileUrl}?preview=1`}>Open exact saved public preview →</Link>
         <p className="mt-3 text-sm text-slate-600">Save profile and privacy changes before previewing or exporting. Public fields are read again on the server.</p>
         <div className="mt-6 grid gap-5 xl:grid-cols-[1.15fr_.85fr]">
@@ -765,8 +768,8 @@ export default function TgpiAccountCenter({
               <p className="text-[9px] font-extrabold uppercase tracking-[0.18em] text-[#7A8390]">Shared fields</p>
               <ul className="mt-4 grid gap-3 text-xs font-bold text-[var(--tgpi-navy-raised)]">
                 <li className="flex items-center justify-between gap-4"><span>Name, image, headline and biography</span><span className="text-[#277352]">Included</span></li>
-                <li className="flex items-center justify-between gap-4"><span>Location</span><span>{profile.privacy.showLocation ? "Included" : "Hidden"}</span></li>
-                <li className="flex items-center justify-between gap-4"><span>Global goals</span><span>{profile.privacy.showGoals ? "Included" : "Hidden"}</span></li>
+                <li className="flex items-center justify-between gap-4"><span><LocalizedText text={"Location"} /></span><span>{profile.privacy.showLocation ? "Included" : "Hidden"}</span></li>
+                <li className="flex items-center justify-between gap-4"><span><LocalizedText text={"Global goals"} /></span><span>{profile.privacy.showGoals ? "Included" : "Hidden"}</span></li>
                 <li className="flex items-center justify-between gap-4"><span>Profile progress</span><span>{profile.privacy.showProgress ? "Included" : "Hidden"}</span></li>
               </ul>
             </article>
@@ -780,7 +783,7 @@ export default function TgpiAccountCenter({
   if (activeSection === "preferences") {
     activeScreen = (
       <div>
-        <ScreenHeading description="Save your research and display preferences. Content languages and unit conversion depend on the current feature." section="preferences" title="App preferences" />
+        <ScreenHeading description="Save your research and display preferences. Content languages and unit conversion depend on the current feature." section="preferences" title={localizeLabel("App preferences")} />
         <div className="mt-6 rounded-[22px] border border-[var(--tgpi-border)] bg-white p-5 sm:p-7">
           <div className="grid gap-5 sm:grid-cols-2">
             <LanguageSelector />
@@ -799,7 +802,7 @@ export default function TgpiAccountCenter({
   if (activeSection === "notifications") {
     activeScreen = (
       <div>
-        <ScreenHeading description="Control which updates may reach you as your global plan and the TGPI system evolve." section="notifications" title="Notifications" />
+        <ScreenHeading description="Control which updates may reach you as your global plan and the TGPI system evolve." section="notifications" title={localizeLabel("Notifications")} />
         <div className="mt-6 overflow-hidden rounded-[22px] border border-[var(--tgpi-border)] bg-white">
           <Toggle checked={profile.notifications.planReminders} description="Prompts connected to your active personal plan and timeline." label="Plan reminders" onChange={(value) => updateNotifications("planReminders", value)} />
           <Toggle checked={profile.notifications.researchAlerts} description="Updates when evidence linked to your selected countries changes." label="Research alerts" onChange={(value) => updateNotifications("researchAlerts", value)} />
@@ -814,9 +817,9 @@ export default function TgpiAccountCenter({
   if (activeSection === "privacy") {
     activeScreen = (
       <div>
-        <ScreenHeading description="Choose which saved fields can appear in your member profile, discovery and shareable presentations." section="privacy" title="Privacy" />
+        <ScreenHeading description="Choose which saved fields can appear in your member profile, discovery and shareable presentations." section="privacy" title={localizeLabel("Privacy")} />
         <div className="mt-6 rounded-[22px] border border-[var(--tgpi-border)] bg-white p-5 sm:p-7">
-          <Field description="Private is the safest default. You can change this whenever you choose." label="Profile visibility"><select className="tgpi-account-input" onChange={(event) => updatePrivacy("visibility", event.target.value as TgpiAccountProfile["privacy"]["visibility"])} value={profile.privacy.visibility}><option value="private">Private — only you</option><option value="members">Members — signed-in TGPI members</option><option value="public">Public — shareable profile</option></select></Field>
+          <Field description="Private is the safest default. You can change this whenever you choose." label="Profile visibility"><select className="tgpi-account-input" onChange={(event) => updatePrivacy("visibility", event.target.value as TgpiAccountProfile["privacy"]["visibility"])} value={profile.privacy.visibility}><option value="private"><LocalizedText text={"Private — only you"} /></option><option value="members">Members — signed-in TGPI members</option><option value="public"><LocalizedText text={"Public — shareable profile"} /></option></select></Field>
           <div className="mt-6 overflow-hidden rounded-2xl border border-[#E3DED3]"><Toggle checked={profile.privacy.showLocation} description="Share country only. Your city remains private." label="Show location" onChange={(value) => updatePrivacy("showLocation", value)} /><Toggle checked={profile.privacy.showProgress} description="Show learning and preparation progress on your profile." label="Show progress" onChange={(value) => updatePrivacy("showProgress", value)} /><Toggle checked={profile.privacy.showGoals} description="Show selected international goals on your profile." label="Show global goals" onChange={(value) => updatePrivacy("showGoals", value)} /></div>
           <div className="mt-4 overflow-hidden rounded-2xl border border-[#E3DED3]">
             <Toggle checked={profile.privacy.discoverable} label="Member discovery" description="Allow exact @ID and TGPI number searches by signed-in members. Your profile visibility still applies." onChange={v => updatePrivacy('discoverable', v)} />
@@ -825,7 +828,7 @@ export default function TgpiAccountCenter({
             <Toggle checked={profile.privacy.showLanguages} label="Share declared languages" description="Listing a language does not verify proficiency." onChange={v => updatePrivacy('showLanguages', v)} />
             <Toggle checked={profile.privacy.showLinks} label="Share professional links" description="Publish your selected website and social links." onChange={v => updatePrivacy('showLinks', v)} />
           </div>
-          <a className="tgpi-member-button mt-4" href="/api/account-data" download="tgpi-account-data.json">Download private profile & plan data</a>
+          <a className="tgpi-member-button mt-4" href="/api/account-data" download="tgpi-account-data.json"><LocalizedText text={"Download private profile & plan data"} /></a>
           <div className="mt-6 rounded-2xl bg-[#F3EFE6] p-5 text-xs leading-6 text-[#5F6876]">TGPI never stores passwords, recovery methods, passport numbers, national IDs or document scans in this profile. Authentication remains protected by Clerk.</div>
         </div>
       </div>
@@ -837,7 +840,7 @@ export default function TgpiAccountCenter({
   if (activeSection === "security") {
     activeScreen = (
       <div>
-        <ScreenHeading description="Manage verified emails, passwords, passkeys, login methods and active devices through Clerk protection." section="security" title="Login & security" />
+        <ScreenHeading description="Manage verified emails, passwords, passkeys, login methods and active devices through Clerk protection." section="security" title={localizeLabel("Login & security")} />
         <div className="mt-6 overflow-hidden rounded-[22px] border border-[var(--tgpi-border)] bg-white p-2 sm:p-4">{children}</div>
       </div>
     );
@@ -846,8 +849,8 @@ export default function TgpiAccountCenter({
   return (
     <div className="tgpi-settings-v2 mx-auto max-w-[1500px]">
       <header className="tgpi-account-heading mb-5 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <div><p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#8B6416]">TGPI Global Key</p><h1 className="mt-2 font-[var(--tgpi-font-display)] text-4xl font-semibold tracking-[-0.045em] text-[var(--tgpi-navy-raised)] sm:text-5xl">Settings</h1><p className="mt-2 text-sm text-[#6E7784]">Your identity, preferences and security in one connected app.</p></div>
-        <Link className="inline-flex min-h-11 items-center justify-center rounded-xl border border-[#D6D0C4] bg-white px-4 text-xs font-extrabold text-[var(--tgpi-navy-raised)] transition hover:border-[var(--tgpi-gold-hover)]" href="/profile">Back to workspace</Link>
+        <div><p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#8B6416]">TGPI Global Key</p><h1 className="mt-2 font-[var(--tgpi-font-display)] text-4xl font-semibold tracking-[-0.045em] text-[var(--tgpi-navy-raised)] sm:text-5xl"><LocalizedText text={"Settings"} /></h1><p className="mt-2 text-sm text-[#6E7784]">Your identity, preferences and security in one connected app.</p></div>
+        <Link className="inline-flex min-h-11 items-center justify-center rounded-xl border border-[#D6D0C4] bg-white px-4 text-xs font-extrabold text-[var(--tgpi-navy-raised)] transition hover:border-[var(--tgpi-gold-hover)]" href="/profile"><LocalizedText text={"Back to workspace"} /></Link>
       </header>
 
       <div className="overflow-clip rounded-[30px] border border-[var(--tgpi-border)] bg-white shadow-[0_28px_80px_rgba(11,31,58,0.1)] lg:grid lg:grid-cols-[270px_minmax(0,1fr)]">
@@ -857,13 +860,13 @@ export default function TgpiAccountCenter({
           <nav aria-label={t("Account settings")} className="mt-4 space-y-4">
             {settingsGroups.map((group) => { const groupSections = filteredSections.filter((section) => section.group === group); if (!groupSections.length) return null; return <div key={group}><p className="px-3 pb-1 text-[9px] font-extrabold uppercase tracking-[0.16em] text-[#9299A2]">{t(group)}</p><div className="space-y-1">{groupSections.map((section) => { const active = section.key === activeSection; return <button aria-current={active ? "page" : undefined} className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition ${active ? "bg-[var(--tgpi-navy-raised)] text-white shadow-[0_10px_24px_rgba(11,31,58,0.16)]" : "text-[#4F5B6A] hover:bg-white hover:text-[var(--tgpi-navy-raised)]"}`} key={section.key} onClick={() => selectSection(section.key)} type="button"><span aria-hidden="true" className={`grid h-8 w-8 shrink-0 place-items-center rounded-xl text-sm ${active ? "bg-white/10 text-[var(--tgpi-gold-light)]" : "bg-[#EEF1F4] text-[var(--tgpi-navy-raised)]"}`}><SettingsIcon section={section.key} /></span><span className="text-xs font-extrabold"><LocalizedText text={section.label} /></span></button>; })}</div></div>; })}
           </nav>
-          {filteredSections.length === 0 ? <p className="px-3 py-5 text-xs leading-5 text-[#717A87]">No setting matches this search.</p> : null}
+          {filteredSections.length === 0 ? <p className="px-3 py-5 text-xs leading-5 text-[#717A87]"><LocalizedText text={"No setting matches this search."} /></p> : null}
           <div className="mt-auto rounded-2xl border border-[#E0D8C5] bg-[#F4E7BE] p-4"><p className="text-[9px] font-extrabold uppercase tracking-[0.18em] text-[#75530E]">Synchronization</p><p className="mt-2 text-xs font-extrabold text-[var(--tgpi-navy-raised)]">{isDirty ? "Changes waiting to be saved" : "Your account is up to date"}</p><p className="mt-1 text-[11px] leading-5 text-[#685B38]">Last update: {t(formatSavedDate(profile.updatedAt, locale))}</p></div>
         </aside>
 
         <div className="min-w-0 bg-[var(--tgpi-canvas-alt)]">
           <div className="tgpi-account-mobile-nav sticky top-0 z-30 border-b border-[var(--tgpi-border)] bg-[#FFFDFA]/95 p-3 backdrop-blur lg:hidden">
-            <div className="flex items-center gap-3"><AccountAvatar imageUrl={account.avatarUrl} initials={initials} label={fullName} size="small" /><div className="min-w-0 flex-1"><p className="truncate text-sm font-extrabold text-[var(--tgpi-navy-raised)]"><LocalizedText text={activeDefinition.label} /></p><p className="truncate text-[11px] text-[#737C89]"><LocalizedText text={activeDefinition.description} /></p></div>{isDirty ? <span className="h-2.5 w-2.5 rounded-full bg-[var(--tgpi-gold-hover)]" title="Unsaved changes" /> : null}</div>
+            <div className="flex items-center gap-3"><AccountAvatar imageUrl={account.avatarUrl} initials={initials} label={fullName} size="small" /><div className="min-w-0 flex-1"><p className="truncate text-sm font-extrabold text-[var(--tgpi-navy-raised)]"><LocalizedText text={activeDefinition.label} /></p><p className="truncate text-[11px] text-[#737C89]"><LocalizedText text={activeDefinition.description} /></p></div>{isDirty ? <span className="h-2.5 w-2.5 rounded-full bg-[var(--tgpi-gold-hover)]" title={localizeLabel("Unsaved changes")} /> : null}</div>
             <nav aria-label={t("Account settings")} className="tgpi-smart-rail tgpi-account-tabs -mx-3 mt-3 flex gap-2 overflow-x-auto px-3 pb-1">
               {settingsSections.map((section) => { const active = section.key === activeSection; return <button aria-current={active ? "page" : undefined} className={`tgpi-account-tab flex min-w-max items-center gap-2 rounded-full border px-3 py-2 text-[11px] font-extrabold transition ${active ? "border-[var(--tgpi-navy-raised)] bg-[var(--tgpi-navy-raised)] text-white" : "border-[var(--tgpi-border)] bg-white text-[#596473]"}`} key={section.key} onClick={() => selectSection(section.key)} type="button"><span aria-hidden="true"><SettingsIcon section={section.key} /></span><LocalizedText text={section.label} /></button>; })}
             </nav>
@@ -874,7 +877,7 @@ export default function TgpiAccountCenter({
           <div className="tgpi-account-save-bar relative border-t border-[var(--tgpi-border)] bg-white/95 px-4 py-3 backdrop-blur sm:px-7 lg:px-10">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
               <div aria-live="polite" role="status"><p className={`text-xs font-extrabold ${saveState === "error" ? "text-[#A32626]" : isDirty ? "text-[#8B6416]" : "text-[#277352]"}`}>{saveState === "saving" ? "Synchronizing your account…" : message || (isDirty ? "You have unsaved changes" : "All changes are synchronized")}</p><p className="mt-0.5 text-[10px] text-[#7A8390]">Connected to Country Fit, Compare, Personal Plan and Learning</p></div>
-              <button className="min-h-11 rounded-xl bg-[var(--tgpi-navy-raised)] px-6 text-xs font-extrabold text-white shadow-[0_10px_24px_rgba(11,31,58,0.18)] transition hover:bg-[#173554] disabled:cursor-not-allowed disabled:opacity-50" disabled={!isDirty || saveState === "saving"} onClick={saveAccount} type="button">{saveState === "saving" ? "Saving…" : "Save changes"}</button>
+              <button className="min-h-11 rounded-xl bg-[var(--tgpi-navy-raised)] px-6 text-xs font-extrabold text-white shadow-[0_10px_24px_rgba(11,31,58,0.18)] transition hover:bg-[#173554] disabled:cursor-not-allowed disabled:opacity-50" disabled={!isDirty || saveState === "saving"} onClick={saveAccount} type="button">{saveState === "saving" ? <LocalizedText text={"Saving…"} /> : <LocalizedText text={"Save changes"} />}</button>
             </div>
           </div>
         </div>

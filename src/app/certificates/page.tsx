@@ -84,15 +84,15 @@ export default async function CertificatesPage() {
           </section>
           <dl className="certificate-stats">
             <div>
-              <dt>Certificates earned</dt>
+              <dt><LocalizedText text={"Certificates earned"} /></dt>
               <dd>{records.status === "fulfilled" ? active.length : "—"}</dd>
             </div>
             <div>
-              <dt>Verified skills</dt>
+              <dt><LocalizedText text={"Verified skills"} /></dt>
               <dd>{records.status === "fulfilled" ? skills.size : "—"}</dd>
             </div>
             <div>
-              <dt>Learning hours</dt>
+              <dt><LocalizedText text={"Learning hours"} /></dt>
               <dd>
                 {records.status === "fulfilled"
                   ? Math.round(
@@ -139,7 +139,7 @@ export default async function CertificatesPage() {
             <div className="certificate-section-heading">
               <div>
                 <p className="certificate-eyebrow">Your next milestone</p>
-                <h2 id="next-certificate-title">Certificates you can earn</h2>
+                <h2 id="next-certificate-title"><LocalizedText text={"Certificates you can earn"} /></h2>
               </div>
               <span className="certificate-count">1 available path</span>
             </div>
@@ -165,7 +165,7 @@ export default async function CertificatesPage() {
                     : eligibility?.eligible
                       ? "Ready for certification"
                       : progress
-                        ? "In progress"
+                        ? <LocalizedText text={"In progress"} />
                         : "Available to earn"}
                 </span>
                 <h3><LocalizedText text={course.title} /></h3>
@@ -176,7 +176,7 @@ export default async function CertificatesPage() {
                 {status ? (
                   <>
                     <div className="certificate-progress-label">
-                      <span>Lessons completed</span>
+                      <span><LocalizedText text={"Lessons completed"} /></span>
                       <strong>
                         {eligibility?.lessonsCompleted} /{" "}
                         {eligibility?.totalLessons}
@@ -210,7 +210,7 @@ export default async function CertificatesPage() {
                       : progress === 100
                         ? "Review certification requirements"
                         : progress
-                          ? "Continue learning"
+                          ? <LocalizedText text={"Continue learning"} />
                           : "View course"}
                     <span aria-hidden="true">→</span>
                   </Link>

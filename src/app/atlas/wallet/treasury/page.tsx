@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import { walletReadiness } from '@/lib/wallet/readiness.server';
 import { auth } from '@clerk/nextjs/server';
 import { notFound } from 'next/navigation';
@@ -23,7 +25,7 @@ export default async function TreasuryPage() {
       ['Capacidade da API restante', usd(Math.max(0, fundedLimitMicroUsd() - treasury.providerReservedMicroUsd) / 10_000)],
     ].map(([label, value]) => <article key={label}><span>{label}</span><h3>{value}</h3></article>)}
     </section><section><h2>Diagnóstico de ativação</h2><p className={styles.fine}>Ambiente: {readiness.mode === 'live' ? 'produção' : 'testes'}. Este painel consulta a integração instalada no site; conectar o Stripe ao ChatGPT não altera automaticamente as credenciais do site.</p>
-      {readiness.account && <p className={styles.fine}>Conta: {readiness.account.id} · País: {readiness.account.country || 'Não informado'} · Liquidação: {readiness.account.currency?.toUpperCase() || 'Não informada'}</p>}
+      {readiness.account && <p className={styles.fine}>Conta: {readiness.account.id}{" "}<LocalizedText text={"· País:"} />{" "}{readiness.account.country || 'Não informado'} · Liquidação: {readiness.account.currency?.toUpperCase() || 'Não informada'}</p>}
       <ul className={styles.ledger}>{readiness.checks.map(check => <li key={check.label}><strong>{check.label}</strong><span>{check.state === 'met' ? 'Confirmado' : check.state === 'pending' ? 'Pendente' : 'Não verificado'}</span></li>)}</ul>
       <details><summary>Eventos Stripe necessários</summary><ul>{readiness.requiredEvents.map(event => <li key={event}><code>{event}</code></li>)}</ul></details>
       <p className={styles.fine}>A existência do webhook não comprova a entrega de eventos. Valores convertidos de BRL usam a liquidação registrada pelo Stripe; não representam dólares disponíveis, saque ou lucro.</p>

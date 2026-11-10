@@ -1,4 +1,5 @@
 "use client";
+import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 import { useCallback, useEffect, useState, useRef } from "react";
 import { useUser } from "@clerk/nextjs";
 import Image from "next/image";
@@ -42,6 +43,8 @@ export default function CommunityApp({
   initialView?: string;
   destination?: string;
 }) {
+  const { t: localizeLabel } = useInterfaceLocale();
+
   const { user, isLoaded } = useUser(),
     [cards, setCards] = useState<CommunityCard[]>([]),
     [detail, setDetail] = useState<CommunityDetail | null>(null),
@@ -219,23 +222,19 @@ export default function CommunityApp({
         <div className={s.actions}>
           <Link className={s.button} href="/community"><LocalizedText text="Explore communities" /></Link>
           {user ? (
-            <button className={s.secondary} onClick={() => setCreating(true)}>
-              Create community
-            </button>
+            <button className={s.secondary} onClick={() => setCreating(true)}><LocalizedText text={"Create community"} /></button>
           ) : (
             <Link
               className={s.secondary}
               href="/sign-in?redirect_url=/community"
-            >
-              Sign in to participate
-            </Link>
+            ><LocalizedText text={"Sign in to participate"} /></Link>
           )}
         </div>
       </header>
       <div className={s.layout}>
-        <nav className={s.nav} aria-label="Community navigation">
+        <nav className={s.nav} aria-label={localizeLabel("Community navigation")}>
           {id ? (
-            <Link href="/community">All communities</Link>
+            <Link href="/community"><LocalizedText text={"All communities"} /></Link>
           ) : (
             [
               "feed",
@@ -276,14 +275,14 @@ export default function CommunityApp({
             <Link href="/community/moderation">Global moderation</Link>
           )}
           <Link href="/profile"><LocalizedText text="Workspace" /></Link>
-          <Link href="/countries">Destinations</Link>
-          <Link href="/members">Find members</Link>
+          <Link href="/countries"><LocalizedText text={"Destinations"} /></Link>
+          <Link href="/members"><LocalizedText text={"Find members"} /></Link>
           {id && <a href="#community-rules"><LocalizedText text="About & rules" /></a>}
         </nav>
         <section className={s.content} aria-label="Community content">
           {error && (
             <div className={s.error} role="alert">
-              {error}
+              <LocalizedText text={error} />
               <div className={s.actions}>
                 <button className={s.secondary} onClick={() => void load()}><LocalizedText text="Try again" /></button>
               </div>
@@ -291,7 +290,7 @@ export default function CommunityApp({
           )}
           {notice && (
             <p className={s.status} role="status">
-              {notice}
+              <LocalizedText text={notice} />
             </p>
           )}
           {creating ? (
@@ -318,16 +317,14 @@ export default function CommunityApp({
                         setQuery(search);
                       }}
                     >
-                      <label style={{ flex: 1, margin: 0 }}>
-                        Search communities
-                        <input
+                      <label style={{ flex: 1, margin: 0 }}><LocalizedText text={"Search communities"} /><input
                           type="search"
                           value={search}
                           onChange={(e) => setSearch(e.target.value)}
                           placeholder="Destination, topic or language"
                         />
                       </label>
-                      <button className={s.secondary}>Search</button>
+                      <button className={s.secondary}><LocalizedText text={"Search"} /></button>
                     </form>
                     <p className={s.notice}>
                       Search by the first word of a destination, topic or
@@ -548,7 +545,7 @@ export default function CommunityApp({
                       </p>
                     )}
                     {c.archived && (
-                      <p className={s.status}>This community is archived.</p>
+                      <p className={s.status}><LocalizedText text={"This community is archived."} /></p>
                     )}
                     {m && (
                       <p className={s.status}>
@@ -591,9 +588,7 @@ export default function CommunityApp({
                               className={s.secondary}
                               disabled={busy}
                               onClick={() => void action({ action: "cancel" })}
-                            >
-                              Cancel request
-                            </button>
+                            ><LocalizedText text={"Cancel request"} /></button>
                           ) : (
                             <>
                               <details>
@@ -673,9 +668,7 @@ export default function CommunityApp({
                                 reason,
                               });
                           }}
-                        >
-                          Report community
-                        </button>
+                        ><LocalizedText text={"Report community"} /></button>
                         {admin && (
                           <button
                             className={s.secondary}
@@ -693,9 +686,7 @@ export default function CommunityApp({
                               if (window.confirm("Leave this community?"))
                                 void action({ action: "leave" });
                             }}
-                          >
-                            Leave community
-                          </button>
+                          ><LocalizedText text={"Leave community"} /></button>
                         )}
                         {c.transferTo === uid && (
                           <button
@@ -764,10 +755,10 @@ export default function CommunityApp({
                         onChange={(e) => setPostFilter(e.target.value)}
                       >
                         <option value="all">All contributions</option>
-                        <option value="open">Unanswered questions</option>
+                        <option value="open"><LocalizedText text={"Unanswered questions"} /></option>
                         <option value="experience">Experience Atlas</option>
                         <option value="guide">Guides</option>
-                        <option value="discussion">Discussions</option>
+                        <option value="discussion"><LocalizedText text={"Discussions"} /></option>
                       </select>
                     </label>
                   )}
@@ -839,9 +830,7 @@ export default function CommunityApp({
                 </>
               )}
               {loading && (
-                <p className={s.loading} role="status">
-                  Loading community…
-                </p>
+                <p className={s.loading} role="status"><LocalizedText text={"Loading community…"} /></p>
               )}
               {next && !loading && (
                 <button className={s.secondary} onClick={() => void load(next)}><LocalizedText text="Load more" /></button>
@@ -856,7 +845,7 @@ export default function CommunityApp({
                 src="/brand/tgpi-crest-metal-v3-256.png"
                 width={42}
                 height={42}
-                alt="TGPI crest"
+                alt={localizeLabel("TGPI crest")}
               />
               <span className={s.meta}>
                 THE GLOBAL
@@ -876,9 +865,7 @@ export default function CommunityApp({
             <p>
               Find a destination. Ask a useful question. Share what helped you.
             </p>
-            <Link className={s.secondary} href="/countries">
-              Explore destinations
-            </Link>
+            <Link className={s.secondary} href="/countries"><LocalizedText text={"Explore destinations"} /></Link>
           </section>
           <section className={s.panel}>
             <div className={s.editorial}>
@@ -891,7 +878,7 @@ export default function CommunityApp({
             </div>
             <h3>Build your next step</h3>
             <p>Connect your research with a practical plan.</p>
-            <Link href="/profile">Open your Workspace →</Link>
+            <Link href="/profile"><LocalizedText text={"Open your Workspace →"} /></Link>
           </section>
         </aside>
       </div>

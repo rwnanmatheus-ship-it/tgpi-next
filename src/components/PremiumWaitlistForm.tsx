@@ -1,4 +1,5 @@
 "use client";
+import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 
 import { FormEvent, useState } from "react";
 import { doc, serverTimestamp, setDoc } from "firebase/firestore";
@@ -35,6 +36,8 @@ async function hashEmail(email: string) {
 }
 
 export default function PremiumWaitlistForm() {
+  const { t: localizeLabel } = useInterfaceLocale();
+
   const [form, setForm] = useState<FormState>(initialState);
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [message, setMessage] = useState<string | null>(null);
@@ -137,13 +140,11 @@ export default function PremiumWaitlistForm() {
           />
         </label>
 
-        <label className="text-sm font-bold text-[#303846]">
-          Current country
-          <input
+        <label className="text-sm font-bold text-[#303846]"><LocalizedText text={"Current country"} /><input
             value={form.currentCountry}
             onChange={(event) => updateField("currentCountry", event.target.value)}
             className="mt-2 w-full rounded-2xl border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] px-4 py-3 font-normal outline-none transition focus:border-[var(--tgpi-gold-hover)]"
-            placeholder="Brazil"
+            placeholder={localizeLabel("Brazil")}
           />
         </label>
 
@@ -162,7 +163,7 @@ export default function PremiumWaitlistForm() {
             onChange={(event) => updateField("goal", event.target.value)}
             className="mt-2 w-full rounded-2xl border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] px-4 py-3 font-normal outline-none transition focus:border-[var(--tgpi-gold-hover)]"
           >
-            <option value="move">Move abroad</option>
+            <option value="move"><LocalizedText text={"Move abroad"} /></option>
             <option value="work">Work internationally</option>
             <option value="study"><LocalizedText text="Study abroad" /></option>
             <option value="remote">Build a remote global life</option>
@@ -180,8 +181,8 @@ export default function PremiumWaitlistForm() {
             <option value="0-3-months"><LocalizedText text="Within 3 months" /></option>
             <option value="3-6-months">3 to 6 months</option>
             <option value="6-12-months">6 to 12 months</option>
-            <option value="12-plus-months">More than 12 months</option>
-            <option value="researching">Still researching</option>
+            <option value="12-plus-months"><LocalizedText text={"More than 12 months"} /></option>
+            <option value="researching"><LocalizedText text={"Still researching"} /></option>
           </select>
         </label>
 

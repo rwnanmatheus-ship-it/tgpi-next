@@ -158,9 +158,7 @@ export default async function ResourcesPage() {
                 {startLabel} ↗
               </Link>
             </div>
-            <p className="resources-hero-note">
-              Data · Education · Mobility · Decision
-            </p>
+            <p className="resources-hero-note"><LocalizedText text={"Data · Education · Mobility · Decision"} /></p>
           </div>
           <div className="resources-hero-image">
             <Image
@@ -177,9 +175,7 @@ export default async function ResourcesPage() {
                 width={42}
                 height={42}
               />
-              <span>
-                Practical education.
-                <br />
+              <span><LocalizedText text={"Practical education."} /><br />
                 Global perspective.
               </span>
             </div>
@@ -319,9 +315,7 @@ export default async function ResourcesPage() {
         <section className="resources-plans" aria-labelledby="access-title">
           <div>
             <p className="resources-kicker">Access that makes sense</p>
-            <h2 id="access-title">
-              Start exploring.
-              <br />
+            <h2 id="access-title"><LocalizedText text={"Start exploring."} /><br />
               Choose your depth.
             </h2>
             <p>
@@ -360,7 +354,7 @@ export default async function ResourcesPage() {
           </div>
         </section>
         <section className="resources-faq" aria-labelledby="faq-title">
-          <p className="resources-kicker">Before you begin</p>
+          <p className="resources-kicker"><LocalizedText text={"Before you begin"} /></p>
           <h2 id="faq-title">A little more clarity.</h2>
           {faqs.map(([question, answer]) => (
             <details key={question}>

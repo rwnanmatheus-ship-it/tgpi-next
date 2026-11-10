@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import { getRank } from "@/lib/rank-system";
 
 const ladder = [
@@ -33,7 +35,7 @@ export default function PatentLadder({ xp }: { xp: number }) {
                 : "border-slate-800 bg-slate-950"
             }`}
           >
-            <p className="text-sm text-slate-400">Starts at {item.minXp} XP</p>
+            <p className="text-sm text-slate-400"><LocalizedText text={"Starts at"} />{" "}{item.minXp} XP</p>
             <p className="mt-2 text-lg font-bold text-white">{item.name}</p>
           </div>
         ))}

@@ -1,5 +1,7 @@
 "use client";
 
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import { useEffect, useState } from "react";
 import { getFavoriteCountries, toggleFavoriteCountry } from "@/lib/favorites";
 
@@ -40,7 +42,7 @@ export default function CountryFavoriteButton({ country }: Props) {
           : "border border-yellow-500/40 bg-yellow-500/5 text-yellow-300 hover:bg-yellow-500/10"
       }`}
     >
-      {loading ? "Saving..." : active ? "★ Favorited" : "☆ Add to Favorites"}
+      {loading ? <LocalizedText text={"Saving..."} /> : active ? "★ Favorited" : "☆ Add to Favorites"}
     </button>
   );
 }

@@ -1,4 +1,5 @@
 "use client";
+import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 
 import Link from "next/link";
 import CertificateDownloadButton from "@/components/credentials/CertificateDownloadButton";
@@ -36,6 +37,8 @@ export default function CredentialPortfolioExplorer({
 }: {
   items: CredentialPortfolioItem[];
 }) {
+  const { t: localizeLabel } = useInterfaceLocale();
+
   const [filter, setFilter] = useState<PortfolioFilter>("all");
   const [query, setQuery] = useState("");
   const [sort, setSort] = useState<PortfolioSort>("newest");
@@ -88,8 +91,8 @@ export default function CredentialPortfolioExplorer({
     <section aria-labelledby="credential-portfolio-title">
       <div className="certificate-section-heading">
         <div>
-          <p className="certificate-eyebrow">Your achievements</p>
-          <h2 id="credential-portfolio-title">My certificates</h2>
+          <p className="certificate-eyebrow"><LocalizedText text={"Your achievements"} /></p>
+          <h2 id="credential-portfolio-title"><LocalizedText text={"My certificates"} /></h2>
         </div>
         <span className="certificate-count">
           {items.filter((item) => item.status === "active").length} earned
@@ -99,7 +102,7 @@ export default function CredentialPortfolioExplorer({
         <>
           <div className="certificate-tools">
             <label>
-              <span>Search certificates</span>
+              <span><LocalizedText text={"Search certificates"} /></span>
               <input
                 type="search"
                 value={query}
@@ -109,7 +112,7 @@ export default function CredentialPortfolioExplorer({
               />
             </label>
             <label>
-              <span>Sort by</span>
+              <span><LocalizedText text={"Sort by"} /></span>
               <select
                 value={sort}
                 onChange={(event) =>
@@ -117,12 +120,12 @@ export default function CredentialPortfolioExplorer({
                 }
               >
                 <option value="newest">Newest first</option>
-                <option value="score">Highest mastery</option>
-                <option value="title">Course title</option>
+                <option value="score"><LocalizedText text={"Highest mastery"} /></option>
+                <option value="title"><LocalizedText text={"Course title"} /></option>
               </select>
             </label>
           </div>
-          <div aria-label="Filter certificates" className="certificate-filters">
+          <div aria-label={localizeLabel("Filter certificates")} className="certificate-filters">
             {(
               [
                 { value: "all", label: "All records" },
@@ -179,9 +182,7 @@ export default function CredentialPortfolioExplorer({
                   <Link
                     className="certificate-button"
                     href={`/certificates/${encodeURIComponent(item.id)}`}
-                  >
-                    Open certificate
-                  </Link>
+                  ><LocalizedText text={"Open certificate"} /></Link>
                   {item.status === "active" ? (
                     <>
                       <CertificateDownloadButton
@@ -192,9 +193,7 @@ export default function CredentialPortfolioExplorer({
                         type="button"
                         className="certificate-button secondary"
                         onClick={() => void share(item)}
-                      >
-                        Share ↗
-                      </button>
+                      ><LocalizedText text={"Share ↗"} /></button>
                     </>
                   ) : (
                     <Link
@@ -210,7 +209,7 @@ export default function CredentialPortfolioExplorer({
           </div>
           {!visible.length && (
             <div className="certificate-empty">
-              <h3>No certificates match your search.</h3>
+              <h3><LocalizedText text={"No certificates match your search."} /></h3>
               <button
                 className="certificate-button secondary"
                 type="button"
@@ -218,9 +217,7 @@ export default function CredentialPortfolioExplorer({
                   setFilter("all");
                   setQuery("");
                 }}
-              >
-                Clear filters
-              </button>
+              ><LocalizedText text={"Clear filters"} /></button>
             </div>
           )}
         </>

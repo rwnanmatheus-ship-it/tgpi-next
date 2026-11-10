@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 /** TGPI's own issuer mark, never a third-party accreditation emblem. */
 export default function CertificateSeal({ verified }: { verified: boolean }) {
   return (
@@ -77,9 +79,7 @@ export default function CertificateSeal({ verified }: { verified: boolean }) {
         fontSize="9"
         letterSpacing="1"
         fill="#E9D397"
-      >
-        LEARNING
-      </text>
+      ><LocalizedText text={"LEARNING"} /></text>
     </svg>
   );
 }

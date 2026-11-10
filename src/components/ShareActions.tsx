@@ -1,5 +1,7 @@
 "use client";
 
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import { useState } from "react";
 
 type ShareActionsProps = {
@@ -61,15 +63,13 @@ export default function ShareActions({
         <button
           onClick={handleShare}
           className="rounded-xl bg-yellow-500 px-5 py-3 font-semibold text-black transition hover:bg-yellow-400"
-        >
-          Share
-        </button>
+        ><LocalizedText text={"Share"} /></button>
 
         <button
           onClick={handleCopy}
           className="rounded-xl border border-slate-700 bg-slate-950 px-5 py-3 font-semibold text-white transition hover:border-yellow-500"
         >
-          {copied ? "Copied" : "Copy Link"}
+          {copied ? "Copied" : <LocalizedText text={"Copy Link"} />}
         </button>
       </div>
     </div>

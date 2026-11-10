@@ -1,4 +1,5 @@
 "use client";
+import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 
 import { LocalizedText } from "@/components/localization/LocaleProvider";
 import { useState } from "react";
@@ -8,8 +9,10 @@ const QUESTIONS = [
   { question: "One country has no published value for an indicator. How should you compare it?", answers: ["Treat the missing value as zero.", "Copy the regional average and call it verified.", "Show the gap and withhold conclusions that depend on it."], correct: 2, explanation: "Missing evidence is not bad performance. Substitution without disclosure creates false certainty and can unfairly rank countries." },
 ];
 export default function EvidenceLesson() {
+  const { t: localizeLabel } = useInterfaceLocale();
+
   const [index, setIndex] = useState(0);
   const [answer, setAnswer] = useState<number | null>(null);
   const q = QUESTIONS[index];
-  return <section id="learning" className="ig-section ig-panel"><p className="ig-eyebrow">TGPI Learning / Evidence literacy / {index + 1}{" "}<LocalizedText text="of" />{" "}{QUESTIONS.length}</p><h2>Learn to challenge a number.</h2><p className="ig-small">A short practice in interpretation, dates and missing evidence. Completion is a learning exercise, not an accredited qualification.</p><h3>{q.question}</h3><div className="grid gap-3 my-5" role="group" aria-label="Answer options">{q.answers.map((option, n) => <button type="button" className="ig-select text-left" aria-pressed={answer === n} key={option} onClick={() => setAnswer(n)}>{option}</button>)}</div>{answer !== null ? <div role="status" className="ig-status"><strong>{answer === q.correct ? "Correct interpretation." : "Revisit the evidence."}</strong><p className="ig-small">{q.explanation}</p><button type="button" className="ig-button" onClick={() => { setIndex((index + 1) % QUESTIONS.length); setAnswer(null); }}>{index === QUESTIONS.length - 1 ? "Practice again" : "Next question →"}</button></div> : null}</section>;
+  return <section id="learning" className="ig-section ig-panel"><p className="ig-eyebrow">TGPI Learning / Evidence literacy / {index + 1}{" "}<LocalizedText text="of" />{" "}{QUESTIONS.length}</p><h2>Learn to challenge a number.</h2><p className="ig-small">A short practice in interpretation, dates and missing evidence. Completion is a learning exercise, not an accredited qualification.</p><h3>{q.question}</h3><div className="grid gap-3 my-5" role="group" aria-label={localizeLabel("Answer options")}>{q.answers.map((option, n) => <button type="button" className="ig-select text-left" aria-pressed={answer === n} key={option} onClick={() => setAnswer(n)}>{option}</button>)}</div>{answer !== null ? <div role="status" className="ig-status"><strong>{answer === q.correct ? "Correct interpretation." : "Revisit the evidence."}</strong><p className="ig-small">{q.explanation}</p><button type="button" className="ig-button" onClick={() => { setIndex((index + 1) % QUESTIONS.length); setAnswer(null); }}>{index === QUESTIONS.length - 1 ? <LocalizedText text={"Practice again"} /> : "Next question →"}</button></div> : null}</section>;
 }

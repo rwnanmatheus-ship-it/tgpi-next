@@ -88,7 +88,7 @@ export default function AvatarUpload() {
       </div>
 
       {loading ? (
-        <p className="mt-3 text-sm text-slate-400">Uploading...</p>
+        <p className="mt-3 text-sm text-slate-400"><LocalizedText text={"Uploading..."} /></p>
       ) : null}
 
       {message ? (

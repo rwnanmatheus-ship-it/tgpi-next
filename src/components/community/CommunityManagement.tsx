@@ -67,7 +67,7 @@ export default function CommunityManagement({
   }
   return (
     <section className={s.panel}>
-      <h2>Community management</h2>
+      <h2><LocalizedText text={"Community management"} /></h2>
       <div className={s.actions}>
         {["members", "pending", "appeals", "reports", "invites", "audit"].map(
           (x) => (
@@ -146,9 +146,7 @@ export default function CommunityManagement({
                   if (window.confirm("Remove this publication?"))
                     void act({ action: "delete", post: p.id });
                 }}
-              >
-                Remove publication
-              </button>
+              ><LocalizedText text={"Remove publication"} /></button>
             </article>
           );
         })}
@@ -162,7 +160,7 @@ export default function CommunityManagement({
                 {member.role} · {member.state}
               </p>
               {member.answers && <p className={s.body}>{member.answers}</p>}
-              {member.reason && <p>Decision: {member.reason}</p>}
+              {member.reason && <p><LocalizedText text={"Decision:"} />{" "}{member.reason}</p>}
               <div className={s.actions}>
                 {(member.state === "pending"
                   ? ["approve", "decline"]
@@ -261,9 +259,7 @@ export default function CommunityManagement({
             }}
           >
             <div className={s.split}>
-              <label>
-                Valid for days
-                <input
+              <label><LocalizedText text={"Valid for days"} /><input
                   type="number"
                   min={1}
                   max={30}
@@ -272,9 +268,7 @@ export default function CommunityManagement({
                   onChange={(e) => setDays(Number(e.target.value))}
                 />
               </label>
-              <label>
-                Maximum uses
-                <input
+              <label><LocalizedText text={"Maximum uses"} /><input
                   type="number"
                   min={1}
                   max={100}
@@ -284,9 +278,7 @@ export default function CommunityManagement({
                 />
               </label>
             </div>
-            <button className={s.button} disabled={busy}>
-              Create invitation
-            </button>
+            <button className={s.button} disabled={busy}><LocalizedText text={"Create invitation"} /></button>
           </form>
           {invite && (
             <label>
@@ -304,7 +296,7 @@ export default function CommunityManagement({
               <div className={s.reply} key={i.id}>
                 <p>
                   {new Date(i.expiresAt).toLocaleString()} · {i.uses}/
-                  {i.maxUses} uses · {i.revoked ? "Revoked" : "Active"}
+                  {i.maxUses} uses · {i.revoked ? "Revoked" : <LocalizedText text={"Active"} />}
                 </p>
                 {!i.revoked && (
                   <button
@@ -369,9 +361,7 @@ export default function CommunityManagement({
                 defaultValue={c.slowModeSeconds || 0}
               />
             </label>
-            <button className={s.button} disabled={busy}>
-              Save settings
-            </button>
+            <button className={s.button} disabled={busy}><LocalizedText text={"Save settings"} /></button>
           </form>
           <ImageUpload
             community={c.id}
@@ -426,7 +416,7 @@ export default function CommunityManagement({
                 void act({ action: "archive" });
             }}
           >
-            {c.archived ? "Reopen" : "Archive"}
+            {c.archived ? "Reopen" : <LocalizedText text={"Archive"} />}
           </button>
         </div>
       )}

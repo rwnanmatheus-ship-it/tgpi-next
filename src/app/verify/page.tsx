@@ -1,5 +1,7 @@
 "use client";
 
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 
@@ -109,9 +111,7 @@ export default function VerifyPage() {
           </div>
 
           <aside className="border-t border-white/10 bg-white/[0.045] p-8 lg:border-l lg:border-t-0 sm:p-10">
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#E8CC7B]">
-              Verification layers
-            </p>
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#E8CC7B]"><LocalizedText text={"Verification layers"} /></p>
             <div className="mt-7 grid gap-5">
               {[
                 ["Identity", "Authenticated learner and TGPI Global Key binding"],

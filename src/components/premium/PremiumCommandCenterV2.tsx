@@ -410,9 +410,7 @@ export default function PremiumCommandCenterV2({
               data-tgpi-depth="raised"
               data-tgpi-tone="white"
             >
-              <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#79550F]">
-                Monthly cost plan
-              </p>
+              <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#79550F]"><LocalizedText text={"Monthly cost plan"} /></p>
               <p className="mt-5 font-[var(--tgpi-font-display)] text-5xl font-semibold tracking-[-0.035em]">
                 {model.cost.isPersonalEstimate ? formatMoney(model.cost.amount, model.cost.currency) : "Not set"}
               </p>
@@ -532,9 +530,7 @@ export default function PremiumCommandCenterV2({
             <article className="rounded-[30px] bg-[var(--tgpi-navy-raised)] p-7 text-white sm:p-8">
               <div className="flex items-start justify-between gap-5">
                 <div>
-                  <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold-light)]">
-                    Learning path
-                  </p>
+                  <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold-light)]"><LocalizedText text={"Learning path"} /></p>
                   <h2 className="mt-3 font-[var(--tgpi-font-display)] text-3xl font-semibold">
                     {model.learning.title}
                   </h2>
@@ -565,7 +561,7 @@ export default function PremiumCommandCenterV2({
                 className="mt-5 inline-flex min-h-11 items-center text-sm font-extrabold text-[var(--tgpi-gold-light)]"
                 href={model.learning.href}
               >
-                {model.learning.percent ? "Continue learning" : "Start learning path"} <span aria-hidden="true">→</span>
+                {model.learning.percent ? <LocalizedText text={"Continue learning"} /> : "Start learning path"} <span aria-hidden="true">→</span>
               </Link>
             </article>
 

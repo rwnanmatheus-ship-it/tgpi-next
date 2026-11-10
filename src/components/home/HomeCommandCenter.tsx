@@ -28,7 +28,7 @@ export default function HomeCommandCenter() {
               <Link href="/sign-in" className="inline-flex min-h-14 items-center justify-center rounded-2xl border border-white/20 px-6 text-sm font-extrabold text-white transition hover:border-[var(--tgpi-gold-light)] hover:text-[var(--tgpi-gold-light)]"><LocalizedText text="Sign in" /></Link>
             </Show>
             <Show when="signed-in">
-              <Link href="/profile" className="inline-flex min-h-14 items-center justify-center gap-3 rounded-2xl bg-[var(--tgpi-gold)] px-6 text-sm font-extrabold text-[var(--tgpi-navy-deep)] transition hover:-translate-y-0.5 hover:bg-[var(--tgpi-gold-light)]">Open my workspace <NavigationIcon name="arrow" width={18} height={18} /></Link>
+              <Link href="/profile" className="inline-flex min-h-14 items-center justify-center gap-3 rounded-2xl bg-[var(--tgpi-gold)] px-6 text-sm font-extrabold text-[var(--tgpi-navy-deep)] transition hover:-translate-y-0.5 hover:bg-[var(--tgpi-gold-light)]"><LocalizedText text={"Open my workspace"} />{" "}<NavigationIcon name="arrow" width={18} height={18} /></Link>
               <Link href="/global-key" className="inline-flex min-h-14 items-center justify-center rounded-2xl border border-white/20 px-6 text-sm font-extrabold text-white transition hover:border-[var(--tgpi-gold-light)] hover:text-[var(--tgpi-gold-light)]">View Global Key</Link>
             </Show>
           </div>

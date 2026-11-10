@@ -76,9 +76,7 @@ export default function CountriesLearningOS() {
 
             <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
               <Link href="/authority" className="inline-flex min-h-12 items-center justify-center rounded-2xl border border-white/18 bg-white/[0.055] px-5 text-sm font-extrabold text-white transition hover:border-[var(--tgpi-gold-light)]"><LocalizedText text="Read the methodology" /></Link>
-              <Link href="/courses" className="inline-flex min-h-12 items-center justify-center rounded-2xl bg-[var(--tgpi-gold)] px-5 text-sm font-extrabold text-[var(--tgpi-navy)] transition hover:bg-[#D4AA49]">
-                Continue in Learning
-              </Link>
+              <Link href="/courses" className="inline-flex min-h-12 items-center justify-center rounded-2xl bg-[var(--tgpi-gold)] px-5 text-sm font-extrabold text-[var(--tgpi-navy)] transition hover:bg-[#D4AA49]"><LocalizedText text={"Continue in Learning"} /></Link>
             </div>
           </div>
         </aside>

@@ -1,4 +1,6 @@
 "use client";
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import CommunityOperations from "./CommunityOperations";
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -41,8 +43,8 @@ export default function ModerationConsole() {
       <CommunityOperations />
       <header className={s.panel}>
         <p className={s.eyebrow}>TGPI administration</p>
-        <h1>Community moderation</h1>
-        <Link href="/community">Return to community</Link>
+        <h1><LocalizedText text={"Community moderation"} /></h1>
+        <Link href="/community"><LocalizedText text={"Return to community"} /></Link>
       </header>
       {error && (
         <p role="alert" className={s.error}>

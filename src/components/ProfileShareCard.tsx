@@ -1,5 +1,7 @@
 "use client";
 
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import { useState } from "react";
 
 export default function ProfileShareCard({
@@ -24,9 +26,7 @@ export default function ProfileShareCard({
 
   return (
     <section className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-      <h2 className="text-xl font-bold text-yellow-400">
-        Share Your Global Profile
-      </h2>
+      <h2 className="text-xl font-bold text-yellow-400"><LocalizedText text={"Share Your Global Profile"} /></h2>
 
       <p className="mt-3 text-sm leading-7 text-slate-300">
         Turn your TGPI identity into a public signal. Share your profile with

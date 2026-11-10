@@ -1,4 +1,6 @@
 "use client";
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import s from "./Community.module.css";
@@ -35,7 +37,7 @@ export default function CommunityImageUpload({
     <div className={s.reply}>
       <label>
         {["post", "comment"].includes(kind)
-          ? "Attach a photo"
+          ? <LocalizedText text={"Attach a photo"} />
           : `Community ${kind}`}
         <input
           type="file"
@@ -57,9 +59,7 @@ export default function CommunityImageUpload({
           className={s.uploadPreview}
         />
       )}
-      <label>
-        Image description (alternative text)
-        <input
+      <label><LocalizedText text={"Image description (alternative text)"} /><input
           value={alt}
           maxLength={250}
           onChange={(e) => setAlt(e.target.value)}

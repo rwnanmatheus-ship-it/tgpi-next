@@ -1,5 +1,7 @@
 "use client";
 
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 type NotificationItem = {
   id: string;
   title: string;
@@ -17,7 +19,7 @@ export default function PlatformNotificationPanel({
     <section className="rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.015))] p-6 shadow-[0_0_35px_rgba(250,204,21,0.03)]">
       <div className="mb-5 flex items-center justify-between">
         <div>
-          <h2 className="text-2xl font-bold text-yellow-400">Notificações</h2>
+          <h2 className="text-2xl font-bold text-yellow-400"><LocalizedText text={"Notificações"} /></h2>
           <p className="mt-2 text-sm text-slate-400">
             Atualizações da sua conta, da plataforma e do seu progresso.
           </p>

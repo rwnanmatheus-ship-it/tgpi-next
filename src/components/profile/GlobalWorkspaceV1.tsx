@@ -196,9 +196,7 @@ export default function GlobalWorkspaceV1({
       <section aria-labelledby="global-plan-summary-title">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#956A13]">
-              Global plan
-            </p>
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#956A13]"><LocalizedText text={"Global plan"} /></p>
             <h2
               id="global-plan-summary-title"
               className="mt-3 font-[var(--tgpi-font-display)] text-4xl font-semibold tracking-[-0.035em]"
@@ -314,9 +312,7 @@ export default function GlobalWorkspaceV1({
                     <Link
                       href={`/countries/${fit.country.slug}#documents-to-verify`}
                       className="text-[#956A13]"
-                    >
-                      Documents →
-                    </Link>
+                    ><LocalizedText text={"Documents →"} /></Link>
                   </div>
                 </div>
               </article>
@@ -334,9 +330,7 @@ export default function GlobalWorkspaceV1({
             <Link
               href="/onboarding"
               className="mt-6 inline-flex min-h-12 items-center justify-center rounded-xl bg-[var(--tgpi-navy-raised)] px-6 text-sm font-extrabold text-white"
-            >
-              Choose countries
-            </Link>
+            ><LocalizedText text={"Choose countries"} /></Link>
           </div>
         )}
         <p className="mt-4 text-xs leading-6 text-[#7A8390]">

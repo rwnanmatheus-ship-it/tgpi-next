@@ -1,5 +1,8 @@
 "use client";
+import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
@@ -96,6 +99,8 @@ export function ResourcesNavigation() {
 }
 
 export default function ResourceExplorer() {
+  const { t: localizeLabel } = useInterfaceLocale();
+
   const [selected, setSelected] = useState<string>("explore");
   const item =
     objectives.find((objective) => objective.id === selected) ?? objectives[0];
@@ -105,8 +110,8 @@ export default function ResourceExplorer() {
       aria-labelledby="resource-selector-title"
     >
       <div>
-        <p className="resources-kicker">Your starting point</p>
-        <h2 id="resource-selector-title">What would you like to do first?</h2>
+        <p className="resources-kicker"><LocalizedText text={"Your starting point"} /></p>
+        <h2 id="resource-selector-title"><LocalizedText text={"What would you like to do first?"} /></h2>
         <p>
           Select an objective to see a suggested starting tool. This guide does
           not use personal data or calculate a country recommendation.
@@ -116,7 +121,7 @@ export default function ResourceExplorer() {
         <div
           className="resources-options"
           role="group"
-          aria-label="Choose your objective"
+          aria-label={localizeLabel("Choose your objective")}
         >
           {objectives.map((objective) => (
             <button

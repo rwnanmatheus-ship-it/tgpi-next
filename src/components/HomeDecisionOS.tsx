@@ -315,9 +315,7 @@ function LearningPanel() {
         <Link
           href="/courses"
           className="mt-6 inline-flex min-h-12 items-center justify-center rounded-2xl bg-[var(--tgpi-gold)] px-5 text-sm font-extrabold text-[var(--tgpi-navy)]"
-        >
-          Explore Learning
-        </Link>
+        ><LocalizedText text={"Explore Learning"} /></Link>
       </div>
     </div>
   );

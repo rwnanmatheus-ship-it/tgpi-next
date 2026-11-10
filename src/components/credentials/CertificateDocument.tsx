@@ -38,9 +38,7 @@ export default function CertificateDocument({
             <small><LocalizedText text="Education for a global life" /></small>
           </div>
         </div>
-        <span className="diploma-brand-edition">
-          Verified learning
-          <br />
+        <span className="diploma-brand-edition"><LocalizedText text={"Verified learning"} /><br />
           Professional achievement
         </span>
       </header>
@@ -53,7 +51,7 @@ export default function CertificateDocument({
       )}
       <div className="diploma-body">
         <div className="diploma-main">
-          <p className="diploma-eyebrow">Certificate of achievement</p>
+          <p className="diploma-eyebrow"><LocalizedText text={"Certificate of achievement"} /></p>
           <h2>{credential.documentNature || "Professional Certificate"}</h2>
           <p className="diploma-label">Awarded to</p>
           <p className="diploma-name">{credential.publicName}</p>
@@ -101,7 +99,7 @@ export default function CertificateDocument({
           <dd>{certificateDate(credential.issuedAt)}</dd>
         </div>
         <div>
-          <dt>Mastery</dt>
+          <dt><LocalizedText text={"Mastery"} /></dt>
           <dd>{credential.assessmentScore}%</dd>
         </div>
         <div>

@@ -26,7 +26,7 @@ export default function AccountSecurityPanel({ email = "", updatedAt = "" }: Pro
   return (
     <section className="rounded-[28px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.015))] p-6 shadow-[0_0_35px_rgba(250,204,21,0.03)]">
       <div className="mb-5">
-        <h2 className="text-2xl font-bold text-yellow-400">Account & Security</h2>
+        <h2 className="text-2xl font-bold text-yellow-400"><LocalizedText text={"Account & Security"} /></h2>
         <p className="mt-2 text-sm text-slate-400">
           Core account information and essential controls for launch readiness.
         </p>
@@ -34,8 +34,8 @@ export default function AccountSecurityPanel({ email = "", updatedAt = "" }: Pro
 
       <div className="space-y-3">
         <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
-          <p className="text-xs uppercase tracking-[0.18em] text-slate-400">Primary Email</p>
-          <p className="mt-2 text-white">{email || "Not available"}</p>
+          <p className="text-xs uppercase tracking-[0.18em] text-slate-400"><LocalizedText text={"Primary Email"} /></p>
+          <p className="mt-2 text-white">{email || <LocalizedText text={"Not available"} />}</p>
         </div>
 
         <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">

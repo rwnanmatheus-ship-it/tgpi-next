@@ -1,4 +1,5 @@
 "use client";
+import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 
 import Link from "next/link";
 import { useState } from "react";
@@ -10,6 +11,8 @@ import { LocalizedText } from "@/components/localization/LocaleProvider";
 
 
 export default function DocumentsPathfinder() {
+  const { t: localizeLabel } = useInterfaceLocale();
+
   const [selectedGoal, setSelectedGoal] = useState<DocumentGoal>("travel");
   const selectedPath =
     documentGoalPaths.find((path) => path.goal === selectedGoal) ||
@@ -38,7 +41,7 @@ export default function DocumentsPathfinder() {
           </p>
         </div>
 
-        <div className="mt-7 grid grid-cols-2 gap-2 lg:grid-cols-4" role="group" aria-label="Choose a global objective">
+        <div className="mt-7 grid grid-cols-2 gap-2 lg:grid-cols-4" role="group" aria-label={localizeLabel("Choose a global objective")}>
           {documentGoalPaths.map((path) => {
             const selected = path.goal === selectedGoal;
 

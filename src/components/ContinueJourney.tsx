@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 export default function ContinueJourney() {
   return (
     <div className="rounded-2xl border border-yellow-600/30 bg-yellow-500/5 p-6">
@@ -9,9 +11,7 @@ export default function ContinueJourney() {
         Resume your last country or course and keep evolving globally.
       </p>
 
-      <button className="mt-4 rounded-lg bg-yellow-500 px-4 py-2 text-black">
-        Continue
-      </button>
+      <button className="mt-4 rounded-lg bg-yellow-500 px-4 py-2 text-black"><LocalizedText text={"Continue"} /></button>
     </div>
   );
 }

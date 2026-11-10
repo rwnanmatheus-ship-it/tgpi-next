@@ -1,5 +1,7 @@
 "use client";
 
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import Link from "next/link";
 
 const rooms = [
@@ -12,9 +14,7 @@ const rooms = [
 export default function GlobalRooms() {
   return (
     <section className="rounded-3xl border border-slate-800 bg-slate-900 p-6">
-      <h2 className="text-yellow-400 font-bold text-xl">
-        🌍 Global Rooms
-      </h2>
+      <h2 className="text-yellow-400 font-bold text-xl"><LocalizedText text={"🌍 Global Rooms"} /></h2>
 
       <p className="text-sm text-slate-400 mt-2">
         Join live rooms with people moving to the same destination.

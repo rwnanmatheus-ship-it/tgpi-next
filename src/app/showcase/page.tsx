@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import Link from "next/link";
 import PublicProofWall from "@/components/PublicProofWall";
 
@@ -44,16 +46,13 @@ export default function ShowcasePage() {
               <h2 className="text-xl font-bold text-yellow-400">{user.name}</h2>
               <p className="text-sm text-slate-400">@{user.username}</p>
 
-              <p className="mt-3 text-sm text-slate-300">
-                Destination: {user.destination}
+              <p className="mt-3 text-sm text-slate-300"><LocalizedText text={"Destination:"} />{" "}{user.destination}
               </p>
 
               <Link
                 href={`/user/${user.username}`}
                 className="mt-5 inline-block rounded-xl bg-yellow-500 px-5 py-2 text-sm font-bold text-black"
-              >
-                View Profile
-              </Link>
+              ><LocalizedText text={"View Profile"} /></Link>
             </div>
           ))}
         </section>

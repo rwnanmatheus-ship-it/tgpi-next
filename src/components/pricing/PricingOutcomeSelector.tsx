@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { LocalizedText } from "@/components/localization/LocaleProvider";
+import { LocalizedText, useLocale } from "@/components/localization/LocaleProvider";
 
 
 const outcomes = [
@@ -51,6 +51,8 @@ const outcomes = [
 type OutcomeId = (typeof outcomes)[number]["id"];
 
 export default function PricingOutcomeSelector() {
+  const { t } = useLocale();
+
   const [activeId, setActiveId] = useState<OutcomeId>("move");
   const active = outcomes.find((outcome) => outcome.id === activeId) ?? outcomes[0];
 
@@ -59,18 +61,11 @@ export default function PricingOutcomeSelector() {
       <div className="overflow-hidden rounded-[30px] border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] shadow-[0_24px_70px_rgba(11,31,58,0.08)]">
         <div className="grid lg:grid-cols-[0.8fr_1.2fr]">
           <div className="border-b border-[var(--tgpi-border)] bg-[#F1EBDD] p-7 sm:p-9 lg:border-b-0 lg:border-r">
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#956A13]">
-              Value built around you
-            </p>
-            <h2 id="pricing-outcome-title" className="mt-4 font-[var(--tgpi-font-display)] text-4xl font-semibold leading-[1.02] tracking-[-0.035em] text-[#071A31] sm:text-5xl">
-              What should Premium help you achieve?
-            </h2>
-            <p className="mt-5 text-sm leading-7 text-[#596576]">
-              Select the outcome behind your subscription. The TGPI system reorganizes
-              around the decision you need to make.
-            </p>
+            <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#956A13]"><LocalizedText text={"Value built around you"} /></p>
+            <h2 id="pricing-outcome-title" className="mt-4 font-[var(--tgpi-font-display)] text-4xl font-semibold leading-[1.02] tracking-[-0.035em] text-[#071A31] sm:text-5xl"><LocalizedText text={"What should Premium help you achieve?"} /></h2>
+            <p className="mt-5 text-sm leading-7 text-[#596576]"><LocalizedText text={"Select the outcome behind your subscription. The TGPI system reorganizes around the decision you need to make."} /></p>
 
-            <div className="mt-7 grid gap-2" role="group" aria-label="Choose your Premium outcome">
+            <div className="mt-7 grid gap-2" role="group" aria-label={t("Choose your Premium outcome")}>
               {outcomes.map((outcome, index) => {
                 const selected = outcome.id === active.id;
 
@@ -90,7 +85,7 @@ export default function PricingOutcomeSelector() {
                       <span className={selected ? "text-[var(--tgpi-gold-light)]" : "text-[#956A13]"}>
                         0{index + 1}
                       </span>
-                      {outcome.label}
+                      <LocalizedText text={outcome.label} />
                     </span>
                     <span aria-hidden="true">→</span>
                   </button>
@@ -102,13 +97,13 @@ export default function PricingOutcomeSelector() {
           <div className="flex flex-col justify-between bg-[#071A31] p-7 text-white sm:p-9 lg:p-11" aria-live="polite">
             <div>
               <p className="text-[10px] font-extrabold uppercase tracking-[0.23em] text-[var(--tgpi-gold-light)]">
-                {active.eyebrow}
+                <LocalizedText text={active.eyebrow} />
               </p>
               <h3 className="mt-4 max-w-2xl font-[var(--tgpi-font-display)] text-4xl font-semibold leading-[1.02] tracking-[-0.03em] sm:text-5xl">
-                {active.headline}
+                <LocalizedText text={active.headline} />
               </h3>
               <p className="mt-5 max-w-2xl text-sm leading-7 text-white/65 sm:text-base">
-                {active.description}
+                <LocalizedText text={active.description} />
               </p>
             </div>
 
@@ -117,9 +112,9 @@ export default function PricingOutcomeSelector() {
                 {active.path.map((step, index) => (
                   <div key={step} className="rounded-xl border border-white/10 bg-white/[0.035] px-3 py-4">
                     <p className="text-[9px] font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-gold-light)]">
-                      Step 0{index + 1}
+                      <LocalizedText text="Step {number}" values={{ number: String(index + 1).padStart(2, "0") }} />
                     </p>
-                    <p className="mt-2 text-sm font-bold text-white/85">{step}</p>
+                    <p className="mt-2 text-sm font-bold text-white/85"><LocalizedText text={step} /></p>
                   </div>
                 ))}
               </div>
@@ -127,11 +122,9 @@ export default function PricingOutcomeSelector() {
               <div className="mt-5 flex flex-col gap-4 rounded-2xl border border-[#D7B45D]/25 bg-[#D7B45D]/8 p-5 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                   <p className="text-[9px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-light)]"><LocalizedText text="Designed outcome" /></p>
-                  <p className="mt-2 text-sm font-bold text-white">{active.result}</p>
+                  <p className="mt-2 text-sm font-bold text-white"><LocalizedText text={active.result} /></p>
                 </div>
-                <Link href="#membership" className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[var(--tgpi-gold-hover)] px-5 text-sm font-extrabold text-[#071A31] transition hover:bg-[#C79B36]">
-                  See membership
-                </Link>
+                <Link href="#membership" className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[var(--tgpi-gold-hover)] px-5 text-sm font-extrabold text-[#071A31] transition hover:bg-[#C79B36]"><LocalizedText text={"See membership"} /></Link>
               </div>
             </div>
           </div>

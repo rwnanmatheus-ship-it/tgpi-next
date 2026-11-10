@@ -1,5 +1,7 @@
 "use client";
 
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import { useState } from "react";
 
 export default function Missions() {
@@ -28,16 +30,12 @@ export default function Missions() {
           <button
             onClick={() => answer(true)}
             className="bg-green-500 px-4 py-2 rounded text-black"
-          >
-            Yes
-          </button>
+          ><LocalizedText text={"Yes"} /></button>
 
           <button
             onClick={() => answer(false)}
             className="bg-red-500 px-4 py-2 rounded text-black"
-          >
-            No
-          </button>
+          ><LocalizedText text={"No"} /></button>
         </div>
 
         <p className="text-yellow-400 font-bold mt-2">

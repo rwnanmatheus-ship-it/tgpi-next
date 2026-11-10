@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import Link from "next/link";
 
 export default function PremiumEngineCard() {
@@ -18,9 +20,7 @@ export default function PremiumEngineCard() {
       <Link
         href="/premium"
         className="mt-5 block rounded-xl bg-yellow-500 px-5 py-3 text-center font-bold text-black"
-      >
-        View plans
-      </Link>
+      ><LocalizedText text={"View plans"} /></Link>
     </section>
   );
 }

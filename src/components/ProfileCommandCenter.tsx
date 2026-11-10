@@ -1,4 +1,5 @@
 "use client";
+import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
@@ -129,6 +130,8 @@ function Stat({
 }
 
 export default function ProfileCommandCenter({ mode }: { mode: ViewMode }) {
+  const { t: localizeLabel } = useInterfaceLocale();
+
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<ProfileDoc | null>(null);
   const [memory, setMemory] = useState<MemoryShape | null>(null);
@@ -274,7 +277,7 @@ export default function ProfileCommandCenter({ mode }: { mode: ViewMode }) {
                 <div className="space-y-3 text-sm">
                   <div className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950 p-3">
                     <span className="text-slate-400"><LocalizedText text="Plan" /></span>
-                    <span className="font-semibold text-white">{profile?.plan || "FREE"}</span>
+                    <span className="font-semibold text-white">{profile?.plan || <LocalizedText text={"FREE"} />}</span>
                   </div>
 
                   <div className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950 p-3">
@@ -311,7 +314,7 @@ export default function ProfileCommandCenter({ mode }: { mode: ViewMode }) {
             <ProfileDetailsForm />
 
             <Block
-              title="Recent Activity"
+              title={localizeLabel("Recent Activity")}
               subtitle="Behavioral signals that make TGPI more personalized and intelligent."
             >
               <div className="space-y-3">

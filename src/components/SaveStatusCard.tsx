@@ -1,5 +1,7 @@
 "use client";
 
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 type StatusType = "success" | "error";
 
 export default function SaveStatusCard({
@@ -38,7 +40,7 @@ export default function SaveStatusCard({
               isSuccess ? "text-emerald-300" : "text-red-300"
             }`}
           >
-            {isSuccess ? "Saved successfully" : "Save failed"}
+            {isSuccess ? <LocalizedText text={"Saved successfully"} /> : "Save failed"}
           </p>
           <p
             className={`mt-1 text-sm ${

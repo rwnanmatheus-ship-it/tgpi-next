@@ -1,5 +1,7 @@
 "use client";
 
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import { useState } from "react";
 
 export default function InviteSystem() {
@@ -36,7 +38,7 @@ export default function InviteSystem() {
           onClick={handleCopy}
           className="rounded-xl bg-yellow-500 px-6 py-3 text-sm font-bold text-black transition hover:bg-yellow-400"
         >
-          {copied ? "Copied" : "Copy Link"}
+          {copied ? "Copied" : <LocalizedText text={"Copy Link"} />}
         </button>
       </div>
 

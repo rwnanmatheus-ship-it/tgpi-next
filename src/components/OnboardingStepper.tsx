@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 type OnboardingStepperProps = {
   currentStep: number;
 };
@@ -30,8 +32,7 @@ export default function OnboardingStepper({
                   : "border-slate-800 bg-slate-950"
               }`}
             >
-              <p className="text-xs uppercase tracking-[0.2em] text-slate-400">
-                Step {stepNumber}
+              <p className="text-xs uppercase tracking-[0.2em] text-slate-400"><LocalizedText text={"Step"} />{" "}{stepNumber}
               </p>
               <p className="mt-2 text-lg font-bold text-white">{step}</p>
             </div>

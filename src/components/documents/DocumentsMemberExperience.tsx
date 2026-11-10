@@ -1,4 +1,5 @@
 "use client";
+import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -15,6 +16,8 @@ type Filter = "all" | "pending" | "completed";
 export default function DocumentsMemberExperience({ firstName, globalId, model }: {
   firstName: string; globalId: string; model: DocumentsMemberModel;
 }) {
+  const { t: localizeLabel } = useInterfaceLocale();
+
   const [filter, setFilter] = useState<Filter>("all");
   const [search, setSearch] = useState("");
   const countries = model.countries.filter(country =>
@@ -35,7 +38,7 @@ export default function DocumentsMemberExperience({ firstName, globalId, model }
             <div className="documents-actions"><Link className="documents-button" href={model.nextAction.href}>{model.nextAction.label} <span aria-hidden="true">↗</span></Link><a className="documents-button secondary" href="#destination-files">View my files ↓</a></div>
             <div className="documents-identity"><Link href="/global-key">{globalId}</Link><span>{model.goalLabel}</span></div>
           </div>
-          <aside className="documents-score" aria-label="Preparation score">
+          <aside className="documents-score" aria-label={localizeLabel("Preparation score")}>
             <p className="documents-eyebrow">Preparation signals</p><strong>{model.readinessScore}<small>/100</small></strong>
             <progress max={100} value={model.readinessScore} aria-label="Preparation signals achieved" />
             <p>A planning indicator based on your profile and checklist activity. Review the breakdown below.</p>
@@ -49,8 +52,8 @@ export default function DocumentsMemberExperience({ firstName, globalId, model }
         <section className="documents-next" aria-labelledby="next-step-title"><div><p className="documents-eyebrow">Recommended next step</p><h2 id="next-step-title">{model.nextAction.title}</h2><p>{model.nextAction.description}</p></div><Link className="documents-button" href={model.nextAction.href}>{model.nextAction.label} →</Link></section>
         <section id="destination-files" className="documents-section">
           <div className="documents-section-heading"><div><p className="documents-eyebrow">Your research portfolio</p><h2><LocalizedText text="Destination files" /></h2><p>See what you have reviewed and where preparation still needs attention.</p></div><Link className="documents-text-link" href="/countries">Add a destination ↗</Link></div>
-          <div className="documents-toolbar"><div className="documents-filters" role="group" aria-label="Filter destination files">{([ ["all", "All files"], ["pending", "To review"], ["completed", "Reviewed"] ] as const).map(([value, label]) => <button type="button" aria-pressed={filter === value} key={value} onClick={() => setFilter(value)}>{label}</button>)}</div><label className="documents-search"><span className="sr-only">Search your destinations</span><input type="search" value={search} onChange={event => setSearch(event.target.value)} placeholder="Search destinations…" /></label></div>
-          <p className="documents-result-count" role="status">{countries.length}{" "}<LocalizedText text="of" />{" "}{model.countries.length} destination files · {model.completedItems}/{model.totalItems} research items reviewed</p>
+          <div className="documents-toolbar"><div className="documents-filters" role="group" aria-label="Filter destination files">{([ ["all", "All files"], ["pending", "To review"], ["completed", "Reviewed"] ] as const).map(([value, label]) => <button type="button" aria-pressed={filter === value} key={value} onClick={() => setFilter(value)}>{label}</button>)}</div><label className="documents-search"><span className="sr-only">Search your destinations</span><input type="search" value={search} onChange={event => setSearch(event.target.value)} placeholder={localizeLabel("Search destinations…")} /></label></div>
+          <p className="documents-result-count" role="status">{countries.length}{" "}<LocalizedText text="of" />{" "}{model.countries.length}{" "}<LocalizedText text={"destination files ·"} />{" "}{model.completedItems}/{model.totalItems} research items reviewed</p>
           <div className="documents-country-grid">{countries.map(country => <article className="documents-country" key={country.slug}>
             <div className="documents-country-heading"><span aria-hidden="true" className="documents-flag">{country.emoji}</span><span className="documents-status" data-status={country.status}>{statusLabels[country.status]}</span></div>
             <h3><LocalizedText text={country.name} /></h3><p>{country.totalItems ? `${country.completedItems} of ${country.totalItems} research items reviewed` : "Open the checklist to establish your preparation baseline."}</p>

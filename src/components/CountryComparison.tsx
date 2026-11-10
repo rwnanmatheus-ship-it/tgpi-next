@@ -63,8 +63,8 @@ export default function CountryComparison() {
       <div className="mt-6 overflow-hidden rounded-2xl border border-slate-800">
         <div className="grid grid-cols-3 bg-slate-900 p-4 text-sm font-semibold text-yellow-300">
           <div>Category</div>
-          <div>{firstCountry?.name || "Country A"}</div>
-          <div>{secondCountry?.name || "Country B"}</div>
+          <div>{firstCountry?.name || <LocalizedText text={"Country A"} />}</div>
+          <div>{secondCountry?.name || <LocalizedText text={"Country B"} />}</div>
         </div>
 
         {rows.map((row) => (

@@ -44,9 +44,7 @@ export default function CertificatePanel() {
               <button
                 onClick={() => shareCertificate(certificate.title)}
                 className="rounded-xl bg-yellow-500 px-5 py-3 text-sm font-semibold text-black transition hover:bg-yellow-400"
-              >
-                Share Certificate
-              </button>
+              ><LocalizedText text={"Share Certificate"} /></button>
             </div>
           </div>
         ))}

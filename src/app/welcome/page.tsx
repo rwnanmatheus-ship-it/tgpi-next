@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import { safeReturnTo } from "@/lib/auth/return-to";
 import type { Metadata } from "next";
 import { currentUser } from "@clerk/nextjs/server";
@@ -12,7 +14,7 @@ export default async function WelcomePage({ searchParams }: { searchParams: Prom
   const user = await currentUser();
   if (!user) redirect(`/sign-in?next=${encodeURIComponent(next)}`);
   const verified = user.emailAddresses.some(email => email.id === user.primaryEmailAddressId && email.verification?.status === "verified");
-  if (!verified) return <TGPIAuthShell mode="welcome"><p>Verify your primary email in <a href="/settings">account settings</a> before completing registration.</p></TGPIAuthShell>;
+  if (!verified) return <TGPIAuthShell mode="welcome"><p>Verify your primary email in <a href="/settings"><LocalizedText text={"account settings"} /></a> before completing registration.</p></TGPIAuthShell>;
   const profile = normalizeTgpiAccountProfile(user.unsafeMetadata.tgpiAccountProfile);
   const names = new Intl.DisplayNames(["en"], { type: "region" });
   const countries = registrationCountryCodes.map(code => ({ code, name: names.of(code) || code })).sort((a,b) => a.name.localeCompare(b.name, "en"));

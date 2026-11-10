@@ -81,7 +81,7 @@ export default function LegalPage() {
             </dd>
           </div>
           <div>
-            <dt className="text-xs font-extrabold uppercase tracking-[0.14em] text-[#956A13]">Customer & billing support</dt>
+            <dt className="text-xs font-extrabold uppercase tracking-[0.14em] text-[#956A13]"><LocalizedText text={"Customer & billing support"} /></dt>
             <dd className="mt-1 font-bold text-[var(--tgpi-navy-raised)]">
               <a
                 href="mailto:contact@theglobalpolymath.com"
@@ -104,7 +104,7 @@ export default function LegalPage() {
       </section>
 
       <section>
-        <h2 className="text-2xl font-semibold text-[var(--tgpi-navy)]">Payments</h2>
+        <h2 className="text-2xl font-semibold text-[var(--tgpi-navy)]"><LocalizedText text={"Payments"} /></h2>
         <p className="mt-3">
           TGPI Premium is offered as a recurring digital membership. Stripe is used to
           securely process eligible payments and provide billing infrastructure. The standard

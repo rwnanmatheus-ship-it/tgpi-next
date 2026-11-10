@@ -1,5 +1,7 @@
 "use client";
 
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import { useMemo, useState } from "react";
 
 type CostItem = {
@@ -160,7 +162,7 @@ export default function LifeSimulator({
 
           <div className="grid gap-3">
             <div className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950 p-4">
-              <span className="text-slate-300">Income</span>
+              <span className="text-slate-300"><LocalizedText text={"Income"} /></span>
               <span className="font-semibold text-white">
                 {formatAmount(simulation.income, currencyCode)}
               </span>

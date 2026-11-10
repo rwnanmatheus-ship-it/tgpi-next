@@ -1,4 +1,5 @@
 "use client";
+import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 import Link from "next/link";
 import { useEffect, useState, useRef } from "react";
 import {
@@ -23,6 +24,8 @@ export default function CommunityChat({
   membership: Membership | null;
   uid: string;
 }) {
+  const { t: localizeLabel } = useInterfaceLocale();
+
   const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
   const [missing, setMissing] = useState(false);
@@ -77,7 +80,7 @@ export default function CommunityChat({
     }
   }
   return (
-    <section aria-label="Community chat">
+    <section aria-label={localizeLabel("Community chat")}>
       {loading && <p role="status">Opening community conversation…</p>}
       {error && (
         <div className={s.status}>
@@ -87,7 +90,7 @@ export default function CommunityChat({
       )}
       {missing && (
         <div className={s.panel}>
-          <h2>Community conversation</h2>
+          <h2><LocalizedText text={"Community conversation"} /></h2>
           <p>
             A shared space for introductions, questions and everyday
             experiences.
@@ -134,11 +137,9 @@ export default function CommunityChat({
       )}
       <p className={s.notice}>
         Manage community alerts in{" "}
-        <Link href="/community?view=preferences">Community preferences</Link>{" "}
+        <Link href="/community?view=preferences"><LocalizedText text={"Community preferences"} /></Link>{" "}
         and delivery channels in{" "}
-        <Link href="/profile#settings-notifications">
-          Notification settings
-        </Link>
+        <Link href="/profile#settings-notifications"><LocalizedText text={"Notification settings"} /></Link>
         . Replies and @mentions follow your saved preferences.
       </p>
     </section>

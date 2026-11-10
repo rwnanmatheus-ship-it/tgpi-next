@@ -44,7 +44,7 @@ export default function CommunityMeetings({
         Upcoming exchanges from up to eight of your active communities. Times
         are shown in your current time zone.
       </p>
-      {loading && <p role="status">Loading…</p>}
+      {loading && <p role="status"><LocalizedText text={"Loading…"} /></p>}
       {error && (
         <p className={s.error} role="alert">
           {error}

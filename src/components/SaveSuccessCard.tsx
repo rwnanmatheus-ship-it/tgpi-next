@@ -1,5 +1,7 @@
 "use client";
 
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 export default function SaveSuccessCard({
   message,
   visible,
@@ -17,7 +19,7 @@ export default function SaveSuccessCard({
         </div>
 
         <div>
-          <p className="font-semibold text-emerald-300">Saved successfully</p>
+          <p className="font-semibold text-emerald-300"><LocalizedText text={"Saved successfully"} /></p>
           <p className="mt-1 text-sm text-emerald-100/90">{message}</p>
         </div>
       </div>

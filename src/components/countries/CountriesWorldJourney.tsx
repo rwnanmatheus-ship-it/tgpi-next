@@ -1,4 +1,5 @@
 "use client";
+import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 
 import Image from "next/image";
 import Link from "next/link";
@@ -41,6 +42,8 @@ function getCostLabel(costLevel: CountryExplorerItem["costLevel"]) {
 }
 
 export default function CountriesWorldJourney({ countries }: CountriesWorldJourneyProps) {
+  const { t: localizeLabel } = useInterfaceLocale();
+
   const [activeRegionId, setActiveRegionId] = useState<CountryMapRegionId>("world");
   const [query, setQuery] = useState("");
   const [selectedSlug, setSelectedSlug] = useState(
@@ -169,7 +172,7 @@ export default function CountriesWorldJourney({ countries }: CountriesWorldJourn
                 Surprise me
               </button>
             </div>
-            <label htmlFor="world-country-search" className="sr-only">Search all countries</label>
+            <label htmlFor="world-country-search" className="sr-only"><LocalizedText text={"Search all countries"} /></label>
             <div className="relative mt-3">
               <input
                 id="world-country-search"
@@ -177,7 +180,7 @@ export default function CountriesWorldJourney({ countries }: CountriesWorldJourn
                 autoComplete="off"
                 value={query}
                 onChange={(event) => setQuery(event.target.value)}
-                placeholder="Country, capital, language…"
+                placeholder={localizeLabel("Country, capital, language…")}
                 className="min-h-12 w-full rounded-2xl border border-[var(--tgpi-border)] bg-white px-4 pr-16 text-sm font-semibold text-[var(--tgpi-navy)] shadow-sm outline-none transition placeholder:text-[var(--tgpi-muted)]/75 focus:border-[var(--tgpi-gold)] focus:ring-4 focus:ring-[var(--tgpi-gold)]/15"
               />
               {query ? (
@@ -191,7 +194,7 @@ export default function CountriesWorldJourney({ countries }: CountriesWorldJourn
           <div className="mt-4 flex items-end justify-between gap-3" aria-live="polite">
             <div>
               <p className="text-xs font-extrabold text-[var(--tgpi-navy)]">{normalizedQuery ? `Results for “${deferredQuery.trim()}”` : activeRegion.label}</p>
-              <p className="mt-1 text-[9px] font-bold uppercase tracking-[0.12em] text-[var(--tgpi-muted)]">{contextCountries.length} destinations</p>
+              <p className="mt-1 text-[9px] font-bold uppercase tracking-[0.12em] text-[var(--tgpi-muted)]">{contextCountries.length}{" "}<LocalizedText text={"destinations"} /></p>
             </div>
             <a href="#country-explorer" className="text-[10px] font-extrabold text-[var(--tgpi-gold-strong)] underline decoration-[var(--tgpi-gold)] underline-offset-4">Advanced index</a>
           </div>
@@ -244,7 +247,7 @@ export default function CountriesWorldJourney({ countries }: CountriesWorldJourn
                 <JourneyMetric label="English" value={`${selectedCountry.intelligence.englishFriendliness}/100`} />
               </div>
               <div className="mt-4 grid grid-cols-[1fr_auto] gap-2">
-                <Link href={`/countries/${selectedCountry.slug}`} className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[var(--tgpi-gold)] px-4 text-xs font-extrabold text-[var(--tgpi-navy)] transition hover:bg-[#D4AA49] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white">Open dossier →</Link>
+                <Link href={`/countries/${selectedCountry.slug}`} className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[var(--tgpi-gold)] px-4 text-xs font-extrabold text-[var(--tgpi-navy)] transition hover:bg-[#D4AA49] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"><LocalizedText text={"Open dossier →"} /></Link>
                 <Link href={`/compare?country=${selectedCountry.slug}`} className="inline-flex min-h-11 items-center justify-center rounded-xl border border-white/20 bg-[var(--tgpi-navy-deep)]/70 px-4 text-xs font-extrabold text-white backdrop-blur transition hover:border-[var(--tgpi-gold-light)]"><LocalizedText text="Compare" /></Link>
               </div>
             </div>

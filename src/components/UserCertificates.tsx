@@ -46,9 +46,7 @@ export default function UserCertificates({
             <Link
               href={`/certificate/${certificate.courseId}`}
               className="rounded-xl bg-yellow-500 px-4 py-2 font-semibold text-black transition hover:bg-yellow-400"
-            >
-              View Certificate
-            </Link>
+            ><LocalizedText text={"View Certificate"} /></Link>
           </div>
         ))}
       </div>

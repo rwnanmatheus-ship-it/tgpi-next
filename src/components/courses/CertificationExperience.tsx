@@ -1,5 +1,7 @@
 "use client";
 
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import ActivationProgressProvider, {
@@ -210,9 +212,7 @@ function CertificationDashboard({
               <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[#956A13]">
                 Evidence dashboard
               </p>
-              <h2 id="evidence-dashboard-title" className="mt-3 text-3xl font-semibold sm:text-5xl">
-                Your path to certification
-              </h2>
+              <h2 id="evidence-dashboard-title" className="mt-3 text-3xl font-semibold sm:text-5xl"><LocalizedText text={"Your path to certification"} /></h2>
             </div>
             <span className="rounded-full border border-[#D9D1C2] bg-white px-4 py-2 text-xs font-extrabold">
               {eligibility?.moduleGatesPassed || 0}/6 gates passed
@@ -258,7 +258,7 @@ function CertificationDashboard({
                   <div className="mt-5 grid grid-cols-3 gap-2 border-y border-[#E7E1D5] py-4 text-center">
                     <div><p className="text-lg font-extrabold">{assessment.questions.length}</p><p className="text-[9px] font-bold uppercase text-[#7B8088]">Decisions</p></div>
                     <div><p className="text-lg font-extrabold">{assessment.masteryThreshold}%</p><p className="text-[9px] font-bold uppercase text-[#7B8088]">Pass</p></div>
-                    <div><p className="text-lg font-extrabold">{summary?.bestScore ?? "—"}</p><p className="text-[9px] font-bold uppercase text-[#7B8088]">Best score</p></div>
+                    <div><p className="text-lg font-extrabold">{summary?.bestScore ?? "—"}</p><p className="text-[9px] font-bold uppercase text-[#7B8088]"><LocalizedText text={"Best score"} /></p></div>
                   </div>
                   <div className="mt-5 flex items-center justify-between gap-4">
                     <p className="text-xs font-bold text-[#6D7480]">
@@ -269,9 +269,7 @@ function CertificationDashboard({
                         {summary ? "Open gate" : "Begin"} →
                       </Link>
                     ) : (
-                      <span className="text-xs font-extrabold text-[#8A8F96]">
-                        Complete prerequisites
-                      </span>
+                      <span className="text-xs font-extrabold text-[#8A8F96]"><LocalizedText text={"Complete prerequisites"} /></span>
                     )}
                   </div>
                 </article>
@@ -311,8 +309,7 @@ function CertificationDashboard({
                   </button>
                 </div>
               )}
-              <p className="mt-4 text-xs leading-6 text-[#C8D1DE]">
-                Identity: {eligibility?.identityVerified ? "verified" : "verify your primary email"}. Secure issuance: {status?.credentialConfigured ? "ready" : "activation pending"}.
+              <p className="mt-4 text-xs leading-6 text-[#C8D1DE]"><LocalizedText text={"Identity:"} />{" "}{eligibility?.identityVerified ? "verified" : "verify your primary email"}. Secure issuance: {status?.credentialConfigured ? "ready" : "activation pending"}.
               </p>
             </div>
           </div>

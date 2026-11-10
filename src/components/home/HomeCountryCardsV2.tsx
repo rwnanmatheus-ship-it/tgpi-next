@@ -123,9 +123,7 @@ export default function HomeCountryCardsV2() {
                 <div className="p-5 sm:p-6">
                   <div className="flex items-start justify-between gap-4">
                     <div>
-                      <p className="text-[10px] font-extrabold uppercase tracking-[0.16em] text-white/45">
-                        Country profile
-                      </p>
+                      <p className="text-[10px] font-extrabold uppercase tracking-[0.16em] text-white/45"><LocalizedText text={"Country profile"} /></p>
                       <h3 className="mt-2 font-[var(--tgpi-font-display)] text-3xl font-semibold text-white">
                         <LocalizedText text={country.name} />
                       </h3>

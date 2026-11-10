@@ -109,9 +109,7 @@ export default function PersonalPlanDashboard({
               </div>
             </div>
             <div className="mt-5 border-t border-white/10 pt-5">
-              <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-gold-light)]">
-                Current stage
-              </p>
+              <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-gold-light)]"><LocalizedText text={"Current stage"} /></p>
               <p className="mt-1 text-lg font-extrabold">{currentStage.label}</p>
               <p className="mt-2 text-xs leading-6 text-white/60">
                 {currentStage.description}
@@ -252,18 +250,14 @@ export default function PersonalPlanDashboard({
               <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-strong)]">
                 Decision shortlist
               </p>
-              <h2 id="shortlist-title" className="mt-2 text-3xl text-[var(--tgpi-navy)]">
-                Countries in your plan
-              </h2>
+              <h2 id="shortlist-title" className="mt-2 text-3xl text-[var(--tgpi-navy)]"><LocalizedText text={"Countries in your plan"} /></h2>
             </div>
             <div className="flex flex-col gap-2 sm:flex-row">
               <Link className="inline-flex min-h-11 items-center justify-center rounded-xl border border-[var(--tgpi-border)] px-4 text-xs font-extrabold text-[var(--tgpi-navy)]" href="/country-fit">
                 Refine Country Fit
               </Link>
               {model.selectedCountryCount >= 2 ? (
-                <Link className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[var(--tgpi-navy)] px-4 text-xs font-extrabold text-white" href={model.compareHref}>
-                  Compare shortlist
-                </Link>
+                <Link className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[var(--tgpi-navy)] px-4 text-xs font-extrabold text-white" href={model.compareHref}><LocalizedText text={"Compare shortlist"} /></Link>
               ) : null}
             </div>
           </div>

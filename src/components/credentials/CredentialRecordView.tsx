@@ -1,3 +1,5 @@
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import Link from "next/link";
 import CertificateDocument from "./CertificateDocument";
 import CredentialActions from "./CredentialActions";
@@ -39,10 +41,10 @@ export default function CredentialRecordView({
           className="credential-record-breadcrumb"
         >
           <Link href={owner ? "/certificates" : "/verify"}>
-            {owner ? "My certificates" : "Public verification"}
+            {owner ? <LocalizedText text={"My certificates"} /> : <LocalizedText text={"Public verification"} />}
           </Link>
           <span aria-hidden="true">/</span>
-          <span>Certificate record</span>
+          <span><LocalizedText text={"Certificate record"} /></span>
         </nav>
         <header className="credential-record-heading">
           <div>
@@ -104,15 +106,14 @@ export default function CredentialRecordView({
           aria-label="Learning evidence"
         >
           <article>
-            <p className="credential-eyebrow">Assessment</p>
+            <p className="credential-eyebrow"><LocalizedText text={"Assessment"} /></p>
             <h2>{credential.assessmentScore}% mastery</h2>
             <p>
               {credential.masteryThreshold}% required ·{" "}
-              {credential.learningHours} learning hours
-            </p>
+              {credential.learningHours}{" "}<LocalizedText text={"learning hours"} /></p>
           </article>
           <article>
-            <p className="credential-eyebrow">Identity</p>
+            <p className="credential-eyebrow"><LocalizedText text={"Identity"} /></p>
             <h2>TGPI Global ID</h2>
             <p className="credential-mono">
               {credential.identityEvidence.globalKeyId}
@@ -139,7 +140,7 @@ export default function CredentialRecordView({
                 {credential.skills.map((skill) => (
                   <li key={skill.id}>
                     <strong>{skill.name}</strong>
-                    <span>{skill.level} evidence</span>
+                    <span>{skill.level}{" "}<LocalizedText text={"evidence"} /></span>
                   </li>
                 ))}
               </ul>
@@ -211,9 +212,7 @@ export default function CredentialRecordView({
             {owner ? "← Back to my certificates" : "Verify another record"}
           </Link>
           {owner && (
-            <Link className="credential-button" href="/courses">
-              Continue learning ↗
-            </Link>
+            <Link className="credential-button" href="/courses"><LocalizedText text={"Continue learning ↗"} /></Link>
           )}
         </nav>
       </div>

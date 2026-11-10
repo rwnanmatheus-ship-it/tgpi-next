@@ -1,5 +1,7 @@
 "use client";
 
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import { useState } from "react";
 
 export default function PrivacySettings() {
@@ -7,9 +9,7 @@ export default function PrivacySettings() {
 
   return (
     <div className="mt-8 border border-slate-800 p-6 rounded-xl">
-      <h2 className="text-lg font-bold text-yellow-400">
-        Privacy Settings
-      </h2>
+      <h2 className="text-lg font-bold text-yellow-400"><LocalizedText text={"Privacy Settings"} /></h2>
 
       <label className="flex items-center gap-3 mt-4">
         <input

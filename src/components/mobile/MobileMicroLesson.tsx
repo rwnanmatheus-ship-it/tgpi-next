@@ -1,4 +1,5 @@
 "use client";
+import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 
 import Link from "next/link";
 import { useState } from "react";
@@ -13,6 +14,8 @@ const scenarios = [
 ] as const;
 
 export default function MobileMicroLesson() {
+  const { t: localizeLabel } = useInterfaceLocale();
+
   const [step, setStep] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [complete, setComplete] = useState(false);
@@ -21,9 +24,9 @@ export default function MobileMicroLesson() {
   return <section className="tgpi-mobile mobile-practice" aria-labelledby="mobile-practice-title">
     <div className="mobile-section-topline"><span className="mobile-eyebrow">LEARN SOMETHING USEFUL</span><span className="mobile-small">{complete ? "Complete" : `${step + 1} / ${scenarios.length}`}</span></div>
     <h2 id="mobile-practice-title">A small lesson. A real advantage.</h2>
-    {complete ? <div className="mobile-practice-complete" role="status"><span className="mobile-success-icon"><MobileIcon name="check" /></span><h3>Three moments. Better prepared.</h3><p>Take these questions into your next conversation, viewing or country comparison.</p><Link href="/courses" className="mobile-primary-button"><LocalizedText text="Explore TGPI Learning" />{" "}<MobileIcon name="arrow" /></Link><button type="button" className="mobile-text-link" onClick={() => { setStep(0); setSelected(null); setComplete(false); }}>Practice again</button></div> : <>
+    {complete ? <div className="mobile-practice-complete" role="status"><span className="mobile-success-icon"><MobileIcon name="check" /></span><h3>Three moments. Better prepared.</h3><p>Take these questions into your next conversation, viewing or country comparison.</p><Link href="/courses" className="mobile-primary-button"><LocalizedText text="Explore TGPI Learning" />{" "}<MobileIcon name="arrow" /></Link><button type="button" className="mobile-text-link" onClick={() => { setStep(0); setSelected(null); setComplete(false); }}><LocalizedText text={"Practice again"} /></button></div> : <>
       <p className="mobile-scenario-label">{scenario.scene}</p><h3>{scenario.question}</h3>
-      <div className="mobile-answer-options" role="group" aria-label="Choose your response">{scenario.options.map((option, index) => <button type="button" key={option} aria-pressed={selected === index} data-answer={selected === null ? undefined : index === scenario.answer ? "correct" : selected === index ? "retry" : undefined} onClick={() => setSelected(index)}><span>{String.fromCharCode(65 + index)}</span>{option}</button>)}</div>
+      <div className="mobile-answer-options" role="group" aria-label={localizeLabel("Choose your response")}>{scenario.options.map((option, index) => <button type="button" key={option} aria-pressed={selected === index} data-answer={selected === null ? undefined : index === scenario.answer ? "correct" : selected === index ? "retry" : undefined} onClick={() => setSelected(index)}><span>{String.fromCharCode(65 + index)}</span>{option}</button>)}</div>
       {selected !== null && <div className="mobile-answer-feedback" role="status"><strong>{selected === scenario.answer ? "Exactly. Here’s why." : "A stronger choice is highlighted."}</strong><p>{scenario.explanation}</p><button type="button" className="mobile-text-link" onClick={() => { if (step === scenarios.length - 1) setComplete(true); else { setStep((value) => value + 1); setSelected(null); } }}>{step === scenarios.length - 1 ? "Finish practice" : "Next scenario"}<MobileIcon name="arrow" /></button></div>}
     </>}
     <p className="mobile-practice-note">Practice preview · no account needed · not course credit</p>

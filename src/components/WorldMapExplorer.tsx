@@ -59,7 +59,7 @@ export default function WorldMapExplorer() {
                   <span className="text-slate-200">
                     {country.emoji} <LocalizedText text={country.name} />
                   </span>
-                  <span className="text-sm text-yellow-300">Open →</span>
+                  <span className="text-sm text-yellow-300"><LocalizedText text={"Open →"} /></span>
                 </Link>
               ))}
             </div>

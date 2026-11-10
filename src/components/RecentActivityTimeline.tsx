@@ -33,7 +33,7 @@ export default function RecentActivityTimeline() {
       <h2 className="mb-4 text-xl font-bold text-yellow-400"><LocalizedText text="Recent Activity" /></h2>
 
       {activities.length === 0 ? (
-        <p className="text-sm text-slate-400">No recent activity yet.</p>
+        <p className="text-sm text-slate-400"><LocalizedText text={"No recent activity yet."} /></p>
       ) : (
         <div className="space-y-3">
           {activities

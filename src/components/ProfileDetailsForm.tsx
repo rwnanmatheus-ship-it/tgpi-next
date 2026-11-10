@@ -131,7 +131,7 @@ export default function ProfileDetailsForm() {
   return (
     <section className="rounded-3xl border border-slate-800 bg-slate-950 p-6">
       <div className="mb-5">
-        <h2 className="text-2xl font-bold text-yellow-400">Edit Your Profile</h2>
+        <h2 className="text-2xl font-bold text-yellow-400"><LocalizedText text={"Edit Your Profile"} /></h2>
         <p className="mt-2 text-sm text-slate-400">
           Complete your information to turn TGPI into a more accurate and useful global platform for you.
         </p>
@@ -139,7 +139,7 @@ export default function ProfileDetailsForm() {
 
       <div className="grid gap-4 md:grid-cols-2">
         <div>
-          <label className="mb-2 block text-sm text-slate-300">Display Name</label>
+          <label className="mb-2 block text-sm text-slate-300"><LocalizedText text={"Display Name"} /></label>
           <input
             value={form.displayName}
             onChange={(e) => updateField("displayName", e.target.value)}
@@ -148,7 +148,7 @@ export default function ProfileDetailsForm() {
         </div>
 
         <div>
-          <label className="mb-2 block text-sm text-slate-300">Username</label>
+          <label className="mb-2 block text-sm text-slate-300"><LocalizedText text={"Username"} /></label>
           <input
             value={form.username}
             onChange={(e) => updateField("username", e.target.value)}
@@ -167,7 +167,7 @@ export default function ProfileDetailsForm() {
         </div>
 
         <div>
-          <label className="mb-2 block text-sm text-slate-300">City</label>
+          <label className="mb-2 block text-sm text-slate-300"><LocalizedText text={"City"} /></label>
           <input
             value={form.city}
             onChange={(e) => updateField("city", e.target.value)}
@@ -185,7 +185,7 @@ export default function ProfileDetailsForm() {
         </div>
 
         <div>
-          <label className="mb-2 block text-sm text-slate-300">Preferred Currency</label>
+          <label className="mb-2 block text-sm text-slate-300"><LocalizedText text={"Preferred Currency"} /></label>
           <select
             value={form.preferredCurrency}
             onChange={(e) => updateField("preferredCurrency", e.target.value)}
@@ -209,9 +209,9 @@ export default function ProfileDetailsForm() {
             className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-white outline-none focus:border-yellow-500"
           >
             <option value=""><LocalizedText text="Select" /></option>
-            <option value="work">Work Abroad</option>
-            <option value="study">Study Abroad</option>
-            <option value="live">Live Abroad</option>
+            <option value="work"><LocalizedText text={"Work Abroad"} /></option>
+            <option value="study"><LocalizedText text={"Study Abroad"} /></option>
+            <option value="live"><LocalizedText text={"Live Abroad"} /></option>
           </select>
         </div>
 
@@ -239,9 +239,9 @@ export default function ProfileDetailsForm() {
             className="w-full rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-white outline-none focus:border-yellow-500"
           >
             <option value=""><LocalizedText text="Select" /></option>
-            <option value="low">Low</option>
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
+            <option value="low"><LocalizedText text={"Low"} /></option>
+            <option value="medium"><LocalizedText text={"Medium"} /></option>
+            <option value="high"><LocalizedText text={"High"} /></option>
           </select>
         </div>
 
@@ -262,7 +262,7 @@ export default function ProfileDetailsForm() {
           onClick={handleSave}
           className="rounded-xl bg-yellow-500 px-6 py-3 font-semibold text-black transition hover:bg-yellow-400"
         >
-          {loading ? "Saving..." : "Save Profile"}
+          {loading ? <LocalizedText text={"Saving..."} /> : "Save Profile"}
         </button>
       </div>
     </section>

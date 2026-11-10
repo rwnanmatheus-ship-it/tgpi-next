@@ -1,5 +1,7 @@
 "use client";
 
+
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { useActivationProgress } from "@/components/activation/ActivationProgressProvider";
@@ -69,7 +71,7 @@ export default function MonthlyCostPlanner({
       </div>
 
       <label className="mt-5 block">
-        <span className="sr-only">Monthly cost estimate</span>
+        <span className="sr-only"><LocalizedText text={"Monthly cost estimate"} /></span>
         <input
           type="number"
           min={1}
@@ -94,7 +96,7 @@ export default function MonthlyCostPlanner({
           className="mt-5 inline-flex min-h-11 items-center justify-center rounded-xl bg-[var(--tgpi-navy-raised)] px-5 text-sm font-black text-white transition hover:bg-[#143454] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#C59632] disabled:cursor-wait disabled:opacity-60"
         >
           {isSaving
-            ? "Saving…"
+            ? <LocalizedText text={"Saving…"} />
             : saved || (savedEstimate?.amount === amount && savedEstimate?.currency === currency)
               ? "✓ Estimate saved"
               : "Save monthly estimate"}

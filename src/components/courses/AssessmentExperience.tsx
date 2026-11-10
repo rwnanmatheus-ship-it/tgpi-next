@@ -1,4 +1,5 @@
 "use client";
+import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
@@ -23,6 +24,8 @@ export default function AssessmentExperience({
   assessment: LearningAssessment;
   courseId: string;
 }) {
+  const { t: localizeLabel } = useInterfaceLocale();
+
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [reflection, setReflection] = useState("");
   const [result, setResult] = useState<LearningAssessmentResult | null>(null);
@@ -130,13 +133,9 @@ export default function AssessmentExperience({
               <Link href={`/courses/${courseId}/certification`} className="inline-flex min-h-12 items-center rounded-xl bg-[var(--tgpi-navy-raised)] px-6 text-sm font-extrabold text-white">
                 Continue pathway →
               </Link>
-              <button type="button" onClick={beginRetake} className="min-h-12 rounded-xl border border-[#B9A76F] bg-white/70 px-6 text-sm font-extrabold">
-                Start a new attempt
-              </button>
+              <button type="button" onClick={beginRetake} className="min-h-12 rounded-xl border border-[#B9A76F] bg-white/70 px-6 text-sm font-extrabold"><LocalizedText text={"Start a new attempt"} /></button>
               {credentialId ? (
-                <Link href={`/certificates/${credentialId}`} className="inline-flex min-h-12 items-center rounded-xl bg-[#C39A31] px-6 text-sm font-extrabold text-[var(--tgpi-navy-raised)]">
-                  View credential
-                </Link>
+                <Link href={`/certificates/${credentialId}`} className="inline-flex min-h-12 items-center rounded-xl bg-[#C39A31] px-6 text-sm font-extrabold text-[var(--tgpi-navy-raised)]"><LocalizedText text={"View credential"} /></Link>
               ) : null}
             </div>
           </section>
@@ -146,7 +145,7 @@ export default function AssessmentExperience({
           <div role="alert" className="mt-7 rounded-2xl border border-[#D7A9A4] bg-[#FFF1EF] p-5 text-sm font-bold text-[#8D2F28]">{error}</div>
         ) : null}
 
-        <section className="mt-8 grid gap-6" aria-label="Assessment questions">
+        <section className="mt-8 grid gap-6" aria-label={localizeLabel("Assessment questions")}>
           {assessment.questions.map((question, index) => {
             const itemFeedback = feedback.get(question.id);
             return (
