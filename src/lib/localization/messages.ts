@@ -11572,13 +11572,13 @@ for (const entry of Object.values(catalog)) {
     else if (existing !== entry) sourceAliases.set(alias, null);
   }
 }
-function findMessage(key: string): Readonly<Record<Locale, string>> | undefined {
+function findMessage(key: string, includeAliases = true): Readonly<Record<Locale, string>> | undefined {
   if (Object.prototype.hasOwnProperty.call(catalog, key)) return catalog[key];
   const normalized = normalizeMessage(key);
-  return normalizedMessages.get(normalized) ?? sourceAliases.get(normalized) ?? undefined;
+  return normalizedMessages.get(normalized) ?? (includeAliases ? sourceAliases.get(normalized) ?? undefined : undefined);
 }
 function messageTemplate(locale: Locale, key: string): string {
-  const direct = findMessage(key);
+  const direct = findMessage(key, false);
   if (direct) return direct[locale];
   const extra = supplemental.get(locale)?.get(normalizeMessage(key));
   if (extra !== undefined) return extra;
@@ -11586,10 +11586,16 @@ function messageTemplate(locale: Locale, key: string): string {
   // Matching is anchored and requires the whole remaining phrase to be registered.
   const decorated = key.match(/^(\d{1,2}\s*[—–/]\s*|[\s\p{S}→←↗↓↑•✓●·—–/]*)(.*?)([\s→←↗↓↑·:./!?…]*)$/u);
   if (decorated && decorated[2]) {
-    const core = findMessage(decorated[2]);
+    const core = findMessage(decorated[2], false);
     if (core) return decorated[1] + core[locale] + decorated[3];
     const extraCore = supplemental.get(locale)?.get(normalizeMessage(decorated[2]));
     if (extraCore !== undefined) return decorated[1] + extraCore + decorated[3];
+  }
+  const alias = findMessage(key);
+  if (alias) return alias[locale];
+  if (decorated?.[2]) {
+    const aliasCore = findMessage(decorated[2]);
+    if (aliasCore) return decorated[1] + aliasCore[locale] + decorated[3];
   }
   return key;
 }

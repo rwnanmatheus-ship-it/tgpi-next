@@ -536,8 +536,9 @@ test('billing renders localized status, access and dates, including unknown valu
       if (name === 'react') return {
         ...React,
         useState(initial) {
+          const state = React.useState(initial);
           if (stateIndex++ === 0) return [{ plan: 'premium', status, accessMode, currentPeriodEnd: date, cancelAtPeriodEnd: true, portalAvailable: true }, () => {}];
-          return React.useState(initial);
+          return state;
         },
       };
       if (name === 'react/jsx-runtime') return runtime;
@@ -666,4 +667,23 @@ test('protected assessment translations remain server-only and complete without 
   const provider = fs.readFileSync('src/components/localization/LocaleProvider.tsx', 'utf8');
   assert.ok(provider.indexOf('await ensureLocaleMessages(next)') < provider.indexOf("fetch('/api/preferences/locale'"));
   assert.match(fs.readFileSync('src/app/layout.tsx', 'utf8'), /<html lang=\{locale\} translate="no"/);
+});
+
+
+test('complete authored sentences cannot silently reuse English in a translated locale', () => {
+  const dictionaries = Object.fromEntries(locales.map(locale => [locale, JSON.parse(fs.readFileSync(`public/locales/${locale}.json`, 'utf8'))]));
+  for (const [key, english] of Object.entries(dictionaries.en)) {
+    if (key.split(/\s+/).length < 5 || !/[.!?]$/.test(key)) continue;
+    for (const locale of locales.filter(locale => locale !== 'en')) assert.notEqual(dictionaries[locale][key], english, `${locale}: untranslated sentence: ${key}`);
+  }
+  const protectedCopy = JSON.parse(fs.readFileSync('src/lib/localization/assessment-messages.json', 'utf8'));
+  const question = 'A border officer asks why you are entering the country. Which response is clearest and complete?';
+  for (const locale of locales.filter(locale => locale !== 'en')) assert.notEqual(protectedCopy[question][locale], protectedCopy[question].en);
+});
+
+
+test('canonical rank labels take precedence over aliases from other languages', () => {
+  assert.equal(translate('pt-BR', 'Explorer'), 'Explorador');
+  assert.equal(translate('fr', 'Explorer'), 'Explorateur');
+  assert.notEqual(translate('pt-BR', 'Explorer'), translate('pt-BR', 'Explore'));
 });

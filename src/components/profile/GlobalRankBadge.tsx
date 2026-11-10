@@ -1,3 +1,5 @@
+"use client";
+import { useLocale } from "@/components/localization/LocaleProvider";
 
 import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import Image from "@/components/localization/LocalizedImage";
@@ -18,9 +20,10 @@ export default function GlobalRankBadge({
 }) {
   const config = sizes[size];
 
+  const { t } = useLocale();
   return (
     <LocalizedElement as="span"
-      aria-label={`${rank.name} TGPI rank emblem`}
+      aria-label={t("{name} TGPI rank emblem", { name: t(rank.name) })}
       className={`relative block shrink-0 drop-shadow-[0_14px_24px_rgba(0,0,0,0.28)] ${config.className}`}
       role="img"
     >

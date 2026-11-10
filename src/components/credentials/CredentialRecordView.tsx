@@ -133,7 +133,7 @@ export default function CredentialRecordView({
                 {credential.skills.map((skill) => (
                   <li key={skill.id}>
                     <strong>{skill.name}</strong>
-                    <span>{skill.level}{" "}<LocalizedText text={"evidence"} /></span>
+                    <span><LocalizedText text={skill.level} />{" "}<LocalizedText text={"evidence"} /></span>
                   </li>
                 ))}
               </ul>

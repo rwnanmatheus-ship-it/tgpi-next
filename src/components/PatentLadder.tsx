@@ -31,7 +31,7 @@ export default function PatentLadder({ xp }: { xp: number }) {
             }`}
           >
             <p className="text-sm text-slate-400"><LocalizedText text={"Starts at"} />{" "}{item.minXp}{" "}<LocalizedText text={"XP"} /></p>
-            <p className="mt-2 text-lg font-bold text-white">{item.name}</p>
+            <p className="mt-2 text-lg font-bold text-white"><LocalizedText text={item.name} /></p>
           </div>
         ))}
       </div>
