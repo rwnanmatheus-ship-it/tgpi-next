@@ -9,7 +9,9 @@ function load(path, imports = {}) {
   vm.runInNewContext(code, { exports, require: id => { if (!(id in imports)) throw Error(id); return imports[id]; } });
   return exports;
 }
-const activation = load("src/lib/activation-progress.ts");
+const catalog = load("src/lib/comparison-catalog.ts");
+const comparison = load("src/lib/comparison-state.ts", { "./comparison-catalog.ts": catalog });
+const activation = load("src/lib/activation-progress.ts", { "./comparison-catalog.ts": catalog, "./comparison-state.ts": comparison });
 const { buildDocumentsMemberModel: build } = load("src/lib/documents-os.ts", { "@/lib/activation-progress": activation });
 const countries = Array.from({length:8}, (_,i) => ({ slug:`country-${i}`, name:`Country ${i}`, emoji:"" }));
 const onboarding = { completed:true, primaryGoal:"work", targetCountries:countries.map(c=>c.slug), timeHorizon:"6-months", budgetRange:"1500-3000" };

@@ -1,3 +1,4 @@
+import { comparisonPath } from "./comparison-state.ts";
 import type { Course } from "@/data/courses";
 import type { TgpiActivationProgress } from "@/lib/activation-progress";
 import type { Country } from "@/lib/countries";
@@ -78,11 +79,7 @@ function uniqueStrings(values: string[]) {
 }
 
 function buildComparisonHref(countrySlugs: string[], goal: ComparisonGoal) {
-  const params = new URLSearchParams();
-  countrySlugs.slice(0, 3).forEach((slug) => params.append("country", slug));
-  if (goal !== "overall") params.set("goal", goal);
-  const query = params.toString();
-  return query ? `/compare?${query}` : "/compare";
+  return comparisonPath(countrySlugs, goal);
 }
 
 function getCourseLessonCount(course: Course) {

@@ -4,6 +4,8 @@ import "server-only";
 import { clerkClient } from "@clerk/nextjs/server";
 import {
   activationLimits,
+  comparisonPath,
+  comparisonIdentity,
   addActivationActivity,
   normalizeActivationProgress,
   serializeActivationProgressForStorage,
@@ -73,14 +75,14 @@ export function parseActivationMutation(value: unknown): ActivationMutation {
   }
 
   if (value.type === "record_comparison") {
-    if (!Array.isArray(value.countrySlugs)) {
+    if (!Array.isArray(value.countrySlugs) || value.countrySlugs.length > 195) {
       throw new ActivationInputError("Choose at least two countries.");
     }
     const countrySlugs = Array.from(
       new Set(value.countrySlugs.map((slug) => requireCountrySlug(slug).slug)),
     );
-    if (countrySlugs.length < 2 || countrySlugs.length > 3) {
-      throw new ActivationInputError("Compare two or three different countries.");
+    if (countrySlugs.length < 2 || countrySlugs.length > 195) {
+      throw new ActivationInputError("Choose between 2 and 195 different countries.");
     }
     if (typeof value.goal !== "string" || !isComparisonGoal(value.goal)) {
       throw new ActivationInputError("Comparison goal is not valid.");
@@ -198,12 +200,6 @@ function ensureStorageLimit(progress: TgpiActivationProgress) {
   return progress;
 }
 
-function comparisonHref(countrySlugs: string[], goal: string) {
-  const params = new URLSearchParams();
-  countrySlugs.forEach((slug) => params.append("country", slug));
-  if (goal !== "overall") params.set("goal", goal);
-  return `/compare?${params.toString()}`;
-}
 
 export function applyActivationMutation(
   current: TgpiActivationProgress,
@@ -244,7 +240,7 @@ export function applyActivationMutation(
   }
 
   if (mutation.type === "record_comparison") {
-    const id = `${mutation.goal}:${[...mutation.countrySlugs].sort().join("+")}`;
+    const id = comparisonIdentity(mutation.countrySlugs, mutation.goal);
     next.comparisons = [
       {
         countrySlugs: mutation.countrySlugs,
@@ -252,7 +248,7 @@ export function applyActivationMutation(
         id,
         updatedAt: now,
       },
-      ...next.comparisons.filter((item) => item.id !== id),
+      ...next.comparisons.filter((item) => comparisonIdentity(item.countrySlugs, item.goal) !== id),
     ].slice(0, activationLimits.comparisons);
     next.savedCountries = Array.from(
       new Set([...mutation.countrySlugs, ...next.savedCountries]),
@@ -263,8 +259,8 @@ export function applyActivationMutation(
     next.activities = addActivationActivity(
       next,
       {
-        href: comparisonHref(mutation.countrySlugs, mutation.goal),
-        title: `${names.join(" vs ")} comparison completed`,
+        href: comparisonPath(mutation.countrySlugs, mutation.goal),
+        title: names.length <= 3 ? `${names.join(" vs ")} comparison completed` : `${names.length} countries compared`,
         type: "comparison",
       },
       now,

@@ -1,3 +1,4 @@
+import { comparisonPath } from "./comparison-state.ts";
 import { getLearningContinuation } from "./learning-continuity.ts";
 import type { Course } from "../types/course.ts";
 import type { Country } from "./countries.ts";
@@ -133,12 +134,7 @@ function getPriorityReason(priority: OnboardingPriority) {
 }
 
 function buildCompareHref(countries: Country[], goal: ComparisonGoal) {
-  const params = new URLSearchParams();
-  countries.slice(0, 3).forEach((country) => {
-    params.append("country", country.slug);
-  });
-  if (goal !== "overall") params.set("goal", goal);
-  return `/compare?${params.toString()}`;
+  return comparisonPath(countries.map(country => country.slug), goal);
 }
 
 function joinLabels(values: string[], fallback: string) {

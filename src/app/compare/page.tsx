@@ -1,62 +1,62 @@
-import { localizeMetadata } from "@/lib/localization/metadata.server";
 import "./compare.css";
-import CinematicImage from "@/components/ui/CinematicImage";
-import DecisionLabs from "@/components/compare/DecisionLabs";
-import DecisionOverview from "@/components/compare/DecisionOverview";
-import { getLocale } from "@/lib/localization/server";
-import { translate } from "@/lib/localization/messages";
-import ResearchLoading from "@/components/intelligence/ResearchLoading";
+import { localizeMetadata } from "@/lib/localization/metadata.server";
 import { Suspense } from "react";
-import PersonalResearchContext from "@/components/profile/PersonalResearchContext";
 import type { Metadata } from "next";
 import Link from "next/link";
+import CinematicImage from "@/components/ui/CinematicImage";
 import ActivationProgressProvider from "@/components/activation/ActivationProgressProvider";
 import CompareCountryPicker from "@/components/compare/CompareCountryPicker";
-import { EvidenceCard, GraphStatus } from "@/components/intelligence/Evidence";
-import { getAllCountries } from "@/lib/countries";
-import { INDICATOR_IDS, INDICATORS, findObservation, comparisonCaveat } from "@/lib/intelligence/core";
-import { getIntelligence, identities } from "@/lib/intelligence/server";
-import { isComparisonGoal, getComparisonGoalConfig } from "@/lib/tgpi-comparison";
+import ComparisonMatrix from "@/components/compare/ComparisonMatrix";
+import ComparisonNavigation from "@/components/compare/ComparisonNavigation";
+import DecisionLabs from "@/components/compare/DecisionLabs";
+import DecisionOverview from "@/components/compare/DecisionOverview";
+import { GraphStatus } from "@/components/intelligence/Evidence";
+import ResearchLoading from "@/components/intelligence/ResearchLoading";
 import DossierComparison from "@/components/intelligence/DossierComparison";
-import { LocalizedText } from "@/components/localization/LocaleProvider";
-
+import { getLocale } from "@/lib/localization/server";
+import { translate } from "@/lib/localization/messages";
+import { getAllCountries } from "@/lib/countries";
+import { getIntelligence, identities } from "@/lib/intelligence/server";
+import { isComparisonGoal, getComparisonGoalConfig, type ComparisonGoal } from "@/lib/tgpi-comparison";
+import { decodeCountrySet } from "@/lib/comparison-catalog";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
-const sourceMetadata: Metadata = { title: "Compare Countries — Evidence & Trade-offs | TGPI", description: "Compare up to three countries using source-linked observations, visible reference years and explicit gaps. No unsupported country ratings.", alternates: { canonical: "https://www.theglobalpolymath.com/compare" } };
-export default async function ComparePage({ searchParams }: { searchParams?: Promise<{ country?: string | string[]; goal?: string }> }) {
-  const params = await searchParams;
-  const locale = await getLocale();
-  const t = (text: string) => translate(locale, text);
-  const raw = params?.country ? (Array.isArray(params.country) ? params.country : [params.country]) : [];
-  const requested = Array.from(new Set(raw)).slice(0, 3);
-  const valid = new Set(identities.map(c => c.slug));
-  const slugs = requested.length ? requested.filter(s => valid.has(s)) : ["portugal", "canada", "japan"];
-  const selected = slugs.map(slug => identities.find(c => c.slug === slug)!);
-  const goal = isComparisonGoal(params?.goal) ? params.goal : "overall";
-  const countries = getAllCountries().map(({ slug, name, emoji, region }) => ({ slug, name, emoji, region, iso2: identities.find(c => c.slug === slug)?.iso2, iso3: identities.find(c => c.slug === slug)?.iso3 })).sort((a, b) => a.name.localeCompare(b.name));
+const sourceMetadata: Metadata = { title: "Compare Countries — Decision Studio | TGPI", description: "Compare all selected countries with source-linked indicators, reference years, decision lenses and personal planning tools.", alternates: { canonical: "https://www.theglobalpolymath.com/compare" } };
+type Country = {slug:string;name:string;emoji:string;region:string;iso2:string;iso3:string};
+const PAGE_SIZE=4;
+export default async function ComparePage({ searchParams }: { searchParams?: Promise<{ country?: string | string[]; set?:string; goal?:string;view?:string }> }) {
+  const [params,locale] = await Promise.all([searchParams,getLocale()]);
+  const t=(text:string,values?:Record<string,string|number>)=>translate(locale,text,values);
+  const names=new Intl.DisplayNames([locale],{type:"region"});
+  const valid = new Set(identities.map(c=>c.slug));
+  const raw=params?.set ? decodeCountrySet(params.set) : params?.country ? (Array.isArray(params.country)?params.country:[params.country]) : [];
+  const explicit=params?.set !== undefined || params?.country !== undefined;
+  const slugs=explicit ? [...new Set(raw)].filter(slug=>valid.has(slug)) : ["portugal","canada","japan"];
+  const goal=isComparisonGoal(params?.goal)?params.goal:"overall";
+  const countries:Country[]=getAllCountries().flatMap(c=>{const identity=identities.find(i=>i.slug===c.slug);return identity?[{slug:c.slug,name:names.of(identity.iso2)??c.name,emoji:c.emoji,region:c.region,iso2:identity.iso2,iso3:identity.iso3}]:[];}).sort((a,b)=>a.name.localeCompare(b.name,locale));
+  const bySlug=new Map(countries.map(c=>[c.slug,c]));
+  const selected=slugs.flatMap(slug=>bySlug.get(slug)?[bySlug.get(slug)!]:[]);
+  const page=Math.max(1,Math.min(Math.ceil(selected.length/PAGE_SIZE)||1,Math.floor(Number(params?.view))||1));
+  const visible=selected.slice((page-1)*PAGE_SIZE,page*PAGE_SIZE);
   return <ActivationProgressProvider><main className="ig-shell compare-command"><div className="ig-container">
-    <header className="product-page-heading compare-page-heading"><div><p className="product-kicker"><LocalizedText text={"TGPI /"} />{" "}{t("Decision Intelligence")}</p><h1 id="compare-title">{t("Compare the world.")}</h1><p>{t("Put up to three countries side by side. Inspect the sources, dates and gaps, then connect the trade-offs to your own priorities.")}</p></div><nav className="product-page-links" aria-label={t("Connected learning tools")}><Link href="/countries">{t("Explore destinations")} ↗</Link><Link href="/plan">{t("My plan")} ↗</Link></nav><div className="compare-research-art" aria-hidden="true"><CinematicImage asset="decision-comparison" alt="" priority sizes="(max-width: 767px) calc(100vw - 40px), 340px" /></div></header>
-    <CompareCountryPicker key={`${slugs.join(",")}:${goal}`} countries={countries} initialSlugs={slugs} initialGoal={goal} hasExplicitSelection={requested.length > 0} />
-    <PersonalResearchContext />
-    <nav className="compare-nav" aria-label={t("Comparison sections")}>{[["#comparison-builder", "Build my comparison"], ["#decision-overview", "Overview"], ["#decision-details", "Detailed comparison"], ["#comparison-matrix", "Sources & evidence"], ["#decision-labs", "Decision Lab"], ["#decision-actions", "Next steps"]].map(([href, label]) => <a key={href} href={href}><LocalizedText text={label} /></a>)}</nav>
-    {raw.length > 3 || requested.some(s => !valid.has(s)) ? <p className="ig-status"><LocalizedText text="Only valid country selections are shown, up to three at a time." /></p> : null}
-    <DecisionOverview countries={slugs.map(slug => countries.find(country => country.slug === slug)!)} />
-    <section className="ig-section ig-panel"><p className="ig-eyebrow">{t("Your decision lens")} / {t(getComparisonGoalConfig(goal).shortLabel)}</p><h2><LocalizedText text="The best next step is a better question." /></h2><p className="ig-small">{t(getComparisonGoalConfig(goal).description)} {t("This lens guides your research; it does not reweight statistics into a personal fit score. The first release deliberately withholds safety, affordability and immigration rankings without sufficient evidence.")}</p></section>
-    {selected.length < 2 ? <p className="ig-status"><LocalizedText text="Choose at least two countries above to build a comparison. A single dossier can still be explored below." /></p> : null}
-    <div id="decision-details"><DossierComparison countries={selected.map(c => ({ slug: c.slug, name: countries.find(a => a.slug === c.slug)?.name ?? c.name }))} /></div>
-    <Suspense fallback={<ResearchLoading />}><ComparisonEvidence selected={selected} countries={countries} /></Suspense>
-    <section id="decision-labs" className="ig-section ig-panel"><p className="ig-eyebrow"><LocalizedText text={"TGPI /"} />{" "}<LocalizedText text="Decision Lab" /></p><h2><LocalizedText text="Turn insight into action." /></h2><p className="ig-small"><LocalizedText text="Build a city budget and a preparation checklist for each destination. Your estimates remain separate from published evidence." /></p><DecisionLabs countries={selected.map(c => ({ slug: c.slug, name: countries.find(country => country.slug === c.slug)?.name ?? c.name }))} /></section>
-    <section id="decision-actions" className="ig-section ig-panel"><h2><LocalizedText text="Complete the decision, not just the table." /></h2><p className="ig-small"><LocalizedText text="The missing layers — a city budget, your nationality and legal route, institution or profession, language requirements and timeline — belong in your personal research plan." /></p><div className="ig-actions">{selected.map(c => <Link key={c.slug} className="ig-button" href={`/country-fit?country=${c.slug}`}>{t("Plan for")} {countries.find(a => a.slug === c.slug)?.name ?? c.name} →</Link>)}<Link className="ig-link" href="/intelligence"><LocalizedText text="Methodology & source coverage" /></Link></div><div className="compare-next-grid">{[["/dashboard", "Workspace"], ["/learn", "Learn"], ["/documents", "Documents"], ["/atlas", "Ask Atlas"]].map(([href, label]) => <Link key={href} href={href}><LocalizedText text={label} /><span aria-hidden="true">↗</span></Link>)}</div></section>
+    <header className="compare-hero"><div className="compare-hero-copy"><p className="compare-kicker">TGPI / {t("Decision Studio")}</p><h1 id="compare-title">{t("Compare the world.")}<br/><span>{t("Design your next move.")}</span></h1><p>{t("Your destinations. Your priorities. One clear view of the evidence and your next steps.")}</p><div className="compare-hero-links"><a href="#comparison-builder">{t("Build my comparison")} ↗</a><Link href="/plan">{t("My plan")} →</Link></div><div className="compare-hero-meta"><span>{countries.length} {t("countries")}</span><span>{t("Source-linked data")}</span><span>{t("Connected to your workspace")}</span></div></div><div className="compare-hero-art" aria-hidden="true"><CinematicImage asset="decision-comparison" alt="" priority sizes="(max-width: 767px) 100vw, 45vw"/><div className="compare-orbit"/><span className="compare-art-label">TGPI / GLOBAL PERSPECTIVES</span></div></header>
+    <CompareCountryPicker key={`${slugs.join(",")}:${goal}:${locale}`} countries={countries} initialSlugs={slugs} initialGoal={goal} hasExplicitSelection={explicit}/>
+    {explicit && (!raw.length || raw.some(slug=>!valid.has(slug))) && <p className="ig-status" role="status">{t("Invalid country selections were ignored. Choose destinations from the catalog.")}</p>}
+    {selected.length>=2 ? <><nav className="compare-nav" aria-label={t("Comparison sections")}>{[["#decision-overview","Overview"],["#comparison-matrix","Sources & evidence"],["#decision-details","Detailed comparison"],["#decision-labs","Decision Lab"],["#decision-actions","Next steps"]].map(([href,label],i)=><a href={href} key={href}><span>0{i+2}</span>{t(label)}</a>)}</nav>
+    <div id="decision-overview" className="compare-section"><ComparisonNavigation countries={selected} goal={goal} page={page} pageSize={PAGE_SIZE}/><DecisionOverview countries={visible}/></div>
+    <section className="compare-lens"><span aria-hidden="true">◎</span><div><p className="compare-kicker">{t("Your decision lens")} / {t(getComparisonGoalConfig(goal).shortLabel)}</p><h2>{t(getComparisonGoalConfig(goal).label)}</h2><p>{t(getComparisonGoalConfig(goal).description)}</p></div><Link href="/profile/security#settings-identity">{t("Personalize my profile")} ↗</Link></section>
+    <Suspense fallback={<ResearchLoading/>}><ComparisonEvidence visible={visible} selected={selected} goal={goal}/></Suspense>
+    <section id="decision-details" className="compare-section"><div className="compare-section-head"><div><p className="compare-kicker">04 / {t("Detailed comparison")}</p><h2>{t("Go beyond the numbers.")}</h2><p>{t("Check legal pathways, education and cost references before committing.")}</p></div><Link className="compare-button" href="/intelligence">{t("Methodology & source coverage")} ↗</Link></div><details className="compare-dossier-disclosure"><summary>{t("Open destination evidence and limitations")}</summary><DossierComparison countries={visible}/></details></section>
+    <section id="decision-labs" className="compare-section compare-labs"><div className="compare-section-head"><div><p className="compare-kicker">05 / {t("Decision Lab")}</p><h2>{t("Turn insight into action.")}</h2><p>{t("Build a city budget and a preparation checklist for each destination. Your estimates remain separate from published evidence.")}</p></div><span className="compare-lab-symbol" aria-hidden="true">↗</span></div><DecisionLabs key={visible.map(c=>c.slug).join(",")} countries={visible}/></section>
+    {selected.length>PAGE_SIZE && <ComparisonNavigation countries={selected} goal={goal} page={page} pageSize={PAGE_SIZE}/>}</> : <section className="compare-empty"><h2>{t("Choose at least two countries to build a comparison.")}</h2><p>{t("Search the full catalog, add destinations and choose your focus.")}</p></section>}
+    <section id="decision-actions" className="compare-section compare-next"><div><p className="compare-kicker">06 / {t("Next steps")}</p><h2>{t("A comparison is only the beginning.")}</h2><p>{t("Connect your research to a plan, learning and practical preparation.")}</p></div><div className="compare-next-grid">{[["/plan","My plan"],["/countries","Explore destinations"],["/learn","Learn"],["/documents","Documents"],["/atlas","Ask Atlas"],["/profile","Workspace"]].map(([href,label])=><Link href={href} key={href}>{t(label)}<span aria-hidden="true">↗</span></Link>)}</div></section>
   </div></main></ActivationProgressProvider>;
 }
-
-async function ComparisonEvidence({ selected, countries }: { selected: typeof identities; countries: Array<{slug:string;name:string}> }) {
-  const [state, locale] = await Promise.all([getIntelligence(), getLocale()]);
-  const t = (text: string) => translate(locale, text);
-  return (
-    <><GraphStatus state={state} /><div id="comparison-matrix">{INDICATOR_IDS.map(id => <section className="ig-section" key={id}><h2>{t(INDICATORS[id].label)}</h2><p className="ig-small">{t(comparisonCaveat(selected.map(c => findObservation(state.snapshot, c.slug, id))))}</p><div className="ig-compare-row">{selected.map(c => <div key={c.slug}><h3 className="mb-3 text-xl font-bold"><Link href={`/countries/${c.slug}`}>{t(countries.find(a => a.slug === c.slug)?.name ?? c.name)}</Link></h3><EvidenceCard indicator={id} countryCode={c.iso2} observation={findObservation(state.snapshot, c.slug, id)} /></div>)}</div></section>)}</div></>
-  );
+async function ComparisonEvidence({visible,selected,goal}:{visible:Country[];selected:Country[];goal:ComparisonGoal}){
+  const state=await getIntelligence();
+  const wanted=new Set(selected.map(c=>c.slug));
+  return <><ComparisonMatrix countries={visible} allCountries={selected} observations={state.snapshot.observations.filter(o=>wanted.has(o.country))} goal={goal}/><GraphStatus state={{...state,snapshot:{...state.snapshot,observations:[]}}}/></>;
 }
 
 export async function generateMetadata() { return localizeMetadata(sourceMetadata); }

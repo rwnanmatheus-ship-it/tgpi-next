@@ -1,9 +1,31 @@
 import Link from "next/link";
 import SourceReviewNotice from "./SourceReviewNotice";
 import { dossierFor, formatReference, referenceReviewState, reviewState, sourceFor } from "@/lib/intelligence/dossiers";
-import { LocalizedText } from "@/components/localization/LocaleProvider";
+import { getLocale } from "@/lib/localization/server";
+import { translate } from "@/lib/localization/messages";
 
-
-export default function DossierComparison({ countries }: { countries: { slug: string; name: string }[] }) {
-  return <section className="ig-section"><p className="ig-eyebrow"><LocalizedText text={"Decision layers / Study-focused first release"} /></p><h2><LocalizedText text={"Compare the questions that affect your decision."} /></h2><p className="ig-small"><LocalizedText text={"National statistics, visa evidence, programme recognition and cost estimates answer different questions. No combined affordability or eligibility ranking is calculated. Currencies, locations, periods and household assumptions remain separate."} /></p><div className="ig-compare-row">{countries.map(country => { const dossier = dossierFor(country.slug); return <article className="ig-panel" key={country.slug}><h3><LocalizedText text={country.name} /></h3><SourceReviewNotice country={country.slug} />{(["entry", "education"] as const).map(layer => { const claims = dossier.claims.filter(c => c.layer === layer); return <div className="ig-details" key={layer}><p className="ig-eyebrow">{layer === "entry" ? <LocalizedText text={"Entry & residence"} /> : <LocalizedText text={"Education & recognition"} />}</p>{claims.length ? claims.map(c => <div key={c.id}><p className="ig-small"><LocalizedText text={c.title} /></p><p className="ig-meta"><LocalizedText text={c.audience} /></p><p className="ig-meta">{reviewState(c) === "reviewed" ? <LocalizedText text={"Source review {value0}; applicability still needs confirmation"} values={{value0: String(c.reviewedAt)}} /> : <LocalizedText text={"Review overdue or reference period not current"} />}</p><a className="ig-link" href={sourceFor(c.sourceId)!.url} target="_blank" rel="noreferrer"><LocalizedText text={"Check the responsible source ↗"} /></a></div>) : <p className="ig-small"><LocalizedText text={"No reviewed summary in this layer. Do not infer eligibility."} /></p>}</div>; })}<div className="ig-details"><p className="ig-eyebrow"><LocalizedText text={"Published cost reference"} /></p>{dossier.costs.length ? dossier.costs.map(c => <div key={c.id}><p className="ig-small"><strong>{formatReference(c)}</strong><br /><LocalizedText text={c.title} /> · {c.location}</p><p className="ig-meta">{c.referencePeriod} · {referenceReviewState(c) === "reviewed" ? <LocalizedText text={"Source-reviewed reference"} /> : <LocalizedText text={"Review overdue / reference period ended"} />} · {c.category === "living" ? <LocalizedText text={"Living expenses only"} /> : <LocalizedText text={"Includes tuition and other study costs"} />}<br /><LocalizedText text={c.audience} /><br /><LocalizedText text={"Excludes:"} />{" "}<LocalizedText text={c.excludes} /></p><a href={sourceFor(c.sourceId)!.url} target="_blank" rel="noreferrer" className="ig-link"><LocalizedText text={"Inspect original scope ↗"} /></a></div>) : <p className="ig-small"><LocalizedText text={"No numeric living-cost reference approved. A funds threshold is not a substitute."} /></p>}</div><Link className="ig-button ig-secondary" href={`/country-fit?country=${country.slug}#research-workbench`}><LocalizedText text={"Build my"} />{" "}<LocalizedText text={country.name} />{" "}<LocalizedText text={"scenario →"} /></Link></article>; })}</div></section>;
+export default async function DossierComparison({ countries }: { countries: { slug: string; name: string }[] }) {
+  const locale = await getLocale();
+  const t = (text: string) => translate(locale, text);
+  return <div className="ig-compare-row">{countries.map(country => {
+    const dossier = dossierFor(country.slug);
+    return <article className="ig-panel" key={country.slug}><h3>{country.name}</h3><SourceReviewNotice country={country.slug} />
+      {(["entry", "education"] as const).map(layer => {
+        const claims = dossier.claims.filter(c => c.layer === layer);
+        return <div className="ig-details" key={layer}><p className="ig-eyebrow">{t(layer === "entry" ? "Entry & residence" : "Education & recognition")}</p>
+          {claims.length ? claims.map(claim => <div key={claim.id}>
+            <p className="ig-small">{t(claim.title)}</p><p className="ig-meta">{t(claim.audience)}</p>
+            <p className="ig-meta">{t(reviewState(claim) === "reviewed" ? "Source-reviewed reference" : "Review overdue or reference period not current")} · {claim.reviewedAt}</p>
+            <a className="ig-link" href={sourceFor(claim.sourceId)!.url} target="_blank" rel="noreferrer">{t("Check the responsible source")} ↗</a>
+          </div>) : <p className="ig-small">{t("No reviewed summary in this layer. Do not infer eligibility.")}</p>}
+        </div>;
+      })}
+      <div className="ig-details"><p className="ig-eyebrow">{t("Published cost reference")}</p>{dossier.costs.length ? dossier.costs.map(cost => <div key={cost.id}>
+        <p className="ig-small"><strong>{formatReference(cost)}</strong><br/>{t(cost.title)} · {cost.location}</p>
+        <p className="ig-meta">{cost.referencePeriod} · {t(referenceReviewState(cost) === "reviewed" ? "Source-reviewed reference" : "Review overdue / reference period ended")}<br/>{t(cost.audience)}<br/>{t("Excludes")}: {t(cost.excludes)}</p>
+        <a href={sourceFor(cost.sourceId)!.url} target="_blank" rel="noreferrer" className="ig-link">{t("Inspect original scope")} ↗</a>
+      </div>) : <p className="ig-small">{t("No numeric living-cost reference approved. A funds threshold is not a substitute.")}</p>}</div>
+      <Link className="ig-button ig-secondary" href={`/country-fit?country=${country.slug}#research-workbench`}>{t("Budget & preparation")} ↗</Link>
+    </article>;
+  })}</div>;
 }

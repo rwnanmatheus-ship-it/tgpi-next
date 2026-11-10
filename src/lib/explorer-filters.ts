@@ -27,7 +27,7 @@ export function normalizeExplorerFilters(input: ExplorerFilterInput, countries: 
   return {
     query: first(input.q).slice(0, 120),
     region: countries.some(country => country.region === region) ? region : "all",
-    selection: [...new Set(selection)].filter(slug => slugs.has(slug)).slice(0, 3),
+    selection: [...new Set(selection)].filter(slug => slugs.has(slug)).slice(0, 195),
     limit: Math.max(24, Math.min(195, Math.floor(Number(first(input.limit)) || 24))),
   };
 }

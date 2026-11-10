@@ -1,4 +1,5 @@
 import type { ComparisonGoal } from "@/lib/tgpi-comparison";
+import { decodeCountrySet, encodeCountrySet, MAX_COMPARISON_COUNTRIES, COMPARISON_CATALOG } from "./comparison-catalog.ts";
 
 export const TGPI_ACTIVATION_METADATA_KEY = "tgpiActivationV1";
 
@@ -155,7 +156,7 @@ function normalizeActivities(value: unknown): ActivationActivity[] {
   return value
     .filter(isRecord)
     .map((item) => ({
-      href: safeString(item.href, 180),
+      href: safeString(item.href, 650),
       id: safeString(item.id, 160),
       occurredAt: safeDate(item.occurredAt),
       title: safeString(item.title, 120),
@@ -180,7 +181,7 @@ function normalizeComparisons(value: unknown): SavedComparison[] {
   return value
     .filter(isRecord)
     .map((item) => ({
-      countrySlugs: safeStringArray(item.countrySlugs, 3),
+      countrySlugs: item.countrySet ? decodeCountrySet(item.countrySet) : safeStringArray(item.countrySlugs, MAX_COMPARISON_COUNTRIES),
       goal: safeString(item.goal, 40) as ComparisonGoal,
       id: safeString(item.id, 160),
       updatedAt: safeDate(item.updatedAt),
@@ -306,9 +307,17 @@ export function normalizeActivationProgress(
 
 
 /** Compact persistence format; the API and UI continue to use named fields. */
+export { comparisonPath } from "./comparison-state.ts";
+export function comparisonIdentity(slugs: readonly string[], goal: string) {
+  const selected = new Set(slugs);
+  const bits = COMPARISON_CATALOG.map(slug => selected.has(slug) ? "1" : "0").join("").padEnd(196, "0");
+  return goal + ":" + (bits.match(/.{4}/g) ?? []).map(group => parseInt(group, 2).toString(16)).join("");
+}
+
 export function serializeActivationProgressForStorage(progress: TgpiActivationProgress) {
   return {
     ...progress,
+    comparisons: progress.comparisons.map(({ countrySlugs, ...comparison }) => ({ ...comparison, countrySet: encodeCountrySet(countrySlugs) })),
     courseProgress: Object.fromEntries(Object.entries(progress.courseProgress).map(([id, record]) => [id, [
       record.courseVersion, record.totalLessons, record.startedAt, record.updatedAt,
       record.lastLessonId ?? null, record.completedAt ?? null, record.completedLessonIds,

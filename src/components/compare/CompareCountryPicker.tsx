@@ -4,392 +4,79 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import { useActivationProgress } from "@/components/activation/ActivationProgressProvider";
-import {
-  COMPARISON_GOALS,
-  getComparisonGoalConfig,
-  type ComparisonGoal,
-} from "@/lib/tgpi-comparison";
+import { COMPARISON_GOALS, getComparisonGoalConfig, type ComparisonGoal } from "@/lib/tgpi-comparison";
 import { countrySearchScore, countrySearchTerms } from "@/lib/country-search";
 import { comparisonPath, restoreComparison } from "@/lib/comparison-state";
-import { LocalizedText, useLocale } from "@/components/localization/LocaleProvider";
+import { useLocale } from "@/components/localization/LocaleProvider";
 
-
-const MAX_COUNTRIES = 3;
 const STORAGE_KEY = "tgpi-country-comparison:v1";
+export type ComparePickerCountry = { slug: string; name: string; emoji: string; region: string; iso2?: string; iso3?: string };
+type Props = { countries: ComparePickerCountry[]; initialSlugs: string[]; initialGoal: ComparisonGoal; hasExplicitSelection: boolean };
 
-export type ComparePickerCountry = {
-  slug: string;
-  name: string;
-  emoji: string;
-  region: string;
-  iso2?: string;
-  iso3?: string;
-};
-
-type CompareCountryPickerProps = {
-  countries: ComparePickerCountry[];
-  initialSlugs: string[];
-  initialGoal: ComparisonGoal;
-  hasExplicitSelection: boolean;
-};
-
-function createSlots(slugs: string[]): string[] {
-  return Array.from({ length: MAX_COUNTRIES }, (_, index) => slugs[index] ?? "");
-}
-
-
-export default function CompareCountryPicker({
-  countries,
-  initialSlugs,
-  initialGoal,
-  hasExplicitSelection,
-}: CompareCountryPickerProps) {
+export default function CompareCountryPicker({ countries, initialSlugs, initialGoal, hasExplicitSelection }: Props) {
   const router = useRouter();
   const { t } = useLocale();
-  const [search, setSearch] = useState("");
   const { isAuthenticated, mutate } = useActivationProgress();
-  const builderRef = useRef<HTMLElement>(null);
-  const builderTopRef = useRef<number | null>(null);
-  const restoredRef = useRef(false);
-  const [slots, setSlots] = useState<string[]>(() => createSlots(initialSlugs));
-  const [goal, setGoal] = useState<ComparisonGoal>(initialGoal);
+  const [selection, setSelection] = useState(initialSlugs);
+  const [goal, setGoal] = useState(initialGoal);
+  const [search, setSearch] = useState("");
+  const [region, setRegion] = useState("all");
+  const [limit, setLimit] = useState(12);
   const [notice, setNotice] = useState("");
-  const [copyStatus, setCopyStatus] = useState("");
-  const [isPastBuilder, setIsPastBuilder] = useState(false);
-  const [isManuallyExpanded, setIsManuallyExpanded] = useState(false);
-  const [isSavingComparison, setIsSavingComparison] = useState(false);
-  const [isPending, startTransition] = useTransition();
-  const validSlugs = useMemo(
-    () => new Set(countries.map((country) => country.slug)),
-    [countries],
-  );
-  const countryBySlug = useMemo(
-    () => new Map(countries.map((country) => [country.slug, country])),
-    [countries],
-  );
-  const selectedSlugs = useMemo(
-    () => Array.from(new Set(slots.filter(Boolean))),
-    [slots],
-  );
-  const selectedCountries = useMemo(
-    () =>
-      selectedSlugs
-        .map((slug) => countryBySlug.get(slug))
-        .filter((country): country is ComparePickerCountry => Boolean(country)),
-    [countryBySlug, selectedSlugs],
-  );
-  const searchTerms = useMemo(() => new Map(countries.map(country => [country.slug, countrySearchTerms({ ...country, iso2: country.iso2 ?? "ZZ", iso3: country.iso3 ?? "" })])), [countries]);
-  const isCompact = isPastBuilder && !isManuallyExpanded;
+  const [saving, setSaving] = useState(false);
+  const [pending, startTransition] = useTransition();
+  const restored = useRef(false);
+  const valid = useMemo(() => new Set(countries.map(c => c.slug)), [countries]);
+  const bySlug = useMemo(() => new Map(countries.map(c => [c.slug, c])), [countries]);
+  const terms = useMemo(() => new Map(countries.map(c => [c.slug, countrySearchTerms({ ...c, iso2: c.iso2 ?? "ZZ", iso3: c.iso3 ?? "" })])), [countries]);
+  const results = useMemo(() => countries.map(country => ({ country, score: countrySearchScore(terms.get(country.slug) ?? [], search) }))
+    .filter(({ country, score }) => score > 0 && (region === "all" || country.region === region)).sort((a,b) => b.score - a.score), [countries, terms, search, region]);
+  const dirty = selection.join(",") !== initialSlugs.join(",") || goal !== initialGoal;
 
   useEffect(() => {
-    if (restoredRef.current) return;
-    restoredRef.current = true;
-
-    if (hasExplicitSelection) {
-      if (initialSlugs.length >= 2) {
-        try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify({ countrySlugs: initialSlugs, goal: initialGoal })); } catch { /* The URL remains the source of comparison context. */ }
-      }
-      return;
-    }
-
+    if (restored.current) return;
+    restored.current = true;
+    if (hasExplicitSelection) return;
     try {
-      const stored = window.localStorage.getItem(STORAGE_KEY);
-      const parsed: unknown = stored ? JSON.parse(stored) : [];
-      const restored = restoreComparison(parsed, validSlugs, COMPARISON_GOALS);
-      if (!restored) return;
-      startTransition(() => router.replace(comparisonPath(restored.countrySlugs, restored.goal)));
+      const raw: unknown = JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "null");
+      const previous = restoreComparison(raw, valid, COMPARISON_GOALS);
+      if (previous) startTransition(() => router.replace(comparisonPath(previous.countrySlugs, previous.goal), { scroll: false }));
+    } catch { /* Comparison works without browser storage. */ }
+  }, [hasExplicitSelection, router, valid]);
 
-    } catch {
-      try { window.localStorage.removeItem(STORAGE_KEY); } catch { /* Storage is optional. */ }
-    }
-  }, [hasExplicitSelection, initialGoal, initialSlugs, router, validSlugs]);
-
-  useEffect(() => {
-    let frame = 0;
-
-    function updateBuilderMode() {
-      window.cancelAnimationFrame(frame);
-      frame = window.requestAnimationFrame(() => {
-        if (builderTopRef.current === null && builderRef.current) {
-          builderTopRef.current =
-            builderRef.current.getBoundingClientRect().top + window.scrollY;
-        }
-        const builderTop = builderTopRef.current ?? Number.POSITIVE_INFINITY;
-        const pastBuilder = window.scrollY > builderTop + 180;
-        setIsPastBuilder(pastBuilder);
-        if (!pastBuilder) setIsManuallyExpanded(false);
-      });
-    }
-
-    updateBuilderMode();
-    window.addEventListener("scroll", updateBuilderMode, { passive: true });
-    window.addEventListener("resize", updateBuilderMode);
-    return () => {
-      window.cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", updateBuilderMode);
-      window.removeEventListener("resize", updateBuilderMode);
-    };
-  }, []);
-
-  function updateSlot(index: number, slug: string) {
+  function toggle(slug: string) {
+    setSelection(current => current.includes(slug) ? current.filter(value => value !== slug) : [...current, slug]);
     setNotice("");
-    setCopyStatus("");
-    setSlots((current) => {
-      const next = [...current];
-      next[index] = slug;
-      return next;
-    });
   }
-
-  function swapPrimaryCountries() {
-    setSlots((current) => [current[1] ?? "", current[0] ?? "", current[2] ?? ""]);
+  function runComparison() {
+    if (selection.length < 2) return;
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ countrySlugs: selection, goal })); } catch { /* URL is authoritative. */ }
     setNotice("");
-    setCopyStatus("");
+    startTransition(() => router.push(comparisonPath(selection, goal), { scroll: false }));
   }
-
-  function clearSelection() {
-    setSlots(createSlots([]));
-    setNotice("Choose at least two countries to build a comparison.");
-    setCopyStatus("");
-    try { window.localStorage.removeItem(STORAGE_KEY); } catch { /* Storage is optional. */ }
-  }
-
-  async function copyComparisonLink() {
-    if (selectedSlugs.length < 2) {
-      setCopyStatus("Choose two countries before copying a decision link.");
-      return;
-    }
-
+  async function saveComparison() {
+    setSaving(true);
     try {
-      const path = comparisonPath(selectedSlugs, goal);
-      await navigator.clipboard.writeText(`${window.location.origin}${path}`);
-      setCopyStatus("Decision link copied.");
+      await mutate({ type: "record_comparison", countrySlugs: selection, goal });
+      setNotice("Comparison saved to your workspace.");
     } catch {
-      setCopyStatus("The link is ready in the address bar after you run the comparison.");
-    }
+      setNotice("Workspace save failed. Your selection is still available here; retry or copy the link.");
+    } finally { setSaving(false); }
   }
-
-  async function runComparison() {
-    if (selectedSlugs.length < 2) {
-      setNotice("Choose at least two different countries before comparing.");
-      return;
-    }
-
-    try { window.localStorage.setItem(STORAGE_KEY, JSON.stringify({ countrySlugs: selectedSlugs, goal })); } catch { /* Comparing and saving still work when storage is disabled. */ }
-
-    if (isAuthenticated) {
-      setIsSavingComparison(true);
-      try {
-        await mutate({
-          countrySlugs: selectedSlugs,
-          goal,
-          type: "record_comparison",
-        });
-      } catch {
-        setNotice(
-          "The comparison is ready, but TGPI could not save it to your workspace.",
-        );
-      } finally {
-        setIsSavingComparison(false);
-      }
-    }
-
-    startTransition(() => router.push(comparisonPath(selectedSlugs, goal)));
+  async function copyLink() {
+    try {
+      await navigator.clipboard.writeText(`${location.origin}${comparisonPath(selection, goal)}`);
+      setNotice("Decision link copied.");
+    } catch { setNotice("Copy the comparison URL from your address bar after applying your selection."); }
   }
-
-  return (
-    <section
-      ref={builderRef}
-      id="comparison-builder"
-      aria-labelledby="comparison-builder-title"
-      className="compare-builder relative z-30 mt-7 scroll-mt-28 rounded-[28px] border border-[var(--tgpi-border)] bg-[rgba(255,253,248,0.97)] shadow-[var(--tgpi-shadow-premium)] backdrop-blur-2xl transition-all duration-300 "
-    >
-      {isCompact ? (
-        <div className="flex min-h-[74px] flex-col gap-3 p-3 sm:flex-row sm:items-center sm:justify-between sm:px-4">
-          <div className="flex min-w-0 items-center gap-3">
-            <div className="hidden h-11 w-11 shrink-0 place-items-center rounded-2xl bg-[var(--tgpi-navy)] text-sm font-extrabold text-[var(--tgpi-gold-light)] sm:grid">
-              C
-            </div>
-            <div className="min-w-0">
-              <p className="text-[9px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-strong)]">
-                {t("Active decision set")} · {t(getComparisonGoalConfig(goal).shortLabel)}
-              </p>
-              <p className="mt-1 truncate text-sm font-extrabold text-[var(--tgpi-navy)]">
-                {selectedCountries.length
-                  ? selectedCountries
-                      .map((country) => `${country.emoji} ${t(country.name)}`)
-                      .join("  ·  ")
-                  : t("Choose countries to continue")}
-              </p>
-            </div>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <button
-              type="button"
-              onClick={() => setIsManuallyExpanded(true)}
-              aria-expanded="false"
-              className="min-h-11 rounded-xl border border-[var(--tgpi-border)] bg-white px-4 text-xs font-extrabold text-[var(--tgpi-navy)] transition hover:border-[var(--tgpi-gold)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
-            >
-              {t("Edit comparison")}
-            </button>
-            <button
-              type="button"
-              onClick={runComparison}
-              disabled={isPending || isSavingComparison || selectedSlugs.length < 2}
-              className="min-h-11 rounded-xl bg-[var(--tgpi-gold)] px-5 text-xs font-extrabold text-[var(--tgpi-navy-deep)] transition hover:bg-[var(--tgpi-gold-light)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-navy)] disabled:cursor-not-allowed disabled:opacity-45"
-            >
-              {t(isSavingComparison ? "Saving…" : isPending ? "Building…" : "Rebuild decision")}
-            </button>
-          </div>
-        </div>
-      ) : (
-        <div className="p-4 sm:p-5">
-          <div className="flex flex-col gap-3 border-b border-[var(--tgpi-border-soft)] pb-4 sm:flex-row sm:items-end sm:justify-between">
-            <div>
-              <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold-strong)]">
-                {t("Comparison builder")}
-              </p>
-              <h2
-                id="comparison-builder-title"
-                className="mt-1 max-w-3xl font-[var(--tgpi-font-display)] text-2xl font-semibold text-[var(--tgpi-navy)] sm:text-3xl"
-              >
-                {t("Choose countries to compare")}
-              </h2>
-            </div>
-            <div className="flex flex-wrap items-center gap-3">
-              {isPastBuilder ? (
-                <button
-                  type="button"
-                  onClick={() => setIsManuallyExpanded(false)}
-                  aria-expanded="true"
-                  className="inline-flex min-h-11 items-center text-sm font-extrabold text-[var(--tgpi-muted)] transition hover:text-[var(--tgpi-navy)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
-                >
-                  {t("Keep compact ↑")}
-                </button>
-              ) : null}
-              <Link
-                href="/countries#country-explorer"
-                className="inline-flex min-h-11 items-center text-sm font-extrabold text-[var(--tgpi-gold-strong)] underline decoration-[var(--tgpi-gold)]/40 underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
-              >
-                {t("Browse all 195 profiles")}
-              </Link>
-            </div>
-          </div>
-
-          <label className="mt-4 block">
-            <span className="mb-2 block text-xs font-bold">{t("Search countries")}</span>
-            <input type="search" value={search} onChange={event => setSearch(event.target.value)} placeholder={t("Country, translated name or ISO code…")} className="h-11 w-full rounded-xl border border-[var(--tgpi-border)] bg-white px-4 text-sm" />
-          </label>
-          <div className="mt-4 grid gap-3 lg:grid-cols-[1fr_1fr_1fr_0.9fr_auto] lg:items-end">
-            {slots.map((slug, index) => (
-              <label key={index} className="block">
-                <span className="mb-2 block text-[11px] font-extrabold uppercase tracking-[0.16em] text-[var(--tgpi-muted)]">
-                  {t(index === 0
-                    ? "Country A"
-                    : index === 1
-                      ? "Country B"
-                      : "Country C · optional")}
-                </span>
-                <select
-                  value={slug}
-                  onChange={(event) => updateSlot(index, event.target.value)}
-                  className="h-12 w-full rounded-2xl border border-[var(--tgpi-border)] bg-white px-4 text-sm font-bold text-[var(--tgpi-navy)] outline-none transition focus:border-[var(--tgpi-gold)] focus:ring-2 focus:ring-[var(--tgpi-gold)]/25"
-                >
-                  <option value=""><LocalizedText text={t("Choose a country")} /></option>
-                  {countries.filter(country => slots.includes(country.slug) || countrySearchScore(searchTerms.get(country.slug) ?? [], search) > 0).map((country) => {
-                    const usedElsewhere = slots.some(
-                      (selected, selectedIndex) =>
-                        selectedIndex !== index && selected === country.slug,
-                    );
-                    return (
-                      <option
-                        key={country.slug}
-                        value={country.slug}
-                        disabled={usedElsewhere}
-                      >
-                        {country.emoji} {t(country.name)} · {t(country.region)}
-                      </option>
-                    );
-                  })}
-                </select>
-              </label>
-            ))}
-
-            <label className="block">
-              <span className="mb-2 block text-[11px] font-extrabold uppercase tracking-[0.16em] text-[var(--tgpi-muted)]">
-                {t("Decision lens")}
-              </span>
-              <select
-                value={goal}
-                onChange={(event) => {
-                  setGoal(event.target.value as ComparisonGoal);
-                  setNotice("");
-                  setCopyStatus("");
-                }}
-                className="h-12 w-full rounded-2xl border border-[var(--tgpi-border)] bg-white px-4 text-sm font-bold text-[var(--tgpi-navy)] outline-none transition focus:border-[var(--tgpi-gold)] focus:ring-2 focus:ring-[var(--tgpi-gold)]/25"
-              >
-                {COMPARISON_GOALS.map((value) => (
-                  <option key={value} value={value}>
-                    {t(getComparisonGoalConfig(value).label)}
-                  </option>
-                ))}
-              </select>
-            </label>
-
-            <button
-              type="button"
-              onClick={runComparison}
-              disabled={isPending || isSavingComparison || selectedSlugs.length < 2}
-              className="inline-flex h-12 items-center justify-center rounded-2xl bg-[var(--tgpi-navy)] px-6 text-sm font-extrabold text-white shadow-lg transition hover:-translate-y-0.5 hover:bg-[var(--tgpi-navy-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)] disabled:cursor-not-allowed disabled:opacity-45 disabled:hover:translate-y-0"
-            >
-              {t(isSavingComparison
-                ? "Saving…"
-                : isPending
-                  ? "Building…"
-                  : "Compare now")}
-            </button>
-          </div>
-
-          <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <p aria-live="polite" className="text-sm font-semibold text-[var(--tgpi-muted)]">
-                {notice ||
-                  (selectedSlugs.length >= 2
-                    ? <LocalizedText text={"{value0} countries ready for the {value1} lens."} values={{value0: String(selectedSlugs.length), value1: String(getComparisonGoalConfig(goal).shortLabel.toLowerCase())}} />
-                    : <LocalizedText text={"Choose {value0} more {value1}."} values={{value0: String(2 - selectedSlugs.length), value1: String(selectedSlugs.length === 1 ? "country" : "countries")}} />)}
-              </p>
-              {copyStatus ? (
-                <p aria-live="polite" className="mt-1 text-xs font-bold text-[var(--tgpi-gold-strong)]">
-                  {copyStatus}
-                </p>
-              ) : null}
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <button
-                type="button"
-                onClick={copyComparisonLink}
-                disabled={selectedSlugs.length < 2}
-                className="min-h-10 rounded-xl border border-[var(--tgpi-border)] bg-white px-4 text-xs font-extrabold text-[var(--tgpi-navy)] transition hover:border-[var(--tgpi-gold)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)] disabled:opacity-40"
-              >
-                {t("Copy decision link")}
-              </button>
-              <button
-                type="button"
-                onClick={swapPrimaryCountries}
-                disabled={!slots[0] || !slots[1]}
-                className="min-h-10 rounded-xl border border-[var(--tgpi-border)] bg-white px-4 text-xs font-extrabold text-[var(--tgpi-navy)] transition hover:border-[var(--tgpi-gold)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)] disabled:opacity-40"
-              >
-                {t("Swap A ↔ B")}
-              </button>
-              <button
-                type="button"
-                onClick={clearSelection}
-                className="min-h-10 rounded-xl px-4 text-xs font-extrabold text-[var(--tgpi-gold-strong)] transition hover:bg-[var(--tgpi-gold-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
-              ><LocalizedText text="Clear" /></button>
-            </div>
-          </div>
-        </div>
-      )}
-    </section>
-  );
+  return <section id="comparison-builder" className="compare-builder" aria-labelledby="comparison-builder-title">
+    <div className="compare-section-head"><div><p className="compare-kicker">01 / {t("Build my comparison")}</p><h2 id="comparison-builder-title">{t("Your next chapter starts here.")}</h2><p>{t("Search the full catalog, add destinations and choose your focus.")}</p></div><span className="compare-count">{countries.length} <span>{t("countries")}</span></span></div>
+    <div className="compare-search-row"><label><span>{t("Search countries")}</span><input type="search" value={search} onChange={e => {setSearch(e.target.value.slice(0,120));setLimit(12);}} placeholder={t("Country, translated name or ISO code…")} /></label><label><span>{t("Region")}</span><select value={region} onChange={e => {setRegion(e.target.value);setLimit(12);}}><option value="all">{t("All regions")}</option>{[...new Set(countries.map(c=>c.region))].map(r=><option key={r} value={r}>{t(r)}</option>)}</select></label></div>
+    <div className="compare-catalog" aria-label={t("Available countries")}>{results.slice(0,limit).map(({country}) => <button type="button" key={country.slug} aria-pressed={selection.includes(country.slug)} onClick={()=>toggle(country.slug)}><span className="compare-flag" aria-hidden="true">{country.emoji}</span><span><strong>{country.name}</strong><small>{t(country.region)}</small></span><span aria-hidden="true" className="compare-check">{selection.includes(country.slug) ? "✓" : "+"}</span></button>)}</div>
+    {!results.length && <p role="status">{t("No countries match this search.")}</p>}
+    <div className="compare-catalog-actions"><span>{t("{count} results",{count:results.length})}</span><div>{limit < results.length && <button type="button" onClick={()=>setLimit(n=>n+24)}>{t("Show more")}</button>}<button type="button" disabled={!results.length} onClick={()=>setSelection(current=>[...new Set([...current,...results.map(r=>r.country.slug)])])}>{t("Add all results")}</button></div></div>
+    <div className="compare-selection"><div className="compare-selection-heading"><strong>{t("{count} selected",{count:selection.length})}</strong><button type="button" onClick={()=>{setSelection([]);setNotice("");try{localStorage.removeItem(STORAGE_KEY);}catch{ /* Optional. */ }}} disabled={!selection.length}>{t("Clear")}</button></div><div className="compare-chips">{selection.map(slug=>{const c=bySlug.get(slug);return c ? <button type="button" key={slug} onClick={()=>toggle(slug)} aria-label={t("Remove {country}",{country:c.name})}><span aria-hidden="true">{c.emoji}</span> {c.name}<span aria-hidden="true"> ×</span></button>:null;})}{!selection.length && <p>{t("Choose at least two countries to build a comparison.")}</p>}</div></div>
+    <fieldset className="compare-focus"><legend>{t("Decision lens")}</legend>{COMPARISON_GOALS.map(value=><label key={value}><input type="radio" name="comparison-goal" value={value} checked={goal===value} onChange={()=>setGoal(value)} /><span>{t(getComparisonGoalConfig(value).label)}</span></label>)}</fieldset>
+    <div className="compare-builder-footer"><div><p className="compare-draft-note">{t(dirty ? "Selection changed. Apply to update the results below." : "Results reflect your current selection.")}</p><p role="status" aria-live="polite">{t(notice)}</p></div><div className="compare-actions"><button type="button" disabled={selection.length<2} onClick={copyLink}>{t("Copy decision link")}</button>{isAuthenticated ? <button type="button" disabled={selection.length<2 || saving || pending || dirty} onClick={saveComparison}>{t(saving ? "Saving…" : "Save to workspace")}</button> : <Link href={`/sign-in?redirect_url=${encodeURIComponent(comparisonPath(selection,goal))}`}>{t("Sign in to save")}</Link>}<button type="button" className="compare-primary" disabled={selection.length<2 || pending || saving} onClick={runComparison}>{t(pending ? "Building…" : "Compare now")} <span aria-hidden="true">↗</span></button></div></div>
+  </section>;
 }

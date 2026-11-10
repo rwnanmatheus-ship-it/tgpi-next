@@ -4,6 +4,8 @@ import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 
 import Link from "next/link";
+import { comparisonPath } from "@/lib/comparison-state";
+import { isComparisonGoal } from "@/lib/tgpi-comparison";
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import { CountryCard } from "@/components/countries/CountryCard";
 import {
@@ -26,7 +28,7 @@ type CountriesExplorerV3Props = {
   regions: string[];
 };
 
-const MAX_COMPARE = 3;
+const MAX_COMPARE = 195;
 const INITIAL_RESULTS = 9;
 const RESULTS_INCREMENT = 9;
 const COMPARE_STORAGE_KEY = "tgpi-country-comparison:v1";
@@ -84,7 +86,8 @@ export default function CountriesExplorerV3({ countries, goals, regions }: Count
   const [visibleCount, setVisibleCount] = useState(INITIAL_RESULTS);
   const [compareNotice, setCompareNotice] = useState("");
   const closeButtonRef = useRef<HTMLButtonElement>(null);
-  const comparisonRestoredRef = useRef(false);
+  const [comparisonRestored, setComparisonRestored] = useState(false);
+  const comparisonGoalRef = useRef("overall");
 
   const deferredQuery = useDeferredValue(query);
 
@@ -92,17 +95,16 @@ export default function CountriesExplorerV3({ countries, goals, regions }: Count
     try {
       const stored = window.localStorage.getItem(COMPARE_STORAGE_KEY);
       const parsed: unknown = stored ? JSON.parse(stored) : [];
-      if (Array.isArray(parsed)) {
-        const validSlugs = parsed
-          .filter((slug): slug is string => typeof slug === "string")
-          .filter((slug) => countries.some((country) => country.slug === slug))
-          .slice(0, MAX_COMPARE);
-        setSelectedSlugs(validSlugs);
+      const record = parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed as Record<string, unknown> : null;
+      const saved = Array.isArray(parsed) ? parsed : record?.countrySlugs;
+      comparisonGoalRef.current = typeof record?.goal === "string" && isComparisonGoal(record.goal) ? record.goal : "overall";
+      if (Array.isArray(saved)) {
+        setSelectedSlugs([...new Set(saved.filter((slug): slug is string => typeof slug === "string" && countries.some(country => country.slug === slug)))].slice(0, MAX_COMPARE));
       }
     } catch {
       // Storage can be unavailable in private or restricted browsing contexts.
     } finally {
-      comparisonRestoredRef.current = true;
+      setComparisonRestored(true);
     }
 
     const requestedIntent = new URLSearchParams(window.location.search).get("intent");
@@ -119,13 +121,13 @@ export default function CountriesExplorerV3({ countries, goals, regions }: Count
   }, [countries]);
 
   useEffect(() => {
-    if (!comparisonRestoredRef.current) return;
+    if (!comparisonRestored) return;
     try {
-      window.localStorage.setItem(COMPARE_STORAGE_KEY, JSON.stringify(selectedSlugs));
+      window.localStorage.setItem(COMPARE_STORAGE_KEY, JSON.stringify({ countrySlugs: selectedSlugs, goal: comparisonGoalRef.current }));
     } catch {
       // Comparison remains available for this session when storage is restricted.
     }
-  }, [selectedSlugs]);
+  }, [selectedSlugs, comparisonRestored]);
 
   useEffect(() => {
     if (!filtersOpen) return;
@@ -204,11 +206,7 @@ export default function CountriesExplorerV3({ countries, goals, regions }: Count
     return items;
   }, [activePreset, region, goal, cost, difficulty, minSafety, minEnglish]);
 
-  const compareHref = useMemo(() => {
-    const params = new URLSearchParams();
-    selectedSlugs.forEach((slug) => params.append("country", slug));
-    return selectedSlugs.length ? `/compare?${params.toString()}` : "/compare";
-  }, [selectedSlugs]);
+  const compareHref = useMemo(() => selectedSlugs.length ? comparisonPath(selectedSlugs, comparisonGoalRef.current) : "/compare", [selectedSlugs]);
 
   const hasActiveControls = Boolean(
     query || activeFilters.length || sort !== "score",
@@ -248,7 +246,7 @@ export default function CountriesExplorerV3({ countries, goals, regions }: Count
     setSelectedSlugs((current) => {
       if (current.includes(slug)) return current.filter((item) => item !== slug);
       if (current.length >= MAX_COMPARE) {
-        setCompareNotice("You can compare up to three countries. Remove one before adding another.");
+        setCompareNotice("All countries are already selected.");
         return current;
       }
       setCompareNotice("");
@@ -369,7 +367,7 @@ export default function CountriesExplorerV3({ countries, goals, regions }: Count
       {selectedCountries.length ? (
         <div className="mobile-comparison-tray fixed inset-x-0 bottom-0 z-50 border-t border-[var(--tgpi-gold)]/30 bg-[rgba(7,26,50,0.96)] px-4 py-4 text-white shadow-2xl backdrop-blur-xl">
           <div className="mx-auto flex max-w-[1280px] flex-col gap-3 md:flex-row md:items-center md:justify-between">
-            <div><p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-light)]"><LocalizedText text={"Comparison tray"} /></p><div className="mt-2 flex flex-wrap gap-2">{selectedCountries.map((country) => <button key={country.slug} type="button" onClick={() => toggleCountry(country.slug)} className="rounded-full border border-white/15 px-3 py-2 text-xs font-bold"><LocalizedText text={country.name} /> ×</button>)}</div></div>
+            <div><p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-light)]"><LocalizedText text={"Comparison tray"} /></p><div className="mt-2 flex max-h-24 flex-wrap gap-2 overflow-y-auto">{selectedCountries.map((country) => <button key={country.slug} type="button" onClick={() => toggleCountry(country.slug)} className="rounded-full border border-white/15 px-3 py-2 text-xs font-bold"><LocalizedText text={country.name} /> ×</button>)}</div></div>
             <div className="flex flex-wrap items-center gap-3">
               <button type="button" onClick={() => { setSelectedSlugs([]); setCompareNotice(""); }} className="rounded-2xl border border-white/20 px-4 py-3 text-sm font-extrabold"><LocalizedText text="Clear" /></button>
               {selectedCountries.length >= 2 ? <Link href={compareHref} className="rounded-2xl bg-[var(--tgpi-gold)] px-5 py-3 text-sm font-extrabold text-[var(--tgpi-navy)]"><LocalizedText text="Compare" />{" "}{selectedCountries.length}{" "}<LocalizedText text={"countries"} /></Link> : <span className="rounded-2xl border border-white/15 bg-white/5 px-5 py-3 text-sm font-bold text-[#D7E0EB]"><LocalizedText text={"Select one more country"} /></span>}

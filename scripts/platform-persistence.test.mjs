@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import test from "node:test";
 import ts from "typescript";
 import * as activation from "../src/lib/activation-progress.ts";
+import { COMPARISON_CATALOG } from "../src/lib/comparison-catalog.ts";
 
 // Run the real persistence function; Clerk and archive transports are isolated test doubles.
 const fixture = { id:"global-budget",version:"1",title:"Global budget",modules:[{lessons:[{id:"costs"}]}] };
@@ -18,8 +19,8 @@ function server({ archiveFails = false, prepareFails = false, clerkFails = false
     if(id==="@clerk/nextjs/server")return {clerkClient:async()=>client};
     if(id==="@/lib/activation-progress")return activation;
     if(id==="@/data/courses")return {courses:[fixture]};
-    if(id==="@/lib/countries")return {getCountry:slug=>slug==="portugal"?{slug,name:"Portugal"}:undefined};
-    if(id==="@/lib/tgpi-comparison")return {isComparisonGoal:value=>value==="work"};
+    if(id==="@/lib/countries")return {getCountry:slug=>COMPARISON_CATALOG.includes(slug)?{slug,name:slug}:undefined};
+    if(id==="@/lib/tgpi-comparison")return {isComparisonGoal:value=>["overall","work","study","live","travel"].includes(value)};
     throw new Error(`Unexpected dependency ${id}`);
   },exports);
   return {exports,user,writes};
@@ -60,4 +61,18 @@ test("a failed Clerk write does not report a successful save",async()=>{
  const {exports,writes}=server({clerkFails:true});
  await assert.rejects(exports.updateUserActivationProgress("test-user",{type:"save_country",countrySlug:"portugal",saved:true}),/Clerk unavailable/);
  assert.equal(writes.length,0);
+});
+
+
+test("all 195 countries survive actual comparison validation, storage and read-back", async()=>{
+  const {exports}=server();
+  for (const goal of ["work","study","live","travel"]) {
+    const mutation=exports.parseActivationMutation({type:"record_comparison",countrySlugs:[...COMPARISON_CATALOG],goal});
+    await exports.updateUserActivationProgress("test-user",mutation);
+  }
+  const restored=await exports.getUserActivationProgress("test-user");
+  assert.equal(restored.comparisons.length,4);
+  for(const comparison of restored.comparisons) assert.deepEqual(comparison.countrySlugs,[...COMPARISON_CATALOG]);
+  assert.ok(restored.activities.every(item=>item.href.includes("set=v1.")));
+  assert.throws(()=>exports.parseActivationMutation({type:"record_comparison",countrySlugs:[...COMPARISON_CATALOG,"portugal"],goal:"work"}));
 });
