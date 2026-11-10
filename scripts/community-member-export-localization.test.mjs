@@ -50,7 +50,7 @@ test('profile PNG localizes rank and known goals, places, and language labels bu
   const member = {
     name: 'Save Member', avatar: '', headline: 'Save', bio: 'Private words', number: 'TGPI-TEST', handle: 'save',
     path: '/member/TGPI-TEST', country: '', visibility: 'public', indexable: false,
-    career: ['Data analyst'], languages: ['English'], links: [], goal: 'Live abroad',
+    career: ['Data analyst'], languages: ['English', 'Save'], links: [], goal: 'Live abroad',
     countries: [{ name: 'United States', path: '/countries/united-states' }],
     rank: { name: 'Explorer', points: 1200 }, courses: [], certificates: [],
   };
@@ -61,7 +61,7 @@ test('profile PNG localizes rank and known goals, places, and language labels bu
       assert.equal(blob.type, 'image/png');
       const t = (key, values) => fixture.messages.translate(locale, key, values);
       const goal = `${t('Live abroad')} · ${t('United States')}`;
-      for (const expected of [t('TGPI progression: {rank}', { rank: t('Explorer') }), t('Direction: {goal}', { goal }), t('Declared languages: {languages}', { languages: t('English') }), 'Save Member', 'Save', 'Private words', 'Data analyst', 'TGPI-TEST']) {
+      for (const expected of [t('TGPI progression: {rank}', { rank: t('Explorer') }), t('Direction: {goal}', { goal }), t('Declared languages: {languages}', { languages: `${t('English')}, Save` }), 'Save Member', 'Save', 'Private words', 'Data analyst', 'TGPI-TEST']) {
         assert.ok(drawn.join('').includes(expected), `${locale}: ${expected}`);
       }
       for (const authoredGoal of ['Explore internationally', 'Build global knowledge']) {

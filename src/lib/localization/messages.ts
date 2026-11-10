@@ -11727,8 +11727,136 @@ export const messages = {
     "fr": "Développer ses connaissances du monde",
     "de": "Globales Wissen aufbauen",
     "it": "Ampliare le conoscenze globali"
+  },
+  "Before committing to your near-term timeline, verify nationality-specific entry, residence and {activity} for {country}. TGPI does not determine eligibility.": {
+  "en": "Before committing to your near-term timeline, verify nationality-specific entry, residence and {activity} for {country}. TGPI does not determine eligibility.",
+  "pt-BR": "Antes de confirmar seu prazo próximo, verifique as exigências de entrada e residência para sua nacionalidade e a {activity} em {country}. A TGPI não determina elegibilidade.",
+  "es": "Antes de comprometerte con un plazo cercano, verifica los requisitos de entrada y residencia para tu nacionalidad y la {activity} en {country}. TGPI no determina la elegibilidad.",
+  "fr": "Avant de confirmer votre échéance proche, vérifiez les conditions d’entrée et de séjour selon votre nationalité ainsi que {activity} en {country}. TGPI ne détermine pas l’admissibilité.",
+  "de": "Bevor du deinen kurzfristigen Zeitplan festlegst, prüfe die Einreise- und Aufenthaltsregeln für deine Staatsangehörigkeit sowie {activity} in {country}. TGPI entscheidet nicht über die Berechtigung.",
+  "it": "Prima di confermare una scadenza ravvicinata, verifica i requisiti di ingresso e soggiorno per la tua cittadinanza e {activity} in {country}. TGPI non determina l’idoneità."
+},
+  "Verify nationality-specific entry, residence and {activity} for {country}. TGPI does not determine eligibility.": {
+  "en": "Verify nationality-specific entry, residence and {activity} for {country}. TGPI does not determine eligibility.",
+  "pt-BR": "Verifique as exigências de entrada e residência para sua nacionalidade e a {activity} em {country}. A TGPI não determina elegibilidade.",
+  "es": "Verifica los requisitos de entrada y residencia para tu nacionalidad y la {activity} en {country}. TGPI no determina la elegibilidad.",
+  "fr": "Vérifiez les conditions d’entrée et de séjour selon votre nationalité ainsi que {activity} en {country}. TGPI ne détermine pas l’admissibilité.",
+  "de": "Prüfe die Einreise- und Aufenthaltsregeln für deine Staatsangehörigkeit sowie {activity} in {country}. TGPI entscheidet nicht über die Berechtigung.",
+  "it": "Verifica i requisiti di ingresso e soggiorno per la tua cittadinanza e {activity} in {country}. TGPI non determina l’idoneità."
+},
+  "Your stated budget band is {band}.": {
+  "en": "Your stated budget band is {band}.",
+  "pt-BR": "Sua faixa de orçamento informada é {band}.",
+  "es": "Tu presupuesto declarado está en la franja de {band}.",
+  "fr": "La fourchette budgétaire que vous avez indiquée est {band}.",
+  "de": "Dein angegebenes Budget liegt bei {band}.",
+  "it": "La fascia di budget che hai indicato è {band}."
+},
+  "Collect dated housing, insurance, transport and education quotes in one currency; include deposits and a contingency. National statistics cannot establish affordability.": {
+  "en": "Collect dated housing, insurance, transport and education quotes in one currency; include deposits and a contingency. National statistics cannot establish affordability.",
+  "pt-BR": "Reúna cotações com data para moradia, seguro, transporte e educação na mesma moeda; inclua depósitos e uma reserva para imprevistos. Estatísticas nacionais não comprovam se o custo cabe no seu orçamento.",
+  "es": "Reúne presupuestos fechados para vivienda, seguro, transporte y educación en una misma moneda; incluye depósitos y un margen para imprevistos. Las estadísticas nacionales no demuestran si puedes asumir esos gastos.",
+  "fr": "Rassemblez des devis datés pour le logement, l’assurance, les transports et les études dans une seule devise ; ajoutez les dépôts et une marge pour imprévus. Les statistiques nationales ne permettent pas d’établir si ces dépenses sont abordables pour vous.",
+  "de": "Sammle datierte Angebote für Wohnen, Versicherung, Verkehr und Bildung in einer Währung; berücksichtige Kautionen und einen Puffer. Nationale Statistiken belegen nicht, ob du dir diese Kosten leisten kannst.",
+  "it": "Raccogli preventivi datati per alloggio, assicurazione, trasporti e istruzione in un’unica valuta; includi depositi e un margine per imprevisti. Le statistiche nazionali non dimostrano se puoi sostenere queste spese."
+},
+  "For {profession}, verify qualifications recognition, any professional licensing and actual opportunities. A national unemployment rate is only background context.": {
+  "en": "For {profession}, verify qualifications recognition, any professional licensing and actual opportunities. A national unemployment rate is only background context.",
+  "pt-BR": "Para atuar em {profession}, verifique o reconhecimento das qualificações, as licenças profissionais exigidas e as oportunidades reais. A taxa nacional de desemprego oferece apenas contexto geral.",
+  "es": "Para ejercer en {profession}, verifica el reconocimiento de tus cualificaciones, las licencias profesionales necesarias y las oportunidades reales. La tasa nacional de desempleo solo aporta contexto general.",
+  "fr": "Pour exercer dans le domaine {profession}, vérifiez la reconnaissance de vos qualifications, les autorisations professionnelles nécessaires et les possibilités réelles. Le taux de chômage national n’est qu’un élément de contexte.",
+  "de": "Für Tätigkeiten im Bereich {profession} prüfe die Anerkennung deiner Qualifikationen, erforderliche Berufszulassungen und tatsächliche Chancen. Die nationale Arbeitslosenquote liefert nur allgemeinen Kontext.",
+  "it": "Per lavorare nel settore {profession}, verifica il riconoscimento delle qualifiche, le eventuali abilitazioni professionali e le opportunità reali. Il tasso nazionale di disoccupazione fornisce solo un contesto generale."
+},
+  "Verify qualifications recognition, any professional licensing and actual opportunities. A national unemployment rate is only background context.": {
+  "en": "Verify qualifications recognition, any professional licensing and actual opportunities. A national unemployment rate is only background context.",
+  "pt-BR": "Verifique o reconhecimento das qualificações, as licenças profissionais exigidas e as oportunidades reais. A taxa nacional de desemprego oferece apenas contexto geral.",
+  "es": "Verifica el reconocimiento de tus cualificaciones, las licencias profesionales necesarias y las oportunidades reales. La tasa nacional de desempleo solo aporta contexto general.",
+  "fr": "Vérifiez la reconnaissance de vos qualifications, les autorisations professionnelles nécessaires et les possibilités réelles. Le taux de chômage national n’est qu’un élément de contexte.",
+  "de": "Prüfe die Anerkennung deiner Qualifikationen, erforderliche Berufszulassungen und tatsächliche Chancen. Die nationale Arbeitslosenquote liefert nur allgemeinen Kontext.",
+  "it": "Verifica il riconoscimento delle qualifiche, le eventuali abilitazioni professionali e le opportunità reali. Il tasso nazionale di disoccupazione fornisce solo un contesto generale."
+},
+  "Your stated languages: {languages}. Compare them with your chosen course, employer and official process. Practice source evaluation before drawing conclusions.": {
+  "en": "Your stated languages: {languages}. Compare them with your chosen course, employer and official process. Practice source evaluation before drawing conclusions.",
+  "pt-BR": "Idiomas informados: {languages}. Compare-os com os requisitos do curso, empregador e procedimento oficial escolhidos. Pratique a avaliação de fontes antes de tirar conclusões.",
+  "es": "Idiomas indicados: {languages}. Compáralos con los requisitos del curso, empleador y trámite oficial que elijas. Evalúa las fuentes antes de sacar conclusiones.",
+  "fr": "Langues indiquées : {languages}. Comparez-les aux exigences du cursus, de l’employeur et de la procédure officielle choisis. Évaluez les sources avant de tirer des conclusions.",
+  "de": "Angegebene Sprachen: {languages}. Vergleiche sie mit den Anforderungen deines Kurses, Arbeitgebers und des offiziellen Verfahrens. Prüfe Quellen, bevor du Schlussfolgerungen ziehst.",
+  "it": "Lingue indicate: {languages}. Confrontale con i requisiti del corso, del datore di lavoro e della procedura ufficiale scelti. Valuta le fonti prima di trarre conclusioni."
+},
+  "Record your language skills. Compare them with your chosen course, employer and official process. Practice source evaluation before drawing conclusions.": {
+  "en": "Record your language skills. Compare them with your chosen course, employer and official process. Practice source evaluation before drawing conclusions.",
+  "pt-BR": "Registre suas competências linguísticas. Compare-as com os requisitos do curso, empregador e procedimento oficial escolhidos. Pratique a avaliação de fontes antes de tirar conclusões.",
+  "es": "Registra tus competencias lingüísticas. Compáralas con los requisitos del curso, empleador y trámite oficial que elijas. Evalúa las fuentes antes de sacar conclusiones.",
+  "fr": "Indiquez vos compétences linguistiques. Comparez-les aux exigences du cursus, de l’employeur et de la procédure officielle choisis. Évaluez les sources avant de tirer des conclusions.",
+  "de": "Erfasse deine Sprachkenntnisse. Vergleiche sie mit den Anforderungen deines Kurses, Arbeitgebers und des offiziellen Verfahrens. Prüfe Quellen, bevor du Schlussfolgerungen ziehst.",
+  "it": "Registra le tue competenze linguistiche. Confrontale con i requisiti del corso, del datore di lavoro e della procedura ufficiale scelti. Valuta le fonti prima di trarre conclusioni."
+},
+  "Government": {
+  "en": "Government",
+  "pt-BR": "Governo",
+  "es": "Gobierno",
+  "fr": "Gouvernement",
+  "de": "Regierung",
+  "it": "Governo"
+},
+  "Public agency": {
+  "en": "Public agency",
+  "pt-BR": "Órgão público",
+  "es": "Organismo público",
+  "fr": "Organisme public",
+  "de": "Öffentliche Behörde",
+  "it": "Ente pubblico"
+},
+  "University": {
+  "en": "University",
+  "pt-BR": "Universidade",
+  "es": "Universidad",
+  "fr": "Université",
+  "de": "Universität",
+  "it": "Università"
+},
+  "University association": {
+  "en": "University association",
+  "pt-BR": "Associação de universidades",
+  "es": "Asociación universitaria",
+  "fr": "Association universitaire",
+  "de": "Hochschulverband",
+  "it": "Associazione universitaria"
+},
+  "month": {
+  "en": "month",
+  "pt-BR": "mês",
+  "es": "mes",
+  "fr": "mois",
+  "de": "Monat",
+  "it": "mese"
+},
+  "months": {
+  "en": "months",
+  "pt-BR": "meses",
+  "es": "meses",
+  "fr": "mois",
+  "de": "Monate",
+  "it": "mesi"
+},
+  "Directory": {
+  "en": "Directory",
+  "pt-BR": "Diretório",
+  "es": "Directorio",
+  "fr": "Répertoire",
+  "de": "Verzeichnis",
+  "it": "Elenco"
+  },
+  "Requirement": {
+    "en": "Requirement", "pt-BR": "Requisito", "es": "Requisito", "fr": "Exigence", "de": "Anforderung", "it": "Requisito"
+  },
+  "Estimate": {
+    "en": "Estimate", "pt-BR": "Estimativa", "es": "Estimación", "fr": "Estimation", "de": "Schätzung", "it": "Stima"
+  },
+  "Guidance": {
+    "en": "Guidance", "pt-BR": "Orientação", "es": "Orientación", "fr": "Conseils", "de": "Hinweis", "it": "Indicazioni"
   }
-
 } as const satisfies Record<string, Record<Locale, string>>;
 
 export type MessageKey = keyof typeof messages;

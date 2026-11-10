@@ -10,6 +10,7 @@ import * as dossiers from '../src/lib/intelligence/dossiers.ts';
 import * as core from '../src/lib/intelligence/core.ts';
 import { createResearchPdf } from '../src/lib/research-pdf.server.ts';
 import { researchReportCopy } from '../src/lib/intelligence/report-copy.ts';
+import { localizeKnownLanguage } from '../src/lib/localization/presentation-values.ts';
 import { academyLocalizationFixture } from './helpers/academy-localization.mjs';
 
 const translations = academyLocalizationFixture();
@@ -24,7 +25,7 @@ function fixture(locale, onRender, goal = 'work', horizon = '3-months') {
   const source = readFileSync(new URL('../src/app/api/intelligence/report/route.ts', import.meta.url), 'utf8');
   const code = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, esModuleInterop: true } }).outputText;
   const imports = {
-    '@clerk/nextjs/server': { currentUser: async () => ({ unsafeMetadata: { tgpiLocale: 'en', tgpiAccountProfile: { profession: 'Custom Data Scientist', languages: ['English'] }, tgpiOnboarding: {} } }) },
+    '@clerk/nextjs/server': { currentUser: async () => ({ unsafeMetadata: { tgpiLocale: 'en', tgpiAccountProfile: { profession: 'Custom Data Scientist', languages: ['English', 'Save'] }, tgpiOnboarding: {} } }) },
     '@/data/intelligence/identities.json': { __esModule: true, default: identities },
     '@/lib/intelligence/research-plan': plan,
     '@/lib/intelligence/dossiers': dossiers,
@@ -33,6 +34,7 @@ function fixture(locale, onRender, goal = 'work', horizon = '3-months') {
     '@/lib/research-pdf.server': { createResearchPdf: async (input, selected) => { onRender(input, selected); return Buffer.from('%PDF-1.7 test'); } },
     '@/lib/localization/server': { getLocaleForAccount: async accountLocale => { assert.equal(accountLocale, 'en'); return locale; } },
     '@/lib/localization/messages': translations.messages,
+    '@/lib/localization/presentation-values': { localizeKnownLanguage },
     '@/lib/intelligence/report-copy': { researchReportCopy },
     '@/lib/intelligence/server': { getIntelligence: async () => ({ snapshot: { observations: [{ country: 'portugal', indicator: 'SP.POP.TOTL', value: 10_639_726, year: 2024, retrievedAt: '2026-11-10T00:00:00Z' }] } }) },
     '@/lib/intelligence/core': core,
@@ -60,6 +62,8 @@ test('a fresh research download follows the chosen device locale, preserving raw
     assert.ok(input.context[0].includes(`${t('Goal')}: ${t('Work globally')}`));
     assert.ok(input.context[0].includes(`${t('Timeline')}: ${t('Within 3 months')}`));
     assert.ok(input.context[1].includes(t('English')));
+    assert.ok(input.context[1].includes('Save'));
+    assert.ok(!input.context[1].includes(t('Save')) || t('Save') === 'Save');
     assert.ok(input.evidence.some(item => item.title.includes(t(dossiers.DOSSIER_CLAIMS[0].title))));
     assert.ok(input.evidence.some(item => item.text.includes('10_639_726'.replaceAll('_', ''))));
     assert.ok(input.evidence.some(item => item.text.includes('https://')));

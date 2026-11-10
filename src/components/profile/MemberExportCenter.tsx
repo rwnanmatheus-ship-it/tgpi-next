@@ -4,6 +4,7 @@ import { exportGroups, type ExportGroup } from '@/lib/members/export-selection';
 import type { PublicMemberProfile } from '@/lib/members/public-profile';
 import { useLocale , LocalizedText } from '@/components/localization/LocaleProvider';
 import { translate } from '@/lib/localization/messages';
+import { localizeKnownLanguage } from '@/lib/localization/presentation-values';
 import type { Locale } from '@/lib/localization/config';
 
 type ImagePayload = { locale: Locale; member: PublicMemberProfile; photo: string; crest: string; qr: string };
@@ -33,7 +34,7 @@ export async function createMemberPng(data: ImagePayload, compact: boolean) {
   if (!compact) {
     if (data.member.bio) wrap(data.member.bio, 28);
     if (data.member.career.length) wrap(t('Self-declared: {career}', { career: data.member.career.join(' · ') }), 28);
-    if (data.member.languages.length) wrap(t('Declared languages: {languages}', { languages: data.member.languages.map(language => t(language)).join(', ') }), 28);
+    if (data.member.languages.length) wrap(t('Declared languages: {languages}', { languages: data.member.languages.map(language => localizeKnownLanguage(language, t)).join(', ') }), 28);
     if (data.member.goal || data.member.countries.length) wrap(t('Direction: {goal}', { goal: [data.member.goal ? t(data.member.goal) : '', ...data.member.countries.map(c => t(c.name))].filter(Boolean).join(' · ') }), 28);
     for (const l of data.member.links) wrap(`${l.label}: ${l.url}`, 26);
     for (const c of data.member.courses) wrap(t('Recorded completion: {course}', { course: c.title }), 26);

@@ -8,6 +8,7 @@ import { createResearchPdf } from "@/lib/research-pdf.server";
 import { getLocaleForAccount } from "@/lib/localization/server";
 import { translate } from "@/lib/localization/messages";
 import { researchReportCopy } from "@/lib/intelligence/report-copy";
+import { localizeKnownLanguage } from "@/lib/localization/presentation-values";
 import { getIntelligence } from "@/lib/intelligence/server";
 import { INDICATOR_IDS, INDICATORS, findObservation, evidenceLabel, evidenceStatus, indicatorUrl } from "@/lib/intelligence/core";
 export const runtime = "nodejs";
@@ -60,7 +61,7 @@ export async function POST(request: Request) {
       name: t(identity.name), worksheet: plan,
       context: [
         `${t("Goal")}: ${journey.primaryGoal ? t(goalLabels[journey.primaryGoal]) : copy.notProvided} | ${t("Timeline")}: ${journey.timeHorizon ? t(timelineLabels[journey.timeHorizon]) : copy.exploring}`,
-        `${t("Profession")}: ${profile.profession || copy.notProvided} | ${t("Languages")}: ${profile.languages.map(t).join(", ") || copy.notProvided}`,
+        `${t("Profession")}: ${profile.profession || copy.notProvided} | ${t("Languages")}: ${profile.languages.map(language => localizeKnownLanguage(language, t)).join(", ") || copy.notProvided}`,
       ],
       evidence: [
         ...statistics,
