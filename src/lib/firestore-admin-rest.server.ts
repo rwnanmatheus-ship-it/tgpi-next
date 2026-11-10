@@ -371,13 +371,17 @@ async function beginTransaction() {
   return payload.transaction;
 }
 
-async function getDocumentsInTransaction<T>(
+export async function getFirestoreDocuments<T>(
   documentPaths: string[],
-  transaction: string,
+  transaction?: string,
 ) {
+  const pathsByName = new Map(documentPaths.map(path => [firestoreDocumentName(path), path]));
+  const result = new Map<string, FirestoreDecodedDocument<T> | null>();
+  documentPaths.forEach(path => result.set(path, null));
+  if (!pathsByName.size) return result;
   const response = await firestoreFetch("/documents:batchGet", {
     body: JSON.stringify({
-      documents: documentPaths.map(firestoreDocumentName),
+      documents: [...pathsByName.keys()],
       transaction,
     }),
     method: "POST",
@@ -386,18 +390,18 @@ async function getDocumentsInTransaction<T>(
     found?: FirestoreDocument;
     missing?: string;
   }>;
-  const result = new Map<string, FirestoreDecodedDocument<T> | null>();
-
-  documentPaths.forEach((path) => result.set(path, null));
+  const seen = new Set<string>();
   payload.forEach((item) => {
     const name = item.found?.name || item.missing;
     if (!name) return;
-    const path = documentPaths.find(
-      (candidate) => firestoreDocumentName(candidate) === name,
-    );
+    const path = pathsByName.get(name);
     if (!path) return;
+    seen.add(path);
     result.set(path, item.found ? decodeDocument<T>(item.found) : null);
   });
+  if (seen.size !== result.size) {
+    throw new FirestoreAdminError("Firestore did not return a complete document snapshot.", 503);
+  }
   return result;
 }
 
@@ -432,7 +436,7 @@ export async function runFirestoreTransaction<T>(
     try {
       const plan = await buildPlan({
         getDocuments: <TDocument>(paths: string[]) =>
-          getDocumentsInTransaction<TDocument>(paths, transaction),
+          getFirestoreDocuments<TDocument>(paths, transaction),
       });
       await commitTransaction(transaction, plan.writes);
       return plan.result;

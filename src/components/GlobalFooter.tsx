@@ -14,7 +14,7 @@ const footerGroups = [
     ["Certificates", "/certificates"], ["Verify a credential", "/verify"],
   ] },
   { title: "Your TGPI", links: [
-    ["Workspace", "/dashboard"], ["Global Key", "/global-key"],
+    ["Workspace", "/dashboard"], ["TGPI Global ID", "/global-key"],
     ["Profile & settings", "/profile"], ["Premium", "/premium"],
   ] },
   { title: "The institute", links: [

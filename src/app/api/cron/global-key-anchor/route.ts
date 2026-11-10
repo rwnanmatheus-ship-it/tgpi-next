@@ -28,12 +28,14 @@ export async function GET(request: Request) {
   if (process.env.VERCEL_ENV !== "production") {
     return Response.json({ error: "Production runtime required" }, { status: 409 });
   }
+  const headers = { "Cache-Control": "no-store" };
+  if (process.env.TGPI_BASE_ANCHOR_ENABLED !== "true") {
+    return Response.json({ status: "disabled", anchored: 0 }, { headers });
+  }
 
   try {
     const result = await anchorPendingGlobalKeys();
-    return Response.json(result, {
-      headers: { "Cache-Control": "no-store" },
-    });
+    return Response.json(result, { headers });
   } catch (error) {
     if (error instanceof GlobalKeyAnchorError) {
       return Response.json({ error: error.message }, { status: 503 });

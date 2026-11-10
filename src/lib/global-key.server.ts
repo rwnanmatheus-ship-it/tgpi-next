@@ -5,105 +5,54 @@ import { formatTgpiGlobalId } from "@/lib/auth/guards";
 import {
   createGlobalKeyProof,
   getGlobalKeyFingerprint,
+  getGlobalKeyProofStatus,
   getGlobalKeySlotFromProof,
   GlobalKeyIntegrityError,
   issueGlobalKey,
-  normalizeGlobalKeyRecord,
   readGlobalKeyProof,
   rotateGlobalKey,
   verifyGlobalKeyChain,
 } from "@/lib/global-key-crypto";
+import { createBaseAnchorExplorerUrl, createGlobalKeyAnchorLeaf } from "@/lib/global-key-anchor";
+import { isBaseMainnetAnchorConfigured, verifyGlobalKeyBaseAnchor } from "@/lib/global-key-anchor.server";
 import {
-  createBaseAnchorExplorerUrl,
-  createGlobalKeyAnchorLeaf,
-  normalizeGlobalKeyAnchorRecord,
-} from "@/lib/global-key-anchor";
-import {
-  isBaseMainnetAnchorConfigured,
-  verifyGlobalKeyBaseAnchor,
-} from "@/lib/global-key-anchor.server";
-import {
-  getGlobalKeySecretForSlot,
-  getPrimaryGlobalKeyMaterial,
-} from "@/lib/global-key-secrets.server";
-import {
-  TGPI_GLOBAL_KEY_ANCHOR_METADATA_KEY,
-  TGPI_GLOBAL_KEY_METADATA_KEY,
-  type GlobalKeyVerification,
-  type TgpiGlobalKeyAnchorView,
-  type TgpiGlobalKeyRecord,
-  type TgpiGlobalKeyView,
-} from "@/lib/global-key";
+  canMutateGlobalKey,
+  loadGlobalKeyLedger,
+  loadGlobalKeyReceipt,
+  updateGlobalKeyLedger,
+  type GlobalKeyLedger,
+} from "@/lib/global-key-ledger.server";
+import { getGlobalKeySecretForSlot, getPrimaryGlobalKeyMaterial } from "@/lib/global-key-secrets.server";
+import { ensureMemberNumber } from "@/lib/members/identity.server";
+import type { GlobalKeyVerification, TgpiGlobalKeyAnchorView, TgpiGlobalKeyView } from "@/lib/global-key";
 
-const MAX_GLOBAL_KEY_METADATA_BYTES = 4_000;
-const MAX_PRIVATE_METADATA_BYTES = 7_500;
-
-function ensureMetadataLimit(record: TgpiGlobalKeyRecord) {
-  if (
-    Buffer.byteLength(JSON.stringify(record), "utf8") >
-    MAX_GLOBAL_KEY_METADATA_BYTES
-  ) {
-    throw new GlobalKeyIntegrityError(
-      "The Global Key record exceeds its safe storage limit.",
-    );
-  }
-  return record;
-}
-
-function withGlobalKeyMetadata(
-  privateMetadata: Record<string, unknown>,
-  record: TgpiGlobalKeyRecord,
-) {
-  const nextMetadata = {
-    ...privateMetadata,
-    [TGPI_GLOBAL_KEY_METADATA_KEY]: record,
-  };
-  if (
-    Buffer.byteLength(JSON.stringify(nextMetadata), "utf8") >
-    MAX_PRIVATE_METADATA_BYTES
-  ) {
-    throw new GlobalKeyIntegrityError(
-      "Your private TGPI record has reached the safe V1 storage limit.",
-    );
-  }
-  return nextMetadata;
-}
-
-function buildView(
-  record: TgpiGlobalKeyRecord,
-  anchorValue: unknown,
-  userId: string,
-): TgpiGlobalKeyView {
+function buildView({ record, anchor }: GlobalKeyLedger, userId: string): TgpiGlobalKeyView {
   const secret = getGlobalKeySecretForSlot(record.keySlot);
-  if (!verifyGlobalKeyChain({ expectedKeyId: record.keyId, record, secret })) {
-    throw new GlobalKeyIntegrityError(
-      "The Global Key integrity chain requires review.",
-    );
+  if (!verifyGlobalKeyChain({ expectedKeyId: formatTgpiGlobalId(userId), record, secret })) {
+    throw new GlobalKeyIntegrityError("The Global Key integrity chain requires review.");
   }
-  const currentAnchorRecord = getCurrentGlobalKeyAnchorRecord({
-    anchorValue,
-    record,
-  });
+  const currentHash = record.events.at(-1)?.hash;
+  const currentAnchor = anchor && currentHash && anchor.revision === record.revision &&
+    anchor.eventHash === currentHash && anchor.leaf === createGlobalKeyAnchorLeaf({
+      batchId: anchor.batchId,
+      eventHash: currentHash,
+      keyId: record.keyId,
+      revision: record.revision,
+    }) ? anchor : null;
+  const explorerUrl = currentAnchor && createBaseAnchorExplorerUrl(currentAnchor.transactionHash);
+  const anchorView: TgpiGlobalKeyAnchorView = currentAnchor && explorerUrl
+    ? { ...currentAnchor, explorerUrl }
+    : { status: isBaseMainnetAnchorConfigured() ? "awaiting_anchor" : "activation_pending" };
   const proof = createGlobalKeyProof({
-    ...(currentAnchorRecord ? { anchor: currentAnchorRecord } : {}),
+    ...(currentAnchor ? { anchor: currentAnchor } : {}),
     record,
     secret,
     userId,
   });
-  const anchor = getGlobalKeyAnchorView({
-    anchorRecord: currentAnchorRecord,
-    configured: isBaseMainnetAnchorConfigured(),
-  });
-
   return {
-    anchor,
-    blocks: record.events.map((event) => ({
-      hash: event.hash,
-      previousHash: event.previousHash,
-      sequence: event.sequence,
-      timestamp: event.timestamp,
-      type: event.type,
-    })),
+    anchor: anchorView,
+    blocks: record.events.map(({ hash, previousHash, sequence, timestamp, type }) =>
+      ({ hash, previousHash, sequence, timestamp, type })),
     fingerprint: getGlobalKeyFingerprint(record),
     integrity: "verified",
     issuedAt: record.issuedAt,
@@ -115,145 +64,58 @@ function buildView(
   };
 }
 
-function getGlobalKeyAnchorView({
-  anchorRecord,
-  configured,
-}: {
-  anchorRecord: ReturnType<typeof normalizeGlobalKeyAnchorRecord>;
-  configured: boolean;
-}): TgpiGlobalKeyAnchorView {
-  if (!anchorRecord) {
-    return { status: configured ? "awaiting_anchor" : "activation_pending" };
-  }
-  const explorerUrl = createBaseAnchorExplorerUrl(anchorRecord.transactionHash);
-  if (!explorerUrl) {
-    return { status: configured ? "awaiting_anchor" : "activation_pending" };
-  }
-
-  return {
-    anchoredAt: anchorRecord.anchoredAt,
-    batchId: anchorRecord.batchId,
-    blockNumber: anchorRecord.blockNumber,
-    chainId: anchorRecord.chainId,
-    explorerUrl,
-    leaf: anchorRecord.leaf,
-    memberCount: anchorRecord.memberCount,
-    merkleProof: anchorRecord.merkleProof,
-    network: anchorRecord.network,
-    root: anchorRecord.root,
-    signerAddress: anchorRecord.signerAddress,
-    status: "confirmed",
-    transactionHash: anchorRecord.transactionHash,
-  };
-}
-
-function getCurrentGlobalKeyAnchorRecord({
-  anchorValue,
-  record,
-}: {
-  anchorValue: unknown;
-  record: TgpiGlobalKeyRecord;
-}) {
-  const anchor = normalizeGlobalKeyAnchorRecord(anchorValue);
-  const currentHash = record.events.at(-1)?.hash;
-  if (
-    !anchor ||
-    anchor.revision !== record.revision ||
-    anchor.eventHash !== currentHash
-  ) {
-    return null;
-  }
-  const expectedLeaf = createGlobalKeyAnchorLeaf({
-    batchId: anchor.batchId,
-    eventHash: anchor.eventHash,
-    keyId: record.keyId,
-    revision: anchor.revision,
-  });
-  return expectedLeaf === anchor.leaf ? anchor : null;
-}
-
 export async function getOrCreateGlobalKey(userId: string) {
-  const client = await clerkClient();
-  const user = await client.users.getUser(userId);
-  const existingValue = user.privateMetadata[TGPI_GLOBAL_KEY_METADATA_KEY];
-  const keyId = formatTgpiGlobalId(userId);
-
-  if (existingValue !== undefined) {
-    const existing = normalizeGlobalKeyRecord(existingValue);
-    if (!existing) {
-      throw new GlobalKeyIntegrityError(
-        "The existing Global Key record requires an integrity review.",
-      );
-    }
-    if (existing.keyId !== keyId) {
-      throw new GlobalKeyIntegrityError(
-        "The existing Global Key identity requires an integrity review.",
-      );
-    }
-    return buildView(
-      existing,
-      user.privateMetadata[TGPI_GLOBAL_KEY_ANCHOR_METADATA_KEY],
-      userId,
-    );
+  const user = await (await clerkClient()).users.getUser(userId);
+  if (user.banned || user.locked) {
+    throw new GlobalKeyIntegrityError("This identity requires account review.");
   }
+  const existing = await loadGlobalKeyLedger(userId, user.privateMetadata);
+  if (existing) return buildView(existing, userId);
 
-  const keyMaterial = getPrimaryGlobalKeyMaterial();
-  const record = ensureMetadataLimit(
-    issueGlobalKey({
-      keyId,
-      keySlot: keyMaterial.slot,
-      secret: keyMaterial.secret,
-    }),
-  );
-
-  await client.users.updateUserMetadata(userId, {
-    privateMetadata: withGlobalKeyMetadata(user.privateMetadata, record),
+  if (!canMutateGlobalKey()) {
+    throw new GlobalKeyIntegrityError("Identity storage is temporarily unavailable.");
+  }
+  await ensureMemberNumber(userId);
+  const ledger = await updateGlobalKeyLedger(userId, user.privateMetadata, current => {
+    if (current) return { result: current };
+    const { secret, slot } = getPrimaryGlobalKeyMaterial();
+    const next = {
+      record: issueGlobalKey({ keyId: formatTgpiGlobalId(userId), keySlot: slot, secret }),
+      anchor: null,
+    };
+    return { next, result: next };
   });
-
-  return buildView(
-    record,
-    user.privateMetadata[TGPI_GLOBAL_KEY_ANCHOR_METADATA_KEY],
-    userId,
-  );
+  return buildView(ledger, userId);
 }
 
-export async function rotateUserGlobalKey(userId: string) {
-  const client = await clerkClient();
-  const user = await client.users.getUser(userId);
-  const record = normalizeGlobalKeyRecord(
-    user.privateMetadata[TGPI_GLOBAL_KEY_METADATA_KEY],
-  );
-  if (!record) {
-    throw new GlobalKeyIntegrityError(
-      "Open your Global Key before rotating its proof.",
-    );
+export async function rotateUserGlobalKey(userId: string, expectedRevision: number) {
+  const user = await (await clerkClient()).users.getUser(userId);
+  if (user.banned || user.locked) {
+    throw new GlobalKeyIntegrityError("This identity requires account review.");
   }
-
-  const secret = getGlobalKeySecretForSlot(record.keySlot);
-  const rotated = ensureMetadataLimit(rotateGlobalKey({ record, secret }));
-
-  await client.users.updateUserMetadata(userId, {
-    privateMetadata: withGlobalKeyMetadata(user.privateMetadata, rotated),
+  const next = await updateGlobalKeyLedger(userId, user.privateMetadata, ledger => {
+    const record = ledger?.record;
+    if (!record || record.keyId !== formatTgpiGlobalId(userId) || record.revision !== expectedRevision) {
+      throw new GlobalKeyIntegrityError("The identity revision changed. Refresh before rotating.");
+    }
+    const secret = getGlobalKeySecretForSlot(record.keySlot);
+    const rotated = { record: rotateGlobalKey({ record, secret }), anchor: null };
+    return { next: rotated, result: rotated };
   });
-
-  return buildView(
-    rotated,
-    user.privateMetadata[TGPI_GLOBAL_KEY_ANCHOR_METADATA_KEY],
-    userId,
-  );
+  return buildView(next, userId);
 }
 
 export async function verifyPublicGlobalKey(
   proof: string,
+  mode: "portable" | "temporary" = "portable",
 ): Promise<GlobalKeyVerification> {
   const slot = getGlobalKeySlotFromProof(proof);
   if (!slot) return { status: "invalid" };
-
   let secret: string;
   try {
     secret = getGlobalKeySecretForSlot(slot);
   } catch {
-    return { status: "invalid" };
+    return { status: "unavailable" };
   }
   const payload = readGlobalKeyProof({ proof, secret });
   if (!payload) return { status: "invalid" };
@@ -261,55 +123,43 @@ export async function verifyPublicGlobalKey(
   try {
     const client = await clerkClient();
     const user = await client.users.getUser(payload.userId);
-    const record = normalizeGlobalKeyRecord(
-      user.privateMetadata[TGPI_GLOBAL_KEY_METADATA_KEY],
-    );
+    if (user.banned || user.locked) return { status: "invalid" };
+    const ledger = await loadGlobalKeyLedger(payload.userId, user.privateMetadata);
     if (
-      !record ||
-      record.keySlot !== slot ||
-      record.keyId !== payload.keyId ||
-      !verifyGlobalKeyChain({
-        expectedKeyId: formatTgpiGlobalId(payload.userId),
-        record,
-        secret,
-      })
-    ) {
-      return { status: "invalid" };
-    }
+      !ledger || ledger.record.keySlot !== slot ||
+      !verifyGlobalKeyChain({ expectedKeyId: formatTgpiGlobalId(payload.userId), record: ledger.record, secret })
+    ) return { status: "invalid" };
 
-    const currentHash = record.events.at(-1)?.hash;
-    const status =
-      record.revision === payload.revision && currentHash === payload.currentHash
-        ? "verified"
-        : "historical";
-    const embeddedAnchor = normalizeGlobalKeyAnchorRecord(payload.anchor);
+    const { record } = ledger;
+    const status = getGlobalKeyProofStatus(record, payload);
+    if (status === "invalid") return { status };
+    if (mode === "temporary" && status === "historical") return { status: "superseded" };
+
+    const storedAnchor = ledger.anchor?.revision === payload.revision
+      ? ledger.anchor
+      : await loadGlobalKeyReceipt(payload.userId, payload.revision);
     const anchor = await verifyGlobalKeyBaseAnchor({
-      anchorValue:
-        embeddedAnchor ||
-        user.privateMetadata[TGPI_GLOBAL_KEY_ANCHOR_METADATA_KEY],
+      anchorValue: storedAnchor || payload.anchor,
       eventHash: payload.currentHash,
       keyId: payload.keyId,
       revision: payload.revision,
     });
-
     return {
       anchor,
-      fingerprint: getGlobalKeyFingerprint(record),
+      currentRevision: record.revision,
+      fingerprint: getGlobalKeyFingerprint(record, payload.revision),
       issuedAt: record.issuedAt,
       keyId: record.keyId,
-      revision: record.revision,
+      revision: payload.revision,
       status,
     };
   } catch (error) {
-    if (
-      typeof error === "object" &&
-      error !== null &&
-      "status" in error &&
-      error.status === 404
-    ) {
+    if (typeof error === "object" && error !== null && "status" in error && error.status === 404) {
       return { status: "invalid" };
     }
-    console.error("Unable to complete Global Key verification", error);
+    console.error("Unable to complete Global Key verification", {
+      errorName: error instanceof Error ? error.name : "UnknownError",
+    });
     return { status: "unavailable" };
   }
 }
