@@ -1,4 +1,6 @@
 import { localizeMetadata } from "@/lib/localization/metadata.server";
+import { loadLearningSummary } from "@/lib/learning/unified-progress.server";
+import { connectPlanLearning } from "@/lib/personal-plan";
 import { courses } from "@/data/courses";
 import type { Metadata } from "next";
 import { currentUser } from "@clerk/nextjs/server";
@@ -22,24 +24,27 @@ const sourceMetadata: Metadata = {
 };
 
 export default async function PersonalPlanPage() {
-  const [, user] = await Promise.all([requireUser(), currentUser()]);
+  const [session, user] = await Promise.all([requireUser(), currentUser()]);
   const onboarding = normalizeOnboardingData(
     user?.unsafeMetadata.tgpiOnboarding,
   );
   const activation = normalizeActivationProgress(
     user?.privateMetadata[TGPI_ACTIVATION_METADATA_KEY],
   );
-  const model = buildGlobalWorkspaceModel(
+  const learning = await loadLearningSummary(session.userId, activation);
+  const model = connectPlanLearning(buildGlobalWorkspaceModel(
     onboarding,
     getAllCountries(),
     activation,
     courses,
-  );
+  ), learning);
 
   return (
     <PersonalPlanDashboard
       firstName={user?.firstName || user?.fullName || "Global explorer"}
       model={model}
+      learning={learning}
+      timeHorizon={onboarding.timeHorizon}
     />
   );
 }

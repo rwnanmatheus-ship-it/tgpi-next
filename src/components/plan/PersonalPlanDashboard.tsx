@@ -1,269 +1,66 @@
+'use client';
 
-import { LocalizedElement } from "@/components/localization/LocalizedElement";
-import PlatformBannerImage from "@/components/ui/PlatformBannerImage";
-import Link from "next/link";
-import NavigationIcon from "@/components/navigation/NavigationIcon";
-import type {
-  GlobalWorkspaceModel,
-  WorkspaceActionStatus,
-} from "@/lib/global-workspace";
-import { LocalizedText } from "@/components/localization/LocaleProvider";
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import Image from '@/components/localization/LocalizedImage';
+import { LocalizedText, useLocale } from '@/components/localization/LocaleProvider';
+import { learningStatusLabels, type LearningSummary } from '@/lib/learning/unified-progress';
+import type { GlobalWorkspaceModel, WorkspaceAction, WorkspaceActionStatus } from '@/lib/global-workspace';
+import { prioritizePlanActions } from '@/lib/personal-plan';
+import { PROGRESS_SYNC_CHANNEL, PROGRESS_SYNC_EVENT } from '@/lib/progress-sync';
+import PlanHero from './PlanHero';
+import { planActivityCopy, planCopy } from './plan-copy';
+import PlanTabs from './PlanTabs';
+import PlanBudget from './PlanBudget';
+import './plan.css';
 
+const statusLabels: Record<WorkspaceActionStatus, string> = { completed: 'Completed', in_progress: 'In progress', needs_attention: 'Context needed', not_started: 'Ready to start' };
 
-type PersonalPlanDashboardProps = {
-  firstName: string;
-  model: GlobalWorkspaceModel;
-};
-
-const statusLabels: Record<WorkspaceActionStatus, string> = {
-  completed: "Completed",
-  in_progress: "In progress",
-  needs_attention: "Context needed",
-  not_started: "Ready to start",
-};
-
-const statusStyles: Record<WorkspaceActionStatus, string> = {
-  completed: "border-emerald-200 bg-emerald-50 text-emerald-800",
-  in_progress: "border-blue-200 bg-blue-50 text-blue-800",
-  needs_attention: "border-amber-200 bg-amber-50 text-amber-900",
-  not_started: "border-slate-200 bg-slate-50 text-slate-700",
-};
-
-const journeyIcons = {
-  decide: "compare",
-  develop: "book",
-  discover: "compass",
-  prepare: "file",
-} as const;
-
-export default function PersonalPlanDashboard({
-  firstName,
-  model,
-}: PersonalPlanDashboardProps) {
-  const currentStage =
-    model.journey.find((stage) => stage.id === model.currentStageId) ??
-    model.journey[0];
-  const nextAction =
-    model.actions.find((action) => action.status !== "completed") ??
-    model.actions.at(-1);
-
-  return (
-    <main className="min-h-screen bg-[var(--tgpi-canvas)] pb-10 text-[var(--tgpi-ink)] lg:pb-12">
-      <section className="relative overflow-hidden bg-[var(--tgpi-navy-deep)] text-white">
-        <PlatformBannerImage className="opacity-35" priority />
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 opacity-80 [background-image:radial-gradient(circle_at_12%_10%,rgba(196,149,54,.24),transparent_28%),radial-gradient(circle_at_88%_8%,rgba(36,87,127,.42),transparent_30%),linear-gradient(rgba(255,255,255,.025)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.025)_1px,transparent_1px)] [background-size:auto,auto,42px_42px,42px_42px]"
-        />
-        <div className="relative mx-auto grid w-full max-w-7xl gap-8 px-4 py-10 sm:px-6 sm:py-14 lg:grid-cols-[minmax(0,1.35fr)_minmax(300px,.65fr)] lg:items-end lg:px-8 lg:py-20">
-          <div className="min-w-0">
-            <p className="text-[11px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold-light)]"><LocalizedText text={"TGPI / Personal Global Plan"} /></p>
-            <h1 className="mt-4 max-w-4xl text-4xl leading-[0.95] sm:text-5xl lg:text-7xl"><LocalizedText text={"Your next move,"} /><br /><LocalizedText text={"connected."} /></h1>
-            <p className="mt-6 max-w-2xl text-sm leading-7 text-white/70 sm:text-base">
-              {firstName}<LocalizedText text={", keep your next move connected: one place for your goal, shortlist, evidence, preparation and learning progress."} /></p>
-            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-              {nextAction ? (
-                <Link
-                  className="inline-flex min-h-12 items-center justify-center gap-3 rounded-2xl bg-[var(--tgpi-gold)] px-5 text-sm font-extrabold text-[var(--tgpi-navy-deep)] transition hover:-translate-y-0.5 hover:bg-[var(--tgpi-gold-light)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
-                  href={nextAction.href}
-                >
-                  <LocalizedText text={nextAction.action} />
-                  <NavigationIcon name="arrow" width={18} height={18} />
-                </Link>
-              ) : null}
-              <Link
-                className="inline-flex min-h-12 items-center justify-center rounded-2xl border border-white/15 bg-white/[0.06] px-5 text-sm font-extrabold text-white transition hover:border-[var(--tgpi-gold)]/60 hover:bg-white/[0.1]"
-                href="/onboarding"
-              ><LocalizedText text={"Edit plan context"} /></Link>
-            </div>
-          </div>
-
-          <aside className="min-w-0 rounded-[1.75rem] border border-white/12 bg-white/[0.06] p-5 shadow-2xl backdrop-blur-xl sm:p-6">
-            <div className="flex items-center justify-between gap-4">
-              <div>
-                <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-white/50"><LocalizedText text={"Plan foundation"} /></p>
-                <p className="mt-2 text-3xl font-extrabold text-white">
-                  {model.completion}%
-                </p>
-              </div>
-              <LocalizedElement as="div"
-                aria-label={`${model.completion}% plan foundation complete`}
-                className="grid h-20 w-20 shrink-0 place-items-center rounded-full p-2"
-                role="img"
-                style={{
-                  background: `conic-gradient(var(--tgpi-gold) ${model.completion}%, rgba(255,255,255,.12) 0)`,
-                }}
-              >
-                <span className="grid h-full w-full place-items-center rounded-full bg-[var(--tgpi-navy-deep)] text-xs font-extrabold">
-                  {model.progress.filter((item) => item.complete).length}/{model.progress.length}
-                </span>
-              </LocalizedElement>
-            </div>
-            <div className="mt-5 border-t border-white/10 pt-5">
-              <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-gold-light)]"><LocalizedText text={"Current stage"} /></p>
-              <p className="mt-1 text-lg font-extrabold"><LocalizedText text={currentStage.label} /></p>
-              <p className="mt-2 text-xs leading-6 text-white/60">
-                <LocalizedText text={currentStage.description} />
-              </p>
-            </div>
-          </aside>
-        </div>
-      </section>
-
-      <div className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
-        <section aria-labelledby="journey-title">
-          <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
-            <div>
-              <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-strong)]"><LocalizedText text={"Connected decision system"} /></p>
-              <h2 id="journey-title" className="mt-2 text-3xl text-[var(--tgpi-navy)] sm:text-4xl"><LocalizedText text={"Your global decision journey"} /></h2>
-            </div>
-            <p className="max-w-md text-sm leading-6 text-[var(--tgpi-muted)]"><LocalizedText text={"Every stage uses your saved context and real TGPI activity. Progress is never invented."} /></p>
-          </div>
-
-          <div className="mt-7 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            {model.journey.map((stage, index) => (
-              <Link
-                className={`group min-w-0 rounded-[1.5rem] border p-5 shadow-[var(--tgpi-shadow-sm)] transition hover:-translate-y-1 hover:shadow-[var(--tgpi-shadow-soft)] ${
-                  stage.id === model.currentStageId
-                    ? "border-[var(--tgpi-gold)] bg-[var(--tgpi-navy)] text-white"
-                    : "border-[var(--tgpi-border-soft)] bg-white text-[var(--tgpi-navy)]"
-                }`}
-                href={stage.href}
-                key={stage.id}
-              >
-                <div className="flex items-center justify-between gap-3">
-                  <span
-                    className={`grid h-11 w-11 place-items-center rounded-2xl ${
-                      stage.id === model.currentStageId
-                        ? "bg-white/10 text-[var(--tgpi-gold-light)]"
-                        : "bg-[var(--tgpi-blue-soft)] text-[var(--tgpi-blue)]"
-                    }`}
-                  >
-                    <NavigationIcon name={journeyIcons[stage.id]} width={20} height={20} />
-                  </span>
-                  <span className="text-[10px] font-extrabold tracking-[0.18em] opacity-55">
-                    0{index + 1}
-                  </span>
-                </div>
-                <p className="mt-5 text-lg font-extrabold"><LocalizedText text={stage.label} /></p>
-                <p className="mt-2 min-h-12 text-xs leading-6 opacity-65">
-                  <LocalizedText text={stage.description} />
-                </p>
-                <div className="mt-5 h-1.5 overflow-hidden rounded-full bg-current/10">
-                  <div
-                    className="h-full rounded-full bg-[var(--tgpi-gold)]"
-                    style={{ width: `${stage.progress}%` }}
-                  />
-                </div>
-                <div className="mt-2 flex items-center justify-between text-[10px] font-extrabold uppercase tracking-[0.12em] opacity-60">
-                  <span><LocalizedText text={statusLabels[stage.status]} /></span>
-                  <span>{stage.progress}%</span>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </section>
-
-        <div className="mt-8 grid gap-6 lg:grid-cols-[minmax(0,.82fr)_minmax(0,1.18fr)]">
-          <section className="min-w-0 rounded-[1.75rem] border border-[var(--tgpi-border-soft)] bg-white p-5 shadow-[var(--tgpi-shadow-sm)] sm:p-7" aria-labelledby="context-title">
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-strong)]"><LocalizedText text={"Canonical context"} /></p>
-                <h2 id="context-title" className="mt-2 text-3xl text-[var(--tgpi-navy)]"><LocalizedText text={"Plan profile"} /></h2>
-              </div>
-              <Link className="text-xs font-extrabold text-[var(--tgpi-gold-strong)]" href="/onboarding"><LocalizedText text={"Edit →"} /></Link>
-            </div>
-            <dl className="mt-6 divide-y divide-[var(--tgpi-border-soft)]">
-              {model.planSummary.map((item) => (
-                <div className="grid gap-1 py-4 sm:grid-cols-[110px_minmax(0,1fr)] sm:gap-4" key={item.label}>
-                  <dt className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-[var(--tgpi-muted)]">
-                    <LocalizedText text={item.label} />
-                  </dt>
-                  <dd className="min-w-0 text-sm font-bold text-[var(--tgpi-navy)] sm:text-right">
-                    {item.value}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          </section>
-
-          <section className="min-w-0 rounded-[1.75rem] border border-[var(--tgpi-border-soft)] bg-[var(--tgpi-surface)] p-5 shadow-[var(--tgpi-shadow-sm)] sm:p-7" aria-labelledby="actions-title">
-            <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-strong)]"><LocalizedText text={"Priority engine"} /></p>
-            <h2 id="actions-title" className="mt-2 text-3xl text-[var(--tgpi-navy)]"><LocalizedText text={"Best next actions"} /></h2>
-            <div className="mt-6 grid gap-3 sm:grid-cols-2">
-              {model.actions.map((action) => (
-                <Link
-                  className="group min-w-0 rounded-2xl border border-[var(--tgpi-border-soft)] bg-white p-4 transition hover:border-[var(--tgpi-gold)] hover:shadow-[var(--tgpi-shadow-sm)]"
-                  href={action.href}
-                  key={action.id}
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <p className="text-[10px] font-extrabold uppercase tracking-[0.16em] text-[var(--tgpi-gold-strong)]">
-                      <LocalizedText text={action.eyebrow} />
-                    </p>
-                    <span className={`rounded-full border px-2 py-1 text-[9px] font-extrabold uppercase tracking-[0.08em] ${statusStyles[action.status]}`}>
-                      <LocalizedText text={statusLabels[action.status]} />
-                    </span>
-                  </div>
-                  <h3 className="mt-3 text-xl text-[var(--tgpi-navy)]"><LocalizedText text={action.title} /></h3>
-                  <p className="mt-2 text-xs leading-6 text-[var(--tgpi-muted)]">
-                    <LocalizedText text={action.description} />
-                  </p>
-                  <span className="mt-4 inline-flex items-center gap-2 text-xs font-extrabold text-[var(--tgpi-navy)] group-hover:text-[var(--tgpi-gold-strong)]">
-                    <LocalizedText text={action.action} />
-                    <NavigationIcon name="arrow" width={16} height={16} />
-                  </span>
-                </Link>
-              ))}
-            </div>
-          </section>
-        </div>
-
-        <section className="mt-8 overflow-hidden rounded-[1.75rem] border border-[var(--tgpi-border-soft)] bg-white shadow-[var(--tgpi-shadow-sm)]" aria-labelledby="shortlist-title">
-          <div className="flex flex-col justify-between gap-4 border-b border-[var(--tgpi-border-soft)] p-5 sm:flex-row sm:items-end sm:p-7">
-            <div>
-              <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-strong)]"><LocalizedText text={"Decision shortlist"} /></p>
-              <h2 id="shortlist-title" className="mt-2 text-3xl text-[var(--tgpi-navy)]"><LocalizedText text={"Countries in your plan"} /></h2>
-            </div>
-            <div className="flex flex-col gap-2 sm:flex-row">
-              <Link className="inline-flex min-h-11 items-center justify-center rounded-xl border border-[var(--tgpi-border)] px-4 text-xs font-extrabold text-[var(--tgpi-navy)]" href="/country-fit"><LocalizedText text={"Refine Country Fit"} /></Link>
-              {model.selectedCountryCount >= 2 ? (
-                <Link className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[var(--tgpi-navy)] px-4 text-xs font-extrabold text-white" href={model.compareHref}><LocalizedText text={"Compare shortlist"} /></Link>
-              ) : null}
-            </div>
-          </div>
-          {model.countryFits.length ? (
-            <div className="grid gap-px bg-[var(--tgpi-border-soft)] sm:grid-cols-2 lg:grid-cols-3">
-              {model.countryFits.map(({ country, reasons, warning }) => (
-                <article className="min-w-0 bg-white p-5 sm:p-6" key={country.slug}>
-                  <div className="flex items-center gap-3">
-                    <span className="text-3xl" aria-hidden="true">{country.emoji}</span>
-                    <div className="min-w-0">
-                      <h3 className="truncate text-xl text-[var(--tgpi-navy)]"><LocalizedText text={country.name} /></h3>
-                      <p className="text-[10px] font-extrabold uppercase tracking-[0.12em] text-[var(--tgpi-muted)]"><LocalizedText text={country.region} /></p>
-                    </div>
-                  </div>
-                  <ul className="mt-4 space-y-2 text-xs leading-5 text-[var(--tgpi-muted)]">
-                    {(reasons.length ? reasons : ["Add priorities to personalize your research questions."]).map((reason) => (
-                      <li className="flex gap-2" key={reason}><span className="text-[var(--tgpi-gold-strong)]">●</span><span><LocalizedText text={reason} /></span></li>
-                    ))}
-                  </ul>
-                  <p className="mt-4 border-t border-[var(--tgpi-border-soft)] pt-4 text-[10px] leading-5 text-[var(--tgpi-muted)]">
-                    <LocalizedText text={warning} />
-                  </p>
-                  <Link className="mt-4 inline-flex text-xs font-extrabold text-[var(--tgpi-gold-strong)]" href={`/countries/${country.slug}`}><LocalizedText text={"Open evidence dossier →"} /></Link>
-                </article>
-              ))}
-            </div>
-          ) : (
-            <div className="p-6 sm:p-8">
-              <p className="max-w-xl text-sm leading-7 text-[var(--tgpi-muted)]"><LocalizedText text={"Your shortlist is empty. Start with Country Fit to connect a destination to your goal, timeline and research priorities."} /></p>
-              <Link className="mt-5 inline-flex min-h-12 items-center justify-center gap-2 rounded-2xl bg-[var(--tgpi-navy)] px-5 text-sm font-extrabold text-white" href="/country-fit"><LocalizedText text={"Build my Country Fit"} /><NavigationIcon name="arrow" width={17} height={17} />
-              </Link>
-            </div>
-          )}
-        </section>
-      </div>
-    </main>
-  );
+export default function PersonalPlanDashboard({ firstName, model, learning: learningSummary, timeHorizon = '' }: { firstName: string; model: GlobalWorkspaceModel; learning: LearningSummary; timeHorizon?: string }) {
+  const { t, locale } = useLocale();
+  const router = useRouter();
+  const copy = (value: string) => planCopy(value, t, locale);
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout>;
+    const refresh = () => { clearTimeout(timer); timer = setTimeout(() => { if (document.visibilityState === 'visible') router.refresh(); }, 400); };
+    const channel = typeof BroadcastChannel !== 'undefined' ? new BroadcastChannel(PROGRESS_SYNC_CHANNEL) : null;
+    if (channel) channel.onmessage = refresh;
+    window.addEventListener(PROGRESS_SYNC_EVENT, refresh); window.addEventListener('focus', refresh);
+    return () => { clearTimeout(timer); channel?.close(); window.removeEventListener(PROGRESS_SYNC_EVENT, refresh); window.removeEventListener('focus', refresh); };
+  }, [router]);
+  const actions = prioritizePlanActions(model, timeHorizon);
+  const nextAction = actions.find(action => action.status !== 'completed');
+  const learning = actions.find(action => action.id === 'learning');
+  const currentStage = model.journey.find(stage => stage.id === model.currentStageId);
+  const date = (value: string) => Number.isFinite(Date.parse(value)) ? new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(value)) : t('Not available');
+  function actionCard(action: WorkspaceAction, index: number) {
+    return <article className="plan-panel plan-action" key={action.id}>
+      <span className="plan-action-number" aria-hidden="true">0{index + 1}</span>
+      <div className="plan-action-body"><span className="plan-badge" data-status={action.status}>{t(statusLabels[action.status])}</span><h3>{t(action.title)}</h3><p>{copy(action.description)}</p><Link className="plan-button" href={action.href}>{copy(action.action)} <span aria-hidden="true">↗</span></Link></div>
+    </article>;
+  }
+  return <main className="plan-shell"><div className="plan-container">
+    <PlanHero eyebrow="TGPI / Personal Global Plan" title="Your next move," accent="connected." description="One clear plan for your destinations, decisions and progress. Start with what matters next." asset="workspace-global-focus">
+      <div className="plan-actions"><a className="plan-button primary" href="#actions">{t('Best next actions')} <span aria-hidden="true">↓</span></a><Link className="plan-button" href="/country-fit">{t('Refine Country Fit')} ↗</Link></div>
+    </PlanHero>
+    <div className="plan-stats">{[
+      ['Plan foundation', `${model.completion}%`], ['Countries in your plan', String(model.selectedCountryCount)], ['Recorded actions', `${model.actionSummary.completed}/${model.actions.length}`], ['Current stage', t(currentStage?.label ?? 'Discover')],
+    ].map(([label, value]) => <div className="plan-stat" key={label}><span>{t(label)}</span><strong style={label === 'Current stage' ? { fontSize: 17 } : undefined}>{value}</strong></div>)}</div>
+    <PlanTabs id="personal-plan" tabs={[
+      { id: 'overview', label: 'Overview', content: <>
+        <div className="plan-grid"><section className="plan-panel accent"><p className="plan-kicker">{t('Priority engine')}</p><p className="plan-person">{firstName}</p><h2>{t(nextAction?.title ?? 'Review your next move')}</h2><p>{copy(nextAction?.description ?? 'Your recorded actions are complete. Revisit your evidence whenever your plans change.')}</p><div className="plan-actions"><Link className="plan-button" href={nextAction?.href ?? '/country-fit'}>{copy(nextAction?.action ?? 'Refine Country Fit')} ↗</Link></div><p className="plan-footnote">{t('Ordered by missing context, timeline and recorded progress.')}</p></section>
+        <section className="plan-panel"><div className="plan-ring-row"><div className="plan-ring" role="img" aria-label={t('Plan foundation') + `: ${model.completion}%`} style={{ background: `conic-gradient(#c5a05b ${model.completion}%, #e8edf4 0)` }}><span>{model.completion}%</span></div><div><p className="plan-kicker">{t('Plan foundation')}</p><h3>{t('What is ready?')}</h3><p className="plan-footnote">{t('Profile completeness, not permission to travel.')}</p></div></div><ul className="plan-checklist">{model.progress.map(item => <li key={item.label} data-complete={item.complete}><span aria-hidden="true">{item.complete ? '✓' : '○'}</span><span>{t(item.label)}</span><span className="sr-only">{t(item.complete ? 'Completed' : 'Context needed')}</span></li>)}</ul></section></div>
+        <div className="plan-section-head"><h2><LocalizedText text="Your global decision journey" /></h2><Link href="/onboarding">{t('Edit plan context')} ↗</Link></div>
+        <div className="plan-journey">{model.journey.map((stage, index) => <Link key={stage.id} href={stage.href} className={`plan-stage ${stage.id === model.currentStageId ? 'active' : ''}`}><p className="plan-kicker">0{index + 1} / {t(statusLabels[stage.status])}</p><h3>{t(stage.label)}</h3><p>{t(stage.description)}</p><div className="plan-progress" role="progressbar" aria-label={t(stage.label)} aria-valuenow={stage.progress} aria-valuemin={0} aria-valuemax={100}><span style={{ width: `${stage.progress}%` }} /></div><small>{stage.progress}%</small></Link>)}</div>
+        <div className="plan-section-head"><h2>{t('Plan profile')}</h2></div><div className="plan-grid"><section className="plan-panel"><dl className="plan-profile">{model.planSummary.map(item => <div key={item.label}><dt>{t(item.label)}</dt><dd>{copy(item.value)}</dd></div>)}</dl></section><section className="plan-panel"><p className="plan-kicker">{t('Connected decision system')}</p><h2>{t('Keep your next step in reach.')}</h2><p>{t('Move between research, documents, learning and Atlas with your TGPI profile connected.')}</p><div className="plan-links"><Link className="plan-button" href="/atlas">{t('Ask Atlas')} ↗</Link><Link className="plan-button" href="/passport">{t('Documents')} ↗</Link><Link className="plan-button" href="/profile">{t('My space')} ↗</Link></div></section></div>
+      </> },
+      { id: 'actions', label: 'Action plan', content: <><div className="plan-section-head"><div><p className="plan-kicker">{t('Priority engine')}</p><h2><LocalizedText text="Best next actions" /></h2></div><span className="plan-badge">{model.actionSummary.completed}/{model.actions.length} {t('Completed')}</span></div><p className="plan-footnote">{t('Ordered by missing context, timeline and recorded progress.')}</p><div className="plan-action-list">{actions.map(actionCard)}</div></> },
+      { id: 'destinations', label: 'Destinations', content: <><div className="plan-section-head"><h2><LocalizedText text="Countries in your plan" /></h2><div className="plan-links"><Link className="plan-button" href="/onboarding">{t('Edit plan context')}</Link>{model.selectedCountryCount >= 2 && <Link className="plan-button primary" href={model.compareHref}>{t('Compare shortlist')} ↗</Link>}</div></div>{model.countryFits.length ? <div className="plan-destinations">{model.countryFits.map(({ country, reasons, warning }) => <article className="plan-panel plan-destination" key={country.slug}><div className="plan-country-art"><Image src={`/images/countries/identity/${country.slug}.webp`} alt="" fill sizes="(max-width: 760px) 100vw, 33vw" className="object-cover" /><span aria-hidden="true">{country.emoji}</span></div><div className="plan-country-body"><p className="plan-kicker">{t(country.region)}</p><h3>{t(country.name)}</h3><ul>{(reasons.length ? reasons : ['Add priorities to personalize your research questions.']).map(reason => <li key={reason}>{copy(reason)}</li>)}</ul><p>{t(warning)}</p><Link className="plan-button primary" href={`/country-fit?country=${country.slug}`}>{t('Refine Country Fit')} ↗</Link><Link className="plan-button" href={`/countries/${country.slug}`}>{t('Open evidence dossier →')}</Link></div></article>)}</div> : <div className="plan-panel plan-empty"><h3>{t('Your shortlist is empty.')}</h3><p>{t('Choose a destination to open your three private budget scenarios.')}</p><Link className="plan-button primary" href="/country-fit">{t('Build my Country Fit')} ↗</Link></div>}</> },
+      { id: 'budget', label: 'Budget & scenarios', content: <PlanBudget countries={model.countryFits.map(fit => ({ slug: fit.country.slug, name: fit.country.name }))} /> },
+      { id: 'learning', label: 'Learning', content: <div className="plan-grid"><div>{learning && actionCard(learning, 0)}{learningSummary.unavailable.length > 0 && <p className="plan-callout" role="status">{t('Some learning progress is temporarily unavailable. Try again shortly.')}</p>}<div className="plan-action-list" style={{ marginTop: 16 }}>{learningSummary.items.map(item => <article className="plan-panel" key={item.courseId}><span className="plan-badge">{t(learningStatusLabels[item.status])}</span><h3 style={{ marginTop: 14 }}>{t(item.title)}</h3><p className="plan-footnote">{item.status === 'edition_changed' ? t('New edition · Review your course') : `${item.completed}/${item.total}`}</p><Link className="plan-button" href={item.href}>{t(item.status === 'completed' ? 'Review completed path' : 'Continue learning')} ↗</Link></article>)}</div></div><section className="plan-panel"><p className="plan-kicker">{t('Develop')}</p><h2>{t('Skills for your next chapter.')}</h2><p>{t('Your saved course activity determines where you resume. Certificates remain connected to completed learning requirements.')}</p><div className="plan-links"><Link className="plan-button primary" href="/courses">{t('Explore learning paths')} ↗</Link><Link className="plan-button" href="/certificates">{t('Certificates')} ↗</Link></div></section></div> },
+      { id: 'activity', label: 'Activity', content: <section className="plan-panel"><p className="plan-kicker">{t('Connected decision system')}</p><h2>{t('Your latest progress')}</h2><p>{t('Saved comparisons, document reviews and learning activity appear here.')}</p>{model.recentActivities.length ? <ul className="plan-history">{model.recentActivities.map(item => <li key={item.id}><Link href={item.href}>{planActivityCopy(item.title, t, locale)} ↗</Link><time dateTime={item.occurredAt}>{date(item.occurredAt)}</time></li>)}</ul> : <p className="plan-callout">{t('No recorded activity yet. Complete your first action to start your history.')}</p>}{model.lastSyncedAt && <p className="plan-footnote">{t('Last saved activity')}: {date(model.lastSyncedAt)}</p>}</section> },
+    ]} />
+    <p className="plan-footnote">{t('Every stage uses your saved context and real TGPI activity. Progress is never invented.')}</p>
+  </div></main>;
 }

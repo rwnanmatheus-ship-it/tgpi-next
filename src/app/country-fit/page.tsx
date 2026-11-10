@@ -1,5 +1,6 @@
 import { localizeMetadata } from "@/lib/localization/metadata.server";
-import AreaHero from "@/components/ui/AreaHero";
+import PlanHero from "@/components/plan/PlanHero";
+import "@/components/plan/plan.css";
 import PersonalResearchContext from "@/components/profile/PersonalResearchContext";
 import Link from "next/link";
 import type { Metadata } from "next";
@@ -24,7 +25,13 @@ export default async function CountryFitPage({ searchParams }: { searchParams: P
   const context = { ...(savedContext ?? { primaryGoal: "study", budgetRange: "undecided", timeHorizon: "exploring", languages: [], profession: "", priorities: [] }), ...(requestedGoal ? { primaryGoal: requestedGoal } : {}) };
   const aliases = new Map(getAllCountries().map(c => [c.slug, c.name]));
   const countries = identities.map(c => ({ ...c, name: aliases.get(c.slug) ?? c.name })).sort((a, b) => a.name.localeCompare(b.name));
-  return <main className="ig-shell"><div className="ig-container"><AreaHero id="country-fit-title" eyebrow="TGPI / Your personal research plan" title={<><LocalizedText text={"Your ambition."} /><br /><LocalizedText text={"A practical next step."} /></>} description="Bring your goals, budget, languages and timeline into one research space. Understand the evidence, identify the gaps and prepare a plan you can act on." image="/images/cinematic-2026/country-research-1600.webp" /><GraphStatus state={state} /><PersonalResearchContext /><CountryFitWorkspace countries={countries} snapshot={state.snapshot} initialCountry={params.country ?? savedContext?.targetCountries[0]} initialContext={context} /><section className="ig-section ig-panel"><p className="ig-eyebrow"><LocalizedText text="Global Community" /></p><h2><LocalizedText text={"Give your research a human perspective."} /></h2><p className="ig-small"><LocalizedText text={"Explore experiences from people navigating international life. Your private budget, documents and questionnaire answers are never published to the community."} /></p><Link className="ig-link" href="/community"><LocalizedText text={"Explore Global Community →"} /></Link></section></div></main>;
+  return <main className="plan-shell"><div className="plan-container">
+    <PlanHero eyebrow="TGPI / Country Fit" title="Your ambition." accent="A practical next step." description="Connect your goals to evidence, compare possibilities and build a practical plan for your next chapter." asset="country-research"><div className="plan-actions"><a className="plan-button primary" href="#context"><LocalizedText text="Refine Country Fit" /> ↓</a><Link className="plan-button" href="/plan"><LocalizedText text="Open my connected plan" /> ↗</Link></div></PlanHero>
+    <CountryFitWorkspace countries={countries} snapshot={state.snapshot} initialCountry={params.country ?? savedContext?.targetCountries[0]} initialContext={context} ownerId={member?.id ?? "guest"} shortlist={savedContext?.targetCountries ?? []} />
+    {member && <details className="plan-panel plan-disclosure"><summary><LocalizedText text="Your connected profile" /></summary><PersonalResearchContext /></details>}
+    <details className="plan-panel plan-disclosure"><summary><LocalizedText text="Sources & methodology" /></summary><GraphStatus state={state} /></details>
+    <section className="plan-panel" style={{ marginTop: 20 }}><p className="plan-kicker"><LocalizedText text="Global Community" /></p><h2><LocalizedText text="Give your research a human perspective." /></h2><p><LocalizedText text="Explore experiences from people navigating international life. Your private budget, documents and questionnaire answers are never published to the community." /></p><div className="plan-links"><Link className="plan-button" href="/community"><LocalizedText text="Explore Global Community →" /></Link><Link className="plan-button" href="/atlas"><LocalizedText text="Ask Atlas" /> ↗</Link></div></section>
+  </div></main>;
 }
 
 export async function generateMetadata() { return localizeMetadata(sourceMetadata); }

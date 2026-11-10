@@ -1,6 +1,6 @@
 # Localization coverage and release validation
 
-The platform supports English, Brazilian Portuguese, Spanish, French, German and Italian. The November 2026 completion release contains 11,065 normalized public message keys, including 8,672 supplemental entries per language, and 1,691 protected assessment entries. Public interface, accessibility attributes, legal pages, authored course instructions, worked labs, practice explanations, API error presentation, community controls, workspace controls and learning downloads use the selected language. Authored content and UI strings were generated offline with the configured OpenAI key, then validated and supplemented with editorial corrections.
+The platform supports English, Brazilian Portuguese, Spanish, French, German and Italian. The November 2026 completion release contains 11,143 normalized public message keys, including 8,751 supplemental entries per language, and 1,691 protected assessment entries. Public interface, accessibility attributes, legal pages, authored course instructions, worked labs, practice explanations, API error presentation, community controls, workspace controls and learning downloads use the selected language. Authored content and UI strings were generated offline with the configured OpenAI key, then validated and supplemented with editorial corrections.
 
 ## Language change
 
@@ -16,7 +16,7 @@ Member names, conversations, posts, submissions, reviewer feedback, identifiers,
 
 - `npm run check:localization`: checks static TSX copy and accessible attributes across app, components and modules. Release result: zero missing candidates and zero registered literals bypassing the localization components.
 - `npm run test:localization`: checks all six dictionaries, placeholders, persistence, protected assessment boundaries, authored-content identity preservation and representative rendered journeys.
-- `npm run test:all`: 518 tests passed, including learning, billing, community, account, security and Atlas tests.
+- `npm run test:all`: 528 tests passed, including learning, billing, community, account, security and Atlas tests.
 - `npm run build`: production compile, type checking, page generation and the full test/audit prebuild gate.
 
 The literal audit is not a proof about every possible dynamic payload. Authored course data, downloadable material, protected assessments and API messages have separate inventories and runtime integration. Third-party interfaces and member-authored content are not treated as TGPI interface copy. Authenticated external services still require normal account access for end-to-end testing.
@@ -32,3 +32,7 @@ All 27 courses and 227 lesson/laboratory placements now have registered presenta
 Authorized assessment responses carry locale maps only for the current question set and already released feedback. Language changes update an active attempt without replacing answers, numerical input, notes or portfolio drafts. Persisted numerical cases are matched to their original template and keep their exact generated values; no question is regenerated for a language change. Correct choices, expected numerical answers and unreleased explanations remain server-only.
 
 The follow-up translation job used the existing key and only authored sources verified through unauthenticated reads of the published public repository. Estimated one-time provider usage: USD 0.83. It did not send learner records or credentials, and introduces no request-time translation or grading calls.
+
+## Concurrent personal-plan release
+
+Preserved the published personal-plan and Country Fit redesign while merging the academy translations. Shared message catalogs contain both sets of additions and use a new cache version. Plan tools, selected-goal roadmaps, current learning progress and private draft restoration remain connected.

@@ -196,7 +196,6 @@ export function buildGlobalWorkspaceModel(
       warning: "No fit score is published without sufficient evidence. Validate your legal route, local budget and personal requirements.",
     }));
   const countriesForComparison = countryFits
-    .slice(0, 3)
     .map((fit) => fit.country);
   const primaryCountry = countryFits[0]?.country;
   const compareHref = buildCompareHref(countriesForComparison, comparisonGoal);
@@ -249,11 +248,11 @@ export function buildGlobalWorkspaceModel(
   const progress: WorkspaceProgressItem[] = [
     { complete: Boolean(onboarding.primaryGoal), label: "Primary goal" },
     {
-      complete: onboarding.targetCountries.length > 0,
+      complete: selectedCountries.length > 0,
       label: "Country shortlist",
     },
     {
-      complete: Boolean(onboarding.timeHorizon && onboarding.budgetRange),
+      complete: Boolean(onboarding.timeHorizon && onboarding.timeHorizon !== "exploring" && onboarding.budgetRange && onboarding.budgetRange !== "undecided"),
       label: "Timeline and budget",
     },
     {
@@ -267,7 +266,7 @@ export function buildGlobalWorkspaceModel(
       label: "Decision priorities",
     },
   ];
-  const profileStatus: ActivationStatus = onboarding.completed
+  const profileStatus: ActivationStatus = progress.every((item) => item.complete)
     ? "completed"
     : progress.some((item) => item.complete)
       ? "in_progress"
@@ -369,8 +368,8 @@ export function buildGlobalWorkspaceModel(
       title: "Estimate monthly costs",
     },
     {
-      action: onboarding.completed ? "Review global profile" : "Complete profile",
-      description: onboarding.completed
+      action: profileStatus === "completed" ? "Review global profile" : "Complete profile",
+      description: profileStatus === "completed"
         ? "Your core plan is complete. Review it whenever your direction, budget or priorities change."
         : "Complete your goal, shortlist, timeline, context and priorities to improve every TGPI recommendation.",
       eyebrow: "Personalize",

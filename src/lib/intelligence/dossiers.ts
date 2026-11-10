@@ -119,5 +119,5 @@ export function reviewState(c: DossierClaim, now = new Date()): "reviewed" | "re
   if (c.effectiveUntil && day > c.effectiveUntil) return "expired";
   return now.getTime() - Date.parse(c.reviewedAt) > c.reviewDays * 86400000 ? "review-due" : "reviewed";
 }
-export function formatMoney(value: number, currency: Currency) { return new Intl.NumberFormat("en-US", { style: "currency", currency, currencyDisplay: "code", minimumFractionDigits: 0, maximumFractionDigits: currency === "JPY" ? 0 : 2 }).format(value); }
+export function formatMoney(value: number, currency: Currency, locale = "en-US") { return new Intl.NumberFormat(locale, { style: "currency", currency, currencyDisplay: "code", minimumFractionDigits: 0, maximumFractionDigits: currency === "JPY" ? 0 : 2 }).format(value); }
 export function formatReference(c: CostReference) { return `${formatMoney(c.low, c.currency)}${c.high !== c.low ? `–${formatMoney(c.high, c.currency)}` : ""} / ${c.periodMonths === 1 ? "month" : `${c.periodMonths} months`}`; }

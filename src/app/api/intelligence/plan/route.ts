@@ -22,7 +22,7 @@ export async function PATCH(request: Request) {
     const user = await client.users.getUser(session.userId);
     const previous = normalizeOnboardingData(user.unsafeMetadata.tgpiOnboarding);
     if (previous.targetCountries.length >= 5 && !previous.targetCountries.includes(payload.countrySlug)) return Response.json({ error: "Your five-country shortlist is full. Manage it in your profile before adding another destination." }, { status: 409 });
-    const onboarding = { ...previous, primaryGoal: context.primaryGoal, timeHorizon: context.timeHorizon, budgetRange: context.budgetRange, languages: context.languages, profession: context.profession, targetCountries: Array.from(new Set([payload.countrySlug, ...previous.targetCountries])), updatedAt: new Date().toISOString() };
+    const onboarding = { ...previous, primaryGoal: context.primaryGoal, timeHorizon: context.timeHorizon, budgetRange: context.budgetRange, languages: context.languages, profession: context.profession, priorities: Object.hasOwn(payload.context, "priorities") ? context.priorities : previous.priorities, targetCountries: Array.from(new Set([payload.countrySlug, ...previous.targetCountries])), updatedAt: new Date().toISOString() };
     await client.users.updateUserMetadata(session.userId, { unsafeMetadata: { tgpiOnboarding: onboarding, tgpiAccountProfile: {
       ...normalizeTgpiAccountProfile(user.unsafeMetadata.tgpiAccountProfile),
       profession: onboarding.profession, languages: onboarding.languages, updatedAt: onboarding.updatedAt,

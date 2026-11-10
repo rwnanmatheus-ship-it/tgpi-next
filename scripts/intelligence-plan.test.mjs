@@ -41,3 +41,16 @@ test("saving preserves unrelated fields, completion and existing countries", asy
 test("full shortlist is not silently truncated", async () => { const h = handler({ previous: { targetCountries: ["canada", "japan", "spain", "france", "italy"] } }); assert.equal((await h.patch(request())).status, 409); assert.equal(h.writes.length, 0); });
 test("client-provided account identifiers are ignored", async () => { const h = handler(); await h.patch(request({ countrySlug: "portugal", context, userId: "another-user" })); assert.equal(h.writes[0][0], "test-user"); });
 test("upstream failure returns failure without reporting a successful save", async () => { const h = handler({ fail: true }); const response = await h.patch(request()); assert.equal(response.status, 500); assert.equal(h.writes.length, 0); assert.match((await response.json()).error, /Unable to save/); });
+
+test('explicit priorities update while unrelated profile fields remain intact', async () => {
+ const h = handler({previous:{priorities:['safety'],educationLevel:'Degree',targetCountries:['canada']}});
+ assert.equal((await h.patch(request({countrySlug:'portugal',context:{...context,priorities:['career','cost','language']}}))).status,200);
+ const saved=h.writes[0][1].unsafeMetadata.tgpiOnboarding;
+ assert.deepEqual([...saved.priorities],['career','cost','language']);
+ assert.equal(saved.educationLevel,'Degree');
+});
+test('explicitly cleared priorities do not resurrect previous choices', async () => {
+ const h=handler({previous:{priorities:['safety']}});
+ await h.patch(request({countrySlug:'portugal',context:{...context,priorities:[]}}));
+ assert.equal(h.writes[0][1].unsafeMetadata.tgpiOnboarding.priorities.length,0);
+});
