@@ -31,6 +31,7 @@ function harness() {
     '@/lib/auth/guards': { requireApiUser: async () => { if (!signedIn) throw new AuthenticationError(); return identity; }, TgpiAuthenticationError: AuthenticationError },
     '@/lib/localization/server': { getLocale: async () => 'en' },
     '@/lib/localization/assessment.server': { assessmentTranslations: () => ({}) },
+    '@/lib/localization/academy-assessment.server': { withAcademyTranslations: status => status },
     '@/lib/localization/messages': { translate: (_locale, text) => text },
     'server-only': {}, '@/lib/firestore-admin-rest.server': backend,
     '@/lib/activation-store.server': { getUserActivationProgress: async () => ({ courseProgress: {} }) },

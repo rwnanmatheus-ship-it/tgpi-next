@@ -2,9 +2,7 @@ import { NextResponse } from 'next/server';
 import { requireApiUser, TgpiAuthenticationError } from '@/lib/auth/guards';
 import { FirestoreAdminError } from '@/lib/firestore-admin-rest.server';
 import { academyStatus, mutateAcademy, AcademyError } from '@/lib/learning/academy/service.server';
-import { getLocale } from '@/lib/localization/server';
-import { assessmentTranslations } from '@/lib/localization/assessment.server';
-import { translate } from '@/lib/localization/messages';
+import { withAcademyTranslations } from '@/lib/localization/academy-assessment.server';
 const headers = { 'Cache-Control': 'private, no-store, max-age=0', 'X-Content-Type-Options': 'nosniff', Vary: 'Cookie' };
 export const runtime = 'nodejs';
 function failure(error: unknown) {
@@ -14,14 +12,7 @@ function failure(error: unknown) {
   return NextResponse.json({ error: message }, { status, headers });
 }
 async function response(status: Awaited<ReturnType<typeof academyStatus>>, courseId: string) {
-  const locale = await getLocale();
-  // Translate only authored questions and feedback, never names, notes or signed records.
-  const languagePractice = ['global-english-2026', 'ingles-carreira-internacional'].includes(courseId);
-  const text = (value: string) => assessmentTranslations(value)[locale] ?? translate(locale, value);
-  return NextResponse.json({ ...status,
-    challenge: status.challenge ? { ...status.challenge, questions: status.challenge.questions.map(q => ({ ...q, prompt: text(q.prompt), options: q.options.map(o => ({ ...o, label: languagePractice ? o.label : text(o.label) })) })) } : null,
-    lastResult: status.lastResult ? { ...status.lastResult, feedback: status.lastResult.feedback.map(item => ({ ...item, explanation: text(item.explanation) })) } : null,
-  }, { headers });
+  return NextResponse.json(withAcademyTranslations(status, courseId), { headers });
 }
 export async function GET(_request: Request, context: { params: Promise<{ courseId: string }> }) {
   try { const identity = await requireApiUser(), { courseId } = await context.params; return await response(await academyStatus(identity, courseId), courseId); }

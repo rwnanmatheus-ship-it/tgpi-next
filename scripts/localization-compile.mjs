@@ -15,7 +15,7 @@ const tokens = value => (value.match(/\{\w+\}/g) ?? []).sort().join('|');
 const usage = { inputTokens: 0, outputTokens: 0, estimatedUsd: 0 };
 for (const path of paths) {
   const checkpoint = JSON.parse(fs.readFileSync(path, 'utf8'));
-  if (path.includes('assessment')) throw new Error('Protected assessment translations cannot enter public catalogs.');
+  if (/assessment|protected/i.test(path) || checkpoint.scope === 'assessment') throw new Error('Protected assessment translations cannot enter public catalogs.');
   usage.inputTokens += checkpoint.inputTokens; usage.outputTokens += checkpoint.outputTokens; usage.estimatedUsd += checkpoint.estimatedUsd;
   for (const [raw, values] of Object.entries(checkpoint.entries)) {
     const key = decode(raw);

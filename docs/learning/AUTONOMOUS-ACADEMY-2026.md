@@ -39,7 +39,7 @@ The certificate states course completion and objective automatic assessment. It 
 
 ## Language and content scope
 
-New interface controls and status/catalog labels have six-language entries. Existing translated foundation lessons and protected question translations remain available. New laboratories and newly authored case questions are English source content, disclosed on the course overview and laboratory view. Target-language exercises retain the language being taught. This expansion does not claim that all new curriculum prose has been translated into six languages.
+Interface controls, all assembled course curricula, the 81 distinct new laboratories, assessment prompts, choice labels, feedback and numerical case instructions have six-language entries. Composite foundation sections retain separate translation boundaries. Target-language utterances and answer choices in English courses retain the language being taught. Active assessments use authorized locale maps so switching language preserves drafts, answers, attempt identifiers and generated numerical values. The localization regression suite checks all 27 assembled curricula and their assessment banks.
 
 Fictional cases avoid asserting current destination-specific visa, tax, healthcare or employment rules. Learners are directed to verify current official requirements before real decisions. Practice documents should use fictional or redacted information.
 

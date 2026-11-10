@@ -5,7 +5,7 @@ import { professionalCourseDrafts } from '@/data/courses/professional';
 import { professionalWorkedLabs } from '@/data/courses/professional/worked-labs';
 import { professionalQuestionBank } from '@/data/courses/professional/assessment-bank.server';
 import { courseArtwork } from '@/lib/cinematic-art';
-import type { AcademyCourse, AcademyLab, AcademyLesson, AcademyPrivateQuestion, CaseSpec } from '@/lib/learning/academy/types';
+import type { AcademyCourse, AcademyLab, AcademyLesson, AcademyPrivateQuestion, AcademySection, CaseSpec } from '@/lib/learning/academy/types';
 import { mobilityLabs } from './mobility';
 import { workLabs } from './work';
 import { technologyLabs } from './technology';
@@ -22,7 +22,9 @@ const plannedFoundations: Record<string, AcademyLab[]> = {
 };
 const courseMap = new Map<string, AcademyCourse>();
 const banks = new Map<string, AcademyPrivateQuestion[]>();
-const section = (title: string, body: string) => ({ title, body });
+const section = (title: string, body: string, presentation: Partial<Omit<AcademySection, 'title' | 'body'>> = {}): AcademySection => ({ title, body, ...presentation });
+const lines = (title: string, parts: Array<{ text: string; preserve?: boolean }>, preserveTitle = false): AcademySection =>
+  section(title, parts.map(part => part.text).join('\n'), { bodyParts: parts, preserveTitle });
 const references: Record<string, string[]> = {
   'python-automacao-profissionais': ['https://docs.python.org/3/library/csv.html', 'https://docs.python.org/3/library/unittest.html'],
   'analise-dados-power-bi-ia': ['https://learn.microsoft.com/en-us/power-bi/guidance/star-schema'],
@@ -49,13 +51,14 @@ for (const [id, additions] of Object.entries(labs)) {
   const questions: AcademyPrivateQuestion[] = [];
   let base: AcademyLesson[] = [];
   if (old) base = old.modules.flatMap(m => m.lessons).map(lesson => {
+    const languagePractice = id === 'global-english-2026';
     questions.push({ id: `${lesson.id}-checkpoint`, lessonId: lesson.id, prompt: lesson.checkpoint.prompt,
       options: lesson.checkpoint.options, correctOptionId: lesson.checkpoint.correctOptionId, explanation: lesson.checkpoint.explanation, essential: true });
     return { id: lesson.id, title: lesson.title, objective: lesson.objective, minutes: lesson.durationMinutes, foundation: true,
       sections: [section('Scenario', lesson.scenario), section('Core lesson', lesson.summary),
-        ...lesson.dialogue.map(line => section(line.speaker, line.line)),
-        ...lesson.keyPhrases.map(phrase => section(phrase.phrase, `${phrase.meaning}\n${phrase.example}`)),
-        section('Common mistake', `${lesson.commonMistake.avoid}\n${lesson.commonMistake.reason}\n${lesson.commonMistake.useInstead}`),
+        ...lesson.dialogue.map(line => section(line.speaker, line.line, { preserveTitle: languagePractice, preserveBody: languagePractice })),
+        ...lesson.keyPhrases.map(phrase => lines(phrase.phrase, [{ text: phrase.meaning }, { text: phrase.example, preserve: languagePractice }], languagePractice)),
+        lines('Common mistake', [{ text: lesson.commonMistake.avoid, preserve: languagePractice }, { text: lesson.commonMistake.reason }, { text: lesson.commonMistake.useInstead, preserve: languagePractice }]),
         ...lesson.coachNotes.map(body => section('Practice guidance', body))],
       practice: [lesson.practiceTask.prompt, lesson.practiceTask.instruction], deliverable: lesson.practiceTask.title, references: [] };
   });
@@ -67,7 +70,7 @@ for (const [id, additions] of Object.entries(labs)) {
       questions.push({ ...q, id: `${lesson.id}-checkpoint`, lessonId: lesson.id });
       return { id: lesson.id, title: lesson.title, objective: lesson.objective, foundation: true, minutes: 45,
         sections: [section('Core lesson', lesson.explanation), section('Worked example', lesson.workedExample), section('Applied laboratory', professionalWorkedLabs[id]?.[i] || lesson.workedExample),
-          section('Success criteria', lesson.successCriteria.join('\n')), section('Common mistakes', lesson.commonErrors.join('\n')), section('Recovery practice', lesson.recovery)],
+          lines('Success criteria', lesson.successCriteria.map(text => ({ text }))), lines('Common mistakes', lesson.commonErrors.map(text => ({ text }))), section('Recovery practice', lesson.recovery)],
         practice: [lesson.guidedPractice, lesson.independentPractice], deliverable: lesson.objective, references: lesson.referenceUrls.length ? lesson.referenceUrls : references[id] ?? [] };
     });
   }
@@ -77,6 +80,7 @@ for (const [id, additions] of Object.entries(labs)) {
   const portfolioMinutes = 90, assessmentMinutes = 60;
   courseMap.set(id, { id, version: ACADEMY_VERSION, title: old?.title ?? pro?.title ?? overview?.title ?? id,
     description: old?.description ?? overview?.desc ?? pro?.outcomes.join(' ') ?? '', outcomes: old?.outcomes ?? pro?.outcomes ?? overview?.benefits ?? [],
+    ...(!old && !overview?.desc && pro ? { descriptionParts: pro.outcomes } : {}),
     lessons, portfolioMinutes, assessmentMinutes, minutes: lessons.reduce((sum, l) => sum + l.minutes, 0) + portfolioMinutes + assessmentMinutes,
     language: pro ? 'pt-BR / en' : 'en', image: overview?.image ?? courseArtwork(id),
     ...(old ? { legacyHref: `/courses/${id}/lessons/${old.modules[0].lessons[0].id}` } : pro ? { legacyHref: `/courses/${id}/history` } : {}),
