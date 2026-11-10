@@ -32,7 +32,29 @@ async function CountryResearch({ filters }: { filters: Filters }) {
 export default async function CountriesPage({ searchParams }: { searchParams?: Promise<Filters> }) {
   const filters = await searchParams ?? {};
   return <main className="ig-shell country-studio"><div className="ig-container">
-    <header className="country-explorer-hero country-hero-v4"><div className="country-hero-copy"><p className="ig-eyebrow"><LocalizedText text="TGPI / Country Intelligence" /></p><h1><LocalizedText text="Your world." /><br /><em><LocalizedText text="Your next move." /></em></h1><p><LocalizedText text="Explore 195 destinations. Build a shortlist, understand the evidence and shape your own international plan." /></p><div className="ig-actions"><a className="ig-button" href="#country-explorer"><LocalizedText text="Find a destination ↓" /></a><Link className="ig-link" href="/country-fit"><LocalizedText text="My Country Fit →" /></Link></div></div><div className="country-hero-art"><Image src="/images/cinematic-2026/country-research-1600.webp" alt="Global country intelligence observatory with an illuminated world atlas and international architecture" fill sizes="(max-width: 767px) 100vw, 60vw" priority quality={88} /><div className="country-hero-caption"><strong>195</strong><span><LocalizedText text="destinations. One connected journey." /></span></div></div></header>
+    <header className="country-explorer-hero country-hero-v4">
+      <div className="country-hero-copy">
+        <p className="ig-eyebrow"><LocalizedText text="TGPI / Country Intelligence" /></p>
+        <h1><LocalizedText text="Your world." /><br /><em><LocalizedText text="Your next move." /></em></h1>
+        <p><LocalizedText text="Explore 195 destinations. Build a shortlist, understand the evidence and shape your own international plan." /></p>
+        <div className="ig-actions">
+          <a className="ig-button" href="#country-explorer"><LocalizedText text="Find a destination ↓" /></a>
+          <Link className="ig-link" href="/country-fit"><LocalizedText text="My Country Fit →" /></Link>
+        </div>
+      </div>
+      <div className="country-hero-art">
+        {/* Decorative conceptual cityscape; individual country photographs remain in the explorer. */}
+        <Image
+          src="/images/cinematic-2026/countries-coastal-horizon-v1.webp"
+          alt=""
+          fill
+          sizes="(max-width: 767px) 100vw, (max-width: 1399px) 50vw, 640px"
+          preload
+          quality={88}
+        />
+        <div className="country-hero-caption"><strong>195</strong><span><LocalizedText text="destinations. One connected journey." /></span></div>
+      </div>
+    </header>
     <nav className="country-journey-links"><Link href="/compare"><span>01</span><LocalizedText text="Compare countries" /> ↗</Link><Link href="/country-fit"><span>02</span><LocalizedText text="Country Fit" /> ↗</Link><Link href="/plan"><span>03</span><LocalizedText text="My Plan" /> ↗</Link><Link href="/intelligence"><span>04</span><LocalizedText text="Sources & methodology" /> ↗</Link></nav>
     <Suspense fallback={<ResearchLoading />}><CountryResearch filters={filters} /></Suspense>
     <section className="ig-section ig-panel"><p className="ig-eyebrow"><LocalizedText text="Responsible intelligence" /></p><h2><LocalizedText text="Coverage is not completeness." /></h2><p className="ig-small"><LocalizedText text={"Every country has a UNSD identity reference. Statistical coverage varies by indicator, country and year. A source-linked statistic does not verify a visa route, living budget or personal fit. Unsupported legacy country ratings have been removed from this research experience."} /></p><Link href="/intelligence" className="ig-link"><LocalizedText text="Read our methodology and limitations →" /></Link></section>
