@@ -71,6 +71,10 @@ export class FirestoreAdminError extends Error {
   }
 }
 
+export function isFirestoreQuotaError(error: unknown) {
+  return error instanceof FirestoreAdminError && (error.code === "RESOURCE_EXHAUSTED" || error.status === 429);
+}
+
 function getConfig() {
   return {
     clientEmail: process.env.TGPI_FIREBASE_CLIENT_EMAIL?.trim() || "",

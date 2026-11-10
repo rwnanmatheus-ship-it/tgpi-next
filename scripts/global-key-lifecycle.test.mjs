@@ -14,10 +14,14 @@ const keyId = "TGPI-0000-0000-0001";
 const secret = "a dedicated global identity fixture key";
 const issuedAt = "2026-09-08T10:00:00.000Z";
 
-function loadServer(name, services, environment, clock) {
-  const source = readFileSync(new URL(`../src/lib/${name}.ts`, import.meta.url), "utf8");
+function loadServer(path, services, environment, clock) {
+  const source = readFileSync(new URL(`../src/${path}`, import.meta.url), "utf8");
   const code = ts.transpileModule(source, {
-    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
+    compilerOptions: {
+      module: ts.ModuleKind.CommonJS,
+      target: ts.ScriptTarget.ES2022,
+      ...(path.endsWith(".tsx") ? { jsx: ts.JsxEmit.ReactJSX } : {}),
+    },
   }).outputText;
   const exports = {};
   new Function("require", "exports", "process", "Date", "console", code)(dependency => {
@@ -82,7 +86,7 @@ function setup({ legacy, environment = {} } = {}) {
     "@clerk/nextjs/server": { clerkClient: async () => ({ users: { getUser: async () => user } }) },
   };
 
-  const load = name => loadServer(name, services, environment, TestClock);
+  const load = name => loadServer(`lib/${name}.ts`, services, environment, TestClock);
   services["@/lib/global-key-ledger.server"] = load("global-key-ledger.server");
   const identity = services["@/lib/global-key.server"] = load("global-key.server");
   const grants = load("global-key-share.server");
@@ -147,4 +151,38 @@ test("preview cannot issue or rotate live identity ledger records", async () => 
   await assert.rejects(identity.rotateUserGlobalKey(uid, 1), /temporarily unavailable/);
   await assert.rejects(grants.createGlobalKeyShare(uid, 1, 1), /temporarily unavailable/);
   assert.equal(docs.size, 0);
+});
+
+test("the authenticated ID route preserves the member number during Firestore quota exhaustion", async () => {
+  const { FirestoreAdminError, isFirestoreQuotaError } = loadServer("lib/firestore-admin-rest.server.ts", {
+    "server-only": {}, "node:crypto": {},
+  }, {}, Date);
+  const quotaState = () => {};
+  const jsx = (type, props) => ({ type, props });
+  const secondaryRead = () => assert.fail("An identity outage should skip optional storage reads");
+  let error = new FirestoreAdminError("Quota exceeded.", 429, "RESOURCE_EXHAUSTED");
+  const page = loadServer("app/global-key/page.tsx", {
+    "react/jsx-runtime": { jsx },
+    "@clerk/nextjs/server": { currentUser: secondaryRead },
+    "next/headers": { headers: async () => new Headers() },
+    "@/components/profile/GlobalKeyCenter": {},
+    "@/components/profile/GlobalKeyQuotaState": { default: quotaState },
+    "@/lib/account-profile": {},
+    "@/lib/auth/guards": { requireUser: async () => ({ userId: uid }), formatTgpiGlobalId: () => keyId },
+    "@/lib/certificate-presentation": {},
+    "@/lib/credential-signing.server": {},
+    "@/lib/firestore-admin-rest.server": { isFirestoreQuotaError, isLearningStorageConfigured: secondaryRead },
+    "@/lib/global-key-credentials.server": { getCredentialShowcase: secondaryRead },
+    "@/lib/global-key-ledger.server": { canMutateGlobalKey: secondaryRead },
+    "@/lib/global-key-share.server": { listGlobalKeyShares: secondaryRead },
+    "@/lib/global-key.server": { getOrCreateGlobalKey: async () => { throw error; } },
+    "@/lib/learning-records.server": { listUserLearningCredentials: secondaryRead },
+    "@/lib/learning/unified-progress.server": { loadLearningSummary: secondaryRead },
+    "@/lib/localization/metadata.server": {},
+    "@/lib/members/identity.server": { getMemberIdentity: secondaryRead },
+  }, {}, Date);
+
+  assert.deepEqual(await page.default(), { type: quotaState, props: { keyId } });
+  error = new FirestoreAdminError("Permission denied.", 403, "PERMISSION_DENIED");
+  await assert.rejects(page.default(), error);
 });

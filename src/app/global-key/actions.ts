@@ -2,6 +2,7 @@
 
 import { auth } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
+import { isFirestoreQuotaError } from "@/lib/firestore-admin-rest.server";
 import { saveCredentialShowcase } from "@/lib/global-key-credentials.server";
 import { GlobalKeyIntegrityError } from "@/lib/global-key-crypto";
 import { canMutateGlobalKey } from "@/lib/global-key-ledger.server";
@@ -18,6 +19,7 @@ async function withIdentityOwner<T>(operation: (uid: string) => Promise<T>) {
     return { ok: true as const, value: await operation(userId) };
   } catch (error) {
     if (error instanceof GlobalKeyIntegrityError) return { ok: false as const, error: error.message };
+    if (isFirestoreQuotaError(error)) return { ok: false as const, error: "Identity storage is temporarily unavailable." };
     console.error("Global ID operation failed", { errorName: error instanceof Error ? error.name : "UnknownError" });
     return { ok: false as const, error: "The identity update could not be completed." };
   }

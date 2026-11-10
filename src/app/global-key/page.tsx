@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import { currentUser } from "@clerk/nextjs/server";
 import { headers } from "next/headers";
 import GlobalKeyCenter from "@/components/profile/GlobalKeyCenter";
+import GlobalKeyQuotaState from "@/components/profile/GlobalKeyQuotaState";
 import { normalizeTgpiAccountProfile } from "@/lib/account-profile";
-import { requireUser } from "@/lib/auth/guards";
+import { formatTgpiGlobalId, requireUser } from "@/lib/auth/guards";
 import { CERTIFICATE_ORIGIN } from "@/lib/certificate-presentation";
 import { verifyLearningCredentialIntegrity } from "@/lib/credential-signing.server";
-import { isLearningStorageConfigured } from "@/lib/firestore-admin-rest.server";
+import { isFirestoreQuotaError, isLearningStorageConfigured } from "@/lib/firestore-admin-rest.server";
 import { getCredentialShowcase } from "@/lib/global-key-credentials.server";
 import { canMutateGlobalKey } from "@/lib/global-key-ledger.server";
 import { listGlobalKeyShares } from "@/lib/global-key-share.server";
@@ -32,10 +33,15 @@ function getRequestOrigin(requestHeaders: Headers) {
 
 export default async function GlobalKeyPage() {
   const [{ userId }, requestHeaders] = await Promise.all([requireUser(), headers()]);
+  const key = await getOrCreateGlobalKey(userId).catch((error: unknown) => {
+    if (isFirestoreQuotaError(error)) return null;
+    throw error;
+  });
+  if (!key) return <GlobalKeyQuotaState keyId={formatTgpiGlobalId(userId)} />;
+
   const storage = isLearningStorageConfigured();
   const canManage = canMutateGlobalKey();
-  const [key, member, [records, progress, links, showcase, profileIdentity]] = await Promise.all([
-    getOrCreateGlobalKey(userId),
+  const [member, [records, progress, links, showcase, profileIdentity]] = await Promise.all([
     currentUser(),
     Promise.allSettled([
       storage ? listUserLearningCredentials(userId) : Promise.resolve(null),
