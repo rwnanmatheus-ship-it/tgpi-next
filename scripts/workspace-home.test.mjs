@@ -202,3 +202,56 @@ test("workspace membership displays confirmed plans and stays neutral during a b
   assert.equal(await getAccountMembershipLabel(identity), "Premium Preview");
   assert.deepEqual(reads, Array(4).fill(identity.uid));
 });
+
+function loadWorkspaceComponent(path, dependencies, browserWindow) {
+  const source = readFileSync(new URL(path, import.meta.url), "utf8");
+  const { outputText } = ts.transpileModule(source, {
+    compilerOptions: {
+      module: ts.ModuleKind.CommonJS,
+      target: ts.ScriptTarget.ES2022,
+      jsx: ts.JsxEmit.ReactJSX,
+      esModuleInterop: true,
+    },
+  });
+  const exports = {};
+  new Function("require", "exports", "window", outputText)((id) => {
+    if (id === "react/jsx-runtime") return require(id);
+    assert.ok(Object.hasOwn(dependencies, id), `Unexpected import: ${id}`);
+    return dependencies[id];
+  }, exports, browserWindow);
+  return exports.default;
+}
+
+test("workspace entries request a fresh document and keep link attributes", () => {
+  const NextLink = () => null;
+  const NavigationLink = loadWorkspaceComponent("../src/components/navigation/NavigationLink.tsx", {
+    "next/link": NextLink,
+  });
+  const onClick = () => {};
+  for (const href of ["/profile", "/profile/?onboarding=completed", "/profile/security#settings-identity", "/dashboard"]) {
+    const link = NavigationLink({ href, "aria-current": "page", onClick, prefetch: false });
+    assert.equal(link.type, "a", href);
+    assert.equal(link.props.href, href);
+    assert.equal(link.props.onClick, onClick);
+    assert.equal(link.props["aria-current"], "page");
+    assert.equal(Object.hasOwn(link.props, "prefetch"), false);
+  }
+  for (const href of ["/countries?return_to=/profile", "/profiles", "/sign-up"]) {
+    const link = NavigationLink({ href, prefetch: false });
+    assert.equal(link.type, NextLink, href);
+    assert.equal(link.props.prefetch, false);
+  }
+});
+
+test("workspace recovery reloads the current document instead of retrying the failed server render", () => {
+  let reloads = 0;
+  const WorkspaceError = loadWorkspaceComponent("../src/app/profile/error.tsx", {
+    "@/components/localization/LocaleProvider": { useLocale: () => ({ t: (key) => key }) },
+  }, { location: { reload: () => { reloads += 1; } } });
+
+  const error = WorkspaceError();
+  const button = error.props.children.find((element) => element.type === "button");
+  assert.equal(button.props.children, "Retry workspace");
+  button.props.onClick();
+  assert.equal(reloads, 1);
+});

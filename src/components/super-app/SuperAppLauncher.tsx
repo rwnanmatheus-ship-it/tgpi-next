@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import NavigationLink from "@/components/navigation/NavigationLink";
 import { usePathname } from 'next/navigation';
 import { useEffect, useRef, useState, type KeyboardEvent } from 'react';
 import { useLocale , LocalizedText } from '@/components/localization/LocaleProvider';
@@ -79,7 +80,7 @@ export default function SuperAppLauncher() {
     <label className={styles.search} htmlFor="tgpi-super-app-search"><NavigationIcon name="search" /><span className="sr-only">{t('Search countries, tools or actions')}</span><input id="tgpi-super-app-search" ref={searchRef} type="search" value={query} autoComplete="off" placeholder={t('Country, capital, tool or action…')} onChange={event => setQuery(event.target.value)} /><kbd aria-hidden="true"><LocalizedText text={"Esc"} /></kbd></label>
     <div className={styles.results}>
       <p className={styles.status} role="status">{search ? t('{tools} tools · {countries} countries found', { tools: modules.length, countries: countryResults.length }) : t('Search across the connected TGPI system.')}</p>
-      {modules.length > 0 ? <nav aria-label={t('Tools')}><h3>{t('Tools')}</h3>{modules.map(module => <Link key={module.id} data-command-result href={module.href} prefetch={false} aria-current={isSuperAppRouteActive(pathname,module) ? 'page' : undefined} onClick={close}><span className={styles.icon}><NavigationIcon name={getSuperAppIconName(module.id)} /></span><span><strong>{t(module.shortLabel)}</strong><small>{t(module.description)}</small></span><NavigationIcon name="arrow" width={16} height={16} /></Link>)}</nav> : null}
+      {modules.length > 0 ? <nav aria-label={t('Tools')}><h3>{t('Tools')}</h3>{modules.map(module => <NavigationLink key={module.id} data-command-result href={module.href} prefetch={false} aria-current={isSuperAppRouteActive(pathname,module) ? 'page' : undefined} onClick={close}><span className={styles.icon}><NavigationIcon name={getSuperAppIconName(module.id)} /></span><span><strong>{t(module.shortLabel)}</strong><small>{t(module.description)}</small></span><NavigationIcon name="arrow" width={16} height={16} /></NavigationLink>)}</nav> : null}
       {countryResults.length > 0 ? <nav aria-label={t('Countries')}><h3>{t('Countries')}</h3>{countryResults.map(country => <Link key={country.slug} data-command-result href={`/countries/${country.slug}`} prefetch={false} onClick={close}><span className={styles.icon} aria-hidden="true">{country.emoji}</span><span><strong>{country.name}</strong><small><LocalizedText text={country.capital} /> · <LocalizedText text={country.region} /></small></span><NavigationIcon name="arrow" width={16} height={16} /></Link>)}</nav> : null}
       {loadState === 'loading' ? <p className={styles.status} role="status">{t('Connecting to TGPI intelligence…')}</p> : null}
       {loadState === 'error' ? <div className={styles.empty}><p>{t('Country intelligence is temporarily unavailable. App search remains active.')}</p><button type="button" onClick={() => setRetry(value => value + 1)}>{t('Reconnect country intelligence')}</button></div> : null}

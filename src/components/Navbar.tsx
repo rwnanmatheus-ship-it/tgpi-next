@@ -5,6 +5,7 @@ import { useLocale } from "@/components/localization/LocaleProvider";
 import { Show } from "@clerk/nextjs";
 import TgpiAccountMenu from "@/components/profile/TgpiAccountMenu";
 import Link from "next/link";
+import NavigationLink from "@/components/navigation/NavigationLink";
 import { usePathname } from "next/navigation";
 import NotificationBell from "@/components/NotificationBell";
 import BrandSignature from "@/components/navigation/BrandSignature";
@@ -51,10 +52,10 @@ export default function Navbar() {
 
           <Show when="signed-in">
             <NotificationBell />
-            <Link href="/profile" aria-label={t("Open your TGPI workspace")} title={t("Your personal workspace")} className="tgpi-navigation-workspace-button">
+            <NavigationLink href="/profile" aria-label={t("Open your TGPI workspace")} title={t("Your personal workspace")} className="tgpi-navigation-workspace-button">
               <NavigationIcon name="key" width={18} height={18} />
               <span className="tgpi-workspace-label">{t("Workspace")}</span>
-            </Link>
+            </NavigationLink>
             <TgpiAccountMenu />
           </Show>
 

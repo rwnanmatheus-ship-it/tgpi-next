@@ -8,6 +8,7 @@ import LanguageSelector from "@/components/localization/LanguageSelector";
 
 import { announceProgressSaved } from "@/lib/progress-sync";
 import Link from "next/link";
+import NavigationLink from "@/components/navigation/NavigationLink";
 import MemberIdentityEditor from './MemberIdentityEditor';
 import MemberExportCenter from './MemberExportCenter';
 import MemberDirectory from './MemberDirectory';
@@ -853,7 +854,7 @@ export default function TgpiAccountCenter({
     <div className="tgpi-settings-v2 mx-auto max-w-[1500px]">
       <header className="tgpi-account-heading mb-5 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div><p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#8B6416]"><LocalizedText text={"TGPI Global Key"} /></p><h1 className="mt-2 font-[var(--tgpi-font-display)] text-4xl font-semibold tracking-[-0.045em] text-[var(--tgpi-navy-raised)] sm:text-5xl"><LocalizedText text={"Settings"} /></h1><p className="mt-2 text-sm text-[#6E7784]"><LocalizedText text={"Your identity, preferences and security in one connected app."} /></p></div>
-        <Link className="inline-flex min-h-11 items-center justify-center rounded-xl border border-[#D6D0C4] bg-white px-4 text-xs font-extrabold text-[var(--tgpi-navy-raised)] transition hover:border-[var(--tgpi-gold-hover)]" href="/profile"><LocalizedText text={"Back to workspace"} /></Link>
+        <NavigationLink className="inline-flex min-h-11 items-center justify-center rounded-xl border border-[#D6D0C4] bg-white px-4 text-xs font-extrabold text-[var(--tgpi-navy-raised)] transition hover:border-[var(--tgpi-gold-hover)]" href="/profile"><LocalizedText text={"Back to workspace"} /></NavigationLink>
       </header>
 
       <div className="overflow-clip rounded-[30px] border border-[var(--tgpi-border)] bg-white shadow-[0_28px_80px_rgba(11,31,58,0.1)] lg:grid lg:grid-cols-[270px_minmax(0,1fr)]">

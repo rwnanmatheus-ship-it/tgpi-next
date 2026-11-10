@@ -2,6 +2,7 @@
 import LanguageSelector from "@/components/localization/LanguageSelector";
 import { useLocale , LocalizedText } from "@/components/localization/LocaleProvider";
 import Link from "next/link";
+import NavigationLink from "@/components/navigation/NavigationLink";
 import BrandCrest from "@/components/BrandCrest";
 
 const footerGroups = [
@@ -59,7 +60,7 @@ export default function GlobalFooter() {
             <p className="font-medium text-[clamp(1.875rem,3.6vw,3.125rem)] leading-[1.16] tracking-[-0.035em] text-[#F5F0E5]">{t("A wider world.")}<br /><span className="bg-[linear-gradient(110deg,#B8914F,#F6E5B8_45%,#C9A35B)] bg-clip-text text-transparent">{t("A more considered life.")}</span></p>
             <p className="mt-4 max-w-lg text-sm leading-6 text-[#B7C7D9]">{t("The perspective to choose. The knowledge to prepare. The confidence to move forward.")}</p>
           </div>
-          <Link href="/dashboard" className="group inline-flex min-h-12 w-fit items-center gap-5 rounded-full border border-[#D4B36E]/50 bg-[linear-gradient(120deg,rgba(212,179,110,0.17),rgba(212,179,110,0.04))] px-6 py-3 text-sm font-semibold text-[#F1D796] shadow-[inset_0_1px_0_rgba(255,244,211,0.14),0_8px_30px_rgba(0,0,0,0.18)] transition-colors hover:border-[#F1D796] hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#F1D796]">{t("Enter your workspace")}<span aria-hidden="true">↗</span></Link>
+          <NavigationLink href="/profile" className="group inline-flex min-h-12 w-fit items-center gap-5 rounded-full border border-[#D4B36E]/50 bg-[linear-gradient(120deg,rgba(212,179,110,0.17),rgba(212,179,110,0.04))] px-6 py-3 text-sm font-semibold text-[#F1D796] shadow-[inset_0_1px_0_rgba(255,244,211,0.14),0_8px_30px_rgba(0,0,0,0.18)] transition-colors hover:border-[#F1D796] hover:bg-white/10 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#F1D796]">{t("Enter your workspace")}<span aria-hidden="true">↗</span></NavigationLink>
         </div>
         <div className="grid gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,2fr)] lg:gap-12">
           <div className="min-w-0">
@@ -78,7 +79,7 @@ export default function GlobalFooter() {
             <div key={t(title)} className="min-w-0">
               <h2 style={{ fontFamily: "var(--tgpi-font-sans)", fontSize: "0.875rem", fontWeight: 600, lineHeight: 1.5, letterSpacing: "0.015em" }} className="mb-3 text-[#E5C887]">{t(title)}</h2>
               <ul>
-                {links.map(([label, href]) => <li key={href}><Link href={href} prefetch={false} className={linkStyle}>{t(label)}</Link></li>)}
+                {links.map(([label, href]) => <li key={href}><NavigationLink href={href} prefetch={false} className={linkStyle}>{t(label)}</NavigationLink></li>)}
               </ul>
             </div>
           ))}

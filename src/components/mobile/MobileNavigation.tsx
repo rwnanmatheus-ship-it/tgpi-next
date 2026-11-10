@@ -3,7 +3,7 @@ import LanguageSelector from '@/components/localization/LanguageSelector';
 import { useLocale } from '@/components/localization/LocaleProvider';
 import { Show } from '@clerk/nextjs';
 import NotificationBell from '@/components/NotificationBell';
-import Link from 'next/link';
+import NavigationLink from "@/components/navigation/NavigationLink";
 import { usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import LauncherButton from '@/components/navigation/LauncherButton';
@@ -26,5 +26,5 @@ export default function MobileNavigation() {
     return () => { viewport?.removeEventListener('resize', update); document.removeEventListener('focusin', update); document.removeEventListener('focusout', update); };
   }, []);
   return <><header className="tgpi-mobile tgpi-compact-topbar" aria-label={t('TGPI compact navigation')} data-navigation-version="2"><BrandSignature compact /><div className="tgpi-compact-actions"><LanguageSelector compact /><Show when="signed-in"><NotificationBell /></Show><LauncherButton compact /></div></header>
-    {!isFocusedMobileRoute(pathname) ? <nav className="tgpi-mobile tgpi-compact-dock" aria-label={t('Mobile primary navigation')} data-keyboard={keyboardOpen ? 'open' : 'closed'}>{COMPACT_NAVIGATION.map(destination => <Link key={destination.id} href={destination.href} aria-current={isNavigationDestinationActive(pathname,destination) ? 'page' : undefined}><span className="tgpi-compact-dock-icon"><NavigationIcon name={destination.icon} width={22} height={22} /></span><span>{t(destination.shortLabel)}</span></Link>)}</nav> : null}</>;
+    {!isFocusedMobileRoute(pathname) ? <nav className="tgpi-mobile tgpi-compact-dock" aria-label={t('Mobile primary navigation')} data-keyboard={keyboardOpen ? 'open' : 'closed'}>{COMPACT_NAVIGATION.map(destination => <NavigationLink key={destination.id} href={destination.href} aria-current={isNavigationDestinationActive(pathname,destination) ? 'page' : undefined}><span className="tgpi-compact-dock-icon"><NavigationIcon name={destination.icon} width={22} height={22} /></span><span>{t(destination.shortLabel)}</span></NavigationLink>)}</nav> : null}</>;
 }

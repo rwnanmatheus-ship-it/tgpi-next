@@ -1,7 +1,21 @@
 'use client';
 
 import { useLocale } from '@/components/localization/LocaleProvider';
-export default function WorkspaceError({ retry }: { retry: () => void }) {
+
+export default function WorkspaceError() {
   const { t } = useLocale();
-  return <main className="mx-auto max-w-3xl px-6 py-16"><h1 className="text-3xl font-semibold">{t("Your workspace could not be loaded.")}</h1><p className="my-5">{t("Check your connection and retry. Your saved activity has not been changed.")}</p><button className="min-h-11 rounded-xl bg-[#0B2137] px-5 py-3 text-white focus-visible:outline-2 focus-visible:outline-offset-4" onClick={retry}>{t("Retry workspace")}</button></main>;
+
+  return (
+    <main className="mx-auto max-w-3xl px-6 py-16">
+      <h1 className="text-3xl font-semibold">{t("Your workspace could not be loaded.")}</h1>
+      <p className="my-5">{t("Check your connection and retry. Your saved activity has not been changed.")}</p>
+      <button
+        type="button"
+        className="min-h-11 rounded-xl bg-[#0B2137] px-5 py-3 text-white focus-visible:outline-2 focus-visible:outline-offset-4"
+        onClick={() => window.location.reload()}
+      >
+        {t("Retry workspace")}
+      </button>
+    </main>
+  );
 }

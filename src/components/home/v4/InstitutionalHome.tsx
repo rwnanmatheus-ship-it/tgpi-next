@@ -1,4 +1,5 @@
 import Link from "next/link";
+import NavigationLink from "@/components/navigation/NavigationLink";
 import { coursesOverview } from "@/data/courses-overview";
 import { academyManifest } from "@/data/courses/academy/manifest";
 import { HOME_FAQ, HOME_ROUTES as routes } from "@/lib/home-content";
@@ -49,7 +50,7 @@ export default function InstitutionalHome() {
         </div>
         <div className={styles.heroVisual}>
           <div className={styles.heroPhoto}><CinematicImage asset="global-horizon" alt="TGPI conceptual editorial image: preparing for international life" priority sizes="(max-width: 1023px) 94vw, 52vw" position="60% center" /><div className={styles.heroImageLabel}><span>{t("THE WORLD IS YOUR NEXT CHAPTER")}</span><span aria-hidden="true">↗</span></div></div>
-          <div className={styles.heroDock}><div><span className={styles.statusDot} aria-hidden="true" />{t("One platform. Your next chapter.")}</div><div className={styles.heroDockLinks}><Link href="/courses">{t("Learn")} <span aria-hidden="true">↗</span></Link><Link href="/countries">{t("Explore")} <span aria-hidden="true">↗</span></Link><Link href="/profile">{t("My workspace")} <span aria-hidden="true">↗</span></Link></div></div>
+          <div className={styles.heroDock}><div><span className={styles.statusDot} aria-hidden="true" />{t("One platform. Your next chapter.")}</div><div className={styles.heroDockLinks}><Link href="/courses">{t("Learn")} <span aria-hidden="true">↗</span></Link><Link href="/countries">{t("Explore")} <span aria-hidden="true">↗</span></Link><NavigationLink href="/profile">{t("My workspace")} <span aria-hidden="true">↗</span></NavigationLink></div></div>
         </div>
       </div>
       <div className={`${styles.container} ${styles.brandStrip}`}><p>{t("Education gives you capability. Intelligence gives you direction.")}</p><div><strong>{courseCount}</strong><span>{t("expanded learning paths")}</span></div><div><strong>01</strong><span>{t("connected ecosystem")}</span></div><Link href="#certification">{t("Explore TGPI certification")} <span aria-hidden="true">↗</span></Link></div>
@@ -67,7 +68,7 @@ export default function InstitutionalHome() {
     </section>
 
     <section className={`${styles.container} ${styles.section}`} aria-labelledby="capabilities-title" id="capabilities" tabIndex={-1}>
-      <div className={styles.ecosystemIntro}><div><p className={styles.eyebrow}>{t("The TGPI ecosystem")}</p><h2 id="capabilities-title">{t("Everything has a next step.")}</h2></div><Link href="/profile" className={styles.textLink}>{t("Open your workspace")} <span aria-hidden="true">↗</span></Link></div>
+      <div className={styles.ecosystemIntro}><div><p className={styles.eyebrow}>{t("The TGPI ecosystem")}</p><h2 id="capabilities-title">{t("Everything has a next step.")}</h2></div><NavigationLink href="/profile" className={styles.textLink}>{t("Open your workspace")} <span aria-hidden="true">↗</span></NavigationLink></div>
       <div className={styles.ecosystemGrid}>{ecosystem.map(item => <Link href={item.href} className={styles.ecosystemItem} key={item.title}><span className={styles.ecosystemNumber}>{item.mark}</span><div><h3>{t(item.title)}</h3><p>{t(item.copy)}</p></div><span className={styles.ecosystemArrow} aria-hidden="true">↗</span></Link>)}</div>
     </section>
 

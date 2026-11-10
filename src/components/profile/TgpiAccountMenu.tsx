@@ -5,6 +5,7 @@ import { useLocale , LocalizedText } from "@/components/localization/LocaleProvi
 
 import { useClerk, useUser } from "@clerk/nextjs";
 import Link from "next/link";
+import NavigationLink from "@/components/navigation/NavigationLink";
 import { normalizeTgpiAccountProfile } from '@/lib/account-profile';
 import type { MemberIdentity } from '@/lib/members/identity';
 import { useEffect, useRef, useState } from "react";
@@ -68,15 +69,15 @@ export default function TgpiAccountMenu() {
         <div className="rounded-2xl bg-[linear-gradient(135deg,#0B1F3A,#183D61)] p-5 text-white">
           <p className="text-[10px] font-bold uppercase tracking-[.22em] text-[var(--tgpi-gold-light)]">{t("TGPI · Your account")}</p>
           <p className="mt-3 break-words text-lg font-bold">{name}</p>
-          <Link href="/profile/security#settings-identity" onClick={() => setOpen(false)} className="mt-1 block text-sm text-[var(--tgpi-gold-light)]">{handle}</Link>
+          <NavigationLink href="/profile/security#settings-identity" onClick={() => setOpen(false)} className="mt-1 block text-sm text-[var(--tgpi-gold-light)]">{handle}</NavigationLink>
           {!user.firstName || (!identityLoading && !identityError && !memberIdentity?.handle) ? <p className="mt-3 text-xs leading-5 text-[#D6DFEA]">{t("Next step: add your name and claim your TGPI @ID.")}</p> : null}
         </div>
         <nav aria-label={t("Account shortcuts")} className="mt-2">
-          {destinations.map(([section, label, description]) => <Link key={section} href={`/profile/security#settings-${section}`} onClick={() => setOpen(false)} className="block rounded-xl px-4 py-3 transition hover:bg-[#F5F1E8] focus-visible:outline-[var(--tgpi-gold-hover)]"><span className="block text-sm font-bold">{t(label)}</span><span className="mt-1 block text-xs text-[var(--tgpi-muted)]">{t(description)}</span></Link>)}
+          {destinations.map(([section, label, description]) => <NavigationLink key={section} href={`/profile/security#settings-${section}`} onClick={() => setOpen(false)} className="block rounded-xl px-4 py-3 transition hover:bg-[#F5F1E8] focus-visible:outline-[var(--tgpi-gold-hover)]"><span className="block text-sm font-bold">{t(label)}</span><span className="mt-1 block text-xs text-[var(--tgpi-muted)]">{t(description)}</span></NavigationLink>)}
           <Link href="/members" onClick={() => setOpen(false)} className="block min-h-11 rounded-xl px-4 py-3 text-sm font-bold">{t("Find a TGPI member →")}</Link>
           <div className="grid grid-cols-2 gap-2 border-t border-[var(--tgpi-border)] pt-3">
-            <Link href="/profile" onClick={() => setOpen(false)} className="rounded-xl bg-[#F5F1E8] p-3 text-center text-xs font-bold">{t("Workspace")}</Link>
-            <Link href="/profile/security#settings-billing" onClick={() => setOpen(false)} className="rounded-xl bg-[#F5F1E8] p-3 text-center text-xs font-bold">{t("Plan & billing")}</Link>
+            <NavigationLink href="/profile" onClick={() => setOpen(false)} className="rounded-xl bg-[#F5F1E8] p-3 text-center text-xs font-bold">{t("Workspace")}</NavigationLink>
+            <NavigationLink href="/profile/security#settings-billing" onClick={() => setOpen(false)} className="rounded-xl bg-[#F5F1E8] p-3 text-center text-xs font-bold">{t("Plan & billing")}</NavigationLink>
           </div>
         </nav>
         <button type="button" disabled={signingOut} onClick={async () => {

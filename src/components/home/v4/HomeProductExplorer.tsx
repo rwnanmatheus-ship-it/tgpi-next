@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, type KeyboardEvent } from "react";
-import Link from "next/link";
+import NavigationLink from "@/components/navigation/NavigationLink";
 import CinematicImage from "@/components/ui/CinematicImage";
 import type { CinematicKey } from "@/lib/cinematic-art";
 import { useLocale } from "@/components/localization/LocaleProvider";
@@ -34,7 +34,7 @@ export default function HomeProductExplorer() {
       {products.map((item, index) => <button key={item.id} ref={element => { refs.current[index] = element; }} type="button" role="tab" id={`product-tab-${item.id}`} aria-selected={selected === index} aria-controls={`product-panel-${item.id}`} tabIndex={selected === index ? 0 : -1} onClick={() => setSelected(index)} onKeyDown={event => onKey(event, index)}><span aria-hidden="true">0{index + 1}</span>{t(item.label)}<span aria-hidden="true">↗</span></button>)}
     </div>
     {products.map((item, index) => <div key={item.id} role="tabpanel" id={`product-panel-${item.id}`} aria-labelledby={`product-tab-${item.id}`} tabIndex={0} hidden={selected !== index} className={styles.productPanel}>
-      {selected === index && <><div className={styles.productPhoto}><CinematicImage asset={product.image} alt="" sizes="(max-width: 767px) 94vw, 55vw" /><div className={styles.productPhotoCaption}><span>TGPI</span><span>{t(product.label)} / 0{selected + 1}</span></div></div><div className={styles.productCopy}><p className={styles.eyebrow}>{t("Connected to your next step")}</p><h3>{t(product.title)}</h3><p>{t(product.copy)}</p><ol>{product.steps.map((step, i) => <li key={step}><span aria-hidden="true">0{i + 1}</span>{t(step)}</li>)}</ol><Link href={product.href} className={styles.darkButton}>{t(product.cta)} <span aria-hidden="true">↗</span></Link></div></>}
+      {selected === index && <><div className={styles.productPhoto}><CinematicImage asset={product.image} alt="" sizes="(max-width: 767px) 94vw, 55vw" /><div className={styles.productPhotoCaption}><span>TGPI</span><span>{t(product.label)} / 0{selected + 1}</span></div></div><div className={styles.productCopy}><p className={styles.eyebrow}>{t("Connected to your next step")}</p><h3>{t(product.title)}</h3><p>{t(product.copy)}</p><ol>{product.steps.map((step, i) => <li key={step}><span aria-hidden="true">0{i + 1}</span>{t(step)}</li>)}</ol><NavigationLink href={product.href} className={styles.darkButton}>{t(product.cta)} <span aria-hidden="true">↗</span></NavigationLink></div></>}
     </div>)}
   </div>;
 }

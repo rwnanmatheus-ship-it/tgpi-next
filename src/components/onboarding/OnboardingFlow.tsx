@@ -6,7 +6,6 @@ import { useLocale as useInterfaceLocale } from "@/components/localization/Local
 import { announceProgressSaved } from "@/lib/progress-sync";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
 import type {
   OnboardingCountry,
   OnboardingGoal,
@@ -171,7 +170,6 @@ export default function OnboardingFlow({
   initialData,
   firstName,
 }: OnboardingFlowProps) {
-  const router = useRouter();
   const [data, setData] = useState(initialData);
   const [step, setStep] = useState(initialData.currentStep || 1);
   const [highestStep, setHighestStep] = useState(initialData.currentStep || 1);
@@ -243,9 +241,9 @@ export default function OnboardingFlow({
       setIsCompleting(false);
 
       if (saved) {
-        router.push("/profile?onboarding=completed");
         announceProgressSaved();
-        router.refresh();
+        // eslint-disable-next-line @next/next/no-location-assign-relative-destination -- Open the workspace on the active deployment.
+        window.location.assign("/profile?onboarding=completed");
       }
       return;
     }
@@ -261,7 +259,8 @@ export default function OnboardingFlow({
 
   function goBack() {
     if (step === 1) {
-      router.push("/profile");
+      // eslint-disable-next-line @next/next/no-location-assign-relative-destination -- Open the workspace on the active deployment.
+      window.location.assign("/profile");
       return;
     }
 
