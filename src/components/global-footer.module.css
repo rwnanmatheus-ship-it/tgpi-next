@@ -8,7 +8,7 @@
 .container {
   width: min(1240px, calc(100% - 64px));
   margin-inline: auto;
-  padding-block: clamp(40px, 5vw, 78px) 25px;
+  padding-block: clamp(40px, 5vw, 78px) calc(94px + env(safe-area-inset-bottom, 0px));
 }
 
 .footer a {
@@ -163,7 +163,7 @@
 }
 
 @media (max-width: 767px) {
-  .container { width: calc(100% - 36px); }
+  .container { width: calc(100% - 36px); padding-block-end: 58px; }
   .invitation { display: grid; gap: 20px; }
   .invitationActions { justify-self: start; }
   .directory { padding-block: 30px; }
