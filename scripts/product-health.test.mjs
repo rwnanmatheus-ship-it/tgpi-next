@@ -19,7 +19,7 @@ function load(path, dependencies, environment = {}) {
   return exports;
 }
 
-function fixture({ userId = "user_admin", role = "admin", storageFailure, matchesOffer = true, live = true, ...env } = {}) {
+function fixture({ userId = "user_admin", sessionId = "sess_admin", role = "admin", storageFailure, matchesOffer = true, live = true, ...env } = {}) {
   const calls = [];
   const { requireAdmin } = load("auth/guards.ts", {
     "server-only": {},
@@ -28,11 +28,12 @@ function fixture({ userId = "user_admin", role = "admin", storageFailure, matche
       notFound: () => { throw new Error("not-found"); },
       redirect: (path) => { throw new Error(path); },
     },
+    "@/lib/auth/return-to": load("auth/return-to.ts", {}),
     "@/lib/billing.server": {},
     "@/lib/premium-access.server": {},
     "@/lib/account-profile": {},
     "@clerk/nextjs/server": {
-      auth: async () => ({ userId }),
+      auth: async () => ({ userId, sessionId }),
       clerkClient: async () => ({
         users: { getUser: async () => ({ privateMetadata: { role }, unsafeMetadata: { role: "admin" } }) },
       }),
@@ -76,7 +77,7 @@ function fixture({ userId = "user_admin", role = "admin", storageFailure, matche
 }
 
 test("signed-out and ordinary accounts cannot start diagnostics, including spoofed editable roles", async () => {
-  for (const [options, expected] of [[{ userId: null }, /sign-in/], [{ role: "member" }, /not-found/]]) {
+  for (const [options, expected] of [[{ userId: null, sessionId: null }, /sign-in/], [{ sessionId: null }, /sign-in/], [{ role: "member" }, /not-found/]]) {
     const { getProductHealth, calls } = fixture(options);
     await assert.rejects(getProductHealth(), expected);
     assert.deepEqual(calls, []);
@@ -93,7 +94,7 @@ test("verified reads and local configuration checks have distinct states", async
     atlas: "configured", notifications: "configured", integrity: "configured",
   });
   assert.deepEqual(calls.sort(), ["firestore", "stripe", "user_admin"]);
-  assert.doesNotMatch(JSON.stringify(report), /user_admin|unused-proof-key|price_fixture/);
+  assert.doesNotMatch(JSON.stringify(report), /user_admin|sess_admin|unused-proof-key|price_fixture/);
 });
 
 test("quota and timeout failures remain isolated and redact provider messages", async () => {
