@@ -3,12 +3,12 @@ import type { Course } from '../../types/course.ts';
 import type { ProfessionalRecord } from './professional-model.ts';
 import { getLearningContinuation } from '../learning-continuity.ts';
 
-export type LearningStatus = 'in_progress' | 'awaiting_review' | 'revision_requested' | 'approved' | 'completed' | 'edition_changed';
+export type LearningStatus = 'in_progress' | 'awaiting_review' | 'revision_requested' | 'approved' | 'completed' | 'edition_changed' | 'review_due' | 'certificate_pending';
 export type LearningProgressItem = {
-  courseId: string; title: string; href: string; kind: 'legacy' | 'professional';
+  courseId: string; title: string; href: string; kind: 'legacy' | 'professional' | 'academy';
   status: LearningStatus; completed: number; total: number; updatedAt: string;
 };
-export type LearningSummary = { items: LearningProgressItem[]; unavailable: Array<'legacy' | 'professional'> };
+export type LearningSummary = { items: LearningProgressItem[]; unavailable: Array<'legacy' | 'professional' | 'academy'> };
 export type ProfessionalProgressCourse = { id: string; title: string; version: string; lessonIds: string[] };
 
 /** Read-only projection: preserve editions and never infer certification from lesson completion. */
@@ -51,5 +51,6 @@ export function projectLearningProgress(input: {
 export const learningStatusLabels: Record<LearningStatus, string> = {
   in_progress: 'In progress', awaiting_review: 'Awaiting project review',
   revision_requested: 'Project revisions requested', approved: 'Project approved · Check certificate requirements',
+  review_due: 'Spaced review pending', certificate_pending: 'Completed · Certificate pending',
   completed: 'Completed', edition_changed: 'New edition · Review your course',
 };

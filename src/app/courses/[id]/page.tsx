@@ -1,3 +1,5 @@
+import AcademyOverview from "@/components/courses/academy/AcademyOverview";
+import { getAcademyCourse } from "@/data/courses/academy/catalog.server";
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import CourseWorkshop from "@/components/courses/CourseWorkshop";
@@ -18,6 +20,8 @@ export async function generateMetadata({
   params,
 }: CoursePageProps): Promise<Metadata> {
   const { id } = await params;
+  const academy = getAcademyCourse(id);
+  if (academy) return { title: `${academy.title} | TGPI Learning`, description: academy.description };
   const professional = getProfessionalCourse(id);
   if (professional && professionalCourseEnabled(id, process.env.VERCEL_ENV || process.env.NODE_ENV)) return { title: `${professional.title} | TGPI Learning`, description: professional.outcomes.join(" ") };
   const course = getCourse(id);
@@ -32,6 +36,8 @@ export async function generateMetadata({
 
 export default async function CoursePage({ params }: CoursePageProps) {
   const { id } = await params;
+  const academy = getAcademyCourse(id);
+  if (academy) { if (id !== academy.id) redirect(`/courses/${academy.id}`); return <AcademyOverview course={academy} />; }
   const professional = getProfessionalCourse(id);
   if (professional && professionalCourseEnabled(id, process.env.VERCEL_ENV || process.env.NODE_ENV)) return <ProfessionalOverview course={professional} />;
   const course = getCourse(id);

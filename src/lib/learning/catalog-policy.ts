@@ -4,7 +4,7 @@ export type CourseLearningPolicy = {
   kind: 'professional' | 'flagship' | 'practice';
   publicationStatus: 'early_access' | 'published' | 'planned';
   accessPolicy: 'free_account';
-  assessmentPolicy: 'practice' | 'verified_assessment' | 'quiz_project_review';
+  assessmentPolicy: 'practice' | 'verified_assessment' | 'quiz_project_review' | 'automatic_assessment';
   credentialStatus: 'none' | 'criteria_available';
   instructionLanguage: 'en' | 'pt-BR';
 };
@@ -24,6 +24,7 @@ export function courseLearningPolicy(course: CourseOverview): CourseLearningPoli
 }
 
 export function credentialLabel(policy: CourseLearningPolicy) {
+  if (policy.assessmentPolicy === 'automatic_assessment') return 'Certificate included · Automatic assessment';
   if (policy.publicationStatus === 'planned') return 'Planned curriculum';
   if (policy.assessmentPolicy === 'quiz_project_review') return 'Certificate criteria · Quiz, project and human review';
   return policy.credentialStatus === 'criteria_available' ? 'Verified certification pathway' : 'Applied practice · No certificate';

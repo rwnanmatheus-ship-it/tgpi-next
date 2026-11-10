@@ -109,6 +109,7 @@ export type TgpiCredentialIdentityEvidence = {
 };
 
 export type TgpiLearningCredential = {
+  automatedEvidence?: { method: "objective-assessment"; finalScore: number; retentionScore: number; lessonChecks: number; humanReviewed: false; workloadMinutes: number };
   completedAt?: string;
   replacedBy?: string;
   replaces?: string;

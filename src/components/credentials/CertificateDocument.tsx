@@ -96,11 +96,11 @@ export default function CertificateDocument({
           <dd>{certificateDate(credential.issuedAt)}</dd>
         </div>
         <div>
-          <dt><LocalizedText text={"Mastery"} /></dt>
+          <dt><LocalizedText text={credential.automatedEvidence ? "Automatic assessment" : "Mastery"} /></dt>
           <dd>{credential.assessmentScore}%</dd>
         </div>
         <div>
-          <dt><LocalizedText text={"Volume"} /></dt>
+          <dt><LocalizedText text={credential.automatedEvidence ? "estimated workload" : "Volume"} /></dt>
           <dd>{credential.learningHours}{" "}<LocalizedText text={"hours"} /></dd>
         </div>
       </dl>

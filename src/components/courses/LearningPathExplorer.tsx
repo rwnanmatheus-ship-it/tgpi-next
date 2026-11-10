@@ -73,7 +73,7 @@ function Catalog({ courses, initialFilters }: Props) {
       return <article key={course.id} className={styles.card}>
         <Link href={course.href} className={styles.cover} aria-label={t("Explore {course}", { course: t(course.title) })}>
           {courseArtworkKeys[course.id] ? <CinematicImage asset={courseArtworkKeys[course.id]} alt="" sizes="(max-width: 639px) calc(100vw - 40px), (max-width: 1100px) 46vw, 400px" className={styles.image} /> : <Image src={course.image} alt="" fill sizes="(max-width: 639px) 100vw, 33vw" className={styles.image} />}
-          <span className={styles.badge}>{course.status === "available" ? policy.publicationStatus === "early_access" ? t("Early access") : policy.kind === "flagship" ? t("Flagship course") : t("New · Short course") : t("In development")}</span>
+          <span className={styles.badge}>{course.status === "available" ? policy.publicationStatus === "early_access" ? t("Early access") : policy.kind === "flagship" ? t("Flagship course") : t("Expanded course") : t("In development")}</span>
           {course.series && <span className={styles.seriesBadge}>{t(course.series)}<small>{t("Chapter {number}", { number: String(course.seriesOrder).padStart(2, "0") })}</small></span>}
           <span className={styles.coverArrow} aria-hidden="true">↗</span>
         </Link>

@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { LocalizedText } from "@/components/localization/LocaleProvider";
 import { requireUser } from "@/lib/auth/guards";
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
@@ -57,6 +59,8 @@ export default async function LessonPage({ params }: LessonPageProps) {
   if (!courseModule || lessonIndex < 0) notFound();
 
   return (
+    <>
+    <div className="mx-auto max-w-6xl px-5 py-4"><Link className="text-blue-700 underline" href={`/courses/${course.id}/study`}><LocalizedText text="Continue in the expanded edition" /></Link></div>
     <LessonExperience
       course={course}
       courseModule={courseModule}
@@ -65,5 +69,6 @@ export default async function LessonPage({ params }: LessonPageProps) {
       nextLesson={lessons[lessonIndex + 1]}
       previousLesson={lessons[lessonIndex - 1]}
     />
+    </>
   );
 }

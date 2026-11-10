@@ -323,7 +323,7 @@ export async function createCertificatePdf(
     {
       x: 625,
       w: 70,
-      label: portuguese ? "PROJETO" : "MASTERY",
+      label: credential.automatedEvidence ? "AVALIAÇÃO" : portuguese ? "PROJETO" : "MASTERY",
       value: `${credential.assessmentScore}%`,
     },
     {
@@ -351,7 +351,7 @@ export async function createCertificatePdf(
     height: 37,
     color: rgb(0.94, 0.93, 0.89),
   });
-  const marks = portuguese ? ["CONTA VINCULADA", "PROJETO AVALIADO", privateSharing ? "TITULAR CONTROLA O ACESSO" : "VERIFICAÇÃO PÚBLICA"] : ["IDENTITY LINKED", "ASSESSED LEARNING", "PUBLIC VERIFICATION"];
+  const marks = portuguese ? ["CONTA VINCULADA", credential.automatedEvidence ? "AVALIAÇÃO AUTOMÁTICA" : "PROJETO AVALIADO", privateSharing ? "TITULAR CONTROLA O ACESSO" : "VERIFICAÇÃO PÚBLICA"] : ["IDENTITY LINKED", "ASSESSED LEARNING", "PUBLIC VERIFICATION"];
   marks.forEach((value, index) => {
     const x = 63 + index * 244;
     page.drawCircle({ x: x + 5, y: 84, size: 7, color: navy });

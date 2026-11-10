@@ -21,6 +21,8 @@ export async function POST(request: Request, context: { params: Promise<{ course
     const identity = await requireApiUser(); assertProfessionalOrigin(request);
     const { courseId } = await context.params;
     const input: unknown = JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(await readProfessionalBody(request)));
+    const action = typeof input === "object" && input !== null && "action" in input ? input.action : undefined;
+    if (!["issue", "sharing"].includes(String(action))) return professionalJson({ error: "This edition is archived. Continue in the expanded course with automatic assessments.", href: `/courses/${courseId}/study` }, 409);
     const result = await mutateProfessionalRecord(identity, courseId, input);
     return professionalJson({ ...result, ...('feedback' in result && result.feedback ? { feedback: result.feedback.map(item => ({ ...item, explanationTranslations: assessmentTranslations(item.explanation) })) } : {}) });
   } catch (error) { return professionalError(error); }

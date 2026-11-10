@@ -1,7 +1,8 @@
+import { academyManifest } from "@/data/courses/academy/manifest";
 import { seriesOverview } from "@/data/courses/series-courses";
 import type { CourseOverview } from "@/types/course-overview";
 
-export const coursesOverview: CourseOverview[] = [
+const originalOverview: CourseOverview[] = [
   ...seriesOverview,
 {
   "id": "country-fit",
@@ -166,3 +167,13 @@ export const coursesOverview: CourseOverview[] = [
     title: "Global Economics: Money, Markets & Opportunity",
   },
 ];
+
+export const coursesOverview: CourseOverview[] = originalOverview.map(course => {
+  const edition = academyManifest[course.id];
+  if (!edition) return course;
+  return { ...course, status: "available", href: `/courses/${course.id}`,
+    duration: `${Math.floor(edition.minutes / 60)}h ${edition.minutes % 60}m`,
+    format: `${edition.lessons} lessons and laboratories`, releaseLabel: "Expanded edition · Automatic assessment",
+    learningPolicy: { kind: course.id === "global-english-2026" ? "flagship" : "practice", publicationStatus: "published", accessPolicy: "free_account", assessmentPolicy: "automatic_assessment", credentialStatus: "criteria_available", instructionLanguage: "en" },
+  };
+});

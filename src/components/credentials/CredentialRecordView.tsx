@@ -119,7 +119,7 @@ export default function CredentialRecordView({
           <article>
             <p className="credential-eyebrow"><LocalizedText text={"Portability"} /></p>
             <h2><LocalizedText text={"Share worldwide"} /></h2>
-            <p><LocalizedText text={"English-language PDF, public QR verification and portable evidence. Acceptance depends on the receiving institution."} /></p>
+            <p><LocalizedText text={credential.automatedEvidence ? "Automatic objective assessments; estimated workload; sharing controlled by the holder." : "English-language PDF, public QR verification and portable evidence. Acceptance depends on the receiving institution."} /></p>
           </article>
         </LocalizedElement>
         <details className="credential-details">

@@ -1,6 +1,11 @@
 import type { Locale } from "./config";
 
 export const messages = {
+  "Spaced review pending": {"en": "Spaced review pending", "pt-BR": "Revisão espaçada pendente", "es": "Repaso espaciado pendiente", "fr": "Révision espacée en attente", "de": "Zeitversetzte Wiederholung ausstehend", "it": "Ripasso distanziato in attesa"},
+  "Completed \u00b7 Certificate pending": {"en": "Completed · Certificate pending", "pt-BR": "Concluído · Certificado pendente", "es": "Completado · Certificado pendiente", "fr": "Terminé · Certificat en attente", "de": "Abgeschlossen · Zertifikat ausstehend", "it": "Completato · Certificato in attesa"},
+  "6 lessons and laboratories": {"en": "6 lessons and laboratories", "pt-BR": "6 aulas e laboratórios", "es": "6 lecciones y laboratorios", "fr": "6 leçons et ateliers", "de": "6 Lektionen und Labore", "it": "6 lezioni e laboratori"},
+  "11 lessons and laboratories": {"en": "11 lessons and laboratories", "pt-BR": "11 aulas e laboratórios", "es": "11 lecciones y laboratorios", "fr": "11 leçons et ateliers", "de": "11 Lektionen und Labore", "it": "11 lezioni e laboratori"},
+  "21 lessons and laboratories": {"en": "21 lessons and laboratories", "pt-BR": "21 aulas e laboratórios", "es": "21 lecciones y laboratorios", "fr": "21 leçons et ateliers", "de": "21 Lektionen und Labore", "it": "21 lezioni e laboratori"},
   "Global perspectives": {"en": "Global perspectives", "pt-BR": "Perspectivas globais", "es": "Perspectivas globales", "fr": "Perspectives mondiales", "de": "Globale Perspektiven", "it": "Prospettive globali"},
   "World Bank WDI": {"en": "World Bank WDI", "pt-BR": "Banco Mundial · WDI", "es": "Banco Mundial · WDI", "fr": "Banque mondiale · WDI", "de": "Weltbank · WDI", "it": "Banca Mondiale · WDI"},
   "Compare Countries — Decision Studio | TGPI": {"en": "Compare Countries — Decision Studio | TGPI", "pt-BR": "Comparar Países — Estúdio de Decisão | TGPI", "es": "Comparar Países — Estudio de Decisiones | TGPI", "fr": "Comparer les pays — Studio de décision | TGPI", "de": "Länder vergleichen — Entscheidungsstudio | TGPI", "it": "Confronta paesi — Studio decisionale | TGPI"},
