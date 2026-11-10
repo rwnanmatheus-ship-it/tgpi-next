@@ -61,7 +61,7 @@ export default function DocumentsExperience({ countries, initialCountry, initial
             </div>
           </div>
           <div className="documents-hero-visual">
-            <CinematicImage asset="documents-command" alt="" priority sizes="(max-width: 760px) 94vw, (max-width: 1400px) 48vw, 670px" position="72% 54%" />
+            <CinematicImage asset="documents-command" alt="" priority sizes="(max-width: 760px) 94vw, (max-width: 1400px) 48vw, 670px" position="var(--documents-hero-position, 98% 48%)" />
           </div>
         </header>
 

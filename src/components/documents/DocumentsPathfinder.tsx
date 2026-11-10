@@ -2,14 +2,12 @@
 
 import { useCallback, useState } from "react";
 import Link from "next/link";
-import { useActivationProgress } from "@/components/activation/ActivationProgressProvider";
 import DocumentReviewChecklist from "@/components/activation/DocumentReviewChecklist";
 import CountrySearchInput from "@/components/countries/CountrySearchInput";
 import { useLocale } from "@/components/localization/LocaleProvider";
 import NavigationIcon from "@/components/navigation/NavigationIcon";
 import CountryFlag from "@/components/ui/CountryFlag";
 import { localizedCountryName, type SearchableCountry } from "@/lib/country-search";
-import { documentReviewItems } from "@/lib/document-review";
 import { documentGoalPaths, documentsHref, type DocumentGoal } from "@/lib/documents-os";
 
 const goalIcons = { travel: "compass", study: "book", work: "file", live: "home" } as const;
@@ -23,7 +21,6 @@ type Props = {
 
 export default function DocumentsPathfinder({ countries, initialGoal, initialCountry, shortlist = [] }: Props) {
   const { locale, t } = useLocale();
-  const { progress } = useActivationProgress();
   const [goal, setGoal] = useState(initialGoal);
   const [countrySlug, setCountrySlug] = useState(initialCountry);
   const [query, setQuery] = useState("");
@@ -41,31 +38,6 @@ export default function DocumentsPathfinder({ countries, initialGoal, initialCou
     setQuery("");
     setShareStatus(undefined);
   }, []);
-
-  function downloadBrief() {
-    if (!country) return;
-    const reviewed = new Set(progress.documentReviews[country.slug]?.completedItemIds);
-    const text = [
-      "TGPI Global Documents",
-      t("Research brief for {country}", { country: destinationName }),
-      t(path.label),
-      "",
-      t(path.description),
-      "",
-      t("Documents to verify"),
-      ...documentReviewItems.map(item => `[${reviewed.has(item.id) ? "x" : " "}] ${t(item.title)}\n    ${t(item.text)}`),
-      "",
-      t("Open country sources"),
-      new URL(`/countries/${country.slug}#country-sources`, window.location.origin).href,
-      t("Confirm applicable requirements with the receiving authority."),
-    ].join("\n");
-    const url = URL.createObjectURL(new Blob([text], { type: "text/plain;charset=utf-8" }));
-    const link = document.createElement("a");
-    link.href = url;
-    link.download = `tgpi-documents-${country.slug}-${goal}.txt`;
-    link.click();
-    window.setTimeout(() => URL.revokeObjectURL(url), 5_000);
-  }
 
   async function copyResearchLink() {
     try {
@@ -138,7 +110,7 @@ export default function DocumentsPathfinder({ countries, initialGoal, initialCou
           <span className="documents-icon"><NavigationIcon name="file" /></span>
           <h3>{t("Take your research with you")}</h3>
           <p>{t("Download a text brief with your research questions, checklist and a link to the country sources.")}</p>
-          <button className="documents-button" type="button" onClick={downloadBrief}>{t("Download research brief")}</button>
+          <a className="documents-button" href={`/api/documents/brief?country=${country.slug}&goal=${goal}`} download>{t("Download research brief")}</a>
           <button className="documents-button secondary" type="button" onClick={() => void copyResearchLink()}>{t("Copy research link")}</button>
           {shareStatus && <p className="documents-share-status" role="status">
             {shareStatus === "copied" ? t("Research link copied.") : <Link className="documents-text-link" href={researchHref}>{t("Open shareable research link")}</Link>}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState, type FormEvent } from "react";
 import { useLocale } from "@/components/localization/LocaleProvider";
 import NavigationIcon from "@/components/navigation/NavigationIcon";
 import CinematicImage from "@/components/ui/CinematicImage";
@@ -23,9 +23,15 @@ const questions = [
 
 export default function DocumentsPreparationTools() {
   const { t, locale } = useLocale();
-  const [submission, setSubmission] = useState("");
-  const [expiration, setExpiration] = useState("");
-  const days = documentWindowDays(expiration, submission);
+  const submission = useRef<HTMLInputElement>(null);
+  const expiry = useRef<HTMLInputElement>(null);
+  const [days, setDays] = useState<number | null>(null);
+
+  function calculate(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setDays(documentWindowDays(expiry.current?.value ?? "", submission.current?.value ?? ""));
+  }
+
   const duration = days === null ? "" : new Intl.NumberFormat(locale, { style: "unit", unit: "day", unitDisplay: "long" }).format(Math.abs(days));
 
   return (
@@ -42,14 +48,17 @@ export default function DocumentsPreparationTools() {
           <span className="documents-icon"><NavigationIcon name="target" /></span>
           <h3>{t("Document date calculator")}</h3>
           <p>{t("Compare your planned submission date with the document’s expiry date.")}</p>
-          <div className="documents-dates">
-            <label>{t("Planned submission date")}
-              <input type="date" value={submission} onChange={event => setSubmission(event.target.value)} max="9999-12-31" />
-            </label>
-            <label>{t("Document expiry date")}
-              <input type="date" value={expiration} onChange={event => setExpiration(event.target.value)} max="9999-12-31" />
-            </label>
-          </div>
+          <form onSubmit={calculate} onInput={() => setDays(null)}>
+            <div className="documents-dates">
+              <label>{t("Planned submission date")}
+                <input type="date" ref={submission} max="9999-12-31" required />
+              </label>
+              <label>{t("Document expiry date")}
+                <input type="date" ref={expiry} max="9999-12-31" required />
+              </label>
+            </div>
+            <button className="documents-button" type="submit">{t("Compare dates")}</button>
+          </form>
           <p className="documents-date-result" data-result={days === null ? "waiting" : days < 0 ? "past" : days === 0 ? "same" : "future"} role="status">
             {days === null ? t("Enter both dates to compare them.")
               : days === 0 ? t("The document expires on the planned submission date.")

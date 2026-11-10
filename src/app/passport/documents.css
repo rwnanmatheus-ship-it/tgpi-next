@@ -53,7 +53,7 @@
   background: radial-gradient(ellipse at 4% 12%, #273954, transparent 68%), linear-gradient(135deg, #192740, #0d1829);
   box-shadow: 0 22px 55px #0005, inset 0 1px #e0edff20;
 }
-.documents-hero-copy { align-self: center; padding: clamp(1.45rem, 4vw, 3.5rem); }
+.documents-hero-copy { align-self: center; padding: clamp(1.45rem, 3.6vw, 3rem); }
 .documents-os .documents-eyebrow {
   display: flex;
   align-items: center;
@@ -77,7 +77,7 @@
   background: linear-gradient(140deg, #cda85b24, #18273d);
   box-shadow: inset 0 1px #edd3aa28;
 }
-.documents-hero h1 { max-width: 15ch; margin-block: .9rem .9rem; font-size: clamp(2.55rem, 5.55vw, 5.05rem); line-height: .97; text-wrap: balance; }
+.documents-hero h1 { max-width: 16ch; margin-block: .9rem .9rem; font-size: clamp(2.55rem, 5.3vw, 4.8rem); line-height: .97; text-wrap: balance; }
 .documents-os .documents-intro { max-width: 43ch; color: #c6d4e7; font-size: clamp(.94rem, 1.25vw, 1.08rem); }
 .documents-hero-visual { position: relative; min-height: 21rem; border-inline-start: 1px solid #7594bb52; background: #101927; }
 .documents-hero-visual::after {
@@ -167,6 +167,7 @@
   line-height: 1.22;
   color: var(--doc-muted);
 }
+.documents-nav-short { display: none; }
 .documents-nav-index { font-size: .62rem; letter-spacing: .08em; font-variant-numeric: tabular-nums; opacity: .84; }
 .documents-nav-strip a svg { flex-shrink: 0; color: #a0bce2; }
 .documents-nav-strip a[aria-current="location"] { border-color: #b79b71; background: linear-gradient(125deg, #383745, #1c2f4b); color: #f6dfb4; box-shadow: inset 0 1px #efd6a021; }
@@ -371,7 +372,7 @@
 .documents-deadline > p, .documents-questions p { font-size: .89rem; }
 .documents-dates { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6rem; margin-block: .8rem; }
 .documents-dates label { display: grid; align-content: end; gap: .32rem; color: var(--doc-muted); font-size: .79rem; font-weight: 750; }
-.documents-os .documents-date-result { padding: .62rem .72rem; border: 1px solid #516987; border-radius: .63rem; background: #101e30; color: var(--doc-blue); font-weight: 750; }
+.documents-os .documents-date-result { margin-top: .75rem; padding: .62rem .72rem; border: 1px solid #516987; border-radius: .63rem; background: #101e30; color: var(--doc-blue); font-weight: 750; }
 .documents-os .documents-date-result[data-result="past"] { border-color: #b18474; color: #ffccb8; background: #3b2a2b; }
 .documents-os .documents-date-result[data-result="same"] { border-color: #bfa173; color: var(--doc-gold); background: #382f28; }
 .documents-os .documents-date-result[data-result="future"] { border-color: #579286; color: #b7e8d6; background: #173531; }
@@ -426,11 +427,14 @@
 @media (max-width: 760px) {
   .documents-hero, .documents-studio, .documents-research-grid, .documents-tools-grid, .documents-breakdown { grid-template-columns: minmax(0, 1fr); }
   .documents-hero h1 { max-width: 18ch; font-size: clamp(2.55rem, 8vw, 4.3rem); }
-  .documents-hero-visual { min-height: 0; aspect-ratio: 2.2; border-inline-start: 0; border-top: 1px solid #7594bb52; }
+  .documents-hero-visual { --documents-hero-position: 75% 24%; min-height: 0; aspect-ratio: 2.2; border-inline-start: 0; border-top: 1px solid #7594bb52; }
   .documents-hero-visual::before { inset: 8px; }
   .documents-hero-visual::after { background: linear-gradient(180deg, #0a13283d, transparent 24%); }
-  .documents-nav-strip { display: flex; overflow-x: auto; scrollbar-width: thin; scrollbar-color: #6e88aa #122033; scroll-snap-type: x proximity; }
-  .documents-nav-strip a { flex: 1 0 auto; scroll-snap-align: start; font-size: .79rem; }
+  .documents-nav-strip { gap: .16rem; }
+  .documents-nav-strip a { flex-direction: column; gap: .16rem; min-height: 47px; padding: .26rem .15rem; font-size: .69rem; text-align: center; }
+  .documents-nav-strip a svg { width: 17px; height: 17px; }
+  .documents-nav-full { display: none; }
+  .documents-nav-short { display: block; }
   .documents-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .documents-guide-image { aspect-ratio: 2.8; }
 }

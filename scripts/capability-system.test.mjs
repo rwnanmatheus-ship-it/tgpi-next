@@ -37,8 +37,8 @@ test("every capability experience renders the shared system rail", () => {
 });
 
 test("documents compatibility route preserves the established Passport URL", () => {
-  const route = source("src/app/documents/page.tsx");
-  assert.match(route, /permanentRedirect\(documentsHref\(/);
+  const config = source("next.config.ts");
+  assert.match(config, /source: "\/documents", destination: "\/passport", permanent: true/);
 });
 
 test("capability layout protects 100 percent zoom and narrow screens", () => {

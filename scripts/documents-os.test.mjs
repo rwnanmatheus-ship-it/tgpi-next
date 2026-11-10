@@ -6,14 +6,15 @@ import ts from "typescript";
 function load(path, imports = {}) {
   const code = ts.transpileModule(readFileSync(new URL(`../${path}`, import.meta.url), "utf8"), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
   const exports = {};
-  vm.runInNewContext(code, { exports, URLSearchParams, require: id => { if (!(id in imports)) throw Error(id); return imports[id]; } });
+  vm.runInNewContext(code, { exports, URL, URLSearchParams, Response, require: id => { if (!(id in imports)) throw Error(id); return imports[id]; } });
   return exports;
 }
 const catalog = load("src/lib/comparison-catalog.ts");
 const comparison = load("src/lib/comparison-state.ts", { "./comparison-catalog.ts": catalog });
 const activation = load("src/lib/activation-progress.ts", { "./comparison-catalog.ts": catalog, "./comparison-state.ts": comparison });
 const review = load("src/lib/document-review.ts", { "./activation-progress.ts": activation });
-const { buildDocumentsMemberModel: build, documentsHref, resolveDocumentGoal, documentWindowDays } = load("src/lib/documents-os.ts", { "@/lib/document-review": review });
+const documents = load("src/lib/documents-os.ts", { "@/lib/document-review": review });
+const { buildDocumentsMemberModel: build, documentsHref, resolveDocumentGoal, documentWindowDays } = documents;
 const countries = Array.from({length:8}, (_,i) => ({ slug:`country-${i}`, name:`Country ${i}`, emoji:"" }));
 const onboarding = { completed:true, primaryGoal:"work", targetCountries:countries.map(c=>c.slug), timeHorizon:"6-months", budgetRange:"1500-3000" };
 const empty = () => activation.createEmptyActivationProgress();
@@ -74,4 +75,35 @@ test("document research links retain destination and a recognized goal", () => {
   assert.equal(documentsHref(), "/passport");
   assert.equal(documentsHref({ country: "portugal", goal: resolveDocumentGoal("study") }), "/passport?country=portugal&goal=study");
   assert.equal(resolveDocumentGoal(["study"]), undefined);
+});
+
+test("briefs download as private text attachments and only include the current member’s checkpoints", async () => {
+  let userId = null;
+  let reads = 0;
+  const { GET } = load("src/app/api/documents/brief/route.ts", {
+    "@clerk/nextjs/server": { auth: async () => ({ userId }) },
+    "@/data/intelligence/identities.json": { default: { countries: [{ slug: "portugal", name: "Portugal" }] } },
+    "@/lib/activation-store.server": { getUserActivationProgress: async id => {
+      assert.equal(id, "member");
+      reads += 1;
+      return { documentReviews: { portugal: { completedItemIds: [review.documentReviewItems[0].id] } } };
+    } },
+    "@/lib/country-search": { localizedCountryName: item => item.name },
+    "@/lib/document-review": review,
+    "@/lib/documents-os": documents,
+    "@/lib/localization/messages": { translate: (_locale, key, values) => key.replace("{country}", values?.country ?? "") },
+    "@/lib/localization/server": { getLocale: async () => "pt-BR" },
+  });
+  const request = (query) => new Request(`https://example.test/api/documents/brief?${query}`);
+  const guest = await GET(request("country=portugal&goal=study"));
+  assert.equal(guest.headers.get("cache-control"), "private, no-store, max-age=0");
+  assert.equal(guest.headers.get("content-language"), "pt-BR");
+  assert.match(guest.headers.get("content-disposition"), /attachment; filename="tgpi-documents-portugal-study.txt"/);
+  assert.match(await guest.text(), /\[ \] Evidence v1/);
+  assert.equal(reads, 0);
+  userId = "member";
+  const member = await GET(request("country=portugal&goal=study"));
+  assert.match(await member.text(), /\[x\] Evidence v1/);
+  assert.equal(reads, 1);
+  assert.equal((await GET(request("country=not-a-country&goal=study"))).status, 400);
 });
