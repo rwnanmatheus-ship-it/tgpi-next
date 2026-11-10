@@ -79,7 +79,7 @@ export default async function CountriesPage({ searchParams }: { searchParams?: P
               src="/images/cinematic-2026/countries-orbital-earth-v2.webp"
               alt=""
               fill
-              sizes="(max-width: 767px) 80vw, (max-width: 1399px) 66vw, 924px"
+              sizes="(max-width: 767px) 100vw, (max-width: 1399px) 66vw, 924px"
               preload
             />
           </div>

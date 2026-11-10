@@ -118,9 +118,9 @@ export default function EvidenceExplorer({ countries, initialFilters, indicatorT
       <div className={styles.toolbar}>
         <div className={styles.toolbarHeading}>
           <h2 id="countries-heading">{t("Find your next destination.")}</h2>
-          <button type="button" className={styles.atlasButton} aria-expanded={showAtlas} aria-controls="country-atlas-panel" onClick={() => setShowAtlas(!showAtlas)}>
+          <button type="button" className={styles.atlasButton} aria-expanded={showAtlas} aria-controls="country-atlas-panel" aria-label={showAtlas ? t("Close atlas") : t("Open interactive atlas")} title={showAtlas ? t("Close atlas") : t("Open interactive atlas")} onClick={() => setShowAtlas(!showAtlas)}>
             <NavigationIcon name="globe" width={18} height={18} />
-            {showAtlas ? t("Close atlas") : t("Open interactive atlas")}
+            <span className={styles.atlasLabel}>{showAtlas ? t("Close atlas") : t("Open interactive atlas")}</span>
           </button>
         </div>
         <div className={`country-search-bar ${styles.searchBar}`}>
