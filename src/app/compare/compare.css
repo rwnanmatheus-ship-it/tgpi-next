@@ -37,7 +37,7 @@
 .compare-catalog button { min-width:0; text-align:left; display:flex; gap:10px; align-items:center; border:1px solid #e2e7ef; border-radius:12px; padding:12px; background:#fff; transition:border-color .15s,background .15s; }
 .compare-catalog button:hover { border-color:#789ac9; background:#f4f8ff; }
 .compare-catalog button[aria-pressed=true] { background:#eef4ff; border-color:#2563eb; box-shadow:inset 0 0 0 1px #2563eb; }
-.compare-flag { font-size:24px; flex-shrink:0; }
+.compare-flag { display:flex; align-items:center; flex-shrink:0; }
 .compare-catalog button > span:nth-child(2) { min-width:0; }
 .compare-catalog strong { display:block; font-size:12px; font-weight:700; overflow-wrap:anywhere; }
 .compare-catalog small { display:block; font-size:10px; color:#627184; margin-top:3px; }
@@ -48,8 +48,8 @@
 .compare-selection-heading { display:flex; align-items:center; justify-content:space-between; gap:16px; font-size:12px; }
 .compare-selection-heading button { min-height:32px; color:#53667e; }
 .compare-chips { display:flex; gap:7px; flex-wrap:wrap; max-height:125px; overflow:auto; padding:4px 2px; }
-.compare-chips button { min-height:34px; background:white; border:1px solid #d7e1ef; border-radius:8px; padding:6px 10px; font-size:11px; font-weight:650; }
-.compare-chips button span:last-child { margin-left:8px; color:#65768a; }
+.compare-chips button { display:inline-flex; align-items:center; gap:7px; min-height:38px; background:white; border:1px solid #d7e1ef; border-radius:8px; padding:6px 10px; font-size:11px; font-weight:650; }
+.compare-chips button > span:last-child { margin-left:1px; color:#65768a; }
 .compare-chips p { font-size:12px; margin:4px 0; color:#64748b; }
 .compare-focus { display:flex; flex-wrap:wrap; gap:7px; margin:20px 0 0; padding:0; border:0; }
 .compare-focus legend { font-size:11px; font-weight:700; padding:0 0 9px; }
@@ -81,7 +81,7 @@
 .compare-destinations { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(100%,215px),1fr)); gap:14px; }
 .compare-destination { overflow:hidden; border:1px solid #dce3ed; border-radius:18px; background:#fff; box-shadow:0 8px 25px #071b3105; }
 .compare-destination-image { height:150px; position:relative; background:#071b31; }
-.compare-destination-image > span { position:absolute; left:18px; bottom:-17px; display:grid; place-items:center; width:40px; height:40px; border:3px solid white; border-radius:50%; background:#f6f9fd; font-size:23px; }
+.compare-destination-image > span { position:absolute; left:18px; bottom:-16px; display:flex; padding:3px; border-radius:8px; background:#fff; box-shadow:0 4px 12px #071b3115; }
 .compare-destination-body { padding:25px 18px 18px; }
 .compare-destination h3 { font-size:24px; font-weight:700; line-height:1.15; margin:6px 0 9px; }
 .compare-destination p { font-size:11px; line-height:1.7; color:#627184; }

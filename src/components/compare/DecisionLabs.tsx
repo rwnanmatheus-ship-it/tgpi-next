@@ -14,7 +14,7 @@ export default function DecisionLabs({ countries }: { countries: { slug: string;
   const [visited, setVisited] = useState<Set<string>>(() => new Set());
   return <>{countries.map(country => <details className="ig-details" key={country.slug} onToggle={event => {
     if (event.currentTarget.open) setVisited(previous => previous.has(country.slug) ? previous : new Set([...previous, country.slug]));
-  }}><summary><CountryFlag iso2={country.iso2} width={20} /> <LocalizedText text={country.name} /> · <LocalizedText text="Budget & preparation" /></summary>
+  }}><summary><CountryFlag iso2={country.iso2} width={28} /> <LocalizedText text={country.name} /> · <LocalizedText text="Budget & preparation" /></summary>
     {visited.has(country.slug) ? <Workbench country={country.slug} countryName={country.name} /> : null}
   </details>)}</>;
 }

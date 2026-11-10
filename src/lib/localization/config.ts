@@ -2,13 +2,13 @@ export const locales = ['en', 'pt-BR', 'es', 'fr', 'de', 'it'] as const;
 export type Locale = typeof locales[number];
 export const localeCookie = 'tgpi_locale';
 export const localeOptions = [
-  { code: 'en', name: 'English', profileName: 'English', flag: '/images/flags/us.svg' },
-  { code: 'pt-BR', name: 'Português', profileName: 'Portuguese', flag: '/images/flags/br.svg' },
-  { code: 'es', name: 'Español', profileName: 'Spanish', flag: '/images/flags/es.svg' },
-  { code: 'fr', name: 'Français', profileName: 'French', flag: '/images/flags/fr.svg' },
-  { code: 'de', name: 'Deutsch', profileName: 'German', flag: '/images/flags/de.svg' },
-  { code: 'it', name: 'Italiano', profileName: 'Italian', flag: '/images/flags/it.svg' },
-] as const satisfies readonly { code: Locale; name: string; profileName: string; flag: string }[];
+  { code: 'en', name: 'English', profileName: 'English', iso2: 'us', flag: '/images/country-flags/us.svg' },
+  { code: 'pt-BR', name: 'Português', profileName: 'Portuguese', iso2: 'br', flag: '/images/country-flags/br.svg' },
+  { code: 'es', name: 'Español', profileName: 'Spanish', iso2: 'es', flag: '/images/country-flags/es.svg' },
+  { code: 'fr', name: 'Français', profileName: 'French', iso2: 'fr', flag: '/images/country-flags/fr.svg' },
+  { code: 'de', name: 'Deutsch', profileName: 'German', iso2: 'de', flag: '/images/country-flags/de.svg' },
+  { code: 'it', name: 'Italiano', profileName: 'Italian', iso2: 'it', flag: '/images/country-flags/it.svg' },
+] as const satisfies readonly { code: Locale; name: string; profileName: string; iso2: string; flag: string }[];
 export function isLocale(value: unknown): value is Locale {
   return typeof value === 'string' && locales.includes(value as Locale);
 }

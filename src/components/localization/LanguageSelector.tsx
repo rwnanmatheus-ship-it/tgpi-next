@@ -1,6 +1,6 @@
 'use client';
 
-import Image from 'next/image';
+import CountryFlag from '@/components/ui/CountryFlag';
 import { useEffect, useId, useRef, useState } from 'react';
 import { localeOptions, type Locale } from '@/lib/localization/config';
 import { useLocale } from './LocaleProvider';
@@ -32,14 +32,14 @@ export default function LanguageSelector({ compact = false }: { compact?: boolea
     <button ref={trigger} id={id} type="button" className="tgpi-language-trigger" aria-label={`${t('Interface language')}: ${selected.name}`}
       aria-expanded={open} aria-controls={`${id}-choices`} aria-describedby={error ? `${id}-error` : undefined}
       aria-busy={pending} disabled={pending} onClick={() => setOpen(value => !value)}>
-      <Image src={selected.flag} alt="" aria-hidden="true" width={24} height={16} className="tgpi-language-flag" />
+      <CountryFlag iso2={selected.iso2} width={32} />
       <span lang={locale}>{compact ? locale === 'pt-BR' ? 'PT' : locale.toUpperCase() : selected.name}</span>
       <span aria-hidden="true" className="tgpi-language-chevron">⌄</span>
     </button>
     {open && <div id={`${id}-choices`} className="tgpi-language-options" role="group" aria-label={t('Interface language')}>
       {localeOptions.map(option => <button key={option.code} type="button" className="tgpi-language-option" lang={option.code}
         aria-pressed={option.code === locale} disabled={pending} onClick={() => choose(option.code)}>
-        <Image src={option.flag} alt="" aria-hidden="true" width={24} height={16} className="tgpi-language-flag" />
+        <CountryFlag iso2={option.iso2} width={36} />
         <span>{option.name}</span><span className="tgpi-language-check" aria-hidden="true">{option.code === locale ? '✓' : ''}</span>
       </button>)}
     </div>}
