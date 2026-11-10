@@ -7,7 +7,7 @@ import { safeReturnTo } from "../src/lib/auth/return-to.ts";
 import { hasFunnelConsent } from "../src/lib/funnel.ts";
 import { HOME_ROUTES, HOME_COURSES, HOME_FAQ } from "../src/lib/home-content.ts";
 import { HOME_GOALS, HOME_SECTIONS, homeGoal } from "../src/lib/home-journey.ts";
-import { HOME_ART_ROOT, HOME_LIBRARY, HOME_PRODUCTS, HOME_SPOTLIGHT, homeProductArt } from "../src/lib/home-showcase.ts";
+import { HOME_ART_ROOT, HOME_LIBRARY, HOME_PRODUCTS, homeProductArt } from "../src/lib/home-showcase.ts";
 
 const read = path => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
 test("authentication preserves allowed local intent including country goal and membership anchor", () => {
@@ -30,7 +30,7 @@ test("every central Home destination resolves to a route", () => {
   }
 });
 test("every Home product has a live route, individual artwork and seal glyph", () => {
-  const shown = [...HOME_SPOTLIGHT, ...HOME_LIBRARY, "premium"];
+  const shown = HOME_LIBRARY;
   assert.deepEqual(shown.toSorted(), Object.keys(HOME_PRODUCTS).toSorted());
   assert.equal(new Set(Object.values(HOME_PRODUCTS).map(product => product.icon)).size, shown.length);
   for (const id of shown) {
@@ -39,12 +39,14 @@ test("every Home product has a live route, individual artwork and seal glyph", (
     assert.ok(existsSync(new URL(`../public${homeProductArt(id)}`, import.meta.url)), id);
   }
   assert.ok(existsSync(new URL(`../public${homeProductArt("hero")}`, import.meta.url)));
-  assert.ok(existsSync(new URL(`../public${HOME_ART_ROOT}/seal-frame.webp`, import.meta.url)));
 });
 
 test("featured courses resolve and all responsive cinematic variants exist", () => {
-  const catalog = read("src/data/courses-overview.ts");
-  for (const { id } of HOME_COURSES) assert.ok(catalog.includes(`"${id}"`), id);
+  const catalog = read("src/data/courses-overview.ts") + read("src/data/courses/series-courses.ts");
+  for (const { id, art } of HOME_COURSES) {
+    assert.ok(catalog.includes(`"${id}"`), id);
+    assert.ok(existsSync(new URL(`../public${HOME_ART_ROOT}/${art}.webp`, import.meta.url)), art);
+  }
   for (const asset of cinematicKeys) for (const width of cinematicWidths) for (const format of ["avif", "webp"]) assert.ok(existsSync(new URL(`../public${cinematicUrl(asset, width, format)}`, import.meta.url)), `${asset}/${width}/${format}`);
 });
 test("Home provides one H1 and FAQ structured data uses the same answers", () => {
@@ -66,6 +68,10 @@ test("Home goals use the Country Fit route's supported vocabulary and safe defau
   for (const goal of HOME_GOALS) {
     assert.ok(route.includes(`"${goal.id}"`), goal.id);
     assert.equal(homeGoal(goal.id), goal.id);
+    assert.equal(new Set(goal.products).size, 4);
+    assert.equal(new Set(goal.courses).size, 3);
+    for (const id of goal.products) assert.ok(HOME_LIBRARY.includes(id), id);
+    for (const id of goal.courses) assert.ok(HOME_COURSES.some(course => course.id === id), id);
   }
   for (const invalid of [undefined, null, "<script>", "admin", [], {}]) assert.equal(homeGoal(invalid), "study");
 });

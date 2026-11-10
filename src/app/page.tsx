@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import InstitutionalHome from "@/components/home/v4/InstitutionalHome";
 import HomeStructuredData from "@/components/home/HomeStructuredData";
 import { HOME_FAQ, HOME_HERO_DESCRIPTION } from "@/lib/home-content";
+import { homeGoal } from "@/lib/home-journey";
 import { homeProductArt } from "@/lib/home-showcase";
 
 const sourceMetadata: Metadata = {
@@ -44,8 +45,10 @@ const sourceMetadata: Metadata = {
   },
 };
 
-export default function HomePage() {
-  return <><HomeStructuredData faq={HOME_FAQ} /><InstitutionalHome /></>;
+export default async function HomePage({ searchParams }: { searchParams: Promise<{ goal?: string | string[] }> }) {
+  const params = await searchParams;
+  const goal = Array.isArray(params.goal) ? params.goal[0] : params.goal;
+  return <><HomeStructuredData faq={HOME_FAQ} /><InstitutionalHome initialGoal={homeGoal(goal)} /></>;
 }
 
 export async function generateMetadata() { return localizeMetadata(sourceMetadata); }

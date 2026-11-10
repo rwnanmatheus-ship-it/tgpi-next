@@ -47,7 +47,7 @@ function getHomeStructuredData(faq: readonly { question: string; answer: string 
       contentUrl: `${siteUrl}${homeProductArt("hero")}`,
       width: 1536,
       height: 1024,
-      caption: "TGPI product collection editorial artwork",
+      caption: "TGPI homepage editorial illustration of an Atlantic city and bridge",
     },
     {
       "@type": "WebPage",
