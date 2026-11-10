@@ -82,7 +82,7 @@ for (const [id, additions] of Object.entries(labs)) {
     description: old?.description ?? overview?.desc ?? pro?.outcomes.join(' ') ?? '', outcomes: old?.outcomes ?? pro?.outcomes ?? overview?.benefits ?? [],
     ...(!old && !overview?.desc && pro ? { descriptionParts: pro.outcomes } : {}),
     lessons, portfolioMinutes, assessmentMinutes, minutes: lessons.reduce((sum, l) => sum + l.minutes, 0) + portfolioMinutes + assessmentMinutes,
-    language: pro ? 'pt-BR / en' : 'en', image: overview?.image ?? courseArtwork(id),
+    language: pro ? 'pt-BR / en' : 'en', image: courseArtwork(id, overview?.image),
     ...(old ? { legacyHref: `/courses/${id}/lessons/${old.modules[0].lessons[0].id}` } : pro ? { legacyHref: `/courses/${id}/history` } : {}),
   });
   banks.set(id, questions);

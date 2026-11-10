@@ -1,94 +1,56 @@
-"use client";
-import { useLocale } from "@/components/localization/LocaleProvider";
-
-import Image from "@/components/localization/LocalizedImage";
-import CinematicImage from "@/components/ui/CinematicImage";
-import { courseArtworkKeys } from "@/lib/cinematic-art";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import ContinueLearning from "./ContinueLearning";
-import { courseLearningPolicy, credentialLabel } from "@/lib/learning/catalog-policy";
-import { parseCatalogFilters, catalogFilterParams, defaultCatalogFilters, type CatalogFilters } from "@/lib/learning/catalog-filters";
-import ActivationProgressProvider, { useActivationProgress } from "@/components/activation/ActivationProgressProvider";
-import type { CourseOverview } from "@/types/course-overview";
-import styles from "./learning-catalog.module.css";
-import { LocalizedText } from "@/components/localization/LocaleProvider";
-
+'use client';
+import { useLocale } from '@/components/localization/LocaleProvider';
+import Image from 'next/image';
+import { courseArtwork } from '@/lib/cinematic-art';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import ContinueLearning from './ContinueLearning';
+import CourseSearch from './CourseSearch';
+import { courseLearningPolicy, credentialLabel } from '@/lib/learning/catalog-policy';
+import { parseCatalogFilters, catalogFilterParams, defaultCatalogFilters, type CatalogFilters } from '@/lib/learning/catalog-filters';
+import { courseMinutes, courseSearchScore } from '@/lib/learning/catalog-search';
+import type { CourseOverview } from '@/types/course-overview';
+import styles from './learning-catalog.module.css';
 
 type Props = { courses: CourseOverview[]; initialFilters: CatalogFilters };
-const goals = [
-  ["all", "All subjects"], ["global-mobility", "Language & mobility"],
-  ["decision-intelligence", "Better decisions"], ["global-economics", "Money & opportunity"],
-  ["future-of-work", "Career & technology"],
-] as const;
-
-export default function LearningPathExplorer(props: Props) {
-  return <ActivationProgressProvider><Catalog {...props} /></ActivationProgressProvider>;
-}
-
-function Catalog({ courses, initialFilters }: Props) {
-  const { t } = useLocale();
-  const [filters, setFilters] = useState(initialFilters);
-  const { goal, query, series, availability, credential, language } = filters;
+const goals = [['all','All subjects'],['global-mobility','Language & mobility'],['decision-intelligence','Better decisions'],['global-economics','Money & opportunity'],['future-of-work','Career & technology']] as const;
+export default function LearningPathExplorer({ courses, initialFilters }: Props) {
+  const { t, locale } = useLocale();
+  const [filters, setFilters] = useState(initialFilters), [sort, setSort] = useState('recommended');
+  const [limit, setLimit] = useState(9), [comparison, setComparison] = useState<string[]>([]), [view, setView] = useState<'grid'|'list'>('grid');
+  const [compareOpen, setCompareOpen] = useState(false);
   const update = (patch: Partial<CatalogFilters>) => {
-    const next = { ...filters, ...patch };
-    setFilters(next);
+    const next = { ...filters, ...patch }; setFilters(next); setLimit(9);
     const params = catalogFilterParams(next, new URLSearchParams(window.location.search));
     window.history.replaceState(null, '', `${window.location.pathname}${params.size ? `?${params}` : ''}${window.location.hash}`);
   };
-  useEffect(() => {
-    const read = () => setFilters(parseCatalogFilters(new URLSearchParams(window.location.search)));
-    window.addEventListener('popstate', read);
-    return () => window.removeEventListener('popstate', read);
-  }, []);
-  const seriesNames = [...new Set(courses.flatMap(course => course.series ? [course.series] : []))];
-  const { progress } = useActivationProgress();
-  const visible = courses.filter(course =>
-    (goal === "all" || course.goal === goal) &&
-    (series === "all" || course.series === series) &&
-    (availability === "all" || course.status === availability) &&
-    (credential === "all" || courseLearningPolicy(course).credentialStatus === credential) &&
-    (language === "all" || courseLearningPolicy(course).instructionLanguage === language) &&
-    `${course.title} ${course.desc} ${course.category} ${course.series ?? ""} ${t(course.title)} ${t(course.desc)} ${t(course.category)} ${t(course.series ?? "")}`.toLowerCase().includes(query.trim().toLowerCase()));
-  const liveCount = courses.filter(course => course.status === "available").length;
+  useEffect(() => { const read = () => { setFilters(parseCatalogFilters(new URLSearchParams(window.location.search))); setLimit(9); }; window.addEventListener('popstate',read); return () => window.removeEventListener('popstate',read); }, []);
+  const eligible = courses.filter(course => (filters.goal === 'all' || course.goal === filters.goal) && (filters.series === 'all' || course.series === filters.series) && (filters.availability === 'all' || course.status === filters.availability) && (filters.credential === 'all' || courseLearningPolicy(course).credentialStatus === filters.credential) && (filters.language === 'all' || courseLearningPolicy(course).instructionLanguage === filters.language));
+  const visible = eligible.map(course => ({ course, score: courseSearchScore(course,filters.query,t) })).filter(item => item.score > 0).sort((a,b) => sort === 'shortest' ? courseMinutes(a.course.duration)-courseMinutes(b.course.duration) : sort === 'title' ? t(a.course.title).localeCompare(t(b.course.title),locale) : b.score-a.score).map(item => item.course);
+  const selected = courses.filter(course => comparison.includes(course.id));
+  const activeFilters = Object.entries(filters).some(([key,value]) => value !== defaultCatalogFilters[key as keyof CatalogFilters]);
   return <section id="learning-paths" className={styles.catalog} aria-labelledby="learning-paths-title">
     <ContinueLearning />
-    <h2 id="learning-paths-title" className="sr-only">{t("All courses")}</h2>
+    <div className={styles.heading}><div><p className={styles.eyebrow}>{t('Your next capability')}</p><h2 id="learning-paths-title">{t('Find a course. Change what you can do.')}</h2></div><p>{t('Choose by outcome, explore the curriculum and build evidence through practice.')}</p></div>
     <div className={styles.tools}>
-      <div className={styles.searchRow}>
-        <label className={styles.search}><span><LocalizedText text={t("Search courses")} /></span><input type="search" value={query} onChange={event => update({ query: event.target.value })} placeholder={t("Try English, career or budget")} /></label>
-        <label className={styles.select}><span><LocalizedText text={t("Course series")} /></span><select aria-label={t("Course series")} value={series} onChange={event => update({ series: event.target.value })}><option value="all"><LocalizedText text={t("All series")} /></option>{seriesNames.map(name => <option key={name} value={name}><LocalizedText text={t(name)} /></option>)}</select></label>
-        <label className={styles.select}><span><LocalizedText text={t("Availability")} /></span><select aria-label={t("Availability")} value={availability} onChange={event => update({ availability: event.target.value })}><option value="available">{t("Available now")} ({liveCount})</option><option value="planned"><LocalizedText text={t("In development")} /></option><option value="all"><LocalizedText text={t("Full library")} /></option></select></label>
-      </div>
-      <div className={styles.filters} role="group" aria-label={t("Filter by learning goal")}>{goals.map(([value,label]) => <button key={value} type="button" aria-pressed={goal === value} onClick={() => update({ goal: value })}>{t(label)}</button>)}</div>
-      <div className={styles.policyFilters}>
-        <label>{t('Credential pathway')}<select value={credential} onChange={event => update({ credential: event.target.value })}><option value="all"><LocalizedText text={t('All credential types')} /></option><option value="criteria_available"><LocalizedText text={t('Credential pathway')} /></option><option value="none"><LocalizedText text={t('Practice')} /></option></select></label>
-        <label>{t('Course language')}<select value={language} onChange={event => update({ language: event.target.value })}><option value="all"><LocalizedText text={t('All languages')} /></option><option value="pt-BR"><LocalizedText text={"Português"} /></option><option value="en"><LocalizedText text={"English"} /></option></select></label>
-      </div>
+      <CourseSearch courses={eligible} query={filters.query} onChange={query => update({query})} />
+      <div className={styles.filters} role="group" aria-label={t('Filter by learning goal')}>{goals.map(([value,label]) => <button key={value} type="button" aria-pressed={filters.goal === value} onClick={() => update({goal:value})}>{t(label)}<small>{courses.filter(course => value === 'all' || course.goal === value).length}</small></button>)}</div>
+      <details className={styles.advanced}><summary>{t('Refine your search')}{activeFilters && <span> · {t('Filters active')}</span>}</summary><div className={styles.policyFilters}>
+        <label>{t('Course series')}<select value={filters.series} onChange={event => update({series:event.target.value})}><option value="all">{t('All series')}</option>{[...new Set(courses.flatMap(course => course.series ? [course.series] : []))].map(series => <option key={series} value={series}>{t(series)}</option>)}</select></label>
+        <label>{t('Availability')}<select value={filters.availability} onChange={event => update({availability:event.target.value})}><option value="available">{t('Available now')}</option><option value="all">{t('Full library')}</option><option value="planned">{t('In development')}</option></select></label>
+        <label>{t('Course language')}<select value={filters.language} onChange={event => update({language:event.target.value})}><option value="all">{t('All languages')}</option><option value="en">{t('English')}</option><option value="pt-BR">{t('Português')}</option></select></label>
+        <label>{t('Credential pathway')}<select value={filters.credential} onChange={event => update({credential:event.target.value})}><option value="all">{t('All credential types')}</option><option value="criteria_available">{t('Credential pathway')}</option><option value="none">{t('Practice')}</option></select></label>
+      </div></details>
     </div>
-    <div className={styles.resultRow}><p role="status">{t("Course results: {count}", { count: visible.length })}</p><Link href="/certificates"><LocalizedText text="My certificates ↗" /></Link></div>
-    {visible.length ? <div className={styles.grid}>{visible.map(course => {
-      const record = progress.courseProgress[course.id];
-      const policy = courseLearningPolicy(course);
-      return <article key={course.id} className={styles.card}>
-        <Link href={course.href} className={styles.cover} aria-label={t("Explore {course}", { course: t(course.title) })}>
-          {courseArtworkKeys[course.id] ? <CinematicImage asset={courseArtworkKeys[course.id]} alt="" sizes="(max-width: 639px) calc(100vw - 40px), (max-width: 1100px) 46vw, 400px" className={styles.image} /> : <Image src={course.image} alt="" fill sizes="(max-width: 639px) 100vw, 33vw" className={styles.image} />}
-          <span className={styles.badge}>{course.status === "available" ? policy.publicationStatus === "early_access" ? t("Early access") : policy.kind === "flagship" ? t("Flagship course") : t("Expanded course") : t("In development")}</span>
-          {course.series && <span className={styles.seriesBadge}>{t(course.series)}<small>{t("Chapter {number}", { number: String(course.seriesOrder).padStart(2, "0") })}</small></span>}
-          <span className={styles.coverArrow} aria-hidden="true">↗</span>
-        </Link>
-        <div className={styles.cardBody}>
-          <p className={styles.eyebrow}><LocalizedText text={course.category} /></p>
-          <h3><Link href={course.href}><LocalizedText text={course.title} /></Link></h3>
-          <p className={styles.description}><LocalizedText text={course.desc} /></p>
-          <p className={styles.language}>{t(policy.instructionLanguage === "pt-BR" ? "Instruction: Portuguese" : "Instruction: English")} · {t("Free with an account")}</p>
-          <p className={styles.meta}>{t(course.duration)} <span aria-hidden="true">·</span> <LocalizedText text={course.format} /></p>
-          <ul className={styles.outcomes}>{course.benefits.slice(0, 2).map(benefit => <li key={benefit}>{t(benefit)}</li>)}</ul>
-          <div className={styles.cardFooter}><p>{t(credentialLabel(policy))}</p><Link className={styles.primary} href={course.href}>{course.status === "planned" ? t("Request early access") : record ? t("Continue learning") : t("Explore course")}<span aria-hidden="true"> →</span></Link></div>
-        </div>
-      </article>;
-    })}</div> : <div className={styles.empty}><h3><LocalizedText text="No courses match these filters." /></h3><p><LocalizedText text="Try a broader subject or another search term." /></p><button className={styles.primary} onClick={() => {update(defaultCatalogFilters);}}><LocalizedText text="Reset filters" /></button></div>}
-    <aside className={styles.connected}><div><p className={styles.eyebrow}><LocalizedText text="Put learning to work" /></p><h2><LocalizedText text="One course. One concrete next step." /></h2><p><LocalizedText text="Compare your destinations, turn your findings into a personal plan and keep your achievements together." /></p></div><nav aria-label={t("Connected learning tools")}><Link href="/compare"><LocalizedText text="Compare countries ↗" /></Link><Link href="/dashboard"><LocalizedText text="My workspace ↗" /></Link><Link href="/certificates"><LocalizedText text="My achievements ↗" /></Link></nav></aside>
-    <details className={styles.standard}><summary><LocalizedText text="How TGPI learning works" /></summary><div><p><strong><LocalizedText text="Learn through situations." /></strong>{" "}<LocalizedText text="Each available course includes scenarios, practical tasks and formative checkpoints with feedback." /></p><p><strong><LocalizedText text="Keep your progress." /></strong>{" "}<LocalizedText text="Practice courses record checkpoints; professional courses also save activities and project submissions in your account." /></p><p><strong><LocalizedText text="Understand your credential." /></strong>{" "}<LocalizedText text="Professional courses combine practice, a quiz and a project reviewed by a person. See each course for its certification criteria." /></p></div></details>
+    <div className={styles.resultRow}><p role="status" aria-live="polite">{t('Course results: {count}', {count:visible.length})}{activeFilters && <button className={styles.textButton} onClick={() => update(defaultCatalogFilters)}>{t('Reset filters')}</button>}</p><div className={styles.resultControls}><select aria-label={t('Sort courses')} value={sort} onChange={event => {setSort(event.target.value);setLimit(9);}}><option value="recommended">{t('Relevance')}</option><option value="shortest">{t('Shortest workload')}</option><option value="title">{t('Course title')}</option></select><div className={styles.viewSwitch} role="group" aria-label={t('Course layout')}><button aria-pressed={view==='grid'} aria-label={t('Grid view')} onClick={() => setView('grid')}>▦</button><button aria-pressed={view==='list'} aria-label={t('List view')} onClick={() => setView('list')}>☰</button></div></div></div>
+    {selected.length > 0 && <aside className={styles.compareBar} aria-label={t('Course comparison')}><span>{t('Compare up to three courses')} · {selected.length}/3</span><button className={styles.primary} disabled={selected.length<2} onClick={() => {setCompareOpen(value => !value);requestAnimationFrame(() => document.getElementById('course-comparison')?.scrollIntoView({block:'start'}));}} aria-expanded={compareOpen}>{t(compareOpen ? 'Close comparison' : 'Compare courses')}</button><button className={styles.textButton} onClick={() => {setComparison([]);setCompareOpen(false);}}>{t('Clear selection')}</button></aside>}
+    {compareOpen && <section id="course-comparison" className={styles.comparePanel}><h2>{t('Course comparison')}</h2><div className={styles.compareScroll} tabIndex={0} role="region" aria-label={t('Course comparison')}><table><thead><tr><th scope="col">{t('Course')}</th>{selected.map(course => <th scope="col" key={course.id}>{t(course.title)}</th>)}</tr></thead><tbody>{[['Study time', (c:CourseOverview) => c.duration], ['Level',(c:CourseOverview) => t(c.level)], ['What you will practice',(c:CourseOverview) => t(c.benefits[0] || c.desc)],['Course language',(c:CourseOverview) => t(courseLearningPolicy(c).instructionLanguage === 'pt-BR' ? 'Instruction: Portuguese' : 'Instruction: English')]].map(([label,read]) => <tr key={label as string}><th scope="row">{t(label as string)}</th>{selected.map(course => <td key={course.id}>{(read as (c:CourseOverview)=>string)(course)}</td>)}</tr>)}<tr><th scope="row">{t('Explore course')}</th>{selected.map(course => <td key={course.id}><Link className={styles.primary} href={course.href}>{t('Course overview')} ↗</Link></td>)}</tr></tbody></table></div></section>}
+    {visible.length ? <div className={`${styles.grid} ${view === 'list' ? styles.list : ''}`}>{visible.slice(0,limit).map(course => { const policy = courseLearningPolicy(course); return <article className={styles.card} key={course.id}>
+      <Link href={course.href} className={styles.cover} aria-label={t('Explore {course}',{course:t(course.title)})}><Image src={courseArtwork(course.id,course.image)} alt="" fill sizes={view === 'list' ? '(max-width: 640px) 100vw, 300px' : '(max-width: 640px) 100vw, (max-width: 1100px) 50vw, 420px'} className={styles.image} /><span className={styles.badge}>{t(policy.kind === 'flagship' ? 'Flagship course' : course.status === 'available' ? 'Available now' : 'In development')}</span><span className={styles.coverArrow} aria-hidden="true">↗</span></Link>
+      <div className={styles.cardBody}><p className={styles.eyebrow}>{t(course.category)}</p><h3><Link href={course.href}>{t(course.title)}</Link></h3><p className={styles.description}>{t(course.desc)}</p><div className={styles.meta}><span>{course.duration}</span><span>{t(course.format)}</span></div><p className={styles.outcome}>{t(course.benefits[0] || course.goalLabel)}</p><div className={styles.cardFooter}><span className={styles.credential}>{t(credentialLabel(policy))}</span><Link className={styles.primary} href={course.href}>{t('Explore course')} <span aria-hidden="true">→</span></Link><label className={styles.compareCheck}><input type="checkbox" checked={comparison.includes(course.id)} disabled={!comparison.includes(course.id) && comparison.length >= 3} onChange={() => {setComparison(previous => previous.includes(course.id) ? previous.filter(id => id !== course.id) : [...previous,course.id]);setCompareOpen(false);}} />{t('Compare course')}</label></div></div>
+    </article>; })}</div> : <div className={styles.empty}><h3>{t('No courses match these filters.')}</h3><p>{t('Try a broader subject or another search term.')}</p><button className={styles.primary} onClick={() => update(defaultCatalogFilters)}>{t('Reset filters')}</button></div>}
+    {visible.length > limit && <div className={styles.loadMore}><button className={styles.primary} onClick={() => setLimit(previous => previous+9)}>{t('Show more courses')} <span aria-hidden="true">↓</span></button><p>{t('Showing {start}–{end} of {count}',{start:1,end:Math.min(limit,visible.length),count:visible.length})}</p></div>}
+    <aside className={styles.connected}><div><p className={styles.eyebrow}>{t('Put learning to work')}</p><h2>{t('One course. One concrete next step.')}</h2><p>{t('Compare your destinations, turn your findings into a personal plan and keep your achievements together.')}</p></div><nav aria-label={t('Connected learning tools')}><Link href="/compare">{t('Compare countries ↗')}</Link><Link href="/dashboard">{t('My workspace ↗')}</Link><Link href="/certificates">{t('My achievements ↗')}</Link></nav></aside>
+    <details className={styles.standard}><summary>{t('How TGPI learning works')}</summary><div><p><strong>{t('Learn through situations.')}</strong>{t('Each available course includes scenarios, practical tasks and formative checkpoints with feedback.')}</p><p><strong>{t('Keep your progress.')}</strong>{t('Practice courses record checkpoints; professional courses also save activities and project submissions in your account.')}</p><p><strong>{t('Understand your credential.')}</strong>{t('Study, apply, check and revisit. Your certificate is issued automatically after all requirements are met; no human review queue is required.')}</p></div></details>
   </section>;
 }
