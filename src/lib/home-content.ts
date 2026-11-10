@@ -24,7 +24,17 @@ export const HOME_FAQ = [
 ] as const;
 
 export const HOME_COURSES = [
-  { id: "global-english-2026", asset: "english", objective: "Handle practical conversations for arrival, housing and work.", alt: "Two adults communicating naturally in a contemporary city café" },
-  { id: "country-fit", asset: "country", objective: "Compare destinations against your constraints and the evidence.", alt: "A globe, maps and notebooks arranged for thoughtful country research" },
-  { id: "relocation-budget", asset: "budget", objective: "Separate moving costs from living costs and test your financial runway.", alt: "A calculator, notebook and apartment keys arranged for relocation budgeting" },
+  { id: "global-english-2026", group: "language", art: "course-english", alt: "A traveler practicing a conversation at a station information desk" },
+  { id: "study-abroad-planning", group: "mobility", art: "course-study", alt: "A student reviewing an application plan in a university courtyard" },
+  { id: "ai-workflow-foundations", group: "career", art: "course-ai", alt: "An analyst checking a paper workflow beside a laptop" },
+  { id: "arrival-playbook", group: "mobility", art: "course-arrival", alt: "A traveler stepping from a tram with a red suitcase" },
+  { id: "career-networking", group: "career", art: "course-career", alt: "Two professionals talking in a conference lounge" },
+  { id: "cost-of-living-lab", group: "mobility", art: "course-cost", alt: "A shopper comparing purchases and taking notes at a market" },
 ] as const;
+
+export type HomeCourseId = typeof HOME_COURSES[number]["id"];
+export type HomeCourseGroup = typeof HOME_COURSES[number]["group"];
+
+export function homeCertificateSample(locale: string) {
+  return `/images/home/certificate-academic-2026-5-${locale === "pt-BR" ? "pt" : "en"}.webp`;
+}

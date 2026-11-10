@@ -1,7 +1,7 @@
 import type { NavigationIconName } from "./navigation-system";
 import { HOME_ROUTES } from "./home-content.ts";
 
-export const HOME_ART_ROOT = "/images/home/showcase-v1";
+export const HOME_ART_ROOT = "/images/home/showcase-v2";
 
 export const HOME_PRODUCT_GROUPS = [
   { id: "decide", label: "Explore & decide" },
@@ -82,10 +82,7 @@ export const HOME_PRODUCTS = {
 
 export type HomeProductId = keyof typeof HOME_PRODUCTS;
 
-export const HOME_SPOTLIGHT = ["atlas", "integrity", "learning", "certificates"] as const;
-export const HOME_LIBRARY = [
-  "countries", "compare", "fit", "plan", "documents", "evidence", "workspace", "global-id", "community",
-] as const satisfies readonly HomeProductId[];
+export const HOME_LIBRARY = Object.keys(HOME_PRODUCTS) as HomeProductId[];
 
 export function homeProductArt(product: HomeProductId | "hero") {
   return `${HOME_ART_ROOT}/${product}.webp`;
