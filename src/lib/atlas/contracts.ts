@@ -2,6 +2,7 @@ import { z } from 'zod';
 
 export const scopeSchema = z.enum(['destinations', 'languages', 'career', 'budget']);
 export type AtlasScope = z.infer<typeof scopeSchema>;
+export const sponsoredUnavailable = 'Atlas free access is temporarily unavailable. No credits were charged.';
 export const idSchema = z.string().uuid();
 export const chatSchema = z.object({
   conversationId: idSchema,
@@ -9,6 +10,7 @@ export const chatSchema = z.object({
   text: z.string().trim().min(1).max(4000),
   scopes: z.array(scopeSchema).max(4).default([]),
   temporary: z.boolean().default(false),
+  access: z.literal('sponsored').optional(),
   history: z.array(z.object({ role: z.enum(['user', 'assistant']), content: z.string().max(8000) }).strict()).max(12).default([]),
 }).strict();
 export type AtlasInput = z.infer<typeof chatSchema>;
@@ -60,6 +62,6 @@ export function safeAtlasLink(href: string) {
     const url = new URL(href, 'https://theglobalpolymath.com');
     const path = decodeURIComponent(url.pathname);
     if (url.origin !== 'https://theglobalpolymath.com' || path.includes('..') || path.includes('\\')) return '';
-    return /^\/(?:countries|compare|country-fit|courses|passport|profile|plan|community|intelligence|privacy|terms)(?:\/|$)/.test(path) ? url.pathname + url.search + url.hash : '';
+    return /^\/(?:countries|compare|country-fit|courses|passport|profile|plan|community|intelligence|privacy|terms|certificates|verify|global-key|pricing)(?:\/|$)/.test(path) ? url.pathname + url.search + url.hash : '';
   } catch { return ''; }
 }

@@ -2,7 +2,7 @@ import 'server-only';
 import { randomUUID } from 'node:crypto';
 import { createFirestoreUpdateWrite, runFirestoreTransaction } from '@/lib/firestore-admin-rest.server';
 import { PROVIDER_RESERVE_MICRO_USD } from '@/lib/wallet/policy';
-import { AtlasError, boundedHistory, ownedPath, type AtlasInput } from './contracts';
+import { AtlasError, sponsoredUnavailable, boundedHistory, ownedPath, type AtlasInput } from './contracts';
 
 export const isSponsoredAtlas = () => process.env.TGPI_ATLAS_ACCESS_MODE === 'sponsored';
 
@@ -15,7 +15,7 @@ export function sponsoredConfig(now = Date.now()) {
     process.env.TGPI_ATLAS_SPONSORED_POLICY_CONFIRMED !== 'true' ||
     !/^[a-zA-Z0-9_-]{1,80}$/.test(grant) || !Number.isSafeInteger(cents) || cents < 2 || cents > 100_000 ||
     !Number.isFinite(expiresAt) || expiresAt <= now) {
-    throw new AtlasError('Atlas free access is temporarily unavailable. No credits were charged.', 503);
+    throw new AtlasError(sponsoredUnavailable, 503);
   }
   return { grant, limitMicroUsd: cents * 10_000, expiresAt };
 }

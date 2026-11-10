@@ -1,4 +1,24 @@
-# TGPI Atlas AI — first functional core
+# TGPI Atlas AI
+
+## Atlas Command Center
+
+The default guide runs in the browser. It resolves countries from the TGPI identity catalogue, uses the shared product navigation for its resources and suggests the next applicable module. The current conversation retains the destination and comparison goal. The guide and budget calculator use no inference provider, Firestore reads or Atlas wallet credits.
+
+Signed-in members can search, rename, export and delete their conversations on this browser. IndexedDB uses the Clerk account and conversation IDs as its compound key. Drafts use tab-scoped storage. A temporary chat keeps its text in memory. Device history is independent of the legacy cloud archive at `/atlas?mode=account` and is not synchronized. The browser renders the member's first name without adding it to the online provider context.
+
+Compatible browsers can offer generative AI through their built-in language model. Activation and any initial model download require an explicit click. Atlas uses the same public product catalogue and keeps this conversation on the device. Browser and language support determine availability.
+
+Sponsored AI is a separate mode. It uses the existing grant, shared limit and protected API. New clients request sponsored access explicitly and fail closed if the deployment switches to wallet access. See [Sponsored access](SPONSORED-ACCESS.md).
+
+The floating launcher docks to either side, keeps its position in this browser and offers route-aware entry points without reading page content. WebGL is loaded only for visible animation. Reduced-motion preferences or unavailable WebGL use the static mascot.
+
+### Rebuild the owl
+
+`blender -b -t 6 --python scripts/assets/build-atlas-owl.py` exports the original GLB and a transparent PNG. Optimize the mesh with `npx --yes @gltf-transform/cli@4.2.1 meshopt INPUT.glb OUTPUT.glb --level medium` and encode the poster as `owl-poster.webp`. Ship the optimized mesh at `public/brand/atlas/owl-articulated.glb`. Its three clips are `Idle`, `Invite` and `Focus`.
+
+### Historical release record
+
+The following notes describe the first core release from October 2026.
 
 Status: interface-only production release authorized on 2026-10-21. AI generation remains disabled pending live validation. The page shows a preview notice, disables sending, and skips initial history loading when server generation gates are not satisfied. **Not validated end to end against live services.**
 

@@ -5,7 +5,7 @@ import { ATLAS_MODEL, providerCostMicroUsd } from '@/lib/wallet/policy';
 import OpenAI from 'openai';
 import { clerkClient } from '@clerk/nextjs/server';
 import { atlasBody, atlasFailure, atlasUser, requireAtlasGeneration } from '@/lib/atlas/http.server';
-import { AtlasError, chatSchema, type AtlasEvent, type AtlasMessage } from '@/lib/atlas/contracts';
+import { AtlasError, sponsoredUnavailable, chatSchema, type AtlasEvent, type AtlasMessage } from '@/lib/atlas/contracts';
 import { atlasInstructions, selectAtlasContext } from '@/lib/atlas/context';
 import { beginTurn, finishTurn } from '@/lib/atlas/store.server';
 
@@ -17,6 +17,9 @@ export async function POST(request: Request) {
     const budget = requireAtlasGeneration(userId);
     const input = await atlasBody(request, chatSchema);
     const sponsored = isSponsoredAtlas();
+    if (input.access === 'sponsored' && !sponsored) {
+      throw new AtlasError(sponsoredUnavailable, 503);
+    }
     let selected = selectAtlasContext({}, []);
     if (input.scopes.length) {
       const user = await (await clerkClient()).users.getUser(userId);

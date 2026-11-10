@@ -31,7 +31,7 @@ async function api<T>(url: string, init?: RequestInit): Promise<T> {
   return body as T;
 }
 
-export default function AtlasChat({ userId, enabled = true, embedded = false, sponsored = false, evidenceGuide = false }: { userId: string; enabled?: boolean; embedded?: boolean; sponsored?: boolean; evidenceGuide?: boolean }) {
+export default function AtlasChat({ userId, enabled = true, embedded = false, sponsored = false, evidenceGuide = false, archive = false }: { userId: string; enabled?: boolean; embedded?: boolean; sponsored?: boolean; evidenceGuide?: boolean; archive?: boolean }) {
   const { t, locale } = useLocale();
   const [id, setId] = useState('');
   const [messages, setMessages] = useState<AtlasMessage[]>([]);
@@ -72,9 +72,9 @@ export default function AtlasChat({ userId, enabled = true, embedded = false, sp
   useEffect(() => {
     setId(crypto.randomUUID());
     try { if (!sponsored) setDraft(sessionStorage.getItem(draftKey) || ''); } catch { /* storage disabled */ }
-    if (enabled && !sponsored) void loadHistory();
+    if ((enabled || archive) && !sponsored) void loadHistory();
     return () => { abort.current?.abort(); };
-  }, [draftKey, loadHistory, enabled, sponsored]);
+  }, [draftKey, loadHistory, enabled, sponsored, archive]);
 
   useEffect(() => {
     const visual = window.visualViewport;
@@ -195,7 +195,7 @@ export default function AtlasChat({ userId, enabled = true, embedded = false, sp
   const saved = !sponsored && !temporary && items.some(x => x.id === id);
   return <main id={embedded ? 'atlas-widget-chat' : 'atlas-main'} tabIndex={-1} ref={shell} className={`${styles.shell} ${embedded ? styles.embedded : ''}`}>
     <aside className={`${styles.sidebar} ${showHistory ? styles.sidebarOpen : ''}`} aria-label={t("Atlas conversations")}>
-      <Link href="/profile" className={styles.back}><LocalizedText text="← Workspace" /></Link>
+      <Link href={archive ? '/atlas' : '/profile'} className={styles.back}>{t(archive ? 'Ask Atlas' : '← Workspace')}</Link>
       <div className={styles.brand}><Image src="/brand/atlas/avatar.webp" width={48} height={48} alt={t("Atlas owl")} /><div><strong><LocalizedText text={"TGPI ATLAS AI"} /></strong><span>{t("Your global companion")}</span></div></div>
       <button className={styles.primary} disabled={busy} onClick={() => newConversation(false)}>{t("＋ New conversation")}</button>
       {!sponsored && <><button disabled={busy} onClick={() => newConversation(true)}>{t("Start temporary conversation")}</button>
@@ -213,7 +213,7 @@ export default function AtlasChat({ userId, enabled = true, embedded = false, sp
       <header className={styles.header}>
         <button className={styles.historyToggle} aria-expanded={showHistory} onClick={() => setShowHistory(!showHistory)}>{t(sponsored ? 'New conversation' : 'History')}</button>
         <div><h1><LocalizedText text={"Atlas"} />{" "}<span><LocalizedText text={"AI"} /></span></h1><p>{temporary ? t('Temporary conversation') : title || t('New conversation')}</p></div>
-        <div className={styles.headerActions}>{!sponsored && <Link href="/atlas/wallet">{walletCopy[locale].walletLink}</Link>}{saved && <><button disabled={busy} onClick={() => void openConversation(id)}>{t("Reload")}</button><button disabled={busy} onClick={() => { setAction('rename'); setRename(title); }}>{t("Rename")}</button><button disabled={busy} onClick={() => setAction('delete')}>{t("Delete")}</button></>}</div>
+        <div className={styles.headerActions}>{!sponsored && (!archive || enabled) && <Link href="/atlas/wallet">{walletCopy[locale].walletLink}</Link>}{saved && <><button disabled={busy} onClick={() => void openConversation(id)}>{t("Reload")}</button><button disabled={busy} onClick={() => { setAction('rename'); setRename(title); }}>{t("Rename")}</button><button disabled={busy} onClick={() => setAction('delete')}>{t("Delete")}</button></>}</div>
       </header>
       {enabled && <p className={styles.confirm}>{sponsored ? atlasFreeCopy[locale].banner : walletCopy[locale].chatPrice}</p>}
       {!enabled && <div className={styles.confirm} role="status"><p><strong>{t("Atlas preview")}</strong>{' '}{t("— Explore the interface. AI replies are not available for this account yet. Messages cannot be sent during this preview.")}</p></div>}

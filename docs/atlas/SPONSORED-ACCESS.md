@@ -1,6 +1,6 @@
 # Sponsored Atlas access
 
-`TGPI_ATLAS_ACCESS_MODE=sponsored` enables temporary, authenticated AI conversations funded by a verified provider grant. It never credits or debits a member wallet. Checkout is disabled while this mode is active.
+`TGPI_ATLAS_ACCESS_MODE=sponsored` enables authenticated AI conversations funded by a verified provider grant. Requests are temporary on the server. It never credits or debits a member wallet. Checkout is disabled while this mode is active.
 
 ## Production configuration
 
@@ -27,7 +27,7 @@ Metadata is confined to two protected document paths:
 
 Member metadata is overwritten when a new UTC day is used; each document has at most ten request IDs. Grant totals persist to prevent accidental reuse of an older allowance. After 120 grant entries, activation fails closed pending maintenance. Browser clients must have no read/write access to the `tgpiLearningUsers` namespace; only the authenticated server uses these documents.
 
-Questions, answers, selected profile fields and drafts are not stored by this path. Conversation text remains in page memory and is lost on reload or close. OpenAI receives the bounded conversation and only explicitly selected profile fields with `store:false`; provider retention is separate from TGPI storage. Legacy saved conversations and paid accounting retain their existing gates and behavior outside sponsored mode.
+The sponsored server path stores usage metadata. In the Atlas Command Center, members can keep the transcript on the same browser or start a temporary chat that holds text in memory. Browser history is separated by signed-in account. OpenAI receives the bounded conversation and only explicitly selected profile fields with `store:false`. Provider retention is separate. Explicitly sponsored requests fail closed if the deployment switches to wallet access. The legacy account archive keeps its existing ownership and retention rules.
 
 ## Validation and rollout
 

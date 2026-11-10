@@ -58,6 +58,7 @@
     "remark-gfm": "^4.0.1",
     "sharp": "0.35.4",
     "stripe": "^22.0.2",
+    "three": "0.187.0",
     "viem": "^2.56.3",
     "web-push": "3.6.7",
     "zod": "^4.6.7"
@@ -69,6 +70,7 @@
     "@types/qrcode": "^1.5.6",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/three": "0.187.0",
     "@types/web-push": "3.6.4",
     "eslint": "^9",
     "eslint-config-next": "16.3.4",

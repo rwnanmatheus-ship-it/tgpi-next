@@ -31,8 +31,8 @@ function setup(cents = '100') {
       queue = task.catch(() => {}); return task;
     },
   };
-  const module = load('src/lib/atlas/sponsored.server.ts', { '@/lib/firestore-admin-rest.server': firestore, '@/lib/wallet/policy': policy, './contracts': contracts });
-  return { ...module, data, cooldown: () => { for (const value of data.values()) if ('lastAt' in value) value.lastAt = 0; } };
+  const sponsoredStore = load('src/lib/atlas/sponsored.server.ts', { '@/lib/firestore-admin-rest.server': firestore, '@/lib/wallet/policy': policy, './contracts': contracts });
+  return { ...sponsoredStore, data, cooldown: () => { for (const value of data.values()) if ('lastAt' in value) value.lastAt = 0; } };
 }
 const input = () => ({ conversationId: randomUUID(), requestId: randomUUID(), text: 'PRIVATE_QUESTION', temporary: true, history: [], scopes: [] });
 
@@ -101,4 +101,25 @@ test('free-access copy is present in all supported locales', () => {
   const { atlasFreeCopy } = load('src/lib/atlas/free-copy.ts', {});
   assert.deepEqual(Object.keys(atlasFreeCopy).sort(), ['de','en','es','fr','it','pt-BR']);
   for (const copy of Object.values(atlasFreeCopy)) assert.ok(copy.banner.includes('10') && copy.privacy.length > 100 && copy.exhausted);
+});
+
+test('a sponsored request fails closed if deployment access switches to the paid wallet', async () => {
+  let providerOrWalletCalls = 0;
+  const forbidden = () => { providerOrWalletCalls++; throw new Error('Must not reach billing or inference'); };
+  const request = { ...input(), access: 'sponsored' };
+  assert.equal(contracts.chatSchema.safeParse(request).success, true);
+  const route = load('src/app/api/atlas/chat/route.ts', {
+    '@/lib/localization/server': { getLocale: async () => 'en' },
+    openai: forbidden, '@clerk/nextjs/server': {},
+    '@/lib/atlas/sponsored.server': { isSponsoredAtlas: () => false, beginSponsoredTurn: forbidden },
+    '@/lib/atlas/http.server': { atlasUser: async () => 'alice', requireAtlasGeneration: () => 2, atlasBody: async () => request,
+      atlasFailure: error => Response.json({ error: error.message }, { status: error.status }) },
+    '@/lib/atlas/contracts': contracts, '@/lib/atlas/context': {},
+    '@/lib/atlas/store.server': { beginTurn: forbidden, finishTurn: forbidden },
+    '@/lib/wallet/store.server': { settleWallet: forbidden }, '@/lib/wallet/policy': policy,
+  });
+  const response = await route.POST(new Request('https://tgpi.test/api/atlas/chat', { method: 'POST' }));
+  assert.equal(response.status, 503);
+  assert.match((await response.json()).error, /No credits were charged/);
+  assert.equal(providerOrWalletCalls, 0);
 });
