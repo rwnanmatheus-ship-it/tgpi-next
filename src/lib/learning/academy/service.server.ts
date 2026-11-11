@@ -1,6 +1,6 @@
 import 'server-only';
 import { randomInt, randomUUID } from 'node:crypto';
-import { academyCourses, getAcademyCourse, academyQuestions, academyCase, ACADEMY_PASS_SCORE, ACADEMY_REVIEW_DELAY_MS } from '@/data/courses/academy/catalog.server';
+import { academyCourses, getAcademyCourse, academyQuestions, academyCase, ACADEMY_VERSION, PREVIOUS_ACADEMY_VERSION, ACADEMY_PASS_SCORE, ACADEMY_REVIEW_DELAY_MS } from '@/data/courses/academy/catalog.server';
 import { academyMutation, academyRecordPath, numericAnswer } from './model';
 import type { AcademyChallenge, AcademyCourse, AcademyPrivateQuestion, AcademyRecord, AcademyResult } from './types';
 import { createFirestoreUpdateWrite as write, getFirestoreDocument as get, isLearningStorageConfigured, runFirestoreTransaction as transaction, type JsonValue } from '@/lib/firestore-admin-rest.server';
@@ -18,8 +18,8 @@ type StoredChallenge = { public: AcademyChallenge; questions: AcademyPrivateQues
 type ActiveState = { challengeId: string };
 const json = (value: unknown) => JSON.parse(JSON.stringify(value)) as Record<string, JsonValue>;
 export class AcademyError extends Error { constructor(message: string, readonly status = 400) { super(message); } }
-function courseFor(id: string) {
-  const course = getAcademyCourse(id);
+function courseFor(id: string, version = ACADEMY_VERSION) {
+  const course = getAcademyCourse(id, version);
   if (!course || course.id !== id) throw new AcademyError('Course not found.', 404);
   if (!isLearningStorageConfigured()) throw new AcademyError('Secure learning storage is unavailable. Please try again.', 503);
   return course;
@@ -45,14 +45,18 @@ function shuffled<T>(items: readonly T[]): T[] {
   return output;
 }
 function makeChallenge(course: AcademyCourse, target: string): StoredChallenge {
-  const bank = academyQuestions(course.id);
+  const bank = academyQuestions(course.id, course.version);
   let selected: AcademyPrivateQuestion[];
   if (target === 'final' || target === 'retention') {
     // Cover every advanced laboratory, then sample foundation skills. Each item uses opaque per-attempt IDs.
     const advancedIds = new Set(course.lessons.filter(l => !l.foundation).map(l => l.id));
     const advanced = shuffled(bank.filter(q => advancedIds.has(q.lessonId)));
+    // Preserve every required item while keeping final assessments within the request schema.
+    const essential = advanced.filter(question => question.essential);
+    const practice = advanced.filter(question => !question.essential);
     const foundation = shuffled(bank.filter(q => !advancedIds.has(q.lessonId)));
-    selected = [...advanced, ...foundation.slice(0, Math.max(3, 12 - advanced.length))];
+    selected = [...essential, ...practice.slice(0, Math.max(0, 32 - essential.length)),
+      ...foundation.slice(0, Math.max(3, 12 - advanced.length))];
   } else selected = bank.filter(q => q.lessonId === target);
   if (!selected.length) throw new AcademyError('Assessment content is unavailable.', 503);
   const questions = shuffled(selected).map(q => {
@@ -69,6 +73,15 @@ function makeChallenge(course: AcademyCourse, target: string): StoredChallenge {
   return challenge;
 }
 async function priorLearning(uid: string, course: AcademyCourse): Promise<Pick<AcademyRecord, 'notes' | 'legacy'>> {
+  const historical = (await get<AcademyRecord>(academyRecordPath(uid, course.id, PREVIOUS_ACADEMY_VERSION)))?.data;
+  if (historical?.uid === uid && historical.courseId === course.id && historical.version === PREVIOUS_ACADEMY_VERSION) {
+    const lessonIds = new Set(course.lessons.map(lesson => lesson.id));
+    return {
+      notes: Object.fromEntries(Object.entries(historical.notes).filter(([id]) => lessonIds.has(id))),
+      legacy: { version: historical.version, completed: Object.keys(historical.completed).length,
+        ...(historical.credentialId ? { credentialId: historical.credentialId } : {}) },
+    };
+  }
   const pro = getProfessionalCourse(course.id);
   if (pro) {
     const previous = (await get<ProfessionalRecord>(professionalRecordPath(uid, course.id, pro.version)))?.data;
@@ -79,8 +92,23 @@ async function priorLearning(uid: string, course: AcademyCourse): Promise<Pick<A
   const progress = await getUserActivationProgress(uid), previous = progress.courseProgress[course.id] ?? (course.id === 'global-english-2026' ? progress.courseProgress['english-abroad'] : undefined);
   return { notes: {}, ...(previous ? { legacy: { version: previous.courseVersion, completed: previous.completedLessonIds.length } } : {}) };
 }
-export async function academyStatus(identity: Identity, id: string) {
-  const course = courseFor(id), path = academyRecordPath(identity.uid, id, course.version);
+export async function academyStudyCourse(uid: string, course: AcademyCourse, preferCurrent = false, preferredVersion?: string) {
+  if (preferCurrent || !isLearningStorageConfigured()) return course;
+  const previous = getAcademyCourse(course.id, PREVIOUS_ACADEMY_VERSION);
+  if (!previous) return course;
+  const [current, historical] = await Promise.all([
+    preferredVersion === previous.version ? null : get<AcademyRecord>(academyRecordPath(uid, course.id, course.version)),
+    get<AcademyRecord>(academyRecordPath(uid, course.id, previous.version)),
+  ]);
+  if (current?.data.uid === uid && current.data.courseId === course.id && current.data.version === course.version) return course;
+  return historical?.data.uid === uid && historical.data.courseId === course.id && historical.data.version === previous.version ? previous : course;
+}
+
+export async function academyStatus(identity: Identity, id: string, version?: string) {
+  const latest = courseFor(id);
+  if (version && !getAcademyCourse(id, version)) throw new AcademyError('The course edition changed. Reload; your previous records are preserved.', 409);
+  const course = version ? courseFor(id, version) : await academyStudyCourse(identity.uid, latest);
+  const path = academyRecordPath(identity.uid, id, course.version);
   const [document, active] = await Promise.all([get<AcademyRecord>(path), get<ActiveState>(`${path}/state/active`)]);
   if (document) assertRecord(document.data, identity, course);
   const stored = active?.data.challengeId ? (await get<StoredChallenge>(`${path}/attempts/${active.data.challengeId}`))?.data : null;
@@ -89,18 +117,21 @@ export async function academyStatus(identity: Identity, id: string) {
 export async function mutateAcademy(identity: Identity, id: string, raw: unknown) {
   const parsed = academyMutation.safeParse(raw);
   if (!parsed.success) throw new AcademyError('Check the fields and their limits before sending.');
-  const input = parsed.data, course = courseFor(id), path = academyRecordPath(identity.uid, id, course.version);
-  if (input.version !== course.version) throw new AcademyError('The course edition changed. Reload; your previous records are preserved.', 409);
-  if (input.action === 'issue') { await issueAcademyCredential(identity, course, input.confirmedName); return academyStatus(identity, id); }
-  if (input.action === 'sharing') { await academySharing(identity, course, input.sharing); return academyStatus(identity, id); }
-  const prior = input.action === 'enrol' ? await priorLearning(identity.uid, course) : null;
+  const input = parsed.data;
+  courseFor(id);
+  if (!getAcademyCourse(id, input.version)) throw new AcademyError('The course edition changed. Reload; your previous records are preserved.', 409);
+  const course = courseFor(id, input.version), path = academyRecordPath(identity.uid, id, course.version);
+  if (input.action === 'issue') { await issueAcademyCredential(identity, course, input.confirmedName); return academyStatus(identity, id, course.version); }
+  if (input.action === 'sharing') { await academySharing(identity, course, input.sharing); return academyStatus(identity, id, course.version); }
+  const prior = input.action === 'enrol' && course.version === ACADEMY_VERSION ? await priorLearning(identity.uid, course) : null;
   await transaction(async ({ getDocuments }) => {
     const doc = (await getDocuments<AcademyRecord>([path])).get(path), now = new Date().toISOString();
     let record = doc?.data;
     if (input.action === 'enrol') {
       if (record) { assertRecord(record, identity, course); return { result: null, writes: [] }; }
+      if (course.version !== ACADEMY_VERSION) throw new AcademyError('The course edition changed. Reload; your previous records are preserved.', 409);
       if (!isCertificateName(identity.publicName)) throw new AcademyError('Set your certificate name in your account before starting.', 409);
-      record = { uid: identity.uid, courseId: id, version: course.version, revision: 1, enrolledAt: now, updatedAt: now, consent: { publicName: identity.publicName, acceptedAt: now }, diagnostic: input.diagnostic, notes: prior?.notes ?? {}, completed: {}, portfolio: '', sharing: false, attemptLimits: {}, ...(prior?.legacy ? { legacy: prior.legacy } : {}) };
+      record = { uid: identity.uid, courseId: id, version: course.version, revision: 1, enrolledAt: now, updatedAt: now, consent: { publicName: identity.publicName, acceptedAt: now }, diagnostic: input.diagnostic, ...(input.plan ? { plan: input.plan } : {}), notes: prior?.notes ?? {}, completed: {}, portfolio: '', sharing: false, attemptLimits: {}, ...(prior?.legacy ? { legacy: prior.legacy } : {}) };
       return { result: null, writes: [write(path, json(record), { exists: false })] };
     }
     assertRecord(record, identity, course);
@@ -142,7 +173,7 @@ export async function mutateAcademy(identity: Identity, id: string, raw: unknown
       const feedback = stored.questions.map(q => ({ questionId: q.id, lessonId: q.lessonId, correct: answers.get(q.id) === q.correctOptionId, explanation: q.explanation }));
       if (stored.calculation) {
         const answer = numericAnswer(input.calculation);
-        feedback.push({ questionId: 'calculation', lessonId: stored.public.target, correct: answer !== null && Math.abs(answer - stored.calculation.expected) <= 0.011, explanation: stored.calculation.explanation });
+        feedback.push({ questionId: 'calculation', lessonId: stored.public.target, correct: answer !== null && answer === stored.calculation.expected, explanation: stored.calculation.explanation });
       } else if (input.calculation !== undefined) throw new AcademyError('This assessment does not contain a calculation.');
       const score = Math.round(feedback.filter(f => f.correct).length / feedback.length * 100), finalStage = ['final', 'retention'].includes(stored.public.target);
       const essentialsPassed = stored.questions.every(q => !q.essential || answers.get(q.id) === q.correctOptionId) && (!stored.calculation || feedback.at(-1)!.correct);
@@ -159,11 +190,11 @@ export async function mutateAcademy(identity: Identity, id: string, raw: unknown
     record = { ...record, updatedAt: now, revision: record.revision + 1 };
     return { result: null, writes: [write(path, json(record), { updateTime: doc!.updateTime })] };
   });
-  const status = await academyStatus(identity, id);
+  const status = await academyStatus(identity, id, course.version);
   if (status.record?.completedAt && !status.record.credentialId && identity.emailVerified && isCredentialSigningConfigured() &&
       isCertificateName(identity.publicName) && status.record.consent.publicName === identity.publicName) {
     await issueAcademyCredential(identity, course);
-    return academyStatus(identity, id);
+    return academyStatus(identity, id, course.version);
   }
   return status;
 }

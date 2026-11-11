@@ -5,16 +5,26 @@ import { useAuth } from '@clerk/nextjs';
 import Link from 'next/link';
 import { useLocale } from '@/components/localization/LocaleProvider';
 import { localizeAcademyCourse } from '@/lib/localization/academy-content';
-import type { AcademyCourse, AcademyStatus } from '@/lib/learning/academy/types';
+import type { AcademyCourse, AcademyStatus, AcademyStudyPlan } from '@/lib/learning/academy/types';
 import styles from './academy.module.css';
 import { announceProgressSaved, PROGRESS_SYNC_CHANNEL } from '@/lib/progress-sync';
+import AcademyJourney from './AcademyJourney';
 
-export default function AcademyStudy({ course }: { course: AcademyCourse }) {
+export default function AcademyStudy({ course, initialLesson }: { course: AcademyCourse; initialLesson?: string }) {
+  const { t } = useLocale();
   const { sessionId, isLoaded } = useAuth();
-  if (!isLoaded || !sessionId) return null;
-  return <StudySession key={`${sessionId}:${course.id}:${course.version}`} course={course} sessionId={sessionId} />;
+  if (!isLoaded) return <p className={styles.page} role="status">{t('Loading your learning record…')}</p>;
+  if (!sessionId) return <Link className={styles.page} href={`/sign-in?next=${encodeURIComponent(`/courses/${course.id}/study`)}`}>{t('Sign in to continue.')}</Link>;
+  return <StudySession key={`${sessionId}:${course.id}:${course.version}:${initialLesson ?? ''}`} course={course} sessionId={sessionId} initialLesson={initialLesson} />;
 }
-function StudySession({ course: original, sessionId }: { course: AcademyCourse; sessionId: string }) {
+function nextTarget(course: AcademyCourse, status: AcademyStatus) {
+  const record = status.record;
+  return status.challenge?.target
+    ?? course.lessons.find(lesson => !record?.completed[lesson.id])?.id
+    ?? (record?.final ? 'retention' : (record?.portfolio.trim().length ?? 0) >= 200 ? 'final' : 'portfolio');
+}
+
+function StudySession({ course: original, sessionId, initialLesson }: { course: AcademyCourse; sessionId: string; initialLesson?: string }) {
   const { locale, t } = useLocale();
   const course = useMemo(() => localizeAcademyCourse(original, locale), [original, locale]);
   const [status, setStatus] = useState<AcademyStatus | null>(null), [selected, setSelected] = useState(course.lessons[0].id);
@@ -23,7 +33,11 @@ function StudySession({ course: original, sessionId }: { course: AcademyCourse; 
   const [focus, setFocus] = useState(false), [largeText, setLargeText] = useState(false), [now, setNow] = useState(() => Date.now());
   const [busy, setBusy] = useState(false), [error, setError] = useState(''), [loaded, setLoaded] = useState(false);
   const inFlight = useRef(false), alive = useRef(true), stateRef = useRef(status); stateRef.current = status;
-  const endpoint = `/api/learning/academy/${course.id}`;
+  const [plan, setPlan] = useState<AcademyStudyPlan>({ goal: 'foundation', weeklyHours: 3 });
+  const endpoint = `/api/learning/academy/${course.id}?edition=${course.version}`;
+  const editionPath = `/courses/${course.id}/study`;
+  const source = useRef(original);
+  source.current = original;
   const record = status?.record, lesson = course.lessons.find(l => l.id === selected);
   const certificateName = status?.publicName ?? '';
   const requiresNameConfirmation = Boolean(record && certificateName !== record.consent.publicName);
@@ -37,12 +51,11 @@ function StudySession({ course: original, sessionId }: { course: AcademyCourse; 
       if (!response.ok) throw new Error(data.error || 'Unable to load learning.');
       if (!alive.current) return;
       const next = data as AcademyStatus; setStatus(next);
-      const first = next.challenge?.target ?? course.lessons.find(l => !next.record?.completed[l.id])?.id ?? 'portfolio';
+      const first = next.challenge?.target ?? (source.current.lessons.some(item => item.id === initialLesson) ? initialLesson : undefined) ?? nextTarget(source.current, next);
       setSelected(first); setNote(next.record?.notes[first] ?? ''); setPortfolio(next.record?.portfolio ?? ''); setLoaded(true);
     } catch (e) { if (alive.current) setError(e instanceof Error ? e.message : 'Unable to load learning.'); }
-  }, [endpoint, course.lessons, sessionId]);
-  // The edition is immutable for this mounted session; language changes only affect presentation.
-  useEffect(() => { alive.current = true; void load(); return () => { alive.current = false; }; }, [endpoint]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [endpoint, initialLesson, sessionId]);
+  useEffect(() => { alive.current = true; void load(); return () => { alive.current = false; }; }, [load]);
   useEffect(() => { const warn = (event: BeforeUnloadEvent) => { if (dirtyRef.current) { event.preventDefault(); event.returnValue = ''; } }; window.addEventListener('beforeunload', warn); return () => window.removeEventListener('beforeunload', warn); }, []);
   async function mutate(input: Record<string, unknown>): Promise<boolean> {
     if (inFlight.current) return false;
@@ -111,7 +124,15 @@ function StudySession({ course: original, sessionId }: { course: AcademyCourse; 
     requestAnimationFrame(() => { const target = document.getElementById('learning-content'); target?.focus({ preventScroll: true }); target?.scrollIntoView({ block: 'start', behavior: 'instant' }); });
   }
   const completed = course.lessons.filter(l => record?.completed[l.id]).length, allComplete = completed === course.lessons.length;
+  const portfolioReady = Boolean(record && record.portfolio.trim().length >= 200);
   const challenge = status?.challenge, result = status?.lastResult;
+  const prerequisiteMissing = lesson ? course.lessons.slice(0, course.lessons.indexOf(lesson)).some(item => !record?.completed[item.id]) : false;
+  const suggested = status ? nextTarget(original, status) : selected;
+  const goals = {
+    foundation: ['Build the foundations', 'Read the worked example, then reproduce it with your own inputs.'],
+    application: ['Apply a skill', 'Choose a fictional situation and use it across the course activities.'],
+    portfolio: ['Build portfolio evidence', 'Save a first version and document each improvement as you go.'],
+  } as const;
   const reviewOpen = Boolean(record?.reviewAvailableAt && now >= Date.parse(record.reviewAvailableAt));
   useEffect(() => {
     if (!record?.reviewAvailableAt || record.retention) return;
@@ -135,12 +156,47 @@ function StudySession({ course: original, sessionId }: { course: AcademyCourse; 
     <p className={styles.subtitle}>{t('Learn actively. Keep your evidence. Verify what you can apply.')}</p>
     {error && <div role="alert" className={styles.error}>{t(error)}{button('Reload confirmed progress', () => { if (!dirty || window.confirm(t('Your local unsaved draft will be replaced by the last confirmed version. Continue?'))) void load(); }, false, true)}</div>}
     {!loaded && !error && <p role="status">{t('Loading your learning record…')}</p>}
-    {loaded && !record && <section className={styles.card}><h2>{t('Set your starting point')}</h2><p>{t('Describe what you already know, one situation you want to handle and one uncertainty. This diagnostic is saved, not graded.')}</p><label className={styles.label}>{t('My starting point')}<textarea className={styles.field} value={diagnostic} onChange={e => setDiagnostic(e.target.value)} minLength={30} maxLength={3000} /></label>{certificateName ? <label className={styles.check}><input type="checkbox" checked={consent} onChange={e => setConsent(e.target.checked)} /><span>{t('I agree to automatic certificate issuance after completion using this account name:')} <strong>{certificateName}</strong>. {t('The certificate starts private. I understand that open projects and oral fluency are not independently graded.')}</span></label> : <p className={styles.notice}>{t('Enter your complete real name for certificates.')} <Link className={styles.link} href="/profile/security#settings-identity">{t('Account settings')}</Link></p>}<p className={styles.muted}>{t('The required spaced review opens 24 hours after the final assessment. Waiting time is not counted in the workload.')}</p>{button('Start this edition', () => void mutate({ action: 'enrol', diagnostic, nameConsent: true }), !certificateName || !consent || diagnostic.trim().length < 30)}</section>}
+    {loaded && !record && <>
+      <AcademyJourney course={course} t={t} />
+      <section className={styles.card}>
+        <h2>{t('Set your starting point')}</h2>
+        <div className={styles.studyPlanControls}>
+          <label className={styles.label}>{t('My learning goal')}
+            <select value={plan.goal} onChange={event => setPlan({ ...plan, goal: event.target.value as AcademyStudyPlan['goal'] })}>
+              {Object.entries(goals).map(([value, [label]]) => <option key={value} value={value}>{t(label)}</option>)}
+            </select>
+          </label>
+          <label className={styles.label}>{t('Hours per week')}
+            <select value={plan.weeklyHours} onChange={event => setPlan({ ...plan, weeklyHours: Number(event.target.value) })}>
+              {[1, 2, 3, 5, 8, 10].map(hours => <option key={hours} value={hours}>{hours}</option>)}
+            </select>
+          </label>
+        </div>
+        <p className={styles.notice}>{t(goals[plan.goal][1])} {t('Estimated study weeks')}: <strong>{Math.ceil(course.minutes / (60 * plan.weeklyHours))}</strong>.</p>
+        <p>{t('Describe what you already know, one situation you want to handle and one uncertainty. This diagnostic is saved, not graded.')}</p>
+        <label className={styles.label}>{t('My starting point')}
+          <textarea className={styles.field} value={diagnostic} onChange={event => setDiagnostic(event.target.value)} minLength={30} maxLength={3000} />
+        </label>
+        {certificateName ? <label className={styles.check}><input type="checkbox" checked={consent} onChange={event => setConsent(event.target.checked)} /><span>{t('I agree to automatic certificate issuance after completion using this account name:')} <strong>{certificateName}</strong>. {t('The certificate starts private. I understand that open projects and oral fluency are not independently graded.')}</span></label> : <p className={styles.notice}>{t('Enter your complete real name for certificates.')} <Link className={styles.link} href="/profile/security#settings-identity">{t('Account settings')}</Link></p>}
+        <p className={styles.muted}>{t('The required spaced review opens 24 hours after the final assessment. Waiting time is not counted in the workload.')}</p>
+        {button('Start this edition', () => void mutate({ action: 'enrol', diagnostic, plan, nameConsent: true }), !certificateName || !consent || diagnostic.trim().length < 30)}
+      </section>
+    </>}
     {record && <>
+      <div className={styles.topline}>
+        {record.plan && <p className={styles.muted}>{t(goals[record.plan.goal][0])} · {t('Hours per week')}: {record.plan.weeklyHours}</p>}
+        <div className={styles.actions}>
+          {!record.completedAt && suggested !== selected && button('Go to my next step', () => select(suggested), dirty, true)}
+          <Link className={styles.link} href={`/atlas?guide=learning&course=${course.id}`}>{t('Open Atlas AI')}</Link>
+          <Link className={styles.link} href="/workspace">{t('Workspace')}</Link>
+          {!course.projectBrief && <Link className={styles.link} href={`${editionPath}?edition=current`}>{t('Open the expanded edition')}</Link>}
+          {record.legacy?.version === '2026.11.1' && <Link className={styles.link} href={`${editionPath}?edition=previous`}>{t('Open previous learning records')}</Link>}
+        </div>
+      </div>
       <div className={styles.studyToolbar}><span>{t('Your learning studio')}</span><div className={styles.studyTools}><button type="button" aria-pressed={focus} onClick={() => setFocus(value => !value)}>{t('Focus mode')}</button><button type="button" aria-pressed={largeText} onClick={() => setLargeText(value => !value)}>{t('Larger text')}</button><a className={styles.link} href="#learning-content">{t('Go to lesson')}</a></div></div>
-      <div className={styles.studyStage} aria-label={t('Learning milestones')}><span data-complete={allComplete}><strong>01</strong>{t('Lessons and practice')} · {completed}/{course.lessons.length}</span><span data-complete={record.portfolio.trim().length >= 200}><strong>02</strong>{t('Practice portfolio')}</span><span data-complete={Boolean(record.final)}><strong>03</strong>{t('Final assessment')}</span><span data-complete={Boolean(record.retention)}><strong>04</strong>{t('Spaced review')}</span></div>
+      <div className={styles.studyStage} aria-label={t('Learning milestones')}><span data-complete={allComplete}><strong>01</strong>{t('Lessons and practice')} · {completed}/{course.lessons.length}</span><span data-complete={portfolioReady}><strong>02</strong>{t('Practice portfolio')}</span><span data-complete={Boolean(record.final)}><strong>03</strong>{t('Final assessment')}</span><span data-complete={Boolean(record.retention)}><strong>04</strong>{t('Spaced review')}</span></div>
       <label className={styles.mobileLessonSelect}>{t('Course sections')}<select value={selected} disabled={busy} onChange={event => select(event.target.value)}>{course.lessons.map((item,i) => <option key={item.id} value={item.id}>{record.completed[item.id] ? '✓ ' : ''}{i+1}. {item.title}</option>)}<option value="portfolio">{t('Practice portfolio')}</option><option value="final">{t('Final assessment')}</option><option value="retention">{t('Spaced review')}</option></select></label>
-      <div className={styles.topline}><span className={styles.badge}>{completed}/{course.lessons.length} {t('lesson checks passed')}</span><span className={styles.muted}>{t('Edition')} {course.version}</span></div><progress className={styles.progress} max={course.lessons.length + 2} value={completed + Number(Boolean(record.final)) + Number(Boolean(record.retention))} aria-label={t('Course progress')} />
+      <div className={styles.topline}><span className={styles.badge}>{completed}/{course.lessons.length} {t('lesson checks passed')}</span><span className={styles.muted}>{t('Edition')} {course.version}</span></div><progress className={styles.progress} max={course.lessons.length + 3} value={completed + Number(portfolioReady) + Number(Boolean(record.final)) + Number(Boolean(record.retention))} aria-label={t('Course progress')} />
       {record.legacy && <p className={styles.notice}>{t('Previous learning is preserved. Imported notes are available; this edition has new assessment requirements.')} {course.legacyHref && <Link className={styles.link} href={course.legacyHref}>{t('Open previous learning records')}</Link>}</p>}
       {record.credentialId && <section className={styles.success}><h2>{t('Your certificate is ready')}</h2><p>{t('You completed all required checks, the final assessment and the spaced review.')}</p><div className={styles.actions}><Link className={styles.button} href={`/certificates/${record.credentialId}`}>{t('View and download certificate')}</Link>{button(record.sharing ? 'Make certificate private' : 'Enable public verification', () => void mutate({ action: 'sharing', sharing: !record.sharing }), false, true)}</div><p className={styles.muted}>{record.sharing ? t('Anyone with the verification link can view the shared certificate name and results.') : t('The certificate is private. Public verification becomes available only when you enable sharing.')}</p></section>}
       {record.completedAt && !record.credentialId && (
@@ -163,7 +219,7 @@ function StudySession({ course: original, sessionId }: { course: AcademyCourse; 
       )}
       <div className={styles.study}><nav className={styles.nav} aria-label={t('Course sections')}><div className={styles.navHeading}>{t('Your learning path')}</div>{course.lessons.map((l,i) => <button key={l.id} type="button" className={styles.navButton} aria-current={selected === l.id ? 'step' : undefined} onClick={() => select(l.id)} disabled={busy}>{record.completed[l.id] ? '✓' : String(i + 1).padStart(2, '0')} · {l.title}</button>)}{['portfolio','final','retention'].map(id => <button key={id} type="button" className={styles.navButton} aria-current={selected === id ? 'step' : undefined} onClick={() => select(id)} disabled={busy}>{t(id === 'portfolio' ? 'Practice portfolio' : id === 'final' ? 'Final assessment' : 'Spaced review')}</button>)}</nav>
       <div id="learning-content" tabIndex={-1} className={`${styles.studyContent} ${styles.studyTitle}`}>
-        {lesson && <article className={styles.card}><span className={styles.badge}>{lesson.minutes} {t("min ·")} {lesson.foundation ? t('Foundation') : t('Advanced laboratory')}</span><p className={styles.sectionKicker}>{t('Lesson {current} of {total}', { current: lessonIndex+1, total: course.lessons.length })}</p><h2 className={styles.title}>{lesson.title}</h2><p>{lesson.objective}</p>{lesson.sections.map((section,i) => <section key={i}><h3>{section.title}</h3><p className={styles.sectionBody}>{section.body}</p></section>)}<h3>{t('Practice and transfer')}</h3><ol>{lesson.practice.map((step,i) => <li key={i}>{step}</li>)}</ol><p className={styles.notice}>{lesson.deliverable}</p>{lesson.references.length > 0 && <><h3>{t('Primary references')}</h3><ul>{lesson.references.map(url => <li key={url}><a className={styles.link} href={url} target="_blank" rel="noreferrer">{new URL(url).hostname} <CourseArrow /></a></li>)}</ul></>}<label className={styles.label}>{t('My practice evidence')}<textarea className={styles.field} value={note} onChange={e => setNote(e.target.value)} maxLength={6000} /></label><p className={styles.muted}>{t('Record your result, correction and limitation. Use fictional or redacted information. Text length is a completion check, not a quality score.')}</p><p className={styles.saved} role="status">{busy ? t('Saving or checking…') : dirty ? t('Unsaved changes') : t('Confirmed on the server')}</p><div className={styles.actions}>{button('Save now', () => void mutate({ action: 'save', revision: record.revision, lessonId: lesson.id, text: note }), !dirty, true)}{record.completed[lesson.id] ? <span className={styles.badge}>{t('Lesson check passed')}</span> : button('Open lesson check', () => void mutate({ action: 'begin', revision: record.revision, target: lesson.id }), dirty || note.trim().length < 80 || Boolean(challenge))}</div><div className={styles.lessonActions}>{lessonIndex > 0 && button('Previous lesson', () => select(course.lessons[lessonIndex-1].id), dirty, true)}{record.completed[lesson.id] && button(lessonIndex < course.lessons.length-1 ? 'Continue to next lesson' : 'Practice portfolio', () => select(course.lessons[lessonIndex+1]?.id ?? 'portfolio'), dirty)}</div></article>}
+        {lesson && <article className={styles.card}><span className={styles.badge}>{lesson.minutes} {t("min ·")} {lesson.project ? t('Applied project') : lesson.foundation ? t('Foundation') : t('Advanced laboratory')}</span><p className={styles.sectionKicker}>{t('Lesson {current} of {total}', { current: lessonIndex+1, total: course.lessons.length })}</p><h2 className={styles.title}>{lesson.title}</h2><p>{lesson.objective}</p>{lesson.sections.map((section,i) => <section key={i}><h3>{section.title}</h3><p className={styles.sectionBody}>{section.body}</p></section>)}<h3>{t('Practice and transfer')}</h3><ol>{lesson.practice.map((step,i) => <li key={i}>{step}</li>)}</ol><p className={styles.notice}>{lesson.deliverable}</p>{lesson.references.length > 0 && <><h3>{t('Primary references')}</h3><ul>{lesson.references.map(url => <li key={url}><a className={styles.link} href={url} target="_blank" rel="noreferrer">{new URL(url).hostname} <CourseArrow /></a></li>)}</ul></>}<label className={styles.label}>{t('My practice evidence')}<textarea className={styles.field} value={note} onChange={e => setNote(e.target.value)} maxLength={6000} /></label><p className={styles.muted}>{t('Record your result, correction and limitation. Use fictional or redacted information. Text length is a completion check, not a quality score.')}</p><p className={styles.saved} role="status">{busy ? t('Saving or checking…') : dirty ? t('Unsaved changes') : t('Confirmed on the server')}</p><div className={styles.actions}>{button('Save now', () => void mutate({ action: 'save', revision: record.revision, lessonId: lesson.id, text: note }), !dirty, true)}{record.completed[lesson.id] ? <span className={styles.badge}>{t('Lesson check passed')}</span> : button('Open lesson check', () => void mutate({ action: 'begin', revision: record.revision, target: lesson.id }), prerequisiteMissing || dirty || note.trim().length < 80 || Boolean(challenge))}</div>{prerequisiteMissing && <p className={styles.notice}>{t('Complete the previous lesson checks before advancing.')}</p>}<div className={styles.lessonActions}>{lessonIndex > 0 && button('Previous lesson', () => select(course.lessons[lessonIndex-1].id), dirty, true)}{record.completed[lesson.id] && button(lessonIndex < course.lessons.length-1 ? 'Continue to next lesson' : 'Practice portfolio', () => select(course.lessons[lessonIndex+1]?.id ?? 'portfolio'), dirty)}</div></article>}
         {selected === 'portfolio' && <section className={styles.card}><h2>{t('Practice portfolio')}</h2><p>{t('Combine your work into a decision-ready artifact: describe the situation, the method, the result, a failed assumption, your correction and how you would adapt it to a new case. Include an honest statement of any AI assistance.')}</p><p className={styles.notice}>{t('This portfolio supports practice and reflection. It is not scored by text length or presented as an independently approved professional project.')}</p><label className={styles.label}>{t('My portfolio and transfer reflection')}<textarea className={styles.field} rows={12} maxLength={12000} value={portfolio} onChange={e => setPortfolio(e.target.value)} /></label><p role="status" className={styles.saved}>{busy ? t('Saving or checking…') : dirty ? t('Unsaved changes') : t('Confirmed on the server')}</p><div className={styles.actions}>{button('Save now', () => void mutate({ action: 'portfolio', revision: record.revision, text: portfolio }), !dirty, true)}{button('Go to final assessment', () => select('final'), dirty || !allComplete || portfolio.trim().length < 200)}</div></section>}
         {(selected === 'final' || selected === 'retention') && <section className={styles.card}><h2>{t(selected === 'final' ? 'Final assessment' : 'Spaced review')}</h2><p>{t('At least 80% is required, including every essential question and the fresh numerical case. Answers are scored on the server. There is no answering time limit.')}</p>{!allComplete && <p className={styles.notice}>{t('Complete all lesson checks and save your portfolio before the final assessment.')}</p>}{record.reviewAvailableAt && <p className={styles.notice}>{t('Spaced review available from:')} <time className={styles.time} dateTime={record.reviewAvailableAt}>{new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'short' }).format(new Date(record.reviewAvailableAt))}</time></p>}{selected === 'final' && record.final ? <p className={styles.success}>{t('Final assessment passed')} · {record.final.score}%</p> : selected === 'retention' && record.retention ? <p className={styles.success}>{t('Spaced review passed')} · {record.retention.score}%</p> : button(selected === 'final' ? 'Start final assessment' : 'Start spaced review', () => void mutate({ action: 'begin', revision: record.revision, target: selected }), Boolean(challenge) || !allComplete || record.portfolio.trim().length < 200 || selected === 'retention' && !reviewOpen)}</section>}
         {challenge && <section className={styles.card} aria-label={t('Active assessment')}><h2>{t('Your active assessment')}</h2><p className={styles.muted}>{t('This attempt is saved to your account. You can return without losing the question set. Answers are submitted together.')}</p>{challenge.questions.map((q,index) => <fieldset key={q.id} className={styles.checkpoint}><legend>{index+1}. {q.translations?.[locale] ?? t(q.prompt)} {q.essential && <span className={styles.badge}>{t('Essential')}</span>}</legend>{q.options.map(option => <label key={option.id} className={styles.option}><input type="radio" name={q.id} value={option.id} checked={answers[q.id] === option.id} onChange={() => setAnswers(previous => ({ ...previous, [q.id]: option.id }))} disabled={busy} /><span>{option.translations?.[locale] ?? option.label}</span></label>)}</fieldset>)}{challenge.calculation && <label className={styles.label}>{challenge.calculation.translations?.[locale] ?? t(challenge.calculation.prompt)}<input className={`${styles.field} ${styles.input}`} type="text" inputMode="decimal" value={calculation} onChange={e => setCalculation(e.target.value)} maxLength={40} /><span className={styles.muted}>{challenge.calculation.unitTranslations?.[locale] ?? t(challenge.calculation.unit)} · {t('Use a dot or comma for decimals; do not include units.')}</span></label>}<div className={styles.actions}>{button('Submit answers', () => void mutate({ action: 'submit', challengeId: challenge.id, answers: Object.entries(answers).map(([questionId,optionId]) => ({ questionId, optionId })), ...(challenge.calculation ? { calculation } : {}) }), dirty || Object.keys(answers).length !== challenge.questions.length || Boolean(challenge.calculation && !calculation.trim()))}</div></section>}

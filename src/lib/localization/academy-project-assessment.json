@@ -1,0 +1,162 @@
+{
+  "What makes the baseline useful for evaluating your later work?": {
+    "en": "What makes the baseline useful for evaluating your later work?",
+    "pt-BR": "O que torna a referência útil para avaliar seu trabalho depois?",
+    "es": "¿Qué hace útil la referencia para evaluar tu trabajo posterior?",
+    "fr": "Qu’est-ce qui rend la référence utile pour évaluer la suite du travail ?",
+    "de": "Was macht den Ausgangswert für die spätere Bewertung nützlich?",
+    "it": "Cosa rende utile il riferimento per valutare il lavoro successivo?"
+  },
+  "A recorded result with explicit inputs and criteria.": {
+    "en": "A recorded result with explicit inputs and criteria.",
+    "pt-BR": "Um resultado registrado com insumos e critérios explícitos.",
+    "es": "Un resultado registrado con insumos y criterios explícitos.",
+    "fr": "Un résultat consigné avec des entrées et critères explicites.",
+    "de": "Ein dokumentiertes Ergebnis mit klaren Eingaben und Kriterien.",
+    "it": "Un risultato registrato con input e criteri espliciti."
+  },
+  "A polished result with undocumented assumptions.": {
+    "en": "A polished result with undocumented assumptions.",
+    "pt-BR": "Um resultado refinado com hipóteses sem registro.",
+    "es": "Un resultado pulido con supuestos sin documentar.",
+    "fr": "Un résultat soigné aux hypothèses non documentées.",
+    "de": "Ein ausgefeiltes Ergebnis mit undokumentierten Annahmen.",
+    "it": "Un risultato curato con ipotesi non documentate."
+  },
+  "A success criterion chosen after seeing the result.": {
+    "en": "A success criterion chosen after seeing the result.",
+    "pt-BR": "Um critério escolhido depois de ver o resultado.",
+    "es": "Un criterio elegido después de ver el resultado.",
+    "fr": "Un critère choisi après avoir vu le résultat.",
+    "de": "Ein Kriterium, das erst nach Sichtung des Ergebnisses gewählt wurde.",
+    "it": "Un criterio scelto dopo aver visto il risultato."
+  },
+  "A baseline with documented inputs and criteria makes later changes interpretable.": {
+    "en": "A baseline with documented inputs and criteria makes later changes interpretable.",
+    "pt-BR": "Uma referência com insumos e critérios documentados permite interpretar mudanças posteriores.",
+    "es": "Una referencia con insumos y criterios documentados permite interpretar cambios posteriores.",
+    "fr": "Une référence aux entrées et critères documentés permet d’interpréter les changements ultérieurs.",
+    "de": "Ein Ausgangswert mit dokumentierten Eingaben und Kriterien macht spätere Änderungen nachvollziehbar.",
+    "it": "Un riferimento con input e criteri documentati rende interpretabili le modifiche successive."
+  },
+  "Which record makes your work reproducible by another learner?": {
+    "en": "Which record makes your work reproducible by another learner?",
+    "pt-BR": "Qual registro permite que outro aluno reproduza seu trabalho?",
+    "es": "¿Qué registro permite que otro alumno reproduzca tu trabajo?",
+    "fr": "Quelle trace permet à un autre apprenant de reproduire ton travail ?",
+    "de": "Welche Aufzeichnung hilft anderen Lernenden, deine Arbeit zu reproduzieren?",
+    "it": "Quale registrazione permette a un altro studente di riprodurre il tuo lavoro?"
+  },
+  "The inputs, the steps and the observed outputs.": {
+    "en": "The inputs, the steps and the observed outputs.",
+    "pt-BR": "Os insumos, as etapas e os resultados observados.",
+    "es": "Los insumos, los pasos y los resultados observados.",
+    "fr": "Les entrées, les étapes et les résultats observés.",
+    "de": "Die Eingaben, die Schritte und die beobachteten Ergebnisse.",
+    "it": "Gli input, i passaggi e i risultati osservati."
+  },
+  "A description of the final appearance only.": {
+    "en": "A description of the final appearance only.",
+    "pt-BR": "Apenas uma descrição da aparência final.",
+    "es": "Solo una descripción del aspecto final.",
+    "fr": "Une simple description de l’apparence finale.",
+    "de": "Nur eine Beschreibung des endgültigen Aussehens.",
+    "it": "Solo una descrizione dell’aspetto finale."
+  },
+  "A list of tools with no record of decisions.": {
+    "en": "A list of tools with no record of decisions.",
+    "pt-BR": "Uma lista de ferramentas sem registro das decisões.",
+    "es": "Una lista de herramientas sin registro de decisiones.",
+    "fr": "Une liste d’outils sans trace des décisions.",
+    "de": "Eine Werkzeugliste ohne dokumentierte Entscheidungen.",
+    "it": "Un elenco di strumenti senza traccia delle decisioni."
+  },
+  "Recording inputs, steps and outputs lets another learner reproduce and check the result.": {
+    "en": "Recording inputs, steps and outputs lets another learner reproduce and check the result.",
+    "pt-BR": "Registrar insumos, etapas e resultados permite que outro aluno reproduza e confira o resultado.",
+    "es": "Registrar insumos, pasos y resultados permite que otro alumno reproduzca y compruebe el resultado.",
+    "fr": "Consigner entrées, étapes et résultats permet à autrui de reproduire et de vérifier le résultat.",
+    "de": "Dokumentierte Eingaben, Schritte und Ausgaben ermöglichen es anderen Lernenden, das Ergebnis zu reproduzieren und zu prüfen.",
+    "it": "Registrare input, passaggi e output consente a un altro studente di riprodurre e verificare il risultato."
+  },
+  "What is the strongest check that your revision addressed the observed weakness?": {
+    "en": "What is the strongest check that your revision addressed the observed weakness?",
+    "pt-BR": "Qual é a melhor verificação de que sua revisão resolveu a fragilidade observada?",
+    "es": "¿Cuál es la mejor comprobación de que tu revisión resolvió la debilidad observada?",
+    "fr": "Quel test montre le mieux que ta révision a corrigé la faiblesse observée ?",
+    "de": "Welche Prüfung zeigt am besten, dass deine Überarbeitung die beobachtete Schwäche behoben hat?",
+    "it": "Quale prova mostra meglio che la revisione ha risolto il punto debole osservato?"
+  },
+  "Rerun the failing case and the baseline with documented expectations.": {
+    "en": "Rerun the failing case and the baseline with documented expectations.",
+    "pt-BR": "Repita o caso que falhou e a referência com expectativas documentadas.",
+    "es": "Repite el caso fallido y la referencia con expectativas documentadas.",
+    "fr": "Rejoue le cas en échec et la référence avec des attentes documentées.",
+    "de": "Wiederhole den fehlgeschlagenen Fall und den Ausgangstest mit dokumentierten Erwartungen.",
+    "it": "Ripeti il caso fallito e il test di riferimento con aspettative documentate."
+  },
+  "Test only a new case that is likely to pass.": {
+    "en": "Test only a new case that is likely to pass.",
+    "pt-BR": "Teste apenas um caso novo com boa chance de passar.",
+    "es": "Prueba solo un caso nuevo que probablemente pase.",
+    "fr": "Teste seulement un nouveau cas susceptible de réussir.",
+    "de": "Teste nur einen neuen Fall, der wahrscheinlich besteht.",
+    "it": "Prova solo un nuovo caso che probabilmente passerà."
+  },
+  "Replace the original result with the revised one.": {
+    "en": "Replace the original result with the revised one.",
+    "pt-BR": "Substitua o resultado original pela versão revisada.",
+    "es": "Sustituye el resultado original por la versión revisada.",
+    "fr": "Remplace le résultat initial par sa version révisée.",
+    "de": "Ersetze das ursprüngliche Ergebnis durch die überarbeitete Fassung.",
+    "it": "Sostituisci il risultato originale con quello rivisto."
+  },
+  "Repeating the failing case checks the repair, and repeating the baseline checks for regression.": {
+    "en": "Repeating the failing case checks the repair, and repeating the baseline checks for regression.",
+    "pt-BR": "Repetir o caso que falhou verifica a correção, e repetir a referência ajuda a detectar regressões.",
+    "es": "Repetir el caso fallido comprueba la corrección, y repetir la referencia detecta regresiones.",
+    "fr": "Rejouer le cas en échec vérifie la correction, et rejouer la référence détecte une régression.",
+    "de": "Der erneute Fehlerfall prüft die Korrektur, der erneute Ausgangstest mögliche Rückschritte.",
+    "it": "Ripetere il caso fallito verifica la correzione, ripetere il riferimento rileva regressioni."
+  },
+  "What is evidence that the method transfers to a new situation?": {
+    "en": "What is evidence that the method transfers to a new situation?",
+    "pt-BR": "O que demonstra que o método funciona em uma nova situação?",
+    "es": "¿Qué demuestra que el método funciona en una situación nueva?",
+    "fr": "Qu’est-ce qui prouve que la méthode s’applique à une nouvelle situation ?",
+    "de": "Was belegt, dass die Methode auf eine neue Situation übertragbar ist?",
+    "it": "Cosa dimostra che il metodo si trasferisce a una nuova situazione?"
+  },
+  "A changed constraint, a new result and a documented comparison.": {
+    "en": "A changed constraint, a new result and a documented comparison.",
+    "pt-BR": "Uma restrição alterada, um resultado novo e uma comparação documentada.",
+    "es": "Una restricción cambiada, un resultado nuevo y una comparación documentada.",
+    "fr": "Une contrainte modifiée, un nouveau résultat et une comparaison documentée.",
+    "de": "Eine geänderte Vorgabe, ein neues Ergebnis und ein dokumentierter Vergleich.",
+    "it": "Un vincolo modificato, un nuovo risultato e un confronto documentato."
+  },
+  "The same result with a different project title.": {
+    "en": "The same result with a different project title.",
+    "pt-BR": "O mesmo resultado com outro título de projeto.",
+    "es": "El mismo resultado con otro título de proyecto.",
+    "fr": "Le même résultat avec un autre titre de projet.",
+    "de": "Dasselbe Ergebnis mit einem anderen Projekttitel.",
+    "it": "Lo stesso risultato con un altro titolo del progetto."
+  },
+  "A claim of general usefulness without a new test.": {
+    "en": "A claim of general usefulness without a new test.",
+    "pt-BR": "Uma afirmação de utilidade geral sem um novo teste.",
+    "es": "Una afirmación de utilidad general sin una nueva prueba.",
+    "fr": "Une affirmation d’utilité générale sans nouveau test.",
+    "de": "Eine Behauptung allgemeiner Nützlichkeit ohne neuen Test.",
+    "it": "Una dichiarazione di utilità generale senza una nuova prova."
+  },
+  "Transfer is demonstrated by applying the method under a changed constraint and explaining the result.": {
+    "en": "Transfer is demonstrated by applying the method under a changed constraint and explaining the result.",
+    "pt-BR": "A transferência se demonstra ao aplicar o método com outra restrição e explicar o resultado.",
+    "es": "La transferencia se demuestra al aplicar el método con otra restricción y explicar el resultado.",
+    "fr": "Le transfert se démontre en appliquant la méthode à une contrainte modifiée et en expliquant le résultat.",
+    "de": "Übertragbarkeit zeigt sich, wenn die Methode mit geänderter Vorgabe angewendet und das Ergebnis erklärt wird.",
+    "it": "Il trasferimento si dimostra applicando il metodo con un vincolo diverso e spiegando il risultato."
+  }
+}

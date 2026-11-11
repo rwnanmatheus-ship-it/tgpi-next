@@ -1,5 +1,8 @@
-/** Generated from the versioned curriculum; verified by academy tests. */
-export const academyManifest: Record<string, { minutes: number; lessons: number }> = {
+import { academyProjects } from './projects.ts';
+import { projectStageCount } from './project-stages.ts';
+
+/** Workload of the previous edition, verified against the published curriculum. */
+export const previousAcademyManifest: Record<string, { minutes: number; lessons: number }> = {
   "country-fit": {
     "minutes": 390,
     "lessons": 6
@@ -109,3 +112,7 @@ export const academyManifest: Record<string, { minutes: number; lessons: number 
     "lessons": 6
   }
 };
+
+export const academyManifest = Object.fromEntries(Object.entries(previousAcademyManifest).map(([id, previous]) => [
+  id, { minutes: academyProjects[id][0] * 60, lessons: previous.lessons + projectStageCount },
+]));

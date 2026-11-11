@@ -5,3 +5,36 @@
 @media(max-width:760px){.hero{grid-template-columns:1fr}.heroVisual{min-height:260px;order:-1}.heroImage{max-height:none}.heroCopy{padding:26px}.hero h1{font-size:32px}.hero .actions .button{width:auto}.heroVisual>span{font-size:19px;bottom:20px}.overviewNav{top:72px;padding:5px;gap:2px}.overviewNav a{font-size:11px;padding:9px}.lessonPreview,.planner{grid-template-columns:1fr;gap:20px}.lessonPreview blockquote{max-height:300px}.card{padding:22px}.method{grid-template-columns:1fr 1fr;gap:20px;padding:22px}.study{grid-template-columns:1fr}.study .nav{display:none}.mobileLessonSelect{display:block;width:100%;margin:14px 0;font-size:13px;font-weight:700;color:#365978}.mobileLessonSelect select{display:block;width:100%;min-height:48px;border:1px solid #b9cce3;border-radius:11px;background:white;color:#183e6a;padding:12px;font-size:14px;margin-top:7px}.studyToolbar{padding:12px;flex-wrap:wrap}.studyToolbar>span{width:100%;font-size:12px}.studyContent article{padding:22px}.studyContent article>section{padding-block:16px}.studyStage{gap:5px}.studyStage span{font-size:10px;padding:8px}.studyTitle{font-size:25px}.lessonActions{flex-wrap:wrap}.lessonActions .button{width:auto}.planNumber{font-size:48px!important}}
 
 .focusMode .mobileLessonSelect{display:block;max-width:840px;margin:14px auto}.focusMode .mobileLessonSelect select{display:block;width:100%;min-height:48px;padding:10px;border:1px solid #b9cce3;border-radius:10px;background:#fff;color:#183e6a;margin-top:7px}
+
+.journey {
+  scroll-margin-top: 105px;
+  background: linear-gradient(135deg, #08182d, #122d4c);
+  color: #f3f7ff;
+  border: 1px solid #2b4560;
+  border-radius: 24px;
+  padding: clamp(20px, 4vw, 42px);
+  margin: 24px 0;
+}
+.journeyIntro h2 { font-size: clamp(24px, 3vw, 34px); font-weight: 750; letter-spacing: -.025em; }
+.journeyIntro p { color: #c4d2e5; margin-top: 5px; }
+.journeySteps {
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 214px), 1fr));
+  gap: 10px;
+  margin: 24px 0;
+  padding: 0;
+}
+.journeySteps li { display: flex; gap: 11px; padding: 15px; border: 1px solid #42617e; border-radius: 14px; background: #142c46; }
+.journeySteps strong { display: block; line-height: 1.35; font-size: 15px; }
+.journeySteps p, .journeySteps small { color: #c8d6e9; font-size: 13px; margin-top: 4px; }
+.journeyNumber {
+  display: grid; place-items: center; width: 29px; height: 29px; flex: 0 0 29px;
+  border-radius: 50%; background: #e4bf77; color: #14263a; font-size: 13px; font-weight: 800;
+}
+.journeyBrief { border-top: 1px solid #47607b; padding-top: 16px; }
+.journeyBrief h3 { font-weight: 750; color: #f4d391; }
+.journeyBrief p { line-height: 1.6; max-width: 68ch; margin: 6px 0 12px; }
+.journeyBrief a { color: #b7d5ff; text-decoration: underline; text-underline-offset: 3px; }
+.studyPlanControls { display: flex; flex-wrap: wrap; gap: 12px; margin: 12px 0; }
+.studyPlanControls select { display: block; min-height: 44px; margin-top: 4px; border: 1px solid #aabbd0; border-radius: 9px; padding: 6px 10px; background: #fff; color: #12223a; }

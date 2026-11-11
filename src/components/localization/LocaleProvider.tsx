@@ -21,12 +21,16 @@ const loadedCatalogs = new Map<Locale, Promise<void>>();
 async function ensureLocaleMessages(locale: Locale) {
   const cached = loadedCatalogs.get(locale);
   if (cached) return cached;
-  const loading = fetch(`/locales/${locale}.json?v=${localeCatalogVersion}`).then(async response => {
+  const read = async (path: string) => {
+    const response = await fetch(`/locales/${path}?v=${localeCatalogVersion}`);
     if (!response.ok) throw new Error('Language catalog unavailable');
     const entries: unknown = await response.json();
     if (!entries || typeof entries !== 'object' || Array.isArray(entries) || Object.values(entries).some(value => typeof value !== 'string')) throw new Error('Invalid language catalog');
-    registerSupplementalMessages(locale, entries as SupplementalMessages);
-  }).catch(error => { loadedCatalogs.delete(locale); throw error; });
+    return entries as SupplementalMessages;
+  };
+  const loading = Promise.all([read(`${locale}.json`), read(`academy/${locale}.json`)])
+    .then(([base, academy]) => registerSupplementalMessages(locale, { ...base, ...academy }))
+    .catch(error => { loadedCatalogs.delete(locale); throw error; });
   loadedCatalogs.set(locale, loading);
   return loading;
 }

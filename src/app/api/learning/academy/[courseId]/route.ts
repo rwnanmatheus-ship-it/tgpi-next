@@ -15,7 +15,7 @@ async function response(status: Awaited<ReturnType<typeof academyStatus>>, cours
   return NextResponse.json(withAcademyTranslations(status, courseId), { headers });
 }
 export async function GET(request: Request, context: { params: Promise<{ courseId: string }> }) {
-  try { const identity = await requireApiUser(request), { courseId } = await context.params; return await response(await academyStatus(identity, courseId), courseId); }
+  try { const identity = await requireApiUser(request), { courseId } = await context.params; return await response(await academyStatus(identity, courseId, new URL(request.url).searchParams.get('edition') ?? undefined), courseId); }
   catch (error) { return failure(error); }
 }
 export async function POST(request: Request, context: { params: Promise<{ courseId: string }> }) {
@@ -23,10 +23,10 @@ export async function POST(request: Request, context: { params: Promise<{ course
     const identity = await requireApiUser(request), { courseId } = await context.params;
     const origin = request.headers.get('origin');
     if (!origin || new URL(origin).origin !== new URL(request.url).origin) throw new AcademyError('Request origin is not allowed.', 403);
-    if (!request.headers.get('content-type')?.toLowerCase().startsWith('application/json')) throw new AcademyError('JSON content is required.', 415);
+    if (request.headers.get('content-type')?.split(';', 1)[0].trim().toLowerCase() !== 'application/json') throw new AcademyError('JSON content is required.', 415);
     const reader = request.body?.getReader(); if (!reader) throw new AcademyError('Request body is missing.');
     const chunks: Uint8Array[] = []; let size = 0;
-    while (true) { const { done, value } = await reader.read(); if (done) break; size += value.byteLength; if (size > 24000) { await reader.cancel(); throw new AcademyError('Request exceeds the allowed size.', 413); } chunks.push(value); }
+    while (true) { const { done, value } = await reader.read(); if (done) break; size += value.byteLength; if (size > 76000) { await reader.cancel(); throw new AcademyError('Request exceeds the allowed size.', 413); } chunks.push(value); }
     const bytes = new Uint8Array(size); let offset = 0; for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.byteLength; }
     const input: unknown = JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(bytes));
     return await response(await mutateAcademy(identity, courseId, input), courseId);

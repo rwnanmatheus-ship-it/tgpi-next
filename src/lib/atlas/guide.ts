@@ -118,6 +118,7 @@ export function answerAtlasGuide({
     if (countries.length >= 2) resources[0].href = comparisonPath(countries, goal ?? 'overall');
     else content = countries.length ? guideText(guideCompareOne, locale).replace('{country}', countryName(countries[0], locale)) : guideText(guideCompareNone, locale);
   }
+  if (topic === 'learning' && context?.learningCourse) resources.unshift({ href: `/courses/${context.learningCourse.id}/study`, label: context.learningCourse.title });
   if (topic === 'credentials') resources.push({ href: '/verify', label: 'Verify' });
   if (topic === 'documents' || topic === 'compare' || topic === 'countries' || topic === 'plan') {
     resources.push(...countries.slice(0, 3).map(slug => ({ href: `/countries/${slug}`, label: countryName(slug, locale), literal: true })));

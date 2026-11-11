@@ -1,12 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
+import { dirname, resolve } from 'node:path';
 import ts from 'typescript';
 const url = source => 'data:text/javascript;base64,' + Buffer.from(ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 } }).outputText).toString('base64');
 const configUrl = url(fs.readFileSync('src/lib/localization/config.ts', 'utf8'));
 const { locales, resolveLocale, negotiateLocale, isLocale } = await import(configUrl);
 const { messages, translate, registerSupplementalMessages } = await import(url(fs.readFileSync('src/lib/localization/messages.ts', 'utf8')));
-const supplementalCatalogs = Object.fromEntries(locales.map(locale => [locale, JSON.parse(fs.readFileSync(`public/locales/${locale}.json`, 'utf8'))]));
+const supplementalCatalogs = Object.fromEntries(locales.map(locale => [locale, {
+  ...JSON.parse(fs.readFileSync(`public/locales/${locale}.json`, 'utf8')),
+  ...JSON.parse(fs.readFileSync(`public/locales/academy/${locale}.json`, 'utf8')),
+}]));
 for (const locale of locales) registerSupplementalMessages(locale, supplementalCatalogs[locale]);
 const mockReact = await import('react');
 function localizationDependency(name, locale) {
@@ -123,8 +127,12 @@ test('home FAQ translates questions and complete answers in every supported lang
 async function localModuleUrl(path) {
   if (!fs.existsSync(path) && path.endsWith('.ts')) path = path.slice(0, -3) + '/index.ts';
   let compiled = ts.transpileModule(fs.readFileSync(path, 'utf8'), { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 } }).outputText;
-  const imports = [...compiled.matchAll(/from\s+["'](@\/[^"']+)["']/g)];
-  for (const match of imports) compiled = compiled.replace(match[0], `from ${JSON.stringify(await localModuleUrl(`src/${match[1].slice(2)}.ts`))}`);
+  const imports = [...compiled.matchAll(/from\s+["']((?:@\/|\.\.?\/)[^"']+)["']/g)];
+  for (const match of imports) {
+    const specifier = match[1];
+    const target = specifier.startsWith('@/') ? `src/${specifier.slice(2)}` : resolve(dirname(path), specifier);
+    compiled = compiled.replace(match[0], `from ${JSON.stringify(await localModuleUrl(target.endsWith('.ts') ? target : `${target}.ts`))}`);
+  }
   return 'data:text/javascript;base64,' + Buffer.from(compiled).toString('base64');
 }
 test('course catalogue cards and global journey have complete translations', async () => {
@@ -135,8 +143,7 @@ test('course catalogue cards and global journey have complete translations', asy
     ...PLATFORM_JOURNEY.flatMap(stage => [stage.label, stage.description]),
   ]);
   for (const key of keys) {
-    assert.ok(Object.hasOwn(messages, key), `Missing catalogue entry: ${key}`);
-    for (const locale of locales) assert.ok(messages[key][locale]?.trim(), `${locale}: ${key}`);
+    for (const locale of locales) assert.ok(messages[key]?.[locale]?.trim() || supplementalCatalogs[locale][key]?.trim(), `${locale}: missing catalogue entry: ${key}`);
   }
 });
 test('all language options ship self-contained vector flags with no remote dependencies', async () => {

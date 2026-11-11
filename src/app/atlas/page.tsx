@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import { auth } from '@clerk/nextjs/server';
 import AtlasChat from '@/components/atlas/AtlasChat';
 import AtlasStudio from '@/components/atlas/AtlasStudio';
+import { getAcademyCourse } from '@/data/courses/academy/catalog.server';
 import { requireAtlasGeneration } from '@/lib/atlas/http.server';
 
 const sourceMetadata: Metadata = {
@@ -12,9 +13,9 @@ const sourceMetadata: Metadata = {
   robots: { index: false, follow: false },
 };
 export default async function AtlasPage({ searchParams }: {
-  searchParams: Promise<{ guide?: string | string[]; mode?: string | string[] }>;
+  searchParams: Promise<{ guide?: string | string[]; mode?: string | string[]; course?: string | string[] }>;
 }) {
-  const [{ userId }, { guide, mode }] = await Promise.all([auth(), searchParams]);
+  const [{ userId }, { guide, mode, course }] = await Promise.all([auth(), searchParams]);
   if (!userId) return null;
   let enabled = false;
   try { requireAtlasGeneration(userId); enabled = true; } catch { /* The browser guide remains available. */ }
@@ -22,9 +23,14 @@ export default async function AtlasPage({ searchParams }: {
   if (mode === 'account') {
     return <AtlasChat key={userId} userId={userId} enabled={enabled && !sponsored} archive />;
   }
+  const learningCourse = guide === 'learning' && typeof course === 'string' ? getAcademyCourse(course) : undefined;
+  const context = guide === 'learning' ? {
+    topic: 'learning' as const,
+    ...(learningCourse ? { learningCourse: { id: learningCourse.id, title: learningCourse.title } } : {}),
+  } : guide === 'evidence' ? { topic: 'intelligence' as const } : undefined;
   return <main>
     <AtlasStudio key={userId} userId={userId} onlineAvailable={enabled && sponsored}
-      context={guide === 'evidence' ? { topic: 'intelligence' } : undefined} />
+      context={context} />
   </main>;
 }
 

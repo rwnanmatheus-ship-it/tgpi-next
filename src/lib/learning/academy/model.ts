@@ -1,8 +1,9 @@
 import { z } from 'zod';
 export const academyId = z.string().regex(/^[a-zA-Z0-9._-]{1,160}$/);
 const common = { version: academyId };
+export const academyGoals = ['foundation', 'application', 'portfolio'] as const;
 export const academyMutation = z.discriminatedUnion('action', [
-  z.object({ ...common, action: z.literal('enrol'), diagnostic: z.string().trim().min(30).max(3000), nameConsent: z.literal(true) }).strict(),
+  z.object({ ...common, action: z.literal('enrol'), diagnostic: z.string().trim().min(30).max(3000), nameConsent: z.literal(true), plan: z.object({ goal: z.enum(academyGoals), weeklyHours: z.number().int().min(1).max(20) }).strict().optional() }).strict(),
   z.object({ ...common, action: z.literal('save'), revision: z.number().int().nonnegative(), lessonId: academyId, text: z.string().max(6000) }).strict(),
   z.object({ ...common, action: z.literal('portfolio'), revision: z.number().int().nonnegative(), text: z.string().max(12000) }).strict(),
   z.object({ ...common, action: z.literal('begin'), revision: z.number().int().nonnegative(), target: academyId }).strict(),

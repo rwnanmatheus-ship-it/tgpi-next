@@ -11,7 +11,11 @@ import { workLabs } from './work';
 import { technologyLabs } from './technology';
 import { languageAndStrategyLabs } from './language-and-strategy';
 
-export const ACADEMY_VERSION = '2026.11.1';
+import { academyProjects } from './projects';
+import { projectLessons, projectWorkload } from './project-stages';
+
+export const PREVIOUS_ACADEMY_VERSION = '2026.11.1';
+export const ACADEMY_VERSION = '2026.11.2';
 export const ACADEMY_REVIEW_DELAY_MS = 24 * 60 * 60 * 1000;
 export const ACADEMY_PASS_SCORE = 80;
 const labs = { ...mobilityLabs, ...workLabs, ...technologyLabs, ...languageAndStrategyLabs };
@@ -22,6 +26,8 @@ const plannedFoundations: Record<string, AcademyLab[]> = {
 };
 const courseMap = new Map<string, AcademyCourse>();
 const banks = new Map<string, AcademyPrivateQuestion[]>();
+const previousCourseMap = new Map<string, AcademyCourse>();
+const previousBanks = new Map<string, AcademyPrivateQuestion[]>();
 const section = (title: string, body: string, presentation: Partial<Omit<AcademySection, 'title' | 'body'>> = {}): AcademySection => ({ title, body, ...presentation });
 const lines = (title: string, parts: Array<{ text: string; preserve?: boolean }>, preserveTitle = false): AcademySection =>
   section(title, parts.map(part => part.text).join('\n'), { bodyParts: parts, preserveTitle });
@@ -78,18 +84,36 @@ for (const [id, additions] of Object.entries(labs)) {
   const lessons = [...base, ...additions.map((lab, i) => labLesson(id, lab, i + (plannedFoundations[id]?.length ?? 0), false, questions))];
   if (!lessons.length || new Set(lessons.map(l => l.id)).size !== lessons.length) throw new Error(`Invalid academy lessons: ${id}`);
   const portfolioMinutes = 90, assessmentMinutes = 60;
-  courseMap.set(id, { id, version: ACADEMY_VERSION, title: old?.title ?? pro?.title ?? overview?.title ?? id,
+  const previous: AcademyCourse = { id, version: PREVIOUS_ACADEMY_VERSION, title: old?.title ?? pro?.title ?? overview?.title ?? id,
     description: old?.description ?? overview?.desc ?? pro?.outcomes.join(' ') ?? '', outcomes: old?.outcomes ?? pro?.outcomes ?? overview?.benefits ?? [],
     ...(!old && !overview?.desc && pro ? { descriptionParts: pro.outcomes } : {}),
     lessons, portfolioMinutes, assessmentMinutes, minutes: lessons.reduce((sum, l) => sum + l.minutes, 0) + portfolioMinutes + assessmentMinutes,
     language: pro ? 'pt-BR / en' : 'en', image: courseArtwork(id, overview?.image),
     ...(old ? { legacyHref: `/courses/${id}/lessons/${old.modules[0].lessons[0].id}` } : pro ? { legacyHref: `/courses/${id}/history` } : {}),
+  };
+  previousCourseMap.set(id, previous);
+  previousBanks.set(id, questions);
+
+  const [hours, projectBrief] = academyProjects[id];
+  const { extraPortfolioMinutes, extraAssessmentMinutes, projectMinutes } = projectWorkload(hours, previous.minutes);
+  const project = projectLessons(id, projectBrief, projectMinutes, references[id] ?? []);
+  courseMap.set(id, {
+    ...previous, version: ACADEMY_VERSION, projectBrief,
+    lessons: [...lessons, ...project.map(item => item.lesson)],
+    portfolioMinutes: portfolioMinutes + extraPortfolioMinutes,
+    assessmentMinutes: assessmentMinutes + extraAssessmentMinutes,
+    minutes: hours * 60,
   });
-  banks.set(id, questions);
+  banks.set(id, [...questions, ...project.map(item => item.question)]);
 }
 export const academyCourses = [...courseMap.values()];
-export function getAcademyCourse(id: string) { return courseMap.get(id === 'english-abroad' ? 'global-english-2026' : id); }
-export function academyQuestions(id: string) { return banks.get(id) ?? []; }
+export function getAcademyCourse(id: string, version = ACADEMY_VERSION) {
+  const canonical = id === 'english-abroad' ? 'global-english-2026' : id;
+  return (version === PREVIOUS_ACADEMY_VERSION ? previousCourseMap : version === ACADEMY_VERSION ? courseMap : undefined)?.get(canonical);
+}
+export function academyQuestions(id: string, version = ACADEMY_VERSION) {
+  return (version === PREVIOUS_ACADEMY_VERSION ? previousBanks : banks).get(id) ?? [];
+}
 
 /** Fresh numeric cases test application instead of trusting a browser-supplied score. */
 export function academyCase(id: string): CaseSpec {

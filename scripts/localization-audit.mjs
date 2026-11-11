@@ -7,10 +7,14 @@ import { messageLiterals, renderedMessageText } from './helpers/localization-aud
 const exports = {};
 const catalogSource = fs.readFileSync('src/lib/localization/messages.ts', 'utf8');
 new Function('exports', ts.transpileModule(catalogSource, { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText)(exports);
-const supplemental = JSON.parse(fs.readFileSync('public/locales/en.json', 'utf8'));
+const supplementalFor = locale => ({
+  ...JSON.parse(fs.readFileSync(`public/locales/${locale}.json`, 'utf8')),
+  ...JSON.parse(fs.readFileSync(`public/locales/academy/${locale}.json`, 'utf8')),
+});
+const supplemental = supplementalFor('en');
 const notifications = {};
 new Function('exports', ts.transpileModule(fs.readFileSync('src/lib/notifications/text.ts', 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText)(notifications);
-for (const locale of ['en', 'pt-BR', 'es', 'fr', 'de', 'it']) exports.registerSupplementalMessages(locale, JSON.parse(fs.readFileSync(`public/locales/${locale}.json`, 'utf8')));
+for (const locale of ['en', 'pt-BR', 'es', 'fr', 'de', 'it']) exports.registerSupplementalMessages(locale, supplementalFor(locale));
 const registered = new Set([...Object.keys(exports.messages), ...Object.keys(supplemental)].map(key => key.toLocaleLowerCase('en')));
 const brands = new Set(['TGPI', 'The Global Polymath Institute', 'TGPI Premium', 'Global Key', 'TGPI Global ID', 'TGPI Global Key', 'Instagram', 'LinkedIn', 'TGPI GLOBAL EDUCATION LTDA', 'Renan']);
 const candidates = new Map();

@@ -1,5 +1,5 @@
 import 'server-only';
-import { academyCourses } from '@/data/courses/academy/catalog.server';
+import { academyCourses, getAcademyCourse, PREVIOUS_ACADEMY_VERSION } from '@/data/courses/academy/catalog.server';
 import type { AcademyRecord } from './academy/types';
 import type { LearningProgressItem } from './unified-progress';
 import { courses } from '@/data/courses';
@@ -32,11 +32,13 @@ export async function loadLearningSummary(uid: string, activation?: TgpiActivati
   });
   const records = academy.status === "fulfilled" ? academy.value.map(row => row.data).filter(record => record.uid === uid) : [];
   const current: LearningProgressItem[] = academyCourses.flatMap(course => {
-    const record = records.find(r => r.courseId === course.id && r.version === course.version);
-    if (!record) return [];
+    const record = records.find(r => r.courseId === course.id && r.version === course.version)
+      ?? records.find(r => r.courseId === course.id && r.version === PREVIOUS_ACADEMY_VERSION);
+    const edition = record && getAcademyCourse(course.id, record.version);
+    if (!record || !edition) return [];
     return [{ courseId: course.id, title: course.title, href: `/courses/${course.id}/study`, kind: "academy",
       status: record.credentialId ? "completed" : record.completedAt ? "certificate_pending" : record.final ? "review_due" : "in_progress",
-      completed: course.lessons.filter(l => record.completed[l.id]).length + Number(Boolean(record.final)) + Number(Boolean(record.retention)), total: course.lessons.length + 2, updatedAt: record.updatedAt }];
+      completed: edition.lessons.filter(l => record.completed[l.id]).length + Number(record.portfolio.trim().length >= 200) + Number(Boolean(record.final)) + Number(Boolean(record.retention)), total: edition.lessons.length + 3, updatedAt: record.updatedAt }];
   });
   const updatedIds = new Set(current.map(item => item.courseId));
   return { unavailable, items: [...current, ...oldItems.filter(item => !updatedIds.has(item.courseId)).map(item => academyCourses.some(c => c.id === item.courseId) ? { ...item, href: `/courses/${item.courseId}/study`, status: "edition_changed" as const } : item)].sort((a,b) => Number(a.status === "completed") - Number(b.status === "completed") || b.updatedAt.localeCompare(a.updatedAt)) };
