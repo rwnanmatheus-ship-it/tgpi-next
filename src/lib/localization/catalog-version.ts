@@ -1,2 +1,2 @@
 /** Change whenever the compiled supplemental dictionaries change. */
-export const localeCatalogVersion = '2026-11-11-academy';
+export const localeCatalogVersion = '2026-11-11-learning-studio';
