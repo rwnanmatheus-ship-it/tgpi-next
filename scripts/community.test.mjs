@@ -170,6 +170,27 @@ test("community server workflows with isolated transactional persistence", async
     ]);
     assert.equal(db.get(cp("public-circle")).memberCount, 2);
   });
+  await t.test("discovery matches every term and ignores accents", async () => {
+    const matches = await store.discover("", "", "glób cir eng");
+    assert.ok(matches.items.some((item) => item.id === "public-circle"));
+    assert.deepEqual((await store.discover("", "", "global korean")).items, []);
+  });
+
+  await t.test("concurrent preference changes preserve other settings", async () => {
+    const actor = { ...member, uid: "user_preferences" };
+    await Promise.all([
+      act(actor, "", "preferences", { interests: ["Portugal"], personalized: true }),
+      act(actor, "", "community-preference", { target: "public-circle", field: "hidden" }),
+      act(actor, "", "community-preference", { target: "public-circle", field: "muted" }),
+    ]);
+    assert.deepEqual(await store.preferences(actor.uid), {
+      interests: ["Portugal"], personalized: true,
+      muted: ["public-circle"], hidden: ["public-circle"], communityNotifications: {},
+    });
+    await act(actor, "", "preferences", { hidden: [], muted: [] });
+    assert.deepEqual((await store.preferences(actor.uid)).interests, ["Portugal"]);
+  });
+
   await t.test("participation pointer exposes own communities", async () => {
     assert.equal((await store.mine(member.uid)).items[0].id, "public-circle");
   });
@@ -545,6 +566,36 @@ test("community server workflows with isolated transactional persistence", async
       );
     },
   );
+  await t.test("filtered feed reaches older matches and binds cursors to the filter", async () => {
+    const id = "feed-filter-circle";
+    const uid = "user_filtered";
+    db.set(cp(id), { ...db.get(cp("public-circle")), id });
+    db.set(`${cp(id)}/members/${uid}`, { uid, state: "active", role: "member" });
+    db.set(`tgpiLearningUsers/_community/people/${uid}/memberships/${id}`, { community: id });
+    const fixture = db.get(`${cp("public-circle")}/posts/page-post-027`);
+    for (let i = 0; i <= 25; i++) {
+      const postId = `filter-post-${i}`;
+      db.set(`${cp(id)}/posts/${postId}`, {
+        ...fixture,
+        id: postId,
+        community: id,
+        kind: i === 0 ? "question" : "discussion",
+        accepted: "",
+        createdAt: new Date(1700000000000 + i * 1000).toISOString(),
+      });
+    }
+    const first = await store.personalFeed(uid, "", "questions");
+    assert.deepEqual(first.items, []);
+    assert.ok(first.next);
+    await assert.rejects(store.personalFeed(uid, first.next, "atlas"), /cursor/);
+    const last = await store.personalFeed(uid, first.next, "questions");
+    assert.deepEqual(last.items.map((post) => post.id), ["filter-post-0"]);
+    assert.equal(last.next, null);
+    for (const key of [...db.keys()]) {
+      if (key.startsWith(cp(id)) || key.includes(`/people/${uid}/`)) db.delete(key);
+    }
+  });
+
   await t.test(
     "private single-post route also checks revoked membership",
     async () => {
@@ -944,6 +995,13 @@ test("community server workflows with isolated transactional persistence", async
         body: "",
         attachments: [chatPhoto],
       });
+      for (const viewer of ["", "user_nonmember"]) {
+        await assert.rejects(store.publication("release-circle", "community-chat", viewer), /unavailable/);
+        await assert.rejects(store.comments("release-circle", "community-chat", viewer), /unavailable/);
+        await assert.rejects(assets.readCommunityAsset(viewer, "release-circle", chatPhoto.id), /unavailable/);
+      }
+      const room = await store.detail("release-circle", member.uid);
+      assert.ok(room.posts.every((post) => post.id !== "community-chat"));
       const messages = await store.comments(
         "release-circle",
         "community-chat",

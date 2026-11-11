@@ -5,7 +5,7 @@ import { useLocale as useFormattingLocale } from "@/components/localization/Loca
 import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 import Image from "@/components/localization/LocalizedImage";
-import { useState, useEffect, useRef } from "react";
+import { useCallback, useState, useEffect, useRef } from "react";
 import MemberAvatar from "./MemberAvatar";
 import ImageUpload from "./CommunityImageUpload";
 import Link from "next/link";
@@ -17,7 +17,7 @@ import {
   type Membership,
   type Page,
 } from "@/lib/community/model";
-import { api, type Action } from "./api";
+import { api, CommunityRequestError, type Action } from "./api";
 import s from "./Community.module.css";
 import { LocalizedText } from "@/components/localization/LocaleProvider";
 
@@ -26,6 +26,7 @@ export default function CommunityPost({
   post: p,
   uid,
   membership,
+  canReply = active(membership),
   busy,
   action,
 }: {
@@ -33,6 +34,7 @@ export default function CommunityPost({
   post: Post & { saved?: boolean };
   uid?: string;
   membership: Membership | null;
+  canReply?: boolean;
   busy: boolean;
   action: Action;
 }) {
@@ -54,71 +56,58 @@ export default function CommunityPost({
     [title, setTitle] = useState(p.title),
     [body, setBody] = useState(p.body),
     [cid, setCid] = useState(() => crypto.randomUUID());
-  async function load(append = false) {
-    setError("");
-    if (append) {
-      setHistoryExpanded(true);
-      stickToBottom.current = false;
-    } else {
-      setHistoryExpanded(false);
+  const request = useRef<AbortController | null>(null);
+  const load = useCallback(async (cursor = "", background = false) => {
+    if (background && request.current) return;
+    request.current?.abort();
+    const controller = new AbortController();
+    request.current = controller;
+    if (!background) {
+      setRefreshing(true);
+      setError("");
     }
     try {
-      const r = await api<Page<Comment>>({
+      const page = await api<Page<Comment>>({
         community: p.community,
         post: p.id,
-        ...(append && next ? { after: next } : {}),
-      });
-      setReplies((prev) => (append ? [...(prev || []), ...r.items] : r.items));
-      setNext(r.next);
-    } catch (e) {
-      setError((e as Error).message);
+        ...(cursor ? { after: cursor } : {}),
+      }, undefined, controller.signal);
+      if (controller.signal.aborted) return;
+      if (cursor) stickToBottom.current = false;
+      setHistoryExpanded(Boolean(cursor));
+      setReplies((previous) => cursor ? [...(previous || []), ...page.items] : page.items);
+      setNext(page.next);
+      setError("");
+    } catch (error) {
+      if (controller.signal.aborted) return;
+      if (error instanceof CommunityRequestError && [401, 403, 404, 423].includes(error.status)) {
+        setReplies(null);
+        setNext(null);
+      }
+      setError((error as Error).message);
+    } finally {
+      if (request.current === controller) {
+        request.current = null;
+        setRefreshing(false);
+      }
     }
-  }
+  }, [p.community, p.id]);
   useEffect(() => {
     if (!expanded || historyExpanded) return;
-    let disposed = false;
-    let timer: ReturnType<typeof setTimeout>;
-    let controller: AbortController | undefined;
-    async function refresh() {
-      if (!disposed && document.visibilityState === "visible") {
-        controller = new AbortController();
-        try {
-          const response = await fetch(
-            `/api/community?${new URLSearchParams({ community: p.community, post: p.id })}`,
-            { cache: "no-store", signal: controller.signal },
-          );
-          const data = await response.json();
-          if (!response.ok) {
-            if ([401, 403, 404].includes(response.status) && !disposed)
-              setReplies(null);
-            throw new Error(data.error || "Unable to refresh messages.");
-          }
-          if (!disposed) {
-            setReplies(data.items as Comment[]);
-            setNext(data.next);
-            setError("");
-          }
-        } catch (e) {
-          if (!disposed) setError((e as Error).message);
-        }
-      }
-      if (!disposed) timer = setTimeout(refresh, 12000);
-    }
-    timer = setTimeout(refresh, 12000);
-    return () => {
-      disposed = true;
-      clearTimeout(timer);
-      controller?.abort();
-    };
-  }, [expanded, historyExpanded, p.community, p.id]);
+    const timer = setInterval(() => {
+      if (document.visibilityState === "visible") void load("", true);
+    }, 12000);
+    return () => clearInterval(timer);
+  }, [expanded, historyExpanded, load]);
+  useEffect(() => {
+    if (conversation) void load();
+    return () => request.current?.abort();
+  }, [conversation, load]);
   useEffect(() => {
     const element = messagesRef.current;
     if (element && stickToBottom.current)
       element.scrollTop = element.scrollHeight;
   }, [replies]);
-  useEffect(() => {
-    if (conversation) void load();
-  }, [conversation, p.id]); // eslint-disable-line react-hooks/exhaustive-deps
   const own = uid === p.author,
     moderator = manages(membership);
   return (
@@ -218,11 +207,17 @@ export default function CommunityPost({
             onClick={() => {
               setExpanded(!expanded);
               if (!expanded) void load();
-              else setReplies(null);
+              else {
+                request.current?.abort();
+                request.current = null;
+                setRefreshing(false);
+                setHistoryExpanded(false);
+                setReplies(null);
+              }
             }}
-            aria-expanded={replies !== null}
+            aria-expanded={expanded}
           >
-            {replies === null ? <LocalizedText text={"Open replies"} /> : <LocalizedText text={"Close replies"} />}
+            {!expanded ? <LocalizedText text={"Open replies"} /> : <LocalizedText text={"Close replies"} />}
           </button>
           {active(membership) && p.state !== "pending" && (
             <button
@@ -361,14 +356,7 @@ export default function CommunityPost({
             type="button"
             className={s.secondary}
             disabled={refreshing}
-            onClick={async () => {
-              setRefreshing(true);
-              try {
-                await load();
-              } finally {
-                setRefreshing(false);
-              }
-            }}
+            onClick={() => void load()}
           >
             {refreshing ? <LocalizedText text={"Refreshing…"} /> : <LocalizedText text={"Refresh"} />}
           </button>
@@ -378,6 +366,9 @@ export default function CommunityPost({
         <p className={s.error} role="alert">
           <LocalizedText text={error} />
         </p>
+      )}
+      {expanded && refreshing && replies === null && (
+        <p className={s.notice} role="status"><LocalizedText text="Loading…" /></p>
       )}
       {expanded && replies !== null && (
         <section aria-label={localizeLabel("Replies")}>
@@ -524,9 +515,10 @@ export default function CommunityPost({
             <p className={s.notice}><LocalizedText text={"Reading earlier messages. Use Refresh to return to the latest conversation."} /></p>
           )}
           {next && (
-            <button className={s.secondary} onClick={() => void load(true)}><LocalizedText text={"Load more replies"} /></button>
+            <button className={s.secondary} disabled={refreshing}
+              onClick={() => void load(next)}><LocalizedText text={"Load more replies"} /></button>
           )}
-          {active(membership) && (
+          {canReply && (
             <form
               onSubmit={async (e) => {
                 e.preventDefault();

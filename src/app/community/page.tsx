@@ -11,14 +11,14 @@ const sourceMetadata: Metadata = {
 export default async function CommunityPage({
   searchParams,
 }: {
-  searchParams: Promise<{ view?: string; destination?: string }>;
+  searchParams: Promise<{ view?: string | string[]; destination?: string | string[] }>;
 }) {
-  const p = await searchParams;
+  const { view, destination } = await searchParams;
   return (
     <CommunityApp
       globalAdmin={(await currentUser())?.privateMetadata.role === "admin"}
       initialView={
-        [
+        typeof view === "string" && [
           "mine",
           "requests",
           "saved",
@@ -27,11 +27,11 @@ export default async function CommunityPage({
           "questions",
           "atlas",
           "preferences",
-        ].includes(p.view || "")
-          ? p.view
+        ].includes(view)
+          ? view
           : "explore"
       }
-      destination={(p.destination || "").slice(0, 100)}
+      destination={typeof destination === "string" ? destination.trim().slice(0, 100) : ""}
     />
   );
 }

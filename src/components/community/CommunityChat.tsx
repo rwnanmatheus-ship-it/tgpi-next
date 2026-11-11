@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useEffect, useState, useRef } from "react";
 import {
   active,
+  communityChatId,
   manages,
   type Community,
   type CommunityDetail,
@@ -41,7 +42,7 @@ export default function CommunityChat({
     setError("");
     try {
       const response = await fetch(
-        `/api/community?${new URLSearchParams({ community: community.id, single: "community-chat" })}`,
+        `/api/community?${new URLSearchParams({ community: community.id, single: communityChatId })}`,
         { cache: "no-store" },
       );
       const data = await response.json();
@@ -100,7 +101,7 @@ export default function CommunityChat({
                 if (
                   await action({
                     action: "post",
-                    id: "community-chat",
+                    id: communityChatId,
                     kind: "discussion",
                     title: "Community conversation",
                     body: "Welcome to our community conversation. Introduce yourself, share your destination and tell us what you are working toward.",
@@ -121,7 +122,8 @@ export default function CommunityChat({
           conversation
           post={post}
           uid={uid}
-          membership={canSend ? membership : null}
+          membership={membership}
+          canReply={canSend}
           action={action}
           busy={busy}
         />

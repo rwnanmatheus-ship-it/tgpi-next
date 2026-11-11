@@ -230,12 +230,16 @@ export function parseCommunityPreferences(v: unknown): CommunityPreferences {
   };
 }
 
+export const communityChatId = "community-chat";
+
 export function postVisible(
   p: Post,
   m: Membership | null | undefined,
   uid: string,
 ) {
   return (
-    !p.removed && (p.state !== "pending" || p.author === uid || manages(m))
+    !p.removed &&
+    (p.id !== communityChatId || active(m)) &&
+    (p.state !== "pending" || p.author === uid || manages(m))
   );
 }

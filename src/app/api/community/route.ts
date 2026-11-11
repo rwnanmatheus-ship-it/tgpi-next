@@ -59,7 +59,7 @@ export async function GET(request: Request) {
         : u.searchParams.has("blocks")
           ? await blocks(uid, after)
           : u.searchParams.has("feed")
-            ? await personalFeed(uid, after)
+            ? await personalFeed(uid, after, u.searchParams.get("filter") || "")
             : u.searchParams.has("global-reports")
               ? await globalReports(
                   uid,

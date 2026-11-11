@@ -24,7 +24,8 @@ export default function Preferences({
     [interests, setInterests] = useState(""),
     [blocks, setBlocks] = useState<{ uid: string }[]>([]),
     [blockNext, setBlockNext] = useState<string | null>(null),
-    [error, setError] = useState("");
+    [error, setError] = useState(""),
+    [loaded, setLoaded] = useState(false);
   useEffect(() => {
     let mounted = true;
     api<{ items: { uid: string }[]; next: string | null }>({ blocks: "1" })
@@ -41,6 +42,7 @@ export default function Preferences({
       .then((v) => {
         if (mounted) {
           setValue(v);
+          setLoaded(true);
           setInterests(v.interests.join(", "));
         }
       })
@@ -73,7 +75,11 @@ export default function Preferences({
                   .map((x) => x.trim())
                   .filter(Boolean),
               });
-              if (await action({ action: "preferences", ...p })) setValue(p);
+              if (await action({
+                action: "preferences",
+                interests: p.interests,
+                personalized: p.personalized,
+              })) setValue(p);
             } catch (e) {
               setError((e as Error).message);
             }
@@ -94,7 +100,7 @@ export default function Preferences({
                 setValue({ ...value, personalized: e.target.checked })
               }
             /><LocalizedText text={"Show explanations when communities match these interests"} /></label>
-          <button className={s.button} disabled={busy}><LocalizedText text={"Save preferences"} /></button>
+          <button className={s.button} disabled={busy || !loaded}><LocalizedText text={"Save preferences"} /></button>
         </form>
         <details>
           <summary><LocalizedText text={"Notification preferences per community"} /></summary>
@@ -125,7 +131,7 @@ export default function Preferences({
               placeholder="community-slug"
               onBlur={(e) => {
                 const id = e.target.value.trim();
-                if (/^[a-z0-9][a-z0-9-]{2,59}$/.test(id))
+                if (/^[a-z0-9][a-z0-9-]{2,59}$/.test(id) && !(id in (value.communityNotifications || {})))
                   setValue({
                     ...value,
                     communityNotifications: {
@@ -139,8 +145,11 @@ export default function Preferences({
           <p className={s.notice}><LocalizedText text={"Add a community identifier, choose its preference and select Save preferences. Delivery is capped at ten community updates per hour."} /></p>
           <button
             className={s.secondary}
-            disabled={busy}
-            onClick={() => void action({ action: "preferences", ...value })}
+            disabled={busy || !loaded}
+            onClick={() => void action({
+              action: "preferences",
+              communityNotifications: value.communityNotifications,
+            })}
           ><LocalizedText text={"Save notification preferences"} /></button>
         </details>
         <details>
@@ -186,14 +195,11 @@ export default function Preferences({
           <button
             className={s.secondary}
             disabled={busy}
-            onClick={() =>
-              void action({
-                action: "preferences",
-                ...value,
-                hidden: [],
-                muted: [],
-              })
-            }
+            onClick={async () => {
+              if (await action({ action: "preferences", hidden: [], muted: [] })) {
+                setValue((previous) => ({ ...previous, hidden: [], muted: [] }));
+              }
+            }}
           ><LocalizedText text={"Restore hidden and muted communities"} /></button>
         )}
       </section>

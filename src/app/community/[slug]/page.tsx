@@ -11,10 +11,10 @@ export default async function CommunityPage({
   searchParams,
 }: {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<{ token?: string; post?: string }>;
+  searchParams: Promise<{ token?: string | string[]; post?: string | string[] }>;
 }) {
   const [{ slug }, { token, post }] = await Promise.all([params, searchParams]);
-  return <CommunityApp id={slug} token={token || ""} post={post || ""} />;
+  return <CommunityApp key={slug} id={slug} token={typeof token === "string" ? token : ""} post={typeof post === "string" ? post : ""} />;
 }
 
 export async function generateMetadata() { return localizeMetadata(sourceMetadata); }

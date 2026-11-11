@@ -10,6 +10,7 @@ import "server-only";
 import {
   searchTokens,
   searchQuery,
+  searchWords,
   moderatorSettings,
   attachments,
   journeyStages,
@@ -34,6 +35,7 @@ import {
 } from "@/lib/firestore-admin-rest.server";
 import {
   active,
+  communityChatId,
   postVisible,
   parseCommunityPreferences,
   canDiscover,
@@ -128,12 +130,13 @@ async function children<T>(
   collection: string,
   after = "",
   filter?: { field: string; term: string },
+  searchScope = "",
 ) {
   const chronological =
       collection === "posts" ||
       collection === "comments" ||
       collection === "updates",
-    scope = `${parent}/${collection}${filter ? `:${filter.field}:${filter.term}` : ""}`,
+    scope = `${parent}/${collection}${searchScope ? `:${searchScope}` : ""}`,
     cursor = after ? openCursor(scope, after) : null;
   if (
     cursor &&
@@ -298,14 +301,16 @@ export async function globalReports(uid: string, admin: boolean, after = "") {
     throw new CommunityError("Administrator permission required.", 403);
   return children<Report & { community: string }>(root, "reports", after);
 }
-export async function personalFeed(uid: string, cursor = "") {
+export async function personalFeed(uid: string, cursor = "", filter = "") {
   if (!uid) throw new CommunityError("Sign in to see your feed.", 401);
-  const scope = `${root}/people/${uid}/feed`,
+  if (filter && filter !== "questions" && filter !== "atlas")
+    throw new CommunityError("Invalid publication filter.");
+  const scope = `${root}/people/${uid}/feed${filter ? ":" + filter : ""}`,
     prefs = await preferences(uid),
     groups = (await mine(uid)).items
       .filter((c) => active(c.membership) && !prefs.muted.includes(c.id))
       .slice(0, 8);
-  let positions: Record<string, string> = {};
+  let positions: Record<string, string | null> = {};
   if (cursor) {
     try {
       positions = JSON.parse(openCursor(scope, cursor).date);
@@ -314,64 +319,49 @@ export async function personalFeed(uid: string, cursor = "") {
     }
   }
   const pages = await Promise.all(
-    groups.map(async (c) => ({
-      community: c,
-      ...(await children<Post>(
-        cp(c.id),
-        "posts",
-        typeof positions[c.id] === "string" ? positions[c.id] : "",
-      )),
-    })),
-  );
-  const candidates = (
-    await Promise.all(
-      pages.flatMap((page) =>
-        page.items.map(async (p) =>
-          (await allowedPost(p, page.community.membership, uid))
-            ? {
-                ...(await enrichPost(p, uid)),
-                communityName: page.community.name,
-                membership: page.community.membership,
-              }
-            : null,
-        ),
-      ),
-    )
-  )
-    .filter((p) => p !== null)
-    .sort(
-      (a, b) =>
-        b.createdAt.localeCompare(a.createdAt) ||
-        b.community.localeCompare(a.community) ||
-        b.id.localeCompare(a.id),
-    );
-  const items = candidates.slice(0, 25);
-  for (const page of pages) {
-    if (
-      !candidates.some((p) => p.community === page.community.id) &&
-      page.items.length
-    ) {
-      const last = page.items.at(-1)!;
-      positions[page.community.id] = sealCursor(
-        `${cp(page.community.id)}/posts`,
-        last.id,
-        last.createdAt,
+    groups.filter((c) => positions[c.id] !== null).map(async (c) => {
+      const page = await children<Post>(cp(c.id), "posts", positions[c.id] || "");
+      const visible = await Promise.all(
+        page.items
+          .filter((p) =>
+            p.id !== communityChatId &&
+            (filter !== "questions" || (p.kind === "question" && !p.accepted)) &&
+            (filter !== "atlas" || p.kind === "experience"),
+          )
+          .map(async (p) => (await allowedPost(p, c.membership, uid)) ? p : null),
       );
+      return { community: c, next: page.next, posts: visible.filter((p) => p !== null) };
+    }),
+  );
+  const ranked = pages.flatMap((page) =>
+    page.posts.map((post) => ({ post, community: page.community })),
+  ).sort(
+    (a, b) =>
+      b.post.createdAt.localeCompare(a.post.createdAt) ||
+      b.post.community.localeCompare(a.post.community) ||
+      b.post.id.localeCompare(a.post.id),
+  );
+  const selected = ranked.slice(0, 25);
+  for (const page of pages) {
+    const id = page.community.id;
+    const last = selected.findLast((item) => item.community.id === id)?.post;
+    if (!page.posts.length || last === page.posts.at(-1)) {
+      // Skip inaccessible rows after the final selected post as well.
+      positions[id] = page.next;
+    } else if (last) {
+      positions[id] = sealCursor(`${cp(id)}/posts`, last.id, last.createdAt);
     }
   }
-  for (const p of items)
-    positions[p.community] = sealCursor(
-      `${cp(p.community)}/posts`,
-      p.id,
-      p.createdAt,
-    );
   return {
-    items,
+    items: await Promise.all(selected.map(async ({ post, community }) => ({
+      ...(await enrichPost(post, uid)),
+      communityName: community.name,
+      membership: community.membership,
+    }))),
     communitiesConsidered: groups.length,
-    next:
-      candidates.length > 25 || pages.some((p) => p.next)
-        ? sealCursor(scope, "feed", JSON.stringify(positions))
-        : null,
+    next: groups.some((c) => positions[c.id] !== null)
+      ? sealCursor(scope, "feed", JSON.stringify(positions))
+      : null,
   };
 }
 export async function blocks(uid: string, after = "") {
@@ -397,19 +387,25 @@ export async function preferences(uid: string) {
 }
 export async function discover(uid: string, after = "", search = "") {
   ready();
-  const q = searchQuery(search);
+  const terms = searchQuery(search);
+  const indexedTerm = terms.find((word) => /^[a-z0-9]{2,}$/.test(word))?.slice(0, 24);
   const result = await children<Community>(
     root,
     "communities",
     after,
-    q.length >= 2 ? { field: "searchIndex", term: q } : undefined,
+    indexedTerm ? { field: "searchIndex", term: indexedTerm } : undefined,
+    terms.join(" "),
   );
   const prefs = uid ? await preferences(uid) : parseCommunityPreferences(null);
   const items = await Promise.all(
     result.items.map(async (c) => {
+      if (c.visibility === "hidden") return null;
+      if (terms.length) {
+        const words = searchWords([c.name, c.description, c.destination, c.theme, c.language].join(" "));
+        if (!terms.every((term) => words.some((word) => word.startsWith(term)))) return null;
+      }
       const m = uid ? (await get<Membership>(mp(c.id, uid)))?.data : null;
       if (
-        c.visibility === "hidden" ||
         !canDiscover(c, m) ||
         prefs.hidden.includes(c.id) ||
         prefs.muted.includes(c.id)
@@ -486,7 +482,9 @@ export async function detail(id: string, uid: string, after = "", token = "") {
   const rows = await children<Post>(cp(id), "posts", after);
   const checked = await Promise.all(
     rows.items.map(async (p) =>
-      (await allowedPost(p, a.membership, uid)) ? enrichPost(p, uid) : null,
+      p.id !== communityChatId && (await allowedPost(p, a.membership, uid))
+        ? enrichPost(p, uid)
+        : null,
     ),
   );
   const posts = checked.filter((p) => p !== null);
@@ -622,7 +620,7 @@ export async function draft(uid: string) {
 export async function mutate(actor: Actor, input: Record<string, unknown>) {
   ready();
   const action = text(input.action, 40, true),
-    id = ["draft", "preferences", "unblock"].includes(action)
+    id = ["draft", "preferences", "community-preference", "unblock"].includes(action)
       ? action
       : identifier(input.community),
     uid = actor.uid,
@@ -792,12 +790,28 @@ export async function mutate(actor: Actor, input: Record<string, unknown>) {
         });
         return { result: { id }, writes };
       }
-      if (action === "preferences") {
-        put(
-          `${root}/people/${uid}/preferences/current`,
-          parseCommunityPreferences(input),
+      if (action === "preferences" || action === "community-preference") {
+        const preferencePath = `${root}/people/${uid}/preferences/current`;
+        const current = parseCommunityPreferences(
+          (await getDocuments<Record<string, JsonValue>>([preferencePath]))
+            .get(preferencePath)?.data,
         );
-        return { result: { id }, writes };
+        if (action === "preferences") {
+          put(preferencePath, parseCommunityPreferences({ ...current, ...input }));
+          return { result: { id }, writes };
+        }
+        const target = identifier(input.target);
+        const field = input.field;
+        if (field !== "hidden" && field !== "muted")
+          throw new CommunityError("Invalid community preference.");
+        const values = current[field];
+        if (!values.includes(target)) {
+          put(preferencePath, parseCommunityPreferences({
+            ...current,
+            [field]: [target, ...values],
+          }));
+        }
+        return { result: { id: target }, writes };
       }
       if (action === "draft") {
         put(`${root}/drafts/${uid}`, {
@@ -1098,12 +1112,12 @@ export async function mutate(actor: Actor, input: Record<string, unknown>) {
           )
         )
           throw new CommunityError("Choose a publication format.");
-        if (input.id === "community-chat") manage();
+        if (input.id === communityChatId) manage();
         const pid = identifier(input.id),
           postPath = pp(id, pid),
           previous = (await getDocuments<Post>([postPath])).get(postPath);
         if (previous) {
-          if (previous.data.author !== uid && pid !== "community-chat")
+          if (previous.data.author !== uid && pid !== communityChatId)
             throw new CommunityError("Publication ID unavailable.", 409);
           return { result: { id }, writes: [] };
         }

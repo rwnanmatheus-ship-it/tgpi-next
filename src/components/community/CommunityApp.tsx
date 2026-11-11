@@ -7,12 +7,15 @@ import { useUser } from "@clerk/nextjs";
 import Image from "@/components/localization/LocalizedImage";
 import CinematicImage from "@/components/ui/CinematicImage";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import NavigationIcon from "@/components/navigation/NavigationIcon";
 import dynamic from "next/dynamic";
 import {
   active,
+  canRead,
+  communityChatId,
   manages,
   type CommunityCard,
-  type CommunityPreferences,
   type CommunityDetail,
   type Post,
   type Page,
@@ -31,6 +34,38 @@ const Playbooks = dynamic(() => import("./CommunityPlaybooks"));
 const Chat = dynamic(() => import("./CommunityChat"));
 const ImageUpload = dynamic(() => import("./CommunityImageUpload"));
 const Sessions = dynamic(() => import("./GlobalSessions"));
+const directoryViews = [
+  { id: "explore", label: "Explore", icon: "compass" },
+  { id: "feed", label: "For you", icon: "apps" },
+  { id: "questions", label: "Unanswered questions", icon: "target" },
+  { id: "atlas", label: "Experience Atlas", icon: "globe" },
+  { id: "meetings", label: "Global Sessions", icon: "bell" },
+  { id: "mine", label: "My communities", icon: "home" },
+  { id: "requests", label: "My requests", icon: "key" },
+  { id: "saved", label: "Saved posts", icon: "book" },
+  { id: "preferences", label: "My interests", icon: "settings" },
+] as const;
+const roomTabs = [
+  { id: "posts", label: "Discussions" },
+  { id: "chat", label: "Community chat" },
+  { id: "events", label: "Global Sessions" },
+  { id: "guides", label: "Playbooks" },
+  { id: "about", label: "About & rules" },
+] as const;
+type RoomTab = (typeof roomTabs)[number]["id"];
+
+const emptySearch = {
+  en: { communities: "No communities match this search.", posts: "No contributions match this filter." },
+  "pt-BR": { communities: "Nenhuma comunidade corresponde a esta busca.", posts: "Nenhuma publicação corresponde ao filtro." },
+  es: { communities: "Ninguna comunidad coincide con esta búsqueda.", posts: "Ninguna publicación coincide con el filtro." },
+  fr: { communities: "Aucune communauté ne correspond à cette recherche.", posts: "Aucune publication ne correspond à ce filtre." },
+  de: { communities: "Keine Community entspricht dieser Suche.", posts: "Keine Beiträge entsprechen diesem Filter." },
+  it: { communities: "Nessuna comunità corrisponde a questa ricerca.", posts: "Nessun contributo corrisponde a questo filtro." },
+};
+function normalizeSearch(value: string) {
+  return value.normalize("NFKD").replace(/\p{Mark}/gu, "").toLowerCase().trim();
+}
+
 export default function CommunityApp({
   globalAdmin = false,
   id = "",
@@ -46,7 +81,10 @@ export default function CommunityApp({
   initialView?: string;
   destination?: string;
 }) {
-  const { t: localizeLabel } = useInterfaceLocale();
+  const { locale, t: localizeLabel } = useInterfaceLocale();
+  const router = useRouter();
+  const view = initialView;
+  const requiresSignIn = !id && view !== "explore";
 
   const { user, isLoaded } = useUser(),
     [cards, setCards] = useState<CommunityCard[]>([]),
@@ -58,21 +96,31 @@ export default function CommunityApp({
         communityName: string;
       })[]
     >([]),
-    [query, setQuery] = useState(destination),
     [next, setNext] = useState<string | null>(null),
     [error, setError] = useState(""),
     [notice, setNotice] = useState(""),
     [loading, setLoading] = useState(true),
     [busy, setBusy] = useState(false),
-    [view, setView] = useState(initialView),
     [search, setSearch] = useState(destination),
     [postFilter, setPostFilter] = useState("all"),
+    [roomTab, setRoomTab] = useState<RoomTab>("posts"),
     [creating, setCreating] = useState(false),
     [manage, setManage] = useState(false),
     [accepted, setAccepted] = useState(false),
     [answers, setAnswers] = useState("");
   const uid = user?.id || "";
   const loadVersion = useRef(0);
+  const actionLock = useRef(false);
+  const signIn = (target: string) =>
+    `/sign-in?${new URLSearchParams({ redirect_url: target })}`;
+  const directoryHref = (section: string) =>
+    section === "explore" ? "/community" : `/community?view=${section}`;
+  const currentHref = id
+    ? `/community/${id}${token || post ? "?" + new URLSearchParams({
+        ...(token ? { token } : {}),
+        ...(post ? { post } : {}),
+      }) : ""}`
+    : directoryHref(view);
   const load = useCallback(
     async (cursor = "") => {
       const revision = ++loadVersion.current;
@@ -91,7 +139,7 @@ export default function CommunityApp({
             cursor && prev ? { ...r, posts: [...prev.posts, ...r.posts] } : r,
           );
           setNext(r.next);
-        } else if (["preferences", "meetings"].includes(view)) {
+        } else if ((requiresSignIn && !uid) || ["preferences", "meetings"].includes(view)) {
           setNext(null);
         } else if (["feed", "questions", "atlas"].includes(view)) {
           const r = await api<
@@ -101,7 +149,7 @@ export default function CommunityApp({
                 communityName: string;
               }
             >
-          >({ feed: "1", ...(cursor ? { after: cursor } : {}) });
+          >({ feed: "1", ...(view === "feed" ? {} : { filter: view }), ...(cursor ? { after: cursor } : {}) });
           if (revision !== loadVersion.current) return;
           setFeed((prev) => (cursor ? [...prev, ...r.items] : r.items));
           setNext(r.next);
@@ -117,7 +165,7 @@ export default function CommunityApp({
           const r = await api<Page<CommunityCard>>({
             ...(["mine", "requests"].includes(view)
               ? { mine: "1" }
-              : { q: query }),
+              : { q: destination }),
             ...(cursor ? { after: cursor } : {}),
           });
           if (revision !== loadVersion.current) return;
@@ -130,9 +178,11 @@ export default function CommunityApp({
         if (revision === loadVersion.current) setLoading(false);
       }
     },
-    [id, token, view, post, query],
+    [id, token, view, post, destination, requiresSignIn, uid],
   );
+  const currentLoad = useRef(load);
   useEffect(() => {
+    currentLoad.current = load;
     if (isLoaded) {
       setDetail(null);
       setCards([]);
@@ -141,7 +191,9 @@ export default function CommunityApp({
       setNext(null);
       void load();
     }
-  }, [load, isLoaded, uid]);
+    return () => { loadVersion.current += 1; };
+  }, [load, isLoaded]);
+  useEffect(() => setSearch(destination), [destination]);
   useEffect(() => {
     if (loading || post) return;
     try {
@@ -159,131 +211,136 @@ export default function CommunityApp({
     } catch {}
   }, [loading, post, id, view]);
   async function action(body: Record<string, unknown>) {
-    if (busy) return false;
+    if (actionLock.current) return false;
+    actionLock.current = true;
     setBusy(true);
     setError("");
     setNotice("");
     try {
       await api({}, { community: id, ...body });
       setNotice("Changes saved.");
-      await load();
+      await currentLoad.current();
       return true;
     } catch (e) {
       setError((e as Error).message);
       return false;
     } finally {
+      actionLock.current = false;
       setBusy(false);
     }
   }
-  async function hideCommunity(community: string, muted = false) {
-    try {
-      const p = await api<CommunityPreferences>({ preferences: "1" });
-      const field = muted ? "muted" : "hidden";
-      await action({
-        action: "preferences",
-        ...p,
-        [field]: [...new Set([...p[field], community])],
-      });
-    } catch (e) {
-      setError((e as Error).message);
-    }
+  function hideCommunity(community: string, muted = false) {
+    return action({
+      action: "community-preference",
+      target: community,
+      field: muted ? "muted" : "hidden",
+    });
   }
   const c = detail?.community,
     m = detail?.membership,
     joined = active(m),
     admin = manages(m);
+  const searchable = normalizeSearch(search);
+  const currentTab = post ? (post === communityChatId ? "chat" : "posts") : roomTab;
+  const readable = c && canRead(c, m);
+  const availableTabs = roomTabs.filter((tab) =>
+    tab.id === "about" || (readable && (tab.id !== "chat" || joined)),
+  );
   const filtered = cards.filter(
     (c) =>
       (view !== "mine" || c.membership?.state === "active") &&
       (view !== "requests" || c.membership?.state === "pending") &&
       (view === "explore" ||
-        `${c.name} ${c.description} ${c.destination} ${c.theme} ${c.language}`
-          .toLowerCase()
-          .includes(search.toLowerCase())),
+        normalizeSearch(`${c.name} ${c.description} ${c.destination} ${c.theme} ${c.language}`)
+          .includes(searchable)),
   );
+  const visibleFeed = feed.filter((p) =>
+    view !== "atlas" ||
+    normalizeSearch(`${p.destination} ${p.title} ${p.context}`).includes(searchable),
+  );
+  const visiblePosts = detail?.posts.filter((p) =>
+    p.id !== communityChatId &&
+    (post || postFilter === "all" ||
+      (postFilter === "open" && p.kind === "question" && !p.accepted) ||
+      p.kind === postFilter),
+  ) || [];
+  const title = directoryViews.find((item) => item.id === view)?.label || "Explore";
+  const formatter = new Intl.NumberFormat(locale);
   return (
     <main className={s.shell}>
-      <header className={s.hero}>
+      <header className={`${s.hero} ${id ? s.roomHero : ""}`}>
         {c?.coverId ? (
           <Image
             src={`/api/community/assets/${c.id}/${c.coverId}`}
-            unoptimized
-            alt=""
-            fill
-            sizes="(max-width:760px) 100vw, 1200px"
-            priority
+            unoptimized alt="" fill sizes="(max-width:760px) 100vw, 1200px" priority
           />
         ) : (
           <CinematicImage asset="community-global-exchange" alt="" priority
             sizes="(max-width:760px) 100vw, 1200px" position="65% center" />
         )}
-        <span className={s.eyebrow}><LocalizedText text={"TGPI · Global Community"} /></span>
-        <h1>{c?.name || <LocalizedText text={"Your world. Shared experience."} />}</h1>
-        <p>
-          {c?.description ||
-            <LocalizedText text={"Connect with people navigating life across borders."} />}
-        </p>
-        <div className={s.actions}>
-          <Link className={s.button} href="/community"><LocalizedText text="Explore communities" /></Link>
-          {user ? (
-            <button className={s.secondary} onClick={() => setCreating(true)}><LocalizedText text={"Create community"} /></button>
+        <div className={s.heroCopy}>
+          {id ? (
+            <Link className={s.back} href="/community">
+              <NavigationIcon name="arrow" width={16} height={16} />
+              <LocalizedText text="All communities" />
+            </Link>
           ) : (
-            <Link
-              className={s.secondary}
-              href="/sign-in?redirect_url=/community"
-            ><LocalizedText text={"Sign in to participate"} /></Link>
+            <span className={s.eyebrow}><LocalizedText text="TGPI · Global Community" /></span>
           )}
+          <h1>{c?.name || <LocalizedText text="Your world. Shared experience." />}</h1>
+          <p>{c?.description || <LocalizedText text="Connect with people navigating life across borders." />}</p>
+          <div className={s.actions}>
+            {!id && (
+              <>
+                {user ? (
+                  <button className={s.button} onClick={() => setCreating(true)}>
+                    <LocalizedText text="Create community" />
+                  </button>
+                ) : (
+                  <Link className={s.button} href={signIn(currentHref)}>
+                    <LocalizedText text="Sign in to participate" />
+                  </Link>
+                )}
+                <Link className={s.heroLink} href={view === "explore" ? "#community-content" : "/community"}>
+                  <LocalizedText text="Explore communities" />
+                  <NavigationIcon name="arrow" width={16} height={16} />
+                </Link>
+              </>
+            )}
+            {c && !joined && !c.archived && (
+              user ? (
+                <a className={s.button} href="#community-membership"><LocalizedText text="Rules & participation" /></a>
+              ) : (
+                <Link className={s.button} href={signIn(currentHref)}><LocalizedText text="Sign in to participate" /></Link>
+              )
+            )}
+          </div>
         </div>
       </header>
-      <div className={s.layout}>
-        <nav className={s.nav} aria-label={localizeLabel("Community navigation")}>
-          {id ? (
-            <Link href="/community"><LocalizedText text={"All communities"} /></Link>
-          ) : (
-            [
-              "feed",
-              "explore",
-              "mine",
-              "questions",
-              "atlas",
-              "meetings",
-              "requests",
-              "saved",
-              "preferences",
-            ].map((v) => (
-              <button
-                aria-current={view === v ? "page" : undefined}
-                key={v}
-                onClick={() => {
-                  setCreating(false);
-                  setView(v);
-                }}
+      <div className={`${s.layout} ${id ? s.roomLayout : ""}`}>
+        {!id && (
+          <nav className={s.nav} aria-label={localizeLabel("Community navigation")}>
+            {directoryViews.map((item) => (
+              <Link
+                href={directoryHref(item.id)}
+                aria-current={view === item.id ? "page" : undefined}
+                key={item.id}
+                scroll={false}
+                onClick={() => setCreating(false)}
               >
-                {
-                  {
-                    meetings: "Global Sessions",
-                    feed: "For you",
-                    questions: "Questions that need you",
-                    atlas: "Experience Atlas",
-                    explore: "Explore",
-                    mine: "My communities",
-                    requests: "My requests",
-                    saved: "Saved posts",
-                    preferences: "My interests",
-                  }[v]
-                }
-              </button>
-            ))
-          )}
-          {globalAdmin && (
-            <Link href="/community/moderation"><LocalizedText text={"Global moderation"} /></Link>
-          )}
-          <Link href="/profile"><LocalizedText text="Workspace" /></Link>
-          <Link href="/countries"><LocalizedText text={"Destinations"} /></Link>
-          <Link href="/members"><LocalizedText text={"Find members"} /></Link>
-          {id && <a href="#community-rules"><LocalizedText text="About & rules" /></a>}
-        </nav>
-        <LocalizedElement as="section" className={s.content} aria-label="Community content">
+                <NavigationIcon name={item.icon} width={18} height={18} />
+                <LocalizedText text={item.label} />
+              </Link>
+            ))}
+            {globalAdmin && (
+              <Link href="/community/moderation">
+                <NavigationIcon name="shield" width={18} height={18} />
+                <LocalizedText text="Global moderation" />
+              </Link>
+            )}
+          </nav>
+        )}
+        <LocalizedElement as="section" className={s.content} id="community-content" aria-label="Community content">
           {error && (
             <div className={s.error} role="alert">
               <LocalizedText text={error} />
@@ -299,6 +356,11 @@ export default function CommunityApp({
           )}
           {creating ? (
             <CreateFlow key={uid} close={() => setCreating(false)} />
+          ) : requiresSignIn && isLoaded && !user ? (
+            <div className={s.empty}>
+              <h2><LocalizedText text={title} /></h2>
+              <Link className={s.button} href={signIn(currentHref)}><LocalizedText text="Sign in to participate" /></Link>
+            </div>
           ) : (
             <>
               {!id && view === "preferences" && user && (
@@ -314,60 +376,75 @@ export default function CommunityApp({
                   "meetings",
                 ].includes(view) && (
                   <>
+                    <h2 className={s.sectionTitle}><LocalizedText text={title} /></h2>
                     <form
                       className={s.tools}
                       onSubmit={(e) => {
                         e.preventDefault();
-                        setQuery(search);
+                        if (view !== "explore") return;
+                        const value = search.trim();
+                        if (value === destination) void load();
+                        else router.push(value
+                          ? `/community?${new URLSearchParams({ destination: value })}`
+                          : "/community", { scroll: false });
                       }}
                     >
                       <label style={{ flex: 1, margin: 0 }}><LocalizedText text={"Search communities"} /><LocalizedElement as="input"
                           type="search"
                           value={search}
+                          maxLength={100}
                           onChange={(e) => setSearch(e.target.value)}
                           placeholder="Destination, topic or language"
                         />
                       </label>
-                      <button className={s.secondary}><LocalizedText text={"Search"} /></button>
+                      {view === "explore" && (
+                        <button className={s.button}>
+                          <NavigationIcon name="search" width={17} height={17} />
+                          <LocalizedText text="Search" />
+                        </button>
+                      )}
                     </form>
-                    <p className={s.notice}><LocalizedText text={"Search by the first word of a destination, topic or language."} /></p>
                     <div className={s.grid}>
                       {filtered.map((c) => (
-                        <article className={s.card} key={c.id}>
-                          <span className={s.badge}>
-                            <LocalizedText text={c.visibility} /> · <LocalizedText text={c.admission} />
-                          </span>
-                          <h2>
-                            <Link href={`/community/${c.id}`}>{c.name}</Link>
-                          </h2>
-                          <p>{c.description}</p>
-                          {c.recommendation && (
-                            <p className={s.status}>{c.recommendation}</p>
-                          )}
-                          <p className={s.meta}>
-                            {c.destination || <LocalizedText text={"Across borders"} />} · {c.language}
-                          </p>
-                          <p className={s.meta}>
-                            {c.memberCount}{" "}<LocalizedText text={"members ·"} />{" "}{c.theme}
-                          </p>
-                          {c.membership && (
-                            <p className={s.badge}>{c.membership.state}</p>
-                          )}
-                          <Link
-                            className={s.secondary}
-                            href={`/community/${c.id}`}
-                          ><LocalizedText text={"Visit community"} /></Link>
-                          {user && view === "explore" && (
-                            <button
-                              className={s.secondary}
-                              disabled={busy}
-                              onClick={() => void hideCommunity(c.id)}
-                            ><LocalizedText text={"Hide recommendation"} /></button>
-                          )}
+                        <article className={s.directoryCard} key={c.id}>
+                          <div className={s.cardCover}>
+                            {c.coverId ? (
+                              <Image src={`/api/community/assets/${c.id}/${c.coverId}`} unoptimized
+                                alt="" fill sizes="(max-width:760px) 100vw, 400px" />
+                            ) : (
+                              <CinematicImage asset={c.destination ? "arrival-city" : "community-conversation"}
+                                alt="" sizes="(max-width:760px) 100vw, 400px" />
+                            )}
+                            <span className={s.cardVisibility}><LocalizedText text={c.visibility} /></span>
+                          </div>
+                          <div className={s.cardContent}>
+                            <p className={s.cardTopics}>
+                              {[c.destination, c.language, c.theme].filter(Boolean).join(" · ")}
+                            </p>
+                            <h3><Link href={`/community/${c.id}`}>{c.name}</Link></h3>
+                            <p className={s.cardDescription}>{c.description}</p>
+                            {c.recommendation && <p className={s.notice}>{c.recommendation}</p>}
+                            <div className={s.cardFooter}>
+                              <span className={s.meta}>
+                                {formatter.format(c.memberCount)} <LocalizedText text="members" />
+                                <span aria-hidden="true">·</span> <LocalizedText text={c.membership?.state || c.admission} />
+                              </span>
+                              <Link className={s.cardArrow} href={`/community/${c.id}`}
+                                aria-label={`${localizeLabel("Visit community")} · ${c.name}`}>
+                                <NavigationIcon name="arrow" width={19} height={19} />
+                              </Link>
+                            </div>
+                            {user && view === "explore" && (
+                              <button className={s.quietButton} disabled={busy}
+                                onClick={() => void hideCommunity(c.id)}>
+                                <LocalizedText text="Hide recommendation" />
+                              </button>
+                            )}
+                          </div>
                         </article>
                       ))}
                     </div>
-                    {!loading && !error && !filtered.length && (
+                    {!loading && !error && !filtered.length && !next && (
                       <div className={s.empty}>
                         <div className={s.editorial}>
                           <Image
@@ -378,9 +455,11 @@ export default function CommunityApp({
                           />
                         </div>
                         <h2>
-                          {view === "requests"
-                            ? <LocalizedText text={"No pending requests."} />
-                            : <LocalizedText text={"Find your next circle."} />}
+                          {destination
+                            ? emptySearch[locale].communities
+                            : view === "requests"
+                              ? <LocalizedText text="No pending requests." />
+                              : <LocalizedText text="Find your next circle." />}
                         </h2>
                         <p>
                           {view === "requests"
@@ -391,7 +470,7 @@ export default function CommunityApp({
                     )}
                   </>
                 )}
-              {!id && view === "meetings" && (
+              {!id && view === "meetings" && user && (
                 <Meetings key={uid} action={action} busy={busy} />
               )}
               {!id && ["feed", "questions", "atlas"].includes(view) && (
@@ -411,17 +490,7 @@ export default function CommunityApp({
                       />
                     </label>
                   )}
-                  {feed
-                    .filter((p) =>
-                      view === "questions"
-                        ? p.kind === "question" && !p.accepted
-                        : view === "atlas"
-                          ? p.kind === "experience" &&
-                            `${p.destination} ${p.title} ${p.context}`
-                              .toLowerCase()
-                              .includes(search.toLowerCase())
-                          : true,
-                    )
+                  {visibleFeed
                     .map((p) => (
                       <section key={`${p.community}-${p.id}`}>
                         <Link href={`/community/${p.community}`}>
@@ -438,16 +507,15 @@ export default function CommunityApp({
                         />
                       </section>
                     ))}
-                  {!loading && !feed.length && !error && (
+                  {!loading && !visibleFeed.length && !error && (next || view !== "feed" ? (
+                    <p className={s.empty}>{emptySearch[locale].posts}</p>
+                  ) : (
                     <div className={s.empty}>
                       <h3><LocalizedText text={"Choose your first circle."} /></h3>
                       <p><LocalizedText text={"Join a community to bring its conversations here."} /></p>
-                      <button
-                        className={s.button}
-                        onClick={() => setView("explore")}
-                      ><LocalizedText text="Explore communities" /></button>
+                      <Link className={s.button} href="/community"><LocalizedText text="Explore communities" /></Link>
                     </div>
-                  )}
+                  ))}
                 </section>
               )}
               {!id && view === "saved" && (
@@ -484,7 +552,7 @@ export default function CommunityApp({
               )}
               {c && (
                 <>
-                  <section className={s.panel}>
+                  <section className={s.panel} id="community-membership" data-membership-panel>
                     {c.avatarId && (
                       <Image
                         src={`/api/community/assets/${c.id}/${c.avatarId}`}
@@ -705,138 +773,93 @@ export default function CommunityApp({
                       ><LocalizedText text={"Accept updated rules"} /></button>
                     </section>
                   )}
-                  {joined && (
-                    <Chat
-                      key={`${c.id}:${uid}`}
-                      community={c}
-                      membership={m || null}
-                      uid={uid}
-                    />
+                  {post && (
+                    <Link className={s.backLink} href={`/community/${c.id}`}>
+                      <NavigationIcon name="arrow" width={16} height={16} />
+                      {c.name}
+                    </Link>
                   )}
-                  {joined && !c.archived && (
-                    <Composer community={c.id} action={action} busy={busy} />
+                  {!post && (
+                    <nav className={s.roomTabs} aria-label={localizeLabel("Community navigation")}>
+                      {availableTabs.map((tab) => (
+                        <button key={tab.id} aria-pressed={currentTab === tab.id}
+                          onClick={() => setRoomTab(tab.id)}>
+                          <LocalizedText text={tab.label} />
+                        </button>
+                      ))}
+                    </nav>
                   )}
-                  {(joined || c.visibility === "public") && (
-                    <label><LocalizedText text={"Publication filter"} /><select
-                        value={postFilter}
-                        onChange={(e) => setPostFilter(e.target.value)}
-                      >
-                        <option value="all"><LocalizedText text={"All contributions"} /></option>
-                        <option value="open"><LocalizedText text={"Unanswered questions"} /></option>
-                        <option value="experience"><LocalizedText text={"Experience Atlas"} /></option>
-                        <option value="guide"><LocalizedText text={"Guides"} /></option>
-                        <option value="discussion"><LocalizedText text={"Discussions"} /></option>
-                      </select>
-                    </label>
+                  {joined && currentTab === "chat" && (
+                    <Chat key={`${c.id}:${uid}`} community={c} membership={m || null} uid={uid} />
                   )}
-                  {detail.posts
-                    .filter(
-                      (p) =>
-                        p.id !== "community-chat" &&
-                        (postFilter === "all" ||
-                          (postFilter === "open" &&
-                            p.kind === "question" &&
-                            !p.accepted) ||
-                          p.kind === postFilter),
-                    )
-                    .map((p) => (
-                      <PostCard
-                        post={p}
-                        uid={uid}
-                        membership={m || null}
-                        action={action}
-                        busy={busy}
-                        key={p.id}
-                      />
-                    ))}
-                  {!loading && !detail.posts.length && (
-                    <div className={s.empty}>
-                      <h2>
-                        {joined
-                          ? <LocalizedText text={"Start with an introduction."} />
-                          : c.visibility === "public"
-                            ? <LocalizedText text={"A new conversation starts here."} />
-                            : <LocalizedText text={"A space for its members."} />}
-                      </h2>
-                      <p>
-                        {joined
-                          ? <LocalizedText text={"Share your destination, what you are learning and where you could help."} />
-                          : c.visibility === "public"
-                            ? <LocalizedText text={"No publications yet."} />
-                            : <LocalizedText text={"Complete the admission process to read and contribute."} />}
-                      </p>
+                  {readable && (
+                    <div hidden={currentTab !== "posts"}>
+                      {joined && !c.archived && !post && m?.acceptedVersion === c.rulesVersion && (
+                        <Composer community={c.id} action={action} busy={busy} />
+                      )}
+                      {!post && (
+                        <label className={s.postFilter}><LocalizedText text="Publication filter" />
+                          <select value={postFilter} onChange={(e) => setPostFilter(e.target.value)}>
+                            <option value="all"><LocalizedText text="All contributions" /></option>
+                            <option value="open"><LocalizedText text="Unanswered questions" /></option>
+                            <option value="experience"><LocalizedText text="Experience Atlas" /></option>
+                            <option value="guide"><LocalizedText text="Guides" /></option>
+                            <option value="discussion"><LocalizedText text="Discussions" /></option>
+                          </select>
+                        </label>
+                      )}
+                      {currentTab === "posts" && visiblePosts.map((p) => (
+                        <PostCard post={p} uid={uid}
+                          membership={m || null}
+                          canReply={joined && !c.archived && m?.acceptedVersion === c.rulesVersion}
+                          action={action} busy={busy} key={p.id} />
+                      ))}
+                      {!loading && !visiblePosts.length && (
+                        <div className={s.empty}>
+                          <h2>
+                            {postFilter !== "all" || next
+                              ? emptySearch[locale].posts
+                              : joined
+                                ? <LocalizedText text="Start with an introduction." />
+                                : <LocalizedText text="A new conversation starts here." />}
+                          </h2>
+                        </div>
+                      )}
                     </div>
                   )}
-                  {(joined || c.visibility === "public") && (
-                    <Sessions
-                      community={id}
-                      joined={joined}
-                      manage={admin}
-                      action={action}
-                      busy={busy}
-                    />
+                  {readable && currentTab === "events" && (
+                    <Sessions community={id} joined={joined} manage={admin} action={action} busy={busy} />
                   )}
-                  {(joined || c.visibility === "public") && (
-                    <Playbooks
-                      community={c.id}
-                      posts={detail.posts}
-                      manage={admin}
-                      action={action}
-                      busy={busy}
-                    />
+                  {readable && currentTab === "guides" && (
+                    <Playbooks community={c.id} posts={detail.posts} manage={admin} action={action} busy={busy} />
                   )}
-                  <section className={s.panel} id="community-rules">
-                    <h2><LocalizedText text="About & rules" /></h2>
-                    <p className={s.body}>{c.about}</p>
-                    <p className={s.rules}>{c.rules}</p>
-                    <p className={s.notice}><LocalizedText text={"Member experiences are not official immigration, legal, medical or financial advice. Verify sources and dates."} /></p>
-                  </section>
+                  {(currentTab === "about" || !readable) && (
+                    <section className={s.panel} id="community-rules">
+                      <h2><LocalizedText text="About & rules" /></h2>
+                      {!readable && <p><LocalizedText text="Complete the admission process to read and contribute." /></p>}
+                      <p className={s.body}>{c.about}</p>
+                      <p className={s.rules}>{c.rules}</p>
+                      <p className={s.notice}><LocalizedText text="Member experiences are not official immigration, legal, medical or financial advice. Verify sources and dates." /></p>
+                    </section>
+                  )}
                 </>
               )}
               {loading && (
                 <p className={s.loading} role="status"><LocalizedText text={"Loading community…"} /></p>
               )}
-              {next && !loading && (
+              {next && !loading && (!id || currentTab === "posts" || (currentTab === "guides" && admin)) && (
                 <button className={s.secondary} onClick={() => void load(next)}><LocalizedText text="Load more" /></button>
               )}
             </>
           )}
         </LocalizedElement>
         <aside className={s.context}>
-          <section className={s.panel}>
-            <div className={s.identity}>
-              <Image
-                src="/brand/tgpi-crest-metal-v3-256.png"
-                width={42}
-                height={42}
-                alt={localizeLabel("TGPI crest")}
-              />
-              <span className={s.meta}><LocalizedText text={"THE GLOBAL"} /><br /><LocalizedText text={"POLYMATH INSTITUTE"} /></span>
-            </div>
-            <h2><LocalizedText text={"Experience into action."} /></h2>
-            <div className={s.editorial}>
-              <Image
-                src="/images/cinematic-2026/arrival-city-1600.webp"
-                alt="AI-generated editorial illustration of a conversation at a neighborhood cafe"
-                fill
-                sizes="240px"
-              />
-            </div>
-            <p><LocalizedText text={"Find a destination. Ask a useful question. Share what helped you."} /></p>
-            <Link className={s.secondary} href="/countries"><LocalizedText text={"Explore destinations"} /></Link>
-          </section>
-          <section className={s.panel}>
-            <div className={s.editorial}>
-              <Image
-                src="/images/cinematic-2026/learning-atelier-1600.webp"
-                alt="AI-generated editorial illustration of collaborative study"
-                fill
-                sizes="240px"
-              />
-            </div>
-            <h3><LocalizedText text={"Build your next step"} /></h3>
-            <p><LocalizedText text={"Connect your research with a practical plan."} /></p>
-            <Link href="/profile"><LocalizedText text={"Open your Workspace →"} /></Link>
+          <section className={s.contextPanel}>
+            <NavigationIcon name="compass" width={22} height={22} />
+            <h2><LocalizedText text="Build your next step" /></h2>
+            <Link href="/countries"><LocalizedText text="Explore destinations" /></Link>
+            <Link href="/members"><LocalizedText text="Find members" /></Link>
+            <Link href="/profile"><LocalizedText text="Open your Workspace →" /></Link>
           </section>
         </aside>
       </div>

@@ -25,16 +25,14 @@ export function searchTokens(...values: string[]) {
     ),
   ].slice(0, 400);
 }
-export function searchQuery(v: unknown) {
-  return (
-    text(v, 100)
-      .normalize("NFKD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .toLowerCase()
-      .split(/[^a-z0-9]+/)
-      .filter(Boolean)[0]
-      ?.slice(0, 24) || ""
-  );
+export function searchWords(value: string) {
+  return value.normalize("NFKD")
+    .replace(/\p{Mark}/gu, "")
+    .toLowerCase()
+    .match(/[\p{Letter}\p{Number}]+/gu) || [];
+}
+export function searchQuery(value: unknown) {
+  return [...new Set(searchWords(text(value, 100)))];
 }
 export function moderatorSettings(v: Record<string, unknown>) {
   const seconds = Number(v.slowModeSeconds || 0);
