@@ -70,7 +70,7 @@ function statusFor(courseId, withResult = false) {
   const { correctOptionId: _answer, explanation, ...question } = source;
   void _answer;
   const prompt = h.academyCase(courseId).prompt.replaceAll('{a}', '120').replaceAll('{b}', '30').replaceAll('{c}', '6');
-  return { record: { notes: { [source.lessonId]: 'Save' }, portfolio: 'Explorer', diagnostic: 'Next action', consent: { publicName: 'Explorer' }, completed: {}, revision: 1 }, publicName: 'Explorer', emailVerified: true, signingReady: true,
+  return { record: { courseId, version: h.getAcademyCourse(courseId).version, updatedAt: '2026-11-11T00:00:00Z', notes: { [source.lessonId]: 'Save' }, portfolio: 'Explorer', diagnostic: 'Next action', consent: { publicName: 'Explorer' }, completed: {}, revision: 1 }, publicName: 'Explorer', emailVerified: true, signingReady: true,
     challenge: withResult ? null : { id: 'attempt', target: source.lessonId, createdAt: '2026-11-10T00:00:00Z', questions: [question], calculation: { prompt, unit: h.academyCase(courseId).unit } },
     lastResult: withResult ? { challengeId: 'attempt', target: source.lessonId, score: 0, passed: false, feedback: [{ questionId: source.id, lessonId: source.lessonId, correct: false, explanation }], submittedAt: '2026-11-10T00:00:00Z' } : null };
 }
@@ -134,12 +134,12 @@ test('switching the study presentation language keeps selected answers and local
   const course = h.getAcademyCourse('country-fit');
   const status = withAcademyTranslations(statusFor(course.id), course.id);
   const question = status.challenge.questions[0], selectedOption = question.options[0].id;
-  const states = [status, course.lessons[0].id, 'MY UNSAVED PRACTICE', 'MY UNSAVED PORTFOLIO', '', false, { [question.id]: selectedOption }, '42', false, '', true];
+  const states = [status, course.lessons[0].id, 'MY UNSAVED PRACTICE', 'MY UNSAVED PORTFOLIO', '', false, { [question.id]: selectedOption }, '42', false, false, Date.parse('2026-11-11T00:00:00Z'), false, '', true, { goal: 'foundation', weeklyHours: 3 }];
   const preserved = JSON.stringify(states);
   for (const locale of ['en', 'pt-BR', 'fr', 'de']) {
     let slot = 0;
     const fixture = academyLocalizationFixture({
-      react: { ...React, useState(initial) { const base = React.useState(initial); return [states[slot++], base[1]]; } },
+      react: { ...React, useState(initial) { const base = React.useState(initial); return slot < states.length ? [states[slot++], base[1]] : base; } },
       '@clerk/nextjs': { useAuth: () => ({ isLoaded: true, sessionId: 'synthetic-session' }) },
       'next/link': { __esModule: true, default: props => React.createElement('a', props) },
       '@/components/localization/LocaleProvider': { useLocale: () => ({ locale, t: (text, values) => h.messages.translate(locale, text, values) }) },

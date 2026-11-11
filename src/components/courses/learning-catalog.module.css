@@ -6,3 +6,22 @@
 .comparePanel{scroll-margin-top:190px}
 
 .searchInput input::-webkit-search-cancel-button{display:none}.coverArrow,.suggestions li>span:last-child{font-family:Arial,sans-serif}.tools{z-index:10}
+
+/* Course covers share the TGPI Learning Studio palette. */
+.card { border-color:#34475f; background:linear-gradient(145deg,#16283f,#0d1a2b); color:#e6eefb; border-radius:18px; box-shadow:inset 0 1px 0 #ffffff0b,0 12px 30px #0a1d3522; }
+.card:hover { border-color:#b59b6a; box-shadow:0 18px 38px #0a1d3530; }
+.cover::after { content:''; position:absolute; inset:0; pointer-events:none; background:linear-gradient(0deg,#122238,transparent 55%); }
+.badge { z-index:1; color:#edcf96; background:#0b1b2ee8; border-color:#b69c6566; backdrop-filter:blur(10px); }
+.coverArrow { z-index:1; border:1px solid #e4c68b88; background:#17283cc9; backdrop-filter:blur(12px); color:#e9c98d; box-shadow:inset 0 1px 0 #ffffff15; }
+.cardBody { padding-top:17px; }
+.card .eyebrow { color:#d0af72; font-size:9px!important; letter-spacing:.14em; }
+.card h3 { color:#edf3ff; font-weight:600; }
+.card .description { color:#aec0d7; }
+.card .meta { color:#bad2f1; }
+.card .meta span { background:#203650; border:1px solid #3b536f; border-radius:5px; font-size:10px; }
+.card .outcome { color:#c0d0e6; border-color:#35475f; }
+.card .outcome::before { color:#dfbd7e; }
+.card .credential,.card .compareCheck { color:#9fb5d1; }
+.card .primary { background:linear-gradient(130deg,#e5ca94,#cda764); border-color:#e0bf83; color:#142337!important; font-size:12px; box-shadow:inset 0 1px 0 #ffffff55; }
+.card .primary:hover { background:#eed6a6; }
+.card .compareCheck input { accent-color:#cdae72; color-scheme:dark; }
