@@ -147,6 +147,7 @@ export function getCertificateName(identity: AccountIdentityInput, profile: Tgpi
 function cleanUrl(value: unknown, host?: string) {
   const input = cleanText(value, 240);
   if (!input) return "";
+  if (/^[a-z][a-z0-9+.-]*:/i.test(input) && !/^https?:\/\//i.test(input)) return "";
 
   const withProtocol = /^https?:\/\//i.test(input) ? input : `https://${input}`;
 
@@ -244,6 +245,40 @@ export function normalizeTgpiAccountProfile(value: unknown): TgpiAccountProfile 
     },
     updatedAt: cleanText(input.updatedAt, 40) || undefined,
   };
+}
+
+/** Preserve nested preferences omitted by older clients. Unknown fields never enter storage. */
+export function mergeAccountProfilePatch(existing: TgpiAccountProfile, patch: unknown): TgpiAccountProfile {
+  const input = isRecord(patch) ? patch : {};
+  return normalizeTgpiAccountProfile({
+    ...existing,
+    ...input,
+    notifications: { ...existing.notifications, ...(isRecord(input.notifications) ? input.notifications : {}) },
+    privacy: { ...existing.privacy, ...(isRecord(input.privacy) ? input.privacy : {}) },
+  });
+}
+
+/** Reject invalid values instead of silently clearing a user's existing links. */
+export function validateAccountProfileInput(value: unknown): string | null {
+  if (!isRecord(value)) return 'The submitted data is not in a valid format.';
+  for (const [key, host] of [['website', undefined], ['linkedin', 'linkedin.com'], ['instagram', 'instagram.com']] as const) {
+    if (value[key] !== undefined && (typeof value[key] !== 'string' || (value[key].trim() && !cleanUrl(value[key], host)))) {
+      return 'Check your website and social links before saving.';
+    }
+  }
+  if (value.timezone !== undefined) {
+    if (typeof value.timezone !== 'string') return 'Choose a valid timezone.';
+    if (value.timezone.trim()) {
+      try { new Intl.DateTimeFormat('en', { timeZone: value.timezone.trim() }).format(); }
+      catch { return 'Choose a valid timezone.'; }
+    }
+  }
+  if (value.preferredCurrency !== undefined && (typeof value.preferredCurrency !== 'string' || !/^[A-Za-z]{3}$/.test(value.preferredCurrency.trim()))) {
+    return 'Choose a valid three-letter currency code.';
+  }
+  if (value.privacy !== undefined && !isRecord(value.privacy)) return 'The submitted data is not in a valid format.';
+  if (value.notifications !== undefined && !isRecord(value.notifications)) return 'The submitted data is not in a valid format.';
+  return null;
 }
 
 export function mergeAccountProfileWithOnboarding(

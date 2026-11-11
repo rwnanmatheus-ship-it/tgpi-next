@@ -1,3 +1,4 @@
+import DisplayPreferencesSync from "@/components/profile/DisplayPreferencesSync";
 import { localizeMetadata } from "@/lib/localization/metadata.server";
 import { getSupplementalMessages } from "@/lib/localization/catalog.server";
 import "./localization.css";
@@ -125,6 +126,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           appearance={tgpiClerkAppearance}
         >
           <AccountLocaleSync />
+          <DisplayPreferencesSync />
           <NotificationProvider>
           <GlobalProgressSync />
           {process.env.TGPI_FUNNEL_ANALYTICS_ENABLED === "true" ? <FunnelTelemetry /> : null}

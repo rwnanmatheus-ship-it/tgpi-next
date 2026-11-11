@@ -47,7 +47,7 @@ export default function AccountSecurityPanel({ email = "", updatedAt = "" }: Pro
         <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4">
           <p className="text-xs uppercase tracking-[0.18em] text-slate-400"><LocalizedText text={"Password & Access"} /></p>
           <p className="mt-2 text-sm leading-7 text-slate-300"><LocalizedText text={"Manage passwords, passkeys, connected accounts, multi-factor authentication and active devices through your TGPI Global Key."} /></p>
-          <Link href="/profile/security" className="mt-3 inline-flex text-sm font-bold text-yellow-300"><LocalizedText text={"Open security center"} /></Link>
+          <Link href="/profile/security#settings-security" className="mt-3 inline-flex text-sm font-bold text-yellow-300"><LocalizedText text={"Open security center"} /></Link>
         </div>
 
         <SignOutButton redirectUrl="/">

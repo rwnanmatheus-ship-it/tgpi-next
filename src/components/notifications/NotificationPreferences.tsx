@@ -16,7 +16,7 @@ const categories = {
   pushCommunity: "community",
   pushProduct: "product",
 } as const;
-export default function NotificationPreferences() {
+export default function NotificationPreferences({ onDirtyChange }: { onDirtyChange?: (dirty: boolean) => void } = {}) {
   const inbox = useNotifications(),
     { locale } = useLocale(),
     t = (key: NotificationTextKey) => notificationText(locale, key);
@@ -32,6 +32,8 @@ export default function NotificationPreferences() {
     };
   }, []);
   const draft = override || inbox.preferences;
+  const dirty = JSON.stringify(draft) !== JSON.stringify(inbox.preferences);
+  useEffect(() => { onDirtyChange?.(dirty); }, [dirty, onDirtyChange]);
   async function save() {
     setSaved(false);
     const result = await inbox.savePreferences(draft);
@@ -145,7 +147,7 @@ export default function NotificationPreferences() {
         <button
           type="button"
           className={styles.secondary}
-          onClick={() => {
+          onClick={async () => {
             const value = {
               ...draft,
               pausedUntil:
@@ -153,8 +155,8 @@ export default function NotificationPreferences() {
                   ? ""
                   : new Date(Date.now() + 3600000).toISOString(),
             };
-            setDraft(value);
-            void inbox.savePreferences(value);
+            const success = await inbox.savePreferences(value);
+            if (success) { setDraft(null); setSaved(true); }
           }}
         >
           {Date.parse(draft.pausedUntil) > clock ? t("resume") : t("pause")}
@@ -167,6 +169,7 @@ export default function NotificationPreferences() {
           {inbox.pending ? t("loading") : t("save")}
         </button>
         {saved && <p role="status">{t("saved")}</p>}
+        {inbox.error && <p role="alert">{t("error")}</p>}
       </fieldset>
     </section>
   );

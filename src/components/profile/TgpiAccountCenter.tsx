@@ -6,6 +6,16 @@ import { useLocale } from "@/components/localization/LocaleProvider";
 import { localeOptions } from "@/lib/localization/config";
 import LanguageSelector from "@/components/localization/LanguageSelector";
 
+import Image from "next/image";
+import SettingsAccessibility from "./SettingsAccessibility";
+import SettingsDiagnostics from "./SettingsDiagnostics";
+import SettingsData from "./SettingsData";
+import NotificationPreferences from "@/components/notifications/NotificationPreferences";
+import NotificationDevices from "@/components/notifications/NotificationDevices";
+import AnalyticsPreferences from "@/components/analytics/AnalyticsPreferences";
+import { useNotifications } from "@/components/notifications/NotificationProvider";
+import { resolveSettingsSection, settingsHref, normalizeSettingsSearch, type SettingsSection } from "@/lib/settings-navigation";
+import styles from "./settings.module.css";
 import { announceProgressSaved } from "@/lib/progress-sync";
 import Link from "next/link";
 import NavigationLink from "@/components/navigation/NavigationLink";
@@ -17,8 +27,8 @@ import { useUser } from "@clerk/nextjs";
 import { usePathname, useRouter } from "next/navigation";
 import { Children, cloneElement, isValidElement, useId, useEffect, useMemo, useRef, useState, type ReactElement } from "react";
 import PublicProfileShareButton from "@/components/profile/PublicProfileShareButton";
-import GlobalProgressPanel from "@/components/profile/GlobalProgressPanel";
 import GlobalRankBadge from "@/components/profile/GlobalRankBadge";
+import GlobalProgressPanel from "@/components/profile/GlobalProgressPanel";
 import ProfileSearchSelect from "@/components/profile/ProfileSearchSelect";
 import { citySuggestions, professionSuggestions } from "@/lib/profile-options";
 import { getAccountSalutation, getCertificateName } from "@/lib/account-profile";
@@ -61,18 +71,6 @@ type TgpiAccountCenterProps = {
   rank: GlobalRank | null;
 };
 type SaveState = "idle" | "saving" | "saved" | "error";
-type SettingsSection =
-  | "overview"
-  | "global-key"
-  | "identity"
-  | "global"
-  | "progress"
-  | "public-profile"
-  | "preferences"
-  | "notifications"
-  | "privacy"
-  | "security"
-  | "billing";
 type SettingsSectionDefinition = {
   description: string;
   key: SettingsSection;
@@ -123,6 +121,9 @@ const timezoneOptions = [
 ] as const;
 
 const settingsSections: readonly SettingsSectionDefinition[] = [
+  { description: "Reading, motion and keyboard navigation", key: "accessibility", keywords: "accessibility motion animation text font focus acessibilidade fonte animacao movimento leitura contraste", label: "Accessibility", group: "Experience", sticker: "" },
+  { description: "Export your saved profile and personal plan", key: "data", keywords: "data export backup download dados exportar baixar copia", label: "Data & exports", group: "Safety", sticker: "" },
+  { description: "Check your connection and saved profile version", key: "diagnostics", keywords: "connection offline sync help status conexao sincronizacao diagnostico falha erro", label: "Connection & sync", group: "Safety", sticker: "" },
   {
     description: "Account status and connected systems",
     key: "overview",
@@ -204,7 +205,7 @@ const settingsSections: readonly SettingsSectionDefinition[] = [
     group: "Safety",
     sticker: "⌾",
   },
-] as const;
+].sort((a, b) => Number(b.key === "overview") - Number(a.key === "overview")) as SettingsSectionDefinition[];
 
 const settingsGroups: readonly SettingsSectionDefinition["group"][] = [
   "Account center",
@@ -213,23 +214,10 @@ const settingsGroups: readonly SettingsSectionDefinition["group"][] = [
   "Safety",
 ];
 
-const connectedSystems = [
-  { href: "/country-fit", icon: "◎", label: "Country Fit", text: "Match destinations to your real priorities." },
-  { href: "/compare", icon: "⚖", label: "Compare", text: "Compare your shortlist through one decision lens." },
-  { href: "/onboarding", icon: "◫", label: "Personal plan", text: "Turn context into your next practical actions." },
-  { href: "/passport", icon: "🛂", label: "Documents", text: "Connect evidence and preparation requirements." },
-  { href: "/courses", icon: "🎓", label: "Learning", text: "Build capabilities linked to your global objective." },
-] as const;
-
-const goalLabels: Record<string, string> = {
-  learn: "Expand global knowledge",
-  live: "Live in another country",
-  study: "Study abroad",
-  travel: "Travel smarter",
-  work: "Work globally",
-};
-
 const iconPaths: Record<SettingsSection, string> = {
+  accessibility: "M12 3v.01M5 8h14M12 8v6M8 21l4-7 4 7M8 8l4 4 4-4",
+  data: "M12 3v12m-4-4 4 4 4-4M4 16v5h16v-5",
+  diagnostics: "M3 12h4l3-8 4 16 3-8h4",
   billing: "M3 5h18v14H3zM3 9h18M7 14h3",
   overview: "M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z",
   "global-key": "M14.5 9.5a4.5 4.5 0 1 0-4 4L13 16h2v2h2v2h3v-3l-6.5-6.5M7 9.5h.01",
@@ -296,7 +284,7 @@ function Field({
 }) {
   const id = useId();
   const nodes = Children.toArray(children);
-  const primary = nodes.findIndex(node => isValidElement(node) && typeof node.type === 'string' && ['input', 'select', 'textarea'].includes(node.type));
+  const primary = nodes.findIndex(node => isValidElement(node) && ((typeof node.type === 'string' && ['input', 'select', 'textarea'].includes(node.type)) || (node.type === LocalizedElement && ['input', 'select', 'textarea'].includes((node.props as { as: string }).as))));
   const nativeInput = primary >= 0;
   const control = nodes.map((node, index) => index === primary ? cloneElement(node as ReactElement<{ id?: string; "aria-describedby"?: string }>, { id, "aria-describedby": description ? `${id}-description` : undefined }) : node);
   return (
@@ -343,27 +331,16 @@ function ScreenHeading({
   title: string;
 }) {
   return (
-    <div className="flex items-start gap-4 border-b border-[#E3DED3] pb-6">
-      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-[var(--tgpi-navy-raised)] text-[var(--tgpi-gold-light)] shadow-[0_10px_24px_rgba(11,31,58,0.15)]">
+    <div className={styles.screenHeading}>
+      <span className={styles.screenIcon}>
         <SettingsIcon section={section} />
       </span>
       <div>
-        <h2 className="font-[var(--tgpi-font-display)] text-3xl font-semibold tracking-[-0.035em] text-[var(--tgpi-navy-raised)] sm:text-4xl"><LocalizedText text={title} /></h2>
+        <h2 className={styles.screenTitle}><LocalizedText text={title} /></h2>
         <p className="mt-2 max-w-2xl text-sm leading-6 text-[var(--tgpi-muted)]"><LocalizedText text={description} /></p>
       </div>
     </div>
   );
-}
-
-function formatSavedDate(value: string | undefined, locale: string) {
-  if (!value) return "Not saved yet";
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return "Saved recently";
-  return new Intl.DateTimeFormat(locale, { dateStyle: "medium", timeZone: "UTC" }).format(date);
-}
-
-function isSettingsSection(value: string): value is SettingsSection {
-  return settingsSections.some((section) => section.key === value);
 }
 
 export default function TgpiAccountCenter({
@@ -380,6 +357,7 @@ export default function TgpiAccountCenter({
 
   const { locale, t } = useLocale();
   const { user } = useUser();
+  const notifications = useNotifications();
   const pathname = usePathname();
   const router = useRouter();
   const contentRef = useRef<HTMLDivElement>(null);
@@ -389,19 +367,28 @@ export default function TgpiAccountCenter({
   const [query, setQuery] = useState("");
   const [saveState, setSaveState] = useState<SaveState>("idle");
   const [message, setMessage] = useState("");
+  const [online, setOnline] = useState(true);
+  const [notificationsVisited, setNotificationsVisited] = useState(false);
+  const [notificationDirty, setNotificationDirty] = useState(false);
+  const [conflict, setConflict] = useState(false);
+  const [discardOpen, setDiscardOpen] = useState(false);
+  const [pendingNavigation, setPendingNavigation] = useState<string | null>(null);
+  const savingRef = useRef(false);
   const savedSnapshot = useRef(JSON.stringify({ identity: initialIdentity, profile: initialProfile }));
   const incomingSnapshot = useRef(JSON.stringify({ identity: initialIdentity, profile: initialProfile }));
   const currentSnapshot = JSON.stringify({ identity, profile });
   const isDirty = currentSnapshot !== savedSnapshot.current;
+  const hasUnsavedChanges = isDirty || notificationDirty;
+  useEffect(() => { if (activeSection === "notifications") setNotificationsVisited(true); }, [activeSection]);
   const completion = useMemo(() => getAccountProfileCompletion(identity, profile), [identity, profile]);
   const filteredSections = useMemo(() => {
-    const normalize = (value: string) => value.normalize("NFD").replace(/\p{Diacritic}/gu, "").toLocaleLowerCase(locale).trim();
+    const normalize = normalizeSettingsSearch;
     const normalizedQuery = normalize(query);
     if (!normalizedQuery) return settingsSections;
     return settingsSections.filter((section) =>
       normalize(`${t(section.label)} ${t(section.description)} ${section.label} ${section.description} ${section.keywords}`).includes(normalizedQuery),
     );
-  }, [query, locale, t]);
+  }, [query, t]);
   const activeDefinition = settingsSections.find((section) => section.key === activeSection) ?? settingsSections[0];
   const initials = `${identity.firstName.at(0) ?? ""}${identity.lastName.at(0) ?? ""}`.toUpperCase() || "TG";
   const fullName = profile.displayName || [identity.firstName, identity.lastName].filter(Boolean).join(" ") || t("TGPI member");
@@ -412,7 +399,10 @@ export default function TgpiAccountCenter({
     global: profile.profession || (profile.languages.length ? t("Languages: {count}", { count: profile.languages.length }) : t("Add your global context")),
     identity: profile.currentCity || (currentCountryName ? t(currentCountryName) : t("Add personal information")),
     progress: rank ? t("{rank} · {points} points", { rank: t(rank.name), points: rank.points.toLocaleString(locale) }) : t("Unavailable"),
-    notifications: t("Enabled: {count}", { count: Object.values(profile.notifications).filter(Boolean).length }),
+    notifications: t(notifications.preferences.pushEnabled ? "Notifications enabled" : "Notifications paused"),
+    accessibility: t("Reading, motion and keyboard navigation"),
+    data: t("Export your saved profile and personal plan"),
+    diagnostics: t(online ? "Online" : "Offline"),
     preferences: `${localeOptions.find(option => option.code === locale)?.name} · ${profile.preferredCurrency}`,
     "public-profile": t(profile.privacy.visibility === "private" ? "Only you can view it" : "Ready to preview and share"),
     privacy: t(profile.privacy.visibility.charAt(0).toUpperCase() + profile.privacy.visibility.slice(1)),
@@ -431,42 +421,50 @@ export default function TgpiAccountCenter({
   }, [initialIdentity, initialProfile, isDirty]);
 
   useEffect(() => {
-    const normalizedPath = pathname.replace(/\/+$/, "");
-    if (normalizedPath !== "/profile/security") {
-      setActiveSection("security");
-      return;
-    }
-    const hashSection = window.location.hash.replace("#settings-", "");
-    if (isSettingsSection(hashSection)) setActiveSection(hashSection);
-  }, [pathname]);
-
-  useEffect(() => {
-    function syncHash() {
-      const section = window.location.hash.replace("#settings-", "");
-      setActiveSection(isSettingsSection(section) ? section : "overview");
-    }
+    const syncHash = () => setActiveSection(resolveSettingsSection(window.location.pathname, window.location.hash));
+    syncHash();
     window.addEventListener("hashchange", syncHash);
     window.addEventListener("popstate", syncHash);
     return () => { window.removeEventListener("hashchange", syncHash); window.removeEventListener("popstate", syncHash); };
+  }, [pathname]);
+
+  useEffect(() => {
+    const sync = () => setOnline(navigator.onLine);
+    sync(); window.addEventListener("online", sync); window.addEventListener("offline", sync);
+    return () => { window.removeEventListener("online", sync); window.removeEventListener("offline", sync); };
   }, []);
 
   useEffect(() => {
+    const protectNavigation = (event: MouseEvent) => {
+      if (!hasUnsavedChanges || event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+      const link = (event.target as Element).closest<HTMLAnchorElement>('a[href]');
+      if (!link || link.hasAttribute('download') || link.target === '_blank') return;
+      const target = new URL(link.href, location.href);
+      if (target.origin === location.origin && target.pathname === location.pathname && target.hash.startsWith('#settings-')) return;
+      event.preventDefault(); event.stopPropagation(); setPendingNavigation(link.href);
+    };
+    document.addEventListener('click', protectNavigation, true);
+    return () => document.removeEventListener('click', protectNavigation, true);
+  }, [hasUnsavedChanges]);
+
+  useEffect(() => {
     function protectChanges(event: BeforeUnloadEvent) {
-      if (isDirty) event.preventDefault();
+      if (hasUnsavedChanges) { event.preventDefault(); event.returnValue = ""; }
     }
     window.addEventListener("beforeunload", protectChanges);
     return () => window.removeEventListener("beforeunload", protectChanges);
-  }, [isDirty]);
+  }, [hasUnsavedChanges]);
 
   function selectSection(section: SettingsSection) {
     setActiveSection(section);
     setQuery("");
-    window.history.pushState(null, "", `#settings-${section}`);
+    const href = settingsHref(section, pathname);
+    if (`${window.location.pathname}${window.location.hash}` !== href) window.history.pushState(null, "", href);
     window.requestAnimationFrame(() => {
       const content = contentRef.current;
       if (!content) return;
-      const nav = content.parentElement?.querySelector<HTMLElement>('.tgpi-account-mobile-nav');
-      const navHeight = nav && window.getComputedStyle(nav).display !== 'none' ? nav.getBoundingClientRect().height : 0;
+      const navHeight = 0;
+      content.focus({ preventScroll: true });
       const headerOffset = Number.parseFloat(window.getComputedStyle(document.documentElement).scrollPaddingTop) || 84;
       window.scrollTo({ top: Math.max(0, window.scrollY + content.getBoundingClientRect().top - headerOffset - navHeight - 16), behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
     });
@@ -482,10 +480,6 @@ export default function TgpiAccountCenter({
     setIdentity((current) => ({ ...current, ...patch }));
     setSaveState("idle");
     setMessage("");
-  }
-
-  function updateNotifications(key: keyof TgpiAccountProfile["notifications"], value: boolean) {
-    updateProfile({ notifications: { ...profile.notifications, [key]: value } });
   }
 
   function updatePrivacy(
@@ -510,10 +504,13 @@ export default function TgpiAccountCenter({
   }
 
   async function saveAccount() {
-    if (saveState === "saving") return;
+    if (savingRef.current || !isDirty) return;
+    if (!navigator.onLine) { setSaveState("error"); setMessage("You are offline. Keep this page open and retry when connected."); return; }
     const invalid = contentRef.current?.querySelector<HTMLInputElement>('input:invalid, select:invalid, textarea:invalid');
     if (invalid) { invalid.reportValidity(); return; }
+    savingRef.current = true;
     setSaveState("saving");
+    setConflict(false);
     setMessage("");
     const payload: TgpiAccountUpdate = { identity, profile };
 
@@ -522,12 +519,14 @@ export default function TgpiAccountCenter({
         body: JSON.stringify(payload),
         headers: { "Content-Type": "application/json", "X-TGPI-Session": sessionId },
         method: "PATCH",
+        signal: AbortSignal.timeout(20000),
       });
       const result = (await response.json()) as {
         error?: string;
         identity?: AccountIdentityInput;
         profile?: TgpiAccountProfile;
       };
+      if (response.status === 409) setConflict(true);
       if (!response.ok || !result.identity || !result.profile) {
         throw new Error(result.error || "Unable to save your account.");
       }
@@ -542,92 +541,36 @@ export default function TgpiAccountCenter({
       router.refresh();
     } catch (error) {
       setSaveState("error");
-      setMessage(error instanceof Error ? error.message : "Unable to save your account. Please try again.");
-    }
+      setMessage(error instanceof Error && error.name !== "TimeoutError" ? error.message : "Saving could not be confirmed. Keep your edits and check the connection before retrying.");
+    } finally { savingRef.current = false; }
+  }
+
+  function discardChanges() {
+    const saved = JSON.parse(savedSnapshot.current) as TgpiAccountUpdate;
+    setIdentity(saved.identity); setProfile(saved.profile); setDiscardOpen(false); setMessage(""); setSaveState("idle");
   }
 
   const overviewScreen = (
-    <div>
-      <ScreenHeading description="Your private preparation center: identity, learning and decisions, with distinct progress signals." section="overview" title={localizeLabel("Account overview")} />
-      <div className="mt-4 grid gap-3 sm:grid-cols-3">
-        <Link className="tgpi-account-tile rounded-2xl border border-slate-200 p-4" href="/courses"><strong><LocalizedText text="Continue learning →" /></strong><p className="mt-2 text-sm"><LocalizedText text={"Resume from your saved lesson."} /></p></Link>
-        <Link className="tgpi-account-tile rounded-2xl border border-slate-200 p-4" href="/certificates"><strong><LocalizedText text={"My credentials →"} /></strong><p className="mt-2 text-sm"><LocalizedText text={"Issued records and milestones to earn."} /></p></Link>
-        <Link className="tgpi-account-tile rounded-2xl border border-slate-200 p-4" href="/profile/security#settings-billing"><strong>{t(account.membership)} →</strong><p className="mt-2 text-sm"><LocalizedText text={"Review plan and manage billing."} /></p></Link>
+    <div className={styles.stack}>
+      <ScreenHeading section="overview" title="Make TGPI work your way." description="A clear view of your account, with the right controls within reach." />
+      <div className={styles.statusGrid}>
+        <button type="button" className={styles.statusCard} onClick={() => selectSection("security")}><SettingsIcon section="security" /><span>{t("Account access")}</span><strong>{t(account.emailVerified ? "Email verified" : "Verify your email")}</strong><small>{t("Review login methods and devices")}</small></button>
+        <button type="button" className={styles.statusCard} onClick={() => selectSection("privacy")}><SettingsIcon section="privacy" /><span>{t("Profile visibility")}</span><strong>{t(profile.privacy.visibility === "private" ? "Private profile" : profile.privacy.visibility === "members" ? "TGPI members" : "Public profile")}</strong><small>{t(isDirty ? "Preview of your pending choices" : "Review what you share")}</small></button>
+        <button type="button" className={styles.statusCard} onClick={() => selectSection("diagnostics")}><SettingsIcon section="diagnostics" /><span>{t("Synchronization")}</span><strong>{t(isDirty ? "Unsaved changes" : "No pending edits")}</strong><small>{t("Check account connection")}</small></button>
       </div>
-      <div className="mt-4 rounded-2xl border border-blue-200 bg-blue-50 p-4"><strong><LocalizedText text={"Next useful action"} /></strong><p className="mt-2 text-sm">{!profile.profession ? <LocalizedText text={"Add your professional field: it gives career research a relevant starting point."} /> : !decisionContext.countries.length ? <LocalizedText text={"Save a destination: your current plan has no country shortlist."} /> : <LocalizedText text={"Review your Country Fit context: budget, timeline and priorities guide the research questions."} />}</p><Link className="mt-2 inline-flex min-h-11 items-center font-bold" href="/country-fit"><LocalizedText text={"Update Country Fit →"} /></Link></div>
-      <article className="mt-6 overflow-hidden rounded-[26px] bg-[var(--tgpi-navy-raised)] p-5 text-white sm:p-7">
-        <div className="flex flex-col gap-5 sm:flex-row sm:items-center">
-          <AccountAvatar imageUrl={account.avatarUrl} initials={initials} label={fullName} />
-          <div className="min-w-0 flex-1">
-            <div className="flex flex-wrap items-center gap-2">
-              <h3 className="truncate font-[var(--tgpi-font-display)] text-3xl font-semibold">{fullName}</h3>
-              <span className="rounded-full border border-[#E5BF5A]/30 bg-[#E5BF5A]/10 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.15em] text-[var(--tgpi-gold-light)]">{t(account.membership)}</span>
-            </div>
-            <p className="mt-1 text-sm text-[#C8D2DE]">{profile.headline || <LocalizedText text={"Add a professional headline"} />}</p>
-            <p className="mt-3 break-all text-xs text-[#9FAFC0]">{identity.username ? <LocalizedText text={"@{value0}"} values={{value0: String(identity.username)}} /> : <LocalizedText text={"Create your unique @ID in Personal information"} />}</p>
-          </div>
-          <div className="flex flex-wrap gap-2">
-            <button className="min-h-11 rounded-xl bg-white px-5 text-xs font-extrabold text-[var(--tgpi-navy-raised)] transition hover:bg-[#F4E7BE]" onClick={() => selectSection("identity")} type="button"><LocalizedText text={"Edit profile"} /></button>
-            <button className="min-h-11 rounded-xl border border-white/15 bg-white/5 px-5 text-xs font-extrabold text-white transition hover:bg-white/10" onClick={() => selectSection("public-profile")} type="button"><LocalizedText text={"View public profile"} /></button>
-          </div>
-        </div>
-        <div className="mt-6 grid gap-3 border-t border-white/10 pt-5 sm:grid-cols-[1fr_auto] sm:items-center">
-          <div>
-            <div className="flex items-center justify-between gap-4 text-xs font-bold"><span><LocalizedText text={"Profile completeness"} /></span><span className="text-[var(--tgpi-gold-light)]">{completion}%</span></div>
-            <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-white/15"><div className="h-full rounded-full bg-[#E5BF5A] transition-[width] duration-500" style={{ width: `${completion}%` }} /></div>
-          </div>
-          <p className="text-xs text-[#AEBBC9]">{account.emailVerified ? <LocalizedText text={"Verified identity"} /> : <LocalizedText text={"Email verification required"} />}</p>
-        </div>
+      <article className={styles.identityCard}>
+        <AccountAvatar imageUrl={account.avatarUrl} initials={initials} label={fullName} />
+        <div><span className={styles.eyebrow}>{t(account.membership)}</span><h3>{fullName}</h3><p>{profile.headline || t("Your identity across TGPI")}</p><small>{t("Profile completeness")} · {completion}%</small><progress aria-label={t("Profile completeness")} value={completion} max={100} /></div>
+        <button type="button" className={styles.lightButton} onClick={() => selectSection("identity")}>{t("Edit profile")} ↗</button>
       </article>
-
-      <div className="mt-6">
-        <p className="px-1 text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#86621A]"><LocalizedText text="Account settings" /></p>
-        <div className="tgpi-account-grid mt-3 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-          {settingsSections.slice(1).map((section) => (
-            <button className="tgpi-account-tile group flex w-full items-center gap-4 rounded-[22px] border border-[var(--tgpi-border)] px-4 py-5 text-left sm:px-5" key={section.key} onClick={() => selectSection(section.key)} type="button">
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#EEF1F4] text-[var(--tgpi-navy-raised)] transition group-hover:bg-[var(--tgpi-navy-raised)] group-hover:text-[var(--tgpi-gold-light)]"><SettingsIcon section={section.key} /></span>
-              <span className="min-w-0 flex-1"><span className="block text-sm font-extrabold text-[var(--tgpi-navy-raised)]"><LocalizedText text={section.label} /></span><span className="mt-0.5 block truncate text-xs text-[#707987]">{sectionSummaries[section.key as Exclude<SettingsSection, "overview">]}</span></span>
-              <span aria-hidden="true" className="text-xl text-[#A0A7B0] transition group-hover:translate-x-0.5 group-hover:text-[#956A13]">›</span>
-            </button>
-          ))}
-        </div>
+      <div className={styles.recommendation}>
+        <span className={styles.screenIcon}><SettingsIcon section={!profile.legalFullName ? "identity" : "preferences"} /></span>
+        <div><span className={styles.eyebrow}>{t("Suggested next step")}</span><h3>{t(!profile.legalFullName ? "Review your certificate name" : !profile.timezone ? "Set your local timezone" : "Review your privacy choices")}</h3><p>{t(!profile.legalFullName ? "Check the full name used for your next learning credential." : !profile.timezone ? "Keep a useful timezone reference in your account." : "Decide which details belong on your shared profile.")}</p></div>
+        <button type="button" className={styles.secondary} onClick={() => selectSection(!profile.legalFullName ? "identity" : !profile.timezone ? "preferences" : "privacy")}>{t("Review")} →</button>
       </div>
-
-      <div className="mt-6 grid gap-4 xl:grid-cols-3">
-        <article className="rounded-[24px] border border-[var(--tgpi-border)] bg-white p-5 sm:p-6">
-          <div className="flex flex-wrap items-start justify-between gap-4">
-            <div><p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#86621A]"><LocalizedText text="Personal plan" /></p><h3 className="mt-2 text-lg font-extrabold text-[var(--tgpi-navy-raised)]">{decisionContext.completed ? <LocalizedText text={"Decision context connected"} /> : <LocalizedText text={"Complete your decision context"} />}</h3></div>
-            <span className="rounded-full bg-[#EDF0F3] px-3 py-1.5 text-xs font-extrabold text-[var(--tgpi-navy-raised)]">{decisionContext.progress}%</span>
-          </div>
-          <div className="mt-5 space-y-3 text-xs">
-            <div className="flex justify-between gap-4"><span className="text-[#737C89]"><LocalizedText text="Primary goal" /></span><span className="text-right font-extrabold text-[var(--tgpi-navy-raised)]">{(goalLabels[decisionContext.goal] ? t(goalLabels[decisionContext.goal]) : "") || <LocalizedText text={"Not defined"} />}</span></div>
-            <div className="flex justify-between gap-4"><span className="text-[#737C89]"><LocalizedText text={"Shortlist"} /></span><span className="max-w-[65%] text-right font-extrabold text-[var(--tgpi-navy-raised)]">{decisionContext.countries.map((country) => `${country.emoji} ${t(country.name)}`).join(", ") || <LocalizedText text={"No countries selected"} />}</span></div>
-          </div>
-          <Link className="mt-5 inline-flex text-xs font-extrabold text-[#8C6414]" href="/onboarding"><LocalizedText text={"Open personal plan →"} /></Link>
-        </article>
-        {rank && <button className="group flex rounded-[24px] border border-[#B9CEE0] bg-[#EDF5FA] p-5 text-left transition hover:-translate-y-0.5 hover:border-[#6B91B1] sm:p-6" onClick={() => selectSection("progress")} type="button">
-          <GlobalRankBadge rank={rank} size="medium" />
-          <span className="ml-4 min-w-0"><span className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#325E83]"><LocalizedText text={"Global rank"} /></span><span className="mt-2 block font-[var(--tgpi-font-display)] text-2xl font-semibold text-[var(--tgpi-navy-raised)]">{t(rank.name)}</span><span className="mt-2 block text-xs leading-5 text-[#52677A]">{rank.points}{" "}<LocalizedText text={"points ·"} />{" "}{rank.nextRank ? <LocalizedText text={"{value0} to {value1}"} values={{value0: String(rank.pointsToNext), value1: t(rank.nextRank.name)}} /> : <LocalizedText text={"highest rank reached"} />}</span><span className="mt-3 block text-xs font-extrabold text-[#234D70]"><LocalizedText text={"Open rank journey"} />{" "}<span aria-hidden="true" className="transition group-hover:translate-x-0.5">→</span></span></span>
-        </button>}
-        <Link className="group rounded-[24px] border border-[var(--tgpi-border)] bg-[#F4E7BE] p-5 transition hover:-translate-y-0.5 hover:border-[var(--tgpi-gold-hover)] sm:p-6" href="/global-key">
-          <p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#73520F]"><LocalizedText text={"TGPI Global ID"} /></p>
-          <p className="mt-3 break-all font-[var(--tgpi-font-display)] text-xl font-semibold text-[var(--tgpi-navy-raised)]">{account.globalId}</p>
-          <p className="mt-3 text-xs leading-5 text-[#665A38]"><LocalizedText text={"Your stable reference across TGPI. It is never a password, recovery code or travel document."} /></p>
-          <span className="mt-4 inline-flex text-xs font-extrabold text-[#76520C]"><LocalizedText text={"Open Integrity Chain"} />{" "}<span aria-hidden="true" className="ml-1 transition group-hover:translate-x-0.5">→</span></span>
-        </Link>
-      </div>
-
-      <div className="mt-6">
-        <p className="px-1 text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#86621A]"><LocalizedText text={"Connected experience"} /></p>
-        <div className="mt-3 grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
-          {connectedSystems.map((system) => (
-            <Link className="group rounded-[20px] border border-[var(--tgpi-border)] bg-white p-4 transition hover:-translate-y-0.5 hover:border-[var(--tgpi-gold-hover)] hover:shadow-[0_14px_30px_rgba(11,31,58,0.08)]" href={system.href} key={system.label}>
-              <div className="flex items-center justify-between gap-3"><span aria-hidden="true" className="grid h-9 w-9 place-items-center rounded-xl bg-[#EEF2F5] text-base text-[var(--tgpi-navy-raised)]">{system.icon}</span><span aria-hidden="true" className="text-[#956A13] transition group-hover:translate-x-0.5">→</span></div><h3 className="mt-3 text-sm font-extrabold text-[var(--tgpi-navy-raised)]"><LocalizedText text={system.label} /></h3>
-              <p className="mt-2 text-xs leading-5 text-[#697386]"><LocalizedText text={system.text} /></p>
-            </Link>
-          ))}
-        </div>
-      </div>
+      <div><div className={styles.sectionLabel}><span className={styles.eyebrow}>{t("Explore your settings")}</span><small>{t("Account · experience · privacy")}</small></div>
+      <div className={styles.settingsGrid}>{settingsSections.filter(section => section.key !== "overview" && section.key !== "progress").map(section => <button type="button" className={styles.settingCard} onClick={() => selectSection(section.key)} key={section.key}><span className={styles.tileIcon}><SettingsIcon section={section.key} /></span><div><strong>{t(section.label)}</strong><p>{sectionSummaries[section.key as Exclude<SettingsSection, "overview">]}</p></div><span aria-hidden="true">↗</span></button>)}</div></div>
+      <Link className={styles.relatedLink} href="/profile">{t("Learning, goals and achievements live in your workspace.")} <span>→</span></Link>
     </div>
   );
 
@@ -636,7 +579,7 @@ export default function TgpiAccountCenter({
   if (activeSection === "global-key") {
     activeScreen = (
       <div>
-        <ScreenHeading description="Manage the cryptographic identity, encrypted proof, Base Mainnet anchor and linked integrity history behind your stable TGPI Global ID." section="global-key" title="TGPI Global ID" />
+        <ScreenHeading description="Global ID, verification and account security" section="global-key" title="TGPI Global ID" />
         <article className="tgpi-key-surface relative mt-6 overflow-hidden rounded-[28px] border border-[#173754] p-6 text-white shadow-[0_24px_65px_rgba(11,31,58,0.2)] sm:p-8">
           <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
             <span aria-hidden="true" className="tgpi-key-emblem grid h-16 w-16 shrink-0 place-items-center rounded-[22px] border border-[var(--tgpi-gold)]/35 bg-[var(--tgpi-gold)]/10 text-[var(--tgpi-gold-light)]"><SettingsIcon section="global-key" /></span>
@@ -657,10 +600,6 @@ export default function TgpiAccountCenter({
             { title: "Certificate identity", value: profile.legalFullName ? "Real name provided" : "Add your complete name", detail: "Review the name used for newly issued learning credentials.", section: "identity" as const },
             { title: "Privacy controls", value: profile.privacy.visibility === "private" ? "Private profile" : "Review profile sharing", detail: "Choose which profile details other people can see.", section: "privacy" as const },
           ].map(card => <button className="tgpi-account-tile rounded-2xl border border-[var(--tgpi-border)] bg-white p-5 text-left" key={card.title} onClick={() => selectSection(card.section)} type="button"><span className="text-xs font-bold uppercase tracking-wider text-[#705115]"><LocalizedText text={card.title} /></span><span className="mt-2 block text-base font-extrabold text-[var(--tgpi-navy-raised)]">{t(card.value)} →</span><span className="mt-2 block text-sm leading-6 text-[var(--tgpi-muted)]"><LocalizedText text={card.detail} /></span></button>)}
-        </div>
-        <div className="tgpi-account-grid mt-6 grid gap-4 sm:grid-cols-2">
-          <article className="tgpi-account-tile rounded-[22px] border border-[var(--tgpi-border)] bg-white p-5 sm:p-6"><p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#86621A]"><LocalizedText text={"Authentication boundary"} /></p><h3 className="mt-2 text-lg font-extrabold text-[var(--tgpi-navy-raised)]"><LocalizedText text={"Clerk remains the security authority."} /></h3><p className="mt-3 text-xs leading-6 text-[var(--tgpi-muted)]"><LocalizedText text={"Passwords, MFA, passkeys, recovery and active sessions never enter the TGPI cryptographic proof."} /></p><button className="mt-4 text-xs font-extrabold text-[#76520C]" onClick={() => selectSection("security")} type="button"><LocalizedText text={"Open login security →"} /></button></article>
-          <article className="rounded-[22px] border border-[#D7C68F] bg-[#FBF4DE] p-5 sm:p-6"><p className="text-[10px] font-extrabold uppercase tracking-[0.18em] text-[#73520F]"><LocalizedText text={"Transparent technology"} /></p><h3 className="mt-2 text-lg font-extrabold text-[var(--tgpi-navy-raised)]"><LocalizedText text={"Publicly anchored, never tokenized."} /></h3><p className="mt-3 text-xs leading-6 text-[#665A38]"><LocalizedText text={"When anchoring is configured and confirmed, a privacy-safe Merkle root can be checked on Base Mainnet. The Global Key is not a cryptocurrency, wallet, NFT or government credential."} /></p></article>
         </div>
       </div>
     );
@@ -692,10 +631,6 @@ export default function TgpiAccountCenter({
             <Field label="Country of residence"><ProfileSearchSelect label="Country of residence" value={profile.currentCountry} options={countries.map(country => ({ label: `${country.emoji} ${country.name}`, value: country.slug }))} onChange={value => updateProfile({ currentCountry: value, currentCity: "" })} /></Field>
             <Field label="City of residence" description="Search major-city suggestions or enter and select your city if it is not listed."><ProfileSearchSelect key={profile.currentCountry} label="City of residence" value={profile.currentCity} options={(citySuggestions[profile.currentCountry] ?? []).map(city => ({ label: city, value: city }))} allowCustom onChange={value => updateProfile({ currentCity: value })} /></Field>
             <Field label="Nationality / country of citizenship" description="Your citizenship can differ from where you live. It helps frame document and immigration research."><ProfileSearchSelect label="Nationality" value={profile.nationality} options={countries.map(country => ({ label: country.name, value: country.name }))} onChange={value => updateProfile({ nationality: value })} /></Field>
-            <Field label="Profession" description="Used as context for career research, qualification recognition and your personal plan."><ProfileSearchSelect label="Profession" value={profile.profession} options={professionSuggestions.map(profession => ({ label: profession, value: profession }))} allowCustom onChange={value => updateProfile({ profession: value })} /></Field>
-            <Field label="Professional experience"><select className="tgpi-account-input" value={profile.yearsExperience} onChange={event => updateProfile({ yearsExperience: event.target.value })}><option value=""><LocalizedText text={"Select your experience"} /></option><option value="0"><LocalizedText text={"Getting started"} /></option><option value="1-2"><LocalizedText text={"1–2 years"} /></option><option value="3-5"><LocalizedText text={"3–5 years"} /></option><option value="6-10"><LocalizedText text={"6–10 years"} /></option><option value="11+"><LocalizedText text={"11+ years"} /></option></select></Field>
-            <Field label="Current professional situation"><select className="tgpi-account-input" value={profile.employmentType} onChange={event => updateProfile({ employmentType: event.target.value })}><option value=""><LocalizedText text="Select an option" /></option><option value="employed"><LocalizedText text={"Employed"} /></option><option value="self-employed"><LocalizedText text={"Self-employed"} /></option><option value="entrepreneur"><LocalizedText text={"Entrepreneur"} /></option><option value="student"><LocalizedText text={"Student"} /></option><option value="seeking-work"><LocalizedText text={"Seeking work"} /></option><option value="retired"><LocalizedText text={"Retired"} /></option></select></Field>
-            <Field label="Timezone"><LocalizedElement as="input" className="tgpi-account-input" list="tgpi-timezones" maxLength={80} onChange={(event) => updateProfile({ timezone: event.target.value })} placeholder="America/Sao_Paulo" value={profile.timezone} /><datalist id="tgpi-timezones">{timezoneOptions.map((timezone) => <option key={timezone} value={timezone} />)}</datalist></Field>
           </div>
         </div>
         <MemberIdentityEditor />
@@ -719,6 +654,8 @@ export default function TgpiAccountCenter({
           <div className="grid gap-5 sm:grid-cols-2">
             <Field label="Profession or field"><ProfileSearchSelect label="Profession or field" value={profile.profession} options={professionSuggestions.map(profession => ({ label: profession, value: profession }))} allowCustom onChange={value => updateProfile({ profession: value })} /></Field>
             <Field label="Education level"><select className="tgpi-account-input" onChange={(event) => updateProfile({ educationLevel: event.target.value })} value={profile.educationLevel}><option value=""><LocalizedText text={"Select your level"} /></option><option value="Secondary education"><LocalizedText text="Secondary education" /></option><option value="Technical or vocational"><LocalizedText text={"Technical or vocational"} /></option><option value="Undergraduate"><LocalizedText text={"Undergraduate"} /></option><option value="Bachelor's degree"><LocalizedText text={"Bachelor's degree"} /></option><option value="Master's degree"><LocalizedText text={"Master's degree"} /></option><option value="Doctorate"><LocalizedText text={"Doctorate"} /></option><option value="Other"><LocalizedText text="Other" /></option></select></Field>
+            <Field label="Professional experience"><select className="tgpi-account-input" value={profile.yearsExperience} onChange={event => updateProfile({ yearsExperience: event.target.value })}><option value=""><LocalizedText text={"Select your experience"} /></option><option value="0"><LocalizedText text={"Getting started"} /></option><option value="1-2"><LocalizedText text={"1–2 years"} /></option><option value="3-5"><LocalizedText text={"3–5 years"} /></option><option value="6-10"><LocalizedText text={"6–10 years"} /></option><option value="11+"><LocalizedText text={"11+ years"} /></option></select></Field>
+            <Field label="Current professional situation"><select className="tgpi-account-input" value={profile.employmentType} onChange={event => updateProfile({ employmentType: event.target.value })}><option value=""><LocalizedText text="Select an option" /></option><option value="employed"><LocalizedText text={"Employed"} /></option><option value="self-employed"><LocalizedText text={"Self-employed"} /></option><option value="entrepreneur"><LocalizedText text={"Entrepreneur"} /></option><option value="student"><LocalizedText text={"Student"} /></option><option value="seeking-work"><LocalizedText text={"Seeking work"} /></option><option value="retired"><LocalizedText text={"Retired"} /></option></select></Field>
             <div className="sm:col-span-2"><p className="text-sm font-extrabold text-[var(--tgpi-navy-raised)]"><LocalizedText text="Languages" /></p><p className="mt-1 text-xs leading-5 text-[#6B7280]"><LocalizedText text={"Choose up to eight. The same list updates your personal plan."} /></p><div className="mt-3 flex flex-wrap gap-2">{languageOptions.map((language) => { const selected = profile.languages.includes(language); return <button aria-pressed={selected} className={`rounded-full border px-3.5 py-2 text-xs font-extrabold transition ${selected ? "border-[var(--tgpi-navy-raised)] bg-[var(--tgpi-navy-raised)] text-white" : "border-[var(--tgpi-border)] bg-white text-[#566173] hover:border-[var(--tgpi-gold-hover)]"}`} key={language} onClick={() => toggleLanguage(language)} type="button">{selected ? "✓ " : ""}<LocalizedText text={language} /></button>; })}</div></div>
           </div>
           <div className="mt-7 rounded-2xl border border-[#D9C78D] bg-[#FBF4DE] p-5"><p className="text-sm font-extrabold text-[var(--tgpi-navy-raised)]"><LocalizedText text={"One canonical personal plan"} /></p><p className="mt-1 text-xs leading-5 text-[#6F6241]"><LocalizedText text={"Goals, shortlist, budget, timeline and priorities remain in the plan editor to prevent conflicting recommendations."} /></p><Link className="mt-4 inline-flex text-xs font-extrabold text-[#76520C]" href="/onboarding"><LocalizedText text={"Edit personal plan →"} /></Link></div>
@@ -736,6 +673,9 @@ export default function TgpiAccountCenter({
     activeScreen = (
       <div>
         <ScreenHeading description="Preview the saved public fields, manage your member identity and export an authorized presentation." section="public-profile" title={localizeLabel("Public profile")} />
+        <div className="mt-6 rounded-[22px] border border-[var(--tgpi-border)] bg-white p-5 sm:p-7"><div className="grid gap-5 sm:grid-cols-2">            <Field label="Website"><LocalizedElement as="input" className="tgpi-account-input" inputMode="url" maxLength={240} onChange={(event) => updateProfile({ website: event.target.value })} placeholder="https://yourwebsite.com" value={profile.website} /></Field>
+            <Field label="LinkedIn"><LocalizedElement as="input" className="tgpi-account-input" inputMode="url" maxLength={240} onChange={(event) => updateProfile({ linkedin: event.target.value })} placeholder="linkedin.com/in/username" value={profile.linkedin} /></Field>
+            <Field label="Instagram"><LocalizedElement as="input" className="tgpi-account-input" inputMode="url" maxLength={240} onChange={(event) => updateProfile({ instagram: event.target.value })} placeholder="instagram.com/username" value={profile.instagram} /></Field></div></div>
         <MemberIdentityEditor />
         <MemberExportCenter />
         <details className="mt-4"><summary className="cursor-pointer py-3 font-bold"><LocalizedText text={"Find a TGPI member"} /></summary><MemberDirectory /></details>
@@ -795,28 +735,10 @@ export default function TgpiAccountCenter({
           <div className="grid gap-5 sm:grid-cols-2">
             <LanguageSelector />
             <Field label="Preferred currency"><select className="tgpi-account-input" onChange={(event) => updateProfile({ preferredCurrency: event.target.value })} value={profile.preferredCurrency}>{currencyOptions.map((currency) => <option key={currency} value={currency}><LocalizedText text={currency} /></option>)}</select></Field>
-            <Field label="Measurement system"><select className="tgpi-account-input" onChange={(event) => updateProfile({ measurementSystem: event.target.value === "imperial" ? "imperial" : "metric" })} value={profile.measurementSystem}><option value="metric"><LocalizedText text={"Metric — km, kg, °C"} /></option><option value="imperial"><LocalizedText text={"Imperial — mi, lb, °F"} /></option></select></Field>
-            <div className="hidden sm:block" />
-            <Field label="Website"><LocalizedElement as="input" className="tgpi-account-input" inputMode="url" maxLength={240} onChange={(event) => updateProfile({ website: event.target.value })} placeholder="https://yourwebsite.com" value={profile.website} /></Field>
-            <Field label="LinkedIn"><LocalizedElement as="input" className="tgpi-account-input" inputMode="url" maxLength={240} onChange={(event) => updateProfile({ linkedin: event.target.value })} placeholder="linkedin.com/in/username" value={profile.linkedin} /></Field>
-            <Field label="Instagram"><LocalizedElement as="input" className="tgpi-account-input" inputMode="url" maxLength={240} onChange={(event) => updateProfile({ instagram: event.target.value })} placeholder="instagram.com/username" value={profile.instagram} /></Field>
+            <Field label="Timezone"><LocalizedElement as="input" className="tgpi-account-input" list="tgpi-timezones" maxLength={80} onChange={(event) => updateProfile({ timezone: event.target.value })} placeholder="America/Sao_Paulo" value={profile.timezone} /><datalist id="tgpi-timezones">{timezoneOptions.map((timezone) => <option key={timezone} value={timezone} />)}</datalist></Field>
+            <button type="button" className={styles.secondary} onClick={() => updateProfile({ timezone: Intl.DateTimeFormat().resolvedOptions().timeZone })}>{t("Use this device’s timezone")}</button>
           </div>
         </div>
-      </div>
-    );
-  }
-
-  if (activeSection === "notifications") {
-    activeScreen = (
-      <div>
-        <ScreenHeading description="Control which updates may reach you as your global plan and the TGPI system evolve." section="notifications" title={localizeLabel("Notifications")} />
-        <div className="mt-6 overflow-hidden rounded-[22px] border border-[var(--tgpi-border)] bg-white">
-          <Toggle checked={profile.notifications.planReminders} description="Prompts connected to your active personal plan and timeline." label="Plan reminders" onChange={(value) => updateNotifications("planReminders", value)} />
-          <Toggle checked={profile.notifications.researchAlerts} description="Updates when evidence linked to your selected countries changes." label="Research alerts" onChange={(value) => updateNotifications("researchAlerts", value)} />
-          <Toggle checked={profile.notifications.learningUpdates} description="Relevant course and capability-path updates." label="Learning updates" onChange={(value) => updateNotifications("learningUpdates", value)} />
-          <Toggle checked={profile.notifications.productNews} description="Selected TGPI product, platform and release news." label="Product news" onChange={(value) => updateNotifications("productNews", value)} />
-        </div>
-        <p className="mt-4 px-1 text-xs leading-5 text-[#697386]"><LocalizedText text={"Preferences are stored with your Global Key. Delivery channels activate only when the corresponding workflow is available."} /></p>
       </div>
     );
   }
@@ -835,60 +757,65 @@ export default function TgpiAccountCenter({
             <Toggle checked={profile.privacy.showLanguages} label="Share declared languages" description="Listing a language does not verify proficiency." onChange={v => updatePrivacy('showLanguages', v)} />
             <Toggle checked={profile.privacy.showLinks} label="Share professional links" description="Publish your selected website and social links." onChange={v => updatePrivacy('showLinks', v)} />
           </div>
-          <a className="tgpi-member-button mt-4" href="/api/account-data" download="tgpi-account-data.json"><LocalizedText text={"Download private profile & plan data"} /></a>
           <div className="mt-6 rounded-2xl bg-[#F3EFE6] p-5 text-xs leading-6 text-[#5F6876]"><LocalizedText text={"TGPI never stores passwords, recovery methods, passport numbers, national IDs or document scans in this profile. Authentication remains protected by Clerk."} /></div>
         </div>
+        <div className="mt-5"><AnalyticsPreferences /></div>
       </div>
     );
   }
 
-  if (activeSection === "billing") { activeScreen = <AccountBillingPanel />; }
+  if (activeSection === "billing") { activeScreen = <div><ScreenHeading section="billing" title="Subscription & billing" description="Plan status, renewal and secure billing portal" /><AccountBillingPanel /></div>; }
+  if (activeSection === "accessibility") activeScreen = <div><ScreenHeading section="accessibility" title="Accessibility" description="Reading, motion and keyboard navigation" /><SettingsAccessibility /></div>;
+  if (activeSection === "data") activeScreen = <div><ScreenHeading section="data" title="Data & exports" description="Export your saved profile and personal plan" /><SettingsData /></div>;
+  if (activeSection === "diagnostics") activeScreen = <div><ScreenHeading section="diagnostics" title="Connection & sync" description="Check your connection and saved profile version" /><SettingsDiagnostics updatedAt={profile.updatedAt} /></div>;
 
   if (activeSection === "security") {
     activeScreen = (
       <div>
-        <ScreenHeading description="Manage verified emails, passwords, passkeys, login methods and active devices through Clerk protection." section="security" title={localizeLabel("Login & security")} />
+        <ScreenHeading description="Password, devices and login methods" section="security" title={localizeLabel("Login & security")} />
         <div className="mt-6 overflow-hidden rounded-[22px] border border-[var(--tgpi-border)] bg-white p-2 sm:p-4">{children}</div>
       </div>
     );
   }
 
+  const editable = ["identity", "global", "preferences", "privacy", "public-profile"].includes(activeSection);
+  const navigation = settingsSections.filter(section => section.key !== "progress");
+  const renderSearch = (id: string) => <label className={styles.search} htmlFor={id}><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 5 5" /></svg><span className="sr-only">{t("Search settings")}</span><input id={id} type="search" value={query} placeholder={t("Search settings")} onChange={event => setQuery(event.target.value)} onKeyDown={event => { if (event.key === "Enter" && filteredSections.length) selectSection(filteredSections[0].key); if (event.key === "Escape") setQuery(""); }} /></label>;
   return (
-    <div className="tgpi-settings-v2 mx-auto max-w-[1500px]">
-      <header className="tgpi-account-heading mb-5 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <div><p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#8B6416]"><LocalizedText text={"TGPI Global Key"} /></p><h1 className="mt-2 font-[var(--tgpi-font-display)] text-4xl font-semibold tracking-[-0.045em] text-[var(--tgpi-navy-raised)] sm:text-5xl"><LocalizedText text={"Settings"} /></h1><p className="mt-2 text-sm text-[#6E7784]"><LocalizedText text={"Your identity, preferences and security in one connected app."} /></p></div>
-        <NavigationLink className="inline-flex min-h-11 items-center justify-center rounded-xl border border-[#D6D0C4] bg-white px-4 text-xs font-extrabold text-[var(--tgpi-navy-raised)] transition hover:border-[var(--tgpi-gold-hover)]" href="/profile"><LocalizedText text={"Back to workspace"} /></NavigationLink>
+    <div className={`tgpi-settings-v2 ${styles.root}`}>
+      <header className={styles.hero}>
+        <Image className={styles.heroImage} src="/images/cinematic-2026/digital-security-1600.webp" alt="" fill sizes="(max-width: 768px) 100vw, 1400px" priority />
+        <div className={styles.heroContent}><span className={styles.eyebrow}>{t("TGPI / Account control")}</span><h1>{t("Settings")}</h1><p>{t("Your world. Your preferences. Your control.")}</p><div className={styles.heroBadges}><span><i />{t("Private account center")}</span><span>{t(account.membership)}</span></div></div>
+        <NavigationLink className={styles.heroLink} href="/profile">{t("Back to workspace")} ↗</NavigationLink>
       </header>
-
-      <div className="overflow-clip rounded-[30px] border border-[var(--tgpi-border)] bg-white shadow-[0_28px_80px_rgba(11,31,58,0.1)] lg:grid lg:grid-cols-[270px_minmax(0,1fr)]">
-        <aside className="hidden border-r border-[#E1DCD2] bg-[#FCFAF5] p-4 lg:flex lg:flex-col">
-          <button className="flex items-center gap-3 rounded-2xl p-3 text-left transition hover:bg-white" onClick={() => selectSection("overview")} type="button"><AccountAvatar imageUrl={account.avatarUrl} initials={initials} label={fullName} size="small" /><span className="min-w-0"><span className="block truncate text-sm font-extrabold text-[var(--tgpi-navy-raised)]">{fullName}</span><span className="mt-0.5 block truncate text-[11px] text-[#727B88]">{t(account.membership)}</span></span></button>
-          <label className="relative mt-3 block"><span className="sr-only"><LocalizedText text="Search settings" /></span><svg aria-hidden="true" className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[#7A8390]" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" /><path d="m20 20-4-4" /></svg><input className="h-11 w-full rounded-xl border border-[var(--tgpi-border)] bg-white pl-9 pr-3 text-xs text-[var(--tgpi-navy-raised)] outline-none transition placeholder:text-[#959CA6] focus:border-[var(--tgpi-gold-hover)] focus:ring-4 focus:ring-[var(--tgpi-gold-hover)]/10" onChange={(event) => setQuery(event.target.value)} placeholder={t("Search settings")} value={query} /></label>
-          <nav aria-label={t("Account settings")} className="mt-4 space-y-4">
-            {settingsGroups.map((group) => { const groupSections = filteredSections.filter((section) => section.group === group); if (!groupSections.length) return null; return <div key={group}><p className="px-3 pb-1 text-[9px] font-extrabold uppercase tracking-[0.16em] text-[#9299A2]">{t(group)}</p><div className="space-y-1">{groupSections.map((section) => { const active = section.key === activeSection; return <button aria-current={active ? "page" : undefined} className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition ${active ? "bg-[var(--tgpi-navy-raised)] text-white shadow-[0_10px_24px_rgba(11,31,58,0.16)]" : "text-[#4F5B6A] hover:bg-white hover:text-[var(--tgpi-navy-raised)]"}`} key={section.key} onClick={() => selectSection(section.key)} type="button"><span aria-hidden="true" className={`grid h-8 w-8 shrink-0 place-items-center rounded-xl text-sm ${active ? "bg-white/10 text-[var(--tgpi-gold-light)]" : "bg-[#EEF1F4] text-[var(--tgpi-navy-raised)]"}`}><SettingsIcon section={section.key} /></span><span className="text-xs font-extrabold"><LocalizedText text={section.label} /></span></button>; })}</div></div>; })}
-          </nav>
-          {filteredSections.length === 0 ? <p className="px-3 py-5 text-xs leading-5 text-[#717A87]"><LocalizedText text={"No setting matches this search."} /></p> : null}
-          <div className="mt-auto rounded-2xl border border-[#E0D8C5] bg-[#F4E7BE] p-4"><p className="text-[9px] font-extrabold uppercase tracking-[0.18em] text-[#75530E]"><LocalizedText text={"Synchronization"} /></p><p className="mt-2 text-xs font-extrabold text-[var(--tgpi-navy-raised)]">{isDirty ? <LocalizedText text={"Changes waiting to be saved"} /> : <LocalizedText text={"Your account is up to date"} />}</p><p className="mt-1 text-[11px] leading-5 text-[#685B38]"><LocalizedText text={"Last update:"} />{" "}{t(formatSavedDate(profile.updatedAt, locale))}</p></div>
+      <div className={styles.shell}>
+        <aside className={styles.sidebar}>
+          <button className={styles.sidebarIdentity} onClick={() => selectSection("overview")} type="button"><AccountAvatar imageUrl={account.avatarUrl} initials={initials} label={fullName} size="small" /><span><strong>{fullName}</strong><small>{t("Your account")}</small></span></button>
+          {renderSearch("settings-search-desktop")}
+          <nav aria-label={t("Account settings")} className={styles.navigation}>{settingsGroups.map(group => {
+            const sections = filteredSections.filter(section => section.group === group && (section.key !== "progress" || Boolean(query) || activeSection === "progress"));
+            return sections.length ? <div key={group}><p>{t(group)}</p>{sections.map(section => <button type="button" key={section.key} aria-current={activeSection === section.key ? "page" : undefined} onClick={() => selectSection(section.key)}><SettingsIcon section={section.key} /><span>{t(section.label)}</span></button>)}</div> : null;
+          })}</nav>
+          {filteredSections.length === 0 && <p role="status" className={styles.empty}>{t("No setting matches this search.")}</p>}
+          <div className={styles.sidebarStatus}><i /><span>{t(online ? "Online" : "Offline")}<small>{t(isDirty ? "Changes waiting to be saved" : "No pending edits")}</small></span></div>
         </aside>
-
-        <div className="min-w-0 bg-[var(--tgpi-canvas-alt)]">
-          <div className="tgpi-account-mobile-nav sticky top-0 z-30 border-b border-[var(--tgpi-border)] bg-[#FFFDFA]/95 p-3 backdrop-blur lg:hidden">
-            <div className="flex items-center gap-3"><AccountAvatar imageUrl={account.avatarUrl} initials={initials} label={fullName} size="small" /><div className="min-w-0 flex-1"><p className="truncate text-sm font-extrabold text-[var(--tgpi-navy-raised)]"><LocalizedText text={activeDefinition.label} /></p><p className="truncate text-[11px] text-[#737C89]"><LocalizedText text={activeDefinition.description} /></p></div>{isDirty ? <span className="h-2.5 w-2.5 rounded-full bg-[var(--tgpi-gold-hover)]" title={localizeLabel("Unsaved changes")} /> : null}</div>
-            <nav aria-label={t("Account settings")} className="tgpi-smart-rail tgpi-account-tabs -mx-3 mt-3 flex gap-2 overflow-x-auto px-3 pb-1">
-              {settingsSections.map((section) => { const active = section.key === activeSection; return <button aria-current={active ? "page" : undefined} className={`tgpi-account-tab flex min-w-max items-center gap-2 rounded-full border px-3 py-2 text-[11px] font-extrabold transition ${active ? "border-[var(--tgpi-navy-raised)] bg-[var(--tgpi-navy-raised)] text-white" : "border-[var(--tgpi-border)] bg-white text-[#596473]"}`} key={section.key} onClick={() => selectSection(section.key)} type="button"><span aria-hidden="true"><SettingsIcon section={section.key} /></span><LocalizedText text={section.label} /></button>; })}
-            </nav>
+        <div className={styles.main}>
+          <div className={styles.mobileNav}>
+            {renderSearch("settings-search-mobile")}
+            {query ? <div className={styles.mobileResults}>{filteredSections.map(section => <button type="button" key={section.key} onClick={() => selectSection(section.key)}><SettingsIcon section={section.key} />{t(section.label)}<span>→</span></button>)}{!filteredSections.length && <p role="status">{t("No setting matches this search.")}</p>}</div> : <label className={styles.mobileSelect}><SettingsIcon section={activeSection} /><span className="sr-only">{t("Choose settings section")}</span><select value={activeSection} onChange={event => selectSection(event.target.value as SettingsSection)}>{(activeSection === "progress" ? settingsSections : navigation).map(section => <option key={section.key} value={section.key}>{t(section.label)}</option>)}</select></label>}
           </div>
-
-          <div className="tgpi-account-content scroll-mt-36 p-4 sm:p-6 lg:p-7 xl:p-8" id={`settings-${activeSection}`} ref={contentRef}><fieldset className="min-w-0" disabled={saveState === "saving"}><LocalizedText text={activeScreen} /></fieldset></div>
-
-          <div className="tgpi-account-save-bar relative border-t border-[var(--tgpi-border)] bg-white/95 px-4 py-3 backdrop-blur sm:px-7 lg:px-10">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-              <div aria-live="polite" role="status"><p className={`text-xs font-extrabold ${saveState === "error" ? "text-[#A32626]" : isDirty ? "text-[#8B6416]" : "text-[#277352]"}`}>{saveState === "saving" ? <LocalizedText text={"Synchronizing your account…"} /> : message ? <LocalizedText text={message} /> : isDirty ? <LocalizedText text={"You have unsaved changes"} /> : <LocalizedText text={"All changes are synchronized"} />}</p><p className="mt-0.5 text-[10px] text-[#7A8390]"><LocalizedText text={"Connected to Country Fit, Compare, Personal Plan and Learning"} /></p></div>
-              <button className="min-h-11 rounded-xl bg-[var(--tgpi-navy-raised)] px-6 text-xs font-extrabold text-white shadow-[0_10px_24px_rgba(11,31,58,0.18)] transition hover:bg-[#173554] disabled:cursor-not-allowed disabled:opacity-50" disabled={!isDirty || saveState === "saving"} onClick={saveAccount} type="button">{saveState === "saving" ? <LocalizedText text={"Saving…"} /> : <LocalizedText text={"Save changes"} />}</button>
-            </div>
-          </div>
+          <div className={styles.breadcrumb}><button type="button" onClick={() => selectSection("overview")}>{t("Settings")}</button><span>/</span><span>{t(activeDefinition.label)}</span><small>{t(editable ? "Save to your account" : "Account control")}</small></div>
+          {!online && <p className={styles.warning} role="status">{t("You are offline. Keep this page open and retry when connected.")}</p>}
+          <div className={`tgpi-account-content ${styles.content}`} id={`settings-${activeSection}`} ref={contentRef} tabIndex={-1}><fieldset className="min-w-0" disabled={saveState === "saving"}><div hidden={activeSection === "notifications"}>{activeScreen}</div>{(notificationsVisited || activeSection === "notifications") && <div hidden={activeSection !== "notifications"} className={styles.stack}><ScreenHeading section="notifications" title="Notifications" description="Choose your channels, quiet hours and connected devices in one place." /><NotificationPreferences onDirtyChange={setNotificationDirty} /><NotificationDevices /><Link className={styles.relatedLink} href="/notifications">{t("Open notification center")} →</Link></div>}</fieldset></div>
+          {(isDirty || editable || saveState === "error") && <div className={styles.saveBar}>
+            <div role="status" aria-live="polite"><strong>{t(saveState === "saving" ? "Synchronizing your account…" : message || (isDirty ? "You have unsaved changes" : "No pending edits"))}</strong><small>{t("Profile changes stay in this page until you save.")}</small></div>
+            <div className={styles.saveActions}><button className={styles.secondary} disabled={!isDirty || saveState === "saving"} onClick={() => setDiscardOpen(true)} type="button">{t("Discard edits")}</button><button className={styles.primary} disabled={!isDirty || saveState === "saving" || !online} onClick={() => void saveAccount()} type="button">{t(saveState === "saving" ? "Saving…" : "Save changes")}</button></div>
+            {discardOpen && <div className={styles.confirm}><p>{t("Discard all unsaved profile edits?")}</p><button type="button" className={styles.secondary} onClick={() => setDiscardOpen(false)}>{t("Keep editing")}</button><button type="button" className={styles.primary} onClick={discardChanges}>{t("Discard edits")}</button></div>}
+            {conflict && <p className={styles.warning}>{t("Your edits are still here. Copy any changes you need before reloading the latest saved profile.")}</p>}
+          </div>}
         </div>
       </div>
+      {pendingNavigation && <div className={styles.navigationWarning} role="alert"><strong>{t("You have unsaved changes")}</strong><button type="button" className={styles.secondary} onClick={() => setPendingNavigation(null)}>{t("Keep editing")}</button><button type="button" className={styles.primary} onClick={() => { const href = pendingNavigation; discardChanges(); setPendingNavigation(null); router.push(href); }}>{t("Discard and leave")}</button></div>}
     </div>
   );
 }

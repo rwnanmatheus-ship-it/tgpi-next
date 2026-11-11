@@ -6,11 +6,25 @@ import {
   normalizeAccountIdentity,
   normalizeBirthDate,
   normalizeTgpiAccountProfile,
+  mergeAccountProfilePatch,
+  mergeAccountProfileWithOnboarding,
+  validateAccountProfileInput,
   type TgpiAccountUpdate,
 } from "@/lib/account-profile";
 import { normalizeOnboardingData } from "@/lib/onboarding";
 
 const MAX_BODY_SIZE = 24_000;
+
+export async function GET() {
+  const session = await auth();
+  const headers = { 'Cache-Control': 'private, no-store', Vary: 'Cookie' };
+  if (!session.userId || !session.sessionId) return NextResponse.json({ error: 'Session expired.' }, { status: 401, headers });
+  try {
+    const client = await clerkClient();
+    const user = await client.users.getUser(session.userId);
+    return NextResponse.json({ profile: mergeAccountProfileWithOnboarding(user.unsafeMetadata.tgpiAccountProfile, user.unsafeMetadata.tgpiOnboarding) }, { headers });
+  } catch { return NextResponse.json({ error: 'Unable to load your account.' }, { status: 503, headers }); }
+}
 
 export async function PATCH(request: Request) {
   const session = await auth();
@@ -48,6 +62,8 @@ export async function PATCH(request: Request) {
         : {};
     const identity = normalizeAccountIdentity(input.identity);
     const profile = normalizeTgpiAccountProfile(input.profile);
+    const validationError = validateAccountProfileInput(input.profile);
+    if (validationError) return NextResponse.json({ error: validationError }, { status: 400 });
 
     if (input.profile?.dateOfBirth && !normalizeBirthDate(input.profile.dateOfBirth)) {
       return NextResponse.json({ error: "Choose a valid birth date, no later than today." }, { status: 400 });
@@ -74,10 +90,7 @@ export async function PATCH(request: Request) {
     const previousTimestamp = Date.parse(existing.updatedAt ?? "");
     const now = new Date(Math.max(Date.now(), (previousTimestamp || 0) + 1)).toISOString();
     // Merge normalized known fields so older clients cannot erase newly added information.
-    const savedProfile = { ...normalizeTgpiAccountProfile({
-      ...existing,
-      ...input.profile,
-    }), updatedAt: now };
+    const savedProfile = { ...mergeAccountProfilePatch(existing, input.profile), updatedAt: now };
     const memberIdentity = await getMemberIdentity(session.userId).catch(() => null);
     if (identity.firstName !== user.firstName || identity.lastName !== (user.lastName || "")) {
       await client.users.updateUser(session.userId, {

@@ -340,3 +340,10 @@ img {
 .tgpi-settings-v2 .tgpi-account-input::placeholder { color: #657185; opacity: 1; }
 .tgpi-settings-v2 .tgpi-account-tile { box-shadow: inset 0 1px 0 color-mix(in srgb,var(--tgpi-surface-strong) 70.20%,transparent), 0 3px 0 color-mix(in srgb,var(--tgpi-navy-raised) 5.10%,transparent), 0 14px 30px color-mix(in srgb,var(--tgpi-navy-raised) 3.92%,transparent); }
 @media (prefers-reduced-motion: reduce) { .tgpi-key-emblem { transform: none; } }
+
+/* Device-only accessibility controls, applied consistently across routes. */
+html[data-tgpi-text="large"] { font-size: 18px; }
+html[data-tgpi-motion="reduced"] *,
+html[data-tgpi-motion="reduced"] *::before,
+html[data-tgpi-motion="reduced"] *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+html[data-tgpi-focus="strong"] :is(a,button,input,select,textarea,[tabindex]):focus-visible { outline: 4px solid #2563eb !important; outline-offset: 4px !important; box-shadow: 0 0 0 7px #fff !important; }

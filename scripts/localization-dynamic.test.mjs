@@ -157,6 +157,7 @@ test('account summaries and next-rank requirements translate without changing pe
   const before = JSON.stringify(props), empty = { __esModule: true, default: () => null };
   const overrides = {
     '@clerk/nextjs': { useUser: () => ({ user: null }) },
+    '@/components/notifications/NotificationProvider': { useNotifications: () => ({ preferences: { pushEnabled: false } }) },
     'next/navigation': { usePathname: () => '/profile/security', useRouter: () => ({}) },
   };
   for (const name of ['./MemberIdentityEditor', './MemberExportCenter', './MemberDirectory', './AccountBillingPanel', '@/components/localization/LanguageSelector', '@/components/profile/PublicProfileShareButton', '@/components/profile/GlobalProgressPanel', '@/components/profile/GlobalRankBadge', '@/components/profile/ProfileSearchSelect', '@/components/profile/TgpiAvatarEditor', '@/components/ui/AreaHero']) overrides[name] = empty;
@@ -165,9 +166,9 @@ test('account summaries and next-rank requirements translate without changing pe
     const fixture = academyLocalizationFixture({ './LocaleProvider': { useLocale: () => ({ locale, t }) } });
     overrides['@/components/localization/LocalizedElement'] = fixture.load(resolve('src/components/localization/LocalizedElement.tsx'));
     const html = render('src/components/profile/TgpiAccountCenter.tsx', locale, props, [], overrides);
-    for (const text of [t('TGPI Free'), t('Global ID, verification and account security'), t('Password, devices and login methods'), t('Ready to preview and share'), t('Public'), t('United States'), t('{rank} · {points} points', { rank: t(rank.name), points: rank.points.toLocaleString(locale) }), t('{value0} to {value1}', { value0: String(rank.pointsToNext), value1: t(rank.nextRank.name) }), 'Private profession', '>Save<']) assert.ok(html.includes(esc(text)) || html.includes(text), `${locale}: ${text}`);
+    for (const text of [t('TGPI Free'), t('Global ID, verification and account security'), t('Password, devices and login methods'), t('Ready to preview and share'), t('Public'), t('Connection & sync'), t('Data & exports'), 'Private profession', '>Save<']) assert.ok(html.includes(esc(text)) || html.includes(text), `${locale}: ${text}`);
     assert.ok(html.includes(`aria-label="${esc(t('Profile photo of {name}', { name: 'Save' }))}"`));
-    assert.ok(html.includes(esc(t('Enabled: {count}', { count: Object.values(props.initialProfile.notifications).filter(Boolean).length }))));
+    assert.ok(html.includes(esc(t('Notifications paused'))));
     const noProfession = { ...props, initialProfile: { ...props.initialProfile, profession: '' } };
     const fallbackHtml = render('src/components/profile/TgpiAccountCenter.tsx', locale, noProfession, [], overrides);
     assert.ok(fallbackHtml.includes(esc(t('Languages: {count}', { count: 1 }))));

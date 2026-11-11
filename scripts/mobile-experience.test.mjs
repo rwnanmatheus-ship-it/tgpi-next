@@ -86,8 +86,9 @@ test("compact workspace and settings do not compete with global navigation",()=>
   assert.doesNotMatch(layout,/position:\s*(fixed|sticky)/);
   const sectionNav=readFileSync(new URL("../src/components/profile/WorkspaceSectionNav.tsx",import.meta.url),"utf8");
   assert.match(sectionNav,/aria-label=\{t\('Workspace sections'\)\}/);
-  assert.match(settings,/tgpi-account-tabs/);
-  assert.match(settings,/tgpi-account-save-bar/);
+  assert.match(settings,/settings-search-mobile/);
+  assert.match(settings,/Choose settings section/);
+  assert.match(settings,/styles.saveBar/);
   assert.match(css,/\.tgpi-account-tabs > \.tgpi-account-tab \{[\s\S]*?min-width: max-content;[\s\S]*?white-space: nowrap;/);
   assert.match(css,/\.tgpi-account-save-bar \{[\s\S]*?position: static;/);
 });

@@ -626,5 +626,5 @@
   .panel { order: 1; }
   .mainColumn { order: 2; }
   .research { order: 3; }
-  :global(#notification-preferences) { order: 0; }
+  .panel:global(#notification-preferences) { order: 0; }
 }

@@ -74,7 +74,7 @@ export default async function SecurityPage() {
   }) : null;
 
   return (
-    <main className="min-h-screen bg-[#F5F1E8] px-4 py-6 text-[var(--tgpi-navy-raised)] sm:px-6 sm:py-10 lg:py-14">
+    <main className="min-h-screen bg-[#edf1f6] px-3 py-5 text-[var(--tgpi-navy-raised)] sm:px-5 sm:py-7 lg:py-8">
       <TgpiAccountCenter
         key={session.sessionId}
         sessionId={session.sessionId}
