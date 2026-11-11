@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import LauncherButton from '@/components/navigation/LauncherButton';
 import BrandSignature from '@/components/navigation/BrandSignature';
 import NavigationIcon from '@/components/navigation/NavigationIcon';
+import TgpiAccountMenu from '@/components/profile/TgpiAccountMenu';
 import { COMPACT_NAVIGATION, isNavigationDestinationActive } from '@/lib/navigation-system';
 import { isFocusedMobileRoute } from '@/lib/mobile-experience';
 
@@ -25,6 +26,15 @@ export default function MobileNavigation() {
     viewport?.addEventListener('resize', update); document.addEventListener('focusin', update); document.addEventListener('focusout', update);
     return () => { viewport?.removeEventListener('resize', update); document.removeEventListener('focusin', update); document.removeEventListener('focusout', update); };
   }, []);
-  return <><header className="tgpi-mobile tgpi-compact-topbar" aria-label={t('TGPI compact navigation')} data-navigation-version="2"><BrandSignature compact /><div className="tgpi-compact-actions"><LanguageSelector compact /><Show when="signed-in"><NotificationBell /></Show><LauncherButton compact /></div></header>
+  return <>
+    <header className="tgpi-mobile tgpi-compact-topbar" aria-label={t('TGPI compact navigation')} data-navigation-version="2">
+      <BrandSignature compact />
+      <div className="tgpi-compact-actions">
+        <LanguageSelector compact />
+        <Show when="signed-in"><NotificationBell /></Show>
+        <LauncherButton compact />
+        <Show when="signed-in"><TgpiAccountMenu /></Show>
+      </div>
+    </header>
     {!isFocusedMobileRoute(pathname) ? <nav className="tgpi-mobile tgpi-compact-dock" aria-label={t('Mobile primary navigation')} data-keyboard={keyboardOpen ? 'open' : 'closed'}>{COMPACT_NAVIGATION.map(destination => <NavigationLink key={destination.id} href={destination.href} aria-current={isNavigationDestinationActive(pathname,destination) ? 'page' : undefined}><span className="tgpi-compact-dock-icon"><NavigationIcon name={destination.icon} width={22} height={22} /></span><span>{t(destination.shortLabel)}</span></NavigationLink>)}</nav> : null}</>;
 }

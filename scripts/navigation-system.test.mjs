@@ -65,6 +65,11 @@ test("desktop and compact navigation share the typed registry", () => {
   assert.match(compact, /data-navigation-version="2"/);
 });
 
+test("the compact header exposes the shared account menu to signed-in members", () => {
+  const compact = readFileSync(new URL("../src/components/mobile/MobileNavigation.tsx", import.meta.url), "utf8");
+  assert.match(compact, /<Show when="signed-in"><TgpiAccountMenu\s*\/><\/Show>/);
+});
+
 test("navigation surfaces use vector icons instead of decorative emoji", () => {
   const desktop = readFileSync(new URL("../src/components/Navbar.tsx", import.meta.url), "utf8");
   const compact = readFileSync(new URL("../src/components/mobile/MobileNavigation.tsx", import.meta.url), "utf8");

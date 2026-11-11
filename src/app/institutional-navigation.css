@@ -126,7 +126,6 @@ html { scrollbar-gutter: stable; scroll-padding-top: 100px; }
   max-width: none;
 }
 .tgpi-navigation-key-button:hover { background: #e8d39f; transform: none; }
-.tgpi-desktop-actions button[aria-controls="tgpi-account-popover"] { width: 44px; height: 44px; }
 :is(.tgpi-desktop-navigation,.tgpi-compact-topbar,.tgpi-compact-dock) :is(a,button):focus-visible {
   outline: 3px solid var(--tgpi-header-focus);
   outline-offset: 3px;

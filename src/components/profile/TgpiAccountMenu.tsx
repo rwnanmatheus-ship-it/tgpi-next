@@ -52,6 +52,10 @@ function AccountMenu({ name, imageUrl }: { name: string; imageUrl: string }) {
 
     function placePanel() {
       if (!panel || !avatar) return;
+      if (!avatar.getClientRects().length) {
+        setOpen(false);
+        return;
+      }
       const bounds = avatar.getBoundingClientRect();
       panel.style.setProperty("--account-top", `${bounds.bottom + 10}px`);
       panel.style.setProperty("--account-right", `${Math.max(12, document.documentElement.clientWidth - bounds.right)}px`);
@@ -198,7 +202,7 @@ function AccountMenu({ name, imageUrl }: { name: string; imageUrl: string }) {
                   <NavigationIcon name={copyStatus === "copied" ? "check" : "copy"} width={18} height={18} />
                 </button>}
               </div>
-              <p className={styles.copyStatus} role="status" hidden={copyStatus === "idle"}>
+              <p className={styles.copyStatus} role="status">
                 {copyStatus === "copied" ? t("Copied to clipboard.") : copyStatus === "error" ? t("Copy is unavailable. Select the visible reference manually.") : ""}
               </p>
             </div>
