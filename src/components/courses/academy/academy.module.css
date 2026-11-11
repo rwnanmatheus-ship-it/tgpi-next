@@ -419,3 +419,11 @@
   .studioHero[data-enrolled=true] .orbit strong { font-size:35px; }
   .studioHero[data-enrolled=true] .orbitCard { padding:16px; }
 }
+
+/* A short viewport must not trap the final milestones below a sticky sidebar. */
+@media(min-width:761px) {
+  .studioPage .nav { max-height:calc(100dvh - var(--tgpi-header-height,80px) - 106px); overflow-y:auto; overscroll-behavior:contain; scrollbar-width:thin; scrollbar-color:#4c6482 transparent; }
+}
+@media(min-width:761px) {
+  .focusMode .nav { top:calc(var(--tgpi-header-height,80px) + 155px); max-height:calc(100dvh - var(--tgpi-header-height,80px) - 175px); }
+}

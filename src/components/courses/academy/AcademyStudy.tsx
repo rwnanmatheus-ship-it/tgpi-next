@@ -242,7 +242,7 @@ function StudySession({ course: original, sessionId, initialLesson }: { course: 
           <span className={styles.sectionKicker}>{t(record.completedAt ? 'Course completed' : 'Your next step')}</span>
           <h3>{record.completedAt ? t('Your learning record is preserved.') : nextLabel}</h3>
           {record.completedAt ? <Link className={styles.link} href="/certificates">{t('My certificates')} →</Link> : button(challenge ? 'Resume assessment' : 'Go to my next step', continueJourney, dirty)}
-          <div className={styles.forecast}><AcademyIcon name="clock" size={17} /><span><strong>{Math.ceil(progress.remainingMinutes / 60)}h</strong> {t('estimated work remaining')}</span></div>
+          <div className={styles.forecast}><AcademyIcon name="clock" size={17} /><span><strong>{Math.floor(progress.remainingMinutes / 60)}h {progress.remainingMinutes % 60 ? `${progress.remainingMinutes % 60}m` : ''}</strong> {t('estimated work remaining')}</span></div>
           {record.plan && <p className={styles.muted}>{t(goals[record.plan.goal][0])} · {record.plan.weeklyHours}h/{t('week')} · {Math.ceil(progress.remainingMinutes / (record.plan.weeklyHours * 60))} {t('weeks estimated')}</p>}
           <p className={styles.finePrint}>{t('Planning estimate from unfinished steps; not measured study time.')}</p>
         </section>
