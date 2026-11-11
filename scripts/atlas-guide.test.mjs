@@ -62,3 +62,14 @@ test('budget uses a single currency, handles zero and rejects malformed or out-o
     assert.equal(estimateAtlasBudget(...invalid), null);
   }
 });
+
+test('academy guide offers the selected applied project and a safe route back to study', () => {
+  const brief = 'Build a fictional dashboard and reconcile the totals.';
+  const reply = answerAtlasGuide({
+    question: 'Help me practise', locale: 'en', topic: 'learning',
+    context: { topic: 'learning', learningCourse: { id: 'analise-dados-power-bi-ia', title: 'Data analysis', projectBrief: brief } },
+  });
+  assert.ok(reply.content.includes(brief));
+  assert.match(reply.content, /Start with one deliverable/);
+  assert.equal(safeAtlasLink(reply.resources[0].href), '/courses/analise-dados-power-bi-ia/study');
+});

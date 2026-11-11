@@ -1,7 +1,7 @@
 import { getSuperAppModule } from '../super-app';
 import type { GuideTopic } from './guide-copy';
 
-export type AtlasNavigationContext = { topic: GuideTopic; country?: string; learningCourse?: { id: string; title: string } };
+export type AtlasNavigationContext = { topic: GuideTopic; country?: string; learningCourse?: { id: string; title: string; projectBrief?: string } };
 
 export function atlasNavigationContext(pathname: string): AtlasNavigationContext | undefined {
   if (pathname === '/community' || pathname.startsWith('/community/')) return { topic: 'community' };

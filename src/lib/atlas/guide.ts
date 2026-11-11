@@ -2,7 +2,8 @@ import identityData from '@/data/intelligence/identities.json';
 import { comparisonPath } from '../comparison-state';
 import { getNextSuperAppModule, SUPER_APP_MODULES } from '../super-app';
 import type { Locale } from '../localization/config';
-import { guideCompareNone, guideCompareOne, guideFallback, guideText, guideTopics, type GuideTopic } from './guide-copy';
+import { translate } from '../localization/messages';
+import { guideCompareNone, guideCompareOne, guideFallback, guideLearningProject, guideText, guideTopics, type GuideTopic } from './guide-copy';
 import type { AtlasNavigationContext } from './navigation-context';
 
 export type GuideResource = { href: string; label: string; literal?: boolean };
@@ -118,7 +119,11 @@ export function answerAtlasGuide({
     if (countries.length >= 2) resources[0].href = comparisonPath(countries, goal ?? 'overall');
     else content = countries.length ? guideText(guideCompareOne, locale).replace('{country}', countryName(countries[0], locale)) : guideText(guideCompareNone, locale);
   }
-  if (topic === 'learning' && context?.learningCourse) resources.unshift({ href: `/courses/${context.learningCourse.id}/study`, label: context.learningCourse.title });
+  if (topic === 'learning' && context?.learningCourse) {
+    const { id, title, projectBrief } = context.learningCourse;
+    resources.unshift({ href: `/courses/${id}/study`, label: title });
+    if (projectBrief) content = `${translate(locale, projectBrief)}\n\n${guideText(guideLearningProject, locale)}`;
+  }
   if (topic === 'credentials') resources.push({ href: '/verify', label: 'Verify' });
   if (topic === 'documents' || topic === 'compare' || topic === 'countries' || topic === 'plan') {
     resources.push(...countries.slice(0, 3).map(slug => ({ href: `/countries/${slug}`, label: countryName(slug, locale), literal: true })));

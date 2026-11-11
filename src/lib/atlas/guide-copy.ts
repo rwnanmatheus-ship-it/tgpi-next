@@ -5,6 +5,15 @@ export type GuideTopic = 'compare' | 'countries' | 'country-fit' | 'plan' | 'lea
 type Translation = readonly [string, string, string, string, string, string];
 export const guideText = (copy: Translation, locale: Locale) => copy[locales.indexOf(locale)];
 
+export const guideLearningProject = [
+  'Start with one deliverable. What result could another learner inspect to tell whether you met the brief?',
+  'Comece com uma entrega. Que resultado outro aluno poderia verificar para saber se você cumpriu a proposta?',
+  'Empieza con una entrega. ¿Qué resultado podría comprobar otro estudiante para saber si cumpliste la propuesta?',
+  'Commence par un livrable. Quel résultat un autre apprenant pourrait-il vérifier pour savoir si tu as répondu au brief ?',
+  'Beginne mit einem Lieferobjekt. Welches Ergebnis könnte jemand prüfen, um zu erkennen, ob du die Aufgabe erfüllt hast?',
+  'Inizia con una consegna. Quale risultato potrebbe verificare un altro studente per capire se hai rispettato il progetto?',
+] satisfies Translation;
+
 export const guideFallback = [
   'I can help you plan a move, compare countries, prepare documents, practise a language or find a TGPI tool. Where are you now, and what are you trying to decide?',
   'Posso ajudar a planejar uma mudança, comparar países, preparar documentos, praticar um idioma ou encontrar uma ferramenta da TGPI. Onde você está e o que quer decidir?',
