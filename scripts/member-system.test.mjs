@@ -84,6 +84,31 @@ test('number creation preserves current identity and old handles remain reserved
   assert.equal(await api.resolveMember('handles','first_id'), 'owner1');
   await assert.rejects(api.claimMemberIdentity('owner2','first_id'), e => e.status === 409);
 });
+test('account menu reads only the signed-in handle and does not reserve a member number', async () => {
+  const { api, docs } = registry();
+  let userId = null;
+  let configured = true;
+  const route = loadModule('../src/app/api/member-identity/route.ts', {
+    '@clerk/nextjs/server': { auth: async () => ({ userId }) },
+    '@/lib/members/identity.server': api,
+    '@/lib/firestore-admin-rest.server': { isLearningStorageConfigured: () => configured },
+  });
+  const url = 'https://tgpi.test/api/member-identity';
+  const readSummary = () => route.GET(new Request(`${url}?view=summary`));
+
+  assert.equal((await readSummary()).status, 401);
+  userId = 'menu_user';
+  const empty = await readSummary();
+  assert.equal(empty.headers.get('cache-control'), 'private, no-store');
+  assert.deepEqual(await empty.json(), { handle: '' });
+  assert.equal(docs.size, 0);
+
+  const existing = await api.claimMemberIdentity(userId, 'menu_handle');
+  assert.deepEqual(await (await readSummary()).json(), { handle: 'menu_handle' });
+  assert.deepEqual(await (await route.GET(new Request(url))).json(), { identity: { ...existing }, available: true });
+  configured = false;
+  assert.equal((await readSummary()).status, 503);
+});
 test('search frequency limits are shared through storage transactions', async () => {
   const { api } = registry();
   await Promise.all(Array.from({ length: 15 }, () => api.consumeMemberLookup('owner')));

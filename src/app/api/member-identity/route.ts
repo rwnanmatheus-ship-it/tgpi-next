@@ -1,11 +1,20 @@
 import { auth, clerkClient } from '@clerk/nextjs/server';
-import { claimMemberIdentity, ensureMemberNumber, MemberInputError } from '@/lib/members/identity.server';
+import { claimMemberIdentity, ensureMemberNumber, getMemberIdentity, MemberInputError } from '@/lib/members/identity.server';
 import { isLearningStorageConfigured } from '@/lib/firestore-admin-rest.server';
 const headers = { 'Cache-Control': 'private, no-store' };
-export async function GET() {
+export async function GET(request: Request) {
   const { userId } = await auth();
   if (!userId) return Response.json({ error: 'Sign in to manage your identity.' }, { status: 401, headers });
-  try { return Response.json({ identity: await ensureMemberNumber(userId), available: isLearningStorageConfigured() }, { headers }); }
+  try {
+    if (new URL(request.url).searchParams.get('view') === 'summary') {
+      if (!isLearningStorageConfigured()) {
+        return Response.json({ error: 'Unable to load your member identity.' }, { status: 503, headers });
+      }
+      const identity = await getMemberIdentity(userId);
+      return Response.json({ handle: identity?.handle ?? '' }, { headers });
+    }
+    return Response.json({ identity: await ensureMemberNumber(userId), available: isLearningStorageConfigured() }, { headers });
+  }
   catch { return Response.json({ error: 'Unable to load your member identity.' }, { status: 503, headers }); }
 }
 export async function PATCH(request: Request) {

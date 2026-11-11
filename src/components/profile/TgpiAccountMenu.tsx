@@ -1,92 +1,245 @@
 "use client";
 
-import { LocalizedElement } from "@/components/localization/LocalizedElement";
-import { useLocale , LocalizedText } from "@/components/localization/LocaleProvider";
-
 import { useClerk, useUser } from "@clerk/nextjs";
-import Link from "next/link";
+import { useEffect, useId, useRef, useState } from "react";
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
+import { useLocale } from "@/components/localization/LocaleProvider";
+import NavigationIcon from "@/components/navigation/NavigationIcon";
 import NavigationLink from "@/components/navigation/NavigationLink";
-import { normalizeTgpiAccountProfile } from '@/lib/account-profile';
-import type { MemberIdentity } from '@/lib/members/identity';
-import { useEffect, useRef, useState } from "react";
+import { normalizeTgpiAccountProfile } from "@/lib/account-profile";
+import { containDialogFocus } from "@/lib/dialog-focus";
+import styles from "./TgpiAccountMenu.module.css";
+
+const settingsUrl = "/profile/security#settings-";
 
 const destinations = [
-  ["identity", "Personal information", "Name, photo and unique @ID"],
-  ["security", "Login & security", "Email, login methods and devices"],
-  ["privacy", "Privacy controls", "Choose what others can see"],
-  ["preferences", "App preferences", "Language, currency and time zone"],
-  ["notifications", "Notification preferences", "Choose the updates you receive"],
+  ["identity", "Personal information", "file"],
+  ["security", "Login & security", "shield"],
+  ["privacy", "Privacy controls", "key"],
+  ["preferences", "App preferences", "globe"],
+  ["notifications", "Notification preferences", "bell"],
+  ["billing", "Plan & billing", "graph"],
 ] as const;
 
+type IdentitySummary =
+  | { status: "loading" | "unavailable" }
+  | { status: "ready"; handle: string };
+
 export default function TgpiAccountMenu() {
-  const { t } = useLocale();
   const { user, isLoaded } = useUser();
+  if (!isLoaded || !user) return null;
+
+  const displayName = normalizeTgpiAccountProfile(user.unsafeMetadata.tgpiAccountProfile).displayName;
+  return <AccountMenu key={user.id} name={displayName || user.fullName || ""} imageUrl={user.imageUrl} />;
+}
+
+function AccountMenu({ name, imageUrl }: { name: string; imageUrl: string }) {
+  const { t } = useLocale();
   const { signOut } = useClerk();
-  const [open, setOpen] = useState(false);
-  const [signingOut, setSigningOut] = useState(false);
-  const [error, setError] = useState("");
-  const [memberIdentity, setMemberIdentity] = useState<MemberIdentity | null>(null);
-  const [identityLoading, setIdentityLoading] = useState(false);
-  const [identityError, setIdentityError] = useState(false);
-  useEffect(() => {
-    if (!open || !user?.id) return;
-    const controller = new AbortController();
-    fetch('/api/member-identity', { cache: 'no-store', signal: controller.signal }).then(async response => {
-      if (!response.ok) throw new Error('Unavailable');
-      const data = await response.json(); setMemberIdentity(data.identity);
-    }).catch(error => { if (error.name !== 'AbortError') setIdentityError(true); }).finally(() => { if (!controller.signal.aborted) setIdentityLoading(false); });
-    return () => controller.abort();
-  }, [open, user?.id]);
-  const root = useRef<HTMLDivElement>(null);
+  const dialogId = useId();
   const trigger = useRef<HTMLButtonElement>(null);
+  const dialog = useRef<HTMLDialogElement>(null);
+  const closeButton = useRef<HTMLButtonElement>(null);
+  const [open, setOpen] = useState(false);
+  const [identity, setIdentity] = useState<IdentitySummary>({ status: "loading" });
+  const [copyStatus, setCopyStatus] = useState<"idle" | "copied" | "error">("idle");
+  const [signOutStatus, setSignOutStatus] = useState<"idle" | "pending" | "error">("idle");
+
   useEffect(() => {
-    if (!open) return;
-    function outside(event: PointerEvent) {
-      if (!root.current?.contains(event.target as Node)) setOpen(false);
+    const panel = dialog.current;
+    const avatar = trigger.current;
+    if (!open || !panel || !avatar) return;
+
+    function placePanel() {
+      if (!panel || !avatar) return;
+      const bounds = avatar.getBoundingClientRect();
+      panel.style.setProperty("--account-top", `${bounds.bottom + 10}px`);
+      panel.style.setProperty("--account-right", `${Math.max(12, document.documentElement.clientWidth - bounds.right)}px`);
     }
-    function escape(event: KeyboardEvent) {
-      if (event.key === "Escape") { setOpen(false); trigger.current?.focus(); }
-    }
-    document.addEventListener("pointerdown", outside);
-    document.addEventListener("keydown", escape);
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    placePanel();
+    panel.showModal();
+    closeButton.current?.focus({ preventScroll: true });
+    window.addEventListener("resize", placePanel);
     return () => {
-      document.removeEventListener("pointerdown", outside);
-      document.removeEventListener("keydown", escape);
+      window.removeEventListener("resize", placePanel);
+      panel.close();
+      document.body.style.overflow = previousOverflow;
+      avatar.focus({ preventScroll: true });
     };
   }, [open]);
-  if (!isLoaded || !user) return null;
-  const name = normalizeTgpiAccountProfile(user.unsafeMetadata.tgpiAccountProfile).displayName || [user.firstName, user.lastName].filter(Boolean).join(" ") || t(t('TGPI member'));
-  const handle = identityLoading ? t('Loading member ID…') : memberIdentity?.handle ? `@${memberIdentity.handle}` : identityError ? t('Manage your member ID') : t('Create your unique @ID');
+
+  useEffect(() => {
+    if (!open) return;
+
+    const controller = new AbortController();
+    async function loadIdentity() {
+      try {
+        const response = await fetch("/api/member-identity?view=summary", {
+          cache: "no-store",
+          signal: controller.signal,
+        });
+        if (!response.ok) {
+          if (!controller.signal.aborted) setIdentity({ status: "unavailable" });
+          return;
+        }
+        const summary: { handle?: unknown } = await response.json();
+        if (!controller.signal.aborted) {
+          setIdentity(typeof summary.handle === "string"
+            ? { status: "ready", handle: summary.handle }
+            : { status: "unavailable" });
+        }
+      } catch {
+        if (!controller.signal.aborted) setIdentity({ status: "unavailable" });
+      }
+    }
+
+    void loadIdentity();
+    return () => controller.abort();
+  }, [open]);
+
+  function openMenu() {
+    setIdentity({ status: "loading" });
+    setCopyStatus("idle");
+    setOpen(true);
+  }
+
+  function closeMenu() {
+    setOpen(false);
+  }
+
+  async function copyHandle(value: string) {
+    try {
+      await navigator.clipboard.writeText(value);
+      setCopyStatus("copied");
+    } catch {
+      setCopyStatus("error");
+    }
+  }
+
+  async function leaveSession() {
+    setSignOutStatus("pending");
+    try {
+      await signOut({ redirectUrl: "/" });
+    } catch {
+      setSignOutStatus("error");
+    }
+  }
+
+  const displayName = name || t("TGPI member");
+  const initials = displayName.trim().split(/\s+/).slice(0, 2).map((word) => Array.from(word)[0]).join("");
+  const handle = identity.status === "ready" && identity.handle ? `@${identity.handle}` : "";
+  const avatarContent = imageUrl
+    ? <LocalizedElement as="img" src={imageUrl} alt="" referrerPolicy="no-referrer" className={styles.avatarImage} />
+    : initials;
+
   return (
-    <div className="relative" ref={root} onBlur={(event) => {
-      if (!event.currentTarget.contains(event.relatedTarget as Node | null)) setOpen(false);
-    }}>
-      <button ref={trigger} type="button" aria-label={t("Account settings for {name}", { name })} aria-expanded={open} aria-controls="tgpi-account-popover" onClick={() => { if (!open) { setIdentityLoading(true); setIdentityError(false); } setOpen(!open); }} className="grid h-10 w-10 place-items-center overflow-hidden rounded-full border-2 border-[var(--tgpi-gold-hover)]/50 bg-[var(--tgpi-navy-raised)] text-sm font-bold text-[var(--tgpi-gold-light)] shadow-md focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[var(--tgpi-gold-hover)]">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        {user.imageUrl ? <LocalizedElement as="img" src={user.imageUrl} alt="" className="h-full w-full object-cover" /> : name.slice(0, 1)}
+    <>
+      <button
+        ref={trigger}
+        type="button"
+        aria-label={t("Account settings for {name}", { name: displayName })}
+        aria-expanded={open}
+        aria-haspopup="dialog"
+        aria-controls={dialogId}
+        className={styles.trigger}
+        onClick={openMenu}
+      >
+        {avatarContent}
       </button>
-      {open && <section id="tgpi-account-popover" aria-label={t("Your TGPI account")} className="absolute right-0 top-14 z-50 max-h-[min(80dvh,680px)] w-[min(360px,calc(100vw-32px))] overflow-y-auto rounded-[24px] border border-[var(--tgpi-border)] bg-[#FFFDFA] p-3 text-[var(--tgpi-navy-raised)] shadow-[0_28px_80px_rgba(11,31,58,.24)]">
-        <div className="rounded-2xl bg-[linear-gradient(135deg,#0B1F3A,#183D61)] p-5 text-white">
-          <p className="text-[10px] font-bold uppercase tracking-[.22em] text-[var(--tgpi-gold-light)]">{t("TGPI · Your account")}</p>
-          <p className="mt-3 break-words text-lg font-bold">{name}</p>
-          <NavigationLink href="/profile/security#settings-identity" onClick={() => setOpen(false)} className="mt-1 block text-sm text-[var(--tgpi-gold-light)]">{handle}</NavigationLink>
-          {!user.firstName || (!identityLoading && !identityError && !memberIdentity?.handle) ? <p className="mt-3 text-xs leading-5 text-[#D6DFEA]">{t("Next step: add your name and claim your TGPI @ID.")}</p> : null}
-        </div>
-        <nav aria-label={t("Account shortcuts")} className="mt-2">
-          {destinations.map(([section, label, description]) => <NavigationLink key={section} href={`/profile/security#settings-${section}`} onClick={() => setOpen(false)} className="block rounded-xl px-4 py-3 transition hover:bg-[#F5F1E8] focus-visible:outline-[var(--tgpi-gold-hover)]"><span className="block text-sm font-bold">{t(label)}</span><span className="mt-1 block text-xs text-[var(--tgpi-muted)]">{t(description)}</span></NavigationLink>)}
-          <Link href="/members" onClick={() => setOpen(false)} className="block min-h-11 rounded-xl px-4 py-3 text-sm font-bold">{t("Find a TGPI member →")}</Link>
-          <div className="grid grid-cols-2 gap-2 border-t border-[var(--tgpi-border)] pt-3">
-            <NavigationLink href="/profile" onClick={() => setOpen(false)} className="rounded-xl bg-[#F5F1E8] p-3 text-center text-xs font-bold">{t("Workspace")}</NavigationLink>
-            <NavigationLink href="/profile/security#settings-billing" onClick={() => setOpen(false)} className="rounded-xl bg-[#F5F1E8] p-3 text-center text-xs font-bold">{t("Plan & billing")}</NavigationLink>
+
+      <dialog
+        ref={dialog}
+        id={dialogId}
+        aria-labelledby={`${dialogId}-title`}
+        className={styles.panel}
+        onKeyDown={containDialogFocus}
+        onCancel={(event) => {
+          event.preventDefault();
+          closeMenu();
+        }}
+        onClick={(event) => {
+          if (event.target !== event.currentTarget) return;
+          const bounds = event.currentTarget.getBoundingClientRect();
+          if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) {
+            closeMenu();
+          }
+        }}
+      >
+        {open && <>
+          <header className={styles.header}>
+            <h2 id={`${dialogId}-title`}>{t("Your TGPI account")}</h2>
+            <button ref={closeButton} type="button" className={styles.close} aria-label={t("Close")} onClick={closeMenu}>
+              <NavigationIcon name="close" width={19} height={19} />
+            </button>
+          </header>
+
+          <div className={styles.content}>
+            <div className={styles.identity}>
+              <div className={styles.identityRow}>
+                <span className={styles.identityAvatar} aria-hidden="true">{avatarContent}</span>
+                <div className={styles.identityText}>
+                  <p className={styles.name}>{displayName}</p>
+                  {handle ? <p className={styles.handle}>{handle}</p>
+                    : identity.status === "loading" ? <p className={styles.handle} role="status">{t("Loading member ID…")}</p>
+                      : <NavigationLink href={`${settingsUrl}identity`} className={styles.handleLink} onClick={closeMenu}>
+                        {identity.status === "unavailable" ? t("Manage your member ID") : t("Create your unique @ID")}
+                      </NavigationLink>}
+                </div>
+                {handle && <button
+                  type="button"
+                  className={styles.copy}
+                  aria-label={`${t("Copy")} ${handle}`}
+                  title={`${t("Copy")} ${handle}`}
+                  onClick={() => void copyHandle(handle)}
+                >
+                  <NavigationIcon name={copyStatus === "copied" ? "check" : "copy"} width={18} height={18} />
+                </button>}
+              </div>
+              <p className={styles.copyStatus} role="status" hidden={copyStatus === "idle"}>
+                {copyStatus === "copied" ? t("Copied to clipboard.") : copyStatus === "error" ? t("Copy is unavailable. Select the visible reference manually.") : ""}
+              </p>
+            </div>
+
+            <nav aria-label={t("Account shortcuts")} className={styles.shortcuts}>
+              <NavigationLink href={`${settingsUrl}global-key`} className={styles.shortcut} onClick={closeMenu}>
+                <NavigationIcon name="key" width={19} height={19} />
+                <span>{t("TGPI Global ID")}</span>
+                <NavigationIcon className={styles.shortcutArrow} name="chevron" width={14} height={14} />
+              </NavigationLink>
+              <NavigationLink href="/certificates" className={styles.shortcut} onClick={closeMenu}>
+                <NavigationIcon name="certificate" width={19} height={19} />
+                <span>{t("Certificates")}</span>
+                <NavigationIcon className={styles.shortcutArrow} name="chevron" width={14} height={14} />
+              </NavigationLink>
+            </nav>
+
+            <nav aria-labelledby={`${dialogId}-settings`} className={styles.settings}>
+              <h3 id={`${dialogId}-settings`}>{t("Settings")}</h3>
+              <ul className={styles.settingsList}>
+                {destinations.map(([section, label, icon]) => (
+                  <li key={section}>
+                    <NavigationLink href={`${settingsUrl}${section}`} className={styles.setting} onClick={closeMenu}>
+                      <span className={styles.settingIcon}><NavigationIcon name={icon} width={18} height={18} /></span>
+                      <span>{t(label)}</span>
+                    </NavigationLink>
+                  </li>
+                ))}
+              </ul>
+            </nav>
           </div>
-        </nav>
-        <button type="button" disabled={signingOut} onClick={async () => {
-          setSigningOut(true); setError("");
-          try { await signOut({ redirectUrl: "/" }); }
-          catch { setSigningOut(false); setError(t(t('Unable to sign out. Please try again.'))); }
-        }} className="mt-2 min-h-11 w-full rounded-xl px-4 text-left text-sm font-bold text-[#8C2929] hover:bg-[#F5F1E8] disabled:opacity-50">{signingOut ? t('Signing out…') : t('Sign out')}</button>
-        {error && <p role="alert" className="px-4 text-xs text-[#8C2929]"><LocalizedText text={error} /></p>}
-      </section>}
-    </div>
+
+          <footer className={styles.footer}>
+            <button type="button" className={styles.signOut} disabled={signOutStatus === "pending"} onClick={() => void leaveSession()}>
+              <NavigationIcon name="log-out" width={18} height={18} />
+              {signOutStatus === "pending" ? t("Signing out…") : t("Sign out")}
+            </button>
+            {signOutStatus === "error" && <p role="alert" className={styles.signOutError}>{t("Unable to sign out. Please try again.")}</p>}
+          </footer>
+        </>}
+      </dialog>
+    </>
   );
 }
