@@ -232,7 +232,8 @@ export default function AtlasStudio({ userId, onlineAvailable = false, embedded 
   function contextPrompt() {
     if (!context) return '';
     if (context.learningCourse) {
-      return t('Coach me through one practice exercise for {course}. Ask one question at a time and give hints before showing an example.', { course: t(context.learningCourse.title) });
+      const prompt = t('Coach me through one practice exercise for {course}. Ask one question at a time and give hints before showing an example.', { course: t(context.learningCourse.title) });
+      return context.learningCourse.projectBrief ? `${prompt}\n\n${t(context.learningCourse.projectBrief)}` : prompt;
     }
     return guideText(guideTopics[context.topic].prompt, locale);
   }
