@@ -399,7 +399,7 @@ export default function TgpiAccountCenter({
     global: profile.profession || (profile.languages.length ? t("Languages: {count}", { count: profile.languages.length }) : t("Add your global context")),
     identity: profile.currentCity || (currentCountryName ? t(currentCountryName) : t("Add personal information")),
     progress: rank ? t("{rank} · {points} points", { rank: t(rank.name), points: rank.points.toLocaleString(locale) }) : t("Unavailable"),
-    notifications: t(notifications.preferences.pushEnabled ? "Notifications enabled" : "Notifications paused"),
+    notifications: t(notifications.loading ? "Loading notifications" : notifications.error ? "Unavailable" : notifications.preferences.pushEnabled ? "Notifications enabled" : "Notifications paused"),
     accessibility: t("Reading, motion and keyboard navigation"),
     data: t("Export your saved profile and personal plan"),
     diagnostics: t(online ? "Online" : "Offline"),

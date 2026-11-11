@@ -1,6 +1,7 @@
 import type { Locale } from "./config";
 
 export const messages = {
+  "Complete real name": {"en":"Full legal name","pt-BR":"Nome completo","es":"Nombre completo","fr":"Nom complet","de":"Vollständiger Name","it":"Nome completo"},
   // Account center: navigation, privacy, device presentation and connection checks.
   "A clear view of your account, with the right controls within reach.": {"en": "A clear view of your account, with the right controls within reach.", "pt-BR": "Uma visão clara da sua conta, com os controles certos ao seu alcance.", "es": "Una vista clara de tu cuenta, con los controles a tu alcance.", "fr": "Une vue claire de votre compte, avec les bons réglages à portée de main.", "de": "Dein Konto im Überblick, mit allen wichtigen Einstellungen in Reichweite.", "it": "Una visione chiara del tuo account, con i controlli a portata di mano."},
   "A newer profile version is available. Review it before saving.": {"en": "A newer profile version is available. Review it before saving.", "pt-BR": "Há uma versão mais recente do perfil. Revise antes de salvar.", "es": "Hay una versión más reciente del perfil. Revísala antes de guardar.", "fr": "Une version plus récente du profil est disponible. Vérifiez-la avant d’enregistrer.", "de": "Eine neuere Profilversion ist verfügbar. Prüfe sie vor dem Speichern.", "it": "È disponibile una versione più recente del profilo. Controllala prima di salvare."},
