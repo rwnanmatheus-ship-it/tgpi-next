@@ -8,9 +8,9 @@ import { academyLocalizationFixture, academyDisplayCopy } from './helpers/academ
 
 const h = academyLocalizationFixture();
 const normalized = text => text.replace(/\s+/g, ' ').trim().toLowerCase();
-const supplemental = JSON.parse(fs.readFileSync('public/locales/en.json', 'utf8'));
+const supplemental = { ...JSON.parse(fs.readFileSync('public/locales/en.json', 'utf8')), ...JSON.parse(fs.readFileSync('public/locales/academy/en.json', 'utf8')) };
 const publicKeys = new Set([...Object.keys(h.messages.messages), ...Object.keys(supplemental)].map(normalized));
-const protectedCopy = JSON.parse(fs.readFileSync('src/lib/localization/assessment-messages.json', 'utf8'));
+const protectedCopy = { ...JSON.parse(fs.readFileSync('src/lib/localization/assessment-messages.json', 'utf8')), ...JSON.parse(fs.readFileSync('src/lib/localization/academy-project-assessment.json', 'utf8')) };
 const protectedKeys = new Set(Object.keys(protectedCopy).map(normalized));
 const { localizeAcademyCourse } = h.load(resolve('src/lib/localization/academy-content.ts'));
 const { withAcademyTranslations, academyCaseTranslations } = h.load(resolve('src/lib/localization/academy-assessment.server.ts'));

@@ -229,6 +229,14 @@ export default function AtlasStudio({ userId, onlineAvailable = false, embedded 
     }
   }
 
+  function contextPrompt() {
+    if (!context) return '';
+    if (context.learningCourse) {
+      return t('Coach me through one practice exercise for {course}. Ask one question at a time and give hints before showing an example.', { course: t(context.learningCourse.title) });
+    }
+    return guideText(guideTopics[context.topic].prompt, locale);
+  }
+
   async function send(text = draft, topic?: GuideTopic, retryId?: string) {
     const questionText = text.trim();
     if (!questionText || questionText.length > 4000 || controller.current || !canSend) return;
@@ -488,8 +496,8 @@ export default function AtlasStudio({ userId, onlineAvailable = false, embedded 
             <div className={styles.owl}><AtlasMascot pose={busy ? 'Focus' : 'Invite'} animated={motion} /></div>
           </div>
           {mode === 'guide' && <>
-            {context && <button type="button" className={styles.contextCard} onClick={() => void send(guideText(guideTopics[context.topic].prompt, locale), context.topic)}>
-              <small>{label('inContext')}</small><strong>{t(guideResource(context.topic).label)}</strong><span aria-hidden="true">↗︎</span>
+            {context && <button type="button" className={styles.contextCard} onClick={() => void send(contextPrompt(), context.topic)}>
+              <small>{label('inContext')}</small><strong>{context.learningCourse ? t(context.learningCourse.title) : t(guideResource(context.topic).label)}</strong><span aria-hidden="true">↗︎</span>
             </button>}
             <div className={styles.tools} aria-label={label('tools')}>
               {tasks.map(task => <button type="button" key={task.topic} onClick={() => void send(guideText(guideTopics[task.topic].prompt, locale), task.topic)}>
@@ -547,7 +555,7 @@ export default function AtlasStudio({ userId, onlineAvailable = false, embedded 
           <div className={styles.quickTools}>
             {!calculator && <button type="button" className={styles.calculatorToggle} onClick={() => setCalculator(true)}>{label('calculator')}</button>}
             {context && messages.length > 0 && <button type="button" className={styles.calculatorToggle} disabled={busy}
-              onClick={() => void send(guideText(guideTopics[context.topic].prompt, locale), context.topic)}>{label('inContext')} · {t(guideResource(context.topic).label)}</button>}
+              onClick={() => void send(contextPrompt(), context.topic)}>{label('inContext')} · {t(guideResource(context.topic).label)}</button>}
           </div>
           {calculator && <Budget />}
         </>}

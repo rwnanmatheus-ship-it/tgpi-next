@@ -77,13 +77,13 @@ async function completeLessons(h,course,user=identity) {
 test('all 27 courses have real expanded lessons, inspectable workload, assessments and preserved foundation IDs',()=>{
  const h=harness(), {academyCourses,academyQuestions}=h.catalog;
  assert.equal(academyCourses.length,27);assert.equal(new Set(academyCourses.map(c=>c.id)).size,27);
- assert.equal(academyCourses.reduce((n,c)=>n+c.lessons.length,0),227);
+ assert.equal(academyCourses.reduce((n,c)=>n+c.lessons.length,0),335);
  const manifest=h.load(resolve('src/data/courses/academy/manifest.ts')).academyManifest;
  const old=h.load(resolve('src/data/courses.ts')).courses, pro=h.load(resolve('src/data/courses/professional/index.ts')).professionalCourseDrafts;
  for(const course of academyCourses){
   assert.equal(course.minutes,course.lessons.reduce((n,l)=>n+l.minutes,0)+course.portfolioMinutes+course.assessmentMinutes);
   assert.deepEqual(manifest[course.id],{minutes:course.minutes,lessons:course.lessons.length});
-  assert.ok(course.lessons.length>=6);assert.ok(course.minutes>=375);
+  assert.equal(course.lessons.filter(lesson => lesson.project).length,4);assert.ok(course.minutes>=900 && course.minutes<=2400);
   const bank=academyQuestions(course.id);assert.ok(bank.length>=course.lessons.length);
   for(const lesson of course.lessons){assert.ok(bank.some(q=>q.lessonId===lesson.id));assert.ok(lesson.sections.every(s=>s.body.trim()));assert.ok(lesson.practice.length>=2);}
   const previous=[...old,...pro].find(c=>c.id===course.id);
@@ -199,7 +199,7 @@ test('academy completes work with an outdated name but signs the full name only 
 
 test('route boundary uses server identity, strict origin, streamed size limit and private cache; old submissions cannot enter a human queue',()=>{
  const route=readFileSync('src/app/api/learning/academy/[courseId]/route.ts','utf8');
- assert.match(route,/requireApiUser/);assert.match(route,/new URL\(origin\)\.origin !== new URL\(request.url\)\.origin/);assert.match(route,/size > 24000/);assert.match(route,/reader.cancel/);assert.match(route,/private, no-store/);
+ assert.match(route,/requireApiUser/);assert.match(route,/new URL\(origin\)\.origin !== new URL\(request.url\)\.origin/);assert.match(route,/size > 76000/);assert.match(route,/reader.cancel/);assert.match(route,/private, no-store/);
  const old=readFileSync('src/app/api/learning/professional/[courseId]/route.ts','utf8');assert.match(old,/\["issue", "sharing"\]/);assert.match(old,/409/);
 });
 
@@ -211,10 +211,36 @@ test('real route handlers reject unsigned, cross-origin, oversized, wrong-type a
  const request=(value=JSON.stringify(body),origin='https://example.test',type='application/json')=>new Request(url,{method:'POST',headers:{origin,'content-type':type},body:value});
  assert.equal((await route.POST(request(JSON.stringify(body),'https://evil.test'),context)).status,403);
  assert.equal((await route.POST(request(JSON.stringify(body),'https://example.test','text/plain'),context)).status,415);
- assert.equal((await route.POST(request('x'.repeat(24001)),context)).status,413);
+ assert.equal((await route.POST(request(JSON.stringify(body),'https://example.test','application/jsonx'),context)).status,415);
+ assert.equal((await route.POST(request('x'.repeat(76001)),context)).status,413);
  assert.equal((await route.POST(request('{invalid'),context)).status,400);
  assert.equal(h.documents.size,0);
  const created=await route.POST(request(),context);assert.equal(created.status,200);assert.match(created.headers.get('cache-control'),/private, no-store/);
+ const fullPortfolio='🌎'.repeat(6000);
+ const saved=await route.POST(request(JSON.stringify({action:'portfolio',version:course.version,revision:1,text:fullPortfolio})),context);
+ assert.equal(saved.status,200);assert.equal((await saved.json()).record.portfolio,fullPortfolio);
  const fetched=await route.GET(new Request(url+'?uid=outsider'),context);assert.equal((await fetched.json()).record.uid,identity.uid);
  h.signOut();assert.equal((await route.GET(new Request(url),context)).status,401);assert.equal((await route.POST(request(),context)).status,401);
+});
+
+test('previous editions remain resumable, retain their signed workload and cannot receive new enrolments', async () => {
+ const h=harness(), course=h.catalog.academyCourses[0], previous=h.catalog.getAcademyCourse(course.id,h.catalog.PREVIOUS_ACADEMY_VERSION);
+ const historical={ uid:identity.uid, courseId:course.id, version:previous.version, revision:1, enrolledAt:new Date().toISOString(),
+  updatedAt:new Date().toISOString(), diagnostic:note, notes:{[previous.lessons[0].id]:note}, completed:{}, portfolio:'',
+  consent:{publicName:identity.publicName,acceptedAt:new Date().toISOString()}, sharing:false, attemptLimits:{} };
+ await assert.rejects(()=>enrol(h,previous), /course edition changed/i);
+ h.seed(path(previous),historical);
+ assert.equal((await h.service.academyStudyCourse(identity.uid,course)).version,previous.version);
+ assert.equal((await h.service.academyStatus(identity,course.id)).record.version,previous.version);
+ const mutate=mutation(h,previous);
+ const opened=await mutate({action:'begin',revision:1,target:previous.lessons[0].id});
+ assert.equal(opened.challenge.target,previous.lessons[0].id);
+ const updated=await mutate(submittedAnswers(h,previous,opened));
+ assert.equal(updated.record.completed[previous.lessons[0].id].score,100);
+ const current=await mutation(h,course)({action:'enrol',diagnostic:note,nameConsent:true,plan:{goal:'portfolio',weeklyHours:5}});
+ assert.deepEqual(current.record.plan,{goal:'portfolio',weeklyHours:5});
+ assert.deepEqual(current.record.notes,historical.notes);
+ assert.deepEqual(current.record.completed,{});
+ assert.equal((await h.service.academyStudyCourse(identity.uid,course)).version,course.version);
+ assert.equal((await h.service.academyStatus(identity,course.id,previous.version)).record.completed[previous.lessons[0].id].score,100);
 });

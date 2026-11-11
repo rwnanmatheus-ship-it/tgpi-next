@@ -10,12 +10,12 @@ export type AcademySection = {
 /** The public DTO deliberately contains no scoring keys. */
 export type AcademyLesson = {
   id: string; title: string; objective: string; sections: AcademySection[];
-  practice: string[]; deliverable: string; minutes: number; references: string[]; foundation: boolean;
+  practice: string[]; deliverable: string; minutes: number; references: string[]; foundation: boolean; project?: boolean;
 };
 export type AcademyCourse = {
   id: string; version: string; title: string; description: string; descriptionParts?: string[]; outcomes: string[];
   lessons: AcademyLesson[]; minutes: number; portfolioMinutes: number; assessmentMinutes: number;
-  language: string; image: string; legacyHref?: string;
+  language: string; image: string; legacyHref?: string; projectBrief?: string;
 };
 export type AcademyQuestion = { id: string; lessonId: string; prompt: string; translations?: AcademyTranslations; options: Array<{ id: string; label: string; translations?: AcademyTranslations }>; essential: boolean };
 export type AcademyPrivateQuestion = AcademyQuestion & { correctOptionId: string; explanation: string };
@@ -26,11 +26,12 @@ export type AcademyChallenge = {
 };
 export type AcademyFeedback = { questionId: string; lessonId: string; correct: boolean; explanation: string; translations?: AcademyTranslations };
 export type AcademyResult = { challengeId: string; target: string; score: number; passed: boolean; feedback: AcademyFeedback[]; submittedAt: string };
+export type AcademyStudyPlan = { goal: 'foundation' | 'application' | 'portfolio'; weeklyHours: number };
 export type AcademyRecord = {
   uid: string; courseId: string; version: string; revision: number; enrolledAt: string; updatedAt: string;
   consent: { publicName: string; acceptedAt: string }; diagnostic: string;
   notes: Record<string, string>; completed: Record<string, { score: number; at: string; challengeId: string }>;
-  portfolio: string; final?: { score: number; at: string }; retention?: { score: number; at: string };
+  plan?: AcademyStudyPlan; portfolio: string; final?: { score: number; at: string }; retention?: { score: number; at: string };
   reviewAvailableAt?: string; completedAt?: string; credentialId?: string; sharing: boolean;
   legacy?: { version: string; completed: number; credentialId?: string; state?: string };
   attemptLimits: Record<string, { day: string; count: number; lastAt: string }>;

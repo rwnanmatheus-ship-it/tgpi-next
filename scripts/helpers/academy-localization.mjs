@@ -23,7 +23,7 @@ export function academyLocalizationFixture(overrides = {}) {
   }
   const messages = load(resolve('src/lib/localization/messages.ts'));
   const { locales } = load(resolve('src/lib/localization/config.ts'));
-  for (const locale of locales) messages.registerSupplementalMessages(locale, JSON.parse(readFileSync(`public/locales/${locale}.json`, 'utf8')));
+  for (const locale of locales) messages.registerSupplementalMessages(locale, { ...JSON.parse(readFileSync(`public/locales/${locale}.json`, 'utf8')), ...JSON.parse(readFileSync(`public/locales/academy/${locale}.json`, 'utf8')) });
   const catalog = load(resolve('src/data/courses/academy/catalog.server.ts'));
   return { load, messages, locales, ...catalog };
 }
