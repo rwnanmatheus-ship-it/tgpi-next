@@ -12,6 +12,7 @@ export type ResearchSource = {
   kind: string; topics: ResearchTopic[]; scope: string; reviewedAt: string | null;
   reviewScope: "publisher-and-portal" | "selected-guidance" | "legacy-summary";
   authorityUrl: string;
+  diagnosticNote?: string;
   supportingReference?: { url: string; reviewedAt: string; scope: string };
   access: { status: "retrieved" | "restricted" | "manual"; checkedAt: string | null; httpStatus: number | null; pageTitle: string; responseSha256: string | null };
 };
@@ -25,7 +26,7 @@ const international = (sourceData as ResearchSource[]).map(source => ({ ...sourc
 const legacy: ResearchSource[] = DOSSIER_SOURCES.map(s => ({
   id: s.id, country: s.country, title: s.title, publisher: s.publisher, url: s.url, kind: s.kind,
   topics: [...new Set(dossierFor(s.country).claims.filter(c => c.sourceId === s.id).map(c => c.layer))],
-  scope: s.note, reviewedAt: s.reviewedAt, reviewScope: "legacy-summary", authorityUrl: s.url,
+  scope: s.note, diagnosticNote: s.diagnosticNote, reviewedAt: s.reviewedAt, reviewScope: "legacy-summary", authorityUrl: s.url,
   access: { status: "manual", checkedAt: null, httpStatus: null, pageTitle: "", responseSha256: null },
 }));
 // Count a shared resource once, even when it is useful in all 195 dossiers.

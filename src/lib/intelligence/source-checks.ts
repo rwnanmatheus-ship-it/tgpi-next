@@ -66,6 +66,7 @@ export function sourceCheckIsStale(check: SourceCheck, now = Date.now()) {
 }
 export function inspectSourceText(source: RegisteredSource, html: string): Pick<SourceCheck, "status" | "matchedMarkers" | "message"> {
   const text = normalizeSourceText(html);
+  if (/^radware page verifying your browser before proceeding/.test(text)) return { status: "restricted", matchedMarkers: 0, message: "The checker received a browser-verification challenge, not the official article. No challenge was bypassed; manual review is required." };
   if (text.length < 100 || /^(?:.{0,100})(?:just a moment|access denied|verify you are human|robot check)/i.test(text)) return { status: "review-needed", matchedMarkers: 0, message: "The response may be empty or an access-challenge page. It was not accepted as evidence." };
   const matchedMarkers = source.markers.filter(marker => text.includes(normalizeSourceText(marker))).length;
   const missing = source.markers.filter(marker => !text.includes(normalizeSourceText(marker)));

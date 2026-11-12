@@ -63,3 +63,15 @@ test('supporting official descriptions do not relabel restricted database access
     assert.notEqual(source.supportingReference.url, source.url);
   }
 });
+
+test('browser challenges never become article evidence; partial pages declare their scope', async () => {
+  const { inspectSourceText } = await import('../src/lib/intelligence/source-checks.ts');
+  const source = DOSSIER_SOURCES.find(s => s.id === 'de-visa');
+  assert.equal(source.automaticCheck, false);
+  assert.match(source.diagnosticNote, /browser-verification/);
+  const result = inspectSourceText(source, '<title>Radware Page</title><p>Verifying your browser before proceeding...</p><div>Incident ID: test</div>');
+  assert.equal(result.status, 'restricted');
+  assert.equal(result.matchedMarkers, 0);
+  assert.match(DOSSIER_SOURCES.find(s => s.id === 'nl-study').diagnosticNote, /landing page only/);
+  assert.match(DOSSIER_SOURCES.find(s => s.id === 'au-cricos').diagnosticNote, /does not establish a public outage/);
+});

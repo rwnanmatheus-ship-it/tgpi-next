@@ -67,9 +67,9 @@ test("invalid, old and future timestamps are not treated as fresh evidence", () 
   assert.equal(sourceCheckIsStale({ status: "not-checked", checkedAt: null }, NOW.getTime()), false);
 });
 test("all open gaps retain explicit observation, action and deadline", () => {
-  const issues = DOSSIER_SOURCES.filter(s => s.reviewIssue); assert.equal(issues.length, 0); assert.equal(DOSSIER_SOURCES.filter(s => !s.automaticCheck).length, 7);
+  const issues = DOSSIER_SOURCES.filter(s => s.reviewIssue); assert.equal(issues.length, 0); assert.equal(DOSSIER_SOURCES.filter(s => !s.automaticCheck).length, 8);
   for (const source of issues) { const issue = source.reviewIssue; assert.ok(issue.action); assert.ok(issue.observation); assert.ok(issue.reviewBy > issue.observedAt); if (issue.reason === "access-restricted") { assert.equal(source.automaticCheck, false); assert.ok(source.reviewedAt); } }
-  assert.equal(DOSSIER_SOURCES.find(s => s.id === "de-visa").automaticCheck, true);
+  assert.equal(DOSSIER_SOURCES.find(s => s.id === "de-visa").automaticCheck, false);
 });
 test("expanded coverage uses real layer-specific guidance without inventing local cost estimates", () => {
   assert.equal(DOSSIER_CLAIMS.length, 31); assert.equal(DOSSIER_SOURCES.length, 29);
