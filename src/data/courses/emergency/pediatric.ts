@@ -1,7 +1,7 @@
 import { firstAid, lesson, skillsSessions, type EmergencyCurriculum } from './lesson-types';
 
 export const pediatric: EmergencyCurriculum = {
-  references: [firstAid, skillsSessions, 'https://cpr.heart.org/en/cpr-courses-and-kits/heartsaver/heartsaver-pediatric-first-aid-cpr-aed', 'https://www.childcare.gov/consumer-education/health-and-safety-training'],
+  references: [firstAid, skillsSessions, 'https://cpr.heart.org/en/cpr-courses-and-kits/heartsaver/heartsaver-pediatric-training', 'https://childcare.gov/consumer-education/health-and-safety-training'],
   portfolio: 'Projete um plano de emergência para uma família ou escola fictícia. Inclua prevenção por idade, papéis, localização dos recursos, autorização e comunicação com responsáveis. Resolva três casos em papel e registre os critérios que um instrutor deverá verificar em manequins de lactente e criança.',
   assessment: ['Uma escola revisou {a} fichas fictícias. {b} estavam sem contato principal e outras {c}, sem contato alternativo. Quantas fichas estavam completas?', 'fichas', 'Subtraia do total os dois grupos sem sobreposição.'],
   lessons: [

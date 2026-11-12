@@ -1,7 +1,7 @@
 import { call911, lesson, type EmergencyCurriculum } from './lesson-types';
 
 export const english: EmergencyCurriculum = {
-  references: [call911, 'https://digital-strategy.ec.europa.eu/en/policies/112', 'https://www.weather.gov/safety'],
+  references: [call911, 'https://digital-strategy.ec.europa.eu/en/policies/112', 'https://www.gov.br/mcom/pt-br/noticias/2026/setembro/emergencia-voce-sabe-para-quem-ligar-quando-precisa-de-ajuda/', 'https://www.weather.gov/safety'],
   portfolio: 'Prepare um cartão bilíngue para um destino, com número oficial, endereço fictício, instruções de acesso e duas frases para pedir esclarecimento. Ensaie três chamadas com parceiro ou grave em áudio local. Entregue os roteiros revisados, uma correção por cenário e uma passagem de informações de até um minuto. Use nomes e dados fictícios.',
   assessment: ['The exercise includes {a} addresses. {b} have no building number and another {c} have no city. How many addresses are complete? The groups do not overlap.', 'addresses', 'Subtract both groups of incomplete addresses from the total.'],
   lessons: [

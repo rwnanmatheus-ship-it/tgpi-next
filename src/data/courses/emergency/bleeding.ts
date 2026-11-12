@@ -1,7 +1,7 @@
 import { bleeding as fast, firstAid, lesson, skillsSessions, type EmergencyCurriculum } from './lesson-types';
 
 export const bleeding: EmergencyCurriculum = {
-  references: [firstAid, skillsSessions, fast, 'https://www.stopthebleed.org/training/'],
+  references: [firstAid, skillsSessions, fast, 'https://publish.stopthebleed.org/get-trained/'],
   portfolio: 'Projete um plano de resposta a sangramento grave para um ambiente fictício. Desenhe acessos, inventarie o kit, distribua papéis e realize dois exercícios de mesa. Entregue a passagem para o serviço, um plano de reposição de materiais e os critérios que serão avaliados presencialmente.',
   assessment: ['Foram revisados {a} kits. {b} estavam incompletos e outros {c} estavam inacessíveis. Quantos estavam completos e acessíveis?', 'kits', 'Subtraia os dois grupos distintos do total.'],
   lessons: [

@@ -1,7 +1,7 @@
 import { defenseAlerts, lesson, type EmergencyCurriculum } from './lesson-types';
 
 export const disasters: EmergencyCurriculum = {
-  references: [defenseAlerts, 'https://www.weather.gov/safety', 'https://www.redcross.org/get-help/how-to-prepare-for-emergencies/make-a-plan.html', 'https://www.cdc.gov/natural-disasters/response/what-to-do-protect-yourself-during-a-power-outage.html'],
+  references: [defenseAlerts, 'https://www.weather.gov/safety', 'https://www.usgs.gov/faqs/what-can-i-do-be-prepared-earthquake', 'https://www.weather.gov/safety/tsunami-during', 'https://www.redcross.org/get-help/how-to-prepare-for-emergencies/make-a-plan.html', 'https://www.cdc.gov/natural-disasters/response/what-to-do-protect-yourself-during-a-power-outage.html'],
   portfolio: 'Monte um plano para dois destinos. Use uma fonte oficial por ameaça, dois caminhos ou um ponto de abrigo por cenário, um cartão offline, um plano para necessidades específicas e uma matriz de continuidade. Teste o plano duas vezes com condições diferentes. Entregue a versão revisada, a data da consulta às fontes e o registro das falhas corrigidas.',
   assessment: ['O exercício avaliou {a} tarefas. {b} falharam na primeira tentativa. Qual a porcentagem de falhas? Arredonde para duas casas decimais.', '%', 'Divida as tarefas que falharam pelo total e multiplique por 100.'],
   lessons: [
