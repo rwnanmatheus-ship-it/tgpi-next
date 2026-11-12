@@ -1,4 +1,10 @@
-import type { GlobalWorkspaceModel, WorkspaceAction } from './global-workspace.ts';
+import { buildGlobalWorkspaceModel, type GlobalWorkspaceModel, type WorkspaceAction, type WorkspaceJourneyStageId } from './global-workspace.ts';
+import { summarizeDocumentReview } from './document-review.ts';
+import type { TgpiActivationProgress } from './activation-progress.ts';
+import type { Country } from './countries.ts';
+import type { LearningProgressItem, LearningSummary } from './learning/unified-progress.ts';
+import type { TgpiOnboardingData } from '../types/onboarding.ts';
+import type { Course } from '../types/course.ts';
 import type { ResearchContext } from './intelligence/core.ts';
 
 export const fitGoalLabels: Record<string, string> = { study: 'Study abroad', work: 'Work globally', live: 'Live in another country', travel: 'Travel smarter', learn: 'Expand global knowledge' };
@@ -40,19 +46,175 @@ export function fitRoadmap(context: ResearchContext) {
   ];
 }
 
-/** Academy, professional and legacy editions share the account's canonical learning projection. */
-export function connectPlanLearning(model: GlobalWorkspaceModel, summary: import('./learning/unified-progress.ts').LearningSummary): GlobalWorkspaceModel {
-  const next = summary.items.find(item => item.status !== 'completed') ?? summary.items[0];
-  const complete = summary.items.length > 0 && summary.items.every(item => item.status === 'completed') && summary.unavailable.length === 0;
-  const status = complete ? 'completed' : next ? 'in_progress' : summary.unavailable.length ? 'needs_attention' : 'not_started';
-  const actions = model.actions.map(action => action.id !== 'learning' ? action : { ...action, status, href: next?.href ?? '/courses', action: next ? complete ? 'Review completed path' : 'Continue learning' : 'Explore learning paths' } as WorkspaceAction);
-  const currentItems = summary.items.filter(item => item.status !== 'edition_changed');
-  const total = currentItems.reduce((sum, item) => sum + item.total, 0);
-  const done = currentItems.reduce((sum, item) => sum + Math.min(item.completed, item.total), 0);
-  const journey = model.journey.map(stage => stage.id !== 'develop' ? stage : { ...stage, status, href: next?.href ?? '/courses', progress: total ? Math.min(100, Math.round(done / total * 100)) : 0 } as typeof stage);
-  const completed = actions.filter(action => action.status === 'completed').length;
-  return { ...model, actions, journey, currentStageId: (journey.find(stage => stage.status !== 'completed') ?? journey[journey.length - 1]).id,
-    activationCompletion: completed * 20,
-    actionSummary: { completed, inProgress: actions.filter(a => a.status === 'in_progress').length, needsContext: actions.filter(a => a.status === 'needs_attention').length, ready: actions.filter(a => a.status === 'not_started').length },
+export type PlanScenarioSlot = '1' | '2' | '3';
+export type PlanBudgetEvidence = { status: 'complete' | 'partial'; slot: PlanScenarioSlot };
+export type PlanPreparation = {
+  slug: string;
+  name: string;
+  documents: ReturnType<typeof summarizeDocumentReview>;
+  budget: 'ready' | 'partial' | 'estimate' | 'missing' | 'unavailable';
+  budgetHref: string;
+};
+
+const coursesByGoal = {
+  study: ['study-abroad-planning', 'global-english-2026'],
+  work: ['international-career', 'global-english-2026'],
+  live: ['arrival-playbook', 'relocation-budget'],
+  travel: ['digital-safety-abroad', 'cross-cultural-confidence'],
+  learn: ['evidence-literacy', 'country-fit'],
+} satisfies Record<Exclude<TgpiOnboardingData['primaryGoal'], ''>, string[]>;
+
+export function planCourseRecommendations(goal: TgpiOnboardingData['primaryGoal'], catalogue: readonly Pick<Course, 'id' | 'title'>[]) {
+  if (!goal) return [];
+  return coursesByGoal[goal].flatMap(id => {
+    const course = catalogue.find(item => item.id === id);
+    return course ? [{ id: course.id, title: course.title, href: `/courses/${course.id}` }] : [];
+  });
+}
+
+type PlanCourse = ReturnType<typeof planCourseRecommendations>[number];
+export type PlanLearningPath = { course: PlanCourse; progress?: LearningProgressItem };
+
+export function connectPlanLearning(model: GlobalWorkspaceModel, summary: LearningSummary, path: PlanLearningPath[] = []): GlobalWorkspaceModel {
+  const relevant = path.length
+    ? path.flatMap(entry => entry.progress ? [entry.progress] : [])
+    : summary.items;
+  const open = path.find(entry => entry.progress?.status === 'review_due')
+    ?? path.find(entry => entry.progress?.status === 'revision_requested')
+    ?? path.find(entry => entry.progress?.status === 'in_progress')
+    ?? path.find(entry => entry.progress?.status !== 'completed');
+  const next = path.length ? (open ? open.progress : relevant[0])
+    : relevant.find(item => item.status === 'review_due' || item.status === 'revision_requested')
+      ?? relevant.find(item => item.status !== 'completed')
+      ?? relevant[0];
+  const href = next?.href ?? open?.course.href ?? '/courses';
+  const complete = relevant.length > 0 && (!path.length || path.length === relevant.length)
+    && relevant.every(item => item.status === 'completed') && summary.unavailable.length === 0;
+  const status = complete ? 'completed' : summary.unavailable.length ? 'needs_attention'
+    : relevant.some(item => item.status !== 'edition_changed') ? 'in_progress' : 'not_started';
+  const action = complete ? 'Review completed path' : next?.status === 'review_due' ? 'Open course review'
+    : next && next.status !== 'completed' && next.status !== 'edition_changed' ? 'Continue learning'
+    : open || next ? 'Open course' : 'Explore learning paths';
+  const currentItems = relevant.filter(item => item.status !== 'edition_changed');
+  const progress = path.length
+    ? Math.floor(path.reduce((sum, entry) => sum + (entry.progress?.status === 'completed' ? 100 : entry.progress?.status === 'edition_changed' || !entry.progress?.total ? 0 : Math.min(100, entry.progress.completed / entry.progress.total * 100)), 0) / path.length)
+    : Math.floor(currentItems.reduce((sum, item) => sum + Math.min(item.completed, item.total), 0) / (currentItems.reduce((sum, item) => sum + item.total, 0) || 1) * 100);
+
+  return {
+    ...model,
+    actions: model.actions.map(item => item.id === 'learning' ? { ...item, status, href, action } : item),
+    journey: model.journey.map(stage => stage.id === 'develop'
+      ? { ...stage, status, href, progress: complete ? 100 : Math.min(99, progress) }
+      : stage),
   };
+}
+
+const actionStages: Record<WorkspaceAction['id'], WorkspaceJourneyStageId> = {
+  profile: 'discover', compare: 'decide', cost: 'decide', documents: 'prepare', learning: 'develop',
+};
+
+export function buildPersonalPlan(
+  onboarding: TgpiOnboardingData,
+  countries: Country[],
+  activation: TgpiActivationProgress,
+  learning: LearningSummary,
+  catalogue: readonly Course[],
+  budgetEvidence: Record<string, PlanBudgetEvidence> | null,
+  activationReadOnly: boolean,
+) {
+  const learningOnly = onboarding.primaryGoal === 'learn';
+  const destinations = onboarding.targetCountries.filter(slug => countries.some(country => country.slug === slug));
+  const comparisons = activation.comparisons.filter(comparison =>
+    comparison.goal === onboarding.primaryGoal
+    && comparison.countrySlugs.length === destinations.length
+    && new Set(comparison.countrySlugs).size === destinations.length
+    && destinations.every(slug => comparison.countrySlugs.includes(slug)));
+  const scoped = {
+    ...activation,
+    comparisons,
+    costEstimates: Object.fromEntries(destinations.flatMap(slug => activation.costEstimates[slug] ? [[slug, activation.costEstimates[slug]]] : [])),
+    documentReviews: Object.fromEntries(destinations.flatMap(slug => activation.documentReviews[slug] ? [[slug, activation.documentReviews[slug]]] : [])),
+  };
+  const path = planCourseRecommendations(onboarding.primaryGoal, catalogue).map(course => ({
+    course,
+    progress: learning.items.find(item => item.courseId === course.id),
+  }));
+  const model = connectPlanLearning(buildGlobalWorkspaceModel(onboarding, countries, scoped, catalogue), learning, path);
+  const preparation: PlanPreparation[] = model.countryFits.map(({ country }) => ({
+    slug: country.slug,
+    name: country.name,
+    documents: summarizeDocumentReview(scoped.documentReviews[country.slug]),
+    budget: budgetEvidence?.[country.slug]?.status === 'complete' ? 'ready'
+      : budgetEvidence?.[country.slug]?.status === 'partial' ? 'partial'
+      : scoped.costEstimates[country.slug] ? 'estimate'
+      : budgetEvidence === null ? 'unavailable' : 'missing',
+    budgetHref: `/plan?country=${country.slug}${budgetEvidence?.[country.slug] ? `&scenario=${budgetEvidence[country.slug].slot}` : ''}#budget`,
+  }));
+  const documentTarget = preparation.find(item => item.documents.status !== 'completed') ?? preparation[0];
+  const budgetTarget = preparation.find(item => item.budget !== 'ready') ?? preparation[0];
+  const docCount = preparation.reduce((sum, item) => sum + item.documents.completedItems, 0);
+  const docTotal = preparation.reduce((sum, item) => sum + item.documents.totalItems, 0);
+  const budgetCount = preparation.filter(item => item.budget === 'ready').length;
+  const documents = model.actions.find(item => item.id === 'documents')!;
+  const cost = model.actions.find(item => item.id === 'cost')!;
+  const profile = model.actions.find(item => item.id === 'profile')!;
+  if (documentTarget) {
+    documents.status = activationReadOnly ? 'needs_attention' : docCount === docTotal ? 'completed' : docCount ? 'in_progress' : 'not_started';
+    documents.description = 'Record the official source and the date you checked the requirements for your route.';
+    documents.href = `/countries/${documentTarget.slug}#documents-to-verify`;
+    documents.action = `Review ${documentTarget.name}`;
+  }
+  if (budgetTarget) {
+    cost.status = budgetEvidence === null ? 'needs_attention' : budgetCount === preparation.length ? 'completed'
+      : preparation.some(item => item.budget === 'partial' || item.budget === 'estimate' || item.budget === 'ready') ? 'in_progress' : 'not_started';
+    cost.title = 'Build a city-level budget';
+    cost.description = 'Save a city scenario with all cost fields, a quote date and a source note.';
+    cost.action = 'Open budget scenarios';
+    cost.href = budgetTarget.budgetHref;
+  }
+  if (activationReadOnly && destinations.length > 1) {
+    const compare = model.actions.find(item => item.id === 'compare');
+    if (compare) compare.status = 'needs_attention';
+  }
+  if (learningOnly) {
+    model.progress = model.progress.filter(item => !['Country shortlist', 'Timeline and budget'].includes(item.label));
+    model.completion = Math.round(model.progress.filter(item => item.complete).length / model.progress.length * 100);
+    profile.status = model.completion === 100 ? 'completed' : 'in_progress';
+    profile.description = 'Save your learning goal, priorities and personal context.';
+  }
+  model.actions = model.actions.filter(item => learningOnly
+    ? item.id === 'profile' || item.id === 'learning'
+    : item.id !== 'compare' || destinations.length > 1);
+  model.journey = model.journey
+    .filter(stage => !learningOnly || stage.id === 'discover' || stage.id === 'develop')
+    .map(stage => {
+      if (stage.id === 'discover' && learningOnly) return { ...stage, description: profile.description, progress: model.completion, status: profile.status };
+      if (stage.id === 'prepare') return { ...stage, href: documents.href, status: documents.status, progress: docTotal ? Math.floor(docCount / docTotal * 100) : 0 };
+      if (stage.id !== 'decide') return stage;
+      const signals = model.actions.filter(item => actionStages[item.id] === 'decide');
+      const units = signals.reduce((sum, item) => sum + (item.id === 'cost'
+        ? budgetCount / (preparation.length || 1)
+        : Number(item.status === 'completed')), 0);
+      return { ...stage, href: destinations.length > 1 && signals.some(item => item.id === 'compare' && item.status !== 'completed') ? model.compareHref : cost.href,
+        progress: Math.floor(units / signals.length * 100),
+        status: signals.every(item => item.status === 'completed') ? 'completed' as const
+          : signals.some(item => item.status === 'needs_attention') ? 'needs_attention' as const
+          : signals.some(item => item.status === 'in_progress' || item.status === 'completed') ? 'in_progress' as const : 'not_started' as const };
+    });
+
+  const actions = prioritizePlanActions(model, onboarding.timeHorizon);
+  // A known goal and destination are enough to act on a near-term checklist.
+  // Learning can also begin while a learner adds optional planning context.
+  const urgent = onboarding.timeHorizon === 'now' || onboarding.timeHorizon === '3-months';
+  const focus = learningOnly ? 'learning' : urgent && onboarding.primaryGoal && destinations.length ? 'documents' : null;
+  const focusIndex = actions.findIndex(item => item.id === focus && item.status !== 'completed' && item.status !== 'needs_attention');
+  if (focusIndex > 0) actions.unshift(...actions.splice(focusIndex, 1));
+  const next = actions.find(item => item.status !== 'completed');
+  const count = (status: WorkspaceAction['status']) => actions.filter(item => item.status === status).length;
+  const completed = count('completed');
+  model.actionSummary = { completed, inProgress: count('in_progress'), needsContext: count('needs_attention'), ready: count('not_started') };
+  model.activationCompletion = Math.round(completed / actions.length * 100);
+  model.currentStageId = next ? actionStages[next.id] : model.journey.at(-1)!.id;
+  model.actions = actions;
+  return { model, preparation, path };
 }

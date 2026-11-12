@@ -14,11 +14,11 @@ import { COST_CATEGORIES, PLAN_CURRENCIES, RESEARCH_TASKS, emptyWorksheet, valid
 import { LocalizedText } from "@/components/localization/LocaleProvider";
 
 
-export default function ResearchWorkbench({ country, countryName }: { country: string; countryName: string }) {
+export default function ResearchWorkbench({ country, countryName, initialSlot = "1" }: { country: string; countryName: string; initialSlot?: "1" | "2" | "3" }) {
   const { t: localizeLabel } = useInterfaceLocale();
 
   const { user, isLoaded } = useResearchProfile();
-  const [slot, setSlot] = useState("1");
+  const [slot, setSlot] = useState<string>(initialSlot);
   if (!isLoaded) return <section className="ig-panel" role="status"><LocalizedText text={"Loading your decision workspace…"} /></section>;
   return <div className="decision-lab"><div className="research-slot-bar"><span><LocalizedText text={"Decision Lab / Independent scenarios"} /></span><div role="group" aria-label={localizeLabel("Scenario slots")}>{["1", "2", "3"].map(id => <button type="button" aria-pressed={slot === id} key={id} onClick={() => setSlot(id)}><LocalizedText text="Scenario" />{" "}{id}</button>)}</div></div><Worksheet key={`${user?.id ?? "guest"}:${country}:${slot}`} owner={user?.id ?? "guest"} slot={slot} country={country} countryName={countryName} canSave={Boolean(user)} /></div>;
 }

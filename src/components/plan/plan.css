@@ -54,3 +54,35 @@
   .plan-hero-learning .plan-hero-art { order:0; min-height:180px; max-height:none; }
   .plan-hero-learning .plan-art-caption { bottom:18px; left:24px; right:24px; font-size:18px; }
 }
+
+.plan-focus {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+  gap: 24px;
+  margin-top: 20px;
+  background: #f5f8fe;
+  border-color: #d9e4f5;
+}
+.plan-focus h2 { margin-bottom: 8px; }
+.plan-focus p { color: #40566f; font-size: 13px; }
+.plan-focus .plan-footnote { margin-bottom: 0; }
+.plan-prep-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
+  gap: 16px;
+}
+.plan-prep-card h3 { margin: 12px 0; }
+.plan-prep-card dl > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #e6edf6;
+  font-size: 13px;
+}
+.plan-prep-card dt { color: #40566f; }
+.plan-prep-card dd { text-align: right; font-weight: 650; }
+.plan-learning-details { margin-top: 20px; }
+@media (max-width: 760px) {
+  .plan-focus { grid-template-columns: 1fr; gap: 12px; }
+}

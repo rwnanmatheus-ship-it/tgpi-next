@@ -71,3 +71,53 @@ test('dynamic plan text translates full budget sentences and historical course t
  assert.equal(planActivityCopy('Portugal vs Spain comparison completed',t,'pt-BR'),'Portugal e Espanha · Comparação concluída');
  assert.equal(planActivityCopy('5 countries compared',t,'pt-BR'),'5 países comparados');
 });
+
+test('old destinations and comparison goals cannot complete the current plan', async () => {
+  const { buildPersonalPlan } = await import('../src/lib/personal-plan.ts');
+  const { createEmptyActivationProgress } = await import('../src/lib/activation-progress.ts');
+  const { documentReviewItems } = await import('../src/lib/document-review.ts');
+  const updatedAt = '2026-11-10T00:00:00.000Z';
+  const review = { totalItems: documentReviewItems.length, completedItemIds: documentReviewItems.map(item => item.id), updatedAt };
+  const onboarding = { ...profile, targetCountries: ['portugal', 'spain'], timeHorizon: 'now' };
+  const activation = { ...createEmptyActivationProgress(),
+    comparisons: [
+      { id: 'wrong-goal', countrySlugs: ['spain', 'portugal'], goal: 'study', updatedAt },
+      { id: 'wrong-countries', countrySlugs: ['portugal', 'canada'], goal: 'work', updatedAt },
+    ],
+    documentReviews: { canada: review, portugal: review, spain: { ...review, completedItemIds: ['old-id'] } },
+    costEstimates: { canada: { amount: 1000, currency: 'CAD', updatedAt } },
+  };
+  const { model, preparation } = buildPersonalPlan(onboarding, countries, activation, { items: [], unavailable: [] }, [], { portugal: { status: 'complete', slot: '2' }, spain: { status: 'partial', slot: '3' } }, false);
+  assert.equal(model.actions[0].id, 'documents');
+  assert.equal(model.currentStageId, 'prepare');
+  assert.equal(model.actions[0].href, '/countries/spain#documents-to-verify');
+  assert.equal(model.actions[0].status, 'in_progress');
+  assert.equal(model.journey.find(stage => stage.id === 'prepare').progress, 50);
+  assert.equal(model.actions.find(action => action.id === 'compare').status, 'not_started');
+  assert.equal(model.actions.find(action => action.id === 'cost').href, '/plan?country=spain&scenario=3#budget');
+  assert.deepEqual(preparation.map(item => item.budget), ['ready', 'partial']);
+  activation.comparisons.push({ id: 'match', countrySlugs: ['spain', 'portugal'], goal: 'work', updatedAt });
+  const matched = buildPersonalPlan(onboarding, countries, activation, { items: [], unavailable: [] }, [], {}, false);
+  assert.equal(matched.model.actions.find(action => action.id === 'compare').status, 'completed');
+  const single = buildPersonalPlan({ ...onboarding, targetCountries: ['portugal'] }, countries, activation, { items: [], unavailable: [] }, [], { portugal: { status: 'complete', slot: '2' } }, false);
+  assert.equal(single.model.actions.some(action => action.id === 'compare'), false);
+  assert.equal(single.model.journey.find(stage => stage.id === 'decide').status, 'completed');
+});
+
+test('learning-only goals can start immediately and unrelated courses stay outside the goal milestone', async () => {
+  const { buildPersonalPlan } = await import('../src/lib/personal-plan.ts');
+  const { createEmptyActivationProgress } = await import('../src/lib/activation-progress.ts');
+  const onboarding = { ...profile, primaryGoal: 'learn', targetCountries: [], priorities: [], timeHorizon: 'exploring' };
+  const completed = { courseId: 'arrival-playbook', kind: 'academy', status: 'completed', completed: 6, total: 6, href: '/courses/arrival-playbook/study' };
+  const catalogue = [{ id: 'evidence-literacy', title: 'Evidence literacy' }, { id: 'country-fit', title: 'Country Fit' }];
+  const build = (items, unavailable = []) => buildPersonalPlan(onboarding, countries, createEmptyActivationProgress(), { items, unavailable }, catalogue, {}, false);
+  const { model } = build([completed]);
+  assert.deepEqual(model.actions.map(action => action.id), ['learning', 'profile']);
+  assert.equal(model.actions[0].href, '/courses/evidence-literacy');
+  assert.equal(model.actions[0].status, 'not_started');
+  const review = { ...completed, courseId: 'country-fit', status: 'review_due', completed: 4, href: '/courses/country-fit/study' };
+  assert.equal(build([review]).model.actions[0].href, review.href);
+  assert.equal(build([review]).model.actions[0].action, 'Open course review');
+  assert.equal(build([review]).model.journey.find(stage => stage.id === 'develop').progress, 33);
+  assert.equal(build([], ['academy']).model.actions.find(action => action.id === 'learning').status, 'needs_attention');
+});

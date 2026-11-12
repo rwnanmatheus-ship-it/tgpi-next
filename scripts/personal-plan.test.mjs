@@ -10,10 +10,10 @@ test("personal plan has one canonical protected route", () => {
   assert.equal(getSuperAppModule("/onboarding")?.id, "plan");
 
   const page = readFileSync(new URL("../src/app/plan/page.tsx", import.meta.url), "utf8");
-  assert.match(page, /requireUser\(\)/);
+  assert.match(page, /requireUser\("\/plan"\)/);
   assert.match(page, /normalizeOnboardingData/);
   assert.match(page, /getUserActivationView\(session.userId/);
-  assert.match(page, /buildGlobalWorkspaceModel/);
+  assert.match(page, /buildPersonalPlan/);
 });
 
 test("personal plan connects the core TGPI decision modules", () => {
