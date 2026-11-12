@@ -1,0 +1,70 @@
+{
+  "reviewedAt": "2026-11-11",
+  "scope": "Explicit review of six previously open editorial issues. This closes only the stated summary scope, not individual applications, interactive records or external service availability.",
+  "resolutions": [
+    {
+      "sourceId": "es-ruct",
+      "previousUrl": "https://universidades.sede.gob.es/pagina/index/directorio/Proc_Ruct",
+      "url": "https://www.ciencia.gob.es/Universidades/RUCT.html",
+      "decision": "Official register description verified. Exact programme records still require a separate check.",
+      "method": "primary-page-reader",
+      "reviewedAt": "2026-11-11"
+    },
+    {
+      "sourceId": "nl-study",
+      "previousUrl": "https://ind.nl/en/residence-permits/study/student-residence-permit-for-university-or-higher-professional-education",
+      "url": "https://ind.nl/en/residence-permits/study/student-residence-permit-for-university-or-higher-professional-education",
+      "decision": "IND page updated 21 September 2026 confirms the recognised sponsor, full-time accredited programme and institution-led application.",
+      "method": "primary-page-reader",
+      "reviewedAt": "2026-11-11"
+    },
+    {
+      "sourceId": "au-cricos",
+      "previousUrl": "https://www.teqsa.gov.au/cricos-and-elicos",
+      "url": "https://www.education.gov.au/esos-framework",
+      "decision": "The Department of Education confirms that providers enrolling overseas students on student visas must be ESOS registered and CRICOS listed. Individual entries are outside this review.",
+      "method": "primary-page-reader",
+      "reviewedAt": "2026-11-11"
+    },
+    {
+      "sourceId": "pt-aima",
+      "previousUrl": "https://aima.gov.pt/pt/estudar/autorizacao-de-residencia-emitida-a-estudantes-do-ensino-superior-art-o-91",
+      "url": "https://aima.gov.pt/pt/estudar/autorizacao-de-residencia-emitida-a-estudantes-do-ensino-superior-art-o-91",
+      "decision": "Selected Article 91 document categories verified in the official page returned by web search. Direct page retrieval still returned 502; automatic access is not certified.",
+      "method": "primary-search-extract",
+      "reviewedAt": "2026-11-11"
+    },
+    {
+      "sourceId": "es-qedu",
+      "previousUrl": "https://siiu.universidades.gob.es/QEDU/",
+      "url": "https://www.ciencia.gob.es/Universidades/QEDU.html",
+      "decision": "The ministry identifies RUCT and SIIU as QEDU inputs and states that the information is orientative. Interactive course records were not audited.",
+      "method": "primary-page-reader",
+      "reviewedAt": "2026-11-11"
+    },
+    {
+      "sourceId": "de-visa",
+      "previousUrl": "https://www.make-it-in-germany.com/en/visa-residence/types/studying",
+      "url": "https://www.make-it-in-germany.com/en/visa-recognition/visa-types/studying",
+      "decision": "The current federal portal route confirms EUR 11,904 in 2026 for the study route, with scholarship and declaration-of-commitment alternatives. Study-place seeking is a different route.",
+      "method": "primary-page-reader",
+      "reviewedAt": "2026-11-11"
+    }
+  ],
+  "notices": [
+    {
+      "id": "spain-university-subsede-20261022",
+      "country": "spain",
+      "publishedAt": "2026-10-22",
+      "checkedAt": "2026-11-11",
+      "status": "external-service-notice",
+      "title": "Spain: university electronic service suspension",
+      "summary": "The ministry’s notice of 22 October 2026 announces a temporary closure of the university electronic office and suspension of affected procedures, including foreign-degree recognition. Consult the official notice before submitting an application; resumption has not been confirmed in this review.",
+      "url": "https://www.ciencia.gob.es/InfoGeneralPortal/Avisos/Cierre-subsede-electronica-Secretar-a-General-Universidades.html",
+      "relatedSourceIds": [
+        "es-ruct",
+        "es-qedu"
+      ]
+    }
+  ]
+}

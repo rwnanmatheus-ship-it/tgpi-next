@@ -43,6 +43,23 @@ export default function GlobalDossierView({ dossier }: { dossier: GlobalDossier 
         <button type="button" onClick={() => setExpanded(!expanded)}>{t(expanded ? "Collapse chapters" : "Expand chapters")}</button>
       </div>
     </header>
+    {dossier.serviceNotices.map(notice => <aside key={notice.id} className={styles.serviceNotice} aria-label={t("Official service notice")}>
+      <p className={styles.eyebrow}>{t("Official service notice")} · {notice.publishedAt}</p>
+      <h3>{t(notice.title)}</h3><p>{t(notice.summary)}</p>
+      <a href={notice.url} target="_blank" rel="noreferrer">{t("Read the official notice")} ↗</a>
+      <p className={styles.meta}>{t("Last reviewed")}: {notice.checkedAt}</p>
+    </aside>)}
+    <details className={styles.evidenceOverview}>
+      <summary><strong>{t("Compare the evidence in context")}</strong><span>{t("21 indicators in the complete export")}</span></summary>
+      <p>{t("Comparisons use the unweighted median of at least five other catalog countries in the same region and reference year. They describe available observations, not the whole region, a ranking or personal outcomes.")}</p>
+      <div className={styles.tableScroll}><table><caption>{t("Additional indicators and regional context")}</caption><thead><tr><th scope="col">{t("Indicator")}</th><th scope="col">{t("Country")}</th><th scope="col">{t("Reference year")}</th><th scope="col">{t("Regional median")}</th><th scope="col">{t("Comparison countries")}</th></tr></thead><tbody>{dossier.indicators.map(indicator => <tr key={indicator.id}>
+        <th scope="row"><a href={`https://data.worldbank.org/indicator/${indicator.id}?locations=${dossier.coverage.iso2}`} target="_blank" rel="noreferrer">{t(indicator.label)} ↗</a><small>{t(indicator.unit)} · {t(states[indicator.state])}</small></th>
+        <td>{indicator.observation ? new Intl.NumberFormat(locale, { maximumFractionDigits: 2 }).format(indicator.observation.value) : "—"}</td>
+        <td>{indicator.observation?.year ?? "—"}</td>
+        <td>{indicator.comparison ? new Intl.NumberFormat(locale, { maximumFractionDigits: 2 }).format(indicator.comparison.median) : "—"}</td>
+        <td>{indicator.comparison ? `${t(indicator.comparison.region)} · ${indicator.comparison.peers}` : t("Insufficient comparable data")}</td>
+      </tr>)}</tbody></table></div>
+    </details>
     <div className={styles.controls}>
       <div className={styles.tabs} role="group" aria-label={t("Dossier research goal")}>{Object.entries(goalLabels).map(([key, label]) => <button key={key} type="button" aria-pressed={goal === key} onClick={() => setGoal(key)}>{t(label)}</button>)}</div>
       <label className={styles.search}><span>{t("Search this dossier")}</span><input type="search" maxLength={120} value={query} placeholder={t("Topic, evidence or next step…")} onChange={e => setQuery(e.target.value)} /></label>

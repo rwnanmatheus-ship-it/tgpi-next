@@ -2,3 +2,18 @@
 @media(max-width:1000px){.sourceGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.countryGrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:640px){.metrics{grid-template-columns:repeat(2,1fr);gap:1rem}.sourceGrid,.researchGrid,.identity{grid-template-columns:1fr}.countryGrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:.6rem}.countryCard{padding:.9rem}.countryCard h3{font-size:1rem}.filters{grid-template-columns:1fr;padding:1rem;gap:.75rem}.controls .search{max-width:none;width:100%;min-width:0}.chapter>summary{padding:1rem;gap:.7rem}.chapter>summary strong{font-size:.9rem}.dossierHero{border-radius:1.2rem}.actions>a,.actions>button{font-size:.7rem;padding:.65rem .75rem}.researchGrid{gap:1rem}}
 @media print{.controls,.actions,.more{display:none}.chapter{break-inside:avoid}.dossierHero{color:#000;background:#fff}.dossierHero h2,.dossierHero p,.metrics strong,.metrics span{color:#000!important}.chapterBody{display:block!important}.chapter>summary{background:#fff}.sourceGrid{grid-template-columns:1fr 1fr}}
+
+.serviceNotice { margin: 1.2rem 0; padding: 1.5rem; border: 1px solid #c3a26480; border-left: 4px solid #c3a264; border-radius: 12px; background: #c3a26412; }
+.serviceNotice h3 { font-size: 1.15rem; margin: .6rem 0; }
+.serviceNotice p { max-width: 80ch; line-height: 1.65; }
+.serviceNotice a, .evidenceOverview a { color: inherit; text-underline-offset: 4px; }
+.evidenceOverview { margin: 1.5rem 0; padding: 1.25rem; border: 1px solid #9fabc833; border-radius: 12px; }
+.evidenceOverview summary { display: flex; flex-wrap: wrap; gap: .6rem 1rem; justify-content: space-between; cursor: pointer; }
+.evidenceOverview summary span { font-size: .8rem; opacity: .75; }
+.evidenceOverview p { max-width: 90ch; line-height: 1.7; }
+.tableScroll { max-width: 100%; overflow-x: auto; }
+.evidenceOverview table { width: 100%; border-collapse: collapse; font-size: .85rem; text-align: left; }
+.evidenceOverview caption { text-align: left; font-weight: 600; padding: 1rem 0; }
+.evidenceOverview th, .evidenceOverview td { padding: .85rem .65rem; border-bottom: 1px solid #9fabc833; vertical-align: top; }
+.evidenceOverview tbody th { font-weight: 500; min-width: 160px; }
+.evidenceOverview small { display: block; font-size: .72rem; opacity: .75; margin-top: .3rem; }

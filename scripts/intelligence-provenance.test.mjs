@@ -15,10 +15,10 @@ test("registry keeps provenance, content review and review issues separate", () 
   assert.ok(records.every(record => /^[A-Z]{2}$/.test(record.iso2) && record.countryName));
   const unconfirmed = records.find(record => record.id === "pt-aima");
   assert.equal(unconfirmed.iso2, "PT");
-  assert.equal(unconfirmed.reviewedAt, null);
-  assert.equal(unconfirmed.status, "unconfirmed");
+  assert.equal(unconfirmed.reviewedAt, "2026-11-11");
+  assert.equal(unconfirmed.status, "limited");
   assert.equal(unconfirmed.automaticCheck, false);
-  assert.equal(unconfirmed.needsReview, true);
+  assert.equal(unconfirmed.needsReview, false);
   const requirement = records.find(record => record.id === "uk-funds");
   assert.equal(requirement.status, "reviewed");
   assert.equal(requirement.summaries[0].state, "reviewed");

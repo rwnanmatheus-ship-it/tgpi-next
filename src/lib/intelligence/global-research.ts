@@ -3,7 +3,7 @@ import countryLinks from "../../data/intelligence/research-country-links.json" w
 import identityData from "../../data/intelligence/identities.json" with { type: "json" };
 import { DOSSIER_SOURCES, dossierFor, reviewState } from "./dossiers.ts";
 
-export const RESEARCH_VERSION = "3.0.0";
+export const RESEARCH_VERSION = "3.1.0";
 export const RESEARCH_RELEASE = "2026-11-11";
 export const RESEARCH_TOPICS = ["identity", "entry", "education", "work", "cost", "housing", "health", "safety", "digital", "economy", "documents", "climate"] as const;
 export type ResearchTopic = typeof RESEARCH_TOPICS[number];
@@ -12,9 +12,16 @@ export type ResearchSource = {
   kind: string; topics: ResearchTopic[]; scope: string; reviewedAt: string | null;
   reviewScope: "publisher-and-portal" | "selected-guidance" | "legacy-summary";
   authorityUrl: string;
+  supportingReference?: { url: string; reviewedAt: string; scope: string };
   access: { status: "retrieved" | "restricted" | "manual"; checkedAt: string | null; httpStatus: number | null; pageTitle: string; responseSha256: string | null };
 };
-const international = sourceData as ResearchSource[];
+// Accessible official descriptions help inspect scope; they do not replace database records.
+const supportingReferences: Record<string, string> = {
+  "whed": "https://www.unesco.org/sdg4education2030/en/knowledge-hub/world-higher-education-database",
+  "itu-data": "https://www.itu.int/en/ITU-D/Statistics/Pages/stat/default.aspx",
+  "unhcr-data": "https://refugeedata.unhcr.org/en/documentation/start-here/how-to-use/",
+};
+const international = (sourceData as ResearchSource[]).map(source => ({ ...source, ...(supportingReferences[source.id] ? { supportingReference: { url: supportingReferences[source.id], reviewedAt: RESEARCH_RELEASE, scope: "Publisher scope and methodology" } } : {}) }));
 const legacy: ResearchSource[] = DOSSIER_SOURCES.map(s => ({
   id: s.id, country: s.country, title: s.title, publisher: s.publisher, url: s.url, kind: s.kind,
   topics: [...new Set(dossierFor(s.country).claims.filter(c => c.sourceId === s.id).map(c => c.layer))],

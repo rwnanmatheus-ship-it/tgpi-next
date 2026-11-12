@@ -34,3 +34,15 @@ The research interface and chapter content use the existing six-language localiz
 ## Validation
 
 Regression tests cover all 195 identities, chapter-source mappings, resource deduplication, safe fixed URLs, excluded obsolete domains, observed country links, unique observations, missing data, historical/stale states and rejection of corrupt source responses. Existing dossier/provenance tests were updated for the explicit November review rather than changing expected semantics of automated availability checks.
+
+## Editorial completion — v3.1.0
+
+Six previously open editorial issues were explicitly reviewed on 2026-11-11. The public resolution record preserves the old URL, replacement or retained official URL, method and narrow decision. Historical observations remain in `SOURCE_REVIEW_ISSUES`; no HTTP success automatically renews an editorial review. The 29-source study register now contains 31 scoped summaries. AIMA remains manual: the official search extract supported selected document categories, while direct retrieval returned 502.
+
+Spain's ministry notice dated 2026-10-22 is a separate, visible operational notice in the source register, Spain dossier and JSON export. It announces a temporary university electronic-office closure and suspension of affected procedures. Resumption is not established by this release. Closing a register-description review does not establish that an interactive service has reopened.
+
+The country JSON export retains the existing twelve `indicators` and adds nine `nationalIndicators`, plus `editorialSummaries`, `editorialResolutions` and `serviceNotices`. Existing consumers remain compatible. Every statistic keeps its observation year, collection date, producer and series provenance; unavailable values stay null.
+
+The new comparison table contains 1,962 computable comparisons across 194 catalog countries. Each uses an unweighted median of at least five *other* catalog countries in the same statistical region, indicator and observation year, using the latest stored country observations. It does not reconstruct a complete historical panel or represent countries with missing/different-year data. Duplicate peers invalidate the comparison. No rankings, desirability scores or personal outcomes are inferred. The Vatican correctly has no comparable observations.
+
+The registry still counts 153 distinct source references. Three accessible official scope/methodology references accompany WHED, ITU and UNHCR without inflating that count or relabelling restricted database access. New interface copy, new Portugal/Spain summaries, service notice and the six resolution decisions are available in the platform's six interface languages.
