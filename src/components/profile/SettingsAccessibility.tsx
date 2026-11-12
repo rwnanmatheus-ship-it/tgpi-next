@@ -17,8 +17,13 @@ export default function SettingsAccessibility() {
   const [notice, setNotice] = useState('');
   useEffect(() => {
     const sync = () => setPreferences(readDisplayPreferences());
-    sync(); window.addEventListener('storage', sync);
-    return () => window.removeEventListener('storage', sync);
+    sync();
+    window.addEventListener('storage', sync);
+    window.addEventListener(displayEvent, sync);
+    return () => {
+      window.removeEventListener('storage', sync);
+      window.removeEventListener(displayEvent, sync);
+    };
   }, []);
   function save(next: DisplayPreferences) {
     try {

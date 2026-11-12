@@ -9,6 +9,7 @@ import LanguageSelector from "@/components/localization/LanguageSelector";
 import { useLocale } from "@/components/localization/LocaleProvider";
 import { HOME_PRODUCTS, type HomeProductId } from "@/lib/home-showcase";
 import styles from "./global-footer.module.css";
+import { studyCopy } from "@/lib/localization/study-accessibility";
 
 function productLink(id: HomeProductId) {
   const { name, href } = HOME_PRODUCTS[id];
@@ -33,11 +34,11 @@ const footerGroups = [
 
 const legalLinks = [
   ["Privacy", "/privacy"], ["Terms", "/terms"], ["Cookies", "/cookies"],
-  ["Billing", "/billing-terms"], ["Refunds & cancellation", "/refunds"],
+  ["Accessibility", "/accessibility"], ["Billing", "/billing-terms"], ["Refunds & cancellation", "/refunds"],
 ] as const;
 
 export default function GlobalFooter() {
-  const { t } = useLocale();
+  const { locale, t } = useLocale();
   return (
     <footer className={`${styles.footer} ${brandStyles.theme}`}>
       <div className={styles.container}>
@@ -97,7 +98,7 @@ export default function GlobalFooter() {
             <p>{t("Educational information supports your research. Confirm requirements with official sources before making decisions.")}</p>
           </div>
           <nav aria-label={t("Legal policies")}>
-            {legalLinks.map(([label, href]) => <Link key={href} href={href} prefetch={false}>{t(label)}</Link>)}
+            {legalLinks.map(([label, href]) => <Link key={href} href={href} prefetch={false}>{href === "/accessibility" ? studyCopy(locale, "center") : t(label)}</Link>)}
           </nav>
         </div>
       </div>

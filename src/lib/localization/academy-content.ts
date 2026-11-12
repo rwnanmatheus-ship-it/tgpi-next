@@ -15,6 +15,7 @@ export function localizeAcademyCourse(source: AcademyCourse, locale: Locale): Ac
       sections: source.lessons[index].sections.map(section => ({
         ...section,
         title: section.preserveTitle ? section.title : translate(locale, section.title),
+        bodyParts: section.bodyParts?.map(part => part.preserve ? part : { ...part, text: translate(locale, part.text) }),
         body: section.bodyParts
           ? section.bodyParts.map(part => part.preserve ? part.text : translate(locale, part.text)).join('\n')
           : section.preserveBody ? section.body : translate(locale, section.body),

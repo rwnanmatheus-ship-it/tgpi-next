@@ -16,6 +16,7 @@ import { deviceAtlasAvailability, prepareDeviceAtlas, streamDeviceAtlas, type De
 import { atlasFreeCopy } from '@/lib/atlas/free-copy';
 import { answerAtlasGuide, atlasFirstName, guideResource, nextAtlasTopic, normalizeAtlasText } from '@/lib/atlas/guide';
 import { guideText, guideTopics, type GuideTopic } from '@/lib/atlas/guide-copy';
+import { studyCopy } from '@/lib/localization/study-accessibility';
 import type { AtlasNavigationContext } from '@/lib/atlas/navigation-context';
 import { atlasCopy } from '@/lib/atlas/studio-copy';
 import { streamSponsoredAtlas } from '@/lib/atlas/studio-stream';
@@ -41,6 +42,7 @@ type StudioProps = {
   onlineAvailable?: boolean;
   embedded?: boolean;
   context?: AtlasNavigationContext;
+  studySupport?: boolean;
 };
 type HistoryChange = { id: string; deleted?: boolean };
 
@@ -53,7 +55,7 @@ function withoutLastTurn(messages: StudioMessage[], requestId?: string) {
   return messages.filter(message => message.requestId !== requestId);
 }
 
-export default function AtlasStudio({ userId, onlineAvailable = false, embedded = false, context }: StudioProps) {
+export default function AtlasStudio({ userId, onlineAvailable = false, embedded = false, context, studySupport = false }: StudioProps) {
   const { locale, t } = useLocale();
   const { user } = useUser();
   const name = user?.id === userId ? atlasFirstName(user.firstName || user.fullName) : '';
@@ -566,6 +568,19 @@ export default function AtlasStudio({ userId, onlineAvailable = false, embedded 
             <button type="button" disabled={!canSend} onClick={() => void send(retry.content, undefined, retry.requestId)}>{t('Retry last question')}</button>
             {mode !== 'guide' && <button type="button" onClick={() => { start('guide'); setDraft(retry.content); composer.current?.focus(); }}>{label('tryGuide')}</button>}
           </div>}
+        </div>}
+        {studySupport && <div className={styles.quickTools}>
+          <button className={styles.calculatorToggle} type="button" disabled={busy || Boolean(draft.trim())} onClick={() => {
+            interaction.current = true;
+            const template = studyCopy(locale, 'atlasTemplate') + ' ';
+            if (!conversation && mode === 'guide' && (deviceAvailability === 'available' || onlineAvailable)) {
+              start(deviceAvailability === 'available' ? 'device' : 'sponsored', true);
+              setDraft(template);
+            } else {
+              editDraft(template);
+            }
+            composer.current?.focus();
+          }}>{studyCopy(locale, 'atlasPlain')}</button>
         </div>}
         <form className={styles.composer} onSubmit={event => { event.preventDefault(); void send(); }}>
           <label className={styles.srOnly} htmlFor={`${ids}-message`}>{t('Message Atlas')}</label>

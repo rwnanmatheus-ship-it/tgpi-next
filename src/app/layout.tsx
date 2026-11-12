@@ -3,7 +3,7 @@ import { localizeMetadata } from "@/lib/localization/metadata.server";
 import { getSupplementalMessages } from "@/lib/localization/catalog.server";
 import "./localization.css";
 import { getLocale } from "@/lib/localization/server";
-import { LocaleProvider, AccountLocaleSync, LocalizedText } from "@/components/localization/LocaleProvider";
+import { LocaleProvider, AccountLocaleSync } from "@/components/localization/LocaleProvider";
 import { enUS, ptBR, esES, frFR, deDE, itIT } from "@clerk/localizations";
 import FunnelTelemetry from "@/components/analytics/FunnelTelemetry";
 import GlobalProgressSync from "@/components/profile/GlobalProgressSync";
@@ -34,6 +34,7 @@ import SuperAppLauncher from "@/components/super-app/SuperAppLauncher";
 import TgpiAppRuntime from "@/components/app-runtime/TgpiAppRuntime";
 import AccessAwareChrome from "@/components/auth/AccessAwareChrome";
 import AtlasWidget from "@/components/atlas/AtlasWidget";
+import SkipToContent from "@/components/accessibility/SkipToContent";
 
 const displayFont = Cormorant_Garamond({
   subsets: ["latin"],
@@ -130,7 +131,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <NotificationProvider>
           <GlobalProgressSync />
           {process.env.TGPI_FUNNEL_ANALYTICS_ENABLED === "true" ? <FunnelTelemetry /> : null}
-          <a href="#main-content" className="sr-only fixed left-4 top-4 z-[100] rounded-xl bg-[var(--tgpi-gold)] px-4 py-3 text-sm font-extrabold text-[var(--tgpi-navy-deep)] shadow-lg transition focus:not-sr-only"><LocalizedText text="Skip to content" /></a>
+          <SkipToContent />
           <AccessAwareChrome
             navigation={<><Navbar /><MobileNavigation /><SuperAppLauncher /></>}
             footer={<GlobalFooter />}

@@ -1,0 +1,65 @@
+.trigger, .panel :is(button, select, a), .page .link {
+  min-height: 44px;
+}
+.trigger, .panel :is(button, select) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: .45rem .8rem;
+  border: 1px solid #8799b3;
+  border-radius: .65rem;
+  color: #14263e;
+  background: #fff;
+  font-weight: 700;
+  line-height: 1.35;
+}
+.trigger { margin-block: .75rem; }
+.trigger:hover, .panel button:hover:not([aria-disabled='true']) { background: #e6efff; }
+.trigger:focus-visible, .panel :focus-visible, .page :focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 3px #fff;
+}
+.panel {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: min(48rem, calc(100% - 1.5rem));
+  max-height: calc(100dvh - 1.5rem);
+  padding: clamp(.75rem, 3vw, 2rem);
+  overflow: auto;
+  border: 1px solid #8799b3;
+  border-radius: 1rem;
+  background: #f8faff;
+  color: #14263e;
+  overscroll-behavior: contain;
+  overflow-wrap: anywhere;
+}
+.panel::backdrop { background: #071021bc; }
+.panel header { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .75rem; align-items: start; margin-bottom: 1rem; }
+.panel h2, .page h2 { font-size: 1.4rem; font-weight: 750; }
+.panel h3 { font-weight: 750; }
+.controls { display: flex; flex-wrap: wrap; align-items: center; gap: .65rem; margin-block: .75rem; }
+.controls label { display: flex; flex-wrap: wrap; align-items: center; gap: .45rem; font-weight: 650; }
+.controls select { max-width: 100%; }
+.chapter { min-width: 0; flex: 1 1 14rem; }
+.chapter select { width: 100%; justify-content: start; text-overflow: ellipsis; }
+.panel details { margin: 1rem 0; border-block: 1px solid #8799b3; padding-block: .25rem; }
+.panel summary { min-height: 44px; padding-block: .55rem; font-weight: 700; cursor: pointer; }
+.panel input[type='checkbox'] { width: 1.25rem; height: 1.25rem; accent-color: #154b9c; }
+.reading { max-width: 65ch; min-height: 9rem; padding-block: 1rem; line-height: 1.7; }
+.reading p { margin-top: .75em; white-space: pre-wrap; }
+.reading[data-spacing='true'] { letter-spacing: .08em; word-spacing: .16em; line-height: 1.9; }
+.panel[data-contrast='true'] { background: #000; color: #fff; border-color: #fff; }
+.panel[data-contrast='true'] :is(button, select) { color: #fff; background: #151515; border-color: #fff; }
+.panel[data-contrast='true'] button:hover:not(:disabled) { background: #343434; }
+.panel[data-contrast='true'] a { color: #ffdc6c; }
+.panel[data-contrast='true'] :focus-visible { outline-color: #ffdc6c; box-shadow: none; }
+.panel a, .page .link { display: inline-flex; align-items: center; color: #174a96; text-decoration: underline; text-underline-offset: .15em; }
+.page { max-width: 60rem; margin-inline: auto; padding: clamp(1rem, 5vw, 4rem); color: #14263e; overflow-wrap: anywhere; }
+.page h1 { font-size: clamp(2rem, 6vw, 3.5rem); line-height: 1.12; font-weight: 750; }
+.page p { max-width: 65ch; line-height: 1.65; }
+.page > p { margin-block: .75rem; }
+.page > section { padding: clamp(.75rem, 3vw, 1.5rem); margin-block: 1.25rem; border: 1px solid #9bacbf; border-radius: 1rem; background: #fff; }
+.page > section > h2 { margin-bottom: .7rem; }
+.panel button[aria-disabled='true'] { opacity: .55; cursor: default; }

@@ -13,13 +13,15 @@ const sourceMetadata: Metadata = {
   robots: { index: false, follow: false },
 };
 export default async function AtlasPage({ searchParams }: {
-  searchParams: Promise<{ guide?: string | string[]; mode?: string | string[]; course?: string | string[] }>;
+  searchParams: Promise<{ guide?: string | string[]; mode?: string | string[]; course?: string | string[]; support?: string | string[] }>;
 }) {
-  const { guide, mode, course } = await searchParams;
+  const { guide, mode, course, support } = await searchParams;
   const learningCourse = guide === 'learning' && typeof course === 'string' ? getAcademyCourse(course) : undefined;
   const query = new URLSearchParams();
   if (guide === 'learning' || guide === 'evidence') query.set('guide', guide);
   if (learningCourse) query.set('course', learningCourse.id);
+  const studySupport = guide === 'learning' && support === 'plain-language';
+  if (studySupport) query.set('support', 'plain-language');
   if (mode === 'account') query.set('mode', mode);
   const { userId } = await requireUser(`/atlas${query.size ? `?${query}` : ''}`);
   let enabled = false;
@@ -34,7 +36,7 @@ export default async function AtlasPage({ searchParams }: {
   } : guide === 'evidence' ? { topic: 'intelligence' as const } : undefined;
   return <main>
     <AtlasStudio key={userId} userId={userId} onlineAvailable={enabled && sponsored}
-      context={context} />
+      context={context} studySupport={studySupport} />
   </main>;
 }
 

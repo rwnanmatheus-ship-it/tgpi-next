@@ -347,3 +347,22 @@ html[data-tgpi-motion="reduced"] *,
 html[data-tgpi-motion="reduced"] *::before,
 html[data-tgpi-motion="reduced"] *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
 html[data-tgpi-focus="strong"] :is(a,button,input,select,textarea,[tabindex]):focus-visible { outline: 4px solid #2563eb !important; outline-offset: 4px !important; box-shadow: 0 0 0 7px #fff !important; }
+
+/* Keep the first keyboard shortcut above the persistent site chrome. */
+.tgpi-content-skip {
+  position: fixed;
+  inset-block-start: 0.75rem;
+  inset-inline-start: 0.75rem;
+  z-index: 2147483647;
+  clip-path: inset(50%);
+  padding: .7rem 1rem;
+  border-radius: .6rem;
+  background: #fff;
+  color: #14263e;
+  font-weight: 750;
+}
+.tgpi-content-skip:focus {
+  clip-path: none;
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+}

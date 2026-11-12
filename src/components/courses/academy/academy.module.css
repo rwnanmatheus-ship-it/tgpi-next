@@ -271,7 +271,7 @@
 /* Focus changes presentation only; every lesson stays reachable. */
 .focusMode .studioHero, .focusMode .roadmap, .focusMode .supportRail, .focusMode .editionBanner { display: none; }
 .focusMode .study { grid-template-columns: 220px minmax(0,840px); justify-content: center; }
-.focusMode .studyToolbar { position: sticky; top: 80px; background: #0b1628f5; padding: 12px; border: 1px solid #2f435e; border-radius: 10px; z-index: 10; }
+.focusMode .studyToolbar { position: static; background: #0b1628f5; padding: 12px; border: 1px solid #2f435e; border-radius: 10px; z-index: 10; }
 .largeText .sectionBody, .largeText .practicePanel li, .largeText .field { font-size: 18px !important; line-height: 2 !important; }
 /* The surrounding site keeps its identity; the course breadcrumb enters the studio. */
 :global(.product-study):has(.studioPage) > nav { background: #0b1526; border-bottom: 1px solid #2b3c52; }
@@ -380,7 +380,6 @@
   .journeySteps { grid-template-columns: 1fr; gap: 9px; }.journeySteps li { padding: 18px; }
   .journeySteps p { font-size: 12px; }.journeySteps strong { font-size: 13px; }
   .journeyBrief { display: block; }.journeyBrief p { margin: 10px 0 18px; }.journeyBrief a { display: inline-block; }
-  .focusMode .studyToolbar { top: 70px; }.focusMode .syncStatus { display: none; }
 }
 @media (max-width: 420px) { .page { padding-inline: 12px; }.studioHero { padding: 23px 19px; }.supportRail { grid-template-columns: 1fr; }.card { padding-inline: 18px; }.edition { display: none; } }
 @media (prefers-reduced-motion: reduce) { .page *, .page *::before, .page *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
@@ -401,7 +400,7 @@
 
 .studioPage .nav { top:calc(var(--tgpi-header-height, 80px) + 88px); }
 .studioPage :is(.studyTitle,.readingSections,.practicePanel,.evidencePanel,.assessmentCard,.roadmap) { scroll-margin-top:calc(var(--tgpi-header-height, 80px) + 90px); }
-.focusMode .studyToolbar { top:calc(var(--tgpi-header-height, 80px) + 69px); }
+
 .focusMode :is(.studyTitle,.readingSections,.practicePanel,.evidencePanel,.assessmentCard) { scroll-margin-top:calc(var(--tgpi-header-height, 80px) + 170px); }
 .sectionBody { font-size:15px !important; }
 .navButton strong { font-size:12px; }
@@ -427,3 +426,5 @@
 @media(min-width:761px) {
   .focusMode .nav { top:calc(var(--tgpi-header-height,80px) + 155px); max-height:calc(100dvh - var(--tgpi-header-height,80px) - 175px); }
 }
+
+.studioPage h2[tabindex='-1'] { scroll-margin-top: 2rem; }

@@ -44,3 +44,11 @@ export function courseMinutes(duration: string): number {
 export function studyWeeks(minutes: number, weeklyMinutes: number): number {
   return Math.max(1, Math.ceil(minutes / Math.max(30, weeklyMinutes)));
 }
+
+/** Use the listbox endpoints when no suggestion is selected yet. */
+export function moveCourseSuggestion(previous: number, count: number, key: 'ArrowUp' | 'ArrowDown') {
+  if (count === 0) return -1;
+  const backwards = key === 'ArrowUp';
+  if (previous < 0 || previous >= count) return backwards ? count - 1 : 0;
+  return (previous + (backwards ? -1 : 1) + count) % count;
+}

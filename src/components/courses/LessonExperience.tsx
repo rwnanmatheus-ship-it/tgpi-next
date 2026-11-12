@@ -2,6 +2,7 @@
 
 import { localizeAuthoredContent } from "@/lib/localization/authored-content";
 import Link from "next/link";
+import StudyReader from "@/components/accessibility/StudyReader";
 import ActiveRecallPractice from "@/components/courses/ActiveRecallPractice";
 import {
   useEffect,
@@ -45,6 +46,7 @@ function Lesson({
 }: LessonExperienceProps) {
   const { locale, t } = useLocale();
   const options = { languagePractice: originalCourse.id === "global-english-2026" };
+  const exampleLanguage = options.languagePractice ? "en" : locale;
   const course = useMemo(() => localizeAuthoredContent(originalCourse, locale, { languagePractice: originalCourse.id === "global-english-2026" }), [originalCourse, locale]);
   const courseModule = localizeAuthoredContent(originalModule, locale, options);
   const lesson = localizeAuthoredContent(originalLesson, locale, options);
@@ -123,7 +125,7 @@ function Lesson({
 
   return (
     <main lang={locale} className="min-h-screen bg-[var(--tgpi-canvas)] text-[var(--tgpi-navy)]">
-      <div className="sticky top-0 z-20 border-b border-white/10 bg-[var(--tgpi-navy)] text-white shadow-lg">
+      <div className="border-b border-white/10 bg-[var(--tgpi-navy)] text-white shadow-lg">
         <div className="mx-auto max-w-[1280px] px-4 py-5 sm:px-6 lg:px-8">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <Link
@@ -181,6 +183,13 @@ function Lesson({
               <LocalizedText text={lesson.summary} />
             </p>
 
+            <StudyReader key={locale} title={t(lesson.title)} language={locale} atlas sections={[
+              { title: t("Performance objective"), passages: [{ text: t(lesson.summary) }, { text: t(lesson.objective) }, { text: t(lesson.scenario) }] },
+              ...lesson.keyPhrases.map(item => ({ title: item.phrase, titleLang: exampleLanguage, passages: [{ text: t(item.meaning) }, { text: item.example, lang: exampleLanguage }] })),
+              { title: t("Work through the decision"), passages: lesson.dialogue.map(line => ({ text: `${line.speaker}. ${line.line}`, lang: exampleLanguage })) },
+              { title: t("Make it sound clear and natural"), passages: [...lesson.coachNotes.map(text => ({ text: t(text) })), { text: lesson.commonMistake.avoid, lang: exampleLanguage }, { text: lesson.commonMistake.useInstead, lang: exampleLanguage }, { text: t(lesson.commonMistake.reason) }] },
+              { title: t(lesson.practiceTask.title), passages: [{ text: t(lesson.practiceTask.instruction) }, { text: lesson.practiceTask.prompt, lang: exampleLanguage }] },
+            ]} />
             <div className="mt-8 grid overflow-hidden rounded-2xl border border-[var(--tgpi-gold)]/30 bg-[#FFF7DE] sm:grid-cols-2">
               <div className="p-5">
                 <p className="text-[10px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-strong)]"><LocalizedText text="Performance objective" /></p>
@@ -211,9 +220,9 @@ function Lesson({
                     <span className="grid h-8 w-8 place-items-center rounded-full bg-[var(--tgpi-gold-soft)] text-[10px] font-extrabold text-[var(--tgpi-gold-strong)]" aria-hidden="true">
                       {String(index + 1).padStart(2, "0")}
                     </span>
-                    <h3 className="mt-4 text-xl font-semibold text-[var(--tgpi-navy)]">“{item.phrase}”</h3>
+                    <h3 lang={exampleLanguage} className="mt-4 text-xl font-semibold text-[var(--tgpi-navy)]">“{item.phrase}”</h3>
                     <p className="mt-2 text-sm leading-7 text-[var(--tgpi-muted)]"><LocalizedText text={item.meaning} /></p>
-                    <p className="mt-4 rounded-xl bg-[var(--tgpi-canvas)] p-3 text-sm font-bold leading-6 text-[var(--tgpi-navy)]">
+                    <p lang={exampleLanguage} className="mt-4 rounded-xl bg-[var(--tgpi-canvas)] p-3 text-sm font-bold leading-6 text-[var(--tgpi-navy)]">
                       {item.example}
                     </p>
                   </div>
@@ -231,7 +240,7 @@ function Lesson({
                         <p className={`text-[9px] font-extrabold uppercase tracking-[0.18em] ${isLearner ? "text-[var(--tgpi-gold-light)]" : "text-[var(--tgpi-gold-strong)]"}`}>
                           {line.speaker}
                         </p>
-                        <p className={`mt-2 text-sm font-bold leading-7 ${isLearner ? "text-white/85" : "text-[var(--tgpi-navy)]"}`}>
+                        <p lang={exampleLanguage} className={`mt-2 text-sm font-bold leading-7 ${isLearner ? "text-white/85" : "text-[var(--tgpi-navy)]"}`}>
                           {line.line}
                         </p>
                       </div>
@@ -292,7 +301,7 @@ function Lesson({
 
             <ActiveRecallPractice key={lesson.id} lesson={lesson} />
 
-            <section id="checkpoint" className="scroll-mt-24 rounded-[28px] border border-[var(--tgpi-gold)]/35 bg-[#FFF7DE] p-6 shadow-[var(--tgpi-shadow-soft)] sm:p-8" aria-labelledby="checkpoint-title">
+            <section id="checkpoint" tabIndex={-1} className="scroll-mt-24 rounded-[28px] border border-[var(--tgpi-gold)]/35 bg-[#FFF7DE] p-6 shadow-[var(--tgpi-shadow-soft)] sm:p-8" aria-labelledby="checkpoint-title">
               <div className="flex flex-wrap items-center justify-between gap-3">
                 <p className="text-[10px] font-extrabold uppercase tracking-[0.22em] text-[var(--tgpi-gold-strong)]"><LocalizedText text="04 · Prove" /></p>
                 <span className="rounded-full border border-[var(--tgpi-gold)]/30 bg-white/55 px-3 py-1.5 text-[9px] font-extrabold uppercase tracking-[0.14em] text-[#6F5A31]"><LocalizedText text="Formative · not certificate-scored" /></span>

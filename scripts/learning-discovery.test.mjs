@@ -3,7 +3,7 @@ import { readFileSync, existsSync } from 'node:fs';
 import test from 'node:test';
 import ts from 'typescript';
 function moduleAt(path) { const result = {}; new Function('exports', ts.transpileModule(readFileSync(path,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText)(result); return result; }
-const { courseSearchScore, normalizeCourseSearch, courseMinutes, studyWeeks } = moduleAt('src/lib/learning/catalog-search.ts');
+const { courseSearchScore, normalizeCourseSearch, moveCourseSuggestion, courseMinutes, studyWeeks } = moduleAt('src/lib/learning/catalog-search.ts');
 const make = (title, desc='') => ({title,desc,category:'Learning',goalLabel:'Practice',benefits:[]});
 test('course search handles accents, prefixes, translations and small spelling errors', () => {
  assert.equal(normalizeCourseSearch(' INGLÊS / AÇÃO '),'ingles acao');
@@ -35,3 +35,12 @@ test('all 27 registered course covers are unique and resolve to real assets', ()
  for (const id of distinctCourseArtwork) assert.ok(existsSync('public'+courseArtwork(id)),id);
 });
 
+
+test('keyboard suggestions start from the correct endpoint and wrap safely', () => {
+  assert.equal(moveCourseSuggestion(-1, 5, 'ArrowUp'), 4);
+  assert.equal(moveCourseSuggestion(-1, 5, 'ArrowDown'), 0);
+  assert.equal(moveCourseSuggestion(0, 5, 'ArrowUp'), 4);
+  assert.equal(moveCourseSuggestion(4, 5, 'ArrowDown'), 0);
+  assert.equal(moveCourseSuggestion(4, 2, 'ArrowDown'), 0);
+  assert.equal(moveCourseSuggestion(-1, 0, 'ArrowUp'), -1);
+});

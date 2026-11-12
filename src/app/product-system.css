@@ -18,3 +18,6 @@
 @media(max-width:639px){.product-page-heading{display:block}.product-page-links{margin-top:14px}.product-body .tgpi-page-shell{padding-top:16px!important}.product-learning{padding:16px}.product-learning>header{align-items:flex-start;flex-wrap:wrap}.product-learning-grid{grid-template-columns:minmax(0,1fr)}.product-learning-item:nth-child(n+2){display:none}.product-catalog-art{min-height:120px}.product-catalog-art>div{padding:20px;max-width:85%}.product-catalog-art h2{font-size:20px}.product-catalog-art img{object-position:70% center}.product-study>nav{font-size:12px}.product-page-heading h1{font-size:27px}}
 @media(prefers-reduced-motion:reduce){.product-frame *{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
 .product-frame .product-learning h2,.product-frame .product-learning-item,.product-frame .product-learning-item strong{color:var(--product-navy)}.product-frame .product-learning p{color:var(--product-muted)}.product-frame .product-learning .product-kicker{color:var(--product-gold)!important}.product-frame .product-learning-item{border-color:var(--product-border)}
+
+.product-study > nav { flex-wrap: wrap; row-gap: 0; }
+.product-study > nav > a { display: inline-flex; min-height: 44px; align-items: center; }
