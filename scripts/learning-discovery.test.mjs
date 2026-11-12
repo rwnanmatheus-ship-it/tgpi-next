@@ -31,5 +31,7 @@ test('all 27 registered course covers are unique and resolve to real assets', ()
  const paths=Object.keys(courseArtworkKeys).map(id=>courseArtwork(id));
  assert.equal(paths.length,27); assert.equal(new Set(paths).size,27);
  for(const path of paths) assert.ok(existsSync('public'+path),path);
- assert.equal(distinctCourseArtwork.length,8);
+ assert.equal(distinctCourseArtwork.length,14);
+ for (const id of distinctCourseArtwork) assert.ok(existsSync('public'+courseArtwork(id)),id);
 });
+

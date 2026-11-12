@@ -12,7 +12,7 @@ function load(name) {
   const code = ts.transpileModule(readFileSync(file, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
   new Function('require', 'exports', code)(id => {
     if (id.startsWith('@/')) return load(id.slice(2));
-    if (id.startsWith('./')) return load(relative(resolve('src'), resolve(dirname(file), id)).replace(/\.ts$/, ''));
+    if (id.startsWith('.')) return load(relative(resolve('src'), resolve(dirname(file), id)).replace(/\.ts$/, ''));
     throw Error('Unexpected import ' + id);
   }, exports);
   cache.set(file, exports);

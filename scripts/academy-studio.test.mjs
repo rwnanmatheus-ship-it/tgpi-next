@@ -13,7 +13,7 @@ const recordFor = course => ({ uid: 'private-identity', courseId: course.id, ver
 const statusFor = record => ({ record, publicName: 'Private Learner', emailVerified: true, signingReady: true, challenge: null, lastResult: null });
 
 test('every current and historical edition starts with its exact workload and no invented progress', () => {
-  for (const current of h.academyCourses) for (const course of [current, h.getAcademyCourse(current.id, '2026.11.1')]) {
+  for (const current of h.academyCourses) for (const course of [current, h.getAcademyCourse(current.id, '2026.11.1')].filter(Boolean)) {
     const record = recordFor(course);
     record.notes[course.lessons[0].id] = 'Reading or writing a draft is not a passed check.';
     const value = studioProgress(course, record);
@@ -66,3 +66,4 @@ test('evidence exports include only saved coursework and preserve literal learne
   assert.ok(text.includes(course.version));
   for (const value of ['private-identity', 'Private Learner', 'private diagnostic', 'private-certificate-id', 'obsolete content']) assert.ok(!text.includes(value));
 });
+

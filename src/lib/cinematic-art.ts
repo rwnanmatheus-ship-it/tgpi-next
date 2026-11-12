@@ -1,5 +1,3 @@
-import { emergencyCover, emergencyCourses } from '../data/courses/emergency/catalog.ts';
-
 /** Approved illustrative artwork. Never evidence, a real campus, or a user photograph. */
 export const cinematicKeys = ["global-horizon","learning-atelier","country-research","documents-preparation","workspace-focus","community-conversation","premium-library","arrival-city","housing-abroad","budget-planning","evidence-research","global-economy","ai-workflow","english-dialogue","spreadsheets","international-career","data-analysis","project-management","international-marketing","digital-security","python-automation","communication-negotiation","remote-work","study-abroad","atlas-intelligence","decision-comparison","community-global-exchange","global-documents-precision","learning-achievement","workspace-global-focus","workspace-observatory","documents-command","documents-folios"] as const;
 export type CinematicKey = typeof cinematicKeys[number];
@@ -48,10 +46,12 @@ export const courseArtworkKeys: Record<string, CinematicKey> = {
 };
 
 /** Distinct 2026 course covers replace shared category artwork. */
-export const distinctCourseArtwork = ["career-networking", "ingles-carreira-internacional", "cost-of-living-lab", "technology-future", "ai-workflow-foundations", "critical-thinking", "digital-safety-abroad", "carreira-internacional-profissional"] as const;
+export const distinctCourseArtwork = ["career-networking", "ingles-carreira-internacional", "cost-of-living-lab", "technology-future", "ai-workflow-foundations", "critical-thinking", "digital-safety-abroad", "carreira-internacional-profissional",
+  "primeiros-socorros-rcp-dea", "preparacao-desastres", "ingles-emergencias",
+  "primeiros-socorros-pediatricos", "controle-hemorragias", "primeiros-socorros-psicologicos",
+] as const;
 
 export function courseArtwork(id: string, fallback?: string) {
-  if (emergencyCourses.some(course => course.id === id)) return emergencyCover(id);
   if ((distinctCourseArtwork as readonly string[]).includes(id)) return `/images/courses/learning-2026/${id}.webp`;
   const key = courseArtworkKeys[id];
   return key ? cinematicUrl(key) : fallback ?? cinematicUrl('learning-atelier');
