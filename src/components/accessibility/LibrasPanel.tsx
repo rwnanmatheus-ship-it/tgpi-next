@@ -9,7 +9,7 @@ function publicFrame(text: string) {
   const escaped = text.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
   return `<!doctype html><html lang="pt-BR"><head><meta charset="utf-8">
 <meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src https://vlibras.gov.br https://cdn.jsdelivr.net/gh/spbgovbr-vlibras/vlibras-portal@v7.12.2/; style-src 'unsafe-inline' https://vlibras.gov.br https://cdn.jsdelivr.net; frame-src https://vlibras.gov.br; font-src https://vlibras.gov.br https://cdn.jsdelivr.net; img-src https://vlibras.gov.br https://cdn.jsdelivr.net data:; connect-src https://vlibras.gov.br https://cdn.jsdelivr.net; form-action 'none'; base-uri 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src https://vlibras.gov.br https://cdn.jsdelivr.net/gh/spbgovbr-vlibras/vlibras-portal@v7.12.2/; style-src 'unsafe-inline' https://vlibras.gov.br https://cdn.jsdelivr.net; frame-src https://vlibras.gov.br; font-src https://vlibras.gov.br https://cdn.jsdelivr.net; img-src https://vlibras.gov.br https://cdn.jsdelivr.net data:; connect-src https://vlibras.gov.br https://cdn.jsdelivr.net https://traducao2.vlibras.gov.br https://dicionario2.vlibras.gov.br https://repositorio.vlibras.gov.br; form-action 'none'; base-uri 'none'">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Texto para tradução em Libras</title>
 <style>body{font:1rem/1.6 system-ui,sans-serif;color:#14263e;background:#f6f9ff;margin:1rem;padding-right:3.5rem}main{white-space:pre-wrap;overflow-wrap:anywhere}</style>
