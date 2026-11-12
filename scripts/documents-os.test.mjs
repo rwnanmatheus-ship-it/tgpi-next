@@ -63,6 +63,23 @@ test("a new checkpoint is saved even when all legacy slots were marked", () => {
   assert.equal(restored.documentReviews["country-0"].completedItemIds[0], review.documentReviewItems[0].id);
 });
 
+test("the activation snapshot preserves preparation across every supported destination", () => {
+  const progress = empty();
+  const updatedAt = "2026-11-12T00:00:00.000Z";
+  for (const slug of catalog.COMPARISON_CATALOG) {
+    progress.documentReviews[slug] = {
+      completedItemIds: review.documentReviewItems.map(item => item.id),
+      totalItems: review.documentReviewItems.length,
+      updatedAt,
+    };
+    progress.costEstimates[slug] = { amount: 1000, currency: "USD", updatedAt };
+  }
+  const snapshot = JSON.stringify(activation.serializeActivationProgressForStorage(progress));
+  const restored = activation.normalizeActivationProgress(JSON.parse(snapshot));
+  assert.deepEqual(Object.keys(restored.documentReviews), Array.from(catalog.COMPARISON_CATALOG));
+  assert.deepEqual(Object.keys(restored.costEstimates), Array.from(catalog.COMPARISON_CATALOG));
+});
+
 test("document date calculator uses calendar dates across timezone boundaries and rejects invalid days", () => {
   assert.equal(documentWindowDays("2028-03-01", "2028-02-28"), 2);
   assert.equal(documentWindowDays("2026-11-09", "2026-11-10"), -1);

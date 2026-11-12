@@ -107,7 +107,8 @@ export type ActivationMutation =
 
 const MAX_ACTIVITIES = 6;
 const MAX_COMPARISONS = 4;
-const MAX_COUNTRY_RECORDS = 4;
+// Preserve preparation for every supported destination, including the full shortlist.
+const MAX_COUNTRY_RECORDS = COMPARISON_CATALOG.length;
 // Keep a bounded record while supporting the expanded TGPI learning library.
 const MAX_COURSES = 64;
 const MAX_SAVED_COUNTRIES = 8;
