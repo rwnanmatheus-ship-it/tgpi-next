@@ -1,4 +1,4 @@
-.trigger, .panel :is(button, select, a), .page .link {
+.trigger, .panel :is(button, select, a) {
   min-height: 44px;
 }
 .trigger, .panel :is(button, select) {
@@ -15,7 +15,7 @@
 }
 .trigger { margin-block: .75rem; }
 .trigger:hover, .panel button:hover:not([aria-disabled='true']) { background: #e6efff; }
-.trigger:focus-visible, .panel :focus-visible, .page :focus-visible {
+.trigger:focus-visible, .panel :focus-visible {
   outline: 3px solid #2563eb;
   outline-offset: 3px;
   box-shadow: 0 0 0 3px #fff;
@@ -37,7 +37,7 @@
 }
 .panel::backdrop { background: #071021bc; }
 .panel header { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .75rem; align-items: start; margin-bottom: 1rem; }
-.panel h2, .page h2 { font-size: 1.4rem; font-weight: 750; }
+.panel h2 { font-size: 1.4rem; font-weight: 750; }
 .panel h3 { font-weight: 750; }
 .controls { display: flex; flex-wrap: wrap; align-items: center; gap: .65rem; margin-block: .75rem; }
 .controls label { display: flex; flex-wrap: wrap; align-items: center; gap: .45rem; font-weight: 650; }
@@ -55,11 +55,13 @@
 .panel[data-contrast='true'] button:hover:not(:disabled) { background: #343434; }
 .panel[data-contrast='true'] a { color: #ffdc6c; }
 .panel[data-contrast='true'] :focus-visible { outline-color: #ffdc6c; box-shadow: none; }
-.panel a, .page .link { display: inline-flex; align-items: center; color: #174a96; text-decoration: underline; text-underline-offset: .15em; }
-.page { max-width: 60rem; margin-inline: auto; padding: clamp(1rem, 5vw, 4rem); color: #14263e; overflow-wrap: anywhere; }
-.page h1 { font-size: clamp(2rem, 6vw, 3.5rem); line-height: 1.12; font-weight: 750; }
-.page p { max-width: 65ch; line-height: 1.65; }
-.page > p { margin-block: .75rem; }
-.page > section { padding: clamp(.75rem, 3vw, 1.5rem); margin-block: 1.25rem; border: 1px solid #9bacbf; border-radius: 1rem; background: #fff; }
-.page > section > h2 { margin-bottom: .7rem; }
+.panel a { display: inline-flex; align-items: center; color: #174a96; text-decoration: underline; text-underline-offset: .15em; }
 .panel button[aria-disabled='true'] { opacity: .55; cursor: default; }
+
+.presets { border: 0; padding: .25rem 0 0; margin: 0; }
+.presets legend { font-weight: 720; }
+.panel button[aria-pressed='true'] { border-width: 2px; border-color: currentColor; box-shadow: inset 0 -3px currentColor; }
+@media (forced-colors: active) {
+  .panel :focus-visible, .trigger:focus-visible { outline-color: Highlight; box-shadow: none; }
+  .panel button[aria-pressed='true'] { border-color: Highlight; }
+}

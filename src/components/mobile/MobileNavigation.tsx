@@ -1,4 +1,5 @@
 'use client';
+import AccessibilityLink from '@/components/accessibility/AccessibilityLink';
 import LanguageSelector from '@/components/localization/LanguageSelector';
 import { useLocale } from '@/components/localization/LocaleProvider';
 import { Show } from '@clerk/nextjs';
@@ -33,6 +34,7 @@ export default function MobileNavigation() {
         <LanguageSelector compact />
         <Show when="signed-in"><NotificationBell /></Show>
         <LauncherButton compact />
+        <AccessibilityLink />
         <Show when="signed-in"><TgpiAccountMenu /></Show>
       </div>
     </header>

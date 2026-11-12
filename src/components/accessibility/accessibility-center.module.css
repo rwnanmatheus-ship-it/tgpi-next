@@ -1,0 +1,110 @@
+.page {
+  --access-text: #f3f7ff;
+  --access-muted: #b7c9e3;
+  --access-blue: #b2d2ff;
+  --access-gold: #ffe09d;
+  --access-border: #415a7a;
+  color: var(--access-text);
+  background: #08111f;
+  overflow-wrap: anywhere;
+}
+.hero {
+  background:
+    radial-gradient(ellipse at 85% 15%, #1a3b6b 0%, transparent 55%),
+    linear-gradient(140deg, #101e32, #08111f 70%);
+  border-bottom: 1px solid var(--access-border);
+}
+.shell { width: min(100% - 2rem, 72rem); margin-inline: auto; }
+.hero .shell { padding-block: clamp(2rem, 7vw, 5.25rem); }
+.hero h1 { max-width: 18ch; font-size: clamp(2.2rem, 6vw, 4.65rem); font-weight: 760; line-height: 1.04; letter-spacing: -.035em; }
+.hero p { margin-block: 1rem; color: var(--access-muted); max-width: 58ch; line-height: 1.7; }
+.quick {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .75rem;
+  margin-top: 2rem;
+}
+.quick a {
+  display: grid;
+  align-content: start;
+  gap: .45rem;
+  min-height: 44px;
+  padding: 1rem;
+  border: 1px solid var(--access-border);
+  border-radius: .8rem;
+  background: #112039;
+  color: var(--access-text);
+  text-decoration: none;
+}
+.quick a:hover { border-color: var(--access-blue); background: #192d4a; }
+.quick svg { color: var(--access-gold); }
+.quick strong { font-size: 1rem; }
+.quick span { color: var(--access-muted); font-size: .95rem; line-height: 1.5; }
+.body { padding-block: clamp(1rem, 4vw, 2.75rem) 3rem; }
+.body section { scroll-margin-block-start: .9rem; }
+.grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 1rem; }
+.card {
+  margin-bottom: 1rem;
+  min-width: 0;
+  padding: clamp(.9rem, 3vw, 1.6rem);
+  border: 1px solid var(--access-border);
+  border-radius: 1rem;
+  color: var(--access-text);
+  background: #101c30;
+}
+.card h2 { margin-bottom: .55rem; font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 740; line-height: 1.25; }
+.card > p { color: var(--access-muted); line-height: 1.65; margin-block: .55rem; }
+.card a:not([class]) { color: var(--access-blue); }
+.settings {
+  border-radius: .75rem;
+  padding: .85rem;
+  background: #f3f7ff;
+  color: #14263e;
+}
+.card .contact, .hero .contact { min-height: 44px; display: inline-flex; align-items: center; color: var(--access-blue); text-decoration: underline; text-underline-offset: .2em; }
+.mediaPlayer {
+  min-width: 0;
+  margin-block: .85rem;
+  padding: clamp(.65rem, 2vw, 1rem);
+  border: 1px solid #516784;
+  border-radius: .75rem;
+  color: #f5f7ff;
+  background: #0b1629;
+}
+.mediaPlayer figcaption { font-size: 1.1rem; font-weight: 750; }
+.mediaPlayer > p { margin-block: .35rem .7rem; color: #b7c9e3; line-height: 1.55; }
+.mediaPlayer video { display: block; width: 100%; max-width: 100%; border-radius: .5rem; aspect-ratio: 16 / 9; background: #030913; }
+.transcript { margin-top: .6rem; }
+.transcript summary { min-height: 44px; padding-block: .65rem; cursor: pointer; font-weight: 730; color: #d4e6ff; }
+.languages { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .75rem; }
+.languages button, .cues button, .action {
+  min-height: 44px;
+  min-width: 44px;
+  border: 1px solid #8198b8;
+  border-radius: .55rem;
+  padding: .45rem .7rem;
+  color: #14263e;
+  background: #f5f8ff;
+  font-weight: 720;
+}
+.languages button[aria-pressed=true] { border-color: #abcaff; background: #cce0ff; box-shadow: inset 0 -3px #2563a4; }
+.cues { display: grid; gap: .35rem; padding: 0; list-style: none; margin-top: .7rem; }
+.cues li { display: flex; align-items: start; gap: .65rem; padding: .5rem 0; border-top: 1px solid #3c5474; }
+.cues p { margin: .35rem 0; line-height: 1.6; }
+.librasPanel { margin-block: .75rem; overflow-wrap: anywhere; }
+.librasPanel p { line-height: 1.65; margin-block: .6rem; }
+.librasPanel a { display: inline-flex; min-height: 44px; align-items: center; text-decoration: underline; text-underline-offset: .18em; }
+.librasFrame { width: 100%; min-height: 30rem; border: 1px solid #8198b8; border-radius: .6rem; background: #f6f9ff; }
+.page :focus-visible, .mediaPlayer :focus-visible, .librasPanel :focus-visible {
+  outline: 3px solid #f1c974;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 3px #132740;
+}
+.settings :focus-visible { outline-color: #2054a0; box-shadow: 0 0 0 3px #fff; }
+@media (max-width: 700px) {
+  .quick, .grid { grid-template-columns: minmax(0, 1fr); }
+}
+@media (forced-colors: active) {
+  .page :focus-visible, .mediaPlayer :focus-visible, .librasPanel :focus-visible { outline-color: Highlight; box-shadow: none; }
+  .languages button[aria-pressed=true] { border: 2px solid Highlight; }
+}

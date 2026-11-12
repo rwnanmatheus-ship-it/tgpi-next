@@ -1,6 +1,8 @@
 'use client';
 
 import Link from 'next/link';
+import LibrasPanel from './LibrasPanel';
+import { accessCopy } from '@/lib/localization/accessibility-center';
 import { useEffect, useId, useRef, useState } from 'react';
 import { useLocale } from '@/components/localization/LocaleProvider';
 import { studyCopy } from '@/lib/localization/study-accessibility';
@@ -12,6 +14,11 @@ type Preferences = { size: 100 | 125 | 150 | 200; rate: 0.75 | 1 | 1.25; spacing
 type Playback = 'idle' | 'playing' | 'paused';
 const storageKey = 'tgpi.study-reader.v1';
 const defaults: Preferences = { size: 100, rate: 1, spacing: false, contrast: false };
+const presets = [
+  { key: 'standard', size: 100, spacing: false, contrast: false },
+  { key: 'comfortable', size: 125, spacing: true, contrast: false },
+  { key: 'clear', size: 150, spacing: true, contrast: true },
+] as const;
 
 function preferences(): Preferences {
   try {
@@ -44,10 +51,12 @@ export default function StudyReader({ title, language, sections, atlas = false }
   const trigger = useRef<HTMLButtonElement>(null);
   const utterance = useRef<SpeechSynthesisUtterance | null>(null);
   const [index, setIndex] = useState(0);
+  const [isOpen, setIsOpen] = useState(false);
   const [settings, setSettings] = useState(defaults);
   const [playback, setPlayback] = useState<Playback>('idle');
   const [issue, setIssue] = useState<'voiceError' | 'voiceMissing' | null>(null);
   const section = sections[index];
+  const portuguesePassages = section?.passages.filter(passage => (passage.lang ?? language) === 'pt-BR') ?? [];
 
   useEffect(() => () => {
     if (utterance.current) {
@@ -145,9 +154,11 @@ export default function StudyReader({ title, language, sections, atlas = false }
       setSettings(preferences());
       setIssue(null);
       dialog.current?.showModal();
+      setIsOpen(true);
     }}>{label('reader')}</button>
     <dialog ref={dialog} className={styles.panel} aria-labelledby={id} data-contrast={settings.contrast} onClose={() => {
       stop();
+      setIsOpen(false);
       trigger.current?.focus({ preventScroll: true });
     }}>
       <header>
@@ -179,6 +190,14 @@ export default function StudyReader({ title, language, sections, atlas = false }
       <p role="status">{issue ? label(issue) : ''}</p>
       <details>
         <summary>{label('settings')}</summary>
+        <fieldset className={styles.presets}>
+          <legend>{accessCopy(locale, 'profiles')}</legend>
+          <div className={styles.controls}>
+            {presets.map(({ key, ...preset }) => <button key={key} type="button"
+              aria-pressed={settings.size === preset.size && settings.spacing === preset.spacing && settings.contrast === preset.contrast}
+              onClick={() => update({ ...settings, ...preset })}>{accessCopy(locale, key)}</button>)}
+          </div>
+        </fieldset>
         <div className={styles.controls}>
           <label>{label('size')}
             <select value={settings.size} onChange={event => update({ ...settings, size: Number(event.target.value) as Preferences['size'] })}>
@@ -197,6 +216,10 @@ export default function StudyReader({ title, language, sections, atlas = false }
         <button type="button" onClick={download}>{label('download')}</button>
         {atlas && <Link href="/atlas?guide=learning&support=plain-language" target="_blank" rel="noopener noreferrer" aria-describedby={`${id}-atlas`}>{label('atlas')}</Link>}
       </div>
+      {portuguesePassages.length > 0 && <details>
+        <summary>{accessCopy(locale, 'libras')}</summary>
+        {isOpen && <LibrasPanel key={index} text={portuguesePassages.map(item => item.text).join('\n\n')} />}
+      </details>}
       {atlas && <p id={`${id}-atlas`}>{label('atlasHint')}</p>}
     </dialog>
   </>;

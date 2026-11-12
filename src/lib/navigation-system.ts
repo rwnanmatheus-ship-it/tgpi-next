@@ -1,6 +1,7 @@
 import type { SuperAppModuleId } from "@/lib/super-app";
 
 export type NavigationIconName =
+  | "accessibility"
   | "apps"
   | "arrow"
   | "bell"
@@ -18,6 +19,7 @@ export type NavigationIconName =
   | "home"
   | "key"
   | "log-out"
+  | "media"
   | "menu"
   | "search"
   | "settings"

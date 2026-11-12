@@ -1,4 +1,5 @@
 "use client";
+import AccessibilityLink from '@/components/accessibility/AccessibilityLink';
 import LanguageSelector from "@/components/localization/LanguageSelector";
 import { useLocale } from "@/components/localization/LocaleProvider";
 
@@ -49,6 +50,7 @@ export default function Navbar() {
         <div className="tgpi-desktop-actions">
           <LanguageSelector compact />
           <LauncherButton />
+          <AccessibilityLink />
 
           <Show when="signed-in">
             <NotificationBell />
