@@ -2038,7 +2038,7 @@
   },
   {
     "id": "whed",
-    "title": "Just a moment...",
+    "title": "World Higher Education Database (WHED)",
     "publisher": "International Association of Universities / UNESCO collaboration",
     "url": "https://www.whed.net/home.php",
     "topics": [
@@ -2108,7 +2108,7 @@
   },
   {
     "id": "ilo-normlex",
-    "title": "",
+    "title": "NORMLEX — International Labour Standards",
     "publisher": "International Labour Organization",
     "url": "https://normlex.ilo.org/",
     "topics": [
@@ -2222,7 +2222,7 @@
   },
   {
     "id": "itu-data",
-    "title": "ERROR: The request could not be satisfied",
+    "title": "ITU DataHub",
     "publisher": "International Telecommunication Union",
     "url": "https://datahub.itu.int/",
     "topics": [
@@ -2244,7 +2244,7 @@
   },
   {
     "id": "iom-portal",
-    "title": "Access Denied",
+    "title": "Migration Data Portal",
     "publisher": "International Organization for Migration",
     "url": "https://www.migrationdataportal.org/",
     "topics": [
@@ -2267,7 +2267,7 @@
   },
   {
     "id": "unhcr-data",
-    "title": "",
+    "title": "UNHCR Refugee Data Finder",
     "publisher": "UNHCR",
     "url": "https://www.unhcr.org/refugee-statistics/",
     "topics": [
@@ -2385,7 +2385,7 @@
   },
   {
     "id": "oecd-data",
-    "title": "",
+    "title": "OECD Data Explorer",
     "publisher": "Organisation for Economic Co-operation and Development",
     "url": "https://data-explorer.oecd.org/",
     "topics": [

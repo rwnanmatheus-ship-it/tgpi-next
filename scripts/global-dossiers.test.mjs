@@ -23,7 +23,7 @@ test('source counts represent distinct resources, with known publishers and prov
   assert.equal(new Set(RESEARCH_SOURCES.map(s=>s.url.replace(/\/$/,''))).size,RESEARCH_SOURCES.length);
   for(const s of RESEARCH_SOURCES){
     for(const value of [s.url,s.authorityUrl]){const u=new URL(value);assert.equal(u.protocol,'https:');assert.equal(u.username,'');assert.equal(u.password,'');}
-    assert.ok(s.publisher);assert.ok(s.scope);assert.ok(!s.country||identities.has(s.country));
+    assert.ok(s.publisher);assert.ok(s.scope);assert.ok(s.title.trim());assert.doesNotMatch(s.title,/^Access Denied$|^Just a moment|^ERROR:/i);assert.ok(!s.country||identities.has(s.country));
     if(s.access.status==='retrieved'){assert.equal(s.access.httpStatus,200);assert.match(s.access.responseSha256,/^[a-f0-9]{64}$/);}
     for(const topic of s.topics)assert.ok(RESEARCH_TOPICS.includes(topic));
     assert.doesNotMatch(s.url,/cnsee\.org|ssnbs\.org|znaki\.fm|isteebu\.bi|tlcafrica/);

@@ -1,6 +1,11 @@
 import type { Locale } from "./config";
 
 export const messages = {
+  "1 result": {"en": "1 result", "pt-BR": "1 resultado", "es": "1 resultado", "fr": "1 résultat", "de": "1 Ergebnis", "it": "1 risultato"},
+  "1 destination-specific reference": {"en": "1 destination-specific reference", "pt-BR": "1 referência específica do país", "es": "1 referencia específica del país", "fr": "1 référence propre au pays", "de": "1 länderspezifische Quelle", "it": "1 riferimento specifico del paese"},
+  "1 source reference": {"en": "1 source reference", "pt-BR": "1 referência de fonte", "es": "1 referencia de fuente", "fr": "1 référence de source", "de": "1 Quellenverweis", "it": "1 riferimento alla fonte"},
+  "1 indicator": {"en": "1 indicator", "pt-BR": "1 indicador", "es": "1 indicador", "fr": "1 indicateur", "de": "1 Indikator", "it": "1 indicatore"},
+  "{count} applicable source references": {"en": "{count} applicable source references", "pt-BR": "{count} referências aplicáveis", "es": "{count} referencias aplicables", "fr": "{count} références pertinentes", "de": "{count} relevante Quellen", "it": "{count} riferimenti pertinenti"},
   // Global research dossier: six-language editorial and interface copy.
   "Global research dossier": {"en": "Global research dossier", "pt-BR": "Dossiê global de pesquisa", "es": "Dosier global de investigación", "fr": "Dossier mondial de recherche", "de": "Globales Recherchedossier", "it": "Dossier di ricerca globale"},
   "Research chapters": {"en": "Research chapters", "pt-BR": "Capítulos de pesquisa", "es": "Capítulos de investigación", "fr": "Chapitres de recherche", "de": "Recherchekapitel", "it": "Capitoli di ricerca"},
