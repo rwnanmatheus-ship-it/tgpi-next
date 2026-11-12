@@ -1,5 +1,5 @@
 import 'server-only';
-import { academyCase } from '@/data/courses/academy/catalog.server';
+import { academyCase, getAcademyCourse } from '@/data/courses/academy/catalog.server';
 import type { AcademyStatus, AcademyTranslations } from '@/lib/learning/academy/types';
 import { locales } from './config';
 import { assessmentTranslations } from './assessment.server';
@@ -20,6 +20,7 @@ export function academyCaseTranslations(courseId: string, source: string): Acade
 
 /** Called after authorization. Only currently disclosed questions/feedback are localized. */
 export function withAcademyTranslations(status: AcademyStatus, courseId: string): AcademyStatus {
+  if (getAcademyCourse(courseId)?.language === 'pt-BR') return status;
   const languagePractice = ['global-english-2026', 'ingles-carreira-internacional'].includes(courseId);
   return {
     ...status,
@@ -42,3 +43,4 @@ export function withAcademyTranslations(status: AcademyStatus, courseId: string)
     } : null,
   };
 }
+
