@@ -217,9 +217,9 @@ async function issueAcademyCredential(identity: Identity, course: AcademyCourse,
     const unsigned: Omit<TgpiLearningCredential, 'verificationHash'> = {
       id, achievementType: 'Professional Certificate', assessmentScore: Math.min(record.final.score, record.retention.score), competencyIds: course.lessons.map(l => l.id), courseId: course.id, courseTitle: course.title, courseVersion: course.version,
       credentialProfile: 'TGPI Verified Learning Credential', credentialSchemaVersion: 2, credentialStandardVersion: 'tgpi-autonomous-1.0', criteriaUrl: `/courses/${course.id}#certification`,
-      evidenceSummary: ['Lesson checks passed with practice records.', 'Final assessment and spaced review: at least 80%, including all essential checks and a fresh numerical case.', 'Objective responses were scored automatically. Open practice artifacts, oral performance and professional competence were not independently evaluated.', 'Estimated workload includes study, practice and assessment; it is not monitored attendance. Non-degree course; no external accreditation or license is implied.'],
+      evidenceSummary: [...(course.scopeNotice ? [course.scopeNotice] : []), 'Lesson checks passed with practice records.', 'Final assessment and spaced review: at least 80%, including all essential checks and a fresh numerical case.', 'Objective responses were scored automatically. Open practice artifacts, oral performance and professional competence were not independently evaluated.', 'Estimated workload includes study, practice and assessment; it is not monitored attendance. Non-degree course; no external accreditation or license is implied.'],
       identityEvidence: { anchor: key.anchor, fingerprint: key.fingerprint, globalKeyId: key.keyId, revision: key.revision }, issuedAt: now, completedAt: record.completedAt,
-      documentNature: 'Certificado de conclusão — práticas e avaliações automáticas', issuer: 'TGPI — The Global Polymath Institute', keyId: TGPI_CREDENTIAL_KEY_ID,
+      documentNature: course.scopeNotice ? 'Certificado de conclusão teórica' : 'Certificado de conclusão — práticas e avaliações automáticas', issuer: 'TGPI — The Global Polymath Institute', keyId: TGPI_CREDENTIAL_KEY_ID,
       learningHours: Math.round(course.minutes / 60 * 100) / 100, masteryThreshold: 80, ownerUid: identity.uid, publicName: consent.publicName,
       skills: course.lessons.filter(l => !l.foundation).map(l => ({ id: l.id, level: 'foundation', name: l.title })), standardsAlignment: [], status: 'active',
       professionalEvidence: { sharing: record.sharing, instructionLanguage: course.language, certificateLanguage: 'pt-BR', rubricVersion: 'tgpi-autonomous-1.0' },
@@ -247,3 +247,4 @@ async function academySharing(identity: Identity, course: AcademyCourse, sharing
   });
 }
 export function academyCatalogSize() { return academyCourses.length; }
+

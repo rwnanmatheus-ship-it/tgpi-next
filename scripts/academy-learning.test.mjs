@@ -74,16 +74,33 @@ async function completeLessons(h,course,user=identity) {
   return mutate({action:'portfolio',revision:status.record.revision,text:portfolio});
 }
 
-test('all 27 courses have real expanded lessons, inspectable workload, assessments and preserved foundation IDs',()=>{
+test('academy courses have inspectable workload, assessments and preserved foundation IDs',()=>{
  const h=harness(), {academyCourses,academyQuestions}=h.catalog;
- assert.equal(academyCourses.length,27);assert.equal(new Set(academyCourses.map(c=>c.id)).size,27);
- assert.equal(academyCourses.reduce((n,c)=>n+c.lessons.length,0),335);
+ const { emergencyCourses } = h.load(resolve('src/data/courses/emergency/catalog.ts'));
+ const emergency = new Map(emergencyCourses.map(course => [course.id, course]));
+ const originals = academyCourses.filter(course => !emergency.has(course.id));
+ assert.equal(originals.length,27);
+ assert.equal(new Set(academyCourses.map(c=>c.id)).size,33);
+ assert.equal(originals.reduce((n,c)=>n+c.lessons.length,0),335);
+ assert.equal(academyCourses.filter(course => emergency.has(course.id)).length,6);
  const manifest=h.load(resolve('src/data/courses/academy/manifest.ts')).academyManifest;
  const old=h.load(resolve('src/data/courses.ts')).courses, pro=h.load(resolve('src/data/courses/professional/index.ts')).professionalCourseDrafts;
  for(const course of academyCourses){
   assert.equal(course.minutes,course.lessons.reduce((n,l)=>n+l.minutes,0)+course.portfolioMinutes+course.assessmentMinutes);
   assert.deepEqual(manifest[course.id],{minutes:course.minutes,lessons:course.lessons.length});
-  assert.equal(course.lessons.filter(lesson => lesson.project).length,4);assert.ok(course.minutes>=900 && course.minutes<=2400);
+  const entry = emergency.get(course.id);
+  if (entry) {
+   assert.equal(course.minutes, entry.hours * 60);
+   assert.equal(course.lessons.length, entry.lessons);
+   assert.equal(course.language, 'pt-BR');
+   assert.equal(Boolean(course.scopeNotice), entry.practicalTraining);
+   assert.ok(course.projectBrief);
+   assert.ok(existsSync(resolve('public', course.image.slice(1))));
+   assert.equal(h.catalog.getAcademyCourse(course.id, h.catalog.PREVIOUS_ACADEMY_VERSION), undefined);
+  } else {
+   assert.equal(course.lessons.filter(lesson => lesson.project).length,4);
+   assert.ok(course.minutes>=900 && course.minutes<=2400);
+  }
   const bank=academyQuestions(course.id);assert.ok(bank.length>=course.lessons.length);
   for(const lesson of course.lessons){assert.ok(bank.some(q=>q.lessonId===lesson.id));assert.ok(lesson.sections.every(s=>s.body.trim()));assert.ok(lesson.practice.length>=2);}
   const previous=[...old,...pro].find(c=>c.id===course.id);
@@ -111,8 +128,12 @@ test('every course completes objective gates and delayed review, then automatica
   assert.equal(credential.automatedEvidence.humanReviewed,false);assert.equal(credential.automatedEvidence.workloadMinutes,course.minutes);
   assert.ok(h.load(resolve('src/lib/credential-signing.server.ts')).verifyLearningCredentialIntegrity(credential));
   assert.ok(!credential.evidenceSummary.join(' ').includes('human reviewer approved'));
+  if (course.scopeNotice) {
+   assert.equal(credential.documentNature, 'Certificado de conclusão teórica');
+   assert.ok(credential.evidenceSummary.includes(course.scopeNotice));
+  }
  }
- assert.equal([...h.documents.keys()].filter(p=>p.startsWith('tgpiLearningCredentials/')).length,27);
+ assert.equal([...h.documents.keys()].filter(p=>p.startsWith('tgpiLearningCredentials/')).length,h.catalog.academyCourses.length);
 });
 
 test('client grades, skipped lessons, other users, stale revisions, duplicate and foreign answers are rejected',async()=>{
@@ -244,3 +265,4 @@ test('previous editions remain resumable, retain their signed workload and canno
  assert.equal((await h.service.academyStudyCourse(identity.uid,course)).version,course.version);
  assert.equal((await h.service.academyStatus(identity,course.id,previous.version)).record.completed[previous.lessons[0].id].score,100);
 });
+

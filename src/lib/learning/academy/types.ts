@@ -15,7 +15,7 @@ export type AcademyLesson = {
 export type AcademyCourse = {
   id: string; version: string; title: string; description: string; descriptionParts?: string[]; outcomes: string[];
   lessons: AcademyLesson[]; minutes: number; portfolioMinutes: number; assessmentMinutes: number;
-  language: string; image: string; legacyHref?: string; projectBrief?: string;
+  language: string; image: string; legacyHref?: string; projectBrief?: string; scopeNotice?: string;
 };
 export type AcademyQuestion = { id: string; lessonId: string; prompt: string; translations?: AcademyTranslations; options: Array<{ id: string; label: string; translations?: AcademyTranslations }>; essential: boolean };
 export type AcademyPrivateQuestion = AcademyQuestion & { correctOptionId: string; explanation: string };
@@ -45,3 +45,4 @@ export type AcademyLab = {
 export type CaseSpec = {
   prompt: string; unit: string; operation: 'remaining' | 'ratio' | 'percent' | 'sum'; explanation: string;
 };
+

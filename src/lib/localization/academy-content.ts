@@ -5,6 +5,7 @@ import { translate } from './messages';
 
 /** Localizes authored course copy without flattening language-learning boundaries. */
 export function localizeAcademyCourse(source: AcademyCourse, locale: Locale): AcademyCourse {
+  if (source.language === 'pt-BR') return source;
   const localized = localizeAuthoredContent(source, locale);
   return {
     ...localized,
@@ -21,3 +22,4 @@ export function localizeAcademyCourse(source: AcademyCourse, locale: Locale): Ac
     })),
   };
 }
+

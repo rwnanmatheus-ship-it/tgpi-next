@@ -1,5 +1,6 @@
 import { courseArtwork } from '@/lib/cinematic-art';
 import { academyManifest } from "@/data/courses/academy/manifest";
+import { emergencyOverview } from "@/data/courses/emergency/overview";
 import { seriesOverview } from "@/data/courses/series-courses";
 import type { CourseOverview } from "@/types/course-overview";
 
@@ -169,12 +170,13 @@ const originalOverview: CourseOverview[] = [
   },
 ];
 
-export const coursesOverview: CourseOverview[] = originalOverview.map(course => {
+export const coursesOverview: CourseOverview[] = [...originalOverview.map(course => {
   const edition = academyManifest[course.id];
   if (!edition) return course;
   return { ...course, image: courseArtwork(course.id, course.image), status: "available", href: `/courses/${course.id}`,
     duration: `${Math.floor(edition.minutes / 60)}h ${edition.minutes % 60}m`,
     format: `${edition.lessons} lessons and laboratories`, releaseLabel: "Expanded edition · Automatic assessment",
     learningPolicy: { kind: course.id === "global-english-2026" ? "flagship" : "practice", publicationStatus: "published", accessPolicy: "free_account", assessmentPolicy: "automatic_assessment", credentialStatus: "criteria_available", instructionLanguage: "en" },
-  };
-});
+  } satisfies CourseOverview;
+}), ...emergencyOverview];
+

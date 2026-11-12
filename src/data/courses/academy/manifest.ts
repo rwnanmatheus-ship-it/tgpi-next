@@ -1,5 +1,6 @@
 import { academyProjects } from './projects.ts';
 import { projectStageCount } from './project-stages.ts';
+import { emergencyCourses } from '../emergency/catalog.ts';
 
 /** Workload of the previous edition, verified against the published curriculum. */
 export const previousAcademyManifest: Record<string, { minutes: number; lessons: number }> = {
@@ -113,6 +114,10 @@ export const previousAcademyManifest: Record<string, { minutes: number; lessons:
   }
 };
 
-export const academyManifest = Object.fromEntries(Object.entries(previousAcademyManifest).map(([id, previous]) => [
-  id, { minutes: academyProjects[id][0] * 60, lessons: previous.lessons + projectStageCount },
-]));
+export const academyManifest = Object.fromEntries([
+  ...Object.entries(previousAcademyManifest).map(([id, previous]) => [
+    id, { minutes: academyProjects[id][0] * 60, lessons: previous.lessons + projectStageCount },
+  ] as const),
+  ...emergencyCourses.map(course => [course.id, { minutes: course.hours * 60, lessons: course.lessons }] as const),
+]);
+

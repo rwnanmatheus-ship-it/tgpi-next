@@ -14,7 +14,7 @@ import type { CourseOverview } from '@/types/course-overview';
 import styles from './learning-catalog.module.css';
 
 type Props = { courses: CourseOverview[]; initialFilters: CatalogFilters };
-const goals = [['all','All subjects'],['global-mobility','Language & mobility'],['decision-intelligence','Better decisions'],['global-economics','Money & opportunity'],['future-of-work','Career & technology']] as const;
+const goals = [['all','All subjects'],['emergency-readiness','Primeiros socorros e desastres'],['global-mobility','Language & mobility'],['decision-intelligence','Better decisions'],['global-economics','Money & opportunity'],['future-of-work','Career & technology']] as const;
 export default function LearningPathExplorer({ courses, initialFilters }: Props) {
   const { t, locale } = useLocale();
   const [filters, setFilters] = useState(initialFilters), [sort, setSort] = useState('recommended');
@@ -55,3 +55,4 @@ export default function LearningPathExplorer({ courses, initialFilters }: Props)
     <details className={styles.standard}><summary>{t('How TGPI learning works')}</summary><div><p><strong>{t('Learn through situations.')}</strong>{t('Each available course includes scenarios, practical tasks and formative checkpoints with feedback.')}</p><p><strong>{t('Keep your progress.')}</strong>{t('Practice courses record checkpoints; professional courses also save activities and project submissions in your account.')}</p><p><strong>{t('Understand your credential.')}</strong>{t('Study, apply, check and revisit. Your certificate is issued automatically after all requirements are met; no human review queue is required.')}</p></div></details>
   </section>;
 }
+

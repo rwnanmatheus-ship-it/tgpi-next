@@ -4,7 +4,7 @@ export function parseCatalogFilters(params: URLSearchParams): CatalogFilters {
   const oneOf = (name: string, options: readonly string[], fallback: string) => { const value = params.get(name); return value && options.includes(value) ? value : fallback; };
   return {
     query: (params.get('q') ?? '').slice(0, 160),
-    goal: oneOf('goal', ['all','global-mobility','decision-intelligence','global-economics','future-of-work'], 'all'),
+    goal: oneOf('goal', ['all','global-mobility','decision-intelligence','global-economics','future-of-work','emergency-readiness'], 'all'),
     series: oneOf('series', ['all','First 30 Days','Career Without Borders','The Intelligence Toolkit','The Global Money Series'], 'all'),
     availability: oneOf('availability', ['all','available','planned'], 'available'),
     credential: oneOf('credential', ['all','criteria_available','none'], 'all'),
@@ -19,3 +19,4 @@ export function catalogFilterParams(filters: CatalogFilters, current = new URLSe
   }
   return params;
 }
+

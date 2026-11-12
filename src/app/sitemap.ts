@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { emergencyCover, emergencyCourses } from "@/data/courses/emergency/catalog";
 import { publicGuides } from "@/lib/public-guides";
 import { getAllCountrySlugs } from "@/lib/countries";
 
@@ -47,10 +48,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  return [...pages, ...countries, ...publicGuides.map(guide => ({
+  const emergency: MetadataRoute.Sitemap = emergencyCourses.map(({ id }) => ({
+    url: `${siteUrl}/courses/${id}`,
+    images: [`${siteUrl}${emergencyCover(id)}`],
+    changeFrequency: "monthly",
+    priority: 0.7,
+  }));
+
+  return [...pages, ...countries, ...emergency, ...publicGuides.map(guide => ({
     url: `${siteUrl}/guides/${guide.slug}`,
     lastModified: guide.reviewedAt,
     changeFrequency: "monthly" as const,
     priority: 0.7,
   }))];
 }
+

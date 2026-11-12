@@ -47,7 +47,7 @@ test('new courses have complete mapped lessons, valid checkpoints and honest cre
 test('catalog entries and asset references are unique and valid', () => {
   assert.equal(new Set(coursesOverview.map(c => c.id)).size, coursesOverview.length);
   for (const entry of coursesOverview) assert.ok(existsSync(resolve('public', entry.image.slice(1))));
-  assert.equal(coursesOverview.filter(c => c.status === 'available').length, 17);
+  assert.equal(coursesOverview.filter(c => c.status === 'available').length, 23);
 });
 
 test('ten new courses have unique chapters, complete registry entries and full-resolution covers', () => {

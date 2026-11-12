@@ -2,7 +2,8 @@ export type CourseGoal =
   | "global-mobility"
   | "decision-intelligence"
   | "future-of-work"
-  | "global-economics";
+  | "global-economics"
+  | "emergency-readiness";
 
 export type CourseSeries = "First 30 Days" | "Career Without Borders" | "The Intelligence Toolkit" | "The Global Money Series";
 
@@ -27,3 +28,4 @@ export interface CourseOverview {
   status: "available" | "planned";
   title: string;
 }
+

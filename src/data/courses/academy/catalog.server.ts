@@ -13,6 +13,7 @@ import { languageAndStrategyLabs } from './language-and-strategy';
 
 import { academyProjects } from './projects';
 import { projectLessons, projectWorkload } from './project-stages';
+import { emergencyAcademy } from './emergency.server';
 
 export const PREVIOUS_ACADEMY_VERSION = '2026.11.1';
 export const ACADEMY_VERSION = '2026.11.2';
@@ -106,6 +107,12 @@ for (const [id, additions] of Object.entries(labs)) {
   });
   banks.set(id, [...questions, ...project.map(item => item.question)]);
 }
+const emergencyCases = new Map<string, CaseSpec>();
+for (const { course, questions, calculation } of emergencyAcademy(ACADEMY_VERSION)) {
+  courseMap.set(course.id, course);
+  banks.set(course.id, questions);
+  emergencyCases.set(course.id, calculation);
+}
 export const academyCourses = [...courseMap.values()];
 export function getAcademyCourse(id: string, version = ACADEMY_VERSION) {
   const canonical = id === 'english-abroad' ? 'global-english-2026' : id;
@@ -117,6 +124,8 @@ export function academyQuestions(id: string, version = ACADEMY_VERSION) {
 
 /** Fresh numeric cases test application instead of trusting a browser-supplied score. */
 export function academyCase(id: string): CaseSpec {
+  const emergency = emergencyCases.get(id);
+  if (emergency) return emergency;
   const budget = { prompt: 'Fictional planning case: liquid funds are {a} units, committed setup costs are {b} units, and the monthly shortfall is {c} units. Excluding other risks, how many months does the remaining cash cover? Round to two decimal places.', operation: 'remaining', unit: 'months', explanation: 'Subtract committed costs from available cash, then divide by the monthly shortfall. This simplified estimate is not a guarantee.' } as const;
   const throughput = { prompt: 'Fictional workflow: the baseline takes {a} minutes. The revised workflow takes {b} minutes of preparation and {c} minutes of verification. How many minutes are saved per run? Round to two decimal places.', operation: 'remaining', unit: 'minutes', explanation: 'Compare the complete workflow with the baseline, including preparation and verification.' } as const;
   const percent = { prompt: 'Fictional evaluation: {a} cases were checked and {b} failed the defined criterion. What percentage failed? Round to two decimal places.', operation: 'percent', unit: '%', explanation: 'Divide failed cases by all checked cases and multiply by 100. A sample result does not guarantee future performance.' } as const;
@@ -125,3 +134,4 @@ export function academyCase(id: string): CaseSpec {
   if (['global-english-2026','ingles-carreira-internacional'].includes(id)) return { prompt: 'Read the handover: “We have {a} tasks. {b} are complete and {c} are cancelled. Please report the number still open.” How many tasks remain open?', operation: 'sum', unit: 'tasks', explanation: 'Subtract the completed and cancelled tasks from the total. The language task asks for the remaining open items.' };
   return percent;
 }
+
