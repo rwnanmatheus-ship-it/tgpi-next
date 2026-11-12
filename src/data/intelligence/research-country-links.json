@@ -1,0 +1,986 @@
+{
+  "afghanistan": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/afg/",
+    "who-countries": "https://data.who.int/countries/004",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/afghanistan"
+  },
+  "albania": {
+    "enic-naric": "https://enic-naric.net/page-Albania",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/alb/",
+    "who-countries": "https://data.who.int/countries/008",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/albania"
+  },
+  "algeria": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/dza/",
+    "who-countries": "https://data.who.int/countries/012",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/algeria"
+  },
+  "andorra": {
+    "enic-naric": "https://enic-naric.net/page-Andorra",
+    "who-countries": "https://data.who.int/countries/020",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/andorra"
+  },
+  "angola": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/ago/",
+    "who-countries": "https://data.who.int/countries/024",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/angola"
+  },
+  "antigua-and-barbuda": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/atg/",
+    "who-countries": "https://data.who.int/countries/028",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/antigua-and-barbuda"
+  },
+  "argentina": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/arg/",
+    "who-countries": "https://data.who.int/countries/032",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/argentina"
+  },
+  "armenia": {
+    "enic-naric": "https://enic-naric.net/page-Armenia",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/arm/",
+    "who-countries": "https://data.who.int/countries/051",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/armenia"
+  },
+  "australia": {
+    "enic-naric": "https://enic-naric.net/page-Australia",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/aus/",
+    "who-countries": "https://data.who.int/countries/036",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/australia"
+  },
+  "austria": {
+    "enic-naric": "https://enic-naric.net/page-Austria",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/aut/",
+    "who-countries": "https://data.who.int/countries/040",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/austria"
+  },
+  "azerbaijan": {
+    "enic-naric": "https://enic-naric.net/page-Azerbaijan",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/aze/",
+    "who-countries": "https://data.who.int/countries/031",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/azerbaijan"
+  },
+  "bahamas": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/bhs/",
+    "who-countries": "https://data.who.int/countries/044",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/bahamas"
+  },
+  "bahrain": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/bhr/",
+    "who-countries": "https://data.who.int/countries/048",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/bahrain"
+  },
+  "bangladesh": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/bgd/",
+    "who-countries": "https://data.who.int/countries/050",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/bangladesh"
+  },
+  "barbados": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/brb/",
+    "who-countries": "https://data.who.int/countries/052",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/barbados"
+  },
+  "belarus": {
+    "enic-naric": "https://enic-naric.net/page-Belarus",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/blr/",
+    "who-countries": "https://data.who.int/countries/112",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/belarus"
+  },
+  "belgium": {
+    "enic-naric": "https://enic-naric.net/page-Belgium",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/bel/",
+    "who-countries": "https://data.who.int/countries/056",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/belgium"
+  },
+  "belize": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/blz/",
+    "who-countries": "https://data.who.int/countries/084",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/belize"
+  },
+  "benin": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/ben/",
+    "who-countries": "https://data.who.int/countries/204",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/benin"
+  },
+  "bhutan": {
+    "who-countries": "https://data.who.int/countries/064",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/bhutan"
+  },
+  "bolivia": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/bol/",
+    "who-countries": "https://data.who.int/countries/068"
+  },
+  "bosnia-and-herzegovina": {
+    "enic-naric": "https://enic-naric.net/page-Bosnia-and-Herzegovina",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/bih/",
+    "who-countries": "https://data.who.int/countries/070",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/bosnia-and-herzegovina"
+  },
+  "botswana": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/bwa/",
+    "who-countries": "https://data.who.int/countries/072",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/botswana"
+  },
+  "brazil": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/bra/",
+    "who-countries": "https://data.who.int/countries/076",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/brazil"
+  },
+  "brunei": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/brn/",
+    "who-countries": "https://data.who.int/countries/096"
+  },
+  "bulgaria": {
+    "enic-naric": "https://enic-naric.net/page-Bulgaria",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/bgr/",
+    "who-countries": "https://data.who.int/countries/100",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/bulgaria"
+  },
+  "burkina-faso": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/bfa/",
+    "who-countries": "https://data.who.int/countries/854",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/burkina-faso"
+  },
+  "burundi": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/bdi/",
+    "who-countries": "https://data.who.int/countries/108",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/burundi"
+  },
+  "cabo-verde": {
+    "who-countries": "https://data.who.int/countries/132"
+  },
+  "cambodia": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/khm/",
+    "who-countries": "https://data.who.int/countries/116",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/cambodia"
+  },
+  "cameroon": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/cmr/",
+    "who-countries": "https://data.who.int/countries/120",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/cameroon"
+  },
+  "canada": {
+    "enic-naric": "https://enic-naric.net/page-Canada",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/can/",
+    "who-countries": "https://data.who.int/countries/124",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/canada"
+  },
+  "central-african-republic": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/caf/",
+    "who-countries": "https://data.who.int/countries/140",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/central-african-republic"
+  },
+  "chad": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/tcd/",
+    "who-countries": "https://data.who.int/countries/148",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/chad"
+  },
+  "chile": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/chl/",
+    "who-countries": "https://data.who.int/countries/152",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/chile"
+  },
+  "china": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/chn/",
+    "who-countries": "https://data.who.int/countries/156",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/china"
+  },
+  "colombia": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/col/",
+    "who-countries": "https://data.who.int/countries/170",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/colombia"
+  },
+  "comoros": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/com/",
+    "who-countries": "https://data.who.int/countries/174",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/comoros"
+  },
+  "congo": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/cog/",
+    "who-countries": "https://data.who.int/countries/178",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/congo"
+  },
+  "costa-rica": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/cri/",
+    "who-countries": "https://data.who.int/countries/188",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/costa-rica"
+  },
+  "croatia": {
+    "enic-naric": "https://enic-naric.net/page-Croatia",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/hrv/",
+    "who-countries": "https://data.who.int/countries/191",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/croatia"
+  },
+  "cuba": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/cub/",
+    "who-countries": "https://data.who.int/countries/192",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/cuba"
+  },
+  "cyprus": {
+    "enic-naric": "https://enic-naric.net/page-Cyprus",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/cyp/",
+    "who-countries": "https://data.who.int/countries/196",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/cyprus"
+  },
+  "czechia": {
+    "enic-naric": "https://enic-naric.net/page-Czech-Republic",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/cze/",
+    "who-countries": "https://data.who.int/countries/203",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/czechia"
+  },
+  "democratic-republic-of-the-congo": {
+    "who-countries": "https://data.who.int/countries/180",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/democratic-republic-of-the-congo"
+  },
+  "denmark": {
+    "enic-naric": "https://enic-naric.net/page-Denmark",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/dnk/",
+    "who-countries": "https://data.who.int/countries/208",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/denmark"
+  },
+  "djibouti": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/dji/",
+    "who-countries": "https://data.who.int/countries/262",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/djibouti"
+  },
+  "dominica": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/dma/",
+    "who-countries": "https://data.who.int/countries/212",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/dominica"
+  },
+  "dominican-republic": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/dom/",
+    "who-countries": "https://data.who.int/countries/214",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/dominican-republic"
+  },
+  "ecuador": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/ecu/",
+    "who-countries": "https://data.who.int/countries/218",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/ecuador"
+  },
+  "egypt": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/egy/",
+    "who-countries": "https://data.who.int/countries/818",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/egypt"
+  },
+  "el-salvador": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/slv/",
+    "who-countries": "https://data.who.int/countries/222",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/el-salvador"
+  },
+  "equatorial-guinea": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/gnq/",
+    "who-countries": "https://data.who.int/countries/226",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/equatorial-guinea"
+  },
+  "eritrea": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/eri/",
+    "who-countries": "https://data.who.int/countries/232",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/eritrea"
+  },
+  "estonia": {
+    "enic-naric": "https://enic-naric.net/page-Estonia",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/est/",
+    "who-countries": "https://data.who.int/countries/233",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/estonia"
+  },
+  "eswatini": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/swz/",
+    "who-countries": "https://data.who.int/countries/748",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/eswatini"
+  },
+  "ethiopia": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/eth/",
+    "who-countries": "https://data.who.int/countries/231",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/ethiopia"
+  },
+  "fiji": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/fji/",
+    "who-countries": "https://data.who.int/countries/242",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/fiji"
+  },
+  "finland": {
+    "enic-naric": "https://enic-naric.net/page-Finland",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/fin/",
+    "who-countries": "https://data.who.int/countries/246",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/finland"
+  },
+  "france": {
+    "enic-naric": "https://enic-naric.net/page-France",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/fra/",
+    "who-countries": "https://data.who.int/countries/250",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/france"
+  },
+  "gabon": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/gab/",
+    "who-countries": "https://data.who.int/countries/266",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/gabon"
+  },
+  "gambia": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/gmb/",
+    "who-countries": "https://data.who.int/countries/270"
+  },
+  "georgia": {
+    "enic-naric": "https://enic-naric.net/page-Georgia",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/geo/",
+    "who-countries": "https://data.who.int/countries/268",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/georgia"
+  },
+  "germany": {
+    "enic-naric": "https://enic-naric.net/page-Germany",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/deu/",
+    "who-countries": "https://data.who.int/countries/276",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/germany"
+  },
+  "ghana": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/gha/",
+    "who-countries": "https://data.who.int/countries/288",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/ghana"
+  },
+  "greece": {
+    "enic-naric": "https://enic-naric.net/page-Greece",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/grc/",
+    "who-countries": "https://data.who.int/countries/300",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/greece"
+  },
+  "grenada": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/grd/",
+    "who-countries": "https://data.who.int/countries/308",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/grenada"
+  },
+  "guatemala": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/gtm/",
+    "who-countries": "https://data.who.int/countries/320",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/guatemala"
+  },
+  "guinea": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/gin/",
+    "who-countries": "https://data.who.int/countries/324",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/guinea"
+  },
+  "guinea-bissau": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/gnb/",
+    "who-countries": "https://data.who.int/countries/624",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/guinea-bissau"
+  },
+  "guyana": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/guy/",
+    "who-countries": "https://data.who.int/countries/328",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/guyana"
+  },
+  "haiti": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/hti/",
+    "who-countries": "https://data.who.int/countries/332",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/haiti"
+  },
+  "honduras": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/hnd/",
+    "who-countries": "https://data.who.int/countries/340",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/honduras"
+  },
+  "hungary": {
+    "enic-naric": "https://enic-naric.net/page-Hungary",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/hun/",
+    "who-countries": "https://data.who.int/countries/348",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/hungary"
+  },
+  "iceland": {
+    "enic-naric": "https://enic-naric.net/page-Iceland",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/isl/",
+    "who-countries": "https://data.who.int/countries/352",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/iceland"
+  },
+  "india": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/ind/",
+    "who-countries": "https://data.who.int/countries/356",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/india"
+  },
+  "indonesia": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/idn/",
+    "who-countries": "https://data.who.int/countries/360",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/indonesia"
+  },
+  "iran": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/irn/",
+    "who-countries": "https://data.who.int/countries/364"
+  },
+  "iraq": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/irq/",
+    "who-countries": "https://data.who.int/countries/368",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/iraq"
+  },
+  "ireland": {
+    "enic-naric": "https://enic-naric.net/page-Ireland",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/irl/",
+    "who-countries": "https://data.who.int/countries/372",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/ireland"
+  },
+  "israel": {
+    "enic-naric": "https://enic-naric.net/page-Israel",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/isr/",
+    "who-countries": "https://data.who.int/countries/376",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/israel"
+  },
+  "italy": {
+    "enic-naric": "https://enic-naric.net/page-Italy",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/ita/",
+    "who-countries": "https://data.who.int/countries/380",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/italy"
+  },
+  "ivory-coast": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/civ/",
+    "who-countries": "https://data.who.int/countries/384",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/cote-d-ivoire"
+  },
+  "jamaica": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/jam/",
+    "who-countries": "https://data.who.int/countries/388",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/jamaica"
+  },
+  "japan": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/jpn/",
+    "who-countries": "https://data.who.int/countries/392",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/japan"
+  },
+  "jordan": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/jor/",
+    "who-countries": "https://data.who.int/countries/400",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/jordan"
+  },
+  "kazakhstan": {
+    "enic-naric": "https://enic-naric.net/page-Kazakhstan",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/kaz/",
+    "who-countries": "https://data.who.int/countries/398",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/kazakhstan"
+  },
+  "kenya": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/ken/",
+    "who-countries": "https://data.who.int/countries/404",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/kenya"
+  },
+  "kiribati": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/kir/",
+    "who-countries": "https://data.who.int/countries/296",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/kiribati"
+  },
+  "kuwait": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/kwt/",
+    "who-countries": "https://data.who.int/countries/414",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/kuwait"
+  },
+  "kyrgyzstan": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/kgz/",
+    "who-countries": "https://data.who.int/countries/417",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/kyrgyzstan"
+  },
+  "laos": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/lao/",
+    "who-countries": "https://data.who.int/countries/418"
+  },
+  "latvia": {
+    "enic-naric": "https://enic-naric.net/page-Latvia",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/lva/",
+    "who-countries": "https://data.who.int/countries/428",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/latvia"
+  },
+  "lebanon": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/lbn/",
+    "who-countries": "https://data.who.int/countries/422",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/lebanon"
+  },
+  "lesotho": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/lso/",
+    "who-countries": "https://data.who.int/countries/426",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/lesotho"
+  },
+  "liberia": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/lbr/",
+    "who-countries": "https://data.who.int/countries/430",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/liberia"
+  },
+  "libya": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/lby/",
+    "who-countries": "https://data.who.int/countries/434",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/libya"
+  },
+  "liechtenstein": {
+    "enic-naric": "https://enic-naric.net/page-Liechtenstein",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/liechtenstein"
+  },
+  "lithuania": {
+    "enic-naric": "https://enic-naric.net/page-Lithuania",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/ltu/",
+    "who-countries": "https://data.who.int/countries/440",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/lithuania"
+  },
+  "luxembourg": {
+    "enic-naric": "https://enic-naric.net/page-Luxembourg",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/lux/",
+    "who-countries": "https://data.who.int/countries/442",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/luxembourg"
+  },
+  "madagascar": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/mdg/",
+    "who-countries": "https://data.who.int/countries/450",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/madagascar"
+  },
+  "malawi": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/mwi/",
+    "who-countries": "https://data.who.int/countries/454",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/malawi"
+  },
+  "malaysia": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/mys/",
+    "who-countries": "https://data.who.int/countries/458",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/malaysia"
+  },
+  "maldives": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/mdv/",
+    "who-countries": "https://data.who.int/countries/462",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/maldives"
+  },
+  "mali": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/mli/",
+    "who-countries": "https://data.who.int/countries/466",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/mali"
+  },
+  "malta": {
+    "enic-naric": "https://enic-naric.net/page-Malta",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/mlt/",
+    "who-countries": "https://data.who.int/countries/470",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/malta"
+  },
+  "marshall-islands": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/mhl/",
+    "who-countries": "https://data.who.int/countries/584",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/marshall-islands"
+  },
+  "mauritania": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/mrt/",
+    "who-countries": "https://data.who.int/countries/478",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/mauritania"
+  },
+  "mauritius": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/mus/",
+    "who-countries": "https://data.who.int/countries/480",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/mauritius"
+  },
+  "mexico": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/mex/",
+    "who-countries": "https://data.who.int/countries/484",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/mexico"
+  },
+  "micronesia": {
+    "who-countries": "https://data.who.int/countries/583"
+  },
+  "moldova": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/mda/",
+    "who-countries": "https://data.who.int/countries/498"
+  },
+  "monaco": {
+    "enic-naric": "https://enic-naric.net/page-Monaco",
+    "who-countries": "https://data.who.int/countries/492",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/monaco"
+  },
+  "mongolia": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/mng/",
+    "who-countries": "https://data.who.int/countries/496",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/mongolia"
+  },
+  "montenegro": {
+    "enic-naric": "https://enic-naric.net/page-Montenegro",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/mne/",
+    "who-countries": "https://data.who.int/countries/499",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/montenegro"
+  },
+  "morocco": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/mar/",
+    "who-countries": "https://data.who.int/countries/504",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/morocco"
+  },
+  "mozambique": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/moz/",
+    "who-countries": "https://data.who.int/countries/508",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/mozambique"
+  },
+  "myanmar": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/mmr/",
+    "who-countries": "https://data.who.int/countries/104"
+  },
+  "namibia": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/nam/",
+    "who-countries": "https://data.who.int/countries/516",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/namibia"
+  },
+  "nauru": {
+    "who-countries": "https://data.who.int/countries/520"
+  },
+  "nepal": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/npl/",
+    "who-countries": "https://data.who.int/countries/524",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/nepal"
+  },
+  "netherlands": {
+    "who-countries": "https://data.who.int/countries/528"
+  },
+  "new-zealand": {
+    "enic-naric": "https://enic-naric.net/page-New-Zealand",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/nzl/",
+    "who-countries": "https://data.who.int/countries/554",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/new-zealand"
+  },
+  "nicaragua": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/nic/",
+    "who-countries": "https://data.who.int/countries/558",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/nicaragua"
+  },
+  "niger": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/ner/",
+    "who-countries": "https://data.who.int/countries/562",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/niger"
+  },
+  "nigeria": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/nga/",
+    "who-countries": "https://data.who.int/countries/566",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/nigeria"
+  },
+  "north-korea": {
+    "who-countries": "https://data.who.int/countries/408"
+  },
+  "north-macedonia": {
+    "enic-naric": "https://enic-naric.net/page-North-Macedonia",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/mkd/",
+    "who-countries": "https://data.who.int/countries/807",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/north-macedonia"
+  },
+  "norway": {
+    "enic-naric": "https://enic-naric.net/page-Norway",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/nor/",
+    "who-countries": "https://data.who.int/countries/578",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/norway"
+  },
+  "oman": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/omn/",
+    "who-countries": "https://data.who.int/countries/512",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/oman"
+  },
+  "pakistan": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/pak/",
+    "who-countries": "https://data.who.int/countries/586",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/pakistan"
+  },
+  "palau": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/plw/",
+    "who-countries": "https://data.who.int/countries/585",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/palau"
+  },
+  "palestine": {},
+  "panama": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/pan/",
+    "who-countries": "https://data.who.int/countries/591",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/panama"
+  },
+  "papua-new-guinea": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/png/",
+    "who-countries": "https://data.who.int/countries/598",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/papua-new-guinea"
+  },
+  "paraguay": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/pry/",
+    "who-countries": "https://data.who.int/countries/600",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/paraguay"
+  },
+  "peru": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/per/",
+    "who-countries": "https://data.who.int/countries/604",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/peru"
+  },
+  "philippines": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/phl/",
+    "who-countries": "https://data.who.int/countries/608",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/philippines"
+  },
+  "poland": {
+    "enic-naric": "https://enic-naric.net/page-Poland",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/pol/",
+    "who-countries": "https://data.who.int/countries/616",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/poland"
+  },
+  "portugal": {
+    "enic-naric": "https://enic-naric.net/page-Portugal",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/prt/",
+    "who-countries": "https://data.who.int/countries/620",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/portugal"
+  },
+  "qatar": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/qat/",
+    "who-countries": "https://data.who.int/countries/634",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/qatar"
+  },
+  "romania": {
+    "enic-naric": "https://enic-naric.net/page-Romania",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/rou/",
+    "who-countries": "https://data.who.int/countries/642",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/romania"
+  },
+  "russia": {
+    "enic-naric": "https://enic-naric.net/page-Russian-Federation",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/rus/",
+    "who-countries": "https://data.who.int/countries/643"
+  },
+  "rwanda": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/rwa/",
+    "who-countries": "https://data.who.int/countries/646",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/rwanda"
+  },
+  "saint-kitts-and-nevis": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/kna/",
+    "who-countries": "https://data.who.int/countries/659"
+  },
+  "saint-lucia": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/lca/",
+    "who-countries": "https://data.who.int/countries/662"
+  },
+  "saint-vincent-and-the-grenadines": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/vct/",
+    "who-countries": "https://data.who.int/countries/670"
+  },
+  "samoa": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/wsm/",
+    "who-countries": "https://data.who.int/countries/882",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/samoa"
+  },
+  "san-marino": {
+    "enic-naric": "https://enic-naric.net/page-San-Marino",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/smr/",
+    "who-countries": "https://data.who.int/countries/674",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/san-marino"
+  },
+  "sao-tome-and-principe": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/stp/",
+    "who-countries": "https://data.who.int/countries/678",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/sao-tome-and-principe"
+  },
+  "saudi-arabia": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/sau/",
+    "who-countries": "https://data.who.int/countries/682",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/saudi-arabia"
+  },
+  "senegal": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/sen/",
+    "who-countries": "https://data.who.int/countries/686",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/senegal"
+  },
+  "serbia": {
+    "enic-naric": "https://enic-naric.net/page-Serbia",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/srb/",
+    "who-countries": "https://data.who.int/countries/688",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/serbia"
+  },
+  "seychelles": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/syc/",
+    "who-countries": "https://data.who.int/countries/690",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/seychelles"
+  },
+  "sierra-leone": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/sle/",
+    "who-countries": "https://data.who.int/countries/694",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/sierra-leone"
+  },
+  "singapore": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/sgp/",
+    "who-countries": "https://data.who.int/countries/702",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/singapore"
+  },
+  "slovakia": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/svk/",
+    "who-countries": "https://data.who.int/countries/703",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/slovakia"
+  },
+  "slovenia": {
+    "enic-naric": "https://enic-naric.net/page-Slovenia",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/svn/",
+    "who-countries": "https://data.who.int/countries/705",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/slovenia"
+  },
+  "solomon-islands": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/slb/",
+    "who-countries": "https://data.who.int/countries/090",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/solomon-islands"
+  },
+  "somalia": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/som/",
+    "who-countries": "https://data.who.int/countries/706",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/somalia"
+  },
+  "south-africa": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/zaf/",
+    "who-countries": "https://data.who.int/countries/710",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/south-africa"
+  },
+  "south-korea": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/kor/",
+    "who-countries": "https://data.who.int/countries/410"
+  },
+  "south-sudan": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/ssd/",
+    "who-countries": "https://data.who.int/countries/728",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/south-sudan"
+  },
+  "spain": {
+    "enic-naric": "https://enic-naric.net/page-Spain",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/esp/",
+    "who-countries": "https://data.who.int/countries/724",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/spain"
+  },
+  "sri-lanka": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/lka/",
+    "who-countries": "https://data.who.int/countries/144",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/sri-lanka"
+  },
+  "sudan": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/sdn/",
+    "who-countries": "https://data.who.int/countries/729",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/sudan"
+  },
+  "suriname": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/sur/",
+    "who-countries": "https://data.who.int/countries/740",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/suriname"
+  },
+  "sweden": {
+    "enic-naric": "https://enic-naric.net/page-Sweden",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/swe/",
+    "who-countries": "https://data.who.int/countries/752",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/sweden"
+  },
+  "switzerland": {
+    "enic-naric": "https://enic-naric.net/page-Switzerland",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/che/",
+    "who-countries": "https://data.who.int/countries/756",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/switzerland"
+  },
+  "syria": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/syr/",
+    "who-countries": "https://data.who.int/countries/760"
+  },
+  "tajikistan": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/tjk/",
+    "who-countries": "https://data.who.int/countries/762",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/tajikistan"
+  },
+  "tanzania": {
+    "who-countries": "https://data.who.int/countries/834"
+  },
+  "thailand": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/tha/",
+    "who-countries": "https://data.who.int/countries/764",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/thailand"
+  },
+  "timor-leste": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/tls/",
+    "who-countries": "https://data.who.int/countries/626",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/timor-leste"
+  },
+  "togo": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/tgo/",
+    "who-countries": "https://data.who.int/countries/768",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/togo"
+  },
+  "tonga": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/ton/",
+    "who-countries": "https://data.who.int/countries/776",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/tonga"
+  },
+  "trinidad-and-tobago": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/tto/",
+    "who-countries": "https://data.who.int/countries/780",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/trinidad-and-tobago"
+  },
+  "tunisia": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/tun/",
+    "who-countries": "https://data.who.int/countries/788",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/tunisia"
+  },
+  "turkey": {
+    "enic-naric": "https://enic-naric.net/page-Turkiye",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/tur/",
+    "who-countries": "https://data.who.int/countries/792"
+  },
+  "turkmenistan": {
+    "enic-naric": "https://enic-naric.net/page-Turkmenistan",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/tkm/",
+    "who-countries": "https://data.who.int/countries/795",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/turkmenistan"
+  },
+  "tuvalu": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/tuv/",
+    "who-countries": "https://data.who.int/countries/798",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/tuvalu"
+  },
+  "uganda": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/uga/",
+    "who-countries": "https://data.who.int/countries/800",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/uganda"
+  },
+  "ukraine": {
+    "enic-naric": "https://enic-naric.net/page-Ukraine",
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/ukr/",
+    "who-countries": "https://data.who.int/countries/804",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/ukraine"
+  },
+  "united-arab-emirates": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/are/",
+    "who-countries": "https://data.who.int/countries/784",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/united-arab-emirates"
+  },
+  "united-kingdom": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/gbr/",
+    "who-countries": "https://data.who.int/countries/826"
+  },
+  "united-states": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/usa/",
+    "who-countries": "https://data.who.int/countries/840"
+  },
+  "uruguay": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/ury/",
+    "who-countries": "https://data.who.int/countries/858",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/uruguay"
+  },
+  "uzbekistan": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/uzb/",
+    "who-countries": "https://data.who.int/countries/860",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/uzbekistan"
+  },
+  "vanuatu": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/vut/",
+    "who-countries": "https://data.who.int/countries/548",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/vanuatu"
+  },
+  "vatican-city": {
+    "enic-naric": "https://enic-naric.net/page-Holy-See"
+  },
+  "venezuela": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/ven/",
+    "who-countries": "https://data.who.int/countries/862"
+  },
+  "vietnam": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/vnm/",
+    "who-countries": "https://data.who.int/countries/704",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/vietnam"
+  },
+  "yemen": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/yem/",
+    "who-countries": "https://data.who.int/countries/887",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/yemen"
+  },
+  "zambia": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/zmb/",
+    "who-countries": "https://data.who.int/countries/894",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/zambia"
+  },
+  "zimbabwe": {
+    "ilo-profiles": "https://ilostat.ilo.org/data/country-profiles/zwe/",
+    "who-countries": "https://data.who.int/countries/716",
+    "fcdo-advice": "https://www.gov.uk/foreign-travel-advice/zimbabwe"
+  }
+}

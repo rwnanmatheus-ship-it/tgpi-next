@@ -14,7 +14,7 @@ test("dossier sources and claims have unique identities and known country links"
 });
 test("registered sources use fixed public HTTPS URLs with no credentials or fragments", () => { for (const source of DOSSIER_SOURCES) { const url = new URL(source.url); assert.equal(url.protocol, "https:"); assert.equal(url.username, ""); assert.equal(url.password, ""); assert.equal(url.hash, ""); if (source.automaticCheck) assert.ok(source.markers.length); if (!source.reviewedAt) assert.equal(source.automaticCheck, false); } });
 test("a country outside the editorial wave has explicit missing layers", () => { const dossier = dossierFor("vatican-city"); assert.deepEqual(dossier, { claims: [], sources: [], costs: [] }); assert.deepEqual(dossierFor("__proto__"), dossier); });
-test("review dates cannot be renewed by availability checks", () => { const c = DOSSIER_CLAIMS.find(c => c.id === "ca-funding-2026"); assert.equal(reviewState(c, NOW), "reviewed"); assert.equal(reviewState(c, new Date("2026-10-04")), "review-due"); assert.equal(reviewState(c, new Date("2026-08-31")), "not-effective"); const de = DOSSIER_CLAIMS.find(c => c.id === "de-study-route"); assert.equal(reviewState(de, new Date("2027-01-01")), "expired"); });
+test("review dates cannot be renewed by availability checks", () => { const c = DOSSIER_CLAIMS.find(c => c.id === "ca-funding-2026"); assert.equal(reviewState(c, NOW), "reviewed"); assert.equal(reviewState(c, new Date("2026-12-12")), "review-due"); assert.equal(reviewState(c, new Date("2026-08-31")), "not-effective"); const de = DOSSIER_CLAIMS.find(c => c.id === "de-study-route"); assert.equal(reviewState(de, new Date("2027-01-01")), "expired"); });
 test("Canada’s dated funds threshold is not promoted to a living-cost estimate", () => { const c = DOSSIER_CLAIMS.find(c => c.id === "ca-funding-2026"); assert.equal(c.kind, "requirement"); assert.equal(c.effectiveFrom, "2026-09-01"); assert.match(c.summary, /23,448/); assert.match(c.limits, /Quebec/); assert.equal(dossierFor("canada").costs.length, 0); });
 test("cost references retain distinct currencies, periods, categories and source years", () => { const ox = COST_REFERENCES.find(c => c.id === "oxford-2026"); const mit = COST_REFERENCES.find(c => c.id === "mit-2026"); const jp = COST_REFERENCES.find(c => c.id === "japan-jasso-2023"); assert.deepEqual([ox.low, ox.high, ox.currency, ox.periodMonths, ox.category], [1405, 2105, "GBP", 1, "living"]); assert.deepEqual([mit.low, mit.currency, mit.periodMonths, mit.category], [109017, "USD", 9, "total-study"]); assert.equal(jp.historical, true); assert.match(jp.referencePeriod, /2023/); });
 test("source normalization ignores scripts and preserves inspectable text", () => { assert.equal(normalizeSourceText('<main>2026–27&nbsp;<b>£1,405</b><script>ignore()</script></main>'), '2026-27 £1,405'); });
@@ -35,7 +35,7 @@ const htmlResponse = (text = fixtureHtml, status = 200) => new Response(text, { 
 test("unknown identifiers and manual-only sources never initiate retrieval", async () => {
   let calls = 0; const fetcher = async () => { calls++; throw new Error("must not fetch"); };
   await assert.rejects(retrieveRegisteredSource("https://127.0.0.1/", DOSSIER_SOURCES, fetcher), /Unknown/);
-  for (const source of DOSSIER_SOURCES.filter(s => !s.automaticCheck)) { const result = await retrieveRegisteredSource(source.id, DOSSIER_SOURCES, fetcher); assert.equal(result.status, "not-checked"); assert.equal(result.checkedAt, null); assert.equal(result.httpStatus, null); assert.match(result.message, /Manual queue/); }
+  for (const source of DOSSIER_SOURCES.filter(s => !s.automaticCheck)) { const result = await retrieveRegisteredSource(source.id, DOSSIER_SOURCES, fetcher); assert.equal(result.status, "not-checked"); assert.equal(result.checkedAt, null); assert.equal(result.httpStatus, null); assert.match(result.message, source.reviewIssue ? /Manual queue/ : /Automatic retrieval is disabled/); }
   assert.equal(calls, 0);
 });
 test("restricted, redirect and nontransient HTTP results stop after one attempt", async () => {
@@ -67,7 +67,7 @@ test("invalid, old and future timestamps are not treated as fresh evidence", () 
   assert.equal(sourceCheckIsStale({ status: "not-checked", checkedAt: null }, NOW.getTime()), false);
 });
 test("all open gaps retain explicit observation, action and deadline", () => {
-  const issues = DOSSIER_SOURCES.filter(s => s.reviewIssue); assert.equal(issues.length, 11); assert.equal(DOSSIER_SOURCES.filter(s => !s.automaticCheck).length, 7);
+  const issues = DOSSIER_SOURCES.filter(s => s.reviewIssue); assert.equal(issues.length, 6); assert.equal(DOSSIER_SOURCES.filter(s => !s.automaticCheck).length, 7);
   for (const source of issues) { const issue = source.reviewIssue; assert.ok(issue.action); assert.ok(issue.observation); assert.ok(issue.reviewBy > issue.observedAt); if (issue.reason === "access-restricted") { assert.equal(source.automaticCheck, false); assert.ok(source.reviewedAt); } }
   assert.equal(DOSSIER_SOURCES.find(s => s.id === "de-visa").automaticCheck, true);
 });

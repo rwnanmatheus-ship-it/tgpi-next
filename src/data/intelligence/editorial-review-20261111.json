@@ -1,0 +1,144 @@
+{
+  "reviewedAt": "2026-11-11",
+  "scope": "Explicit editorial comparison of the existing selected summaries against retrieved primary-source content. Source reference periods, limitations and numeric values retained. This is not a full legal review or individual eligibility decision.",
+  "sources": [
+    {
+      "id": "pt-nova-entry",
+      "url": "https://www.fct.unl.pt/internacional/visto-e-outras-informacoes",
+      "responseSha256": "acb6ceb1ef1a4a8e13beca769fa87d2e963b8de61b45098d5dcc2fbf7a49745c",
+      "reviewedAt": "2026-11-11"
+    },
+    {
+      "id": "fr-degree-orders",
+      "url": "https://www.enseignementsup-recherche.gouv.fr/fr/bo/2026/Hebdo28/ESRS2617415A",
+      "responseSha256": "d59729b3c855f52c4ea91c853af97dc40a5a228ea1e04890224c6a331fca7123",
+      "reviewedAt": "2026-11-11"
+    },
+    {
+      "id": "nl-sponsors",
+      "url": "https://ind.nl/en/public-register-recognised-sponsors/public-register-study",
+      "responseSha256": "08df85f22fc6d39f3f94920604eef2f06121eaf8a27d349c86ce80734fbcf732",
+      "reviewedAt": "2026-11-11"
+    },
+    {
+      "id": "ie-study",
+      "url": "https://www.irishimmigration.ie/coming-to-study-in-ireland/what-are-my-study-options/a-third-level-course-or-a-language-course/",
+      "responseSha256": "7ef0417a6d6dae8fc24252c6f4ff2423f4cefe36e3c3a08676f5ab32e67e4790",
+      "reviewedAt": "2026-11-11"
+    },
+    {
+      "id": "ie-qualifications",
+      "url": "https://www.qqi.ie/what-we-do/the-qualifications-system/irish-register-of-qualifications",
+      "responseSha256": "9989da824e2c7f96d32dbfd19e60b26cfb59cbcff208b67eab752cd55bfcf258",
+      "reviewedAt": "2026-11-11"
+    },
+    {
+      "id": "au-study",
+      "url": "https://www.studyaustralia.gov.au/en/plan-your-move/visa-application-process",
+      "responseSha256": "8801e3beca9da4ac37aa20d412d00ed7f03c396eecdfb596721736f613b860ea",
+      "reviewedAt": "2026-11-11"
+    },
+    {
+      "id": "nz-study",
+      "url": "https://www.immigration.govt.nz/visas/fee-paying-student-visa/",
+      "responseSha256": "28285cb7e706932e5ab9fb8408e261e9ff62bdd5dea2db12397be24e3c3609cb",
+      "reviewedAt": "2026-11-11"
+    },
+    {
+      "id": "pt-dges",
+      "url": "https://www.dges.gov.pt/simges/public/www/cursos_instituicoes",
+      "responseSha256": "71f6350ae6b31e96b52e8b84364b926d61424d13f771db0714a5c4e6f86e282a",
+      "reviewedAt": "2026-11-11"
+    },
+    {
+      "id": "pt-fees",
+      "url": "https://www.ulisboa.pt/en/info/tuition-fees",
+      "responseSha256": "b1da0c2908ce70e71df8302b9d67ba207e8e2eb05c5b825b53f101b24eec3440",
+      "reviewedAt": "2026-11-11"
+    },
+    {
+      "id": "de-directory",
+      "url": "https://www.hochschulkompass.de/en/higher-education-institutions.html",
+      "responseSha256": "4cb8dbddfd82654b537a60ca1aeef57d083fa9d6519c38595b2f596d5ca9f955",
+      "reviewedAt": "2026-11-11"
+    },
+    {
+      "id": "de-cost",
+      "url": "https://www.daad.de/en/studying-in-germany/living-in-germany/finances/",
+      "responseSha256": "2e8f2b5cf93d61deb021135519c45d2c4354ab85f577a3ad011e24e17d9c5f3e",
+      "reviewedAt": "2026-11-11"
+    },
+    {
+      "id": "uk-funds",
+      "url": "https://www.gov.uk/student-visa/money",
+      "responseSha256": "6c08046e6dafeea0c0e1b2729dd3a4bea44fe809eb18da1bc7bc7fec40ec56e8",
+      "reviewedAt": "2026-11-11"
+    },
+    {
+      "id": "uk-degree",
+      "url": "https://www.gov.uk/check-university-award-degree",
+      "responseSha256": "97c1378428f81a5cf4ae4bfe3e001f41521027b73ce367495f1c6200e2d75a1a",
+      "reviewedAt": "2026-11-11"
+    },
+    {
+      "id": "uk-oxford",
+      "url": "https://www.ox.ac.uk/students/fees-funding/living-costs",
+      "responseSha256": "e69d17dc34f14dd8d49a824183e4774f3e90e13203c235ee63788caf6174f5fe",
+      "reviewedAt": "2026-11-11"
+    },
+    {
+      "id": "ca-funds",
+      "url": "https://www.canada.ca/en/immigration-refugees-citizenship/services/study-canada/study-permit/get-documents/financial-support.html",
+      "responseSha256": "03995c24e98945aba19c70db72d1fa6a67b9ee8c6e4486f3ca47b6e7a8306348",
+      "reviewedAt": "2026-11-11"
+    },
+    {
+      "id": "ca-dli",
+      "url": "https://www.canada.ca/en/immigration-refugees-citizenship/services/study-canada/study-permit/prepare/designated-learning-institutions-list.html",
+      "responseSha256": "f327662a4a54c8920ec80a4ba17292bc6aa3dbcec4310bacb7d18bdcabb856c4",
+      "reviewedAt": "2026-11-11"
+    },
+    {
+      "id": "us-visa",
+      "url": "https://travel.state.gov/content/travel/en/us-visas/study/student-visa.html",
+      "responseSha256": "e5c92c39e6313e30bea195e7e943ac15c9980a795b616a1ea1a9e23d25f62780",
+      "reviewedAt": "2026-11-11"
+    },
+    {
+      "id": "us-mit",
+      "url": "https://sfs.mit.edu/graduate-students/cost-of-attendance/grad-cost-of-attendance/",
+      "responseSha256": "409b2bed0b74432a9baea9cb4980a68cb4d750fc12ae66e5e629fe3fe2b3ed8d",
+      "reviewedAt": "2026-11-11"
+    },
+    {
+      "id": "jp-visa",
+      "url": "https://www.mofa.go.jp/j_info/visit/visa/long/visa6.html",
+      "responseSha256": "64afac6ba16fa777d0035254b982069b2e63d0aecc96e04a123a66423b6960c7",
+      "reviewedAt": "2026-11-11"
+    },
+    {
+      "id": "jp-schools",
+      "url": "https://www.studyinjapan.go.jp/en/search-for-schools/school_search.php?lang=en",
+      "responseSha256": "bbd13d8ab5680d936d64592bfa763efe0725c907f9ed5069e5d7d5b30de8653d",
+      "reviewedAt": "2026-11-11"
+    },
+    {
+      "id": "jp-cost",
+      "url": "https://www.studyinjapan.go.jp/en/life/cost-of-living/",
+      "responseSha256": "b469922c6dcbae4ff7a36e30b4b003a2f0c4ccb1bc5e782a1468031059ababfb",
+      "reviewedAt": "2026-11-11"
+    },
+    {
+      "id": "es-entry",
+      "url": "https://home-affairs.ec.europa.eu/policies/migration-and-asylum/eu-immigration-portal/student-spain_en",
+      "responseSha256": "0a2f2fbc4161d07934b6c33fac0e99cd0dfafff73cdf3222bf4d64fe10149fc0",
+      "reviewedAt": "2026-11-11"
+    },
+    {
+      "id": "fr-entry",
+      "url": "https://france-visas.gouv.fr/en/etudiant",
+      "responseSha256": "b4d87f85f33e163d422556f8b1b6669db308f7dd7b625626a01ad9883907a2ea",
+      "reviewedAt": "2026-11-11"
+    }
+  ]
+}

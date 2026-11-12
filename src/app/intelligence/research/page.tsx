@@ -1,22 +1,35 @@
-import { localizeMetadata } from "@/lib/localization/metadata.server";
-
-import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { DOSSIER_CLAIMS, DOSSIER_COUNTRIES, DOSSIER_REVIEW_DATE, DOSSIER_SOURCES, dossierFor } from "@/lib/intelligence/dossiers";
-import { getCountry } from "@/lib/countries";
+import { localizeMetadata } from "@/lib/localization/metadata.server";
+import { LocalizedText as Copy } from "@/components/localization/LocaleProvider";
+import ResearchDiscovery from "@/components/intelligence/global/ResearchDiscovery";
 import SourceRegister from "@/components/intelligence/SourceRegister";
-import { LocalizedText } from "@/components/localization/LocaleProvider";
+import { RESEARCH_COUNTRIES, RESEARCH_SOURCES, RESEARCH_RELEASE } from "@/lib/intelligence/global-research";
+import { DOSSIER_COUNTRIES } from "@/lib/intelligence/dossiers";
 
-
-const sourceMetadata: Metadata = { title: "Decision Dossiers — Study, Costs & Official Sources | TGPI", description: "Research study pathways, institution recognition, scoped cost references and personal planning with explicit source coverage.", alternates: { canonical: "https://www.theglobalpolymath.com/intelligence/research" } };
+const sourceMetadata: Metadata = {
+  title: "Global Decision Dossiers — 195 Countries | TGPI",
+  description: "Explore 195 structured country dossiers with official sources, dated statistics and twelve practical research chapters.",
+  alternates: { canonical: "https://www.theglobalpolymath.com/intelligence/research" },
+};
 export default function ResearchPage() {
-  return <main className="ig-shell"><div className="ig-container"><header className="ig-hero"><p className="ig-eyebrow"><LocalizedText text={"TGPI Intelligence / Decision dossiers"} /></p><h1><LocalizedText text={"The next decision"} /><br /><LocalizedText text={"needs a deeper answer."} /></h1><p><LocalizedText text={"Move beyond country averages. Inspect study pathways, institution checks and cost assumptions — then build a personal scenario that keeps the unknowns visible."} /></p><div className="ig-actions"><Link href="/country-fit#research-workbench" className="ig-button"><LocalizedText text={"Open my Decision Lab →"} /></Link><Link href="/intelligence" className="ig-link"><LocalizedText text="Read the methodology" /></Link></div></header>
-    <section className="ig-section ig-panel"><p className="ig-eyebrow"><LocalizedText text={"Release scope /"} />{" "}{DOSSIER_REVIEW_DATE}</p><h2><LocalizedText text={"Coverage is visible, not implied."} /></h2><p className="ig-small">{DOSSIER_COUNTRIES.length}{" "}<LocalizedText text={"initial destinations ·"} />{" "}{DOSSIER_CLAIMS.length}{" "}<LocalizedText text={"source-linked summaries ·"} />{" "}{DOSSIER_SOURCES.filter(s => s.reviewedAt).length}{" "}<LocalizedText text={"sources with a completed content review. Coverage differs by layer. These are study-focused research dossiers, not complete legal files or a ranking of countries."} />{" "}{DOSSIER_SOURCES.filter(s => !s.reviewedAt).length}{" "}<LocalizedText text={"additional source pointers remain unconfirmed and are clearly marked."} /></p><p className="ig-small"><LocalizedText text={"The same worksheet works for all 195 country identities. A missing local estimate stays missing; a visa financial threshold is never labelled as a city’s living cost."} /></p></section>
-    <LocalizedElement as="section" className="ig-section ig-country-grid" aria-label="Research destinations">{DOSSIER_COUNTRIES.map(slug => { const country = getCountry(slug)!; const dossier = dossierFor(slug); return <article className="ig-panel" key={slug}><p className="ig-eyebrow">{country.emoji} <LocalizedText text={country.name} /></p><h2><LocalizedText text={country.name} /></h2><div className="ig-coverage-list">{(["entry", "education", "cost"] as const).map(layer => { const count = dossier.claims.filter(c => c.layer === layer).length; return <p key={layer}><span>{layer === "entry" ? <LocalizedText text={"Entry / residence"} /> : layer === "education" ? <LocalizedText text={"Education"} /> : <LocalizedText text={"Cost / funding"} />}</span><span className={`ig-badge ${count ? "" : "ig-historical"}`}>{count ? <LocalizedText text={"{value0} {value1}"} values={{value0: String(count), value1: String(count === 1 ? "summary" : "summaries")}} /> : <LocalizedText text={"Not yet covered"} />}</span></p>; })}</div><div className="ig-actions"><Link className="ig-button" href={`/countries/${slug}#research-dossier`}><LocalizedText text={"Inspect dossier →"} /></Link><Link className="ig-link" href={`/country-fit?country=${slug}#research-workbench`}><LocalizedText text={"Build a scenario"} /></Link></div></article>; })}</LocalizedElement>
-    <SourceRegister />
-    <section className="ig-section ig-panel"><h2><LocalizedText text={"Four questions before trusting any number."} /></h2><ol className="ig-question-list"><li><LocalizedText text={"Is this a requirement, an estimate, a historical observation or my own assumption?"} /></li><li><LocalizedText text={"Does the source describe my city, programme, household and application date?"} /></li><li><LocalizedText text={"Are the currency, period and exclusions the same as the comparison?"} /></li><li><LocalizedText text={"What must the responsible authority or institution confirm before I commit?"} /></li></ol><p className="ig-small"><LocalizedText text={"Institutional sources are cited for their published information. TGPI has no implied affiliation, accreditation or endorsement from the universities, agencies or governments referenced."} /></p></section>
+  return <main className="ig-shell"><div className="ig-container">
+    <header className="ig-hero">
+      <p className="ig-eyebrow">{"TGPI /"} <Copy text="Global research dossier" /></p>
+      <h1><Copy text="The world, with more context." /></h1>
+      <p><Copy text="Research every destination through education, work, costs, housing, health, safety, connectivity and the documents behind your next move." /></p>
+      <div className="ig-actions"><a href="#dossier-directory" className="ig-button"><Copy text="Explore all country dossiers" /> ↓</a><Link href="/intelligence#global-source-register" className="ig-link"><Copy text="Explore the sources" /> ↗</Link></div>
+    </header>
+    <section className="ig-section ig-panel">
+      <p className="ig-eyebrow"><Copy text="Release scope /" /> {RESEARCH_RELEASE}</p>
+      <h2><Copy text="Coverage is visible, not implied." /></h2>
+      <p className="ig-small"><Copy text="{countries} destinations · 12 research chapters each · {sources} distinct source records." values={{ countries: RESEARCH_COUNTRIES.length, sources: RESEARCH_SOURCES.length }} /></p>
+      <p className="ig-small"><Copy text="Every destination has a structured dossier. Local rule verification remains uneven: {count} destinations also have selected study summaries with their own review dates and outstanding issues." values={{ count: DOSSIER_COUNTRIES.length }} /></p>
+      <p className="ig-small"><Copy text="National statistics, editorial summaries and personal research tasks are different evidence layers. Missing data stays missing; a source access check never renews a legal review." /></p>
+    </section>
+    <section className="ig-section" id="dossier-directory" style={{ scrollMarginTop: "8rem" }}><ResearchDiscovery mode="countries" /></section>
+    <details className="ig-details ig-section"><summary><Copy text="Selected study summaries and their review queue" /></summary><SourceRegister /></details>
+    <section className="ig-section ig-panel"><h2><Copy text="From research to a personal plan." /></h2><p className="ig-small"><Copy text="Use dated quotes and official confirmations to resolve the gaps. Your worksheet records your assumptions without turning them into verified country facts." /></p><Link href="/country-fit#research-workbench" className="ig-button"><Copy text="Open my Decision Lab →" /></Link></section>
   </div></main>;
 }
-
 export async function generateMetadata() { return localizeMetadata(sourceMetadata); }

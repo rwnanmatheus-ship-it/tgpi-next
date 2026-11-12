@@ -1,3 +1,5 @@
+import GlobalDossierView from "@/components/intelligence/global/GlobalDossierView";
+import { globalDossier } from "@/lib/intelligence/global-dossier.server";
 import CountryFlag from "@/components/ui/CountryFlag";
 
 import { LocalizedElement } from "@/components/localization/LocalizedElement";
@@ -48,16 +50,18 @@ export default async function CountryPage({ params }: Props) {
   const country = getCountry(slug);
   const identity = identities.find(c => c.slug === slug);
   if (!country || !identity) notFound();
+  const expandedDossier = globalDossier(slug);
   const [state, context] = await Promise.all([getIntelligence(), getCountryContext()]);
   return <ActivationProgressProvider><main className="ig-shell country-studio"><div className="ig-container">
     <Link href="/countries" className="ig-link"><LocalizedText text={"← All countries"} /></Link>
     <header className="country-dossier-hero" id="overview"><Image src={`/images/countries/identity/${slug}.webp`} alt="" fill sizes="(max-width: 768px) 100vw, 1280px" className="object-cover" quality={88} priority /><div className="country-dossier-intro"><p className="ig-eyebrow"><LocalizedText text={"Country intelligence /"} />{" "}{identity.iso3} / <LocalizedText text={identity.region} /></p><div className="country-dossier-identity"><CountryFlag iso2={identity.iso2} width={88} /><h1><LocalizedText text={country.name} /></h1></div><p><LocalizedText text={"A destination. A personal plan. Your next informed decision."} /></p><div className="ig-actions"><SavedCountryButton countryName={country.name} countrySlug={slug} /><Link className="ig-button" href={`/compare?country=${slug}`}><LocalizedText text={"Compare destination →"} /></Link><a className="ig-button ig-secondary" href="#research-workbench"><LocalizedText text={"Open Decision Lab ↓"} /></a></div></div></header>
-    <LocalizedElement as="nav" className="country-section-nav" aria-label="Country research sections"><a href="#overview"><LocalizedText text="Overview" /></a><a href="#decision-signals"><LocalizedText text="National context" /></a><a href="#country-context"><LocalizedText text="Health, infrastructure & economy" /></a><a href="#country-sources"><LocalizedText text="Sources & methodology" /></a><a href="#research-workbench"><LocalizedText text={"Decision Lab"} /></a><a href="#research-dossier"><LocalizedText text={"Routes & education"} /></a><a href="#cost-of-living"><LocalizedText text={"Cost references"} /></a><a href="#satellite"><LocalizedText text={"Satellite"} /></a><a href="#decision-guide"><LocalizedText text="Preparation" /></a></LocalizedElement>
+    <LocalizedElement as="nav" className="country-section-nav" aria-label="Country research sections"><a href="#overview"><LocalizedText text="Overview" /></a><a href="#decision-signals"><LocalizedText text="National context" /></a><a href="#country-context"><LocalizedText text="Health, infrastructure & economy" /></a><a href="#country-sources"><LocalizedText text="Sources & methodology" /></a><a href="#research-workbench"><LocalizedText text={"Decision Lab"} /></a><a href="#global-dossier"><LocalizedText text="Global research dossier" /></a><a href="#research-dossier"><LocalizedText text={"Routes & education"} /></a><a href="#cost-of-living"><LocalizedText text={"Cost references"} /></a><a href="#satellite"><LocalizedText text={"Satellite"} /></a><a href="#decision-guide"><LocalizedText text="Preparation" /></a></LocalizedElement>
     <CountryResearchBrief country={slug} name={country.name} />
     <section id="decision-signals" className="ig-section"><p className="ig-eyebrow"><LocalizedText text={"National context / Source-linked observations"} /></p><h2><LocalizedText text={"Facts with their boundaries."} /></h2><div className="ig-evidence-grid">{INDICATOR_IDS.map(id => <EvidenceCard key={id} indicator={id} countryCode={identity.iso2} observation={findObservation(state.snapshot, slug, id)} />)}</div></section>
     <CountrySourcePassport country={slug} iso2={identity.iso2} observations={state.snapshot.observations.filter(o => o.country === slug)} revision={state.snapshot.revision} retrievedAt={state.snapshot.retrievedAt} retained={state.status !== "available" || context.status !== "available"} contextObservations={context.snapshot.observations.filter(o => o.country === slug)} />
     <CountryDecisionGuide country={slug} />
     <ResearchWorkbench country={slug} countryName={country.name} />
+    {expandedDossier ? <GlobalDossierView dossier={expandedDossier} /> : null}
     <DossierEvidence country={slug} />
     <div id="cost-of-living"><CostReferences country={slug} /></div>
     <CountryContextPanel observations={context.snapshot.observations.filter(o => o.country === slug)} iso2={identity.iso2} />

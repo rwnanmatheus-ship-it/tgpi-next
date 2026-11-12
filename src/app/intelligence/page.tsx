@@ -1,3 +1,6 @@
+import ResearchDiscovery from "@/components/intelligence/global/ResearchDiscovery";
+import { RESEARCH_SOURCES, RESEARCH_COUNTRIES, RESEARCH_SOURCE_DOMAINS } from "@/lib/intelligence/global-research";
+import { DEEP_INDICATOR_IDS } from "@/lib/intelligence/deep-context";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -56,15 +59,15 @@ function Registry({ source, country }: { source?: string | string[]; country?: s
   return <ProvenanceExplorer key={selected?.id ?? initialCountry} records={records} initialCountry={initialCountry} initialSource={selected?.id} />;
 }
 
-export default async function IntelligencePage({ searchParams }: { searchParams: Promise<{ source?: string | string[]; country?: string | string[] }> }) {
+export default async function IntelligencePage({ searchParams }: { searchParams: Promise<{ source?: string | string[]; country?: string | string[]; destination?: string; topic?: string }> }) {
   const params = await searchParams;
   const reviewed = DOSSIER_SOURCES.filter(source => source.reviewedAt).length;
   const pending = DOSSIER_SOURCES.filter(source => source.reviewIssue).length;
   const stats = [
     { value: identities.length, label: "Mapped country identities" },
-    { value: INDICATOR_IDS.length + CONTEXT_INDICATOR_IDS.length, label: "Statistical indicators" },
-    { value: DOSSIER_COUNTRIES.length, label: "Destinations with dossiers" },
-    { value: DOSSIER_SOURCES.length, label: "Dossier source records" },
+    { value: INDICATOR_IDS.length + CONTEXT_INDICATOR_IDS.length + DEEP_INDICATOR_IDS.length, label: "Statistical indicators" },
+    { value: RESEARCH_COUNTRIES.length, label: "Destinations with dossiers" },
+    { value: RESEARCH_SOURCES.length, label: "Dossier source records" },
   ];
 
   return (
@@ -127,7 +130,15 @@ export default async function IntelligencePage({ searchParams }: { searchParams:
             <Link className={styles.inlineLink} href="/intelligence/research"><Copy text="Inspect dossier coverage →" /></Link>
           </article>
         </div>
-        <Registry source={params.source} country={params.country} />
+        <div id="global-source-register" style={{ scrollMarginTop: "8rem" }}>
+          <p className={styles.meta}><Copy text="{sources} distinct source records across {domains} domains. Shared international resources are counted once, even when they support many dossiers." values={{ sources: RESEARCH_SOURCES.length, domains: RESEARCH_SOURCE_DOMAINS }} /></p>
+          <p className={styles.meta}><Copy text="Portal review identifies the publisher and its scope. It does not certify every rule or individual eligibility." /></p>
+          <ResearchDiscovery key={`${params.destination ?? params.country ?? ""}-${params.topic ?? ""}`} initialCountry={params.destination ?? (typeof params.country === "string" ? params.country : "")} initialTopic={params.topic} />
+        </div>
+        <details className="ig-details ig-section" open={typeof params.source === "string" || undefined}>
+          <summary><Copy text="Selected study summaries and their review queue" /></summary>
+          <Registry source={params.source} country={params.country} />
+        </details>
       </section>
 
       <section className={styles.method} id="methodology" aria-labelledby="method-title">

@@ -8,7 +8,7 @@ import { safeReturnTo } from "../src/lib/auth/return-to.ts";
 const { countries } = JSON.parse(readFileSync(new URL("../src/data/intelligence/identities.json", import.meta.url), "utf8"));
 
 test("registry keeps provenance, content review and review issues separate", () => {
-  const date = new Date("2026-11-10T14:00:00Z");
+  const date = new Date("2026-11-12T14:00:00Z");
   const records = buildSourceRecords(countries, date);
   assert.equal(records.length, DOSSIER_SOURCES.length);
   assert.equal(records.reduce((count, record) => count + record.summaries.length, 0), DOSSIER_CLAIMS.length);
@@ -21,8 +21,9 @@ test("registry keeps provenance, content review and review issues separate", () 
   assert.equal(unconfirmed.needsReview, true);
   const requirement = records.find(record => record.id === "uk-funds");
   assert.equal(requirement.status, "reviewed");
-  assert.equal(requirement.summaries[0].state, "review-due");
-  assert.equal(requirement.needsReview, true);
+  assert.equal(requirement.summaries[0].state, "reviewed");
+  assert.equal(requirement.needsReview, false);
+  assert.equal(buildSourceRecords(countries, new Date("2026-12-12")).find(record => record.id === "uk-funds").needsReview, true);
   const stable = records.find(record => record.id === "uk-degree");
   assert.equal(stable.summaries[0].state, "reviewed");
   assert.equal(stable.needsReview, false);

@@ -1,0 +1,2972 @@
+[
+  {
+    "id": "nso-angola",
+    "country": "angola",
+    "title": "Instituto Nacional de Estatistica",
+    "publisher": "Instituto Nacional de Estatistica",
+    "url": "https://www.ine.gov.ao/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "INE-Instituto Nacional De Estatísticas",
+      "responseSha256": "64361ca9665bb758a8c8dd805faef8f59e2970056e23e892b074058ddd46e468"
+    }
+  },
+  {
+    "id": "nso-cabo-verde",
+    "country": "cabo-verde",
+    "title": "Instituto Nacional de Estatistica",
+    "publisher": "Instituto Nacional de Estatistica",
+    "url": "https://www.ine.cv/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "INE",
+      "responseSha256": "acd7e2f5ee34ab99096645bae853a94a3f591a7e2a8ee7c9f403cfadd5dbcf6f"
+    }
+  },
+  {
+    "id": "nso-djibouti",
+    "country": "djibouti",
+    "title": "Ministère de l'Economie, des Finances et de la Planification, chargé de la Privatisation",
+    "publisher": "Ministère de l'Economie, des Finances et de la Planification, chargé de la Privatisation",
+    "url": "https://www.ministere-finances.dj/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Portail Internet du Ministère de l’Economie des\nFinances et de l'Indistrie -Chargé de la Planification (MEFIP)",
+      "responseSha256": "2e1a0cd169e5845889254842628c66da60191d7760033bc9f4f39bf3160577a0"
+    }
+  },
+  {
+    "id": "nso-egypt",
+    "country": "egypt",
+    "title": "Central Agency for Public Mobilization and Statistics",
+    "publisher": "Central Agency for Public Mobilization and Statistics",
+    "url": "https://www.capmas.gov.eg/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "الجهاز المركزي للتعبئة العامة والإحصاء",
+      "responseSha256": "e93561ceb8c580adc73910bbe5c548d40742008e68bc52c76b47ef62ee343cc4"
+    }
+  },
+  {
+    "id": "nso-ghana",
+    "country": "ghana",
+    "title": "Ghana Statistical Services",
+    "publisher": "Ghana Statistical Services",
+    "url": "https://www.statsghana.gov.gh/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Ghana Statistical Service",
+      "responseSha256": "0215cc5ca91638939b95cc738b51723976c7d38109b516d64659093b8fbc6c32"
+    }
+  },
+  {
+    "id": "nso-guinea",
+    "country": "guinea",
+    "title": "Direction Nationale de la Statistique",
+    "publisher": "Direction Nationale de la Statistique",
+    "url": "https://www.stat-guinee.org/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Institut National de la Statistique",
+      "responseSha256": "f6f4cca38dc2a121f0f74b208e1ddca26e5987d8752e8c5f62e976611db422b2"
+    }
+  },
+  {
+    "id": "nso-guinea-bissau",
+    "country": "guinea-bissau",
+    "title": "Instituto Nacional de Estatística e Censos",
+    "publisher": "Instituto Nacional de Estatística e Censos",
+    "url": "https://www.stat-guinebissau.com/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Página Inícial - Instituto Nacional de Estatística da Guine-Bissau",
+      "responseSha256": "192523c5d3616297b087110a2eea3fc89afacca3f2b8ef76dd373ace54a31b15"
+    }
+  },
+  {
+    "id": "nso-lesotho",
+    "country": "lesotho",
+    "title": "Lesotho Bureau of Statistics",
+    "publisher": "Lesotho Bureau of Statistics",
+    "url": "https://www.bos.gov.ls/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Lesotho Bureau of Statistics | Official Website",
+      "responseSha256": "5d98e3fd3da9ba3297d5ed8a89049d86068e235a1ed4eef02c0911452e80b2e3"
+    }
+  },
+  {
+    "id": "nso-libya",
+    "country": "libya",
+    "title": "Bureau of Statistics and Census Libya",
+    "publisher": "Bureau of Statistics and Census Libya",
+    "url": "https://bsc.ly/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "مصلحة الإحصاء والتعداد",
+      "responseSha256": "e0b914507b3bae50a4facad77fcd0ac7ea657a339d35494d1ea147baac819c43"
+    }
+  },
+  {
+    "id": "nso-madagascar",
+    "country": "madagascar",
+    "title": "Institut National de la Statistique",
+    "publisher": "Institut National de la Statistique",
+    "url": "https://www.instat.mg/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "INSTAT Madagascar - Institut National de la Statistique",
+      "responseSha256": "e1dc1b6e1249a27786d05ee35015aa4409dd3cbf218425b3c3b67ac878fc4a94"
+    }
+  },
+  {
+    "id": "nso-mali",
+    "country": "mali",
+    "title": "l’Institut National de la Statistique",
+    "publisher": "l’Institut National de la Statistique",
+    "url": "https://www.instat-mali.org/fr",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Institut National de la Statistique du Mali | INSTAT",
+      "responseSha256": "46942bba84e802525af735c490f9f2fcd721b2c6ed61250b3d66f64d825a77e1"
+    }
+  },
+  {
+    "id": "nso-morocco",
+    "country": "morocco",
+    "title": "Direction de la Statistique",
+    "publisher": "Direction de la Statistique",
+    "url": "https://www.hcp.ma/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Site institutionnel du Haut-Commissariat au Plan du Royaume du Maroc",
+      "responseSha256": "8a83874d5fce55346d3071eec8d5eb81c304bff999e930fd31387647f226d1f1"
+    }
+  },
+  {
+    "id": "nso-niger",
+    "country": "niger",
+    "title": "Institut National de la Statistique",
+    "publisher": "Institut National de la Statistique",
+    "url": "https://www.stat-niger.org/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Institut National de la Statistique du Niger",
+      "responseSha256": "994e5dd02018fae8a3d86156be0dab68b94944b54e5f747712f15652b28c7e21"
+    }
+  },
+  {
+    "id": "nso-nigeria",
+    "country": "nigeria",
+    "title": "National Bureau of Statistics",
+    "publisher": "National Bureau of Statistics",
+    "url": "https://www.nigerianstat.gov.ng/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Home | National Bureau of Statistics",
+      "responseSha256": "aac7cf59876f7f097a65c8818605dd1e240ecf6f2342b8b1168b1f7258bf6a74"
+    }
+  },
+  {
+    "id": "nso-sao-tome-and-principe",
+    "country": "sao-tome-and-principe",
+    "title": "Instituto Nacional de Estatisticas",
+    "publisher": "Instituto Nacional de Estatisticas",
+    "url": "https://www.ine.st/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Instituto Nacional de Estatística",
+      "responseSha256": "6d9fae5f664709a1f0183ca2c36f2852ad3d5778c184cd2c9fa821f843d8aff9"
+    }
+  },
+  {
+    "id": "nso-sierra-leone",
+    "country": "sierra-leone",
+    "title": "Statistics Sierra Leone",
+    "publisher": "Statistics Sierra Leone",
+    "url": "https://www.statistics.sl/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Stats SL - Home | Statistics Sierra Leone",
+      "responseSha256": "af98b3b13b25891e03a3df5526a19144d52ba05c1d3d248b5f606ef3f716e24f"
+    }
+  },
+  {
+    "id": "nso-togo",
+    "country": "togo",
+    "title": "Direction Generale de la Statistique et de la Comptabilite Nationale",
+    "publisher": "Direction Generale de la Statistique et de la Comptabilite Nationale",
+    "url": "https://inseed.tg/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "INSEED – Institut National de la Statistique et des Etudes Économiques et Démographiques",
+      "responseSha256": "5e9ab045e1c929ab15b0b68b1b5c97b70c828de07c25ade2d05eb9f2d5db04b4"
+    }
+  },
+  {
+    "id": "nso-tanzania",
+    "country": "tanzania",
+    "title": "National Bureau of Statistics",
+    "publisher": "National Bureau of Statistics",
+    "url": "https://www.nbs.go.tz/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "NBS |   National Bureau of Statistics - Home",
+      "responseSha256": "f87f7c2f786f1a99a342a4ca4c714f27aba69ed97598e9e82aa0fa9465f9b3a8"
+    }
+  },
+  {
+    "id": "nso-zambia",
+    "country": "zambia",
+    "title": "Central Statistical Office of Zambia",
+    "publisher": "Central Statistical Office of Zambia",
+    "url": "https://www.zamstats.gov.zm/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Home - Zambia Statistics Agency",
+      "responseSha256": "0ca0d2feee27b67df95bcc29eb2730c42a1c33a765f638b764278907ba4b71b4"
+    }
+  },
+  {
+    "id": "nso-zimbabwe",
+    "country": "zimbabwe",
+    "title": "ZIMSTAT",
+    "publisher": "ZIMSTAT",
+    "url": "https://zimstat.co.zw/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Home - ZIMSTAT",
+      "responseSha256": "7456bfa0982b36a500a2471539a74b9a3a388deee451a95e3e0b91f2c899f326"
+    }
+  },
+  {
+    "id": "nso-belize",
+    "country": "belize",
+    "title": "Statistical Institute of Belize",
+    "publisher": "Statistical Institute of Belize",
+    "url": "https://sib.org.bz/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Statistical Institute of Belize – Informing Belize. Inspiring Progress.",
+      "responseSha256": "faf130ad3c87ace877cde0a272d193284b0ff7f1102a3640d420e76849840311"
+    }
+  },
+  {
+    "id": "nso-brazil",
+    "country": "brazil",
+    "title": "Instituto Brasileiro de Geografia e Estatística (IBGE)",
+    "publisher": "Instituto Brasileiro de Geografia e Estatística (IBGE)",
+    "url": "https://www.ibge.gov.br/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "IBGE | Portal do IBGE  | IBGE",
+      "responseSha256": "88e86c0199ed34bce885eedf1d0b1f41e2950a04ab83a9094746ff2ff7fa8d72"
+    }
+  },
+  {
+    "id": "nso-canada",
+    "country": "canada",
+    "title": "Statistics Canada",
+    "publisher": "Statistics Canada",
+    "url": "https://www.statcan.gc.ca/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Statistics Canada: Canada's national statistical agency / Statistique Canada : Organisme statistique national du Canada",
+      "responseSha256": "f99f76323ebb4f05a4a235378e7f2381ab9a0c1c6ee2544f6a020b91dccb19ff"
+    }
+  },
+  {
+    "id": "nso-chile",
+    "country": "chile",
+    "title": "Instituto Nacional de Estadísticas",
+    "publisher": "Instituto Nacional de Estadísticas",
+    "url": "https://www.ine.gob.cl/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Inicio",
+      "responseSha256": "5baf63e25807aab4455cacac800d049707efe40097eeb363ccdf1b2937cedf36"
+    }
+  },
+  {
+    "id": "nso-colombia",
+    "country": "colombia",
+    "title": "Departamento Administrativo Nacional de Estadística (DANE)",
+    "publisher": "Departamento Administrativo Nacional de Estadística (DANE)",
+    "url": "https://www.dane.gov.co/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "DANE - Inicio",
+      "responseSha256": "fafa9ce29f0f1b008386bbf84a44f0b7dd8934272256dec5c90e4fa9d5a076ee"
+    }
+  },
+  {
+    "id": "nso-guatemala",
+    "country": "guatemala",
+    "title": "Instituto Nacional de Estadística",
+    "publisher": "Instituto Nacional de Estadística",
+    "url": "https://www.ine.gob.gt/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Instituto Nacional de Estadística – Instituto Nacional de Estadística Guatemala",
+      "responseSha256": "eb39b90c3afb2dbd183756d1d201711610deae49df8672de23d4f84ca2b7c356"
+    }
+  },
+  {
+    "id": "nso-guyana",
+    "country": "guyana",
+    "title": "Bureau of Statistics",
+    "publisher": "Bureau of Statistics",
+    "url": "https://statisticsguyana.gov.gy/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Home - Bureau of Statistics",
+      "responseSha256": "a1fc9f3bdaba3f92ed96c898a6a54948e30d71f28c612c1eea4f06c1f73e5968"
+    }
+  },
+  {
+    "id": "nso-mexico",
+    "country": "mexico",
+    "title": "Instituto Nacional de Estadística, Geografía (INEGI)",
+    "publisher": "Instituto Nacional de Estadística, Geografía (INEGI)",
+    "url": "https://www.inegi.org.mx/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Instituto Nacional de Estadística y Geografía (INEGI)",
+      "responseSha256": "9fef21fc7065e93a226f083ce783f0d1799291f3927624d6ceebc4240b4f750b"
+    }
+  },
+  {
+    "id": "nso-nicaragua",
+    "country": "nicaragua",
+    "title": "Instituto Nacional de InformaciÃ³n de Desarrollo (INIDE)",
+    "publisher": "Instituto Nacional de InformaciÃ³n de Desarrollo (INIDE)",
+    "url": "https://www.inide.gob.ni/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Instituto Nacional de Información de Desarrollo - INIDE",
+      "responseSha256": "695e1b0647e57855302580e8f85aee59cdcd15fb6a0e40fd80064cedf81994dd"
+    }
+  },
+  {
+    "id": "nso-peru",
+    "country": "peru",
+    "title": "Instituto Nacional de Estadística e Informática (INEI)",
+    "publisher": "Instituto Nacional de Estadística e Informática (INEI)",
+    "url": "https://www.gob.pe/inei/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Instituto Nacional de Estadística e Informática - INEI - Plataforma del Estado Peruano",
+      "responseSha256": "5802c9577568af92b6dfe70955977e5a8feb159a1b6e346dcef97c3587c61958"
+    }
+  },
+  {
+    "id": "nso-saint-lucia",
+    "country": "saint-lucia",
+    "title": "Saint Lucian Government Statistics Department",
+    "publisher": "Saint Lucian Government Statistics Department",
+    "url": "https://www.stats.gov.lc/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Home - The Central Statistical Office of Saint Lucia",
+      "responseSha256": "2b288ba66111d19481e8e231ca79fcc7e90e39e3d6ab595d6599366e0bb85924"
+    }
+  },
+  {
+    "id": "nso-suriname",
+    "country": "suriname",
+    "title": "General Bureau of Statistics",
+    "publisher": "General Bureau of Statistics",
+    "url": "https://statistics-suriname.org/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Home nl - Algemeen Bureau voor de Statistiek in Suriname",
+      "responseSha256": "39f1a7d3ff95fe3bd63a495f30405af26c71ecb33ab9be966717d0c44d7c3625"
+    }
+  },
+  {
+    "id": "nso-trinidad-and-tobago",
+    "country": "trinidad-and-tobago",
+    "title": "Central Statistical Office",
+    "publisher": "Central Statistical Office",
+    "url": "https://cso.gov.tt/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Central Statistical Office",
+      "responseSha256": "945104f6f13bbb1a82f5da0095619c7d3c63e0dcc6a0795e208b1984336ef80c"
+    }
+  },
+  {
+    "id": "nso-uruguay",
+    "country": "uruguay",
+    "title": "Instituto Nacional de Estadística",
+    "publisher": "Instituto Nacional de Estadística",
+    "url": "https://www.gub.uy/instituto-nacional-estadistica/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Instituto Nacional de Estadística - GUB.UY",
+      "responseSha256": "d0d3d8d3cdd01746cb96290dc0d566ba2c3ab0ef251dfc5d8f599f38da6d204e"
+    }
+  },
+  {
+    "id": "nso-armenia",
+    "country": "armenia",
+    "title": "NationalStatistical Service of the Republic of Armenia",
+    "publisher": "NationalStatistical Service of the Republic of Armenia",
+    "url": "https://www.armstat.am/en/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Statistical Committee of the Republic of Armenia",
+      "responseSha256": "93dfb3f5491d6169b16bfc7a4b89b4733cb7f8cd790efd0302635c39c6ce2556"
+    }
+  },
+  {
+    "id": "nso-bhutan",
+    "country": "bhutan",
+    "title": "National Statistics Bureau",
+    "publisher": "National Statistics Bureau",
+    "url": "https://nsb.gov.bt/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "National Statistics Bureau – National Statistics Bureau",
+      "responseSha256": "334af7e2c6c9d499f50d4c05a509e5c0ede6fb746af7a97cfbc45b1c4d32251d"
+    }
+  },
+  {
+    "id": "nso-china",
+    "country": "china",
+    "title": "National Bureau of Statistics of China",
+    "publisher": "National Bureau of Statistics of China",
+    "url": "https://www.stats.gov.cn/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "国家统计局",
+      "responseSha256": "6e8b996e4ca300a84232784aaed4c2051db1a4efdf5c6d6d4aa2794939688a8a"
+    }
+  },
+  {
+    "id": "nso-georgia",
+    "country": "georgia",
+    "title": "National Statistics Office of Georgia",
+    "publisher": "National Statistics Office of Georgia",
+    "url": "https://www.geostat.ge/index.php/ka",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "საქართველოს სტატისტიკის ეროვნული სამსახური",
+      "responseSha256": "7f9e35ff19395901ae50b31921427796a58204d315d1a0afebba3b0c8063fdc7"
+    }
+  },
+  {
+    "id": "nso-india",
+    "country": "india",
+    "title": "Ministry of Statistcs and Programme Implementation",
+    "publisher": "Ministry of Statistcs and Programme Implementation",
+    "url": "https://www.mospi.gov.in/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Ministry of Statistics and Program Implementation | Government Of India",
+      "responseSha256": "bafae051e988f70f69831cc8ba57e0ddb0aa8e936a5a4e687d4807aea1ed9cbf"
+    }
+  },
+  {
+    "id": "nso-indonesia",
+    "country": "indonesia",
+    "title": "BPS- Statistics Indonesia",
+    "publisher": "BPS- Statistics Indonesia",
+    "url": "https://www.bps.go.id/id",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Badan Pusat Statistik Indonesia",
+      "responseSha256": "dd39f68553e374b4934ffeff1efab98cbd89b7888b4363be5baac19f9c6202b2"
+    }
+  },
+  {
+    "id": "nso-israel",
+    "country": "israel",
+    "title": "Central Bureau of Statistics",
+    "publisher": "Central Bureau of Statistics",
+    "url": "https://www.cbs.gov.il/he/cbsnewbrand/Pages/default.aspx",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "הלשכה המרכזית לסטטיסטיקה\n            \n            \n            דף הבית",
+      "responseSha256": "f7c39a7b928117c2d289669cd5cbca2ad27c25ae0a288a9cd7e4242ae809ae30"
+    }
+  },
+  {
+    "id": "nso-kazakhstan",
+    "country": "kazakhstan",
+    "title": "Statistical Office",
+    "publisher": "Statistical Office",
+    "url": "https://stat.gov.kz/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Қазақстан Республикасы Стратегиялық жоспарлау және реформалар агенттігінің Ұлттық статистика бюросы - Басты бет",
+      "responseSha256": "77bcce859e0c855f0fb5fcdb4cfc9aa3b9cb70bcab6a17e5c569c313a65d9289"
+    }
+  },
+  {
+    "id": "nso-south-korea",
+    "country": "south-korea",
+    "title": "Statistcs Korea",
+    "publisher": "Statistcs Korea",
+    "url": "https://mods.go.kr/index.es?sid=a1",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "국가데이터처",
+      "responseSha256": "81b6ee3c5c1fd7ed1b728b714a3c2cdcef3c1cd93417c6e6e92849620d107e65"
+    }
+  },
+  {
+    "id": "nso-kuwait",
+    "country": "kuwait",
+    "title": "Central Statistical Office",
+    "publisher": "Central Statistical Office",
+    "url": "https://www.csb.gov.kw/Default_EN",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Home - Central Statistical Bureau",
+      "responseSha256": "c3f234644a1e65a6d4e46175ccfaa475e84129e91f3afa2fbd6edc22f7852526"
+    }
+  },
+  {
+    "id": "nso-lebanon",
+    "country": "lebanon",
+    "title": "Central Administration for Statistics",
+    "publisher": "Central Administration for Statistics",
+    "url": "https://www.cas.gov.lb/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "cas.gov.lb",
+      "responseSha256": "2ebdc88f32f39023a2195477433096a82ccdc741c939a8ac94c474e535cbdf02"
+    }
+  },
+  {
+    "id": "nso-mongolia",
+    "country": "mongolia",
+    "title": "National Statistical Office",
+    "publisher": "National Statistical Office",
+    "url": "https://www.nso.mn/mn",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Үндэсний статистикийн хороо",
+      "responseSha256": "b30fcfd2d4e19ddb61c91d4ca988a444548548c1cae3ea8e4d45208311447310"
+    }
+  },
+  {
+    "id": "nso-myanmar",
+    "country": "myanmar",
+    "title": "Central Statistical Organization",
+    "publisher": "Central Statistical Organization",
+    "url": "https://www.csostat.gov.mm/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Central Statistical Organization",
+      "responseSha256": "b9ef2664a5df408e9645b629794a81f06840cf66ed763357eaf040bc310968b1"
+    }
+  },
+  {
+    "id": "nso-saudi-arabia",
+    "country": "saudi-arabia",
+    "title": "General Authority for Statistcs",
+    "publisher": "General Authority for Statistcs",
+    "url": "https://www.stats.gov.sa/en",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "General Authority for Statistics",
+      "responseSha256": "4908eb9fa277d3395916ab16e5213e018ee5fbc58829231d8b991b03d1769a7d"
+    }
+  },
+  {
+    "id": "nso-sri-lanka",
+    "country": "sri-lanka",
+    "title": "Department of Census and Statistics",
+    "publisher": "Department of Census and Statistics",
+    "url": "https://www.statistics.gov.lk/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Department of Census and Statistics",
+      "responseSha256": "b91562f678432a8ba234bfe4c6811aae9aed3de3b8eeebbbf4c43ae0a0562423"
+    }
+  },
+  {
+    "id": "nso-tajikistan",
+    "country": "tajikistan",
+    "title": "State Statistical Committee of Tajikistan",
+    "publisher": "State Statistical Committee of Tajikistan",
+    "url": "https://www.stat.tj/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Агентии омори назди Президенти Ҷумҳурии Тоҷикистон",
+      "responseSha256": "6977d91140bb70a7b43f7466133f940ad88a0dce5618340c04b4517a42b48a00"
+    }
+  },
+  {
+    "id": "nso-thailand",
+    "country": "thailand",
+    "title": "National Statistical Office",
+    "publisher": "National Statistical Office",
+    "url": "https://www.nso.go.th/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "สำนักงานสถิติแห่งชาติ : National Statistical Office",
+      "responseSha256": "1d7d3f998232a24c39d3730d8ff2d96d0add4d8c943aaa9ad97e4fc1de901e91"
+    }
+  },
+  {
+    "id": "nso-uzbekistan",
+    "country": "uzbekistan",
+    "title": "State Committee of the Republic of Uzbekistan on Statistics",
+    "publisher": "State Committee of the Republic of Uzbekistan on Statistics",
+    "url": "https://stat.uz/uz/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "O‘zbekiston Respublikasi Milliy statistika qo‘mitasi",
+      "responseSha256": "0389c6d9a5f528d5160d2f10eec9f8a684707e0ae4296ece0575a4ac1a24b521"
+    }
+  },
+  {
+    "id": "nso-austria",
+    "country": "austria",
+    "title": "Statistics Austria",
+    "publisher": "Statistics Austria",
+    "url": "https://www.statistik.at/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Startseite - STATISTIK AUSTRIA - Die Informationsmanager",
+      "responseSha256": "3d1cb3c10d5cdfa03c69520e2c966bafa047a3c70e6d5baecbc4b86c648a2ec3"
+    }
+  },
+  {
+    "id": "nso-belgium",
+    "country": "belgium",
+    "title": "Statistics Belgium",
+    "publisher": "Statistics Belgium",
+    "url": "https://statbel.fgov.be/language_selection_page?destination=/node/15",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Language selection | Statbel",
+      "responseSha256": "8972f77824bd3cc81cf3ec6abce9eb6e6e1592338f170e2ebf062e4724c088be"
+    }
+  },
+  {
+    "id": "nso-bosnia-and-herzegovina",
+    "country": "bosnia-and-herzegovina",
+    "title": "Agency for Statistics of Bosnia and Herzegovina",
+    "publisher": "Agency for Statistics of Bosnia and Herzegovina",
+    "url": "https://www.bhas.ba/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "bhas.ba",
+      "responseSha256": "63977943c81d3a72ebe3058c6fd79fc48cd5e091ffa69b8f5b8620c4d8726799"
+    }
+  },
+  {
+    "id": "nso-bulgaria",
+    "country": "bulgaria",
+    "title": "National Statistical Institute of the Republic of Bulgaria",
+    "publisher": "National Statistical Institute of the Republic of Bulgaria",
+    "url": "https://www.nsi.bg/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "НСИ - Национален статистически институт",
+      "responseSha256": "47b99cabac1d4ed35dfac7f004fe123c82fb4a8e98b8ec96f0271ac6b179f96c"
+    }
+  },
+  {
+    "id": "nso-croatia",
+    "country": "croatia",
+    "title": "Croatian Bureau of Statistics",
+    "publisher": "Croatian Bureau of Statistics",
+    "url": "https://dzs.gov.hr/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Državni zavod za statistiku - Naslovna",
+      "responseSha256": "ed8e322ebb5822d27c2d538c0b49946b39adcc77362e9469eb06f0f79c0fffc4"
+    }
+  },
+  {
+    "id": "nso-czechia",
+    "country": "czechia",
+    "title": "Czech Statistical Office",
+    "publisher": "Czech Statistical Office",
+    "url": "https://csu.gov.cz/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Český statistický úřad | Statistika",
+      "responseSha256": "50d7b331c60b10909308747138dd4fd718bce02c340168b3ab61df994e0fb12c"
+    }
+  },
+  {
+    "id": "nso-denmark",
+    "country": "denmark",
+    "title": "Statistics Denmark",
+    "publisher": "Statistics Denmark",
+    "url": "https://www.dst.dk/da/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Danmarks Statistik",
+      "responseSha256": "7e13122bfb16c9d9fd3efa67e17570b349176fa0cd4189d928e1d83f790add57"
+    }
+  },
+  {
+    "id": "nso-finland",
+    "country": "finland",
+    "title": "Statistics Finland",
+    "publisher": "Statistics Finland",
+    "url": "https://stat.fi/fi",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Tilastokeskus",
+      "responseSha256": "b7cee9e38fb2f3895b55445265f5afd3894242743b59e827aa24c07fd4047f90"
+    }
+  },
+  {
+    "id": "nso-france",
+    "country": "france",
+    "title": "Institut National de la Statistique et des Études Économiques",
+    "publisher": "Institut National de la Statistique et des Études Économiques",
+    "url": "https://www.insee.fr/fr/accueil",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Accueil − Insee − Institut national de la statistique et des études économiques | Insee",
+      "responseSha256": "8db5f1d2a9710a9aeda9cf7c1cd92766fcbfc807ad719c9492386ff573786bc1"
+    }
+  },
+  {
+    "id": "nso-germany",
+    "country": "germany",
+    "title": "Federal Statistical Office",
+    "publisher": "Federal Statistical Office",
+    "url": "https://www.destatis.de/DE/Home/_inhalt.html",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Startseite  -  Statistisches Bundesamt",
+      "responseSha256": "d9cd200c4de997d90febbdbf8d59d5a9761d505f9c85c0adecac5b8f3099a9ff"
+    }
+  },
+  {
+    "id": "nso-greece",
+    "country": "greece",
+    "title": "National Statistical Service of Greece",
+    "publisher": "National Statistical Service of Greece",
+    "url": "https://www.statistics.gr/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Κεντρική Σελίδα ΕΛΣΤΑΤ - ELSTAT",
+      "responseSha256": "068b63c64875a47edea1109e1b4779f499531948f87d44c6f170814861e52da1"
+    }
+  },
+  {
+    "id": "nso-hungary",
+    "country": "hungary",
+    "title": "Hungarian Central Statistical Office",
+    "publisher": "Hungarian Central Statistical Office",
+    "url": "https://www.ksh.hu/?lang=en",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Hungarian Central Statistical Office",
+      "responseSha256": "3a8751fe03078d3c3075c26d9a293fc49fd29a17686186624525266f2ff923f9"
+    }
+  },
+  {
+    "id": "nso-iceland",
+    "country": "iceland",
+    "title": "Statistics Iceland",
+    "publisher": "Statistics Iceland",
+    "url": "https://www.hagstofa.is/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Hagstofa Íslands - Forsíða",
+      "responseSha256": "2b24984acd703db229ca9baa3890e38a73ac5e1730a9dbf78f717b2076511541"
+    }
+  },
+  {
+    "id": "nso-ireland",
+    "country": "ireland",
+    "title": "Central Statistics Office Ireland",
+    "publisher": "Central Statistics Office Ireland",
+    "url": "https://www.cso.ie/en/index.html",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Home - CSO - Central Statistics Office",
+      "responseSha256": "27c5489aa71beba05dc72d52404e62e04b5da075b961e8b95e0925f2e9f8f1d4"
+    }
+  },
+  {
+    "id": "nso-italy",
+    "country": "italy",
+    "title": "National Institut of Statistics",
+    "publisher": "National Institut of Statistics",
+    "url": "https://www.istat.it/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Istat",
+      "responseSha256": "474fa69fcbc9643695058464cab44410c5ee514f6ea18d116d273f96bbe12681"
+    }
+  },
+  {
+    "id": "nso-latvia",
+    "country": "latvia",
+    "title": "Central Statistical Bureau of Latvia",
+    "publisher": "Central Statistical Bureau of Latvia",
+    "url": "https://www.csb.lv/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Foreign trade in goods – Statistics Latvia",
+      "responseSha256": "708303173226e539eaedf7fa1a4f9b67c8f042d5f36eae33cc0c2e7b7341c174"
+    }
+  },
+  {
+    "id": "nso-liechtenstein",
+    "country": "liechtenstein",
+    "title": "Bureau of Statistics",
+    "publisher": "Bureau of Statistics",
+    "url": "https://www.llv.li/de/landesverwaltung/amt-fuer-statistik",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Amt für Statistik - Liechtensteinische Landesverwaltung",
+      "responseSha256": "8a3333acaf321b64fe01acfad36b6a34f9ae575a9c6268259d201c2d91be2afb"
+    }
+  },
+  {
+    "id": "nso-lithuania",
+    "country": "lithuania",
+    "title": "Statistics Lithuania",
+    "publisher": "Statistics Lithuania",
+    "url": "https://vda.lrv.lt/lt/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Pradžia - Valstybės duomenų agentūra",
+      "responseSha256": "3da8b044e6e63a85a7ab5fe65bf976c2776f36c2597132d66d89424a76aa8d2a"
+    }
+  },
+  {
+    "id": "nso-luxembourg",
+    "country": "luxembourg",
+    "title": "STATEC",
+    "publisher": "STATEC",
+    "url": "https://statistiques.public.lu/fr.html",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Statistiques - Luxembourg",
+      "responseSha256": "89327eb3912ffa0b31122b9528c8e0335df5ee914a0c2e070c21e31279de1434"
+    }
+  },
+  {
+    "id": "nso-norway",
+    "country": "norway",
+    "title": "Statistics Norway",
+    "publisher": "Statistics Norway",
+    "url": "https://www.ssb.no/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Statistisk sentralbyrå",
+      "responseSha256": "aad2f938c8cb491a8f7213269a774b537025ea9a2eba57e30496fcdd73940c88"
+    }
+  },
+  {
+    "id": "nso-portugal",
+    "country": "portugal",
+    "title": "Instituto Nacional de Estatística",
+    "publisher": "Instituto Nacional de Estatística",
+    "url": "https://www.ine.pt/xportal/xmain?xpgid=ine_main&xpid=INE",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Statistics Portugal (INE) - Official statistics of Portugal",
+      "responseSha256": "3d24ccbf3b3d22509362bbfda971377379a95958293d25bb0b2a0e9885ab633f"
+    }
+  },
+  {
+    "id": "nso-slovenia",
+    "country": "slovenia",
+    "title": "Statistical Office of the Republic of Slovenia",
+    "publisher": "Statistical Office of the Republic of Slovenia",
+    "url": "https://www.stat.si/statweb",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "SURS",
+      "responseSha256": "bd82e65f5e91bbee5e5ed1eb5c00d48c95271fdcc9b4e7fe2bf69716cf9bfec5"
+    }
+  },
+  {
+    "id": "nso-spain",
+    "country": "spain",
+    "title": "Instituto Nacional de Estadística",
+    "publisher": "Instituto Nacional de Estadística",
+    "url": "https://www.ine.es/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "INE. Instituto Nacional de Estadística",
+      "responseSha256": "3cc83dcb6109f4f74aa7e97f3d3b72a58fcbd3b7913c95e5c2466ed960233d02"
+    }
+  },
+  {
+    "id": "nso-sweden",
+    "country": "sweden",
+    "title": "Statistics Sweden",
+    "publisher": "Statistics Sweden",
+    "url": "https://www.scb.se/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Statistikmyndigheten SCB",
+      "responseSha256": "62c2350bc43ac0ccaaeb960a044b4b51d4c369c0b8ddee67afe121d9fefa0b9f"
+    }
+  },
+  {
+    "id": "nso-switzerland",
+    "country": "switzerland",
+    "title": "Swiss Federal Statistical Office",
+    "publisher": "Swiss Federal Statistical Office",
+    "url": "https://www.bfs.admin.ch/en",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Data for an informed Switzerland",
+      "responseSha256": "011eccd8e92cc129f37442b747aec0d48560cc9cecad30d550bc2bbeafdb18a6"
+    }
+  },
+  {
+    "id": "nso-australia",
+    "country": "australia",
+    "title": "Australian Bureau of Statistics",
+    "publisher": "Australian Bureau of Statistics",
+    "url": "https://www.abs.gov.au/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Australian Bureau of Statistics",
+      "responseSha256": "17bf96e913e4556c46aa8e1e4f2ae9bb8c40b683013efb33fbebadfe1edf5aa0"
+    }
+  },
+  {
+    "id": "nso-new-zealand",
+    "country": "new-zealand",
+    "title": "Statistics New Zealand",
+    "publisher": "Statistics New Zealand",
+    "url": "https://www.stats.govt.nz/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Home | Stats NZ",
+      "responseSha256": "265350a41e8198b6d91f1f512b2d7bd4c77c8583e9252b27ca5e64b2fc6fd6f8"
+    }
+  },
+  {
+    "id": "nso-samoa",
+    "country": "samoa",
+    "title": "Samoa Bureau of Statistics",
+    "publisher": "Samoa Bureau of Statistics",
+    "url": "https://www.sbs.gov.ws/",
+    "kind": "national-statistics",
+    "topics": [
+      "economy",
+      "cost",
+      "work"
+    ],
+    "scope": "National statistical producer. Select the relevant local dataset, year and methodology; a national aggregate is not a city budget, salary offer or immigration rule.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Samoa Bureau of Statistics",
+      "responseSha256": "acf526210b629e4e29d7520c30d14ac573e96aab42382165a3f4ac380355ac5c"
+    }
+  },
+  {
+    "id": "un-m49",
+    "title": "UNSD — Methodology",
+    "publisher": "United Nations Statistics Division",
+    "url": "https://unstats.un.org/unsd/methodology/m49/overview/",
+    "topics": [
+      "identity"
+    ],
+    "scope": "Country identifiers and statistical regions; geography is not a sovereignty decision.",
+    "country": null,
+    "kind": "international",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/unsd/methodology/m49/overview/",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "UNSD — Methodology",
+      "responseSha256": "f72c6ed8c0146e5277dc1c1a7840bd04cac9fb67e1527ddcf83e6b6a457248b2"
+    }
+  },
+  {
+    "id": "un-nso",
+    "title": "UNSD — Partners",
+    "publisher": "United Nations Statistics Division",
+    "url": "https://unstats.un.org/home/nso_sites",
+    "topics": [
+      "economy",
+      "work",
+      "cost"
+    ],
+    "scope": "Institutional directory. A listed office is a primary producer, but older directory addresses may need replacement.",
+    "country": null,
+    "kind": "international",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "UNSD — Partners",
+      "responseSha256": "856dfeed4a9eeb163cf11bb11be56aeb3297518a20958b21513359273881b853"
+    }
+  },
+  {
+    "id": "wb-wdi",
+    "title": "WDI - Sources and Methods",
+    "publisher": "World Bank",
+    "url": "https://datatopics.worldbank.org/world-development-indicators/sources-and-methods.html",
+    "topics": [
+      "economy",
+      "cost",
+      "health",
+      "education",
+      "work",
+      "digital"
+    ],
+    "scope": "Comparable national statistics with series-specific definitions, years and limitations; no personal budget or eligibility inference.",
+    "country": null,
+    "kind": "international",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://datatopics.worldbank.org/world-development-indicators/sources-and-methods.html",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "WDI - Sources and Methods",
+      "responseSha256": "d5ee444ee99fe6cd6bdd761bd7c6b7b5ea91f9d4fa6a6c0dabaf312961df10ca"
+    }
+  },
+  {
+    "id": "uis-education",
+    "title": "SDG 4 Country Profiles | Institute for Statistics (UIS)",
+    "publisher": "UNESCO Institute for Statistics",
+    "url": "https://www.uis.unesco.org/en/data/sdg4-country-profiles",
+    "topics": [
+      "education"
+    ],
+    "scope": "National education systems and SDG 4 indicators. Coverage and reference years vary; not a university accreditation decision.",
+    "country": null,
+    "kind": "international",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://www.uis.unesco.org/en/data/sdg4-country-profiles",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "SDG 4 Country Profiles | Institute for Statistics (UIS)",
+      "responseSha256": "b508d427e440b2ff05abc51cb0cbce1d8ce9c89a61367f59f51aacf9d4933f7d"
+    }
+  },
+  {
+    "id": "uis-browser",
+    "title": "UIS Data Browser",
+    "publisher": "UNESCO Institute for Statistics",
+    "url": "https://databrowser.uis.unesco.org/",
+    "topics": [
+      "education"
+    ],
+    "scope": "Education, science and culture data and metadata. Select the exact country, indicator, population and year.",
+    "country": null,
+    "kind": "international",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://databrowser.uis.unesco.org/",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "UIS Data Browser",
+      "responseSha256": "de163c6ab7b5d129202202a9ecd6beb11e676e5b9bc35144a034992c83f6df1c"
+    }
+  },
+  {
+    "id": "whed",
+    "title": "Just a moment...",
+    "publisher": "International Association of Universities / UNESCO collaboration",
+    "url": "https://www.whed.net/home.php",
+    "topics": [
+      "education",
+      "documents"
+    ],
+    "scope": "Higher education institutions meeting WHED criteria. Inclusion is not admission, programme-level recognition or professional licensing.",
+    "country": null,
+    "kind": "international",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://www.unesco.org/sdg4education2030/en/knowledge-hub/world-higher-education-database",
+    "access": {
+      "status": "restricted",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 403,
+      "pageTitle": "Just a moment...",
+      "responseSha256": "03c60f364e889b350b57cad5562a184c65abc09ca7866aeb725eec5838b2d6ac"
+    }
+  },
+  {
+    "id": "enic-naric",
+    "title": "country pages - ENIC-NARIC",
+    "publisher": "ENIC-NARIC Networks",
+    "url": "https://enic-naric.net/page-countries-of-the-networks",
+    "topics": [
+      "education",
+      "documents",
+      "work"
+    ],
+    "scope": "National systems and qualification recognition contacts in participating countries. Academic recognition and regulated-profession permission are separate.",
+    "country": null,
+    "kind": "international",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://enic-naric.net/page-countries-of-the-networks",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "country pages - ENIC-NARIC",
+      "responseSha256": "45e35ac8442c85639650447523e3ba888b743a0b8522a915b7ecb41d086934d4"
+    }
+  },
+  {
+    "id": "ilo-profiles",
+    "title": "Country profiles - ILOSTAT",
+    "publisher": "International Labour Organization",
+    "url": "https://ilostat.ilo.org/data/country-profiles/",
+    "topics": [
+      "work",
+      "economy"
+    ],
+    "scope": "Employment, wages and labour-market indicators. National or modelled estimates do not predict individual employment outcomes.",
+    "country": null,
+    "kind": "international",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://ilostat.ilo.org/data/country-profiles/",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Country profiles - ILOSTAT",
+      "responseSha256": "9370b33075a74932c18ca5b892b353eae7e433c07c697f1f149df065a626d6a6"
+    }
+  },
+  {
+    "id": "ilo-normlex",
+    "title": "",
+    "publisher": "International Labour Organization",
+    "url": "https://normlex.ilo.org/",
+    "topics": [
+      "work"
+    ],
+    "scope": "International labour standards, ratifications and supervision. Consult current national law and competent authorities for an individual contract.",
+    "country": null,
+    "kind": "international",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://normlex.ilo.org/",
+    "access": {
+      "status": "manual",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 302,
+      "pageTitle": "",
+      "responseSha256": null
+    }
+  },
+  {
+    "id": "who-countries",
+    "title": "Countries",
+    "publisher": "World Health Organization",
+    "url": "https://data.who.int/countries",
+    "topics": [
+      "health"
+    ],
+    "scope": "National health indicators and country coverage. A health indicator does not establish insurance access, entitlements or clinical advice.",
+    "country": null,
+    "kind": "international",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://data.who.int/countries",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Countries",
+      "responseSha256": "da64a8f5f3b9961dc20013270e764a3416bc74cfc197a84d9a299b07e1b13fe2"
+    }
+  },
+  {
+    "id": "who-outbreaks",
+    "title": "Disease Outbreak News",
+    "publisher": "World Health Organization",
+    "url": "https://www.who.int/emergencies/disease-outbreak-news",
+    "topics": [
+      "health",
+      "safety"
+    ],
+    "scope": "Published outbreak reports. Check report date, geographical scope and current local public-health guidance.",
+    "country": null,
+    "kind": "international",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://www.who.int/emergencies/disease-outbreak-news",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Disease Outbreak News",
+      "responseSha256": "e5d377fd31e3d1c8b9502b045948ac9e7fd49c1db88786b7f23a7350a10f5a37"
+    }
+  },
+  {
+    "id": "imf-data",
+    "title": "Data Home",
+    "publisher": "International Monetary Fund",
+    "url": "https://data.imf.org/",
+    "topics": [
+      "economy",
+      "cost"
+    ],
+    "scope": "Economic and financial statistics. Separate observed data, estimates and forecasts; national inflation is not a city rent quote.",
+    "country": null,
+    "kind": "international",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://data.imf.org/",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Data Home",
+      "responseSha256": "a637a0ce4c6bd76e52760aee6b1022507be2f24a3e86764e3b8c5a55ce10f960"
+    }
+  },
+  {
+    "id": "undp-hdi",
+    "title": "Data Center | Human Development Reports",
+    "publisher": "United Nations Development Programme",
+    "url": "https://hdr.undp.org/data-center",
+    "topics": [
+      "economy",
+      "health",
+      "education"
+    ],
+    "scope": "Human development measures and methodology. Composite indices do not rank personal destination suitability.",
+    "country": null,
+    "kind": "international",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://hdr.undp.org/data-center",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Data Center | Human Development Reports",
+      "responseSha256": "15bcb63ed21b0a0fd71bc67a12c66c1c81f4752cb14df6a60c5d776a9801b59a"
+    }
+  },
+  {
+    "id": "itu-data",
+    "title": "ERROR: The request could not be satisfied",
+    "publisher": "International Telecommunication Union",
+    "url": "https://datahub.itu.int/",
+    "topics": [
+      "digital"
+    ],
+    "scope": "Connectivity and digital-development indicators. National access is not connection speed, reliability or a remote-work permit.",
+    "country": null,
+    "kind": "international",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://www.itu.int/en/ITU-D/Statistics/Dashboards/Pages/Digital-Development.aspx",
+    "access": {
+      "status": "restricted",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 403,
+      "pageTitle": "ERROR: The request could not be satisfied",
+      "responseSha256": "45e9fbd4a65254e2d836852a9de431dd17406f872e2ad2a652f3e9984b847efd"
+    }
+  },
+  {
+    "id": "iom-portal",
+    "title": "Access Denied",
+    "publisher": "International Organization for Migration",
+    "url": "https://www.migrationdataportal.org/",
+    "topics": [
+      "entry",
+      "identity"
+    ],
+    "scope": "Migration statistics, concepts and evidence gaps. Migrant stocks do not establish visa eligibility or current admissions.",
+    "country": null,
+    "kind": "international",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://gdn.paris21.org/resources/migration-data-portal",
+    "access": {
+      "status": "restricted",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 403,
+      "pageTitle": "Access Denied",
+      "responseSha256": "23eeb0dfc8c9fb725d1ca5d5d125173647b252e08e591332149d2f993e565f7a"
+    }
+  },
+  {
+    "id": "unhcr-data",
+    "title": "",
+    "publisher": "UNHCR",
+    "url": "https://www.unhcr.org/refugee-statistics/",
+    "topics": [
+      "entry",
+      "safety"
+    ],
+    "scope": "Forced-displacement statistics. Protection procedures and individual legal status require competent specialist advice.",
+    "country": null,
+    "kind": "international",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://www.unhcr.org/refugee-statistics/",
+    "access": {
+      "status": "restricted",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 429,
+      "pageTitle": "",
+      "responseSha256": "ba3fb872d722787350bf7fba53877c71625f48019729027e3b6bad360bfec560"
+    }
+  },
+  {
+    "id": "hcch-apostille",
+    "title": "HCCH | Apostille Section",
+    "publisher": "Hague Conference on Private International Law",
+    "url": "https://www.hcch.net/en/instruments/conventions/specialised-sections/apostille",
+    "topics": [
+      "documents"
+    ],
+    "scope": "Convention participation and designated authorities. Verify origin, destination, entry into force and objections; not every document is eligible.",
+    "country": null,
+    "kind": "international",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://www.hcch.net/en/instruments/conventions/specialised-sections/apostille",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "HCCH | Apostille Section",
+      "responseSha256": "fb0a142a1fa1e15cec5b4bfc34d09a347afec3389375b7d26319f719fa3123ce"
+    }
+  },
+  {
+    "id": "eu-immigration",
+    "title": "EU Immigration Portal - Migration and Home Affairs - European Commission",
+    "publisher": "European Commission",
+    "url": "https://home-affairs.ec.europa.eu/policies/migration-and-asylum/eu-immigration-portal_en",
+    "topics": [
+      "entry",
+      "work",
+      "education"
+    ],
+    "scope": "Route-specific orientation for participating EU states. Ireland and Denmark have exceptions; national authorities decide individual cases.",
+    "country": null,
+    "kind": "international",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://home-affairs.ec.europa.eu/policies/migration-and-asylum/eu-immigration-portal_en",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "EU Immigration Portal - Migration and Home Affairs - European Commission",
+      "responseSha256": "6f796d232d2cb301aa5eed2d79d4f59fff6a6ce719a2f96ebeb6c13b1f35371d"
+    }
+  },
+  {
+    "id": "eures",
+    "title": "Living and working - EURES (EURopean Employment Services) - European Union",
+    "publisher": "European Labour Authority / European Commission",
+    "url": "https://eures.europa.eu/living-and-working_en",
+    "topics": [
+      "work",
+      "cost"
+    ],
+    "scope": "European labour-market and practical settlement guidance. A vacancy does not grant the right to work.",
+    "country": null,
+    "kind": "international",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://eures.europa.eu/living-and-working_en",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Living and working - EURES (EURopean Employment Services) - European Union",
+      "responseSha256": "a66712dbdb0d9e0f0bef13adbb2ddac70ea4779e4971764851832bce273386a8"
+    }
+  },
+  {
+    "id": "eurostat",
+    "title": "Database - Eurostat",
+    "publisher": "European Commission — Eurostat",
+    "url": "https://ec.europa.eu/eurostat/data/database",
+    "topics": [
+      "economy",
+      "cost",
+      "education",
+      "work",
+      "housing"
+    ],
+    "scope": "European statistical series. Compare the same unit, year, geographic level and population definition.",
+    "country": null,
+    "kind": "international",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://ec.europa.eu/eurostat/data/database",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Database - Eurostat",
+      "responseSha256": "ec0884a5629bf87204bb3e7541a47a71ad5eb5f23ec53674f53f3b126866c684"
+    }
+  },
+  {
+    "id": "oecd-data",
+    "title": "",
+    "publisher": "Organisation for Economic Co-operation and Development",
+    "url": "https://data-explorer.oecd.org/",
+    "topics": [
+      "economy",
+      "work",
+      "education",
+      "housing"
+    ],
+    "scope": "International data for participating economies. Dataset coverage varies; aggregates do not determine a household outcome.",
+    "country": null,
+    "kind": "international",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://data-explorer.oecd.org/",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "",
+      "responseSha256": "279a9e36d8962ba85d47e7af604f2e21548b54b7346b38a995167a188d2ff16d"
+    }
+  },
+  {
+    "id": "wb-climate",
+    "title": "Climate Change Knowledge Portal | Climate Change Knowledge Portal",
+    "publisher": "World Bank",
+    "url": "https://climateknowledgeportal.worldbank.org/",
+    "topics": [
+      "climate",
+      "housing"
+    ],
+    "scope": "Historical climate and model projections. Scenarios are not forecasts for a particular property or travel date.",
+    "country": null,
+    "kind": "international",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://climateknowledgeportal.worldbank.org/",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Climate Change Knowledge Portal | Climate Change Knowledge Portal",
+      "responseSha256": "7505b0250fd9316da7264b485f192b64f1d91e5d81eeb78316bf1a1f75de39ed"
+    }
+  },
+  {
+    "id": "wmo-climate",
+    "title": "Climate",
+    "publisher": "World Meteorological Organization",
+    "url": "https://wmo.int/topics/climate",
+    "topics": [
+      "climate"
+    ],
+    "scope": "Climate science and official meteorological context. Use local meteorological services for operational warnings.",
+    "country": null,
+    "kind": "international",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://wmo.int/topics/climate",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Climate",
+      "responseSha256": "2cd29ef51ae5c4ed2846e83e365c36deafeba28f575b225fa221523cd896f907"
+    }
+  },
+  {
+    "id": "un-habitat",
+    "title": "Urban Indicators Database",
+    "publisher": "UN-Habitat",
+    "url": "https://data.unhabitat.org/",
+    "topics": [
+      "housing",
+      "identity"
+    ],
+    "scope": "Urbanisation and human-settlement data. Municipal housing prices and tenancy rules require local evidence.",
+    "country": null,
+    "kind": "international",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://data.unhabitat.org/",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Urban Indicators Database",
+      "responseSha256": "95de5b1de55e6db85b9c57bc062d116b5775e356039807467a35eeae712be5aa"
+    }
+  },
+  {
+    "id": "fcdo-advice",
+    "title": "Foreign travel advice - GOV.UK",
+    "publisher": "UK Foreign, Commonwealth & Development Office",
+    "url": "https://www.gov.uk/foreign-travel-advice",
+    "topics": [
+      "safety",
+      "health",
+      "entry"
+    ],
+    "scope": "Travel advice primarily for British nationals. Risk information and entry rules must be read with their nationality and regional scope.",
+    "country": null,
+    "kind": "government",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://www.gov.uk/foreign-travel-advice",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Foreign travel advice - GOV.UK",
+      "responseSha256": "111089aeb4240afd287ca15fc6332623fd83088ac3183a28eaef6e6b3cb1b326"
+    }
+  },
+  {
+    "id": "us-advice",
+    "title": "Travel Advisories",
+    "publisher": "U.S. Department of State",
+    "url": "https://travel.state.gov/en/international-travel/travel-advisories.html",
+    "topics": [
+      "safety"
+    ],
+    "scope": "Advisories for U.S. travellers. Do not transplant nationality-specific consular or entry guidance to other passport holders.",
+    "country": null,
+    "kind": "government",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://travel.state.gov/en/international-travel/travel-advisories.html",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Travel Advisories",
+      "responseSha256": "2f4bacc4dd6cde80aeec92aa1535cd7001082213143ada97ec084d78cdfbae85"
+    }
+  },
+  {
+    "id": "br-consular",
+    "title": "Portal Consular - Reformulação — Ministério das Relações Exteriores",
+    "publisher": "Brazil — Ministério das Relações Exteriores",
+    "url": "https://www.gov.br/mre/pt-br/assuntos/portal-consular",
+    "topics": [
+      "safety",
+      "documents",
+      "entry"
+    ],
+    "scope": "Consular assistance, notices and services for Brazilian citizens abroad. Host-country immigration decisions remain with the destination authority.",
+    "country": null,
+    "kind": "government",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://www.gov.br/mre/pt-br/assuntos/portal-consular",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Portal Consular - Reformulação — Ministério das Relações Exteriores",
+      "responseSha256": "ad3057510a840d1f8eb7ccae254be246b11f711494827df6b260072941cb7880"
+    }
+  },
+  {
+    "id": "br-econsular",
+    "title": "e-consular",
+    "publisher": "Brazil — Ministério das Relações Exteriores",
+    "url": "https://econsular.itamaraty.gov.br/",
+    "topics": [
+      "documents",
+      "safety"
+    ],
+    "scope": "Find the Brazilian post with the correct jurisdiction. Service requirements and appointments vary by post.",
+    "country": null,
+    "kind": "government",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://econsular.itamaraty.gov.br/",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "e-consular",
+      "responseSha256": "16318a7f63185c01cd0c3a12ab062e77a3bdf90d18619de8a1ceb3db32122b78"
+    }
+  },
+  {
+    "id": "spc-data",
+    "country": null,
+    "title": "Pacific Data Hub — statistics",
+    "publisher": "Pacific Community (SPC)",
+    "url": "https://sdd.spc.int/",
+    "kind": "international",
+    "topics": [
+      "economy",
+      "work",
+      "education",
+      "health"
+    ],
+    "scope": "Pacific statistical systems and country data. Country and indicator coverage vary; a shared regional portal is counted once.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://unstats.un.org/home/nso_sites",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Home | Statistics for Development Division",
+      "responseSha256": "e26064b5eab031128c1548f6e2a4769d10d83bda26fcd2dba6f412d6ee38179c"
+    }
+  },
+  {
+    "id": "authority-argentina",
+    "country": "argentina",
+    "title": "Immigration and residence — official destination authority",
+    "publisher": "Argentina — Dirección Nacional de Migraciones",
+    "url": "https://www.argentina.gob.ar/migraciones",
+    "kind": "government",
+    "topics": [
+      "entry",
+      "work",
+      "education",
+      "documents"
+    ],
+    "scope": "Official destination portal for identifying the relevant procedure and responsible authority. Select your nationality, purpose and duration. This portal reference does not establish personal eligibility, work rights, required funds or current processing times.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://www.argentina.gob.ar/migraciones",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Migraciones | Argentina.gob.ar",
+      "responseSha256": "3aa29278248de51c2be351dda87ba67b202cbc3ccf4f804162f4f74f615c3edd"
+    }
+  },
+  {
+    "id": "authority-chile",
+    "country": "chile",
+    "title": "Immigration and residence — official destination authority",
+    "publisher": "Chile — Servicio Nacional de Migraciones",
+    "url": "https://serviciomigraciones.cl/",
+    "kind": "government",
+    "topics": [
+      "entry",
+      "work",
+      "education",
+      "documents"
+    ],
+    "scope": "Official destination portal for identifying the relevant procedure and responsible authority. Select your nationality, purpose and duration. This portal reference does not establish personal eligibility, work rights, required funds or current processing times.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://serviciomigraciones.cl/",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Servicio Nacional de Migraciones | Gobierno de Chile",
+      "responseSha256": "660498398641f1a2c913113aecfc75895eaf4d852fc767c68d66e2149fcf3ddc"
+    }
+  },
+  {
+    "id": "authority-peru",
+    "country": "peru",
+    "title": "Immigration and residence — official destination authority",
+    "publisher": "Peru — Superintendencia Nacional de Migraciones",
+    "url": "https://www.gob.pe/migraciones",
+    "kind": "government",
+    "topics": [
+      "entry",
+      "work",
+      "education",
+      "documents"
+    ],
+    "scope": "Official destination portal for identifying the relevant procedure and responsible authority. Select your nationality, purpose and duration. This portal reference does not establish personal eligibility, work rights, required funds or current processing times.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://www.gob.pe/migraciones",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Superintendencia Nacional de Migraciones - MIGRACIONES - Plataforma del Estado Peruano",
+      "responseSha256": "921deab942dccd9977af0167c9342d89056851b91d6da35636a51993da28b1c9"
+    }
+  },
+  {
+    "id": "authority-colombia",
+    "country": "colombia",
+    "title": "Immigration and residence — official destination authority",
+    "publisher": "Colombia — Migración Colombia",
+    "url": "https://www.migracioncolombia.gov.co/",
+    "kind": "government",
+    "topics": [
+      "entry",
+      "work",
+      "education",
+      "documents"
+    ],
+    "scope": "Official destination portal for identifying the relevant procedure and responsible authority. Select your nationality, purpose and duration. This portal reference does not establish personal eligibility, work rights, required funds or current processing times.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://www.migracioncolombia.gov.co/",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Inicio - Migración Colombia",
+      "responseSha256": "ec0dc70add0f156ef89174f49d88f30ce8e0a019f11f3cd7b8359ade10976ff8"
+    }
+  },
+  {
+    "id": "authority-sweden",
+    "country": "sweden",
+    "title": "Immigration and residence — official destination authority",
+    "publisher": "Swedish Migration Agency",
+    "url": "https://www.migrationsverket.se/en.html",
+    "kind": "government",
+    "topics": [
+      "entry",
+      "work",
+      "education",
+      "documents"
+    ],
+    "scope": "Official destination portal for identifying the relevant procedure and responsible authority. Select your nationality, purpose and duration. This portal reference does not establish personal eligibility, work rights, required funds or current processing times.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://www.migrationsverket.se/en.html",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Start page – Swedish Migration Agency",
+      "responseSha256": "b6506c62daa425677ffa8802e7b4d2a4f5ec7aabe87d40f7368a32c172c2de87"
+    }
+  },
+  {
+    "id": "authority-norway",
+    "country": "norway",
+    "title": "Immigration and residence — official destination authority",
+    "publisher": "Norway — Directorate of Immigration (UDI)",
+    "url": "https://www.udi.no/en/want-to-apply/",
+    "kind": "government",
+    "topics": [
+      "entry",
+      "work",
+      "education",
+      "documents"
+    ],
+    "scope": "Official destination portal for identifying the relevant procedure and responsible authority. Select your nationality, purpose and duration. This portal reference does not establish personal eligibility, work rights, required funds or current processing times.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://www.udi.no/en/want-to-apply/",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Want to apply - UDI",
+      "responseSha256": "61e127cd19e1b2f449413927149e41363d942f79b1eb605e5cad0a77cf3b2385"
+    }
+  },
+  {
+    "id": "authority-denmark",
+    "country": "denmark",
+    "title": "Immigration and residence — official destination authority",
+    "publisher": "Danish Immigration Service / SIRI",
+    "url": "https://www.nyidanmark.dk/en-GB/You-want-to-apply",
+    "kind": "government",
+    "topics": [
+      "entry",
+      "work",
+      "education",
+      "documents"
+    ],
+    "scope": "Official destination portal for identifying the relevant procedure and responsible authority. Select your nationality, purpose and duration. This portal reference does not establish personal eligibility, work rights, required funds or current processing times.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://www.nyidanmark.dk/en-GB/You-want-to-apply",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "New to Denmark",
+      "responseSha256": "bc4dfd87639364bbe1c5350bbe1f521693ca667852f1858d6c6e27737d5fdecd"
+    }
+  },
+  {
+    "id": "authority-austria",
+    "country": "austria",
+    "title": "Immigration and residence — official destination authority",
+    "publisher": "Austrian Federal Government — migration.gv.at",
+    "url": "https://www.migration.gv.at/en/welcome/?no_cache=1",
+    "kind": "government",
+    "topics": [
+      "entry",
+      "work",
+      "education",
+      "documents"
+    ],
+    "scope": "Official destination portal for identifying the relevant procedure and responsible authority. Select your nationality, purpose and duration. This portal reference does not establish personal eligibility, work rights, required funds or current processing times.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://www.migration.gv.at/en/welcome/?no_cache=1",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Welcome to the Migration Platform of the Austrian Federal Government!",
+      "responseSha256": "907d9fffe94c45e310f0c5535526cc63c02e11c3a8643fd22d53f1170d385dc5"
+    }
+  },
+  {
+    "id": "authority-singapore",
+    "country": "singapore",
+    "title": "Immigration and residence — official destination authority",
+    "publisher": "Singapore — Ministry of Manpower",
+    "url": "https://www.mom.gov.sg/passes-and-permits",
+    "kind": "government",
+    "topics": [
+      "entry",
+      "work",
+      "education",
+      "documents"
+    ],
+    "scope": "Official destination portal for identifying the relevant procedure and responsible authority. Select your nationality, purpose and duration. This portal reference does not establish personal eligibility, work rights, required funds or current processing times.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://www.mom.gov.sg/passes-and-permits",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Work passes",
+      "responseSha256": "e3420d1f71f3a09ec53f4c16d04a8bbcd5cb5e034e7625ee7cc2502679622ee3"
+    }
+  },
+  {
+    "id": "authority-south-korea",
+    "country": "south-korea",
+    "title": "Immigration and residence — official destination authority",
+    "publisher": "Republic of Korea — Ministry of Justice",
+    "url": "https://www.visa.go.kr/",
+    "kind": "government",
+    "topics": [
+      "entry",
+      "work",
+      "education",
+      "documents"
+    ],
+    "scope": "Official destination portal for identifying the relevant procedure and responsible authority. Select your nationality, purpose and duration. This portal reference does not establish personal eligibility, work rights, required funds or current processing times.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://www.visa.go.kr/",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "KOREA VISA PORTAL",
+      "responseSha256": "7f94bee2af79ae8250123c2553dcedb9bd4e016fb5e5de16b87dd6c53a5a2a38"
+    }
+  },
+  {
+    "id": "authority-india",
+    "country": "india",
+    "title": "Immigration and residence — official destination authority",
+    "publisher": "India — Ministry of Home Affairs",
+    "url": "https://indianvisaonline.gov.in/",
+    "kind": "government",
+    "topics": [
+      "entry",
+      "work",
+      "education",
+      "documents"
+    ],
+    "scope": "Official destination portal for identifying the relevant procedure and responsible authority. Select your nationality, purpose and duration. This portal reference does not establish personal eligibility, work rights, required funds or current processing times.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://indianvisaonline.gov.in/",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "India Visa Online",
+      "responseSha256": "395eb00fa4cbcc2bc33564d650357cdf74a6ff9b6b2ab1a8cdc3afef7913ea6a"
+    }
+  },
+  {
+    "id": "authority-thailand",
+    "country": "thailand",
+    "title": "Immigration and residence — official destination authority",
+    "publisher": "Thailand — Ministry of Foreign Affairs",
+    "url": "https://www.thaievisa.go.th/",
+    "kind": "government",
+    "topics": [
+      "entry",
+      "work",
+      "education",
+      "documents"
+    ],
+    "scope": "Official destination portal for identifying the relevant procedure and responsible authority. Select your nationality, purpose and duration. This portal reference does not establish personal eligibility, work rights, required funds or current processing times.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://www.thaievisa.go.th/",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Official Website of Thailand Electronic Visa",
+      "responseSha256": "3f0f9a4a56a37def75380cc155c22f14cf943fe98daa975d6aa2cc5b760e68d1"
+    }
+  },
+  {
+    "id": "authority-united-arab-emirates",
+    "country": "united-arab-emirates",
+    "title": "Immigration and residence — official destination authority",
+    "publisher": "United Arab Emirates — Government portal",
+    "url": "https://u.ae/en/information-and-services/visa-and-emirates-id",
+    "kind": "government",
+    "topics": [
+      "entry",
+      "work",
+      "education",
+      "documents"
+    ],
+    "scope": "Official destination portal for identifying the relevant procedure and responsible authority. Select your nationality, purpose and duration. This portal reference does not establish personal eligibility, work rights, required funds or current processing times.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://u.ae/en/information-and-services/visa-and-emirates-id",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Visa and Emirates ID | The Official Portal of the UAE Government",
+      "responseSha256": "914d732c00463690e7e5b3e5e4fa54c12ccec80e69bb95646b864d78b0e9a1c4"
+    }
+  },
+  {
+    "id": "authority-rwanda",
+    "country": "rwanda",
+    "title": "Immigration and residence — official destination authority",
+    "publisher": "Rwanda — Directorate General of Immigration and Emigration",
+    "url": "https://www.migration.gov.rw/",
+    "kind": "government",
+    "topics": [
+      "entry",
+      "work",
+      "education",
+      "documents"
+    ],
+    "scope": "Official destination portal for identifying the relevant procedure and responsible authority. Select your nationality, purpose and duration. This portal reference does not establish personal eligibility, work rights, required funds or current processing times.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://www.migration.gov.rw/",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Home",
+      "responseSha256": "71fac432bbfc8cc248dc511c18bf707a63ca7a45be61cd786eed0bb030508c06"
+    }
+  },
+  {
+    "id": "authority-kenya",
+    "country": "kenya",
+    "title": "Immigration and residence — official destination authority",
+    "publisher": "Kenya — Directorate of Immigration Services",
+    "url": "https://immigration.go.ke/",
+    "kind": "government",
+    "topics": [
+      "entry",
+      "work",
+      "education",
+      "documents"
+    ],
+    "scope": "Official destination portal for identifying the relevant procedure and responsible authority. Select your nationality, purpose and duration. This portal reference does not establish personal eligibility, work rights, required funds or current processing times.",
+    "reviewedAt": "2026-11-11",
+    "reviewScope": "publisher-and-portal",
+    "authorityUrl": "https://immigration.go.ke/",
+    "access": {
+      "status": "retrieved",
+      "checkedAt": "2026-11-11",
+      "httpStatus": 200,
+      "pageTitle": "Directorate of Immigration Services – DIS",
+      "responseSha256": "279c8dde2269a381b3787f51e4031e6e75428cd5e59dbf2788018a8138254386"
+    }
+  }
+]
