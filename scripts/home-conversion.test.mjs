@@ -26,6 +26,13 @@ test("comparison handoff preserves a bounded selection and lens through login", 
   assert.equal(url.searchParams.get("goal"), "work");
   assert.deepEqual(url.searchParams.getAll("country"), ["portugal", "canada", "japan", "spain", "germany"]);
 });
+test("protected plan and billing pages own redirects so their selected context survives sign-in", () => {
+  assert.equal(existsSync(new URL("../src/app/onboarding/layout.tsx", import.meta.url)), false);
+  assert.equal(existsSync(new URL("../src/app/profile/layout.tsx", import.meta.url)), false);
+  assert.match(read("src/app/onboarding/page.tsx"), /requireUser\(returnTo\)/);
+  assert.match(read("src/app/profile/security/[[...user-profile]]/page.tsx"), /requireUser\(returnTo\)/);
+  assert.match(read("src/app/profile/page.tsx"), /requireUser\(\)/);
+});
 test("conversion measurement requires exact consent and respects GPC", () => {
   assert.equal(hasFunnelConsent(null), false);
   assert.equal(hasFunnelConsent("tgpi_analytics_consent=denied"), false);
