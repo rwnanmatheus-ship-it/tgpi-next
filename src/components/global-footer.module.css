@@ -10,7 +10,7 @@
 .container {
   width: min(1240px, calc(100% - 2 * var(--tgpi-app-gutter, 1rem)));
   margin-inline: auto;
-  padding-block: clamp(1.5rem, 4vw, 3rem) calc(1rem + env(safe-area-inset-bottom, 0px));
+  padding-block: clamp(1.5rem, 4vw, 3rem) calc(6rem + env(safe-area-inset-bottom, 0px));
 }
 
 .footer a {
@@ -216,6 +216,11 @@ button.utility { cursor: pointer; }
 
 .legal p { max-width: 62ch; margin: 0 0 .25rem; }
 .legal nav { display: flex; flex-wrap: wrap; justify-content: end; gap: 0 .9rem; }
+
+@media (max-width: 1023px) {
+  /* The app shell already reserves space for the mobile dock. */
+  .container { padding-block-end: 3.25rem; }
+}
 
 @media (max-width: 940px) {
   .directory { grid-template-columns: 1fr; gap: 1.45rem; }
