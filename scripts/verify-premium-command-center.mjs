@@ -38,6 +38,10 @@ const sourceContracts = [
   },
   {
     file: "src/app/compare/page.tsx",
+    checks: [/<ComparisonMatrix\b/],
+  },
+  {
+    file: "src/components/compare/ComparisonMatrix.tsx",
     checks: [/id="comparison-matrix"/],
   },
   {
@@ -101,12 +105,18 @@ const runtimeContracts = [
   {
     label: "Public learning path overview",
     path: "/courses/global-english-2026",
-    validate: validatePage({ anchor: "curriculum-title" }),
+    validate: validatePage({ anchor: "curriculum" }),
   },
   {
     label: "Course lesson signed-out protection",
     path: "/courses/global-english-2026/lessons/intro",
     validate: validateSignInRedirect,
+  },
+  {
+    label: "Course history preserves the destination after sign-in",
+    path: "/courses/python-automacao-profissionais/history",
+    validate: (response) =>
+      validateSignInRedirect(response, "/courses/python-automacao-profissionais/history"),
   },
   {
     label: "Comparison destination",
@@ -148,20 +158,28 @@ function isRedirect(status) {
   return [301, 302, 303, 307, 308].includes(status);
 }
 
-async function validateSignInRedirect(response) {
-  const location = response.headers.get("location") || "";
-  // App Router can start streaming the shared layout before auth resolves.
-  // In that case Next emits its redirect meta tag in an HTTP 200 response.
+async function validateSignInRedirect(response, returnTo) {
+  let location = response.headers.get("location") || "";
+  // The shared layout can start streaming before the authentication guard runs.
   if (response.status === 200) {
     const html = await response.text();
-    invariant(
-      /<meta\b(?=[^>]*\bid=["']__next-page-redirect["'])(?=[^>]*\bhttp-equiv=["']refresh["'])(?=[^>]*\bcontent=["']\d+;url=\/sign-in(?:[?][^"']*)?["'])[^>]*>/i.test(html),
-      "expected a streamed Next.js sign-in redirect",
+    const match = html.match(
+      /<meta\b(?=[^>]*\bid=["']__next-page-redirect["'])(?=[^>]*\bhttp-equiv=["']refresh["'])(?=[^>]*\bcontent=["']\d+;url=([^"']+)["'])[^>]*>/i,
     );
-    return;
+    invariant(match, "expected a streamed Next.js sign-in redirect");
+    location = match[1].replaceAll("&amp;", "&");
+  } else {
+    invariant(isRedirect(response.status), `expected a redirect, received ${response.status}`);
   }
-  invariant(isRedirect(response.status), `expected a redirect, received ${response.status}`);
-  invariant(location.includes("/sign-in"), `expected /sign-in redirect, received ${location || "no location"}`);
+
+  const target = location && new URL(location, response.url);
+  invariant(
+    target && target.origin === new URL(response.url).origin && target.pathname === "/sign-in",
+    `expected /sign-in redirect, received ${location || "no location"}`,
+  );
+  if (returnTo) {
+    invariant(target.searchParams.get("next") === returnTo, `expected return to ${returnTo}`);
+  }
 }
 
 function validatePage({ anchor }) {
