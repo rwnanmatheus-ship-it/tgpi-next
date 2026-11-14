@@ -5,11 +5,10 @@ import {
   isCertificateName,
   normalizeAccountIdentity,
   normalizeBirthDate,
-  normalizeTgpiAccountProfile,
   mergeAccountProfilePatch,
   mergeAccountProfileWithOnboarding,
   validateAccountProfileInput,
-  type TgpiAccountUpdate,
+  type TgpiAccountUpdatePatch,
 } from "@/lib/account-profile";
 import { normalizeOnboardingData } from "@/lib/onboarding";
 
@@ -58,20 +57,21 @@ export async function PATCH(request: Request) {
     const payload: unknown = JSON.parse(body);
     const input =
       typeof payload === "object" && payload !== null
-        ? (payload as Partial<TgpiAccountUpdate>)
+        ? (payload as Partial<TgpiAccountUpdatePatch>)
         : {};
-    const identity = normalizeAccountIdentity(input.identity);
-    const profile = normalizeTgpiAccountProfile(input.profile);
     const validationError = validateAccountProfileInput(input.profile);
     if (validationError) return NextResponse.json({ error: validationError }, { status: 400 });
 
-    if (input.profile?.dateOfBirth && !normalizeBirthDate(input.profile.dateOfBirth)) {
+    const dateOfBirth: unknown = input.profile?.dateOfBirth;
+    if (dateOfBirth !== undefined && dateOfBirth !== "" && !normalizeBirthDate(dateOfBirth)) {
       return NextResponse.json({ error: "Choose a valid birth date, no later than today." }, { status: 400 });
     }
-    if (input.profile?.legalFullName && !isCertificateName(profile.legalFullName)) {
+    const certificateName: unknown = input.profile?.legalFullName;
+    if (certificateName !== undefined && (typeof certificateName !== "string" || (certificateName.trim() && !isCertificateName(certificateName.trim())))) {
       return NextResponse.json({ error: "Enter your complete real name for certificates." }, { status: 400 });
     }
-    if (!identity.firstName) {
+    const submittedIdentity = normalizeAccountIdentity(input.identity);
+    if (input.identity?.firstName !== undefined && !submittedIdentity.firstName) {
       return NextResponse.json(
         { error: "Add your first name before saving your account." },
         { status: 400 },
@@ -83,32 +83,41 @@ export async function PATCH(request: Request) {
     const onboarding = normalizeOnboardingData(
       user.unsafeMetadata.tgpiOnboarding,
     );
-    const existing = normalizeTgpiAccountProfile(user.unsafeMetadata.tgpiAccountProfile);
-    if (input.profile?.updatedAt !== existing.updatedAt) {
+    const existing = mergeAccountProfileWithOnboarding(user.unsafeMetadata.tgpiAccountProfile, onboarding);
+    const identity = normalizeAccountIdentity({
+      firstName: input.identity?.firstName === undefined ? user.firstName : submittedIdentity.firstName,
+      lastName: input.identity?.lastName === undefined ? user.lastName : submittedIdentity.lastName,
+    });
+    const identityPatch = {
+      ...(input.identity?.firstName !== undefined && identity.firstName !== (user.firstName || "") ? { firstName: identity.firstName } : {}),
+      ...(input.identity?.lastName !== undefined && identity.lastName !== (user.lastName || "") ? { lastName: identity.lastName } : {}),
+    };
+    const merged = { ...mergeAccountProfilePatch(existing, input.profile), updatedAt: existing.updatedAt };
+    const alreadySaved = Object.keys(identityPatch).length === 0 && JSON.stringify(merged) === JSON.stringify(existing);
+    if (input.profile?.updatedAt !== existing.updatedAt && !alreadySaved) {
       return NextResponse.json({ error: "This profile changed in another session. Copy your edits, reload and review the latest version before saving." }, { status: 409 });
     }
     const previousTimestamp = Date.parse(existing.updatedAt ?? "");
     const now = new Date(Math.max(Date.now(), (previousTimestamp || 0) + 1)).toISOString();
     // Merge normalized known fields so older clients cannot erase newly added information.
-    const savedProfile = { ...mergeAccountProfilePatch(existing, input.profile), updatedAt: now };
-    const memberIdentity = await getMemberIdentity(session.userId).catch(() => null);
-    if (identity.firstName !== user.firstName || identity.lastName !== (user.lastName || "")) {
-      await client.users.updateUser(session.userId, {
-        firstName: identity.firstName,
-        lastName: identity.lastName,
-      });
+    const savedProfile = alreadySaved ? existing : { ...merged, updatedAt: now };
+    if (Object.keys(identityPatch).length) {
+      await client.users.updateUser(session.userId, identityPatch);
     }
     const sharedFields = { languages: savedProfile.languages, profession: savedProfile.profession, educationLevel: savedProfile.educationLevel };
     const changedPlan = sharedFields.profession !== onboarding.profession ||
       sharedFields.educationLevel !== onboarding.educationLevel ||
       JSON.stringify(sharedFields.languages) !== JSON.stringify(onboarding.languages);
-    await client.users.updateUserMetadata(session.userId, {
-      unsafeMetadata: {
-        tgpiAccountProfile: savedProfile,
-        ...(changedPlan ? { tgpiOnboarding: { ...sharedFields, updatedAt: now } } : {}),
-      },
-    });
+    if (!alreadySaved) {
+      await client.users.updateUserMetadata(session.userId, {
+        unsafeMetadata: {
+          tgpiAccountProfile: savedProfile,
+          ...(changedPlan ? { tgpiOnboarding: { ...sharedFields, updatedAt: now } } : {}),
+        },
+      });
+    }
 
+    const memberIdentity = await getMemberIdentity(session.userId).catch(() => null);
     return NextResponse.json({
       identity: { ...identity, username: memberIdentity?.handle || "" },
       profile: savedProfile,

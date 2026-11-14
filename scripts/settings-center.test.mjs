@@ -93,3 +93,47 @@ test('invalid link fails before changing identity or metadata', async () => {
   const f = fixture(); const body = f.payload(); body.identity.firstName = 'Changed'; body.profile.linkedin = 'https://wrong.example';
   assert.equal((await f.api.PATCH(f.request(body))).status, 400); assert.equal(f.writes.length, 0); assert.equal(f.stored.firstName, 'Alex');
 });
+
+test('the account draft sends changed fields, including explicit clears and nested choices', () => {
+  const saved = {
+    identity: { firstName: 'Alex', lastName: 'Learner', username: 'alex' },
+    profile: profile.normalizeTgpiAccountProfile({ currentCity: 'Campinas', legalFullName: 'Alex Learner', updatedAt: '2026-11-10T00:00:00.000Z' }),
+  };
+  const draft = structuredClone(saved);
+  draft.identity.lastName = '';
+  draft.profile.currentCity = '';
+  draft.profile.privacy.showGoals = true;
+  assert.deepEqual(profile.getAccountUpdatePatch(saved, draft), {
+    identity: { lastName: '' },
+    profile: { currentCity: '', privacy: { showGoals: true }, updatedAt: saved.profile.updatedAt },
+  });
+});
+
+test('saving unrelated settings preserves inherited profile fields and supports accounts without a Clerk name', async () => {
+  const f = fixture();
+  f.stored.firstName = null;
+  f.stored.unsafeMetadata.tgpiAccountProfile.profession = '';
+  f.stored.unsafeMetadata.tgpiOnboarding.profession = 'Engineer';
+  const body = { profile: { updatedAt: f.payload().profile.updatedAt, currentCity: 'Campinas' } };
+  const response = await f.api.PATCH(f.request(body));
+  assert.equal(response.status, 200);
+  const data = await response.json();
+  assert.equal(data.profile.currentCity, 'Campinas');
+  assert.equal(data.profile.profession, 'Engineer');
+  assert.equal(f.stored.unsafeMetadata.tgpiOnboarding.profession, 'Engineer');
+  assert.equal(f.stored.firstName, null);
+});
+
+test('a retry after the server saved the changes returns the saved version without another write', async () => {
+  const f = fixture();
+  const body = { identity: { firstName: 'Alexandra' }, profile: { updatedAt: f.payload().profile.updatedAt, bio: 'Updated biography' } };
+  const first = await f.api.PATCH(f.request(body));
+  assert.equal(first.status, 200);
+  const saved = await first.json();
+  const count = f.writes.length;
+  const second = await f.api.PATCH(f.request(body));
+  assert.equal(second.status, 200);
+  assert.deepEqual(await second.json(), saved);
+  assert.equal(f.writes.length, count);
+  assert.equal(f.stored.lastName, 'Learner');
+});

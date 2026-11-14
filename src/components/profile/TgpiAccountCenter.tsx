@@ -4,6 +4,7 @@ import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 import { useLocale } from "@/components/localization/LocaleProvider";
 import { localeOptions } from "@/lib/localization/config";
+import { translateAccountSaveError } from "@/lib/localization/account-save";
 import LanguageSelector from "@/components/localization/LanguageSelector";
 
 import Image from "next/image";
@@ -26,6 +27,7 @@ import AccountBillingPanel from './AccountBillingPanel';
 import { useUser } from "@clerk/nextjs";
 import { usePathname, useRouter } from "next/navigation";
 import { Children, cloneElement, isValidElement, useId, useEffect, useMemo, useRef, useState, type ReactElement } from "react";
+import { createPortal } from "react-dom";
 import PublicProfileShareButton from "@/components/profile/PublicProfileShareButton";
 import GlobalRankBadge from "@/components/profile/GlobalRankBadge";
 import GlobalProgressPanel from "@/components/profile/GlobalProgressPanel";
@@ -35,6 +37,7 @@ import { getAccountSalutation, getCertificateName } from "@/lib/account-profile"
 import TgpiAvatarEditor from "@/components/profile/TgpiAvatarEditor";
 import {
   getAccountProfileCompletion,
+  getAccountUpdatePatch,
   type AccountIdentityInput,
   type TgpiAccountProfile,
   type TgpiAccountUpdate,
@@ -370,14 +373,13 @@ export default function TgpiAccountCenter({
   const [online, setOnline] = useState(true);
   const [notificationsVisited, setNotificationsVisited] = useState(false);
   const [notificationDirty, setNotificationDirty] = useState(false);
-  const [conflict, setConflict] = useState(false);
   const [discardOpen, setDiscardOpen] = useState(false);
   const [pendingNavigation, setPendingNavigation] = useState<string | null>(null);
   const savingRef = useRef(false);
-  const savedSnapshot = useRef(JSON.stringify({ identity: initialIdentity, profile: initialProfile }));
+  const [savedAccount, setSavedAccount] = useState<TgpiAccountUpdate>({ identity: initialIdentity, profile: initialProfile });
   const incomingSnapshot = useRef(JSON.stringify({ identity: initialIdentity, profile: initialProfile }));
-  const currentSnapshot = JSON.stringify({ identity, profile });
-  const isDirty = currentSnapshot !== savedSnapshot.current;
+  const patch = useMemo(() => getAccountUpdatePatch(savedAccount, { identity, profile }), [savedAccount, identity, profile]);
+  const isDirty = Object.keys(patch.identity ?? {}).length > 0 || Object.keys(patch.profile).length > 1;
   const hasUnsavedChanges = isDirty || notificationDirty;
   useEffect(() => { if (activeSection === "notifications") setNotificationsVisited(true); }, [activeSection]);
   const completion = useMemo(() => getAccountProfileCompletion(identity, profile), [identity, profile]);
@@ -412,13 +414,20 @@ export default function TgpiAccountCenter({
   useEffect(() => {
     const nextSnapshot = JSON.stringify({ identity: initialIdentity, profile: initialProfile });
     if (nextSnapshot === incomingSnapshot.current) return;
-    if (!isDirty) {
+    if (!isDirty && !savingRef.current) {
       incomingSnapshot.current = nextSnapshot;
-      savedSnapshot.current = nextSnapshot;
+      if ((initialProfile.updatedAt ?? "") < (savedAccount.profile.updatedAt ?? "")) return;
+      setSavedAccount({ identity: initialIdentity, profile: initialProfile });
       setIdentity(initialIdentity);
       setProfile(initialProfile);
     }
-  }, [initialIdentity, initialProfile, isDirty]);
+  }, [initialIdentity, initialProfile, isDirty, savedAccount.profile.updatedAt]);
+
+  useEffect(() => {
+    if (saveState !== "saved") return;
+    const timeout = window.setTimeout(() => setSaveState("idle"), 4500);
+    return () => window.clearTimeout(timeout);
+  }, [saveState]);
 
   useEffect(() => {
     const syncHash = () => setActiveSection(resolveSettingsSection(window.location.pathname, window.location.hash));
@@ -505,49 +514,52 @@ export default function TgpiAccountCenter({
 
   async function saveAccount() {
     if (savingRef.current || !isDirty) return;
-    if (!navigator.onLine) { setSaveState("error"); setMessage("You are offline. Keep this page open and retry when connected."); return; }
-    const invalid = contentRef.current?.querySelector<HTMLInputElement>('input:invalid, select:invalid, textarea:invalid');
-    if (invalid) { invalid.reportValidity(); return; }
+    if (!navigator.onLine) return;
+    const dateField = "dateOfBirth" in patch.profile
+      ? contentRef.current?.querySelector<HTMLInputElement>("[data-account-birth-date]")
+      : null;
+    if (dateField && !dateField.reportValidity()) return;
     savingRef.current = true;
+    setDiscardOpen(false);
     setSaveState("saving");
-    setConflict(false);
     setMessage("");
-    const payload: TgpiAccountUpdate = { identity, profile };
 
+    let saved: TgpiAccountUpdate;
     try {
       const response = await fetch("/api/account-profile", {
-        body: JSON.stringify(payload),
+        body: JSON.stringify(patch),
         headers: { "Content-Type": "application/json", "X-TGPI-Session": sessionId },
         method: "PATCH",
         signal: AbortSignal.timeout(20000),
       });
-      const result = (await response.json()) as {
+      const result = (await response.json().catch(() => null)) as {
         error?: string;
         identity?: AccountIdentityInput;
         profile?: TgpiAccountProfile;
-      };
-      if (response.status === 409) setConflict(true);
-      if (!response.ok || !result.identity || !result.profile) {
-        throw new Error(result.error || "Unable to save your account.");
+      } | null;
+      if (!response.ok || !result?.identity || !result.profile) {
+        setSaveState("error");
+        setMessage(result?.error || "Unable to save");
+        return;
       }
-      setIdentity(result.identity);
-      setProfile(result.profile);
-      savedSnapshot.current = JSON.stringify({ identity: result.identity, profile: result.profile });
-      incomingSnapshot.current = JSON.stringify({ identity: initialIdentity, profile: initialProfile });
-      setSaveState("saved");
-      setMessage("Saved across your TGPI account and decision tools.");
-      announceProgressSaved();
-      try { await user?.reload(); } catch { /* Persistence succeeded; a session refresh can retry later. */ }
-      router.refresh();
-    } catch (error) {
+      saved = { identity: result.identity, profile: result.profile };
+    } catch {
       setSaveState("error");
-      setMessage(error instanceof Error && error.name !== "TimeoutError" ? error.message : "Saving could not be confirmed. Keep your edits and check the connection before retrying.");
+      setMessage("Saving could not be confirmed. Keep your edits and check the connection before retrying.");
+      return;
     } finally { savingRef.current = false; }
+
+    setSavedAccount(saved);
+    setIdentity(saved.identity);
+    setProfile(saved.profile);
+    setSaveState("saved");
+    router.refresh();
+    void user?.reload().catch(() => {});
+    announceProgressSaved();
   }
 
   function discardChanges() {
-    const saved = JSON.parse(savedSnapshot.current) as TgpiAccountUpdate;
-    setIdentity(saved.identity); setProfile(saved.profile); setDiscardOpen(false); setMessage(""); setSaveState("idle");
+    setIdentity(savedAccount.identity); setProfile(savedAccount.profile); setDiscardOpen(false); setMessage(""); setSaveState("idle");
   }
 
   const overviewScreen = (
@@ -618,17 +630,17 @@ export default function TgpiAccountCenter({
         </div>
         <div className="mt-6 rounded-[22px] border border-[var(--tgpi-border)] bg-white p-5 sm:p-7">
           <div className="grid gap-5 sm:grid-cols-2">
-            <Field label="First name"><input autoComplete="given-name" className="tgpi-account-input" maxLength={60} onChange={(event) => updateIdentity({ firstName: event.target.value })} required value={identity.firstName} /></Field>
+            <Field label="First name"><input autoComplete="given-name" className="tgpi-account-input" maxLength={60} onChange={(event) => updateIdentity({ firstName: event.target.value })} value={identity.firstName} /></Field>
             <Field label="Last name"><input autoComplete="family-name" className="tgpi-account-input" maxLength={60} onChange={(event) => updateIdentity({ lastName: event.target.value })} value={identity.lastName} /></Field>
             <div className="sm:col-span-2"><Field label="Complete real name" description="Enter all given names and surnames exactly as you want them on new certificates. This is self-declared, not document-verified."><LocalizedElement as="input" autoComplete="name" className="tgpi-account-input" maxLength={120} onChange={event => updateProfile({ legalFullName: event.target.value })} placeholder={getCertificateName(identity, profile)} value={profile.legalFullName} /></Field></div>
-            <Field label="Date of birth" description="Private. Only added to your downloaded PDF if you enable the option below."><input type="date" className="tgpi-account-input" autoComplete="bday" min="1900-01-01" max={new Date().toISOString().slice(0, 10)} onChange={event => updateProfile({ dateOfBirth: event.target.value })} value={profile.dateOfBirth} /></Field>
+            <Field label="Date of birth" description="Private. Only added to your downloaded PDF if you enable the option below."><input type="date" data-account-birth-date className="tgpi-account-input" autoComplete="bday" min="1900-01-01" max={new Date().toISOString().slice(0, 10)} onChange={event => updateProfile({ dateOfBirth: event.target.value })} value={profile.dateOfBirth} /></Field>
             <Field label="Gender" description="Choose how you identify. This does not determine country or career recommendations."><select className="tgpi-account-input" value={profile.gender} onChange={event => updateProfile({ gender: event.target.value as TgpiAccountProfile["gender"] })}><option value=""><LocalizedText text="Select an option" /></option><option value="man"><LocalizedText text={"Man"} /></option><option value="woman"><LocalizedText text={"Woman"} /></option><option value="other"><LocalizedText text="Other" /></option><option value="undisclosed"><LocalizedText text={"Prefer not to say"} /></option></select></Field>
             <Field label="How should TGPI address you?" description="Independent of gender; choose what feels right."><select className="tgpi-account-input" value={profile.preferredTitle} onChange={event => updateProfile({ preferredTitle: event.target.value as TgpiAccountProfile["preferredTitle"] })}><option value="name"><LocalizedText text={"By my name"} /></option><option value="mr"><LocalizedText text={"Mr."} /></option><option value="ms"><LocalizedText text={"Ms."} /></option><option value="mx"><LocalizedText text={"Mx."} /></option></select></Field>
             <div className="rounded-2xl border border-[var(--tgpi-border)] bg-[var(--tgpi-canvas-alt)] p-4"><p className="text-xs font-bold text-[var(--tgpi-muted)]"><LocalizedText text={"Personal greeting preview"} /></p><p className="mt-2 text-xl font-semibold text-[var(--tgpi-navy-raised)]">{getAccountSalutation(identity, profile, localizeLabel)}</p></div>
             <div className="sm:col-span-2"><Field label="Display name" description="Your public presentation; certificate names remain separate."><input className="tgpi-account-input" autoComplete="nickname" maxLength={120} value={profile.displayName} onChange={e => updateProfile({ displayName: e.target.value })} /></Field></div>
             <div className="sm:col-span-2"><Field description="A concise line used in future profile and collaboration surfaces." label="Professional headline"><LocalizedElement as="input" className="tgpi-account-input" maxLength={120} onChange={(event) => updateProfile({ headline: event.target.value })} placeholder="Product designer building a global career" value={profile.headline} /></Field></div>
             <div className="sm:col-span-2"><Field description={localizeLabel("{count}/{limit} characters", { count: profile.bio.length, limit: 500 })} label="About you"><LocalizedElement as="textarea" className="tgpi-account-input min-h-32 resize-y py-3" maxLength={500} onChange={(event) => updateProfile({ bio: event.target.value })} placeholder="Share the context that helps TGPI understand your goals and experience." value={profile.bio} /></Field></div>
-            <Field label="Country of residence"><ProfileSearchSelect label="Country of residence" value={profile.currentCountry} options={countries.map(country => ({ label: `${country.emoji} ${country.name}`, value: country.slug }))} onChange={value => updateProfile({ currentCountry: value, currentCity: "" })} /></Field>
+            <Field label="Country of residence"><ProfileSearchSelect label="Country of residence" value={profile.currentCountry} options={countries.map(country => ({ label: country.name, value: country.slug, emoji: country.emoji }))} onChange={value => { if (value !== profile.currentCountry) updateProfile({ currentCountry: value, currentCity: "" }); }} /></Field>
             <Field label="City of residence" description="Search major-city suggestions or enter and select your city if it is not listed."><ProfileSearchSelect key={profile.currentCountry} label="City of residence" value={profile.currentCity} options={(citySuggestions[profile.currentCountry] ?? []).map(city => ({ label: city, value: city }))} allowCustom onChange={value => updateProfile({ currentCity: value })} /></Field>
             <Field label="Nationality / country of citizenship" description="Your citizenship can differ from where you live. It helps frame document and immigration research."><ProfileSearchSelect label="Nationality" value={profile.nationality} options={countries.map(country => ({ label: country.name, value: country.name }))} onChange={value => updateProfile({ nationality: value })} /></Field>
           </div>
@@ -807,15 +819,32 @@ export default function TgpiAccountCenter({
           <div className={styles.breadcrumb}><button type="button" onClick={() => selectSection("overview")}>{t("Settings")}</button><span>/</span><span>{t(activeDefinition.label)}</span><small>{t(editable ? "Save to your account" : "Account control")}</small></div>
           {!online && <p className={styles.warning} role="status">{t("You are offline. Keep this page open and retry when connected.")}</p>}
           <div className={`tgpi-account-content ${styles.content}`} id={`settings-${activeSection}`} ref={contentRef} tabIndex={-1}><fieldset className="min-w-0" disabled={saveState === "saving"}><div hidden={activeSection === "notifications"}>{activeScreen}</div>{(notificationsVisited || activeSection === "notifications") && <div hidden={activeSection !== "notifications"} className={styles.stack}><ScreenHeading section="notifications" title="Notifications" description="Choose your channels, quiet hours and connected devices in one place." /><NotificationPreferences onDirtyChange={setNotificationDirty} /><NotificationDevices /><Link className={styles.relatedLink} href="/notifications">{t("Open notification center")} →</Link></div>}</fieldset></div>
-          {(isDirty || editable || saveState === "error") && <div className={styles.saveBar}>
-            <div role="status" aria-live="polite"><strong>{t(saveState === "saving" ? "Synchronizing your account…" : message || (isDirty ? "You have unsaved changes" : "No pending edits"))}</strong><small>{t("Profile changes stay in this page until you save.")}</small></div>
-            <div className={styles.saveActions}><button className={styles.secondary} disabled={!isDirty || saveState === "saving"} onClick={() => setDiscardOpen(true)} type="button">{t("Discard edits")}</button><button className={styles.primary} disabled={!isDirty || saveState === "saving" || !online} onClick={() => void saveAccount()} type="button">{t(saveState === "saving" ? "Saving…" : "Save changes")}</button></div>
-            {discardOpen && <div className={styles.confirm}><p>{t("Discard all unsaved profile edits?")}</p><button type="button" className={styles.secondary} onClick={() => setDiscardOpen(false)}>{t("Keep editing")}</button><button type="button" className={styles.primary} onClick={discardChanges}>{t("Discard edits")}</button></div>}
-            {conflict && <p className={styles.warning}>{t("Your edits are still here. Copy any changes you need before reloading the latest saved profile.")}</p>}
-          </div>}
+          {(isDirty || saveState === "saved" || saveState === "error") && <div className={styles.saveClearance} aria-hidden="true" />}
+          {(isDirty || saveState === "saved" || saveState === "error") && createPortal(
+            <div className={styles.saveBar} data-state={saveState}>
+              <p className={styles.saveStatus} role="status">
+                {saveState === "saved" ? t("Changes saved.")
+                  : saveState === "saving" ? t("Saving…")
+                  : !online && isDirty ? t("You are offline. Keep this page open and retry when connected.")
+                  : translateAccountSaveError(locale, message) ?? t(message || "Unsaved changes")}
+              </p>
+              {isDirty && !discardOpen && <div className={styles.saveActions}>
+                <button className={styles.secondary} disabled={saveState === "saving"} onClick={() => setDiscardOpen(true)} type="button">{t("Discard edits")}</button>
+                <button className={styles.primary} disabled={saveState === "saving" || !online} onClick={() => void saveAccount()} type="button">{t(saveState === "saving" ? "Saving…" : saveState === "error" ? "Try again" : "Save changes")}</button>
+              </div>}
+              {isDirty && discardOpen && <div className={styles.confirm}>
+                <p>{t("Discard all unsaved profile edits?")}</p>
+                <div className={styles.saveActions}>
+                  <button type="button" className={styles.secondary} onClick={() => setDiscardOpen(false)} autoFocus>{t("Keep editing")}</button>
+                  <button type="button" className={styles.primary} onClick={discardChanges}>{t("Discard edits")}</button>
+                </div>
+              </div>}
+            </div>,
+            document.body,
+          )}
         </div>
       </div>
-      {pendingNavigation && <div className={styles.navigationWarning} role="alert"><strong>{t("You have unsaved changes")}</strong><button type="button" className={styles.secondary} onClick={() => setPendingNavigation(null)}>{t("Keep editing")}</button><button type="button" className={styles.primary} onClick={() => { const href = pendingNavigation; discardChanges(); setPendingNavigation(null); router.push(href); }}>{t("Discard and leave")}</button></div>}
+      {pendingNavigation && <div className={styles.navigationWarning} role="alert"><strong>{t("Unsaved changes")}</strong><button type="button" className={styles.secondary} onClick={() => setPendingNavigation(null)}>{t("Keep editing")}</button><button type="button" className={styles.primary} disabled={saveState === "saving"} onClick={() => { const href = pendingNavigation; discardChanges(); setPendingNavigation(null); router.push(href); }}>{t("Discard and leave")}</button></div>}
     </div>
   );
 }

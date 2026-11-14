@@ -60,6 +60,36 @@ export type TgpiAccountUpdate = {
   profile: TgpiAccountProfile;
 };
 
+export type TgpiAccountUpdatePatch = {
+  identity?: Pick<Partial<AccountIdentityInput>, "firstName" | "lastName">;
+  profile: Partial<Omit<TgpiAccountProfile, "privacy" | "notifications">> & {
+    privacy?: Partial<TgpiAccountProfile["privacy"]>;
+    notifications?: Partial<TgpiAccountProfile["notifications"]>;
+  };
+};
+
+function changedFields<T extends object>(saved: T, draft: T): Partial<T> {
+  return Object.fromEntries(
+    (Object.keys(draft) as (keyof T)[])
+      .filter(key => JSON.stringify(draft[key]) !== JSON.stringify(saved[key]))
+      .map(key => [key, draft[key]]),
+  ) as Partial<T>;
+}
+
+export function getAccountUpdatePatch(saved: TgpiAccountUpdate, draft: TgpiAccountUpdate): TgpiAccountUpdatePatch {
+  const { firstName, lastName } = draft.identity;
+  const { privacy, notifications, ...fields } = changedFields(saved.profile, draft.profile);
+  return {
+    identity: changedFields(saved.identity, { firstName, lastName }),
+    profile: {
+      ...fields,
+      updatedAt: saved.profile.updatedAt,
+      ...(privacy && { privacy: changedFields(saved.profile.privacy, privacy) }),
+      ...(notifications && { notifications: changedFields(saved.profile.notifications, notifications) }),
+    },
+  };
+}
+
 const MAX_LANGUAGES = 8;
 
 export const emptyTgpiAccountProfile: TgpiAccountProfile = {
