@@ -30,7 +30,9 @@ export function sourceApiUrl(id: IndicatorId, year = new Date().getUTCFullYear()
     if (!Number.isInteger(year) || year < 2010 || year > 2100) throw new Error("Invalid source query year");
     return `https://api.worldbank.org/v2/country/all/indicator/${id}?source=2&format=json&date=2010:${year}&per_page=5000`;
   }
-  return `https://api.worldbank.org/v2/country/all/indicator/${id}?source=2&format=json&mrnev=1&per_page=400`;
+  // For population, MRNEV can return the full history instead of one row per country.
+  const recent = id === "SP.POP.TOTL" ? "mrv" : "mrnev";
+  return `https://api.worldbank.org/v2/country/all/indicator/${id}?source=2&format=json&${recent}=1&per_page=400`;
 }
 export function evidenceStatus(observation: Observation | undefined, now = new Date()): EvidenceStatus {
   if (!observation) return "missing";

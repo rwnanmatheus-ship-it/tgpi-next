@@ -85,7 +85,7 @@ async function collectWithResilience(): Promise<CachedCollection> {
 // keeps requests bounded, while a failed refresh becomes a degraded cached result instead of
 // an exception. This preserves the last validated snapshot and prevents user requests from
 // being reported as runtime failures when the upstream source is temporarily slow.
-const collect = unstable_cache(collectWithResilience, ["tgpi-intelligence-graph", METHODOLOGY_VERSION, "independent-series-v3"], {
+const collect = unstable_cache(collectWithResilience, ["tgpi-intelligence-graph", METHODOLOGY_VERSION, "independent-series-v4"], {
   revalidate: 21_600,
   tags: ["tgpi-intelligence-graph"],
 });

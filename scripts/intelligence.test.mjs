@@ -19,6 +19,10 @@ test("195 country IDs map uniquely to all existing country slugs", () => {
 });
 test("registered query URLs are fixed HTTPS World Bank requests", () => {
   for (const id of INDICATOR_IDS) { const url = new URL(sourceApiUrl(id)); assert.equal(url.origin, "https://api.worldbank.org"); assert.equal(url.searchParams.get("source"), "2"); }
+  const population = new URL(sourceApiUrl("SP.POP.TOTL"));
+  assert.equal(population.searchParams.get("mrv"), "1");
+  assert.equal(population.searchParams.has("mrnev"), false);
+  assert.equal(new URL(sourceApiUrl("IT.NET.USER.ZS")).searchParams.get("mrnev"), "1");
   assert.throws(() => sourceApiUrl("https://127.0.0.1/secret"));
 });
 test("bundled fallback is complete, source-linked and matches its content revision", () => {
@@ -32,7 +36,15 @@ test("bundled fallback is complete, source-linked and matches its content revisi
     assert.ok(Number.isFinite(Date.parse(row.retrievedAt))); assert.ok(row.retrievedAt <= snapshot.retrievedAt);
     const key = `${row.country}:${row.indicator}`; assert.ok(!keys.has(key)); keys.add(key);
   }
-  for (const series of snapshot.series) { assert.equal(series.url, sourceApiUrl(series.indicator, new Date(series.retrievedAt).getUTCFullYear())); assert.match(series.responseSha256, /^[a-f0-9]{64}$/); assert.equal(series.observations, snapshot.observations.filter(o => o.indicator === series.indicator).length); }
+  for (const series of snapshot.series) {
+    const expectedUrl = sourceApiUrl(series.indicator, new Date(series.retrievedAt).getUTCFullYear());
+    const recordedUrl = series.indicator === "SP.POP.TOTL"
+      ? expectedUrl.replace("&mrv=1", "&mrnev=1")
+      : expectedUrl;
+    assert.equal(series.url, recordedUrl);
+    assert.match(series.responseSha256, /^[a-f0-9]{64}$/);
+    assert.equal(series.observations, snapshot.observations.filter(o => o.indicator === series.indicator).length);
+  }
   const signature = JSON.stringify(snapshot.observations.map(({country,indicator,value,year}) => ({country,indicator,value,year})));
   assert.equal(snapshot.revision, createHash("sha256").update(signature).digest("hex").slice(0,16));
 });
