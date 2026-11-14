@@ -105,7 +105,7 @@ export default function PremiumWaitlistForm() {
     return (
       <div className="rounded-[28px] border border-[var(--tgpi-gold-hover)] bg-[#FFF7DE] p-8 text-center">
         <p className="text-xs font-black uppercase tracking-[0.25em] text-[#8A5B09]"><LocalizedText text={"Early access confirmed"} /></p>
-        <h2 className="mt-4 font-serif text-3xl font-semibold text-[#0B0B0B]"><LocalizedText text={"Your place is registered."} /></h2>
+        <h2 className="mt-4 tgpi-display text-3xl font-semibold text-[#0B0B0B]"><LocalizedText text={"Your place is registered."} /></h2>
         <p className="mt-4 leading-7 text-[#5A4A28]"><LocalizedText text={message} /></p>
       </div>
     );

@@ -9,7 +9,7 @@ export default function WorldMapCard() {
       <div className="flex items-center justify-between gap-4 p-6">
         <div>
           <p className="text-xs font-black uppercase tracking-[0.22em] text-[#9A6A12]"><LocalizedText text="Country intelligence" /></p>
-          <h2 className="mt-2 font-serif text-3xl font-semibold text-[#0B1F3A]"><LocalizedText text={"Global Decision Map"} /></h2>
+          <h2 className="mt-2 tgpi-display text-3xl font-semibold text-[#0B1F3A]"><LocalizedText text={"Global Decision Map"} /></h2>
         </div>
 
         <Link
@@ -27,7 +27,7 @@ export default function WorldMapCard() {
         />
         <div className="absolute inset-0 bg-gradient-to-t from-[#0B1F3A]/80 via-[#0B1F3A]/5 to-transparent" />
         <div className="absolute inset-x-5 bottom-5 rounded-2xl border border-white/20 bg-[#0B1F3A]/78 px-6 py-4 text-center text-white backdrop-blur-xl">
-          <p className="font-serif text-2xl font-semibold"><LocalizedText text={"Compare countries through evidence."} /></p>
+          <p className="tgpi-display text-2xl font-semibold"><LocalizedText text={"Compare countries through evidence."} /></p>
           <p className="mt-2 text-sm text-[#D7DFEA]"><LocalizedText text={"Cost, safety, language, readiness and opportunity in one system."} /></p>
         </div>
       </div>

@@ -24,7 +24,7 @@ export default function PremiumWaitlistPage() {
               className="text-sm font-bold text-[var(--tgpi-navy-raised)] transition hover:text-[var(--tgpi-gold-hover)]"
             ><LocalizedText text={"← Back to pricing"} /></Link>
             <p className="mt-10 text-xs font-black uppercase tracking-[0.3em] text-[var(--tgpi-gold-hover)]"><LocalizedText text={"TGPI Premium Founding Access"} /></p>
-            <h1 className="mt-5 font-serif text-5xl font-semibold leading-[0.98] tracking-[-0.04em] text-[#0B0B0B] md:text-7xl"><LocalizedText text={"Secure priority for the first TGPI Premium release."} /></h1>
+            <h1 className="mt-5 tgpi-display text-5xl font-semibold leading-[0.98] tracking-[-0.04em] text-[#0B0B0B] md:text-7xl"><LocalizedText text={"Secure priority for the first TGPI Premium release."} /></h1>
             <p className="mt-6 text-lg leading-8 text-[#566070]"><LocalizedText text={"Join the founding list while payments remain disabled. Tell TGPI where you are going and which outcome matters most so the first membership experience begins around real global decisions."} /></p>
           </div>
 

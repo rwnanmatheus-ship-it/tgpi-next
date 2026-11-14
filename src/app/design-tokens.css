@@ -28,8 +28,12 @@
   --tgpi-danger-soft: #f9eae5;
   --tgpi-warning: var(--tgpi-gold-strong);
   --tgpi-focus: var(--tgpi-blue);
-  --tgpi-font-display: var(--font-tgpi-display), Georgia, serif;
+  --tgpi-font-display: var(--font-tgpi-display), var(--tgpi-font-sans);
   --tgpi-font-sans: var(--font-tgpi-sans), ui-sans-serif, system-ui, sans-serif;
+  --tgpi-font-credential: var(--font-tgpi-credential), Georgia, serif;
+  --tgpi-display-width: 95%;
+  --tgpi-display-leading: 1.08;
+  --tgpi-display-tracking: -.03em;
   --tgpi-text-xs: .75rem;
   --tgpi-text-sm: .875rem;
   --tgpi-text-base: 1rem;

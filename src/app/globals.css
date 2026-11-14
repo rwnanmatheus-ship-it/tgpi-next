@@ -1,6 +1,8 @@
 @import "tailwindcss";
 
-
+@theme inline {
+  --font-sans: var(--tgpi-font-sans);
+}
 
 html {
   min-height: 100%;
@@ -19,7 +21,7 @@ body {
     var(--tgpi-canvas);
   color: var(--tgpi-ink);
   font-family: var(--tgpi-font-sans);
-  font-size: 16px;
+  font-size: var(--tgpi-text-base);
   line-height: 1.6;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
@@ -29,17 +31,28 @@ body {
   box-sizing: border-box;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  margin: 0;
-  font-family: var(--tgpi-font-display);
-  font-weight: 600;
-  letter-spacing: -0.025em;
-  text-wrap: balance;
+@layer base {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 0;
+    font-family: var(--tgpi-font-display);
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -.02em;
+    text-wrap: balance;
+    overflow-wrap: anywhere;
+  }
+
+  h1,
+  h2 {
+    font-stretch: var(--tgpi-display-width);
+    line-height: var(--tgpi-display-leading);
+    letter-spacing: var(--tgpi-display-tracking);
+  }
 }
 
 p {
@@ -81,8 +94,14 @@ img {
   color: var(--tgpi-navy);
 }
 
-.tgpi-display {
-  font-family: var(--tgpi-font-display);
+@layer components {
+  .tgpi-display {
+    font-family: var(--tgpi-font-display);
+    font-stretch: var(--tgpi-display-width);
+    font-weight: 600;
+    line-height: var(--tgpi-display-leading);
+    letter-spacing: var(--tgpi-display-tracking);
+  }
 }
 
 .tgpi-container {

@@ -16,7 +16,7 @@ export default async function NotificationOperationsPage() {
     >
       <div className="mx-auto max-w-2xl">
         <p className="text-xs font-bold uppercase tracking-widest text-[#805D19]"><LocalizedText text={"TGPI · Member communications"} /></p>
-        <h1 className="mt-3 font-serif text-4xl"><LocalizedText text={"Notification operations"} /></h1>
+        <h1 className="mt-3 tgpi-display text-4xl"><LocalizedText text={"Notification operations"} /></h1>
         <AnnouncementComposer />
       </div>
     </main>

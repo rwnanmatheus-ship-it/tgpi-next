@@ -30,7 +30,7 @@ export function EditorialHeading({
 }: EditorialHeadingProps) {
   return (
     <Component
-      className={`tgpi-display font-semibold leading-[0.94] tracking-[-0.045em] ${sizeClasses[size]} ${toneClasses[tone]} ${className}`.trim()}
+      className={`tgpi-display ${sizeClasses[size]} ${toneClasses[tone]} ${className}`.trim()}
     >
       {children}
     </Component>

@@ -25,7 +25,7 @@ import "./design-tokens.css";
 import "./design-system.css";
 import "./surface-system.css";
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, Manrope } from "next/font/google";
+import localFont from "next/font/local";
 import NotificationProvider from "@/components/notifications/NotificationProvider";
 import Navbar from "@/components/Navbar";
 import GlobalFooter from "@/components/GlobalFooter";
@@ -39,18 +39,28 @@ import AccessAwareChrome from "@/components/auth/AccessAwareChrome";
 import AtlasWidget from "@/components/atlas/AtlasWidget";
 import SkipToContent from "@/components/accessibility/SkipToContent";
 
-const displayFont = Cormorant_Garamond({
-  subsets: ["latin"],
+const displayFont = localFont({
+  src: "./fonts/instrument-sans-variable.woff2",
   variable: "--font-tgpi-display",
-  weight: ["500", "600", "700"],
+  weight: "400 700",
+  declarations: [{ prop: "font-stretch", value: "75% 100%" }],
   display: "swap",
 });
 
-const interfaceFont = Manrope({
-  subsets: ["latin"],
+const interfaceFont = localFont({
+  src: "./fonts/geist-variable.woff2",
   variable: "--font-tgpi-sans",
-  weight: ["400", "500", "600", "700", "800"],
+  weight: "100 900",
   display: "swap",
+});
+
+const credentialFont = localFont({
+  src: "./fonts/cormorant-garamond-variable.woff2",
+  variable: "--font-tgpi-credential",
+  weight: "500 700",
+  display: "swap",
+  preload: false,
+  adjustFontFallback: "Times New Roman",
 });
 
 const sourceMetadata: Metadata = {
@@ -106,7 +116,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const locale = await getLocale();
   const clerkLocales = { en: enUS, "pt-BR": ptBR, es: esES, fr: frFR, de: deDE, it: itIT };
   return (
-    <html lang={locale} translate="no" suppressHydrationWarning className={`${displayFont.variable} ${interfaceFont.variable}`}>
+    <html lang={locale} translate="no" suppressHydrationWarning className={`${displayFont.variable} ${interfaceFont.variable} ${credentialFont.variable}`}>
       <head>
         {/* Execute synchronously before any visible content is rendered. */}
         <script id="tgpi-appearance" dangerouslySetInnerHTML={{ __html: appearanceBootstrap }} />

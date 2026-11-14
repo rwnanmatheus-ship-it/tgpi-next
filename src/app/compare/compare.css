@@ -1,6 +1,6 @@
 .compare-command { background:radial-gradient(ellipse at 90% 0%,#e8eef8,transparent 40%),#f5f7fa; color:#10243a; padding-bottom:100px; }
 .compare-command .ig-container { max-width:1440px; min-width:0; }
-.compare-command h1,.compare-command h2,.compare-command h3 { font-family:var(--font-tgpi-sans),Arial,sans-serif; letter-spacing:-.045em; }
+.compare-command :is(h1,h2,h3) { font-family:var(--tgpi-font-display); letter-spacing:var(--tgpi-display-tracking); }
 .compare-command h2 { font-size:clamp(1.5rem,2.5vw,2.2rem); line-height:1.15; font-weight:650; }
 .compare-command button,.compare-command select,.compare-command input,.compare-command a { -webkit-tap-highlight-color:transparent; }
 .compare-command button { cursor:pointer; }
@@ -28,7 +28,7 @@
 .compare-section-head { display:flex; gap:24px; justify-content:space-between; align-items:center; margin-bottom:22px; }
 .compare-section-head h2 { margin:0 0 8px; }
 .compare-section-head p:not(.compare-kicker) { font-size:13px; color:#627184; line-height:1.7; max-width:670px; margin:0; }
-.compare-count { font-size:32px; font-weight:750; letter-spacing:-.05em; color:#122e50; text-align:right; white-space:nowrap; }
+.compare-count { font-size:2rem; font-weight:750; font-variant-numeric:tabular-nums; letter-spacing:-.03em; color:#122e50; text-align:right; white-space:nowrap; }
 .compare-count > span { display:block; font-size:10px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; color:#627184; }
 .compare-search-row { display:grid; grid-template-columns:1fr 240px; gap:14px; margin-bottom:16px; }
 .compare-search-row label > span,.compare-result-navigation label > span { display:block; font-size:11px; color:#526174; font-weight:700; margin-bottom:7px; }
