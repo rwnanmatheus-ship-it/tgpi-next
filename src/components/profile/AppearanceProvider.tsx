@@ -39,7 +39,10 @@ export default function AppearanceProvider({ children }: { children: ReactNode }
       setScheme(applyAppearance(next, media.matches));
       setPersisted(true);
     };
-    const applyDefault = () => setScheme(applyAppearance('system', media.matches));
+    const applyDefault = () => {
+      setScheme(applyAppearance('system', media.matches));
+      setPersisted(false);
+    };
     try { synchronize(); } catch { applyDefault(); }
     const onStorage = (event: StorageEvent) => {
       if (event.key !== appearanceStorageKey && event.key !== null) return;

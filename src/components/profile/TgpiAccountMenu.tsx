@@ -8,6 +8,7 @@ import NavigationIcon from "@/components/navigation/NavigationIcon";
 import NavigationLink from "@/components/navigation/NavigationLink";
 import { normalizeTgpiAccountProfile } from "@/lib/account-profile";
 import { containDialogFocus } from "@/lib/dialog-focus";
+import AppearanceControl from "./AppearanceControl";
 import styles from "./TgpiAccountMenu.module.css";
 
 const settingsUrl = "/profile/security#settings-";
@@ -182,6 +183,7 @@ function AccountMenu({ name, imageUrl }: { name: string; imageUrl: string }) {
           </header>
 
           <div className={styles.content}>
+            <div className={styles.appearance}><AppearanceControl variant="quick" /></div>
             <div className={styles.identity}>
               <div className={styles.identityRow}>
                 <span className={styles.identityAvatar} aria-hidden="true">{avatarContent}</span>

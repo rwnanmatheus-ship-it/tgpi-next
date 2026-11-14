@@ -4,6 +4,7 @@ import AccessibleMedia from '@/components/accessibility/AccessibleMedia';
 import LibrasPanel from '@/components/accessibility/LibrasPanel';
 import StudyReader from '@/components/accessibility/StudyReader';
 import NavigationIcon from '@/components/navigation/NavigationIcon';
+import AppearanceControl from '@/components/profile/AppearanceControl';
 import SettingsAccessibility from '@/components/profile/SettingsAccessibility';
 import styles from '@/components/accessibility/accessibility-center.module.css';
 import { getLocale } from '@/lib/localization/server';
@@ -33,6 +34,9 @@ export default async function AccessibilityPage() {
       <div className={styles.shell}>
         <h1>{studyCopy(locale, 'center')}</h1>
         <p>{studyCopy(locale, 'intro')}</p>
+        <div className={styles.appearance}>
+          <AppearanceControl variant="quick" />
+        </div>
         <Link className={styles.contact} href="/courses">{translate(locale, 'All courses')}</Link>
         <nav className={styles.quick} aria-label={accessCopy(locale, 'access')}>
           {shortcuts.map(item => <a href={item.href} key={item.href}>

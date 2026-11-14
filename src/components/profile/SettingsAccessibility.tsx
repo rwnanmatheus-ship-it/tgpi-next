@@ -33,7 +33,7 @@ export default function SettingsAccessibility() {
       setNotice('Display preferences applied to this browser.');
     } catch { setNotice('Your browser could not save this preference.'); }
   }
-  return <div className={styles.stack}>
+  return <div className={`${styles.stack} ${styles.displayPreferences}`}>
     <p className={styles.notice}>{t('Applies immediately in this browser. Your operating system’s reduced-motion preference remains respected.')}</p>
     <div className={styles.card}>{choices.map(choice => <label className={styles.toggle} key={choice.key}>
       <span><strong>{t(choice.label)}</strong><small>{t(choice.text)}</small></span>

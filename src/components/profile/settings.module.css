@@ -70,7 +70,7 @@
   .saveActions { width: 100%; }
 }
 
-:global([data-tgpi-theme="dark"]) .root {
+:global([data-tgpi-theme="dark"]) :is(.root, .displayPreferences) {
   --settings-line: var(--tgpi-border);
   --settings-muted: var(--tgpi-muted);
   color: var(--tgpi-ink);
@@ -90,7 +90,8 @@
   box-shadow: none;
 }
 :global([data-tgpi-theme="dark"]) :is(.warning, .recommendation, .recommendation p) { background: var(--tgpi-gold-soft); color: var(--tgpi-gold-strong); }
-:global([data-tgpi-theme="dark"]) .main .eyebrow { color: var(--tgpi-gold-strong); }
+:global([data-tgpi-theme="dark"]) :is(.main, .displayPreferences) .eyebrow { color: var(--tgpi-gold-strong); }
+:global([data-tgpi-theme="dark"]) .mobileSelect select { background: var(--tgpi-surface); }
 :global([data-tgpi-theme="dark"]) :is(.confirm, .toggle, .content :global(.tgpi-account-input)) { border-color: var(--settings-line); }
 :global([data-tgpi-theme="dark"]) .content :global(.tgpi-account-input) {
   background: var(--tgpi-surface-strong);

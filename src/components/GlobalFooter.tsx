@@ -69,7 +69,7 @@ export default function GlobalFooter() {
             </Link>
             <p>{t("An independent institute connecting practical education, decision intelligence and global adaptability.")}</p>
             <LanguageSelector />
-            <AppearanceControl compact />
+            <AppearanceControl variant="compact" />
           </div>
           <nav aria-label={t("TGPI footer navigation")} className={styles.groups}>
             {footerGroups.map(({ title, links }) => (
