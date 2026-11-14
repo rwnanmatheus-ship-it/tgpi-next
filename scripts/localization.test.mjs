@@ -571,9 +571,9 @@ test('billing renders localized status, access and dates, including unknown valu
     compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX, esModuleInterop: true },
   }).outputText;
   const cases = [
-    ['past_due', 'subscription', 'Payment overdue', 'Subscription', '2026-11-15T00:00:00Z'],
-    ['active', 'preview', 'Active', 'Preview access', '2026-11-15T00:00:00Z'],
-    ['constructor', '__proto__', 'Unavailable', 'Unavailable', 'bad-date'],
+    ['past_due', 'subscription', 'Payment overdue', 'Subscription', 1794744000],
+    ['active', 'preview', 'Active', 'Preview access', 1794744000],
+    ['constructor', '__proto__', 'Unavailable', 'Unavailable', NaN],
   ];
   for (const locale of locales) for (const [status, accessMode, statusLabel, accessLabel, date] of cases) {
     const t = (key, values) => translate(locale, key, values);
@@ -584,21 +584,25 @@ test('billing renders localized status, access and dates, including unknown valu
         ...React,
         useState(initial) {
           const state = React.useState(initial);
-          if (stateIndex++ === 0) return [{ plan: 'premium', status, accessMode, currentPeriodEnd: date, cancelAtPeriodEnd: true, portalAvailable: true }, () => {}];
+          if (stateIndex++ === 0) return [{ plan: 'premium', status, accessMode, cycleDate: date, schedule: 'ending', hasBillingAccount: true, paymentMethod: null, history: { invoices: [], nextCursor: null } }, () => {}];
           return state;
         },
       };
       if (name === 'react/jsx-runtime') return runtime;
       if (localizationDependency(name, locale)) return localizationDependency(name, locale);
       if (name === 'next/link') return { __esModule: true, default: ({ children, prefetch, ...props }) => React.createElement('a', props, children) };
+      if (name.endsWith('.css')) return {};
       throw Error('Unexpected import: ' + name);
     }, exports);
     const html = renderToStaticMarkup(React.createElement(exports.default));
-    assert.ok(html.includes(t('Status: {status} · Access: {access}', { status: t(statusLabel), access: t(accessLabel) })));
-    const formattedDate = date === 'bad-date' ? t('Date unavailable') : new Date(date).toLocaleDateString(locale, { timeZone: 'UTC' });
-    assert.ok(html.includes(formattedDate));
-    assert.ok(html.includes(t('Access scheduled until')));
-    assert.ok(html.includes(t('Manage subscription securely →')));
+    assert.ok(html.includes(t(statusLabel)));
+    assert.ok(html.includes(t(accessLabel)));
+    const cycle = Number.isFinite(date)
+      ? t('Access ends on {date}', { date: new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(date * 1000) })
+      : t('Date unavailable');
+    assert.ok(html.includes(cycle));
+    assert.ok(html.includes(t('Cancellation scheduled')));
+    assert.ok(html.includes(t(status === 'constructor' ? 'Open Stripe billing portal' : 'Manage subscription')));
   }
 });
 

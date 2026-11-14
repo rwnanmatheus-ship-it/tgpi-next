@@ -47,3 +47,30 @@ export type BillingStatusResponse = {
   cancelAtPeriodEnd: boolean;
   currentPeriodEnd: string;
 };
+
+export type BillingInvoice = {
+  id: string;
+  number: string | null;
+  createdAt: number;
+  status: "paid" | "open" | "void" | "uncollectible";
+  currency: string;
+  amount: number;
+  invoiceUrl: string | null;
+  pdfUrl: string | null;
+};
+
+export type BillingInvoicePage = {
+  invoices: BillingInvoice[];
+  nextCursor: string | null;
+};
+
+export type BillingOverview = {
+  accessMode: PremiumAccessMode;
+  plan: UserPlan;
+  status: SubscriptionStatus;
+  hasBillingAccount: boolean;
+  schedule: "automatic" | "manual" | "ending" | "paused" | "none";
+  cycleDate: number | null;
+  paymentMethod: { kind: "card"; brand: string; last4: string; expires: string } | { kind: "other" } | null;
+  history: BillingInvoicePage | null;
+};

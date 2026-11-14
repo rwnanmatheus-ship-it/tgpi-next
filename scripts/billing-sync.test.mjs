@@ -138,3 +138,48 @@ test('customer creation does not overwrite a concurrent authoritative subscripti
   assert.equal(await h.service.getOrCreateStripeCustomer('alice'), 'cus_alice');
   assert.equal((await h.service.getUserBillingRecord('alice')).plan, 'premium');
 });
+
+test('billing overview prioritizes the live subscription card and shows cancellation or pause', () => {
+  const { getBillingSchedule, describePaymentMethod } = compile('src/lib/billing-overview.server.ts', {
+    'server-only': {}, '@/lib/billing': policy, '@/lib/stripe': {},
+  });
+  const card = (last4, month) => ({ object: 'payment_method', card: { brand: 'visa', last4, exp_month: month, exp_year: 2030 } });
+  const customer = { invoice_settings: { default_payment_method: card('4242', 12) } };
+  const active = { ...subscription(), collection_method: 'charge_automatically', default_payment_method: card('1234', 2) };
+  assert.deepEqual(getBillingSchedule(active), { schedule: 'automatic', cycleDate: 1800000000 });
+  assert.deepEqual(describePaymentMethod(customer, active), { kind: 'card', brand: 'visa', last4: '1234', expires: '02/2030' });
+  assert.equal(describePaymentMethod(customer, { ...active, status: 'canceled' }).last4, '4242');
+  assert.equal(getBillingSchedule({ ...active, collection_method: 'send_invoice' }).schedule, 'manual');
+  assert.deepEqual(getBillingSchedule({ ...active, cancel_at: 1790000000 }), { schedule: 'ending', cycleDate: 1790000000 });
+  assert.deepEqual(getBillingSchedule({ ...active, pause_collection: {} }), { schedule: 'paused', cycleDate: null });
+  assert.deepEqual(getBillingSchedule({ ...active, status: 'canceled' }), { schedule: 'none', cycleDate: null });
+});
+
+test('invoice pagination checks account ownership, masks private fields and keeps draft cursors', async () => {
+  const calls = [];
+  const stripe = { invoices: {
+    retrieve: async id => ({ id, customer: id === 'in_other' ? 'cus_other' : 'cus_alice' }),
+    list: async params => {
+      calls.push(params);
+      return { has_more: true, data: [
+        { id: 'in_paid', number: 'TGPI-001', status: 'paid', created: 1, status_transitions: { finalized_at: 2 }, currency: 'usd', amount_paid: 1990,
+          hosted_invoice_url: 'https://invoice.stripe.com/i/example', invoice_pdf: 'https://invoice.stripe.com/i/example/pdf', customer_email: 'private@example.com' },
+        { id: 'in_open', number: 'TGPI-002', status: 'open', created: 1, status_transitions: {}, currency: 'usd', amount_due: 1990, amount_remaining: 490,
+          hosted_invoice_url: 'https://invoice.stripe.com.example.com/i/example' },
+        { id: 'in_draft', status: 'draft' },
+      ] };
+    },
+  } };
+  const { listBillingInvoices } = compile('src/lib/billing-overview.server.ts', {
+    'server-only': {}, '@/lib/billing': policy, '@/lib/stripe': { getStripeServer: () => stripe },
+  });
+  await assert.rejects(listBillingInvoices('cus_alice', 'in_other'), /ownership/);
+  assert.deepEqual(calls, []);
+  const page = await listBillingInvoices('cus_alice', 'in_before');
+  assert.deepEqual(calls, [{ customer: 'cus_alice', limit: 12, starting_after: 'in_before' }]);
+  assert.equal(page.nextCursor, 'in_draft');
+  assert.deepEqual(page.invoices[0], { id: 'in_paid', number: 'TGPI-001', status: 'paid', createdAt: 2, currency: 'usd', amount: 1990,
+    invoiceUrl: 'https://invoice.stripe.com/i/example', pdfUrl: 'https://invoice.stripe.com/i/example/pdf' });
+  assert.equal(page.invoices[1].amount, 490);
+  assert.equal(page.invoices[1].invoiceUrl, null);
+});

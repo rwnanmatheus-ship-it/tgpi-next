@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { requireApiUser, TgpiAuthenticationError } from "@/lib/auth/guards";
 import { getUserBillingRecord } from "@/lib/billing.server";
+import { isFirestoreQuotaError } from "@/lib/firestore-admin-rest.server";
 import { getControlledPremiumAccessMode } from "@/lib/premium-access.server";
 
 const PRIVATE_NO_STORE_HEADERS = {
@@ -38,10 +39,10 @@ export async function GET() {
       },
     );
   } catch (error) {
-    const status = error instanceof TgpiAuthenticationError ? 401 : 500;
+    const status = error instanceof TgpiAuthenticationError ? 401 : isFirestoreQuotaError(error) ? 503 : 500;
 
-    if (status === 500) {
-      console.error("Could not load TGPI billing status:", error);
+    if (status !== 401) {
+      console.error("Could not load TGPI billing status", { status });
     }
 
     return json(

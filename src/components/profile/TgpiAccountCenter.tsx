@@ -135,7 +135,7 @@ const settingsSections: readonly SettingsSectionDefinition[] = [
     group: "Account center",
     sticker: "⌂",
   },
-  { description: "Plan status, renewal and secure billing portal", key: "billing", keywords: "stripe payment subscription plan renew", label: "Subscription & billing", group: "Account center", sticker: "◈" },
+  { description: "Plan, payment methods and invoice history", key: "billing", keywords: "stripe payment subscription plan renew card invoice cartão fatura cobrança", label: "Subscription & billing", group: "Account center", sticker: "◈" },
   {
     description: "Cryptographic identity, fingerprint and verification",
     key: "global-key",
@@ -776,7 +776,7 @@ export default function TgpiAccountCenter({
     );
   }
 
-  if (activeSection === "billing") { activeScreen = <div><ScreenHeading section="billing" title="Subscription & billing" description="Plan status, renewal and secure billing portal" /><AccountBillingPanel /></div>; }
+  if (activeSection === "billing") { activeScreen = <div><ScreenHeading section="billing" title="Subscription & billing" description="Plan, payment methods and invoice history" /><AccountBillingPanel /></div>; }
   if (activeSection === "accessibility") activeScreen = <div><ScreenHeading section="accessibility" title="Accessibility" description="Reading, motion and keyboard navigation" /><SettingsAccessibility /></div>;
   if (activeSection === "data") activeScreen = <div><ScreenHeading section="data" title="Data & exports" description="Export your saved profile and personal plan" /><SettingsData /></div>;
   if (activeSection === "diagnostics") activeScreen = <div><ScreenHeading section="diagnostics" title="Connection & sync" description="Check your connection and saved profile version" /><SettingsDiagnostics updatedAt={profile.updatedAt} /></div>;
