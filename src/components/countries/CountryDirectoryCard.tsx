@@ -25,7 +25,7 @@ export default function CountryDirectoryCard({ country, indicatorTotal, selected
   const href = `/countries/${country.slug}`;
 
   return (
-    <article className={styles.card} data-selected={selected || undefined}>
+    <article className={styles.card} data-tgpi-surface="card" data-tgpi-interactive="true" data-selected={selected || undefined}>
       <div className={styles.cardImage}>
         <Image
           src={`/images/countries/identity/${country.slug}.webp`}

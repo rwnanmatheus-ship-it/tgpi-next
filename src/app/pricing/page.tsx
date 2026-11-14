@@ -165,7 +165,8 @@ export default async function PricingPage({
             ><LocalizedText text={"View membership options"} />{" "}<span aria-hidden="true">↓</span>
             </a>
             <div className="mt-4"><Link href="/premium/demo" className="inline-flex min-h-11 items-center rounded-xl border border-[var(--tgpi-gold-hover)] px-4 py-2 text-sm font-bold text-[var(--tgpi-navy-raised)]"><LocalizedText text="Try the scenario comparison" /> ↗</Link></div>
-            <div className="relative mt-6 hidden aspect-[3/2] lg:block overflow-hidden rounded-[24px] bg-[var(--tgpi-navy-raised)]">
+            <div data-tgpi-surface="banner"
+              className="relative mt-6 hidden aspect-[3/2] lg:block overflow-hidden rounded-[24px] bg-[var(--tgpi-navy-raised)]">
               <Image
                 src="/images/cinematic-2026/premium-library-1600.webp"
                 alt={t("International research library overlooking a waterfront city, with a brass globe and warm academic lighting")}
@@ -180,6 +181,8 @@ export default async function PricingPage({
           </div>
           <aside
             id="membership"
+            data-tgpi-surface="card"
+            data-tgpi-material="inverse"
             className="scroll-mt-28 overflow-hidden rounded-[28px] border border-[var(--tgpi-gold-hover)]/40 bg-[var(--tgpi-navy-raised)] text-white shadow-[0_24px_70px_rgba(11,31,58,0.16)] lg:sticky lg:top-28"
             aria-label={t("Premium membership")}
           >

@@ -81,7 +81,7 @@ export function ScenarioComparison({scenarios,example=false}:{scenarios:SavedPre
       const w=s.worksheet,totals=worksheetTotals(w),difference=scenarios[0] ? scenarioTotalDifference(s,scenarios[0]) : null;
       const money=(amount:number|null) => amount === null ? t('Missing') : new Intl.NumberFormat(locale,{style:'currency',currency:w.currency}).format(amount);
       const country=new Intl.DisplayNames([locale],{type:'region'}).of(s.iso2) ?? s.countryName;
-      return <article key={s.id} className={styles.card}>
+      return <article key={s.id} className={styles.card} data-tgpi-surface="card">
         <div className={styles.cardHead}><span>{index === 0 ? t('Baseline') : t('Alternative {number}',{number:index})}</span><span><LocalizedText text={w.currency} /></span></div>
         <h3>{country}{w.city ? <LocalizedText text={" · {value0}"} values={{value0: String(w.city)}} /> : ''}</h3><p>{example ? t('Example {number}',{number:s.slot}) : <LocalizedText text={"{value0} {value1}"} values={{value0: String(t('Scenario')), value1: String(s.slot)}} />} · {t('{count} months',{count:w.months})}</p>
         <dl>{COST_CATEGORIES.map(category => <div key={category}><dt>{t(categories[category])}</dt><dd>{money(w.monthly[category])}</dd></div>)}<div className={styles.subtotal}><dt>{t('Known monthly costs')}</dt><dd>{money(totals.knownMonthly)}</dd></div><div><dt>{t('Tuition')}</dt><dd>{money(w.tuition)}</dd></div><div><dt>{t('Arrival')}</dt><dd>{money(w.arrival)}</dd></div><div><dt>{t('Contingency')} ({new Intl.NumberFormat(locale).format(w.bufferPercent)}%)</dt><dd>{money(totals.buffer)}</dd></div></dl>

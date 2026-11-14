@@ -90,7 +90,7 @@ export default function DocumentsExperience({ countries, initialCountry, initial
             </div>
           </div>
           <div className="documents-layer-grid documents-connected-grid">
-            {connectedTools.map(({ label, href, icon, detail }) => <Link key={href} className="documents-layer" href={href} prefetch={false}>
+            {connectedTools.map(({ label, href, icon, detail }) => <Link key={href} className="documents-layer" data-tgpi-surface="card" data-tgpi-material="inverse" data-tgpi-interactive="true" href={href} prefetch={false}>
               <div className="documents-layer-top"><span className="documents-icon"><NavigationIcon name={icon} /></span><span aria-hidden="true">↗</span></div>
               <h3><LocalizedText text={label} /></h3>
               <p><LocalizedText text={detail} /></p>

@@ -30,7 +30,7 @@ export default async function AccessibilityPage() {
     { href: '#libras', icon: 'accessibility', title: 'libras', detail: 'librasBody' },
   ] as const;
   return <main className={styles.page}>
-    <header className={styles.hero}>
+    <header className={styles.hero} data-tgpi-surface="banner">
       <div className={styles.shell}>
         <h1>{studyCopy(locale, 'center')}</h1>
         <p>{studyCopy(locale, 'intro')}</p>
@@ -49,7 +49,7 @@ export default async function AccessibilityPage() {
     </header>
     <div className={`${styles.shell} ${styles.body}`}>
       <div className={styles.grid}>
-        <section id="reading" tabIndex={-1} className={styles.card}>
+        <section id="reading" tabIndex={-1} className={styles.card} data-tgpi-surface="card" data-tgpi-material="inverse">
           <h2>{studyCopy(locale, 'sample')}</h2>
           <p>{studyCopy(locale, 'sampleBody')}</p>
           <StudyReader key={locale} title={studyCopy(locale, 'sample')} language={locale} sections={[
@@ -57,21 +57,21 @@ export default async function AccessibilityPage() {
             { title: translate(locale, 'Practice and transfer'), passages: [{ text: studyCopy(locale, 'samplePractice') }] },
           ]} atlas />
         </section>
-        <section className={styles.card}>
+        <section className={styles.card} data-tgpi-surface="card" data-tgpi-material="inverse">
           <h2>{studyCopy(locale, 'settings')}</h2>
           <div className={styles.settings}><SettingsAccessibility /></div>
         </section>
       </div>
-      <section id="media" tabIndex={-1} className={styles.card}>
+      <section id="media" tabIndex={-1} className={styles.card} data-tgpi-surface="card" data-tgpi-material="inverse">
         <h2>{accessCopy(locale, 'media')}</h2>
         <AccessibleMedia key={locale} asset={asynchronousHandover} />
       </section>
-      <section id="libras" tabIndex={-1} className={styles.card}>
+      <section id="libras" tabIndex={-1} className={styles.card} data-tgpi-surface="card" data-tgpi-material="inverse">
         <h2>{accessCopy(locale, 'libras')}</h2>
         {locale !== 'pt-BR' && <p>{accessCopy(locale, 'librasBody')}</p>}
         <LibrasPanel text={studyCopy('pt-BR', 'sampleBody')} />
       </section>
-      <section className={styles.card}>
+      <section className={styles.card} data-tgpi-surface="card" data-tgpi-material="inverse">
         <h2>{studyCopy(locale, 'navigation')}</h2>
         <p>{studyCopy(locale, 'keys')}</p>
         <a className={styles.contact} href="mailto:contact@theglobalpolymath.com?subject=TGPI%20Accessibility">{studyCopy(locale, 'report')}</a>

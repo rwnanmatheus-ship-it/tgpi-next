@@ -151,3 +151,58 @@
  .compare-destination-identity>span {width:48px!important;height:36px!important;}
  .compare-destination-identity h3 {margin-bottom:0;}
 }
+
+@media screen {
+  :root[data-tgpi-theme="dark"] .compare-command {
+    background: radial-gradient(ellipse at 90% 0%, var(--tgpi-blue-soft), transparent 44%), var(--tgpi-canvas);
+    color: var(--tgpi-ink);
+  }
+
+  :root[data-tgpi-theme="dark"] .compare-command :is(
+    .compare-builder, .compare-dossier-disclosure, .compare-labs, .compare-empty
+  ) {
+    background: var(--tgpi-material-card);
+    border-color: var(--tgpi-material-edge);
+  }
+
+  :root[data-tgpi-theme="dark"] .compare-command :is(
+    .compare-catalog button, .compare-selection, .compare-chips button, .compare-focus span,
+    .compare-actions :is(button, a):not(.compare-primary), .compare-button, .compare-nav,
+    .compare-result-navigation nav a, .compare-table-scroll, .compare-table tbody th:first-child,
+    .compare-search-row input[type="search"], select,
+    .compare-destination .ig-button, .compare-note, .compare-lens
+  ) {
+    background: var(--tgpi-surface);
+    border-color: var(--tgpi-border);
+    color: var(--tgpi-ink);
+  }
+
+  :root[data-tgpi-theme="dark"] .compare-command :is(
+    .compare-catalog button:hover, .compare-catalog button[aria-pressed="true"],
+    .compare-focus input:checked + span, .compare-nav a:hover
+  ) {
+    background: var(--tgpi-blue-soft);
+    border-color: var(--tgpi-blue);
+    color: var(--tgpi-blue);
+  }
+
+  :root[data-tgpi-theme="dark"] .compare-command :is(
+    .compare-section-head p:not(.compare-kicker), .compare-count > span, .compare-search-row label > span,
+    .compare-catalog small, .compare-catalog-actions, .compare-selection-heading button,
+    .compare-builder-footer p, .compare-result-navigation label > span, .compare-disclosure,
+    .compare-destination p, .compare-lens p:not(.compare-kicker), .compare-metric-year, .compare-table caption,
+    .compare-table small, .compare-table details, .compare-chips p, .compare-chips button > span:last-child
+  ) { color: var(--tgpi-muted); }
+
+  :root[data-tgpi-theme="dark"] .compare-command :is(
+    .compare-count, .compare-check, .compare-catalog-actions button, .compare-builder-footer p[role="status"],
+    .compare-destination dd, .compare-table summary, .compare-table a, .compare-metric-value
+  ) { color: var(--tgpi-blue); }
+
+  :root[data-tgpi-theme="dark"] .compare-command :is(.compare-kicker, .compare-nav a span) { color: var(--tgpi-gold-light); }
+  :root[data-tgpi-theme="dark"] .compare-command :is(
+    .compare-table th, .compare-table td, .compare-table caption, .compare-destination dl > div,
+    .compare-builder-footer, .compare-result-navigation, .compare-labs > .ig-details
+  ) { border-color: var(--tgpi-border); }
+  :root[data-tgpi-theme="dark"] .compare-command :focus-visible { outline-color: var(--tgpi-focus); }
+}

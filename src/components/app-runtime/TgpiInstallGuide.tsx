@@ -47,7 +47,7 @@ export function InstallGuideButton({ className, onOpen }: { className?: string; 
 export function InstallInvite({ open, dismiss }: { open: () => void; dismiss: () => void }) {
   const { locale } = useLocale();
   return (
-    <aside className={styles.invite} aria-label={installCopy(locale, "title")} data-pwa-runtime="install">
+    <aside className={styles.invite} data-tgpi-surface="card" data-tgpi-material="inverse" aria-label={installCopy(locale, "title")} data-pwa-runtime="install">
       <div className={styles.heading}>
         <AppIcon />
         <div>
@@ -74,12 +74,9 @@ export function InstallGuide({ platform, standalone, canInstallNative, installin
   useEffect(() => {
     const dialog = dialogRef.current;
     const previousFocus = document.activeElement instanceof HTMLElement ? document.activeElement : null;
-    const previousOverflow = document.body.style.overflow;
     dialog?.showModal();
-    document.body.style.overflow = "hidden";
     return () => {
       dialog?.close();
-      document.body.style.overflow = previousOverflow;
       previousFocus?.focus({ preventScroll: true });
     };
   }, []);
@@ -94,7 +91,7 @@ export function InstallGuide({ platform, standalone, canInstallNative, installin
   }
 
   return (
-    <dialog className={styles.dialog} ref={dialogRef} aria-labelledby="tgpi-install-heading" onKeyDown={containDialogFocus} onCancel={event => { event.preventDefault(); close(); }}>
+    <dialog className={styles.dialog} data-tgpi-surface="dialog" data-tgpi-material="inverse" ref={dialogRef} aria-labelledby="tgpi-install-heading" onKeyDown={containDialogFocus} onCancel={event => { event.preventDefault(); close(); }}>
       <div className={styles.panel}>
         <button className={styles.close} type="button" aria-label={installCopy(locale, "close")} onClick={close}>×</button>
         <div className={styles.heading}>

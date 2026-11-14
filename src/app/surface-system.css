@@ -1,0 +1,122 @@
+/* Shared finishes for editorial banners, navigation cards, and dialogs. */
+:root {
+  --tgpi-material-card: linear-gradient(155deg, var(--tgpi-surface-strong) 16%, var(--tgpi-surface));
+  --tgpi-material-blue: linear-gradient(155deg, #172e49, #0a1627 78%);
+  --tgpi-material-gold: linear-gradient(155deg, var(--tgpi-surface-strong), var(--tgpi-gold-soft));
+  --tgpi-material-edge: color-mix(in srgb, var(--tgpi-blue) 21%, var(--tgpi-border-soft));
+  --tgpi-material-metal-edge: #899fb355;
+  --tgpi-material-panel-shadow: inset 0 1px #ffffff22, 0 24px 64px -26px #020a17a0;
+  --tgpi-material-edge-light: inset 0 1px #ffffff52;
+  --tgpi-material-radius: clamp(1.125rem, 2vw, 1.5rem);
+  --tgpi-material-hero-radius: clamp(1.25rem, 3vw, 2rem);
+  --tgpi-modal-scrim: #031020ad;
+}
+
+:root[data-tgpi-theme="dark"] {
+  --tgpi-material-edge-light: inset 0 1px #a6c4eb17;
+  --tgpi-modal-scrim: #020812bd;
+}
+
+:root [data-tgpi-surface="banner"],
+:root [data-tgpi-surface="card"][data-tgpi-material="inverse"] {
+  --surface-edge: var(--tgpi-material-metal-edge);
+}
+
+:root [data-tgpi-surface="banner"],
+:root :is(.country-dossier-hero, .resources-hero, .plan-hero, .compare-hero, .documents-hero, .credential-hub-hero) {
+  border: 1px solid var(--tgpi-material-metal-edge);
+  border-radius: var(--tgpi-material-hero-radius);
+  box-shadow: var(--tgpi-material-panel-shadow);
+}
+
+:root [data-tgpi-surface="banner"][data-tgpi-material="inverse"] {
+  background-color: #0a1627;
+}
+
+:root [data-tgpi-surface="card"],
+:root :is(.ds-panel, .ds-state, .compare-builder, .compare-destination, .compare-labs, .compare-dossier-disclosure, .plan-panel, .documents-layer) {
+  border-radius: var(--tgpi-material-radius);
+  border-color: var(--surface-edge, var(--tgpi-material-edge));
+  box-shadow: var(--tgpi-material-edge-light), var(--tgpi-depth-1);
+}
+
+:root [data-tgpi-surface="card"][data-tgpi-material="adaptive"] {
+  background: var(--tgpi-material-card);
+  color: var(--tgpi-ink);
+}
+
+:root [data-tgpi-surface="card"][data-tgpi-material="inverse"] {
+  background-color: #0d1b2d;
+  box-shadow: inset 0 1px #c0d6f020, 0 14px 29px -21px #010812a8;
+}
+
+:root .tgpi-card-3d.tgpi-card-3d {
+  --tgpi-card-border: var(--tgpi-material-edge);
+  border-radius: var(--tgpi-material-radius);
+  box-shadow: var(--tgpi-material-edge-light), var(--tgpi-card-shadow);
+  transform: none;
+}
+
+:root .tgpi-card-3d:is([data-tgpi-tone="white"], [data-tgpi-tone="paper"]) {
+  --tgpi-card-background: var(--tgpi-material-card);
+}
+
+:root .tgpi-card-3d[data-tgpi-tone="gold"] {
+  --tgpi-card-background: var(--tgpi-material-gold);
+}
+
+:root .tgpi-card-3d:is([data-tgpi-tone="navy"], [data-tgpi-tone="glass"]) {
+  --tgpi-card-border: var(--tgpi-material-metal-edge);
+}
+
+:root .tgpi-card-3d[data-tgpi-tone="navy"] {
+  --tgpi-card-background: var(--tgpi-material-blue);
+}
+
+:root :is([data-tgpi-surface="card"][data-tgpi-interactive], .tgpi-card-3d[data-tgpi-interactive="true"]) {
+  transition: border-color var(--tgpi-motion-control), box-shadow var(--tgpi-motion-control);
+}
+
+:root :is([data-tgpi-surface="card"][data-tgpi-interactive], .tgpi-card-3d[data-tgpi-interactive="true"]):focus-within {
+  border-color: var(--tgpi-blue);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  :root :is([data-tgpi-surface="card"][data-tgpi-interactive], .tgpi-card-3d[data-tgpi-interactive="true"]):hover {
+    border-color: var(--tgpi-gold);
+    box-shadow: var(--tgpi-material-edge-light), var(--tgpi-depth-2);
+  }
+}
+
+/* Native modal dialogs cover every navigation shell and share the backdrop. */
+:root:has(dialog[data-tgpi-surface="dialog"]:modal) { overflow: hidden; }
+:root dialog[data-tgpi-surface="dialog"] { overscroll-behavior: contain; }
+:root dialog[data-tgpi-surface="dialog"]::backdrop { background: var(--tgpi-modal-scrim); }
+:root dialog[data-tgpi-surface="dialog"][data-tgpi-material="adaptive"] {
+  background: var(--tgpi-material-card);
+  color: var(--tgpi-heading);
+  box-shadow: var(--tgpi-material-panel-shadow);
+}
+:root dialog[data-tgpi-surface="dialog"][data-tgpi-material="inverse"] {
+  box-shadow: var(--tgpi-material-panel-shadow);
+}
+
+@media (forced-colors: active) {
+  :root :is([data-tgpi-surface], .tgpi-card-3d) { border-color: CanvasText; }
+  :root :is([data-tgpi-surface], .tgpi-card-3d) :focus-visible { outline: 3px solid Highlight; }
+}
+
+:root [data-tgpi-surface="masthead"] {
+  background: var(--tgpi-material-blue);
+  border-block-end-color: var(--tgpi-gold);
+}
+
+:root [data-tgpi-surface="card"][data-selected] {
+  border-color: var(--tgpi-blue);
+  box-shadow: 0 0 0 1px var(--tgpi-blue), var(--tgpi-depth-1);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root .tgpi-card-3d[data-tgpi-interactive="true"],
+  :root .tgpi-card-3d [data-tgpi-layer] { transform: none !important; }
+}

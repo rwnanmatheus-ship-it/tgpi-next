@@ -17,19 +17,16 @@ export default function NotificationDrawer() {
     const dialog = ref.current;
     if (!dialog) return;
     const trigger = drawerTrigger.current;
-    const overflow = document.body.style.overflow;
     dialog.showModal();
-    document.body.style.overflow = "hidden";
     return () => {
       dialog.close();
-      document.body.style.overflow = overflow;
       trigger?.focus({ preventScroll: true });
     };
   }, [drawerTrigger]);
 
   return (
     <dialog
-      className={styles.drawer}
+      className={styles.drawer} data-tgpi-surface="dialog"
       ref={ref}
       aria-label={notificationText(locale, "title")}
       onKeyDown={containDialogFocus}

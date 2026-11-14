@@ -29,7 +29,7 @@ export default function HomeProductExplorer() {
     else return;
     event.preventDefault(); setSelected(next); refs.current[next]?.focus();
   }
-  return <div className={styles.productExplorer}>
+  return <div className={styles.productExplorer} data-tgpi-surface="card" data-tgpi-material="adaptive">
     <div className={styles.productTabs} role="tablist" aria-label={t("Explore TGPI tools")}>
       {products.map((item, index) => <button key={item.id} ref={element => { refs.current[index] = element; }} type="button" role="tab" id={`product-tab-${item.id}`} aria-selected={selected === index} aria-controls={`product-panel-${item.id}`} tabIndex={selected === index ? 0 : -1} onClick={() => setSelected(index)} onKeyDown={event => onKey(event, index)}><span aria-hidden="true">0{index + 1}</span>{t(item.label)}<span aria-hidden="true">↗</span></button>)}
     </div>

@@ -487,7 +487,7 @@ export default function AtlasStudio({ userId, onlineAvailable = false, embedded 
         if (follow.current) setHasNew(false);
       }}>
         {messages.length === 0 ? <div className={styles.welcome}>
-          <div className={styles.hero}>
+          <div className={styles.hero} data-tgpi-surface="banner" data-tgpi-material="inverse">
             {!embedded && <div className={styles.backdrop} aria-hidden="true"><CinematicImage asset="atlas-intelligence" alt="" sizes="(max-width: 767px) 95vw, 860px" /></div>}
             <div className={styles.heroCopy}>
               <span className={styles.kicker}>{label('eyebrow')}</span>
@@ -499,7 +499,7 @@ export default function AtlasStudio({ userId, onlineAvailable = false, embedded 
             <div className={styles.owl}><AtlasMascot pose={busy ? 'Focus' : 'Invite'} animated={motion} /></div>
           </div>
           {mode === 'guide' && <>
-            {context && <button type="button" className={styles.contextCard} onClick={() => void send(contextPrompt(), context.topic)}>
+            {context && <button type="button" className={styles.contextCard} data-tgpi-surface="card" data-tgpi-interactive="true" onClick={() => void send(contextPrompt(), context.topic)}>
               <small>{label('inContext')}</small><strong>{context.learningCourse ? t(context.learningCourse.title) : t(guideResource(context.topic).label)}</strong><span aria-hidden="true">↗︎</span>
             </button>}
             <div className={styles.tools} aria-label={label('tools')}>
@@ -527,7 +527,7 @@ export default function AtlasStudio({ userId, onlineAvailable = false, embedded 
           {busy && mode !== 'guide' && downloadProgress === null && last?.role === 'user' && <article className={styles.message} data-role="assistant">
             <div className={styles.speaker}>{brand}</div><p className={styles.plain}>{partial || label('thinking')}</p>
           </article>}
-          {!busy && mode === 'guide' && next && <button type="button" className={styles.contextCard} onClick={() => void send(guideText(guideTopics[next].prompt, locale), next)}>
+          {!busy && mode === 'guide' && next && <button type="button" className={styles.contextCard} data-tgpi-surface="card" data-tgpi-interactive="true" onClick={() => void send(guideText(guideTopics[next].prompt, locale), next)}>
             <small>{label('nextStep')}</small><strong>{t(guideResource(next).label)}</strong><span aria-hidden="true">↗︎</span>
           </button>}
         </div>}

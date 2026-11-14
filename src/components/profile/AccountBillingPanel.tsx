@@ -139,7 +139,7 @@ export default function AccountBillingPanel() {
 
   const signIn = <Link className={styles.button} href="/sign-in?next=%2Fprofile%2Fsecurity%23settings-billing">{t("Sign in")}</Link>;
   if (!overview) return (
-    <section className={styles.panel} aria-busy={!loadError}>
+    <section className={styles.panel} data-tgpi-surface="card" data-tgpi-material="inverse" aria-busy={!loadError}>
       <p role="status">{loadError === 401
         ? t("Sign in again to access billing.")
         : loadError ? t("Unable to load billing right now.") : t("Loading your current plan…")}</p>
@@ -155,7 +155,7 @@ export default function AccountBillingPanel() {
 
   return (
     <div className={styles.billing}>
-      <section className={styles.hero} aria-labelledby="billing-plan-heading">
+      <section className={styles.hero} data-tgpi-surface="banner" data-tgpi-material="inverse" aria-labelledby="billing-plan-heading">
         <div>
           <p className={styles.label}>{t(Object.hasOwn(accessLabels, overview.accessMode) ? accessLabels[overview.accessMode] : "Unavailable")}</p>
           <h2 id="billing-plan-heading">TGPI {t(overview.plan === "premium" || !canSubscribe ? "Premium" : "Free")}</h2>
@@ -177,7 +177,7 @@ export default function AccountBillingPanel() {
       )}
 
       <div className={styles.grid}>
-        <section className={styles.panel} aria-labelledby="billing-card-heading">
+        <section className={styles.panel} data-tgpi-surface="card" data-tgpi-material="inverse" aria-labelledby="billing-card-heading">
           <h3 id="billing-card-heading">{t("Payment method")}</h3>
           <div className={styles.card}>
             <span className={styles.chip} aria-hidden="true" />
@@ -194,7 +194,7 @@ export default function AccountBillingPanel() {
           </button>
         </section>
 
-        <section className={styles.panel} aria-labelledby="billing-cycle-heading">
+        <section className={styles.panel} data-tgpi-surface="card" data-tgpi-material="inverse" aria-labelledby="billing-cycle-heading">
           <h3 id="billing-cycle-heading">{t("Billing cycle")}</h3>
           <p className={styles.schedule}>{t(scheduleLabels[schedule])}</p>
           {cycleDate !== null && <p className={styles.muted}>
@@ -217,7 +217,7 @@ export default function AccountBillingPanel() {
         {actionError === "history" && t("Unable to load more invoices. Please try again.")}
       </div>
 
-      <section className={styles.panel} aria-labelledby="billing-history-heading">
+      <section className={styles.panel} data-tgpi-surface="card" data-tgpi-material="inverse" aria-labelledby="billing-history-heading">
         <h3 id="billing-history-heading">{t("Payment history")}</h3>
         {!history ? (
           <>

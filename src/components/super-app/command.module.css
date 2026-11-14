@@ -7,3 +7,26 @@
 
 .installButton { min-height: 44px; color: inherit; text-decoration: underline; text-underline-offset: 0.2em; cursor: pointer; }
 .installButton:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+
+.command[open] { display: flex; flex-direction: column; }
+.command :is(.header, .search, .footer) { flex: none; }
+.command .header { border-top: 2px solid var(--tgpi-gold); }
+.command :is(.header h2, .search input, .results nav a) { color: var(--tgpi-heading); }
+.results { min-height: 0; }
+.toolRow { display: grid; grid-template-columns: minmax(0, 1fr) 44px; gap: .375rem; align-items: center; }
+.pin {
+  display: grid;
+  min-height: 44px;
+  place-items: center;
+  border: 1px solid var(--tgpi-material-edge);
+  border-radius: var(--tgpi-radius-sm);
+  background: var(--tgpi-surface-strong);
+  color: var(--tgpi-muted);
+  cursor: pointer;
+}
+.pin svg { fill: none; }
+.pin[aria-pressed="true"] { color: var(--tgpi-gold-strong); background: var(--tgpi-gold-soft); }
+.pin[aria-pressed="true"] svg { fill: currentColor; }
+.pin:focus-visible { outline: 2px solid var(--tgpi-focus); outline-offset: 2px; }
+@media (max-width: 639px) { .results { max-height: none; } }
+@media (max-height: 540px) { .command { margin: 8px auto; max-height: calc(100dvh - 16px); } }

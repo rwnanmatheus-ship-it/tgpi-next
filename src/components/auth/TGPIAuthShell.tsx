@@ -31,7 +31,7 @@ export default async function TGPIAuthShell({ children, mode }: TGPIAuthShellPro
   const joining = mode !== "sign-in";
   return (
     <main className={styles.page} data-access-version="3" data-access-mode={mode}>
-      <div className={styles.shell}>
+      <div className={styles.shell} data-tgpi-surface="banner">
         <section className={styles.story} aria-label={t("Global education and decision intelligence")}>
           <Image src="/images/cinematic-2026/premium-library-1600.webp" alt={t("A sunlit research library with a circular window overlooking a city")} fill priority sizes="(min-width: 1024px) 520px, 1px" className={styles.photo} />
           <div className={styles.shade} />

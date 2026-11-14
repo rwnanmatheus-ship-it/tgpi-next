@@ -122,7 +122,7 @@ export default function NotificationInbox({ onClose }: { onClose?: () => void } 
 
   return (
     <Container className={styles.inbox} data-drawer={Boolean(onClose)} aria-labelledby={titleId} data-tgpi-localized="true">
-      <header className={styles.header}>
+      <header className={styles.header} data-tgpi-surface="masthead">
         <div className={styles.heading}>
           <span className={styles.headerIcon}><NavigationIcon name="bell" width={23} /></span>
           <div>

@@ -268,7 +268,7 @@ export default function CommunityApp({
   const formatter = new Intl.NumberFormat(locale);
   return (
     <main className={s.shell}>
-      <header className={`${s.hero} ${id ? s.roomHero : ""}`}>
+      <header className={`${s.hero} ${id ? s.roomHero : ""}`} data-tgpi-surface="banner" data-tgpi-material="inverse">
         {c?.coverId ? (
           <Image
             src={`/api/community/assets/${c.id}/${c.coverId}`}

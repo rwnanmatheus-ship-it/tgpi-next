@@ -63,8 +63,6 @@ function AccountMenu({ name, imageUrl }: { name: string; imageUrl: string }) {
       panel.style.setProperty("--account-right", `${Math.max(12, document.documentElement.clientWidth - bounds.right)}px`);
     }
 
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
     placePanel();
     panel.showModal();
     closeButton.current?.focus({ preventScroll: true });
@@ -72,7 +70,6 @@ function AccountMenu({ name, imageUrl }: { name: string; imageUrl: string }) {
     return () => {
       window.removeEventListener("resize", placePanel);
       panel.close();
-      document.body.style.overflow = previousOverflow;
       avatar.focus({ preventScroll: true });
     };
   }, [open]);
@@ -160,7 +157,7 @@ function AccountMenu({ name, imageUrl }: { name: string; imageUrl: string }) {
         ref={dialog}
         id={dialogId}
         aria-labelledby={`${dialogId}-title`}
-        className={styles.panel}
+        className={styles.panel} data-tgpi-surface="dialog" data-tgpi-material="adaptive"
         onKeyDown={containDialogFocus}
         onCancel={(event) => {
           event.preventDefault();

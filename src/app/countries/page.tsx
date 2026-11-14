@@ -73,7 +73,7 @@ export default async function CountriesPage({ searchParams }: { searchParams?: P
   return (
     <main className={`ig-shell country-studio ${styles.page}`}>
       <div className="ig-container">
-        <header className={styles.hero}>
+        <header className={styles.hero} data-tgpi-surface="banner" data-tgpi-material="inverse">
           <div className={styles.heroArt}>
             <Image
               src="/images/cinematic-2026/countries-orbital-earth-v2.webp"

@@ -60,13 +60,6 @@ export default function AtlasWidget() {
   }, []);
 
   useEffect(() => {
-    if (!opened || hidden) return;
-    const overflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => { document.body.style.overflow = overflow; };
-  }, [opened, hidden]);
-
-  useEffect(() => {
     if (!opened || hidden || !userId) return;
     const controller = new AbortController();
     void fetch('/api/atlas/status', { cache: 'no-store', signal: controller.signal })
@@ -176,7 +169,7 @@ export default function AtlasWidget() {
         <span className={styles.label}>{t('Ask Atlas')}</span>
       </button>
     </div>
-    <dialog ref={dialog} id="tgpi-atlas-widget" className={styles.panel} data-side={position.side}
+    <dialog ref={dialog} id="tgpi-atlas-widget" className={styles.panel} data-tgpi-surface="dialog" data-tgpi-material="inverse" data-side={position.side}
       aria-labelledby="atlas-widget-title" onKeyDown={containDialogFocus}
       onClose={() => { setOpened(false); trigger.current?.focus({ preventScroll: true }); }}
       onClick={event => {

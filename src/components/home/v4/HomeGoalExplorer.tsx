@@ -25,7 +25,7 @@ export default function HomeGoalExplorer() {
     window.history.replaceState(window.history.state, "", `${url.pathname}${url.search}${url.hash}`);
     window.dispatchEvent(new Event(changeEvent));
   }
-  return <form action={goal === "learn" ? "/courses" : "/country-fit"} method="get" className={styles.goalExplorer} aria-labelledby="goal-explorer-title">
+  return <form action={goal === "learn" ? "/courses" : "/country-fit"} method="get" className={styles.goalExplorer} data-tgpi-surface="card" data-tgpi-material="adaptive" aria-labelledby="goal-explorer-title">
     <div className={styles.goalControls}>
       <p className={styles.eyebrow}><LocalizedText text="Make the first step yours" /></p>
       <h3 id="goal-explorer-title"><LocalizedText text="What brings you here?" /></h3>

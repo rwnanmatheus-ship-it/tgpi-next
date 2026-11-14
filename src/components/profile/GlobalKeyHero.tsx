@@ -5,7 +5,7 @@ import styles from "./GlobalKeyCenter.module.css";
 
 export default function GlobalKeyHero({ children }: { children: ReactNode }) {
   return (
-    <header className={styles.hero}>
+    <header className={styles.hero} data-tgpi-surface="banner" data-tgpi-material="inverse">
       <div className={styles.heroMedia}>
         <Image
           className={styles.heroArt}

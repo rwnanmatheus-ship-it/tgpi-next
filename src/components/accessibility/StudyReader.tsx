@@ -156,7 +156,7 @@ export default function StudyReader({ title, language, sections, atlas = false }
       dialog.current?.showModal();
       setIsOpen(true);
     }}>{label('reader')}</button>
-    <dialog ref={dialog} className={styles.panel} aria-labelledby={id} data-contrast={settings.contrast} onClose={() => {
+    <dialog ref={dialog} className={styles.panel} data-tgpi-surface="dialog" aria-labelledby={id} data-contrast={settings.contrast} onClose={() => {
       stop();
       setIsOpen(false);
       trigger.current?.focus({ preventScroll: true });

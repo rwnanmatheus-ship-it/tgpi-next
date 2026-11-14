@@ -219,3 +219,61 @@
 :global([data-tgpi-theme="dark"]) :is(.primary, .darkButton):hover { background: #305980; }
 :global([data-tgpi-theme="dark"]) .premiumPlan .primary { background: #edcb83; }
 :global([data-tgpi-theme="dark"]) .premiumPlan .primary:hover { background: #f7dfab; }
+
+/* The landing page uses the same metals and elevation as the product surfaces. */
+.home { --home-accent: var(--tgpi-gold-strong); }
+.hero {
+  padding-top: clamp(2rem, 5vw, 5rem);
+  background:
+    radial-gradient(ellipse at 93% 0%, color-mix(in srgb, var(--tgpi-blue) 15%, transparent), transparent 48%),
+    radial-gradient(ellipse at 5% 7%, color-mix(in srgb, var(--tgpi-gold) 17%, transparent), transparent 56%),
+    var(--paper);
+}
+.heroVisual {
+  padding: 0;
+  overflow: hidden;
+  background: var(--tgpi-material-blue);
+}
+.heroPhoto { aspect-ratio: 1.35; border-radius: 0; }
+.heroPhoto::after { inset: 24% 0 0; background: linear-gradient(180deg, transparent, #071728cf); }
+.heroDock { border-top: 1px solid #e4c47b59; padding: 1rem clamp(1rem, 3vw, 1.625rem); }
+.heroDockLinks a { min-height: 44px; padding-block: 9px; }
+.heroProof { color: var(--tgpi-muted); }
+.home .hero h1 em { color: var(--home-accent); }
+.home .eyebrow { color: var(--home-accent); }
+.home .premiumPlan .eyebrow { color: var(--tgpi-gold-light); }
+
+.ecosystemGrid {
+  gap: .875rem;
+  border: 0;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 235px), 1fr));
+}
+.ecosystemGrid .ecosystemItem {
+  min-height: 114px;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: .875rem;
+  padding: 1rem 2.25rem 1rem 1rem;
+  border: 1px solid var(--tgpi-material-edge);
+}
+.ecosystemIcon {
+  display: grid;
+  place-items: center;
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+  border: 1px solid var(--tgpi-material-edge);
+  border-radius: .75rem;
+  color: var(--tgpi-blue);
+  background: var(--tgpi-blue-soft);
+}
+.ecosystemItem .ecosystemArrow { right: .875rem; top: 1rem; color: var(--tgpi-blue); }
+.courseCopy a:focus-visible { outline-offset: 3px; }
+.courseImage:focus-visible { outline-offset: -5px; }
+.home .courseMeta { color: var(--home-accent); }
+
+@media (max-width: 599px) {
+  .heroVisual { padding: 0; }
+  .heroImageLabel { inset-inline: 1rem; }
+  .ecosystemGrid .ecosystemItem { min-height: 76px; }
+}

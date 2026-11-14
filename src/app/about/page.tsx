@@ -37,7 +37,7 @@ export default async function AboutPage() {
       isPartOf: { "@id": "https://www.theglobalpolymath.com/#website" },
     }).replace(/</g, "\\u003c") }} />
     <div className={styles.frame}>
-      <section className={styles.hero} aria-labelledby="about-title">
+      <section className={styles.hero} data-tgpi-surface="banner" data-tgpi-material="inverse" aria-labelledby="about-title">
         <Image src="/images/cinematic-2026/country-research-1600.webp" alt={t("A brass globe and open notebook overlooking an international city at blue hour")} fill sizes="(max-width: 1280px) 100vw, 1280px" priority className={styles.heroImage} />
         <div className={styles.heroContent}>
           <p className={styles.eyebrow}><LocalizedText text={"The Global Polymath Institute"} /></p>

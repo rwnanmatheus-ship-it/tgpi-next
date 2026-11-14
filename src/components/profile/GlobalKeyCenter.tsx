@@ -153,7 +153,7 @@ export default function GlobalKeyCenter({
           <GlobalIdSharing initialShares={initialShares} revision={key.revision} origin={verifyOrigin} copy={copy} />
         </div>
 
-        <section className={styles.panel} id="integrity" aria-labelledby="integrity-heading">
+        <section className={styles.panel} data-tgpi-surface="card" data-tgpi-material="inverse" id="integrity" aria-labelledby="integrity-heading">
           <div className={styles.sectionHead}>
             <div>
               <p className={styles.eyebrow}><LocalizedText text="TGPI Integrity Chain" /></p>

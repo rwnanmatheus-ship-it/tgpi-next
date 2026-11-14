@@ -4,6 +4,8 @@ import { academyManifest } from "@/data/courses/academy/manifest";
 import { HOME_FAQ, HOME_ROUTES as routes } from "@/lib/home-content";
 import { TGPI_PREMIUM_PLAN } from "@/lib/subscription-plans";
 import { LocalizedText, LocalizedRegion } from "@/components/localization/LocaleProvider";
+import NavigationIcon from "@/components/navigation/NavigationIcon";
+import type { NavigationIconName } from "@/lib/navigation-system";
 import CinematicImage from "@/components/ui/CinematicImage";
 import HomeAccountLink from "./HomeAccountLink";
 import HomeGoalExplorer from "./HomeGoalExplorer";
@@ -14,15 +16,15 @@ import HomeCertificatePreview from "./HomeCertificatePreview";
 import styles from "./home.module.css";
 
 const ecosystem = [
-  { title: "Country intelligence", copy: "Explore countries", href: routes.countries, mark: "01" },
-  { title: "Country Fit", copy: "Build your Country Fit plan", href: routes.fit, mark: "02" },
-  { title: "Compare", copy: "Compare your options", href: routes.compare, mark: "03" },
-  { title: "TGPI Academy", copy: "Explore learning", href: routes.learning, mark: "04" },
-  { title: "Atlas AI", copy: "Think through your next step", href: "/atlas", mark: "05" },
-  { title: "TGPI Global Documents", copy: "Explore preparation", href: "/documents", mark: "06" },
-  { title: "Global Key", copy: "Your identity inside TGPI", href: "/global-key", mark: "07" },
-  { title: "Community", copy: "Connect around shared goals", href: "/community", mark: "08" },
-] as const;
+  { title: "Country intelligence", copy: "Explore countries", href: routes.countries, icon: "globe" },
+  { title: "Country Fit", copy: "Build your Country Fit plan", href: routes.fit, icon: "target" },
+  { title: "Compare", copy: "Compare your options", href: routes.compare, icon: "compare" },
+  { title: "TGPI Academy", copy: "Explore learning", href: routes.learning, icon: "book" },
+  { title: "Atlas AI", copy: "Think through your next step", href: "/atlas", icon: "spark" },
+  { title: "TGPI Global Documents", copy: "Explore preparation", href: "/passport", icon: "file" },
+  { title: "Global Key", copy: "Your identity inside TGPI", href: "/global-key", icon: "key" },
+  { title: "Community", copy: "Connect around shared goals", href: "/community", icon: "apps" },
+] as const satisfies readonly { title: string; copy: string; href: string; icon: NavigationIconName }[];
 
 export default function InstitutionalHome() {
   const t = (text: string) => <LocalizedText text={text} />;
@@ -47,7 +49,7 @@ export default function InstitutionalHome() {
           <p className={styles.heroNote}>{t("Free to begin. Built to move forward.")}</p>
           <div className={styles.heroProof}><span>{t("Applied learning")}</span><span>{t("Verifiable certificates")}</span><span>{t("Connected tools")}</span></div>
         </div>
-        <div className={styles.heroVisual}>
+        <div className={styles.heroVisual} data-tgpi-surface="banner" data-tgpi-material="inverse">
           <div className={styles.heroPhoto}><CinematicImage asset="global-horizon" alt="TGPI conceptual editorial image: preparing for international life" priority sizes="(max-width: 1023px) 94vw, 52vw" position="60% center" /><div className={styles.heroImageLabel}><span>{t("THE WORLD IS YOUR NEXT CHAPTER")}</span><span aria-hidden="true">↗</span></div></div>
           <div className={styles.heroDock}><div><span className={styles.statusDot} aria-hidden="true" />{t("One platform. Your next chapter.")}</div><div className={styles.heroDockLinks}><Link href="/courses">{t("Learn")} <span aria-hidden="true">↗</span></Link><Link href="/countries">{t("Explore")} <span aria-hidden="true">↗</span></Link><Link href="/profile">{t("My workspace")} <span aria-hidden="true">↗</span></Link></div></div>
         </div>
@@ -68,7 +70,7 @@ export default function InstitutionalHome() {
 
     <section className={`${styles.container} ${styles.section}`} aria-labelledby="capabilities-title" id="capabilities" tabIndex={-1}>
       <div className={styles.ecosystemIntro}><div><p className={styles.eyebrow}>{t("The TGPI ecosystem")}</p><h2 id="capabilities-title">{t("Everything has a next step.")}</h2></div><Link href="/profile" className={styles.textLink}>{t("Open your workspace")} <span aria-hidden="true">↗</span></Link></div>
-      <div className={styles.ecosystemGrid}>{ecosystem.map(item => <Link href={item.href} className={styles.ecosystemItem} key={item.title}><span className={styles.ecosystemNumber}>{item.mark}</span><div><h3>{t(item.title)}</h3><p>{t(item.copy)}</p></div><span className={styles.ecosystemArrow} aria-hidden="true">↗</span></Link>)}</div>
+      <div className={styles.ecosystemGrid}>{ecosystem.map(item => <Link href={item.href} className={styles.ecosystemItem} data-tgpi-surface="card" data-tgpi-material="adaptive" data-tgpi-interactive="true" key={item.title}><span className={styles.ecosystemIcon} aria-hidden="true"><NavigationIcon name={item.icon} width={20} height={20} /></span><div><h3>{t(item.title)}</h3><p>{t(item.copy)}</p></div><span className={styles.ecosystemArrow} aria-hidden="true">↗</span></Link>)}</div>
     </section>
 
     <section className={styles.learningSection} aria-labelledby="learning-title" id="practical-learning" tabIndex={-1}>
@@ -82,9 +84,9 @@ export default function InstitutionalHome() {
     <section className={`${styles.container} ${styles.section}`} aria-labelledby="membership-title" id="membership" tabIndex={-1}>
       <div className={styles.sectionIntro}><p className={styles.eyebrow}><LocalizedText text="Choose how you begin" /></p><h2 id="membership-title"><LocalizedText text="Start freely." /><br /><LocalizedText text="Bring it together with Premium." /></h2><p>{t("Research first. Create an account when you want to save your work. Choose Premium for the protected command center.")}</p></div>
       <div className={styles.planGrid}>
-        <article className={styles.plan}><p className={styles.eyebrow}><LocalizedText text="Without an account" /></p><h3><LocalizedText text="Explore." /></h3><p className={styles.price}><LocalizedText text="Free" /></p><ul><li><LocalizedText text="Explore country profiles and source context." /></li><li><LocalizedText text="Compare up to three countries at a time." /></li><li><LocalizedText text="Try Country Fit and browse available courses." /></li></ul><Link href={routes.countries} className={styles.outlineButton}><LocalizedText text="Start exploring" />{" "}<span aria-hidden="true">↗</span></Link></article>
-        <article className={styles.plan}><p className={styles.eyebrow}><LocalizedText text="Your free account" /></p><h3><LocalizedText text="Make it yours." /></h3><p className={styles.price}><LocalizedText text={"US$ 0"} /></p><ul><li><LocalizedText text="Save a research plan and up to five countries of interest." /></li><li><LocalizedText text="Continue lessons and track learning progress." /></li><li><LocalizedText text="Connect preparation and activity in your Workspace." /></li></ul><HomeAccountLink className={styles.outlineButton} placement="free-plan" /><p className={styles.planNote}><LocalizedText text="No subscription required." /></p></article>
-        <article className={`${styles.plan} ${styles.premiumPlan}`}><p className={styles.eyebrow}><LocalizedText text={"TGPI Premium"} /></p><h3><LocalizedText text="Your connected view." /></h3><p className={styles.price}>{TGPI_PREMIUM_PLAN.price}<span>{t(TGPI_PREMIUM_PLAN.cadence ?? "")}</span></p><ul><li><LocalizedText text="Access the protected Premium Command Center." /></li><li><LocalizedText text="View destinations, readiness, preparation and learning together." /></li><li><LocalizedText text="Review your membership and manage billing." /></li></ul><Link href={routes.pricing} className={styles.primary}><LocalizedText text="View Premium membership" />{" "}<span aria-hidden="true">↗</span></Link><p className={styles.planNote}>{t("Monthly renewal until cancelled. Confirm the amount and recurring terms at checkout. Your bank may apply conversion fees.")}</p></article>
+        <article className={styles.plan} data-tgpi-surface="card" data-tgpi-material="adaptive"><p className={styles.eyebrow}><LocalizedText text="Without an account" /></p><h3><LocalizedText text="Explore." /></h3><p className={styles.price}><LocalizedText text="Free" /></p><ul><li><LocalizedText text="Explore country profiles and source context." /></li><li><LocalizedText text="Compare up to three countries at a time." /></li><li><LocalizedText text="Try Country Fit and browse available courses." /></li></ul><Link href={routes.countries} className={styles.outlineButton}><LocalizedText text="Start exploring" />{" "}<span aria-hidden="true">↗</span></Link></article>
+        <article className={styles.plan} data-tgpi-surface="card" data-tgpi-material="adaptive"><p className={styles.eyebrow}><LocalizedText text="Your free account" /></p><h3><LocalizedText text="Make it yours." /></h3><p className={styles.price}><LocalizedText text={"US$ 0"} /></p><ul><li><LocalizedText text="Save a research plan and up to five countries of interest." /></li><li><LocalizedText text="Continue lessons and track learning progress." /></li><li><LocalizedText text="Connect preparation and activity in your Workspace." /></li></ul><HomeAccountLink className={styles.outlineButton} placement="free-plan" /><p className={styles.planNote}><LocalizedText text="No subscription required." /></p></article>
+        <article className={`${styles.plan} ${styles.premiumPlan}`} data-tgpi-surface="card" data-tgpi-material="inverse"><p className={styles.eyebrow}><LocalizedText text={"TGPI Premium"} /></p><h3><LocalizedText text="Your connected view." /></h3><p className={styles.price}>{TGPI_PREMIUM_PLAN.price}<span>{t(TGPI_PREMIUM_PLAN.cadence ?? "")}</span></p><ul><li><LocalizedText text="Access the protected Premium Command Center." /></li><li><LocalizedText text="View destinations, readiness, preparation and learning together." /></li><li><LocalizedText text="Review your membership and manage billing." /></li></ul><Link href={routes.pricing} className={styles.primary}><LocalizedText text="View Premium membership" />{" "}<span aria-hidden="true">↗</span></Link><p className={styles.planNote}>{t("Monthly renewal until cancelled. Confirm the amount and recurring terms at checkout. Your bank may apply conversion fees.")}</p></article>
       </div>
       <p className={styles.planFootnote}>{t("Public comparison, research-plan saving and current learning routes are also available without a paid subscription. Premium does not change the three-country comparison or five-country shortlist limits in the current release.")}{" "}<Link href="/billing-terms"><LocalizedText text="Billing terms" /></Link> · <Link href="/refunds"><LocalizedText text="Refunds & cancellation" /></Link></p>
     </section>
