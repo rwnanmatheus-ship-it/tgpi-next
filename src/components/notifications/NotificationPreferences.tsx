@@ -41,7 +41,7 @@ export default function NotificationPreferences({ onDirtyChange }: { onDirtyChan
     if (result) setDraft(null);
   }
   return (
-    <section className={styles.panel} id="notification-preferences">
+    <section className={styles.panel}>
       <h2>{t("channels")}</h2>
       <p>{t("channelsBody")}</p>
       <fieldset
@@ -49,6 +49,14 @@ export default function NotificationPreferences({ onDirtyChange }: { onDirtyChan
         className={styles.fields}
       >
         <legend className="sr-only">{t("preferences")}</legend>
+        <label className={styles.toggle}>
+          <span>{t("initialView")}</span>
+          <select value={draft.inboxView} onChange={(event) =>
+            setDraft({ ...draft, inboxView: event.target.value as Preferences["inboxView"] })
+          }>
+            {(["all", "unread", "priority"] as const).map((key) => <option value={key} key={key}>{t(key)}</option>)}
+          </select>
+        </label>
         <label className={styles.toggle}>
           <span>{t("pushEnabled")}</span>
           <input

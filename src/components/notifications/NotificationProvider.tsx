@@ -1,6 +1,5 @@
 "use client";
 
-import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import {
   createContext,
   useCallback,
@@ -13,24 +12,22 @@ import { useUser } from "@clerk/nextjs";
 import type {
   InboxNotification,
   NotificationPreferences,
+  NotificationAction,
 } from "@/lib/notifications/model";
 import {
   defaultPreferences,
+  notificationMarks,
   parsePreferences,
 } from "@/lib/notifications/model";
-import { useLocale , LocalizedText } from "@/components/localization/LocaleProvider";
-import {
-  localizedNotification,
-  notificationText,
-} from "@/lib/notifications/text";
+import { useLocale } from "@/components/localization/LocaleProvider";
+import dynamic from "next/dynamic";
 import {
   clearLocalPush,
   currentPushSubscription,
   pushRequest,
   pushSupported,
 } from "@/lib/notifications/push-client";
-import Link from "next/link";
-import styles from "./NotificationInbox.module.css";
+const NotificationDrawer = dynamic(() => import("./NotificationDrawer"), { ssr: false });
 
 type InboxContext = {
   items: InboxNotification[];
@@ -39,9 +36,14 @@ type InboxContext = {
   error: string;
   nextCursor: string | null;
   pending: boolean;
+  fetching: boolean;
+  drawerOpen: boolean;
+  openDrawer: (trigger?: HTMLElement) => void;
+  closeDrawer: () => void;
+  drawerTrigger: React.RefObject<HTMLElement | null>;
   refresh: () => Promise<void>;
   loadMore: () => Promise<void>;
-  mutate: (id: string, action: "read" | "unread" | "archive") => Promise<void>;
+  mutate: (id: string, action: NotificationAction) => Promise<void>;
   markAllRead: () => Promise<void>;
   savePreferences: (value: NotificationPreferences) => Promise<boolean>;
 };
@@ -78,9 +80,12 @@ function NotificationSession({
 }) {
   const { locale } = useLocale();
   const generation = useRef(0);
-  const initialIds = useRef<Set<string> | null>(null);
-  const syncing = useRef(false);
-  const [toast, setToast] = useState<InboxNotification | null>(null);
+  const writing = useRef(false);
+  const fetching = useRef(false);
+  const hasHistory = useRef(false);
+  const drawerTrigger = useRef<HTMLElement>(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
   const [items, setItems] = useState<InboxNotification[]>([]);
   const [preferences, setPreferences] = useState(defaultPreferences);
   const [nextCursor, setNextCursor] = useState<string | null>(null);
@@ -89,7 +94,9 @@ function NotificationSession({
   const [error, setError] = useState("");
   const load = useCallback(
     async (cursor?: string) => {
-      if (!uid) return;
+      if (!uid || writing.current || fetching.current) return;
+      fetching.current = true;
+      setIsFetching(true);
       const requestGeneration = generation.current;
       try {
         const response = await fetch(
@@ -100,34 +107,21 @@ function NotificationSession({
         if (!response.ok)
           throw new Error(data.error || "Unable to load notifications.");
         if (generation.current !== requestGeneration) return;
-        if (!cursor) {
-          const recent = (data.items as InboxNotification[]).find(
-            (item) =>
-              initialIds.current &&
-              !initialIds.current.has(item.id) &&
-              !item.readAt &&
-              !item.archivedAt &&
-              Date.now() - Date.parse(item.createdAt) < 300000,
-          );
-          if (recent && document.visibilityState === "visible")
-            setToast(recent);
-          initialIds.current = new Set(
-            (data.items as InboxNotification[]).map((item) => item.id),
-          );
-        }
-        setItems((previous) =>
-          cursor
-            ? Array.from(
-                new Map(
-                  [...previous, ...data.items].map(
-                    (item: InboxNotification) => [item.id, item],
-                  ),
-                ).values(),
-              )
-            : data.items,
-        );
+        const incoming = data.items as InboxNotification[];
+        if (cursor) hasHistory.current = true;
+        const mergeHead = !cursor && hasHistory.current && data.mode !== "account" && Boolean(data.nextCursor);
+        const newIds = new Set(incoming.map((item) => item.id));
+        const boundary = incoming.at(-1)?.createdAt;
+        setItems((previous) => {
+          if (cursor) return [...previous.filter((item) => !newIds.has(item.id)), ...incoming];
+          if (!mergeHead || !boundary) return incoming;
+          return [...incoming, ...previous.filter((item) => !newIds.has(item.id) && item.createdAt <= boundary)];
+        });
         setPreferences(parsePreferences(data.preferences));
-        setNextCursor(data.nextCursor);
+        if (!mergeHead) {
+          setNextCursor(data.nextCursor);
+          if (!cursor) hasHistory.current = false;
+        }
         setError("");
       } catch (err) {
         if (generation.current === requestGeneration)
@@ -137,6 +131,8 @@ function NotificationSession({
               : "Unable to load notifications.",
           );
       } finally {
+        fetching.current = false;
+        setIsFetching(false);
         if (generation.current === requestGeneration) setLoading(false);
       }
     },
@@ -154,16 +150,17 @@ function NotificationSession({
     }
     setLoading(true);
     let stopped = false;
+    let syncing = false;
     async function sync() {
-      if (syncing.current) return;
-      syncing.current = true;
+      if (syncing) return;
+      syncing = true;
       try {
         await fetch("/api/notifications/sync", { method: "POST" });
       } catch {
         /* GET exposes availability. */
       }
       if (!stopped) await load();
-      syncing.current = false;
+      syncing = false;
     }
     void sync();
     const refresh = () => {
@@ -185,11 +182,6 @@ function NotificationSession({
       navigator.serviceWorker?.removeEventListener("message", onPush);
     };
   }, [uid, isLoaded, load]);
-  useEffect(() => {
-    if (!toast) return;
-    const timer = setTimeout(() => setToast(null), 9000);
-    return () => clearTimeout(timer);
-  }, [toast]);
   useEffect(() => {
     if (!isLoaded || !pushSupported()) return;
     let stopped = false;
@@ -262,81 +254,49 @@ function NotificationSession({
     if (!response.ok) throw new Error(data.error || "Unable to save.");
     return data;
   }
-  async function mutate(id: string, action: "read" | "unread" | "archive") {
+  async function write(operation: () => Promise<void>) {
+    if (writing.current) return false;
+    writing.current = true;
+    generation.current += 1;
     setPending(true);
-    const requestGeneration = generation.current;
     try {
-      await patch({ id, action });
-      if (requestGeneration === generation.current)
-        setItems((previous) =>
-          previous.map((item) =>
-            item.id === id
-              ? {
-                  ...item,
-                  ...(action === "archive"
-                    ? {
-                        archivedAt: new Date().toISOString(),
-                        readAt: item.readAt || new Date().toISOString(),
-                      }
-                    : {
-                        readAt:
-                          action === "read" ? new Date().toISOString() : null,
-                      }),
-                }
-              : item,
-          ),
-        );
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Unable to save.");
-    } finally {
-      setPending(false);
-    }
-  }
-  async function markAllRead() {
-    setPending(true);
-    const requestGeneration = generation.current;
-    try {
-      const ids = items
-        .filter((item) => !item.readAt && !item.archivedAt)
-        .slice(0, 50)
-        .map((item) => item.id);
-      await patch({ action: "read_all", ids });
-      if (requestGeneration === generation.current) {
-        const now = new Date().toISOString();
-        setItems((previous) =>
-          previous.map((item) =>
-            !ids.includes(item.id)
-              ? item
-              : { ...item, readAt: item.readAt || now },
-          ),
-        );
-        setError("");
-      }
-    } catch (err) {
-      if (requestGeneration === generation.current)
-        setError(err instanceof Error ? err.message : "Unable to save.");
-    } finally {
-      setPending(false);
-    }
-  }
-  async function savePreferences(value: NotificationPreferences) {
-    setPending(true);
-    const requestGeneration = generation.current;
-    try {
-      const data = await patch({ action: "preferences", preferences: value });
-      if (requestGeneration === generation.current) {
-        setPreferences(parsePreferences(data.preferences));
-        setError("");
-      }
+      await operation();
+      setError("");
       return true;
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Unable to save preferences.",
-      );
+      setError(err instanceof Error ? err.message : "Unable to save.");
       return false;
     } finally {
+      writing.current = false;
       setPending(false);
     }
+  }
+  async function mutate(id: string, action: NotificationAction) {
+    await write(async () => {
+      await patch({ id, action });
+      const now = new Date().toISOString();
+      setItems((previous) => previous.map((item) =>
+        item.id === id ? { ...item, ...notificationMarks(item, action, now) } : item,
+      ));
+    });
+  }
+  async function markAllRead() {
+    await write(async () => {
+      const ids = items.filter((item) => !item.readAt && !item.archivedAt).slice(0, 50).map((item) => item.id);
+      if (!ids.length) return;
+      await patch({ action: "read_all", ids });
+      const now = new Date().toISOString();
+      const updated = new Set(ids);
+      setItems((previous) => previous.map((item) =>
+        updated.has(item.id) ? { ...item, readAt: item.readAt || now } : item,
+      ));
+    });
+  }
+  function savePreferences(value: NotificationPreferences) {
+    return write(async () => {
+      const data = await patch({ action: "preferences", preferences: value });
+      setPreferences(parsePreferences(data.preferences));
+    });
   }
   return (
     <Context.Provider
@@ -346,37 +306,25 @@ function NotificationSession({
         nextCursor,
         loading,
         pending,
+        fetching: isFetching,
+        drawerOpen,
+        drawerTrigger,
+        openDrawer: (trigger) => {
+          if (!uid) return;
+          drawerTrigger.current = trigger ?? (document.activeElement instanceof HTMLElement ? document.activeElement : null);
+          setDrawerOpen(true);
+        },
+        closeDrawer: () => setDrawerOpen(false),
         error,
         refresh: () => load(),
-        loadMore: () => load(nextCursor || undefined),
+        loadMore: async () => { if (nextCursor) await load(nextCursor); },
         mutate,
         savePreferences,
         markAllRead,
       }}
     >
       {children}
-      {toast && (
-        <div className={styles.toast} role="status" data-tgpi-localized="true">
-          <LocalizedElement as="button"
-            type="button"
-            onClick={() => setToast(null)}
-            aria-label="Close"
-          >
-            ×
-          </LocalizedElement>
-          <strong><LocalizedText text={localizedNotification(toast, locale).title} /></strong>
-          <p>{localizedNotification(toast, locale).body}</p>
-          <Link
-            href={toast.href}
-            onClick={() => {
-              void mutate(toast.id, "read");
-              setToast(null);
-            }}
-          >
-            {notificationText(locale, "open")} →
-          </Link>
-        </div>
-      )}
+      {drawerOpen && <NotificationDrawer />}
     </Context.Provider>
   );
 }

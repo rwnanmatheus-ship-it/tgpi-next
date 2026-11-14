@@ -6,6 +6,7 @@ import vm from "node:vm";
 import ts from "typescript";
 import {
   defaultPreferences,
+  notificationMarks,
   parsePreferences,
   wantsEmail,
   welcomeEvent,
@@ -76,7 +77,7 @@ function storeHarness() {
               : name.includes("firestore-admin")
                 ? firestore
                 : name === "./model"
-                  ? { parsePreferences, safeNotificationHref, wantsEmail }
+                  ? { parsePreferences, safeNotificationHref, wantsEmail, notificationMarks }
                   : require(name),
     },
   );
@@ -149,4 +150,25 @@ test("billing messages distinguish failed payment, pending payment and cancellat
     billingEvent("sub", "active", false, "2026-11-01").key,
     billingEvent("sub", "active", false, "2026-12-01").key,
   );
+});
+
+test("Firestore saves, archives, restores and unsaves independently", async () => {
+  const { api, documents, writes } = storeHarness();
+  const id = await api.publishNotification("user_A", welcomeEvent);
+  const item = () => documents.get(paths.notificationItemPath("user_A", id)).data;
+  await api.mutateNotification("user_A", id, "save");
+  const savedAt = item().savedAt;
+  assert.ok(savedAt);
+  assert.equal(item().readAt, null);
+  const count = writes.length;
+  await api.mutateNotification("user_A", id, "save");
+  assert.equal(writes.length, count);
+  assert.equal(await api.mutateNotification("user_B", id, "save"), false);
+  await api.mutateNotification("user_A", id, "archive");
+  assert.ok(item().archivedAt);
+  await api.mutateNotification("user_A", id, "restore");
+  assert.equal(item().archivedAt, null);
+  assert.equal(item().savedAt, savedAt);
+  await api.mutateNotification("user_A", id, "unsave");
+  assert.equal(item().savedAt, null);
 });

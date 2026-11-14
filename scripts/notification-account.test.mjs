@@ -4,13 +4,13 @@ import { readFileSync } from 'node:fs';
 import { createRequire } from 'node:module';
 import vm from 'node:vm';
 import ts from 'typescript';
-import { parsePreferences, welcomeEvent } from '../src/lib/notifications/model.ts';
+import { notificationMarks, parsePreferences, welcomeEvent } from '../src/lib/notifications/model.ts';
 const require = createRequire(import.meta.url);
 function harness() {
   const users = new Map(['A','B'].map(id => [id, { createdAt: Date.now(), privateMetadata: { existing: 'preserved' } }]));
   const testModule = { exports: {} };
   const mockClient = { users: { updateUserMetadata: async (uid, input) => { const user = users.get(uid); Object.assign(user.privateMetadata, input.privateMetadata); } } };
-  vm.runInNewContext(ts.transpileModule(readFileSync(new URL('../src/lib/notifications/account-inbox.server.ts', import.meta.url), 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText, { module: testModule, exports: testModule.exports, Buffer, Date, console, require: name => name === 'server-only' ? {} : name.includes('clerk') ? { clerkClient: async () => mockClient } : name.includes('reconcile') ? { collectNotificationEvents: async uid => ({ events: [welcomeEvent, { ...welcomeEvent, key: "next:sample", category: "planning" }], user: users.get(uid) }) } : name === './model' ? { parsePreferences } : require(name) });
+  vm.runInNewContext(ts.transpileModule(readFileSync(new URL('../src/lib/notifications/account-inbox.server.ts', import.meta.url), 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText, { module: testModule, exports: testModule.exports, Buffer, Date, console, require: name => name === 'server-only' ? {} : name.includes('clerk') ? { clerkClient: async () => mockClient } : name.includes('reconcile') ? { collectNotificationEvents: async uid => ({ events: [welcomeEvent, { ...welcomeEvent, key: "next:sample", category: "planning" }], user: users.get(uid) }) } : name === './model' ? { parsePreferences, notificationMarks } : require(name) });
   return { api: testModule.exports, users };
 }
 test('account mode persists read and preferences without modifying other private metadata', async () => {
@@ -35,4 +35,24 @@ test('observed timestamps survive reloads, bulk read and archive changes', async
   assert.equal(first.items.find(item => item.key === 'next:sample').createdAt, again.items.find(item => item.key === 'next:sample').createdAt);
   await api.updateAccountInbox('A', { action: 'read_all' });
   assert.ok((await api.accountInbox('A')).items.every(item => item.readAt));
+});
+
+test('account inbox saves and restores items while bulk read honors its ID scope', async () => {
+  const { api } = harness();
+  const { items: [first, second] } = await api.accountInbox('A');
+  await Promise.all([
+    api.updateAccountInbox('A', { id: first.id, action: 'save' }),
+    api.updateAccountInbox('A', { action: 'read_all', ids: [second.id] }),
+  ]);
+  let { items } = await api.accountInbox('A');
+  assert.ok(items.find(item => item.id === first.id).savedAt);
+  assert.equal(items.find(item => item.id === first.id).readAt, null);
+  assert.ok(items.find(item => item.id === second.id).readAt);
+  await api.updateAccountInbox('A', { id: first.id, action: 'archive' });
+  await api.updateAccountInbox('A', { id: first.id, action: 'restore' });
+  ({ items } = await api.accountInbox('A'));
+  const restored = items.find(item => item.id === first.id);
+  assert.equal(restored.archivedAt, null);
+  assert.ok(restored.savedAt);
+  assert.equal(await api.updateAccountInbox('B', { id: first.id, action: 'save' }), false);
 });

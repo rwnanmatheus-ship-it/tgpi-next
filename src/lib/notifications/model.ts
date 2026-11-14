@@ -26,6 +26,7 @@ export type NotificationPreferences = {
   timezone: string;
   pausedUntil: string;
   dailyLimit: number;
+  inboxView: "all" | "unread" | "priority";
 };
 export const defaultPreferences: NotificationPreferences = {
   emailImportant: true,
@@ -46,6 +47,7 @@ export const defaultPreferences: NotificationPreferences = {
   timezone: "UTC",
   pausedUntil: "",
   dailyLimit: 8,
+  inboxView: "all",
 };
 export type NotificationEvent = {
   key: string;
@@ -56,6 +58,7 @@ export type NotificationEvent = {
   actionLabel: string;
   important?: boolean;
   occurredAt?: string;
+  subject?: string;
 };
 export type InboxNotification = NotificationEvent & {
   id: string;
@@ -64,7 +67,26 @@ export type InboxNotification = NotificationEvent & {
   timestampKind?: "event" | "observed";
   readAt: string | null;
   archivedAt: string | null;
+  savedAt?: string | null;
 };
+export const notificationActions = ["read", "unread", "archive", "restore", "save", "unsave"] as const;
+export type NotificationAction = (typeof notificationActions)[number];
+
+export function notificationMarks(
+  item: Pick<InboxNotification, "readAt" | "archivedAt" | "savedAt">,
+  action: NotificationAction,
+  now: string,
+) {
+  const { readAt, archivedAt, savedAt = null } = item;
+  switch (action) {
+    case "read": return { readAt: readAt || now, archivedAt, savedAt };
+    case "unread": return { readAt: archivedAt ? readAt : null, archivedAt, savedAt };
+    case "archive": return { readAt: readAt || now, archivedAt: archivedAt || now, savedAt };
+    case "restore": return { readAt, archivedAt: null, savedAt };
+    case "save": return { readAt, archivedAt, savedAt: savedAt || now };
+    case "unsave": return { readAt, archivedAt, savedAt: null };
+  }
+}
 export function safeNotificationHref(value: unknown): value is string {
   return (
     typeof value === "string" &&
@@ -109,6 +131,8 @@ export function parsePreferences(value: unknown): NotificationPreferences {
     ).toISOString();
   if ([3, 8, 20].includes(Number(input.dailyLimit)))
     parsed.dailyLimit = Number(input.dailyLimit);
+  if (input.inboxView === "unread" || input.inboxView === "priority")
+    parsed.inboxView = input.inboxView;
   return parsed;
 }
 export function wantsEmail(

@@ -8,9 +8,11 @@ import {
 } from "@/lib/firestore-admin-rest.server";
 import {
   parsePreferences,
+  notificationMarks,
   safeNotificationHref,
   wantsEmail,
   type InboxNotification,
+  type NotificationAction,
   type NotificationEvent,
   type NotificationPreferences,
 } from "./model";
@@ -69,6 +71,7 @@ export async function publishNotification(
     silent?: boolean;
     readAt?: string | null;
     archivedAt?: string | null;
+    savedAt?: string | null;
     createdAt?: string;
   } = {},
 ) {
@@ -106,6 +109,7 @@ export async function publishNotification(
       timestampKind: event.occurredAt ? "event" : "observed",
       readAt: options.readAt || null,
       archivedAt: options.archivedAt || null,
+      savedAt: options.savedAt || null,
     };
     const writes = [
       createFirestoreUpdateWrite(path, { ...item }, { exists: false }),
@@ -198,20 +202,18 @@ export async function listNotifications(uid: string, before?: string) {
 export async function mutateNotification(
   uid: string,
   id: string,
-  action: "read" | "unread" | "archive",
+  action: NotificationAction,
 ) {
   if (!/^[a-f0-9]{64}$/.test(id)) throw new Error("Invalid notification ID.");
   const path = notificationItemPath(uid, id);
   return runFirestoreTransaction(async ({ getDocuments }) => {
     const doc = (await getDocuments<InboxNotification>([path])).get(path);
     if (!doc || doc.data.uid !== uid) return { result: false, writes: [] };
-    const now = new Date().toISOString();
-    const item = {
-      ...doc.data,
-      ...(action === "archive"
-        ? { archivedAt: now, readAt: doc.data.readAt || now }
-        : { readAt: action === "read" ? now : null }),
-    };
+    const marks = notificationMarks(doc.data, action, new Date().toISOString());
+    if (marks.readAt === doc.data.readAt && marks.archivedAt === doc.data.archivedAt &&
+        marks.savedAt === (doc.data.savedAt ?? null))
+      return { result: true, writes: [] };
+    const item = { ...doc.data, ...marks };
     return {
       result: true,
       writes: [

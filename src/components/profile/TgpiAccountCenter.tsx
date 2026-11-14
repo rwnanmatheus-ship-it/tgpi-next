@@ -1,4 +1,5 @@
 "use client";
+import NotificationInboxLink from "@/components/notifications/NotificationInboxLink";
 
 import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
@@ -823,7 +824,7 @@ export default function TgpiAccountCenter({
           </div>
           <div className={styles.breadcrumb}><button type="button" onClick={() => selectSection("overview")}>{t("Settings")}</button><span>/</span><span>{t(activeDefinition.label)}</span><small>{t(editable ? "Save to your account" : "Account control")}</small></div>
           {!online && <p className={styles.warning} role="status">{t("You are offline. Keep this page open and retry when connected.")}</p>}
-          <div className={`tgpi-account-content ${styles.content}`} id={`settings-${activeSection}`} ref={contentRef} tabIndex={-1}><fieldset className="min-w-0" disabled={saveState === "saving"}><div hidden={activeSection === "notifications"}>{activeScreen}</div>{(notificationsVisited || activeSection === "notifications") && <div hidden={activeSection !== "notifications"} className={styles.stack}><ScreenHeading section="notifications" title="Notifications" description="Choose your channels, quiet hours and connected devices in one place." /><NotificationPreferences onDirtyChange={setNotificationDirty} /><NotificationDevices /><Link className={styles.relatedLink} href="/notifications">{t("Open notification center")} →</Link></div>}</fieldset></div>
+          <div className={`tgpi-account-content ${styles.content}`} id={`settings-${activeSection}`} ref={contentRef} tabIndex={-1}><fieldset className="min-w-0" disabled={saveState === "saving"}><div hidden={activeSection === "notifications"}>{activeScreen}</div>{(notificationsVisited || activeSection === "notifications") && <div hidden={activeSection !== "notifications"} className={styles.stack}><ScreenHeading section="notifications" title="Notifications" description="Choose your channels, quiet hours and connected devices in one place." /><NotificationPreferences onDirtyChange={setNotificationDirty} /><NotificationDevices /><NotificationInboxLink className={styles.relatedLink} href="/notifications">{t("Open notification center")} →</NotificationInboxLink></div>}</fieldset></div>
           {(isDirty || saveState === "saved" || saveState === "error") && <div className={styles.saveClearance} aria-hidden="true" />}
           {(isDirty || saveState === "saved" || saveState === "error") && createPortal(
             <div className={styles.saveBar} data-state={saveState}>

@@ -1,4 +1,4 @@
-import { parsePreferences } from "@/lib/notifications/model";
+import { notificationActions, parsePreferences, type NotificationAction } from "@/lib/notifications/model";
 import {
   accountInbox,
   updateAccountInbox,
@@ -59,13 +59,15 @@ export async function PATCH(request: Request) {
     if (!parsed || typeof parsed !== "object" || Array.isArray(parsed))
       return json({ error: "Invalid notification action." }, 400);
     const input = parsed as Record<string, unknown>;
+    const action = input.action as NotificationAction;
+    const validId = (id: unknown): id is string => typeof id === "string" && /^[a-f0-9]{64}$/.test(id);
+    if (input.action === "read_all") {
+      if (input.ids !== undefined && (!Array.isArray(input.ids) || input.ids.length > 50 || input.ids.some((id) => !validId(id))))
+        return json({ error: "Invalid notification IDs." }, 400);
+    } else if (input.action !== "preferences" && (!notificationActions.includes(action) || !validId(input.id))) {
+      return json({ error: "Invalid notification action." }, 400);
+    }
     if (!notificationsConfigured()) {
-      if (
-        !["preferences", "read", "unread", "archive", "read_all"].includes(
-          String(input.action),
-        )
-      )
-        return json({ error: "Invalid notification action." }, 400);
       const found = await updateAccountInbox(userId, input);
       return found
         ? json({
@@ -82,11 +84,6 @@ export async function PATCH(request: Request) {
         : (await listNotifications(userId)).items
             .filter((item) => !item.readAt && !item.archivedAt)
             .map((item) => item.id);
-      if (
-        ids.length > 50 ||
-        ids.some((id) => typeof id !== "string" || !/^[a-f0-9]{64}$/.test(id))
-      )
-        return json({ error: "Invalid notification IDs." }, 400);
       await Promise.all(
         ids.map((id) => mutateNotification(userId, String(id), "read")),
       );
@@ -99,17 +96,7 @@ export async function PATCH(request: Request) {
           input.preferences,
         ),
       });
-    if (
-      typeof input.id !== "string" ||
-      !/^[a-f0-9]{64}$/.test(input.id) ||
-      !["read", "unread", "archive"].includes(String(input.action))
-    )
-      return json({ error: "Invalid notification action." }, 400);
-    const found = await mutateNotification(
-      userId,
-      input.id,
-      input.action as "read" | "unread" | "archive",
-    );
+    const found = await mutateNotification(userId, String(input.id), action);
     return found
       ? json({ ok: true })
       : json({ error: "Notification not found." }, 404);

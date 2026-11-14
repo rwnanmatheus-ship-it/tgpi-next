@@ -1,3 +1,4 @@
+import NotificationInboxLink from "@/components/notifications/NotificationInboxLink";
 import { planCopy, workspaceResourceCopy } from '@/lib/localization/workspace-copy';
 
 import { LocalizedElement } from "@/components/localization/LocalizedElement";
@@ -86,7 +87,7 @@ export default async function GlobalWorkspaceOS({ learning, progressReadOnly, id
         </div>
         <div className={styles.actions}>
           <WorkspaceCommandButton />
-          <Link className={styles.quiet} href="/notifications"><LocalizedText text="Notifications ↗" /></Link>
+          <NotificationInboxLink className={styles.quiet} href="/notifications"><LocalizedText text="Notifications ↗" /></NotificationInboxLink>
           <div className="grid justify-items-start">
             <WorkspaceSyncButton notifyClients={false} />
             <span role="status" className="max-w-52 text-xs text-slate-300">

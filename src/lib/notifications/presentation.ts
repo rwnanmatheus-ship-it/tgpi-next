@@ -26,3 +26,7 @@ export function sortNotifications(
       a.id.localeCompare(b.id),
   );
 }
+
+export function notificationSearchText(value: string, locale: string) {
+  return value.normalize("NFD").replace(/\p{M}/gu, "").toLocaleLowerCase(locale).trim();
+}

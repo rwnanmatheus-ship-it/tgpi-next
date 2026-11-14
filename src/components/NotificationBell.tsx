@@ -1,17 +1,19 @@
 "use client";
 import { useLocale } from "@/components/localization/LocaleProvider";
-import Link from "@/components/localization/LocalizedLink";
 import NavigationIcon from "@/components/navigation/NavigationIcon";
 import { useNotifications } from "@/components/notifications/NotificationProvider";
 export default function NotificationBell() {
   const { t } = useLocale();
-  const { items } = useNotifications();
+  const { items, drawerOpen, openDrawer } = useNotifications();
   const unread = items.filter(
     (item) => !item.readAt && !item.archivedAt,
   ).length;
   return (
-    <Link
-      href="/notifications"
+    <button
+      type="button"
+      aria-haspopup="dialog"
+      aria-expanded={drawerOpen}
+      onClick={(event) => openDrawer(event.currentTarget)}
       className="tgpi-navigation-square-button relative"
       aria-label={
         unread
@@ -26,6 +28,6 @@ export default function NotificationBell() {
           {unread > 9 ? "9+" : unread}
         </span>
       )}
-    </Link>
+    </button>
   );
 }

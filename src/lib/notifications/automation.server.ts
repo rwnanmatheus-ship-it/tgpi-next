@@ -7,6 +7,7 @@ import {
   runFirestoreTransaction as transaction,
   type JsonValue,
 } from "@/lib/firestore-admin-rest.server";
+import { getCourse } from "@/data/courses";
 import { getCountryBySlug } from "@/data/countries";
 import type { TgpiActivationProgress } from "@/lib/activation-progress";
 import type { NotificationEvent } from "./model";
@@ -86,6 +87,7 @@ export async function automationEvents(
     )
       events.push({
         key: `research:country:${slug}:${fingerprint}`,
+        subject: getCountryBySlug(slug)!.name,
         category: "planning",
         title: "Your saved country research was updated",
         body: `TGPI updated the research profile for ${getCountryBySlug(slug)!.name}. Review the information and official sources before changing your plan.`,
@@ -99,8 +101,10 @@ export async function automationEvents(
     const age =
       (now.getTime() - Date.parse(course.updatedAt || course.startedAt)) /
       86400000;
-    if (!course.completedAt && age >= 3 && age <= 30)
+    if (!course.completedAt && age >= 3 && age <= 30) {
+      const subject = getCourse(id)?.title;
       events.push({
+        ...(subject ? { subject } : {}),
         key: `reminder:course:${id}:${course.updatedAt || course.startedAt}:${Math.floor((age - 3) / 7)}`,
         category: "learning",
         title: "Your next lesson is waiting",
@@ -112,6 +116,7 @@ export async function automationEvents(
             (3 + 7 * Math.floor((age - 3) / 7)) * 86400000,
         ).toISOString(),
       });
+    }
   }
   return events;
 }

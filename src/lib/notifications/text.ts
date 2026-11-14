@@ -34,6 +34,23 @@ const copy = {
     "Lernen, Mitgliedschaft, Community und gespeicherte Recherche. Ein gemeinsamer Posteingang.",
     "Formazione, abbonamento, comunità e ricerche salvate. Un unico centro.",
   ],
+  initialView: ["Default inbox view", "Visualização inicial da central", "Vista inicial de la bandeja", "Vue par défaut de la boîte", "Standardansicht des Posteingangs", "Vista iniziale della posta"],
+  savedItems: ["Saved", "Salvas", "Guardadas", "Enregistrées", "Gespeichert", "Salvate"],
+  saveItem: ["Save for later", "Salvar para depois", "Guardar para después", "Enregistrer pour plus tard", "Für später speichern", "Salva per dopo"],
+  unsaveItem: ["Remove from saved", "Remover das salvas", "Quitar de guardadas", "Retirer des favoris", "Aus Gespeichert entfernen", "Rimuovi dalle salvate"],
+  restore: ["Restore to inbox", "Restaurar na caixa de entrada", "Restaurar en la bandeja", "Restaurer dans la boîte", "Im Posteingang wiederherstellen", "Ripristina nella posta in arrivo"],
+  backToInbox: ["Back to inbox", "Voltar à caixa de entrada", "Volver a la bandeja", "Retour à la boîte de réception", "Zurück zum Posteingang", "Torna alla posta in arrivo"],
+  closeInbox: ["Close notifications", "Fechar notificações", "Cerrar notificaciones", "Fermer les notifications", "Benachrichtigungen schließen", "Chiudi le notifiche"],
+  categories: ["Category", "Categoria", "Categoría", "Catégorie", "Kategorie", "Categoria"],
+  allCategories: ["All categories", "Todas as categorias", "Todas las categorías", "Toutes les catégories", "Alle Kategorien", "Tutte le categorie"],
+  status: ["Status", "Status", "Estado", "Statut", "Status", "Stato"],
+  readStatus: ["Read", "Lida", "Leída", "Lue", "Gelesen", "Letta"],
+  archivedStatus: ["Archived", "Arquivada", "Archivada", "Archivée", "Archiviert", "Archiviata"],
+  received: ["Date and time", "Data e hora", "Fecha y hora", "Date et heure", "Datum und Uhrzeit", "Data e ora"],
+  dateUnavailable: ["Date unavailable", "Data indisponível", "Fecha no disponible", "Date indisponible", "Datum nicht verfügbar", "Data non disponibile"],
+  noMatches: ["No matching notifications in the loaded history", "Nenhuma notificação encontrada no histórico carregado", "No hay coincidencias en el historial cargado", "Aucune notification correspondante dans l’historique chargé", "Keine passenden Benachrichtigungen im geladenen Verlauf", "Nessuna notifica corrispondente nella cronologia caricata"],
+  resetFilters: ["Clear filters", "Limpar filtros", "Borrar filtros", "Effacer les filtres", "Filter zurücksetzen", "Cancella filtri"],
+  history: ["Notification history", "Histórico de notificações", "Historial de notificaciones", "Historique des notifications", "Benachrichtigungsverlauf", "Cronologia delle notifiche"],
   all: ["All", "Todas", "Todas", "Toutes", "Alle", "Tutte"],
   unread: [
     "Unread",
@@ -464,6 +481,14 @@ const copy = {
     "Dein globaler Arbeitsbereich ist bereit. Lege Prioritäten fest und starte deinen Plan.",
     "Il tuo spazio globale è pronto. Definisci le priorità e inizia il tuo piano.",
   ],
+  shortlistTitle: ["Build your country shortlist", "Monte sua lista de países", "Crea tu lista de países", "Créez votre liste de pays", "Erstelle deine Länderauswahl", "Crea la tua lista di Paesi"],
+  shortlistBody: ["Save countries that fit your priorities, then compare the trade-offs before choosing.", "Salve países que combinam com suas prioridades e compare os critérios antes de escolher.", "Guarda países que encajen con tus prioridades y compara las opciones antes de decidir.", "Enregistrez les pays qui correspondent à vos priorités, puis comparez-les.", "Speichere Länder, die zu deinen Prioritäten passen, und vergleiche die Optionen.", "Salva i Paesi adatti alle tue priorità e confrontali prima di scegliere."],
+  comparisonTitle: ["Your shortlist is ready for comparison", "Sua lista de países está pronta para comparar", "Tu lista de países está lista para comparar", "Votre liste de pays est prête à comparer", "Deine Länderauswahl ist bereit zum Vergleich", "La tua lista di Paesi è pronta da confrontare"],
+  comparisonBody: ["Compare costs, lifestyle and practical requirements to narrow your options.", "Compare custos, estilo de vida e requisitos práticos para refinar suas opções.", "Compara costos, estilo de vida y requisitos para reducir tus opciones.", "Comparez les coûts, le mode de vie et les conditions pour affiner vos choix.", "Vergleiche Kosten, Lebensstil und Anforderungen, um deine Auswahl einzugrenzen.", "Confronta costi, stile di vita e requisiti per restringere le opzioni."],
+  documentsTitle: ["Your document checklist is complete", "Sua lista de documentos está concluída", "Tu lista de documentos está completa", "Votre liste de documents est complète", "Deine Dokumentenliste ist vollständig", "La lista dei documenti è completa"],
+  documentsBody: ["Confirm the requirements with official authorities before travelling or applying.", "Confirme os requisitos com as autoridades oficiais antes de viajar ou enviar uma solicitação.", "Confirma los requisitos con las autoridades antes de viajar o presentar una solicitud.", "Vérifiez les conditions auprès des autorités avant de voyager ou de déposer une demande.", "Prüfe die Voraussetzungen bei den Behörden vor deiner Reise oder Antragstellung.", "Verifica i requisiti presso le autorità prima di partire o presentare una domanda."],
+  courseCompleteTitle: ["Course checkpoints completed", "Etapas do curso concluídas", "Etapas del curso completadas", "Étapes du cours terminées", "Kursaufgaben abgeschlossen", "Tappe del corso completate"],
+  courseCompleteBody: ["Review the assessment and identity requirements for your verified credential.", "Confira a avaliação e os requisitos de identidade para obter sua credencial verificável.", "Revisa la evaluación y los requisitos de identidad para tu credencial verificable.", "Vérifiez l’évaluation et les conditions d’identité de votre attestation vérifiable.", "Prüfe die Bewertung und die Identitätsanforderungen für deinen verifizierbaren Nachweis.", "Controlla la valutazione e i requisiti di identità per la credenziale verificabile."],
   nextTitle: [
     "Your next planning step",
     "Seu próximo passo no planejamento",
@@ -628,32 +653,30 @@ export function localizedNotification<T extends NotificationEvent>(
   item: T,
   locale: Locale,
 ): T {
-  const type = item.key.startsWith("product:release:")
-    ? "release"
-    : item.key.startsWith("research:")
-      ? "researchEvent"
-      : item.key.startsWith("reminder:")
-        ? "reminder"
-        : item.key.startsWith("credential:")
-          ? "credential"
-          : item.key.startsWith("account:welcome")
-            ? "welcome"
-            : item.key.startsWith("next:") ||
-                item.key.startsWith("onboarding:") ||
-                item.key.startsWith("documents:")
-              ? "next"
-              : item.key.startsWith("course:")
-                ? "learning"
-                : item.key.startsWith("community:")
-                  ? "community"
-                  : item.key.startsWith("product:notification-center")
-                    ? "product"
-                    : item.category === "billing"
-                      ? "billing"
-                      : undefined;
+  const prefixes = [
+    ["next:shortlist:", "shortlist"],
+    ["next:compare:", "comparison"],
+    ["documents:", "documents"],
+    ["course:complete:", "courseComplete"],
+    ["product:release:", "release"],
+    ["research:", "researchEvent"],
+    ["reminder:", "reminder"],
+    ["credential:", "credential"],
+    ["account:welcome", "welcome"],
+    ["next:", "next"],
+    ["onboarding:", "next"],
+    ["course:", "learning"],
+    ["community:", "community"],
+    ["product:notification-center", "product"],
+  ] as const;
+  const type = prefixes.find(([prefix]) => item.key.startsWith(prefix))?.[1]
+    ?? (item.category === "billing" ? "billing" : undefined);
   if (!type || locale === "en") return item;
+  const subject = item.subject || (type === "credential" ? /^(.+?): your issued credential/.exec(item.body)?.[1] : undefined)
+    || (type === "researchEvent" ? /research profile for (.+?)\. Review/.exec(item.body)?.[1] : undefined);
   return {
     ...item,
+    ...(subject ? { subject } : {}),
     title: notificationText(
       locale,
       type === "billing" && /past_due|unpaid/.test(item.key)

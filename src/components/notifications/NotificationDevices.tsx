@@ -1,7 +1,7 @@
 "use client";
 
 import { LocalizedElement } from "@/components/localization/LocalizedElement";
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import { useLocale , LocalizedText } from "@/components/localization/LocaleProvider";
 import { notificationText } from "@/lib/notifications/text";
@@ -27,6 +27,7 @@ export default function NotificationDevices() {
     inbox = useNotifications();
   const t = (key: Parameters<typeof notificationText>[1]) =>
     notificationText(locale, key);
+  const headingId = useId();
   const [config, setConfig] = useState<{
     configured: boolean;
     publicKey: string | null;
@@ -113,12 +114,12 @@ export default function NotificationDevices() {
   return (
     <section
       className={styles.panel}
-      aria-labelledby="notification-device-heading"
+      aria-labelledby={headingId}
     >
       <span className={styles.panelIcon} aria-hidden="true">
         ↗
       </span>
-      <h2 id="notification-device-heading">{t("devices")}</h2>
+      <h2 id={headingId}>{t("devices")}</h2>
       <p>{t("deviceBody")}</p>
       {ios ? (
         <p className={styles.notice}>{t("ios")}</p>

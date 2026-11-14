@@ -493,6 +493,7 @@ test('workspace server presentation follows locale and preserves private identit
         }, nav);
         return { __esModule: true, default: nav.default };
       }
+      if (name === '@/components/notifications/NotificationInboxLink') return { __esModule: true, default: ({ children, ...props }) => React.createElement('a', props, children) };
       if (name === './WorkspacePersonalSpace') return { __esModule: true, default: ({ journey, learning }) => React.createElement(React.Fragment, null, learning, journey) };
       if (name.startsWith('./') || name.startsWith('@/components/')) return { __esModule: true, default: () => null };
       throw Error(`Unexpected import: ${name}`);

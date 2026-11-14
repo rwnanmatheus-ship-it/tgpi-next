@@ -5,6 +5,8 @@ import { clerkClient } from "@clerk/nextjs/server";
 import { collectNotificationEvents } from "./reconcile.server";
 import {
   parsePreferences,
+  notificationMarks,
+  type NotificationAction,
   type NotificationPreferences,
   type InboxNotification,
 } from "./model";
@@ -12,7 +14,7 @@ const KEY = "tgpiInboxV2";
 type State = {
   preferences?: NotificationPreferences;
   seen?: Record<string, string>;
-  marks: Record<string, [string | null, string | null]>;
+  marks: Record<string, [string | null, string | null] | [string | null, string | null, string | null]>;
 };
 export function decodeAccountInboxState(value: unknown): State {
   try {
@@ -33,7 +35,23 @@ export function decodeAccountInboxState(value: unknown): State {
 }
 const idFor = (uid: string, key: string) =>
   createHash("sha256").update(`${uid}:${key}`).digest("hex");
-export async function accountInbox(uid: string) {
+const pendingWrites = new Map<string, Promise<unknown>>();
+
+function withAccountWrite<T>(uid: string, work: () => Promise<T>) {
+  const previous = pendingWrites.get(uid) ?? Promise.resolve();
+  const request = previous.catch(() => {}).then(work);
+  pendingWrites.set(uid, request);
+  void request.finally(() => {
+    if (pendingWrites.get(uid) === request) pendingWrites.delete(uid);
+  }).catch(() => {});
+  return request;
+}
+
+export function accountInbox(uid: string) {
+  return withAccountWrite(uid, () => readAccountInbox(uid));
+}
+
+async function readAccountInbox(uid: string, persistSeen = true) {
   const { events, user } = await collectNotificationEvents(uid);
   const state = decodeAccountInboxState(user.privateMetadata[KEY]);
   state.seen ||= {};
@@ -62,9 +80,10 @@ export async function accountInbox(uid: string) {
       timestampKind: eventTime ? "event" : "observed",
       readAt: mark?.[0] || null,
       archivedAt: mark?.[1] || null,
+      savedAt: mark?.[2] || null,
     };
   });
-  if (changed) await saveState(uid, state);
+  if (changed && persistSeen) await saveState(uid, state);
   items.sort(
     (a, b) =>
       Date.parse(b.createdAt) - Date.parse(a.createdAt) ||
@@ -79,25 +98,28 @@ export async function accountInbox(uid: string) {
     state,
   };
 }
-export async function updateAccountInbox(
-  uid: string,
-  input: Record<string, unknown>,
-) {
-  const inbox = await accountInbox(uid);
+export function updateAccountInbox(uid: string, input: Record<string, unknown>) {
+  return withAccountWrite(uid, () => applyAccountUpdate(uid, input));
+}
+
+async function applyAccountUpdate(uid: string, input: Record<string, unknown>) {
+  const inbox = await readAccountInbox(uid, false);
   if (input.action === "preferences")
     inbox.state.preferences = parsePreferences(input.preferences);
-  else if (input.action === "read_all") {
+  else {
     const now = new Date().toISOString();
-    for (const item of inbox.items.filter((item) => !item.archivedAt))
-      inbox.state.marks[item.id.slice(0, 24)] = [item.readAt || now, null];
-  } else {
-    const item = inbox.items.find((item) => item.id === input.id);
-    if (!item) return false;
-    const now = new Date().toISOString();
-    inbox.state.marks[item.id.slice(0, 24)] =
-      input.action === "archive"
-        ? [item.readAt || now, now]
-        : [input.action === "read" ? now : null, item.archivedAt];
+    const ids = Array.isArray(input.ids) ? new Set(input.ids) : null;
+    const items = input.action === "read_all"
+      ? inbox.items.filter((item) => !item.archivedAt && (!ids || ids.has(item.id)))
+      : inbox.items.filter((item) => item.id === input.id);
+    if (input.action !== "read_all" && !items.length) return false;
+    const action = input.action === "read_all" ? "read" : input.action as NotificationAction;
+    for (const item of items) {
+      const mark = notificationMarks(item, action, now);
+      const key = item.id.slice(0, 24);
+      delete inbox.state.marks[key];
+      inbox.state.marks[key] = [mark.readAt, mark.archivedAt, mark.savedAt];
+    }
   }
   await saveState(uid, inbox.state);
   return true;

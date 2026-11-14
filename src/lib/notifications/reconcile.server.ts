@@ -4,6 +4,8 @@ import { communityNotificationEvents } from "@/lib/community/store.server";
 import "server-only";
 import { TGPI_PREMIUM_PRICE_ID } from "@/lib/stripe";
 import { clerkClient } from "@clerk/nextjs/server";
+import { getCourse } from "@/data/courses";
+import { getCountryBySlug } from "@/data/countries";
 import { listUserLearningCredentials } from "@/lib/learning-records.server";
 import { billingEvent, welcomeEvent, type NotificationEvent } from "./model";
 import {
@@ -75,9 +77,11 @@ export async function collectNotificationEvents(uid: string) {
       actionLabel: "Compare my options",
     });
   for (const [id, course] of Object.entries(progress.courseProgress)) {
+    const subject = getCourse(id)?.title;
     if (course.completedAt)
       events.push({
         key: `course:complete:${id}`,
+        ...(subject ? { subject } : {}),
         occurredAt: course.completedAt,
         category: "learning",
         title: "Course checkpoints completed",
@@ -88,6 +92,7 @@ export async function collectNotificationEvents(uid: string) {
     else
       events.push({
         key: `course:start:${id}`,
+        ...(subject ? { subject } : {}),
         category: "learning",
         title: "Your learning journey has started",
         body: "Your progress is saved. Continue your next lesson in your learning workspace.",
@@ -112,6 +117,7 @@ export async function collectNotificationEvents(uid: string) {
   for (const credential of credentials)
     events.push({
       key: `credential:${credential.id}`,
+      subject: credential.courseTitle,
       occurredAt: credential.issuedAt,
       category: "learning",
       title: "Your verified credential is ready",
@@ -133,15 +139,18 @@ export async function collectNotificationEvents(uid: string) {
     if (
       review.totalItems > 0 &&
       review.completedItemIds.length >= review.totalItems
-    )
+    ) {
+      const subject = getCountryBySlug(slug)?.name;
       events.push({
         key: `documents:complete:${slug}`,
+        ...(subject ? { subject } : {}),
         category: "planning",
         title: "Your document checklist is complete",
         body: "Your checklist is marked complete. Confirm requirements with official authorities before you travel or apply.",
         href: `/countries/${slug}`,
         actionLabel: "Review official sources",
       });
+    }
   }
   events.push(
     ...(await communityNotificationEvents(uid)).map((event) => ({
@@ -182,6 +191,7 @@ export async function reconcileNotifications(uid: string) {
         silent: old,
         readAt: mark?.[0],
         archivedAt: mark?.[1],
+        savedAt: mark?.[2],
         createdAt: event.occurredAt || legacy.seen?.[short],
       });
     }
