@@ -18,14 +18,15 @@ const identities = JSON.parse(readFileSync(new URL("src/data/intelligence/identi
 const context = { primaryGoal: "work", budgetRange: "1500-3000", timeHorizon: "6-months", languages: ["English"], profession: "Synthetic test field" };
 const request = (body = { countrySlug: "portugal", context }, origin = "https://example.test") => new Request("https://example.test/api/intelligence/plan", { method: "PATCH", headers: { Origin: origin, "Content-Type": "application/json" }, body: typeof body === "string" ? body : JSON.stringify(body) });
 function handler({ userId = "test-user", previous = {}, fail = false } = {}) {
-  const writes = []; let reads = 0;
+  const writes = [], events = []; let reads = 0;
   const route = load("src/app/api/intelligence/plan/route.ts", {
     "@clerk/nextjs/server": { auth: async () => ({ userId }), clerkClient: async () => ({ users: { getUser: async () => { reads++; return { unsafeMetadata: { tgpiOnboarding: previous } }; }, updateUserMetadata: async (...args) => { if (fail) throw Error("Mock upstream failure"); writes.push(args); } } }) },
+    "@/lib/funnel.server": { recordFunnelEvent: (event, consent) => { if (consent) events.push(event); }, requestFunnelConsent: request => request.headers.get("Cookie") === "tgpi_analytics_consent=granted" },
     "@/lib/onboarding": normalizer,
     "@/lib/account-profile": { normalizeTgpiAccountProfile },
     "@/data/intelligence/identities.json": identities,
   });
-  return { patch: route.PATCH, writes, reads: () => reads };
+  return { patch: route.PATCH, writes, events, reads: () => reads };
 }
 test("anonymous requests cannot read or modify member plans", async () => { const h = handler({ userId: null }); assert.equal((await h.patch(request())).status, 401); assert.equal(h.reads(), 0); assert.equal(h.writes.length, 0); });
 test("cross-origin changes are rejected before profile access", async () => { const h = handler(); assert.equal((await h.patch(request(undefined, "https://attacker.test"))).status, 403); assert.equal(h.reads(), 0); });
@@ -53,4 +54,21 @@ test('explicitly cleared priorities do not resurrect previous choices', async ()
  const h=handler({previous:{priorities:['safety']}});
  await h.patch(request({countrySlug:'portugal',context:{...context,priorities:[]}}));
  assert.equal(h.writes[0][1].unsafeMetadata.tgpiOnboarding.priorities.length,0);
+});
+
+test("a first saved plan records the milestone only with analytics consent", async () => {
+  const first = handler();
+  await first.patch(request());
+  assert.deepEqual(first.events, []);
+
+  const consented = request();
+  consented.headers.set("Cookie", "tgpi_analytics_consent=granted");
+  await first.patch(consented);
+  assert.deepEqual(first.events, ["plan_context_saved"]);
+
+  const existing = handler({ previous: { primaryGoal: "work", targetCountries: ["canada"] } });
+  const update = request();
+  update.headers.set("Cookie", "tgpi_analytics_consent=granted");
+  await existing.patch(update);
+  assert.deepEqual(existing.events, []);
 });
