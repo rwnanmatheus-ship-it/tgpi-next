@@ -60,7 +60,7 @@
     "stripe": "^22.0.2",
     "three": "0.187.0",
     "viem": "^2.56.3",
-    "web-push": "3.6.7",
+    "web-push": "4.0.0",
     "zod": "^4.6.7"
   },
   "devDependencies": {

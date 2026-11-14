@@ -6,7 +6,7 @@ import {
   randomBytes,
   randomUUID,
 } from "node:crypto";
-import webpush from "web-push";
+import { sendNotification } from "web-push";
 import { clerkClient } from "@clerk/nextjs/server";
 import {
   createFirestoreDeleteWrite as del,
@@ -266,7 +266,7 @@ async function send(
 ) {
   const locale = (resolveLocale(device.locale) || "en") as Locale;
   const event = localizedNotification(item, locale);
-  const result = await webpush.sendNotification(
+  const result = await sendNotification(
     unseal(device.ciphertext),
     JSON.stringify({
       title: test

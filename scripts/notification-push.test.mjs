@@ -94,21 +94,19 @@ function harness() {
                             }
                           : name === "web-push"
                             ? {
-                                default: {
-                                  sendNotification: async (
-                                    subscription,
-                                    payload,
-                                  ) => {
-                                    const error = errors.get(
-                                      subscription.endpoint,
-                                    );
-                                    if (error) throw { statusCode: error };
-                                    sent.push({
-                                      endpoint: subscription.endpoint,
-                                      payload: JSON.parse(payload),
-                                    });
-                                    return { statusCode: 201 };
-                                  },
+                                sendNotification: async (
+                                  subscription,
+                                  payload,
+                                ) => {
+                                  const error = errors.get(
+                                    subscription.endpoint,
+                                  );
+                                  if (error) throw { statusCode: error };
+                                  sent.push({
+                                    endpoint: subscription.endpoint,
+                                    payload: JSON.parse(payload),
+                                  });
+                                  return { statusCode: 201 };
                                 },
                               }
                             : require(name);
