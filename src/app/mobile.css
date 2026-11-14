@@ -230,13 +230,11 @@
   #main-content .cl-headerTitle { font-size: 26px; line-height: 1.15; letter-spacing: -.025em; overflow-wrap: anywhere; }
   #main-content .cl-footerAction { flex-wrap: wrap; gap: 8px; }
   .cl-formFieldInput { font-size: 16px; }
-  body > :is(footer), footer { padding-bottom: 12px; }
-  footer nav[aria-label="TGPI connected decision path"] { display: none; }
-  footer > div > section:first-child { display: none; }
-  footer nav[aria-label="TGPI footer navigation"] { gap: 24px 16px; }
-  footer a { min-height: 44px; }
-  footer :is([class*="text-[9px]"], [class*="text-[10px]"]) { font-size: 11px; letter-spacing: .1em; }
-  footer > div { padding-top: 0; }
+  footer:not([data-tgpi-footer]) { padding-bottom: 12px; }
+  footer:not([data-tgpi-footer]) > div > section:first-child { display: none; }
+  footer:not([data-tgpi-footer]) a { min-height: 44px; }
+  footer:not([data-tgpi-footer]) :is([class*="text-[9px]"], [class*="text-[10px]"]) { font-size: 11px; letter-spacing: .1em; }
+  footer:not([data-tgpi-footer]) > div { padding-top: 0; }
 }
 
 @media (max-width: 359px) {

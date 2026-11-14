@@ -16,24 +16,24 @@ function getSnapshot() {
   return dialog instanceof HTMLDialogElement && dialog.open;
 }
 
-export default function LauncherButton({ compact = false }: { compact?: boolean }) {
+export default function LauncherButton({ compact = false, className }: { compact?: boolean; className?: string }) {
   const { t } = useLocale();
   const open = useSyncExternalStore(subscribe, getSnapshot, () => false);
   return (
     <button
       type="button"
-      aria-label={t("Open TGPI apps")}
+      aria-label={t(className ? "Search TGPI" : "Open TGPI apps")}
       aria-haspopup="dialog"
       aria-expanded={open}
       aria-controls="tgpi-super-app-launcher"
       aria-keyshortcuts="Control+K Meta+K"
       title={t("Open TGPI apps (Ctrl/⌘ K)")}
       onClick={() => window.dispatchEvent(new Event(SUPER_APP_OPEN_EVENT))}
-      className={compact ? "tgpi-compact-action tgpi-compact-apps" : "tgpi-navigation-icon-button"}
+      className={className ?? (compact ? "tgpi-compact-action tgpi-compact-apps" : "tgpi-navigation-icon-button")}
     >
       <NavigationIcon name="search" width={20} height={20} />
-      <span className="tgpi-apps-label">{t("Search TGPI")}</span>
-      {!compact ? <kbd aria-hidden="true">⌘ K</kbd> : null}
+      <span className={className ? undefined : "tgpi-apps-label"}>{t("Search TGPI")}</span>
+      {!compact && !className ? <kbd aria-hidden="true">⌘ K</kbd> : null}
     </button>
   );
 }

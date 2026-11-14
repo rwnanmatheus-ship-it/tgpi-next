@@ -5,7 +5,37 @@ import { useEffect, useId, useRef, useState } from 'react';
 import { localeOptions, type Locale } from '@/lib/localization/config';
 import { useLocale } from './LocaleProvider';
 
-export default function LanguageSelector({ compact = false }: { compact?: boolean }) {
+export default function LanguageSelector({ compact = false, native = false }: { compact?: boolean; native?: boolean }) {
+  return native ? <NativeLanguageSelector /> : <FlagLanguageSelector compact={compact} />;
+}
+
+function NativeLanguageSelector() {
+  const id = useId();
+  const { locale, pending, error, changeLocale, t } = useLocale();
+
+  return (
+    <div>
+      <label htmlFor={id}>{t('Interface language')}</label>
+      <select
+        id={id}
+        value={locale}
+        aria-busy={pending}
+        aria-disabled={pending}
+        aria-describedby={error ? `${id}-error` : undefined}
+        onChange={event => {
+          const next = localeOptions.find(option => option.code === event.target.value);
+          if (!pending && next && next.code !== locale) void changeLocale(next.code);
+        }}
+      >
+        {localeOptions.map(option => <option key={option.code} value={option.code} lang={option.code}>{option.name}</option>)}
+      </select>
+      {error && <p id={`${id}-error`} role="alert">{t('Unable to save language. Please try again.')}</p>}
+      <span role="status" className="sr-only">{pending ? t('Saving…') : ''}</span>
+    </div>
+  );
+}
+
+function FlagLanguageSelector({ compact }: { compact: boolean }) {
   const id = useId();
   const { locale, pending, error, changeLocale, t } = useLocale();
   const [open, setOpen] = useState(false);
