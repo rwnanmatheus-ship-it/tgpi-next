@@ -3,6 +3,7 @@
 import { createContext, useContext, useCallback, useMemo, useRef, useState, useEffect, useTransition, type ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
+import { appearanceMessages } from '@/lib/localization/appearance';
 import { type Locale } from '@/lib/localization/config';
 import { translate, registerSupplementalMessages, type SupplementalMessages } from '@/lib/localization/messages';
 import { localeCatalogVersion } from '@/lib/localization/catalog-version';
@@ -80,7 +81,9 @@ export function LocaleProvider({ locale, messages, children }: { locale: Locale;
       setPending(false);
     }
   }, [router]);
-  const value = useMemo(() => ({ locale: appliedLocale, pending: pending || refreshing, error, changeLocale, t: (key: string, values?: Record<string, string | number>) => translate(appliedLocale, key, values) }), [appliedLocale, pending, refreshing, error, changeLocale]);
+  const value = useMemo(() => ({ locale: appliedLocale, pending: pending || refreshing, error, changeLocale, t: (key: string, values?: Record<string, string | number>) => Object.hasOwn(appearanceMessages, key)
+    ? appearanceMessages[key][appliedLocale].replace(/\{(\w+)\}/g, (placeholder, name: string) => String(values?.[name] ?? placeholder))
+    : translate(appliedLocale, key, values) }), [appliedLocale, pending, refreshing, error, changeLocale]);
   return <LocaleContext.Provider value={value}>{children}</LocaleContext.Provider>;
 }
 export function useLocale() {

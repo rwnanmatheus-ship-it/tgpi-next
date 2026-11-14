@@ -4,6 +4,8 @@
   --directory-line: #dbe4ee;
   --directory-blue: #204fc0;
   --directory-wash: #eef4ff;
+  --directory-surface: #fff;
+  --directory-active-ink: #fff;
   --directory-gold: #f0d194;
   --directory-page-gutter: clamp(12px, 2.6vw, 36px);
   background: #f4f7fb;
@@ -109,7 +111,7 @@
   padding: 8px 12px;
   border: 1px solid var(--directory-line);
   border-radius: 10px;
-  background: #fff;
+  background: var(--directory-surface);
   color: var(--directory-ink);
   font-size: 13px;
   font-weight: 650;
@@ -148,7 +150,7 @@
   padding: clamp(12px, 2vw, 20px);
   border: 1px solid var(--directory-line);
   border-radius: 16px;
-  background: white;
+  background: var(--directory-surface);
   box-shadow: 0 8px 24px #112a4608;
 }
 
@@ -180,7 +182,7 @@
   padding: 7px 12px;
   border: 1px solid var(--directory-line);
   border-radius: 9px;
-  background: #fff;
+  background: var(--directory-surface);
   color: var(--directory-blue);
   font-size: 13px;
   font-weight: 700;
@@ -221,7 +223,7 @@
   min-height: 46px;
   border: 1px solid #cbd9ea;
   border-radius: 9px;
-  background: #f7f9fc;
+  background: var(--directory-subtle, #f7f9fc);
   color: var(--directory-ink);
   font-size: 16px;
 }
@@ -241,7 +243,7 @@
   padding: 12px;
   border: 1px solid var(--directory-line);
   border-radius: 14px;
-  background: #fff;
+  background: var(--directory-surface);
 }
 
 .resultsBar {
@@ -264,7 +266,7 @@
   padding: 2px;
   border: 1px solid #cbd9ea;
   border-radius: 10px;
-  background: #eaf0f8;
+  background: var(--directory-subtle, #eaf0f8);
 }
 
 .viewToggle button {
@@ -280,7 +282,7 @@
 .viewToggle button[aria-pressed="true"],
 .filterAction[aria-pressed="true"] {
   background: var(--directory-blue);
-  color: #fff;
+  color: var(--directory-active-ink);
 }
 
 .selection {
@@ -296,7 +298,7 @@
   padding: 8px 10px 8px 14px;
   border: 1px solid #afc2ed;
   border-radius: 12px;
-  background: #f6f9ff;
+  background: var(--directory-subtle, #f6f9ff);
   box-shadow: 0 7px 20px #112a4617;
   color: var(--directory-ink);
   font-size: 13px;
@@ -316,7 +318,7 @@
   padding: 8px 12px;
   border-radius: 9px;
   background: var(--directory-blue);
-  color: #fff;
+  color: var(--directory-active-ink);
   text-decoration: none;
 }
 
@@ -325,7 +327,7 @@
   padding: 0 12px;
   border: 1px solid var(--directory-line);
   border-radius: 10px;
-  background: #fff;
+  background: var(--directory-surface);
   color: var(--directory-ink);
 }
 
@@ -354,7 +356,7 @@
   overflow: hidden;
   border: 1px solid var(--directory-line);
   border-radius: 15px;
-  background: #fff;
+  background: var(--directory-surface);
   box-shadow: 0 4px 14px #112a4608;
   color: var(--directory-ink);
 }
@@ -442,7 +444,7 @@
   gap: 4px 12px;
   padding: 7px 8px;
   border-radius: 8px;
-  background: #f1f5fa;
+  background: var(--directory-subtle, #f1f5fa);
   color: var(--directory-muted);
   font-size: 11px;
   font-weight: 600;
@@ -489,7 +491,7 @@
   padding: 0;
   border: 1px solid var(--directory-line);
   border-radius: 8px;
-  background: #fff;
+  background: var(--directory-surface);
   color: var(--directory-blue);
   cursor: pointer;
 }
@@ -503,7 +505,7 @@
 .compareAction[aria-pressed="true"] {
   border-color: var(--directory-blue);
   background: var(--directory-blue);
-  color: white;
+  color: var(--directory-active-ink);
 }
 
 .cardActions [data-compact-save][aria-pressed="true"] {
@@ -547,7 +549,7 @@
   padding: 18px;
   border: 1px solid var(--directory-line);
   border-radius: 14px;
-  background: #fff;
+  background: var(--directory-surface);
 }
 
 .empty,
@@ -662,4 +664,16 @@
 @media (prefers-reduced-motion: reduce) {
   .photo { transition: none; }
   .cardImage:hover .photo { transform: none; }
+}
+
+:global([data-tgpi-theme="dark"]) .page:global(.ig-shell) {
+  --directory-ink: var(--tgpi-heading);
+  --directory-muted: var(--tgpi-muted);
+  --directory-line: var(--tgpi-border);
+  --directory-blue: var(--tgpi-blue);
+  --directory-wash: var(--tgpi-blue-soft);
+  --directory-surface: var(--tgpi-surface);
+  --directory-subtle: var(--tgpi-canvas-alt);
+  --directory-active-ink: var(--tgpi-navy-deep);
+  background: var(--tgpi-canvas);
 }

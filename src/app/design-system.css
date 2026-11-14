@@ -118,3 +118,43 @@ html { scroll-padding-top: calc(var(--tgpi-header-height) + 1rem); }
 .ds-input { line-height:1.75; }
 .ds-input:disabled { background:var(--tgpi-blue-soft); color:var(--tgpi-muted); cursor:not-allowed; }
 .ds-panel { border:1px solid var(--tgpi-border); border-radius:var(--tgpi-radius-lg); background:var(--tgpi-surface); box-shadow:var(--tgpi-shadow-sm); }
+
+/* Shared controls and decision surfaces use the active palette. */
+.ds-field, .ds-state, .ds-dialog,
+.ds-table th, .ds-tabs [aria-selected=true],
+.ds-button:is([data-variant=secondary], [data-variant=ghost]) { color: var(--tgpi-heading); }
+
+:root[data-tgpi-theme="dark"] .ds-button[data-variant=primary] {
+  color: var(--tgpi-navy-deep);
+  background: var(--tgpi-blue);
+  border-color: var(--tgpi-blue);
+}
+:root[data-tgpi-theme="dark"] .ds-button[data-variant=primary]:hover:not(:disabled) { background: #c5dfff; }
+:root[data-tgpi-theme="dark"] ::selection { color: var(--tgpi-ink); }
+
+.product-sidebar-heading button, .product-command { background: var(--tgpi-surface-strong); }
+:root[data-tgpi-theme="dark"] .product-sidebar a[aria-current=page] { background: var(--tgpi-navy-soft); }
+
+:root[data-tgpi-theme="dark"] :is(.tgpi-desktop-navigation, .tgpi-mobile.tgpi-compact-topbar) {
+  background: linear-gradient(115deg, var(--tgpi-canvas), var(--tgpi-surface-strong));
+}
+:root[data-tgpi-theme="dark"] :is(.tgpi-navigation-icon-button, .tgpi-navigation-square-button, .tgpi-navigation-workspace-button, .tgpi-mobile .tgpi-compact-action) {
+  border-color: var(--tgpi-border);
+}
+
+:root[data-tgpi-theme="dark"] :is(.ig-shell, .ig-banner, .ig-button.ig-secondary) { color: var(--tgpi-heading); }
+:root[data-tgpi-theme="dark"] :is(.ig-panel, .ig-evidence, .ig-country-card, .ig-task, .ig-banner) {
+  background: linear-gradient(145deg, var(--tgpi-surface-strong), var(--tgpi-surface));
+  border-color: var(--tgpi-border);
+}
+:root[data-tgpi-theme="dark"] :is(.ig-small, .ig-meta, .ig-question-list, .ig-banner p:not(.ig-eyebrow)) { color: var(--tgpi-muted); }
+:root[data-tgpi-theme="dark"] :is(.ig-eyebrow, .ig-link) { color: var(--tgpi-gold-strong); }
+:root[data-tgpi-theme="dark"] :is(.ig-form-grid input, .ig-form-grid select, .ig-select, .ig-badge) {
+  background: var(--tgpi-surface-strong);
+  color: var(--tgpi-ink);
+  border-color: var(--tgpi-border);
+}
+:root[data-tgpi-theme="dark"] :is(.ig-select[aria-pressed=true], .ig-step) { background: var(--tgpi-blue-soft); color: var(--tgpi-blue); }
+:root[data-tgpi-theme="dark"] :is(.ig-current, .ig-status, .ig-budget-result) { background: var(--tgpi-success-soft); color: var(--tgpi-success); border-color: var(--tgpi-border); }
+:root[data-tgpi-theme="dark"] :is(.ig-stale, .ig-historical, .ig-caution, .ig-selection) { background: var(--tgpi-gold-soft); color: var(--tgpi-gold-strong); }
+:root[data-tgpi-theme="dark"] .ig-button:not(.ig-secondary, .ig-hero .ig-button) { background: var(--tgpi-blue-soft); border-color: var(--tgpi-border); color: var(--tgpi-blue); }

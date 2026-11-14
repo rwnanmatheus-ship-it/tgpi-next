@@ -151,3 +151,22 @@
 @media (max-width: 360px) { .panel { padding-inline: 16px; } .mobileBrand > span { max-width: 110px; } .names { grid-template-columns: 1fr; } }
 /* Never lock overflow: zoom, recovery, CAPTCHA and the keyboard must remain usable. */
 @media (prefers-reduced-motion: reduce) { .page *, .page *::before, .page *::after { transition: none !important; animation: none !important; scroll-behavior: auto !important; } }
+
+:global([data-tgpi-theme="dark"]) .page {
+  --access-navy: var(--tgpi-heading);
+  --access-gold: var(--tgpi-gold-strong);
+  background: radial-gradient(ellipse at 10% 10%, #152842, transparent 58%), var(--tgpi-canvas);
+}
+:global([data-tgpi-theme="dark"]) .shell { background: var(--tgpi-surface); box-shadow: var(--tgpi-shadow-premium); }
+:global([data-tgpi-theme="dark"]) .page :is(.accessLabel, .legal a:hover) { color: var(--tgpi-gold-strong); }
+:global([data-tgpi-theme="dark"]) .page :is(.back, .security p, .legal, .steps, .profileHeader p) { color: var(--tgpi-muted); }
+:global([data-tgpi-theme="dark"]) .page :is(.steps li[aria-current], .back:hover) { color: var(--tgpi-heading); }
+:global([data-tgpi-theme="dark"]) .authWidget :is(:global(.cl-headerTitle), :global(.cl-formFieldLabel), :global(.cl-socialButtonsBlockButtonText)) { color: var(--tgpi-heading) !important; }
+:global([data-tgpi-theme="dark"]) .authWidget :is(:global(.cl-headerSubtitle), :global(.cl-footerActionText), :global(.cl-dividerText)) { color: var(--tgpi-muted) !important; }
+:global([data-tgpi-theme="dark"]) .authWidget :is(:global(.cl-formFieldInput), :global(.cl-socialButtonsBlockButton)) {
+  color: var(--tgpi-ink) !important;
+  background: var(--tgpi-surface-strong) !important;
+  border-color: var(--tgpi-border) !important;
+  box-shadow: none !important;
+}
+:global([data-tgpi-theme="dark"]) .authWidget :global(.cl-footerActionLink) { color: var(--tgpi-gold-strong) !important; }

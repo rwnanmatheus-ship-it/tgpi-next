@@ -16,6 +16,7 @@ const destinations = [
   ["identity", "Personal information", "file"],
   ["security", "Login & security", "shield"],
   ["privacy", "Privacy controls", "key"],
+  ["appearance", "Appearance", "globe"],
   ["preferences", "App preferences", "globe"],
   ["notifications", "Notification preferences", "bell"],
   ["billing", "Plan & billing", "graph"],

@@ -89,3 +89,34 @@
   :root { --tgpi-motion-fast: 0ms; --tgpi-motion-control: 0ms; --tgpi-motion-context: 0ms; }
 }
 :root { --background:var(--tgpi-canvas); --foreground:var(--tgpi-ink); --tgpi-teal:var(--tgpi-success); --tgpi-teal-soft:var(--tgpi-success-soft); }
+
+:root {
+  color-scheme: light;
+  --tgpi-heading: var(--tgpi-navy);
+}
+
+:root[data-tgpi-theme="dark"] {
+  color-scheme: dark;
+  --tgpi-canvas: #080f1c;
+  --tgpi-canvas-alt: #0c1727;
+  --tgpi-surface: #111e30;
+  --tgpi-surface-strong: #17263a;
+  --tgpi-ink: #eff4fa;
+  --tgpi-heading: #eff4fa;
+  --tgpi-muted: #b3c2d5;
+  --tgpi-border: #3c526c;
+  --tgpi-border-soft: #273b54;
+  --tgpi-blue: #a3caff;
+  --tgpi-blue-soft: #1b3553;
+  --tgpi-gold-strong: #edcb83;
+  --tgpi-gold-soft: #352b1d;
+  --tgpi-success: #92e1bd;
+  --tgpi-success-soft: #15372e;
+  --tgpi-danger: #ffb1aa;
+  --tgpi-danger-soft: #422329;
+  --tgpi-header-ink: var(--tgpi-heading);
+  --product-navy: var(--tgpi-heading);
+  --tgpi-shadow-sm: 0 1px 3px #0004, 0 4px 12px #0002;
+  --tgpi-shadow-soft: 0 12px 32px -12px #0008;
+  --tgpi-shadow-premium: 0 24px 64px -24px #000b;
+}

@@ -189,3 +189,33 @@
 @media(hover:hover) and (prefers-reduced-motion:no-preference) { .course:hover .courseImage img { transform:scale(1.035); } }
 @media(prefers-reduced-motion:reduce) { .home *,.home *::before,.home *::after { transition:none!important; animation:none!important; scroll-behavior:auto!important; } }
 @media(max-height:520px) { .sectionNav { position:static; } }
+
+:global([data-tgpi-theme="dark"]) .home {
+  --paper: var(--tgpi-canvas);
+  --ink: var(--tgpi-ink);
+  --muted: var(--tgpi-muted);
+}
+:global([data-tgpi-theme="dark"]) .hero { background: radial-gradient(ellipse at 0 0, #172b46, transparent 60%), var(--paper); }
+:global([data-tgpi-theme="dark"]) .home :is(h2, h3, .hero h1, .lightLink, .outlineButton, .brandStrip > a, .sectionCount, .finalAction > div > p:last-child) { color: var(--tgpi-heading); }
+:global([data-tgpi-theme="dark"]) .home :is(.eyebrow, h1 em, h2 em, .heroProof span::before, .goalResult li > span, .productCopy li > span, .certificateSteps li > span, .ecosystemNumber, .faq summary > span) { color: var(--tgpi-gold-strong); }
+:global([data-tgpi-theme="dark"]) .home :is(.textLink, .planFootnote a, .trustLinks a) { color: var(--tgpi-blue); }
+:global([data-tgpi-theme="dark"]) .home :is(.heroProof, .brandStrip > p, .goalResultLabel, .goalOutcome, .certificateLegal, .sectionCount > span, .ecosystemArrow) { color: var(--muted); }
+:global([data-tgpi-theme="dark"]) :is(.sectionNav, .demoSection, .learningSection, .trustSection, .certificateSection, .goalControls) {
+  background: var(--tgpi-canvas-alt);
+  border-color: var(--tgpi-border-soft);
+}
+:global([data-tgpi-theme="dark"]) :is(.goalExplorer, .productExplorer, .productTabs button, .ecosystemItem, .course, .courseFilters button, .plan:not(.premiumPlan), .goalOption, .goalLaunch select, .sectionNavSelect) {
+  color: var(--ink);
+  background: var(--tgpi-surface);
+  border-color: var(--tgpi-border);
+}
+:global([data-tgpi-theme="dark"]) :is(.brandStrip, .productTabs, .productCopy li, .ecosystemGrid, .faq details, .outlineButton) { border-color: var(--tgpi-border); }
+:global([data-tgpi-theme="dark"]) :is(.goalOption:has(input:checked), .productTabs button[aria-selected=true], .courseFilters button[aria-pressed=true], .sectionNavLinks a[aria-current], .outlineButton:hover, .ecosystemItem:hover) {
+  color: var(--tgpi-blue);
+  background: var(--tgpi-blue-soft);
+  border-color: var(--tgpi-blue);
+}
+:global([data-tgpi-theme="dark"]) :is(.primary, .darkButton) { background: #214568; }
+:global([data-tgpi-theme="dark"]) :is(.primary, .darkButton):hover { background: #305980; }
+:global([data-tgpi-theme="dark"]) .premiumPlan .primary { background: #edcb83; }
+:global([data-tgpi-theme="dark"]) .premiumPlan .primary:hover { background: #f7dfab; }

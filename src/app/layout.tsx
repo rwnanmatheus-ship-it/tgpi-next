@@ -1,3 +1,5 @@
+import AppearanceProvider from "@/components/profile/AppearanceProvider";
+import { appearanceBootstrap, themeColors } from "@/lib/appearance";
 import DisplayPreferencesSync from "@/components/profile/DisplayPreferencesSync";
 import { localizeMetadata } from "@/lib/localization/metadata.server";
 import { getSupplementalMessages } from "@/lib/localization/catalog.server";
@@ -93,8 +95,8 @@ const sourceMetadata: Metadata = {
 export async function generateMetadata(): Promise<Metadata> { return localizeMetadata(sourceMetadata); }
 
 export const viewport: Viewport = {
-  themeColor: "#061B33",
-  colorScheme: "light",
+  themeColor: themeColors.light,
+  colorScheme: "light dark",
   width: "device-width",
   initialScale: 1,
 };
@@ -103,9 +105,14 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const locale = await getLocale();
   const clerkLocales = { en: enUS, "pt-BR": ptBR, es: esES, fr: frFR, de: deDE, it: itIT };
   return (
-    <html lang={locale} translate="no" className={`${displayFont.variable} ${interfaceFont.variable}`}>
+    <html lang={locale} translate="no" suppressHydrationWarning className={`${displayFont.variable} ${interfaceFont.variable}`}>
+      <head>
+        {/* Execute synchronously before any visible content is rendered. */}
+        <script id="tgpi-appearance" dangerouslySetInnerHTML={{ __html: appearanceBootstrap }} />
+      </head>
       <body>
         <LocaleProvider locale={locale} messages={await getSupplementalMessages(locale)}>
+        <AppearanceProvider>
         <ClerkProvider
           signInUrl="/sign-in"
           signUpUrl="/sign-up"
@@ -142,6 +149,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <AtlasWidget />
           </NotificationProvider>
         </ClerkProvider>
+        </AppearanceProvider>
         </LocaleProvider>
       </body>
     </html>

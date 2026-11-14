@@ -22,3 +22,13 @@ footer .tgpi-language-label{color:#e5c887}
 .tgpi-language-check{margin-left:auto;color:#7a5b17;font-weight:700}
 footer .tgpi-language-options{top:auto;bottom:calc(100% + 6px);left:0;right:auto}
 @media(max-width:380px){.tgpi-language-trigger{gap:4px;padding-inline:7px}.tgpi-language-chevron{display:none}}
+
+:root[data-tgpi-theme="dark"] :is(.tgpi-language-control, .tgpi-language-trigger, .tgpi-language-select, .tgpi-language-options) {
+  color: var(--tgpi-heading);
+}
+:root[data-tgpi-theme="dark"] :is(.tgpi-language-trigger, .tgpi-language-select, .tgpi-language-options, .tgpi-language-error) {
+  background: var(--tgpi-surface-strong);
+}
+:root[data-tgpi-theme="dark"] .tgpi-language-option:is(:hover, [aria-pressed=true]) { background: var(--tgpi-blue-soft); }
+:root[data-tgpi-theme="dark"] .tgpi-language-check { color: var(--tgpi-gold-strong); }
+:root[data-tgpi-theme="dark"] .tgpi-language-error { color: var(--tgpi-danger); }
