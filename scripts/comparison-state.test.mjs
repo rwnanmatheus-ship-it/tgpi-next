@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { comparisonPath, restoreComparison } from '../src/lib/comparison-state.ts';
+import { comparisonDelta, comparisonPath, readComparisonSelection, restoreComparison } from '../src/lib/comparison-state.ts';
 const valid = new Set(['portugal', 'canada', 'japan']);
 const goals = ['overall', 'study', 'work'];
 test('legacy saved selections remain usable', () => {
@@ -76,4 +76,35 @@ test('workspace resources and history preserve the full compact comparison URL',
   const page=parseWorkspaceHistoryPage({events:[{id:'all-countries',href:resource.href,title:'195 countries',type:'comparison',occurredAt:'2026-11-09T22:00:00.000Z'}],cursor:null});
   assert.ok(page);
   assert.equal(page.events[0].href,resource.href);
+});
+
+test('cleared, preselected and goal-only comparisons keep their URL state', () => {
+  const defaults = ['portugal', 'canada'];
+  const clearPath = new URL(comparisonPath([], 'study'), 'https://tgpi.test');
+  assert.equal(clearPath.search, '?country=&goal=study');
+  assert.deepEqual(readComparisonSelection(Object.fromEntries(clearPath.searchParams), valid, defaults),
+    { slugs: [], invalid: false, allowRestore: false });
+  assert.deepEqual(readComparisonSelection({ country: 'japan' }, valid, defaults),
+    { slugs: ['japan'], invalid: false, allowRestore: false });
+  assert.deepEqual(readComparisonSelection({ goal: 'study' }, valid, defaults),
+    { slugs: defaults, invalid: false, allowRestore: false });
+  assert.equal(readComparisonSelection({}, valid, defaults).allowRestore, true);
+  assert.equal(readComparisonSelection({ view: '2' }, valid, defaults).allowRestore, false);
+});
+
+test('invalid links are reported without discarding recognized repeated countries', () => {
+  const defaults = ['portugal', 'canada'];
+  assert.deepEqual(readComparisonSelection({ country: ['japan', 'invalid', 'japan'] }, valid, defaults),
+    { slugs: ['japan'], invalid: true, allowRestore: false });
+  assert.deepEqual(readComparisonSelection({ set: ['v1.00', 'v1.01'] }, valid, defaults),
+    { slugs: [], invalid: true, allowRestore: false });
+});
+
+test('reference deltas preserve real zeros and exclude mixed years and missing values', () => {
+  const reference = { year: 2025, value: 3, indicator: 'IT.NET.USER.ZS' };
+  assert.equal(comparisonDelta({ ...reference, value: 0 }, reference), -3);
+  assert.equal(comparisonDelta(reference, reference), 0);
+  assert.equal(comparisonDelta({ ...reference, year: 2024 }, reference), null);
+  assert.equal(comparisonDelta({ ...reference, indicator: 'SE.TER.ENRR' }, reference), null);
+  assert.equal(comparisonDelta(reference, undefined), null);
 });
