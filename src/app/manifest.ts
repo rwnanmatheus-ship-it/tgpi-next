@@ -39,6 +39,13 @@ export default function manifest(): MetadataRoute.Manifest {
     ],
     shortcuts: [
       {
+        name: "Courses",
+        short_name: "Courses",
+        description: "Find your next lesson on TGPI.",
+        url: "/courses?source=pwa-shortcut",
+        icons: [{ src: "/pwa/icon-192.png", sizes: "192x192" }],
+      },
+      {
         name: "Workspace Intelligence",
         short_name: "Workspace",
         description: "Resume your private global decision workspace.",

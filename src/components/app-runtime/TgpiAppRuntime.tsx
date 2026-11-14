@@ -3,51 +3,13 @@
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { LocalizedText } from "@/components/localization/LocaleProvider";
-
-
-type InstallChoice = {
-  outcome: "accepted" | "dismissed";
-  platform: string;
-};
-
-interface BeforeInstallPromptEvent extends Event {
-  prompt: () => Promise<void>;
-  userChoice: Promise<InstallChoice>;
-}
-
-type RuntimeNotice = "install" | "ios-install" | "offline" | "update" | null;
-
-const INSTALL_DISMISS_KEY = "tgpi:pwa-install-dismissed:v1";
-
-// Storage may be disabled by privacy settings. Runtime connectivity still works.
-function readInstallDismissal() {
-  try { return window.localStorage.getItem(INSTALL_DISMISS_KEY) === "1"; }
-  catch { return false; }
-}
-function persistInstallDismissal(dismissed: boolean) {
-  try {
-    if (dismissed) window.localStorage.setItem(INSTALL_DISMISS_KEY, "1");
-    else window.localStorage.removeItem(INSTALL_DISMISS_KEY);
-  } catch { /* In-memory dismissal remains effective for this visit. */ }
-}
-
-function isStandaloneMode() {
-  const navigatorWithStandalone = navigator as Navigator & { standalone?: boolean };
-  return (
-    window.matchMedia("(display-mode: standalone)").matches ||
-    navigatorWithStandalone.standalone === true
-  );
-}
+import { canInviteToInstall } from "@/lib/pwa-install";
+import { useTgpiInstall } from "./useTgpiInstall";
+import { InstallGuide, InstallInvite } from "./TgpiInstallGuide";
 
 export default function TgpiAppRuntime() {
   const pathname = usePathname();
-  // Installation belongs to the personal workspace, after discovery or study.
-  const canOfferInstall = ["/profile", "/dashboard", "/plan"].includes(pathname);
-  const [installPrompt, setInstallPrompt] =
-    useState<BeforeInstallPromptEvent | null>(null);
-  const [installDismissed, setInstallDismissed] = useState(true);
-  const installDismissedRef = useRef(false);
-  const [iosInstallAvailable, setIosInstallAvailable] = useState(false);
+  const install = useTgpiInstall(canInviteToInstall(pathname));
   const [online, setOnline] = useState(true);
   const [updateAvailable, setUpdateAvailable] = useState(false);
   const registrationRef = useRef<ServiceWorkerRegistration | null>(null);
@@ -57,32 +19,7 @@ export default function TgpiAppRuntime() {
     let disposed = false;
     let runtimeRegistration: ServiceWorkerRegistration | null = null;
     let installingWorker: ServiceWorker | null = null;
-    const standalone = isStandaloneMode();
-    const dismissed = readInstallDismissal();
-    installDismissedRef.current = standalone || dismissed;
-    const isiOS =
-      /iphone|ipad|ipod/i.test(navigator.userAgent) ||
-      (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-
-    const hydrationTimer = window.setTimeout(() => {
-      setOnline(navigator.onLine);
-      setInstallDismissed(standalone || dismissed);
-      setIosInstallAvailable(isiOS && !standalone && !dismissed);
-    }, 0);
-
-    const onBeforeInstall = (event: Event) => {
-      event.preventDefault();
-      if (installDismissedRef.current || readInstallDismissal() || isStandaloneMode()) return;
-      setInstallPrompt(event as BeforeInstallPromptEvent);
-      setInstallDismissed(false);
-    };
-    const onInstalled = () => {
-      installDismissedRef.current = true;
-      setInstallPrompt(null);
-      setInstallDismissed(true);
-      setIosInstallAvailable(false);
-      persistInstallDismissal(false);
-    };
+    const hydrationTimer = window.setTimeout(() => setOnline(navigator.onLine), 0);
     const onOnline = () => setOnline(true);
     const onOffline = () => setOnline(false);
     const onControllerChange = () => {
@@ -109,8 +46,6 @@ export default function TgpiAppRuntime() {
       );
     };
 
-    window.addEventListener("beforeinstallprompt", onBeforeInstall);
-    window.addEventListener("appinstalled", onInstalled);
     window.addEventListener("online", onOnline);
     window.addEventListener("offline", onOffline);
 
@@ -137,7 +72,7 @@ export default function TgpiAppRuntime() {
 
       const checkForUpdate = () => {
         if (document.visibilityState === "visible") {
-          void registrationRef.current?.update();
+          void registrationRef.current?.update().catch(() => undefined);
         }
       };
 
@@ -166,8 +101,6 @@ export default function TgpiAppRuntime() {
           "controllerchange",
           onControllerChange,
         );
-        window.removeEventListener("beforeinstallprompt", onBeforeInstall);
-        window.removeEventListener("appinstalled", onInstalled);
         window.removeEventListener("online", onOnline);
         window.removeEventListener("offline", onOffline);
       };
@@ -176,28 +109,10 @@ export default function TgpiAppRuntime() {
     return () => {
       disposed = true;
       window.clearTimeout(hydrationTimer);
-      window.removeEventListener("beforeinstallprompt", onBeforeInstall);
-      window.removeEventListener("appinstalled", onInstalled);
       window.removeEventListener("online", onOnline);
       window.removeEventListener("offline", onOffline);
     };
   }, []);
-
-  async function installApp() {
-    if (!installPrompt) return;
-    await installPrompt.prompt();
-    const choice = await installPrompt.userChoice;
-    setInstallPrompt(null);
-    if (choice.outcome === "dismissed") dismissInstall();
-  }
-
-  function dismissInstall() {
-    installDismissedRef.current = true;
-    persistInstallDismissal(true);
-    setInstallDismissed(true);
-    setIosInstallAvailable(false);
-    setInstallPrompt(null);
-  }
 
   function activateUpdate() {
     const waitingWorker = registrationRef.current?.waiting;
@@ -209,31 +124,9 @@ export default function TgpiAppRuntime() {
     waitingWorker.postMessage({ type: "SKIP_WAITING" });
   }
 
-  const notice: RuntimeNotice = !online
-    ? "offline"
-    : updateAvailable
-      ? "update"
-      : canOfferInstall && !installDismissed && installPrompt
-        ? "install"
-        : canOfferInstall && iosInstallAvailable
-          ? "ios-install"
-          : null;
+  const notice = !online ? "offline" : updateAvailable ? "update" : null;
 
-  if (!notice) return null;
-
-  const content = {
-    install: {
-      icon: "✦",
-      eyebrow: "TGPI App",
-      title: "Install your global workspace",
-      description: "Open TGPI in its own window and return to your plan faster.",
-    },
-    "ios-install": {
-      icon: "↗",
-      eyebrow: "Install on iPhone",
-      title: "Add TGPI to your Home Screen",
-      description: "Tap Share, then choose Add to Home Screen.",
-    },
+  const content = notice && {
     offline: {
       icon: "◌",
       eyebrow: "Connection paused",
@@ -249,66 +142,51 @@ export default function TgpiAppRuntime() {
   }[notice];
 
   return (
-    <aside
-      aria-atomic="true"
-      aria-live="polite"
-      className="fixed inset-x-4 bottom-[calc(6rem+env(safe-area-inset-bottom))] z-[90] mx-auto max-w-md overflow-hidden rounded-[1.4rem] border border-[var(--tgpi-inverse-border)] bg-[var(--tgpi-navy)] text-white shadow-[0_24px_80px_rgba(1,8,16,0.38)] backdrop-blur-xl lg:inset-x-auto lg:bottom-6 lg:right-6 lg:mx-0"
-      data-pwa-runtime={notice}
-      role="status"
-    >
-      <div className="h-1 bg-gradient-to-r from-[var(--tgpi-gold-strong)] via-[var(--tgpi-gold)] to-[var(--tgpi-gold-light)]" />
-      <div className="flex gap-4 p-4 sm:p-5">
-        <span
-          aria-hidden="true"
-          className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl border border-[var(--tgpi-gold)]/25 bg-[var(--tgpi-gold)]/10 text-xl text-[var(--tgpi-gold-light)]"
-        >
-          {content.icon}
-        </span>
-        <div className="min-w-0 flex-1">
-          <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-[var(--tgpi-gold-light)]">
-            <LocalizedText text={content.eyebrow} />
-          </p>
-          <p className="mt-1 text-sm font-extrabold text-white"><LocalizedText text={content.title} /></p>
-          <p className="mt-1 text-xs leading-5 text-[var(--tgpi-inverse-muted)]"><LocalizedText text={content.description} /></p>
-          <div className="mt-4 flex flex-wrap gap-2">
-            {notice === "install" ? (
-              <button
-                className="min-h-11 rounded-xl bg-[var(--tgpi-gold)] px-4 text-sm font-extrabold text-[var(--tgpi-navy)] transition hover:bg-[var(--tgpi-gold-light)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
-                onClick={() => void installApp()}
-                type="button"
-              ><LocalizedText text="Install TGPI" /></button>
-            ) : null}
-            {notice === "update" ? (
-              <button
-                className="min-h-11 rounded-xl bg-[var(--tgpi-gold)] px-4 text-sm font-extrabold text-[var(--tgpi-navy)] transition hover:bg-[var(--tgpi-gold-light)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
-                onClick={activateUpdate}
-                type="button"
-              ><LocalizedText text="Update now" /></button>
-            ) : null}
-            {notice === "ios-install" ? (
-              <button
-                className="min-h-11 rounded-xl border border-white/15 px-4 text-sm font-extrabold text-white transition hover:border-[var(--tgpi-gold)]/40 hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
-                onClick={dismissInstall}
-                type="button"
-              ><LocalizedText text="Got it" /></button>
-            ) : null}
-            {notice === "offline" ? (
-              <button
-                className="min-h-11 rounded-xl border border-white/15 px-4 text-sm font-extrabold text-white transition hover:border-[var(--tgpi-gold)]/40 hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
-                onClick={() => window.location.reload()}
-                type="button"
-              ><LocalizedText text="Try again" /></button>
-            ) : null}
-            {notice === "install" ? (
-              <button
-                className="min-h-11 rounded-xl px-3 text-sm font-bold text-[var(--tgpi-inverse-muted)] transition hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
-                onClick={dismissInstall}
-                type="button"
-              ><LocalizedText text="Not now" /></button>
-            ) : null}
+    <>
+      {install.showInvite && !notice ? (
+        <InstallInvite open={() => install.setGuideOpen(true)} dismiss={install.remindLater} />
+      ) : null}
+      {install.guideOpen ? <InstallGuide {...install} close={() => install.setGuideOpen(false)} /> : null}
+      {content ? <aside
+        aria-atomic="true"
+        aria-live="polite"
+        className="fixed inset-x-4 bottom-[calc(6rem+env(safe-area-inset-bottom))] z-[90] mx-auto max-w-md overflow-hidden rounded-[1.4rem] border border-[var(--tgpi-inverse-border)] bg-[var(--tgpi-navy)] text-white shadow-[0_24px_80px_rgba(1,8,16,0.38)] backdrop-blur-xl lg:inset-x-auto lg:bottom-6 lg:right-6 lg:mx-0"
+        data-pwa-runtime={notice}
+        role="status"
+      >
+        <div className="h-1 bg-gradient-to-r from-[var(--tgpi-gold-strong)] via-[var(--tgpi-gold)] to-[var(--tgpi-gold-light)]" />
+        <div className="flex gap-4 p-4 sm:p-5">
+          <span
+            aria-hidden="true"
+            className="grid h-11 w-11 shrink-0 place-items-center rounded-2xl border border-[var(--tgpi-gold)]/25 bg-[var(--tgpi-gold)]/10 text-xl text-[var(--tgpi-gold-light)]"
+          >
+            {content.icon}
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-[var(--tgpi-gold-light)]">
+              <LocalizedText text={content.eyebrow} />
+            </p>
+            <p className="mt-1 text-sm font-extrabold text-white"><LocalizedText text={content.title} /></p>
+            <p className="mt-1 text-xs leading-5 text-[var(--tgpi-inverse-muted)]"><LocalizedText text={content.description} /></p>
+            <div className="mt-4 flex flex-wrap gap-2">
+              {notice === "update" ? (
+                <button
+                  className="min-h-11 rounded-xl bg-[var(--tgpi-gold)] px-4 text-sm font-extrabold text-[var(--tgpi-navy)] transition hover:bg-[var(--tgpi-gold-light)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white"
+                  onClick={activateUpdate}
+                  type="button"
+                ><LocalizedText text="Update now" /></button>
+              ) : null}
+              {notice === "offline" ? (
+                <button
+                  className="min-h-11 rounded-xl border border-white/15 px-4 text-sm font-extrabold text-white transition hover:border-[var(--tgpi-gold)]/40 hover:bg-white/5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--tgpi-gold)]"
+                  onClick={() => window.location.reload()}
+                  type="button"
+                ><LocalizedText text="Try again" /></button>
+              ) : null}
+            </div>
           </div>
         </div>
-      </div>
-    </aside>
+      </aside> : null}
+    </>
   );
 }

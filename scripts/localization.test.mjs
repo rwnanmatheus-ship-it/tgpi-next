@@ -377,7 +377,7 @@ test('practice interface follows all six locales while English rehearsal input k
   }
 });
 
-test('global installation, offline and update notices have six-language copy', () => {
+test('global installation, offline and update notices have six-language copy', async () => {
   const path = 'src/components/app-runtime/TgpiAppRuntime.tsx';
   const source = ts.createSourceFile(path, fs.readFileSync(path, 'utf8'), ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
   const keys = [];
@@ -386,8 +386,13 @@ test('global installation, offline and update notices have six-language copy', (
     ts.forEachChild(node, visit);
   }
   visit(source);
-  assert.equal(keys.length, 12);
+  assert.equal(keys.length, 6);
   for (const key of keys) for (const locale of locales) assert.ok(messages[key]?.[locale]?.trim(), `${locale}: ${key}`);
+
+  const { installCopy } = await import(url(fs.readFileSync('src/lib/localization/pwa-install.ts', 'utf8')));
+  const { installPlatforms } = await import(url(fs.readFileSync('src/lib/pwa-install.ts', 'utf8')));
+  const installKeys = [...installPlatforms, 'title', 'intro', 'open', 'later', 'close', 'platform', 'native', 'ready', 'failed', 'otherLabel', 'copy', 'copied'];
+  for (const key of installKeys) for (const locale of locales) assert.ok(installCopy(locale, key)?.trim(), `${locale}: ${key}`);
 });
 
 test('course overview localizes controls and counts unique lessons without granting a credential', async () => {

@@ -127,7 +127,7 @@
 }
 
 .groups ul { display: grid; margin: 0; padding: 0; list-style: none; }
-.groups a, .contact a, .legal a { display: inline-flex; align-items: center; gap: 6px; min-height: 38px; padding-block: 5px; line-height: 1.4; }
+.groups a, .contact a, .installButton, .legal a { display: inline-flex; align-items: center; gap: 6px; min-height: 38px; padding-block: 5px; line-height: 1.4; }
 .groups a { font-size: 13px; }
 .contact {
   display: flex;
@@ -168,7 +168,7 @@
   .invitationActions { justify-self: start; }
   .directory { padding-block: 30px; }
   .groups { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 22px; }
-  .groups a, .contact a, .legal a { min-height: 44px; }
+  .groups a, .contact a, .installButton, .legal a { min-height: 44px; }
   .contact, .legal { display: grid; }
   .contact { padding: 12px 14px 4px; }
   .legal nav { justify-content: start; }
@@ -177,3 +177,6 @@
 @media (max-width: 380px) {
   .invitationActions { width: 100%; }
 }
+
+.installButton { color: inherit; cursor: pointer; }
+.installButton:hover { color: var(--showcase-gold); }

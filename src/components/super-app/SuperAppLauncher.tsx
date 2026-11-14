@@ -9,6 +9,7 @@ import { getSuperAppIconName } from '@/lib/navigation-system';
 import { normalizeMobileSearch, searchMobileCountries, type MobileCountry } from '@/lib/mobile-experience';
 import { containDialogFocus } from '@/lib/dialog-focus';
 import { SUPER_APP_MODULES, SUPER_APP_OPEN_EVENT, isSuperAppRouteActive } from '@/lib/super-app';
+import { InstallGuideButton } from "@/components/app-runtime/TgpiInstallGuide";
 import styles from './command.module.css';
 
 export default function SuperAppLauncher() {
@@ -64,6 +65,11 @@ export default function SuperAppLauncher() {
   const modules = SUPER_APP_MODULES.filter(module => !search || search.split(/\s+/).every(word => normalizeMobileSearch([module.label, module.shortLabel, t(module.label), t(module.shortLabel), t(module.description), ...module.keywords].join(' ')).includes(word)));
   const countryResults = searchMobileCountries(countries.map(country => ({ ...country, name: t(country.name), region: t(country.region) })), query).slice(0, 6);
   function close() { setOpenRoute(null); }
+  function openInstallGuide() {
+    // Close the launcher before the installation dialog takes focus.
+    dialogRef.current?.close();
+    close();
+  }
   function onKeyDown(event: KeyboardEvent<HTMLDialogElement>) {
     containDialogFocus(event);
     if (!['ArrowDown','ArrowUp'].includes(event.key)) return;
@@ -86,6 +92,6 @@ export default function SuperAppLauncher() {
       {loadState === 'error' ? <div className={styles.empty}><p>{t('Country intelligence is temporarily unavailable. App search remains active.')}</p><button type="button" onClick={() => setRetry(value => value + 1)}>{t('Reconnect country intelligence')}</button></div> : null}
       {search && loadState === 'ready' && !modules.length && !countryResults.length ? <p className={styles.empty}>{t('No match. Try another term or clear your search.')}</p> : null}
     </div>
-    <footer className={styles.footer}><span><kbd>↑</kbd> <kbd>↓</kbd> {t('Explore')}</span><span><kbd>↵</kbd> {t('Open')}</span><span><LocalizedText text={"Ctrl / ⌘ K"} /></span></footer>
+    <footer className={styles.footer}><InstallGuideButton className={styles.installButton} onOpen={openInstallGuide} /><span><kbd>↑</kbd> <kbd>↓</kbd> {t('Explore')}</span><span><kbd>↵</kbd> {t('Open')}</span><span><LocalizedText text={"Ctrl / ⌘ K"} /></span></footer>
   </dialog>;
 }

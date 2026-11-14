@@ -10,6 +10,7 @@ import LanguageSelector from "@/components/localization/LanguageSelector";
 import { useLocale } from "@/components/localization/LocaleProvider";
 import { HOME_PRODUCTS, type HomeProductId } from "@/lib/home-showcase";
 import styles from "./global-footer.module.css";
+import { InstallGuideButton } from "@/components/app-runtime/TgpiInstallGuide";
 import { studyCopy } from "@/lib/localization/study-accessibility";
 
 function productLink(id: HomeProductId) {
@@ -87,6 +88,7 @@ export default function GlobalFooter() {
         <div className={styles.contact}>
           <p>{t("Built in Brazil. Connected to the world.")}</p>
           <div>
+            <InstallGuideButton className={styles.installButton} />
             <a href="mailto:contact@theglobalpolymath.com">{t("Contact TGPI")} <span aria-hidden="true">↗</span></a>
             <a href="https://www.instagram.com/theglobalpolymath/" target="_blank" rel="noopener noreferrer">
               Instagram<span className="sr-only"> {t("(opens in a new tab)")}</span> <span aria-hidden="true">↗</span>

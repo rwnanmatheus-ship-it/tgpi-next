@@ -3,7 +3,9 @@ import { readFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
-import ts from "typescript";
+import {
+  canInviteToInstall, detectInstallPlatform, installReminderDelay, isInstallReminderPaused,
+} from "../src/lib/pwa-install.ts";
 import manifest from "../src/app/manifest.ts";
 
 const readSource = (path) =>
@@ -20,6 +22,7 @@ test("manifest installs TGPI as one standalone application", () => {
   assert.deepEqual(
     value.shortcuts?.map(({ url }) => url),
     [
+      "/courses?source=pwa-shortcut",
       "/profile?source=pwa-shortcut",
       "/country-fit?source=pwa-shortcut",
       "/compare?source=pwa-shortcut",
@@ -69,13 +72,14 @@ test("service worker caches only the public shell and hashed build assets", () =
 test("runtime exposes installation, connection and controlled-update states", () => {
   const source = readSource("src/components/app-runtime/TgpiAppRuntime.tsx");
 
-  assert.match(source, /beforeinstallprompt/);
-  assert.match(source, /display-mode: standalone/);
+  const install = readSource("src/components/app-runtime/useTgpiInstall.ts");
+  assert.match(install, /beforeinstallprompt/);
+  assert.match(install, /display-mode: standalone/);
   assert.match(source, /navigator\.serviceWorker\.register\("\/sw\.js"/);
   assert.match(source, /updateViaCache: "none"/);
   assert.match(source, /SKIP_WAITING/);
   assert.match(source, /Private workspace data was not cached/);
-  assert.match(source, /Tap Share, then choose Add to Home Screen/);
+  assert.match(readSource("src/lib/localization/pwa-install.ts"), /Add to Home Screen/);
   assert.match(source, /aria-live="polite"/);
 });
 
@@ -94,55 +98,28 @@ test("root metadata and response headers expose the PWA safely", () => {
   assert.match(offline, /noindex,nofollow/);
 });
 
-test("dismissed installation stays hidden across repeated browser events and reloads", async () => {
-  const state = [], effects = [], listeners = new Map(), storage = new Map();
-  let cursor = 0, blockStorage = false, pathname = '/';
-  const hooks = {
-    useState(initial) { const index = cursor++; if (!(index in state)) state[index] = initial; return [state[index], value => { state[index] = typeof value === 'function' ? value(state[index]) : value; }]; },
-    useRef(initial) { const index = cursor++; return state[index] ??= { current: initial }; },
-    useEffect(effect) { const index = cursor++; if (!(index in state)) { state[index] = true; effects.push(effect); } },
-    LocalizedText: ({ text }) => text,
-    usePathname: () => pathname,
-    jsx: (type, props) => ({ type, props }),
-  };
-  const browserWindow = {
-    localStorage: { getItem(key) { if (blockStorage) throw new Error('blocked'); return storage.get(key); }, setItem(key, value) { if (blockStorage) throw new Error('blocked'); storage.set(key, value); }, removeItem(key) { storage.delete(key); } },
-    matchMedia: () => ({ matches: false }), setTimeout: callback => { callback(); return 1; }, clearTimeout() {},
-    addEventListener: (name, handler) => listeners.set(name, handler), removeEventListener: name => listeners.delete(name),
-  };
-  globalThis.__pwaFixture = { ...hooks, window: browserWindow, navigator: { userAgent: 'test', platform: 'test', maxTouchPoints: 0, onLine: true } };
-  const source = readSource('src/components/app-runtime/TgpiAppRuntime.tsx')
-    .replace(/import[^;]+from "next\/navigation";/, 'const {usePathname}=globalThis.__pwaFixture;')
-    .replace(/import[^;]+from "react";/, 'const {useState,useRef,useEffect}=globalThis.__pwaFixture;')
-    .replace(/import[^;]+from "@\/components\/localization\/LocaleProvider";/, 'const {LocalizedText,window,navigator}=globalThis.__pwaFixture;');
-  const compiled = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX } }).outputText
-    .replace(/import[^;]+from "react\/jsx-runtime";/, 'const {jsx:_jsx,jsx:_jsxs}=globalThis.__pwaFixture;');
-  const { default: Runtime } = await import('data:text/javascript;base64,' + Buffer.from(compiled).toString('base64'));
-  const render = () => { cursor = 0; const result = Runtime(); while (effects.length) effects.shift()(); return result; };
-  const installEvent = () => { let prevented = false; listeners.get('beforeinstallprompt')({ preventDefault() { prevented = true; } }); assert.equal(prevented, true); };
-  const findDismissal = node => {
-    if (!node || typeof node !== 'object') return null;
-    if (node.type === 'button' && node.props.children?.props?.text === 'Not now') return node;
-    const children = [node.props?.children].flat(Infinity);
-    return children.map(findDismissal).find(Boolean);
-  };
-  assert.equal(render(), null);
-  installEvent();
-  assert.equal(render(), null, 'acquisition must remain unobstructed by installation');
-  pathname = '/courses/ia-trabalho-global/study';
-  assert.equal(render(), null, 'study must remain unobstructed by installation');
-  pathname = '/profile';
-  let notice = render();
-  assert.equal(notice.props['data-pwa-runtime'], 'install');
-  findDismissal(notice).props.onClick();
-  installEvent();
-  assert.equal(render(), null, 'a repeated event must respect in-memory dismissal');
-  state.length = 0; listeners.clear();
-  render(); installEvent();
-  assert.equal(render(), null, 'a reload must respect persisted dismissal');
-  storage.clear(); state.length = 0; listeners.clear(); blockStorage = true;
-  render(); installEvent(); notice = render();
-  findDismissal(notice).props.onClick(); installEvent();
-  assert.equal(render(), null, 'denied storage must still respect dismissal during the visit');
-  delete globalThis.__pwaFixture;
+test("installation instructions match browser and device instead of the screen size", () => {
+  assert.equal(detectInstallPlatform("Mozilla/5.0 Macintosh Safari/604", "MacIntel", 5), "ios");
+  assert.equal(detectInstallPlatform("Mozilla/5.0 Macintosh Safari/604", "MacIntel", 0), "safari");
+  assert.equal(detectInstallPlatform("Mozilla/5.0 iPhone CriOS/145 Safari/604", "iPhone", 5), "ios");
+  assert.equal(detectInstallPlatform("Mozilla/5.0 Android Chrome/145 SamsungBrowser/28", "", 5), "samsung");
+  assert.equal(detectInstallPlatform("Mozilla/5.0 Android; wv) Chrome/145 Instagram", "", 5), "other");
+  assert.equal(detectInstallPlatform("Mozilla/5.0 Android Firefox/145", "", 5), "firefoxAndroid");
+  assert.equal(detectInstallPlatform("Mozilla/5.0 Android Chrome/145", "", 5), "android");
+  assert.equal(detectInstallPlatform("Mozilla/5.0 Windows Chrome/145 Edg/145", "", 0), "edge");
+  assert.equal(detectInstallPlatform("Mozilla/5.0 Windows Firefox/145", "", 0), "firefoxWindows");
+  assert.equal(detectInstallPlatform("Mozilla/5.0 Linux Firefox/145", "", 0), "other");
+  assert.equal(detectInstallPlatform("Mozilla/5.0 Chromebook Chrome/145", "", 0), "chromium");
+});
+
+test("reminders expire after two weeks and only appear on selected routes", () => {
+  const now = 1_800_000_000_000;
+  const nextReminder = String(now + installReminderDelay);
+  assert.equal(installReminderDelay / 86400000, 14);
+  assert.equal(isInstallReminderPaused(nextReminder, now), true);
+  assert.equal(isInstallReminderPaused(nextReminder, now + installReminderDelay), false);
+  assert.equal(isInstallReminderPaused(null, now), false);
+  assert.equal(isInstallReminderPaused("invalid", now), false);
+  for (const route of ["/profile", "/dashboard", "/plan", "/courses"]) assert.ok(canInviteToInstall(route), route);
+  for (const route of ["/", "/profile/billing", "/courses/example/study", "/sign-in"]) assert.ok(!canInviteToInstall(route), route);
 });
