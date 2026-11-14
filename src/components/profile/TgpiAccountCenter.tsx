@@ -73,6 +73,7 @@ type TgpiAccountCenterProps = {
   initialIdentity: AccountIdentityInput;
   initialProfile: TgpiAccountProfile;
   sessionId: string;
+  initialSection?: SettingsSection;
   rank: GlobalRank | null;
 };
 type SaveState = "idle" | "saving" | "saved" | "error";
@@ -359,6 +360,7 @@ export default function TgpiAccountCenter({
   initialProfile,
   rank,
   sessionId,
+  initialSection = "overview",
 }: TgpiAccountCenterProps) {
   const { t: localizeLabel } = useInterfaceLocale();
 
@@ -368,7 +370,7 @@ export default function TgpiAccountCenter({
   const pathname = usePathname();
   const router = useRouter();
   const contentRef = useRef<HTMLDivElement>(null);
-  const [activeSection, setActiveSection] = useState<SettingsSection>("overview");
+  const [activeSection, setActiveSection] = useState<SettingsSection>(initialSection);
   const [identity, setIdentity] = useState(initialIdentity);
   const [profile, setProfile] = useState(initialProfile);
   const [query, setQuery] = useState("");
@@ -435,7 +437,11 @@ export default function TgpiAccountCenter({
   }, [saveState]);
 
   useEffect(() => {
-    const syncHash = () => setActiveSection(resolveSettingsSection(window.location.pathname, window.location.hash));
+    const syncHash = () => {
+      const { pathname, hash, search } = window.location;
+      const section = new URLSearchParams(search).get("section");
+      setActiveSection(resolveSettingsSection(pathname, hash || (section === "billing" ? "#settings-billing" : "")));
+    };
     syncHash();
     window.addEventListener("hashchange", syncHash);
     window.addEventListener("popstate", syncHash);

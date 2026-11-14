@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
       { source: "/learn/:path*", destination: "/courses/:path*", permanent: true },
       { source: "/prices", destination: "/pricing", permanent: true },
       { source: "/billing", destination: "/billing-terms", permanent: true },
+      { source: "/workspace", destination: "/profile", permanent: true },
     ];
   },
   async headers() {

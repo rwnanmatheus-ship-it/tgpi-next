@@ -18,6 +18,7 @@ import { formatTgpiGlobalId, requireUser } from "@/lib/auth/guards";
 import { getAllCountries } from "@/lib/countries";
 import { getGlobalRank } from "@/lib/global-ranks";
 import { buildGlobalWorkspaceModel } from "@/lib/global-workspace";
+import { billingReturnHref } from "@/lib/settings-navigation";
 import { normalizeOnboardingData } from "@/lib/onboarding";
 
 const sourceMetadata: Metadata = {
@@ -39,8 +40,10 @@ function getDecisionProgress(onboarding: ReturnType<typeof normalizeOnboardingDa
   return signals.filter(Boolean).length * 20;
 }
 
-export default async function SecurityPage() {
-  const [session, user] = await Promise.all([requireUser(), currentUser()]);
+export default async function SecurityPage({ searchParams }: { searchParams: Promise<{ section?: string | string[] }> }) {
+  const billing = (await searchParams).section === "billing";
+  const returnTo = billing ? billingReturnHref : "/profile/security";
+  const [session, user] = await Promise.all([requireUser(returnTo), currentUser()]);
   const email = user?.primaryEmailAddress?.emailAddress || "No primary email";
   const emailVerified =
     user?.primaryEmailAddress?.verification?.status === "verified";
@@ -78,6 +81,7 @@ export default async function SecurityPage() {
       <TgpiAccountCenter
         key={session.sessionId}
         sessionId={session.sessionId}
+        initialSection={billing ? "billing" : "overview"}
         account={{
           avatarUrl: user?.imageUrl || "",
           email,

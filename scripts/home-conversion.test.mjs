@@ -3,6 +3,7 @@ import { matchesPremiumOffer } from "../src/lib/commercial-offer.ts";
 import assert from "node:assert/strict";
 import test from "node:test";
 import { existsSync, readFileSync } from "node:fs";
+import { comparisonPlanPath } from "../src/lib/comparison-state.ts";
 import { safeReturnTo } from "../src/lib/auth/return-to.ts";
 import { hasFunnelConsent } from "../src/lib/funnel.ts";
 import { HOME_ROUTES, HOME_COURSES, HOME_FAQ } from "../src/lib/home-content.ts";
@@ -11,10 +12,19 @@ import { HOME_ART_ROOT, HOME_LIBRARY, HOME_PRODUCTS, homeProductArt } from "../s
 
 const read = path => readFileSync(new URL(`../${path}`, import.meta.url), "utf8");
 test("authentication preserves allowed local intent including country goal and membership anchor", () => {
-  for (const path of ["/country-fit?country=portugal&goal=work", "/pricing#membership", "/onboarding", "/courses/global-english-2026/study", "/compare?country=canada&country=portugal"]) assert.equal(safeReturnTo(path), path);
+  for (const path of ["/country-fit?country=portugal&goal=work", "/pricing#membership", "/onboarding", "/courses/global-english-2026/study", "/courses/python-automacao-profissionais/history", "/profile/security?section=billing#settings-billing", "/compare?country=canada&country=portugal"]) assert.equal(safeReturnTo(path), path);
 });
 test("authentication rejects external, malformed and privileged redirect targets", () => {
   for (const path of ["https://evil.example", "//evil.example", "/\\evil.example", "/admin", "/api/stripe/create-checkout-session", "/%2f%2fevil.example", "/profile\n", "javascript:alert(1)", null, { next: "/profile" }, "/profile/../admin"]) assert.equal(safeReturnTo(path), "/onboarding");
+});
+test("comparison handoff preserves a bounded selection and lens through login", () => {
+  const path = comparisonPlanPath(["portugal", "canada", "portugal", "invalid", "japan", "spain", "germany", "france"], "work");
+  const url = new URL(path, "https://tgpi.invalid");
+  assert.equal(safeReturnTo(path), path);
+  assert.equal(url.pathname, "/onboarding");
+  assert.equal(url.searchParams.get("source"), "compare");
+  assert.equal(url.searchParams.get("goal"), "work");
+  assert.deepEqual(url.searchParams.getAll("country"), ["portugal", "canada", "japan", "spain", "germany"]);
 });
 test("conversion measurement requires exact consent and respects GPC", () => {
   assert.equal(hasFunnelConsent(null), false);

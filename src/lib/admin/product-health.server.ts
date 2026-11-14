@@ -10,6 +10,8 @@ import {
   isLearningStorageConfigured,
 } from "@/lib/firestore-admin-rest.server";
 import { isBaseMainnetAnchorConfigured } from "@/lib/global-key-anchor.server";
+import { notificationRoot } from "@/lib/notifications/paths";
+import { getIntelligence } from "@/lib/intelligence/server";
 import { pushConfigured } from "@/lib/notifications/push.server";
 import { getStripeServer, TGPI_PREMIUM_PRICE_ID } from "@/lib/stripe";
 
@@ -79,10 +81,34 @@ function checkAtlas(userId: string): CheckResult {
   }
 }
 
-function checkNotifications(): CheckResult {
-  return pushConfigured() && process.env.CRON_SECRET?.trim()
-    ? { state: "configured", detail: "Push e autenticação da rotina estão configurados. Consulte os logs para confirmar entregas." }
-    : { state: "attention", detail: "Confira o armazenamento, as credenciais de push e a autenticação da rotina." };
+async function checkNotifications(): Promise<CheckResult> {
+  if (!process.env.CRON_SECRET?.trim() || !isLearningStorageConfigured()) {
+    return { state: "attention", detail: "A rotina precisa de autenticação e armazenamento configurados." };
+  }
+  const path = `${notificationRoot}/operations/reconcile`;
+  const record = (await getFirestoreDocuments<{ at?: string; failed?: number }>(
+    [path], undefined, AbortSignal.timeout(timeoutMs),
+  )).get(path)?.data;
+  const at = record?.at ? Date.parse(record.at) : NaN;
+  if (!Number.isFinite(at) || Date.now() - at > 10 * 60_000) {
+    return { state: "attention", detail: "Nenhuma execução recente da caixa de notificações foi confirmada." };
+  }
+  if (record?.failed) return { state: "attention", detail: "A rotina foi executada e registrou itens pendentes de nova tentativa." };
+  return pushConfigured()
+    ? { state: "verified", detail: "A caixa de notificações foi reconciliada recentemente. A entrega de push deve ser confirmada no dispositivo." }
+    : { state: "attention", detail: "A caixa de notificações está sendo reconciliada. A configuração de push está pendente." };
+}
+
+async function checkCountryEvidence(): Promise<CheckResult> {
+  const { status, snapshot } = await getIntelligence();
+  const date = snapshot.retrievedAt?.slice(0, 10);
+  if (!date || status === "unavailable") {
+    return { state: "failed", detail: "A coleta estatística validada está indisponível." };
+  }
+  if (status === "degraded") {
+    return { state: "attention", detail: `Atualização adiada. Última coleta validada em ${date}. Consulte a fila de revisão editorial em Fontes e Metodologia.` };
+  }
+  return { state: "verified", detail: `Coleta estatística validada em ${date}. A revisão editorial das fontes é acompanhada em Fontes e Metodologia.` };
 }
 
 function checkIntegrityChain(): CheckResult {
@@ -125,7 +151,8 @@ export async function getProductHealth() {
       : { state: "attention", detail: "A chave de verificação dos certificados está indisponível." },
     },
     { id: "atlas", title: "Atlas AI", source: "Atlas · validação de configuração", run: () => checkAtlas(admin.userId) },
-    { id: "notifications", title: "Notificações", source: "Web Push · configuração", run: checkNotifications },
+    { id: "notifications", title: "Notificações", source: "Firestore · execução da rotina", run: checkNotifications },
+    { id: "evidence", title: "Evidência dos países", source: "Intelligence Graph · coleta validada", run: checkCountryEvidence },
     { id: "integrity", title: "TGPI Integrity Chain", source: "Base · configuração", run: checkIntegrityChain },
   ];
 

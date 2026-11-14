@@ -1,3 +1,4 @@
+import { recordFunnelEvent, requestFunnelConsent } from "@/lib/funnel.server";
 import { normalizeTgpiAccountProfile } from "@/lib/account-profile";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import { normalizeOnboardingData } from "@/lib/onboarding";
@@ -27,6 +28,9 @@ export async function PATCH(request: Request) {
       ...normalizeTgpiAccountProfile(user.unsafeMetadata.tgpiAccountProfile),
       profession: onboarding.profession, languages: onboarding.languages, updatedAt: onboarding.updatedAt,
     } } });
+    if (!previous.primaryGoal || !previous.targetCountries.length) {
+      recordFunnelEvent("plan_context_saved", requestFunnelConsent(request));
+    }
     return Response.json({ saved: true }, { headers: { "Cache-Control": "no-store" } });
   } catch (error) {
     if (error instanceof SyntaxError) return Response.json({ error: "Invalid plan format." }, { status: 400 });

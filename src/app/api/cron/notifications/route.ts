@@ -22,19 +22,26 @@ export async function GET(request: Request) {
       { error: "Production runtime required." },
       { status: 409 },
     );
-  if (!pushConfigured())
-    return Response.json({ error: "Push is not configured." }, { status: 503 });
-  try {
-    const delivery = await dispatchPushBatch();
-    const sync = await reconcileNotificationBatch();
-    return Response.json(
-      { delivery, sync },
-      { headers: { "Cache-Control": "no-store" } },
-    );
-  } catch {
-    return Response.json(
-      { error: "Notification processing will retry." },
-      { status: 503 },
-    );
+  const configured = pushConfigured();
+  const [delivery, sync] = await Promise.allSettled([
+    dispatchPushBatch(),
+    reconcileNotificationBatch(),
+  ]);
+  const deliveryFailed = delivery.status === "rejected";
+  const syncFailed = sync.status === "rejected";
+
+  if (deliveryFailed || syncFailed) {
+    console.error("TGPI notification batch failed", { deliveryFailed, syncFailed });
   }
+
+  return Response.json(
+    {
+      delivery: delivery.status === "fulfilled" ? delivery.value : null,
+      sync: sync.status === "fulfilled" ? sync.value : null,
+    },
+    {
+      status: !configured || deliveryFailed || syncFailed ? 503 : 200,
+      headers: { "Cache-Control": "no-store" },
+    },
+  );
 }

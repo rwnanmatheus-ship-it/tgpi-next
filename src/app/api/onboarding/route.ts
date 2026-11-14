@@ -1,3 +1,4 @@
+import { recordFunnelEvent, requestFunnelConsent } from "@/lib/funnel.server";
 import { normalizeTgpiAccountProfile } from "@/lib/account-profile";
 import { scheduleNotificationReconciliation } from "@/lib/notifications/schedule.server";
 import { auth, clerkClient } from "@clerk/nextjs/server";
@@ -56,6 +57,9 @@ export async function PATCH(request: Request) {
       },
     });
 
+    if (savedOnboarding.completed && !previous.completed) {
+      recordFunnelEvent("plan_context_saved", requestFunnelConsent(request));
+    }
     scheduleNotificationReconciliation(session.userId);
     return NextResponse.json({ onboarding: savedOnboarding });
   } catch (error) {

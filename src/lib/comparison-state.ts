@@ -9,6 +9,14 @@ export function comparisonPath(slugs: readonly string[], goal: string): string {
   return `/compare?${params.toString()}`;
 }
 
+export function comparisonPlanPath(slugs: readonly string[], goal: string): string {
+  const countries = [...new Set(slugs.filter(slug => (COMPARISON_CATALOG as readonly string[]).includes(slug)))];
+  const params = new URLSearchParams({ source: "compare" });
+  countries.slice(0, 5).forEach(slug => params.append("country", slug));
+  if (["study", "work", "live", "travel"].includes(goal)) params.set("goal", goal);
+  return `/onboarding?${params.toString()}`;
+}
+
 export function restoreComparison(value: unknown, validSlugs: ReadonlySet<string>, validGoals: readonly string[]) {
   const record = value && typeof value === "object" && !Array.isArray(value) ? value as Record<string, unknown> : null;
   const raw = Array.isArray(value) ? value : record?.countrySlugs;

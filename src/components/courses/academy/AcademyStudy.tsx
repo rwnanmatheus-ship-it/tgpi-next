@@ -293,7 +293,7 @@ function StudySession({ course: original, sessionId, initialLesson }: { course: 
             {[[allComplete, 'Lessons and practice'], [portfolioReady, 'Practice portfolio'], [Boolean(record.final), 'Final assessment'], [Boolean(record.retention), 'Spaced review'], [Boolean(status?.emailVerified), 'Verified email']].map(([done, label]) => <li key={String(label)} data-complete={Boolean(done)}><span>{done ? <AcademyIcon name="check" size={14} /> : <span className={styles.pendingDot} />}</span>{t(String(label))}</li>)}
           </ul>
           <p className={styles.finePrint}>{t('The required spaced review opens 24 hours after the final assessment. Waiting time is not counted in the workload.')}</p>
-          <Link className={styles.link} href="/workspace">{t('Workspace')} ↗</Link>
+          <Link className={styles.link} href="/profile">{t('Workspace')} ↗</Link>
         </section>
       </aside>
       </div>

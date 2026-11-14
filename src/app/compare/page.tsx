@@ -18,6 +18,8 @@ import { translate } from "@/lib/localization/messages";
 import { getAllCountries } from "@/lib/countries";
 import { getIntelligence, identities } from "@/lib/intelligence/server";
 import { isComparisonGoal, getComparisonGoalConfig, type ComparisonGoal } from "@/lib/tgpi-comparison";
+import { documentsHref, resolveDocumentGoal } from "@/lib/documents-os";
+import { comparisonPlanPath } from "@/lib/comparison-state";
 import { decodeCountrySet } from "@/lib/comparison-catalog";
 
 export const dynamic = "force-dynamic";
@@ -39,6 +41,9 @@ export default async function ComparePage({ searchParams }: { searchParams?: Pro
   const selected=slugs.flatMap(slug=>bySlug.get(slug)?[bySlug.get(slug)!]:[]);
   const page=Math.max(1,Math.min(Math.ceil(selected.length/PAGE_SIZE)||1,Math.floor(Number(params?.view))||1));
   const visible=selected.slice((page-1)*PAGE_SIZE,page*PAGE_SIZE);
+  const canImportToPlan = explicit && selected.length >= 2 && selected.length <= 5;
+  const planHref = canImportToPlan ? comparisonPlanPath(slugs, goal) : "/plan";
+  const preparationHref = documentsHref({ country: explicit ? selected[0]?.slug : undefined, goal: resolveDocumentGoal(goal) });
   return <ActivationProgressProvider><main className="ig-shell compare-command"><div className="ig-container">
     <header className="compare-hero"><div className="compare-hero-copy"><p className="compare-kicker">{t("TGPI /")} {t("Decision Studio")}</p><h1 id="compare-title">{t("Compare the world.")}<br/><span>{t("Design your next move.")}</span></h1><p>{t("Your destinations. Your priorities. One clear view of the evidence and your next steps.")}</p><div className="compare-hero-links"><a href="#comparison-builder">{t("Build my comparison")} ↗</a><Link href="/plan">{t("My plan")} →</Link></div><div className="compare-hero-meta"><span>{countries.length} {t("countries")}</span><span>{t("Source-linked data")}</span><span>{t("Connected to your workspace")}</span></div></div><div className="compare-hero-art" aria-hidden="true"><CinematicImage asset="decision-comparison" alt="" priority sizes="(max-width: 767px) calc(100vw - 32px), (max-width: 1100px) 100vw, 50vw" position="55% center"/><span className="compare-art-label">{t("Global perspectives")}</span></div></header>
     <CompareCountryPicker key={`${slugs.join(",")}:${goal}:${locale}`} countries={countries} initialSlugs={slugs} initialGoal={goal} hasExplicitSelection={explicit}/>
@@ -50,7 +55,7 @@ export default async function ComparePage({ searchParams }: { searchParams?: Pro
     <section id="decision-details" className="compare-section"><div className="compare-section-head"><div><p className="compare-kicker">04 / {t("Detailed comparison")}</p><h2>{t("Go beyond the numbers.")}</h2><p>{t("Check legal pathways, education and cost references before committing.")}</p></div><Link className="compare-button" href="/intelligence">{t("Methodology & source coverage")} ↗</Link></div><details className="compare-dossier-disclosure"><summary>{t("Open destination evidence and limitations")}</summary><DossierComparison countries={visible}/></details></section>
     <section id="decision-labs" className="compare-section compare-labs"><div className="compare-section-head"><div><p className="compare-kicker">05 / {t("Decision Lab")}</p><h2>{t("Turn insight into action.")}</h2><p>{t("Build a city budget and a preparation checklist for each destination. Your estimates remain separate from published evidence.")}</p></div><span className="compare-lab-symbol" aria-hidden="true">↗</span></div><DecisionLabs key={visible.map(c=>c.slug).join(",")} countries={visible}/></section>
     {selected.length>PAGE_SIZE && <ComparisonNavigation countries={selected} goal={goal} page={page} pageSize={PAGE_SIZE}/>}</> : <section className="compare-empty"><h2>{t("Choose at least two countries to build a comparison.")}</h2><p>{t("Search the full catalog, add destinations and choose your focus.")}</p></section>}
-    <section id="decision-actions" className="compare-section compare-next"><div><p className="compare-kicker">06 / {t("Next steps")}</p><h2>{t("A comparison is only the beginning.")}</h2><p>{t("Connect your research to a plan, learning and practical preparation.")}</p></div><div className="compare-next-grid">{[["/plan","My plan"],["/countries","Explore destinations"],["/learn","Learn"],["/documents","Documents"],["/atlas","Ask Atlas"],["/profile","Workspace"]].map(([href,label])=><Link href={href} key={href}>{t(label)}<span aria-hidden="true">↗</span></Link>)}</div></section>
+    <section id="decision-actions" className="compare-section compare-next"><div><p className="compare-kicker">06 / {t("Next steps")}</p><h2>{t("A comparison is only the beginning.")}</h2><p>{t("Connect your research to a plan, learning and practical preparation.")}</p></div><div className="compare-next-grid">{[[planHref, "My plan"],["/countries","Explore destinations"],["/learn","Learn"],[preparationHref,"Documents"],["/atlas?guide=evidence","Ask Atlas"],["/profile","Workspace"]].map(([href,label])=><Link href={href} key={href}>{t(label)}<span aria-hidden="true">↗</span></Link>)}</div></section>
   </div></main></ActivationProgressProvider>;
 }
 async function ComparisonEvidence({visible,selected,goal}:{visible:Country[];selected:Country[];goal:ComparisonGoal}){

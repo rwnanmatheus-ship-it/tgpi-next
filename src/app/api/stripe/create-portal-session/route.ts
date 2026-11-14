@@ -5,7 +5,7 @@ import { findLatestStripeSubscription, getOrCreateStripeCustomer, getUserBilling
 import { assertBillingMode, getBillingCustomer, getBillingSubscription } from "@/lib/billing-overview.server";
 import { isFirestoreQuotaError } from "@/lib/firestore-admin-rest.server";
 import { isLocale } from "@/lib/localization/config";
-import { settingsHref } from "@/lib/settings-navigation";
+import { billingReturnHref } from "@/lib/settings-navigation";
 import { getBaseUrl, getStripeServer } from "@/lib/stripe";
 
 const headers = { "Cache-Control": "private, no-store, max-age=0" };
@@ -31,7 +31,7 @@ export async function POST(request: Request) {
 
     const stripe = getStripeServer();
     await getBillingCustomer(user.uid, customerId);
-    const returnUrl = `${getBaseUrl(request)}${action ? settingsHref("billing") : "/pricing"}`;
+    const returnUrl = `${getBaseUrl(request)}${action ? billingReturnHref : "/pricing"}`;
     const locale = params.get("locale");
     const subscriptionId = action === "card" && (billing.stripeSubscriptionId
       || (await findLatestStripeSubscription(customerId))?.id);

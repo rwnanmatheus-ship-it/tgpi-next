@@ -1,5 +1,8 @@
 import { localizeMetadata } from "@/lib/localization/metadata.server";
 import type { Metadata } from "next";
+import { requireUser } from "@/lib/auth/guards";
+import { comparisonPlanPath } from "@/lib/comparison-state";
+import { isComparisonGoal } from "@/lib/tgpi-comparison";
 import { currentUser } from "@clerk/nextjs/server";
 import OnboardingFlow from "@/components/onboarding/OnboardingFlow";
 import { getAllCountries } from "@/lib/countries";
@@ -24,8 +27,13 @@ function getFlagRegionCode(emoji: string) {
   return /^[A-Z]{2}$/.test(code) ? code : "";
 }
 
-export default async function OnboardingPage() {
-  const user = await currentUser();
+export default async function OnboardingPage({ searchParams }: { searchParams: Promise<{ source?: string | string[]; country?: string | string[]; goal?: string | string[] }> }) {
+  const params = await searchParams;
+  const requestedCountries = typeof params.country === "string" ? [params.country] : params.country ?? [];
+  const fromComparison = params.source === "compare";
+  const requestedGoal = typeof params.goal === "string" && isComparisonGoal(params.goal) && params.goal !== "overall" ? params.goal : undefined;
+  const returnTo = fromComparison ? comparisonPlanPath(requestedCountries, requestedGoal ?? "overall") : "/onboarding";
+  const [, user] = await Promise.all([requireUser(returnTo), currentUser()]);
   const displayNames = new Intl.DisplayNames(["en-US"], { type: "region" });
   const countries: OnboardingCountry[] = getAllCountries()
     .map((country) => {
@@ -43,10 +51,22 @@ export default async function OnboardingPage() {
     user?.unsafeMetadata.tgpiOnboarding,
   );
 
+  const knownCountries = new Set(countries.map(country => country.slug));
+  const selected = [...new Set(requestedCountries)].filter(slug => knownCountries.has(slug)).slice(0, 5);
+  const importComparison = fromComparison && selected.length >= 2;
+  const draft = importComparison ? {
+    ...initialData,
+    primaryGoal: requestedGoal ?? initialData.primaryGoal,
+    targetCountries: [...new Set([...selected, ...initialData.targetCountries])].slice(0, 5),
+    currentStep: 1,
+  } : initialData;
+
   return (
     <OnboardingFlow
       countries={countries}
-      initialData={initialData}
+      initialData={draft}
+      explicitSave={importComparison}
+      completionHref={importComparison ? "/plan" : "/profile?onboarding=completed"}
       firstName={user?.firstName || "global explorer"}
     />
   );

@@ -15,12 +15,14 @@ import type {
 import { LocalizedText } from "@/components/localization/LocaleProvider";
 
 
-type SaveStatus = "saved" | "saving" | "error";
+type SaveStatus = "saved" | "saving" | "error" | "draft";
 
 type OnboardingFlowProps = {
   countries: OnboardingCountry[];
   initialData: TgpiOnboardingData;
   firstName: string;
+  explicitSave?: boolean;
+  completionHref?: string;
 };
 
 const steps = [
@@ -169,48 +171,54 @@ export default function OnboardingFlow({
   countries,
   initialData,
   firstName,
+  explicitSave = false,
+  completionHref = "/profile?onboarding=completed",
 }: OnboardingFlowProps) {
   const [data, setData] = useState(initialData);
   const [step, setStep] = useState(initialData.currentStep || 1);
   const [highestStep, setHighestStep] = useState(initialData.currentStep || 1);
-  const [saveStatus, setSaveStatus] = useState<SaveStatus>("saved");
+  const [saveStatus, setSaveStatus] = useState<SaveStatus>(explicitSave ? "draft" : "saved");
   const [validationMessage, setValidationMessage] = useState("");
   const [isCompleting, setIsCompleting] = useState(false);
-  const hasMounted = useRef(false);
+  const savedDraft = useRef(initialData);
+  const persistenceQueue = useRef(Promise.resolve(true));
+  const completing = useRef(false);
 
-  const persist = useCallback(async (nextData: TgpiOnboardingData) => {
+  const persist = useCallback((nextData: TgpiOnboardingData) => {
     setSaveStatus("saving");
+    const write = async () => {
+      try {
+        const response = await fetch("/api/onboarding", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(nextData),
+        });
 
-    try {
-      const response = await fetch("/api/onboarding", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(nextData),
-      });
+        if (!response.ok) throw new Error("Save failed");
 
-      if (!response.ok) throw new Error("Save failed");
-
-      await response.json();
-      setSaveStatus("saved");
-      return true;
-    } catch {
-      setSaveStatus("error");
-      return false;
-    }
+        await response.json();
+        savedDraft.current = nextData;
+        setSaveStatus("saved");
+        return true;
+      } catch {
+        setSaveStatus("error");
+        return false;
+      }
+    };
+    const queued = persistenceQueue.current.then(write);
+    persistenceQueue.current = queued;
+    return queued;
   }, []);
 
   useEffect(() => {
-    if (!hasMounted.current) {
-      hasMounted.current = true;
-      return;
-    }
+    if (explicitSave || isCompleting || data === savedDraft.current) return;
 
     const timer = window.setTimeout(() => {
-      void persist(data);
+      if (!completing.current && data !== savedDraft.current) void persist(data);
     }, 800);
 
     return () => window.clearTimeout(timer);
-  }, [data, persist]);
+  }, [data, explicitSave, isCompleting, persist]);
 
   function updateData(patch: Partial<TgpiOnboardingData>) {
     setValidationMessage("");
@@ -226,6 +234,7 @@ export default function OnboardingFlow({
   }
 
   async function continueFlow() {
+    if (completing.current) return;
     const message = getStepValidationMessage(step, data);
 
     if (message) {
@@ -234,16 +243,16 @@ export default function OnboardingFlow({
     }
 
     if (step === 5) {
+      completing.current = true;
       setIsCompleting(true);
       const finalData = { ...data, currentStep: 5, completed: true };
-      setData(finalData);
       const saved = await persist(finalData);
+      completing.current = false;
       setIsCompleting(false);
 
       if (saved) {
         announceProgressSaved();
-        // eslint-disable-next-line @next/next/no-location-assign-relative-destination -- Open the workspace on the active deployment.
-        window.location.assign("/profile?onboarding=completed");
+        window.location.assign(new URL(completionHref, window.location.origin));
       }
       return;
     }
@@ -374,7 +383,7 @@ export default function OnboardingFlow({
 
               <div className="mt-4 flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
                 <div className="flex items-center gap-3 text-xs text-[#657082]">
-                  <SaveIndicator status={saveStatus} />
+                  {saveStatus === "draft" ? <LocalizedText text="Unsaved changes" /> : <SaveIndicator status={saveStatus} />}
                   <span><LocalizedText text={"Only experience preferences are saved."} /></span>
                 </div>
                 <div className="flex gap-3">

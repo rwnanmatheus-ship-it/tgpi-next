@@ -13,6 +13,8 @@ export function settingsHref(section: SettingsSection, pathname = '/profile/secu
   return `${path}#settings-${section}`;
 }
 
+export const billingReturnHref = "/profile/security?section=billing#settings-billing";
+
 export function normalizeSettingsSearch(value: string) {
   return value.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase().trim();
 }
