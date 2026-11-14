@@ -1,4 +1,4 @@
-export const settingsKeys = ['overview', 'identity', 'global', 'public-profile', 'global-key', 'billing', 'preferences', 'notifications', 'privacy', 'security', 'accessibility', 'data', 'diagnostics', 'progress'] as const;
+export const settingsKeys = ['overview', 'identity', 'global', 'public-profile', 'global-key', 'billing', 'appearance', 'preferences', 'notifications', 'privacy', 'security', 'accessibility', 'data', 'diagnostics', 'progress'] as const;
 export type SettingsSection = typeof settingsKeys[number];
 
 export function resolveSettingsSection(pathname: string, hash: string): SettingsSection {

@@ -4,6 +4,8 @@
   --directory-line: #d3dfed;
   --directory-blue: #1649bd;
   --directory-wash: #ecf3ff;
+  --directory-surface: #fff;
+  --directory-active-ink: #fff;
   --directory-gold: #f0d194;
   background: radial-gradient(ellipse at 85% 5%, #dfeafc, transparent 32rem), #f2f6fc;
   padding: clamp(14px, 2.3vw, 30px) clamp(12px, 2.6vw, 36px) 56px;
@@ -107,7 +109,7 @@
   padding: 7px 12px;
   border: 1px solid var(--directory-line);
   border-radius: 10px;
-  background: #fff;
+  background: var(--directory-surface);
   color: var(--directory-ink);
   font-size: .81rem;
   font-weight: 700;
@@ -210,7 +212,7 @@
   min-height: 46px;
   border: 1px solid #a9bdd8;
   border-radius: 8px;
-  background: #f6f9ff;
+  background: var(--directory-subtle, #f6f9ff);
   color: var(--directory-ink);
   font-size: 1rem;
 }
@@ -261,7 +263,7 @@
   padding: 12px;
   border: 1px solid var(--directory-line);
   border-radius: 14px;
-  background: #fff;
+  background: var(--directory-surface);
   color: var(--directory-ink);
 }
 
@@ -285,7 +287,7 @@
   padding: 2px;
   border: 1px solid var(--directory-line);
   border-radius: 10px;
-  background: #e5edf8;
+  background: var(--directory-subtle, #e5edf8);
 }
 
 .viewToggle button {
@@ -297,8 +299,8 @@
   color: var(--directory-muted);
   cursor: pointer;
 }
-.viewToggle button:hover { background: #fff; }
-.viewToggle button[aria-pressed="true"] { background: var(--directory-blue); color: #fff; }
+.viewToggle button:hover { background: var(--directory-surface); }
+.viewToggle button[aria-pressed="true"] { background: var(--directory-blue); color: var(--directory-active-ink); }
 
 .selection {
   position: sticky;
@@ -308,7 +310,7 @@
   padding: 8px 12px;
   border: 1px solid #a2bbed;
   border-radius: 12px;
-  background: #f5f8ff;
+  background: var(--directory-subtle, #f5f8ff);
   color: var(--directory-ink);
   box-shadow: 0 7px 20px #112a4617;
   font-size: .82rem;
@@ -325,7 +327,7 @@
   padding: 8px 12px;
   border-radius: 9px;
   background: var(--directory-blue);
-  color: #fff;
+  color: var(--directory-active-ink);
   text-decoration: none;
 }
 
@@ -346,7 +348,7 @@
   overflow: hidden;
   border: 1px solid var(--directory-line);
   border-radius: 15px;
-  background: #fff;
+  background: var(--directory-surface);
   box-shadow: 0 4px 16px #12264212;
   color: var(--directory-ink);
 }
@@ -401,7 +403,7 @@
   padding: 7px 8px;
   list-style: none;
   border-radius: 8px;
-  background: #edf3fc;
+  background: var(--directory-subtle, #edf3fc);
   color: var(--directory-muted);
   font-size: .72rem;
   font-weight: 650;
@@ -441,12 +443,12 @@
   padding: 0;
   border: 1px solid var(--directory-line);
   border-radius: 8px;
-  background: #fff;
+  background: var(--directory-surface);
   color: var(--directory-blue);
   cursor: pointer;
 }
 .compareAction:hover, .cardActions [data-compact-save]:hover { border-color: #9db4e4; background: var(--directory-wash); }
-.compareAction[aria-pressed="true"] { border-color: var(--directory-blue); background: var(--directory-blue); color: #fff; }
+.compareAction[aria-pressed="true"] { border-color: var(--directory-blue); background: var(--directory-blue); color: var(--directory-active-ink); }
 .cardActions [data-compact-save][aria-pressed="true"] { border-color: #dec28d; background: #fcf2dc; color: #745215; }
 .cardActions [data-save-feedback] { flex-basis: 100%; }
 
@@ -524,4 +526,17 @@
 @media (prefers-reduced-motion: reduce) {
   .photo { transition: none; }
   .card:hover .photo { transform: none; }
+}
+
+
+:global([data-tgpi-theme="dark"]) .page:global(.ig-shell) {
+  --directory-ink: var(--tgpi-heading);
+  --directory-muted: var(--tgpi-muted);
+  --directory-line: var(--tgpi-border);
+  --directory-blue: var(--tgpi-blue);
+  --directory-wash: var(--tgpi-blue-soft);
+  --directory-surface: var(--tgpi-surface);
+  --directory-subtle: var(--tgpi-surface-strong);
+  --directory-active-ink: var(--tgpi-navy-deep);
+  background: var(--tgpi-canvas);
 }

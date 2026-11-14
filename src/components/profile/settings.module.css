@@ -69,3 +69,34 @@
   :global(body:has(.tgpi-compact-dock)) .saveBar { --save-offset: calc(var(--tgpi-compact-dock) + var(--tgpi-safe-bottom) + .5rem); }
   .saveActions { width: 100%; }
 }
+
+:global([data-tgpi-theme="dark"]) .root {
+  --settings-line: var(--tgpi-border);
+  --settings-muted: var(--tgpi-muted);
+  color: var(--tgpi-ink);
+}
+:global([data-tgpi-theme="dark"]) :is(.main, .card, .statusCard, .settingCard, .saveBar, .navigationWarning, .mobileSelect, .secondary) {
+  color: var(--tgpi-ink);
+  background: var(--tgpi-surface);
+  border-color: var(--settings-line);
+  box-shadow: var(--tgpi-shadow-sm);
+}
+:global([data-tgpi-theme="dark"]) :is(.screenTitle, .breadcrumb button, .relatedLink, .statusCard svg, .mobileSelect select) { color: var(--tgpi-heading); }
+:global([data-tgpi-theme="dark"]) :is(.breadcrumb, .sectionLabel small, .card p, .settingCard p, .statusCard small, .statusCard > span, .toggle small, .saveBar small, .readingSample p) { color: var(--tgpi-muted); }
+:global([data-tgpi-theme="dark"]) :is(.tileIcon, .notice, .readingSample, .secondary:hover) {
+  color: var(--tgpi-blue);
+  background: var(--tgpi-blue-soft);
+  border-color: var(--settings-line);
+  box-shadow: none;
+}
+:global([data-tgpi-theme="dark"]) :is(.warning, .recommendation, .recommendation p) { background: var(--tgpi-gold-soft); color: var(--tgpi-gold-strong); }
+:global([data-tgpi-theme="dark"]) .main .eyebrow { color: var(--tgpi-gold-strong); }
+:global([data-tgpi-theme="dark"]) :is(.confirm, .toggle, .content :global(.tgpi-account-input)) { border-color: var(--settings-line); }
+:global([data-tgpi-theme="dark"]) .content :global(.tgpi-account-input) {
+  background: var(--tgpi-surface-strong);
+  color: var(--tgpi-ink);
+}
+:global([data-tgpi-theme="dark"]) .content :global(.tgpi-member-panel) {
+  background: var(--tgpi-surface);
+  border-color: var(--settings-line);
+}

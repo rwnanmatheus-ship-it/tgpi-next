@@ -8,6 +8,7 @@ import { translateAccountSaveError } from "@/lib/localization/account-save";
 import LanguageSelector from "@/components/localization/LanguageSelector";
 
 import Image from "next/image";
+import AppearanceControl from "./AppearanceControl";
 import SettingsAccessibility from "./SettingsAccessibility";
 import SettingsDiagnostics from "./SettingsDiagnostics";
 import SettingsData from "./SettingsData";
@@ -124,6 +125,7 @@ const timezoneOptions = [
 ] as const;
 
 const settingsSections: readonly SettingsSectionDefinition[] = [
+  { description: "Theme and device appearance", key: "appearance", keywords: "theme light dark system tema claro escuro aparencia modo nocturno", label: "Appearance", group: "Experience", sticker: "◐" },
   { description: "Reading, motion and keyboard navigation", key: "accessibility", keywords: "accessibility motion animation text font focus acessibilidade fonte animacao movimento leitura contraste", label: "Accessibility", group: "Experience", sticker: "" },
   { description: "Export your saved profile and personal plan", key: "data", keywords: "data export backup download dados exportar baixar copia", label: "Data & exports", group: "Safety", sticker: "" },
   { description: "Check your connection and saved profile version", key: "diagnostics", keywords: "connection offline sync help status conexao sincronizacao diagnostico falha erro", label: "Connection & sync", group: "Safety", sticker: "" },
@@ -218,6 +220,7 @@ const settingsGroups: readonly SettingsSectionDefinition["group"][] = [
 ];
 
 const iconPaths: Record<SettingsSection, string> = {
+  appearance: "M12 3a9 9 0 1 0 0 18 9 9 0 1 0 0-18Zm0 0v18",
   accessibility: "M12 3v.01M5 8h14M12 8v6M8 21l4-7 4 7M8 8l4 4 4-4",
   data: "M12 3v12m-4-4 4 4 4-4M4 16v5h16v-5",
   diagnostics: "M3 12h4l3-8 4 16 3-8h4",
@@ -402,6 +405,7 @@ export default function TgpiAccountCenter({
     identity: profile.currentCity || (currentCountryName ? t(currentCountryName) : t("Add personal information")),
     progress: rank ? t("{rank} · {points} points", { rank: t(rank.name), points: rank.points.toLocaleString(locale) }) : t("Unavailable"),
     notifications: t(notifications.loading ? "Loading notifications" : notifications.error ? "Unavailable" : notifications.preferences.pushEnabled ? "Notifications enabled" : "Notifications paused"),
+    appearance: t("Theme and device appearance"),
     accessibility: t("Reading, motion and keyboard navigation"),
     data: t("Export your saved profile and personal plan"),
     diagnostics: t(online ? "Online" : "Offline"),
@@ -777,6 +781,7 @@ export default function TgpiAccountCenter({
   }
 
   if (activeSection === "billing") { activeScreen = <div><ScreenHeading section="billing" title="Subscription & billing" description="Plan, payment methods and invoice history" /><AccountBillingPanel /></div>; }
+  if (activeSection === "appearance") activeScreen = <div><ScreenHeading section="appearance" title="Appearance" description="Theme and device appearance" /><AppearanceControl /></div>;
   if (activeSection === "accessibility") activeScreen = <div><ScreenHeading section="accessibility" title="Accessibility" description="Reading, motion and keyboard navigation" /><SettingsAccessibility /></div>;
   if (activeSection === "data") activeScreen = <div><ScreenHeading section="data" title="Data & exports" description="Export your saved profile and personal plan" /><SettingsData /></div>;
   if (activeSection === "diagnostics") activeScreen = <div><ScreenHeading section="diagnostics" title="Connection & sync" description="Check your connection and saved profile version" /><SettingsDiagnostics updatedAt={profile.updatedAt} /></div>;

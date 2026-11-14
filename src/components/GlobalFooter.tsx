@@ -5,6 +5,7 @@ import BrandCrest from "@/components/BrandCrest";
 import ProductSeal from "@/components/brand/ProductSeal";
 import brandStyles from "@/components/brand/showcase-brand.module.css";
 import NavigationLink from "@/components/navigation/NavigationLink";
+import AppearanceControl from "@/components/profile/AppearanceControl";
 import LanguageSelector from "@/components/localization/LanguageSelector";
 import { useLocale } from "@/components/localization/LocaleProvider";
 import { HOME_PRODUCTS, type HomeProductId } from "@/lib/home-showcase";
@@ -67,6 +68,7 @@ export default function GlobalFooter() {
             </Link>
             <p>{t("An independent institute connecting practical education, decision intelligence and global adaptability.")}</p>
             <LanguageSelector />
+            <AppearanceControl compact />
           </div>
           <nav aria-label={t("TGPI footer navigation")} className={styles.groups}>
             {footerGroups.map(({ title, links }) => (

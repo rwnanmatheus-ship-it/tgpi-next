@@ -1,0 +1,25 @@
+.panel { display: grid; gap: 1rem; color: var(--tgpi-ink); }
+.panel fieldset { min-width: 0; }
+.panel legend { padding: 0; font-size: 1rem; font-weight: 800; }
+.help, .status { margin: .35rem 0 0; color: var(--tgpi-muted); font-size: .875rem; }
+.status { min-height: 1.5em; }
+.options { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 11rem), 1fr)); gap: .75rem; margin-top: 1rem; }
+.option { display: grid; position: relative; min-width: 0; cursor: pointer; }
+.option input { position: absolute; top: .75rem; right: .75rem; width: 1rem; height: 1rem; margin: 0; z-index: 1; }
+.optionBody { display: grid; align-content: start; gap: .5rem; padding: .75rem; border: 1px solid var(--tgpi-border); border-radius: .9rem; background: var(--tgpi-surface); }
+.option:hover .optionBody { border-color: var(--tgpi-blue); }
+.option input:checked + .optionBody { border-color: var(--tgpi-blue); box-shadow: 0 0 0 1px var(--tgpi-blue); }
+.option input:focus-visible + .optionBody { outline: 3px solid var(--tgpi-focus); outline-offset: 4px; }
+.optionBody small { color: var(--tgpi-muted); }
+.preview { display: grid; grid-template-columns: 22% 1fr; grid-template-rows: .45rem 1fr; gap: .35rem; min-height: 4.75rem; padding: .6rem; margin-top: 1.3rem; border: 1px solid #92774b; border-radius: .5rem; background: #f7f3ea; }
+.preview i { display: block; border-radius: .2rem; background: #dce6f0; }
+.preview i:first-child { grid-column: 1 / -1; background: #ba903b; }
+.preview i:last-child { border-inline-start: 3px solid #537ca8; background: #fff; }
+.preview[data-mode="dark"] { background: #080f1c; }
+.preview[data-mode="dark"] i:nth-child(2) { background: #1c304c; }
+.preview[data-mode="dark"] i:last-child { background: #132238; }
+.preview[data-mode="system"] { background: linear-gradient(115deg, #f7f3ea 49%, #080f1c 50%); }
+.preview[data-mode="system"] i:last-child { background: linear-gradient(115deg, #fff 32%, #132238 33%); }
+.compact { display: grid; justify-items: start; gap: .3rem; margin-top: 1rem; color: inherit; }
+.compact label, .compact p { font-size: .75rem; }
+.compact select { min-height: 44px; max-width: 100%; padding: .4rem .65rem; border: 1px solid var(--tgpi-border); border-radius: .5rem; background: var(--tgpi-surface); color: var(--tgpi-ink); }
