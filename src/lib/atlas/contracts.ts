@@ -62,6 +62,6 @@ export function safeAtlasLink(href: string) {
     const url = new URL(href, 'https://theglobalpolymath.com');
     const path = decodeURIComponent(url.pathname);
     if (url.origin !== 'https://theglobalpolymath.com' || path.includes('..') || path.includes('\\')) return '';
-    return /^\/(?:countries|compare|country-fit|courses|passport|profile|plan|community|intelligence|privacy|terms|certificates|verify|global-key|pricing)(?:\/|$)/.test(path) ? url.pathname + url.search + url.hash : '';
+    return /^\/(?:countries|compare|country-fit|courses|passport|profile|plan|onboarding|community|intelligence|privacy|terms|certificates|verify|global-key|pricing)(?:\/|$)/.test(path) ? url.pathname + url.search + url.hash : '';
   } catch { return ''; }
 }

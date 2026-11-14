@@ -1,5 +1,6 @@
 import identityData from '@/data/intelligence/identities.json';
-import { comparisonPath } from '../comparison-state';
+import { documentsHref, resolveDocumentGoal } from "../documents-os";
+import { comparisonPath, comparisonPlanPath } from '../comparison-state';
 import { getNextSuperAppModule, SUPER_APP_MODULES } from '../super-app';
 import type { Locale } from '../localization/config';
 import { translate } from '../localization/messages';
@@ -105,13 +106,13 @@ export function answerAtlasGuide({
     ?? (followUp ? previous?.topic : undefined) ?? (mentions.length ? 'countries' : undefined);
   if (!topic) return { content: guideText(guideFallback, locale), resources: [] };
   const previousCountries = (previous?.topic === topic || priorCompare) && (followUp || mentions.length < 2) ? previous?.countries ?? [] : [];
-  const contextCountry = context?.country && identities.has(context.country) ? [context.country] : [];
+  const contextCountries = (context?.countries ?? (context?.country ? [context.country] : [])).filter(slug => identities.has(slug));
   const countries = [...new Set([
     ...(topic === 'compare' && mentions.length >= 2 ? [] : previousCountries),
     ...mentions,
-    ...(mentions.length ? [] : contextCountry),
+    ...(mentions.length ? [] : contextCountries),
   ])].slice(0, 8);
-  const goal = goalFor(text) ?? (previous?.topic === topic ? previous.goal : undefined);
+  const goal = goalFor(text) ?? (previous?.topic === topic ? previous.goal : undefined) ?? context?.goal;
   let content = guideText(guideTopics[topic].answer, locale);
   const resources = [guideResource(topic)];
 
@@ -125,6 +126,12 @@ export function answerAtlasGuide({
     if (projectBrief) content = `${translate(locale, projectBrief)}\n\n${guideText(guideLearningProject, locale)}`;
   }
   if (topic === 'credentials') resources.push({ href: '/verify', label: 'Verify' });
+  if (topic === 'global-key') resources.push({ href: '/verify/global-key', label: 'Verify' });
+  if (countries[0] && topic === 'community') resources[0].href = `/community?destination=${encodeURIComponent(countries[0])}`;
+  if (countries[0] && topic === 'documents') resources[0].href = documentsHref({ country: countries[0], goal: resolveDocumentGoal(goal) });
+  if (countries.length >= 2 && (topic === 'compare' || topic === 'plan')) {
+    resources.push({ href: comparisonPlanPath(countries, goal ?? 'overall'), label: 'Open my connected plan' });
+  }
   if (topic === 'documents' || topic === 'compare' || topic === 'countries' || topic === 'plan') {
     resources.push(...countries.slice(0, 3).map(slug => ({ href: `/countries/${slug}`, label: countryName(slug, locale), literal: true })));
   }

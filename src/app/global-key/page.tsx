@@ -32,7 +32,7 @@ function getRequestOrigin(requestHeaders: Headers) {
 }
 
 export default async function GlobalKeyPage() {
-  const [{ userId }, requestHeaders] = await Promise.all([requireUser(), headers()]);
+  const [{ userId }, requestHeaders] = await Promise.all([requireUser("/global-key"), headers()]);
   const key = await getOrCreateGlobalKey(userId).catch((error: unknown) => {
     if (isFirestoreQuotaError(error)) return null;
     throw error;

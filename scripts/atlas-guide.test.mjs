@@ -73,3 +73,14 @@ test('academy guide offers the selected applied project and a safe route back to
   assert.match(reply.content, /Start with one deliverable/);
   assert.equal(safeAtlasLink(reply.resources[0].href), '/courses/analise-dados-power-bi-ia/study');
 });
+
+test('destination context gives users safe links to review a plan or open country preparation', () => {
+  const context = { topic: 'compare', countries: ['portugal', 'unknown', 'canada'], goal: 'study' };
+  const comparison = answerAtlasGuide({ question: 'Compare', locale: 'en', topic: 'compare', context });
+  assert.equal(safeAtlasLink(comparison.resources[0].href), '/compare?country=portugal&country=canada&goal=study');
+  assert.ok(comparison.resources.some(resource => safeAtlasLink(resource.href) === '/onboarding?source=compare&country=portugal&country=canada&goal=study'));
+  const documents = answerAtlasGuide({ question: 'Documents', locale: 'en', topic: 'documents', context });
+  assert.equal(safeAtlasLink(documents.resources[0].href), '/passport?country=portugal&goal=study');
+  const community = answerAtlasGuide({ question: 'Community', locale: 'en', topic: 'community', context });
+  assert.equal(safeAtlasLink(community.resources[0].href), '/community?destination=portugal');
+});
