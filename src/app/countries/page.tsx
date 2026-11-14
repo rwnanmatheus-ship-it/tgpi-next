@@ -106,7 +106,7 @@ export default async function CountriesPage({ searchParams }: { searchParams?: P
         <section className={styles.methodology}>
           <div>
             <p className="ig-eyebrow"><LocalizedText text="Responsible intelligence" /></p>
-            <h2><LocalizedText text="Coverage is not completeness." /></h2>
+            <h2><LocalizedText text="Research coverage" /></h2>
             <p className="ig-small"><LocalizedText text="Every country has a UNSD identity reference. Statistical coverage varies by indicator, country and year. A source-linked statistic does not verify a visa route, living budget or personal fit. Unsupported legacy country ratings have been removed from this research experience." /></p>
           </div>
           <Link href="/intelligence" className="ig-link"><LocalizedText text="Read our methodology and limitations →" /></Link>

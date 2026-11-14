@@ -46,3 +46,26 @@ export function countrySuggestions<T extends SearchableCountry>(countries: T[], 
     .sort((a, b) => localizedCountryName(a, locale).localeCompare(localizedCountryName(b, locale), locale))
     .slice(0, limit);
 }
+
+/** Keep the autocomplete and directory on the same ranking and localized names. */
+export function rankCountryMatches<T extends SearchableCountry>(
+  countries: T[],
+  query: string,
+  locale: string,
+  terms?: ReadonlyMap<string, string[]>,
+  compareCoverage?: (a: T, b: T) => number,
+  alphabetical = false,
+): T[] {
+  const collator = new Intl.Collator(locale);
+  return countries
+    .map(country => ({
+      country,
+      name: localizedCountryName(country, locale),
+      score: query.trim() ? localizedCountryScore(country, query, locale, terms?.get(country.slug)) : 1,
+    }))
+    .filter(({ score }) => score > 0)
+    .sort((a, b) => (compareCoverage?.(a.country, b.country) ?? 0)
+      || (alphabetical ? 0 : b.score - a.score)
+      || collator.compare(a.name, b.name))
+    .map(({ country }) => country);
+}

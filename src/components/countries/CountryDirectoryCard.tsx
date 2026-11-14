@@ -26,7 +26,7 @@ export default function CountryDirectoryCard({ country, indicatorTotal, selected
 
   return (
     <article className={styles.card} data-selected={selected || undefined}>
-      <Link href={href} prefetch={false} className={styles.cardImage} aria-hidden="true" tabIndex={-1}>
+      <div className={styles.cardImage}>
         <Image
           src={`/images/countries/identity/${country.slug}.webp`}
           alt=""
@@ -36,19 +36,20 @@ export default function CountryDirectoryCard({ country, indicatorTotal, selected
             : "(max-width: 599px) 94vw, (max-width: 959px) 48vw, (max-width: 1239px) 32vw, 312px"}
           className={styles.photo}
         />
-      </Link>
+        <span className={styles.imageCode} translate="no" aria-hidden="true">{country.iso3}</span>
+      </div>
       <div className={styles.cardBody}>
         <div className={styles.identity}>
           <CountryFlag iso2={country.iso2} width={42} />
           <div>
-            <p className={styles.location}>{t(country.region)} <span aria-hidden="true">·</span> <span translate="no">{country.iso3}</span></p>
-            <h3><Link href={href} prefetch={false}>{name}</Link></h3>
+            <p className={styles.location}>{t(country.region)}{compact && <> <span aria-hidden="true">·</span> <span translate="no">{country.iso3}</span></>}</p>
+            <h3>{name}</h3>
           </div>
         </div>
-        <div className={styles.evidence}>
-          <span><NavigationIcon name="graph" width={15} height={15} />{country.observations}/{indicatorTotal} {t("National indicators")}</span>
-          <span><NavigationIcon name="file" width={15} height={15} />{country.dossierCount > 0 ? `${t("Research summaries")} · ${country.dossierCount}` : t("Core country profile")}</span>
-        </div>
+        <ul className={styles.evidence}>
+          <li><NavigationIcon name="graph" width={15} height={15} /><span>{t("National indicators")}</span><strong>{country.observations}/{indicatorTotal}</strong></li>
+          <li><NavigationIcon name="file" width={15} height={15} /><span>{t(country.dossierCount > 0 ? "Research summaries" : "Core country profile")}</span>{country.dossierCount > 0 && <strong>{country.dossierCount}</strong>}</li>
+        </ul>
         <div className={styles.cardActions}>
           <Link href={href} prefetch={false} className={styles.profileAction} aria-label={`${t("Explore evidence")} · ${name}`}>
             {t("Explore evidence")} <NavigationIcon name="arrow" width={16} height={16} />

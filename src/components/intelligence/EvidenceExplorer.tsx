@@ -11,7 +11,7 @@ import { LocalizedText, useLocale } from "@/components/localization/LocaleProvid
 import NavigationIcon from "@/components/navigation/NavigationIcon";
 import { comparisonPath } from "@/lib/comparison-state";
 import { getCountryMapRegionId, type CountryMapRegionId } from "@/lib/country-map";
-import { countrySearchTerms, localizedCountryName, localizedCountryScore } from "@/lib/country-search";
+import { countrySearchTerms, localizedCountryName, rankCountryMatches } from "@/lib/country-search";
 import { explorerFiltersFromSearch, explorerFiltersToSearch, normalizeExplorerFilters, type ExplorerFilterInput } from "@/lib/explorer-filters";
 import ResearchReportCard from "./ResearchReportCard";
 import { useResearchProfile } from "./useResearchProfile";
@@ -26,6 +26,13 @@ const CountryAtlas = dynamic(() => import("@/components/countries/CountriesWorld
 });
 
 const PAGE_SIZE = 24;
+type ExplorerState = ReturnType<typeof normalizeExplorerFilters>;
+
+const modes = [
+  { value: "catalog", label: "Explore", icon: "compass" },
+  { value: "atlas", label: "Interactive atlas", icon: "globe" },
+  { value: "saved", label: "Saved", icon: "file" },
+] as const;
 const FILTERS_CHANGED = "tgpi:explorer-location";
 
 function subscribeLocation(listener: () => void) {
@@ -48,52 +55,70 @@ export default function EvidenceExplorer({ countries, initialFilters, indicatorT
   // Read the URL when Next restores a cached subtree. The server snapshot keeps hydration deterministic.
   const initialSearch = explorerFiltersToSearch(initialFilters);
   const search = useSyncExternalStore(subscribeLocation, locationSearch, () => initialSearch);
-  const { query, region, selection, limit } = useMemo(
+  const { query, region, selection, limit, coverage, sort, view, mode } = useMemo(
     () => normalizeExplorerFilters(explorerFiltersFromSearch(search), countries),
     [search, countries],
   );
-  const { user, journey } = useResearchProfile();
-  const { progress } = useActivationProgress();
-  const [onlySaved, setOnlySaved] = useState(false);
-  const [view, setView] = useState<"gallery" | "list">("gallery");
-  const [coverage, setCoverage] = useState<"all" | "dossiers">("all");
-  const [showAtlas, setShowAtlas] = useState(false);
-  const [atlasLayer, setAtlasLayer] = useState<"satellite" | "countries">("satellite");
+  const { user, isLoaded, journey } = useResearchProfile();
+  const { progress, isLoading, error } = useActivationProgress();
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [atlasLayer, setAtlasLayer] = useState<"satellite" | "countries">("countries");
   const [mapZoom, setMapZoom] = useState<{ region: string; id: CountryMapRegionId }>();
-  const [atlasFocus, setAtlasFocus] = useState<{ slug: string; query: string; region: string }>();
+  const [atlasFocus, setAtlasFocus] = useState<{ slug: string; query: string; region: string; coverage: string }>();
+  const showAtlas = mode === "atlas";
+  const onlySaved = mode === "saved";
+  const isFilteredAtlas = showAtlas && (query || region !== "all" || coverage !== "all");
   const terms = useMemo(() => new Map(countries.map(country => [country.slug, countrySearchTerms(country)])), [countries]);
   const bySlug = useMemo(() => new Map(countries.map(country => [country.slug, country])), [countries]);
-  const regions = useMemo(() => [...new Set(countries.map(country => country.region))], [countries]);
-  const sortedRegions = regions.toSorted((a, b) => t(a).localeCompare(t(b), locale));
-  const shortlist = new Set([...journey.targetCountries, ...progress.savedCountries]);
-  const candidates = countries.filter(country => (
-    (region === "all" || country.region === region)
-    && (!onlySaved || shortlist.has(country.slug))
-    && (coverage === "all" || country.dossierCount > 0)
-  ));
-  const filtered = candidates
-    .map(country => ({ country, score: localizedCountryScore(country, query, locale, terms.get(country.slug) ?? []) }))
-    .filter(({ score }) => score > 0)
-    .sort((a, b) => b.score - a.score || localizedCountryName(a.country, locale).localeCompare(localizedCountryName(b.country, locale), locale))
-    .map(({ country }) => country);
-
+  const sortedRegions = useMemo(() => [...new Set(countries.map(country => country.region))]
+    .sort((a, b) => t(a).localeCompare(t(b), locale)), [countries, t, locale]);
+  const mapCountries = useMemo(() => countries.map(country => ({
+    ...country,
+    visual: { alt: "", hasImage: true, url: `/images/countries/identity/${country.slug}.webp` },
+  })), [countries]);
+  const savedCountries = progress.savedCountries;
+  const targetCountries = journey.targetCountries;
+  const candidates = useMemo(() => {
+    const shortlist = new Set(user ? [...targetCountries, ...savedCountries] : []);
+    return countries.filter(country => (region === "all" || country.region === region)
+      && (!onlySaved || shortlist.has(country.slug))
+      && (coverage === "all" || country.dossierCount > 0));
+  }, [countries, region, onlySaved, coverage, user, targetCountries, savedCountries]);
+  const filtered = useMemo(() => rankCountryMatches(candidates, query, locale, terms,
+    sort === "coverage" ? (a, b) => b.observations - a.observations || b.dossierCount - a.dossierCount : undefined,
+    sort === "alphabetical"), [candidates, query, locale, terms, sort]);
   const atlasRegion = mapZoom?.region === region ? mapZoom.id : getCountryMapRegionId(region);
-  const atlasCountry = atlasFocus?.query === query && atlasFocus.region === region
+  const atlasCountry = atlasFocus?.query === query && atlasFocus.region === region && atlasFocus.coverage === coverage
     ? atlasFocus.slug
-    : !query && region === "all" && !onlySaved && coverage === "all" ? "portugal" : filtered[0]?.slug ?? "portugal";
+    : isFilteredAtlas
+      ? filtered[0]?.slug ?? ""
+      : "portugal";
   const reportCountry = bySlug.get(selection[0] ?? (showAtlas ? atlasCountry : filtered[0]?.slug) ?? "");
   const selectedSlugs = new Set(selection);
-  const hasFilters = Boolean(query || region !== "all" || onlySaved || coverage !== "all");
+  const hasFilters = Boolean(query || region !== "all" || coverage !== "all" || sort !== "relevance");
+  const savedLoading = onlySaved && (!isLoaded || isLoading);
+  const savedGuest = onlySaved && isLoaded && !user;
 
-  function updateUrl(next: { query?: string; region?: string; selection?: string[]; limit?: number }) {
+  function updateUrl(next: Partial<ExplorerState>, push = false) {
     const url = new URL(window.location.href);
-    const values = { query, region, selection, limit, ...next };
-    for (const name of ["q", "region", "selected", "limit"]) url.searchParams.delete(name);
-    if (values.query) url.searchParams.set("q", values.query.slice(0, 120));
-    if (values.region !== "all") url.searchParams.set("region", values.region);
-    values.selection.forEach(slug => url.searchParams.append("selected", slug));
-    if (values.limit > PAGE_SIZE) url.searchParams.set("limit", String(values.limit));
-    window.history.replaceState(null, "", `${url.pathname}${url.search}${url.hash}`);
+    const current = normalizeExplorerFilters(explorerFiltersFromSearch(url.search), countries);
+    const values = { ...current, ...next };
+    const params = explorerFiltersToSearch({
+      q: values.query.slice(0, 120) || undefined,
+      region: values.region === "all" ? undefined : values.region,
+      selected: values.selection,
+      limit: values.limit > PAGE_SIZE ? String(values.limit) : undefined,
+      mode: values.mode === "catalog" ? undefined : values.mode,
+      coverage: values.coverage === "all" ? undefined : values.coverage,
+      sort: values.sort === "relevance" ? undefined : values.sort,
+      view: values.view === "gallery" ? undefined : values.view,
+    });
+    for (const name of Object.keys(explorerFiltersFromSearch(url.search))) url.searchParams.delete(name);
+    for (const [name, value] of new URLSearchParams(params)) url.searchParams.append(name, value);
+    if (url.href === window.location.href) return;
+    const href = `${url.pathname}${url.search}${url.hash}`;
+    if (push) window.history.pushState(null, "", href);
+    else window.history.replaceState(null, "", href);
     window.dispatchEvent(new Event(FILTERS_CHANGED));
   }
 
@@ -102,15 +127,14 @@ export default function EvidenceExplorer({ countries, initialFilters, indicatorT
   }
 
   function clearFilters() {
-    setOnlySaved(false);
-    setCoverage("all");
     setMapZoom(undefined);
     setAtlasFocus(undefined);
-    updateUrl({ query: "", region: "all", limit: PAGE_SIZE });
+    updateUrl({ query: "", region: "all", coverage: "all", sort: "relevance", limit: PAGE_SIZE });
   }
 
   function setAtlasCountry(slug: string) {
-    setAtlasFocus({ slug, query, region });
+    const params = new URLSearchParams(locationSearch());
+    setAtlasFocus({ slug, query: params.get("q") ?? "", region: params.get("region") ?? "all", coverage: params.get("coverage") ?? "all" });
   }
 
   return (
@@ -118,34 +142,66 @@ export default function EvidenceExplorer({ countries, initialFilters, indicatorT
       <div className={styles.toolbar}>
         <div className={styles.toolbarHeading}>
           <h2 id="countries-heading">{t("Find your next destination.")}</h2>
-          <button type="button" className={styles.atlasButton} aria-expanded={showAtlas} aria-controls="country-atlas-panel" aria-label={showAtlas ? t("Close atlas") : t("Open interactive atlas")} title={showAtlas ? t("Close atlas") : t("Open interactive atlas")} onClick={() => setShowAtlas(!showAtlas)}>
-            <NavigationIcon name="globe" width={18} height={18} />
-            <span className={styles.atlasLabel}>{showAtlas ? t("Close atlas") : t("Open interactive atlas")}</span>
-          </button>
         </div>
-        <div className={`country-search-bar ${styles.searchBar}`}>
-          <CountrySearchInput key={locale} countries={candidates} query={query} onChange={value => updateUrl({ query: value, limit: PAGE_SIZE })} />
-          <label>
-            {t("Statistical region")}
-            <select value={region} onChange={event => {
+        <div className={styles.modes} role="group" aria-label={t("Display mode")}>
+          {modes.map(({ value, label, icon }) => (
+            <button key={value} type="button" aria-pressed={mode === value} onClick={() => {
               setMapZoom(undefined);
-              updateUrl({ region: event.target.value, limit: PAGE_SIZE });
+              setAtlasFocus(undefined);
+              updateUrl({ mode: value, limit: PAGE_SIZE }, true);
             }}>
-              <option value="all">{t("All regions")}</option>
-              {sortedRegions.map(value => <option key={value} value={value}>{t(value)}</option>)}
-            </select>
-          </label>
-          <label>
-            {t("Research coverage")}
-            <select value={coverage} onChange={event => {
-              setCoverage(event.target.value === "dossiers" ? "dossiers" : "all");
-              updateUrl({ limit: PAGE_SIZE });
-            }}>
-              <option value="all">{t("All destinations")}</option>
-              <option value="dossiers">{t("Research summaries")}</option>
-            </select>
-          </label>
+              <NavigationIcon name={icon} width={17} height={17} />
+              <span>{t(label)}</span>
+            </button>
+          ))}
         </div>
+        {!savedGuest && <div className={`country-search-bar ${styles.searchBar}`}>
+          <CountrySearchInput key={locale} countries={candidates} terms={terms} query={query} onChange={value => updateUrl({ query: value, limit: PAGE_SIZE })} />
+          <button className={styles.filtersToggle} type="button" aria-expanded={filtersOpen} aria-controls="country-directory-filters"
+            onClick={() => setFiltersOpen(!filtersOpen)}>
+            <NavigationIcon name="settings" width={17} height={17} />{t("Filters")}
+          </button>
+          <div id="country-directory-filters" className={styles.filterFields} data-open={filtersOpen}>
+            <label>
+              {t("Statistical region")}
+              <select value={region} onChange={event => {
+                setMapZoom(undefined);
+                updateUrl({ region: event.target.value, limit: PAGE_SIZE });
+              }}>
+                <option value="all">{t("All regions")}</option>
+                {sortedRegions.map(value => <option key={value} value={value}>{t(value)}</option>)}
+              </select>
+            </label>
+            <label>
+              {t("Research coverage")}
+              <select value={coverage} onChange={event => updateUrl({ coverage: event.target.value === "dossiers" ? "dossiers" : "all", limit: PAGE_SIZE })}>
+                <option value="all">{t("All destinations")}</option>
+                <option value="dossiers">{t("Research summaries")}</option>
+              </select>
+            </label>
+            <label>
+              {t("Sort by")}
+              <select value={sort} onChange={event => {
+                const value = event.target.value;
+                updateUrl({ sort: value === "coverage" || value === "alphabetical" ? value : "relevance", limit: PAGE_SIZE });
+              }}>
+                <option value="relevance">{t("Best search matches")}</option>
+                <option value="alphabetical">{t("Alphabetical")}</option>
+                <option value="coverage">{t("Data coverage")}</option>
+              </select>
+            </label>
+          </div>
+        </div>}
+        {!savedGuest && hasFilters && <div className={styles.appliedFilters}>
+          {query && <button type="button" onClick={() => updateUrl({ query: "", limit: PAGE_SIZE })} aria-label={`${t("Remove")} · ${query}`}>{query}<NavigationIcon name="close" width={13} height={13} /></button>}
+          {region !== "all" && <button type="button" onClick={() => {
+            setMapZoom(undefined);
+            updateUrl({ region: "all", limit: PAGE_SIZE });
+          }} aria-label={`${t("Remove")} · ${t(region)}`}>{t(region)}<NavigationIcon name="close" width={13} height={13} /></button>}
+          {coverage !== "all" && <button type="button" onClick={() => updateUrl({ coverage: "all", limit: PAGE_SIZE })} aria-label={`${t("Remove")} · ${t("Research summaries")}`}>{t("Research summaries")}<NavigationIcon name="close" width={13} height={13} /></button>}
+          {sort !== "relevance" && <button type="button" onClick={() => updateUrl({ sort: "relevance", limit: PAGE_SIZE })} aria-label={`${t("Remove")} · ${t("Sort by")}`}>{t(sort === "coverage" ? "Data coverage" : "Alphabetical")}<NavigationIcon name="close" width={13} height={13} /></button>}
+          <button type="button" className={styles.reset} onClick={clearFilters}>{t("Reset filters")}</button>
+        </div>}
       </div>
 
       <div id="country-atlas-panel" hidden={!showAtlas} className={styles.atlasPanel}>
@@ -158,10 +214,7 @@ export default function EvidenceExplorer({ countries, initialFilters, indicatorT
             <SatelliteAtlas countries={countries} selectedSlug={atlasCountry} onCountryPreview={setAtlasCountry} />
           ) : (
             <CountryAtlas
-              countries={countries.map(country => ({
-                ...country,
-                visual: { alt: `TGPI illustration of ${country.name}`, hasImage: true, url: `/images/countries/identity/${country.slug}.webp` },
-              }))}
+              countries={mapCountries}
               activeRegionId={atlasRegion}
               selectedSlug={atlasCountry}
               onCountryPreview={setAtlasCountry}
@@ -175,23 +228,16 @@ export default function EvidenceExplorer({ countries, initialFilters, indicatorT
         </>}
       </div>
 
-      <div className={styles.resultsBar}>
+      {!savedGuest && !savedLoading && <div className={styles.resultsBar}>
         <p aria-live="polite">
           <strong>{t(filtered.length === 1 ? "{count} destination" : "{count} destinations", { count: filtered.length })}</strong>
-          <span aria-hidden="true"> · </span>{query.trim() ? t("Best search matches") : "A–Z"}
+          <span aria-hidden="true"> · </span>{sort === "coverage" ? t("Data coverage") : sort === "relevance" && query.trim() ? t("Best search matches") : "A–Z"}
         </p>
-        <div className={styles.resultsTools}>
-          {user && <button type="button" className={styles.filterAction} aria-pressed={onlySaved} onClick={() => {
-            setOnlySaved(!onlySaved);
-            updateUrl({ limit: PAGE_SIZE });
-          }}>{t("My profile shortlist")}</button>}
-          {hasFilters && <button type="button" className={styles.filterAction} onClick={clearFilters}>{t("Reset filters")}</button>}
-          <div className={styles.viewToggle} role="group" aria-label={t("Display mode")}>
-            <button type="button" aria-pressed={view === "gallery"} onClick={() => setView("gallery")} title={t("Gallery")} aria-label={t("Gallery")}><NavigationIcon name="apps" width={18} height={18} /></button>
-            <button type="button" aria-pressed={view === "list"} onClick={() => setView("list")} title={t("Compact list")} aria-label={t("Compact list")}><NavigationIcon name="menu" width={18} height={18} /></button>
-          </div>
+        <div className={styles.viewToggle} role="group" aria-label={t("Display mode")}>
+          <button type="button" aria-pressed={view === "gallery"} onClick={() => updateUrl({ view: "gallery" })} title={t("Gallery")} aria-label={t("Gallery")}><NavigationIcon name="apps" width={18} height={18} /></button>
+          <button type="button" aria-pressed={view === "list"} onClick={() => updateUrl({ view: "list" })} title={t("Compact list")} aria-label={t("Compact list")}><NavigationIcon name="menu" width={18} height={18} /></button>
         </div>
-      </div>
+      </div>}
 
       {selection.length > 0 && (
         <div className={styles.selection}>
@@ -200,20 +246,22 @@ export default function EvidenceExplorer({ countries, initialFilters, indicatorT
             return country ? localizedCountryName(country, locale) : slug;
           }).join(" · ")}{selection.length > 4 ? ` +${selection.length - 4}` : ""}</span>
           <div>
-            <Link className={styles.selectionLink} href={comparisonPath(selection, "overall")}>{t("Compare")} {selection.length} <NavigationIcon name="arrow" width={16} height={16} /></Link>
+            {selection.length >= 2
+              ? <Link className={styles.selectionLink} href={comparisonPath(selection, "overall")}>{t("Compare")} {selection.length} <NavigationIcon name="arrow" width={16} height={16} /></Link>
+              : <span className={styles.selectionHint}>{t("Select at least two countries to compare.")}</span>}
             <button type="button" className={styles.filterAction} onClick={() => updateUrl({ selection: [] })}>{t("Clear")}</button>
           </div>
         </div>
       )}
 
-      {reportCountry && (query || selection.length > 0 || showAtlas) && (
+      {!savedGuest && !savedLoading && reportCountry && (query || selection.length > 0 || showAtlas) && (
         <details className={styles.brief}>
           <summary>{t("Decision brief: {country}", { country: localizedCountryName(reportCountry, locale) })}</summary>
           <ResearchReportCard key={reportCountry.slug} country={reportCountry.slug} name={reportCountry.name} />
         </details>
       )}
 
-      <div className={styles.results} data-view={view}>
+      {!savedGuest && !savedLoading && <div className={styles.results} data-view={view}>
         {filtered.slice(0, limit).map(country => (
           <CountryDirectoryCard
             key={country.slug}
@@ -224,10 +272,20 @@ export default function EvidenceExplorer({ countries, initialFilters, indicatorT
             onCompare={toggleSelection}
           />
         ))}
-      </div>
+      </div>}
 
-      {filtered.length === 0 && <div className={styles.empty}><NavigationIcon name="search" /><p>{t("No countries found.")}</p></div>}
-      {filtered.length > limit && (
+      {savedLoading && <p className={styles.empty} role="status">{t("Loading the latest TGPI experience…")}</p>}
+      {savedGuest && <div className={styles.empty}>
+        <p>{t("Sign in to see your saved destinations.")}</p>
+        <Link className={styles.selectionLink} href="/sign-in?redirect_url=%2Fcountries%3Fmode%3Dsaved">{t("Sign in")}</Link>
+      </div>}
+      {onlySaved && error && !savedLoading && <p className={styles.empty} role="status">{t(error)}</p>}
+      {!savedGuest && !savedLoading && filtered.length === 0 && !(onlySaved && error) && <div className={styles.empty}>
+        <NavigationIcon name={onlySaved && !hasFilters ? "file" : "search"} />
+        <p>{t(onlySaved && !hasFilters ? "No saved destinations yet." : "No countries found.")}</p>
+        {hasFilters && <button type="button" className={styles.filterAction} onClick={clearFilters}>{t("Reset filters")}</button>}
+      </div>}
+      {!savedGuest && !savedLoading && filtered.length > limit && (
         <div className={styles.pagination}>
           <button type="button" className="ig-button ig-secondary" onClick={() => updateUrl({ limit: Math.min(limit + PAGE_SIZE, countries.length) })}>{t("Show more countries")}</button>
         </div>

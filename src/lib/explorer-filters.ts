@@ -3,13 +3,20 @@ export type ExplorerFilterInput = {
   region?: string | string[];
   selected?: string | string[];
   limit?: string | string[];
+  coverage?: string | string[];
+  sort?: string | string[];
+  view?: string | string[];
+  mode?: string | string[];
 };
 
 const first = (value: string | string[] | undefined) => Array.isArray(value) ? value[0] ?? "" : value ?? "";
 
 export function explorerFiltersFromSearch(search: string): ExplorerFilterInput {
   const params = new URLSearchParams(search);
-  return { q: params.getAll("q"), region: params.getAll("region"), selected: params.getAll("selected"), limit: params.getAll("limit") };
+  return { q: params.getAll("q"), region: params.getAll("region"), selected: params.getAll("selected"), limit: params.getAll("limit"),
+    coverage: params.getAll("coverage"), sort: params.getAll("sort"),
+    view: params.getAll("view"), mode: params.getAll("mode"),
+  };
 }
 
 export function explorerFiltersToSearch(input: ExplorerFilterInput) {
@@ -24,7 +31,12 @@ export function normalizeExplorerFilters(input: ExplorerFilterInput, countries: 
   const region = first(input.region);
   const slugs = new Set(countries.map(country => country.slug));
   const selection = typeof input.selected === "string" ? [input.selected] : input.selected ?? [];
+  const mode = first(input.mode);
   return {
+    mode: mode === "atlas" || mode === "saved" ? mode : "catalog" as const,
+    coverage: first(input.coverage) === "dossiers" ? "dossiers" as const : "all" as const,
+    sort: first(input.sort) === "coverage" ? "coverage" as const : first(input.sort) === "alphabetical" ? "alphabetical" as const : "relevance" as const,
+    view: first(input.view) === "list" ? "list" as const : "gallery" as const,
     query: first(input.q).slice(0, 120),
     region: countries.some(country => country.region === region) ? region : "all",
     selection: [...new Set(selection)].filter(slug => slugs.has(slug)).slice(0, 195),
