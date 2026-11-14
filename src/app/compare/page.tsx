@@ -57,7 +57,7 @@ export default async function ComparePage({ searchParams }: { searchParams: Prom
         <div className="ig-container">
           <header className="compare-hero">
             <div className="compare-hero-copy">
-              <p className="compare-kicker">TGPI / {t("Decision Studio")}</p>
+              <p className="compare-kicker">{t("TGPI /")} {t("Decision Studio")}</p>
               <h1 id="compare-title">{t("Compare countries")}</h1>
               <p>{t("Your destinations. Your priorities. One clear view of the evidence and your next steps.")}</p>
               <div className="compare-hero-links">
