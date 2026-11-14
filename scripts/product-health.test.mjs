@@ -19,7 +19,7 @@ function load(path, dependencies, environment = {}) {
   return exports;
 }
 
-function fixture({ userId = "user_admin", sessionId = "sess_admin", role = "admin", storageFailure, matchesOffer = true, live = true, ...env } = {}) {
+function fixture({ userId = "user_admin", sessionId = "sess_admin", role = "admin", storageFailure, matchesOffer = true, live = true, evidenceStatus = "available", reconciliation = { at: new Date().toISOString(), failed: 0 }, ...env } = {}) {
   const calls = [];
   const { requireAdmin } = load("auth/guards.ts", {
     "server-only": {},
@@ -51,14 +51,16 @@ function fixture({ userId = "user_admin", sessionId = "sess_admin", role = "admi
       isFirestoreQuotaError: (error) => error.code === "RESOURCE_EXHAUSTED",
       getFirestoreDocuments: async (paths, transaction, signal) => {
         calls.push("firestore");
-        assert.deepEqual(paths, ["tgpiOpsDiagnostics/read-probe"]);
+        assert.ok(["tgpiOpsDiagnostics/read-probe", "tgpiLearningUsers/_notifications/operations/reconcile"].includes(paths[0]));
         assert.equal(transaction, undefined);
         assert.ok(signal instanceof AbortSignal);
         if (storageFailure) throw storageFailure;
-        return new Map([[paths[0], null]]);
+        return new Map([[paths[0], paths[0].endsWith("/reconcile") ? { data: reconciliation } : null]]);
       },
     },
     "@/lib/global-key-anchor.server": { isBaseMainnetAnchorConfigured: () => true },
+    "@/lib/notifications/paths": { notificationRoot: "tgpiLearningUsers/_notifications" },
+    "@/lib/intelligence/server": { getIntelligence: async () => ({ status: evidenceStatus, snapshot: { retrievedAt: "2026-11-13T10:47:00Z" } }) },
     "@/lib/notifications/push.server": { pushConfigured: () => true },
     "@/lib/stripe": {
       TGPI_PREMIUM_PRICE_ID: "price_fixture",
@@ -91,9 +93,9 @@ test("verified reads and local configuration checks have distinct states", async
   assert.ok(Number.isFinite(Date.parse(report.checkedAt)));
   assert.deepEqual(Object.fromEntries(report.checks.map(({ id, state }) => [id, state])), {
     access: "verified", storage: "verified", billing: "verified", credentials: "verified",
-    atlas: "configured", notifications: "configured", integrity: "configured",
+    atlas: "configured", notifications: "verified", evidence: "verified", integrity: "configured",
   });
-  assert.deepEqual(calls.sort(), ["firestore", "stripe", "user_admin"]);
+  assert.deepEqual(calls.sort(), ["firestore", "firestore", "stripe", "user_admin"]);
   assert.doesNotMatch(JSON.stringify(report), /user_admin|sess_admin|unused-proof-key|price_fixture/);
 });
 
@@ -117,4 +119,15 @@ test("a missing webhook secret or mismatched offer requires attention even when 
     const { checks } = await getProductHealth();
     assert.equal(checks.find(({ id }) => id === "billing").state, "attention");
   }
+});
+
+test("retained country evidence and an overdue notification batch report separate operational signals", async () => {
+  const { getProductHealth } = fixture({
+    evidenceStatus: "degraded",
+    reconciliation: { at: new Date(Date.now() - 11 * 60_000).toISOString(), failed: 0 },
+  });
+  const { checks } = await getProductHealth();
+  assert.match(checks.find(({ id }) => id === "evidence").detail, /2026-11-13/);
+  assert.equal(checks.find(({ id }) => id === "evidence").state, "attention");
+  assert.equal(checks.find(({ id }) => id === "notifications").state, "attention");
 });
