@@ -14,6 +14,9 @@ export function inspectPage(html, url, headers = {}) {
   const canonical = tags.find(tag => tag.rel === "canonical")?.href;
   const normalize = value => value?.replace(/\/$/, "");
   if (normalize(canonical) !== normalize(url)) issues.push("Missing or non-self canonical");
+  const socialUrl = tags.find(tag => tag.property === "og:url")?.content;
+  if (normalize(socialUrl) !== normalize(url)) issues.push("Missing or non-self Open Graph URL");
+  if (!tags.some(tag => tag.property === "og:image" && /^https:\/\//.test(tag.content || ""))) issues.push("Missing absolute Open Graph image");
   if (!/<title>[^<]+<\/title>/i.test(html)) issues.push("Missing title");
   if (!tags.some(tag => tag.name === "description" && tag.content?.trim())) issues.push("Missing description");
   if (tags.some(tag => /^(robots|googlebot)$/i.test(tag.name || "") && /noindex|none/i.test(tag.content || "")) ||
@@ -37,26 +40,37 @@ export async function audit(fetcher = fetch, now = new Date()) {
   report.sitemapCount = urls.length;
   if (!urls.length || !sitemap.text.includes("<urlset")) report.issues.push("Empty or invalid sitemap");
   if (new Set(urls).size !== urls.length) report.issues.push("Duplicate sitemap URLs");
-  for (const url of urls) {
-    const parsed = new URL(url);
-    if (parsed.origin !== ORIGIN || parsed.search || parsed.hash) report.issues.push(`Non-canonical sitemap URL: ${url}`);
+  const localUrls = urls.filter(url => {
+    let parsed;
+    try { parsed = new URL(url); } catch {
+      report.issues.push(`Invalid sitemap URL: ${url}`);
+      return false;
+    }
+    if (parsed.origin !== ORIGIN || parsed.search || parsed.hash) {
+      report.issues.push(`Non-canonical sitemap URL: ${url}`);
+      return false;
+    }
     if (/^\/(ranking|authority|profile|sign-in|sign-up|admin|api|country-fit|premium)(\/|$)/.test(parsed.pathname)) report.issues.push(`Private, noindex or redirected URL in sitemap: ${url}`);
-  }
+    return true;
+  });
   // Check every landing page and rotate through seven country pages per day.
   // A full pass of all country profiles completes without flooding the live site.
-  const countries = urls.filter(url => new URL(url).pathname.startsWith("/countries/"));
-  const pages = urls.filter(url => !countries.includes(url));
+  const countries = localUrls.filter(url => new URL(url).pathname.startsWith("/countries/"));
+  const pages = localUrls.filter(url => !countries.includes(url));
   const day = Math.floor(now.getTime() / 86400000);
   for (let i = 0; i < Math.min(7, countries.length); i++) pages.push(countries[(day * 7 + i) % countries.length]);
-  for (const url of pages) {
-    if (new URL(url).origin !== ORIGIN) continue; // Never follow untrusted sitemap destinations.
+  async function inspectUrl(url) {
     try {
       const page = await get(url);
       const issues = inspectPage(page.text, url, page.headers);
-      report.checks.push({ url, ok: !issues.length, issues });
+      return { url, ok: !issues.length, issues };
     } catch (error) {
-      report.checks.push({ url, ok: false, issues: [error.message] });
+      return { url, ok: false, issues: [error.message] };
     }
+  }
+  const concurrency = 4;
+  for (let start = 0; start < pages.length; start += concurrency) {
+    report.checks.push(...await Promise.all(pages.slice(start, start + concurrency).map(inspectUrl)));
   }
   report.ok = !report.issues.length && report.checks.every(check => check.ok);
   return report;

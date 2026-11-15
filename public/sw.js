@@ -3,11 +3,12 @@
  * are intentionally network-only and are never written to Cache Storage.
  */
 
-const CACHE_NAME = "tgpi-public-shell-v2";
+const CACHE_NAME = "tgpi-public-shell-v3";
 const OFFLINE_URL = "/offline.html";
 const MAX_STATIC_ASSETS = 80;
 const PUBLIC_SHELL = [
   OFFLINE_URL,
+  "/pwa/offline.js",
   "/pwa/icon-192.png",
   "/pwa/icon-512.png",
   "/pwa/icon-maskable-512.png",
@@ -30,7 +31,9 @@ async function cacheStaticAsset(request, response) {
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(PUBLIC_SHELL)),
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(
+      PUBLIC_SHELL.map((url) => new Request(url, { cache: "reload", credentials: "omit" })),
+    )),
   );
 });
 
@@ -68,7 +71,8 @@ self.addEventListener("fetch", (event) => {
   if (request.mode === "navigate") {
     event.respondWith(
       fetch(request).catch(async () => {
-        const fallback = await caches.match(OFFLINE_URL);
+        const cache = await caches.open(CACHE_NAME);
+        const fallback = await cache.match(OFFLINE_URL);
         return fallback ?? Response.error();
       }),
     );
@@ -95,7 +99,7 @@ self.addEventListener("fetch", (event) => {
 
   if (PUBLIC_SHELL.includes(url.pathname)) {
     event.respondWith(
-      caches.match(request).then((cached) => cached ?? fetch(request)),
+      caches.open(CACHE_NAME).then(async (cache) => (await cache.match(url.pathname)) ?? fetch(request)),
     );
     return;
   }
@@ -103,10 +107,12 @@ self.addEventListener("fetch", (event) => {
   // Next.js build assets are content-hashed and contain no member data.
   if (url.pathname.startsWith("/_next/static/")) {
     event.respondWith(
-      caches.match(request).then(async (cached) => {
+      caches.open(CACHE_NAME).then(async (cache) => {
+        const cached = await cache.match(request);
         if (cached) return cached;
         const response = await fetch(request);
-        if (response.ok) {
+        const contentType = response.headers.get("content-type") ?? "";
+        if (response.ok && !response.redirected && !contentType.includes("text/html")) {
           event.waitUntil(cacheStaticAsset(request, response.clone()));
         }
         return response;

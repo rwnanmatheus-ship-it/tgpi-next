@@ -17,7 +17,7 @@
     "test:super-app": "node --experimental-strip-types --test scripts/super-app.test.mjs",
     "test:workspace": "node --experimental-strip-types --test scripts/workspace-home.test.mjs scripts/workspace-control.test.mjs scripts/workspace-api.test.mjs scripts/workspace-history.test.mjs",
     "test:personal-plan": "node --experimental-strip-types --test scripts/personal-plan.test.mjs",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "next typegen && tsc --noEmit",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
@@ -25,7 +25,7 @@
     "test:capability-system": "node --experimental-strip-types --test scripts/capability-system.test.mjs",
     "test:navigation-system": "node --experimental-strip-types --test scripts/navigation-system.test.mjs",
     "test:home": "node --experimental-strip-types --test scripts/home-conversion.test.mjs",
-    "prebuild": "npm run test:all && npm run check:localization",
+    "prebuild": "npm run lint && npm run test:all && npm run check:localization",
     "test:notifications": "node --experimental-strip-types --test scripts/notifications.test.mjs scripts/notification-account.test.mjs scripts/notification-timeline.test.mjs scripts/notification-push.test.mjs",
     "test:certificate-pdf": "node --experimental-strip-types --test scripts/certificate-pdf.test.mjs",
     "test:community": "node --test scripts/community.test.mjs scripts/community-lifecycle.test.mjs scripts/community-lifecycle-api.test.mjs",
@@ -38,7 +38,8 @@
     "test:premium-scenarios": "node --experimental-strip-types --test scripts/premium-scenarios.test.mjs",
     "test:seo": "node --test scripts/seo.test.mjs",
     "verify:seo": "node scripts/seo-audit.mjs",
-    "check:localization": "node scripts/localization-audit.mjs --check"
+    "check:localization": "node scripts/localization-audit.mjs --check",
+    "verify:foundation": "node scripts/foundation-browser.mjs"
   },
   "dependencies": {
     "@clerk/localizations": "^4.24.2",
@@ -64,6 +65,7 @@
     "zod": "^4.6.7"
   },
   "devDependencies": {
+    "@axe-core/playwright": "4.14.0",
     "@tailwindcss/postcss": "^4",
     "@types/leaflet": "^1.9.22",
     "@types/node": "^20",
@@ -74,6 +76,7 @@
     "@types/web-push": "3.6.4",
     "eslint": "^9",
     "eslint-config-next": "16.3.4",
+    "playwright": "1.65.1",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

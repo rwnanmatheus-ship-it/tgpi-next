@@ -20,11 +20,15 @@ export function resolveLocale(value: unknown): Locale | undefined {
   return match ?? (primary === 'pt' ? 'pt-BR' : isLocale(primary) ? primary : undefined);
 }
 export function negotiateLocale(header: string | null): Locale {
-  return (header ?? '').split(',').map((part, index) => {
-    const [language, ...parameters] = part.trim().split(';');
-    const quality = parameters.find(parameter => parameter.trim().startsWith('q='));
-    const weight = quality ? Number(quality.trim().slice(2)) : 1;
-    return { locale: resolveLocale(language), weight, index };
-  }).filter(item => item.locale && Number.isFinite(item.weight) && item.weight > 0 && item.weight <= 1)
+  const candidates = (header ?? '').split(',').flatMap((part, index) => {
+    const match = /^([a-z]{2,8}(?:-[a-z\d]{1,8})*)(?:\s*;\s*q\s*=\s*(0(?:\.\d{0,3})?|1(?:\.0{0,3})?))?$/i.exec(part.trim());
+    if (!match) return [];
+    const [, language, quality] = match;
+    const primary = language.toLowerCase().split('-')[0];
+    const locale = primary === 'pt' ? 'pt-BR' : primary;
+    if (!isLocale(locale)) return [];
+    return [{ locale, weight: quality === undefined ? 1 : Number(quality), index }];
+  });
+  return candidates.filter(item => item.weight > 0)
     .sort((a, b) => b.weight - a.weight || a.index - b.index)[0]?.locale ?? 'en';
 }

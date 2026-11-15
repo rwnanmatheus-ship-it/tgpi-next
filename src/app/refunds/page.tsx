@@ -1,3 +1,4 @@
+import { withSocialMetadata } from '@/lib/localization/social-metadata';
 import { getLocale } from "@/lib/localization/server";
 import { translate } from "@/lib/localization/messages";
 import type { Metadata } from "next";
@@ -6,11 +7,11 @@ import LegalDocument from "@/components/legal/LegalDocument";
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
   const t = (key: string) => translate(locale, key);
-  return {
+  return withSocialMetadata({
   title: `${t("Refund & Cancellation Policy")} | TGPI`,
   description: t("Cancellation, withdrawal and refund rules for TGPI Premium subscriptions."),
   alternates: { canonical: "/refunds" },
-  };
+  }, locale);
 }
 
 export default async function RefundPolicyPage() {

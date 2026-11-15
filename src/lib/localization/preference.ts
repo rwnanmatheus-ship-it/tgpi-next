@@ -1,6 +1,7 @@
 import { isLocale, resolveLocale, type Locale } from './config';
 
 export const localeSyncKey = 'tgpi:locale:changed';
+export const offlineLocaleKey = 'tgpi:locale:offline';
 
 /** An explicit choice on this device wins; the account restores it on a new device. */
 export function preferredLocale(accountValue: unknown, cookieValue: unknown, fallback: Locale): Locale {

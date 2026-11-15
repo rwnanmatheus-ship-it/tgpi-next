@@ -1,3 +1,4 @@
+import { withSocialMetadata } from '@/lib/localization/social-metadata';
 import GlobalDossierView from "@/components/intelligence/global/GlobalDossierView";
 import { globalDossier } from "@/lib/intelligence/global-dossier.server";
 import CountryFlag from "@/components/ui/CountryFlag";
@@ -39,11 +40,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!country) return {};
   const locale = await getLocale();
   const name = translate(locale, country.name);
-  return {
+  return withSocialMetadata({
     title: translate(locale, "{country}: Evidence, Comparison & Research Plan | TGPI", { country: name }),
     description: translate(locale, "Explore {country} through source-linked national statistics, reference years, explicit limitations and a practical personal research plan.", { country: name }),
     alternates: { canonical: `https://www.theglobalpolymath.com/countries/${slug}` },
-  };
+  }, locale);
 }
 export default async function CountryPage({ params }: Props) {
   const { slug } = await params;

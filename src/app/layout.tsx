@@ -91,7 +91,6 @@ const sourceMetadata: Metadata = {
   openGraph: {
     title: "TGPI | The Global Polymath Institute",
     description: "Compare countries, build practical skills and prepare a global life with clarity.",
-    url: "https://www.theglobalpolymath.com",
     siteName: "TGPI",
     locale: "en_US",
     type: "website",

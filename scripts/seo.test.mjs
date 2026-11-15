@@ -3,12 +3,15 @@ import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { inspectPage, sitemapUrls, ORIGIN, audit } from "./seo-audit.mjs";
 const read = file => readFileSync(new URL("../" + file, import.meta.url), "utf8");
-const html = url => `<title>TGPI</title><meta name="description" content="Research countries"><link rel="canonical" href="${url}"><h1>Country research</h1>`;
+const html = url => `<title>TGPI</title><meta name="description" content="Research countries"><link rel="canonical" href="${url}"><meta property="og:url" content="${url}"><meta property="og:image" content="${ORIGIN}/image.webp"><h1>Country research</h1>`;
 test("parses sitemap URLs", () => assert.deepEqual(sitemapUrls("<urlset><url><loc>https://example.com/a</loc></url></urlset>"), ["https://example.com/a"]));
 test("accepts complete indexable page", () => assert.deepEqual(inspectPage(html(ORIGIN), ORIGIN), []));
 test("detects canonical drift, empty metadata and noindex headers", () => {
   assert.ok(inspectPage(html("https://theglobalpolymath.com"), ORIGIN).length);
   assert.ok(inspectPage("", ORIGIN).length >= 3);
+  const page = `${ORIGIN}/countries`;
+  assert.deepEqual(inspectPage(html(page).replace(`property="og:url" content="${page}`, `property="og:url" content="${ORIGIN}`), page), ["Missing or non-self Open Graph URL"]);
+  assert.deepEqual(inspectPage(html(ORIGIN).replace(`${ORIGIN}/image.webp`, '/image.webp'), ORIGIN), ["Missing absolute Open Graph image"]);
   assert.ok(inspectPage(html(ORIGIN), ORIGIN, {"x-robots-tag": "noindex"}).includes("Indexable route marked noindex"));
   assert.ok(inspectPage(html(ORIGIN) + '<meta name="robots" content="noindex,nofollow">', ORIGIN).length);
 });

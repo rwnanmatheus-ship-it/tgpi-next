@@ -97,6 +97,11 @@
 :root {
   color-scheme: light;
   --tgpi-heading: var(--tgpi-navy);
+  --tgpi-control-border: #7a705e;
+  --tgpi-control-primary: var(--tgpi-navy);
+  --tgpi-control-primary-hover: var(--tgpi-navy-soft);
+  --tgpi-control-on-primary: var(--tgpi-inverse);
+  --tgpi-focus-halo: var(--tgpi-surface-strong);
 }
 
 :root[data-tgpi-theme="dark"] {
@@ -107,6 +112,11 @@
   --tgpi-surface-strong: #17263a;
   --tgpi-ink: #eff4fa;
   --tgpi-heading: #eff4fa;
+  --tgpi-control-border: #849bb5;
+  --tgpi-control-primary: #a3caff;
+  --tgpi-control-primary-hover: #c7dfff;
+  --tgpi-control-on-primary: var(--tgpi-navy-deep);
+  --tgpi-focus-halo: var(--tgpi-navy-deep);
   --tgpi-muted: #b3c2d5;
   --tgpi-border: #3c526c;
   --tgpi-border-soft: #273b54;

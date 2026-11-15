@@ -1,3 +1,4 @@
+import { withSocialMetadata } from '@/lib/localization/social-metadata';
 import { getLocale } from "@/lib/localization/server";
 import { translate } from "@/lib/localization/messages";
 
@@ -8,11 +9,11 @@ import LegalDocument from "@/components/legal/LegalDocument";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
-  return {
+  return withSocialMetadata({
     title: `${translate(locale, "Privacy Policy")} | TGPI`,
     description: translate(locale, "This policy explains how TGPI handles personal data across accounts, country intelligence, learning, billing, credentials and platform operations."),
     alternates: { canonical: "/privacy" },
-  };
+  }, locale);
 }
 
 export default async function PrivacyPage() {

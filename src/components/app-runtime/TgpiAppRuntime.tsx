@@ -20,10 +20,17 @@ export default function TgpiAppRuntime() {
     let runtimeRegistration: ServiceWorkerRegistration | null = null;
     let installingWorker: ServiceWorker | null = null;
     const hydrationTimer = window.setTimeout(() => setOnline(navigator.onLine), 0);
-    const onOnline = () => setOnline(true);
+    const onOnline = () => {
+      setOnline(true);
+      void registrationRef.current?.update().catch(() => undefined);
+    };
     const onOffline = () => setOnline(false);
     const onControllerChange = () => {
-      if (reloadOnControllerChangeRef.current) window.location.reload();
+      setUpdateAvailable(false);
+      if (reloadOnControllerChangeRef.current) {
+        reloadOnControllerChangeRef.current = false;
+        window.location.reload();
+      }
     };
     const onInstallingStateChange = () => {
       if (
@@ -65,6 +72,7 @@ export default function TgpiAppRuntime() {
           }
 
           registration.addEventListener("updatefound", onUpdateFound);
+          onUpdateFound();
         } catch {
           // The website remains fully usable when service-worker registration fails.
         }
@@ -117,7 +125,7 @@ export default function TgpiAppRuntime() {
   function activateUpdate() {
     const waitingWorker = registrationRef.current?.waiting;
     if (!waitingWorker) {
-      window.location.reload();
+      setUpdateAvailable(false);
       return;
     }
     reloadOnControllerChangeRef.current = true;
@@ -143,16 +151,16 @@ export default function TgpiAppRuntime() {
 
   return (
     <>
+      <div className="sr-only" role="status" aria-atomic="true" aria-live="polite">
+        {content ? <LocalizedText text={content.title} /> : null}
+      </div>
       {install.showInvite && !notice ? (
         <InstallInvite open={() => install.setGuideOpen(true)} dismiss={install.remindLater} />
       ) : null}
       {install.guideOpen ? <InstallGuide {...install} close={() => install.setGuideOpen(false)} /> : null}
       {content ? <aside
-        aria-atomic="true"
-        aria-live="polite"
         className="fixed inset-x-4 bottom-[calc(6rem+env(safe-area-inset-bottom))] z-[90] mx-auto max-w-md overflow-hidden rounded-[1.4rem] border border-[var(--tgpi-inverse-border)] bg-[var(--tgpi-navy)] text-white shadow-[0_24px_80px_rgba(1,8,16,0.38)] backdrop-blur-xl lg:inset-x-auto lg:bottom-6 lg:right-6 lg:mx-0"
         data-pwa-runtime={notice}
-        role="status"
       >
         <div className="h-1 bg-gradient-to-r from-[var(--tgpi-gold-strong)] via-[var(--tgpi-gold)] to-[var(--tgpi-gold-light)]" />
         <div className="flex gap-4 p-4 sm:p-5">

@@ -3,6 +3,7 @@ import { readFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import test from "node:test";
+import { runInNewContext } from "node:vm";
 import {
   canInviteToInstall, detectInstallPlatform, installReminderDelay, isInstallReminderPaused,
 } from "../src/lib/pwa-install.ts";
@@ -122,4 +123,35 @@ test("reminders expire after two weeks and only appear on selected routes", () =
   assert.equal(isInstallReminderPaused("invalid", now), false);
   for (const route of ["/profile", "/dashboard", "/plan", "/courses"]) assert.ok(canInviteToInstall(route), route);
   for (const route of ["/", "/profile/billing", "/courses/example/study", "/sign-in"]) assert.ok(!canInviteToInstall(route), route);
+});
+
+test("offline fallback supports all six locale choices and retries the original URL", () => {
+  const source = readSource("public/pwa/offline.js");
+  const destination = "https://www.theglobalpolymath.com/compare?country=portugal#results";
+  for (const [locale, heading] of Object.entries({
+    en: "You are offline",
+    "pt-BR": "Você está offline",
+    es: "Estás sin conexión",
+    fr: "Vous êtes hors ligne",
+    de: "Sie sind offline",
+    it: "Sei offline",
+  })) {
+    const nodes = new Map([".eyebrow", "h1", ".description", ".privacy", "#retry", ".secondary"]
+      .map(selector => [selector, { addEventListener() {} }]));
+    const document = {
+      documentElement: {},
+      querySelector: selector => nodes.get(selector),
+      getElementById: id => nodes.get(`#${id}`),
+    };
+    runInNewContext(source, {
+      document,
+      navigator: { languages: ["fr-CA", "en-US"] },
+      localStorage: { getItem: () => locale },
+      location: { pathname: "/compare", href: destination },
+    });
+    assert.equal(document.documentElement.lang, locale);
+    assert.equal(nodes.get("h1").textContent, heading);
+    assert.equal(nodes.get("#retry").href, destination);
+    assert.ok(nodes.get(".privacy").textContent);
+  }
 });

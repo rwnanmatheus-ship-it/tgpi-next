@@ -1,3 +1,4 @@
+import { withSocialMetadata } from '@/lib/localization/social-metadata';
 import { getLocale } from '@/lib/localization/server';
 import { localizeAcademyCourse } from '@/lib/localization/academy-content';
 import AcademyOverview from "@/components/courses/academy/AcademyOverview";
@@ -24,16 +25,17 @@ export async function generateMetadata({
   const { id } = await params;
   const academy = getAcademyCourse(id);
   if (academy) {
-    const localized = localizeAcademyCourse(academy, await getLocale());
+    const locale = await getLocale();
+    const localized = localizeAcademyCourse(academy, locale);
     const title = `${localized.title} | TGPI Learning`;
     const description = localized.description;
     const url = `/courses/${academy.id}`;
     const images = [{ url: academy.image, width: 1536, height: 1024, alt: localized.title }];
-    return {
+    return withSocialMetadata({
       title, description, alternates: { canonical: url },
       openGraph: { title, description, url, images },
       twitter: { card: 'summary_large_image', title, description, images },
-    };
+    }, locale);
   }
   const professional = getProfessionalCourse(id);
   if (professional && professionalCourseEnabled(id, process.env.VERCEL_ENV || process.env.NODE_ENV)) return { title: `${professional.title} | TGPI Learning`, description: professional.outcomes.join(" ") };

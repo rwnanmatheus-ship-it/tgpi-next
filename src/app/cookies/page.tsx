@@ -1,3 +1,4 @@
+import { withSocialMetadata } from '@/lib/localization/social-metadata';
 import { getLocale } from "@/lib/localization/server";
 import { translate } from "@/lib/localization/messages";
 import AnalyticsPreferences from "@/components/analytics/AnalyticsPreferences";
@@ -7,11 +8,11 @@ import LegalDocument from "@/components/legal/LegalDocument";
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
   const t = (key: string) => translate(locale, key);
-  return {
+  return withSocialMetadata({
   title: `${t("Cookie Policy")} | TGPI`,
   description: t("How TGPI uses cookies and similar technologies for authentication, security, billing and preferences."),
   alternates: { canonical: "/cookies" },
-  };
+  }, locale);
 }
 
 export default async function CookiePolicyPage() {

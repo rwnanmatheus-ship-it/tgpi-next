@@ -1,3 +1,4 @@
+import { withSocialMetadata } from '@/lib/localization/social-metadata';
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import AccessibleMedia from '@/components/accessibility/AccessibleMedia';
@@ -15,11 +16,11 @@ import { asynchronousHandover } from '@/lib/learning/accessible-media';
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
-  return {
+  return withSocialMetadata({
     title: `${studyCopy(locale, 'center')} | TGPI`,
     description: studyCopy(locale, 'intro'),
     alternates: { canonical: '/accessibility' },
-  };
+  }, locale);
 }
 
 export default async function AccessibilityPage() {

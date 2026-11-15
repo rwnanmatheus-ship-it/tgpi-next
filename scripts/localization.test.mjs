@@ -13,12 +13,14 @@ const supplementalCatalogs = Object.fromEntries(locales.map(locale => [locale, {
 }]));
 for (const locale of locales) registerSupplementalMessages(locale, supplementalCatalogs[locale]);
 const mockReact = await import('react');
+const socialMetadata = await import(url(fs.readFileSync('src/lib/localization/social-metadata.ts', 'utf8')));
 function localizationDependency(name, locale) {
   const t = (text, values) => typeof text === 'string' ? translate(locale, text, values) : text;
   if (name === '@/components/localization/LocaleProvider') return { useLocale: () => ({ locale, t }), LocalizedText: ({ text, values }) => t(text, values) };
   if (name === '@/components/localization/LocalizedElement') return { LocalizedElement: ({ as, ...props }) => mockReact.createElement(as, Object.fromEntries(Object.entries(props).map(([key, value]) => [key, ['aria-label', 'title', 'placeholder', 'alt'].includes(key) ? t(value) : value]))) };
   if (name === '@/components/localization/LocalizedImage') return { __esModule: true, default: ({ fill, priority, ...props }) => mockReact.createElement('img', { ...props, alt: t(props.alt) }) };
   if (name === '@/components/localization/LocalizedLink') return { __esModule: true, default: ({ prefetch, ...props }) => mockReact.createElement('a', { ...props, 'aria-label': t(props['aria-label']) }) };
+  if (name === '@/lib/localization/social-metadata') return socialMetadata;
   if (name === '@/lib/localization/workspace-copy') {
     const exports = {};
     new Function('exports', ts.transpileModule(fs.readFileSync('src/lib/localization/workspace-copy.ts', 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText)(exports);
@@ -28,7 +30,7 @@ function localizationDependency(name, locale) {
     const file = name.endsWith('authored-content') ? 'authored-content.ts' : 'metadata.server.ts';
     const exports = {};
     const compiled = ts.transpileModule(fs.readFileSync('src/lib/localization/' + file, 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
-    new Function('require', 'exports', compiled)(dependency => dependency === 'server-only' ? {} : dependency === './server' ? { getLocale: async () => locale } : { translate }, exports);
+    new Function('require', 'exports', compiled)(dependency => dependency === 'server-only' ? {} : dependency === './server' ? { getLocale: async () => locale } : dependency === './social-metadata' ? socialMetadata : { translate }, exports);
     return exports;
   }
 }
@@ -51,6 +53,9 @@ test('language negotiation respects weights, unsupported choices, and exclusions
   assert.equal(negotiateLocale('es;q=broken,pt-BR;q=0.9'), 'pt-BR');
   assert.equal(negotiateLocale(null), 'en');
   assert.equal(negotiateLocale('*'), 'en');
+  assert.equal(negotiateLocale('fr; Q = 0.3, ES-mx;q=0.85'), 'es');
+  assert.equal(negotiateLocale('German,pt;q=0.9'), 'pt-BR');
+  assert.equal(negotiateLocale('fr;q=1.1,es;q=0x1,it;q=0.4'), 'it');
 });
 test('every registered message has all six translations and matching placeholders', () => {
   for (const [key, translations] of Object.entries(messages)) {
@@ -313,6 +318,7 @@ test('cookies and refund policies translate every paragraph without changing lin
       const shell = await load('src/components/legal/LegalDocument.tsx').default(element.props);
       const html = renderToStaticMarkup(shell);
       const metadata = await page.generateMetadata();
+      assert.equal(metadata.openGraph.url, '/' + route);
       for (const key of keys) assert.ok((html + metadata.title + metadata.description).includes(escape(translate(locale, key))) || (metadata.title + metadata.description).includes(translate(locale, key)), `${locale}: ${key}`);
       assert.ok(html.includes('mailto:contact@theglobalpolymath.com'));
       assert.ok(html.includes('CNPJ 49.709.438/0001-32'));

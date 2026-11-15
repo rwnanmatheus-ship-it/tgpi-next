@@ -1,3 +1,6 @@
+import { getLocale } from '@/lib/localization/server';
+import { translate } from '@/lib/localization/messages';
+import { withSocialMetadata } from '@/lib/localization/social-metadata';
 
 import { LocalizedElement } from "@/components/localization/LocalizedElement";
 
@@ -13,7 +16,16 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const guide = publicGuides.find(item => item.slug === slug);
   if (!guide) return {};
-  return { title: `${guide.title} | TGPI`, description: guide.description, alternates: { canonical: `${origin}/guides/${guide.slug}` }, openGraph: { title: guide.title, description: guide.description, url: `${origin}/guides/${guide.slug}`, type: "article" } };
+  const locale = await getLocale();
+  const title = translate(locale, guide.title);
+  const description = translate(locale, guide.description);
+  const canonicalUrl = `${origin}/guides/${guide.slug}`;
+  return withSocialMetadata({
+    title: `${title} | TGPI`,
+    description,
+    alternates: { canonical: canonicalUrl },
+    openGraph: { title, description, type: "article" },
+  }, locale);
 }
 export default async function GuidePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;

@@ -8,7 +8,7 @@ import { planExecutionMessages } from '@/lib/localization/plan-execution-copy';
 import { type Locale } from '@/lib/localization/config';
 import { translate, registerSupplementalMessages, type SupplementalMessages } from '@/lib/localization/messages';
 import { localeCatalogVersion } from '@/lib/localization/catalog-version';
-import { localeSyncKey, readLocaleSignal } from '@/lib/localization/preference';
+import { localeSyncKey, offlineLocaleKey, readLocaleSignal } from '@/lib/localization/preference';
 
 type LocaleContextValue = {
   locale: Locale;
@@ -45,7 +45,10 @@ export function LocaleProvider({ locale, messages, children }: { locale: Locale;
   const [refreshing, startTransition] = useTransition();
   const [appliedLocale, setAppliedLocale] = useState(locale);
   useEffect(() => { setAppliedLocale(locale); }, [locale]);
-  useEffect(() => { document.documentElement.lang = appliedLocale; }, [appliedLocale]);
+  useEffect(() => {
+    document.documentElement.lang = appliedLocale;
+    try { localStorage.setItem(offlineLocaleKey, appliedLocale); } catch { /* The offline page can use the browser language. */ }
+  }, [appliedLocale]);
   useEffect(() => {
     const synchronize = (event: StorageEvent) => {
       if (event.key !== localeSyncKey) return;

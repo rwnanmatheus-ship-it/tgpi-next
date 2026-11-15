@@ -365,7 +365,13 @@ html[data-tgpi-text="large"] { font-size: 18px; }
 html[data-tgpi-motion="reduced"] *,
 html[data-tgpi-motion="reduced"] *::before,
 html[data-tgpi-motion="reduced"] *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
-html[data-tgpi-focus="strong"] :is(a,button,input,select,textarea,[tabindex]):focus-visible { outline: 4px solid #2563eb !important; outline-offset: 4px !important; box-shadow: 0 0 0 7px #fff !important; }
+html[data-tgpi-focus="strong"] :is(a,button,input,select,textarea,[tabindex]):focus-visible { outline: 4px solid var(--tgpi-focus) !important; outline-offset: 3px !important; box-shadow: 0 0 0 3px var(--tgpi-focus-halo) !important; }
+
+@media (forced-colors: active) {
+  html[data-tgpi-focus="strong"] :is(a, button, input, select, textarea, [tabindex]):focus-visible {
+    outline-color: Highlight !important;
+  }
+}
 
 /* Keep the first keyboard shortcut above the persistent site chrome. */
 .tgpi-content-skip {
