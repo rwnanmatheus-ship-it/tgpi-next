@@ -47,6 +47,14 @@ export function fitRoadmap(context: ResearchContext) {
 }
 
 export type PlanScenarioSlot = '1' | '2' | '3';
+export type PlanFundScenario = {
+  country: string;
+  slot: PlanScenarioSlot;
+  city: string;
+  quoteDate: string;
+  currency: import('./intelligence/research-plan.ts').PlanningCurrency;
+  total: number;
+};
 export type PlanBudgetEvidence = { status: 'complete' | 'partial'; slot: PlanScenarioSlot };
 export type PlanPreparation = {
   slug: string;

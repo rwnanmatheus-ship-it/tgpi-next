@@ -3,6 +3,7 @@ import { getUserActivationView } from "@/lib/activation-store.server";
 import { localizeMetadata } from "@/lib/localization/metadata.server";
 import { loadLearningSummary } from "@/lib/learning/unified-progress.server";
 import { buildPersonalPlan } from "@/lib/personal-plan";
+import { loadPlanExecution } from "@/lib/plan-execution.server";
 import { loadPlanBudgetEvidence } from "@/lib/plan-budget.server";
 import { courses } from "@/data/courses";
 import type { Metadata } from "next";
@@ -28,13 +29,14 @@ export default async function PersonalPlanPage({ searchParams }: { searchParams:
   );
   const countries = getAllCountries();
   const destinations = onboarding.targetCountries.filter(slug => countries.some(country => country.slug === slug));
-  const [{ progress: activation, readOnly }, budgets, query] = await Promise.all([
+  const [{ progress: activation, readOnly }, { evidence, scenarios }, query, execution] = await Promise.all([
     getUserActivationView(session.userId, user?.privateMetadata),
     loadPlanBudgetEvidence(session.userId, destinations, user?.unsafeMetadata.tgpiResearchWorksheet),
     searchParams,
+    loadPlanExecution(session.userId),
   ]);
   const learning = await loadLearningSummary(session.userId, activation);
-  const { model, path, preparation } = buildPersonalPlan(onboarding, countries, activation, learning, courses, budgets, readOnly);
+  const { model, path, preparation } = buildPersonalPlan(onboarding, countries, activation, learning, courses, evidence, readOnly);
   const budgetCountry = typeof query.country === 'string' && destinations.includes(query.country) ? query.country : undefined;
 
   const scenario = query.scenario;
@@ -48,6 +50,10 @@ export default async function PersonalPlanPage({ searchParams }: { searchParams:
         learning={learning}
         path={path}
         preparation={preparation}
+        execution={execution}
+        initialDate={new Date().toISOString().slice(0, 10)}
+        fundingScenarios={scenarios}
+        fundingUnavailable={evidence === null}
         budgetCountry={budgetCountry}
         budgetSlot={budgetSlot}
         activationReadOnly={readOnly}

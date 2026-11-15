@@ -4,6 +4,7 @@ import { createContext, useContext, useCallback, useMemo, useRef, useState, useE
 import { useRouter } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
 import { appearanceMessages } from '@/lib/localization/appearance';
+import { planExecutionMessages } from '@/lib/localization/plan-execution-copy';
 import { type Locale } from '@/lib/localization/config';
 import { translate, registerSupplementalMessages, type SupplementalMessages } from '@/lib/localization/messages';
 import { localeCatalogVersion } from '@/lib/localization/catalog-version';
@@ -16,6 +17,7 @@ type LocaleContextValue = {
   changeLocale: (locale: Locale) => Promise<void>;
   t: (key: string, values?: Record<string, string | number>) => string;
 };
+const interfaceMessages = { ...appearanceMessages, ...planExecutionMessages };
 const LocaleContext = createContext<LocaleContextValue | null>(null);
 
 const loadedCatalogs = new Map<Locale, Promise<void>>();
@@ -81,8 +83,8 @@ export function LocaleProvider({ locale, messages, children }: { locale: Locale;
       setPending(false);
     }
   }, [router]);
-  const value = useMemo(() => ({ locale: appliedLocale, pending: pending || refreshing, error, changeLocale, t: (key: string, values?: Record<string, string | number>) => Object.hasOwn(appearanceMessages, key)
-    ? appearanceMessages[key][appliedLocale].replace(/\{(\w+)\}/g, (placeholder, name: string) => String(values?.[name] ?? placeholder))
+  const value = useMemo(() => ({ locale: appliedLocale, pending: pending || refreshing, error, changeLocale, t: (key: string, values?: Record<string, string | number>) => Object.hasOwn(interfaceMessages, key)
+    ? interfaceMessages[key][appliedLocale].replace(/\{(\w+)\}/g, (placeholder, name: string) => String(values?.[name] ?? placeholder))
     : translate(appliedLocale, key, values) }), [appliedLocale, pending, refreshing, error, changeLocale]);
   return <LocaleContext.Provider value={value}>{children}</LocaleContext.Provider>;
 }

@@ -15,9 +15,16 @@ const supplemental = supplementalFor('en');
 const notifications = {};
 new Function('exports', ts.transpileModule(fs.readFileSync('src/lib/notifications/text.ts', 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText)(notifications);
 for (const locale of ['en', 'pt-BR', 'es', 'fr', 'de', 'it']) exports.registerSupplementalMessages(locale, supplementalFor(locale));
-const appearance = {};
-new Function('exports', ts.transpileModule(fs.readFileSync('src/lib/localization/appearance.ts', 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText)(appearance);
-const registered = new Set([...Object.keys(appearance.appearanceMessages), ...Object.keys(exports.messages), ...Object.keys(supplemental)].map(key => key.toLocaleLowerCase('en')));
+const interfaceKeys = [
+  ['appearance', 'appearanceMessages'],
+  ['plan-execution-copy', 'planExecutionMessages'],
+].flatMap(([file, symbol]) => {
+  const catalog = {};
+  const source = fs.readFileSync(`src/lib/localization/${file}.ts`, 'utf8');
+  new Function('exports', ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS } }).outputText)(catalog);
+  return Object.keys(catalog[symbol]);
+});
+const registered = new Set([...interfaceKeys, ...Object.keys(exports.messages), ...Object.keys(supplemental)].map(key => key.toLocaleLowerCase('en')));
 const brands = new Set(['TGPI', 'The Global Polymath Institute', 'TGPI Premium', 'Global Key', 'TGPI Global ID', 'TGPI Global Key', 'Instagram', 'LinkedIn', 'TGPI GLOBAL EDUCATION LTDA', 'Renan']);
 const candidates = new Map();
 const untranslatedRendering = new Map();

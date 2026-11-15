@@ -2,12 +2,13 @@ import 'server-only';
 
 import { getFirestoreDocuments, isLearningStorageConfigured } from '@/lib/firestore-admin-rest.server';
 import { RESEARCH_TASKS, validateWorksheet, worksheetTotals } from '@/lib/intelligence/research-plan';
-import type { PlanBudgetEvidence } from '@/lib/personal-plan';
+import type { PlanBudgetEvidence, PlanFundScenario } from '@/lib/personal-plan';
 
 export async function loadPlanBudgetEvidence(uid: string, destinations: string[], legacy: unknown) {
   const evidence: Record<string, PlanBudgetEvidence> = {};
-  if (!destinations.length) return evidence;
-  if (!isLearningStorageConfigured()) return null;
+  const scenarios: PlanFundScenario[] = [];
+  if (!destinations.length) return { evidence, scenarios };
+  if (!isLearningStorageConfigured()) return { evidence: null, scenarios };
 
   const targets = destinations.flatMap(country => (['1', '2', '3'] as const).map(slot => ({
     country, slot, path: `tgpiLearningUsers/${uid}/researchScenarios/${country}-${slot}`,
@@ -18,12 +19,16 @@ export async function loadPlanBudgetEvidence(uid: string, destinations: string[]
     for (const { country, slot, path } of targets) {
       const row = rows.get(path);
       const worksheet = validateWorksheet(row ? row.data.worksheet : slot === '1' ? legacy : null, [country], taskIds);
-      if (!worksheet || evidence[country]?.status === 'complete') continue;
-      const complete = worksheetTotals(worksheet).complete && worksheet.city && worksheet.quoteDate && worksheet.sourceNote;
-      if (complete || !evidence[country]) evidence[country] = { status: complete ? 'complete' : 'partial', slot };
+      if (!worksheet) continue;
+      const totals = worksheetTotals(worksheet);
+      const complete = totals.complete && Boolean(worksheet.city && worksheet.quoteDate && worksheet.sourceNote);
+      if (complete) scenarios.push({ country, slot, city: worksheet.city, quoteDate: worksheet.quoteDate, currency: worksheet.currency, total: totals.total });
+      if (!evidence[country] || (complete && evidence[country].status !== 'complete')) {
+        evidence[country] = { status: complete ? 'complete' : 'partial', slot };
+      }
     }
-    return evidence;
+    return { evidence, scenarios };
   } catch {
-    return null;
+    return { evidence: null, scenarios: [] };
   }
 }
