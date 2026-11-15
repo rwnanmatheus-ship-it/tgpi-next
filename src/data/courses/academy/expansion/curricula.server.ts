@@ -2,7 +2,7 @@ import 'server-only';
 
 import type { AcademyCourse, AcademyLesson, AcademyPrivateQuestion, CaseSpec } from '@/lib/learning/academy/types';
 import type { CourseGoal } from '@/types/course-overview';
-import { cinematicUrl } from '@/lib/cinematic-art';
+import { cinematicUrl, courseArtwork } from '@/lib/cinematic-art';
 import { assessmentTranslations } from '@/lib/localization/assessment.server';
 import { projectLessons } from '../project-stages';
 import type { ExpansionCurriculum } from './authoring';
@@ -132,7 +132,7 @@ export function expansionAcademy(version: string) {
     const course: AcademyCourse = {
       id, version, title, description, outcomes: labs.map(lab => lab[3]), projectBrief: project,
       lessons, minutes, portfolioMinutes, assessmentMinutes,
-      language: 'pt-BR', image: cinematicUrl(artwork),
+      language: 'pt-BR', image: courseArtwork(id, cinematicUrl(artwork)),
       ...(goal === 'emergency-readiness' ? {
         scopeNotice: 'Formação teórica de planejamento e simulação de mesa. O certificado TGPI registra conclusão teórica. Treinamentos práticos e habilitações são oferecidos pelas entidades competentes.',
       } : {}),

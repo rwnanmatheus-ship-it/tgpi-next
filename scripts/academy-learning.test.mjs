@@ -100,8 +100,11 @@ test('academy courses have inspectable workload, assessments and preserved found
  assert.equal(originals.reduce((n,c)=>n+c.lessons.length,0),335);
  assert.equal(academyCourses.filter(course => emergency.has(course.id)).length,6);
  const manifest=h.load(resolve('src/data/courses/academy/manifest.ts')).academyManifest;
+ const { academyCoverIds, courseArtwork } = h.load(resolve('src/lib/cinematic-art.ts'));
+ assert.deepEqual([...academyCoverIds].sort(), Object.keys(manifest).sort());
  const old=h.load(resolve('src/data/courses.ts')).courses, pro=h.load(resolve('src/data/courses/professional/index.ts')).professionalCourseDrafts;
  for(const course of academyCourses){
+  assert.equal(course.image, courseArtwork(course.id));
   assert.equal(course.minutes,course.lessons.reduce((n,l)=>n+l.minutes,0)+course.portfolioMinutes+course.assessmentMinutes);
   assert.deepEqual(manifest[course.id],{minutes:course.minutes,lessons:course.lessons.length});
   const entry = emergency.get(course.id);

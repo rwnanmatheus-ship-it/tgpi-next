@@ -1,7 +1,9 @@
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
+import { createHash } from 'node:crypto';
 import test from 'node:test';
 import ts from 'typescript';
+import sharp from 'sharp';
 function moduleAt(path) { const result = {}; new Function('exports', ts.transpileModule(readFileSync(path,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText)(result); return result; }
 const { courseSearchScore, normalizeCourseSearch, moveCourseSuggestion, courseMinutes, studyWeeks } = moduleAt('src/lib/learning/catalog-search.ts');
 const make = (title, desc='') => ({title,desc,category:'Learning',goalLabel:'Practice',benefits:[]});
@@ -26,15 +28,29 @@ test('study estimates use workload minutes without promising a completion date',
  assert.equal(studyWeeks(700,300),3);
  assert.equal(studyWeeks(0,0),1);
 });
-test('all 27 registered course covers are unique and resolve to real assets', () => {
- const {courseArtworkKeys,courseArtwork,distinctCourseArtwork}=moduleAt('src/lib/cinematic-art.ts');
- const paths=Object.keys(courseArtworkKeys).map(id=>courseArtwork(id));
- assert.equal(paths.length,27); assert.equal(new Set(paths).size,27);
- for(const path of paths) assert.ok(existsSync('public'+path),path);
- assert.equal(distinctCourseArtwork.length,14);
- for (const id of distinctCourseArtwork) assert.ok(existsSync('public'+courseArtwork(id)),id);
+test('the 83 Academy covers are unique, optimized WebP files with subject badges', async () => {
+  const { academyCoverIds, courseArtwork, courseCoverBadges } = moduleAt('src/lib/cinematic-art.ts');
+  const seen = new Set();
+  assert.equal(academyCoverIds.length, 83);
+  for (const id of academyCoverIds) {
+    const asset = courseArtwork(id);
+    assert.equal(asset, `/images/courses/academy-covers-2026/${id}.webp`);
+    assert.ok(existsSync('public' + asset), id);
+    const data = readFileSync('public' + asset);
+    const hash = createHash('sha256').update(data).digest('hex');
+    assert.ok(!seen.has(hash), id);
+    seen.add(hash);
+    const { format, width, height } = await sharp(data).metadata();
+    assert.equal(format, 'webp', id);
+    assert.equal(width, 1536, id);
+    assert.equal(height, 1024, id);
+    assert.ok(data.length <= 420_000, `${id} is larger than 420 KB`);
+    assert.ok(courseCoverBadges(id).every(label => label.length <= 32), id);
+  }
+  assert.deepEqual(courseCoverBadges('planilhas-decisoes-profissionais'), ['Excel', 'Google Sheets']);
+  assert.deepEqual(courseCoverBadges('espanhol-negocios-latam'), ['ES · B1–B2']);
+  assert.equal(courseCoverBadges('toString'), undefined);
 });
-
 
 test('keyboard suggestions start from the correct endpoint and wrap safely', () => {
   assert.equal(moveCourseSuggestion(-1, 5, 'ArrowUp'), 4);

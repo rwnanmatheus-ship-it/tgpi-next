@@ -220,7 +220,6 @@
 .heroVisual { position: relative; min-height: 380px; }
 .heroImage { object-fit: cover; }
 .heroVisual::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg,#101e31 0,transparent 35%),linear-gradient(0deg,#081627e8,transparent 70%); }
-.heroVisual > span { position: absolute; z-index: 1; left: 35px; bottom: 34px; right: 35px; color: #ead2a1; font-size: 25px; font-weight: 500; letter-spacing: -.03em; }
 .heroFootnote { font-size: 10px !important; color: #92aac6 !important; margin-top: 14px; }
 .overviewNav { display: flex; align-items: center; gap: 5px; position: sticky; top: 78px; z-index: 9; padding: 7px; border: 1px solid #354963; background: #0e1c30f0; backdrop-filter: blur(16px); border-radius: 12px; margin: 22px 0; box-shadow: 0 8px 25px #0003; }
 .overviewNav a { min-height: 40px; display: inline-flex; align-items: center; justify-content: center; padding: 9px 12px; border-radius: 7px; color: #b8cce6; font-size: 11px; white-space: nowrap; }
@@ -366,7 +365,6 @@
   .hero { grid-template-columns: 1fr; border-radius: 16px; }
   .heroVisual { min-height: 235px; order: -1; }
   .heroVisual::after { background: linear-gradient(0deg,#101e31,transparent 85%); }
-  .heroVisual > span { left: 25px; bottom: 23px; font-size: 23px; }
   .heroCopy { padding: 25px; }
   .hero h1 { font-size: 33px; }.hero p { font-size: 13px; }
   .hero .button { width: 100%; }.hero .heroLink { font-size: 12px; }

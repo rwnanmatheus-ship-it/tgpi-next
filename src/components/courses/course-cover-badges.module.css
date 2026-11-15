@@ -1,0 +1,63 @@
+.badges {
+  position: absolute;
+  z-index: 2;
+  inset-inline: clamp(.65rem, 3%, 1.4rem);
+  inset-inline-end: var(--course-cover-badge-end, clamp(.65rem, 3%, 1.4rem));
+  bottom: clamp(.65rem, 4%, 1.4rem);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .32rem;
+  pointer-events: none;
+}
+
+.badge {
+  --seal-ink: #f4deaa;
+  --seal-edge: #d8b86e90;
+  --seal-fill: #101a29ed;
+  min-width: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: .37rem;
+  color: var(--seal-ink);
+  background: var(--seal-fill);
+  border: 1px solid var(--seal-edge);
+  border-radius: .38rem;
+  box-shadow: 0 2px 8px #0006, inset 0 1px #ffffff1a;
+  padding: .34rem .51rem;
+  font-size: .65rem;
+  font-weight: 760;
+  line-height: 1.22;
+  letter-spacing: .055em;
+  overflow-wrap: anywhere;
+}
+
+.badge[data-tone='spreadsheet'] {
+  --seal-ink: #cbffeb;
+  --seal-edge: #7ce2b496;
+  --seal-fill: #092c24f5;
+}
+
+.badge[data-tone='analytics'] {
+  --seal-ink: #ffe18e;
+  --seal-edge: #f5ca579b;
+  --seal-fill: #342705f5;
+}
+
+.badge[data-tone='language'] {
+  --seal-ink: #d8ebff;
+  --seal-edge: #8fbff99e;
+  --seal-fill: #132d4bf5;
+}
+
+.mark {
+  flex: none;
+  inline-size: .34rem;
+  block-size: .34rem;
+  border: 1px solid currentColor;
+  transform: rotate(45deg);
+}
+
+@media (forced-colors: active) {
+  .badge { color: CanvasText; background: Canvas; border-color: CanvasText; }
+}

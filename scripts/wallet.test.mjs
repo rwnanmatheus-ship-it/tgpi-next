@@ -225,7 +225,7 @@ test('commercial availability requires explicit tax review and merchant binding 
 });
 test('readiness distinguishes unavailable Stripe evidence from missing configuration and never enables commerce', async () => {
   const h = harness();
-  const module = load('src/lib/wallet/readiness.server.ts', { './policy': policy, './environment.server': h.environment, './store.server': h.wallet, '@/lib/stripe': { getStripeServer: () => ({ accounts: { retrieve: async () => { throw Error('sensitive provider error'); } }, webhookEndpoints: { list: async () => ({ data: [], has_more: false }) } }) } });
-  const result = await module.walletReadiness();
+  const readinessModule = load('src/lib/wallet/readiness.server.ts', { './policy': policy, './environment.server': h.environment, './store.server': h.wallet, '@/lib/stripe': { getStripeServer: () => ({ accounts: { retrieve: async () => { throw Error('sensitive provider error'); } }, webhookEndpoints: { list: async () => ({ data: [], has_more: false }) } }) } });
+  const result = await readinessModule.walletReadiness();
   assert.equal(result.account, null); assert.ok(result.checks.some(x => x.state === 'unverified')); assert.ok(result.checks.some(x => x.label.includes('Endpoint') && x.state === 'pending')); assert.doesNotMatch(JSON.stringify(result), /sensitive provider error/);
 });

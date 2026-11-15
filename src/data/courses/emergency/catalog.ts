@@ -1,3 +1,5 @@
+import { courseArtwork } from '../../../lib/cinematic-art.ts';
+
 export const emergencyCourseGoal = 'emergency-readiness';
 
 export const emergencyCourses = [
@@ -60,5 +62,5 @@ export const emergencyCourses = [
 export const practicalScope = 'Formação teórica online. O certificado registra conclusão teórica. Habilidades físicas exigem prática supervisionada e avaliação em um centro de treinamento.';
 
 export function emergencyCover(id: string) {
-  return `/images/courses/learning-2026/${id}.webp`;
+  return courseArtwork(id, `/images/courses/learning-2026/${id}.webp`);
 }

@@ -32,7 +32,7 @@ export default function InstitutionalHome() {
   const ids = ["global-english-2026", "country-fit", "relocation-budget", "international-career", "ai-workflow-foundations", "critical-thinking"];
   const featured = ids.flatMap(id => {
     const course = coursesOverview.find(item => item.id === id && item.status === "available");
-    return course ? [{ id, title: course.title, href: course.href, image: course.image, imageAlt: course.imageAlt,
+    return course ? [{ id, title: course.title, href: course.href, image: course.image,
       description: course.desc, duration: course.duration, group: id === "global-english-2026" ? "language" : ["country-fit", "relocation-budget"].includes(id) ? "mobility" : "career",
       certificate: course.learningPolicy?.credentialStatus === "criteria_available" }] : [];
   });

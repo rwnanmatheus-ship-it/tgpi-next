@@ -1,6 +1,5 @@
 import type { MetadataRoute } from "next";
-import { expansionOverview } from "@/data/courses/academy/expansion/listing";
-import { emergencyCover, emergencyCourses } from "@/data/courses/emergency/catalog";
+import { academyCoverIds, courseArtwork } from "@/lib/cinematic-art";
 import { publicGuides } from "@/lib/public-guides";
 import { getAllCountrySlugs } from "@/lib/countries";
 
@@ -50,21 +49,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  const emergency: MetadataRoute.Sitemap = emergencyCourses.map(({ id }) => ({
+  const academy: MetadataRoute.Sitemap = academyCoverIds.map(id => ({
     url: `${siteUrl}/courses/${id}`,
-    images: [`${siteUrl}${emergencyCover(id)}`],
+    images: [`${siteUrl}${courseArtwork(id)}`],
     changeFrequency: "monthly",
     priority: 0.7,
   }));
 
-  const expansion: MetadataRoute.Sitemap = expansionOverview.map(course => ({
-    url: `${siteUrl}${course.href}`,
-    images: [`${siteUrl}${course.image}`],
-    changeFrequency: "monthly",
-    priority: 0.7,
-  }));
-
-  return [...pages, ...countries, ...emergency, ...expansion, ...publicGuides.map(guide => ({
+  return [...pages, ...countries, ...academy, ...publicGuides.map(guide => ({
     url: `${siteUrl}/guides/${guide.slug}`,
     lastModified: guide.reviewedAt,
     changeFrequency: "monthly" as const,

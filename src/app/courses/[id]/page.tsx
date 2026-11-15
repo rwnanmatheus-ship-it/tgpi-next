@@ -23,7 +23,18 @@ export async function generateMetadata({
 }: CoursePageProps): Promise<Metadata> {
   const { id } = await params;
   const academy = getAcademyCourse(id);
-  if (academy) { const localized = localizeAcademyCourse(academy, await getLocale()); return { title: `${localized.title} | TGPI Learning`, description: localized.description, alternates: { canonical: `/courses/${academy.id}` } }; }
+  if (academy) {
+    const localized = localizeAcademyCourse(academy, await getLocale());
+    const title = `${localized.title} | TGPI Learning`;
+    const description = localized.description;
+    const url = `/courses/${academy.id}`;
+    const images = [{ url: academy.image, width: 1536, height: 1024, alt: localized.title }];
+    return {
+      title, description, alternates: { canonical: url },
+      openGraph: { title, description, url, images },
+      twitter: { card: 'summary_large_image', title, description, images },
+    };
+  }
   const professional = getProfessionalCourse(id);
   if (professional && professionalCourseEnabled(id, process.env.VERCEL_ENV || process.env.NODE_ENV)) return { title: `${professional.title} | TGPI Learning`, description: professional.outcomes.join(" ") };
   const course = getCourse(id);

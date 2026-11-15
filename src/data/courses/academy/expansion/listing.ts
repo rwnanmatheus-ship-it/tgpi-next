@@ -1,4 +1,4 @@
-import { cinematicUrl, type CinematicKey } from '@/lib/cinematic-art';
+import { cinematicUrl, courseArtwork, type CinematicKey } from '@/lib/cinematic-art';
 import type { CourseGoal, CourseOverview } from '@/types/course-overview';
 import { projectStageCount } from '../project-stages';
 
@@ -94,7 +94,7 @@ export const expansionOverview: CourseOverview[] = expansionCourses.map(course =
   goal: course.goal,
   goalLabel: categories[course.goal],
   href: `/courses/${course.id}`,
-  image: cinematicUrl(course.artwork),
+  image: courseArtwork(course.id, cinematicUrl(course.artwork)),
   imageAlt: '',
   level: 'Formação aplicada',
   releaseLabel: 'Premium',
