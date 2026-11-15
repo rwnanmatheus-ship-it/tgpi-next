@@ -43,8 +43,8 @@ test('audit sees conditional labels and fallback errors without decoding JavaScr
 test('release audit rejects an encoded JavaScript label and an untranslated conditional branch', () => {
   const folder = mkdtempSync(resolve(tmpdir(), 'tgpi-copy-audit-'));
   try {
-    for (const dir of ['src/app', 'src/components', 'src/modules', 'src/lib/localization', 'src/lib/notifications', 'public']) mkdirSync(resolve(folder, dir), { recursive: true });
-    for (const file of ['src/lib/localization/messages.ts', 'src/lib/localization/appearance.ts', 'src/lib/notifications/text.ts']) symlinkSync(resolve(file), resolve(folder, file));
+    for (const dir of ['src/app', 'src/components', 'src/modules', 'src/lib', 'src/lib/notifications', 'public']) mkdirSync(resolve(folder, dir), { recursive: true });
+    for (const file of ['src/lib/localization', 'src/lib/notifications/text.ts']) symlinkSync(resolve(file), resolve(folder, file));
     symlinkSync(resolve('public/locales'), resolve(folder, 'public/locales'));
     const file = resolve(folder, 'src/components/Fixture.tsx');
     writeFileSync(file, `const ui = <LocalizedText text={"Bachelor&apos;s degree"}/>; t(done ? 'Passed' : 'Untranslated audit sentinel');`);

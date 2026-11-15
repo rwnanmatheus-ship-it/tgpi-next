@@ -109,7 +109,7 @@ export default function PlanMilestones({ milestones, actions, countries, revisio
         </div> : <div className="plan-execution-buttons">
           {href && <PlanActionLink href={href}>{t('Open TGPI tool')} ↗</PlanActionLink>}
           <button type="button" className="plan-button" disabled={busy || Boolean(draft)} onClick={() => void save({ type: 'milestone', revision, milestone: { ...item, status: item.status === 'done' ? 'open' : 'done' } })}>{t(item.status === 'done' ? 'Reopen milestone' : 'Complete milestone')}</button>
-          <button type="button" className="plan-button" disabled={busy || Boolean(draft)} onClick={() => { setRemoving(null); setDraft(item); }}>{t('Edit')}</button>
+          <button type="button" className="plan-button" disabled={busy || Boolean(draft)} onClick={() => { setRemoving(null); setDraft(item); }}>{t('Edit milestone')}</button>
           <button type="button" className="plan-button" disabled={busy || Boolean(draft)} onClick={() => setRemoving(item.id)}>{t('Remove')}</button>
         </div>}
       </li>;

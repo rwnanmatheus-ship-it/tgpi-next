@@ -88,6 +88,7 @@
 }
 
 .plan-dashboard .plan-hero h1 { font-size: clamp(2.3rem, 5vw, 4.7rem); }
+.plan-dashboard .plan-tabs button:not([aria-selected=true]) { background: transparent; }
 .plan-dashboard .plan-tab-panel h2 { overflow-wrap: anywhere; }
 .plan-execution-summary {
   display: flex;
