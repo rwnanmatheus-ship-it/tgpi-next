@@ -5,11 +5,23 @@ import type { LearningProgressItem } from './unified-progress';
 import { courses } from '@/data/courses';
 import { professionalCourseDrafts } from '@/data/courses/professional';
 import { getUserActivationProgress } from '@/lib/activation-store.server';
-import { isLearningStorageConfigured, listFirestoreDocuments } from '@/lib/firestore-admin-rest.server';
+import { isLearningStorageConfigured, listFirestoreDocumentPage, listFirestoreDocuments } from '@/lib/firestore-admin-rest.server';
 import type { TgpiActivationProgress } from '@/lib/activation-progress';
 import type { ProfessionalRecord } from './professional-model';
 import { professionalCourseEnabled } from './professional-runtime';
 import { projectLearningProgress, type LearningSummary } from './unified-progress';
+
+async function listAcademyRecords(uid: string): Promise<AcademyRecord[]> {
+  const records: AcademyRecord[] = [];
+  let cursor: string | null = null;
+  do {
+    const page: Awaited<ReturnType<typeof listFirestoreDocumentPage<AcademyRecord>>> =
+      await listFirestoreDocumentPage<AcademyRecord>(`tgpiLearningUsers/${uid}`, 'academyCourses', cursor ?? undefined, 100);
+    records.push(...page.items.map(row => row.data));
+    cursor = page.nextPageToken;
+  } while (cursor);
+  return records;
+}
 
 /** Callers must derive uid from the server session, never query parameters. */
 export async function loadLearningSummary(uid: string, activation?: TgpiActivationProgress): Promise<LearningSummary> {
@@ -19,7 +31,7 @@ export async function loadLearningSummary(uid: string, activation?: TgpiActivati
     isLearningStorageConfigured()
       ? listFirestoreDocuments<ProfessionalRecord>(`tgpiLearningUsers/${uid}`, 'professionalCourses', 100)
       : Promise.reject(new Error('Learning storage unavailable')),
-    isLearningStorageConfigured() ? listFirestoreDocuments<AcademyRecord>(`tgpiLearningUsers/${uid}`, 'academyCourses', 100) : Promise.reject(new Error('Learning storage unavailable')),
+    isLearningStorageConfigured() ? listAcademyRecords(uid) : Promise.reject(new Error('Learning storage unavailable')),
   ]);
   if (legacy.status === 'rejected') unavailable.push('legacy');
   if (professional.status === 'rejected') unavailable.push('professional');
@@ -30,7 +42,7 @@ export async function loadLearningSummary(uid: string, activation?: TgpiActivati
     professionalCourses: professionalCourseDrafts.filter(course => professionalCourseEnabled(course.id, process.env.VERCEL_ENV || process.env.NODE_ENV))
       .map(course => ({ id: course.id, title: course.title, version: course.version, lessonIds: course.modules.flatMap(module => module.lessons.map(lesson => lesson.id)) })),
   });
-  const records = academy.status === "fulfilled" ? academy.value.map(row => row.data).filter(record => record.uid === uid) : [];
+  const records = academy.status === "fulfilled" ? academy.value.filter(record => record.uid === uid) : [];
   const current: LearningProgressItem[] = academyCourses.flatMap(course => {
     const record = records.find(r => r.courseId === course.id && r.version === course.version)
       ?? records.find(r => r.courseId === course.id && r.version === PREVIOUS_ACADEMY_VERSION);

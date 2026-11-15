@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { expansionOverview } from "@/data/courses/academy/expansion/listing";
 import { emergencyCover, emergencyCourses } from "@/data/courses/emergency/catalog";
 import { publicGuides } from "@/lib/public-guides";
 import { getAllCountrySlugs } from "@/lib/countries";
@@ -56,7 +57,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  return [...pages, ...countries, ...emergency, ...publicGuides.map(guide => ({
+  const expansion: MetadataRoute.Sitemap = expansionOverview.map(course => ({
+    url: `${siteUrl}${course.href}`,
+    images: [`${siteUrl}${course.image}`],
+    changeFrequency: "monthly",
+    priority: 0.7,
+  }));
+
+  return [...pages, ...countries, ...emergency, ...expansion, ...publicGuides.map(guide => ({
     url: `${siteUrl}/guides/${guide.slug}`,
     lastModified: guide.reviewedAt,
     changeFrequency: "monthly" as const,

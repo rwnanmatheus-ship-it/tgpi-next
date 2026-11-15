@@ -25,10 +25,20 @@ function harness() {
     },
   };
   class AuthenticationError extends Error {}
-  let signedIn = true;
+  class PremiumRequiredError extends Error {}
+  let signedIn = true, premium = false;
+  const requireApiUser = async () => { if (!signedIn) throw new AuthenticationError(); return identity; };
   const overrides = {
     'next/server': { NextResponse: { json: (value, init) => Response.json(value, init) } },
-    '@/lib/auth/guards': { requireApiUser: async () => { if (!signedIn) throw new AuthenticationError(); return identity; }, TgpiAuthenticationError: AuthenticationError },
+    '@/lib/auth/guards': {
+      requireApiUser, TgpiAuthenticationError: AuthenticationError, TgpiPremiumRequiredError: PremiumRequiredError,
+      requirePremiumApiUser: async request => {
+        const user = await requireApiUser();
+        if (request.headers.get('x-tgpi-session') !== 'learner-session') throw new AuthenticationError();
+        if (!premium) throw new PremiumRequiredError('Premium access is required.');
+        return user;
+      },
+    },
     '@/lib/localization/server': { getLocale: async () => 'en' },
     '@/lib/localization/assessment.server': { assessmentTranslations: () => ({}) },
     '@/lib/localization/academy-assessment.server': { withAcademyTranslations: status => status },
@@ -48,7 +58,7 @@ function harness() {
     return result;
   }
   const catalog = load(resolve('src/data/courses/academy/catalog.server.ts')), service = load(resolve('src/lib/learning/academy/service.server.ts'));
-  return { documents, load, catalog, service, signOut: () => { signedIn = false; }, advance: ms => { time += ms; }, seed: (path,data) => documents.set(path,{data:structuredClone(data),updateTime:`v${++count}`}) };
+  return { documents, load, catalog, service, enablePremium: () => { premium = true; }, signOut: () => { signedIn = false; }, advance: ms => { time += ms; }, seed: (path,data) => documents.set(path,{data:structuredClone(data),updateTime:`v${++count}`}) };
 }
 const previousSecret = process.env.TGPI_CREDENTIAL_SIGNING_SECRET;
 process.env.TGPI_CREDENTIAL_SIGNING_SECRET = 'test-only-academy-secret-never-used-in-production';
@@ -78,9 +88,15 @@ test('academy courses have inspectable workload, assessments and preserved found
  const h=harness(), {academyCourses,academyQuestions}=h.catalog;
  const { emergencyCourses } = h.load(resolve('src/data/courses/emergency/catalog.ts'));
  const emergency = new Map(emergencyCourses.map(course => [course.id, course]));
- const originals = academyCourses.filter(course => !emergency.has(course.id));
+ const { expansionCourses, expansionOverview } = h.load(resolve('src/data/courses/academy/expansion/listing.ts'));
+ const added = new Map(expansionCourses.map(course => [course.id, course]));
+ assert.equal(added.size, 50);
+ const perGoal = Map.groupBy(expansionCourses, course => course.goal);
+ assert.equal(perGoal.size, 5);
+ for (const entries of perGoal.values()) assert.equal(entries.length, 10);
+ const originals = academyCourses.filter(course => !emergency.has(course.id) && !added.has(course.id));
  assert.equal(originals.length,27);
- assert.equal(new Set(academyCourses.map(c=>c.id)).size,33);
+ assert.equal(new Set(academyCourses.map(c=>c.id)).size,83);
  assert.equal(originals.reduce((n,c)=>n+c.lessons.length,0),335);
  assert.equal(academyCourses.filter(course => emergency.has(course.id)).length,6);
  const manifest=h.load(resolve('src/data/courses/academy/manifest.ts')).academyManifest;
@@ -97,6 +113,13 @@ test('academy courses have inspectable workload, assessments and preserved found
    assert.ok(course.projectBrief);
    assert.ok(existsSync(resolve('public', course.image.slice(1))));
    assert.equal(h.catalog.getAcademyCourse(course.id, h.catalog.PREVIOUS_ACADEMY_VERSION), undefined);
+  } else if (added.has(course.id)) {
+   assert.equal(course.language, 'pt-BR');
+   assert.equal(Boolean(course.scopeNotice), added.get(course.id).goal === 'emergency-readiness');
+   assert.equal(expansionOverview.find(item => item.id === course.id).learningPolicy.accessPolicy, 'premium');
+   assert.equal(course.lessons.filter(lesson => !lesson.project).length, 3);
+   assert.equal(h.catalog.getAcademyCourse(course.id, h.catalog.PREVIOUS_ACADEMY_VERSION), undefined);
+   assert.ok(existsSync(resolve('public', course.image.slice(1))));
   } else {
    assert.equal(course.lessons.filter(lesson => lesson.project).length,4);
    assert.ok(course.minutes>=900 && course.minutes<=2400);
@@ -266,3 +289,25 @@ test('previous editions remain resumable, retain their signed workload and canno
  assert.equal((await h.service.academyStatus(identity,course.id,previous.version)).record.completed[previous.lessons[0].id].score,100);
 });
 
+
+test('Premium study API checks session and active entitlement for both reads and writes', async () => {
+  const h = harness(), route = h.load(resolve('src/app/api/learning/academy/[courseId]/route.ts'));
+  const course = h.catalog.getAcademyCourse('sql-produto-dados');
+  const context = { params: Promise.resolve({ courseId: course.id }) };
+  const url = `https://example.test/api/learning/academy/${course.id}`;
+  const read = () => new Request(url, { headers: { 'x-tgpi-session': 'learner-session' } });
+  const enroll = () => new Request(url, {
+    method: 'POST', headers: { origin: 'https://example.test', 'content-type': 'application/json', 'x-tgpi-session': 'learner-session' },
+    body: JSON.stringify({ action: 'enrol', version: course.version, diagnostic: note, nameConsent: true }),
+  });
+
+  assert.equal((await route.GET(new Request(url), context)).status, 401);
+  assert.equal((await route.GET(read(), context)).status, 403);
+  assert.equal((await route.POST(enroll(), context)).status, 403);
+  assert.equal(h.documents.size, 0);
+  h.enablePremium();
+  assert.equal((await route.GET(read(), context)).status, 200);
+  assert.equal((await route.POST(enroll(), context)).status, 200);
+  h.signOut();
+  assert.equal((await route.GET(read(), context)).status, 401);
+});

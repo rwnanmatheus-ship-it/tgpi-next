@@ -139,7 +139,9 @@ test('course catalogue cards and global journey have complete translations', asy
   const { coursesOverview } = await import(await localModuleUrl('src/data/courses-overview.ts'));
   const { PLATFORM_JOURNEY } = await import(await localModuleUrl('src/lib/platform-journey.ts'));
   const keys = new Set([
-    ...coursesOverview.flatMap(course => [course.title, course.category, course.desc, course.format, course.series, ...course.benefits.slice(0, 2)]).filter(Boolean),
+    // These catalogue entries intentionally retain the Portuguese authored curriculum.
+    ...coursesOverview.filter(course => course.learningPolicy?.accessPolicy !== 'premium')
+      .flatMap(course => [course.title, course.category, course.desc, course.format, course.series, ...course.benefits.slice(0, 2)]).filter(Boolean),
     ...PLATFORM_JOURNEY.flatMap(stage => [stage.label, stage.description]),
   ]);
   for (const key of keys) {

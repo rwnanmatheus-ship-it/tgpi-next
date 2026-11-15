@@ -81,6 +81,15 @@ const comparisons = [
   ["Workspace", "Personal Workspace", "Personal Workspace + protected Premium Command Center"],
 ] as const;
 
+const premiumLearningCopy = {
+  en: '50 Premium courses with TGPI certificates',
+  'pt-BR': '50 cursos Premium com certificados TGPI',
+  es: '50 cursos Premium con certificados TGPI',
+  fr: '50 cours Premium avec certificats TGPI',
+  de: '50 Premium-Kurse mit TGPI-Zertifikaten',
+  it: '50 corsi Premium con certificati TGPI',
+} as const;
+
 const faqs = [
   [
     "What happens after I subscribe?",
@@ -121,6 +130,8 @@ export default async function PricingPage({
   const locale = await getLocale();
   const t = (key: string) => translate(locale, key);
 
+  const premiumLearning = premiumLearningCopy[locale];
+  const premiumFeatures = [...TGPI_PREMIUM_PLAN.features.map(t), premiumLearning];
   const billingEnabled = process.env.BILLING_ENABLED === "true";
   const { canceled } = await searchParams;
 
@@ -215,7 +226,7 @@ export default async function PricingPage({
               <div className="mt-7 border-t border-white/15 pt-6">
                 <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--tgpi-gold-light)]"><LocalizedText text={"Included in your membership"} /></p>
                 <ul className="mt-4 space-y-3">
-                  {TGPI_PREMIUM_PLAN.features.map((feature) => (
+                  {premiumFeatures.map((feature) => (
                     <li
                       key={feature}
                       className="flex gap-3 text-sm leading-6 text-white/90"
@@ -223,7 +234,7 @@ export default async function PricingPage({
                       <span aria-hidden="true" className="text-[var(--tgpi-gold-light)]">
                         ✓
                       </span>
-                      <span><LocalizedText text={feature} /></span>
+                      <span>{feature}</span>
                     </li>
                   ))}
                 </ul>
@@ -361,7 +372,7 @@ export default async function PricingPage({
                       </th>
                       <td className="p-5 text-[#596576]"><LocalizedText text={free} /></td>
                       <td className="bg-[var(--tgpi-navy-raised)] p-5 font-semibold text-white">
-                        <LocalizedText text={premium} />
+                        {feature === "Current courses" ? premiumLearning : <LocalizedText text={premium} />}
                       </td>
                     </tr>
                   ))}

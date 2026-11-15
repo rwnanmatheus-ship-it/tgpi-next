@@ -325,10 +325,11 @@ export async function listFirestoreDocumentPage<T>(
   parentPath: string,
   collectionId: string,
   pageToken?: string,
+  pageSize = 12,
 ) {
   const parent = `/${safeDocumentPath(parentPath)}`;
   const query = new URLSearchParams({
-    pageSize: "12",
+    pageSize: String(Math.min(Math.max(pageSize, 1), 100)),
     orderBy: "__name__ desc",
   });
   if (pageToken) query.set("pageToken", pageToken);

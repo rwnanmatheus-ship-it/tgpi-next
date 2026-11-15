@@ -74,8 +74,8 @@ export class TgpiPremiumRequiredError extends Error {
 }
 
 /** API entitlement matches the protected page and never trusts editable user metadata. */
-export async function requirePremiumApiUser() {
-  const user = await requireApiUser();
+export async function requirePremiumApiUser(request?: Request) {
+  const user = await requireApiUser(request);
   const [billing, controlled] = await Promise.all([
     getUserBillingRecord(user.uid), getControlledPremiumAccessMode(user),
   ]);
@@ -95,8 +95,8 @@ export async function requireAdmin() {
   return { ...session, role: "admin" as const };
 }
 
-export async function requirePremium() {
-  const session = await requireUser();
+export async function requirePremium(returnTo?: string) {
+  const session = await requireUser(returnTo);
   const client = await clerkClient();
   const user = await client.users.getUser(session.userId);
   const billing = await getUserBillingRecord(session.userId);

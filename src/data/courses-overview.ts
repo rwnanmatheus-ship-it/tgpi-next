@@ -1,5 +1,6 @@
 import { courseArtwork } from '@/lib/cinematic-art';
 import { academyManifest } from "@/data/courses/academy/manifest";
+import { expansionOverview } from "@/data/courses/academy/expansion/listing";
 import { emergencyOverview } from "@/data/courses/emergency/overview";
 import { seriesOverview } from "@/data/courses/series-courses";
 import type { CourseOverview } from "@/types/course-overview";
@@ -178,5 +179,5 @@ export const coursesOverview: CourseOverview[] = [...originalOverview.map(course
     format: `${edition.lessons} lessons and laboratories`, releaseLabel: "Expanded edition · Automatic assessment",
     learningPolicy: { kind: course.id === "global-english-2026" ? "flagship" : "practice", publicationStatus: "published", accessPolicy: "free_account", assessmentPolicy: "automatic_assessment", credentialStatus: "criteria_available", instructionLanguage: "en" },
   } satisfies CourseOverview;
-}), ...emergencyOverview];
+}), ...emergencyOverview, ...expansionOverview];
 

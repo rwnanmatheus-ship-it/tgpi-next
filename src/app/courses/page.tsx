@@ -9,6 +9,16 @@ import TGPIPageShell from '@/components/TGPIPageShell';
 import { coursesOverview } from '@/data/courses-overview';
 import { parseCatalogFilters } from '@/lib/learning/catalog-filters';
 
+const featuredCourses = [
+  'global-english-2026',
+  'avaliacao-produtos-ia',
+  'ingles-escrita-executiva-b2',
+  'unit-economics-saas',
+  'inferencia-causal-negocios',
+  'continuidade-negocios-desastres',
+];
+const coursePriority = new Map(featuredCourses.map((id, index) => [id, index]));
+
 const sourceMetadata: Metadata = {
   alternates: { canonical: "/courses" },
   title: 'TGPI Learning — Practical Skills for a Global Life',
@@ -17,7 +27,7 @@ const sourceMetadata: Metadata = {
 
 export default async function CoursesPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
   const catalog = [...professionalCatalog(process.env.VERCEL_ENV || process.env.NODE_ENV), ...coursesOverview]
-    .sort((a,b) => Number(b.id === 'global-english-2026') - Number(a.id === 'global-english-2026'));
+    .sort((a, b) => (coursePriority.get(a.id) ?? featuredCourses.length) - (coursePriority.get(b.id) ?? featuredCourses.length));
   const raw = await searchParams;
   const params = new URLSearchParams(Object.entries(raw).flatMap(([key,value]) => typeof value === 'string' ? [[key,value]] : []));
   return <TGPIPageShell width="capability">

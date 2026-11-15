@@ -1,12 +1,13 @@
 import { localizeMetadata } from "@/lib/localization/metadata.server";
 import { isSponsoredAtlas } from '@/lib/atlas/sponsored.server';
 import type { Metadata } from 'next';
-import { requireUser } from '@/lib/auth/guards';
+import { requirePremium, requireUser } from '@/lib/auth/guards';
 import AtlasChat from '@/components/atlas/AtlasChat';
 import AtlasStudio from '@/components/atlas/AtlasStudio';
 import { restoreComparison } from "@/lib/comparison-state";
 import { COMPARISON_CATALOG } from "@/lib/comparison-catalog";
 import { COMPARISON_GOALS } from "@/lib/tgpi-comparison";
+import { isExpansionCourse } from '@/data/courses/academy/expansion/listing';
 import { getAcademyCourse } from '@/data/courses/academy/catalog.server';
 import { requireAtlasGeneration } from '@/lib/atlas/http.server';
 
@@ -36,7 +37,8 @@ export default async function AtlasPage({ searchParams }: {
   const studySupport = guide === 'learning' && support === 'plain-language';
   if (studySupport) query.set('support', 'plain-language');
   if (mode === 'account') query.set('mode', mode);
-  const { userId } = await requireUser(`/atlas${query.size ? `?${query}` : ''}`);
+  const path = `/atlas${query.size ? `?${query}` : ''}`;
+  const { userId } = await (learningCourse && isExpansionCourse(learningCourse.id) ? requirePremium(path) : requireUser(path));
   let enabled = false;
   try { requireAtlasGeneration(userId); enabled = true; } catch { /* The browser guide remains available. */ }
   const sponsored = isSponsoredAtlas();

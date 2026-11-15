@@ -3,7 +3,7 @@ import type { CourseOverview } from '../../types/course-overview.ts';
 export type CourseLearningPolicy = {
   kind: 'professional' | 'flagship' | 'practice';
   publicationStatus: 'early_access' | 'published' | 'planned';
-  accessPolicy: 'free_account';
+  accessPolicy: 'free_account' | 'premium';
   assessmentPolicy: 'practice' | 'verified_assessment' | 'quiz_project_review' | 'automatic_assessment';
   credentialStatus: 'none' | 'criteria_available';
   instructionLanguage: 'en' | 'pt-BR';

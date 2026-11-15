@@ -1,8 +1,7 @@
 import { getLocale } from '@/lib/localization/server';
 import { localizeAcademyCourse } from '@/lib/localization/academy-content';
 import AcademyOverview from "@/components/courses/academy/AcademyOverview";
-import { emergencyCourses } from "@/data/courses/emergency/catalog";
-import { getAcademyCourse } from "@/data/courses/academy/catalog.server";
+import { academyCourses, getAcademyCourse } from "@/data/courses/academy/catalog.server";
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import CourseWorkshop from "@/components/courses/CourseWorkshop";
@@ -16,7 +15,7 @@ type CoursePageProps = {
 };
 
 export function generateStaticParams() {
-  return [...courses, ...emergencyCourses].map((course) => ({ id: course.id }));
+  return [...new Set([...courses, ...academyCourses].map(course => course.id))].map(id => ({ id }));
 }
 
 export async function generateMetadata({

@@ -76,10 +76,10 @@ function statusFor(courseId, withResult = false) {
     lastResult: withResult ? { challengeId: 'attempt', target: source.lessonId, score: 0, passed: false, feedback: [{ questionId: source.id, lessonId: source.lessonId, correct: false, explanation }], submittedAt: '2026-11-10T00:00:00Z' } : null };
 }
 
-test('Portuguese emergency curricula and their exercises preserve the authored instruction language', () => {
-  const emergency = h.academyCourses.filter(course => course.language === 'pt-BR');
-  assert.equal(emergency.length, 6);
-  for (const course of emergency) {
+test('Portuguese curricula and their exercises preserve the authored instruction language', () => {
+  const portuguese = h.academyCourses.filter(course => course.language === 'pt-BR');
+  assert.equal(portuguese.length, 56);
+  for (const course of portuguese) {
     const source = statusFor(course.id);
     assert.strictEqual(withAcademyTranslations(source, course.id), source);
     for (const locale of h.locales) assert.strictEqual(localizeAcademyCourse(course, locale), course);
