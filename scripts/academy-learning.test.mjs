@@ -94,9 +94,11 @@ test('academy courses have inspectable workload, assessments and preserved found
  const perGoal = Map.groupBy(expansionCourses, course => course.goal);
  assert.equal(perGoal.size, 5);
  for (const entries of perGoal.values()) assert.equal(entries.length, 10);
- const originals = academyCourses.filter(course => !emergency.has(course.id) && !added.has(course.id));
+ const { specializations, specializationOverview, isSpecialization } = h.load(resolve('src/data/courses/academy/specializations/listing.ts'));
+ assert.equal(specializations.length,17);
+ const originals = academyCourses.filter(course => !emergency.has(course.id) && !added.has(course.id) && !isSpecialization(course.id));
  assert.equal(originals.length,27);
- assert.equal(new Set(academyCourses.map(c=>c.id)).size,83);
+ assert.equal(new Set(academyCourses.map(c=>c.id)).size,100);
  assert.equal(originals.reduce((n,c)=>n+c.lessons.length,0),389);
  assert.equal(academyCourses.filter(course => emergency.has(course.id)).length,6);
  const seenScenarios = new Set();
@@ -124,6 +126,19 @@ test('academy courses have inspectable workload, assessments and preserved found
    assert.equal(course.lessons.filter(lesson => !lesson.project && !lesson.practiceLab).length, 3);
    assert.equal(h.catalog.getAcademyCourse(course.id, h.catalog.PREVIOUS_ACADEMY_VERSION), undefined);
    assert.ok(existsSync(resolve('public', course.image.slice(1))));
+  } else if (isSpecialization(course.id)) {
+   const listing = specializationOverview.find(item => item.id === course.id);
+   assert.equal(listing.learningPolicy.accessPolicy, 'premium');
+   const { parseCatalogFilters } = h.load(resolve('src/lib/learning/catalog-filters.ts'));
+   assert.equal(parseCatalogFilters(new URLSearchParams({ series: listing.series })).series, listing.series);
+   assert.equal(listing.learningPolicy.instructionLanguage, 'pt-BR');
+   assert.equal(course.language, 'pt-BR');
+   assert.equal(course.minutes, Number.parseInt(listing.duration, 10) * 60);
+   assert.ok(course.minutes >= 26 * 60 && course.minutes <= 34 * 60);
+   assert.equal(course.lessons.filter(lesson => !lesson.project && !lesson.practiceLab).length, 6);
+   assert.equal(course.lessons.filter(lesson => lesson.project).length, 4);
+   assert.ok(course.lessons.every(lesson => lesson.references.length >= 2));
+   assert.ok(existsSync(resolve('public', course.image.slice(1))));
   } else {
    assert.equal(course.lessons.filter(lesson => lesson.project).length,4);
    assert.ok(course.minutes>=1020 && course.minutes<=2580);
@@ -131,9 +146,14 @@ test('academy courses have inspectable workload, assessments and preserved found
   const baseline = h.catalog.getAcademyCourse(course.id, h.catalog.BASELINE_ACADEMY_VERSION);
   const labs = course.lessons.filter(lesson => lesson.practiceLab);
   assert.equal(labs.length, 2);
-  assert.deepEqual(course.lessons.slice(0, -2), baseline.lessons);
-  assert.equal(course.minutes - baseline.minutes, labs.reduce((sum, lesson) => sum + lesson.minutes, 0));
-  assert.ok(course.minutes - baseline.minutes >= 120 && course.minutes - baseline.minutes <= 180);
+  if (isSpecialization(course.id)) {
+   assert.equal(baseline, undefined);
+   assert.equal(h.catalog.getAcademyCourse(course.id, h.catalog.PREVIOUS_ACADEMY_VERSION), undefined);
+  } else {
+   assert.deepEqual(course.lessons.slice(0, -2), baseline.lessons);
+   assert.equal(course.minutes - baseline.minutes, labs.reduce((sum, lesson) => sum + lesson.minutes, 0));
+   assert.ok(course.minutes - baseline.minutes >= 120 && course.minutes - baseline.minutes <= 180);
+  }
   assert.ok(!seenScenarios.has(labs[0].sections[0].body));
   seenScenarios.add(labs[0].sections[0].body);
   assert.ok(labs.every(lesson => lesson.language === 'pt-BR'));
@@ -304,25 +324,27 @@ test('previous editions remain resumable, retain their signed workload and canno
 
 
 test('Premium study API checks session and active entitlement for both reads and writes', async () => {
-  const h = harness(), route = h.load(resolve('src/app/api/learning/academy/[courseId]/route.ts'));
-  const course = h.catalog.getAcademyCourse('sql-produto-dados');
-  const context = { params: Promise.resolve({ courseId: course.id }) };
-  const url = `https://example.test/api/learning/academy/${course.id}`;
-  const read = () => new Request(url, { headers: { 'x-tgpi-session': 'learner-session' } });
-  const enroll = () => new Request(url, {
-    method: 'POST', headers: { origin: 'https://example.test', 'content-type': 'application/json', 'x-tgpi-session': 'learner-session' },
-    body: JSON.stringify({ action: 'enrol', version: course.version, diagnostic: note, nameConsent: true }),
-  });
+  for (const courseId of ['sql-produto-dados', 'mlops-producao']) {
+    const h = harness(), route = h.load(resolve('src/app/api/learning/academy/[courseId]/route.ts'));
+    const course = h.catalog.getAcademyCourse(courseId);
+    const context = { params: Promise.resolve({ courseId: course.id }) };
+    const url = `https://example.test/api/learning/academy/${course.id}`;
+    const read = () => new Request(url, { headers: { 'x-tgpi-session': 'learner-session' } });
+    const enroll = () => new Request(url, {
+      method: 'POST', headers: { origin: 'https://example.test', 'content-type': 'application/json', 'x-tgpi-session': 'learner-session' },
+      body: JSON.stringify({ action: 'enrol', version: course.version, diagnostic: note, nameConsent: true }),
+    });
 
-  assert.equal((await route.GET(new Request(url), context)).status, 401);
-  assert.equal((await route.GET(read(), context)).status, 403);
-  assert.equal((await route.POST(enroll(), context)).status, 403);
-  assert.equal(h.documents.size, 0);
-  h.enablePremium();
-  assert.equal((await route.GET(read(), context)).status, 200);
-  assert.equal((await route.POST(enroll(), context)).status, 200);
-  h.signOut();
-  assert.equal((await route.GET(read(), context)).status, 401);
+    assert.equal((await route.GET(new Request(url), context)).status, 401);
+    assert.equal((await route.GET(read(), context)).status, 403);
+    assert.equal((await route.POST(enroll(), context)).status, 403);
+    assert.equal(h.documents.size, 0);
+    h.enablePremium();
+    assert.equal((await route.GET(read(), context)).status, 200);
+    assert.equal((await route.POST(enroll(), context)).status, 200);
+    h.signOut();
+    assert.equal((await route.GET(read(), context)).status, 401);
+  }
 });
 
 test('the immediately previous edition resumes its active check and migrates unchanged lesson credit and portfolio', async () => {

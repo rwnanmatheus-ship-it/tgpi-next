@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { requireApiUser, requirePremiumApiUser, TgpiAuthenticationError, TgpiPremiumRequiredError } from '@/lib/auth/guards';
-import { isExpansionCourse } from '@/data/courses/academy/expansion/listing';
+import { isPremiumAcademyCourse } from '@/data/courses/academy/premium-policy';
 import { FirestoreAdminError } from '@/lib/firestore-admin-rest.server';
 import { academyStatus, mutateAcademy, AcademyError } from '@/lib/learning/academy/service.server';
 import { withAcademyTranslations } from '@/lib/localization/academy-assessment.server';
@@ -18,14 +18,14 @@ async function response(status: Awaited<ReturnType<typeof academyStatus>>, cours
 export async function GET(request: Request, context: { params: Promise<{ courseId: string }> }) {
   try {
     const { courseId } = await context.params;
-    const identity = await (isExpansionCourse(courseId) ? requirePremiumApiUser(request) : requireApiUser(request));
+    const identity = await (isPremiumAcademyCourse(courseId) ? requirePremiumApiUser(request) : requireApiUser(request));
     return await response(await academyStatus(identity, courseId, new URL(request.url).searchParams.get('edition') ?? undefined), courseId);
   } catch (error) { return failure(error); }
 }
 export async function POST(request: Request, context: { params: Promise<{ courseId: string }> }) {
   try {
     const { courseId } = await context.params;
-    const identity = await (isExpansionCourse(courseId) ? requirePremiumApiUser(request) : requireApiUser(request));
+    const identity = await (isPremiumAcademyCourse(courseId) ? requirePremiumApiUser(request) : requireApiUser(request));
     const origin = request.headers.get('origin');
     if (!origin || new URL(origin).origin !== new URL(request.url).origin) throw new AcademyError('Request origin is not allowed.', 403);
     if (request.headers.get('content-type')?.split(';', 1)[0].trim().toLowerCase() !== 'application/json') throw new AcademyError('JSON content is required.', 415);

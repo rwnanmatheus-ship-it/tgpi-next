@@ -78,7 +78,7 @@ function statusFor(courseId, withResult = false) {
 
 test('Portuguese curricula and their exercises preserve the authored instruction language', () => {
   const portuguese = h.academyCourses.filter(course => course.language === 'pt-BR');
-  assert.equal(portuguese.length, 56);
+  assert.equal(portuguese.length, 73);
   for (const course of portuguese) {
     const source = statusFor(course.id);
     assert.strictEqual(withAcademyTranslations(source, course.id), source);

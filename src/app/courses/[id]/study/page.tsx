@@ -4,7 +4,7 @@ import AcademyStudy from '@/components/courses/academy/AcademyStudy';
 import { getAcademyCourse, historicalAcademyVersions } from '@/data/courses/academy/catalog.server';
 import { academyStudyCourse } from '@/lib/learning/academy/service.server';
 import { requirePremium, requireUser } from '@/lib/auth/guards';
-import { isExpansionCourse } from '@/data/courses/academy/expansion/listing';
+import { isPremiumAcademyCourse } from '@/data/courses/academy/premium-policy';
 
 const sourceMetadata = { title: 'Meu percurso profissional | TGPI', robots: { index: false, follow: false } };
 
@@ -22,7 +22,7 @@ export default async function AcademyStudyPage({ params, searchParams }: {
   if (latest.lessons.some(item => item.id === lesson) && lesson) query.set('lesson', lesson);
   const path = `/courses/${latest.id}/study${query.size ? `?${query}` : ''}`;
   if (id !== latest.id) redirect(path);
-  const { userId } = await (isExpansionCourse(latest.id) ? requirePremium(path) : requireUser(path));
+  const { userId } = await (isPremiumAcademyCourse(latest.id) ? requirePremium(path) : requireUser(path));
 
   const course = await academyStudyCourse(userId, latest, edition === 'current', edition === 'previous' ? historicalAcademyVersions[1] : previousEdition);
   return <AcademyStudy course={course} latestVersion={latest.version} initialLesson={query.get('lesson') ?? undefined} />;

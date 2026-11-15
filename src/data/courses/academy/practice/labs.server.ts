@@ -8,8 +8,7 @@ import { practiceWorkload } from './workload';
 
 const cases: Readonly<Record<string, PracticeCase>> = { ...corePractice, ...advancedPractice };
 
-export function practiceLabs(course: AcademyCourse) {
-  const entry = cases[course.id];
+export function practiceLabs(course: AcademyCourse, entry = cases[course.id]) {
   if (!entry) throw new Error(`Missing applied practice case: ${course.id}`);
   const [scenario, workedExample, changedConstraint, evidence] = entry;
   const [guidedMinutes, transferMinutes] = practiceWorkload(course.minutes);

@@ -135,6 +135,23 @@ const academyCourseBadges: Readonly<Record<string, readonly string[]>> = {
   'abrigos-logistica-acessivel': ['LOGÍSTICA DE ABRIGOS'],
   'resiliencia-energia-telecom': ['ENERGIA + TELECOM'],
   'voluntariado-coordenacao-desastres': ['VOLUNTARIADO'],
+  'experimentos-produto': ['EXPERIMENTAÇÃO A/B'],
+  'bi-metricas': ['CAMADA SEMÂNTICA'],
+  'mlops-producao': ['MLOPS'],
+  'process-mining': ['PROCESS MINING'],
+  'qa-produtos-globais': ['QUALIDADE DE SOFTWARE'],
+  'engenharia-localizacao': ['LOCALIZAÇÃO DIGITAL'],
+  'apis-integracoes': ['APIS + INTEGRAÇÕES'],
+  'governanca-identidade-cloud': ['IAM · GOVERNANÇA'],
+  'operacoes-saude': ['OPERAÇÕES EM SAÚDE'],
+  'design-instrucional': ['DESIGN INSTRUCIONAL'],
+  'customer-success-global': ['CUSTOMER SUCCESS'],
+  'revops-receita': ['REVOPS'],
+  'exportacao-ecommerce': ['E-COMMERCE GLOBAL'],
+  'operacoes-carbono': ['INVENTÁRIO DE CARBONO'],
+  'tesouraria-pagamentos': ['PAGAMENTOS GLOBAIS'],
+  'workforce-planning': ['WORKFORCE PLANNING'],
+  'pesquisa-geoespacial': ['INTELIGÊNCIA GEOESPACIAL'],
 };
 
 export const academyCoverIds = Object.keys(academyCourseBadges);

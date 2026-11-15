@@ -1,3 +1,4 @@
+import { specializations, specializationLabCount } from './specializations/listing';
 import { practiceLabCount, practiceWorkload } from './practice/workload';
 import { academyProjects } from './projects.ts';
 import { projectStageCount } from './project-stages.ts';
@@ -125,9 +126,14 @@ export const baselineAcademyManifest = Object.fromEntries([
 ]);
 
 
-export const academyManifest = Object.fromEntries(Object.entries(baselineAcademyManifest).map(([id, course]) => [
-  id, {
-    minutes: practiceWorkload(course.minutes).reduce((total, minutes) => total + minutes, course.minutes),
-    lessons: course.lessons + practiceLabCount,
-  },
-]));
+export const academyManifest = Object.fromEntries([
+  ...Object.entries(baselineAcademyManifest).map(([id, course]) => [
+    id, {
+      minutes: practiceWorkload(course.minutes).reduce((total, minutes) => total + minutes, course.minutes),
+      lessons: course.lessons + practiceLabCount,
+    },
+  ] as const),
+  ...specializations.map(([id, , , hours]) => [
+    id, { minutes: hours * 60, lessons: specializationLabCount + projectStageCount + practiceLabCount },
+  ] as const),
+]);

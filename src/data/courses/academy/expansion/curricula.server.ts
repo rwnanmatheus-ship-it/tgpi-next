@@ -43,6 +43,28 @@ const projectMessages: Readonly<Record<string, string>> = {
 };
 const projectTranslation = (text: string) => projectMessages[text] ?? text;
 
+export function projectLessonsInPortuguese(id: string, project: string, minutes: number, sources: string[], scenario: string) {
+  return projectLessons(id, project, minutes, sources).map(({ lesson, question }) => ({
+    lesson: {
+      ...lesson,
+      title: projectTranslation(lesson.title),
+      objective: projectTranslation(lesson.objective),
+      sections: [
+        { title: 'Projeto aplicado', body: project },
+        { title: 'Dados iniciais do projeto', body: scenario },
+      ],
+      practice: lesson.practice.map(projectTranslation),
+      deliverable: projectTranslation(lesson.deliverable),
+    },
+    question: {
+      ...question,
+      prompt: assessmentTranslations(question.prompt)['pt-BR'],
+      explanation: assessmentTranslations(question.explanation)['pt-BR'],
+      options: question.options.map(option => ({ ...option, label: assessmentTranslations(option.label)['pt-BR'] })),
+    },
+  }));
+}
+
 const curricula: Record<string, ExpansionCurriculum> = { ...mobility, ...decision, ...economics, ...readiness, ...technology };
 
 const references: Record<CourseGoal, string[]> = {
@@ -109,24 +131,9 @@ export function expansionAcademy(version: string) {
     });
 
     const projectMinutes = minutes - labs.length * labMinutes - portfolioMinutes - assessmentMinutes;
-    for (const { lesson, question } of projectLessons(id, project, projectMinutes, sourceLinks)) {
-      lessons.push({
-        ...lesson,
-        title: projectTranslation(lesson.title),
-        objective: projectTranslation(lesson.objective),
-        sections: [
-          { title: 'Projeto aplicado', body: project },
-          { title: 'Dados iniciais do projeto', body: projectCases[id] },
-        ],
-        practice: lesson.practice.map(projectTranslation),
-        deliverable: projectTranslation(lesson.deliverable),
-      });
-      questions.push({
-        ...question,
-        prompt: assessmentTranslations(question.prompt)['pt-BR'],
-        explanation: assessmentTranslations(question.explanation)['pt-BR'],
-        options: question.options.map(option => ({ ...option, label: assessmentTranslations(option.label)['pt-BR'] })),
-      });
+    for (const { lesson, question } of projectLessonsInPortuguese(id, project, projectMinutes, sourceLinks, projectCases[id])) {
+      lessons.push(lesson);
+      questions.push(question);
     }
 
     const course: AcademyCourse = {

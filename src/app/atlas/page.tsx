@@ -7,7 +7,7 @@ import AtlasStudio from '@/components/atlas/AtlasStudio';
 import { restoreComparison } from "@/lib/comparison-state";
 import { COMPARISON_CATALOG } from "@/lib/comparison-catalog";
 import { COMPARISON_GOALS } from "@/lib/tgpi-comparison";
-import { isExpansionCourse } from '@/data/courses/academy/expansion/listing';
+import { isPremiumAcademyCourse } from '@/data/courses/academy/premium-policy';
 import { getAcademyCourse } from '@/data/courses/academy/catalog.server';
 import { requireAtlasGeneration } from '@/lib/atlas/http.server';
 
@@ -38,7 +38,7 @@ export default async function AtlasPage({ searchParams }: {
   if (studySupport) query.set('support', 'plain-language');
   if (mode === 'account') query.set('mode', mode);
   const path = `/atlas${query.size ? `?${query}` : ''}`;
-  const { userId } = await (learningCourse && isExpansionCourse(learningCourse.id) ? requirePremium(path) : requireUser(path));
+  const { userId } = await (learningCourse && isPremiumAcademyCourse(learningCourse.id) ? requirePremium(path) : requireUser(path));
   let enabled = false;
   try { requireAtlasGeneration(userId); enabled = true; } catch { /* The browser guide remains available. */ }
   const sponsored = isSponsoredAtlas();

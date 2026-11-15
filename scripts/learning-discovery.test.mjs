@@ -28,10 +28,10 @@ test('study estimates use workload minutes without promising a completion date',
  assert.equal(studyWeeks(700,300),3);
  assert.equal(studyWeeks(0,0),1);
 });
-test('the 83 Academy covers are unique, optimized WebP files with subject badges', async () => {
+test('the 100 Academy covers are unique, optimized WebP files with subject badges', async () => {
   const { academyCoverIds, courseArtwork, courseCoverBadges } = moduleAt('src/lib/cinematic-art.ts');
   const seen = new Set();
-  assert.equal(academyCoverIds.length, 83);
+  assert.equal(academyCoverIds.length, 100);
   for (const id of academyCoverIds) {
     const asset = courseArtwork(id);
     assert.equal(asset, `/images/courses/academy-covers-2026/${id}.webp`);

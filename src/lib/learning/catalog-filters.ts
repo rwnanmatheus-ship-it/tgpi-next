@@ -1,3 +1,5 @@
+export const PREMIUM_SPECIALIZATIONS_SERIES = 'Premium Specializations';
+
 export type CatalogFilters = { query: string; goal: string; series: string; availability: string; credential: string; language: string };
 export const defaultCatalogFilters: CatalogFilters = { query: '', goal: 'all', series: 'all', availability: 'available', credential: 'all', language: 'all' };
 export function parseCatalogFilters(params: URLSearchParams): CatalogFilters {
@@ -5,7 +7,7 @@ export function parseCatalogFilters(params: URLSearchParams): CatalogFilters {
   return {
     query: (params.get('q') ?? '').slice(0, 160),
     goal: oneOf('goal', ['all','global-mobility','decision-intelligence','global-economics','future-of-work','emergency-readiness'], 'all'),
-    series: oneOf('series', ['all','First 30 Days','Career Without Borders','The Intelligence Toolkit','The Global Money Series'], 'all'),
+    series: oneOf('series', ['all','First 30 Days','Career Without Borders','The Intelligence Toolkit','The Global Money Series', PREMIUM_SPECIALIZATIONS_SERIES], 'all'),
     availability: oneOf('availability', ['all','available','planned'], 'available'),
     credential: oneOf('credential', ['all','criteria_available','none'], 'all'),
     language: oneOf('language', ['all','en','pt-BR'], 'all'),

@@ -5,7 +5,7 @@ export type CourseGoal =
   | "global-economics"
   | "emergency-readiness";
 
-export type CourseSeries = "First 30 Days" | "Career Without Borders" | "The Intelligence Toolkit" | "The Global Money Series";
+export type CourseSeries = "First 30 Days" | "Career Without Borders" | "The Intelligence Toolkit" | "The Global Money Series" | "Premium Specializations";
 
 export interface CourseOverview {
   learningPolicy?: import('../lib/learning/catalog-policy').CourseLearningPolicy;

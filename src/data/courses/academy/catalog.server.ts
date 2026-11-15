@@ -15,6 +15,7 @@ import { academyProjects } from './projects';
 import { projectLessons, projectWorkload } from './project-stages';
 import { emergencyAcademy } from './emergency.server';
 import { expansionAcademy } from './expansion/curricula.server';
+import { specializationAcademy } from './specializations/curricula.server';
 
 import { practiceLabs } from './practice/labs.server';
 import { academyManifest } from './manifest';
@@ -129,6 +130,16 @@ for (const course of courseMap.values()) {
   }
   expandedCourses.set(course.id, { ...course, version: ACADEMY_VERSION, lessons, minutes });
   expandedBanks.set(course.id, [...(banks.get(course.id) ?? []), ...added.questions]);
+}
+for (const { course, questions, calculation } of specializationAcademy(ACADEMY_VERSION)) {
+  if (expandedCourses.has(course.id) || course.minutes !== academyManifest[course.id]?.minutes ||
+    course.lessons.length !== academyManifest[course.id]?.lessons ||
+    course.minutes !== course.lessons.reduce((sum, lesson) => sum + lesson.minutes, course.portfolioMinutes + course.assessmentMinutes)) {
+    throw new Error(`Invalid specialization curriculum: ${course.id}`);
+  }
+  expandedCourses.set(course.id, course);
+  expandedBanks.set(course.id, questions);
+  courseCases.set(course.id, calculation);
 }
 export const academyCourses = [...expandedCourses.values()];
 export function getAcademyCourse(id: string, version = ACADEMY_VERSION) {

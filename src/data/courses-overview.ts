@@ -1,3 +1,4 @@
+import { specializationOverview } from '@/data/courses/academy/specializations/listing';
 import { courseArtwork } from '@/lib/cinematic-art';
 import { academyManifest } from "@/data/courses/academy/manifest";
 import { expansionOverview } from "@/data/courses/academy/expansion/listing";
@@ -171,7 +172,7 @@ const originalOverview: CourseOverview[] = [
   },
 ];
 
-export const coursesOverview: CourseOverview[] = [...originalOverview, ...emergencyOverview, ...expansionOverview].map(course => {
+export const coursesOverview: CourseOverview[] = [...originalOverview, ...emergencyOverview, ...expansionOverview, ...specializationOverview].map(course => {
   const edition = academyManifest[course.id];
   if (!edition) return course;
   const estimate = {
