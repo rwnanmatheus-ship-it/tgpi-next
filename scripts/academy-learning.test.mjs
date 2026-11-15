@@ -97,8 +97,9 @@ test('academy courses have inspectable workload, assessments and preserved found
  const originals = academyCourses.filter(course => !emergency.has(course.id) && !added.has(course.id));
  assert.equal(originals.length,27);
  assert.equal(new Set(academyCourses.map(c=>c.id)).size,83);
- assert.equal(originals.reduce((n,c)=>n+c.lessons.length,0),335);
+ assert.equal(originals.reduce((n,c)=>n+c.lessons.length,0),389);
  assert.equal(academyCourses.filter(course => emergency.has(course.id)).length,6);
+ const seenScenarios = new Set();
  const manifest=h.load(resolve('src/data/courses/academy/manifest.ts')).academyManifest;
  const { academyCoverIds, courseArtwork } = h.load(resolve('src/lib/cinematic-art.ts'));
  assert.deepEqual([...academyCoverIds].sort(), Object.keys(manifest).sort());
@@ -109,8 +110,8 @@ test('academy courses have inspectable workload, assessments and preserved found
   assert.deepEqual(manifest[course.id],{minutes:course.minutes,lessons:course.lessons.length});
   const entry = emergency.get(course.id);
   if (entry) {
-   assert.equal(course.minutes, entry.hours * 60);
-   assert.equal(course.lessons.length, entry.lessons);
+   assert.equal(h.catalog.getAcademyCourse(course.id, h.catalog.BASELINE_ACADEMY_VERSION).minutes, entry.hours * 60);
+   assert.equal(course.lessons.length, entry.lessons + 2);
    assert.equal(course.language, 'pt-BR');
    assert.equal(Boolean(course.scopeNotice), entry.practicalTraining);
    assert.ok(course.projectBrief);
@@ -120,13 +121,22 @@ test('academy courses have inspectable workload, assessments and preserved found
    assert.equal(course.language, 'pt-BR');
    assert.equal(Boolean(course.scopeNotice), added.get(course.id).goal === 'emergency-readiness');
    assert.equal(expansionOverview.find(item => item.id === course.id).learningPolicy.accessPolicy, 'premium');
-   assert.equal(course.lessons.filter(lesson => !lesson.project).length, 3);
+   assert.equal(course.lessons.filter(lesson => !lesson.project && !lesson.practiceLab).length, 3);
    assert.equal(h.catalog.getAcademyCourse(course.id, h.catalog.PREVIOUS_ACADEMY_VERSION), undefined);
    assert.ok(existsSync(resolve('public', course.image.slice(1))));
   } else {
    assert.equal(course.lessons.filter(lesson => lesson.project).length,4);
-   assert.ok(course.minutes>=900 && course.minutes<=2400);
+   assert.ok(course.minutes>=1020 && course.minutes<=2580);
   }
+  const baseline = h.catalog.getAcademyCourse(course.id, h.catalog.BASELINE_ACADEMY_VERSION);
+  const labs = course.lessons.filter(lesson => lesson.practiceLab);
+  assert.equal(labs.length, 2);
+  assert.deepEqual(course.lessons.slice(0, -2), baseline.lessons);
+  assert.equal(course.minutes - baseline.minutes, labs.reduce((sum, lesson) => sum + lesson.minutes, 0));
+  assert.ok(course.minutes - baseline.minutes >= 120 && course.minutes - baseline.minutes <= 180);
+  assert.ok(!seenScenarios.has(labs[0].sections[0].body));
+  seenScenarios.add(labs[0].sections[0].body);
+  assert.ok(labs.every(lesson => lesson.language === 'pt-BR'));
   const bank=academyQuestions(course.id);assert.ok(bank.length>=course.lessons.length);
   for(const lesson of course.lessons){assert.ok(bank.some(q=>q.lessonId===lesson.id));assert.ok(lesson.sections.every(s=>s.body.trim()));assert.ok(lesson.practice.length>=2);}
   const previous=[...old,...pro].find(c=>c.id===course.id);
@@ -313,4 +323,33 @@ test('Premium study API checks session and active entitlement for both reads and
   assert.equal((await route.POST(enroll(), context)).status, 200);
   h.signOut();
   assert.equal((await route.GET(read(), context)).status, 401);
+});
+
+test('the immediately previous edition resumes its active check and migrates unchanged lesson credit and portfolio', async () => {
+  const h = harness();
+  const course = h.catalog.getAcademyCourse('sql-produto-dados');
+  const baseline = h.catalog.getAcademyCourse(course.id, h.catalog.BASELINE_ACADEMY_VERSION);
+  const first = baseline.lessons[0].id, next = baseline.lessons[1].id;
+  const previous = {
+    uid: identity.uid, courseId: course.id, version: baseline.version, revision: 1,
+    enrolledAt: new Date().toISOString(), updatedAt: new Date().toISOString(),
+    consent: { publicName: identity.publicName, acceptedAt: new Date().toISOString() },
+    diagnostic: note, notes: { [first]: note, [next]: note }, completed: {}, portfolio,
+    sharing: false, attemptLimits: {},
+  };
+  h.seed(path(baseline), previous);
+  const old = mutation(h, baseline);
+  const active = await old({ action: 'begin', revision: 1, target: first });
+  assert.equal((await h.service.academyStatus(identity, course.id)).challenge.id, active.challenge.id);
+  const passed = await old(submittedAnswers(h, baseline, active));
+  const migrated = await enrol(h, course);
+  assert.deepEqual(migrated.record.completed, passed.record.completed);
+  assert.deepEqual(migrated.record.notes, previous.notes);
+  assert.equal(migrated.record.portfolio, portfolio);
+  assert.equal(migrated.record.final, undefined);
+  assert.equal(migrated.record.credentialId, undefined);
+  assert.equal((await h.service.academyStudyCourse(identity.uid, course)).version, course.version);
+  assert.equal((await h.service.academyStudyCourse(identity.uid, course, false, baseline.version)).version, baseline.version);
+  await assert.rejects(() => mutation(h, course)({ action: 'begin', revision: migrated.record.revision, target: 'final' }), /Complete all lesson/);
+  await assert.rejects(() => enrol(h, baseline, { ...identity, uid: 'another-learner' }), /course edition changed/i);
 });

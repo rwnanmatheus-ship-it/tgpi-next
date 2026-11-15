@@ -1,3 +1,4 @@
+import { practiceLabCount, practiceWorkload } from './practice/workload';
 import { academyProjects } from './projects.ts';
 import { projectStageCount } from './project-stages.ts';
 import { emergencyCourses } from '../emergency/catalog.ts';
@@ -115,7 +116,7 @@ export const previousAcademyManifest: Record<string, { minutes: number; lessons:
   }
 };
 
-export const academyManifest = Object.fromEntries([
+export const baselineAcademyManifest = Object.fromEntries([
   ...Object.entries(previousAcademyManifest).map(([id, previous]) => [
     id, { minutes: academyProjects[id][0] * 60, lessons: previous.lessons + projectStageCount },
   ] as const),
@@ -123,3 +124,10 @@ export const academyManifest = Object.fromEntries([
   ...emergencyCourses.map(course => [course.id, { minutes: course.hours * 60, lessons: course.lessons }] as const),
 ]);
 
+
+export const academyManifest = Object.fromEntries(Object.entries(baselineAcademyManifest).map(([id, course]) => [
+  id, {
+    minutes: practiceWorkload(course.minutes).reduce((total, minutes) => total + minutes, course.minutes),
+    lessons: course.lessons + practiceLabCount,
+  },
+]));

@@ -26,7 +26,7 @@ export function withAcademyTranslations(status: AcademyStatus, courseId: string)
     ...status,
     challenge: status.challenge ? {
       ...status.challenge,
-      questions: status.challenge.questions.map(question => ({
+      questions: status.challenge.questions.map(question => question.language ? question : ({
         ...question,
         translations: assessmentTranslations(question.prompt),
         options: question.options.map(option => ({ ...option, ...(!languagePractice ? { translations: assessmentTranslations(option.label) } : {}) })),
@@ -39,7 +39,7 @@ export function withAcademyTranslations(status: AcademyStatus, courseId: string)
     } : null,
     lastResult: status.lastResult ? {
       ...status.lastResult,
-      feedback: status.lastResult.feedback.map(item => ({ ...item, translations: assessmentTranslations(item.explanation) })),
+      feedback: status.lastResult.feedback.map(item => item.language ? item : ({ ...item, translations: assessmentTranslations(item.explanation) })),
     } : null,
   };
 }

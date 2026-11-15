@@ -30,7 +30,7 @@ export function academyLocalizationFixture(overrides = {}) {
 
 export function academyDisplayCopy(course) {
   const copy = [course.title, ...(course.descriptionParts ?? [course.description]), ...course.outcomes];
-  for (const lesson of course.lessons) {
+  for (const lesson of course.lessons.filter(lesson => !lesson.language)) {
     copy.push(lesson.title, lesson.objective, lesson.deliverable, ...lesson.practice);
     for (const section of lesson.sections) {
       if (!section.preserveTitle) copy.push(section.title);

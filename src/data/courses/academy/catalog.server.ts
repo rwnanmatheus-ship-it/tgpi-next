@@ -16,8 +16,12 @@ import { projectLessons, projectWorkload } from './project-stages';
 import { emergencyAcademy } from './emergency.server';
 import { expansionAcademy } from './expansion/curricula.server';
 
-export const PREVIOUS_ACADEMY_VERSION = '2026.11.1';
-export const ACADEMY_VERSION = '2026.11.2';
+import { practiceLabs } from './practice/labs.server';
+import { academyManifest } from './manifest';
+
+import { ACADEMY_VERSION, BASELINE_ACADEMY_VERSION, PREVIOUS_ACADEMY_VERSION } from '@/lib/learning/academy/versions';
+
+export { ACADEMY_VERSION, BASELINE_ACADEMY_VERSION, PREVIOUS_ACADEMY_VERSION, historicalAcademyVersions } from '@/lib/learning/academy/versions';
 export const ACADEMY_REVIEW_DELAY_MS = 24 * 60 * 60 * 1000;
 export const ACADEMY_PASS_SCORE = 80;
 const labs = { ...mobilityLabs, ...workLabs, ...technologyLabs, ...languageAndStrategyLabs };
@@ -100,7 +104,7 @@ for (const [id, additions] of Object.entries(labs)) {
   const { extraPortfolioMinutes, extraAssessmentMinutes, projectMinutes } = projectWorkload(hours, previous.minutes);
   const project = projectLessons(id, projectBrief, projectMinutes, references[id] ?? []);
   courseMap.set(id, {
-    ...previous, version: ACADEMY_VERSION, projectBrief,
+    ...previous, version: BASELINE_ACADEMY_VERSION, projectBrief,
     lessons: [...lessons, ...project.map(item => item.lesson)],
     portfolioMinutes: portfolioMinutes + extraPortfolioMinutes,
     assessmentMinutes: assessmentMinutes + extraAssessmentMinutes,
@@ -109,18 +113,35 @@ for (const [id, additions] of Object.entries(labs)) {
   banks.set(id, [...questions, ...project.map(item => item.question)]);
 }
 const courseCases = new Map<string, CaseSpec>();
-for (const { course, questions, calculation } of [...emergencyAcademy(ACADEMY_VERSION), ...expansionAcademy(ACADEMY_VERSION)]) {
+for (const { course, questions, calculation } of [...emergencyAcademy(BASELINE_ACADEMY_VERSION), ...expansionAcademy(BASELINE_ACADEMY_VERSION)]) {
   courseMap.set(course.id, course);
   banks.set(course.id, questions);
   courseCases.set(course.id, calculation);
 }
-export const academyCourses = [...courseMap.values()];
+const expandedCourses = new Map<string, AcademyCourse>();
+const expandedBanks = new Map<string, AcademyPrivateQuestion[]>();
+for (const course of courseMap.values()) {
+  const added = practiceLabs(course);
+  const lessons = [...course.lessons, ...added.lessons];
+  const minutes = course.minutes + added.lessons.reduce((sum, lesson) => sum + lesson.minutes, 0);
+  if (minutes !== academyManifest[course.id]?.minutes || lessons.length !== academyManifest[course.id]?.lessons) {
+    throw new Error(`Practice workload mismatch: ${course.id}`);
+  }
+  expandedCourses.set(course.id, { ...course, version: ACADEMY_VERSION, lessons, minutes });
+  expandedBanks.set(course.id, [...(banks.get(course.id) ?? []), ...added.questions]);
+}
+export const academyCourses = [...expandedCourses.values()];
 export function getAcademyCourse(id: string, version = ACADEMY_VERSION) {
   const canonical = id === 'english-abroad' ? 'global-english-2026' : id;
-  return (version === PREVIOUS_ACADEMY_VERSION ? previousCourseMap : version === ACADEMY_VERSION ? courseMap : undefined)?.get(canonical);
+  if (version === ACADEMY_VERSION) return expandedCourses.get(canonical);
+  if (version === BASELINE_ACADEMY_VERSION) return courseMap.get(canonical);
+  if (version === PREVIOUS_ACADEMY_VERSION) return previousCourseMap.get(canonical);
 }
 export function academyQuestions(id: string, version = ACADEMY_VERSION) {
-  return (version === PREVIOUS_ACADEMY_VERSION ? previousBanks : banks).get(id) ?? [];
+  if (version === ACADEMY_VERSION) return expandedBanks.get(id) ?? [];
+  if (version === BASELINE_ACADEMY_VERSION) return banks.get(id) ?? [];
+  if (version === PREVIOUS_ACADEMY_VERSION) return previousBanks.get(id) ?? [];
+  return [];
 }
 
 /** Fresh numeric cases test application instead of trusting a browser-supplied score. */

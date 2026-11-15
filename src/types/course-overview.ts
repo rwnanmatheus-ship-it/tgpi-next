@@ -17,6 +17,7 @@ export interface CourseOverview {
   desc: string;
   duration: string;
   format: string;
+  lessonCount?: number;
   goal: CourseGoal;
   goalLabel: string;
   href: string;

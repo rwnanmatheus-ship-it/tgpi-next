@@ -1,7 +1,7 @@
 import { localizeMetadata } from '@/lib/localization/metadata.server';
 import { notFound, redirect } from 'next/navigation';
 import AcademyStudy from '@/components/courses/academy/AcademyStudy';
-import { getAcademyCourse, PREVIOUS_ACADEMY_VERSION } from '@/data/courses/academy/catalog.server';
+import { getAcademyCourse, historicalAcademyVersions } from '@/data/courses/academy/catalog.server';
 import { academyStudyCourse } from '@/lib/learning/academy/service.server';
 import { requirePremium, requireUser } from '@/lib/auth/guards';
 import { isExpansionCourse } from '@/data/courses/academy/expansion/listing';
@@ -17,14 +17,15 @@ export default async function AcademyStudyPage({ params, searchParams }: {
   if (!latest) notFound();
 
   const query = new URLSearchParams();
-  if (edition === 'current' || edition === 'previous') query.set('edition', edition);
+  const previousEdition = historicalAcademyVersions.find(version => version === edition);
+  if (edition === 'current' || edition === 'previous' || previousEdition) query.set('edition', edition ?? '');
   if (latest.lessons.some(item => item.id === lesson) && lesson) query.set('lesson', lesson);
   const path = `/courses/${latest.id}/study${query.size ? `?${query}` : ''}`;
   if (id !== latest.id) redirect(path);
   const { userId } = await (isExpansionCourse(latest.id) ? requirePremium(path) : requireUser(path));
 
-  const course = await academyStudyCourse(userId, latest, edition === 'current', edition === 'previous' ? PREVIOUS_ACADEMY_VERSION : undefined);
-  return <AcademyStudy course={course} initialLesson={query.get('lesson') ?? undefined} />;
+  const course = await academyStudyCourse(userId, latest, edition === 'current', edition === 'previous' ? historicalAcademyVersions[1] : previousEdition);
+  return <AcademyStudy course={course} latestVersion={latest.version} initialLesson={query.get('lesson') ?? undefined} />;
 }
 
 export async function generateMetadata() { return localizeMetadata(sourceMetadata); }

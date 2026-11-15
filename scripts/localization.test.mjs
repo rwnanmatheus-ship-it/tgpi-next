@@ -141,7 +141,7 @@ test('course catalogue cards and global journey have complete translations', asy
   const keys = new Set([
     // These catalogue entries intentionally retain the Portuguese authored curriculum.
     ...coursesOverview.filter(course => course.learningPolicy?.accessPolicy !== 'premium')
-      .flatMap(course => [course.title, course.category, course.desc, course.format, course.series, ...course.benefits.slice(0, 2)]).filter(Boolean),
+      .flatMap(course => [course.title, course.category, course.desc, course.lessonCount ? "lessons and laboratories" : course.format, course.series, ...course.benefits.slice(0, 2)]).filter(Boolean),
     ...PLATFORM_JOURNEY.flatMap(stage => [stage.label, stage.description]),
   ]);
   for (const key of keys) {

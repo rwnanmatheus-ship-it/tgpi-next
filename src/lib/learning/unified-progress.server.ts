@@ -1,5 +1,5 @@
 import 'server-only';
-import { academyCourses, getAcademyCourse, PREVIOUS_ACADEMY_VERSION } from '@/data/courses/academy/catalog.server';
+import { academyCourses, getAcademyCourse, historicalAcademyVersions } from '@/data/courses/academy/catalog.server';
 import type { AcademyRecord } from './academy/types';
 import type { LearningProgressItem } from './unified-progress';
 import { courses } from '@/data/courses';
@@ -44,8 +44,8 @@ export async function loadLearningSummary(uid: string, activation?: TgpiActivati
   });
   const records = academy.status === "fulfilled" ? academy.value.filter(record => record.uid === uid) : [];
   const current: LearningProgressItem[] = academyCourses.flatMap(course => {
-    const record = records.find(r => r.courseId === course.id && r.version === course.version)
-      ?? records.find(r => r.courseId === course.id && r.version === PREVIOUS_ACADEMY_VERSION);
+    const record = [course.version, ...historicalAcademyVersions]
+      .map(version => records.find(r => r.courseId === course.id && r.version === version)).find(Boolean);
     const edition = record && getAcademyCourse(course.id, record.version);
     if (!record || !edition) return [];
     return [{ courseId: course.id, title: course.title, href: `/courses/${course.id}/study`, kind: "academy",

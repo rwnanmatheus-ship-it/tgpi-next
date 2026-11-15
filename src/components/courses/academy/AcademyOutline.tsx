@@ -1,4 +1,5 @@
 'use client';
+import { academyPracticeCopy } from '@/lib/localization/academy-practice-copy';
 import { useState } from 'react';
 import { useLocale } from '@/components/localization/LocaleProvider';
 import type { AcademyCourse, AcademyRecord } from '@/lib/learning/academy/types';
@@ -8,7 +9,7 @@ import styles from './academy.module.css';
 export default function AcademyOutline({ course, record, selected, disabled, onSelect }: {
   course: AcademyCourse; record: AcademyRecord; selected: string; disabled: boolean; onSelect: (id: string) => void;
 }) {
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState('all');
   const [open, setOpen] = useState(false);
@@ -28,7 +29,7 @@ export default function AcademyOutline({ course, record, selected, disabled, onS
           const passed = Boolean(record.completed[lesson.id]);
           return <button key={lesson.id} type="button" className={styles.navButton} data-complete={passed} aria-current={selected === lesson.id ? 'step' : undefined} onClick={() => { onSelect(lesson.id); }} disabled={disabled}>
             <span className={styles.lessonNumber}>{passed ? <AcademyIcon name="check" size={16} /> : String(course.lessons.indexOf(lesson) + 1).padStart(2, '0')}</span>
-            <span><strong>{lesson.title}</strong><small>{lesson.minutes} {t('min')} · {passed ? t('Lesson check passed') : lesson.project ? t('Applied project') : lesson.foundation ? t('Foundation') : t('Advanced laboratory')}</small></span>
+            <span><strong lang={lesson.language}>{lesson.title}</strong><small>{lesson.minutes} {t('min')} · {passed ? t('Lesson check passed') : lesson.practiceLab ? academyPracticeCopy(locale, 'appliedLabs') : lesson.project ? t('Applied project') : lesson.foundation ? t('Foundation') : t('Advanced laboratory')}</small></span>
           </button>;
         })}
         {visible.length === 0 && <p className={styles.muted} role="status">{t('No lessons match this view.')}</p>}

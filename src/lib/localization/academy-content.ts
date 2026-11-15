@@ -10,7 +10,7 @@ export function localizeAcademyCourse(source: AcademyCourse, locale: Locale): Ac
   return {
     ...localized,
     description: source.descriptionParts?.map(part => translate(locale, part)).join(' ') ?? localized.description,
-    lessons: localized.lessons.map((lesson, index) => ({
+    lessons: localized.lessons.map((lesson, index) => source.lessons[index].language ? source.lessons[index] : ({
       ...lesson,
       sections: source.lessons[index].sections.map(section => ({
         ...section,

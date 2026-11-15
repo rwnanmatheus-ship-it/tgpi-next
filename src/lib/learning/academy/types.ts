@@ -4,27 +4,27 @@ export type AcademyTranslations = Readonly<Record<Locale, string>>;
 export type AcademySection = {
   title: string; body: string;
   /** Preserve the language of an utterance being taught, independently of UI language. */
-  preserveTitle?: boolean; preserveBody?: boolean;
+  preserveTitle?: boolean; preserveBody?: boolean; workedExample?: boolean;
   bodyParts?: Array<{ text: string; preserve?: boolean }>;
 };
 /** The public DTO deliberately contains no scoring keys. */
 export type AcademyLesson = {
   id: string; title: string; objective: string; sections: AcademySection[];
-  practice: string[]; deliverable: string; minutes: number; references: string[]; foundation: boolean; project?: boolean;
+  practice: string[]; deliverable: string; minutes: number; references: string[]; foundation: boolean; project?: boolean; practiceLab?: boolean; language?: Locale;
 };
 export type AcademyCourse = {
   id: string; version: string; title: string; description: string; descriptionParts?: string[]; outcomes: string[];
   lessons: AcademyLesson[]; minutes: number; portfolioMinutes: number; assessmentMinutes: number;
   language: string; image: string; legacyHref?: string; projectBrief?: string; scopeNotice?: string;
 };
-export type AcademyQuestion = { id: string; lessonId: string; prompt: string; translations?: AcademyTranslations; options: Array<{ id: string; label: string; translations?: AcademyTranslations }>; essential: boolean };
+export type AcademyQuestion = { id: string; lessonId: string; prompt: string; language?: Locale; translations?: AcademyTranslations; options: Array<{ id: string; label: string; translations?: AcademyTranslations }>; essential: boolean };
 export type AcademyPrivateQuestion = AcademyQuestion & { correctOptionId: string; explanation: string };
 export type AcademyChallenge = {
   id: string; target: string; createdAt: string;
   questions: AcademyQuestion[];
   calculation?: { prompt: string; unit: string; translations?: AcademyTranslations; unitTranslations?: AcademyTranslations };
 };
-export type AcademyFeedback = { questionId: string; lessonId: string; correct: boolean; explanation: string; translations?: AcademyTranslations };
+export type AcademyFeedback = { questionId: string; lessonId: string; correct: boolean; explanation: string; language?: Locale; translations?: AcademyTranslations };
 export type AcademyResult = { challengeId: string; target: string; score: number; passed: boolean; feedback: AcademyFeedback[]; submittedAt: string };
 export type AcademyStudyPlan = { goal: 'foundation' | 'application' | 'portfolio'; weeklyHours: number };
 export type AcademyRecord = {
