@@ -1,6 +1,7 @@
 import 'server-only';
 import { academyCase, getAcademyCourse } from '@/data/courses/academy/catalog.server';
 import type { AcademyStatus, AcademyTranslations } from '@/lib/learning/academy/types';
+import { fullyLocalizedAcademyCourses } from './academy-coverage';
 import { locales } from './config';
 import { assessmentTranslations } from './assessment.server';
 
@@ -20,17 +21,24 @@ export function academyCaseTranslations(courseId: string, source: string): Acade
 
 /** Called after authorization. Only currently disclosed questions/feedback are localized. */
 export function withAcademyTranslations(status: AcademyStatus, courseId: string): AcademyStatus {
-  if (getAcademyCourse(courseId)?.language === 'pt-BR') return status;
+  const complete = fullyLocalizedAcademyCourses.has(courseId);
+  if (getAcademyCourse(courseId)?.language === 'pt-BR' && !complete) return status;
   const languagePractice = ['global-english-2026', 'ingles-carreira-internacional'].includes(courseId);
   return {
     ...status,
     challenge: status.challenge ? {
       ...status.challenge,
-      questions: status.challenge.questions.map(question => question.language ? question : ({
-        ...question,
-        translations: assessmentTranslations(question.prompt),
-        options: question.options.map(option => ({ ...option, ...(!languagePractice ? { translations: assessmentTranslations(option.label) } : {}) })),
-      })),
+      questions: status.challenge.questions.map(question => {
+        if (question.language && !complete) return question;
+        const { language, ...disclosed } = question;
+        return {
+          ...disclosed,
+          translations: assessmentTranslations(question.prompt),
+          options: languagePractice && !language ? question.options : question.options.map(option => ({
+            ...option, translations: assessmentTranslations(option.label),
+          })),
+        };
+      }),
       ...(status.challenge.calculation ? { calculation: {
         ...status.challenge.calculation,
         translations: academyCaseTranslations(courseId, status.challenge.calculation.prompt),
@@ -39,7 +47,9 @@ export function withAcademyTranslations(status: AcademyStatus, courseId: string)
     } : null,
     lastResult: status.lastResult ? {
       ...status.lastResult,
-      feedback: status.lastResult.feedback.map(item => item.language ? item : ({ ...item, translations: assessmentTranslations(item.explanation) })),
+      feedback: status.lastResult.feedback.map(item => item.language && !complete ? item : ({
+        ...item, language: undefined, translations: assessmentTranslations(item.explanation),
+      })),
     } : null,
   };
 }

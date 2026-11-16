@@ -50,6 +50,9 @@ export function practiceLabs(course: AcademyCourse, entry = cases[course.id]) {
         changedConstraint,
         'Compare a versão original e a adaptada usando o mesmo critério. Registre um resultado esperado, o observado e a evidência que sustenta sua conclusão.',
         'Inclua no portfólio uma nota que permita a outra pessoa repetir a verificação. Indique a primeira condição que exigiria refazer a análise.',
+        ...(course.id === 'global-english-2026' ? [
+          'Na segunda gravação, verifique se um ouvinte consegue identificar o endereço atualizado, quem vai agir e quando você receberá a próxima confirmação.',
+        ] : []),
       ],
       deliverable: `${evidence} Inclua a comparação entre as duas versões e o resultado do teste de transferência.`,
     },

@@ -167,8 +167,8 @@ test('switching the study presentation language keeps selected answers and local
   }
 });
 
-test('new Portuguese labs preserve authored content in a multilingual curriculum and in assessments', () => {
-  const course = h.getAcademyCourse('global-english-2026');
+test('unreleased Portuguese labs retain authored content in a multilingual curriculum and in assessments', () => {
+  const course = h.getAcademyCourse('country-fit');
   const source = course.lessons.filter(lesson => lesson.practiceLab);
   assert.equal(source.length, 2);
   for (const locale of h.locales) {
@@ -183,6 +183,67 @@ test('new Portuguese labs preserve authored content in a multilingual curriculum
   const feedback = { questionId: question.id, lessonId: question.lessonId, language: question.language, correct: false, explanation };
   result.lastResult.feedback.push(feedback);
   assert.deepEqual(withAcademyTranslations(result, course.id).lastResult.feedback[1], feedback);
+});
+
+test('released courses cover every instructional field, preserving language exercises and stored checks', () => {
+  const { fullyLocalizedAcademyCourses } = h.load(resolve('src/lib/localization/academy-coverage.ts'));
+  const quote = text => [...text.matchAll(/“([^”]+)”/g)].map(match => match[1]);
+  const publicDictionaries = Object.fromEntries(h.locales.map(locale => [locale,
+    { ...JSON.parse(fs.readFileSync(`public/locales/${locale}.json`, 'utf8')), ...JSON.parse(fs.readFileSync(`public/locales/academy/${locale}.json`, 'utf8')) },
+  ]));
+  const supplementalKeys = new Map(Object.keys(supplemental).map(key => [normalized(key), key]));
+  for (const id of fullyLocalizedAcademyCourses) {
+    const course = h.getAcademyCourse(id);
+    assert.ok(course, id);
+    const copy = academyDisplayCopy({ ...course, lessons: course.lessons.map(lesson => ({ ...lesson, language: undefined })) });
+    copy.push(...[course.projectBrief, course.prerequisite, course.scopeNotice].filter(Boolean));
+    for (const locale of h.locales) {
+      for (const text of new Set(copy)) {
+        const localized = h.messages.translate(locale, text);
+        assert.ok(publicKeys.has(normalized(text)) || h.locales.some(code => h.messages.translate(code, text) !== text), `${id}: missing ${text}`);
+        const key = supplementalKeys.get(normalized(text));
+        if (key) assert.ok(publicDictionaries[locale][key]?.trim(), `${locale}: ${text}`);
+        for (const expression of quote(text)) assert.ok(localized.includes(expression), `${locale}: lost ${expression}`);
+      }
+      const courseCopy = localizeAcademyCourse(course, locale);
+      assert.ok(courseCopy.lessons.every(lesson => lesson.language === locale));
+      const pairs = courseCopy.lessons.filter(lesson => lesson.practiceLab);
+      assert.equal(pairs.length, 2);
+      assert.equal(pairs[0].title, h.messages.translate(locale, course.lessons.at(-2).title));
+      if (locale !== 'pt-BR') assert.notEqual(pairs[0].title, course.lessons.at(-2).title);
+    }
+    const bank = h.academyQuestions(id);
+    const privateCase = h.academyCase(id);
+    for (const value of [privateCase.prompt, privateCase.unit, privateCase.explanation]) {
+      assert.ok(protectedKeys.has(normalized(value)), `Missing case translation: ${value}`);
+    }
+    for (const source of bank) {
+      const { correctOptionId, explanation, ...question } = source;
+      const status = statusFor(id);
+      status.challenge.questions = [question];
+      status.lastResult = { feedback: [{ questionId: question.id, lessonId: question.lessonId, language: question.language, explanation }] };
+      const translated = withAcademyTranslations(status, id);
+      const [disclosed] = translated.challenge.questions;
+      assert.equal(disclosed.language, undefined);
+      assert.equal(disclosed.id, source.id);
+      assert.equal(disclosed.correctOptionId, undefined);
+      assert.deepEqual(disclosed.options.map(option => option.id), question.options.map(option => option.id));
+      assert.ok(question.options.some(option => option.id === correctOptionId));
+      for (const text of [source.prompt, explanation, ...(source.language ? source.options.map(option => option.label) : [])]) {
+        assert.ok(protectedKeys.has(normalized(text)), `Missing protected copy: ${text}`);
+        const entry = protectedCopy[text.replace(/\s+/g, ' ').trim()];
+        for (const locale of h.locales) {
+          assert.ok(entry[locale]?.trim());
+          for (const expression of quote(text)) assert.ok(entry[locale].includes(expression), `${locale}: lost ${expression}`);
+        }
+      }
+      if (source.language) {
+        assert.notEqual(disclosed.translations.it, question.prompt);
+        assert.notEqual(disclosed.options[0].translations.it, question.options[0].label);
+        assert.notEqual(translated.lastResult.feedback[0].translations.it, explanation);
+      }
+    }
+  }
 });
 
 test('protected assessment catalog cannot be compiled into public dictionary assets', async () => {
