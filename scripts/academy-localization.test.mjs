@@ -270,11 +270,11 @@ test('protected assessment catalog cannot be compiled into public dictionary ass
 test('private curriculum copy is localized for enrolled study without becoming a public dictionary entry', async () => {
   const course = h.getAcademyCourse('housing-abroad');
   const { getAcademyCurriculumMessages } = h.load(resolve('src/lib/localization/academy-curricula.server.ts'));
-  const privateMessages = await getAcademyCurriculumMessages('pt-BR');
+  const privateMessages = await getAcademyCurriculumMessages('en');
   const privateText = course.lessons.slice(1).flatMap(lesson => lesson.sections.map(section => section.body))
     .find(body => privateMessages[body] && !publicKeys.has(normalized(body)));
   assert.ok(privateText, 'Paid lesson body should be available only in the study dictionary');
   assert.notEqual(privateMessages[privateText], privateText);
-  const localized = localizeAcademyCourse(course, 'pt-BR', privateMessages);
+  const localized = localizeAcademyCourse(course, 'en', privateMessages);
   assert.ok(localized.lessons.slice(1).some(lesson => lesson.sections.some(section => section.body === privateMessages[privateText])));
 });
