@@ -4,8 +4,6 @@ import { LocalizedElement } from "@/components/localization/LocalizedElement";
 import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 
 import { FormEvent, useState } from "react";
-import { doc, serverTimestamp, setDoc } from "firebase/firestore";
-import { auth, db } from "@/lib/firebase";
 import { LocalizedText } from "@/components/localization/LocaleProvider";
 
 
@@ -28,14 +26,6 @@ const initialState: FormState = {
   timeline: "6-12-months",
   website: "",
 };
-
-async function hashEmail(email: string) {
-  const data = new TextEncoder().encode(email.trim().toLowerCase());
-  const digest = await crypto.subtle.digest("SHA-256", data);
-  return Array.from(new Uint8Array(digest))
-    .map((byte) => byte.toString(16).padStart(2, "0"))
-    .join("");
-}
 
 export default function PremiumWaitlistForm() {
   const { t: localizeLabel } = useInterfaceLocale();
@@ -67,35 +57,21 @@ export default function PremiumWaitlistForm() {
     setStatus("submitting");
 
     try {
-      const waitlistId = await hashEmail(normalizedEmail);
-      const user = auth.currentUser;
-
-      await setDoc(
-        doc(db, "premiumWaitlist", waitlistId),
-        {
-          name: form.name.trim(),
-          email: normalizedEmail,
-          currentCountry: form.currentCountry.trim(),
-          targetCountry: form.targetCountry.trim(),
-          primaryGoal: form.goal,
-          expectedTimeline: form.timeline,
-          publishedPriceUsd: "19.90",
-          pricingVersion: "tgpi-premium-v3",
-          source: "pricing",
-          status: "interested",
-          userUid: user?.uid ?? null,
-          emailOptIn: true,
-          createdAt: serverTimestamp(),
-          updatedAt: serverTimestamp(),
-        },
-        { merge: true }
-      );
+      const response = await fetch("/api/premium-waitlist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...form, email: normalizedEmail }),
+      });
+      if (!response.ok) {
+        setStatus("error");
+        setMessage("We could not save your request. Please try again in a moment.");
+        return;
+      }
 
       setStatus("success");
       setForm(initialState);
       setMessage("You are on the TGPI Premium early-access list.");
-    } catch (error) {
-      console.error("Premium waitlist submission failed:", error);
+    } catch {
       setStatus("error");
       setMessage("We could not save your request. Please try again in a moment.");
     }

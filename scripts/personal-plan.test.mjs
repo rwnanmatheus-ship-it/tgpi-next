@@ -73,5 +73,5 @@ test('calendar folds UTF-8 lines, escapes delimiters and exports pending dates o
   assert.match(calendar, /DTSTART;VALUE=DATE:20270210/);
   assert.match(calendar, /DTSTAMP:20261115T150000Z/);
   const unfolded = calendar.replaceAll('\r\n ', '');
-  assert.ok(unfolded.includes('SUMMARY:' + title.replace(',', '\\,').replace(';', '\\;').replace('\n', ' ')));
+  assert.ok(unfolded.includes('SUMMARY:Decisão\\, inscrição\\; ' + '保'.repeat(31) + ' END:VEVENT'));
 });

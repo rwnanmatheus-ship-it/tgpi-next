@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import ts from 'typescript';
+import { decodeMessageEntities } from './helpers/localization-audit.mjs';
 
 const paths = process.argv.slice(2);
 if (!paths.length) throw new Error('Pass validated offline translation checkpoints.');
@@ -10,7 +11,6 @@ const output = Object.fromEntries(locales.map(locale => {
   const path = `public/locales/${locale}.json`;
   return [locale, fs.existsSync(path) ? JSON.parse(fs.readFileSync(path, 'utf8')) : {}];
 }));
-const decode = value => value.replaceAll('&apos;', "'").replaceAll('&quot;', '"').replaceAll('&amp;', '&').replaceAll('&lt;', '<').replaceAll('&gt;', '>').replaceAll('&nbsp;', ' ');
 const tokens = value => (value.match(/\{\w+\}/g) ?? []).sort().join('|');
 const usage = { inputTokens: 0, outputTokens: 0, estimatedUsd: 0 };
 for (const path of paths) {
@@ -18,10 +18,10 @@ for (const path of paths) {
   if (/assessment|protected/i.test(path) || checkpoint.scope === 'assessment') throw new Error('Protected assessment translations cannot enter public catalogs.');
   usage.inputTokens += checkpoint.inputTokens; usage.outputTokens += checkpoint.outputTokens; usage.estimatedUsd += checkpoint.estimatedUsd;
   for (const [raw, values] of Object.entries(checkpoint.entries)) {
-    const key = decode(raw);
+    const key = decodeMessageEntities(raw, true);
     if (Object.hasOwn(base.messages, key)) continue;
     for (const locale of locales) {
-      const value = decode(values[locale] ?? '');
+      const value = decodeMessageEntities(values[locale] ?? '', true);
       if (!value.trim() || tokens(value) !== tokens(key)) throw new Error(`Invalid translation: ${locale} ${key}`);
       output[locale][key] = value;
     }

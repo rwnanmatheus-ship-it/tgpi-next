@@ -9,7 +9,7 @@ import * as runtime from 'react/jsx-runtime';
 import { renderToStaticMarkup } from 'react-dom/server';
 import ts from 'typescript';
 import { academyLocalizationFixture } from './helpers/academy-localization.mjs';
-import { messageLiterals, renderedMessageText } from './helpers/localization-audit.mjs';
+import { decodeMessageEntities, messageLiterals, renderedMessageText } from './helpers/localization-audit.mjs';
 
 const h = academyLocalizationFixture();
 const esc = value => String(value).replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll("'", '&#x27;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
@@ -38,6 +38,11 @@ test('audit sees conditional labels and fallback errors without decoding JavaScr
   visit(source);
   assert.deepEqual(messages, ['Passed', 'Needs review', 'Unable to load learning.']);
   assert.deepEqual(entities, ['Bachelor&apos;s degree', "Bachelor's degree"]);
+});
+
+test('entity decoding preserves escaped entity text and handles catalog spaces', () => {
+  assert.equal(decodeMessageEntities('&amp;lt; &lt; &nbsp;'), '&lt; < &nbsp;');
+  assert.equal(decodeMessageEntities('A&nbsp;B &amp;nbsp;', true), 'A B &nbsp;');
 });
 
 test('release audit rejects an encoded JavaScript label and an untranslated conditional branch', () => {

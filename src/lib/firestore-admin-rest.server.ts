@@ -37,6 +37,7 @@ export type FirestoreWrite =
   | {
       currentDocument?: { exists?: boolean; updateTime?: string };
       update: FirestoreDocument;
+      updateTransforms?: { fieldPath: string; setToServerValue: "REQUEST_TIME" }[];
     }
   | {
       currentDocument?: { exists?: boolean; updateTime?: string };
@@ -262,9 +263,11 @@ export function createFirestoreUpdateWrite(
   path: string,
   data: { [key: string]: JsonValue | undefined },
   currentDocument?: { exists?: boolean; updateTime?: string },
+  requestTimeFields?: string[],
 ): FirestoreWrite {
   return {
     currentDocument,
+    updateTransforms: requestTimeFields?.map(fieldPath => ({ fieldPath, setToServerValue: "REQUEST_TIME" })),
     update: {
       fields: encodeFirestoreFields(data),
       name: firestoreDocumentName(path),

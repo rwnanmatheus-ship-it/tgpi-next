@@ -61,7 +61,7 @@ test('CSV includes every selected destination, missing values, years and source 
   const csv=comparisonCsv(countries,[{country:'portugal',indicator:'SP.POP.TOTL',value:123,year:2025,retrievedAt:'2026-11-09T00:00:00Z',sourceUpdatedAt:null}]);
   assert.equal(csv.split('\r\n').length, 1+195*4);
   assert.match(csv, /"123","people","2025"/);
-  assert.match(csv, /data.worldbank.org/);
+  assert.ok(csv.includes('https://data.worldbank.org/'));
   assert.match(csv, /"","people","","Not available"/);
   assert.equal(csvCell('=HYPERLINK("bad")'), '"\'=HYPERLINK(""bad"")"');
 });
