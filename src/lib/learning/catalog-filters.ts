@@ -1,3 +1,5 @@
+import { locales } from '../localization/config.ts';
+
 export const PREMIUM_SPECIALIZATIONS_SERIES = 'Premium Specializations';
 
 export type CatalogFilters = { query: string; goal: string; series: string; availability: string; credential: string; language: string };
@@ -10,7 +12,7 @@ export function parseCatalogFilters(params: URLSearchParams): CatalogFilters {
     series: oneOf('series', ['all','First 30 Days','Career Without Borders','The Intelligence Toolkit','The Global Money Series', PREMIUM_SPECIALIZATIONS_SERIES], 'all'),
     availability: oneOf('availability', ['all','available','planned'], 'available'),
     credential: oneOf('credential', ['all','criteria_available','none'], 'all'),
-    language: oneOf('language', ['all','en','pt-BR'], 'all'),
+    language: oneOf('language', ['all', ...locales], 'all'),
   };
 }
 export function catalogFilterParams(filters: CatalogFilters, current = new URLSearchParams()): URLSearchParams {

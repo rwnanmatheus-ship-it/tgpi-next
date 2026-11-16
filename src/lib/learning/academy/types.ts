@@ -17,7 +17,7 @@ export type AcademyCourse = {
   lessons: AcademyLesson[]; minutes: number; portfolioMinutes: number; assessmentMinutes: number;
   language: string; image: string; legacyHref?: string; projectBrief?: string; prerequisite?: string; scopeNotice?: string;
 };
-export type AcademyQuestion = { id: string; lessonId: string; prompt: string; language?: Locale; translations?: AcademyTranslations; options: Array<{ id: string; label: string; translations?: AcademyTranslations }>; essential: boolean };
+export type AcademyQuestion = { id: string; lessonId: string; prompt: string; language?: Locale; translations?: AcademyTranslations; options: Array<{ id: string; label: string; language?: string; translations?: AcademyTranslations }>; essential: boolean };
 export type AcademyPrivateQuestion = AcademyQuestion & { correctOptionId: string; explanation: string };
 export type AcademyChallenge = {
   id: string; target: string; createdAt: string;

@@ -49,6 +49,13 @@ test('credential display distinguishes professional, flagship, practice and plan
  const professional=courseLearningPolicy({...base,learningPolicy:{assessmentPolicy:'quiz_project_review',publicationStatus:'early_access',credentialStatus:'criteria_available'}});
  assert.match(credentialLabel(professional),/human review/);
 });
+test('catalogue language URLs accept every supported instructional locale', () => {
+ for (const language of ['en', 'pt-BR', 'es', 'fr', 'de', 'it']) {
+   const filters = { ...defaultCatalogFilters, language };
+   assert.equal(parseCatalogFilters(catalogFilterParams(filters)).language, language);
+ }
+});
+
 test('catalogue filter links round-trip, reject invalid enums and preserve unrelated context',()=>{
  const wanted={...defaultCatalogFilters,query:'dados & IA',credential:'criteria_available',language:'pt-BR',goal:'future-of-work'};
  const params=catalogFilterParams(wanted,new URLSearchParams('source=workspace'));assert.deepEqual(parseCatalogFilters(params),wanted);assert.equal(params.get('source'),'workspace');
