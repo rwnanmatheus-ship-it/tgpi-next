@@ -30,7 +30,7 @@ jobs:
           node -e 'const fs=require("node:fs");const d=JSON.parse(fs.readFileSync("country-context.json","utf8"));if(d.countryCoverage<190 || d.snapshot.series.length!==5 || d.snapshot.series.some(s=>Date.now()-Date.parse(s.retrievedAt)>48*3600000))throw Error("Country context freshness or coverage requires investigation");console.log(JSON.stringify({revision:d.snapshot.revision,coverage:d.countryCoverage,observations:d.snapshot.observations.length}));'
       - name: Archive public observations and provenance
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: intelligence-evidence-${{ github.run_id }}
           path: |

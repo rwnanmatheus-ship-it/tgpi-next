@@ -4,13 +4,16 @@ import test from 'node:test';
 import ts from 'typescript';
 
 const code = ts.transpileModule(readFileSync('src/app/api/stripe/create-checkout-session/route.ts', 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
-function harness({ signedIn = true, sameOrigin = true, offer = true, subscription = null, status = 'open' } = {}) {
+function harness({ signedIn = true, sameOrigin = true, offer = true, subscription = null, status = 'open', providerFailure } = {}) {
   let creates = 0;
   let params, options;
   class AuthenticationError extends Error {}
   const exports = {};
   const stripe = {
-    prices: { retrieve: async () => ({}) },
+    prices: { retrieve: async () => {
+      if (providerFailure) throw providerFailure;
+      return {};
+    } },
     checkout: { sessions: {
       create: async (p, o) => { creates++; params = p; options = o; return { id: 'cs_test' }; },
       retrieve: async () => ({ status, url: status === 'open' ? 'https://checkout.stripe.com/test-only' : null }),
@@ -68,4 +71,68 @@ test('completed and expired idempotent replays do not return a payable URL', asy
     assert.equal(response.status, 409);
     assert.equal((await response.json()).code, 'CHECKOUT_NOT_OPEN');
   }
+});
+
+
+test('checkout provider errors are kept out of production logs and responses', async (t) => {
+  const failure = Object.assign(new Error('synthetic buyer details'), {
+    raw: { customer_email: 'synthetic-buyer@example.test' },
+  });
+  const log = t.mock.method(console, 'error', () => {});
+  const response = await harness({ providerFailure: failure }).post();
+  assert.equal(response.status, 500);
+  assert.deepEqual(await response.json(), { error: 'Could not create checkout session.' });
+  assert.deepEqual(log.mock.calls.map(call => call.arguments), [
+    ['Stripe checkout session creation failed'],
+  ]);
+});
+
+test('checkout lookup applies the same private cache policy to success and errors', async (t) => {
+  const lookupSource = readFileSync('src/app/api/stripe/checkout-session/route.ts', 'utf8');
+  const lookupCode = ts.transpileModule(lookupSource, {
+    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
+  }).outputText;
+  class AuthenticationError extends Error {}
+  const log = t.mock.method(console, 'error', () => {});
+
+  for (const scenario of [
+    { status: 200 },
+    { status: 400, sessionId: 'bad-id' },
+    { status: 401, signedOut: true },
+    { status: 404, owner: 'another-user' },
+    { status: 500, fail: true },
+  ]) {
+    const exports = {};
+    const dependencies = {
+      'next/server': { NextResponse: { json: (body, init) => Response.json(body, init) } },
+      '@/lib/auth/guards': {
+        TgpiAuthenticationError: AuthenticationError,
+        requireApiUser: async () => {
+          if (scenario.signedOut) throw new AuthenticationError();
+          return { uid: 'customer' };
+        },
+      },
+      '@/lib/billing.server': {
+        getUserBillingRecord: async () => ({ plan: 'premium', status: 'active' }),
+      },
+      '@/lib/stripe': {
+        getStripeServer: () => ({ checkout: { sessions: {
+          retrieve: async () => {
+            if (scenario.fail) throw new Error('synthetic Stripe error details');
+            return { id: 'cs_test_valid', client_reference_id: scenario.owner ?? 'customer' };
+          },
+        } } }),
+      },
+    };
+    new Function('require', 'exports', lookupCode)(id => dependencies[id], exports);
+    const response = await exports.GET(new Request(
+      'https://preview.example/api/stripe/checkout-session?session_id=' + (scenario.sessionId ?? 'cs_test_valid'),
+    ));
+    assert.equal(response.status, scenario.status);
+    assert.equal(response.headers.get('cache-control'), 'private, no-store');
+  }
+
+  assert.deepEqual(log.mock.calls.map(call => call.arguments), [
+    ['Stripe checkout session lookup failed'],
+  ]);
 });

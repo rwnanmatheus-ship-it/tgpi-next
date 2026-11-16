@@ -3,6 +3,7 @@ import { requireApiUser, TgpiAuthenticationError } from "@/lib/auth/guards";
 import { getUserBillingRecord } from "@/lib/billing.server";
 import { getStripeServer } from "@/lib/stripe";
 
+const headers = { "Cache-Control": "private, no-store" };
 const CHECKOUT_SESSION_ID = /^cs_(?:test_|live_)?[A-Za-z0-9]+$/;
 
 export async function GET(request: Request) {
@@ -18,7 +19,7 @@ export async function GET(request: Request) {
     ) {
       return NextResponse.json(
         { error: "Invalid session_id." },
-        { status: 400 }
+        { status: 400, headers }
       );
     }
 
@@ -30,7 +31,7 @@ export async function GET(request: Request) {
     if (session.client_reference_id !== user.uid) {
       return NextResponse.json(
         { error: "Checkout session not found." },
-        { status: 404 }
+        { status: 404, headers }
       );
     }
 
@@ -46,19 +47,19 @@ export async function GET(request: Request) {
         typeof session.subscription === "string"
           ? session.subscription
           : session.subscription?.id || "",
-    });
+    }, { headers });
   } catch (error) {
     if (error instanceof TgpiAuthenticationError) {
       return NextResponse.json(
         { error: "Authentication required." },
-        { status: 401 }
+        { status: 401, headers }
       );
     }
 
-    console.error("Stripe session fetch error:", error);
+    console.error("Stripe checkout session lookup failed");
     return NextResponse.json(
       { error: "Could not fetch checkout session." },
-      { status: 500 }
+      { status: 500, headers }
     );
   }
 }

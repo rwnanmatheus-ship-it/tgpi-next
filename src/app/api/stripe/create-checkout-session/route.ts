@@ -124,7 +124,7 @@ export async function POST(request: Request) {
   } catch (error) {
     const status = error instanceof TgpiAuthenticationError ? 401 : 500;
 
-    console.error("Stripe checkout session error:", error);
+    if (status !== 401) console.error("Stripe checkout session creation failed");
     return NextResponse.json(
       { error: status === 401 ? "Authentication required." : "Could not create checkout session." },
       { status }
