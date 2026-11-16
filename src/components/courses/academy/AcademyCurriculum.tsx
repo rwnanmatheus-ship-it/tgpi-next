@@ -3,14 +3,18 @@ import { academyPracticeCopy } from '@/lib/localization/academy-practice-copy';
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useLocale } from '@/components/localization/LocaleProvider';
-import { localizeAcademyCourse } from '@/lib/localization/academy-content';
+import { localizeAuthoredContent } from '@/lib/localization/authored-content';
 import type { AcademyCourse } from '@/lib/learning/academy/types';
 import AcademyIcon from './AcademyIcon';
 import styles from './academy.module.css';
 
-export default function AcademyCurriculum({ course: original }: { course: AcademyCourse }) {
+type Curriculum = Pick<AcademyCourse, 'id' | 'language'> & {
+  lessons: Pick<AcademyCourse['lessons'][number], 'id' | 'title' | 'objective' | 'deliverable' | 'minutes' | 'project' | 'practiceLab' | 'foundation' | 'language'>[];
+};
+
+export default function AcademyCurriculum({ course: original }: { course: Curriculum }) {
   const { t, locale } = useLocale();
-  const course = useMemo(() => localizeAcademyCourse(original, locale), [original, locale]);
+  const course = useMemo(() => original.language === 'pt-BR' ? original : { ...original, lessons: original.lessons.map(lesson => lesson.language ? lesson : localizeAuthoredContent(lesson, locale)) }, [original, locale]);
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState<'all' | 'project' | 'labs'>('all');
   const normalize = (text: string) => text.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase();

@@ -1,3 +1,4 @@
+import { PREMIUM_REQUIRED, premiumUpgradeHref } from "@/lib/premium-upgrade";
 import { safeReturnTo } from "@/lib/auth/return-to";
 import { getUserBillingRecord } from "@/lib/billing.server";
 import "server-only";
@@ -70,7 +71,17 @@ export async function requireApiUser(request?: Request) {
 
 export class TgpiPremiumRequiredError extends Error {
   readonly status = 403;
-  constructor() { super('Premium access is required.'); }
+  constructor() { super('Subscribe to TGPI Premium to continue.'); }
+}
+
+export function premiumRequiredBody(returnTo?: string) {
+  return { error: new TgpiPremiumRequiredError().message, code: PREMIUM_REQUIRED, upgradeHref: premiumUpgradeHref(returnTo) };
+}
+
+export function featureAccessError(error: unknown, headers: HeadersInit, returnTo: string) {
+  if (error instanceof TgpiAuthenticationError) return Response.json({ error: 'Sign in to continue.' }, { status: 401, headers });
+  if (error instanceof TgpiPremiumRequiredError) return Response.json(premiumRequiredBody(returnTo), { status: 403, headers });
+  return Response.json({ error: 'Membership verification is temporarily unavailable. Please try again.' }, { status: 503, headers });
 }
 
 /** API entitlement matches the protected page and never trusts editable user metadata. */
@@ -96,7 +107,9 @@ export async function requireAdmin() {
 }
 
 export async function requirePremium(returnTo?: string) {
-  const session = await requireUser(returnTo);
+  const { userId, sessionId } = await auth();
+  if (!userId || !sessionId) redirect(returnTo ? premiumUpgradeHref(returnTo) : "/sign-in");
+  const session = { userId, sessionId };
   const client = await clerkClient();
   const user = await client.users.getUser(session.userId);
   const billing = await getUserBillingRecord(session.userId);
@@ -110,7 +123,7 @@ export async function requirePremium(returnTo?: string) {
   );
 
   if (billing.plan !== "premium" && !controlledAccessMode) {
-    redirect("/pricing");
+    redirect(premiumUpgradeHref(returnTo));
   }
 
   return {

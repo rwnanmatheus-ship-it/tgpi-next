@@ -1,6 +1,8 @@
 import { recordFunnelEvent, requestFunnelConsent } from "@/lib/funnel.server";
 import type { FunnelEvent } from "@/lib/funnel";
 import { scheduleNotificationReconciliation } from "@/lib/notifications/schedule.server";
+import { isPremiumAcademyCourse } from "@/data/courses/academy/premium-policy";
+import { featureAccessError, requirePremiumApiUser } from "@/lib/auth/guards";
 import { auth } from "@clerk/nextjs/server";
 import { FirestoreAdminError } from "@/lib/firestore-admin-rest.server";
 import { NextResponse } from "next/server";
@@ -64,6 +66,10 @@ export async function PATCH(request: Request) {
     }
 
     const mutation = parseActivationMutation(JSON.parse(body) as unknown);
+    if ("courseId" in mutation && isPremiumAcademyCourse(mutation.courseId)) {
+      try { await requirePremiumApiUser(request); }
+      catch (error) { return featureAccessError(error, { "Cache-Control": "private, no-store" }, `/courses/${mutation.courseId}/study`); }
+    }
     const progress = await updateUserActivationProgress(
       session.userId,
       mutation,

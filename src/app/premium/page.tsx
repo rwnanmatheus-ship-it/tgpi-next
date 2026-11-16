@@ -40,7 +40,7 @@ function formatPeriodEnd(locale: import('@/lib/localization/config').Locale, val
 
 export default async function PremiumPage() {
   const locale = await getFormattingLocale();
-  const { accessMode, billing, user } = await requirePremium();
+  const { accessMode, billing, user } = await requirePremium("/premium");
   const isFounderAccess = accessMode === "founder";
   const isPreviewAccess = accessMode === "preview";
   const onboarding = normalizeOnboardingData(

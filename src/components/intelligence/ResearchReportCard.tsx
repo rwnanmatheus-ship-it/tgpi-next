@@ -1,6 +1,8 @@
 "use client";
 
 import { LocalizedText, useLocale } from "@/components/localization/LocaleProvider";
+import Link from "next/link";
+import { PREMIUM_REQUIRED, premiumUpgradeHref } from "@/lib/premium-upgrade";
 import { useUser } from "@clerk/nextjs";
 import { useState } from "react";
 import { emptyWorksheet, validateWorksheet, RESEARCH_TASKS, type ResearchWorksheet } from "@/lib/intelligence/research-plan";
@@ -10,6 +12,8 @@ export default function ResearchReportCard({ country, name, worksheet }: { count
   const { t } = useLocale();
   const [slot, setSlot] = useState("1");
   const [busy, setBusy] = useState(false), [error, setError] = useState("");
+  const [upgradeNeeded, setUpgradeNeeded] = useState(false);
+  const upgradeHref = premiumUpgradeHref(`/country-fit?country=${country}#research-workbench`);
   async function download() {
     setBusy(true); setError("");
     try {
@@ -25,9 +29,9 @@ export default function ResearchReportCard({ country, name, worksheet }: { count
         }
       }
       const response = await fetch("/api/intelligence/report", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(reportWorksheet) });
-      if (!response.ok) { const data = await response.json(); throw Error(data.error || "Unable to create report."); }
+      if (!response.ok) { const data = await response.json(); setUpgradeNeeded(data.code === PREMIUM_REQUIRED || response.status === 401); throw Error(data.error || "Unable to create report."); }
       const url = URL.createObjectURL(await response.blob()); const link = document.createElement("a"); link.href = url; link.download = `TGPI-${country}-research.pdf`; link.click(); setTimeout(() => URL.revokeObjectURL(url), 10_000);
     } catch (e) { setError(e instanceof Error ? e.message : "Please try again."); } finally { setBusy(false); }
   }
-  return <aside className="research-report-card"><div><p className="ig-eyebrow"><LocalizedText text={"TGPI / Research edition"} /></p><strong><LocalizedText text={"Decision brief: {country}"} values={{ country: t(name) }} /></strong><p>{worksheet ? <LocalizedText text={"Download this scenario with your evidence, checkpoints and dated sources."} /> : user ? <LocalizedText text={"Download a saved scenario with published country evidence. Unsaved drafts are available in the Decision Lab."} /> : <LocalizedText text={"Download published country evidence and an empty planning worksheet."} />}</p></div>{!worksheet && user && <label className="report-scenario-select"><LocalizedText text={"Saved scenario"} /><select value={slot} disabled={busy || !isLoaded} onChange={event => setSlot(event.target.value)}>{["1", "2", "3"].map(id => <option key={id} value={id}><LocalizedText text="Scenario" />{" "}{id}</option>)}</select></label>}<button type="button" className="ig-button" disabled={busy || !isLoaded} onClick={download}>{busy ? <LocalizedText text={"Preparing PDF…"} /> : <LocalizedText text={"Download research PDF ↓"} />}</button>{error && <p role="alert"><LocalizedText text={error} /></p>}</aside>;
+  return <aside className="research-report-card"><div><p className="ig-eyebrow"><LocalizedText text={"TGPI Premium"} /></p><strong><LocalizedText text={"Decision brief: {country}"} values={{ country: t(name) }} /></strong><p>{worksheet ? <LocalizedText text={"Download this scenario with your evidence, checkpoints and dated sources."} /> : user ? <LocalizedText text={"Download a saved scenario with published country evidence. Unsaved drafts are available in the Decision Lab."} /> : <LocalizedText text={"Download published country evidence and an empty planning worksheet."} />}</p></div>{!worksheet && user && <label className="report-scenario-select"><LocalizedText text={"Saved scenario"} /><select value={slot} disabled={busy || !isLoaded} onChange={event => setSlot(event.target.value)}>{["1", "2", "3"].map(id => <option key={id} value={id}><LocalizedText text="Scenario" />{" "}{id}</option>)}</select></label>}{(isLoaded && !user || upgradeNeeded) ? <Link href={upgradeHref} className="ig-button"><LocalizedText text="Subscribe to TGPI Premium" /></Link> : <button type="button" className="ig-button" disabled={busy || !isLoaded} onClick={download}>{busy ? <LocalizedText text={"Preparing PDF…"} /> : <LocalizedText text={"Download research PDF ↓"} />}</button>}{error && <p role="alert"><LocalizedText text={error} /></p>}</aside>;
 }

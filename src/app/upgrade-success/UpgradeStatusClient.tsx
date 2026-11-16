@@ -2,6 +2,7 @@
 
 
 import { LocalizedText } from "@/components/localization/LocaleProvider";
+import { premiumCheckoutDestination, premiumDestination } from "@/lib/premium-upgrade";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -24,6 +25,7 @@ export default function UpgradeStatusClient({ sessionId }: { sessionId: string }
   const [status, setStatus] = useState(
     sessionId ? "Confirming your checkout securely…" : "No checkout session was provided."
   );
+  const [destination, setDestination] = useState("");
   const [confirmed, setConfirmed] = useState(false);
 
   useEffect(() => {
@@ -48,6 +50,7 @@ export default function UpgradeStatusClient({ sessionId }: { sessionId: string }
           data.status === "complete" &&
           data.plan === "premium"
         ) {
+          try { setDestination(premiumDestination(sessionStorage.getItem(premiumCheckoutDestination))); } catch { /* The standard confirmation link remains available. */ }
           setConfirmed(true);
           setStatus("TGPI Premium is active. Your access was confirmed securely.");
           return;
@@ -119,8 +122,8 @@ export default function UpgradeStatusClient({ sessionId }: { sessionId: string }
             <p className="mx-auto max-w-2xl rounded-2xl border border-[#A7D8C2] bg-[#EEF8F3] p-4 text-sm font-bold leading-6 text-[#236147]"><LocalizedText text={"Your Premium entitlement is tied to your authenticated TGPI Global Key and can only be changed by verified Stripe webhooks."} /></p>
           ) : null}
           <div className="mt-7 flex flex-wrap justify-center gap-3">
-            <Link href={confirmed ? "/premium" : "/profile"} className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#0B1F3A] px-6 text-sm font-extrabold text-white">
-              {confirmed ? <LocalizedText text={"Open Premium workspace"} /> : <LocalizedText text={"Go to workspace"} />}
+            <Link href={confirmed ? destination || "/premium" : "/profile"} className="inline-flex min-h-12 items-center justify-center rounded-xl bg-[#0B1F3A] px-6 text-sm font-extrabold text-white">
+              {confirmed ? <LocalizedText text={destination ? "Continue with Premium" : "Open Premium workspace"} /> : <LocalizedText text={"Go to workspace"} />}
             </Link>
             <Link href="/pricing" className="inline-flex min-h-12 items-center justify-center rounded-xl border border-[#D8D2C4] bg-white px-6 text-sm font-extrabold"><LocalizedText text={"Back to pricing"} /></Link>
           </div>

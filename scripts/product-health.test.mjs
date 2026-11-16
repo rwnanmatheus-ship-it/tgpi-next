@@ -31,6 +31,7 @@ function fixture({ userId = "user_admin", sessionId = "sess_admin", role = "admi
     "@/lib/auth/return-to": load("auth/return-to.ts", {}),
     "@/lib/billing.server": {},
     "@/lib/premium-access.server": {},
+    "@/lib/premium-upgrade": {},
     "@/lib/account-profile": {},
     "@clerk/nextjs/server": {
       auth: async () => ({ userId, sessionId }),

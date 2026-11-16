@@ -31,6 +31,7 @@ function harness() {
   const overrides = {
     'next/server': { NextResponse: { json: (value, init) => Response.json(value, init) } },
     '@/lib/auth/guards': {
+      premiumRequiredBody: returnTo => ({ code: 'PREMIUM_REQUIRED', upgradeHref: `/pricing?next=${encodeURIComponent(returnTo)}#membership` }),
       requireApiUser, TgpiAuthenticationError: AuthenticationError, TgpiPremiumRequiredError: PremiumRequiredError,
       requirePremiumApiUser: async request => {
         const user = await requireApiUser();
@@ -323,8 +324,23 @@ test('previous editions remain resumable, retain their signed workload and canno
 });
 
 
+test('every current Academy course uses the same entitlement in the catalog and classroom', () => {
+  const h = harness();
+  const { isPremiumAcademyCourse } = h.load(resolve('src/data/courses/academy/premium-policy.ts'));
+  const { courseLearningPolicy } = h.load(resolve('src/lib/learning/catalog-policy.ts'));
+  const { coursesOverview } = h.load(resolve('src/data/courses-overview.ts'));
+  const free = h.catalog.academyCourses.filter(course => !isPremiumAcademyCourse(course.id));
+  assert.equal(free.length, 13);
+  assert.ok(free.some(course => course.id === 'global-english-2026'));
+  assert.equal(isPremiumAcademyCourse('english-abroad'), false);
+  assert.equal(isPremiumAcademyCourse('future-course'), true);
+  for (const course of coursesOverview.filter(item => h.catalog.getAcademyCourse(item.id))) {
+    assert.equal(courseLearningPolicy(course).accessPolicy, isPremiumAcademyCourse(course.id) ? 'premium' : 'free_account', course.id);
+  }
+});
+
 test('Premium study API checks session and active entitlement for both reads and writes', async () => {
-  for (const courseId of ['sql-produto-dados', 'mlops-producao']) {
+  for (const courseId of ['sql-produto-dados', 'mlops-producao', 'ia-trabalho-global', 'housing-abroad']) {
     const h = harness(), route = h.load(resolve('src/app/api/learning/academy/[courseId]/route.ts'));
     const course = h.catalog.getAcademyCourse(courseId);
     const context = { params: Promise.resolve({ courseId: course.id }) };
@@ -336,7 +352,9 @@ test('Premium study API checks session and active entitlement for both reads and
     });
 
     assert.equal((await route.GET(new Request(url), context)).status, 401);
-    assert.equal((await route.GET(read(), context)).status, 403);
+    const locked = await route.GET(read(), context);
+    assert.equal(locked.status, 403);
+    assert.equal((await locked.json()).code, 'PREMIUM_REQUIRED');
     assert.equal((await route.POST(enroll(), context)).status, 403);
     assert.equal(h.documents.size, 0);
     h.enablePremium();

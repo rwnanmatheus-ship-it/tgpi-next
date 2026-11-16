@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { LocalizedText } from "@/components/localization/LocaleProvider";
-import { requireUser } from "@/lib/auth/guards";
+import { isPremiumAcademyCourse } from "@/data/courses/academy/premium-policy";
+import { requirePremium, requireUser } from "@/lib/auth/guards";
 import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import LessonExperience from "@/components/courses/LessonExperience";
@@ -41,7 +42,6 @@ export async function generateMetadata({
 }
 
 export default async function LessonPage({ params }: LessonPageProps) {
-  await requireUser();
   const { id, lessonId } = await params;
   const course = getCourse(id);
   const lesson = course ? getCourseLesson(course, lessonId) : undefined;
@@ -49,6 +49,9 @@ export default async function LessonPage({ params }: LessonPageProps) {
   if (!course || !lesson) notFound();
 
   if (id !== course.id) redirect(`/courses/${course.id}/lessons/${lessonId}`);
+
+  const path = `/courses/${course.id}/lessons/${lessonId}`;
+  await (isPremiumAcademyCourse(course.id) ? requirePremium(path) : requireUser(path));
 
   const lessons = getCourseLessons(course);
   const lessonIndex = getCourseLessonPosition(course, lesson.id);

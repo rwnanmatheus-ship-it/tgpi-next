@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
+import { premiumCheckoutDestination, premiumUpgradeHref } from "@/lib/premium-upgrade";
 import { blocksNewCheckout } from "@/lib/billing";
 import type { BillingStatusResponse } from "@/types";
 
@@ -33,9 +34,11 @@ function getBillingStatus(userId: string) {
 export default function PremiumActionButton({
   billingEnabled,
   showMembershipStatus = false,
+  returnTo,
 }: {
   billingEnabled: boolean;
   showMembershipStatus?: boolean;
+  returnTo?: string;
 }) {
   const { locale } = useLocale();
   const { isLoaded, isSignedIn, userId } = useAuth();
@@ -129,12 +132,12 @@ export default function PremiumActionButton({
 
     try {
       if (!isLoaded || !isSignedIn) {
-        router.push("/sign-in?redirect_url=%2Fpricing%23membership");
+        router.push(`/sign-in?next=${encodeURIComponent(premiumUpgradeHref(returnTo))}`);
         return;
       }
 
       if (hasControlledAccess || hasPremiumAccess) {
-        router.push("/premium");
+        router.push(returnTo || "/premium");
         return;
       }
 
@@ -153,18 +156,18 @@ export default function PremiumActionButton({
         code?: string;
       };
 
-      if (response.status === 503 || data.code === "BILLING_DISABLED") {
+      if (data.code === "BILLING_DISABLED") {
         router.push("/premium-waitlist");
         return;
       }
 
       if (response.status === 401) {
-        router.push("/sign-in?redirect_url=%2Fpricing%23membership");
+        router.push(`/sign-in?next=${encodeURIComponent(premiumUpgradeHref(returnTo))}`);
         return;
       }
 
       if (response.status === 409 && data.code === "ALREADY_PREMIUM") {
-        router.push("/premium");
+        router.push(returnTo || "/premium");
         return;
       }
 
@@ -177,6 +180,7 @@ export default function PremiumActionButton({
         throw new Error(data.error || "Could not start checkout.");
       }
 
+      try { sessionStorage.setItem(premiumCheckoutDestination, returnTo ?? ""); } catch { /* The standard confirmation link remains available. */ }
       window.location.href = data.url;
     } catch (checkoutError) {
       setError(
@@ -270,7 +274,7 @@ export default function PremiumActionButton({
               : hasPreviewAccess
                 ? <LocalizedText text={"Open TGPI Premium Preview"} />
                 : hasPremiumAccess
-                  ? <LocalizedText text={"Open Premium workspace"} />
+                  ? <LocalizedText text={returnTo ? "Continue with Premium" : "Open Premium workspace"} />
                   : isSignedIn && !billing
                     ? <LocalizedText text={"Retry membership check"} />
                     : shouldManageBilling

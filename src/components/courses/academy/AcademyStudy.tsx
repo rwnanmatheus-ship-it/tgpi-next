@@ -5,6 +5,7 @@ import CourseArrow from '../CourseArrow';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useAuth } from '@clerk/nextjs';
 import Link from 'next/link';
+import { premiumUpgradeHref } from '@/lib/premium-upgrade';
 import { useLocale } from '@/components/localization/LocaleProvider';
 import { localizeAcademyCourse } from '@/lib/localization/academy-content';
 import type { AcademyCourse, AcademyStatus, AcademyStudyPlan } from '@/lib/learning/academy/types';
@@ -197,7 +198,7 @@ function StudySession({ course: original, latestVersion, sessionId, initialLesso
   return <main className={`${styles.page} ${styles.studioPage} ${focus ? styles.focusMode : ''} ${largeText ? styles.largeText : ''}`} lang={locale}>
     <div className={styles.topline}><Link className={styles.breadcrumb} href={`/courses/${course.id}`}>← {t('Course overview')}</Link><span className={styles.edition}>{t('Edition')} {course.version}</span><Link className={styles.breadcrumb} href="/certificates"><AcademyIcon name="shield" size={16} />{t('My certificates')}</Link></div>
     <AcademyStudioHeader course={course} record={record} t={t} onContinue={continueJourney} disabled={busy || dirty} />
-    {error && <div role="alert" className={styles.error}>{t(error)}{button('Reload confirmed progress', () => { if (!dirty || window.confirm(t('Your local unsaved draft will be replaced by the last confirmed version. Continue?'))) void load(); }, false, true)}</div>}
+    {error && <div role="alert" className={styles.error}>{t(error)}{error === 'Subscribe to TGPI Premium to continue.' && <Link className={styles.link} href={premiumUpgradeHref(`/courses/${course.id}/study?lesson=${encodeURIComponent(selected)}`)}>{t('Subscribe to TGPI Premium')}</Link>}{button('Reload confirmed progress', () => { if (!dirty || window.confirm(t('Your local unsaved draft will be replaced by the last confirmed version. Continue?'))) void load(); }, false, true)}</div>}
     {!loaded && !error && <p role="status">{t('Loading your learning record…')}</p>}
     {loaded && !record && <>
       <AcademyJourney course={course} t={t} />

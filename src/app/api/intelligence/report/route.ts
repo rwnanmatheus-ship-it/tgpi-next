@@ -1,3 +1,4 @@
+import { requirePremiumApiUser, featureAccessError } from "@/lib/auth/guards";
 import { currentUser } from "@clerk/nextjs/server";
 import identities from "@/data/intelligence/identities.json";
 import { RESEARCH_TASKS, validateWorksheet } from "@/lib/intelligence/research-plan";
@@ -31,6 +32,8 @@ const timelineLabels = {
 export async function POST(request: Request) {
   if (request.headers.get("origin") !== new URL(request.url).origin) return Response.json({ error: "Same-origin request required." }, { status: 403, headers });
   if (!request.headers.get("content-type")?.includes("application/json")) return Response.json({ error: "JSON required." }, { status: 415, headers });
+  try { await requirePremiumApiUser(); }
+  catch (error) { return featureAccessError(error, headers, "/intelligence"); }
   try {
     const reader = request.body?.getReader(); if (!reader) throw new SyntaxError(); const parts: Uint8Array[] = []; let size = 0;
     while (true) { const p = await reader.read(); if (p.done) break; size += p.value.length; if (size > 4096) { await reader.cancel(); return Response.json({ error: "Report input too large." }, { status: 413, headers }); } parts.push(p.value); }
