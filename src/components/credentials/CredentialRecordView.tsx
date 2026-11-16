@@ -89,7 +89,7 @@ export default function CredentialRecordView({
           courseTitle={credential.courseTitle}
           issuedAt={credential.issuedAt}
           professionalSharing={owner && credential.professionalEvidence && !credential.automatedEvidence ? { courseId: credential.courseId, version: credential.courseVersion } : undefined}
-          sharingSettingsUrl={owner && credential.automatedEvidence ? `/courses/${encodeURIComponent(credential.courseId)}/study#certificate-sharing` : undefined}
+          canManageAcademySharing={owner && credential.integrityVerified && Boolean(credential.automatedEvidence)}
           downloadUrl={`/api/credentials/${encodeURIComponent(credential.id)}?download=1`}
           verificationUrl={verificationUrl}
           canDownload={verified}

@@ -24,7 +24,7 @@ function courseFor(id: string, version = ACADEMY_VERSION) {
   if (!isLearningStorageConfigured()) throw new AcademyError('Secure learning storage is unavailable. Please try again.', 503);
   return course;
 }
-function assertRecord(record: AcademyRecord | undefined, identity: Identity, course: AcademyCourse): asserts record is AcademyRecord {
+function assertRecord(record: AcademyRecord | undefined, identity: Pick<Identity, 'uid'>, course: AcademyCourse): asserts record is AcademyRecord {
   if (!record || record.uid !== identity.uid || record.courseId !== course.id || record.version !== course.version) throw new AcademyError('Start this course edition before continuing.', 409);
 }
 function allLessons(course: AcademyCourse, record: AcademyRecord) { return course.lessons.every(l => record.completed[l.id]?.score === 100); }
@@ -245,15 +245,24 @@ async function issueAcademyCredential(identity: Identity, course: AcademyCourse,
   await tryPublishNotification(identity.uid, { key: `credential:${credentialId}`, category: 'learning', title: 'Your verified credential is ready', body: 'Your issued credential is available in your private certificate workspace.', href: '/certificates', actionLabel: 'View my credential', important: true });
   return credentialId;
 }
-async function academySharing(identity: Identity, course: AcademyCourse, sharing: boolean) {
+export async function setAcademyCredentialSharing(uid: string, credentialId: string, sharing: boolean) {
+  const credential = (await get<TgpiLearningCredential>(`tgpiLearningCredentials/${credentialId}`))?.data;
+  if (!credential || credential.ownerUid !== uid || credential.id !== credentialId || !credential.automatedEvidence) {
+    throw new AcademyError('Certificate not found.', 404);
+  }
+  await academySharing({ uid }, courseFor(credential.courseId, credential.courseVersion), sharing, credentialId);
+}
+
+async function academySharing(identity: Pick<Identity, 'uid'>, course: AcademyCourse, sharing: boolean, credentialId?: string) {
   const path = academyRecordPath(identity.uid, course.id, course.version);
   return transaction(async ({ getDocuments }) => {
     const doc = (await getDocuments<AcademyRecord>([path])).get(path), record = doc?.data;
     assertRecord(record, identity, course);
-    if (!record.credentialId) throw new AcademyError('Certificate not found.', 404);
+    if (!record.credentialId || (credentialId && record.credentialId !== credentialId)) throw new AcademyError('Certificate not found.', 404);
     const publicPath = `tgpiLearningCredentials/${record.credentialId}`, ownerPath = `tgpiLearningUsers/${identity.uid}/credentials/${record.credentialId}`;
     const docs = await getDocuments<TgpiLearningCredential>([publicPath, ownerPath]), credential = docs.get(publicPath)?.data;
-    if (!credential || credential.ownerUid !== identity.uid || !credential.automatedEvidence || !verifyLearningCredentialIntegrity(credential) || !docs.get(ownerPath)) throw new AcademyError('Certificate integrity could not be verified.', 409);
+    if (!credential || credential.id !== record.credentialId || credential.ownerUid !== identity.uid || credential.courseId !== course.id || credential.courseVersion !== course.version || !credential.automatedEvidence || !verifyLearningCredentialIntegrity(credential) || !docs.get(ownerPath)) throw new AcademyError('Certificate integrity could not be verified.', 409);
+    if (record.sharing === sharing && credential.professionalEvidence?.sharing === sharing) return { result: null, writes: [] };
     const { verificationHash: _old, ...unsigned } = credential; void _old;
     unsigned.professionalEvidence = { ...credential.professionalEvidence!, sharing };
     const updated = { ...unsigned, verificationHash: signLearningCredential(unsigned) };

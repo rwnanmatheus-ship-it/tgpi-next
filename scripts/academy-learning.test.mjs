@@ -236,7 +236,7 @@ test('legacy notes and signed records are preserved without silently inheriting 
 });
 
 test('unverified email preserves completion, later issuance is idempotent, sharing resigns both copies and denies other owners',async()=>{
- const h=harness(),course=h.catalog.academyCourses[0],unverified={...identity,emailVerified:false},mutate=mutation(h,course,unverified);
+ const h=harness(),course=h.catalog.getAcademyCourse('housing-abroad'),unverified={...identity,emailVerified:false},mutate=mutation(h,course,unverified);
  let status=await completeLessons(h,course,unverified);
  status=await mutate({action:'begin',revision:status.record.revision,target:'final'});status=await mutate(submittedAnswers(h,course,status,false,unverified));h.advance(24*60*60*1000);
  status=await mutate({action:'begin',revision:status.record.revision,target:'retention'});status=await mutate(submittedAnswers(h,course,status,false,unverified));
@@ -247,6 +247,15 @@ test('unverified email preserves completion, later issuance is idempotent, shari
  const publicCopy=h.documents.get(`tgpiLearningCredentials/${id}`).data,ownerCopy=h.documents.get(`tgpiLearningUsers/${identity.uid}/credentials/${id}`).data;
  assert.deepEqual(publicCopy,ownerCopy);assert.ok(h.load(resolve('src/lib/credential-signing.server.ts')).verifyLearningCredentialIntegrity(publicCopy));
  await assert.rejects(()=>mutation(h,course,{...identity,uid:'outsider'})({action:'sharing',sharing:false}),/Start this course edition/);
+ await assert.rejects(() => h.service.setAcademyCredentialSharing('outsider', id, false), /Certificate not found/);
+ const actions = h.load(resolve('src/lib/learning/academy/credential-actions.ts'));
+ assert.deepEqual(await actions.updateAcademyCredentialSharing(id, false), { ok: true });
+ assert.equal(h.documents.get(`tgpiLearningCredentials/${id}`).data.professionalEvidence.sharing, false);
+ assert.deepEqual(await actions.updateAcademyCredentialSharing(id, true), { ok: true });
+ assert.equal(h.documents.get(`tgpiLearningUsers/${identity.uid}/credentials/${id}`).data.professionalEvidence.sharing, true);
+ h.signOut();
+ assert.deepEqual(await actions.updateAcademyCredentialSharing(id, false), { ok: false });
+ assert.equal(h.documents.get(`tgpiLearningCredentials/${id}`).data.professionalEvidence.sharing, true);
 });
 
 test('academy completes work with an outdated name but signs the full name only after reconfirmation', async () => {

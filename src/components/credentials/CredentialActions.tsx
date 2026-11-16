@@ -2,6 +2,7 @@
 import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
 
 import Link from "next/link";
+import { updateAcademyCredentialSharing } from "@/lib/learning/academy/credential-actions";
 import { useRouter } from "next/navigation";
 import CertificateDownloadButton from "@/components/credentials/CertificateDownloadButton";
 import { useState } from "react";
@@ -17,7 +18,7 @@ type CredentialActionsProps = {
   credentialId: string;
   courseTitle: string;
   issuedAt: string;
-  sharingSettingsUrl?: string;
+  canManageAcademySharing?: boolean;
   professionalSharing?: { courseId: string; version: string };
   downloadUrl: string;
   verificationUrl: string;
@@ -30,7 +31,7 @@ export default function CredentialActions({
   credentialId,
   courseTitle,
   issuedAt,
-  sharingSettingsUrl,
+  canManageAcademySharing = false,
   professionalSharing,
   downloadUrl,
   verificationUrl,
@@ -45,16 +46,24 @@ export default function CredentialActions({
   const badgeDownloadUrl = certificateBadgePath(credentialId) + "?download=1";
   const linkedInFeedUrl = "https://www.linkedin.com/sharing/share-offsite/?url=" + encodeURIComponent(verificationUrl);
 
-  async function updateProfessionalSharing() {
-    if (!professionalSharing || updatingSharing) return;
+  async function updateSharing() {
+    if (!owner || updatingSharing) return;
     setUpdatingSharing(true);
     try {
-      const response = await fetch(`/api/learning/professional/${encodeURIComponent(professionalSharing.courseId)}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "sharing", version: professionalSharing.version, sharing: !sharingAllowed }),
-      });
-      if (!response.ok) throw new Error("Unable to update certificate sharing.");
+      const sharing = !sharingAllowed;
+      if (canManageAcademySharing) {
+        const { ok } = await updateAcademyCredentialSharing(credentialId, sharing);
+        if (!ok) throw new Error("Unable to update certificate sharing.");
+      } else if (professionalSharing) {
+        const response = await fetch(`/api/learning/professional/${encodeURIComponent(professionalSharing.courseId)}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "sharing", version: professionalSharing.version, sharing }),
+        });
+        if (!response.ok) throw new Error("Unable to update certificate sharing.");
+      } else {
+        return;
+      }
       setMessage(sharingAllowed ? "The certificate is private." : "Public verification enabled.");
       router.refresh();
     } catch {
@@ -132,9 +141,6 @@ export default function CredentialActions({
           </div>
         </section>
       )}
-      {owner && canDownload && sharingSettingsUrl && (
-        <Link href={sharingSettingsUrl} className="credential-button print:hidden"><LocalizedText text="Manage certificate sharing" /></Link>
-      )}
       <div className="credential-secondary-actions print:hidden">
         <button type="button" onClick={() => void copyValue(credentialId, "Certificate ID copied.")}>
           <LocalizedText text="Copy certificate ID" />
@@ -145,8 +151,8 @@ export default function CredentialActions({
             onClick={() => void copyValue(verificationUrl, "Verification link copied.")}
           ><LocalizedText text="Copy verification link" /></button>
         )}
-        {professionalSharing && canDownload && (
-          <button type="button" disabled={updatingSharing} onClick={() => void updateProfessionalSharing()}>
+        {owner && (canManageAcademySharing || (professionalSharing && canDownload)) && (
+          <button type="button" disabled={updatingSharing} onClick={() => void updateSharing()}>
             <LocalizedText text={sharingAllowed ? "Make certificate private" : "Enable public verification"} />
           </button>
         )}
