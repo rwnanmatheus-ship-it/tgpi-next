@@ -651,9 +651,9 @@
     "pt-BR": "O cabo pode estar energizado. Qual ação vem primeiro?",
     "en": "The cable could be energized. What action comes first?",
     "es": "El cable puede estar energizado. ¿Cuál acción viene primero?",
-    "fr": "Le câble pourrait être sous tension.",
-    "de": "Das Kabel könnte bestromt werden.",
-    "it": "Il cavo potrebbe essere energizzato."
+    "fr": "Le câble pourrait être sous tension. Quelle action commence?",
+    "de": "Das Kabel könnte bestromt werden. Welche Aktion kommt zuerst?",
+    "it": "Il cavo potrebbe essere energizzato. Quale azione viene prima?"
   },
   "A ausência de faísca não confirma segurança.": {
     "pt-BR": "A ausência de faísca não confirma segurança.",
@@ -732,7 +732,7 @@
     "en": "The person does not respond and presents isolated sighs. How to report?",
     "es": "La persona no responde y presenta suspiros aislados. ¿Cómo informar?",
     "fr": "La personne ne répond pas et présente des soupirs isolés. Comment signaler?",
-    "de": "Die Person reagiert nicht und präsentiert isolierte Seufzer.",
+    "de": "Die Person reagiert nicht und präsentiert isolierte Seufzer. Wie soll ich berichten?",
     "it": "La persona non risponde e presenta sospiri isolati. Come segnalare?"
   },
   "Suspiros isolados podem ocorrer na parada e devem ser comunicados imediatamente.": {
@@ -889,10 +889,10 @@
   },
   "Você não sabe o horário exato de início. O que informa?": {
     "pt-BR": "Você não sabe o horário exato de início. O que informa?",
-    "en": "You don't know the exact start time.",
+    "en": "You don't know the exact start time. What do you report?",
     "es": "No sabes el horario exacto de inicio. ¿Qué informa?",
-    "fr": "Vous ne connaissez pas l'heure exacte de départ.",
-    "de": "Sie kennen die genaue Startzeit nicht.",
+    "fr": "Vous ne connaissez pas l'heure exacte de départ. Qu'est-ce que vous rapportez ?",
+    "de": "Sie kennen die genaue Startzeit nicht. Was berichten Sie?",
     "it": "Non conosci l’ora esatta di inizio. Che cosa comunichi?"
   },
   "O serviço pode usar ambas as referências se a incerteza estiver clara.": {
@@ -1009,11 +1009,11 @@
   },
   "O primeiro DEA mapeado fica inacessível após as 18h. Qual ajuste testar?": {
     "pt-BR": "O primeiro DEA mapeado fica inacessível após as 18h. Qual ajuste testar?",
-    "en": "The first DEA mapped becomes inaccessible after 18h. What adjustment to test?",
+    "en": "The first AED mapped becomes inaccessible after 18h. What adjustment to test?",
     "es": "El primer DEA mapeado queda inaccesible después de las 18h. ¿Qué ajuste prueba?",
-    "fr": "La première carte DEA devient inaccessible après 18h. Quel paramètre tester ?",
-    "de": "Die erste abgebildete DEA wird nach 18 Uhr unzugänglich. Welche Einstellung soll getestet werden?",
-    "it": "Il primo DEA mappato diventa inaccessibile dopo le 18. Quale impostazione da testare?"
+    "fr": "La première carte DAE devient inaccessible après 18h. Quel paramètre tester ?",
+    "de": "Die erste abgebildete AED wird nach 18 Uhr unzugänglich. Welche Einstellung soll getestet werden?",
+    "it": "Il primo DAE mappato diventa inaccessibile dopo le 18. Quale impostazione da testare?"
   },
   "Uma alternativa de acesso reduz a dependência sem adiar o acionamento.": {
     "pt-BR": "Uma alternativa de acesso reduz a dependência sem adiar o acionamento.",
@@ -1068,16 +1068,16 @@
     "en": "You already have an initial solution for the case. Now run the variation. Remove the main phone and rework the exercise using the alternative channel defined in the plan. What comparison tests the effect of this change?",
     "es": "Ya tienes una solución inicial para el caso. Ahora ejecute la variación. Retire el teléfono principal y refaya el ejercicio usando el canal alternativo definido en el plano. ¿Qué comparación prueba el efecto de este cambio?",
     "fr": "Vous avez déjà une solution initiale pour le cas. Maintenant exécutez la variation. Supprimez le téléphone principal et retravaillez l'exercice en utilisant le canal alternatif défini dans le plan. Quelle comparaison teste l'effet de ce changement?",
-    "de": "Wenn Sie die Variante ausführen, entfernen Sie das Haupttelefon und überarbeiten Sie die Übung mit dem alternativen Kanal, der im Plan definiert ist.",
-    "it": "Ora eseguire la variazione. Rimuovere il telefono principale e rielaborare l'esercizio utilizzando il canale alternativo definito nel piano. Che confronto verifica l'effetto di questa modifica?"
+    "de": "Sie haben bereits eine erste Lösung für den Fall. Jetzt führen Sie die Variation. Entfernen Sie das Haupttelefon und üben Sie erneut mit dem alternativen Kanal im Flugzeug. Welcher Vergleich testet die Wirkung dieser Veränderung?",
+    "it": "Hai già una soluzione iniziale al caso. Ora esegui la variazione. Rimuovere il telefono principale e ri-esercitare utilizzando il canale alternativo impostato nell'aereo. Quale confronto verifica l'effetto di questo cambiamento?"
   },
   "O exercício avaliou {a} tarefas. {b} falharam na primeira tentativa. Qual a porcentagem de falhas? Arredonde para duas casas decimais.": {
     "pt-BR": "O exercício avaliou {a} tarefas. {b} falharam na primeira tentativa. Qual a porcentagem de falhas? Arredonde para duas casas decimais.",
     "en": "The exercise evaluated {a} tasks. {b} failed in the first attempt. What percentage of failures? Round two decimal places.",
     "es": "El ejercicio evaluó {a} tareas. {b} fallaron en el primer intento. ¿Cuál es el porcentaje de fallas? Arredonde para dos casas decimales.",
-    "fr": "L'exercice a évalué les tâches {a}. {b} a échoué dans la première tentative. Quel pourcentage de défaillances?",
+    "fr": "L'exercice a évalué les tâches {a}. {b} a échoué dans la première tentative. Quel est le pourcentage d'échecs ? Tour à deux décimales.",
     "de": "Die Übung bewertete {a}-Aufgaben. {b} scheiterte im ersten Versuch. Wie viel Prozent der Fehler? Runde zwei Dezimalstellen.",
-    "it": "L'esercizio ha valutato le attività {a}. {b} ha fallito nel primo tentativo. Quale percentuale di guasti?"
+    "it": "L'esercizio ha valutato le attività {a}. {b} ha fallito nel primo tentativo. Qual e' la percentuale di fallimenti? Tondo a due punti decimali."
   },
   "Divida as tarefas que falharam pelo total e multiplique por 100.": {
     "pt-BR": "Divida as tarefas que falharam pelo total e multiplique por 100.",
@@ -1169,11 +1169,11 @@
   },
   "A rota principal passa por água de profundidade desconhecida. O que fazer?": {
     "pt-BR": "A rota principal passa por água de profundidade desconhecida. O que fazer?",
-    "en": "The main route passes through water of unknown depth.",
+    "en": "The main route passes through water of unknown depth. What to do?",
     "es": "La ruta principal pasa por agua de profundidad desconocida. ¿Qué hacer?",
-    "fr": "La route principale traverse une eau de profondeur inconnue.",
-    "de": "Die Hauptroute führt durch Wasser von unbekannter Tiefe.",
-    "it": "Il percorso principale passa attraverso l'acqua di profondità sconosciuta."
+    "fr": "La route principale traverse une eau de profondeur inconnue. Que faire ?",
+    "de": "Die Hauptroute führt durch Wasser von unbekannter Tiefe. Was tun?",
+    "it": "Il percorso principale passa attraverso l'acqua di profondità sconosciuta. Cosa fare?"
   },
   "Água em movimento e danos ocultos tornam a travessia perigosa.": {
     "pt-BR": "Água em movimento e danos ocultos tornam a travessia perigosa.",
@@ -1249,11 +1249,11 @@
   },
   "O grupo quer voltar a uma área ainda interditada. Qual decisão é adequada?": {
     "pt-BR": "O grupo quer voltar a uma área ainda interditada. Qual decisão é adequada?",
-    "en": "The group wants to return to an area still out of order.",
+    "en": "The group wants to return to an area still banned. What decision is appropriate?",
     "es": "El grupo quiere volver a un área aún insertada. ¿Cuál decisión es adecuada?",
-    "fr": "Le groupe veut retourner dans une zone encore hors de contrôle.",
-    "de": "Die Gruppe will in ein Gebiet zurückkehren, das noch nicht in Ordnung ist.",
-    "it": "Il gruppo vuole tornare in un'area ancora fuori ordine."
+    "fr": "Le groupe veut retourner dans une zone encore interdite. Quelle décision est appropriée?",
+    "de": "Die Gruppe will in ein noch verbotenes Gebiet zurückkehren. Welche Entscheidung ist angemessen?",
+    "it": "Il gruppo vuole tornare in un'area ancora vietata. Quale decisione è appropriata?"
   },
   "A chuva cessar não elimina riscos de estrutura, água ou eletricidade.": {
     "pt-BR": "A chuva cessar não elimina riscos de estrutura, água ou eletricidade.",
@@ -1409,11 +1409,11 @@
   },
   "O exercício encontrou falha na comunicação. Qual é o próximo passo?": {
     "pt-BR": "O exercício encontrou falha na comunicação. Qual é o próximo passo?",
-    "en": "The exercise has found communication flawed.",
+    "en": "The exercise found communication flawed. What's the next step?",
     "es": "El ejercicio encontró falla en la comunicación. ¿Cuál es el próximo paso?",
-    "fr": "L'exercice a révélé des lacunes dans la communication.",
-    "de": "Die Übung hat die Kommunikation als fehlerhaft eingestuft.",
-    "it": "L'esercizio ha trovato la comunicazione difettosa."
+    "fr": "L'exercice a révélé des lacunes dans la communication. Quelle est la prochaine étape ?",
+    "de": "Die Übung fand Kommunikation fehlerhaft. Was ist der nächste Schritt?",
+    "it": "L'esercizio ha trovato la comunicazione difettosa. Qual e' il prossimo passo?"
   },
   "A revisão fecha o ciclo de preparação e comprova a melhoria no exercício.": {
     "pt-BR": "A revisão fecha o ciclo de preparação e comprova a melhoria no exercício.",
@@ -1449,11 +1449,11 @@
   },
   "O exercício termina com um familiar sem receber a mensagem. Qual teste isola a falha?": {
     "pt-BR": "O exercício termina com um familiar sem receber a mensagem. Qual teste isola a falha?",
-    "en": "The exercise ends with a family member without receiving the message.",
+    "en": "The exercise ends with a family member without receiving the message. What test isolates failure?",
     "es": "El ejercicio termina con un familiar sin recibir el mensaje. ¿Qué prueba aislante falla?",
-    "fr": "L'exercice se termine avec un membre de la famille sans recevoir le message.",
-    "de": "Die Übung endet mit einem Familienmitglied, ohne die Nachricht zu erhalten.",
-    "it": "L'esercizio termina con un membro della famiglia senza ricevere il messaggio."
+    "fr": "L'exercice se termine avec un membre de la famille sans recevoir le message. Quelles sont les défaillances des isolats ?",
+    "de": "Die Übung endet mit einem Familienmitglied, ohne die Nachricht zu erhalten. Welcher Test isoliert das Versagen?",
+    "it": "L'esercizio termina con un membro della famiglia senza ricevere il messaggio. Quale test isola il fallimento?"
   },
   "O teste precisa reproduzir a condição em que o plano falhou.": {
     "pt-BR": "O teste precisa reproduzir a condição em que o plano falhou.",
@@ -1493,7 +1493,7 @@
     "es": "La orientación oficial es albergarse ahora. La ruta cadastrada es para evacuación posterior. ¿Qué acción usar en el ejercicio?",
     "fr": "L'orientation officielle est de se loger maintenant. L'itinéraire est enregistré pour une évacuation ultérieure. Quelle action utiliser dans l'exercice?",
     "de": "Die offizielle Orientierung ist jetzt Schutz. Die Route ist für weitere Evakuierungen registriert. Welche Maßnahmen sind bei der Übung anzuwenden?",
-    "it": "L'orientamento ufficiale è quello di rifugiarsi, il percorso è registrato per ulteriori evacuazioni."
+    "it": "L'orientamento ufficiale è quello di rifugiarsi ora. La strada arruolata è per ulteriore evacuazione. Che azione si usa nell'esercizio?"
   },
   "Um mapa salvo não substitui a instrução aplicável ao evento.": {
     "pt-BR": "Um mapa salvo não substitui a instrução aplicável ao evento.",
@@ -1549,7 +1549,7 @@
     "es": "Ya tienes una solución inicial para el caso. Ahora ejecute la variación. Haga una simulación de mesa en la que la confirmación por aplicación deja de funcionar. ¿Qué comparación prueba el efecto de ese cambio?",
     "fr": "Vous avez déjà une solution initiale pour le cas. Maintenant exécutez la variation. Faites une simulation de table où la confirmation de l'application cesse de fonctionner. Quelle comparaison teste l'effet de ce changement ?",
     "de": "Sie haben bereits eine erste Lösung für den Fall. Führen Sie nun die Variation aus. Führen Sie eine Tabellensimulation durch, bei der die Anwendungsbestätigung nicht mehr funktioniert. Welcher Vergleich testet die Wirkung dieser Änderung?",
-    "it": "Ora eseguire la variazione. Fare una simulazione di tabella in cui la conferma dell'applicazione smette di funzionare. Quale confronto verifica l'effetto di questo cambiamento?"
+    "it": "Hai già una soluzione iniziale al caso. Ora esegui la variazione. Fai una simulazione della tabella in cui la conferma dell'applicazione smette di funzionare. Quale confronto verifica l'effetto di questo cambiamento?"
   },
   "The exercise includes {a} addresses. {b} have no building number and another {c} have no city. How many addresses are complete? The groups do not overlap.": {
     "pt-BR": "O exercício inclui: {a} Endereços {b} não tem número de edifício e outro {c} Não tem cidade. Quantos endereços estão completos? Os grupos não se sobrepõem.",
@@ -1725,7 +1725,7 @@
     "es": "Ya tienes una solución inicial para el caso. Ahora ejecute la variación. Repita con ruido simulado y troque la entrada por un número de sala, dejando explícito lo que todavía desconoce. ¿Qué comparación prueba el efecto de ese cambio?",
     "fr": "Vous avez déjà une solution initiale pour le cas. Maintenant exécutez la variation. Répétez avec le bruit simulé et passez l'entrée à un numéro de pièce, rendant explicite ce que vous ne savez toujours pas. Quelle comparaison teste l'effet de ce changement?",
     "de": "Sie haben bereits eine erste Lösung für den Fall. Nun führen Sie die Variation aus. Wiederholen Sie mit simuliertem Rauschen und schalten Sie die Eingabe auf eine Raumnummer, um zu verdeutlichen, was Sie noch nicht wissen. Welcher Vergleich testet die Wirkung dieser Änderung?",
-    "it": "Ripetere con il rumore simulato e passare l'ingresso a un numero di camera, rendendo esplicito ciò che ancora non conoscete. Che confronto verifica l'effetto di questo cambiamento?"
+    "it": "Hai già una soluzione iniziale al caso. Ora esegui la variazione. Ripetere con rumore simulato e cambiare l'ingresso per un numero di camera, rendendo esplicito ciò che ancora non si sa. Quale confronto verifica l'effetto di questo cambiamento?"
   },
   "Uma escola revisou {a} fichas fictícias. {b} estavam sem contato principal e outras {c}, sem contato alternativo. Quantas fichas estavam completas?": {
     "pt-BR": "Uma escola revisou {a} fichas fictícias. {b} estavam sem contato principal e outras {c}, sem contato alternativo. Quantas fichas estavam completas?",
@@ -1795,9 +1795,9 @@
     "pt-BR": "Uma criança não responde. Quem recebe a primeira chamada de ajuda?",
     "en": "A child doesn't answer. Who gets the first call for help?",
     "es": "Un niño no responde. ¿Quién recibe la primera llamada de ayuda?",
-    "fr": "Qui reçoit le premier appel à l'aide ?",
+    "fr": "Un enfant ne répond pas. Qui reçoit le premier appel à l'aide ?",
     "de": "Ein Kind antwortet nicht. Wer bekommt den ersten Hilferuf?",
-    "it": "Chi riceve la prima chiamata per aiuto?"
+    "it": "Un bambino non risponde. Chi riceve la prima chiamata per aiuto?"
   },
   "O acionamento de emergência é prioritário e a comunicação pode ser delegada.": {
     "pt-BR": "O acionamento de emergência é prioritário e a comunicação pode ser delegada.",
@@ -2076,8 +2076,8 @@
     "en": "The school identified an outdated record. How to exercise contingency?",
     "es": "La escuela identificó una ficha desactualizada. ¿Cómo ejercitar la contingencia?",
     "fr": "L'école a identifié un dossier périmé. Comment faire pour faire face à une situation d'urgence?",
-    "de": "Die Schule identifizierte einen veralteten Rekord.",
-    "it": "La scuola ha identificato un record superato."
+    "de": "Die Schule identifizierte einen veralteten Rekord. Wie kann man Kontingenz ausüben?",
+    "it": "La scuola ha identificato un record superato. Come esercitare la contingenza?"
   },
   "A resposta urgente e a atualização de contatos são tarefas distintas.": {
     "pt-BR": "A resposta urgente e a atualização de contatos são tarefas distintas.",
@@ -2116,8 +2116,8 @@
     "en": "A colleague proposes that the digital certificate authorizes the practice with children. What should the school require?",
     "es": "Un colega propone que el certificado digital autorice la práctica con niños. ¿Qué debe exigir la escuela?",
     "fr": "Un collègue propose que le certificat numérique autorise la pratique avec les enfants. Que devrait exiger l'école?",
-    "de": "Ein Kollege schlägt vor, dass das digitale Zertifikat die Praxis mit Kindern erlaubt.",
-    "it": "Un collega propone che il certificato digitale autorizzi la pratica con i bambini."
+    "de": "Ein Kollege schlägt vor, dass das digitale Zertifikat die Praxis mit Kindern ermöglicht. Was sollte die Schule verlangen?",
+    "it": "Un collega propone che il certificato digitale consenta la pratica con i bambini. Cosa dovrebbe chiedere la scuola?"
   },
   "A instituição deve verificar a formação e a habilidade exigidas.": {
     "pt-BR": "A instituição deve verificar a formação e a habilidade exigidas.",
@@ -2155,9 +2155,9 @@
     "pt-BR": "Considere o caso inicial. Em um exercício escolar teórico, a equipe desencontra o local da ocorrência e dois adultos afirmam ter chamado o canal responsável. Qual análise melhor sustenta a decisão?",
     "en": "Consider the initial case. In a theoretical school exercise, the team fails to meet the location of the occurrence and two adults claim to have called the channel responsible. Which analysis best supports the decision?",
     "es": "Considere el caso inicial. En un ejercicio escolar teórico, el equipo desencontra el local de la ocurrencia y dos adultos afirman haber llamado el canal responsable. ¿Cuál análisis mejor sustenta la decisión?",
-    "fr": "Dans un exercice théorique, l'équipe ne parvient pas à se rendre sur place et deux adultes affirment avoir appelé le canal responsable. Quelle analyse appuie le mieux la décision?",
+    "fr": "Considérez le cas initial. Dans un exercice théorique, l'équipe n'est pas d'accord avec l'endroit où se produit l'événement et deux adultes affirment avoir appelé le canal responsable. Quelle analyse appuie le mieux la décision?",
     "de": "Betrachten wir den Ausgangsfall. In einer theoretischen Schulübung trifft das Team den Ort des Ereignisses nicht und zwei Erwachsene geben an, den verantwortlichen Sender angerufen zu haben. Welche Analyse unterstützt die Entscheidung am besten?",
-    "it": "Considerate il caso iniziale: in un esercizio teorico, il team non riesce a soddisfare la posizione del verificarsi e due adulti sostengono di aver chiamato il canale responsabile."
+    "it": "Considera il caso iniziale. In un esercizio teorico della scuola, il team non è d'accordo con la posizione del verificarsi e due adulti sostengono di aver chiamato il canale responsabile. Quale analisi supporta meglio la decisione?"
   },
   "Defina quem informa, quem confirma a ligação e quem recebe a ajuda. Compartilhe somente os dados necessários pelo canal institucional.": {
     "pt-BR": "Defina quem informa, quem confirma a ligação e quem recebe a ajuda. Compartilhe somente os dados necessários pelo canal institucional.",
@@ -2173,15 +2173,15 @@
     "es": "Ya tienes una solución inicial para el caso. Ahora ejecute la variación. Simule sustitución de la responsable y la biodisponibilidad de la lista impresa de contactos. ¿Qué comparación prueba el efecto de este cambio?",
     "fr": "Vous avez déjà une solution initiale pour le cas. Maintenant exécutez la variation. Simuler le remplacement responsable et l'indisponibilité de la liste de contact imprimée. Quelle comparaison teste l'effet de ce changement?",
     "de": "Sie haben bereits eine erste Lösung für den Fall. Jetzt führen Sie die Variante aus. Simulieren Sie den verantwortlichen Austausch und die Nichtverfügbarkeit der gedruckten Kontaktliste. Welcher Vergleich testet die Wirkung dieser Änderung?",
-    "it": "Ora esegui la variazione. Simula la sostituzione responsabile e l'inavalidabilità della lista di contatti stampati. Quale confronto verifica l'effetto di questo cambiamento?"
+    "it": "Hai già una soluzione iniziale al caso. Ora esegui la variazione. Simula la sostituzione della persona responsabile e l'inavalidabilità della lista di contatti stampata. Quale confronto verifica l'effetto di questo cambiamento?"
   },
   "Foram revisados {a} kits. {b} estavam incompletos e outros {c} estavam inacessíveis. Quantos estavam completos e acessíveis?": {
     "pt-BR": "Foram revisados {a} kits. {b} estavam incompletos e outros {c} estavam inacessíveis. Quantos estavam completos e acessíveis?",
     "en": "{a} kits were reviewed. {b} were incomplete and other {c} were inaccessible. How many were complete and accessible?",
     "es": "Fueron revisados {a} kits. {b} estaban incompletos y otros {c} estaban inaccesibles. ¿Cuántos estaban completos y accesibles?",
     "fr": "Les kits {a} ont été examinés. {b} étaient incomplets et d'autres {c} étaient inaccessibles. Combien étaient complets et accessibles?",
-    "de": "{a}-Kits wurden überprüft. {b} waren unvollständig und andere {c} waren nicht zugänglich.",
-    "it": "I kit {a} sono stati riesaminati. {b} erano incompleti e altri {c} erano inaccessibili."
+    "de": "{a}-Kits wurden überprüft. {b} waren unvollständig und andere {c} waren nicht zugänglich. Wie viele waren vollständig und zugänglich?",
+    "it": "I kit {a} sono stati riesaminati. {b} erano incompleti e altri {c} erano inaccessibili. Quanti erano completi e accessibili?"
   },
   "Subtraia os dois grupos distintos do total.": {
     "pt-BR": "Subtraia os dois grupos distintos do total.",
@@ -2441,11 +2441,11 @@
   },
   "O kit está completo, mas o acesso depende de uma pessoa ausente. O que o resultado prova?": {
     "pt-BR": "O kit está completo, mas o acesso depende de uma pessoa ausente. O que o resultado prova?",
-    "en": "The kit is complete, but access depends on a missing person.",
+    "en": "The kit is complete, but access depends on a missing person. What does the result prove?",
     "es": "El kit está completo, pero el acceso depende de una persona ausente. ¿Qué es lo que prueba?",
-    "fr": "Le kit est complet, mais l'accès dépend d'une personne disparue.",
-    "de": "Das Kit ist vollständig, aber der Zugang hängt von einer vermissten Person ab.",
-    "it": "Il kit è completo, ma l'accesso dipende da una persona scomparsa."
+    "fr": "Le kit est complet, mais l'accès dépend d'une personne disparue. Que prouve le résultat?",
+    "de": "Das Kit ist vollständig, aber der Zugang hängt von einer vermissten Person ab. Was beweist das Ergebnis?",
+    "it": "Il kit è completo, ma l'accesso dipende da una persona scomparsa. Che cosa prova il risultato?"
   },
   "Disponibilidade de materiais inclui acesso durante a ocorrência.": {
     "pt-BR": "Disponibilidade de materiais inclui acesso durante a ocorrência.",
@@ -2483,8 +2483,8 @@
     "pt-BR": "No exercício, o estado da pessoa mudou durante o atendimento. Como registrar?",
     "en": "In the exercise, the person's condition changed during the service. How to register?",
     "es": "En el ejercicio, el estado de la persona cambió durante la atención. ¿Cómo registrar?",
-    "fr": "Dans l'exercice, l'état de la personne a changé pendant le service.",
-    "de": "In der Übung hat sich der Zustand der Person während des Dienstes geändert.",
+    "fr": "Pendant l'exercice, l'état de la personne a changé pendant les soins. Comment s'enregistrer?",
+    "de": "Während der Übung änderte sich der Zustand der Person während der Pflege. Wie registriere ich mich?",
     "it": "Nell'esercizio, la condizione della persona è cambiata durante il servizio. Come registrarsi?"
   },
   "A evolução orienta a equipe e precisa aparecer na passagem.": {
@@ -2523,7 +2523,7 @@
     "pt-BR": "Considere o caso inicial. Em uma simulação de mesa no trabalho, o plano identifica um kit, mas o inventário está desatualizado e não há responsável pela revisão. Qual análise melhor sustenta a decisão?",
     "en": "Consider the initial case. In a table simulation at work, the plan identifies a kit, but the inventory is outdated and there is no reviewer. Which analysis best supports the decision?",
     "es": "Considere el caso inicial. En una simulación de mesa en el trabajo, el plan identifica un kit, pero el inventario está desactualizado y no hay responsable de la revisión. ¿Cuál análisis mejor sustenta la decisión?",
-    "fr": "Dans une simulation de tableau au travail, le plan identifie une trousse, mais l'inventaire est dépassé et il n'y a pas d'examinateur. Quelle analyse appuie le mieux la décision?",
+    "fr": "Considérez le cas initial. Dans une simulation de tableau au travail, le plan identifie une trousse, mais l'inventaire est dépassé et il n'y a pas d'examinateur. Quelle analyse appuie le mieux la décision?",
     "de": "Betrachten wir den Ausgangsfall. In einer Tabellensimulation bei der Arbeit identifiziert der Plan ein Kit, aber das Inventar ist veraltet und es gibt keinen Gutachter. Welche Analyse unterstützt die Entscheidung am besten?",
     "it": "Considerate il caso iniziale: in una simulazione di tavolo al lavoro, il piano identifica un kit, ma l'inventario è obsoleto e non c'è un recensore. Quale analisi supporta meglio la decisione?"
   },
@@ -2533,7 +2533,7 @@
     "es": "Trate el inventario y la comunicación como parte de la disposición. Atribua el mantenimiento y registre como accionar ayuda y recibir instrucciones del servicio local.",
     "fr": "Traiter l'inventaire et la communication comme un élément de la préparation. Assigner la maintenance et l'enregistrement comme aide au déclenchement et recevoir des instructions de service local.",
     "de": "Bestandsaufnahme und Kommunikation als Teil der Bereitschaft behandeln, Wartung und Registrierung als Triggerhilfe zuweisen und lokale Serviceanweisungen erhalten.",
-    "it": "Assegnare la manutenzione e la registrazione come aiuto di scatto e ricevere istruzioni di servizio locali."
+    "it": "Tratta l'inventario e la comunicazione come parte della disponibilità. Assegnare la manutenzione e registrare come attivare aiuto e ricevere istruzioni di servizio locali."
   },
   "Você já tem uma solução inicial para o caso. Agora execute a variação. Retire o responsável principal do cenário e verifique se o substituto localiza o material e o contato previsto, em ambiente de treinamento. Qual comparação testa o efeito dessa mudança?": {
     "pt-BR": "Você já tem uma solução inicial para o caso. Agora execute a variação. Retire o responsável principal do cenário e verifique se o substituto localiza o material e o contato previsto, em ambiente de treinamento. Qual comparação testa o efeito dessa mudança?",
@@ -2541,7 +2541,7 @@
     "es": "Ya tienes una solución inicial para el caso. Ahora ejecute la variación. Retire el responsable principal del escenario y compruebe si el sustituto localiza el material y el contacto previsto, en ambiente de entrenamiento. ¿Qué comparación prueba el efecto de ese cambio?",
     "fr": "Vous avez déjà une solution initiale pour le cas. Maintenant exécutez la variation. Retirer le principal du scénario et vérifier si le remplaçant localise le matériel et le contact attendu dans un environnement de formation. Quelle comparaison teste l'effet de ce changement?",
     "de": "Sie haben bereits eine erste Lösung für den Fall. Nun führen Sie die Variation aus. Entfernen Sie den Hauptteil aus dem Szenario und prüfen Sie, ob der Ersatzteil das Material und den erwarteten Kontakt in einer Trainingsumgebung lokalisiert. Welcher Vergleich testet die Wirkung dieser Änderung?",
-    "it": "Ora eseguire la variazione. Rimuovere il preside dallo scenario e verificare se il sostituto individua il materiale e il contatto previsto in un ambiente di formazione. Quale confronto verifica l'effetto di questo cambiamento?"
+    "it": "Hai già una soluzione iniziale al caso. Ora esegui la variazione. Rimuovere il preside dallo scenario e verificare se la sostituzione individua il materiale e il contatto previsto in un ambiente di formazione. Quale confronto verifica l'effetto di questo cambiamento?"
   },
   "Uma simulação registrou {a} encaminhamentos. {b} estavam sem destino confirmado e outros {c}, sem responsável. Quantos estavam completos?": {
     "pt-BR": "Uma simulação registrou {a} encaminhamentos. {b} estavam sem destino confirmado e outros {c}, sem responsável. Quantos estavam completos?",
@@ -2549,7 +2549,7 @@
     "es": "Una simulación registró {a} encaminamientos. {b} estaban sin destino confirmado y otros {c} , sin responsable. ¿Cuántos estaban completos?",
     "fr": "Une simulation a enregistré les références {a}. {b} étaient inachevés et d'autres {c} étaient incomptabilisés. Combien étaient complets?",
     "de": "Eine Simulation zeichnete {a}-Empfehlungen auf. {b} waren nicht abgerechnet und andere {c} waren nicht erfasst. Wie viele waren vollständig?",
-    "it": "Una simulazione ha registrato i referral {a}. {b} sono stati insidiati e altri {c} non sono stati registrati."
+    "it": "Una simulazione ha registrato i referral {a}. {b} sono stati confermati in entrata e altri {c} , senza responsabili. Quanti erano completi?"
   },
   "encaminhamentos": {
     "pt-BR": "encaminhamentos",
@@ -2561,11 +2561,11 @@
   },
   "A pessoa recusa conversar. Como responder?": {
     "pt-BR": "A pessoa recusa conversar. Como responder?",
-    "en": "The person refuses to talk.",
+    "en": "The person refuses to talk. How to respond?",
     "es": "La persona se niega a hablar. ¿Cómo responder?",
-    "fr": "La personne refuse de parler.",
-    "de": "Die Person weigert sich zu reden.",
-    "it": "La persona rifiuta di parlare."
+    "fr": "La personne refuse de parler. Comment réagir ?",
+    "de": "Die Person weigert sich zu reden. Wie soll ich antworten?",
+    "it": "La persona rifiuta di parlare. Come rispondere?"
   },
   "O consentimento e a escolha devem ser respeitados.": {
     "pt-BR": "O consentimento e a escolha devem ser respeitados.",
@@ -2684,7 +2684,7 @@
     "en": "The listed service changed address. What is the appropriate action?",
     "es": "El servicio listado cambió de dirección. ¿Cuál es la acción adecuada?",
     "fr": "Le service inscrit a changé d'adresse. Quelle est la mesure appropriée?",
-    "de": "Die Adresse des aufgelisteten Dienstes wurde geändert.",
+    "de": "Der aufgelistete Dienst hat die Adresse geändert. Was ist die richtige Maßnahme?",
     "it": "Il servizio indicato ha cambiato indirizzo. Qual è l'azione appropriata?"
   },
   "O encaminhamento deve ser verificável e acessível.": {
@@ -2841,11 +2841,11 @@
   },
   "O ponto de apoio muda durante a conversa. Como encerrar?": {
     "pt-BR": "O ponto de apoio muda durante a conversa. Como encerrar?",
-    "en": "The point of support changes during the conversation.",
+    "en": "The point of support changes during the conversation. How to close?",
     "es": "El punto de apoyo cambia durante la conversación. ¿Cómo cerrar?",
-    "fr": "Le point de soutien change au cours de la conversation.",
-    "de": "Der Unterstützungspunkt ändert sich während des Gesprächs.",
-    "it": "Il punto di sostegno cambia durante la conversazione."
+    "fr": "Le point de soutien change au cours de la conversation. Comment fermer ?",
+    "de": "Der Unterstützungspunkt ändert sich während des Gesprächs. Wie zu schließen?",
+    "it": "Il punto di sostegno cambia durante la conversazione. Come chiudere?"
   },
   "A saída precisa ter um próximo passo compreensível e verificável.": {
     "pt-BR": "A saída precisa ter um próximo passo compreensível e verificável.",
@@ -2881,7 +2881,7 @@
   },
   "A equipe quer aprender com o caso. O que registrar na devolutiva?": {
     "pt-BR": "A equipe quer aprender com o caso. O que registrar na devolutiva?",
-    "en": "The team wants to learn from the case.",
+    "en": "The team wants to learn from the case. What to register in the return?",
     "es": "El equipo quiere aprender con el caso. ¿Qué registrar en la devolutiva?",
     "fr": "L’équipe veut tirer des enseignements du cas. Que faut-il consigner dans le retour d’expérience ?",
     "de": "Das Team möchte aus dem Fall lernen. Was gehört in die Nachbesprechung?",
@@ -2941,7 +2941,7 @@
     "es": "Ya tienes una solución inicial para el caso. Ahora ejecute la variación. ¿Síule un cambio de preferencia y una opción de encaminamiento que se presenta y se discute con la persona. ¿Qué comparación prueba el efecto de ese cambio?",
     "fr": "Vous avez déjà une solution initiale pour le cas. Maintenant exécutez la variation. Simuler un changement de préférence et une option de renvoi qui est présenté et discuté avec la personne. Quelle comparaison teste l'effet de ce changement?",
     "de": "Sie haben bereits eine erste Lösung für den Fall. Führen Sie nun die Variation aus. Simulieren Sie eine Präferenzänderung und eine Weiterleitungsoption, die mit der Person präsentiert und diskutiert wird. Welcher Vergleich testet die Wirkung dieser Änderung?",
-    "it": "Ora eseguire la variazione. Simulare un cambiamento di preferenza e un'opzione di inoltro che viene presentata e discussa con la persona. Che confronto verifica l'effetto di questo cambiamento?"
+    "it": "Hai già una soluzione iniziale al caso. Ora esegui la variazione. Simulare un cambiamento di preferenza e un'opzione di riferimento che viene presentata e discussa con la persona. Quale confronto verifica l'effetto di questo cambiamento?"
   },
   "Seu laboratório verificou {a} registros sintéticos e isolou {b} por falha. Qual percentual foi isolado? Arredonde para duas casas.": {
     "pt-BR": "Seu laboratório verificou {a} registros sintéticos e isolou {b} por falha. Qual percentual foi isolado? Arredonde para duas casas.",
