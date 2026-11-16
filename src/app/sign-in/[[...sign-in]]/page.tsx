@@ -1,6 +1,6 @@
 import { localizeMetadata } from "@/lib/localization/metadata.server";
 import { LocalizedText } from "@/components/localization/LocaleProvider";
-import { safeReturnTo } from "@/lib/auth/return-to";
+import { registrationReturnTo, registrationUrl, safeReturnTo } from "@/lib/auth/return-to";
 import type { Metadata } from "next";
 import { SignIn } from "@clerk/nextjs";
 import TGPIAuthShell from "@/components/auth/TGPIAuthShell";
@@ -16,13 +16,13 @@ export default async function SignInPage({ searchParams }: { searchParams: Promi
   const params = await searchParams;
   const next = safeReturnTo(params.next ?? params.redirect_url, "/profile");
   return (
-    <TGPIAuthShell mode="sign-in">
+    <TGPIAuthShell mode="sign-in" returnTo={next}>
       <SignIn
         path="/sign-in"
         routing="path"
-        signUpUrl={`/sign-up?next=${encodeURIComponent(next)}`}
+        signUpUrl={`/sign-up?next=${encodeURIComponent(registrationReturnTo(next))}`}
         forceRedirectUrl={next}
-        signUpForceRedirectUrl={`/welcome?next=${encodeURIComponent(next)}`}
+        signUpForceRedirectUrl={registrationUrl(next)}
         fallback={<p role="status"><LocalizedText text="Loading secure sign in…" /></p>}
         appearance={tgpiClerkAppearance}
       />

@@ -129,6 +129,15 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           afterSignOutUrl="/"
           localization={{
             ...clerkLocales[locale],
+            formFieldInputPlaceholder__signUpPassword:
+              clerkLocales[locale].formFieldInputPlaceholder__signUpPassword ?? {
+                en: "Create a password",
+                "pt-BR": "Crie uma senha",
+                es: "Crea una contraseña",
+                fr: "Créez un mot de passe",
+                de: "Erstellen Sie ein Passwort",
+                it: "Crea una password",
+              }[locale],
             signIn: { ...clerkLocales[locale].signIn, start: {
               ...clerkLocales[locale].signIn?.start,
               title: clerkLocales[locale].signIn?.start?.title?.replaceAll('{{applicationName}}', 'TGPI'),

@@ -8,3 +8,14 @@ export function safeReturnTo(value: unknown, fallback = "/onboarding"): string {
     return `${url.pathname}${url.search}${url.hash}`;
   } catch { return fallback; }
 }
+
+/** Reuse a pending profile destination when switching between access routes. */
+export function registrationReturnTo(value: unknown): string {
+  const url = new URL(safeReturnTo(value), "https://tgpi.invalid");
+  const destination = safeReturnTo(url.pathname === "/welcome" ? url.searchParams.get("next") : value);
+  return new URL(destination, url.origin).pathname === "/welcome" ? "/onboarding" : destination;
+}
+
+export function registrationUrl(value: unknown): string {
+  return `/welcome?next=${encodeURIComponent(registrationReturnTo(value))}`;
+}

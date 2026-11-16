@@ -1,63 +1,105 @@
-import { getLocale } from "@/lib/localization/server";
-import { translate } from "@/lib/localization/messages";
-import LanguageSelector from "@/components/localization/LanguageSelector";
+import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import BrandCrest from "@/components/BrandCrest";
+import LanguageSelector from "@/components/localization/LanguageSelector";
+import { registrationReturnTo } from "@/lib/auth/return-to";
+import { getLocale } from "@/lib/localization/server";
+import { translate } from "@/lib/localization/messages";
 import styles from "./auth.module.css";
-import { LocalizedText } from "@/components/localization/LocaleProvider";
 
+type TGPIAuthShellProps = {
+  children: ReactNode;
+  mode: "sign-in" | "sign-up" | "welcome";
+  returnTo: string;
+};
 
-type TGPIAuthShellProps = { children: React.ReactNode; mode: "sign-in" | "sign-up" | "welcome" };
-
-function AccessSymbol({ kind }: { kind: "globe" | "book" | "plan" | "shield" }) {
-  return <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    {kind === "globe" ? <><circle cx="12" cy="12" r="9" /><ellipse cx="12" cy="12" rx="4" ry="9" /><path d="M3 12h18M5 7h14M5 17h14" /></> : null}
-    {kind === "book" ? <><path d="M12 5v15M3 4c4-1 6 0 9 2 3-2 5-3 9-2v14c-4-1-6 0-9 2-3-2-5-3-9-2V4Z" /><path d="m6 8 3 1m6 0 3-1M6 12l3 1m6 0 3-1" /></> : null}
-    {kind === "plan" ? <><rect x="5" y="3" width="14" height="18" rx="3" /><path d="m8 9 1 1 2-2m2 1h3m-8 6 1 1 2-2m2 1h3" /></> : null}
-    {kind === "shield" ? <><path d="m12 3 8 3v6c0 4-4 7-8 9-4-2-8-5-8-9V6l8-3Z" /><path d="m8 12 3 3 5-6" /></> : null}
-  </svg>;
-}
-
-const pathways = [
-  { kind: "globe", title: "Country intelligence", text: "Find where you fit.", number: "01" },
-  { kind: "book", title: "Practical education", text: "Build skills for life abroad.", number: "02" },
-  { kind: "plan", title: "Your personal plan", text: "Know your next move.", number: "03" },
+const accessRoutes = [
+  { path: "/sign-in", mode: "sign-in", title: "Sign in" },
+  { path: "/sign-up", mode: "sign-up", title: "Create account" },
 ] as const;
 
-export default async function TGPIAuthShell({ children, mode }: TGPIAuthShellProps) {
+const pathways = [
+  { kind: "globe", title: "Country intelligence" },
+  { kind: "book", title: "Practical education" },
+  { kind: "plan", title: "Your personal plan" },
+] as const;
+
+function PathwayIcon({ kind }: { kind: (typeof pathways)[number]["kind"] }) {
+  const paths = {
+    globe: "M2 12a10 10 0 1 0 20 0 10 10 0 1 0-20 0Zm10-10c5 5 5 15 0 20-5-5-5-15 0-20ZM2 12h20",
+    book: "M12 5v15M3 4c4-1 6 0 9 2 3-2 5-3 9-2v14c-4-1-6 0-9 2-3-2-5-3-9-2V4Z",
+    plan: "M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2Zm1 6 1 1 2-2m2 1h3m-8 6 1 1 2-2m2 1h3",
+  };
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+      <path d={paths[kind]} />
+    </svg>
+  );
+}
+
+export default async function TGPIAuthShell({ children, mode, returnTo }: TGPIAuthShellProps) {
   const locale = await getLocale();
   const t = (text: string) => translate(locale, text);
-  const joining = mode !== "sign-in";
+
   return (
-    <main className={styles.page} data-access-version="3" data-access-mode={mode}>
-      <div className={styles.shell} data-tgpi-surface="banner">
+    <main className={styles.page} data-access-mode={mode}>
+      <div className={styles.shell}>
         <section className={styles.story} aria-label={t("Global education and decision intelligence")}>
-          <Image src="/images/cinematic-2026/premium-library-1600.webp" alt={t("A sunlit research library with a circular window overlooking a city")} fill priority sizes="(min-width: 1024px) 520px, 1px" className={styles.photo} />
-          <div className={styles.shade} />
+          <Image
+            src="/images/auth/global-observatory.webp"
+            alt=""
+            fill
+            fetchPriority="high"
+            loading="eager"
+            sizes="(min-width: 1280px) 590px, (min-width: 840px) 48vw, (min-width: 620px) 560px, 100vw"
+            className={styles.photo}
+          />
           <Link href="/" className={styles.brand} aria-label={t("TGPI home")}>
-            <span className={styles.crest}><BrandCrest fill sizes="44px" className="object-contain" /></span>
-            <span><strong><LocalizedText text={"TGPI"} /></strong><small><LocalizedText text={"The Global Polymath Institute"} /></small></span>
+            <span className={styles.crest}><BrandCrest fill sizes="40px" className="object-contain" /></span>
+            <span><strong>TGPI</strong><small>The Global Polymath Institute</small></span>
           </Link>
           <div className={styles.storyCopy}>
-            <span className={styles.eyebrow}><span className={styles.signal} />{" "}<LocalizedText text="Education for a global life" /></span>
-            <h1><LocalizedText text="Your world." /><br />{t("A clearer direction.")}</h1>
-            <p>{t("Understand your options. Build your skills.")}<br />{t("Create a global plan that starts with you.")}</p>
+            <p>{t("Education for a global life")}</p>
+            <h2>{t("Your world.")}<br />{t("A clearer direction.")}</h2>
+            <ul className={styles.pathways}>
+              {pathways.map(({ kind, title }) => (
+                <li key={kind}><PathwayIcon kind={kind} /><span>{t(title)}</span></li>
+              ))}
+            </ul>
           </div>
-          <div className={styles.pathways} aria-label={t("Your TGPI journey")}>
-            {pathways.map(item => <article key={item.kind} className={styles.pathway}><span className={styles.pathwayIcon}><AccessSymbol kind={item.kind} /></span><div><h2>{t(item.title)}</h2><p>{t(item.text)}</p></div><span className={styles.pathwayNumber}>{item.number}</span></article>)}
-          </div>
-          <div className={styles.storyFoot}><span>{t("Explore. Learn. Decide.")}</span><span>{t("One connected workspace.")}</span></div>
         </section>
-        <section className={styles.panel} aria-label={t(joining ? "Create your TGPI account" : "Sign in to your TGPI account")}>
+        <section className={styles.panel} aria-label={t("Account access")}>
           <div className={styles.formWrap}>
-            <div className={styles.mobileBrand}><Link href="/" aria-label={t("TGPI home")}><BrandCrest width={30} height={36} /><strong><LocalizedText text={"TGPI"} /></strong></Link><span>{t("Global education & intelligence")}</span></div>
-            <div className={styles.panelTop}><span className={styles.accessLabel}>{t(joining ? "Your global journey starts here" : "Your global workspace")}</span><Link href="/" className={styles.back}>{t("← Home")}</Link></div>
-            {joining ? <ol className={styles.steps} aria-label={t("Registration steps")}><li aria-current={mode === "sign-up" ? "step" : undefined}><span>1</span>{" "}{t("Secure access")}</li><li aria-current={mode === "welcome" ? "step" : undefined}><span>2</span>{" "}{t("Your profile")}</li></ol> : null}
-            <div className="mb-4 flex justify-end"><LanguageSelector compact /></div>
+            <div className={styles.panelTop}>
+              <Link href="/" className={styles.back}>{t("← Home")}</Link>
+              <LanguageSelector compact />
+            </div>
+            {mode === "welcome" ? (
+              <ol className={styles.steps} aria-label={t("Registration steps")}>
+                <li><span>1</span>{t("Secure access")}</li>
+                <li aria-current="step"><span>2</span>{t("Your profile")}</li>
+              </ol>
+            ) : (
+              <nav className={styles.accessNav} aria-label={t("Account access")}>
+                {accessRoutes.map(route => (
+                  <Link
+                    key={route.mode}
+                    href={{ pathname: route.path, query: { next: route.mode === "sign-up" ? registrationReturnTo(returnTo) : returnTo } }}
+                    prefetch={false}
+                    aria-current={mode === route.mode ? "page" : undefined}
+                  >
+                    {t(route.title)}
+                  </Link>
+                ))}
+              </nav>
+            )}
             <div className={styles.authWidget}>{children}</div>
-            <div className={styles.security}><AccessSymbol kind="shield" /><p>{t("Secure access. Your progress stays connected.")}</p></div>
-            <nav className={styles.legal} aria-label={t("Account help and policies")}><Link href="/privacy"><LocalizedText text="Privacy" /></Link><span aria-hidden="true">·</span><Link href="/terms"><LocalizedText text="Terms" /></Link><span aria-hidden="true">·</span><a href="mailto:contact@theglobalpolymath.com">{t("Need help?")}</a></nav>
+            <nav className={styles.legal} aria-label={t("Account help and policies")}>
+              <Link href="/privacy">{t("Privacy")}</Link>
+              <Link href="/terms">{t("Terms")}</Link>
+              <a href="mailto:contact@theglobalpolymath.com">{t("Need help?")}</a>
+            </nav>
           </div>
         </section>
       </div>
