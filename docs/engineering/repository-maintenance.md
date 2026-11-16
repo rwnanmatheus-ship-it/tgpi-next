@@ -26,6 +26,12 @@ A configuração local de um workflow prepara a execução no Actions. Confirme 
 
 ## Dependências transitivas
 
+O SDK Firebase está fixado em `12.18.0`: a resolução testada com
+`12.19.0` instalava duas cópias de `@firebase/app` e impedia o registro do
+Firestore na instância inicializada pelo SDK. Execute
+`node --test scripts/firebase-sdk.test.mjs` antes de atualizar essa família
+de pacotes. O teste usa apenas uma configuração sintética em memória.
+
 Os overrides em `package.json` são restritos aos consumidores que precisam
 das versões corrigidas de `@grpc/grpc-js` e `minimatch`. Revise-os quando
 Firestore e typescript-eslint adotarem versões corrigidas em seus próprios
