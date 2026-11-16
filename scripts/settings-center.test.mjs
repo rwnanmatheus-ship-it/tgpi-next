@@ -46,7 +46,19 @@ function fixture({ authenticated = true } = {}) {
   const stored = { firstName: 'Alex', lastName: 'Learner', unsafeMetadata: { unrelated: { preserved: true }, tgpiAccountProfile: profile.normalizeTgpiAccountProfile({ updatedAt: '2026-11-10T00:00:00.000Z', privacy: { showLinks: true }, profession: 'Engineer' }), tgpiOnboarding: { primaryGoal: 'study', targetCountries: ['portugal'], profession: 'Engineer' } } };
   const writes = [];
   const api = {};
-  function deepMerge(target, patch) { for (const [key,value] of Object.entries(patch)) { if (value && typeof value === 'object' && !Array.isArray(value)) { target[key] ??= {}; deepMerge(target[key], value); } else target[key] = value; } }
+  function deepMerge(target, patch) {
+    for (const [key, value] of Object.entries(patch)) {
+      if (key === '__proto__' || key === 'constructor' || key === 'prototype') continue;
+      const previous = Object.hasOwn(target, key) ? target[key] : undefined;
+      if (value && typeof value === 'object' && !Array.isArray(value)) {
+        const nested = previous && typeof previous === 'object' && !Array.isArray(previous) ? previous : {};
+        deepMerge(nested, value);
+        target[key] = nested;
+      } else {
+        target[key] = value;
+      }
+    }
+  }
   const compiled = ts.transpileModule(readFileSync(new URL('../src/app/api/account-profile/route.ts', import.meta.url), 'utf8'), { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 } }).outputText;
   new Function('exports', 'require', compiled)(api, name => {
     if (name === 'next/server') return { NextResponse: { json: (...args) => Response.json(...args) } };
