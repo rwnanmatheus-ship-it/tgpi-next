@@ -58,7 +58,7 @@
     "react-markdown": "^10.1.0",
     "remark-gfm": "^4.0.1",
     "sharp": "0.35.5",
-    "stripe": "^22.0.2",
+    "stripe": "^23.1.0",
     "three": "0.187.0",
     "viem": "^2.56.3",
     "web-push": "4.0.0",
