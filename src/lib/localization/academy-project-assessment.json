@@ -158,5 +158,77 @@
     "fr": "Le transfert se démontre en appliquant la méthode à une contrainte modifiée et en expliquant le résultat.",
     "de": "Übertragbarkeit zeigt sich, wenn die Methode mit geänderter Vorgabe angewendet und das Ergebnis erklärt wird.",
     "it": "Il trasferimento si dimostra applicando il metodo con un vincolo diverso e spiegando il risultato."
+  },
+  "Considere o caso inicial. O endereço de entrega está errado. O agente diz “I can update the address, but the parcel has already left the warehouse.” Qual análise melhor sustenta a decisão?": {
+    "pt-BR": "Considere o caso inicial. O endereço de entrega está errado. O agente diz “I can update the address, but the parcel has already left the warehouse.” Qual análise melhor sustenta a decisão?",
+    "en": "Consider the initial case. The delivery address is incorrect. The agent says, “I can update the address, but the parcel has already left the warehouse.” Which analysis best supports the decision?",
+    "es": "Considera el caso inicial. La dirección de entrega es incorrecta. El agente dice: “I can update the address, but the parcel has already left the warehouse.” ¿Qué análisis respalda mejor la decisión?",
+    "fr": "Examinez le cas de départ. L’adresse de livraison est incorrecte. L’agent dit : “I can update the address, but the parcel has already left the warehouse.” Quelle analyse étaye le mieux la décision ?",
+    "de": "Betrachte den Ausgangsfall. Die Lieferadresse ist falsch. Der Mitarbeiter sagt: “I can update the address, but the parcel has already left the warehouse.” Welche Analyse stützt die Entscheidung am besten?",
+    "it": "Considera il caso iniziale. L’indirizzo di consegna è errato. L’operatore dice: “I can update the address, but the parcel has already left the warehouse.” Quale analisi sostiene meglio la decisione?"
+  },
+  "Use apenas o resultado mais favorável ao objetivo original e deixe as informações incompletas para a revisão.": {
+    "pt-BR": "Use apenas o resultado mais favorável ao objetivo original e deixe as informações incompletas para a revisão.",
+    "en": "Use only the result that best favors the original goal and leave the incomplete information for review.",
+    "es": "Usa solo el resultado más favorable al objetivo original y deja la información incompleta para la revisión.",
+    "fr": "Utilisez uniquement le résultat le plus favorable à l’objectif initial et laissez les informations incomplètes pour la révision.",
+    "de": "Verwende nur das für das ursprüngliche Ziel günstigste Ergebnis und lass die unvollständigen Angaben für die Überprüfung offen.",
+    "it": "Usa solo il risultato più favorevole all’obiettivo originario e lascia le informazioni incomplete per la revisione."
+  },
+  "Adote a primeira interpretação razoável e valide a decisão a partir de um exemplo com resultado semelhante.": {
+    "pt-BR": "Adote a primeira interpretação razoável e valide a decisão a partir de um exemplo com resultado semelhante.",
+    "en": "Adopt the first reasonable interpretation and validate the decision with an example that has a similar outcome.",
+    "es": "Adopta la primera interpretación razonable y valida la decisión con un ejemplo que tenga un resultado parecido.",
+    "fr": "Retenez la première interprétation raisonnable et validez la décision à partir d’un exemple au résultat similaire.",
+    "de": "Übernimm die erste plausible Auslegung und bestätige die Entscheidung anhand eines Beispiels mit einem ähnlichen Ergebnis.",
+    "it": "Adotta la prima interpretazione ragionevole e convalida la decisione con un esempio dal risultato simile."
+  },
+  "Você já tem uma solução inicial para o caso. Agora execute a variação. Simule a mesma conversa por telefone e depois escreva uma confirmação curta com endereço fictício, horário e próximo passo. Qual comparação testa o efeito dessa mudança?": {
+    "pt-BR": "Você já tem uma solução inicial para o caso. Agora execute a variação. Simule a mesma conversa por telefone e depois escreva uma confirmação curta com endereço fictício, horário e próximo passo. Qual comparação testa o efeito dessa mudança?",
+    "en": "You already have an initial solution. Now try the variation. Role-play the same conversation by phone, then write a brief confirmation with a fictional address, the time, and the next step. Which comparison tests the effect of this change?",
+    "es": "Ya tienes una solución inicial. Ahora prueba la variante. Simula la misma conversación por teléfono y luego escribe una confirmación breve con una dirección ficticia, la hora y el próximo paso. ¿Qué comparación pone a prueba el efecto de este cambio?",
+    "fr": "Vous avez déjà une solution initiale. Passez maintenant à la variante. Jouez la même conversation au téléphone, puis rédigez une brève confirmation avec une adresse fictive, l’heure et la prochaine étape. Quelle comparaison permet de vérifier l’effet de cette modification ?",
+    "de": "Du hast bereits eine erste Lösung. Probiere nun die Variante aus. Spiele dasselbe Gespräch am Telefon nach und schreibe anschließend eine kurze Bestätigung mit einer erfundenen Adresse, der Uhrzeit und dem nächsten Schritt. Mit welchem Vergleich lässt sich die Auswirkung dieser Änderung testen?",
+    "it": "Hai già una prima soluzione. Ora prova la variante. Simula la stessa conversazione al telefono, poi scrivi una breve conferma con un indirizzo fittizio, l’orario e il prossimo passo. Quale confronto verifica l’effetto di questa modifica?"
+  },
+  "Aplique o mesmo critério às duas versões, registre a previsão e use os resultados observados para revisar a conclusão.": {
+    "pt-BR": "Aplique o mesmo critério às duas versões, registre a previsão e use os resultados observados para revisar a conclusão.",
+    "en": "Apply the same criterion to both versions, record your prediction, and use the observed results to revise your conclusion.",
+    "es": "Aplica el mismo criterio a las dos versiones, registra tu predicción y usa los resultados observados para revisar la conclusión.",
+    "fr": "Appliquez le même critère aux deux versions, consignez votre prévision et utilisez les résultats observés pour revoir votre conclusion.",
+    "de": "Wende dasselbe Kriterium auf beide Versionen an, halte deine Vorhersage fest und überarbeite deine Schlussfolgerung anhand der beobachteten Ergebnisse.",
+    "it": "Applica lo stesso criterio a entrambe le versioni, registra la previsione e usa i risultati osservati per rivedere la conclusione."
+  },
+  "Ajuste o critério na segunda versão para que as duas entregas atinjam a mesma meta.": {
+    "pt-BR": "Ajuste o critério na segunda versão para que as duas entregas atinjam a mesma meta.",
+    "en": "Adjust the criterion for the second version so both submissions meet the same goal.",
+    "es": "Ajusta el criterio de la segunda versión para que las dos entregas alcancen la misma meta.",
+    "fr": "Ajustez le critère de la deuxième version pour que les deux productions atteignent le même objectif.",
+    "de": "Passe das Kriterium in der zweiten Version so an, dass beide Abgaben dasselbe Ziel erreichen.",
+    "it": "Adatta il criterio della seconda versione in modo che entrambi gli elaborati raggiungano lo stesso obiettivo."
+  },
+  "Avalie somente a segunda versão e use o resultado final para inferir o que mudou.": {
+    "pt-BR": "Avalie somente a segunda versão e use o resultado final para inferir o que mudou.",
+    "en": "Evaluate only the second version and use the final result to infer what changed.",
+    "es": "Evalúa solo la segunda versión y usa el resultado final para inferir qué cambió.",
+    "fr": "Évaluez uniquement la deuxième version et déduisez du résultat final ce qui a changé.",
+    "de": "Bewerte nur die zweite Version und leite aus dem Endergebnis ab, was sich geändert hat.",
+    "it": "Valuta solo la seconda versione e usa il risultato finale per dedurre che cosa è cambiato."
+  },
+  "Com um critério consistente e uma previsão anterior ao teste, você consegue identificar o efeito da mudança e explicar o que ainda precisa ser verificado.": {
+    "pt-BR": "Com um critério consistente e uma previsão anterior ao teste, você consegue identificar o efeito da mudança e explicar o que ainda precisa ser verificado.",
+    "en": "With a consistent criterion and a prediction made before the test, you can identify the effect of the change and explain what still needs verification.",
+    "es": "Con un criterio coherente y una predicción formulada antes de la prueba, puedes identificar el efecto del cambio y explicar qué queda por verificar.",
+    "fr": "Avec un critère constant et une prévision formulée avant le test, vous pouvez identifier l’effet du changement et expliquer ce qui reste à vérifier.",
+    "de": "Mit einem einheitlichen Kriterium und einer Vorhersage vor dem Test kannst du die Auswirkung der Änderung erkennen und erklären, was noch geprüft werden muss.",
+    "it": "Con un criterio coerente e una previsione formulata prima del test, puoi individuare l’effetto della modifica e spiegare cosa resta da verificare."
+  },
+  "Confirme a ação e a limitação: “Could you confirm the new address and tell me who will contact the driver?”": {
+    "pt-BR": "Confirme a ação e a limitação: “Could you confirm the new address and tell me who will contact the driver?”",
+    "en": "Confirm the action and its limit: “Could you confirm the new address and tell me who will contact the driver?”",
+    "es": "Confirma la acción y su límite: “Could you confirm the new address and tell me who will contact the driver?”",
+    "fr": "Confirmez l’action et sa limite : “Could you confirm the new address and tell me who will contact the driver?”",
+    "de": "Kläre die Maßnahme und ihre Grenze: “Could you confirm the new address and tell me who will contact the driver?”",
+    "it": "Conferma l’azione e il suo limite: “Could you confirm the new address and tell me who will contact the driver?”"
   }
 }

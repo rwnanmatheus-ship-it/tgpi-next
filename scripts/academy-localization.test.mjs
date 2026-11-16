@@ -11,13 +11,14 @@ const multilingualCourses = h.academyCourses.filter(course => course.language !=
 const normalized = text => text.replace(/\s+/g, ' ').trim().toLowerCase();
 const supplemental = { ...JSON.parse(fs.readFileSync('public/locales/en.json', 'utf8')), ...JSON.parse(fs.readFileSync('public/locales/academy/en.json', 'utf8')) };
 const publicKeys = new Set([...Object.keys(h.messages.messages), ...Object.keys(supplemental)].map(normalized));
-const protectedCopy = { ...JSON.parse(fs.readFileSync('src/lib/localization/assessment-messages.json', 'utf8')), ...JSON.parse(fs.readFileSync('src/lib/localization/academy-project-assessment.json', 'utf8')) };
+const curriculumKeys = new Set(Object.keys(JSON.parse(fs.readFileSync('src/lib/localization/academy-curricula/en.json', 'utf8'))).map(normalized));
+const protectedCopy = { ...JSON.parse(fs.readFileSync('src/lib/localization/assessment-messages.json', 'utf8')), ...JSON.parse(fs.readFileSync('src/lib/localization/academy-project-assessment.json', 'utf8')), ...JSON.parse(fs.readFileSync('src/lib/localization/academy-curriculum-assessment.json', 'utf8')) };
 const protectedKeys = new Set(Object.keys(protectedCopy).map(normalized));
 const { localizeAcademyCourse } = h.load(resolve('src/lib/localization/academy-content.ts'));
 const { withAcademyTranslations, academyCaseTranslations } = h.load(resolve('src/lib/localization/academy-assessment.server.ts'));
 
 test('multilingual curricula have registered six-language presentation copy', () => {
-  const missing = [...new Set(multilingualCourses.flatMap(academyDisplayCopy))].filter(text => !publicKeys.has(normalized(text)) && h.locales.every(locale => h.messages.translate(locale, text) === text));
+  const missing = [...new Set(multilingualCourses.flatMap(academyDisplayCopy))].filter(text => !publicKeys.has(normalized(text)) && !curriculumKeys.has(normalized(text)) && h.locales.every(locale => h.messages.translate(locale, text) === text));
   assert.deepEqual(missing, [], `Unregistered academy copy: ${missing.join('\n')}`);
   for (const course of h.academyCourses) for (const locale of h.locales) {
     const rendered = localizeAcademyCourse(course, locale);
@@ -77,8 +78,8 @@ function statusFor(courseId, withResult = false) {
 }
 
 test('Portuguese curricula and their exercises preserve the authored instruction language', () => {
-  const portuguese = h.academyCourses.filter(course => course.language === 'pt-BR');
-  assert.equal(portuguese.length, 73);
+  const { fullyLocalizedAcademyCourses } = h.load(resolve('src/lib/localization/academy-coverage.ts'));
+  const portuguese = h.academyCourses.filter(course => course.language === 'pt-BR' && !fullyLocalizedAcademyCourses.has(course.id));
   for (const course of portuguese) {
     const source = statusFor(course.id);
     assert.strictEqual(withAcademyTranslations(source, course.id), source);
@@ -107,7 +108,7 @@ test('assessment localization preserves attempts, learner drafts and names witho
   assert.equal(returned.challenge, null);
   assert.ok(returned.lastResult.feedback[0].translations['pt-BR']);
   const english = statusFor('global-english-2026');
-  assert.deepEqual(withAcademyTranslations(english, 'global-english-2026').challenge.questions[0].options, english.challenge.questions[0].options);
+  assert.deepEqual(withAcademyTranslations(english, 'global-english-2026').challenge.questions[0].options, english.challenge.questions[0].options.map(option => ({ ...option, language: 'en' })));
 });
 
 test('persisted numerical cases localize without regenerating numbers or changing scoring', () => {
@@ -167,8 +168,10 @@ test('switching the study presentation language keeps selected answers and local
   }
 });
 
-test('new Portuguese labs preserve authored content in a multilingual curriculum and in assessments', () => {
-  const course = h.getAcademyCourse('global-english-2026');
+test('unreleased Portuguese labs retain authored content in a multilingual curriculum and in assessments', () => {
+  const { fullyLocalizedAcademyCourses } = h.load(resolve('src/lib/localization/academy-coverage.ts'));
+  const course = multilingualCourses.find(item => !fullyLocalizedAcademyCourses.has(item.id) && item.lessons.some(lesson => lesson.practiceLab));
+  if (!course) return;
   const source = course.lessons.filter(lesson => lesson.practiceLab);
   assert.equal(source.length, 2);
   for (const locale of h.locales) {
@@ -185,6 +188,70 @@ test('new Portuguese labs preserve authored content in a multilingual curriculum
   assert.deepEqual(withAcademyTranslations(result, course.id).lastResult.feedback[1], feedback);
 });
 
+test('released courses cover every instructional field, preserving language exercises and stored checks', () => {
+  const { fullyLocalizedAcademyCourses, academyAnswerLanguage } = h.load(resolve('src/lib/localization/academy-coverage.ts'));
+    assert.deepEqual([...fullyLocalizedAcademyCourses].sort(), h.academyCourses.map(course => course.id).sort());
+  const publicDictionaries = Object.fromEntries(h.locales.map(locale => [locale,
+    { ...JSON.parse(fs.readFileSync(`public/locales/${locale}.json`, 'utf8')), ...JSON.parse(fs.readFileSync(`public/locales/academy/${locale}.json`, 'utf8')) },
+  ]));
+  const supplementalKeys = new Map(Object.keys(supplemental).map(key => [normalized(key), key]));
+  for (const id of fullyLocalizedAcademyCourses) {
+    const course = h.getAcademyCourse(id);
+    assert.ok(course, id);
+    const copy = academyDisplayCopy({ ...course, lessons: course.lessons.map(lesson => ({ ...lesson, language: undefined })) });
+    copy.push(...[course.projectBrief, course.prerequisite, course.scopeNotice].filter(Boolean));
+    for (const locale of h.locales) {
+      for (const text of new Set(copy)) {
+        const localized = h.messages.translate(locale, text);
+        assert.ok(publicKeys.has(normalized(text)) || curriculumKeys.has(normalized(text)) || h.locales.some(code => h.messages.translate(code, text) !== text), `${id}: missing ${text}`);
+        const key = supplementalKeys.get(normalized(text));
+        if (key) assert.ok(publicDictionaries[locale][key]?.trim(), `${locale}: ${text}`);
+        assert.ok(localized.trim(), `${id} ${locale}: ${text}`);
+      }
+      const courseCopy = localizeAcademyCourse(course, locale);
+      assert.ok(courseCopy.lessons.every(lesson => lesson.language === locale));
+      for (const lesson of courseCopy.lessons) {
+        const authored = course.lessons.find(item => item.id === lesson.id);
+        assert.equal(lesson.title, h.messages.translate(locale, authored.title));
+        assert.deepEqual(lesson.references, authored.references);
+        assert.equal(lesson.minutes, authored.minutes);
+      }
+    }
+    const bank = h.academyQuestions(id);
+    const privateCase = h.academyCase(id);
+    for (const value of [privateCase.prompt, privateCase.unit, privateCase.explanation]) {
+      assert.ok(protectedKeys.has(normalized(value)), `Missing case translation: ${value}`);
+    }
+    for (const source of bank) {
+      const { correctOptionId, explanation, ...question } = source;
+      const status = statusFor(id);
+      status.challenge.questions = [question];
+      status.lastResult = { feedback: [{ questionId: question.id, lessonId: question.lessonId, language: question.language, explanation }] };
+      const translated = withAcademyTranslations(status, id);
+      const [disclosed] = translated.challenge.questions;
+      assert.equal(disclosed.language, undefined);
+      assert.equal(disclosed.id, source.id);
+      assert.equal(disclosed.correctOptionId, undefined);
+      assert.deepEqual(disclosed.options.map(option => option.id), question.options.map(option => option.id));
+      for (const locale of h.locales) {
+        const labels = disclosed.options.map(option => normalized(option.translations?.[locale] ?? option.label));
+        assert.equal(new Set(labels).size, labels.length, `${id} ${source.id} ${locale}: assessment options must remain distinct`);
+      }
+      assert.ok(question.options.some(option => option.id === correctOptionId));
+      for (const text of [source.prompt, explanation, ...(!academyAnswerLanguage(id, source.lessonId, source.language) ? source.options.map(option => option.label) : [])]) {
+        assert.ok(protectedKeys.has(normalized(text)), `Missing protected copy: ${text}`);
+        const entry = protectedCopy[text.replace(/\s+/g, ' ').trim()];
+        for (const locale of h.locales) {
+          assert.ok(entry[locale]?.trim());
+          assert.deepEqual(entry[locale].match(/\{\w+\}/g)?.sort() ?? [], text.match(/\{\w+\}/g)?.sort() ?? []);
+        }
+      }
+      const answerLanguage = academyAnswerLanguage(id, source.lessonId, source.language);
+      if (answerLanguage) assert.deepEqual(disclosed.options, question.options.map(option => ({ ...option, language: answerLanguage })));
+    }
+  }
+});
+
 test('protected assessment catalog cannot be compiled into public dictionary assets', async () => {
   const { spawnSync } = await import('node:child_process');
   const { mkdtempSync, writeFileSync, rmSync } = await import('node:fs');
@@ -199,3 +266,15 @@ test('protected assessment catalog cannot be compiled into public dictionary ass
   } finally { rmSync(folder, { recursive: true, force: true }); }
 });
 
+
+test('private curriculum copy is localized for enrolled study without becoming a public dictionary entry', async () => {
+  const course = h.getAcademyCourse('housing-abroad');
+  const { getAcademyCurriculumMessages } = h.load(resolve('src/lib/localization/academy-curricula.server.ts'));
+  const privateMessages = await getAcademyCurriculumMessages('pt-BR');
+  const privateText = course.lessons.slice(1).flatMap(lesson => lesson.sections.map(section => section.body))
+    .find(body => privateMessages[body] && !publicKeys.has(normalized(body)));
+  assert.ok(privateText, 'Paid lesson body should be available only in the study dictionary');
+  assert.notEqual(privateMessages[privateText], privateText);
+  const localized = localizeAcademyCourse(course, 'pt-BR', privateMessages);
+  assert.ok(localized.lessons.slice(1).some(lesson => lesson.sections.some(section => section.body === privateMessages[privateText])));
+});

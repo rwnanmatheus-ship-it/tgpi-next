@@ -1,3 +1,6 @@
+import { getLocale } from '@/lib/localization/server';
+import { getAcademyCurriculumMessages } from '@/lib/localization/academy-curricula.server';
+import { localizeAcademyCourse } from '@/lib/localization/academy-content';
 import { localizeMetadata } from '@/lib/localization/metadata.server';
 import { notFound, redirect } from 'next/navigation';
 import AcademyStudy from '@/components/courses/academy/AcademyStudy';
@@ -25,7 +28,9 @@ export default async function AcademyStudyPage({ params, searchParams }: {
   const { userId } = await (isPremiumAcademyCourse(latest.id) ? requirePremium(path) : requireUser(path));
 
   const course = await academyStudyCourse(userId, latest, edition === 'current', edition === 'previous' ? historicalAcademyVersions[1] : previousEdition);
-  return <AcademyStudy course={course} latestVersion={latest.version} initialLesson={query.get('lesson') ?? undefined} />;
+  const locale = await getLocale();
+  const localized = localizeAcademyCourse(course, locale, await getAcademyCurriculumMessages(locale));
+  return <AcademyStudy course={localized} localizedOnServer latestVersion={latest.version} initialLesson={query.get('lesson') ?? undefined} />;
 }
 
 export async function generateMetadata() { return localizeMetadata(sourceMetadata); }
