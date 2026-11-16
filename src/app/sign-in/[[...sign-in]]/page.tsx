@@ -20,6 +20,8 @@ export default async function SignInPage({ searchParams }: { searchParams: Promi
       <SignIn
         path="/sign-in"
         routing="path"
+        // Account discovery stays private. New members can use the dedicated sign-up route.
+        withSignUp={false}
         signUpUrl={`/sign-up?next=${encodeURIComponent(registrationReturnTo(next))}`}
         forceRedirectUrl={next}
         signUpForceRedirectUrl={registrationUrl(next)}
