@@ -1,37 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TGPI — The Global Polymath Institute
 
-## Getting Started
+Aplicação da TGPI para comparar países, criar um plano internacional, estudar e emitir credenciais verificáveis. [Site oficial](https://www.theglobalpolymath.com)
 
-First, run the development server:
+## Desenvolvimento local
+
+Use Node.js 24 e npm, aprovados no workflow Platform foundation. Consulte [.env.example](.env.example) para identificar as variáveis utilizadas e configure somente as integrações necessárias em um `.env.local` ignorado pelo Git. Use credenciais e projetos de teste no desenvolvimento.
 
 ```bash
+npm ci
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abra [localhost:3000](http://localhost:3000). Para validar uma alteração antes de abrir o PR, execute:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run typecheck
+npm run build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+`prebuild` executa lint, a suíte de testes e a verificação de localização. O npm também executa essa etapa automaticamente antes de `npm run build`.
 
-## Learn More
+## Mapa do repositório
 
-To learn more about Next.js, take a look at the following resources:
+| Caminho | Responsabilidade |
+| --- | --- |
+| [src/app](src/app) | Rotas, páginas e handlers do App Router |
+| [src/components](src/components) | Componentes de produto e interfaces compartilhadas |
+| [src/lib](src/lib) | Serviços, contratos e integrações, incluindo módulos exclusivos de servidor |
+| [src/data](src/data) | Catálogos e conteúdo versionado |
+| [src/core](src/core), [src/modules](src/modules) | Módulos transversais e áreas de produto existentes |
+| [src/hooks](src/hooks), [src/styles](src/styles), [src/types](src/types) | Hooks, estilos e tipos compartilhados |
+| [public](public) | Recursos servidos diretamente, incluindo mídia e PWA |
+| [scripts](scripts) | Testes, auditorias, geração e verificações operacionais |
+| [.github/workflows](.github/workflows) | Verificações de qualidade e monitores do site |
+| [docs](docs) | Referências de engenharia, produto, localização e histórico de releases |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Manutenção e segurança
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
-"# tgpi-next"  
+Abra PRs pequenos com evidências de teste e descrição do impacto. A branch `fix-deploy-hoje` está ligada à produção na Vercel. Use o [guia de manutenção e prompt mestre](docs/engineering/repository-maintenance.md) para planejar mudanças e a [política de segurança](SECURITY.md) para relatar vulnerabilidades de forma privada.

@@ -46,9 +46,9 @@
     "@clerk/nextjs": "^7.7.7",
     "@pdf-lib/fontkit": "^1.1.1",
     "@stripe/stripe-js": "^9.2.0",
-    "firebase": "^12.18.0",
+    "firebase": "12.18.0",
     "leaflet": "^1.9.4",
-    "next": "16.3.4",
+    "next": "16.4.6",
     "openai": "^7.39.0",
     "pdf-lib": "^1.17.1",
     "qrcode": "^1.5.4",
@@ -57,7 +57,7 @@
     "react-dom": "19.2.4",
     "react-markdown": "^10.1.0",
     "remark-gfm": "^4.0.1",
-    "sharp": "0.35.4",
+    "sharp": "0.35.5",
     "stripe": "^22.0.2",
     "three": "0.187.0",
     "viem": "^2.56.3",
@@ -79,5 +79,13 @@
     "playwright": "1.65.1",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "overrides": {
+    "@firebase/firestore": {
+      "@grpc/grpc-js": "1.13.6"
+    },
+    "@typescript-eslint/typescript-estree": {
+      "minimatch": "11.0.1"
+    }
   }
 }

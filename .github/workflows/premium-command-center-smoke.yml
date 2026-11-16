@@ -25,33 +25,27 @@ jobs:
 
     steps:
       - name: Check out deployment source
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          persist-credentials: false
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 22
 
-      - name: Resolve deployment URL
-        id: target
-        shell: bash
+      - name: Verify Premium Command Center
         env:
           EVENT_NAME: ${{ github.event_name }}
           MANUAL_URL: ${{ inputs.base_url }}
           PRODUCTION_URL: https://www.theglobalpolymath.com
         run: |
           if [[ "$EVENT_NAME" == "workflow_dispatch" ]]; then
-            target_url="$MANUAL_URL"
+            if [[ -z "$MANUAL_URL" ]]; then
+              echo "No deployment URL was provided." >&2
+              exit 1
+            fi
+            node scripts/verify-premium-command-center.mjs "$MANUAL_URL"
           else
-            target_url="$PRODUCTION_URL"
+            node scripts/verify-premium-command-center.mjs "$PRODUCTION_URL"
           fi
-
-          if [[ -z "$target_url" ]]; then
-            echo "No deployment URL was provided." >&2
-            exit 1
-          fi
-
-          echo "base_url=$target_url" >> "$GITHUB_OUTPUT"
-
-      - name: Verify Premium Command Center
-        run: node scripts/verify-premium-command-center.mjs "${{ steps.target.outputs.base_url }}"
