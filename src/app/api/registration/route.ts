@@ -32,7 +32,7 @@ export async function POST(request: Request) {
     const country = new Intl.DisplayNames(["en"], { type: "region" }).of(input.currentCountry) || input.currentCountry;
     await client.users.updateUser(userId, { firstName: input.firstName, lastName: input.lastName });
     await client.users.updateUserMetadata(userId, {
-      unsafeMetadata: { tgpiAccountProfile: { currentCountry: country, preferredLanguage: input.preferredLanguage, updatedAt: now } },
+      unsafeMetadata: { tgpiAccountProfile: { currentCountry: country, ...(input.currentCity ? { currentCity: input.currentCity } : {}), preferredLanguage: input.preferredLanguage, updatedAt: now } },
       privateMetadata: { tgpiRegistration: { completedAt: now, termsVersion: "2026-10-17", termsAcceptedAt: now } },
     });
     recordFunnelEvent("signup_completed", requestFunnelConsent(request));

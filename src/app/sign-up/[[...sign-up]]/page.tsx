@@ -1,6 +1,6 @@
 import { localizeMetadata } from "@/lib/localization/metadata.server";
 import { LocalizedText } from "@/components/localization/LocaleProvider";
-import { safeReturnTo } from "@/lib/auth/return-to";
+import { registrationReturnTo, registrationUrl } from "@/lib/auth/return-to";
 import type { Metadata } from "next";
 import { SignUp } from "@clerk/nextjs";
 import TGPIAuthShell from "@/components/auth/TGPIAuthShell";
@@ -14,15 +14,14 @@ const sourceMetadata: Metadata = {
 
 export default async function SignUpPage({ searchParams }: { searchParams: Promise<{ next?: string; redirect_url?: string }> }) {
   const params = await searchParams;
-  const next = safeReturnTo(params.next ?? params.redirect_url);
-  const welcome = `/welcome?next=${encodeURIComponent(next)}`;
+  const next = registrationReturnTo(params.next ?? params.redirect_url);
   return (
-    <TGPIAuthShell mode="sign-up">
+    <TGPIAuthShell mode="sign-up" returnTo={next}>
       <SignUp
         path="/sign-up"
         routing="path"
         signInUrl={`/sign-in?next=${encodeURIComponent(next)}`}
-        forceRedirectUrl={welcome}
+        forceRedirectUrl={registrationUrl(next)}
         signInFallbackRedirectUrl={next}
         fallback={<p role="status"><LocalizedText text="Loading secure registration…" /></p>}
         appearance={tgpiClerkAppearance}

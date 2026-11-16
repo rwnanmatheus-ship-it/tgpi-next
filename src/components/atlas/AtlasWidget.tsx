@@ -40,7 +40,7 @@ export default function AtlasWidget() {
   const { userId, isLoaded } = useAuth();
   const pathname = usePathname();
   const context = atlasNavigationContext(pathname);
-  const hidden = pathname === '/atlas' || /^\/(sign-in|sign-up)(\/|$)/.test(pathname);
+  const hidden = pathname === '/atlas' || /^\/(sign-in|sign-up|welcome|login)(\/|$)/.test(pathname);
   const inviteTopic = context?.topic;
   const dialog = useRef<HTMLDialogElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
