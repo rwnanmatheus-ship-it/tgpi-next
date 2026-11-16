@@ -11,6 +11,12 @@ export function certificateVerificationUrl(id: string) {
   return `${CERTIFICATE_ORIGIN}/verify/credentials/${encodeURIComponent(id)}`;
 }
 
+export const CERTIFICATE_BADGE_SIZE = { width: 1200, height: 627 } as const;
+
+export function certificateBadgePath(id: string) {
+  return `/api/credentials/${encodeURIComponent(id)}/badge`;
+}
+
 export function certificateDate(value: string, locale = "en") {
   const date = new Date(value);
   return Number.isNaN(date.getTime())

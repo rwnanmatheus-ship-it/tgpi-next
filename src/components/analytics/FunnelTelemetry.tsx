@@ -12,6 +12,7 @@ export default function FunnelTelemetry() {
     }
     if (pathname.startsWith("/sign-up")) send("signup_started");
     if (["/pricing", "/premium", "/upgrade"].includes(pathname)) send("premium_visit");
+    if (/^\/verify\/credentials\/TGPI-[A-Z0-9_-]+$/.test(pathname) && document.querySelector('[data-state="active_verified"]')) send("credential_verification_viewed");
     function onClick(event: MouseEvent) {
       const target = event.target instanceof Element ? event.target.closest<HTMLElement>("[data-funnel-event]") : null;
       const name = target?.dataset.funnelEvent;

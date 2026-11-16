@@ -63,6 +63,7 @@ export function getCredentialTrustState(input: {
 export function createPortableLearningRecord(
   credential: PortableCredentialSource,
   origin: string,
+  includePrivateEvidence = true,
 ) {
   const canonicalOrigin = cleanOrigin(origin);
   const verificationUrl =
@@ -85,19 +86,19 @@ export function createPortableLearningRecord(
         url: canonicalOrigin + credential.criteriaUrl,
       },
       result: {
-        achievedScore: credential.assessmentScore,
+        ...(includePrivateEvidence ? { achievedScore: credential.assessmentScore } : {}),
         learningHours: credential.learningHours,
         masteryThreshold: credential.masteryThreshold,
       },
       skills: credential.skills,
     },
     holder: {
-      globalKey: {
+      ...(includePrivateEvidence ? { globalKey: {
         anchorStatus: credential.identityEvidence.anchor.status,
         fingerprint: credential.identityEvidence.fingerprint,
         id: credential.identityEvidence.globalKeyId,
         revision: credential.identityEvidence.revision,
-      },
+      } } : {}),
       name: credential.publicName,
     },
     integrity: {

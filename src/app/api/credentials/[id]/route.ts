@@ -30,10 +30,17 @@ export async function GET(
 
   let credential = await getPublicLearningCredential(id);
   const download = new URL(request.url).searchParams.get("download") === "1";
-  if (!credential && download) {
+  let includePrivateEvidence = false;
+  if (download) {
     try {
       const identity = await requireApiUser();
-      if (await getUserLearningCredential(identity.uid, id)) credential = await getPublicLearningCredential(id, identity.uid);
+      if (await getUserLearningCredential(identity.uid, id)) {
+        const owned = await getPublicLearningCredential(id, identity.uid);
+        if (owned) {
+          credential = owned;
+          includePrivateEvidence = true;
+        }
+      }
     } catch { /* Private records remain unavailable to anonymous and unrelated users. */ }
   }
   if (!credential) {
@@ -43,7 +50,7 @@ export async function GET(
     );
   }
 
-  const record = createPortableLearningRecord(credential, CERTIFICATE_ORIGIN);
+  const record = createPortableLearningRecord(credential, CERTIFICATE_ORIGIN, includePrivateEvidence);
   const snapshot = { ...record, statusCheckedAt: new Date().toISOString() };
   const proof = signPortableLearningRecord(snapshot);
   const headers = new Headers(responseHeaders());

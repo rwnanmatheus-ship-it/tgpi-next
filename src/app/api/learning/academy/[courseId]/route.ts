@@ -1,3 +1,4 @@
+import { recordFunnelEvent, requestFunnelConsent } from "@/lib/funnel.server";
 import { NextResponse } from 'next/server';
 import { requireApiUser, requirePremiumApiUser, TgpiAuthenticationError, TgpiPremiumRequiredError } from '@/lib/auth/guards';
 import { isPremiumAcademyCourse } from '@/data/courses/academy/premium-policy';
@@ -34,6 +35,6 @@ export async function POST(request: Request, context: { params: Promise<{ course
     while (true) { const { done, value } = await reader.read(); if (done) break; size += value.byteLength; if (size > 76000) { await reader.cancel(); throw new AcademyError('Request exceeds the allowed size.', 413); } chunks.push(value); }
     const bytes = new Uint8Array(size); let offset = 0; for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.byteLength; }
     const input: unknown = JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(bytes));
-    return await response(await mutateAcademy(identity, courseId, input), courseId);
+    return await response(await mutateAcademy(identity, courseId, input, () => recordFunnelEvent("credential_issued", requestFunnelConsent(request))), courseId);
   } catch (error) { return failure(error); }
 }

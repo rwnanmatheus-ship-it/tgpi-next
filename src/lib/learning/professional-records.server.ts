@@ -37,12 +37,12 @@ export async function getProfessionalRecord(uid: string, id: string) {
   return (await get<ProfessionalRecord>(professionalRecordPath(uid, id, course.version)))?.data ?? null;
 }
 
-export async function mutateProfessionalRecord(identity: Identity, id: string, raw: unknown) {
+export async function mutateProfessionalRecord(identity: Identity, id: string, raw: unknown, onIssued?: () => void) {
   const parsed = professionalMutationSchema.safeParse(raw);
   if (!parsed.success) throw new ProfessionalLearningError("Confira os campos e seus limites antes de enviar.");
   const input = parsed.data, course = courseFor(id), path = professionalRecordPath(identity.uid, id, course.version);
   if (input.version !== course.version) throw new ProfessionalLearningError("A versão do curso mudou. Seu histórico foi preservado; recarregue a página.", 409);
-  if (input.action === "issue") return issueProfessionalCredential(identity, id, input.sharing);
+  if (input.action === "issue") return issueProfessionalCredential(identity, id, input.sharing, onIssued);
   if (input.action === "sharing") return setProfessionalSharing(identity.uid, id, input.sharing);
   const result = await transaction<{ record: ProfessionalRecord; feedback?: Array<{ questionId: string; correct: boolean; explanation: string }> }>(async ({ getDocuments }) => {
     const document = (await getDocuments<ProfessionalRecord>([path])).get(path);
@@ -143,15 +143,15 @@ export async function listProfessionalReviews(reviewerUid: string) {
   return records.flatMap(item => item ? [item.data] : []);
 }
 
-async function issueProfessionalCredential(identity: Identity, id: string, sharing: boolean) {
+async function issueProfessionalCredential(identity: Identity, id: string, sharing: boolean, onIssued?: () => void) {
   const course = courseFor(id);
   if (!identity.emailVerified || !isCertificateName(identity.publicName)) throw new ProfessionalLearningError("Confirme seu e-mail e nome de certificado na conta.", 409);
   if (!isCredentialSigningConfigured()) throw new ProfessionalLearningError("Emissão segura indisponível.", 503);
   const key = await getOrCreateGlobalKey(identity.uid), path = professionalRecordPath(identity.uid, id, course.version);
-  return transaction(async ({ getDocuments }) => {
+  const { credentialId, created } = await transaction(async ({ getDocuments }) => {
     const document = (await getDocuments<ProfessionalRecord>([path])).get(path), record = document?.data;
     if (!record || !allActivities(course, record) || !record.quiz?.passed || record.state !== "approved" || !record.review || !record.completedAt || !scoreProfessionalProject(course, identity.uid, record.review).passed || record.review.submissionId !== record.submission?.id) throw new ProfessionalLearningError("A emissão exige práticas, questionário, projeto aprovado e todos os critérios essenciais.", 409);
-    if (record.credentialId) return { result: { credentialId: record.credentialId }, writes: [] };
+    if (record.credentialId) return { result: { credentialId: record.credentialId, created: false }, writes: [] };
     const now = new Date().toISOString(), credentialId = createCredentialId(id);
     const unsigned: Omit<TgpiLearningCredential, "verificationHash"> = {
       achievementType: "Professional Certificate", assessmentScore: Math.round(scoreProfessionalProject(course, identity.uid, record.review).score),
@@ -166,8 +166,10 @@ async function issueProfessionalCredential(identity: Identity, id: string, shari
       professionalEvidence: { sharing, instructionLanguage: course.instructionLanguage, certificateLanguage: course.certificateLanguage, rubricVersion: course.approval.rubricVersion },
     };
     const credential = { ...unsigned, verificationHash: signLearningCredential(unsigned) }, next = { ...record, credentialId, updatedAt: now, revision: record.revision + 1 };
-    return { result: { credentialId }, writes: [write(`tgpiLearningCredentials/${credentialId}`, json(credential), { exists: false }), write(`tgpiLearningUsers/${identity.uid}/credentials/${credentialId}`, json(credential), { exists: false }), write(path, json(next), { updateTime: document!.updateTime }), write(`${path}/history/issue-${next.revision}`, json({ credentialId, issuedAt: now }), { exists: false })] };
+    return { result: { credentialId, created: true }, writes: [write(`tgpiLearningCredentials/${credentialId}`, json(credential), { exists: false }), write(`tgpiLearningUsers/${identity.uid}/credentials/${credentialId}`, json(credential), { exists: false }), write(path, json(next), { updateTime: document!.updateTime }), write(`${path}/history/issue-${next.revision}`, json({ credentialId, issuedAt: now }), { exists: false })] };
   });
+  if (created) onIssued?.();
+  return { credentialId };
 }
 async function setProfessionalSharing(uid: string, id: string, sharing: boolean) {
   const course = courseFor(id), path = professionalRecordPath(uid, id, course.version);

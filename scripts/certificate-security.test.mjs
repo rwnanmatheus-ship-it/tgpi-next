@@ -6,6 +6,7 @@ import test from "node:test";
 import ts from "typescript";
 
 import * as account from "../src/lib/account-profile.ts";
+import * as reference from "../src/lib/certificate-reference.ts";
 import * as presentation from "../src/lib/certificate-presentation.ts";
 import * as standard from "../src/lib/credential-standard.ts";
 
@@ -29,6 +30,8 @@ function loadServerFile(path, dependencies = {}) {
   const { outputText } = ts.transpileModule(source, {
     compilerOptions: {
       module: ts.ModuleKind.CommonJS,
+      jsx: ts.JsxEmit.ReactJSX,
+      esModuleInterop: true,
       target: ts.ScriptTarget.ES2022,
     },
   });
@@ -121,7 +124,17 @@ function setup(storedCredential, authenticatedUid) {
       },
     },
   });
+  const badge = loadServerFile("app/api/credentials/[id]/badge/route.tsx", {
+    "@/lib/certificate-reference": reference,
+    "@/lib/certificate-presentation": presentation,
+    "@/lib/credential-standard": standard,
+    "@/lib/learning-records.server": records,
+  });
   return {
+    badge: (download = false, id = fixture.id) => badge.GET(
+      new Request(`https://www.theglobalpolymath.com${presentation.certificateBadgePath(id)}${download ? "?download=1" : ""}`),
+      { params: Promise.resolve({ id }) },
+    ),
     documents,
     get: (download = false) => api.GET(
       new Request(`https://www.theglobalpolymath.com/api/credentials/${fixture.id}${download ? "?download=1" : ""}`),
@@ -176,6 +189,8 @@ test("the issuer public key verifies exact signed evidence and an altered snapsh
   assert.ok(Number.isFinite(Date.parse(snapshot.statusCheckedAt)));
   assert.equal(snapshot.completedAt, fixture.completedAt);
   assert.equal(snapshot.integrity.verified, true);
+  assert.equal(snapshot.achievement.result.achievedScore, undefined);
+  assert.equal(snapshot.holder.globalKey, undefined);
   const decodedProof = JSON.stringify(snapshot);
   assert.ok(!decodedProof.includes(fixture.ownerUid));
   assert.ok(!decodedProof.includes("verificationHash"));
@@ -244,4 +259,32 @@ test("the issuer signs current revocation status and separates preview keys", as
     process.env.VERCEL_ENV = "production";
     process.env.TGPI_CREDENTIAL_SIGNING_SECRET = testSecret;
   }
+});
+
+test("public evidence stays redacted for downloads while the owner can export the complete record", async () => {
+  const stored = signStoredRecord();
+  const publicRecord = await (await setup(stored, "unrelated-user").get(true)).json();
+  assert.equal(publicRecord.achievement.result.achievedScore, undefined);
+  assert.equal(publicRecord.holder.globalKey, undefined);
+  const ownerRecord = await (await setup(stored, fixture.ownerUid).get(true)).json();
+  assert.equal(ownerRecord.achievement.result.achievedScore, fixture.assessmentScore);
+  assert.equal(ownerRecord.holder.globalKey.id, fixture.identityEvidence.globalKeyId);
+});
+
+test("badge renders a downloadable PNG only for active publicly shared certificates", async () => {
+  const active = setup(signStoredRecord());
+  const response = await active.badge(true);
+  assert.equal(response.status, 200);
+  assert.equal(response.headers.get("content-type"), "image/png");
+  assert.match(response.headers.get("content-disposition"), /badge\.png/);
+  assert.match(response.headers.get("cache-control"), /no-store/);
+  const png = Buffer.from(await response.arrayBuffer());
+  assert.equal(png.readUInt32BE(16), 1200);
+  assert.equal(png.readUInt32BE(20), 627);
+  assert.equal((await active.badge(false, "TGPI-NOT-ISSUED")).status, 404);
+  assert.equal((await setup(signStoredRecord({ status: "revoked" })).badge()).status, 404);
+  assert.equal((await setup(signStoredRecord({ status: "replaced" })).badge()).status, 404);
+  assert.equal((await setup(signStoredRecord({
+    professionalEvidence: { ...fixture.professionalEvidence, sharing: false },
+  })).badge()).status, 404);
 });

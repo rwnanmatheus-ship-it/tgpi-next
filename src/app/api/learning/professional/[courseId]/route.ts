@@ -1,3 +1,4 @@
+import { recordFunnelEvent, requestFunnelConsent } from "@/lib/funnel.server";
 import { requireApiUser } from "@/lib/auth/guards";
 import { assessmentTranslations } from "@/lib/localization/assessment.server";
 import { getProfessionalRecord, mutateProfessionalRecord } from "@/lib/learning/professional-records.server";
@@ -23,7 +24,7 @@ export async function POST(request: Request, context: { params: Promise<{ course
     const input: unknown = JSON.parse(new TextDecoder("utf-8", { fatal: true }).decode(await readProfessionalBody(request)));
     const action = typeof input === "object" && input !== null && "action" in input ? input.action : undefined;
     if (!["issue", "sharing"].includes(String(action))) return professionalJson({ error: "This edition is archived. Continue in the expanded course with automatic assessments.", href: `/courses/${courseId}/study` }, 409);
-    const result = await mutateProfessionalRecord(identity, courseId, input);
+    const result = await mutateProfessionalRecord(identity, courseId, input, () => recordFunnelEvent("credential_issued", requestFunnelConsent(request)));
     return professionalJson({ ...result, ...('feedback' in result && result.feedback ? { feedback: result.feedback.map(item => ({ ...item, explanationTranslations: assessmentTranslations(item.explanation) })) } : {}) });
   } catch (error) { return professionalError(error); }
 }

@@ -557,6 +557,7 @@ export async function submitLearningAssessment(
 export async function issueLearningCredential(
   identity: LearnerIdentity,
   courseId: string,
+  onIssued?: () => void,
 ) {
   if (!isLearningStorageConfigured() || !isCredentialSigningConfigured()) {
     throw new LearningInputError(
@@ -577,7 +578,7 @@ export async function issueLearningCredential(
   const progress = await progressSnapshot(identity.uid, courseId);
   const recordPath = courseRecordPath(identity.uid, courseId);
 
-  return runFirestoreTransaction(async ({ getDocuments }) => {
+  const outcome = await runFirestoreTransaction(async ({ getDocuments }) => {
     const documents = await getDocuments<CourseLearningRecord>([recordPath]);
     const existing = documents.get(recordPath);
     const record = existing?.data || emptyRecord(identity.uid, courseId, course.version);
@@ -587,7 +588,7 @@ export async function issueLearningCredential(
       progress.totalLessons,
       identity.emailVerified && isCertificateName(identity.publicName),
     );
-    if (record.credentialId) return { result: record.credentialId, writes: [] };
+    if (record.credentialId) return { result: { credentialId: record.credentialId, created: false }, writes: [] };
     if (!eligibility.eligible) {
       throw new LearningInputError(
         "Complete every learning, assessment, reflection and identity requirement first.",
@@ -610,7 +611,7 @@ export async function issueLearningCredential(
       updatedAt: issuedAt,
     };
     return {
-      result: credentialId,
+      result: { credentialId, created: true },
       writes: [
         createFirestoreUpdateWrite(
           credentialPath(credentialId),
@@ -632,6 +633,8 @@ export async function issueLearningCredential(
       ],
     };
   });
+  if (outcome.created) onIssued?.();
+  return outcome.credentialId;
 }
 
 export async function listUserLearningCredentials(userId: string) {

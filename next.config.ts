@@ -1,6 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  outputFileTracingIncludes: {
+    "/api/credentials/*/badge": ["./public/brand/tgpi-crest-metal-v3-256.png"],
+  },
   async redirects() {
     return [
       { source: "/authority", destination: "/intelligence", permanent: true },

@@ -87,6 +87,9 @@ export default function CredentialRecordView({
         <CredentialActions
           credentialId={credential.id}
           courseTitle={credential.courseTitle}
+          issuedAt={credential.issuedAt}
+          professionalSharing={owner && credential.professionalEvidence && !credential.automatedEvidence ? { courseId: credential.courseId, version: credential.courseVersion } : undefined}
+          sharingSettingsUrl={owner && credential.automatedEvidence ? `/courses/${encodeURIComponent(credential.courseId)}/study#certificate-sharing` : undefined}
           downloadUrl={`/api/credentials/${encodeURIComponent(credential.id)}?download=1`}
           verificationUrl={verificationUrl}
           canDownload={verified}
@@ -114,7 +117,7 @@ export default function CredentialRecordView({
           </section>
         )}
         <div id="certificate-document">
-          <CertificateDocument credential={credential} verified={verified} verificationUrl={verificationUrl} />
+          <CertificateDocument credential={credential} verified={verified} verificationUrl={verificationUrl} owner={owner} />
         </div>
         {canPrint && (
           <section id="certificate-print" className="credential-print-guide">
@@ -141,18 +144,18 @@ export default function CredentialRecordView({
         >
           <article>
             <p className="credential-eyebrow"><LocalizedText text={"Assessment"} /></p>
-            <h2>{credential.assessmentScore}<LocalizedText text={"% mastery"} /></h2>
+            {owner && <h2>{credential.assessmentScore}<LocalizedText text={"% mastery"} /></h2>}
             <p>
               {credential.masteryThreshold}<LocalizedText text={"% required ·"} />{" "}
               {credential.learningHours}{" "}<LocalizedText text={credential.automatedEvidence ? "hours of estimated workload" : "learning hours"} /></p>
           </article>
-          <article>
+          {owner && <article>
             <p className="credential-eyebrow"><LocalizedText text={"Identity"} /></p>
             <h2><LocalizedText text={"TGPI Global ID"} /></h2>
             <p className="credential-mono">
               {credential.identityEvidence.globalKeyId}
             </p>
-          </article>
+          </article>}
           <article>
             <p className="credential-eyebrow"><LocalizedText text={"Portability"} /></p>
             <h2>{sharingAllowed ? <LocalizedText text="Portable evidence" /> : <LocalizedText text="Private certificate" />}</h2>
@@ -206,10 +209,10 @@ export default function CredentialRecordView({
                   <dt><LocalizedText text="Course edition" /></dt>
                   <dd>{credential.courseVersion}</dd>
                 </div>
-                <div>
+                {owner && <div>
                   <dt><LocalizedText text={"Identity revision"} /></dt>
                   <dd>{credential.identityEvidence.revision}</dd>
-                </div>
+                </div>}
                 <div>
                   <dt><LocalizedText text={"Public anchor"} /></dt>
                   <dd>

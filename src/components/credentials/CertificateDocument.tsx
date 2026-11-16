@@ -22,9 +22,11 @@ export default function CertificateDocument({
   credential,
   verified,
   verificationUrl,
+  owner = false,
 }: {
   credential: PublicTgpiLearningCredential;
   verified: boolean;
+  owner?: boolean;
   verificationUrl: string;
 }) {
   const privateSharing = credential.professionalEvidence?.sharing === false;
@@ -87,20 +89,20 @@ export default function CertificateDocument({
             <dt><LocalizedText text="Issued" /></dt>
             <dd><CertificateIssueDate value={credential.issuedAt} /></dd>
           </div>
-          <div>
+          {owner && <div>
             <dt><LocalizedText text={credential.automatedEvidence ? "Automatic assessment" : "Mastery"} /></dt>
             <dd>{credential.assessmentScore}%</dd>
-          </div>
+          </div>}
           <div>
             <dt><LocalizedText text={credential.automatedEvidence ? "estimated workload" : "Learning hours"} /></dt>
             <dd>{credential.learningHours}{" "}<LocalizedText text="hours" /></dd>
           </div>
         </dl>
         <dl className="diploma-identifiers">
-          <div>
+          {owner && <div>
             <dt><LocalizedText text="TGPI Global ID" /></dt>
             <dd>{credential.identityEvidence.globalKeyId}</dd>
-          </div>
+          </div>}
           <div>
             <dt><LocalizedText text="Certificate ID" /></dt>
             <dd>{credential.id}</dd>

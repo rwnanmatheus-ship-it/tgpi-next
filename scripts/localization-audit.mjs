@@ -18,6 +18,7 @@ for (const locale of ['en', 'pt-BR', 'es', 'fr', 'de', 'it']) exports.registerSu
 const interfaceKeys = [
   ['appearance', 'appearanceMessages'],
   ['plan-execution-copy', 'planExecutionMessages'],
+  ['credential-sharing-copy', 'credentialSharingMessages'],
 ].flatMap(([file, symbol]) => {
   const catalog = {};
   const source = fs.readFileSync(`src/lib/localization/${file}.ts`, 'utf8');

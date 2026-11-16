@@ -127,14 +127,14 @@ export async function academyStatus(identity: Identity, id: string, version?: st
   const stored = active?.data.challengeId ? (await get<StoredChallenge>(`${path}/attempts/${active.data.challengeId}`))?.data : null;
   return { record: document?.data ?? null, publicName: identity.publicName, emailVerified: identity.emailVerified, signingReady: isCredentialSigningConfigured(), challenge: stored && !stored.result ? stored.public : null, lastResult: stored?.result ?? null };
 }
-export async function mutateAcademy(identity: Identity, id: string, raw: unknown) {
+export async function mutateAcademy(identity: Identity, id: string, raw: unknown, onIssued?: () => void) {
   const parsed = academyMutation.safeParse(raw);
   if (!parsed.success) throw new AcademyError('Check the fields and their limits before sending.');
   const input = parsed.data;
   courseFor(id);
   if (!getAcademyCourse(id, input.version)) throw new AcademyError('The course edition changed. Reload; your previous records are preserved.', 409);
   const course = courseFor(id, input.version), path = academyRecordPath(identity.uid, id, course.version);
-  if (input.action === 'issue') { await issueAcademyCredential(identity, course, input.confirmedName); return academyStatus(identity, id, course.version); }
+  if (input.action === 'issue') { await issueAcademyCredential(identity, course, input.confirmedName, onIssued); return academyStatus(identity, id, course.version); }
   if (input.action === 'sharing') { await academySharing(identity, course, input.sharing); return academyStatus(identity, id, course.version); }
   const prior = input.action === 'enrol' && course.version === ACADEMY_VERSION ? await priorLearning(identity.uid, course) : null;
   await transaction(async ({ getDocuments }) => {
@@ -206,19 +206,19 @@ export async function mutateAcademy(identity: Identity, id: string, raw: unknown
   const status = await academyStatus(identity, id, course.version);
   if (status.record?.completedAt && !status.record.credentialId && identity.emailVerified && isCredentialSigningConfigured() &&
       isCertificateName(identity.publicName) && status.record.consent.publicName === identity.publicName) {
-    await issueAcademyCredential(identity, course);
+    await issueAcademyCredential(identity, course, undefined, onIssued);
     return academyStatus(identity, id, course.version);
   }
   return status;
 }
-async function issueAcademyCredential(identity: Identity, course: AcademyCourse, confirmedName?: string) {
+async function issueAcademyCredential(identity: Identity, course: AcademyCourse, confirmedName?: string, onIssued?: () => void) {
   if (!identity.emailVerified) throw new AcademyError('Verify your account email before certificate issuance.', 409);
   if (!isCredentialSigningConfigured()) throw new AcademyError('Secure certificate issuance is temporarily unavailable. Your completion is saved.', 503);
   const key = await getOrCreateGlobalKey(identity.uid), path = academyRecordPath(identity.uid, course.id, course.version);
-  const credentialId = await transaction(async ({ getDocuments }) => {
+  const { credentialId, created } = await transaction(async ({ getDocuments }) => {
     const doc = (await getDocuments<AcademyRecord>([path])).get(path), record = doc?.data;
     assertRecord(record, identity, course);
-    if (record.credentialId) return { result: record.credentialId, writes: [] };
+    if (record.credentialId) return { result: { credentialId: record.credentialId, created: false }, writes: [] };
     if (!allLessons(course, record) || !record.final || record.final.score < 80 || !record.retention || record.retention.score < 80 || !record.completedAt || !record.reviewAvailableAt || Date.parse(record.retention.at) < Date.parse(record.reviewAvailableAt) || record.portfolio.trim().length < 200 || !record.consent.acceptedAt) throw new AcademyError('Complete all required practice, final assessment and spaced review before certification.', 409);
     if (!isCertificateName(identity.publicName)) throw new AcademyError('Enter your complete real name for certificates.', 409);
     const acceptedName = confirmedName ?? record.consent.publicName;
@@ -239,8 +239,9 @@ async function issueAcademyCredential(identity: Identity, course: AcademyCourse,
       automatedEvidence: { method: 'objective-assessment', finalScore: record.final.score, retentionScore: record.retention.score, lessonChecks: course.lessons.length, humanReviewed: false, workloadMinutes: course.minutes },
     };
     const credential = { ...unsigned, verificationHash: signLearningCredential(unsigned) };
-    return { result: id, writes: [write(`tgpiLearningCredentials/${id}`, json(credential), { exists: false }), write(`tgpiLearningUsers/${identity.uid}/credentials/${id}`, json(credential), { exists: false }), write(path, json({ ...record, consent, credentialId: id, updatedAt: now, revision: record.revision + 1 }), { updateTime: doc!.updateTime })] };
+    return { result: { credentialId: id, created: true }, writes: [write(`tgpiLearningCredentials/${id}`, json(credential), { exists: false }), write(`tgpiLearningUsers/${identity.uid}/credentials/${id}`, json(credential), { exists: false }), write(path, json({ ...record, consent, credentialId: id, updatedAt: now, revision: record.revision + 1 }), { updateTime: doc!.updateTime })] };
   });
+  if (created) onIssued?.();
   await tryPublishNotification(identity.uid, { key: `credential:${credentialId}`, category: 'learning', title: 'Your verified credential is ready', body: 'Your issued credential is available in your private certificate workspace.', href: '/certificates', actionLabel: 'View my credential', important: true });
   return credentialId;
 }

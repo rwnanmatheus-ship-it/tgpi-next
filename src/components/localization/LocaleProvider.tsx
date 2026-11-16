@@ -3,6 +3,7 @@
 import { createContext, useContext, useCallback, useMemo, useRef, useState, useEffect, useTransition, type ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
+import { credentialSharingMessages } from '@/lib/localization/credential-sharing-copy';
 import { appearanceMessages } from '@/lib/localization/appearance';
 import { planExecutionMessages } from '@/lib/localization/plan-execution-copy';
 import { type Locale } from '@/lib/localization/config';
@@ -17,7 +18,7 @@ type LocaleContextValue = {
   changeLocale: (locale: Locale) => Promise<void>;
   t: (key: string, values?: Record<string, string | number>) => string;
 };
-const interfaceMessages = { ...appearanceMessages, ...planExecutionMessages };
+const interfaceMessages = { ...appearanceMessages, ...planExecutionMessages, ...credentialSharingMessages };
 const LocaleContext = createContext<LocaleContextValue | null>(null);
 
 const loadedCatalogs = new Map<Locale, Promise<void>>();

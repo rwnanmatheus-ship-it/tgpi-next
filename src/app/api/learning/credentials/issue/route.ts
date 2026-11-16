@@ -1,3 +1,4 @@
+import { recordFunnelEvent, requestFunnelConsent } from "@/lib/funnel.server";
 import { tryPublishNotification } from "@/lib/notifications/store.server";
 import { NextResponse } from "next/server";
 import { requireApiUser, TgpiAuthenticationError } from "@/lib/auth/guards";
@@ -48,7 +49,7 @@ export async function POST(request: Request) {
         400,
       );
     }
-    const credentialId = await issueLearningCredential(identity, input.courseId);
+    const credentialId = await issueLearningCredential(identity, input.courseId, () => recordFunnelEvent("credential_issued", requestFunnelConsent(request)));
     await tryPublishNotification(identity.uid, { key: `credential:${credentialId}`, category: "learning", title: "Your verified credential is ready", body: "Your issued credential is available in your private certificate workspace.", href: "/certificates", actionLabel: "View my credential", important: true });
     return json({ credentialId });
   } catch (error) {
