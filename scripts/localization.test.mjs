@@ -652,6 +652,8 @@ test('public pricing, institute and mobile journeys render the selected language
         if (name.endsWith('.css')) return { default: new Proxy({}, { get: (_target, key) => String(key) }) };
         if (name === 'next/link') return { default: ({ children, prefetch, ...props }) => React.createElement('a', props, children) };
         if (name === 'next/image') return { default: ({ fill, priority, sizes, ...props }) => React.createElement('img', props) };
+        if (name === '@/lib/premium-upgrade') return module('src/lib/premium-upgrade.ts');
+        if (name === './auth/return-to') return module('src/lib/auth/return-to.ts');
         if (name === '@/lib/subscription-plans') return module('src/lib/subscription-plans.ts');
         if (name === '@/components/pricing/PricingOutcomeSelector') return module('src/components/pricing/PricingOutcomeSelector.tsx');
         if (name === '@/components/about/AboutNavigation') return module('src/components/about/AboutNavigation.tsx');

@@ -8,6 +8,8 @@ function route(userId) {
   const exports = {};
   const expected = { courseProgress: {} };
   new Function("require", "exports", code)((id) => {
+    if (id === "@/data/courses/academy/premium-policy") return { isPremiumAcademyCourse: () => false };
+    if (id === "@/lib/auth/guards") return {};
     if (id === "@/lib/firestore-admin-rest.server") return { FirestoreAdminError: class extends Error {} };
     if (id === "@/lib/funnel.server") return { recordFunnelEvent: () => undefined, requestFunnelConsent: () => false };
     if (id === "@clerk/nextjs/server") return { auth: async () => ({ userId, sessionId: userId ? "active-session" : null }) };

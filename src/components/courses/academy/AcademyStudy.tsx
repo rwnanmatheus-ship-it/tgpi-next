@@ -6,6 +6,7 @@ import CourseArrow from '../CourseArrow';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useAuth } from '@clerk/nextjs';
 import Link from 'next/link';
+import { premiumUpgradeHref } from '@/lib/premium-upgrade';
 import { useLocale } from '@/components/localization/LocaleProvider';
 import { localizeAcademyCourse } from '@/lib/localization/academy-content';
 import type { AcademyCourse, AcademyStatus, AcademyStudyPlan } from '@/lib/learning/academy/types';
@@ -23,16 +24,16 @@ import { asynchronousHandover } from '@/lib/learning/accessible-media';
 import { accessCopy } from '@/lib/localization/accessibility-center';
 import { nextStudioTarget as nextTarget, studioProgress, studioNotebook } from '@/lib/learning/academy/studio-progress';
 
-export default function AcademyStudy({ course, latestVersion, initialLesson }: { course: AcademyCourse; latestVersion: string; initialLesson?: string }) {
+export default function AcademyStudy({ course, latestVersion, initialLesson, localizedOnServer = false }: { course: AcademyCourse; latestVersion: string; initialLesson?: string; localizedOnServer?: boolean }) {
   const { t } = useLocale();
   const { sessionId, isLoaded } = useAuth();
   if (!isLoaded) return <p className={styles.page} role="status">{t('Loading your learning record…')}</p>;
   if (!sessionId) return <Link className={styles.page} href={`/sign-in?next=${encodeURIComponent(`/courses/${course.id}/study`)}`}>{t('Sign in to continue.')}</Link>;
-  return <StudySession key={`${sessionId}:${course.id}:${course.version}:${initialLesson ?? ''}`} course={course} latestVersion={latestVersion} sessionId={sessionId} initialLesson={initialLesson} />;
+  return <StudySession key={`${sessionId}:${course.id}:${course.version}:${initialLesson ?? ''}`} course={course} localizedOnServer={localizedOnServer} latestVersion={latestVersion} sessionId={sessionId} initialLesson={initialLesson} />;
 }
-function StudySession({ course: original, latestVersion, sessionId, initialLesson }: { course: AcademyCourse; latestVersion: string; sessionId: string; initialLesson?: string }) {
+function StudySession({ course: original, latestVersion, sessionId, initialLesson, localizedOnServer }: { course: AcademyCourse; latestVersion: string; sessionId: string; initialLesson?: string; localizedOnServer: boolean }) {
   const { locale, t } = useLocale();
-  const course = useMemo(() => localizeAcademyCourse(original, locale), [original, locale]);
+  const course = useMemo(() => localizedOnServer ? original : localizeAcademyCourse(original, locale), [original, locale, localizedOnServer]);
   const [status, setStatus] = useState<AcademyStatus | null>(null), [selected, setSelected] = useState(course.lessons[0].id);
   const [note, setNote] = useState(''), [portfolio, setPortfolio] = useState(''), [diagnostic, setDiagnostic] = useState(''), [consent, setConsent] = useState(false);
   const [answers, setAnswers] = useState<Record<string,string>>({}), [calculation, setCalculation] = useState('');
@@ -199,7 +200,7 @@ function StudySession({ course: original, latestVersion, sessionId, initialLesso
   return <main className={`${styles.page} ${styles.studioPage} ${focus ? styles.focusMode : ''} ${largeText ? styles.largeText : ''}`} lang={locale}>
     <div className={styles.topline}><Link className={styles.breadcrumb} href={`/courses/${course.id}`}>← {t('Course overview')}</Link><span className={styles.edition}>{t('Edition')} {course.version}</span><Link className={styles.breadcrumb} href="/certificates"><AcademyIcon name="shield" size={16} />{t('My certificates')}</Link></div>
     <AcademyStudioHeader course={course} record={record} t={t} onContinue={continueJourney} disabled={busy || dirty} />
-    {error && <div role="alert" className={styles.error}>{t(error)}{button('Reload confirmed progress', () => { if (!dirty || window.confirm(t('Your local unsaved draft will be replaced by the last confirmed version. Continue?'))) void load(); }, false, true)}</div>}
+    {error && <div role="alert" className={styles.error}>{t(error)}{error === 'Subscribe to TGPI Premium to continue.' && <Link className={styles.link} href={premiumUpgradeHref(`/courses/${course.id}/study?lesson=${encodeURIComponent(selected)}`)}>{t('Subscribe to TGPI Premium')}</Link>}{button('Reload confirmed progress', () => { if (!dirty || window.confirm(t('Your local unsaved draft will be replaced by the last confirmed version. Continue?'))) void load(); }, false, true)}</div>}
     {!loaded && !error && <p role="status">{t('Loading your learning record…')}</p>}
     {loaded && !record && <>
       <AcademyJourney course={course} t={t} />

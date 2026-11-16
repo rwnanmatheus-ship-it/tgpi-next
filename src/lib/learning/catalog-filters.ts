@@ -2,8 +2,8 @@ import { locales } from '../localization/config.ts';
 
 export const PREMIUM_SPECIALIZATIONS_SERIES = 'Premium Specializations';
 
-export type CatalogFilters = { query: string; goal: string; series: string; availability: string; credential: string; language: string };
-export const defaultCatalogFilters: CatalogFilters = { query: '', goal: 'all', series: 'all', availability: 'available', credential: 'all', language: 'all' };
+export type CatalogFilters = { query: string; goal: string; series: string; availability: string; credential: string; language: string; access: string };
+export const defaultCatalogFilters: CatalogFilters = { query: '', goal: 'all', series: 'all', availability: 'available', credential: 'all', language: 'all', access: 'all' };
 export function parseCatalogFilters(params: URLSearchParams): CatalogFilters {
   const oneOf = (name: string, options: readonly string[], fallback: string) => { const value = params.get(name); return value && options.includes(value) ? value : fallback; };
   return {
@@ -12,6 +12,7 @@ export function parseCatalogFilters(params: URLSearchParams): CatalogFilters {
     series: oneOf('series', ['all','First 30 Days','Career Without Borders','The Intelligence Toolkit','The Global Money Series', PREMIUM_SPECIALIZATIONS_SERIES], 'all'),
     availability: oneOf('availability', ['all','available','planned'], 'available'),
     credential: oneOf('credential', ['all','criteria_available','none'], 'all'),
+    access: oneOf('access', ['all','free_account','premium'], 'all'),
     language: oneOf('language', ['all', ...locales], 'all'),
   };
 }

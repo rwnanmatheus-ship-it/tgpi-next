@@ -1,3 +1,4 @@
+import { isPremiumAcademyCourse } from "@/data/courses/academy/premium-policy";
 import { specializationOverview } from '@/data/courses/academy/specializations/listing';
 import { courseArtwork } from '@/lib/cinematic-art';
 import { academyManifest } from "@/data/courses/academy/manifest";
@@ -179,10 +180,11 @@ export const coursesOverview: CourseOverview[] = [...originalOverview, ...emerge
     duration: `${Math.floor(edition.minutes / 60)}h ${edition.minutes % 60}m`,
     lessonCount: edition.lessons,
   };
-  if (course.learningPolicy) return { ...course, ...estimate };
+  const accessPolicy = isPremiumAcademyCourse(course.id) ? "premium" : "free_account";
+  if (course.learningPolicy) return { ...course, ...estimate, learningPolicy: { ...course.learningPolicy, accessPolicy } };
   return { ...course, ...estimate, image: courseArtwork(course.id, course.image), status: "available", href: `/courses/${course.id}`,
     releaseLabel: "Expanded edition · Automatic assessment",
-    learningPolicy: { kind: course.id === "global-english-2026" ? "flagship" : "practice", publicationStatus: "published", accessPolicy: "free_account", assessmentPolicy: "automatic_assessment", credentialStatus: "criteria_available", instructionLanguage: "en" },
+    learningPolicy: { kind: course.id === "global-english-2026" ? "flagship" : "practice", publicationStatus: "published", accessPolicy, assessmentPolicy: "automatic_assessment", credentialStatus: "criteria_available", instructionLanguage: "en" },
   } satisfies CourseOverview;
 });
 

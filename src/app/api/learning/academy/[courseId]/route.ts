@@ -1,15 +1,18 @@
 import { recordFunnelEvent, requestFunnelConsent } from "@/lib/funnel.server";
 import { NextResponse } from 'next/server';
-import { requireApiUser, requirePremiumApiUser, TgpiAuthenticationError, TgpiPremiumRequiredError } from '@/lib/auth/guards';
+import { premiumRequiredBody, requireApiUser, requirePremiumApiUser, TgpiAuthenticationError, TgpiPremiumRequiredError } from '@/lib/auth/guards';
 import { isPremiumAcademyCourse } from '@/data/courses/academy/premium-policy';
 import { FirestoreAdminError } from '@/lib/firestore-admin-rest.server';
 import { academyStatus, mutateAcademy, AcademyError } from '@/lib/learning/academy/service.server';
 import { withAcademyTranslations } from '@/lib/localization/academy-assessment.server';
 const headers = { 'Cache-Control': 'private, no-store, max-age=0', 'X-Content-Type-Options': 'nosniff', Vary: 'Cookie, X-TGPI-Session' };
 export const runtime = 'nodejs';
-function failure(error: unknown) {
-  const status = error instanceof TgpiAuthenticationError ? 401 : error instanceof TgpiPremiumRequiredError ? 403 : error instanceof AcademyError ? error.status : error instanceof FirestoreAdminError ? 503 : error instanceof SyntaxError || error instanceof TypeError ? 400 : 500;
-  const message = error instanceof AcademyError || error instanceof TgpiPremiumRequiredError ? error.message : status === 401 ? 'Sign in to continue.' : status === 400 ? 'Invalid request.' : 'Secure learning is temporarily unavailable. Your confirmed work is preserved.';
+function failure(error: unknown, courseId: string) {
+  if (error instanceof TgpiPremiumRequiredError) {
+    return NextResponse.json(premiumRequiredBody(`/courses/${courseId}/study`), { status: 403, headers });
+  }
+  const status = error instanceof TgpiAuthenticationError ? 401 : error instanceof AcademyError ? error.status : error instanceof FirestoreAdminError ? 503 : error instanceof SyntaxError || error instanceof TypeError ? 400 : 500;
+  const message = error instanceof AcademyError ? error.message : status === 401 ? 'Sign in to continue.' : status === 400 ? 'Invalid request.' : 'Secure learning is temporarily unavailable. Your confirmed work is preserved.';
   if (status === 500) console.error('Academy operation failed', error instanceof Error ? error.name : 'unknown');
   return NextResponse.json({ error: message }, { status, headers });
 }
@@ -17,15 +20,15 @@ async function response(status: Awaited<ReturnType<typeof academyStatus>>, cours
   return NextResponse.json(withAcademyTranslations(status, courseId), { headers });
 }
 export async function GET(request: Request, context: { params: Promise<{ courseId: string }> }) {
+  const { courseId } = await context.params;
   try {
-    const { courseId } = await context.params;
     const identity = await (isPremiumAcademyCourse(courseId) ? requirePremiumApiUser(request) : requireApiUser(request));
     return await response(await academyStatus(identity, courseId, new URL(request.url).searchParams.get('edition') ?? undefined), courseId);
-  } catch (error) { return failure(error); }
+  } catch (error) { return failure(error, courseId); }
 }
 export async function POST(request: Request, context: { params: Promise<{ courseId: string }> }) {
+  const { courseId } = await context.params;
   try {
-    const { courseId } = await context.params;
     const identity = await (isPremiumAcademyCourse(courseId) ? requirePremiumApiUser(request) : requireApiUser(request));
     const origin = request.headers.get('origin');
     if (!origin || new URL(origin).origin !== new URL(request.url).origin) throw new AcademyError('Request origin is not allowed.', 403);
@@ -36,5 +39,5 @@ export async function POST(request: Request, context: { params: Promise<{ course
     const bytes = new Uint8Array(size); let offset = 0; for (const chunk of chunks) { bytes.set(chunk, offset); offset += chunk.byteLength; }
     const input: unknown = JSON.parse(new TextDecoder('utf-8', { fatal: true }).decode(bytes));
     return await response(await mutateAcademy(identity, courseId, input, () => recordFunnelEvent("credential_issued", requestFunnelConsent(request))), courseId);
-  } catch (error) { return failure(error); }
+  } catch (error) { return failure(error, courseId); }
 }

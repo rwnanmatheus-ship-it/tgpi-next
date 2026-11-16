@@ -1,6 +1,7 @@
 import { localizeMetadata } from "@/lib/localization/metadata.server";
 import { getLocale } from "@/lib/localization/server";
 import { translate } from "@/lib/localization/messages";
+import { premiumDestination } from "@/lib/premium-upgrade";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
@@ -72,23 +73,16 @@ const systems = [
 ] as const;
 
 const comparisons = [
-  ["Scenario analysis", "Saved worksheets and individual reports", "Cross-scenario comparison and JSON export"],
+  ["Scenario analysis", "One saved scenario per country and worksheet export", "Three saved scenarios per country, scenario comparison and personalized PDF reports"],
   ["Country Fit research planning", "Available", "Available"],
   ["Country comparisons", "Up to 3 countries at a time", "Up to 3 countries at a time"],
   ["Countries of interest", "Up to 5", "Up to 5"],
-  ["Documents", "Member preparation tools", "Member preparation tools"],
-  ["Current courses", "Learning and progress with an account", "Learning and progress with an account"],
+  ["Global Documents", "Document preparation and service requests", "Document preparation and service requests"],
+  ["Courses and certificates", "Selected courses with assessments and certificates · free previews", "Full catalog with assessments and certificates"],
+  ["Atlas AI", "Atlas AI and browser guide", "Atlas AI and course-specific study support for Premium courses"],
+  ["Global Key, issued credentials and community", "Access with an account", "Access with an account"],
   ["Workspace", "Personal Workspace", "Personal Workspace + protected Premium Command Center"],
 ] as const;
-
-const premiumLearningCopy = {
-  en: '50 Premium courses with TGPI certificates',
-  'pt-BR': '50 cursos Premium com certificados TGPI',
-  es: '50 cursos Premium con certificados TGPI',
-  fr: '50 cours Premium avec certificats TGPI',
-  de: '50 Premium-Kurse mit TGPI-Zertifikaten',
-  it: '50 corsi Premium con certificati TGPI',
-} as const;
 
 const faqs = [
   [
@@ -125,15 +119,15 @@ const heading =
 export default async function PricingPage({
   searchParams,
 }: {
-  searchParams: Promise<{ canceled?: string }>;
+  searchParams: Promise<{ canceled?: string; next?: string | string[] }>;
 }) {
   const locale = await getLocale();
   const t = (key: string) => translate(locale, key);
 
-  const premiumLearning = premiumLearningCopy[locale];
-  const premiumFeatures = [...TGPI_PREMIUM_PLAN.features.map(t), premiumLearning];
+  const premiumFeatures = TGPI_PREMIUM_PLAN.features.map(t);
   const billingEnabled = process.env.BILLING_ENABLED === "true";
-  const { canceled } = await searchParams;
+  const { canceled, next } = await searchParams;
+  const returnTo = premiumDestination(next);
 
   return (
     <TGPIPageShell>
@@ -212,8 +206,10 @@ export default async function PricingPage({
                 <span className="text-sm text-white/80"><LocalizedText text={"/ month"} /></span>
               </div>
               <p className="mt-2 text-sm leading-6 text-white/80"><LocalizedText text={"Billed in USD. Renews monthly until cancelled."} /></p>
+              {returnTo && <p className="mt-4 rounded-xl border border-white/20 p-3 text-sm"><LocalizedText text="Subscribe to TGPI Premium to continue." /></p>}
               <div className="mt-6">
                 <PremiumActionButton
+                  returnTo={returnTo || undefined}
                   billingEnabled={billingEnabled}
                   showMembershipStatus
                 />
@@ -372,7 +368,7 @@ export default async function PricingPage({
                       </th>
                       <td className="p-5 text-[#596576]"><LocalizedText text={free} /></td>
                       <td className="bg-[var(--tgpi-navy-raised)] p-5 font-semibold text-white">
-                        {feature === "Current courses" ? premiumLearning : <LocalizedText text={premium} />}
+                        <LocalizedText text={premium} />
                       </td>
                     </tr>
                   ))}
@@ -381,7 +377,7 @@ export default async function PricingPage({
             </div>
           </div>
           <div className="mt-5 flex flex-col justify-between gap-4 rounded-2xl border border-[var(--tgpi-border)] p-5 sm:flex-row sm:items-center">
-            <p className="text-sm leading-6 text-[#596576]"><LocalizedText text={"Still exploring?"} />{" "}<LocalizedText text={TGPI_FREE_PLAN.description} />
+            <p className="text-sm leading-6 text-[#596576]"><LocalizedText text={"Still exploring?"} />{" "}<LocalizedText text={TGPI_FREE_PLAN.description} />{" "}<Link className="underline" href="/courses?access=free_account"><LocalizedText text="Explore free courses" /></Link>
             </p>
             <Link
               href="/sign-up?next=%2Fpricing%23membership"
@@ -429,7 +425,7 @@ export default async function PricingPage({
                 <LocalizedText text="{price} per month. Country Fit, comparisons and personal preparation, connected." values={{ price: TGPI_PREMIUM_PLAN.price }} />
               </p>
             </div>
-            <PremiumActionButton billingEnabled={billingEnabled} />
+            <PremiumActionButton billingEnabled={billingEnabled} returnTo={returnTo || undefined} />
           </div>
         </section>
       </div>

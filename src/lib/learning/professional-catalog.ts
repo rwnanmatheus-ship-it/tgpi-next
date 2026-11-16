@@ -1,3 +1,4 @@
+import { isPremiumAcademyCourse } from "../../data/courses/academy/premium-policy";
 import { academyManifest } from "../../data/courses/academy/manifest";
 import { courseArtwork } from "../cinematic-art";
 import { professionalCourseDrafts } from "../../data/courses/professional";
@@ -13,6 +14,6 @@ export function professionalCatalog(environment: string | undefined): CourseOver
       duration: `${Math.floor(academyManifest[course.id].minutes / 60)}h ${academyManifest[course.id].minutes % 60}m`, format: "lessons and laboratories", lessonCount: academyManifest[course.id].lessons, goal,
       goalLabel: "Practical professional skills", href: `/courses/${course.id}`, image: courseArtwork(course.id), imageAlt: professionalArtwork[course.id].alt,
       level: "Fundamentos aplicados", status: "available", releaseLabel: "Expanded edition · Automatic assessment",
-      learningPolicy: { kind: 'professional', publicationStatus: 'published', accessPolicy: 'free_account', assessmentPolicy: 'automatic_assessment', credentialStatus: 'criteria_available', instructionLanguage: 'pt-BR' } };
+      learningPolicy: { kind: 'professional', publicationStatus: 'published', accessPolicy: isPremiumAcademyCourse(course.id) ? 'premium' : 'free_account', assessmentPolicy: 'automatic_assessment', credentialStatus: 'criteria_available', instructionLanguage: 'pt-BR' } };
   });
 }

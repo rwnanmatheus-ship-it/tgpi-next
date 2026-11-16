@@ -11,13 +11,14 @@ const multilingualCourses = h.academyCourses.filter(course => course.language !=
 const normalized = text => text.replace(/\s+/g, ' ').trim().toLowerCase();
 const supplemental = { ...JSON.parse(fs.readFileSync('public/locales/en.json', 'utf8')), ...JSON.parse(fs.readFileSync('public/locales/academy/en.json', 'utf8')) };
 const publicKeys = new Set([...Object.keys(h.messages.messages), ...Object.keys(supplemental)].map(normalized));
+const curriculumKeys = new Set(Object.keys(JSON.parse(fs.readFileSync('src/lib/localization/academy-curricula/en.json', 'utf8'))).map(normalized));
 const protectedCopy = { ...JSON.parse(fs.readFileSync('src/lib/localization/assessment-messages.json', 'utf8')), ...JSON.parse(fs.readFileSync('src/lib/localization/academy-project-assessment.json', 'utf8')), ...JSON.parse(fs.readFileSync('src/lib/localization/academy-curriculum-assessment.json', 'utf8')) };
 const protectedKeys = new Set(Object.keys(protectedCopy).map(normalized));
 const { localizeAcademyCourse } = h.load(resolve('src/lib/localization/academy-content.ts'));
 const { withAcademyTranslations, academyCaseTranslations } = h.load(resolve('src/lib/localization/academy-assessment.server.ts'));
 
 test('multilingual curricula have registered six-language presentation copy', () => {
-  const missing = [...new Set(multilingualCourses.flatMap(academyDisplayCopy))].filter(text => !publicKeys.has(normalized(text)) && h.locales.every(locale => h.messages.translate(locale, text) === text));
+  const missing = [...new Set(multilingualCourses.flatMap(academyDisplayCopy))].filter(text => !publicKeys.has(normalized(text)) && !curriculumKeys.has(normalized(text)) && h.locales.every(locale => h.messages.translate(locale, text) === text));
   assert.deepEqual(missing, [], `Unregistered academy copy: ${missing.join('\n')}`);
   for (const course of h.academyCourses) for (const locale of h.locales) {
     const rendered = localizeAcademyCourse(course, locale);
@@ -202,7 +203,7 @@ test('released courses cover every instructional field, preserving language exer
     for (const locale of h.locales) {
       for (const text of new Set(copy)) {
         const localized = h.messages.translate(locale, text);
-        assert.ok(publicKeys.has(normalized(text)) || h.locales.some(code => h.messages.translate(code, text) !== text), `${id}: missing ${text}`);
+        assert.ok(publicKeys.has(normalized(text)) || curriculumKeys.has(normalized(text)) || h.locales.some(code => h.messages.translate(code, text) !== text), `${id}: missing ${text}`);
         const key = supplementalKeys.get(normalized(text));
         if (key) assert.ok(publicDictionaries[locale][key]?.trim(), `${locale}: ${text}`);
         assert.ok(localized.trim(), `${id} ${locale}: ${text}`);
@@ -265,3 +266,15 @@ test('protected assessment catalog cannot be compiled into public dictionary ass
   } finally { rmSync(folder, { recursive: true, force: true }); }
 });
 
+
+test('private curriculum copy is localized for enrolled study without becoming a public dictionary entry', async () => {
+  const course = h.getAcademyCourse('housing-abroad');
+  const { getAcademyCurriculumMessages } = h.load(resolve('src/lib/localization/academy-curricula.server.ts'));
+  const privateMessages = await getAcademyCurriculumMessages('en');
+  const privateText = course.lessons.slice(1).flatMap(lesson => lesson.sections.map(section => section.body))
+    .find(body => privateMessages[body] && !publicKeys.has(normalized(body)));
+  assert.ok(privateText, 'Paid lesson body should be available only in the study dictionary');
+  assert.notEqual(privateMessages[privateText], privateText);
+  const localized = localizeAcademyCourse(course, 'en', privateMessages);
+  assert.ok(localized.lessons.slice(1).some(lesson => lesson.sections.some(section => section.body === privateMessages[privateText])));
+});

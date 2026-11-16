@@ -1,6 +1,6 @@
 import "server-only";
 import { NextResponse } from "next/server";
-import { TgpiAuthenticationError } from "@/lib/auth/guards";
+import { premiumRequiredBody, TgpiAuthenticationError, TgpiPremiumRequiredError } from "@/lib/auth/guards";
 import { ProfessionalLearningError } from "./professional-records.server";
 import { FirestoreAdminError } from "@/lib/firestore-admin-rest.server";
 
@@ -26,7 +26,8 @@ export async function readProfessionalBody(request: Request, maxBytes = 90_000) 
   for (const chunk of chunks) { output.set(chunk, offset); offset += chunk.byteLength; }
   return output;
 }
-export function professionalError(error: unknown) {
+export function professionalError(error: unknown, courseId?: string) {
+  if (error instanceof TgpiPremiumRequiredError) return professionalJson(premiumRequiredBody(courseId ? `/courses/${courseId}/study` : undefined), 403);
   if (error instanceof TgpiAuthenticationError) return professionalJson({ error: "Entre na sua conta para continuar." }, 401);
   if (error instanceof ProfessionalLearningError) return professionalJson({ error: error.message }, error.status);
   if (error instanceof SyntaxError) return professionalJson({ error: "Solicitação JSON inválida." }, 400);

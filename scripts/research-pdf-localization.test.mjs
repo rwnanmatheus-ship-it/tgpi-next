@@ -20,11 +20,15 @@ worksheet.monthly.food = 250;
 worksheet.sourceNote = 'Member-authored quote';
 worksheet.city = 'Lisbon';
 const origin = 'https://tgpi.example';
-function fixture(locale, onRender, goal = 'work', horizon = '3-months') {
+function fixture(locale, onRender, goal = 'work', horizon = '3-months', premium = true) {
   const exports = {};
   const source = readFileSync(new URL('../src/app/api/intelligence/report/route.ts', import.meta.url), 'utf8');
   const code = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, esModuleInterop: true } }).outputText;
   const imports = {
+    '@/lib/auth/guards': {
+      requirePremiumApiUser: async () => { if (!premium) throw Error('Premium required'); },
+      featureAccessError: (_error, headers) => Response.json({ code: 'PREMIUM_REQUIRED' }, { headers, status: 403 }),
+    },
     '@clerk/nextjs/server': { currentUser: async () => ({ unsafeMetadata: { tgpiLocale: 'en', tgpiAccountProfile: { profession: 'Custom Data Scientist', languages: ['English', 'Save'] }, tgpiOnboarding: {} } }) },
     '@/data/intelligence/identities.json': { __esModule: true, default: identities },
     '@/lib/intelligence/research-plan': plan,
@@ -107,4 +111,11 @@ test('each saved goal and timeline identifier is displayed as an authored label 
     assert.ok(input.context[0].includes(t(timeline)), `${locale}: ${horizon}`);
     assert.equal(input.worksheet.monthly.housing, 1234.56);
   }
+});
+
+test('a Free account cannot generate a personalized PDF', async () => {
+  const route = fixture('en', () => assert.fail('rendered a paid PDF'), 'work', '3-months', false);
+  const result = await route.POST(request());
+  assert.equal(result.status, 403);
+  assert.equal((await result.json()).code, 'PREMIUM_REQUIRED');
 });

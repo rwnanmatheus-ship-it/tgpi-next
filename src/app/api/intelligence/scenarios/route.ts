@@ -1,3 +1,4 @@
+import { requirePremiumApiUser, featureAccessError } from "@/lib/auth/guards";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import identities from "@/data/intelligence/identities.json";
 import { RESEARCH_TASKS, validateWorksheet } from "@/lib/intelligence/research-plan";
@@ -26,6 +27,10 @@ export async function PATCH(request: Request) {
   if (request.headers.get("origin") !== new URL(request.url).origin) return Response.json({ error: "Same-origin request required." }, { status: 403, headers });
   if (!request.headers.get("content-type")?.includes("application/json")) return Response.json({ error: "JSON required." }, { status: 415, headers });
   const target = location(request, userId); if (!target) return Response.json({ error: "Invalid scenario." }, { status: 400, headers });
+  if (target.slot !== "1") {
+    try { await requirePremiumApiUser(); }
+    catch (error) { return featureAccessError(error, headers, `/country-fit?country=${target.country}#research-workbench`); }
+  }
   try {
     const reader = request.body?.getReader(); if (!reader) throw new SyntaxError();
     const parts: Uint8Array[] = []; let length = 0;

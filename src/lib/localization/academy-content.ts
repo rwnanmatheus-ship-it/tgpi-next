@@ -1,13 +1,16 @@
 import type { AcademyCourse } from '@/lib/learning/academy/types';
 import type { Locale } from './config';
 import { fullyLocalizedAcademyCourses } from './academy-coverage';
-import { translate } from './messages';
+import { translate, type SupplementalMessages } from './messages';
 
 /** Localizes authored course copy while preserving its structure and language exercises. */
-export function localizeAcademyCourse(source: AcademyCourse, locale: Locale): AcademyCourse {
+export function localizeAcademyCourse(source: AcademyCourse, locale: Locale, privateMessages?: SupplementalMessages): AcademyCourse {
   const complete = fullyLocalizedAcademyCourses.has(source.id);
   if (source.language === 'pt-BR' && !complete) return source;
-  const t = (text: string) => translate(locale, text);
+  const t = (text: string) => {
+    const key = text.replace(/\s+/g, ' ').trim();
+    return privateMessages && Object.hasOwn(privateMessages, key) ? privateMessages[key] : translate(locale, text);
+  };
   return {
     ...source,
     title: t(source.title),

@@ -31,6 +31,7 @@ function harness() {
   const overrides = {
     'next/server': { NextResponse: { json: (value, init) => Response.json(value, init) } },
     '@/lib/auth/guards': {
+      premiumRequiredBody: returnTo => ({ code: 'PREMIUM_REQUIRED', upgradeHref: `/pricing?next=${encodeURIComponent(returnTo)}#membership` }),
       requireApiUser, TgpiAuthenticationError: AuthenticationError, TgpiPremiumRequiredError: PremiumRequiredError,
       requirePremiumApiUser: async request => {
         const user = await requireApiUser();
@@ -235,7 +236,7 @@ test('legacy notes and signed records are preserved without silently inheriting 
 });
 
 test('unverified email preserves completion, later issuance is idempotent, sharing resigns both copies and denies other owners',async()=>{
- const h=harness(),course=h.catalog.academyCourses[0],unverified={...identity,emailVerified:false},mutate=mutation(h,course,unverified);
+ const h=harness(),course=h.catalog.getAcademyCourse('housing-abroad'),unverified={...identity,emailVerified:false},mutate=mutation(h,course,unverified);
  let status=await completeLessons(h,course,unverified);
  status=await mutate({action:'begin',revision:status.record.revision,target:'final'});status=await mutate(submittedAnswers(h,course,status,false,unverified));h.advance(24*60*60*1000);
  status=await mutate({action:'begin',revision:status.record.revision,target:'retention'});status=await mutate(submittedAnswers(h,course,status,false,unverified));
@@ -246,6 +247,15 @@ test('unverified email preserves completion, later issuance is idempotent, shari
  const publicCopy=h.documents.get(`tgpiLearningCredentials/${id}`).data,ownerCopy=h.documents.get(`tgpiLearningUsers/${identity.uid}/credentials/${id}`).data;
  assert.deepEqual(publicCopy,ownerCopy);assert.ok(h.load(resolve('src/lib/credential-signing.server.ts')).verifyLearningCredentialIntegrity(publicCopy));
  await assert.rejects(()=>mutation(h,course,{...identity,uid:'outsider'})({action:'sharing',sharing:false}),/Start this course edition/);
+ await assert.rejects(() => h.service.setAcademyCredentialSharing('outsider', id, false), /Certificate not found/);
+ const actions = h.load(resolve('src/lib/learning/academy/credential-actions.ts'));
+ assert.deepEqual(await actions.updateAcademyCredentialSharing(id, false), { ok: true });
+ assert.equal(h.documents.get(`tgpiLearningCredentials/${id}`).data.professionalEvidence.sharing, false);
+ assert.deepEqual(await actions.updateAcademyCredentialSharing(id, true), { ok: true });
+ assert.equal(h.documents.get(`tgpiLearningUsers/${identity.uid}/credentials/${id}`).data.professionalEvidence.sharing, true);
+ h.signOut();
+ assert.deepEqual(await actions.updateAcademyCredentialSharing(id, false), { ok: false });
+ assert.equal(h.documents.get(`tgpiLearningCredentials/${id}`).data.professionalEvidence.sharing, true);
 });
 
 test('academy completes work with an outdated name but signs the full name only after reconfirmation', async () => {
@@ -323,8 +333,23 @@ test('previous editions remain resumable, retain their signed workload and canno
 });
 
 
+test('every current Academy course uses the same entitlement in the catalog and classroom', () => {
+  const h = harness();
+  const { isPremiumAcademyCourse } = h.load(resolve('src/data/courses/academy/premium-policy.ts'));
+  const { courseLearningPolicy } = h.load(resolve('src/lib/learning/catalog-policy.ts'));
+  const { coursesOverview } = h.load(resolve('src/data/courses-overview.ts'));
+  const free = h.catalog.academyCourses.filter(course => !isPremiumAcademyCourse(course.id));
+  assert.equal(free.length, 13);
+  assert.ok(free.some(course => course.id === 'global-english-2026'));
+  assert.equal(isPremiumAcademyCourse('english-abroad'), false);
+  assert.equal(isPremiumAcademyCourse('future-course'), true);
+  for (const course of coursesOverview.filter(item => h.catalog.getAcademyCourse(item.id))) {
+    assert.equal(courseLearningPolicy(course).accessPolicy, isPremiumAcademyCourse(course.id) ? 'premium' : 'free_account', course.id);
+  }
+});
+
 test('Premium study API checks session and active entitlement for both reads and writes', async () => {
-  for (const courseId of ['sql-produto-dados', 'mlops-producao']) {
+  for (const courseId of ['sql-produto-dados', 'mlops-producao', 'ia-trabalho-global', 'housing-abroad']) {
     const h = harness(), route = h.load(resolve('src/app/api/learning/academy/[courseId]/route.ts'));
     const course = h.catalog.getAcademyCourse(courseId);
     const context = { params: Promise.resolve({ courseId: course.id }) };
@@ -336,7 +361,9 @@ test('Premium study API checks session and active entitlement for both reads and
     });
 
     assert.equal((await route.GET(new Request(url), context)).status, 401);
-    assert.equal((await route.GET(read(), context)).status, 403);
+    const locked = await route.GET(read(), context);
+    assert.equal(locked.status, 403);
+    assert.equal((await locked.json()).code, 'PREMIUM_REQUIRED');
     assert.equal((await route.POST(enroll(), context)).status, 403);
     assert.equal(h.documents.size, 0);
     h.enablePremium();
