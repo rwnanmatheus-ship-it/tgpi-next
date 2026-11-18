@@ -1,0 +1,1002 @@
+[
+  {
+    "id": "agentes-atendimento-b2b",
+    "area": "ai",
+    "path": "public/images/courses/market-covers-2026/agentes-atendimento-b2b.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 143110,
+    "sha256": "aa50675b874c36a5f443f0ee8e80de20deccd1a209ab4d78351466e1bf4f0e84",
+    "aiGenerated": true
+  },
+  {
+    "id": "curadoria-datasets-ia",
+    "area": "ai",
+    "path": "public/images/courses/market-covers-2026/curadoria-datasets-ia.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 192150,
+    "sha256": "9ffe4909f767bef146e21e537618f53cb442bf37ea9825cb03e1be8f08131c98",
+    "aiGenerated": true
+  },
+  {
+    "id": "operacoes-anotacao-multimodal",
+    "area": "ai",
+    "path": "public/images/courses/market-covers-2026/operacoes-anotacao-multimodal.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 206472,
+    "sha256": "6055463b739fb62a33f2d4d03763b022f2cbe6bfda45924d68096863360eecbf",
+    "aiGenerated": true
+  },
+  {
+    "id": "red-team-ia-defensivo",
+    "area": "ai",
+    "path": "public/images/courses/market-covers-2026/red-team-ia-defensivo.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 120052,
+    "sha256": "cb270da89da23e42655f69792302e9508839456036555e7e06b8ee8af344d9bf",
+    "aiGenerated": true
+  },
+  {
+    "id": "operacoes-voz-ia",
+    "area": "ai",
+    "path": "public/images/courses/market-covers-2026/operacoes-voz-ia.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 131442,
+    "sha256": "af3c5d10c4f737e31c134ad0bc228e47c063adf8f570eea860d2909f5666fc7a",
+    "aiGenerated": true
+  },
+  {
+    "id": "avaliacao-traducao-ia",
+    "area": "ai",
+    "path": "public/images/courses/market-covers-2026/avaliacao-traducao-ia.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 195300,
+    "sha256": "d3831cfc1cfd46330eef39913c3df94fb7959dbeff2d270bc80706f39021651a",
+    "aiGenerated": true
+  },
+  {
+    "id": "operacoes-sinteticos",
+    "area": "ai",
+    "path": "public/images/courses/market-covers-2026/operacoes-sinteticos.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 156348,
+    "sha256": "7bcd4011e79b49246cc63805d8917516dc21f10ff0853f1a9f2b3e11a90467d3",
+    "aiGenerated": true
+  },
+  {
+    "id": "compras-solucoes-ia",
+    "area": "ai",
+    "path": "public/images/courses/market-covers-2026/compras-solucoes-ia.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 156112,
+    "sha256": "072728649d04eb7d363d768a4eee221201925586b0f1a3ae86c0ee02b3492fd9",
+    "aiGenerated": true
+  },
+  {
+    "id": "operacoes-conhecimento-ia",
+    "area": "ai",
+    "path": "public/images/courses/market-covers-2026/operacoes-conhecimento-ia.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 165394,
+    "sha256": "1ef24dab2577747f417302e4101e88382722f6fbc02883453a64455558360eaf",
+    "aiGenerated": true
+  },
+  {
+    "id": "ia-documentos-comerciais",
+    "area": "ai",
+    "path": "public/images/courses/market-covers-2026/ia-documentos-comerciais.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 117092,
+    "sha256": "10db96b06ad3323b87cb8fbe4ab564b7b404a5045539ee03ad8152e4a11e9677",
+    "aiGenerated": true
+  },
+  {
+    "id": "triagem-soc",
+    "area": "cyber",
+    "path": "public/images/courses/market-covers-2026/triagem-soc.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 111364,
+    "sha256": "84256183cef5d822c5ad1ac9d2933975f6ef2db9a2d2c6f66b38eefb77b4c444",
+    "aiGenerated": true
+  },
+  {
+    "id": "engenharia-deteccao",
+    "area": "cyber",
+    "path": "public/images/courses/market-covers-2026/engenharia-deteccao.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 141330,
+    "sha256": "67273705fb1e860651aacf4aa82505e8f1ff468e8a665934e59f91751ce8a882",
+    "aiGenerated": true
+  },
+  {
+    "id": "seguranca-saas",
+    "area": "cyber",
+    "path": "public/images/courses/market-covers-2026/seguranca-saas.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 150166,
+    "sha256": "3bed590f33a74de0cf3d0f1f0c106482f7fc12c35beb9530ae8e4b3fe300fe54",
+    "aiGenerated": true
+  },
+  {
+    "id": "identidades-maquina",
+    "area": "cyber",
+    "path": "public/images/courses/market-covers-2026/identidades-maquina.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 170106,
+    "sha256": "7baa8d5cce55ddc528fe77dab4ee5c24688d8a6e367c9f1b2816c2a371f9d108",
+    "aiGenerated": true
+  },
+  {
+    "id": "seguranca-cadeia-software",
+    "area": "cyber",
+    "path": "public/images/courses/market-covers-2026/seguranca-cadeia-software.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 141696,
+    "sha256": "259cdbcaf15448a078bb9070307b2c64b2c90025997c5df985b82cfe9f1f33c7",
+    "aiGenerated": true
+  },
+  {
+    "id": "analise-fraude-digital",
+    "area": "cyber",
+    "path": "public/images/courses/market-covers-2026/analise-fraude-digital.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 142968,
+    "sha256": "6ebce29ff8415572dc26fb68fc66c987bfcce1de3432f06acc174fca8f59b12e",
+    "aiGenerated": true
+  },
+  {
+    "id": "forense-logs-cloud",
+    "area": "cyber",
+    "path": "public/images/courses/market-covers-2026/forense-logs-cloud.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 135560,
+    "sha256": "aef6adb0d7cd218bfa8a3457116a33b2f17108a34060e3749bf07371be78c9a8",
+    "aiGenerated": true
+  },
+  {
+    "id": "seguranca-ot-planejamento",
+    "area": "cyber",
+    "path": "public/images/courses/market-covers-2026/seguranca-ot-planejamento.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 160034,
+    "sha256": "d6d18357da4282971fc78b3a9a5db2f578a36caafae5094bf31a5a037a706c1d",
+    "aiGenerated": true
+  },
+  {
+    "id": "risco-terceiros-cyber",
+    "area": "cyber",
+    "path": "public/images/courses/market-covers-2026/risco-terceiros-cyber.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 123882,
+    "sha256": "a63e643a252f5a14b1af6f1586d816d312b0aca99f91cfe10ff61e0cbf80b7c9",
+    "aiGenerated": true
+  },
+  {
+    "id": "recuperacao-ransomware-planejamento",
+    "area": "cyber",
+    "path": "public/images/courses/market-covers-2026/recuperacao-ransomware-planejamento.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 153998,
+    "sha256": "b8ce314f8b0144d8c22dbc85daafe8e81607213dd66145562f0355c2714dee41",
+    "aiGenerated": true
+  },
+  {
+    "id": "analytics-engineering-operacional",
+    "area": "data",
+    "path": "public/images/courses/market-covers-2026/analytics-engineering-operacional.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 143604,
+    "sha256": "b880844db99962d6a851e4a35ee13a0c614ead3aac17ec37221830b65cfbdb92",
+    "aiGenerated": true
+  },
+  {
+    "id": "data-stewardship",
+    "area": "data",
+    "path": "public/images/courses/market-covers-2026/data-stewardship.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 178608,
+    "sha256": "f2316dccb0411018a43bdddce817250818d0bbe8091ffc92969ee8b697664e5f",
+    "aiGenerated": true
+  },
+  {
+    "id": "observabilidade-dados",
+    "area": "data",
+    "path": "public/images/courses/market-covers-2026/observabilidade-dados.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 137248,
+    "sha256": "4d80154b9dea94c94679548554fb7cd1a873ad9d3527b0932ec2a7b2b0a49bf8",
+    "aiGenerated": true
+  },
+  {
+    "id": "privacidade-analytics",
+    "area": "data",
+    "path": "public/images/courses/market-covers-2026/privacidade-analytics.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 145598,
+    "sha256": "0994d3f0466382a46b031adf95c99bb5d21ae0918c30b9e4846136a50332637c",
+    "aiGenerated": true
+  },
+  {
+    "id": "pesquisa-operacional-servicos",
+    "area": "data",
+    "path": "public/images/courses/market-covers-2026/pesquisa-operacional-servicos.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 175102,
+    "sha256": "0e558e9e1f6a301ef129b09f8d4657948fdccf9d42432175c66ee7110ab42036",
+    "aiGenerated": true
+  },
+  {
+    "id": "metrologia-digital",
+    "area": "data",
+    "path": "public/images/courses/market-covers-2026/metrologia-digital.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 142912,
+    "sha256": "0c75ac2e563c82a464d1fb4a2069d11e01ba5a5cc628546911cd8d1fb7f1aa5b",
+    "aiGenerated": true
+  },
+  {
+    "id": "people-analytics-responsavel",
+    "area": "data",
+    "path": "public/images/courses/market-covers-2026/people-analytics-responsavel.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 140832,
+    "sha256": "bb031e66d366ff3d4b225129c4ba329c39c294c79a81856c634f32cd87c6f884",
+    "aiGenerated": true
+  },
+  {
+    "id": "pesquisa-bibliometrica",
+    "area": "data",
+    "path": "public/images/courses/market-covers-2026/pesquisa-bibliometrica.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 168464,
+    "sha256": "9745ebd3cc5a30a9a499a0ab7022e157a35f43e5fce69653b6810894d5dee232",
+    "aiGenerated": true
+  },
+  {
+    "id": "analise-esportiva-operacional",
+    "area": "data",
+    "path": "public/images/courses/market-covers-2026/analise-esportiva-operacional.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 126948,
+    "sha256": "5f79fe9e0f1afc649bde8d9b769f3f0d54ab70e72285400b320b91db2778bd19",
+    "aiGenerated": true
+  },
+  {
+    "id": "inteligencia-patentes",
+    "area": "data",
+    "path": "public/images/courses/market-covers-2026/inteligencia-patentes.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 180060,
+    "sha256": "ef00619fa7164f5b4590946da98173ef292a4fd66a1672a992a5d51dd5971fbd",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-solar-comercial",
+    "area": "energy",
+    "path": "public/images/courses/market-covers-2026/planejamento-solar-comercial.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 136494,
+    "sha256": "3ae6e08c021a5f585a8008bc8366cc97e5932dceebc002d0cd4eaf40d890a1b9",
+    "aiGenerated": true
+  },
+  {
+    "id": "operacoes-eolicas-planejamento",
+    "area": "energy",
+    "path": "public/images/courses/market-covers-2026/operacoes-eolicas-planejamento.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 140882,
+    "sha256": "68720a3f90e41874a08ede9e1bc785b8fa7857c3e063c915fcc64f7bd2b4c51a",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-baterias",
+    "area": "energy",
+    "path": "public/images/courses/market-covers-2026/planejamento-baterias.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 113002,
+    "sha256": "7fb1c9afb8f87399a6a86f32107f6163dabae2d3fb3e995c1ba4dc6bf51b525a",
+    "aiGenerated": true
+  },
+  {
+    "id": "recarga-veiculos-eletricos",
+    "area": "energy",
+    "path": "public/images/courses/market-covers-2026/recarga-veiculos-eletricos.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 157084,
+    "sha256": "4c4e2dc7ff356063c8c740c91fbf01d2371a2a07e4f70b23760245441ca6cb17",
+    "aiGenerated": true
+  },
+  {
+    "id": "bombas-calor-planejamento",
+    "area": "energy",
+    "path": "public/images/courses/market-covers-2026/bombas-calor-planejamento.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 238166,
+    "sha256": "1f2af391a6722249b3237ce98eeacc6183695f76f4f07b25afc8bf82cf5fcf7d",
+    "aiGenerated": true
+  },
+  {
+    "id": "retrofit-energetico",
+    "area": "energy",
+    "path": "public/images/courses/market-covers-2026/retrofit-energetico.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 197564,
+    "sha256": "bacd698b13b2bfdae617e68a5719f9daaf2de5aa4ead6709c371669076381e79",
+    "aiGenerated": true
+  },
+  {
+    "id": "operacoes-agua",
+    "area": "energy",
+    "path": "public/images/courses/market-covers-2026/operacoes-agua.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 238442,
+    "sha256": "f0821db13d917f083ce9e3b7ae4c3844458d86383c68eb20be7a391ee5c1ecb9",
+    "aiGenerated": true
+  },
+  {
+    "id": "passaporte-produto-circular",
+    "area": "energy",
+    "path": "public/images/courses/market-covers-2026/passaporte-produto-circular.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 181420,
+    "sha256": "2497fddddead30ba07078ee9a697260a424c2ecc06daa1bcfcfa745808fb8ec9",
+    "aiGenerated": true
+  },
+  {
+    "id": "agroenergia-recursos",
+    "area": "energy",
+    "path": "public/images/courses/market-covers-2026/agroenergia-recursos.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 249732,
+    "sha256": "e154773c625e65a8e686a3bc28acada7c04559da866e2f262f6ea0c151626984",
+    "aiGenerated": true
+  },
+  {
+    "id": "coordenacao-transicao-energetica",
+    "area": "energy",
+    "path": "public/images/courses/market-covers-2026/coordenacao-transicao-energetica.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 195362,
+    "sha256": "620bdc2d127755357323df5e20b3ad971c1e0b10b83cd5e1facff3fe63e03c4c",
+    "aiGenerated": true
+  },
+  {
+    "id": "coordenacao-teleatendimento",
+    "area": "care",
+    "path": "public/images/courses/market-covers-2026/coordenacao-teleatendimento.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 168796,
+    "sha256": "d89c289eca8123ea245a8e452823d445634ba241f3782c873417fe91218d5747",
+    "aiGenerated": true
+  },
+  {
+    "id": "interoperabilidade-saude-operacoes",
+    "area": "care",
+    "path": "public/images/courses/market-covers-2026/interoperabilidade-saude-operacoes.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 140302,
+    "sha256": "9e6cbd3bdc94254d088c2fc058e49d1a780fc52b412b01ae17f839ea23fa4ab8",
+    "aiGenerated": true
+  },
+  {
+    "id": "qualidade-dados-saude",
+    "area": "care",
+    "path": "public/images/courses/market-covers-2026/qualidade-dados-saude.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 155512,
+    "sha256": "a35688907bd8f2a1664d4e3269dda4aaad68f761bc5356fba5b808ad1409624a",
+    "aiGenerated": true
+  },
+  {
+    "id": "navegacao-servicos-saude",
+    "area": "care",
+    "path": "public/images/courses/market-covers-2026/navegacao-servicos-saude.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 159282,
+    "sha256": "b1c061d806ac6df2f1f36052fcf9a3a485f0ea1cf38077a96a68f550a6a59702",
+    "aiGenerated": true
+  },
+  {
+    "id": "operacoes-longevidade",
+    "area": "care",
+    "path": "public/images/courses/market-covers-2026/operacoes-longevidade.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 239652,
+    "sha256": "1c7e398d89ca41c60768426fb3985c345e41cc83a6ed61e52e15297a133dfbe4",
+    "aiGenerated": true
+  },
+  {
+    "id": "coordenacao-acessibilidade-saude",
+    "area": "care",
+    "path": "public/images/courses/market-covers-2026/coordenacao-acessibilidade-saude.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 167230,
+    "sha256": "760127dc530979bedee595041c231b527c695ac7c73ec939fc39869e95e40fed",
+    "aiGenerated": true
+  },
+  {
+    "id": "operacoes-pesquisa-clinica",
+    "area": "care",
+    "path": "public/images/courses/market-covers-2026/operacoes-pesquisa-clinica.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 117130,
+    "sha256": "a44ab898c68ca13e5ce78370a2bebcc822a77c51a7cc15825cccb0799b53e3a7",
+    "aiGenerated": true
+  },
+  {
+    "id": "operacoes-saude-ocupacional",
+    "area": "care",
+    "path": "public/images/courses/market-covers-2026/operacoes-saude-ocupacional.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 118900,
+    "sha256": "3406e86bd529273ff685b29e3bba2fc495cf80c825ba652b6cf563471e669c69",
+    "aiGenerated": true
+  },
+  {
+    "id": "analise-experiencia-paciente",
+    "area": "care",
+    "path": "public/images/courses/market-covers-2026/analise-experiencia-paciente.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 126774,
+    "sha256": "b2f42f5e59a73c580a6bffcf666eaa5abd359259d0830b9e630c2b2e0a4caeac",
+    "aiGenerated": true
+  },
+  {
+    "id": "continuidade-cuidados-administrativa",
+    "area": "care",
+    "path": "public/images/courses/market-covers-2026/continuidade-cuidados-administrativa.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 168282,
+    "sha256": "b9a19f3553092e6fc46bc22f041a00925caa4fd4fab92a82b03613166f9f1a9c",
+    "aiGenerated": true
+  },
+  {
+    "id": "bim-coordenacao-informacao",
+    "area": "industry",
+    "path": "public/images/courses/market-covers-2026/bim-coordenacao-informacao.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 211146,
+    "sha256": "59d775b9ae74e106e17f5c9712764bbe38deaedd1bcc77a1105c1cf611504d6e",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-manutencao-industrial",
+    "area": "industry",
+    "path": "public/images/courses/market-covers-2026/planejamento-manutencao-industrial.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 125876,
+    "sha256": "6f96ec3f08b653b36261c39bf7adc1e9cda628dbcd6a0dfb9b38e1c6703eaf87",
+    "aiGenerated": true
+  },
+  {
+    "id": "qualidade-manufatura",
+    "area": "industry",
+    "path": "public/images/courses/market-covers-2026/qualidade-manufatura.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 135260,
+    "sha256": "6ad096491acdfcff97b436c0ed61a94c53d6dd31c08d76e5fc99638b1a9480e1",
+    "aiGenerated": true
+  },
+  {
+    "id": "robotica-colaborativa-planejamento",
+    "area": "industry",
+    "path": "public/images/courses/market-covers-2026/robotica-colaborativa-planejamento.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 140606,
+    "sha256": "a17b4a30edab1c815c52ff9cd72282174caad132a9594d02554770e4d1b4e4a4",
+    "aiGenerated": true
+  },
+  {
+    "id": "manufatura-aditiva-operacoes",
+    "area": "industry",
+    "path": "public/images/courses/market-covers-2026/manufatura-aditiva-operacoes.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 138456,
+    "sha256": "4399e4b4c3ae54a53af75f2fea0827ba63f35d106e4a7ecb7f9360b6f47a2084",
+    "aiGenerated": true
+  },
+  {
+    "id": "semicondutores-operacoes-qualidade",
+    "area": "industry",
+    "path": "public/images/courses/market-covers-2026/semicondutores-operacoes-qualidade.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 155814,
+    "sha256": "57f96a82ce53eb14f4643be7a6a72a5279306d47b48e14ecef3267db439a651f",
+    "aiGenerated": true
+  },
+  {
+    "id": "comissionamento-documental",
+    "area": "industry",
+    "path": "public/images/courses/market-covers-2026/comissionamento-documental.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 154338,
+    "sha256": "0808e35c96dec2ec5ac94d142573b243a81f7e80ac5c5b995fc4c26d385cbc0b",
+    "aiGenerated": true
+  },
+  {
+    "id": "confiabilidade-ativos",
+    "area": "industry",
+    "path": "public/images/courses/market-covers-2026/confiabilidade-ativos.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 158750,
+    "sha256": "b40bf9dbb5bf603ed72b5af849be348455934d3fdfbc778324380aed9a4a605c",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-obras-digital",
+    "area": "industry",
+    "path": "public/images/courses/market-covers-2026/planejamento-obras-digital.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 145858,
+    "sha256": "d2982d8d98e7f1b0b63a2cbc506b5770c9efce92b6194538e21c428307e68c65",
+    "aiGenerated": true
+  },
+  {
+    "id": "operacoes-drones-dados",
+    "area": "industry",
+    "path": "public/images/courses/market-covers-2026/operacoes-drones-dados.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 207052,
+    "sha256": "752dcd96517684dea659ffdf1c28773b3046cbfe24c0c22df8247ed2cb8e36dd",
+    "aiGenerated": true
+  },
+  {
+    "id": "cadeia-frio-operacoes",
+    "area": "logistics",
+    "path": "public/images/courses/market-covers-2026/cadeia-frio-operacoes.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 131482,
+    "sha256": "8d2a02d215fac8e645f996159998a729d1ea378136dff64b997b64e0b1a7ca69",
+    "aiGenerated": true
+  },
+  {
+    "id": "logistica-reversa-tecnologia",
+    "area": "logistics",
+    "path": "public/images/courses/market-covers-2026/logistica-reversa-tecnologia.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 188382,
+    "sha256": "aacfcf728690359505d8e9caf565f26ba562599da3a93465b9d4bf841b6f866b",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-armazens",
+    "area": "logistics",
+    "path": "public/images/courses/market-covers-2026/planejamento-armazens.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 181148,
+    "sha256": "94594e37347434057965a4d7189d3b3df750666d6a4a09cc422e08ba0352ec81",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-ultima-milha",
+    "area": "logistics",
+    "path": "public/images/courses/market-covers-2026/planejamento-ultima-milha.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 188834,
+    "sha256": "caa024cc3b23ca33e09e1081c3a842159b929179492c27468f7808cefdad0847",
+    "aiGenerated": true
+  },
+  {
+    "id": "operacoes-portuarias-documentais",
+    "area": "logistics",
+    "path": "public/images/courses/market-covers-2026/operacoes-portuarias-documentais.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 161932,
+    "sha256": "b40dc79d2cfed0712e671efcca674a15e0f4d5046ec34159ac82ef8db52a2e43",
+    "aiGenerated": true
+  },
+  {
+    "id": "rastreabilidade-alimentos",
+    "area": "logistics",
+    "path": "public/images/courses/market-covers-2026/rastreabilidade-alimentos.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 157786,
+    "sha256": "5718ba97fccedaf8ed6c7fab5c4b984d3cf04edc93064942b3c9d1020f2a0aeb",
+    "aiGenerated": true
+  },
+  {
+    "id": "logistica-humanitaria-planejamento",
+    "area": "logistics",
+    "path": "public/images/courses/market-covers-2026/logistica-humanitaria-planejamento.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 227976,
+    "sha256": "0be8e5c119a11686c5c229174e75cc693e210afcbb77fa0d006a6056789ef9b4",
+    "aiGenerated": true
+  },
+  {
+    "id": "embalagens-operacoes",
+    "area": "logistics",
+    "path": "public/images/courses/market-covers-2026/embalagens-operacoes.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 186266,
+    "sha256": "aea1350f168884af0e95d04a9f1c28e120bb3db3b698e89ea97bd8d6d4ef03cc",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-transporte-multimodal",
+    "area": "logistics",
+    "path": "public/images/courses/market-covers-2026/planejamento-transporte-multimodal.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 217770,
+    "sha256": "99064846550d4826dbc610c0c54fbc45235891eecd2d56fd24935cbc86ba4591",
+    "aiGenerated": true
+  },
+  {
+    "id": "operacoes-pecas-criticas",
+    "area": "logistics",
+    "path": "public/images/courses/market-covers-2026/operacoes-pecas-criticas.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 139974,
+    "sha256": "2277f63bd5d09d7941fa5863f42ef8d82c7f6af873032ee9e177eb45dc53e65f",
+    "aiGenerated": true
+  },
+  {
+    "id": "quality-assurance-biotech",
+    "area": "quality",
+    "path": "public/images/courses/market-covers-2026/quality-assurance-biotech.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 144718,
+    "sha256": "5c1d797ed3e33db7d755efa2e6444b720bf495336190f7e97b7f857f0839a8f0",
+    "aiGenerated": true
+  },
+  {
+    "id": "capa-sistemas-qualidade",
+    "area": "quality",
+    "path": "public/images/courses/market-covers-2026/capa-sistemas-qualidade.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 199968,
+    "sha256": "f0b2c29cc2a4d75b545075fbc5d72861809eafafb1da48d9fc4ceed3545ee0c3",
+    "aiGenerated": true
+  },
+  {
+    "id": "validacao-sistemas-documental",
+    "area": "quality",
+    "path": "public/images/courses/market-covers-2026/validacao-sistemas-documental.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 146974,
+    "sha256": "c36092e699f3fe9a2300555b6c9bdd9910c289c3234a9e18d4d64e6afa4d55ed",
+    "aiGenerated": true
+  },
+  {
+    "id": "operacoes-regulatorias",
+    "area": "quality",
+    "path": "public/images/courses/market-covers-2026/operacoes-regulatorias.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 134904,
+    "sha256": "1c00f1c63e5dcf86231ea3d6293683b0b79cfed16e6601b993178faa8c87fa00",
+    "aiGenerated": true
+  },
+  {
+    "id": "integridade-dados-laboratoriais",
+    "area": "quality",
+    "path": "public/images/courses/market-covers-2026/integridade-dados-laboratoriais.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 167840,
+    "sha256": "f6384bdd747c708e266360ac98b68781e807a05b4ac984d995eda940c8bbc731",
+    "aiGenerated": true
+  },
+  {
+    "id": "qualidade-dispositivos-medicos",
+    "area": "quality",
+    "path": "public/images/courses/market-covers-2026/qualidade-dispositivos-medicos.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 149450,
+    "sha256": "00ff66f97ea6fc4edc52810f51a39028537d0b3c56d502fd32bac57e42e1c334",
+    "aiGenerated": true
+  },
+  {
+    "id": "qualificacao-fornecedores-qualidade",
+    "area": "quality",
+    "path": "public/images/courses/market-covers-2026/qualificacao-fornecedores-qualidade.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 157958,
+    "sha256": "9e6eaf51253d9dd7b351d945ea5a25c0946f52815f7ce1271f486c25ad40395a",
+    "aiGenerated": true
+  },
+  {
+    "id": "operacoes-estabilidade-documental",
+    "area": "quality",
+    "path": "public/images/courses/market-covers-2026/operacoes-estabilidade-documental.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 123588,
+    "sha256": "6db08db38a5aeb48ec2f0f98391289711da1d1024681d054a7b6a5a0c6ab55fe",
+    "aiGenerated": true
+  },
+  {
+    "id": "auditoria-sistemas-gestao",
+    "area": "quality",
+    "path": "public/images/courses/market-covers-2026/auditoria-sistemas-gestao.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 131562,
+    "sha256": "f5bd022ecb594bf948d3a7b8faf33c5c606c465e94a7aae68b0531273d93af14",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-conhecimento-cientifico",
+    "area": "quality",
+    "path": "public/images/courses/market-covers-2026/gestao-conhecimento-cientifico.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 166050,
+    "sha256": "f213e7a96215042cc4f49e91bd3b832ece9cc37f0e35386f7b4abda59f6ea9c2",
+    "aiGenerated": true
+  },
+  {
+    "id": "operacoes-licitacoes-internacionais",
+    "area": "business",
+    "path": "public/images/courses/market-covers-2026/operacoes-licitacoes-internacionais.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 120576,
+    "sha256": "b6ec5f45d4dc44298f98ea9da9e851a0edac13ac4734055a98bfb00415013378",
+    "aiGenerated": true
+  },
+  {
+    "id": "operacoes-parcerias",
+    "area": "business",
+    "path": "public/images/courses/market-covers-2026/operacoes-parcerias.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 147794,
+    "sha256": "09a6fb35af572689d9e593dcc740ead79cf21ee329bed57c35bdde438411edf9",
+    "aiGenerated": true
+  },
+  {
+    "id": "operacoes-comunidades",
+    "area": "business",
+    "path": "public/images/courses/market-covers-2026/operacoes-comunidades.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 135812,
+    "sha256": "a7af3507d0d8b510e02f67f1fbd5770e493c3c8dbae09debe8c84330d186cb57",
+    "aiGenerated": true
+  },
+  {
+    "id": "operacoes-eventos-globais",
+    "area": "business",
+    "path": "public/images/courses/market-covers-2026/operacoes-eventos-globais.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 153370,
+    "sha256": "71dd4fd74e866c04456d0882540966c6f3de7006eaacad8d10d9a562a49ba1a4",
+    "aiGenerated": true
+  },
+  {
+    "id": "operacoes-seguros-documental",
+    "area": "business",
+    "path": "public/images/courses/market-covers-2026/operacoes-seguros-documental.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 135864,
+    "sha256": "9755786b34c3f5b980bbbf26a74de0d075341f2b26eb83759f1ea9651cecd591",
+    "aiGenerated": true
+  },
+  {
+    "id": "operacoes-imoveis-servicos",
+    "area": "business",
+    "path": "public/images/courses/market-covers-2026/operacoes-imoveis-servicos.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 169478,
+    "sha256": "23b52f173ce54070385bbd65b7c8a57a74d92a69f67892116202ce6dbdf74981",
+    "aiGenerated": true
+  },
+  {
+    "id": "operacoes-turismo-acessivel",
+    "area": "business",
+    "path": "public/images/courses/market-covers-2026/operacoes-turismo-acessivel.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 238078,
+    "sha256": "70284a85a08ffc43e30226b82f9c6ade458abbfce0fdc2cefaaa3d32d2999de9",
+    "aiGenerated": true
+  },
+  {
+    "id": "operacoes-projetos-financiados",
+    "area": "business",
+    "path": "public/images/courses/market-covers-2026/operacoes-projetos-financiados.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 142378,
+    "sha256": "01ad17053447049fe104a4f875a702c7a92cc06e65604c1baf2b1d3accd174c0",
+    "aiGenerated": true
+  },
+  {
+    "id": "operacoes-servicos-juridicos",
+    "area": "business",
+    "path": "public/images/courses/market-covers-2026/operacoes-servicos-juridicos.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 147730,
+    "sha256": "3a67f4b9423c066c8ae224afa60fdab7541d22645ddecb791e04367a6303b030",
+    "aiGenerated": true
+  },
+  {
+    "id": "operacoes-franquias",
+    "area": "business",
+    "path": "public/images/courses/market-covers-2026/operacoes-franquias.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 149432,
+    "sha256": "ceb59945704b2857d0903fa5f3b40e820259c3c930d03ce3f5de4a253d2a4ab9",
+    "aiGenerated": true
+  },
+  {
+    "id": "redacao-tecnica-produtos",
+    "area": "content",
+    "path": "public/images/courses/market-covers-2026/redacao-tecnica-produtos.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 161492,
+    "sha256": "a5002dcdb22547df9c09b706e55ae2a2ca0c4773b2bac513947e6b7c56d65707",
+    "aiGenerated": true
+  },
+  {
+    "id": "ux-writing-servicos",
+    "area": "content",
+    "path": "public/images/courses/market-covers-2026/ux-writing-servicos.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 160942,
+    "sha256": "19405427bcf60470bacde8a5f806dcab1297a173ea5b28e74b5886ac1bd1370d",
+    "aiGenerated": true
+  },
+  {
+    "id": "producao-legendas-acessiveis",
+    "area": "content",
+    "path": "public/images/courses/market-covers-2026/producao-legendas-acessiveis.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 179046,
+    "sha256": "ab284c12169825eb94536073565561eae08c449e2619840ffcc251ecb0f69e10",
+    "aiGenerated": true
+  },
+  {
+    "id": "localizacao-jogos-operacoes",
+    "area": "content",
+    "path": "public/images/courses/market-covers-2026/localizacao-jogos-operacoes.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 172170,
+    "sha256": "5a5f4179b94672019484ea994aca8119fabbe8e41208274686526e90aad3ff91",
+    "aiGenerated": true
+  },
+  {
+    "id": "conteudo-museus-digitais",
+    "area": "content",
+    "path": "public/images/courses/market-covers-2026/conteudo-museus-digitais.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 134306,
+    "sha256": "6cb8a30ecdc1c1a4df30223f976e3df01ad3d9e44533c229e6e1ed571272b47c",
+    "aiGenerated": true
+  },
+  {
+    "id": "preservacao-digital",
+    "area": "content",
+    "path": "public/images/courses/market-covers-2026/preservacao-digital.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 185590,
+    "sha256": "4aaf3eb7e1d8559e467c9dc722f907f5b82f47b4ec65564948bd37575f1cf475",
+    "aiGenerated": true
+  },
+  {
+    "id": "comunicacao-cientifica-publica",
+    "area": "content",
+    "path": "public/images/courses/market-covers-2026/comunicacao-cientifica-publica.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 159892,
+    "sha256": "10e8ee3cffe6f1e1fc2ef0e2a76c2f97c1d9208824534ad887602aa542ac6c11",
+    "aiGenerated": true
+  },
+  {
+    "id": "plain-language-servicos",
+    "area": "content",
+    "path": "public/images/courses/market-covers-2026/plain-language-servicos.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 118542,
+    "sha256": "a0ccebec2ab298b69d3bc798074a2268f002811385605c0ca61e453025901605",
+    "aiGenerated": true
+  },
+  {
+    "id": "operacoes-editoriais-multilingues",
+    "area": "content",
+    "path": "public/images/courses/market-covers-2026/operacoes-editoriais-multilingues.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 207040,
+    "sha256": "9ee17fe69541f974792da0568730c07ee68315fb20b0a4e2d6f5efe688c1d6f6",
+    "aiGenerated": true
+  },
+  {
+    "id": "acessibilidade-documentos-digitais",
+    "area": "content",
+    "path": "public/images/courses/market-covers-2026/acessibilidade-documentos-digitais.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 169052,
+    "sha256": "bd025657dcce9199f60714c6dc36d64a01a494b943e226e0f1b007a0a5569906",
+    "aiGenerated": true
+  }
+]

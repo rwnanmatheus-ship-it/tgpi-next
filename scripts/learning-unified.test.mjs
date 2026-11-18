@@ -6,6 +6,7 @@ import { projectLearningProgress, learningStatusLabels } from '../src/lib/learni
 import { messages } from '../src/lib/localization/messages.ts';
 import { courseLearningPolicy, credentialLabel } from '../src/lib/learning/catalog-policy.ts';
 import { parseCatalogFilters, catalogFilterParams, defaultCatalogFilters } from '../src/lib/learning/catalog-filters.ts';
+import { professionalAreas } from '../src/lib/learning/professional-areas.ts';
 const courses=[{id:'global-english-2026',title:'English',version:'v2',modules:[{lessons:[{id:'one'},{id:'two'}]}]}];
 const record={courseVersion:'v2',completedLessonIds:['one'],lastLessonId:'two',totalLessons:2,updatedAt:'2026-11-09T10:00:00Z'};
 const pro={uid:'member-a',courseId:'pro',version:'v2',activities:{one:'answer',forged:'ignore'},state:'studying',updatedAt:'2026-11-09T12:00:00Z'};
@@ -54,6 +55,19 @@ test('catalogue language URLs accept every supported instructional locale', () =
    const filters = { ...defaultCatalogFilters, language };
    assert.equal(parseCatalogFilters(catalogFilterParams(filters)).language, language);
  }
+});
+
+test('professional areas round-trip with combined discovery filters and reject unknown areas', () => {
+ assert.equal(professionalAreas.length, 10);
+ assert.equal(new Set(professionalAreas.map(([id]) => id)).size, 10);
+ for (const [area] of professionalAreas) {
+  const filters = { ...defaultCatalogFilters, area, query: 'dados', access: 'premium', language: 'pt-BR', series: 'Premium Specializations' };
+  const params = catalogFilterParams(filters, new URLSearchParams('source=course-page'));
+  assert.deepEqual(parseCatalogFilters(params), filters);
+  assert.equal(params.get('source'), 'course-page');
+ }
+ assert.equal(parseCatalogFilters(new URLSearchParams('area=__proto__')).area, 'all');
+ assert.equal(catalogFilterParams(defaultCatalogFilters, new URLSearchParams('area=energy')).has('area'), false);
 });
 
 test('catalogue filter links round-trip, reject invalid enums and preserve unrelated context',()=>{

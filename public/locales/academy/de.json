@@ -1425,5 +1425,18 @@
   "Produza dois mapas e memo com escolha, sensibilidade e próxima verificação de campo. Inclua insumos, resultado verificável, revisão e limite de aplicação.": "Erstellen Sie zwei Karten und Memos mit Auswahl, Empfindlichkeit und nächster Feldverifizierung, einschließlich Eingaben, überprüfbarem Ergebnis, Überprüfung und Anwendungsgrenze.",
   "Salve inventário de dados, mapa, tabela de cobertura por cenário e justificativa com limites de inferência.": "Speichern Sie Datenbestand, Karte, Szenario-Abdeckungstabelle und Begründung mit Inferenzgrenzen.",
   "Salve inventário de dados, mapa, tabela de cobertura por cenário e justificativa com limites de inferência. Inclua a comparação entre as duas versões e o resultado do teste de transferência.": "Datenbestand, Karte, Szenario-Coverage-Tabelle und Begründung mit Inferenzgrenzen speichern; Vergleich zwischen den beiden Versionen und Transfertestergebnis einschließen.",
-  "Preparação recomendada: Análise de dados básica. QGIS ou ferramenta equivalente.": "Empfohlene Vorbereitung: Grundlegende Datenanalyse. QGIS oder gleichwertiges Tool."
+  "Preparação recomendada: Análise de dados básica. QGIS ou ferramenta equivalente.": "Empfohlene Vorbereitung: Grundlegende Datenanalyse. QGIS oder gleichwertiges Tool.",
+  "Professional area": "Berufsfeld",
+  "All professional areas": "Alle Berufsfelder",
+  "Explore 100 new courses across 10 professional areas.": "Entdecken Sie 100 neue Kurse in 10 Berufsfeldern.",
+  "Artificial intelligence operations": "Betrieb mit künstlicher Intelligenz",
+  "Cybersecurity operations": "Cybersicherheitsbetrieb",
+  "Data and research": "Daten und Forschung",
+  "Energy and resources": "Energie und Ressourcen",
+  "Digital health administration": "Verwaltung im digitalen Gesundheitswesen",
+  "Industry and construction": "Industrie und Bauwesen",
+  "Logistics and traceability": "Logistik und Rückverfolgbarkeit",
+  "Quality and scientific documentation": "Qualität und wissenschaftliche Dokumentation",
+  "Specialist business services": "Spezialisierte Unternehmensdienstleistungen",
+  "Content, culture and accessibility": "Inhalte, Kultur und Barrierefreiheit"
 }

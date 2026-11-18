@@ -14,6 +14,7 @@ import CourseSearch from './CourseSearch';
 import { courseLearningPolicy, credentialLabel } from '@/lib/learning/catalog-policy';
 import { parseCatalogFilters, catalogFilterParams, defaultCatalogFilters, type CatalogFilters } from '@/lib/learning/catalog-filters';
 import { courseMinutes, courseSearchScore } from '@/lib/learning/catalog-search';
+import { professionalAreas } from '@/lib/learning/professional-areas';
 import type { CourseOverview } from '@/types/course-overview';
 import styles from './learning-catalog.module.css';
 
@@ -33,7 +34,7 @@ export default function LearningPathExplorer({ courses, initialFilters }: Props)
   const studyLanguage = (course: CourseOverview) => fullyLocalizedAcademyCourses.has(course.id)
     ? academyPracticeCopy(locale, 'availableLanguages')
     : t(courseLearningPolicy(course).instructionLanguage === 'pt-BR' ? 'Instruction: Portuguese' : 'Instruction: English');
-  const eligible = courses.filter(course => (filters.goal === 'all' || course.goal === filters.goal) && (filters.series === 'all' || course.series === filters.series) && (filters.availability === 'all' || course.status === filters.availability) && (filters.credential === 'all' || courseLearningPolicy(course).credentialStatus === filters.credential) && (filters.access === 'all' || courseLearningPolicy(course).accessPolicy === filters.access) && (filters.language === 'all' || fullyLocalizedAcademyCourses.has(course.id) || courseLearningPolicy(course).instructionLanguage === filters.language));
+  const eligible = courses.filter(course => (filters.area === 'all' || course.professionalArea === filters.area) && (filters.goal === 'all' || course.goal === filters.goal) && (filters.series === 'all' || course.series === filters.series) && (filters.availability === 'all' || course.status === filters.availability) && (filters.credential === 'all' || courseLearningPolicy(course).credentialStatus === filters.credential) && (filters.access === 'all' || courseLearningPolicy(course).accessPolicy === filters.access) && (filters.language === 'all' || fullyLocalizedAcademyCourses.has(course.id) || courseLearningPolicy(course).instructionLanguage === filters.language));
   const visible = eligible.map(course => ({ course, score: courseSearchScore(course,filters.query,t) })).filter(item => item.score > 0).sort((a,b) => sort === 'shortest' ? courseMinutes(a.course.duration)-courseMinutes(b.course.duration) : sort === 'title' ? t(a.course.title).localeCompare(t(b.course.title),locale) : b.score-a.score).map(item => item.course);
   const selected = courses.filter(course => comparison.includes(course.id));
   const activeFilters = Object.entries(filters).some(([key,value]) => value !== defaultCatalogFilters[key as keyof CatalogFilters]);
@@ -42,6 +43,13 @@ export default function LearningPathExplorer({ courses, initialFilters }: Props)
     <div className={styles.heading}><div><p className={styles.eyebrow}>{t('Your next capability')}</p><h2 id="learning-paths-title">{t('Find a course. Change what you can do.')}</h2></div><p>{t('Choose by outcome, explore the curriculum and build evidence through practice.')}</p></div>
     <div className={styles.tools}>
       <CourseSearch courses={eligible} query={filters.query} onChange={query => update({query})} />
+      <div className={styles.areaFilter}>
+        <label htmlFor="professional-area">{t('Professional area')}<select id="professional-area" value={filters.area} onChange={event => update({area:event.target.value})}>
+          <option value="all">{t('All professional areas')}</option>
+          {professionalAreas.map(([id, label]) => <option key={id} value={id}>{t(label)} ({courses.filter(course => course.professionalArea === id).length})</option>)}
+        </select></label>
+        <p>{t('Explore 100 new courses across 10 professional areas.')}</p>
+      </div>
       <div className={styles.filters} role="group" aria-label={t('Filter by learning goal')}>{goals.map(([value,label]) => <button key={value} type="button" aria-pressed={filters.goal === value} onClick={() => update({goal:value})}>{t(label)}<small>{courses.filter(course => value === 'all' || course.goal === value).length}</small></button>)}</div>
       <div className={styles.filters} role="group" aria-label={t('Access plan')}>{([['all', 'All plans'], ['free_account', 'TGPI Free'], ['premium', 'TGPI Premium']] as const).map(([value, label]) => <button key={value} type="button" aria-pressed={filters.access === value} onClick={() => update({ access: value })}>{t(label)}</button>)}</div>
       <details className={styles.advanced}><summary>{t('Refine your search')}{activeFilters && <span> · {t('Filters active')}</span>}</summary><div className={styles.policyFilters}>

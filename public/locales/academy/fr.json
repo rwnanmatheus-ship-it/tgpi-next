@@ -1425,5 +1425,18 @@
   "Produza dois mapas e memo com escolha, sensibilidade e próxima verificação de campo. Inclua insumos, resultado verificável, revisão e limite de aplicação.": "Produire deux cartes et mémos avec choix, sensibilité et prochaine vérification sur le terrain. Inclure les entrées, les résultats vérifiables, la limite d'examen et d'application.",
   "Salve inventário de dados, mapa, tabela de cobertura por cenário e justificativa com limites de inferência.": "Enregistrer l'inventaire des données, la carte, le tableau de couverture des scénarios et la justification avec des limites d'inférence.",
   "Salve inventário de dados, mapa, tabela de cobertura por cenário e justificativa com limites de inferência. Inclua a comparação entre as duas versões e o resultado do teste de transferência.": "Enregistrer l'inventaire des données, la carte, le tableau de couverture des scénarios et la justification avec des limites d'inférence. Inclure la comparaison entre les deux versions et le résultat du test de transfert.",
-  "Preparação recomendada: Análise de dados básica. QGIS ou ferramenta equivalente.": "Préparation recommandée : Analyse des données de base. QGIS ou outil équivalent."
+  "Preparação recomendada: Análise de dados básica. QGIS ou ferramenta equivalente.": "Préparation recommandée : Analyse des données de base. QGIS ou outil équivalent.",
+  "Professional area": "Domaine professionnel",
+  "All professional areas": "Tous les domaines professionnels",
+  "Explore 100 new courses across 10 professional areas.": "Découvrez 100 nouveaux cours dans 10 domaines professionnels.",
+  "Artificial intelligence operations": "Opérations d’intelligence artificielle",
+  "Cybersecurity operations": "Opérations de cybersécurité",
+  "Data and research": "Données et recherche",
+  "Energy and resources": "Énergie et ressources",
+  "Digital health administration": "Administration de santé numérique",
+  "Industry and construction": "Industrie et construction",
+  "Logistics and traceability": "Logistique et traçabilité",
+  "Quality and scientific documentation": "Qualité et documentation scientifique",
+  "Specialist business services": "Services professionnels spécialisés",
+  "Content, culture and accessibility": "Contenu, culture et accessibilité"
 }

@@ -22,6 +22,7 @@ test('100 occupational cases are distinct, fully routed and consistent with thei
     const course = h.getAcademyCourse(item.id), listing = marketOverview.find(row => row.id === item.id);
     assert.ok(course && listing, item.id);
     assert.equal(listing.href, `/courses/${course.id}`);
+    assert.equal(listing.professionalArea, item.track);
     assert.equal(listing.learningPolicy.instructionLanguage, 'pt-BR');
     assert.equal(listing.learningPolicy.accessPolicy, 'premium');
     assert.equal(isPremiumAcademyCourse(course.id), true);

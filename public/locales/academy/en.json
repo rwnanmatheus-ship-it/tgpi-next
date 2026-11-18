@@ -1425,5 +1425,18 @@
   "Produza dois mapas e memo com escolha, sensibilidade e próxima verificação de campo. Inclua insumos, resultado verificável, revisão e limite de aplicação.": "Produce two maps and memos with choice, sensitivity and next field verification. Include inputs, verifiable result, review and application limit.",
   "Salve inventário de dados, mapa, tabela de cobertura por cenário e justificativa com limites de inferência.": "Save data inventory, map, scenario coverage table and justification with inference limits.",
   "Salve inventário de dados, mapa, tabela de cobertura por cenário e justificativa com limites de inferência. Inclua a comparação entre as duas versões e o resultado do teste de transferência.": "Save data inventory, map, scenario coverage table and justification with inference limits. Include the comparison between the two versions and the transfer test result.",
-  "Preparação recomendada: Análise de dados básica. QGIS ou ferramenta equivalente.": "Recommended preparation: Basic data analysis. QGIS or equivalent tool."
+  "Preparação recomendada: Análise de dados básica. QGIS ou ferramenta equivalente.": "Recommended preparation: Basic data analysis. QGIS or equivalent tool.",
+  "Professional area": "Professional area",
+  "All professional areas": "All professional areas",
+  "Explore 100 new courses across 10 professional areas.": "Explore 100 new courses across 10 professional areas.",
+  "Artificial intelligence operations": "Artificial intelligence operations",
+  "Cybersecurity operations": "Cybersecurity operations",
+  "Data and research": "Data and research",
+  "Energy and resources": "Energy and resources",
+  "Digital health administration": "Digital health administration",
+  "Industry and construction": "Industry and construction",
+  "Logistics and traceability": "Logistics and traceability",
+  "Quality and scientific documentation": "Quality and scientific documentation",
+  "Specialist business services": "Specialist business services",
+  "Content, culture and accessibility": "Content, culture and accessibility"
 }
