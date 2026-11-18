@@ -26,3 +26,9 @@
 .card .primary { background:linear-gradient(130deg,#e5ca94,#cda764); border-color:#e0bf83; color:#142337!important; font-size:12px; box-shadow:inset 0 1px 0 #ffffff55; }
 .card .primary:hover { background:#eed6a6; }
 .card .compareCheck input { accent-color:#cdae72; color-scheme:dark; }
+
+.areaFilter { display:flex; align-items:center; justify-content:space-between; gap:1rem; margin-top:1rem; padding:1rem; border:1px solid rgba(212,175,55,.24); border-radius:1rem; background:#12233a; }
+.areaFilter label { display:grid; gap:.5rem; min-width:min(100%,22rem); color:#f6f4ec; font-size:.875rem; font-weight:650; }
+.areaFilter select { width:100%; min-height:2.75rem; padding:.65rem 2.4rem .65rem .8rem; border:1px solid rgba(255,255,255,.22); border-radius:.65rem; color:#f6f4ec; background-color:#101d31; font:inherit; }
+.areaFilter p { margin:0; max-width:24rem; color:#c6cfda; font-size:.9375rem; line-height:1.5; }
+@media(max-width:640px) { .areaFilter { flex-direction:column; align-items:stretch; } .areaFilter label { min-width:0; } }

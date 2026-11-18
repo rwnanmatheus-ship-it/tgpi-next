@@ -1425,5 +1425,18 @@
   "Produza dois mapas e memo com escolha, sensibilidade e próxima verificação de campo. Inclua insumos, resultado verificável, revisão e limite de aplicação.": "Produza dois mapas e memo com escolha, sensibilidade e próxima verificação de campo. Inclua insumos, resultado verificável, revisão e limite de aplicação.",
   "Salve inventário de dados, mapa, tabela de cobertura por cenário e justificativa com limites de inferência.": "Salve inventário de dados, mapa, tabela de cobertura por cenário e justificativa com limites de inferência.",
   "Salve inventário de dados, mapa, tabela de cobertura por cenário e justificativa com limites de inferência. Inclua a comparação entre as duas versões e o resultado do teste de transferência.": "Salve inventário de dados, mapa, tabela de cobertura por cenário e justificativa com limites de inferência. Inclua a comparação entre as duas versões e o resultado do teste de transferência.",
-  "Preparação recomendada: Análise de dados básica. QGIS ou ferramenta equivalente.": "Preparação recomendada: Análise de dados básica. QGIS ou ferramenta equivalente."
+  "Preparação recomendada: Análise de dados básica. QGIS ou ferramenta equivalente.": "Preparação recomendada: Análise de dados básica. QGIS ou ferramenta equivalente.",
+  "Professional area": "Área profissional",
+  "All professional areas": "Todas as áreas profissionais",
+  "Explore 100 new courses across 10 professional areas.": "Explore 100 novos cursos em 10 áreas profissionais.",
+  "Artificial intelligence operations": "Operações de inteligência artificial",
+  "Cybersecurity operations": "Operações de cibersegurança",
+  "Data and research": "Dados e pesquisa",
+  "Energy and resources": "Energia e recursos",
+  "Digital health administration": "Administração de saúde digital",
+  "Industry and construction": "Indústria e construção",
+  "Logistics and traceability": "Logística e rastreabilidade",
+  "Quality and scientific documentation": "Qualidade e documentação científica",
+  "Specialist business services": "Serviços e negócios especializados",
+  "Content, culture and accessibility": "Conteúdo, cultura e acessibilidade"
 }

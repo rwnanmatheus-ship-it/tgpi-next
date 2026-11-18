@@ -1425,5 +1425,18 @@
   "Produza dois mapas e memo com escolha, sensibilidade e próxima verificação de campo. Inclua insumos, resultado verificável, revisão e limite de aplicação.": "Produci due mappe e memo con scelta, sensibilità e verifica del campo successivo. Includi ingressi, risultato verificabile, revisione e limite di applicazione.",
   "Salve inventário de dados, mapa, tabela de cobertura por cenário e justificativa com limites de inferência.": "Salvare l'inventario dei dati, la mappa, la tabella di copertura dello scenario e la giustificazione con i limiti di inferenza.",
   "Salve inventário de dados, mapa, tabela de cobertura por cenário e justificativa com limites de inferência. Inclua a comparação entre as duas versões e o resultado do teste de transferência.": "Salvare l'inventario dei dati, la mappa, la tabella di copertura dello scenario e la giustificazione con i limiti di inferenza.",
-  "Preparação recomendada: Análise de dados básica. QGIS ou ferramenta equivalente.": "Preparazione consigliata: Analisi dei dati di base. QGIS o strumento equivalente."
+  "Preparação recomendada: Análise de dados básica. QGIS ou ferramenta equivalente.": "Preparazione consigliata: Analisi dei dati di base. QGIS o strumento equivalente.",
+  "Professional area": "Area professionale",
+  "All professional areas": "Tutte le aree professionali",
+  "Explore 100 new courses across 10 professional areas.": "Esplora 100 nuovi corsi in 10 aree professionali.",
+  "Artificial intelligence operations": "Operazioni di intelligenza artificiale",
+  "Cybersecurity operations": "Operazioni di cybersicurezza",
+  "Data and research": "Dati e ricerca",
+  "Energy and resources": "Energia e risorse",
+  "Digital health administration": "Amministrazione della sanità digitale",
+  "Industry and construction": "Industria e costruzioni",
+  "Logistics and traceability": "Logistica e tracciabilità",
+  "Quality and scientific documentation": "Qualità e documentazione scientifica",
+  "Specialist business services": "Servizi professionali specializzati",
+  "Content, culture and accessibility": "Contenuti, cultura e accessibilità"
 }

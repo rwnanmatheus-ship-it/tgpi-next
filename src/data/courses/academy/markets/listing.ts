@@ -8,7 +8,7 @@ const goals = { ai: 'future-of-work', cyber: 'future-of-work', data: 'decision-i
 
 export const marketCourseIds: ReadonlySet<string> = new Set(marketCatalog.map(course => course.id));
 export const marketOverview: CourseOverview[] = marketCatalog.map(course => ({
-  id: course.id, title: course.title, goal: goals[course.track], series: PREMIUM_SPECIALIZATIONS_SERIES,
+  id: course.id, title: course.title, goal: goals[course.track], series: PREMIUM_SPECIALIZATIONS_SERIES, professionalArea: course.track,
   category: course.role, goalLabel: 'Formação aplicada para novos mercados',
   desc: `Desenvolva um projeto simulado de ${course.title.toLocaleLowerCase('pt-BR')}, com seis entregáveis, análise de exceções e evidências rastreáveis.`,
   audience: `Profissionais e estudantes interessados na atuação de ${course.role.toLocaleLowerCase('pt-BR')}. Consulte os pré-requisitos e os limites de atuação na apresentação.`,

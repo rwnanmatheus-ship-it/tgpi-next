@@ -60,3 +60,25 @@ test('keyboard suggestions start from the correct endpoint and wrap safely', () 
   assert.equal(moveCourseSuggestion(4, 2, 'ArrowDown'), 0);
   assert.equal(moveCourseSuggestion(-1, 0, 'ArrowUp'), -1);
 });
+
+test('all 100 new market covers are dedicated, distinct and suitable for responsive cards', async () => {
+  const { marketCoverIds, academyCoverIds, courseArtwork, courseCoverBadges } = moduleAt('src/lib/cinematic-art.ts');
+  const prompts = JSON.parse(readFileSync('docs/learning/market-cover-prompts-2026.json', 'utf8'));
+  assert.equal(marketCoverIds.length, 100);
+  assert.deepEqual(new Set(marketCoverIds), new Set(prompts.map(item => item.id)));
+  const hashes = new Set(academyCoverIds.map(id => createHash('sha256').update(readFileSync('public' + courseArtwork(id))).digest('hex')));
+  for (const id of marketCoverIds) {
+    const asset = courseArtwork(id);
+    assert.equal(asset, `/images/courses/market-covers-2026/${id}.webp`);
+    const data = readFileSync('public' + asset);
+    const hash = createHash('sha256').update(data).digest('hex');
+    assert.ok(!hashes.has(hash), `${id} reuses another cover`);
+    hashes.add(hash);
+    const metadata = await sharp(data).metadata();
+    assert.equal(metadata.format, 'webp', id);
+    assert.equal(metadata.width, 1536, id);
+    assert.equal(metadata.height, 1024, id);
+    assert.ok(data.length <= 420_000, id);
+    assert.ok(courseCoverBadges(id)?.every(label => label.length > 0 && label.length <= 32), id);
+  }
+});

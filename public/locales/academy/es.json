@@ -1425,5 +1425,18 @@
   "Produza dois mapas e memo com escolha, sensibilidade e próxima verificação de campo. Inclua insumos, resultado verificável, revisão e limite de aplicação.": "Produce dos mapas y memo con elección, sensibilidad y próxima verificación de campo. Incluya insumos, resultado verificable, revisión y límite de aplicación.",
   "Salve inventário de dados, mapa, tabela de cobertura por cenário e justificativa com limites de inferência.": "Salve inventario de datos, mapa, tabla de cobertura por escenario y justificación con límites de inferencia.",
   "Salve inventário de dados, mapa, tabela de cobertura por cenário e justificativa com limites de inferência. Inclua a comparação entre as duas versões e o resultado do teste de transferência.": "Guarde inventario de datos, mapa, tabla de cobertura por escenario y justificación con límites de inferencia. Incluya la comparación entre las dos versiones y el resultado de la prueba de transferencia.",
-  "Preparação recomendada: Análise de dados básica. QGIS ou ferramenta equivalente.": "Preparación recomendada: Análisis de datos básicos. QGIS o herramienta equivalente."
+  "Preparação recomendada: Análise de dados básica. QGIS ou ferramenta equivalente.": "Preparación recomendada: Análisis de datos básicos. QGIS o herramienta equivalente.",
+  "Professional area": "Área profesional",
+  "All professional areas": "Todas las áreas profesionales",
+  "Explore 100 new courses across 10 professional areas.": "Explora 100 cursos nuevos en 10 áreas profesionales.",
+  "Artificial intelligence operations": "Operaciones de inteligencia artificial",
+  "Cybersecurity operations": "Operaciones de ciberseguridad",
+  "Data and research": "Datos e investigación",
+  "Energy and resources": "Energía y recursos",
+  "Digital health administration": "Administración de salud digital",
+  "Industry and construction": "Industria y construcción",
+  "Logistics and traceability": "Logística y trazabilidad",
+  "Quality and scientific documentation": "Calidad y documentación científica",
+  "Specialist business services": "Servicios y negocios especializados",
+  "Content, culture and accessibility": "Contenido, cultura y accesibilidad"
 }
