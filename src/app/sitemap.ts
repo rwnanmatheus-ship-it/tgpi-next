@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
-import { academyCoverIds, courseArtwork } from "@/lib/cinematic-art";
+import { courseArtwork } from "@/lib/cinematic-art";
+import { academyManifest } from "@/data/courses/academy/manifest";
 import { publicGuides } from "@/lib/public-guides";
 import { getAllCountrySlugs } from "@/lib/countries";
 
@@ -49,7 +50,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  const academy: MetadataRoute.Sitemap = academyCoverIds.map(id => ({
+  const academy: MetadataRoute.Sitemap = Object.keys(academyManifest).map(id => ({
     url: `${siteUrl}/courses/${id}`,
     images: [`${siteUrl}${courseArtwork(id)}`],
     changeFrequency: "monthly",

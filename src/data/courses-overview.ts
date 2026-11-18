@@ -1,3 +1,4 @@
+import { marketOverview } from '@/data/courses/academy/markets/listing';
 import { isPremiumAcademyCourse } from "@/data/courses/academy/premium-policy";
 import { specializationOverview } from '@/data/courses/academy/specializations/listing';
 import { courseArtwork } from '@/lib/cinematic-art';
@@ -173,7 +174,7 @@ const originalOverview: CourseOverview[] = [
   },
 ];
 
-export const coursesOverview: CourseOverview[] = [...originalOverview, ...emergencyOverview, ...expansionOverview, ...specializationOverview].map(course => {
+export const coursesOverview: CourseOverview[] = [...originalOverview, ...emergencyOverview, ...expansionOverview, ...specializationOverview, ...marketOverview].map(course => {
   const edition = academyManifest[course.id];
   if (!edition) return course;
   const estimate = {

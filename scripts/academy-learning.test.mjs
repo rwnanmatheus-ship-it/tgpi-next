@@ -97,15 +97,16 @@ test('academy courses have inspectable workload, assessments and preserved found
  for (const entries of perGoal.values()) assert.equal(entries.length, 10);
  const { specializations, specializationOverview, isSpecialization } = h.load(resolve('src/data/courses/academy/specializations/listing.ts'));
  assert.equal(specializations.length,17);
- const originals = academyCourses.filter(course => !emergency.has(course.id) && !added.has(course.id) && !isSpecialization(course.id));
+ const { marketCourseIds } = h.load(resolve('src/data/courses/academy/markets/listing.ts'));
+ const originals = academyCourses.filter(course => !marketCourseIds.has(course.id) && !emergency.has(course.id) && !added.has(course.id) && !isSpecialization(course.id));
  assert.equal(originals.length,27);
- assert.equal(new Set(academyCourses.map(c=>c.id)).size,100);
+ assert.equal(new Set(academyCourses.map(c=>c.id)).size,200);
  assert.equal(originals.reduce((n,c)=>n+c.lessons.length,0),389);
  assert.equal(academyCourses.filter(course => emergency.has(course.id)).length,6);
  const seenScenarios = new Set();
  const manifest=h.load(resolve('src/data/courses/academy/manifest.ts')).academyManifest;
  const { academyCoverIds, courseArtwork } = h.load(resolve('src/lib/cinematic-art.ts'));
- assert.deepEqual([...academyCoverIds].sort(), Object.keys(manifest).sort());
+ assert.deepEqual([...academyCoverIds].sort(), Object.keys(manifest).filter(id => !marketCourseIds.has(id)).sort());
  const old=h.load(resolve('src/data/courses.ts')).courses, pro=h.load(resolve('src/data/courses/professional/index.ts')).professionalCourseDrafts;
  for(const course of academyCourses){
   assert.equal(course.image, courseArtwork(course.id));
@@ -127,6 +128,13 @@ test('academy courses have inspectable workload, assessments and preserved found
    assert.equal(course.lessons.filter(lesson => !lesson.project && !lesson.practiceLab).length, 3);
    assert.equal(h.catalog.getAcademyCourse(course.id, h.catalog.PREVIOUS_ACADEMY_VERSION), undefined);
    assert.ok(existsSync(resolve('public', course.image.slice(1))));
+  } else if (marketCourseIds.has(course.id)) {
+   assert.equal(course.minutes, 2400);
+   assert.equal(course.lessons.length, 12);
+   assert.equal(course.language, 'pt-BR');
+   assert.ok(course.scopeNotice.includes('não equivale a graduação'));
+   assert.ok(course.lessons.every(lesson => lesson.references.length >= 2));
+   assert.ok(existsSync(resolve('public', course.image.slice(1))));
   } else if (isSpecialization(course.id)) {
    const listing = specializationOverview.find(item => item.id === course.id);
    assert.equal(listing.learningPolicy.accessPolicy, 'premium');
@@ -147,7 +155,7 @@ test('academy courses have inspectable workload, assessments and preserved found
   const baseline = h.catalog.getAcademyCourse(course.id, h.catalog.BASELINE_ACADEMY_VERSION);
   const labs = course.lessons.filter(lesson => lesson.practiceLab);
   assert.equal(labs.length, 2);
-  if (isSpecialization(course.id)) {
+  if (isSpecialization(course.id) || marketCourseIds.has(course.id)) {
    assert.equal(baseline, undefined);
    assert.equal(h.catalog.getAcademyCourse(course.id, h.catalog.PREVIOUS_ACADEMY_VERSION), undefined);
   } else {
