@@ -1,4 +1,5 @@
 import 'server-only';
+import { marketAcademy } from './markets/curricula.server';
 import { courses } from '@/data/courses';
 import { coursesOverview } from '@/data/courses-overview';
 import { professionalCourseDrafts } from '@/data/courses/professional';
@@ -136,6 +137,14 @@ for (const { course, questions, calculation } of specializationAcademy(ACADEMY_V
     course.lessons.length !== academyManifest[course.id]?.lessons ||
     course.minutes !== course.lessons.reduce((sum, lesson) => sum + lesson.minutes, course.portfolioMinutes + course.assessmentMinutes)) {
     throw new Error(`Invalid specialization curriculum: ${course.id}`);
+  }
+  expandedCourses.set(course.id, course);
+  expandedBanks.set(course.id, questions);
+  courseCases.set(course.id, calculation);
+}
+for (const { course, questions, calculation } of marketAcademy(ACADEMY_VERSION)) {
+  if (expandedCourses.has(course.id) || course.minutes !== academyManifest[course.id]?.minutes || course.lessons.length !== academyManifest[course.id]?.lessons) {
+    throw new Error(`Invalid market curriculum: ${course.id}`);
   }
   expandedCourses.set(course.id, course);
   expandedBanks.set(course.id, questions);

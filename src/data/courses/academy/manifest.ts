@@ -1,3 +1,5 @@
+import { marketCatalog } from './markets/catalog';
+import { marketWorkload } from './markets/types';
 import { specializations, specializationLabCount } from './specializations/listing';
 import { practiceLabCount, practiceWorkload } from './practice/workload';
 import { academyProjects } from './projects.ts';
@@ -127,6 +129,7 @@ export const baselineAcademyManifest = Object.fromEntries([
 
 
 export const academyManifest = Object.fromEntries([
+  ...marketCatalog.map(course => [course.id, { minutes: marketWorkload.hours * 60, lessons: marketWorkload.lessons }] as const),
   ...Object.entries(baselineAcademyManifest).map(([id, course]) => [
     id, {
       minutes: practiceWorkload(course.minutes).reduce((total, minutes) => total + minutes, course.minutes),

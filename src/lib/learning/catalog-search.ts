@@ -6,6 +6,13 @@ const concepts = [
   ['budget','orcamento','presupuesto','bilancio'], ['ai','ia','inteligencia artificial','artificial intelligence'],
   ['spreadsheets','planilhas','excel','tableur','tabellen'], ['data','dados','datos','donnees','daten','dati'],
   ['security','seguranca','seguridad','securite','sicherheit','sicurezza'], ['housing','moradia','vivienda','logement','wohnung','alloggio'],
+  ['health','saude','salud','sante','gesundheit','salute'],
+  ['energy','energia','energie'], ['logistics','logistica','logistique','logistik'],
+  ['quality','qualidade','calidad','qualite','qualitat','qualita'],
+  ['batteries','battery','baterias','bateria','batterie'],
+  ['manufacturing','manufatura','manufactura','fabrication','fertigung','produzione'],
+  ['accessibility','acessibilidade','accesibilidad','accessibilite','barrierefreiheit','accessibilita'],
+  ['operations','operacoes','operaciones','betrieb','operazioni'],
   ['remote','remoto','distancia','distance'], ['abroad','exterior','extranjero','etranger','ausland','estero'],
 ];
 function nearWord(a: string, b: string): boolean {
