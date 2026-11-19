@@ -100,7 +100,7 @@ test('academy courses have inspectable workload, assessments and preserved found
  const { marketCourseIds } = h.load(resolve('src/data/courses/academy/markets/listing.ts'));
  const originals = academyCourses.filter(course => !marketCourseIds.has(course.id) && !emergency.has(course.id) && !added.has(course.id) && !isSpecialization(course.id));
  assert.equal(originals.length,27);
- assert.equal(new Set(academyCourses.map(c=>c.id)).size,200);
+ assert.equal(new Set(academyCourses.map(c=>c.id)).size,500);
  assert.equal(originals.reduce((n,c)=>n+c.lessons.length,0),389);
  assert.equal(academyCourses.filter(course => emergency.has(course.id)).length,6);
  const seenScenarios = new Set();
