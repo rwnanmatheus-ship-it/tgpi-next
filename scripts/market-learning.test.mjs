@@ -11,13 +11,24 @@ const { marketSpecs } = h.load(resolve('src/data/courses/academy/markets/specs.s
 const { marketOverview } = h.load(resolve('src/data/courses/academy/markets/listing.ts'));
 const { isPremiumAcademyCourse } = h.load(resolve('src/data/courses/academy/premium-policy.ts'));
 
-test('110 occupational cases are distinct, fully routed and consistent with their public entitlement and workload', () => {
-  assert.equal(marketCatalog.length, 110);
-  assert.equal(new Set(marketSpecs.map(item => item.scenario)).size, 110);
-  assert.equal(new Set(marketSpecs.map(item => item.decision)).size, 110);
-  assert.equal(new Set(marketCatalog.map(item => item.title)).size, 110);
+test('400 occupational cases are distinct, fully routed and consistent with their public entitlement and workload', () => {
+  assert.equal(marketCatalog.length, 400);
+  assert.equal(new Set(marketSpecs.map(item => item.scenario)).size, 400);
+  assert.equal(new Set(marketSpecs.map(item => item.decision)).size, 400);
+  assert.equal(new Set(marketCatalog.map(item => item.title)).size, 400);
   assert.equal(Map.groupBy(marketCatalog, item => item.track).size, 10);
-  for (const [track, entries] of Map.groupBy(marketCatalog, item => item.track)) assert.equal(entries.length, track === 'business' ? 20 : 10);
+  for (const [track, entries] of Map.groupBy(marketCatalog, item => item.track)) assert.equal(entries.length, {
+  "ai": 20,
+  "cyber": 10,
+  "data": 40,
+  "energy": 30,
+  "care": 30,
+  "industry": 40,
+  "logistics": 60,
+  "quality": 10,
+  "business": 100,
+  "content": 60
+}[track]);
   for (const item of marketCatalog) {
     const course = h.getAcademyCourse(item.id), listing = marketOverview.find(row => row.id === item.id);
     assert.ok(course && listing, item.id);

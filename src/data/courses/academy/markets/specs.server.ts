@@ -1,8 +1,10 @@
+import { internationalSpecs } from './international/cases.server';
 import 'server-only';
 import type { MarketCourseSpec } from './types';
 
 /** Original fictional occupational cases; protected decisions never enter the public listing. */
 export const marketSpecs = [
+  ...internationalSpecs,
   {
     "id": "agentes-atendimento-b2b",
     "track": "ai",

@@ -1,8 +1,8 @@
 # Carteira editorial de expansão internacional
 
-Propostas para desenvolvimento. Cada linha contém dez recortes profissionais, em ordem de leitura. A demanda específica, a originalidade curricular, a carga horária e a avaliação de cada formação dependem de validação. As famílias organizam decisões de trabalho e públicos. Não representam um ranking de buscas nem 300 ocupações oficiais.
+Catálogo de formações aplicadas. Cada linha contém dez recortes profissionais, em ordem de leitura. A demanda específica, a originalidade curricular, a carga horária e a avaliação de cada formação dependem de validação. As famílias organizam decisões de trabalho e públicos. Não representam um ranking de buscas nem 300 ocupações oficiais.
 
-| Família | Dez propostas de curso |
+| Família | Dez cursos |
 |---|---|
 | Panificação comercial | Planejamento de fornadas por janela de venda • Modelagem de rendimento de massas • Controle de perdas no balcão • Compras sazonais de farinha • Custeio de confeitaria por encomenda • Programação de fermentação em câmara • Previsão de demanda para padarias de bairro • Dimensionamento de entregas de pão fresco • Padronização de fichas de produção de confeitaria • Gestão de devoluções de pão no atacado |
 | Alimentação coletiva | Escalas de equipes de cozinha institucional • Dimensionamento de porções em refeitórios • Engenharia de cardápio por margem • Medição de desperdício no prato • Planejamento de refeições em eventos esportivos • Programação de preparo por turno escolar • Controle de substituições de ingredientes em fichas • Contratação de serviços de alimentação coletiva • Análise de filas em praças de alimentação • Gestão de recipientes retornáveis em catering |
@@ -45,4 +45,4 @@ O Global Skills Report 2026 da Coursera e Udemy informa mais de 45 matrículas p
 
 ## Implementação nesta versão
 
-A primeira linha tem dez cursos implementados na coleção de mercados da Academy. Cada curso tem um caso com dados e decisão específicos, uma mudança de restrição, seis entregáveis, fundamentos compartilhados da área, projeto, laboratórios e avaliação. Carga estimada de 40 horas por curso conforme o modelo existente. As outras 29 linhas permanecem propostas editoriais.
+Os 300 títulos integram a coleção de mercados da Academy. Cada formação combina fundamentos da área, caso ocupacional próprio, seis entregáveis, projeto, laboratórios e avaliação. Cada curso prevê 40 horas de trabalho estimado em português.

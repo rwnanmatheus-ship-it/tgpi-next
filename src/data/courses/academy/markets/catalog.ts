@@ -1,5 +1,7 @@
+import { internationalCatalog } from './international/catalog';
 /** Public metadata only: no private assessment content. */
 export const marketCatalog = [
+  ...internationalCatalog,
   {
     "id": "agentes-atendimento-b2b",
     "track": "ai",
