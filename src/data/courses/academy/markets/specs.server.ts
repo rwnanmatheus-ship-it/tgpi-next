@@ -1902,5 +1902,195 @@ export const marketSpecs = [
       "Teste de leitura e navegação",
       "Pacote de fonte editável e revisão"
     ]
+  },
+  {
+    "id": "planejamento-de-fornadas-por-janela-de-venda",
+    "track": "business",
+    "title": "Planejamento de fornadas por janela de venda",
+    "role": "Programador de produção de padaria",
+    "positioning": "specialist",
+    "scenario": "O forno comporta 48 pães por ciclo de 30 minutos. Às 7h há 12 pães prontos e pedidos firmes de 92 até 8h. Os dois ciclos podem terminar antes da retirada.",
+    "decision": "Reservar dois ciclos. A necessidade líquida é 80 e um ciclo deixa 32 pães em falta.",
+    "misconception": "Somar estoque com capacidade de apenas um ciclo e aceitar todos os pedidos.",
+    "changedConstraint": "Um ciclo termina quinze minutos depois da retirada.",
+    "tasks": [
+      "Quadro de pedidos por horário",
+      "Saldo inicial confirmado",
+      "Mapa de capacidade do forno",
+      "Cronograma de fornadas",
+      "Análise de sobra por janela",
+      "Simulação de atraso"
+    ]
+  },
+  {
+    "id": "modelagem-de-rendimento-de-massas",
+    "track": "business",
+    "title": "Modelagem de rendimento de massas",
+    "role": "Analista de rendimento de panificação",
+    "positioning": "specialist",
+    "scenario": "Três lotes de 10 kg de massa crua resultam em 8,6, 8,8 e 8,7 kg vendáveis. A encomenda é de 43,5 kg. Considere rendimento médio constante apenas na simulação.",
+    "decision": "Planejar 50 kg de massa crua, pois o rendimento conjunto é 26,1/30 = 87%.",
+    "misconception": "Acrescentar 13% ao pedido e tratar isso como inversão da perda.",
+    "changedConstraint": "O primeiro lote novo rende 8,2 kg e a meta comercial permanece.",
+    "tasks": [
+      "Ficha de pesagem",
+      "Balanço de massa",
+      "Cálculo de rendimento ponderado",
+      "Plano de lotes inteiros",
+      "Análise de sensibilidade",
+      "Registro de desvio"
+    ]
+  },
+  {
+    "id": "controle-de-perdas-no-balcao",
+    "track": "business",
+    "title": "Controle de perdas no balcão",
+    "role": "Encarregado de controle de perdas",
+    "positioning": "specialist",
+    "scenario": "De 120 unidades expostas, 84 são vendidas, 18 doadas com registro e 12 descartadas. O saldo contado é seis. A loja quer separar descarte de saída sem receita.",
+    "decision": "Registrar 10% de descarte e 25% de saída sem receita sobre as 120 expostas.",
+    "misconception": "Classificar as seis unidades que continuam no balcão como descarte.",
+    "changedConstraint": "Uma doação de três unidades foi registrada duas vezes.",
+    "tasks": [
+      "Mapa de destinos",
+      "Conciliação de unidades",
+      "Definição de indicadores",
+      "Análise por turno",
+      "Teste de duplicidade",
+      "Painel de perdas"
+    ]
+  },
+  {
+    "id": "compras-sazonais-de-farinha",
+    "track": "business",
+    "title": "Compras sazonais de farinha",
+    "role": "Comprador de insumos de panificação",
+    "positioning": "specialist",
+    "scenario": "A previsão é consumir 180 sacos em seis semanas, com estoque inicial de 50 e capacidade de 100. O fornecedor oferece desconto para entrada imediata de 120 sacos.",
+    "decision": "Negociar entregas fracionadas: o primeiro recebimento tem limite de 50 sacos antes de qualquer consumo.",
+    "misconception": "Aceitar o lote integral porque o desconto reduz o custo unitário.",
+    "changedConstraint": "A demanda cai de 30 para 20 sacos semanais a partir da terceira semana.",
+    "tasks": [
+      "Projeção semanal",
+      "Mapa de capacidade",
+      "Comparativo de propostas",
+      "Cronograma de compras",
+      "Simulação de sazonalidade",
+      "Memorando ao fornecedor"
+    ]
+  },
+  {
+    "id": "custeio-de-confeitaria-por-encomenda",
+    "track": "business",
+    "title": "Custeio de confeitaria por encomenda",
+    "role": "Orçamentista de confeitaria",
+    "positioning": "specialist",
+    "scenario": "Uma encomenda de 40 caixas custa 240 em ingredientes, 80 em embalagens e 160 em mão de obra direta. A taxa de venda é 4% da receita. A meta é margem de contribuição de 20% após esses custos.",
+    "decision": "Dividir 480 por 0,76: cobrar pelo menos 631,58 no lote antes de arredondar por caixa.",
+    "misconception": "Somar 24% a 480 e assumir que a margem sobre a receita será 20%.",
+    "changedConstraint": "O cliente mantém a quantidade e pede embalagem que custa mais uma unidade monetária por caixa.",
+    "tasks": [
+      "Ficha de insumos",
+      "Orçamento de tempo",
+      "Mapa de custos variáveis",
+      "Formação de preço",
+      "Teste de margem",
+      "Proposta revisada"
+    ]
+  },
+  {
+    "id": "programacao-de-fermentacao-em-camara",
+    "track": "business",
+    "title": "Programação de fermentação em câmara",
+    "role": "Programador de câmaras de fermentação",
+    "positioning": "specialist",
+    "scenario": "Uma câmara tem oito posições. O lote A ocupa cinco de 6h a 8h, B precisa de quatro por duas horas e deve sair até 10h. Para o exercício, os parâmetros do processo já foram aprovados.",
+    "decision": "Reservar B de 8h a 10h e registrar a dependência da liberação de A.",
+    "misconception": "Iniciar B às 7h porque o total diário de horas parece suficiente.",
+    "changedConstraint": "A liberação de A atrasa trinta minutos e o prazo de B permanece.",
+    "tasks": [
+      "Inventário de posições",
+      "Gráfico de ocupação",
+      "Mapa de precedências",
+      "Teste de sobreposição",
+      "Plano de contingência",
+      "Registro de passagem de turno"
+    ]
+  },
+  {
+    "id": "previsao-de-demanda-para-padarias-de-bairro",
+    "track": "business",
+    "title": "Previsão de demanda para padarias de bairro",
+    "role": "Analista de demanda de padaria",
+    "positioning": "specialist",
+    "scenario": "Cinco sábados registram vendas de 80, 84, 55, 82 e 79 pães. No terceiro, faltou produto antes do encerramento. A gerência propõe usar 55 como demanda observada total.",
+    "decision": "Marcar a terceira observação como limitada pelo estoque e comparar previsões com e sem esse dia.",
+    "misconception": "Substituir 55 por 84 e declarar o valor imputado como venda real.",
+    "changedConstraint": "Um evento de rua altera o movimento do próximo sábado.",
+    "tasks": [
+      "Histórico anotado",
+      "Calendário de eventos",
+      "Previsão de referência",
+      "Teste retrospectivo",
+      "Intervalo de planejamento",
+      "Registro de ruptura"
+    ]
+  },
+  {
+    "id": "dimensionamento-de-entregas-de-pao-fresco",
+    "track": "business",
+    "title": "Dimensionamento de entregas de pão fresco",
+    "role": "Coordenador de distribuição de padaria",
+    "positioning": "specialist",
+    "scenario": "A van leva 60 caixas. Duas lojas pedem 35 e 30 caixas até 9h. Existe somente uma viagem antes desse horário. Uma terceira loja aceita entrega posterior.",
+    "decision": "Identificar déficit de cinco caixas na janela e negociar outra capacidade ou novo horário antes de prometer.",
+    "misconception": "Deslocar a terceira loja para mais tarde e afirmar que isso resolve os 65 pedidos prioritários.",
+    "changedConstraint": "A primeira loja aceita receber dez caixas depois das 9h.",
+    "tasks": [
+      "Matriz de pedidos",
+      "Mapa de janelas",
+      "Balanço de capacidade",
+      "Plano de carregamento",
+      "Comparação de alternativas",
+      "Comprovante de entrega simulado"
+    ]
+  },
+  {
+    "id": "padronizacao-de-fichas-de-producao-de-confeitaria",
+    "track": "business",
+    "title": "Padronização de fichas de produção de confeitaria",
+    "role": "Técnico de documentação de confeitaria",
+    "positioning": "specialist",
+    "scenario": "A ficha vigente produz 24 unidades com 960 g de recheio. Uma cópia antiga usa 35 g por unidade. Uma ordem de 60 unidades aponta somente para o nome da receita.",
+    "decision": "Prender a ordem à revisão vigente e reservar 2.400 g de recheio, documentando a diferença de versão.",
+    "misconception": "Fazer a média entre as duas dosagens sem aprovação da alteração.",
+    "changedConstraint": "O cliente solicita porções de 45 g para uma nova versão da encomenda.",
+    "tasks": [
+      "Cadastro de versões",
+      "Tabela de unidades",
+      "Ficha escalonada",
+      "Controle de mudança",
+      "Teste de rastreabilidade",
+      "Pacote para troca de turno"
+    ]
+  },
+  {
+    "id": "gestao-de-devolucoes-de-pao-no-atacado",
+    "track": "business",
+    "title": "Gestão de devoluções de pão no atacado",
+    "role": "Analista comercial de devoluções",
+    "positioning": "specialist",
+    "scenario": "O atacadista enviou 400 unidades a A e 100 a B. Recebeu 20 devoluções de cada. O contrato fictício credita somente devoluções identificadas por remessa. Em B, quatro estão sem identificação.",
+    "decision": "Separar taxa física (5% em A e 20% em B) do crédito elegível: em B apenas 16 estão conciliadas.",
+    "misconception": "Tratar as duas lojas como equivalentes porque devolveram 20 unidades cada.",
+    "changedConstraint": "Seis unidades registradas em A chegam com referência da remessa de B.",
+    "tasks": [
+      "Registro de remessas",
+      "Conferência de devoluções",
+      "Taxa ponderada",
+      "Conciliação de créditos",
+      "Análise de divergência",
+      "Proposta de ajuste de fornecimento"
+    ]
   }
 ] as const satisfies readonly MarketCourseSpec[];

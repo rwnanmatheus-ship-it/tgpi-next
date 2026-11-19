@@ -699,5 +699,75 @@ export const marketCatalog = [
     "title": "Acessibilidade de Documentos e Publicações Digitais",
     "role": "Editor de documentos acessíveis",
     "positioning": "broad"
+  },
+  {
+    "id": "planejamento-de-fornadas-por-janela-de-venda",
+    "track": "business",
+    "title": "Planejamento de fornadas por janela de venda",
+    "role": "Programador de produção de padaria",
+    "positioning": "specialist"
+  },
+  {
+    "id": "modelagem-de-rendimento-de-massas",
+    "track": "business",
+    "title": "Modelagem de rendimento de massas",
+    "role": "Analista de rendimento de panificação",
+    "positioning": "specialist"
+  },
+  {
+    "id": "controle-de-perdas-no-balcao",
+    "track": "business",
+    "title": "Controle de perdas no balcão",
+    "role": "Encarregado de controle de perdas",
+    "positioning": "specialist"
+  },
+  {
+    "id": "compras-sazonais-de-farinha",
+    "track": "business",
+    "title": "Compras sazonais de farinha",
+    "role": "Comprador de insumos de panificação",
+    "positioning": "specialist"
+  },
+  {
+    "id": "custeio-de-confeitaria-por-encomenda",
+    "track": "business",
+    "title": "Custeio de confeitaria por encomenda",
+    "role": "Orçamentista de confeitaria",
+    "positioning": "specialist"
+  },
+  {
+    "id": "programacao-de-fermentacao-em-camara",
+    "track": "business",
+    "title": "Programação de fermentação em câmara",
+    "role": "Programador de câmaras de fermentação",
+    "positioning": "specialist"
+  },
+  {
+    "id": "previsao-de-demanda-para-padarias-de-bairro",
+    "track": "business",
+    "title": "Previsão de demanda para padarias de bairro",
+    "role": "Analista de demanda de padaria",
+    "positioning": "specialist"
+  },
+  {
+    "id": "dimensionamento-de-entregas-de-pao-fresco",
+    "track": "business",
+    "title": "Dimensionamento de entregas de pão fresco",
+    "role": "Coordenador de distribuição de padaria",
+    "positioning": "specialist"
+  },
+  {
+    "id": "padronizacao-de-fichas-de-producao-de-confeitaria",
+    "track": "business",
+    "title": "Padronização de fichas de produção de confeitaria",
+    "role": "Técnico de documentação de confeitaria",
+    "positioning": "specialist"
+  },
+  {
+    "id": "gestao-de-devolucoes-de-pao-no-atacado",
+    "track": "business",
+    "title": "Gestão de devoluções de pão no atacado",
+    "role": "Analista comercial de devoluções",
+    "positioning": "specialist"
   }
 ] as const;
