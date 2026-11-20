@@ -1,13 +1,15 @@
+import { courseRegions } from './course-regions.ts';
 import { locales } from '../localization/config.ts';
 import { professionalAreas } from './professional-areas.ts';
 
 export const PREMIUM_SPECIALIZATIONS_SERIES = 'Premium Specializations';
 
-export type CatalogFilters = { query: string; goal: string; series: string; availability: string; credential: string; language: string; access: string; area: string };
-export const defaultCatalogFilters: CatalogFilters = { query: '', goal: 'all', series: 'all', availability: 'available', credential: 'all', language: 'all', access: 'all', area: 'all' };
+export type CatalogFilters = { query: string; goal: string; series: string; availability: string; credential: string; language: string; access: string; area: string; region: string };
+export const defaultCatalogFilters: CatalogFilters = { query: '', goal: 'all', series: 'all', availability: 'available', credential: 'all', language: 'all', access: 'all', area: 'all', region: 'all' };
 export function parseCatalogFilters(params: URLSearchParams): CatalogFilters {
   const oneOf = (name: string, options: readonly string[], fallback: string) => { const value = params.get(name); return value && options.includes(value) ? value : fallback; };
   return {
+    region: oneOf('region', ['all', ...courseRegions.map(([id]) => id)], 'all'),
     area: oneOf('area', ['all', ...professionalAreas.map(([id]) => id)], 'all'),
     query: (params.get('q') ?? '').slice(0, 160),
     goal: oneOf('goal', ['all','global-mobility','decision-intelligence','global-economics','future-of-work','emergency-readiness'], 'all'),

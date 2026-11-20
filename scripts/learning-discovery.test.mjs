@@ -4,7 +4,12 @@ import { createHash } from 'node:crypto';
 import test from 'node:test';
 import ts from 'typescript';
 import sharp from 'sharp';
-function moduleAt(path) { const result = {}; new Function('exports', ts.transpileModule(readFileSync(path,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText)(result); return result; }
+import { dirname, resolve } from 'node:path';
+function moduleAt(path) { const result = {}; new Function('require', 'exports', ts.transpileModule(readFileSync(path,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022}}).outputText)(id => {
+  if (!id.startsWith('.') && !id.startsWith('@/')) throw new Error(`Unexpected dependency: ${id}`);
+  const target = id.startsWith('@/') ? resolve('src', id.slice(2)) : resolve(dirname(path), id);
+  return moduleAt(target.endsWith('.ts') ? target : `${target}.ts`);
+}, result); return result; }
 const { courseSearchScore, normalizeCourseSearch, moveCourseSuggestion, courseMinutes, studyWeeks } = moduleAt('src/lib/learning/catalog-search.ts');
 const make = (title, desc='') => ({title,desc,category:'Learning',goalLabel:'Practice',benefits:[]});
 test('course search handles accents, prefixes, translations and small spelling errors', () => {

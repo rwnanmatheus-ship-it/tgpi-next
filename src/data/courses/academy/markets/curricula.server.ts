@@ -4,12 +4,12 @@ import { courseArtwork } from '@/lib/cinematic-art';
 import { practiceLabs } from '../practice/labs.server';
 import { marketSpecs } from './specs.server';
 import { marketTracks } from './tracks.server';
-import { marketWorkload } from './types';
+import { marketWorkload, type MarketCourseSpec } from './types';
 
 const commonScope = 'Formação livre complementar da TGPI com avaliação automática de conhecimentos e portfólio produzido pelo aluno. O certificado registra a conclusão segundo os critérios da plataforma; não equivale a graduação, licença profissional, acreditação externa ou revisão humana do projeto. As 40 horas são estimativa de estudo e trabalho autônomo, não horas de vídeo. Fundamentos da mesma área são compartilhados; caso, entregáveis e projeto são específicos de cada curso. Conteúdo autoral disponível em português.';
 
-export function marketAcademy(version: string) {
-  return marketSpecs.map(spec => {
+export function marketAcademy(version: string, specs: readonly MarketCourseSpec[] = marketSpecs) {
+  return specs.map(spec => {
     const track = marketTracks[spec.track];
     if (!track) throw new Error(`Unknown market track: ${spec.track}`);
     const questions: AcademyPrivateQuestion[] = [];

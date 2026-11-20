@@ -1,3 +1,4 @@
+import { courseRegions } from './course-regions.ts';
 import type { CourseOverview } from '../../types/course-overview';
 
 export const normalizeCourseSearch = (value: string) => value.normalize('NFD').replace(/\p{M}/gu, '').toLocaleLowerCase('en').replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
@@ -7,7 +8,8 @@ const concepts = [
   ['spreadsheets','planilhas','excel','tableur','tabellen'], ['data','dados','datos','donnees','daten','dati'],
   ['security','seguranca','seguridad','securite','sicherheit','sicurezza'], ['housing','moradia','vivienda','logement','wohnung','alloggio'],
   ['health','saude','salud','sante','gesundheit','salute'],
-  ['energy','energia','energie'], ['logistics','logistica','logistique','logistik'],
+  ['energy','energia','energie'], ['africa','afrique','afrika'], ['asia','asie','asien'], ['oceania','oceanie','ozeanien'],
+  ['north','norte','nord'], ['south','sul','sur','sud'], ['america','amerique','amerika'], ['logistics','logistica','logistique','logistik'],
   ['quality','qualidade','calidad','qualite','qualitat','qualita'],
   ['batteries','battery','baterias','bateria','batterie'],
   ['manufacturing','manufatura','manufactura','fabrication','fertigung','produzione'],
@@ -30,7 +32,7 @@ export function courseSearchScore(course: CourseOverview, query: string, transla
   const q = normalizeCourseSearch(query).slice(0, 160);
   if (!q) return 1;
   const title = normalizeCourseSearch(`${translate(course.title)} ${course.title}`);
-  const content = normalizeCourseSearch([course.desc, course.category, course.series ?? '', course.goalLabel, ...course.benefits].flatMap(text => [text, translate(text)]).join(' '));
+  const content = normalizeCourseSearch([course.desc, course.category, course.series ?? '', course.goalLabel, ...course.benefits, course.marketRegion ? courseRegions.find(([id]) => id === course.marketRegion)?.[1] ?? '' : ''].flatMap(text => [text, translate(text)]).join(' '));
   const words = title.split(' ');
   let score = title.startsWith(q) ? 100 : title.includes(q) ? 60 : 0;
   for (const token of q.split(' ')) {
