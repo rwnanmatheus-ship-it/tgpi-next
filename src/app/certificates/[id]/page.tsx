@@ -1,3 +1,5 @@
+import { currentUser } from "@clerk/nextjs/server";
+import { getCertificateName, mergeAccountProfileWithOnboarding, normalizeAccountIdentity } from "@/lib/account-profile";
 import { localizeMetadata } from "@/lib/localization/metadata.server";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
@@ -28,7 +30,14 @@ export default async function CredentialPage({
   if (!owned) notFound();
   const credential = await getPublicLearningCredential(id, session.userId);
   if (!credential) notFound();
-  return <CredentialRecordView credential={credential} owner />;
+  const user = await currentUser();
+  const currentCertificateName = user?.id === session.userId
+    ? getCertificateName(
+      normalizeAccountIdentity(user),
+      mergeAccountProfileWithOnboarding(user.unsafeMetadata.tgpiAccountProfile, user.unsafeMetadata.tgpiOnboarding),
+    )
+    : "";
+  return <CredentialRecordView credential={credential} owner currentCertificateName={currentCertificateName} />;
 }
 
 export async function generateMetadata() { return localizeMetadata(sourceMetadata); }

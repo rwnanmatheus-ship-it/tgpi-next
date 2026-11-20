@@ -7,7 +7,7 @@ import styles from "./home.module.css";
 
 export default function HomeCertificatePreview() {
   const { t, locale } = useLocale();
-  const src = `/images/home/certificate-academic-2026-6-${locale === "pt-BR" ? "pt" : "en"}.webp`;
+  const src = `/images/home/certificate-academic-2026-7-${locale === "pt-BR" ? "pt" : "en"}.webp`;
   return <figure className={styles.certificatePreview}>
     <div className={styles.certificateStage} data-tgpi-surface="banner" data-tgpi-material="inverse"><span className={styles.certificateEdition} translate="no">{`TGPI / ${CERTIFICATE_DESIGN_VERSION}`}</span><a href={src} target="_blank" rel="noopener noreferrer" aria-label={t("View certificate sample in full size")}><LocalizedElement as="img" src={src} alt="Sample TGPI certificate with ornamental border, full learner name and verification area" width={1684} height={1191} loading="lazy" decoding="async" /></a><span className={styles.certificateZoom}>{t("View full size")} <span aria-hidden="true">↗</span></span></div>
     <figcaption>{t("Actual TGPI certificate design. Demonstration only; no credential has been issued.")}</figcaption>
