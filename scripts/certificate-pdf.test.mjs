@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { PDFDocument } from "pdf-lib";
+import { PDFDocument, PDFRawStream, decodePDFRawStream } from "pdf-lib";
 import { normalizeTgpiAccountProfile } from "../src/lib/account-profile.ts";
 import { createCertificatePdf } from "../src/lib/certificate-pdf.server.ts";
 import { CERTIFICATE_DESIGN_VERSION } from "../src/lib/certificate-presentation.ts";
@@ -40,6 +40,27 @@ test("long names, long course titles, unsupported glyphs and invalid dates do no
   const pdf = await PDFDocument.load(bytes);
   assert.equal(pdf.getPageCount(), 1);
   assert.ok(pdf.getSubject().includes(publicName));
+});
+
+test("a wrapped legal name has sufficient baseline spacing in the emitted PDF", async () => {
+  const bytes = await createCertificatePdf({
+    ...credential,
+    publicName: "Alexandria Alexandra Agatha Anastasia Angelina Gabriella Genevieve Jacqueline",
+  });
+  const pdf = await PDFDocument.load(bytes);
+  const contents = pdf.getPage(0).node.Contents();
+  const operations = Array.from({ length: contents.size() }, (_, i) =>
+    Buffer.from(decodePDFRawStream(contents.lookup(i, PDFRawStream)).decode()).toString(),
+  ).join("\n");
+  const nameLines = [...operations.matchAll(/BT([\s\S]*?)ET/g)].flatMap((match) => {
+    const size = Number(match[1].match(/ ([\d.]+) Tf/)?.[1]);
+    const y = Number(match[1].match(/1 0 0 1 [\d.]+ ([\d.]+) Tm/)?.[1]);
+    return y >= 300 && y <= 365 ? [{ size, y }] : [];
+  }).sort((a, b) => b.y - a.y);
+  assert.ok(nameLines.length >= 2);
+  for (let i = 1; i < nameLines.length; i++) {
+    assert.ok(nameLines[i - 1].y - nameLines[i].y >= Math.max(nameLines[i - 1].size, nameLines[i].size));
+  }
 });
 
 // Execute the route with isolated service boundaries to exercise access control.

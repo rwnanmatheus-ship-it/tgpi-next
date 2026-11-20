@@ -23,6 +23,6 @@ for (const locale of ["pt", "en"]) {
   const path = `${temp}/${locale}`;
   await fs.writeFile(`${path}.pdf`, await pdf.save());
   execFileSync("pdftoppm", ["-scale-to-x", "1684", "-scale-to-y", "1191", "-singlefile", "-png", `${path}.pdf`, path]);
-  await sharp(`${path}.png`).webp({ quality: 90 }).toFile(`${output}/certificate-academic-2026-5-${locale}.webp`);
+  await sharp(`${path}.png`).webp({ quality: 90 }).toFile(`${output}/certificate-academic-2026-6-${locale}.webp`);
 }
 console.log("Rendered two watermarked certificate samples. No credentials issued.");
