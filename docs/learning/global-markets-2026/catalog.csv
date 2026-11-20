@@ -1,0 +1,501 @@
+id,title,track,role,positioning,region,estimatedHours,lessons
+na-calibracao-de-incerteza-em-modelos-preditivos,Calibração de incerteza em modelos preditivos,ai,Analista de confiabilidade de modelos,broad,north-america,60,14
+na-deteccao-de-contaminacao-em-benchmarks-de-linguagem,Detecção de contaminação em benchmarks de linguagem,ai,Curador de benchmarks de IA,broad,north-america,60,14
+na-roteamento-de-inferencia-entre-modelos-de-custo-diferente,Roteamento de inferência entre modelos de custo diferente,ai,Analista de operações de inferência,broad,north-america,60,14
+na-versionamento-de-embeddings-em-indices-vetoriais,Versionamento de embeddings em índices vetoriais,ai,Engenheiro de operações de busca vetorial,broad,north-america,60,14
+na-avaliacao-de-agentes-por-maquinas-de-estados,Avaliação de agentes por máquinas de estados,ai,Analista de testes de agentes,broad,north-america,60,14
+na-monitoramento-de-deriva-em-modelos-com-rotulos-atrasados,Monitoramento de deriva em modelos com rótulos atrasados,ai,Analista de monitoramento de modelos,broad,north-america,60,14
+na-planejamento-de-capacidade-de-gpu-para-inferencia,Planejamento de capacidade de GPU para inferência,ai,Planejador de infraestrutura de IA,broad,north-america,60,14
+na-testes-de-regressao-de-extracao-estruturada-com-schemas,Testes de regressão de extração estruturada com schemas,ai,Analista de qualidade de extração com IA,broad,north-america,60,14
+na-desenho-de-testes-contrafactuais-para-decisoes-automatizadas,Desenho de testes contrafactuais para decisões automatizadas,ai,Analista de avaliação de equidade algorítmica,broad,north-america,60,14
+na-gestao-de-datasets-de-preferencia-para-alinhamento,Gestão de datasets de preferência para alinhamento,ai,Curador de dados de alinhamento,broad,north-america,60,14
+na-inventario-criptografico-para-migracao-pos-quantica,Inventário criptográfico para migração pós-quântica,cyber,Analista de agilidade criptográfica,broad,north-america,60,14
+na-priorizacao-de-vulnerabilidades-por-exposicao-e-exploracao,Priorização de vulnerabilidades por exposição e exploração,cyber,Analista de gestão de exposição,broad,north-america,60,14
+na-rastreabilidade-de-componentes-por-sbom-em-produtos-digitais,Rastreabilidade de componentes por SBOM em produtos digitais,cyber,Analista de cadeia de suprimentos de software,broad,north-america,60,14
+na-controle-de-identidades-nao-humanas-em-integracoes-saas,Controle de identidades não humanas em integrações SaaS,cyber,Analista de identidades de máquina,broad,north-america,60,14
+na-exercicios-de-restauracao-resistente-a-ransomware,Exercícios de restauração resistente a ransomware,cyber,Coordenador de exercícios de recuperação,broad,north-america,60,14
+na-modelagem-de-autorizacao-em-apis-multiempresa,Modelagem de autorização em APIs multiempresa,cyber,Analista de segurança de APIs,broad,north-america,60,14
+na-verificacao-de-procedencia-de-artefatos-de-compilacao,Verificação de procedência de artefatos de compilação,cyber,Analista de integridade de builds,broad,north-america,60,14
+na-desenho-de-acesso-temporario-para-operacoes-privilegiadas,Desenho de acesso temporário para operações privilegiadas,cyber,Analista de acesso privilegiado,broad,north-america,60,14
+na-avaliacao-de-seguranca-de-webhooks-e-repeticoes,Avaliação de segurança de webhooks e repetições,cyber,Analista de segurança de integrações,broad,north-america,60,14
+na-minimizacao-de-dados-em-registros-de-observabilidade,Minimização de dados em registros de observabilidade,cyber,Analista de privacidade em observabilidade,broad,north-america,60,14
+na-analise-de-sobrevivencia-para-cancelamento-com-censura,Análise de sobrevivência para cancelamento com censura,data,Analista de retenção e sobrevivência,broad,north-america,60,14
+na-desenho-de-testes-sequenciais-sem-inflar-falsos-positivos,Desenho de testes sequenciais sem inflar falsos positivos,data,Analista de experimentação sequencial,broad,north-america,60,14
+na-reconciliacao-de-receitas-entre-eventos-e-razao-contabil,Reconciliação de receitas entre eventos e razão contábil,data,Analista de reconciliação de dados financeiros,broad,north-america,60,14
+na-qualidade-de-dados-em-series-com-mudanca-de-horario,Qualidade de dados em séries com mudança de horário,data,Analista de qualidade temporal de dados,broad,north-america,60,14
+na-privacidade-diferencial-para-publicacao-de-contagens,Privacidade diferencial para publicação de contagens,data,Analista de publicação estatística privada,broad,north-america,60,14
+na-deteccao-de-anomalias-com-sazonalidade-operacional,Detecção de anomalias com sazonalidade operacional,data,Analista de detecção de anomalias,broad,north-america,60,14
+na-validacao-de-modelos-de-previsao-com-janelas-moveis,Validação de modelos de previsão com janelas móveis,data,Analista de validação temporal,broad,north-america,60,14
+na-rastreabilidade-de-metricas-em-camadas-semanticas,Rastreabilidade de métricas em camadas semânticas,data,Analista de engenharia de métricas,broad,north-america,60,14
+na-amostragem-estratificada-para-auditoria-de-qualidade,Amostragem estratificada para auditoria de qualidade,data,Analista de auditoria amostral,broad,north-america,60,14
+na-mapeamento-de-linhagem-para-incidentes-de-dados,Mapeamento de linhagem para incidentes de dados,data,Analista de confiabilidade de pipelines,broad,north-america,60,14
+na-analise-de-cargas-coincidentes-para-eletrificacao-predial,Análise de cargas coincidentes para eletrificação predial,energy,Analista de planejamento de eletrificação,broad,north-america,60,14
+na-monitoramento-de-desempenho-de-bombas-de-calor,Monitoramento de desempenho de bombas de calor,energy,Analista de desempenho térmico,broad,north-america,60,14
+na-gestao-de-flexibilidade-de-recarga-de-frotas,Gestão de flexibilidade de recarga de frotas,energy,Planejador de recarga de frotas,broad,north-america,60,14
+na-verificacao-de-economia-energetica-com-baseline-ajustado,Verificação de economia energética com baseline ajustado,energy,Analista de medição e verificação,broad,north-america,60,14
+na-planejamento-de-resiliencia-com-armazenamento-distribuido,Planejamento de resiliência com armazenamento distribuído,energy,Analista de resiliência energética,broad,north-america,60,14
+na-conciliacao-de-certificados-de-energia-por-periodo-e-local,Conciliação de certificados de energia por período e local,energy,Analista de atributos de energia,broad,north-america,60,14
+na-analise-de-risco-climatico-para-continuidade-de-instalacoes,Análise de risco climático para continuidade de instalações,energy,Analista de adaptação de instalações,broad,north-america,60,14
+na-avaliacao-de-perdas-e-indisponibilidade-em-ativos-solares,Avaliação de perdas e indisponibilidade em ativos solares,energy,Analista de operações solares,broad,north-america,60,14
+na-planejamento-de-manutencao-eolica-com-janela-meteorologica,Planejamento de manutenção eólica com janela meteorológica,energy,Planejador de manutenção eólica,broad,north-america,60,14
+na-inventario-de-emissoes-em-redes-de-calor-e-frio,Inventário de emissões em redes de calor e frio,energy,Analista de dados de descarbonização,broad,north-america,60,14
+na-coordenacao-administrativa-de-atendimento-virtual-em-saude,Coordenação administrativa de atendimento virtual em saúde,care,Coordenador de operações de atendimento virtual,broad,north-america,60,14
+na-qualidade-de-cadastros-para-interoperabilidade-de-saude,Qualidade de cadastros para interoperabilidade de saúde,care,Analista de identidade cadastral em saúde,broad,north-america,60,14
+na-planejamento-de-capacidade-de-salas-ambulatoriais,Planejamento de capacidade de salas ambulatoriais,care,Analista de capacidade ambulatorial,broad,north-america,60,14
+na-monitoramento-administrativo-de-encaminhamentos-pendentes,Monitoramento administrativo de encaminhamentos pendentes,care,Coordenador de encaminhamentos assistenciais,broad,north-america,60,14
+na-acessibilidade-operacional-para-pacientes-com-barreira-linguistica,Acessibilidade operacional para pacientes com barreira linguística,care,Coordenador de acesso linguístico em saúde,broad,north-america,60,14
+na-gestao-de-inventario-administrativo-de-dispositivos-assistivos,Gestão de inventário administrativo de dispositivos assistivos,care,Analista de operações de tecnologia assistiva,broad,north-america,60,14
+na-indicadores-administrativos-de-transicao-de-cuidado,Indicadores administrativos de transição de cuidado,care,Analista de continuidade administrativa do cuidado,broad,north-america,60,14
+na-qualidade-de-dados-de-experiencia-do-paciente,Qualidade de dados de experiência do paciente,care,Analista de experiência e dados do paciente,broad,north-america,60,14
+na-programacao-de-transporte-nao-emergencial-para-servicos-de-saude,Programação de transporte não emergencial para serviços de saúde,care,Planejador de transporte assistencial não emergencial,broad,north-america,60,14
+na-auditoria-de-dados-para-agendas-de-vacinacao-ocupacional,Auditoria de dados para agendas de vacinação ocupacional,care,Analista de operações de saúde ocupacional,broad,north-america,60,14
+na-controle-estatistico-de-processos-com-subgrupos-racionais,Controle estatístico de processos com subgrupos racionais,industry,Analista de controle estatístico industrial,specialist,north-america,60,14
+na-analise-de-sistema-de-medicao-para-inspecao-dimensional,Análise de sistema de medição para inspeção dimensional,industry,Analista de confiabilidade de medição,specialist,north-america,60,14
+na-rastreabilidade-de-lotes-na-manufatura-aditiva,Rastreabilidade de lotes na manufatura aditiva,industry,Analista de dados de manufatura aditiva,specialist,north-america,60,14
+na-programacao-de-manutencao-por-criticidade-funcional,Programação de manutenção por criticidade funcional,industry,Planejador de confiabilidade industrial,specialist,north-america,60,14
+na-mapeamento-de-fluxo-de-valor-com-tempo-de-espera,Mapeamento de fluxo de valor com tempo de espera,industry,Analista de melhoria de fluxo industrial,specialist,north-america,60,14
+na-gestao-de-obsolescencia-de-componentes-eletronicos,Gestão de obsolescência de componentes eletrônicos,industry,Analista de obsolescência industrial,specialist,north-america,60,14
+na-planejamento-de-celulas-com-variabilidade-de-ciclo,Planejamento de células com variabilidade de ciclo,industry,Analista de balanceamento de células,specialist,north-america,60,14
+na-controle-de-alteracoes-em-instrucoes-digitais-de-trabalho,Controle de alterações em instruções digitais de trabalho,industry,Analista de documentação de operações,specialist,north-america,60,14
+na-analise-de-rendimento-de-primeira-passagem-e-retrabalho,Análise de rendimento de primeira passagem e retrabalho,industry,Analista de qualidade de processo,specialist,north-america,60,14
+na-governanca-de-dados-de-gemeos-digitais-industriais,Governança de dados de gêmeos digitais industriais,industry,Analista de governança de gêmeos digitais,specialist,north-america,60,14
+na-planejamento-de-cadeia-fria-por-evidencia-de-excursao,Planejamento de cadeia fria por evidência de excursão,logistics,Analista de monitoramento de cadeia fria,specialist,north-america,60,14
+na-otimizacao-de-estoque-por-nivel-de-servico-e-variabilidade,Otimização de estoque por nível de serviço e variabilidade,logistics,Analista de planejamento de estoque,specialist,north-america,60,14
+na-gestao-de-devolucoes-com-disposicao-rastreavel,Gestão de devoluções com disposição rastreável,logistics,Analista de operações de devolução,specialist,north-america,60,14
+na-analise-de-capacidade-portuaria-com-tempo-de-permanencia,Análise de capacidade portuária com tempo de permanência,logistics,Analista de planejamento de terminais,specialist,north-america,60,14
+na-validacao-de-dados-mestres-para-classificacao-comercial,Validação de dados mestres para classificação comercial,logistics,Analista de dados de comércio internacional,specialist,north-america,60,14
+na-planejamento-de-rotas-com-janelas-e-tempo-de-servico,Planejamento de rotas com janelas e tempo de serviço,logistics,Planejador de distribuição urbana,specialist,north-america,60,14
+na-visibilidade-de-remessas-por-eventos-interoperaveis,Visibilidade de remessas por eventos interoperáveis,logistics,Analista de visibilidade logística,specialist,north-america,60,14
+na-gestao-de-embalagens-retornaveis-por-ciclo-e-perda,Gestão de embalagens retornáveis por ciclo e perda,logistics,Analista de ativos logísticos retornáveis,specialist,north-america,60,14
+na-planejamento-de-suprimentos-com-risco-de-fonte-unica,Planejamento de suprimentos com risco de fonte única,logistics,Analista de risco de suprimentos,specialist,north-america,60,14
+na-auditoria-de-frete-por-peso-tarifavel-e-excecoes,Auditoria de frete por peso tarifável e exceções,logistics,Analista de auditoria de transporte,specialist,north-america,60,14
+na-avaliacao-de-incerteza-em-inventarios-ambientais,Avaliação de incerteza em inventários ambientais,quality,Analista de qualidade de inventários ambientais,specialist,north-america,60,14
+na-controle-de-cadeia-de-custodia-de-amostras-ambientais,Controle de cadeia de custódia de amostras ambientais,quality,Coordenador documental de amostragem ambiental,specialist,north-america,60,14
+na-rastreabilidade-de-residuos-por-massa-e-destino,Rastreabilidade de resíduos por massa e destino,quality,Analista de rastreabilidade de resíduos,specialist,north-america,60,14
+na-avaliacao-de-desempenho-de-sensores-de-qualidade-do-ar,Avaliação de desempenho de sensores de qualidade do ar,quality,Analista de dados de monitoramento atmosférico,specialist,north-america,60,14
+na-gestao-de-evidencias-para-alegacoes-de-circularidade,Gestão de evidências para alegações de circularidade,quality,Analista de evidências de circularidade,specialist,north-america,60,14
+na-planejamento-de-auditorias-por-risco-de-processo,Planejamento de auditorias por risco de processo,quality,Analista de planejamento de auditorias,specialist,north-america,60,14
+na-controle-de-nao-conformidades-por-eficacia-da-correcao,Controle de não conformidades por eficácia da correção,quality,Analista de melhoria de sistemas de qualidade,specialist,north-america,60,14
+na-qualidade-de-dados-em-declaracoes-de-materiais,Qualidade de dados em declarações de materiais,quality,Analista de dados de conformidade de materiais,specialist,north-america,60,14
+na-validacao-de-limpeza-por-evidencia-documental,Validação de limpeza por evidência documental,quality,Analista documental de validação de processos,specialist,north-america,60,14
+na-analise-de-confiabilidade-de-registros-de-inspecao-remota,Análise de confiabilidade de registros de inspeção remota,quality,Analista de evidências de inspeção remota,specialist,north-america,60,14
+na-modelagem-de-receita-recorrente-por-coortes-contratuais,Modelagem de receita recorrente por coortes contratuais,business,Analista de operações de receita,specialist,north-america,60,14
+na-planejamento-financeiro-de-assinaturas-com-uso-variavel,Planejamento financeiro de assinaturas com uso variável,business,Analista de unit economics de produtos digitais,specialist,north-america,60,14
+na-auditoria-operacional-de-programas-de-indicacao,Auditoria operacional de programas de indicação,business,Analista de operações de parcerias,specialist,north-america,60,14
+na-planejamento-de-onboarding-com-dependencias-e-valor-entregue,Planejamento de onboarding com dependências e valor entregue,business,Analista de operações de sucesso do cliente,specialist,north-america,60,14
+na-gestao-de-capacidade-de-suporte-por-complexidade,Gestão de capacidade de suporte por complexidade,business,Planejador de operações de suporte,specialist,north-america,60,14
+na-controle-de-evidencias-em-prestacao-de-contas-de-projetos,Controle de evidências em prestação de contas de projetos,business,Analista de governança de projetos financiados,specialist,north-america,60,14
+na-comparacao-de-propostas-por-custo-total-de-contratacao,Comparação de propostas por custo total de contratação,business,Analista de contratação de serviços digitais,specialist,north-america,60,14
+na-mapeamento-de-competencias-por-evidencia-de-tarefa,Mapeamento de competências por evidência de tarefa,business,Analista de inteligência de competências,specialist,north-america,60,14
+na-analise-de-abandono-em-jornadas-de-inscricao-acessiveis,Análise de abandono em jornadas de inscrição acessíveis,business,Analista de operações de conversão acessível,specialist,north-america,60,14
+na-planejamento-de-expansao-por-prontidao-operacional-regional,Planejamento de expansão por prontidão operacional regional,business,Analista de operações de expansão internacional,specialist,north-america,60,14
+na-descricao-de-audio-para-materiais-educacionais-visuais,Descrição de áudio para materiais educacionais visuais,content,Roteirista de audiodescrição educacional,specialist,north-america,60,14
+na-controle-de-qualidade-de-transcricoes-com-termos-tecnicos,Controle de qualidade de transcrições com termos técnicos,content,Analista de qualidade de transcrição técnica,specialist,north-america,60,14
+na-arquitetura-de-conteudo-para-documentacao-baseada-em-tarefas,Arquitetura de conteúdo para documentação baseada em tarefas,content,Arquiteto de documentação de produto,specialist,north-america,60,14
+na-gestao-de-direitos-de-uso-em-acervos-de-midia,Gestão de direitos de uso em acervos de mídia,content,Analista de operações de direitos de mídia,specialist,north-america,60,14
+na-preparacao-de-dados-para-arquivos-audiovisuais-pesquisaveis,Preparação de dados para arquivos audiovisuais pesquisáveis,content,Analista de metadados audiovisuais,specialist,north-america,60,14
+na-design-de-avaliacoes-praticas-com-rubricas-analiticas,Design de avaliações práticas com rubricas analíticas,content,Designer de avaliação aplicada,specialist,north-america,60,14
+na-edicao-de-visualizacoes-para-leitura-em-dispositivos-moveis,Edição de visualizações para leitura em dispositivos móveis,content,Editor de visualização acessível,specialist,north-america,60,14
+na-planejamento-editorial-de-aprendizagem-por-recuperacao,Planejamento editorial de aprendizagem por recuperação,content,Designer de prática e retenção,specialist,north-america,60,14
+na-governanca-de-conteudos-gerados-por-ia-em-publicacoes,Governança de conteúdos gerados por IA em publicações,content,Analista de governança editorial de IA,specialist,north-america,60,14
+na-localizacao-de-interfaces-com-expansao-e-plurais,Localização de interfaces com expansão e plurais,content,Analista de engenharia de localização,specialist,north-america,60,14
+as-rastreabilidade-de-wafers-em-linhas-terceirizadas-de-semicondutores,Rastreabilidade de wafers em linhas terceirizadas de semicondutores,industry,Analista de processos de microeletrônica,specialist,asia,60,14
+as-analise-de-rendimento-por-etapa-em-encapsulamento-de-chips,Análise de rendimento por etapa em encapsulamento de chips,industry,Analista de processos de microeletrônica,specialist,asia,60,14
+as-controle-de-deriva-em-sensores-de-salas-limpas,Controle de deriva em sensores de salas limpas,industry,Analista de processos de microeletrônica,specialist,asia,60,14
+as-planejamento-de-troca-de-ferramentas-em-montagem-eletronica,Planejamento de troca de ferramentas em montagem eletrônica,industry,Analista de processos de microeletrônica,specialist,asia,60,14
+as-tratamento-de-dados-censurados-em-testes-de-confiabilidade-eletronica,Tratamento de dados censurados em testes de confiabilidade eletrônica,industry,Analista de processos de microeletrônica,specialist,asia,60,14
+as-balanco-de-capacidade-de-inspecao-optica-automatizada,Balanço de capacidade de inspeção óptica automatizada,industry,Analista de processos de microeletrônica,specialist,asia,60,14
+as-qualificacao-documental-de-mudancas-de-resina-em-componentes,Qualificação documental de mudanças de resina em componentes,industry,Analista de processos de microeletrônica,specialist,asia,60,14
+as-programacao-de-manutencao-baseada-em-gargalos-de-producao,Programação de manutenção baseada em gargalos de produção,industry,Analista de processos de microeletrônica,specialist,asia,60,14
+as-gestao-de-receitas-de-teste-em-eletronica-de-potencia,Gestão de receitas de teste em eletrônica de potência,industry,Analista de processos de microeletrônica,specialist,asia,60,14
+as-analise-de-desperdicio-de-agua-em-fabricacao-de-precisao,Análise de desperdício de água em fabricação de precisão,industry,Analista de processos de microeletrônica,specialist,asia,60,14
+as-reconciliacao-de-pagamentos-upi-com-confirmacoes-tardias,Reconciliação de pagamentos UPI com confirmações tardias,data,Analista de operações financeiras digitais,broad,asia,60,14
+as-normalizacao-de-qr-de-pagamento-para-comercio-transfronteirico,Normalização de QR de pagamento para comércio transfronteiriço,data,Analista de operações financeiras digitais,broad,asia,60,14
+as-deteccao-de-fracionamento-em-carteiras-de-remessas,Detecção de fracionamento em carteiras de remessas,data,Analista de operações financeiras digitais,broad,asia,60,14
+as-analise-de-inadimplencia-por-coortes-de-credito-digital,Análise de inadimplência por coortes de crédito digital,data,Analista de operações financeiras digitais,broad,asia,60,14
+as-conciliacao-de-estornos-em-marketplaces-asiaticos,Conciliação de estornos em marketplaces asiáticos,data,Analista de operações financeiras digitais,specialist,asia,60,14
+as-qualidade-de-dados-em-cadastros-empresariais-multilingues,Qualidade de dados em cadastros empresariais multilíngues,data,Analista de operações financeiras digitais,specialist,asia,60,14
+as-monitoramento-de-liquidez-intradiaria-em-sistemas-de-pagamento,Monitoramento de liquidez intradiária em sistemas de pagamento,data,Analista de operações financeiras digitais,specialist,asia,60,14
+as-gestao-de-consentimento-em-agregadores-de-financas-abertas,Gestão de consentimento em agregadores de finanças abertas,data,Analista de operações financeiras digitais,specialist,asia,60,14
+as-analise-de-chargeback-por-canal-em-comercio-de-aplicativos,Análise de chargeback por canal em comércio de aplicativos,data,Analista de operações financeiras digitais,specialist,asia,60,14
+as-validacao-de-regras-de-arredondamento-em-remessas-multicambiais,Validação de regras de arredondamento em remessas multicambiais,data,Analista de operações financeiras digitais,specialist,asia,60,14
+as-avaliacao-de-segmentacao-de-texto-em-tailandes,Avaliação de segmentação de texto em tailandês,ai,Analista de linguagem e sistemas de IA asiáticos,broad,asia,60,14
+as-teste-de-recuperacao-de-informacao-em-documentos-japoneses,Teste de recuperação de informação em documentos japoneses,ai,Analista de linguagem e sistemas de IA asiáticos,broad,asia,60,14
+as-qualidade-de-ocr-em-documentos-de-escrita-arabe,Qualidade de OCR em documentos de escrita árabe,ai,Analista de linguagem e sistemas de IA asiáticos,broad,asia,60,14
+as-avaliacao-de-reconhecimento-de-fala-com-alternancia-hindi-ingles,Avaliação de reconhecimento de fala com alternância hindi-inglês,ai,Analista de linguagem e sistemas de IA asiáticos,broad,asia,60,14
+as-adaptacao-de-taxonomias-de-moderacao-para-indonesio-informal,Adaptação de taxonomias de moderação para indonésio informal,ai,Analista de linguagem e sistemas de IA asiáticos,specialist,asia,60,14
+as-controle-de-terminologia-em-traducao-de-manuais-coreanos,Controle de terminologia em tradução de manuais coreanos,ai,Analista de linguagem e sistemas de IA asiáticos,specialist,asia,60,14
+as-deteccao-de-vazamento-entre-corpora-multilingues-de-avaliacao,Detecção de vazamento entre corpora multilíngues de avaliação,ai,Analista de linguagem e sistemas de IA asiáticos,specialist,asia,60,14
+as-mensuracao-de-custo-de-tokens-em-idiomas-de-baixa-segmentacao,Mensuração de custo de tokens em idiomas de baixa segmentação,ai,Analista de linguagem e sistemas de IA asiáticos,specialist,asia,60,14
+as-validacao-de-assistentes-de-atendimento-em-tagalo,Validação de assistentes de atendimento em tagalo,ai,Analista de linguagem e sistemas de IA asiáticos,specialist,asia,60,14
+as-tratamento-de-variantes-de-nomes-em-busca-de-documentos-asiaticos,Tratamento de variantes de nomes em busca de documentos asiáticos,ai,Analista de linguagem e sistemas de IA asiáticos,specialist,asia,60,14
+as-inventario-de-emissoes-por-contrato-de-eletricidade-em-singapura,Inventário de emissões por contrato de eletricidade em Singapura,energy,Analista de transição energética e recursos,specialist,asia,60,14
+as-analise-de-curtailment-em-parques-solares-indianos,Análise de curtailment em parques solares indianos,energy,Analista de transição energética e recursos,specialist,asia,60,14
+as-planejamento-de-demanda-eletrica-de-centros-de-dados-no-golfo,Planejamento de demanda elétrica de centros de dados no Golfo,energy,Analista de transição energética e recursos,specialist,asia,60,14
+as-rastreabilidade-de-atributos-de-hidrogenio-de-baixo-carbono,Rastreabilidade de atributos de hidrogênio de baixo carbono,energy,Analista de transição energética e recursos,specialist,asia,60,14
+as-avaliacao-de-resposta-da-demanda-em-fabricas-tailandesas,Avaliação de resposta da demanda em fábricas tailandesas,energy,Analista de transição energética e recursos,specialist,asia,60,14
+as-analise-de-reuso-de-agua-em-parques-industriais-chineses,Análise de reúso de água em parques industriais chineses,energy,Analista de transição energética e recursos,specialist,asia,60,14
+as-planejamento-de-troca-de-baterias-para-frotas-de-duas-rodas,Planejamento de troca de baterias para frotas de duas rodas,energy,Analista de transição energética e recursos,specialist,asia,60,14
+as-comparacao-de-intensidade-termica-em-secagem-de-alimentos,Comparação de intensidade térmica em secagem de alimentos,energy,Analista de transição energética e recursos,specialist,asia,60,14
+as-analise-de-perdas-em-redes-de-frio-para-cidades-tropicais,Análise de perdas em redes de frio para cidades tropicais,energy,Analista de transição energética e recursos,specialist,asia,60,14
+as-documentacao-de-descomissionamento-circular-de-paineis-solares,Documentação de descomissionamento circular de painéis solares,energy,Analista de transição energética e recursos,specialist,asia,60,14
+as-analise-de-filas-de-caminhoes-em-portos-de-transbordo,Análise de filas de caminhões em portos de transbordo,logistics,Analista de cadeias comerciais asiáticas,specialist,asia,60,14
+as-reconciliacao-de-conhecimento-eletronico-de-embarque,Reconciliação de conhecimento eletrônico de embarque,logistics,Analista de cadeias comerciais asiáticas,specialist,asia,60,14
+as-planejamento-de-conteineres-retornaveis-em-cadeias-asean,Planejamento de contêineres retornáveis em cadeias ASEAN,logistics,Analista de cadeias comerciais asiáticas,specialist,asia,60,14
+as-gestao-de-dados-de-origem-em-fornecedores-de-vestuario-asiatico,Gestão de dados de origem em fornecedores de vestuário asiático,logistics,Analista de cadeias comerciais asiáticas,specialist,asia,60,14
+as-analise-de-confiabilidade-de-corredores-ferroviarios-eurasiaticos,Análise de confiabilidade de corredores ferroviários eurasiáticos,logistics,Analista de cadeias comerciais asiáticas,specialist,asia,60,14
+as-controle-de-temperatura-documental-em-exportacao-de-frutas,Controle de temperatura documental em exportação de frutas,logistics,Analista de cadeias comerciais asiáticas,specialist,asia,60,14
+as-planejamento-de-fulfillment-em-festivais-de-comercio-eletronico,Planejamento de fulfillment em festivais de comércio eletrônico,logistics,Analista de cadeias comerciais asiáticas,specialist,asia,60,14
+as-analise-de-demurrage-e-detention-em-importacoes-asiaticas,Análise de demurrage e detention em importações asiáticas,logistics,Analista de cadeias comerciais asiáticas,specialist,asia,60,14
+as-consolidacao-de-carga-para-pequenos-exportadores-nepaleses,Consolidação de carga para pequenos exportadores nepaleses,logistics,Analista de cadeias comerciais asiáticas,specialist,asia,60,14
+as-qualidade-de-eventos-de-entrega-em-redes-de-ultima-milha,Qualidade de eventos de entrega em redes de última milha,logistics,Analista de cadeias comerciais asiáticas,specialist,asia,60,14
+as-dimensionamento-administrativo-de-centros-de-convivencia-para-idosos,Dimensionamento administrativo de centros de convivência para idosos,care,Coordenador administrativo de serviços de cuidado,specialist,asia,60,14
+as-controle-de-continuidade-em-visitas-domiciliares-nao-clinicas,Controle de continuidade em visitas domiciliares não clínicas,care,Coordenador administrativo de serviços de cuidado,specialist,asia,60,14
+as-gestao-de-consentimento-para-comunicacao-com-familiares,Gestão de consentimento para comunicação com familiares,care,Coordenador administrativo de serviços de cuidado,specialist,asia,60,14
+as-analise-de-faltas-em-programas-comunitarios-de-reabilitacao,Análise de faltas em programas comunitários de reabilitação,care,Coordenador administrativo de serviços de cuidado,specialist,asia,60,14
+as-acessibilidade-de-portais-de-agendamento-em-alfabetizacao-limitada,Acessibilidade de portais de agendamento em alfabetização limitada,care,Coordenador administrativo de serviços de cuidado,specialist,asia,60,14
+as-coordenacao-de-interpretes-em-atendimento-administrativo-de-saude,Coordenação de intérpretes em atendimento administrativo de saúde,care,Coordenador administrativo de serviços de cuidado,specialist,asia,60,14
+as-qualidade-de-cadastros-em-programas-de-cuidado-de-longa-duracao,Qualidade de cadastros em programas de cuidado de longa duração,care,Coordenador administrativo de serviços de cuidado,specialist,asia,60,14
+as-planejamento-de-voluntariado-para-apoio-intergeracional,Planejamento de voluntariado para apoio intergeracional,care,Coordenador administrativo de serviços de cuidado,specialist,asia,60,14
+as-analise-de-tempo-de-espera-em-servicos-de-apoio-a-cuidadores,Análise de tempo de espera em serviços de apoio a cuidadores,care,Coordenador administrativo de serviços de cuidado,specialist,asia,60,14
+as-transferencia-administrativa-entre-equipes-de-apoio-social,Transferência administrativa entre equipes de apoio social,care,Coordenador administrativo de serviços de cuidado,specialist,asia,60,14
+as-normalizacao-de-rendimento-de-arroz-por-umidade,Normalização de rendimento de arroz por umidade,quality,Analista de qualidade agroalimentar e recursos rurais,specialist,asia,60,14
+as-rastreabilidade-de-lotes-em-cooperativas-de-cha,Rastreabilidade de lotes em cooperativas de chá,quality,Analista de qualidade agroalimentar e recursos rurais,specialist,asia,60,14
+as-analise-de-perdas-pos-colheita-em-manga-tropical,Análise de perdas pós-colheita em manga tropical,quality,Analista de qualidade agroalimentar e recursos rurais,specialist,asia,60,14
+as-controle-documental-de-cadeia-halal-multiforncedor,Controle documental de cadeia halal multiforncedor,quality,Analista de qualidade agroalimentar e recursos rurais,specialist,asia,60,14
+as-amostragem-de-qualidade-em-exportacao-de-especiarias,Amostragem de qualidade em exportação de especiarias,quality,Analista de qualidade agroalimentar e recursos rurais,specialist,asia,60,14
+as-comparacao-de-produtividade-em-aquicultura-com-sobrevivencia,Comparação de produtividade em aquicultura com sobrevivência,quality,Analista de qualidade agroalimentar e recursos rurais,specialist,asia,60,14
+as-conciliacao-de-pesos-em-leiloes-digitais-de-pescado,Conciliação de pesos em leilões digitais de pescado,quality,Analista de qualidade agroalimentar e recursos rurais,specialist,asia,60,14
+as-analise-de-cobertura-de-seguro-parametrico-agricola,Análise de cobertura de seguro paramétrico agrícola,quality,Analista de qualidade agroalimentar e recursos rurais,specialist,asia,60,14
+as-rastreabilidade-documental-de-cafe-com-geolocalizacao,Rastreabilidade documental de café com geolocalização,quality,Analista de qualidade agroalimentar e recursos rurais,specialist,asia,60,14
+as-planejamento-de-janelas-de-colheita-em-cooperativas-de-frutas,Planejamento de janelas de colheita em cooperativas de frutas,quality,Analista de qualidade agroalimentar e recursos rurais,specialist,asia,60,14
+as-seguranca-de-recuperacao-de-conta-em-aplicativos-superapp,Segurança de recuperação de conta em aplicativos superapp,cyber,Analista de segurança operacional e confiança digital,broad,asia,60,14
+as-gestao-de-acesso-temporario-de-fornecedores-em-fabricas-conectadas,Gestão de acesso temporário de fornecedores em fábricas conectadas,cyber,Analista de segurança operacional e confiança digital,broad,asia,60,14
+as-qualidade-de-logs-de-autenticacao-em-fusos-asiaticos,Qualidade de logs de autenticação em fusos asiáticos,cyber,Analista de segurança operacional e confiança digital,broad,asia,60,14
+as-minimizacao-de-dados-em-verificacao-digital-de-identidade,Minimização de dados em verificação digital de identidade,cyber,Analista de segurança operacional e confiança digital,broad,asia,60,14
+as-validacao-de-segmentacao-em-redes-de-edificios-inteligentes,Validação de segmentação em redes de edifícios inteligentes,cyber,Analista de segurança operacional e confiança digital,specialist,asia,60,14
+as-analise-de-risco-de-dependencias-em-software-de-exportacao,Análise de risco de dependências em software de exportação,cyber,Analista de segurança operacional e confiança digital,specialist,asia,60,14
+as-controle-de-compartilhamento-de-arquivos-em-equipes-offshore,Controle de compartilhamento de arquivos em equipes offshore,cyber,Analista de segurança operacional e confiança digital,specialist,asia,60,14
+as-teste-de-revogacao-de-sessoes-em-plataformas-de-ensino,Teste de revogação de sessões em plataformas de ensino,cyber,Analista de segurança operacional e confiança digital,specialist,asia,60,14
+as-analise-de-engenharia-social-em-recrutamento-internacional-remoto,Análise de engenharia social em recrutamento internacional remoto,cyber,Analista de segurança operacional e confiança digital,specialist,asia,60,14
+as-governanca-de-segredos-em-automacoes-empresariais-low-code,Governança de segredos em automações empresariais low-code,cyber,Analista de segurança operacional e confiança digital,specialist,asia,60,14
+as-localizacao-de-interfaces-para-escrita-vertical-japonesa,Localização de interfaces para escrita vertical japonesa,content,Especialista em experiências digitais e patrimônio cultural,specialist,asia,60,14
+as-adaptacao-cultural-de-tutoriais-de-produtos-para-a-india,Adaptação cultural de tutoriais de produtos para a Índia,content,Especialista em experiências digitais e patrimônio cultural,specialist,asia,60,14
+as-curadoria-participativa-de-patrimonio-imaterial-no-sudeste-asiatico,Curadoria participativa de patrimônio imaterial no Sudeste Asiático,content,Especialista em experiências digitais e patrimônio cultural,specialist,asia,60,14
+as-acessibilidade-de-legendas-para-dramas-coreanos,Acessibilidade de legendas para dramas coreanos,content,Especialista em experiências digitais e patrimônio cultural,specialist,asia,60,14
+as-documentacao-de-procedencia-em-acervos-digitais-de-arte-asiatica,Documentação de procedência em acervos digitais de arte asiática,content,Especialista em experiências digitais e patrimônio cultural,specialist,asia,60,14
+as-teste-de-economia-de-jogos-com-itens-cosmeticos,Teste de economia de jogos com itens cosméticos,content,Especialista em experiências digitais e patrimônio cultural,specialist,asia,60,14
+as-planejamento-de-conteudo-turistico-responsavel-em-areas-sagradas,Planejamento de conteúdo turístico responsável em áreas sagradas,content,Especialista em experiências digitais e patrimônio cultural,specialist,asia,60,14
+as-validacao-de-formularios-com-enderecos-do-japao-e-da-coreia,Validação de formulários com endereços do Japão e da Coreia,content,Especialista em experiências digitais e patrimônio cultural,specialist,asia,60,14
+as-producao-de-audioguias-multilingues-para-museus-asiaticos,Produção de audioguias multilíngues para museus asiáticos,content,Especialista em experiências digitais e patrimônio cultural,specialist,asia,60,14
+as-controle-de-continuidade-narrativa-em-series-de-animacao,Controle de continuidade narrativa em séries de animação,content,Especialista em experiências digitais e patrimônio cultural,specialist,asia,60,14
+as-desenho-de-piloto-de-exportacao-de-servicos-para-mercados-asean,Desenho de piloto de exportação de serviços para mercados ASEAN,business,Analista de expansão e operações empresariais na Ásia,specialist,asia,60,14
+as-analise-de-custo-total-em-terceirizacao-para-centros-asiaticos,Análise de custo total em terceirização para centros asiáticos,business,Analista de expansão e operações empresariais na Ásia,specialist,asia,60,14
+as-planejamento-de-atendimento-durante-festivais-e-calendarios-asiaticos,Planejamento de atendimento durante festivais e calendários asiáticos,business,Analista de expansão e operações empresariais na Ásia,specialist,asia,60,14
+as-avaliacao-de-prontidao-de-fornecedores-para-compras-regionais,Avaliação de prontidão de fornecedores para compras regionais,business,Analista de expansão e operações empresariais na Ásia,specialist,asia,60,14
+as-analise-de-margem-em-venda-digital-com-multiplos-marketplaces,Análise de margem em venda digital com múltiplos marketplaces,business,Analista de expansão e operações empresariais na Ásia,specialist,asia,60,14
+as-mapeamento-de-competencias-para-equipes-distribuidas-india-japao,Mapeamento de competências para equipes distribuídas Índia-Japão,business,Analista de expansão e operações empresariais na Ásia,specialist,asia,60,14
+as-mensuracao-de-adocao-de-ferramentas-digitais-em-pequenas-empresas,Mensuração de adoção de ferramentas digitais em pequenas empresas,business,Analista de expansão e operações empresariais na Ásia,specialist,asia,60,14
+as-planejamento-de-sucessao-operacional-em-empresas-familiares-asiaticas,Planejamento de sucessão operacional em empresas familiares asiáticas,business,Analista de expansão e operações empresariais na Ásia,specialist,asia,60,14
+as-analise-de-viabilidade-de-suporte-em-idiomas-de-baixa-cobertura,Análise de viabilidade de suporte em idiomas de baixa cobertura,business,Analista de expansão e operações empresariais na Ásia,specialist,asia,60,14
+as-desenho-de-avaliacao-pratica-para-contratacao-por-habilidades,Desenho de avaliação prática para contratação por habilidades,business,Analista de expansão e operações empresariais na Ásia,specialist,asia,60,14
+sa-balanco-de-massa-na-torrefacao-de-cafes-especiais,Balanço de massa na torrefação de cafés especiais,industry,Analista de operações agroalimentares,broad,south-america,60,14
+sa-planejamento-de-secagem-de-cacau-por-lotes,Planejamento de secagem de cacau por lotes,industry,Analista de operações agroalimentares,specialist,south-america,60,14
+sa-rastreabilidade-de-castanha-amazonica-em-cooperativas,Rastreabilidade de castanha amazônica em cooperativas,industry,Analista de operações agroalimentares,specialist,south-america,60,14
+sa-controle-de-perdas-em-centrais-de-banana,Controle de perdas em centrais de banana,industry,Analista de operações agroalimentares,specialist,south-america,60,14
+sa-custos-de-racao-e-conversao-em-piscicultura-documental,Custos de ração e conversão em piscicultura documental,industry,Analista de operações agroalimentares,broad,south-america,60,14
+sa-programacao-de-colheita-de-quinoa-por-capacidade,Programação de colheita de quinoa por capacidade,industry,Analista de operações agroalimentares,specialist,south-america,60,14
+sa-reconciliacao-de-solidos-no-beneficiamento-de-leite,Reconciliação de sólidos no beneficiamento de leite,industry,Analista de operações agroalimentares,specialist,south-america,60,14
+sa-documentacao-de-fermentacao-de-frutas-para-bebidas,Documentação de fermentação de frutas para bebidas,industry,Analista de operações agroalimentares,specialist,south-america,60,14
+sa-planejamento-de-beneficiamento-de-mandioca-comunitaria,Planejamento de beneficiamento de mandioca comunitária,industry,Analista de operações agroalimentares,broad,south-america,60,14
+sa-gestao-de-pedidos-de-sementes-nativas-com-procedencia,Gestão de pedidos de sementes nativas com procedência,industry,Analista de operações agroalimentares,specialist,south-america,60,14
+sa-reconciliacao-de-certificados-de-energia-por-periodo,Reconciliação de certificados de energia por período,energy,Analista de planejamento energético,specialist,south-america,60,14
+sa-analise-de-indisponibilidade-em-parques-eolicos-costeiros,Análise de indisponibilidade em parques eólicos costeiros,energy,Analista de planejamento energético,specialist,south-america,60,14
+sa-planejamento-de-autoconsumo-solar-em-pequenas-industrias,Planejamento de autoconsumo solar em pequenas indústrias,energy,Analista de planejamento energético,broad,south-america,60,14
+sa-balanco-energetico-de-secagem-industrial-de-graos,Balanço energético de secagem industrial de grãos,energy,Analista de planejamento energético,specialist,south-america,60,14
+sa-analise-documental-de-biogas-em-cooperativas,Análise documental de biogás em cooperativas,energy,Analista de planejamento energético,specialist,south-america,60,14
+sa-planejamento-de-carregamento-de-frotas-municipais-eletricas,Planejamento de carregamento de frotas municipais elétricas,energy,Analista de planejamento energético,specialist,south-america,60,14
+sa-reconciliacao-de-consumo-em-sistemas-de-bombeamento,Reconciliação de consumo em sistemas de bombeamento,energy,Analista de planejamento energético,broad,south-america,60,14
+sa-orcamento-energetico-de-camaras-frias-de-exportacao,Orçamento energético de câmaras frias de exportação,energy,Analista de planejamento energético,specialist,south-america,60,14
+sa-planejamento-de-manutencao-de-inversores-em-usinas-solares,Planejamento de manutenção de inversores em usinas solares,energy,Analista de planejamento energético,specialist,south-america,60,14
+sa-comparacao-de-contratos-de-eficiencia-por-linha-de-base,Comparação de contratos de eficiência por linha de base,energy,Analista de planejamento energético,specialist,south-america,60,14
+sa-planejamento-de-transbordo-hidroviario-no-corredor-amazonico,Planejamento de transbordo hidroviário no corredor amazônico,logistics,Analista de cadeias logísticas regionais,broad,south-america,60,14
+sa-conciliacao-de-tara-em-transporte-de-concentrados-minerais,Conciliação de tara em transporte de concentrados minerais,logistics,Analista de cadeias logísticas regionais,specialist,south-america,60,14
+sa-gestao-de-conteineres-reefer-em-exportacao-de-frutas,Gestão de contêineres reefer em exportação de frutas,logistics,Analista de cadeias logísticas regionais,specialist,south-america,60,14
+sa-planejamento-de-rotas-urbanas-com-janelas-de-recebimento,Planejamento de rotas urbanas com janelas de recebimento,logistics,Analista de cadeias logísticas regionais,specialist,south-america,60,14
+sa-controle-de-estoque-comprometido-em-distribuicao-hospitalar,Controle de estoque comprometido em distribuição hospitalar,logistics,Analista de cadeias logísticas regionais,broad,south-america,60,14
+sa-calculo-de-ocupacao-cubica-em-exportacao-de-moveis,Cálculo de ocupação cúbica em exportação de móveis,logistics,Analista de cadeias logísticas regionais,specialist,south-america,60,14
+sa-reconciliacao-de-transito-aduaneiro-por-marcos-documentais,Reconciliação de trânsito aduaneiro por marcos documentais,logistics,Analista de cadeias logísticas regionais,specialist,south-america,60,14
+sa-planejamento-de-abastecimento-em-localidades-andinas,Planejamento de abastecimento em localidades andinas,logistics,Analista de cadeias logísticas regionais,specialist,south-america,60,14
+sa-gestao-de-devolucoes-em-marketplaces-regionais,Gestão de devoluções em marketplaces regionais,logistics,Analista de cadeias logísticas regionais,broad,south-america,60,14
+sa-planejamento-de-patio-para-exportacao-de-veiculos,Planejamento de pátio para exportação de veículos,logistics,Analista de cadeias logísticas regionais,specialist,south-america,60,14
+sa-deteccao-de-duplicidade-em-cadastros-de-exportadores,Detecção de duplicidade em cadastros de exportadores,data,Analista de dados e interoperabilidade,specialist,south-america,60,14
+sa-analise-de-precos-regionais-com-conversao-de-unidades,Análise de preços regionais com conversão de unidades,data,Analista de dados e interoperabilidade,specialist,south-america,60,14
+sa-analise-de-evasao-em-formacao-profissional,Análise de evasão em formação profissional,data,Analista de dados e interoperabilidade,broad,south-america,60,14
+sa-paineis-de-atendimento-publico-com-tempos-censurados,Painéis de atendimento público com tempos censurados,data,Analista de dados e interoperabilidade,specialist,south-america,60,14
+sa-conciliacao-de-indicadores-de-vendas-em-moedas-locais,Conciliação de indicadores de vendas em moedas locais,data,Analista de dados e interoperabilidade,specialist,south-america,60,14
+sa-amostragem-de-disponibilidade-de-medicamentos-por-estabelecimento,Amostragem de disponibilidade de medicamentos por estabelecimento,data,Analista de dados e interoperabilidade,specialist,south-america,60,14
+sa-series-temporais-de-emprego-com-revisao-de-dados,Séries temporais de emprego com revisão de dados,data,Analista de dados e interoperabilidade,broad,south-america,60,14
+sa-geocodificacao-de-enderecos-informais-em-servicos-urbanos,Geocodificação de endereços informais em serviços urbanos,data,Analista de dados e interoperabilidade,specialist,south-america,60,14
+sa-reconciliacao-de-dados-de-chuva-por-dia-hidrologico,Reconciliação de dados de chuva por dia hidrológico,data,Analista de dados e interoperabilidade,specialist,south-america,60,14
+sa-auditoria-de-juncoes-em-bases-de-faturamento-municipal,Auditoria de junções em bases de faturamento municipal,data,Analista de dados e interoperabilidade,specialist,south-america,60,14
+sa-margem-de-contribuicao-em-turismo-comunitario-andino,Margem de contribuição em turismo comunitário andino,business,Analista de operações comerciais regionais,broad,south-america,60,14
+sa-gestao-de-capital-de-giro-para-exportadores-artesanais,Gestão de capital de giro para exportadores artesanais,business,Analista de operações comerciais regionais,specialist,south-america,60,14
+sa-precificacao-de-servicos-de-traducao-regional-por-escopo,Precificação de serviços de tradução regional por escopo,business,Analista de operações comerciais regionais,specialist,south-america,60,14
+sa-economia-unitaria-de-assinaturas-educacionais-locais,Economia unitária de assinaturas educacionais locais,business,Analista de operações comerciais regionais,specialist,south-america,60,14
+sa-avaliacao-de-propostas-b2b-com-prazos-diferentes,Avaliação de propostas B2B com prazos diferentes,business,Analista de operações comerciais regionais,broad,south-america,60,14
+sa-planejamento-de-compras-coletivas-para-microvarejo,Planejamento de compras coletivas para microvarejo,business,Analista de operações comerciais regionais,specialist,south-america,60,14
+sa-controle-de-comissoes-em-vendas-multicanal,Controle de comissões em vendas multicanal,business,Analista de operações comerciais regionais,specialist,south-america,60,14
+sa-planejamento-comercial-de-safras-de-artesanato,Planejamento comercial de safras de artesanato,business,Analista de operações comerciais regionais,specialist,south-america,60,14
+sa-gestao-de-descontos-em-contratos-de-suporte-regional,Gestão de descontos em contratos de suporte regional,business,Analista de operações comerciais regionais,broad,south-america,60,14
+sa-conciliacao-de-vouchers-em-programas-de-capacitacao,Conciliação de vouchers em programas de capacitação,business,Analista de operações comerciais regionais,specialist,south-america,60,14
+sa-planejamento-de-setup-em-metalmecanica-de-pequenos-lotes,Planejamento de setup em metalmecânica de pequenos lotes,industry,Analista de planejamento e qualidade industrial,specialist,south-america,60,14
+sa-conciliacao-de-refugo-e-retrabalho-em-autopecas,Conciliação de refugo e retrabalho em autopeças,industry,Analista de planejamento e qualidade industrial,specialist,south-america,60,14
+sa-analise-de-gargalo-em-beneficiamento-mineral-documental,Análise de gargalo em beneficiamento mineral documental,industry,Analista de planejamento e qualidade industrial,broad,south-america,60,14
+sa-gestao-de-metrologia-em-embalagens-flexiveis,Gestão de metrologia em embalagens flexíveis,industry,Analista de planejamento e qualidade industrial,specialist,south-america,60,14
+sa-planejamento-de-ordens-de-manutencao-por-criticidade,Planejamento de ordens de manutenção por criticidade,industry,Analista de planejamento e qualidade industrial,specialist,south-america,60,14
+sa-conciliacao-de-umidade-na-producao-de-madeira,Conciliação de umidade na produção de madeira,industry,Analista de planejamento e qualidade industrial,specialist,south-america,60,14
+sa-planejamento-de-corte-textil-por-aproveitamento,Planejamento de corte têxtil por aproveitamento,industry,Analista de planejamento e qualidade industrial,broad,south-america,60,14
+sa-analise-de-capacidade-em-impressao-de-embalagens,Análise de capacidade em impressão de embalagens,industry,Analista de planejamento e qualidade industrial,specialist,south-america,60,14
+sa-rastreabilidade-de-componentes-em-reparacao-de-eletronicos,Rastreabilidade de componentes em reparação de eletrônicos,industry,Analista de planejamento e qualidade industrial,specialist,south-america,60,14
+sa-analise-de-rendimento-em-transformacao-de-plasticos-reciclados,Análise de rendimento em transformação de plásticos reciclados,industry,Analista de planejamento e qualidade industrial,specialist,south-america,60,14
+sa-coordenacao-administrativa-de-teleatendimento-em-zonas-rurais,Coordenação administrativa de teleatendimento em zonas rurais,care,Coordenador de operações de serviços comunitários,broad,south-america,60,14
+sa-gestao-de-encaminhamentos-para-reabilitacao-comunitaria,Gestão de encaminhamentos para reabilitação comunitária,care,Coordenador de operações de serviços comunitários,specialist,south-america,60,14
+sa-planejamento-de-transporte-nao-emergencial-para-idosos,Planejamento de transporte não emergencial para idosos,care,Coordenador de operações de serviços comunitários,specialist,south-america,60,14
+sa-organizacao-de-agendas-de-apoio-a-cuidadores-familiares,Organização de agendas de apoio a cuidadores familiares,care,Coordenador de operações de serviços comunitários,specialist,south-america,60,14
+sa-controle-documental-de-emprestimo-de-tecnologias-assistivas,Controle documental de empréstimo de tecnologias assistivas,care,Coordenador de operações de serviços comunitários,broad,south-america,60,14
+sa-gestao-de-frequencia-em-centros-de-convivencia,Gestão de frequência em centros de convivência,care,Coordenador de operações de serviços comunitários,specialist,south-america,60,14
+sa-coordenacao-de-apoio-administrativo-a-migrantes,Coordenação de apoio administrativo a migrantes,care,Coordenador de operações de serviços comunitários,specialist,south-america,60,14
+sa-planejamento-de-entrega-de-refeicoes-em-programas-sociais,Planejamento de entrega de refeições em programas sociais,care,Coordenador de operações de serviços comunitários,specialist,south-america,60,14
+sa-gestao-de-visitas-domiciliares-com-consentimento-documentado,Gestão de visitas domiciliares com consentimento documentado,care,Coordenador de operações de serviços comunitários,broad,south-america,60,14
+sa-organizacao-de-continuidade-de-cuidado-apos-alta-administrativa,Organização de continuidade de cuidado após alta administrativa,care,Coordenador de operações de serviços comunitários,specialist,south-america,60,14
+sa-producao-de-guias-bilingues-para-turismo-de-base-comunitaria,Produção de guias bilíngues para turismo de base comunitária,content,Especialista em conteúdo e comunicação regional,specialist,south-america,60,14
+sa-legendagem-acessivel-de-formacao-tecnica-regional,Legendagem acessível de formação técnica regional,content,Especialista em conteúdo e comunicação regional,specialist,south-america,60,14
+sa-curadoria-de-mapas-narrativos-sobre-patrimonio-ferroviario,Curadoria de mapas narrativos sobre patrimônio ferroviário,content,Especialista em conteúdo e comunicação regional,broad,south-america,60,14
+sa-comunicacao-de-riscos-de-calor-em-servicos-municipais,Comunicação de riscos de calor em serviços municipais,content,Especialista em conteúdo e comunicação regional,specialist,south-america,60,14
+sa-localizacao-de-interfaces-de-comercio-para-espanhol-regional,Localização de interfaces de comércio para espanhol regional,content,Especialista em conteúdo e comunicação regional,specialist,south-america,60,14
+sa-edicao-de-relatorios-publicos-com-graficos-verificaveis,Edição de relatórios públicos com gráficos verificáveis,content,Especialista em conteúdo e comunicação regional,specialist,south-america,60,14
+sa-documentacao-audiovisual-de-oficios-tradicionais-com-consentimento,Documentação audiovisual de ofícios tradicionais com consentimento,content,Especialista em conteúdo e comunicação regional,broad,south-america,60,14
+sa-redacao-de-instrucoes-de-uso-para-equipamentos-reparados,Redação de instruções de uso para equipamentos reparados,content,Especialista em conteúdo e comunicação regional,specialist,south-america,60,14
+sa-planejamento-editorial-de-educacao-financeira-sem-promessas,Planejamento editorial de educação financeira sem promessas,content,Especialista em conteúdo e comunicação regional,specialist,south-america,60,14
+sa-gestao-de-atualizacao-de-conteudos-de-mobilidade-regional,Gestão de atualização de conteúdos de mobilidade regional,content,Especialista em conteúdo e comunicação regional,specialist,south-america,60,14
+sa-revisao-de-acessos-de-fornecedores-em-cooperativas-digitais,Revisão de acessos de fornecedores em cooperativas digitais,cyber,Analista de segurança operacional defensiva,broad,south-america,60,14
+sa-recuperacao-testada-de-arquivos-de-escritorios-locais,Recuperação testada de arquivos de escritórios locais,cyber,Analista de segurança operacional defensiva,specialist,south-america,60,14
+sa-triagem-defensiva-de-mensagens-de-cobranca-em-microempresas,Triagem defensiva de mensagens de cobrança em microempresas,cyber,Analista de segurança operacional defensiva,specialist,south-america,60,14
+sa-gestao-de-autenticacao-multifator-em-escolas-independentes,Gestão de autenticação multifator em escolas independentes,cyber,Analista de segurança operacional defensiva,specialist,south-america,60,14
+sa-segregacao-de-funcoes-em-pagamentos-de-associacoes,Segregação de funções em pagamentos de associações,cyber,Analista de segurança operacional defensiva,broad,south-america,60,14
+sa-inventario-de-exposicao-de-documentos-em-portais-municipais,Inventário de exposição de documentos em portais municipais,cyber,Analista de segurança operacional defensiva,specialist,south-america,60,14
+sa-planejamento-de-resposta-a-perda-de-celular-corporativo,Planejamento de resposta a perda de celular corporativo,cyber,Analista de segurança operacional defensiva,specialist,south-america,60,14
+sa-revisao-de-permissoes-de-planilhas-em-redes-de-saude,Revisão de permissões de planilhas em redes de saúde,cyber,Analista de segurança operacional defensiva,specialist,south-america,60,14
+sa-controle-de-dependencias-em-aplicacoes-de-organizacoes-sociais,Controle de dependências em aplicações de organizações sociais,cyber,Analista de segurança operacional defensiva,broad,south-america,60,14
+sa-validacao-de-autorizacoes-em-sistemas-de-inscricao,Validação de autorizações em sistemas de inscrição,cyber,Analista de segurança operacional defensiva,specialist,south-america,60,14
+sa-rastreabilidade-documental-de-lotes-de-cobre-reciclado,Rastreabilidade documental de lotes de cobre reciclado,quality,Analista de conformidade e rastreabilidade,specialist,south-america,60,14
+sa-controle-de-evidencias-em-compras-publicas-de-tecnologia,Controle de evidências em compras públicas de tecnologia,quality,Analista de conformidade e rastreabilidade,specialist,south-america,60,14
+sa-analise-de-integridade-de-cadeias-de-custodia-laboratoriais,Análise de integridade de cadeias de custódia laboratoriais,quality,Analista de conformidade e rastreabilidade,broad,south-america,60,14
+sa-qualificacao-documental-de-fornecedores-de-embalagens,Qualificação documental de fornecedores de embalagens,quality,Analista de conformidade e rastreabilidade,specialist,south-america,60,14
+sa-gestao-de-nao-conformidades-em-servicos-de-transporte-escolar,Gestão de não conformidades em serviços de transporte escolar,quality,Analista de conformidade e rastreabilidade,specialist,south-america,60,14
+sa-reconciliacao-de-requisitos-de-acessibilidade-em-licitacoes,Reconciliação de requisitos de acessibilidade em licitações,quality,Analista de conformidade e rastreabilidade,specialist,south-america,60,14
+sa-auditoria-de-origem-de-fibras-em-marcas-independentes,Auditoria de origem de fibras em marcas independentes,quality,Analista de conformidade e rastreabilidade,broad,south-america,60,14
+sa-controle-de-versoes-em-procedimentos-de-cooperativas,Controle de versões em procedimentos de cooperativas,quality,Analista de conformidade e rastreabilidade,specialist,south-america,60,14
+sa-conciliacao-de-pesagens-em-reciclagem-de-equipamentos,Conciliação de pesagens em reciclagem de equipamentos,quality,Analista de conformidade e rastreabilidade,specialist,south-america,60,14
+sa-avaliacao-de-completude-em-relatorios-de-impacto-social,Avaliação de completude em relatórios de impacto social,quality,Analista de conformidade e rastreabilidade,specialist,south-america,60,14
+af-balanco-de-massa-na-secagem-de-milho-cooperativo,Balanço de massa na secagem de milho cooperativo,quality,Analista de pós-colheita,specialist,africa,60,14
+af-fila-de-pre-resfriamento-de-hortalicas-de-exportacao,Fila de pré-resfriamento de hortaliças de exportação,logistics,Planejador de cadeia fria agrícola,specialist,africa,60,14
+af-amostragem-de-qualidade-em-sacarias-de-sorgo,Amostragem de qualidade em sacarias de sorgo,quality,Assistente de controle de grãos,specialist,africa,60,14
+af-reconciliacao-de-cacau-por-origem-e-fermentacao,Reconciliação de cacau por origem e fermentação,data,Analista de rastreabilidade agrícola,specialist,africa,60,14
+af-viabilidade-de-caixas-retornaveis-para-tomate,Viabilidade de caixas retornáveis para tomate,business,Analista de operações hortícolas,specialist,africa,60,14
+af-programacao-de-secadores-solares-de-mandioca,Programação de secadores solares de mandioca,industry,Planejador de processamento rural,specialist,africa,60,14
+af-indice-de-perdas-de-pescado-em-mercados-costeiros,Índice de perdas de pescado em mercados costeiros,data,Analista de perdas alimentares,specialist,africa,60,14
+af-planejamento-de-coleta-leiteira-com-janelas-rurais,Planejamento de coleta leiteira com janelas rurais,logistics,Coordenador de coleta de alimentos,specialist,africa,60,14
+af-custos-de-beneficiamento-de-castanha-por-lote,Custos de beneficiamento de castanha por lote,business,Analista de custos agroindustriais,specialist,africa,60,14
+af-rastreio-de-sementes-comunitarias-e-germinacao,Rastreio de sementes comunitárias e germinação,quality,Assistente de bancos de sementes,specialist,africa,60,14
+af-perfil-de-demanda-para-minirredes-de-mercados-rurais,Perfil de demanda para minirredes de mercados rurais,energy,Analista de minirredes,specialist,africa,60,14
+af-conciliacao-de-medidores-pre-pagos-de-minirrede,Conciliação de medidores pré-pagos de minirrede,data,Analista de receitas energéticas,specialist,africa,60,14
+af-autonomia-de-baterias-para-telecomunicacao-rural,Autonomia de baterias para telecomunicação rural,energy,Planejador de continuidade energética,specialist,africa,60,14
+af-comparacao-de-contratos-de-bombeamento-solar,Comparação de contratos de bombeamento solar,business,Analista comercial de energia produtiva,specialist,africa,60,14
+af-indicadores-de-disponibilidade-de-sistemas-solares-comunitarios,Indicadores de disponibilidade de sistemas solares comunitários,data,Analista de desempenho energético,specialist,africa,60,14
+af-previsao-de-pecas-de-reposicao-para-kits-solares,Previsão de peças de reposição para kits solares,logistics,Planejador de assistência solar,specialist,africa,60,14
+af-analise-de-perdas-por-sombreamento-em-carteiras-fotovoltaicas,Análise de perdas por sombreamento em carteiras fotovoltaicas,energy,Analista de dados solares,specialist,africa,60,14
+af-planejamento-de-consumo-produtivo-em-minirredes,Planejamento de consumo produtivo em minirredes,energy,Analista de desenvolvimento de carga,specialist,africa,60,14
+af-orcamento-de-cozinhas-limpas-por-refeicao-entregue,Orçamento de cozinhas limpas por refeição entregue,business,Analista de programas de energia doméstica,specialist,africa,60,14
+af-triagem-documental-de-projetos-de-biogas-rural,Triagem documental de projetos de biogás rural,quality,Assistente de projetos bioenergéticos,specialist,africa,60,14
+af-balanco-de-agua-nao-faturada-em-pequenos-operadores,Balanço de água não faturada em pequenos operadores,data,Analista de desempenho hídrico,specialist,africa,60,14
+af-continuidade-de-abastecimento-por-bairro-e-horario,Continuidade de abastecimento por bairro e horário,data,Analista de serviços de água,specialist,africa,60,14
+af-prioridade-de-reparo-em-bombas-comunitarias,Prioridade de reparo em bombas comunitárias,business,Coordenador de manutenção hídrica,specialist,africa,60,14
+af-planejamento-de-rotas-de-esvaziamento-de-fossas,Planejamento de rotas de esvaziamento de fossas,logistics,Planejador de serviços de saneamento,specialist,africa,60,14
+af-cobertura-funcional-de-pontos-de-lavagem-em-escolas,Cobertura funcional de pontos de lavagem em escolas,care,Analista de infraestrutura escolar,specialist,africa,60,14
+af-qualidade-de-dados-de-amostras-de-agua,Qualidade de dados de amostras de água,quality,Assistente de monitoramento hídrico,specialist,africa,60,14
+af-custo-do-abastecimento-por-caminhao-e-ponto-atendido,Custo do abastecimento por caminhão e ponto atendido,business,Analista de operações de abastecimento,specialist,africa,60,14
+af-dimensionamento-administrativo-de-reservas-de-agua,Dimensionamento administrativo de reservas de água,business,Planejador de continuidade de instalações,specialist,africa,60,14
+af-monitoramento-de-perdas-em-redes-de-irrigacao-comunitaria,Monitoramento de perdas em redes de irrigação comunitária,data,Analista de eficiência de irrigação,specialist,africa,60,14
+af-gestao-de-filas-e-acesso-em-quiosques-de-agua,Gestão de filas e acesso em quiosques de água,business,Analista de experiência de serviços essenciais,specialist,africa,60,14
+af-liquidez-de-agentes-de-dinheiro-movel-em-dias-de-pagamento,Liquidez de agentes de dinheiro móvel em dias de pagamento,business,Analista de redes de agentes financeiros,specialist,africa,60,14
+af-reconciliacao-de-estornos-em-carteiras-moveis,Reconciliação de estornos em carteiras móveis,data,Analista de operações de pagamentos,specialist,africa,60,14
+af-deteccao-de-duplicidade-em-pagamentos-offline-de-comerciantes,Detecção de duplicidade em pagamentos offline de comerciantes,data,Analista de integridade transacional,specialist,africa,60,14
+af-gestao-de-reclamacoes-de-transferencias-moveis-pendentes,Gestão de reclamações de transferências móveis pendentes,business,Coordenador de atendimento financeiro digital,specialist,africa,60,14
+af-custo-de-aceitacao-digital-para-microcomercios,Custo de aceitação digital para microcomércios,business,Analista de serviços financeiros para pequenos negócios,specialist,africa,60,14
+af-monitoramento-de-disponibilidade-de-canais-ussd,Monitoramento de disponibilidade de canais USSD,data,Analista de canais financeiros acessíveis,specialist,africa,60,14
+af-reconciliacao-de-grupos-de-poupanca-comunitaria,Reconciliação de grupos de poupança comunitária,business,Assistente de gestão de poupança coletiva,specialist,africa,60,14
+af-revisao-de-consentimento-em-aplicativos-de-credito,Revisão de consentimento em aplicativos de crédito,quality,Analista de proteção do consumidor digital,specialist,africa,60,14
+af-qualidade-de-indicadores-de-inclusao-financeira,Qualidade de indicadores de inclusão financeira,data,Analista de monitoramento de inclusão,specialist,africa,60,14
+af-controle-de-repasses-a-comerciantes-por-lote-de-liquidacao,Controle de repasses a comerciantes por lote de liquidação,data,Analista de liquidação comercial,specialist,africa,60,14
+af-estudo-de-tempo-de-liberacao-em-corredores-africanos,Estudo de tempo de liberação em corredores africanos,logistics,Analista de facilitação de comércio,specialist,africa,60,14
+af-custo-logistico-de-exportacao-para-paises-sem-litoral,Custo logístico de exportação para países sem litoral,business,Analista de corredores de exportação,specialist,africa,60,14
+af-rastreabilidade-documental-de-origem-preferencial-africana,Rastreabilidade documental de origem preferencial africana,quality,Assistente de documentação comercial,specialist,africa,60,14
+af-programacao-de-conteineres-refrigerados-em-portos,Programação de contêineres refrigerados em portos,logistics,Planejador de operações de carga perecível,specialist,africa,60,14
+af-consolidacao-de-cargas-fracionadas-para-comercio-regional,Consolidação de cargas fracionadas para comércio regional,logistics,Analista de consolidação de embarques,specialist,africa,60,14
+af-planejamento-de-estoques-em-corredores-sujeitos-a-fronteira,Planejamento de estoques em corredores sujeitos a fronteira,logistics,Analista de ressuprimento regional,specialist,africa,60,14
+af-reconciliacao-de-lacres-e-eventos-de-transito-aduaneiro,Reconciliação de lacres e eventos de trânsito aduaneiro,quality,Assistente de controle de trânsito,specialist,africa,60,14
+af-indicadores-de-entrega-em-enderecamento-informal,Indicadores de entrega em endereçamento informal,data,Analista de última milha inclusiva,specialist,africa,60,14
+af-custo-de-permanencia-de-conteineres-e-janelas-livres,Custo de permanência de contêineres e janelas livres,business,Analista de custos portuários,specialist,africa,60,14
+af-planejamento-de-abastecimento-de-ilhas-com-servico-intermitente,Planejamento de abastecimento de ilhas com serviço intermitente,logistics,Planejador de suprimentos insulares,specialist,africa,60,14
+af-triagem-administrativa-de-excursoes-de-temperatura-vacinal,Triagem administrativa de excursões de temperatura vacinal,care,Assistente de logística de imunização,specialist,africa,60,14
+af-reconciliacao-de-doses-em-campanhas-de-vacinacao,Reconciliação de doses em campanhas de vacinação,data,Analista de estoques de imunização,specialist,africa,60,14
+af-roteamento-de-amostras-laboratoriais-com-janelas-de-recebimento,Roteamento de amostras laboratoriais com janelas de recebimento,logistics,Coordenador de transporte laboratorial,specialist,africa,60,14
+af-previsao-de-consumo-de-testes-diagnosticos-por-unidade,Previsão de consumo de testes diagnósticos por unidade,data,Analista de suprimentos de saúde,specialist,africa,60,14
+af-gestao-de-validade-de-insumos-por-fefo,Gestão de validade de insumos por FEFO,quality,Assistente de almoxarifado de saúde,specialist,africa,60,14
+af-qualidade-de-registros-administrativos-de-referencia-de-pacientes,Qualidade de registros administrativos de referência de pacientes,care,Analista de coordenação de atendimento,specialist,africa,60,14
+af-programacao-de-manutencao-de-equipamentos-de-frio-em-saude,Programação de manutenção de equipamentos de frio em saúde,industry,Planejador de manutenção de cadeia fria,specialist,africa,60,14
+af-indicadores-de-faltas-e-remarcacao-em-servicos-comunitarios,Indicadores de faltas e remarcação em serviços comunitários,data,Analista de agendamento em saúde,specialist,africa,60,14
+af-rastreio-de-kits-de-assistencia-domiciliar-nao-clinica,Rastreio de kits de assistência domiciliar não clínica,care,Coordenador de suprimentos de cuidado,specialist,africa,60,14
+af-completude-de-relatorios-de-unidades-de-saude-remotas,Completude de relatórios de unidades de saúde remotas,data,Analista de informação de serviços,specialist,africa,60,14
+af-sobrevivencia-de-mudas-em-restauracao-do-sahel,Sobrevivência de mudas em restauração do Sahel,data,Analista de monitoramento de restauração,specialist,africa,60,14
+af-desenho-de-amostragem-para-manguezais-comunitarios,Desenho de amostragem para manguezais comunitários,data,Assistente de monitoramento costeiro,specialist,africa,60,14
+af-esforco-amostral-em-monitoramento-de-fauna-por-cameras,Esforço amostral em monitoramento de fauna por câmeras,data,Analista de dados de biodiversidade,specialist,africa,60,14
+af-priorizacao-de-cercas-de-protecao-em-areas-restauradas,Priorização de cercas de proteção em áreas restauradas,business,Planejador de projetos de restauração,specialist,africa,60,14
+af-balanco-de-materiais-em-viveiros-de-restauracao,Balanço de materiais em viveiros de restauração,industry,Analista de operações de viveiros,specialist,africa,60,14
+af-preparacao-documental-de-projetos-de-creditos-de-natureza,Preparação documental de projetos de créditos de natureza,quality,Assistente de integridade de projetos ambientais,specialist,africa,60,14
+af-monitoramento-de-erosao-com-parcelas-de-referencia,Monitoramento de erosão com parcelas de referência,data,Assistente de avaliação de conservação do solo,specialist,africa,60,14
+af-planejamento-de-brigadas-comunitarias-por-risco-de-incendio,Planejamento de brigadas comunitárias por risco de incêndio,business,Coordenador administrativo de prevenção ambiental,specialist,africa,60,14
+af-analise-de-beneficio-comunitario-em-turismo-de-conservacao,Análise de benefício comunitário em turismo de conservação,business,Analista de operações de turismo responsável,specialist,africa,60,14
+af-rastreabilidade-de-coleta-de-residuos-em-areas-protegidas,Rastreabilidade de coleta de resíduos em áreas protegidas,quality,Analista de gestão de resíduos turísticos,specialist,africa,60,14
+af-balanco-de-agua-em-lavanderias-texteis-industriais,Balanço de água em lavanderias têxteis industriais,industry,Analista de produção mais limpa,specialist,africa,60,14
+af-rendimento-de-corte-em-pequenas-confeccoes,Rendimento de corte em pequenas confecções,industry,Analista de planejamento de confecção,specialist,africa,60,14
+af-controle-de-refugo-em-fabricacao-de-blocos,Controle de refugo em fabricação de blocos,quality,Analista de qualidade de produção,specialist,africa,60,14
+af-intensidade-energetica-de-pequenas-moagens,Intensidade energética de pequenas moagens,energy,Analista de eficiência de processos,specialist,africa,60,14
+af-programacao-de-manutencao-por-criticidade-em-oficinas,Programação de manutenção por criticidade em oficinas,industry,Planejador de manutenção industrial,specialist,africa,60,14
+af-balanco-de-embalagens-em-microindustrias-alimentares,Balanço de embalagens em microindústrias alimentares,industry,Analista de materiais de embalagem,specialist,africa,60,14
+af-custo-de-retrabalho-em-montagem-de-equipamentos,Custo de retrabalho em montagem de equipamentos,business,Analista de custos de qualidade,specialist,africa,60,14
+af-rastreio-de-pecas-reaproveitadas-em-reparo-de-eletronicos,Rastreio de peças reaproveitadas em reparo de eletrônicos,quality,Analista de operações de reparação,specialist,africa,60,14
+af-perdas-de-materia-prima-em-producao-de-moveis,Perdas de matéria-prima em produção de móveis,industry,Analista de produção de mobiliário,specialist,africa,60,14
+af-avaliacao-documental-de-compras-de-equipamentos-eficientes,Avaliação documental de compras de equipamentos eficientes,business,Analista de compras industriais,specialist,africa,60,14
+af-cursos-offline-com-sincronizacao-de-progresso-em-baixa-conectividade,Cursos offline com sincronização de progresso em baixa conectividade,data,Analista de tecnologia educacional,specialist,africa,60,14
+af-producao-de-materiais-educacionais-acessiveis-para-leitores-de-tela,Produção de materiais educacionais acessíveis para leitores de tela,content,Editor de acessibilidade educacional,specialist,africa,60,14
+af-planejamento-de-radio-educativo-com-avaliacao-por-telefone,Planejamento de rádio educativo com avaliação por telefone,content,Produtor de educação por rádio,specialist,africa,60,14
+af-localizacao-de-interfaces-educacionais-para-linguas-africanas,Localização de interfaces educacionais para línguas africanas,content,Analista de localização de produtos educacionais,specialist,africa,60,14
+af-rubricas-de-avaliacao-para-aprendizagem-profissional-por-projetos,Rubricas de avaliação para aprendizagem profissional por projetos,quality,Designer de avaliação educacional,specialist,africa,60,14
+af-catalogos-digitais-de-acervos-culturais-comunitarios,Catálogos digitais de acervos culturais comunitários,content,Catalogador de patrimônio digital,specialist,africa,60,14
+af-legendas-multilingues-com-controle-de-tempo-para-formacao-tecnica,Legendas multilíngues com controle de tempo para formação técnica,content,Editor de legendagem educacional,specialist,africa,60,14
+af-pesquisa-de-experiencia-com-alunos-de-aparelhos-compartilhados,Pesquisa de experiência com alunos de aparelhos compartilhados,data,Pesquisador de experiência educacional,specialist,africa,60,14
+af-preservacao-de-arquivos-de-cursos-com-verificacao-de-integridade,Preservação de arquivos de cursos com verificação de integridade,data,Analista de preservação digital educacional,specialist,africa,60,14
+af-planejamento-de-tutoria-assincrona-com-filas-de-duvida,Planejamento de tutoria assíncrona com filas de dúvida,business,Coordenador de operações educacionais,specialist,africa,60,14
+af-sistemas-de-referencia-em-mapas-de-servicos-comunitarios,Sistemas de referência em mapas de serviços comunitários,data,Analista júnior de geoinformação,specialist,africa,60,14
+af-calculo-de-populacao-atendida-por-areas-de-influencia,Cálculo de população atendida por áreas de influência,data,Analista de planejamento territorial,specialist,africa,60,14
+af-validacao-de-classificacao-de-cobertura-do-solo,Validação de classificação de cobertura do solo,data,Analista de sensoriamento remoto,specialist,africa,60,14
+af-completude-de-mapas-comunitarios-de-infraestrutura,Completude de mapas comunitários de infraestrutura,quality,Analista de qualidade de dados geográficos,specialist,africa,60,14
+af-comparacao-temporal-de-areas-agricolas-com-imagens-de-resolucao-distinta,Comparação temporal de áreas agrícolas com imagens de resolução distinta,data,Analista de observação agrícola,specialist,africa,60,14
+af-acessibilidade-a-mercados-por-rede-viaria-rural,Acessibilidade a mercados por rede viária rural,logistics,Analista de acessibilidade territorial,specialist,africa,60,14
+af-paineis-de-seca-com-anomalia-de-chuva-e-base-historica,Painéis de seca com anomalia de chuva e base histórica,data,Analista de indicadores climáticos,specialist,africa,60,14
+af-deteccao-de-duplicatas-em-inventarios-georreferenciados,Detecção de duplicatas em inventários georreferenciados,data,Analista de integração de cadastros territoriais,specialist,africa,60,14
+af-publicacao-segura-de-mapas-de-populacoes-vulneraveis,Publicação segura de mapas de populações vulneráveis,cyber,Analista de governança de dados espaciais,specialist,africa,60,14
+af-reprodutibilidade-de-analises-espaciais-para-projetos-publicos,Reprodutibilidade de análises espaciais para projetos públicos,data,Analista de processos geoespaciais,specialist,africa,60,14
+oc-sequenciamento-de-modulos-habitacionais-pre-fabricados,Sequenciamento de módulos habitacionais pré-fabricados,industry,Analista de planejamento e informação de construção,broad,oceania,60,14
+oc-rastreabilidade-de-revisoes-em-modelos-bim-federados,Rastreabilidade de revisões em modelos BIM federados,industry,Analista de planejamento e informação de construção,specialist,oceania,60,14
+oc-medicao-de-desperdicio-em-corte-de-madeira-engenheirada,Medição de desperdício em corte de madeira engenheirada,industry,Analista de planejamento e informação de construção,specialist,oceania,60,14
+oc-planejamento-de-inspecoes-de-envoltoria-estanque,Planejamento de inspeções de envoltória estanque,industry,Analista de planejamento e informação de construção,specialist,oceania,60,14
+oc-controle-de-umidade-documental-em-materiais-de-obra,Controle de umidade documental em materiais de obra,industry,Analista de planejamento e informação de construção,broad,oceania,60,14
+oc-estimativa-de-custos-de-retrofit-termico-residencial,Estimativa de custos de retrofit térmico residencial,industry,Analista de planejamento e informação de construção,specialist,oceania,60,14
+oc-coordenacao-de-passagens-de-servicos-em-estruturas-de-madeira,Coordenação de passagens de serviços em estruturas de madeira,industry,Analista de planejamento e informação de construção,specialist,oceania,60,14
+oc-gestao-de-produtividade-em-frentes-de-reconstrucao-pos-ciclone,Gestão de produtividade em frentes de reconstrução pós-ciclone,industry,Analista de planejamento e informação de construção,specialist,oceania,60,14
+oc-quantificacao-de-residuos-de-demolicao-por-fluxo,Quantificação de resíduos de demolição por fluxo,industry,Analista de planejamento e informação de construção,broad,oceania,60,14
+oc-planejamento-de-manutencao-de-imoveis-comunitarios-remotos,Planejamento de manutenção de imóveis comunitários remotos,industry,Analista de planejamento e informação de construção,specialist,oceania,60,14
+oc-balanco-horario-de-minirredes-solares-insulares,Balanço horário de minirredes solares insulares,energy,Analista de eficiência e operação energética,specialist,oceania,60,14
+oc-priorizacao-de-vazamentos-em-ar-comprimido-industrial,Priorização de vazamentos em ar comprimido industrial,energy,Analista de eficiência e operação energética,specialist,oceania,60,14
+oc-normalizacao-de-consumo-em-camaras-frias-sazonais,Normalização de consumo em câmaras frias sazonais,energy,Analista de eficiência e operação energética,broad,oceania,60,14
+oc-verificacao-de-faturas-de-demanda-eletrica,Verificação de faturas de demanda elétrica,energy,Analista de eficiência e operação energética,specialist,oceania,60,14
+oc-analise-de-perdas-em-distribuicao-de-agua-quente,Análise de perdas em distribuição de água quente,energy,Analista de eficiência e operação energética,specialist,oceania,60,14
+oc-otimizacao-documental-de-carregamento-de-frotas-eletricas,Otimização documental de carregamento de frotas elétricas,energy,Analista de eficiência e operação energética,specialist,oceania,60,14
+oc-medicao-de-autoconsumo-solar-em-escolas,Medição de autoconsumo solar em escolas,energy,Analista de eficiência e operação energética,broad,oceania,60,14
+oc-avaliacao-de-substituicao-de-motores-por-regime-de-carga,Avaliação de substituição de motores por regime de carga,energy,Analista de eficiência e operação energética,specialist,oceania,60,14
+oc-monitoramento-de-indisponibilidade-em-sistemas-solares-remotos,Monitoramento de indisponibilidade em sistemas solares remotos,energy,Analista de eficiência e operação energética,specialist,oceania,60,14
+oc-provisao-financeira-de-manutencao-de-minirredes,Provisão financeira de manutenção de minirredes,energy,Analista de eficiência e operação energética,specialist,oceania,60,14
+oc-rastreabilidade-de-lotes-em-exportacao-de-frutas-frescas,Rastreabilidade de lotes em exportação de frutas frescas,quality,Analista de rastreabilidade e qualidade de alimentos,broad,oceania,60,14
+oc-reconciliacao-de-rendimento-em-filetagem-de-pescado,Reconciliação de rendimento em filetagem de pescado,quality,Analista de rastreabilidade e qualidade de alimentos,specialist,oceania,60,14
+oc-verificacao-de-declaracoes-de-alergenicos-em-receitas,Verificação de declarações de alergênicos em receitas,quality,Analista de rastreabilidade e qualidade de alimentos,specialist,oceania,60,14
+oc-planejamento-de-amostragem-documental-em-linhas-de-envase,Planejamento de amostragem documental em linhas de envase,quality,Analista de rastreabilidade e qualidade de alimentos,specialist,oceania,60,14
+oc-gestao-de-versoes-de-planos-de-controle-de-alimentos,Gestão de versões de planos de controle de alimentos,quality,Analista de rastreabilidade e qualidade de alimentos,broad,oceania,60,14
+oc-custo-de-nao-qualidade-em-embalagens-de-laticinios,Custo de não qualidade em embalagens de laticínios,quality,Analista de rastreabilidade e qualidade de alimentos,specialist,oceania,60,14
+oc-conciliacao-de-validade-e-giro-em-alimentos-refrigerados,Conciliação de validade e giro em alimentos refrigerados,quality,Analista de rastreabilidade e qualidade de alimentos,specialist,oceania,60,14
+oc-documentacao-de-cadeia-fria-em-rotas-insulares,Documentação de cadeia fria em rotas insulares,quality,Analista de rastreabilidade e qualidade de alimentos,specialist,oceania,60,14
+oc-verificacao-de-balanco-de-ingredientes-em-bebidas-vegetais,Verificação de balanço de ingredientes em bebidas vegetais,quality,Analista de rastreabilidade e qualidade de alimentos,broad,oceania,60,14
+oc-simulacao-de-retirada-documental-de-mel-exportado,Simulação de retirada documental de mel exportado,quality,Analista de rastreabilidade e qualidade de alimentos,specialist,oceania,60,14
+oc-validacao-de-series-de-chuva-com-dias-ausentes,Validação de séries de chuva com dias ausentes,data,Analista de dados ambientais e territoriais,specialist,oceania,60,14
+oc-analise-de-captura-por-unidade-de-esforco-na-pesca-costeira,Análise de captura por unidade de esforço na pesca costeira,data,Analista de dados ambientais e territoriais,specialist,oceania,60,14
+oc-conciliacao-de-coordenadas-em-inventarios-de-ativos-de-agua,Conciliação de coordenadas em inventários de ativos de água,data,Analista de dados ambientais e territoriais,broad,oceania,60,14
+oc-indicadores-de-perdas-aparentes-em-redes-comunitarias-de-agua,Balanço hídrico e perdas totais em redes comunitárias de água,data,Analista de dados ambientais e territoriais,specialist,oceania,60,14
+oc-mapeamento-de-exposicao-de-instalacoes-costeiras,Mapeamento de exposição de instalações costeiras,data,Analista de dados ambientais e territoriais,specialist,oceania,60,14
+oc-analise-de-regeneracao-de-manguezais-por-parcelas,Análise de regeneração de manguezais por parcelas,data,Analista de dados ambientais e territoriais,specialist,oceania,60,14
+oc-controle-de-qualidade-de-sensores-de-salinidade,Controle de qualidade de sensores de salinidade,data,Analista de dados ambientais e territoriais,broad,oceania,60,14
+oc-amostragem-de-residuos-plasticos-em-praias-insulares,Amostragem de resíduos plásticos em praias insulares,data,Analista de dados ambientais e territoriais,specialist,oceania,60,14
+oc-deteccao-de-duplicacao-em-cadastros-de-resposta-a-desastres,Detecção de duplicação em cadastros de resposta a desastres,data,Analista de dados ambientais e territoriais,specialist,oceania,60,14
+oc-paineis-de-acesso-a-servicos-em-ilhas-com-pequenas-populacoes,Painéis de acesso a serviços em ilhas com pequenas populações,data,Analista de dados ambientais e territoriais,specialist,oceania,60,14
+oc-estoque-de-seguranca-para-abastecimento-entre-ilhas,Estoque de segurança para abastecimento entre ilhas,logistics,Analista de logística e abastecimento do Pacífico,broad,oceania,60,14
+oc-consolidacao-de-cargas-por-massa-e-cubagem,Consolidação de cargas por massa e cubagem,logistics,Analista de logística e abastecimento do Pacífico,specialist,oceania,60,14
+oc-planejamento-de-janelas-portuarias-sob-restricao-de-mare,Planejamento de janelas portuárias sob restrição de maré,logistics,Analista de logística e abastecimento do Pacífico,specialist,oceania,60,14
+oc-conciliacao-de-documentos-de-biosseguranca-de-importacao,Conciliação de documentos de biossegurança de importação,logistics,Analista de logística e abastecimento do Pacífico,specialist,oceania,60,14
+oc-programacao-de-transporte-refrigerado-com-entregas-multiplas,Programação de transporte refrigerado com entregas múltiplas,logistics,Analista de logística e abastecimento do Pacífico,broad,oceania,60,14
+oc-dimensionamento-de-kits-de-continuidade-para-escolas-insulares,Dimensionamento de kits de continuidade para escolas insulares,logistics,Analista de logística e abastecimento do Pacífico,specialist,oceania,60,14
+oc-analise-de-custo-total-de-frete-para-microexportadores,Análise de custo total de frete para microexportadores,logistics,Analista de logística e abastecimento do Pacífico,specialist,oceania,60,14
+oc-gestao-de-retornos-de-embalagens-em-cadeias-maritimas,Gestão de retornos de embalagens em cadeias marítimas,logistics,Analista de logística e abastecimento do Pacífico,specialist,oceania,60,14
+oc-sequenciamento-de-recebimento-de-pecas-para-manutencao-remota,Sequenciamento de recebimento de peças para manutenção remota,logistics,Analista de logística e abastecimento do Pacífico,broad,oceania,60,14
+oc-monitoramento-de-confiabilidade-de-servicos-de-ferry,Monitoramento de confiabilidade de serviços de ferry,logistics,Analista de logística e abastecimento do Pacífico,specialist,oceania,60,14
+oc-coordenacao-de-teleatendimento-em-comunidades-com-baixa-conectividade,Coordenação de teleatendimento em comunidades com baixa conectividade,care,Coordenador de operações e acesso a serviços de cuidado,specialist,oceania,60,14
+oc-gestao-de-transporte-para-acesso-a-consultas-rurais,Gestão de transporte para acesso a consultas rurais,care,Coordenador de operações e acesso a serviços de cuidado,specialist,oceania,60,14
+oc-reconciliacao-de-encaminhamentos-entre-servicos-comunitarios,Reconciliação de encaminhamentos entre serviços comunitários,care,Coordenador de operações e acesso a serviços de cuidado,broad,oceania,60,14
+oc-planejamento-de-cobertura-de-apoio-em-servicos-para-idosos,Planejamento de cobertura de apoio em serviços para idosos,care,Coordenador de operações e acesso a serviços de cuidado,specialist,oceania,60,14
+oc-acessibilidade-de-comunicacoes-de-agendamento-em-saude,Acessibilidade de comunicações de agendamento em saúde,care,Coordenador de operações e acesso a serviços de cuidado,specialist,oceania,60,14
+oc-documentacao-de-consentimento-para-pesquisa-comunitaria-nao-clinica,Documentação de consentimento para pesquisa comunitária não clínica,care,Coordenador de operações e acesso a serviços de cuidado,specialist,oceania,60,14
+oc-gestao-de-filas-de-avaliacao-de-necessidades-de-apoio,Gestão de filas de avaliação de necessidades de apoio,care,Coordenador de operações e acesso a serviços de cuidado,broad,oceania,60,14
+oc-operacoes-de-programas-de-alimentacao-escolar-inclusiva,Operações de programas de alimentação escolar inclusiva,care,Coordenador de operações e acesso a serviços de cuidado,specialist,oceania,60,14
+oc-planejamento-de-acessibilidade-em-atividades-de-primeira-infancia,Planejamento de acessibilidade em atividades de primeira infância,care,Coordenador de operações e acesso a serviços de cuidado,specialist,oceania,60,14
+oc-indicadores-de-continuidade-em-servicos-domiciliares,Indicadores de continuidade em serviços domiciliares,care,Coordenador de operações e acesso a serviços de cuidado,specialist,oceania,60,14
+oc-recuperacao-verificavel-de-backups-em-cooperativas-rurais,Recuperação verificável de backups em cooperativas rurais,cyber,Analista de segurança operacional de pequenas organizações,broad,oceania,60,14
+oc-revisao-de-privilegios-em-sistemas-de-reservas-de-turismo,Revisão de privilégios em sistemas de reservas de turismo,cyber,Analista de segurança operacional de pequenas organizações,specialist,oceania,60,14
+oc-preparacao-de-resposta-a-phishing-em-organizacoes-insulares,Preparação de resposta a phishing em organizações insulares,cyber,Analista de segurança operacional de pequenas organizações,specialist,oceania,60,14
+oc-gestao-de-atualizacoes-com-conectividade-intermitente,Gestão de atualizações com conectividade intermitente,cyber,Analista de segurança operacional de pequenas organizações,specialist,oceania,60,14
+oc-separacao-de-redes-para-visitantes-em-pequenos-alojamentos,Separação de redes para visitantes em pequenos alojamentos,cyber,Analista de segurança operacional de pequenas organizações,broad,oceania,60,14
+oc-revisao-de-links-publicos-em-armazenamento-de-projetos,Revisão de links públicos em armazenamento de projetos,cyber,Analista de segurança operacional de pequenas organizações,specialist,oceania,60,14
+oc-verificacao-de-autenticacao-multifator-em-equipes-distribuidas,Verificação de autenticação multifator em equipes distribuídas,cyber,Analista de segurança operacional de pequenas organizações,specialist,oceania,60,14
+oc-continuidade-de-acesso-administrativo-durante-ciclones,Continuidade de acesso administrativo durante ciclones,cyber,Analista de segurança operacional de pequenas organizações,specialist,oceania,60,14
+oc-inventario-de-dados-em-formularios-de-pequenos-servicos,Inventário de dados em formulários de pequenos serviços,cyber,Analista de segurança operacional de pequenas organizações,broad,oceania,60,14
+oc-analise-de-alertas-de-login-em-equipes-transoceanicas,Análise de alertas de login em equipes transoceânicas,cyber,Analista de segurança operacional de pequenas organizações,specialist,oceania,60,14
+oc-avaliacao-de-traducao-assistida-para-atendimento-no-pacifico,Avaliação de tradução assistida para atendimento no Pacífico,ai,Analista de avaliação de IA em serviços regionais,specialist,oceania,60,14
+oc-triagem-assistida-de-imagens-de-recifes-com-classe-desconhecida,Triagem assistida de imagens de recifes com classe desconhecida,ai,Analista de avaliação de IA em serviços regionais,specialist,oceania,60,14
+oc-extracao-de-requisitos-de-editais-com-evidencia-textual,Extração de requisitos de editais com evidência textual,ai,Analista de avaliação de IA em serviços regionais,broad,oceania,60,14
+oc-comparacao-de-custo-por-resposta-revisada-em-assistentes-turisticos,Comparação de custo por resposta revisada em assistentes turísticos,ai,Analista de avaliação de IA em serviços regionais,specialist,oceania,60,14
+oc-controle-de-alucinacao-em-resumos-de-reunioes-comunitarias,Controle de alucinação em resumos de reuniões comunitárias,ai,Analista de avaliação de IA em serviços regionais,specialist,oceania,60,14
+oc-avaliacao-de-assistentes-de-consulta-a-manuais-de-manutencao,Avaliação de assistentes de consulta a manuais de manutenção,ai,Analista de avaliação de IA em serviços regionais,specialist,oceania,60,14
+oc-validacao-de-previsoes-de-demanda-em-turismo-sazonal,Validação de previsões de demanda em turismo sazonal,ai,Analista de avaliação de IA em serviços regionais,broad,oceania,60,14
+oc-avaliacao-de-anonimizacao-assistida-em-relatos-de-servicos,Avaliação de anonimização assistida em relatos de serviços,ai,Analista de avaliação de IA em serviços regionais,specialist,oceania,60,14
+oc-teste-de-consistencia-de-agentes-de-planejamento-de-viagens,Teste de consistência de agentes de planejamento de viagens,ai,Analista de avaliação de IA em serviços regionais,specialist,oceania,60,14
+oc-governanca-de-conjuntos-de-dados-de-linguas-indigenas,Governança de conjuntos de dados de línguas indígenas,ai,Analista de avaliação de IA em serviços regionais,specialist,oceania,60,14
+oc-capital-de-giro-em-microexportacao-de-artesanato-insular,Capital de giro em microexportação de artesanato insular,business,Analista de operações e desenvolvimento de pequenos negócios,broad,oceania,60,14
+oc-precificacao-por-capacidade-em-experiencias-de-ecoturismo,Precificação por capacidade em experiências de ecoturismo,business,Analista de operações e desenvolvimento de pequenos negócios,specialist,oceania,60,14
+oc-planejamento-de-receitas-de-hospedagem-comunitaria,Planejamento de receitas de hospedagem comunitária,business,Analista de operações e desenvolvimento de pequenos negócios,specialist,oceania,60,14
+oc-contratacao-de-servicos-com-pagamentos-por-marcos-verificaveis,Contratação de serviços com pagamentos por marcos verificáveis,business,Analista de operações e desenvolvimento de pequenos negócios,specialist,oceania,60,14
+oc-analise-de-rentabilidade-de-remessas-para-varejo-insular,Análise de rentabilidade de remessas para varejo insular,business,Analista de operações e desenvolvimento de pequenos negócios,broad,oceania,60,14
+oc-planejamento-de-capacidade-em-oficinas-de-reparo-de-equipamentos,Planejamento de capacidade em oficinas de reparo de equipamentos,business,Analista de operações e desenvolvimento de pequenos negócios,specialist,oceania,60,14
+oc-gestao-de-compras-coletivas-de-materiais-em-comunidades,Gestão de compras coletivas de materiais em comunidades,business,Analista de operações e desenvolvimento de pequenos negócios,specialist,oceania,60,14
+oc-medicao-de-conversao-em-servicos-turisticos-com-multiplos-canais,Medição de conversão em serviços turísticos com múltiplos canais,business,Analista de operações e desenvolvimento de pequenos negócios,specialist,oceania,60,14
+oc-planejamento-de-receitas-de-servicos-por-assinatura-em-mercados-pequenos,Planejamento de receitas de serviços por assinatura em mercados pequenos,business,Analista de operações e desenvolvimento de pequenos negócios,broad,oceania,60,14
+oc-avaliacao-de-dependencia-de-fornecedores-em-negocios-remotos,Avaliação de dependência de fornecedores em negócios remotos,business,Analista de operações e desenvolvimento de pequenos negócios,specialist,oceania,60,14
+oc-redacao-de-avisos-de-interrupcao-de-servicos-em-ilhas,Redação de avisos de interrupção de serviços em ilhas,content,Especialista em conteúdo acessível e informação pública,specialist,oceania,60,14
+oc-alternativas-textuais-para-mapas-de-acesso-a-servicos,Alternativas textuais para mapas de acesso a serviços,content,Especialista em conteúdo acessível e informação pública,specialist,oceania,60,14
+oc-governanca-de-publicacao-de-historias-orais-comunitarias,Governança de publicação de histórias orais comunitárias,content,Especialista em conteúdo acessível e informação pública,broad,oceania,60,14
+oc-controle-editorial-de-formularios-bilingues-com-condicoes-de-elegibilidade,Controle editorial de formulários bilíngues com condições de elegibilidade,content,Especialista em conteúdo acessível e informação pública,specialist,oceania,60,14
+oc-legendas-acessiveis-para-videos-de-orientacao-profissional,Legendas acessíveis para vídeos de orientação profissional,content,Especialista em conteúdo acessível e informação pública,specialist,oceania,60,14
+oc-estrutura-semantica-de-guias-digitais-de-mobilidade-no-pacifico,Estrutura semântica de guias digitais de mobilidade no Pacífico,content,Especialista em conteúdo acessível e informação pública,specialist,oceania,60,14
+oc-edicao-de-tabelas-de-taxas-com-moeda-e-vigencia,Edição de tabelas de taxas com moeda e vigência,content,Especialista em conteúdo acessível e informação pública,broad,oceania,60,14
+oc-arquitetura-de-conteudo-para-servicos-com-conectividade-limitada,Arquitetura de conteúdo para serviços com conectividade limitada,content,Especialista em conteúdo acessível e informação pública,specialist,oceania,60,14
+oc-revisao-de-alegacoes-ambientais-em-comunicacao-turistica,Revisão de alegações ambientais em comunicação turística,content,Especialista em conteúdo acessível e informação pública,specialist,oceania,60,14
+oc-publicacao-responsavel-de-indicadores-em-pequenas-comunidades,Publicação responsável de indicadores em pequenas comunidades,content,Especialista em conteúdo acessível e informação pública,specialist,oceania,60,14

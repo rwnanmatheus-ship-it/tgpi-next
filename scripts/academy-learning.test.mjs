@@ -98,9 +98,10 @@ test('academy courses have inspectable workload, assessments and preserved found
  const { specializations, specializationOverview, isSpecialization } = h.load(resolve('src/data/courses/academy/specializations/listing.ts'));
  assert.equal(specializations.length,17);
  const { marketCourseIds } = h.load(resolve('src/data/courses/academy/markets/listing.ts'));
+ const { globalCourseIds } = h.load(resolve('src/data/courses/academy/markets/global/listing.ts'));
  const originals = academyCourses.filter(course => !marketCourseIds.has(course.id) && !emergency.has(course.id) && !added.has(course.id) && !isSpecialization(course.id));
  assert.equal(originals.length,27);
- assert.equal(new Set(academyCourses.map(c=>c.id)).size,500);
+ assert.equal(new Set(academyCourses.map(c=>c.id)).size,1000);
  assert.equal(originals.reduce((n,c)=>n+c.lessons.length,0),389);
  assert.equal(academyCourses.filter(course => emergency.has(course.id)).length,6);
  const seenScenarios = new Set();
@@ -129,8 +130,8 @@ test('academy courses have inspectable workload, assessments and preserved found
    assert.equal(h.catalog.getAcademyCourse(course.id, h.catalog.PREVIOUS_ACADEMY_VERSION), undefined);
    assert.ok(existsSync(resolve('public', course.image.slice(1))));
   } else if (marketCourseIds.has(course.id)) {
-   assert.equal(course.minutes, 2400);
-   assert.equal(course.lessons.length, 12);
+   assert.equal(course.minutes, globalCourseIds.has(course.id) ? 3600 : 2400);
+   assert.equal(course.lessons.length, globalCourseIds.has(course.id) ? 14 : 12);
    assert.equal(course.language, 'pt-BR');
    assert.ok(course.scopeNotice.includes('não equivale a graduação'));
    assert.ok(course.lessons.every(lesson => lesson.references.length >= 2));
