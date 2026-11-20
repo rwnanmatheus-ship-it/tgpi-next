@@ -5,6 +5,7 @@ import { LocalizedText } from "@/components/localization/LocaleProvider";
 import Link from "next/link";
 import Image from "@/components/localization/LocalizedImage";
 import CertificateDocument from "./CertificateDocument";
+import CertificateNameCorrection from "./CertificateNameCorrection";
 import CertificateSeal from "./CertificateSeal";
 import { CertificateIssueDate } from "./CertificatePresentationText";
 import CredentialActions from "./CredentialActions";
@@ -21,9 +22,11 @@ import "@/app/certificates/credential-integrity.css";
 export default function CredentialRecordView({
   credential,
   owner,
+  currentCertificateName,
 }: {
   credential: PublicTgpiLearningCredential;
   owner: boolean;
+  currentCertificateName?: string;
 }) {
   const trustState = getCredentialTrustState(credential);
   const verified = trustState === "active_verified";
@@ -116,6 +119,14 @@ export default function CredentialRecordView({
             <a href={integrity.anchorExplorerUrl} target="_blank" rel="noopener noreferrer"><LocalizedText text="View identity transaction" /></a>
           )}
         </section>
+        {owner && verified && currentCertificateName !== undefined && (
+          <CertificateNameCorrection
+            key={`${credential.id}:${credential.publicName}:${currentCertificateName}`}
+            credentialId={credential.id}
+            recordedName={credential.publicName}
+            currentCertificateName={currentCertificateName}
+          />
+        )}
         <CredentialActions
           credentialId={credential.id}
           courseTitle={credential.courseTitle}

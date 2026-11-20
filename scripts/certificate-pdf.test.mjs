@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { PDFDocument, PDFRawStream, decodePDFRawStream } from "pdf-lib";
+import { PDFDocument, PDFRawStream, PDFDict, PDFArray, PDFName, PDFNumber, decodePDFRawStream } from "pdf-lib";
 import { normalizeTgpiAccountProfile } from "../src/lib/account-profile.ts";
 import { createCertificatePdf } from "../src/lib/certificate-pdf.server.ts";
 import { CERTIFICATE_DESIGN_VERSION } from "../src/lib/certificate-presentation.ts";
@@ -60,6 +60,37 @@ test("a wrapped legal name has sufficient baseline spacing in the emitted PDF", 
   assert.ok(nameLines.length >= 2);
   for (let i = 1; i < nameLines.length; i++) {
     assert.ok(nameLines[i - 1].y - nameLines[i].y >= Math.max(nameLines[i - 1].size, nameLines[i].size));
+  }
+});
+
+test("printed title, recipient, course and skills keep separate text boxes for short and full legal names", async () => {
+  for (const publicName of ["José Silva", "ALEXANDRIA MARIA DE SOUZA ALMEIDA FERNANDES", "Alexandria Alexandra Agatha Anastasia Angelina Gabriella Genevieve Jacqueline"]) {
+    const pdf = await PDFDocument.load(await createCertificatePdf({ ...credential, publicName,
+      courseTitle: "Intercultural Communication, International Negotiation and Applied Critical Thinking for Professional Teams",
+    }));
+    const page = pdf.getPage(0);
+    const fonts = page.node.Resources().lookup(PDFName.of("Font"), PDFDict);
+    const contents = page.node.Contents();
+    const operations = Array.from({ length: contents.size() }, (_, i) =>
+      Buffer.from(decodePDFRawStream(contents.lookup(i, PDFRawStream)).decode()).toString(),
+    ).join("\n");
+    const boxes = [...operations.matchAll(/BT([\s\S]*?)ET/g)].flatMap(match => {
+      const face = match[1].match(/\/([^\s]+) ([\d.]+) Tf/);
+      const y = Number(match[1].match(/1 0 0 1 [\d.]+ ([\d.]+) Tm/)?.[1]);
+      if (!face || y <= 212 || y >= 430) return [];
+      const font = fonts.lookup(PDFName.of(face[1]), PDFDict);
+      const descriptor = font.lookup(PDFName.of("DescendantFonts"), PDFArray).lookup(0, PDFDict).lookup(PDFName.of("FontDescriptor"), PDFDict);
+      const size = Number(face[2]);
+      return [{
+        top: y + descriptor.lookup(PDFName.of("Ascent"), PDFNumber).asNumber() * size / 1000,
+        bottom: y + descriptor.lookup(PDFName.of("Descent"), PDFNumber).asNumber() * size / 1000,
+      }];
+    }).sort((a, b) => b.top - a.top);
+    assert.ok(boxes.length >= 6);
+    for (let i = 1; i < boxes.length; i++) {
+      assert.ok(boxes[i - 1].bottom - boxes[i].top >= 2.5,
+        `Printed text collision for ${publicName}: ${JSON.stringify(boxes.slice(i - 1, i + 1))}`);
+    }
   }
 });
 

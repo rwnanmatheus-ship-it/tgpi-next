@@ -76,39 +76,50 @@ export async function createCertificatePdf(
     page.drawText(styled.value, { x: align === "center" ? x - measured * fitted / 2 : x, y, size: fitted, font: styled.font, color });
   }
   const centered = (value: string, y: number, size: number, font = sans, color: RGB = INK, width = 690) => text(value, CENTER, y, size, font, color, width, "center");
-  function headline(value: string, y: number, width: number, size: number, leading: number, maxLines = 2, font = display, color = INK) {
+  function textBlock(value: string, top: number, bottom: number, width: number, maxSize: number, maxLines = 2, font = display, color = INK) {
     const styled = textStyle(value, font);
     const measure = (line: string) => styled.font.widthOfTextAtSize(line, 1);
-    if (measure(styled.value) * size <= width) {
-      centered(styled.value, y, size, styled.font, color, width);
-      return styled.hasUnsupportedGlyphs;
-    }
     const chars = Array.from(styled.value);
     const spaces = chars.flatMap((ch, index) => ch === " " ? [index] : []);
     const breaks = spaces.length ? spaces : chars.slice(1).map((_, i) => i + 1);
-    let best = { lines: [styled.value], width: measure(styled.value) };
-    for (const index of breaks) {
-      const lines = [chars.slice(0, index).join("").trim(), chars.slice(index).join("").trim()];
-      const measured = Math.max(...lines.map(measure));
-      if (measured < best.width) best = { lines, width: measured };
-    }
-    if (maxLines === 3 && width / best.width < 24) {
-      for (const [i, first] of breaks.entries()) {
-        const start = chars.slice(0, first).join("").trim();
-        if (measure(start) >= best.width) break;
-        for (const second of breaks.slice(i + 1)) {
-          const middle = chars.slice(first, second).join("").trim();
-          if (measure(middle) >= best.width) break;
-          const lines = [start, middle, chars.slice(second).join("").trim()];
-          const measured = Math.max(...lines.map(measure));
-          if (measured < best.width) best = { lines, width: measured };
+    const candidates = [{ lines: [styled.value], width: measure(styled.value) }];
+    if (measure(styled.value) * maxSize > width) {
+      let two = { lines: [styled.value], width: Infinity };
+      for (const index of breaks) {
+        const lines = [chars.slice(0, index).join("").trim(), chars.slice(index).join("").trim()];
+        const measured = Math.max(...lines.map(measure));
+        if (measured < two.width) two = { lines, width: measured };
+      }
+      candidates.push(two);
+      if (maxLines === 3) {
+        let three = { lines: [styled.value], width: Infinity };
+        for (const [i, first] of breaks.entries()) {
+          const start = chars.slice(0, first).join("").trim();
+          if (measure(start) >= three.width) break;
+          for (const second of breaks.slice(i + 1)) {
+            const middle = chars.slice(first, second).join("").trim();
+            if (measure(middle) >= three.width) break;
+            const lines = [start, middle, chars.slice(second).join("").trim()];
+            const measured = Math.max(...lines.map(measure));
+            if (measured < three.width) three = { lines, width: measured };
+          }
         }
+        candidates.push(three);
       }
     }
-    const recipient = maxLines === 3;
-    const fitted = Math.min(size, width / Math.max(best.width, 1), recipient ? best.lines.length === 3 ? 22 : 29 : size);
-    const lineSpacing = recipient ? best.lines.length === 3 ? 23 : 30 : leading;
-    best.lines.forEach((line, index) => centered(line, y - index * lineSpacing, fitted, styled.font, color, width));
+    const heightAtOne = styled.font.heightAtSize(1);
+    const ascentAtOne = styled.font.heightAtSize(1, { descender: false });
+    const gap = 4;
+    const layouts = candidates.map(candidate => ({
+      ...candidate,
+      size: Math.min(maxSize, width / Math.max(candidate.width, 1),
+        (top - bottom - gap * (candidate.lines.length - 1)) / (heightAtOne * candidate.lines.length)),
+    }));
+    const best = layouts.reduce((a, b) => b.size > a.size ? b : a);
+    const lineHeight = heightAtOne * best.size + gap;
+    const totalHeight = lineHeight * best.lines.length - gap;
+    const baseline = bottom + (top - bottom + totalHeight) / 2 - ascentAtOne * best.size;
+    best.lines.forEach((line, index) => centered(line, baseline - index * lineHeight, best.size, styled.font, color, width));
     return styled.hasUnsupportedGlyphs;
   }
   const line = (x1: number, y1: number, x2: number, y2: number, color = LINE, thickness = .5, opacity = 1) =>
@@ -157,13 +168,13 @@ export async function createCertificatePdf(
   line(CENTER + 13, 455, WIDTH - 170, 455, LINE, .5);
   diamond(CENTER, 455, 2.2);
   centered(say("CERTIFICATE OF ACHIEVEMENT", "CERTIFICADO DE CONCLUSÃO"), 421, 34, display, NAVY, 700);
-  centered(credential.documentNature || say("PROFESSIONAL & CONTINUING EDUCATION", "EDUCAÇÃO PROFISSIONAL E CONTINUADA"), 406, 7, sans, GOLD);
+  centered(credential.documentNature || say("PROFESSIONAL & CONTINUING EDUCATION", "EDUCAÇÃO PROFISSIONAL E CONTINUADA"), 401, 7, sans, GOLD);
   centered(say("This certificate is awarded to", "Este certificado é conferido a"), 382, 9.1, sans, MUTED);
-  const unsupportedName = headline(credential.publicName, 355, 690, 39, 24, 3);
+  const unsupportedName = textBlock(credential.publicName, 371, 310, 690, 38, 3);
   centered(say("For completing the required learning and passing the course assessment in", "Pela conclusão das atividades e aprovação na avaliação do curso"), 292, 8.7, sans, MUTED);
-  headline(credential.courseTitle, 265, 675, 25, 23);
+  textBlock(credential.courseTitle, 282, 230, 675, 25);
   const skills = credential.skills?.slice(0, 4).map((skill) => skill.name).filter(Boolean).join("  ·  ");
-  if (skills) centered(skills, 221, 7.2, sans, MUTED, 690);
+  if (skills) centered(skills, 216, 7.2, sans, MUTED, 690);
   const hasWorkload = Number.isFinite(credential.learningHours) && credential.learningHours > 0;
   const metrics = [
     { label: say("ISSUED", "EMISSÃO"), value: certificateDate(credential.issuedAt, locale) },
@@ -177,7 +188,7 @@ export async function createCertificatePdf(
     const x = 91 + metricWidth * (i + .5);
     if (i) line(91 + metricWidth * i, 181, 91 + metricWidth * i, 200, LINE, .35);
     text(label, x, 198, 6.1, sans, GOLD, metricWidth - 15, "center");
-    text(value, x, 181, 16, display, NAVY, metricWidth - 18, "center");
+    text(value, x, 178, 16, display, NAVY, metricWidth - 18, "center");
   });
   line(64, 169, WIDTH - 64, 169, GILT, .65);
   diamond(CENTER, 169, 2.6);
@@ -188,16 +199,16 @@ export async function createCertificatePdf(
   text(credential.identityEvidence?.globalKeyId || "—", 184, 106, 7.5, sans, INK, 165);
   text(say("CERTIFICATE RECORD", "REGISTRO DO CERTIFICADO"), 363, 117, 5.9, sans, GOLD, 260);
   text(credential.id, 363, 106, 7.2, sans, INK, 265);
-  page.drawImage(integrity, { x: 575, y: 57, width: 48, height: 48 });
-  text("TGPI Integrity Chain", 184, 86, 13, display, NAVY, 373);
+  page.drawImage(integrity, { x: 184, y: 60, width: 41, height: 41 });
+  text("TGPI Integrity Chain", 235, 86, 13, display, NAVY, 373);
   // The identity anchor is not evidence that the course certificate itself is on a blockchain.
   const anchorConfirmed = Boolean(credentialTrustPresentation(credential).anchorExplorerUrl);
   const chainDetail = anchorConfirmed
     ? say("Issuer record · Identity anchor on Base", "Registro TGPI · Âncora de identidade na Base")
     : say("Issuer record · Linked TGPI identity", "Registro TGPI · Identidade TGPI vinculada");
-  text(chainDetail, 184, 74, 6.6, sans, MUTED, 373);
+  text(chainDetail, 235, 74, 6.6, sans, MUTED, 373);
   if (credential.documentFingerprint) {
-    text(`${say("Document comparison code", "Código de conferência")}: ${credential.documentFingerprint}`, 184, 62, 6.6, sans, MUTED, 373);
+    text(`${say("Document comparison code", "Código de conferência")}: ${credential.documentFingerprint}`, 235, 62, 6.6, sans, MUTED, 373);
   }
   const verificationUrl = certificateVerificationUrl(credential.id);
   const qr = QRCode.create(verificationUrl, { errorCorrectionLevel: "M" });
@@ -221,8 +232,8 @@ export async function createCertificatePdf(
     A: { Type: PDFName.of("Action"), S: PDFName.of("URI"), URI: PDFString.of(verificationUrl) },
   });
   page.node.addAnnot(document.context.register(annotation));
-  text(say("SCAN TO VERIFY", "ESCANEIE PARA VERIFICAR"), qrX + qrSize / 2, 66, 6.2, sans, GOLD, 143, "center");
-  text(privateSharing ? say("Access controlled by the holder", "Acesso controlado pelo titular") : say("Live issuer record", "Registro atualizado do emissor"), qrX + qrSize / 2, 55, 5.5, sans, MUTED, 143, "center");
+  text(say("SCAN TO VERIFY", "ESCANEIE PARA VERIFICAR"), qrX + qrSize / 2, 68, 6.2, sans, GOLD, 143, "center");
+  text(privateSharing ? say("Access controlled by the holder", "Acesso controlado pelo titular") : say("Live issuer record", "Registro atualizado do emissor"), qrX + qrSize / 2, 58, 5.5, sans, MUTED, 143, "center");
   const notes = [
     options.personalBirthDate && /^\d{4}-\d{2}-\d{2}$/.test(options.personalBirthDate) && `${say("Birth date", "Nascimento")} ${certificateDate(options.personalBirthDate, locale)} (${say("provided by the holder", "informado pelo titular")})`,
     unsupportedName && say("Original name spelling in the issuer record", "Grafia original do nome no registro do emissor"),
@@ -230,8 +241,8 @@ export async function createCertificatePdf(
     credential.professionalEvidence?.instructionLanguage && `${say("Instruction language", "Idioma do curso")} ${credential.professionalEvidence.instructionLanguage}`,
     Number.isFinite(credential.masteryThreshold) && `${say("Required mastery", "Domínio exigido")} ${credential.masteryThreshold}%`,
   ].filter(Boolean).join("  ·  ");
-  centered(notes, 49, 5.4, sans, MUTED, 580);
-  centered(say("TGPI private continuing education · Acceptance is at the discretion of the receiving institution.", "Educação continuada privada TGPI · Aceitação a critério da instituição destinatária."), 39, 5.5, sans, MUTED, 660);
+  centered(notes, 50, 5.8, sans, MUTED, 580);
+  centered(say("TGPI private continuing education · Acceptance is at the discretion of the receiving institution.", "Educação continuada privada TGPI · Aceitação a critério da instituição destinatária."), 39, 5.8, sans, MUTED, 660);
   text(CERTIFICATE_DESIGN_VERSION, WIDTH - 51, 40, 5.5, sans, GOLD, 40, "center");
   return document.save();
 }
