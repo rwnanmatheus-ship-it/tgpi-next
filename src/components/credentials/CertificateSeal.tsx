@@ -11,9 +11,10 @@ export default function CertificateSeal({
 }) {
   return (
     <Image
-      src="/brand/tgpi-certificate-seal-2026.webp"
-      width={1254}
-      height={1254}
+      src="/brand/tgpi-academic-seal-2026.svg"
+      unoptimized
+      width={1200}
+      height={1200}
       alt=""
       sizes={sizes}
       priority={priority}

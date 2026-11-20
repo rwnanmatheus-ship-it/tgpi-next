@@ -3,17 +3,20 @@ import { LocalizedElement } from "@/components/localization/LocalizedElement";
 
 import { LocalizedText } from "@/components/localization/LocaleProvider";
 import Link from "next/link";
+import Image from "@/components/localization/LocalizedImage";
 import CertificateDocument from "./CertificateDocument";
 import CertificateSeal from "./CertificateSeal";
 import { CertificateIssueDate } from "./CertificatePresentationText";
 import CredentialActions from "./CredentialActions";
 import { getCredentialTrustState } from "@/lib/credential-standard";
+import { credentialTrustPresentation } from "@/lib/credential-trust-presentation";
 import {
   CERTIFICATE_DESIGN_VERSION,
   certificateVerificationUrl,
 } from "@/lib/certificate-presentation";
 import type { PublicTgpiLearningCredential } from "@/types/learning";
 import "@/app/certificates/credential-record.css";
+import "@/app/certificates/credential-integrity.css";
 
 export default function CredentialRecordView({
   credential,
@@ -37,6 +40,7 @@ export default function CredentialRecordView({
       ? "This certificate is no longer active. Its original issuance remains in the history."
       : "The record could not pass every integrity check. Do not present it as verified.";
   const verificationUrl = certificateVerificationUrl(credential.id);
+  const integrity = credentialTrustPresentation(credential);
   const sharingAllowed = credential.integrityVerified && (!credential.professionalEvidence || credential.professionalEvidence.sharing === true);
   const canPrint = owner && verified;
   return (
@@ -82,6 +86,34 @@ export default function CredentialRecordView({
             <Link className="credential-inline-link" href={`${owner ? "/certificates/" : "/verify/credentials/"}${encodeURIComponent(credential.replacedBy)}`}>
               <LocalizedText text="Abrir certificado substituto →" />
             </Link>
+          )}
+        </section>
+        <section className="credential-integrity-panel" aria-labelledby="credential-integrity-heading">
+          <div className="credential-integrity-heading">
+            <Image src="/brand/tgpi-integrity-seal-2026.svg" alt="" width={84} height={84} />
+            <div>
+              <h2 id="credential-integrity-heading"><LocalizedText text="TGPI Integrity Chain" /></h2>
+              <p><LocalizedText text="The certificate is checked against TGPI's live issuer record. Blockchain status, when available, refers to the linked identity revision." /></p>
+            </div>
+          </div>
+          <dl>
+            <div>
+              <dt><LocalizedText text="Record status" /></dt>
+              <dd><LocalizedText text={label} /></dd>
+            </div>
+            <div>
+              <dt><LocalizedText text="Portable proof" /></dt>
+              <dd><LocalizedText text={integrity.portableProof ? "Signed portable evidence" : verified ? "Live issuer verification" : "No active verification proof"} />
+                {integrity.portableProof && <small>{credential.portableProof?.algorithm}{" · "}{credential.portableProof?.keyId}</small>}
+              </dd>
+            </div>
+            <div>
+              <dt><LocalizedText text="Identity anchor" /></dt>
+              <dd><LocalizedText text={integrity.anchorLabel} /></dd>
+            </div>
+          </dl>
+          {owner && integrity.anchorExplorerUrl && (
+            <a href={integrity.anchorExplorerUrl} target="_blank" rel="noopener noreferrer"><LocalizedText text="View identity transaction" /></a>
           )}
         </section>
         <CredentialActions
@@ -216,9 +248,7 @@ export default function CredentialRecordView({
                 <div>
                   <dt><LocalizedText text={"Public anchor"} /></dt>
                   <dd>
-                    {credential.identityEvidence.anchor.status === "confirmed"
-                      ? <LocalizedText text={"Confirmed on Base Mainnet"} />
-                      : <LocalizedText text={"Identity anchor activation pending"} />}
+                    <LocalizedText text={integrity.anchorLabel} />
                   </dd>
                 </div>
               </dl>

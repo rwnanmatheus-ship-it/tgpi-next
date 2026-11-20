@@ -1,6 +1,24 @@
 import type { Locale } from "./config";
 
 export const credentialSharingMessages: Record<string, Record<Locale, string>> = {
+  "The certificate is checked against TGPI's live issuer record. Blockchain status, when available, refers to the linked identity revision.": {
+    en: "The certificate is checked against TGPI's live issuer record. Blockchain status, when available, refers to the linked identity revision.",
+    "pt-BR": "O certificado é conferido no registro atualizado da TGPI. O status na blockchain, quando disponível, refere-se à revisão de identidade vinculada.",
+    es: "El certificado se comprueba en el registro actualizado de TGPI. El estado en la blockchain, cuando está disponible, corresponde a la revisión de identidad vinculada.",
+    fr: "Le certificat est contrôlé dans le registre actuel de TGPI. Le statut blockchain, lorsqu’il est disponible, concerne la révision d’identité associée.",
+    de: "Das Zertifikat wird im aktuellen TGPI-Register geprüft. Der Blockchain-Status bezieht sich, sofern verfügbar, auf die verknüpfte Identitätsversion.",
+    it: "Il certificato viene verificato nel registro aggiornato TGPI. Lo stato blockchain, quando disponibile, riguarda la revisione d’identità collegata.",
+  },
+  "Record status": { en: "Record status", "pt-BR": "Status do registro", es: "Estado del registro", fr: "Statut du registre", de: "Registerstatus", it: "Stato del registro" },
+  "Identity anchor": { en: "Identity anchor", "pt-BR": "Âncora de identidade", es: "Anclaje de identidad", fr: "Ancrage d’identité", de: "Identitätsverankerung", it: "Ancoraggio d’identità" },
+  "Signed portable evidence": { en: "Signed portable evidence", "pt-BR": "Evidência portátil assinada", es: "Evidencia portátil firmada", fr: "Preuve portable signée", de: "Signierter portabler Nachweis", it: "Prova portabile firmata" },
+  "Live issuer verification": { en: "Live issuer verification", "pt-BR": "Verificação atualizada pela TGPI", es: "Verificación actualizada del emisor", fr: "Vérification actuelle de l’émetteur", de: "Aktuelle Ausstellerprüfung", it: "Verifica aggiornata dell’emittente" },
+  "No active verification proof": { en: "No active verification proof", "pt-BR": "Sem prova de verificação ativa", es: "Sin prueba de verificación activa", fr: "Aucune preuve de vérification active", de: "Kein aktiver Verifizierungsnachweis", it: "Nessuna prova di verifica attiva" },
+  "Identity anchor not verified": { en: "Identity anchor not verified", "pt-BR": "Âncora de identidade não verificada", es: "Anclaje de identidad no verificado", fr: "Ancrage d’identité non vérifié", de: "Identitätsverankerung nicht geprüft", it: "Ancoraggio d’identità non verificato" },
+  "Identity anchor confirmed": { en: "Identity anchor confirmed", "pt-BR": "Âncora de identidade confirmada", es: "Anclaje de identidad confirmado", fr: "Ancrage d’identité confirmé", de: "Identitätsverankerung bestätigt", it: "Ancoraggio d’identità confermato" },
+  "Identity anchor awaiting confirmation": { en: "Identity anchor awaiting confirmation", "pt-BR": "Âncora de identidade aguardando confirmação", es: "Anclaje de identidad pendiente de confirmación", fr: "Ancrage d’identité en attente de confirmation", de: "Identitätsverankerung wartet auf Bestätigung", it: "Ancoraggio d’identità in attesa di conferma" },
+  "Identity activation pending": { en: "Identity activation pending", "pt-BR": "Ativação da identidade pendente", es: "Activación de identidad pendiente", fr: "Activation d’identité en attente", de: "Identitätsaktivierung ausstehend", it: "Attivazione d’identità in attesa" },
+  "View identity transaction": { en: "View identity transaction", "pt-BR": "Ver transação de identidade", es: "Ver transacción de identidad", fr: "Voir la transaction d’identité", de: "Identitätstransaktion ansehen", it: "Visualizza transazione d’identità" },
   "Public verification enabled.": {"en": "Public verification enabled.", "pt-BR": "Verificação pública ativada.", "es": "Verificación pública activada.", "fr": "Vérification publique activée.", "de": "Öffentliche Prüfung aktiviert.", "it": "Verifica pubblica attivata."},
   "The certificate is private.": {"en": "The certificate is private.", "pt-BR": "O certificado está privado.", "es": "El certificado es privado.", "fr": "Le certificat est privé.", "de": "Das Zertifikat ist privat.", "it": "Il certificato è privato."},
   "Unable to update certificate sharing.": {"en": "Unable to update certificate sharing.", "pt-BR": "Não foi possível atualizar o compartilhamento do certificado.", "es": "No se pudo actualizar el uso compartido del certificado.", "fr": "Impossible de mettre à jour le partage du certificat.", "de": "Die Zertifikatsfreigabe konnte nicht aktualisiert werden.", "it": "Impossibile aggiornare la condivisione del certificato."},
