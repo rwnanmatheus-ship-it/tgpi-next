@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
 import { credentialSharingMessages } from '@/lib/localization/credential-sharing-copy';
 import { appearanceMessages } from '@/lib/localization/appearance';
+import { regionalMarketMessages } from '@/lib/localization/regional-market-copy';
 import { planExecutionMessages } from '@/lib/localization/plan-execution-copy';
 import { type Locale } from '@/lib/localization/config';
 import { translate, registerSupplementalMessages, type SupplementalMessages } from '@/lib/localization/messages';
@@ -18,7 +19,7 @@ type LocaleContextValue = {
   changeLocale: (locale: Locale) => Promise<void>;
   t: (key: string, values?: Record<string, string | number>) => string;
 };
-const interfaceMessages = { ...appearanceMessages, ...planExecutionMessages, ...credentialSharingMessages };
+const interfaceMessages = { ...appearanceMessages, ...planExecutionMessages, ...credentialSharingMessages, ...regionalMarketMessages };
 const LocaleContext = createContext<LocaleContextValue | null>(null);
 
 const loadedCatalogs = new Map<Locale, Promise<void>>();
