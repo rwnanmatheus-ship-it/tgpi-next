@@ -6,14 +6,13 @@ import { courses } from "@/data/courses";
 import { getGlobalRankSignals } from "@/lib/global-rank-signals";
 import type { Metadata } from "next";
 import { currentUser } from "@clerk/nextjs/server";
-import { UserProfile } from "@clerk/nextjs";
+import SecurityCenter from "@/components/profile/SecurityCenter";
 import TgpiAccountCenter from "@/components/profile/TgpiAccountCenter";
 import {
   getAccountProfileCompletion,
   mergeAccountProfileWithOnboarding,
   normalizeAccountIdentity,
 } from "@/lib/account-profile";
-import { tgpiClerkAppearance } from "@/lib/auth/clerk-appearance";
 import { formatTgpiGlobalId, requireUser } from "@/lib/auth/guards";
 import { getAllCountries } from "@/lib/countries";
 import { getGlobalRank } from "@/lib/global-ranks";
@@ -112,11 +111,7 @@ export default async function SecurityPage({ searchParams }: { searchParams: Pro
         initialProfile={profile}
         rank={rank}
       >
-        <UserProfile
-          appearance={tgpiClerkAppearance}
-          path="/profile/security"
-          routing="path"
-        />
+        <SecurityCenter />
       </TgpiAccountCenter>
     </main>
   );
