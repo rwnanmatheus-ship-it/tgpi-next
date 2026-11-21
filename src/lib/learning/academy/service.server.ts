@@ -1,4 +1,5 @@
 import 'server-only';
+import { academyAssessmentRequirements } from './assessment-policy';
 import { randomInt, randomUUID } from 'node:crypto';
 import { academyCourses, getAcademyCourse, academyQuestions, academyCase, ACADEMY_VERSION, BASELINE_ACADEMY_VERSION, historicalAcademyVersions, ACADEMY_PASS_SCORE, ACADEMY_REVIEW_DELAY_MS } from '@/data/courses/academy/catalog.server';
 import { academyMutation, academyRecordPath, numericAnswer } from './model';
@@ -66,7 +67,7 @@ function makeChallenge(course: AcademyCourse, target: string): StoredChallenge {
     return { ...q, id: randomUUID(), correctOptionId: options.find(o => o.originalId === q.correctOptionId)!.id, options: options.map(({ id, label, language }) => ({ id, label, ...(language ? { language } : {}) })) };
   });
   const challenge: StoredChallenge = { public: { id: randomUUID(), target, createdAt: new Date().toISOString(), questions: questions.map(({ correctOptionId: _key, explanation: _reason, ...q }) => { void _key; void _reason; return q; }) }, questions };
-  if ((target === 'final' || target === 'retention') && !course.targetLanguage) {
+  if ((target === 'final' || target === 'retention') && academyAssessmentRequirements(course).requiresCalculation) {
     const spec = academyCase(course.id), a = randomInt(70, 151), b = randomInt(12, 41), c = randomInt(3, 10);
     const expected = spec.operation === 'remaining' ? (a - b) / c : spec.operation === 'sum' ? a - b - c : spec.operation === 'ratio' ? a / c : b / a * 100;
     challenge.public.calculation = { prompt: spec.prompt.replaceAll('{a}', String(a)).replaceAll('{b}', String(b)).replaceAll('{c}', String(c)), unit: spec.unit };
@@ -232,7 +233,7 @@ async function issueAcademyCredential(identity: Identity, course: AcademyCourse,
     const unsigned: Omit<TgpiLearningCredential, 'verificationHash'> = {
       id, achievementType: 'Professional Certificate', assessmentScore: Math.min(record.final.score, record.retention.score), competencyIds: course.lessons.map(l => l.id), courseId: course.id, courseTitle: course.title, courseVersion: course.version,
       credentialProfile: 'TGPI Verified Learning Credential', credentialSchemaVersion: 2, credentialStandardVersion: 'tgpi-autonomous-1.0', criteriaUrl: `/courses/${course.id}#certification`,
-      evidenceSummary: [...(course.scopeNotice ? [course.scopeNotice] : []), 'Lesson checks passed with practice records.', 'Final assessment and spaced review: at least 80%, including all essential checks and a fresh numerical case.', 'Objective responses were scored automatically. Open practice artifacts, oral performance and professional competence were not independently evaluated.', 'Estimated workload includes study, practice and assessment; it is not monitored attendance. Non-degree course; no external accreditation or license is implied.'],
+      evidenceSummary: [...(course.scopeNotice ? [course.scopeNotice] : []), 'Lesson checks passed with practice records.', academyAssessmentRequirements(course).evidence, 'Objective responses were scored automatically. Open practice artifacts, oral performance and professional competence were not independently evaluated.', 'Estimated workload includes study, practice and assessment; it is not monitored attendance. Non-degree course; no external accreditation or license is implied.'],
       identityEvidence: { anchor: key.anchor, fingerprint: key.fingerprint, globalKeyId: key.keyId, revision: key.revision }, issuedAt: now, completedAt: record.completedAt,
       documentNature: course.scopeNotice ? 'Certificado de conclusão teórica' : 'Certificado de conclusão — práticas e avaliações automáticas', issuer: 'TGPI — The Global Polymath Institute', keyId: TGPI_CREDENTIAL_KEY_ID,
       learningHours: Math.round(course.minutes / 60 * 100) / 100, masteryThreshold: 80, ownerUid: identity.uid, publicName: consent.publicName,

@@ -193,6 +193,8 @@ test('every course completes objective gates and delayed review, then automatica
   const credential=h.documents.get(`tgpiLearningCredentials/${first.record.credentialId}`).data;
   assert.equal(credential.courseId,course.id);assert.equal(credential.courseVersion,course.version);assert.equal(credential.professionalEvidence.sharing,false);
   assert.equal(credential.automatedEvidence.humanReviewed,false);assert.equal(credential.automatedEvidence.workloadMinutes,course.minutes);
+  if(course.targetLanguage){assert.ok(!credential.evidenceSummary.some(line=>line.includes('numerical case')));assert.ok(credential.evidenceSummary.some(line=>line.includes('essential language-comprehension checks')));}
+  else assert.ok(credential.evidenceSummary.some(line=>line.includes('fresh numerical case')));
   assert.ok(h.load(resolve('src/lib/credential-signing.server.ts')).verifyLearningCredentialIntegrity(credential));
   assert.ok(!credential.evidenceSummary.join(' ').includes('human reviewer approved'));
   if (course.scopeNotice) {

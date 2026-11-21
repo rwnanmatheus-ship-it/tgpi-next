@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
+import React from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import { resolve } from 'node:path';
 import { readFileSync, existsSync } from 'node:fs';
 import { createHash } from 'node:crypto';
@@ -104,7 +106,8 @@ test('study UI preserves target direction and correct speech tag while speech pr
   assert.ok(study.includes('section.textLanguage'));assert.ok(study.includes('dir={section.direction}'));
   assert.ok(practice.includes('next.lang=target.speech'));assert.ok(practice.includes('item.localService'));
   assert.ok(!practice.includes('fetch('));assert.ok(!practice.includes('SpeechRecognition'));
-  assert.ok(service.includes("&& !course.targetLanguage"));
+  assert.ok(service.includes('academyAssessmentRequirements(course).requiresCalculation'));
+  assert.ok(service.includes('academyAssessmentRequirements(course).evidence'));
   assert.ok(service.includes('bank.filter(question => question.essential)'));
 });
 
@@ -127,4 +130,37 @@ test('language laboratory controls cover all six interface locales without trans
   assert.equal(languageLabCopy('pt-BR','Language to learn'),'Idioma que quero aprender');
   assert.equal(languageLabCopy('fr','Language to learn'),'Langue à apprendre');
   assert.ok(languageLabCopy('de','Session practice status',{done:3,total:14}).includes('3 von 14'));
+});
+
+test('assessment generation, visible criteria and credential evidence share the language-only policy',()=>{
+  const {academyAssessmentRequirements}=h.load(resolve('src/lib/learning/academy/assessment-policy.ts'));
+  const numeric=academyAssessmentRequirements(h.getAcademyCourse('country-fit'));
+  assert.equal(numeric.requiresCalculation,true);assert.match(numeric.evidence,/fresh numerical case/);
+  const dictionaries=Object.fromEntries(h.locales.map(locale=>[locale,JSON.parse(readFileSync(`public/locales/${locale}.json`,'utf8'))]));
+  for(const course of languages){
+    const policy=academyAssessmentRequirements(course);
+    assert.equal(policy.requiresCalculation,false);
+    for(const field of ['journey','minimum','explanation','evidence']){
+      assert.ok(!policy[field].includes('numerical'));
+      for(const locale of h.locales)assert.ok(dictionaries[locale][policy[field]]?.trim());
+    }
+  }
+});
+
+test('public previews render native language tags and Arabic RTL without advertising arithmetic',async()=>{
+  const preview=academyLocalizationFixture({
+    '@/lib/localization/server':{getLocale:async()=> 'en'},
+    '@/components/localization/LocaleProvider':{useLocale:()=>({locale:'en',t:text=>text})},
+    'next/image':{__esModule:true,default:({src,alt})=>React.createElement('img',{src,alt})},
+    'next/link':{__esModule:true,default:({href,children,...props})=>React.createElement('a',{href,...props},children)},
+  });
+  const Overview=preview.load(resolve('src/components/courses/academy/AcademyOverview.tsx')).default;
+  for(const code of ['ar','ja','es']){
+    const course=preview.getAcademyCourse(`idiomas-${code}-primeiras-conversas`);
+    const html=renderToStaticMarkup(await Overview({course}));
+    assert.ok(html.includes(`lang="${course.targetLanguage.speech}" dir="${course.targetLanguage.direction}"`));
+    assert.ok(html.includes(course.languagePractice[0].text));
+    assert.ok(!html.includes('numerical case'));
+    assert.ok(html.includes('all essential language checks correct'));
+  }
 });
