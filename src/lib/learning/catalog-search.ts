@@ -3,7 +3,13 @@ import type { CourseOverview } from '../../types/course-overview';
 
 export const normalizeCourseSearch = (value: string) => value.normalize('NFD').replace(/\p{M}/gu, '').toLocaleLowerCase('en').replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
 const concepts = [
-  ['english','ingles','anglais','englisch','inglese'], ['career','carreira','carrera','carriere','karriere','carriera'],
+  ['english','ingles','anglais','englisch','inglese'],
+  ['spanish','espanhol','espanol','espagnol','spanisch','spagnolo'],
+  ['french','frances','francais','franzosisch','francese'],
+  ['german','alemao','aleman','allemand','deutsch','tedesco'],
+  ['mandarin','mandarim','mandarinchinesisch','mandarino','chinese','chines'],
+  ['programming','programacao','programacion','programmation','programmierung','programmazione'],
+  ['business','negocios','negocio','affaires','geschaft','affari'], ['career','carreira','carrera','carriere','karriere','carriera'],
   ['budget','orcamento','presupuesto','bilancio'], ['ai','ia','inteligencia artificial','artificial intelligence'],
   ['spreadsheets','planilhas','excel','tableur','tabellen'], ['data','dados','datos','donnees','daten','dati'],
   ['security','seguranca','seguridad','securite','sicherheit','sicurezza'], ['housing','moradia','vivienda','logement','wohnung','alloggio'],
@@ -17,8 +23,16 @@ const concepts = [
   ['operations','operacoes','operaciones','betrieb','operazioni'],
   ['remote','remoto','distancia','distance'], ['abroad','exterior','extranjero','etranger','ausland','estero'],
 ];
+const stopWords = new Set(['a','o','os','as','um','uma','de','do','da','dos','das','em','no','na','para','por','com','e','the','of','for','in','to','and','with','el','la','los','las','un','una','en','y','le','les','des','du','pour','et','der','die','das','und','fur','il','lo','gli','per','di','curso','cursos','course','courses','aprender','learn','quero','want','cursar']);
 function nearWord(a: string, b: string): boolean {
   if (a.length < 4 || Math.abs(a.length - b.length) > 1) return false;
+  if (a.length === b.length) {
+    const differences = [...a].flatMap((letter, index) => letter !== b[index] ? [index] : []);
+    if (differences.length === 2) {
+      const [first, second] = differences;
+      if (second === first + 1 && a[first] === b[second] && a[second] === b[first]) return true;
+    }
+  }
   let i = 0, j = 0, edits = 0;
   while (i < a.length && j < b.length) {
     if (a[i] === b[j]) { i++; j++; continue; }
@@ -29,13 +43,22 @@ function nearWord(a: string, b: string): boolean {
   return edits + Number(i < a.length || j < b.length) <= 1;
 }
 export function courseSearchScore(course: CourseOverview, query: string, translate: (text: string) => string = text => text): number {
-  const q = normalizeCourseSearch(query).slice(0, 160);
+  let q = normalizeCourseSearch(query).slice(0, 160);
+  for (const group of concepts) {
+    for (const phrase of group.filter(value => value.includes(' '))) {
+      q = ` ${q} `.replaceAll(` ${phrase} `, ` ${group[0]} `).trim();
+    }
+  }
   if (!q) return 1;
   const title = normalizeCourseSearch(`${translate(course.title)} ${course.title}`);
   const content = normalizeCourseSearch([course.desc, course.category, course.series ?? '', course.goalLabel, ...course.benefits, course.marketRegion ? courseRegions.find(([id]) => id === course.marketRegion)?.[1] ?? '' : ''].flatMap(text => [text, translate(text)]).join(' '));
   const words = title.split(' ');
   let score = title.startsWith(q) ? 100 : title.includes(q) ? 60 : 0;
-  for (const token of q.split(' ')) {
+  // Ignore connector words only when there is a meaningful query token.
+  const rawTokens = q.split(' ');
+  const meaningful = rawTokens.filter(token => !stopWords.has(token));
+  const tokens = meaningful.length ? meaningful : rawTokens;
+  for (const token of tokens) {
     const alternatives = concepts.find(group => group.includes(token)) ?? [token];
     if (words.includes(token)) score += 18;
     else if (words.some(word => word.startsWith(token))) score += 14;
