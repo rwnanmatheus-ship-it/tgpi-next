@@ -1,10 +1,24 @@
 import type { GlobalRank, GlobalRankDefinition } from './global-ranks';
 
+const courseAction = { href: '/courses', title: 'Complete your next course', actionLabel: 'Develop my skills' };
+const planAction = { href: '/plan', title: 'Strengthen your personal plan', actionLabel: 'Review my plan' };
+
+/** Every action points at a scoring source which has not reached its fixed cap. */
+function getPointsAction(rank: GlobalRank) {
+  if (rank.breakdown.plan < 500) return planAction;
+  if (rank.breakdown.readiness < 500) return { href: '/profile', title: 'Complete your preparation', actionLabel: 'Open workspace' };
+  const coursePoints = rank.completedCourses * 650 + Math.round(rank.completedCourses * 200 / 12);
+  const researchPoints = Math.max(0, rank.breakdown.activity - coursePoints);
+  return researchPoints < 1000
+    ? { href: '/countries', title: 'Expand your country research', actionLabel: 'Explore countries' }
+    : courseAction;
+}
+
 export function getRankRequirements(rank: GlobalRank, target: GlobalRankDefinition) {
   return [
-    { id: 'points', label: 'Points', actual: rank.points, target: target.threshold, href: '/countries' },
-    { id: 'courses', label: 'Completed courses', actual: rank.completedCourses, target: target.courses, href: '/courses' },
-    { id: 'plan', label: 'Personal plan', actual: rank.planCompletion, target: target.plan, href: '/plan' },
+    { ...getPointsAction(rank), id: 'points', label: 'Points', actual: rank.points, target: target.threshold },
+    { ...courseAction, id: 'courses', label: 'Completed courses', actual: rank.completedCourses, target: target.courses },
+    { ...planAction, id: 'plan', label: 'Personal plan', actual: rank.planCompletion, target: target.plan },
   ].map(item => ({
     ...item,
     remaining: Math.max(0, item.target - item.actual),
@@ -21,23 +35,11 @@ export function getRankReadiness(rank: GlobalRank, target: GlobalRankDefinition)
   return { requirements, met, percent, eligible: met === requirements.length };
 }
 
-/** Recommend only scoring sources which have not reached their fixed caps. */
 export function getNextRankAction(rank: GlobalRank) {
   if (!rank.nextRank) return null;
   const requirements = getRankRequirements(rank, rank.nextRank);
-  const requirement = requirements.find(item => item.id === 'courses' && !item.met)
+  return requirements.find(item => item.id === 'courses' && !item.met)
     ?? requirements.find(item => item.id === 'plan' && !item.met)
-    ?? requirements.find(item => !item.met);
-  if (!requirement) return null;
-  const courseAction = { href: '/courses', title: 'Complete your next course', label: 'Develop my skills' };
-  const planAction = { href: '/plan', title: 'Strengthen your personal plan', label: 'Review my plan' };
-  if (requirement.id === 'courses') return { ...requirement, ...courseAction };
-  if (requirement.id === 'plan' || rank.breakdown.plan < 500) return { ...requirement, ...planAction };
-  if (rank.breakdown.readiness < 500) {
-    return { ...requirement, href: '/profile', title: 'Complete your preparation', label: 'Open workspace' };
-  }
-  const learningPoints = rank.completedCourses * 650 + Math.round(rank.completedCourses * 200 / 12);
-  const researchPoints = rank.breakdown.activity - learningPoints;
-  if (researchPoints < 1000) return { ...requirement, href: '/countries', title: 'Expand your country research', label: 'Explore countries' };
-  return { ...requirement, ...courseAction };
+    ?? requirements.find(item => !item.met)
+    ?? null;
 }

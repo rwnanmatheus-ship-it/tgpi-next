@@ -43,6 +43,9 @@ test('the final missing preparation points never recommend already capped resear
   assert.equal(action.remaining, 100);
   assert.equal(action.href, '/profile');
   assert.equal(action.title, 'Complete your preparation');
+  const points = getRankReadiness(rank, rank.nextRank).requirements.find(item => item.id === 'points');
+  assert.equal(points.href, '/profile');
+  assert.equal(points.actionLabel, 'Open workspace');
 });
 test('recommendations select an unfinished plan, research or learning source and stop at the final rank', () => {
   const plan = getGlobalRank({ ...base, learningPaths: 12, planCompletion: 90, activationCompletion: 100, comparisons: 4, documentReviews: 4, savedCountries: 8 });
