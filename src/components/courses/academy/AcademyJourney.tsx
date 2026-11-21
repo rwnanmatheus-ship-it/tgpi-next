@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { academyAssessmentRequirements } from '@/lib/learning/academy/assessment-policy';
 import type { AcademyCourse } from '@/lib/learning/academy/types';
 import styles from './academy.module.css';
 
@@ -12,7 +13,7 @@ export default function AcademyJourney({ course, t }: { course: AcademyCourse; t
     ['Lessons and practice', 'Work through the lesson examples and check each skill.'],
     ...(labs.length ? [['Applied project', 'Build, test and hand over a result for the course scenario.']] : []),
     ['Practice portfolio', 'Organize your work and document what you changed.'],
-    ['Final assessment', 'Pass the objective checks and a numerical case.'],
+    ['Final assessment', academyAssessmentRequirements(course).journey],
     ['Spaced review', 'Return at least 24 hours later to check what you retained.'],
     ['Certificate', 'Confirm your name and email for private issuance.'],
   ];

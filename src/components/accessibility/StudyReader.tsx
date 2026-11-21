@@ -4,6 +4,7 @@ import Link from 'next/link';
 import LibrasPanel from './LibrasPanel';
 import { accessCopy } from '@/lib/localization/accessibility-center';
 import { useEffect, useId, useRef, useState } from 'react';
+import { selectLocalSpeechVoice } from '@/lib/learning/speech-voice';
 import { useLocale } from '@/components/localization/LocaleProvider';
 import { studyCopy } from '@/lib/localization/study-accessibility';
 import styles from './study-reader.module.css';
@@ -99,9 +100,9 @@ export default function StudyReader({ title, language, sections, atlas = false }
     const voices = synth.getVoices().filter(voice => voice.localService);
     const queue = [{ text: section.title, lang: section.titleLang }, ...section.passages].flatMap(passage => {
       const lang = passage.lang ?? language;
-      const base = lang.toLowerCase().split('-')[0];
-      const voice = voices.find(item => item.lang.toLowerCase() === lang.toLowerCase())
-        ?? voices.find(item => item.lang.toLowerCase().split('-')[0] === base);
+      // General reading keeps the existing Portuguese fallback; the pronunciation lab uses a strict Brazilian model.
+      const voice = selectLocalSpeechVoice(voices, lang) ?? (lang.toLowerCase() === 'pt-br'
+        ? voices.find(candidate => candidate.lang.toLowerCase().startsWith('pt')) : undefined);
       return speechChunks(passage.text).map(text => ({ text, voice }));
     });
     if (!queue.length || queue.some(item => !item.voice)) {

@@ -1,3 +1,4 @@
+import { targetLanguageOptions } from './learning/language-options.ts';
 import { regionalCoverIds } from './learning/regional-covers.ts';
 import { courseSector, internationalCoverBadges } from './learning/international-covers.ts';
 /** Approved illustrative artwork. Never evidence, a real campus, or a user photograph. */
@@ -372,6 +373,7 @@ export function courseCoverBadges(id: string): readonly string[] | undefined {
 }
 
 export function courseArtwork(id: string, fallback?: string) {
+  if (id.startsWith('idiomas-') && targetLanguageOptions.some(([code]) => id.startsWith(`idiomas-${code}-`))) return `/images/courses/language-covers-2026/${id}.webp`;
   if (regionalCoverIds.has(id)) return `/images/courses/regional-covers-2026/${id}.webp`;
   if (courseSector(id)) return `/images/courses/international-covers-2026/${id}.webp`;
   if (Object.hasOwn(marketCourseBadges, id)) return `/images/courses/market-covers-2026/${id}.webp`;

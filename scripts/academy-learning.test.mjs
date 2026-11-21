@@ -86,7 +86,8 @@ async function completeLessons(h,course,user=identity) {
 }
 
 test('academy courses have inspectable workload, assessments and preserved foundation IDs',()=>{
- const h=harness(), {academyCourses,academyQuestions}=h.catalog;
+ const h=harness(), {academyQuestions}=h.catalog;
+ const academyCourses=h.catalog.academyCourses.filter(course=>!course.targetLanguage);
  const { emergencyCourses } = h.load(resolve('src/data/courses/emergency/catalog.ts'));
  const emergency = new Map(emergencyCourses.map(course => [course.id, course]));
  const { expansionCourses, expansionOverview } = h.load(resolve('src/data/courses/academy/expansion/listing.ts'));
@@ -107,7 +108,7 @@ test('academy courses have inspectable workload, assessments and preserved found
  const seenScenarios = new Set();
  const manifest=h.load(resolve('src/data/courses/academy/manifest.ts')).academyManifest;
  const { academyCoverIds, courseArtwork } = h.load(resolve('src/lib/cinematic-art.ts'));
- assert.deepEqual([...academyCoverIds].sort(), Object.keys(manifest).filter(id => !marketCourseIds.has(id)).sort());
+ assert.deepEqual([...academyCoverIds].sort(), Object.keys(manifest).filter(id => !marketCourseIds.has(id) && !h.catalog.getAcademyCourse(id)?.targetLanguage).sort());
  const old=h.load(resolve('src/data/courses.ts')).courses, pro=h.load(resolve('src/data/courses/professional/index.ts')).professionalCourseDrafts;
  for(const course of academyCourses){
   assert.equal(course.image, courseArtwork(course.id));
@@ -192,6 +193,8 @@ test('every course completes objective gates and delayed review, then automatica
   const credential=h.documents.get(`tgpiLearningCredentials/${first.record.credentialId}`).data;
   assert.equal(credential.courseId,course.id);assert.equal(credential.courseVersion,course.version);assert.equal(credential.professionalEvidence.sharing,false);
   assert.equal(credential.automatedEvidence.humanReviewed,false);assert.equal(credential.automatedEvidence.workloadMinutes,course.minutes);
+  if(course.targetLanguage){assert.ok(!credential.evidenceSummary.some(line=>line.includes('numerical case')));assert.ok(credential.evidenceSummary.some(line=>line.includes('essential language-comprehension checks')));}
+  else assert.ok(credential.evidenceSummary.some(line=>line.includes('fresh numerical case')));
   assert.ok(h.load(resolve('src/lib/credential-signing.server.ts')).verifyLearningCredentialIntegrity(credential));
   assert.ok(!credential.evidenceSummary.join(' ').includes('human reviewer approved'));
   if (course.scopeNotice) {
@@ -200,6 +203,23 @@ test('every course completes objective gates and delayed review, then automatica
   }
  }
  assert.equal([...h.documents.keys()].filter(p=>p.startsWith('tgpiLearningCredentials/')).length,h.catalog.academyCourses.length);
+});
+
+test('language finals cover each lesson, preserve target language and reject essential mistakes without unrelated arithmetic',async()=>{
+ const h=harness();
+ for(const code of ['ar','ja','hi']){
+  const course=h.catalog.getAcademyCourse(`idiomas-${code}-primeiras-conversas`),mutate=mutation(h,course);
+  let status=await completeLessons(h,course);
+  status=await mutate({action:'begin',revision:status.record.revision,target:'final'});
+  assert.equal(status.challenge.questions.length,16);assert.equal(status.challenge.calculation,undefined);
+  assert.equal(new Set(status.challenge.questions.map(question=>question.lessonId)).size,8);
+  assert.ok(status.challenge.questions.every(question=>question.options.every(option=>option.language)));
+  const stored=h.documents.get(`${path(course)}/attempts/${status.challenge.id}`).data;
+  const essential=stored.questions.find(question=>question.essential);
+  const input=submittedAnswers(h,course,status);
+  input.answers.find(answer=>answer.questionId===essential.id).optionId=essential.options.find(option=>option.id!==essential.correctOptionId).id;
+  status=await mutate(input);assert.equal(status.lastResult.score,94);assert.equal(status.lastResult.passed,false);assert.equal(status.record.final,undefined);
+ }
 });
 
 test('client grades, skipped lessons, other users, stale revisions, duplicate and foreign answers are rejected',async()=>{
