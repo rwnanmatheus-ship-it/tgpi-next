@@ -797,7 +797,7 @@ export default function TgpiAccountCenter({
     activeScreen = (
       <div>
         <ScreenHeading description="Password, devices and login methods" section="security" title={localizeLabel("Login & security")} />
-        <div className="mt-6 overflow-hidden rounded-[22px] border border-[var(--tgpi-border)] bg-white p-2 sm:p-4">{children}</div>
+        <div className="mt-6 min-w-0">{children}</div>
       </div>
     );
   }
