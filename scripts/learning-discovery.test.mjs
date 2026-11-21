@@ -87,3 +87,14 @@ test('all 100 new market covers are dedicated, distinct and suitable for respons
     assert.ok(courseCoverBadges(id)?.every(label => label.length > 0 && label.length <= 32), id);
   }
 });
+
+test('natural course queries ignore connectors and tolerate adjacent transpositions', () => {
+ assert.ok(courseSearchScore(make('Inglês para carreira internacional'), 'quero aprender ingles') > 0);
+ assert.ok(courseSearchScore(make('Inglês para carreira internacional'), 'curso de ingles') > 0);
+ assert.ok(courseSearchScore(make('Inglês para carreira internacional'), 'ingles para carreira') > 0);
+ assert.ok(courseSearchScore(make('Python automation'), 'pyhton') > 0);
+ assert.ok(courseSearchScore(make('Spanish for business'), 'espanhol negocios') > 0);
+ assert.ok(courseSearchScore(make('AI workflow'), 'inteligencia artificial') > 0);
+ assert.equal(courseSearchScore(make('Python automation'), 'pyhton finance'), 0);
+ assert.equal(courseSearchScore(make('Carreira internacional'), 'ia'), 0);
+});
