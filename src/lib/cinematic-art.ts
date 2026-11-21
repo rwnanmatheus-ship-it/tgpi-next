@@ -1,3 +1,4 @@
+import { courseSector, internationalCoverBadges } from './learning/international-covers.ts';
 /** Approved illustrative artwork. Never evidence, a real campus, or a user photograph. */
 export const cinematicKeys = ["global-horizon","learning-atelier","country-research","documents-preparation","workspace-focus","community-conversation","premium-library","arrival-city","housing-abroad","budget-planning","evidence-research","global-economy","ai-workflow","english-dialogue","spreadsheets","international-career","data-analysis","project-management","international-marketing","digital-security","python-automation","communication-negotiation","remote-work","study-abroad","atlas-intelligence","decision-comparison","community-global-exchange","global-documents-precision","learning-achievement","workspace-global-focus","workspace-observatory","documents-command","documents-folios"] as const;
 export type CinematicKey = typeof cinematicKeys[number];
@@ -865,10 +866,13 @@ export const marketCoverIds = Object.keys(marketCourseBadges);
 export const academyCoverIds = Object.keys(academyCourseBadges);
 
 export function courseCoverBadges(id: string): readonly string[] | undefined {
+  const badges = internationalCoverBadges(id);
+  if (badges) return badges;
   return Object.hasOwn(marketCourseBadges, id) ? marketCourseBadges[id] : Object.hasOwn(academyCourseBadges, id) ? academyCourseBadges[id] : undefined;
 }
 
 export function courseArtwork(id: string, fallback?: string) {
+  if (courseSector(id)) return `/images/courses/international-covers-2026/${id}.webp`;
   if (Object.hasOwn(marketCourseBadges, id)) return `/images/courses/market-covers-2026/${id}.webp`;
   if (courseCoverBadges(id)) return `/images/courses/academy-covers-2026/${id}.webp`;
   if ((distinctCourseArtwork as readonly string[]).includes(id)) return `/images/courses/learning-2026/${id}.webp`;

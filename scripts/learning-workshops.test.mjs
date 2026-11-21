@@ -15,7 +15,7 @@ function load(file, mocks = {}) {
     if (id in mocks) return mocks[id];
     if (id.startsWith('@/') || id.startsWith('.')) {
       const base = id.startsWith('@/') ? resolve('src', id.slice(2)) : resolve(dirname(file), id);
-      return load(existsSync(`${base}.ts`) ? `${base}.ts` : `${base}/index.ts`);
+      return load(id.endsWith('.ts') && existsSync(base) ? base : existsSync(`${base}.ts`) ? `${base}.ts` : `${base}/index.ts`);
     }
     throw Error(`Unexpected dependency: ${id}`);
   }, exports);

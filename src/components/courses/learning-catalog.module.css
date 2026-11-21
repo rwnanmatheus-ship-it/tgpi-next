@@ -32,3 +32,9 @@
 .areaFilter select { width:100%; min-height:2.75rem; padding:.65rem 2.4rem .65rem .8rem; border:1px solid rgba(255,255,255,.22); border-radius:.65rem; color:#f6f4ec; background-color:#101d31; font:inherit; }
 .areaFilter p { margin:0; max-width:24rem; color:#c6cfda; font-size:.9375rem; line-height:1.5; }
 @media(max-width:640px) { .areaFilter { flex-direction:column; align-items:stretch; } .areaFilter label { min-width:0; } }
+
+/* Dedicated occupational discovery for the international collection. */
+.areaFilter{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+.areaFilter label{min-width:0}
+.areaFilter p{grid-column:1/-1;max-width:none}
+@media(max-width:720px){.areaFilter{grid-template-columns:minmax(0,1fr)}}
