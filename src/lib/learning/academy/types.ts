@@ -6,6 +6,7 @@ export type AcademySection = {
   /** Preserve the language of an utterance being taught, independently of UI language. */
   preserveTitle?: boolean; preserveBody?: boolean; workedExample?: boolean;
   bodyParts?: Array<{ text: string; preserve?: boolean }>;
+  textLanguage?: string; direction?: 'ltr' | 'rtl';
 };
 /** The public DTO deliberately contains no scoring keys. */
 export type AcademyLesson = {
@@ -16,6 +17,8 @@ export type AcademyCourse = {
   id: string; version: string; title: string; description: string; descriptionParts?: string[]; outcomes: string[];
   lessons: AcademyLesson[]; minutes: number; portfolioMinutes: number; assessmentMinutes: number;
   language: string; image: string; legacyHref?: string; projectBrief?: string; prerequisite?: string; scopeNotice?: string;
+  targetLanguage?: { code:string; name:string; native:string; speech:string; direction:'ltr'|'rtl' };
+  languagePractice?: Array<{text:string;meaning:string}>;
 };
 export type AcademyQuestion = { id: string; lessonId: string; prompt: string; language?: Locale; translations?: AcademyTranslations; options: Array<{ id: string; label: string; language?: string; translations?: AcademyTranslations }>; essential: boolean };
 export type AcademyPrivateQuestion = AcademyQuestion & { correctOptionId: string; explanation: string };

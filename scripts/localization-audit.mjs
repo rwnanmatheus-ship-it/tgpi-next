@@ -18,6 +18,7 @@ for (const locale of ['en', 'pt-BR', 'es', 'fr', 'de', 'it']) exports.registerSu
 const interfaceKeys = [
   ['appearance', 'appearanceMessages'],
   ['rank-progress-copy', 'progressMessages'],
+  ['language-lab-copy', 'languageLabMessages'],
   ['regional-market-copy', 'regionalMarketMessages'],
   ['plan-execution-copy', 'planExecutionMessages'],
   ['credential-sharing-copy', 'credentialSharingMessages'],

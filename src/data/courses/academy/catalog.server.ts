@@ -1,3 +1,4 @@
+import { languageAcademy } from './languages/curricula.server';
 import { globalAcademy } from './markets/global/curricula.server';
 import 'server-only';
 import { marketAcademy } from './markets/curricula.server';
@@ -150,6 +151,15 @@ for (const { course, questions, calculation } of [...marketAcademy(ACADEMY_VERSI
   expandedCourses.set(course.id, course);
   expandedBanks.set(course.id, questions);
   courseCases.set(course.id, calculation);
+}
+for (const { course, questions } of languageAcademy(ACADEMY_VERSION)) {
+  if (expandedCourses.has(course.id) || course.minutes !== academyManifest[course.id]?.minutes ||
+      course.lessons.length !== academyManifest[course.id]?.lessons ||
+      course.minutes !== course.lessons.reduce((sum, lesson) => sum + lesson.minutes, course.portfolioMinutes + course.assessmentMinutes)) {
+    throw new Error(`Invalid language curriculum: ${course.id}`);
+  }
+  expandedCourses.set(course.id, course);
+  expandedBanks.set(course.id, questions);
 }
 export const academyCourses = [...expandedCourses.values()];
 export function getAcademyCourse(id: string, version = ACADEMY_VERSION) {

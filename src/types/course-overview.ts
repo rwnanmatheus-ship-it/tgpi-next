@@ -8,6 +8,7 @@ export type CourseGoal =
 export type CourseSeries = "First 30 Days" | "Career Without Borders" | "The Intelligence Toolkit" | "The Global Money Series" | "Premium Specializations";
 
 export interface CourseOverview {
+  targetLanguage?: string;
   marketRegion?: import('../lib/learning/course-regions').CourseRegion;
   professionalArea?: import('../lib/learning/professional-areas').ProfessionalArea;
   learningPolicy?: import('../lib/learning/catalog-policy').CourseLearningPolicy;

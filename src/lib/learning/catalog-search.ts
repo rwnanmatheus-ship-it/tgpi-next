@@ -7,7 +7,24 @@ const concepts = [
   ['spanish','espanhol','espanol','espagnol','spanisch','spagnolo'],
   ['french','frances','francais','franzosisch','francese'],
   ['german','alemao','aleman','allemand','deutsch','tedesco'],
-  ['mandarin','mandarim','mandarinchinesisch','mandarino','chinese','chines'],
+  ['mandarin','mandarim','mandarinchinesisch','mandarino','chinese','chines','普通话','中文'],
+  ['japanese','japones','japonais','japanisch','giapponese','日本語'],
+  ['korean','coreano','coreen','koreanisch','한국어'],
+  ['italian','italiano','italien','italienisch'],
+  ['portuguese','portugues','portugais','portugiesisch','portoghese'],
+  ['brazilian','brasileiro','brasilianisch','bresilien','brasiliano'],
+  ['arabic','arabe','arabisch','arabo','العربية'],
+  ['standard','padrao','الفصحى'],
+  ['hindi','हिन्दी','हिंदी'],
+  ['swahili','suaili','kiswahili'],
+  ['indonesian','indonesio','indonesien','indonesisch','indonesiano','bahasa indonesia'],
+  ['turkish','turco','turc','turkisch','turkce'],
+  ['russian','russo','ruso','russe','russisch','русский'],
+  ['dutch','neerlandes','neerlandais','niederlandisch','olandese','nederlands','holandes'],
+  ['swedish','sueco','suedois','schwedisch','svedese','svenska'],
+  ['polish','polones','polaco','polonais','polnisch','polacco','polski'],
+  ['vietnamese','vietnamita','vietnamien','vietnamesisch','tieng viet'],
+  ['thai','tailandes','thailandais','thailandisch','tailandese','ภาษาไทย'],
   ['programming','programacao','programacion','programmation','programmierung','programmazione'],
   ['business','negocios','negocio','affaires','geschaft','affari'], ['career','carreira','carrera','carriere','karriere','carriera'],
   ['budget','orcamento','presupuesto','bilancio'], ['ai','ia','inteligencia artificial','artificial intelligence'],
@@ -22,7 +39,7 @@ const concepts = [
   ['accessibility','acessibilidade','accesibilidad','accessibilite','barrierefreiheit','accessibilita'],
   ['operations','operacoes','operaciones','betrieb','operazioni'],
   ['remote','remoto','distancia','distance'], ['abroad','exterior','extranjero','etranger','ausland','estero'],
-];
+].map(group=>group.map(normalizeCourseSearch));
 const stopWords = new Set(['a','o','os','as','um','uma','de','do','da','dos','das','em','no','na','para','por','com','e','the','of','for','in','to','and','with','el','la','los','las','un','una','en','y','le','les','des','du','pour','et','der','die','das','und','fur','il','lo','gli','per','di','curso','cursos','course','courses','aprender','learn','quero','want','cursar']);
 function nearWord(a: string, b: string): boolean {
   if (a.length < 4 || Math.abs(a.length - b.length) > 1) return false;

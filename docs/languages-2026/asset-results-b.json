@@ -1,0 +1,406 @@
+[
+  {
+    "id": "idiomas-ko-primeiras-conversas",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-904555a9-a910-446a-ae16-f173d7c4baae.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-ko-primeiras-conversas.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-ko-agenda-e-compromissos",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-1cf94412-d8ea-4e0e-88f6-3f0d79e3c7f0.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-ko-agenda-e-compromissos.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-ko-cidade-e-transporte",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-77633948-accd-42d0-aa6c-282209af5dbb.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-ko-cidade-e-transporte.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-ko-alimentacao-e-compras",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-cec6c724-3e6e-40db-a398-bfb1615ef973.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-ko-alimentacao-e-compras.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-ko-moradia-e-servicos",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-dad99644-5631-4622-9172-3013b8eb04a8.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-ko-moradia-e-servicos.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-ko-trabalho-e-equipe",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-44dd5e78-36ea-4516-8454-253fa8b9693d.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-ko-trabalho-e-equipe.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-ko-estudo-e-universidade",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-ba607ca6-5115-4b93-b5dc-7df5ff97b3bc.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-ko-estudo-e-universidade.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-ko-saude-e-ajuda",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-4ee65180-5db2-4225-8536-161c81fe725c.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-ko-saude-e-ajuda.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-ko-atendimento-e-viagens",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-9fd06396-6f44-4383-98b0-7ae8b2c3e615.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-ko-atendimento-e-viagens.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-ko-comunicacao-digital",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-5bd4fe8e-b029-4747-a9be-4c9f0967a9b9.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-ko-comunicacao-digital.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-zh-primeiras-conversas",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-9b386a44-5d82-4803-8e3c-e4cfc934965f.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-zh-primeiras-conversas.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-zh-agenda-e-compromissos",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-91f68387-6c3c-409d-884d-11950cc11008.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-zh-agenda-e-compromissos.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-zh-cidade-e-transporte",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-08936ab7-4611-4c75-8f79-b45e759171ff.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-zh-cidade-e-transporte.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-zh-alimentacao-e-compras",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-fd7853d5-4fc6-4437-aa5b-d3b74a2469a7.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-zh-alimentacao-e-compras.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-zh-moradia-e-servicos",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-f9a7c0e0-9d83-43ca-9f98-13012e68189e.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-zh-moradia-e-servicos.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-zh-trabalho-e-equipe",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-7a8e11c5-99de-4039-a93a-10117da87420.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-zh-trabalho-e-equipe.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-zh-estudo-e-universidade",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-6c2b2631-e2a7-458d-accf-4cb9826c8f50.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-zh-estudo-e-universidade.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-zh-saude-e-ajuda",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-782d2f8e-d239-4968-b08f-0fd48a0d1fa2.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-zh-saude-e-ajuda.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-zh-atendimento-e-viagens",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-fe80108d-7a2d-4570-ab16-90a2414de8e0.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-zh-atendimento-e-viagens.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-zh-comunicacao-digital",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-63c21d8e-d7e3-447d-9eab-b6df30844fb2.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-zh-comunicacao-digital.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-it-primeiras-conversas",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-bde4b72c-d9ad-42fc-b835-ecbe511b122f.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-it-primeiras-conversas.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-it-agenda-e-compromissos",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-9b6d225a-23db-4ce5-b4cd-81c9580be169.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-it-agenda-e-compromissos.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-it-cidade-e-transporte",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-03ed2fee-dc16-446a-8601-8f91f7c1cadc.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-it-cidade-e-transporte.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-it-alimentacao-e-compras",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-35a0263a-6dbf-4416-a433-0795b7d0b1e8.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-it-alimentacao-e-compras.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-it-moradia-e-servicos",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-00c75cf3-6e22-4818-ace5-48ffd369641b.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-it-moradia-e-servicos.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-it-trabalho-e-equipe",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-d7c692dc-7050-473b-8ca2-b50815643da0.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-it-trabalho-e-equipe.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-it-estudo-e-universidade",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-a0e7c373-1482-4611-8a64-a9eda8fb2732.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-it-estudo-e-universidade.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-it-saude-e-ajuda",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-03c99440-bb39-4c71-be3b-e6b101a5fd62.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-it-saude-e-ajuda.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-it-atendimento-e-viagens",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-679f8be8-99f9-4073-8f4e-5edd5f0fde11.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-it-atendimento-e-viagens.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-it-comunicacao-digital",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-3626714e-38f9-4b69-b09c-4f7a3b37df20.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-it-comunicacao-digital.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-pt-primeiras-conversas",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-b4c379c5-fc39-48eb-8b2b-c4a17baebfdc.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-pt-primeiras-conversas.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-pt-agenda-e-compromissos",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-e852ae86-8a99-4e33-b232-2716fb338ff9.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-pt-agenda-e-compromissos.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-pt-cidade-e-transporte",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-73516e42-4231-4848-862f-80493fc38d6c.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-pt-cidade-e-transporte.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-pt-alimentacao-e-compras",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-45c351d9-f2d9-4cb8-955f-0483040c5dc1.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-pt-alimentacao-e-compras.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-pt-moradia-e-servicos",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-fced707e-7e46-4330-87b1-ef118a1f2f6c.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-pt-moradia-e-servicos.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-pt-trabalho-e-equipe",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-fc0daee6-83b7-4cad-8a3a-b3dfb0857d81.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-pt-trabalho-e-equipe.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-pt-estudo-e-universidade",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-036e1ed2-8cf4-413f-bbf9-e22248d5a7c8.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-pt-estudo-e-universidade.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-pt-saude-e-ajuda",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-6b731fe1-fcea-4642-83aa-b1770db45b30.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-pt-saude-e-ajuda.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-pt-atendimento-e-viagens",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-45177481-addb-4ac1-8396-19107dce4c65.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-pt-atendimento-e-viagens.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-pt-comunicacao-digital",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-68d362f0-aea8-451c-9aa0-2f636536dc48.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-pt-comunicacao-digital.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-ar-primeiras-conversas",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-5de91f0b-92f8-4c7a-9c52-f07458c4bfc0.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-ar-primeiras-conversas.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-ar-agenda-e-compromissos",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-8539a480-fa0d-4d08-bbd8-751fe33fdc28.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-ar-agenda-e-compromissos.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-ar-cidade-e-transporte",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-45e2eb37-4ce1-4a6c-b218-dbec09cfa725.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-ar-cidade-e-transporte.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-ar-alimentacao-e-compras",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-fa9c62d4-67bc-4ebd-906e-27b64043bbe6.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-ar-alimentacao-e-compras.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-ar-moradia-e-servicos",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-d9b2f41f-a40d-49aa-957e-f2923e1ffcbc.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-ar-moradia-e-servicos.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-ar-trabalho-e-equipe",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-13b2ccff-924e-407c-a321-323da176b15f.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-ar-trabalho-e-equipe.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-ar-estudo-e-universidade",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-af4fc085-6bff-4cbe-8007-748ff68dc056.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-ar-estudo-e-universidade.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-ar-saude-e-ajuda",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-08de2794-25a2-4407-984b-78f855f07990.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-ar-saude-e-ajuda.webp",
+    "status": "complete",
+    "revision": 2,
+    "prompt": "Use case: photorealistic-natural. Landscape 16:9 high-resolution premium academic course-cover photograph. Arabic language course: saude-e-ajuda. Specific scene: An East Asian woman aged 48 with a straight short black bob haircut wearing a charcoal jacket, speaking with a male receptionist aged 62 with silver cropped hair, no beard, in an accessible small street-level healthcare reception in Amman. Wide shot from the side through open doorway; no skyline windows; terrazzo floor, plain cream walls, a few seats, realistic clinic counter, no medical procedure. Calm attentive expressions. Absolutely no young curly-haired man or young visitor with a backpack. Natural visible skin texture, genuine age detail, subtle film color grade, believable perspective, documentary realism. No lettering, logos, watermarks, plastic skin or AI-like rendering. Fictional illustrative scene.",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-ar-atendimento-e-viagens",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-f6d04760-a1b4-4517-8106-a6bb1c9e2fd5.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-ar-atendimento-e-viagens.webp",
+    "status": "complete",
+    "width": 1600,
+    "height": 900
+  },
+  {
+    "id": "idiomas-ar-comunicacao-digital",
+    "original": "/workspace/scratch/70faa0e43ddb/generated_images/exec-71587e5b-bda5-4873-9d13-f98c64d688d2.png",
+    "output": "/workspace/scratch/70faa0e43ddb/tgpi-next/public/images/courses/language-covers-2026/idiomas-ar-comunicacao-digital.webp",
+    "status": "complete",
+    "revision": 2,
+    "prompt": "Use case: photorealistic-natural. Landscape 16:9 high-resolution premium academic course-cover photograph. Arabic language course: comunicacao-digital. Specific scene: A Jordanian woman aged 58 with silver-gray hair in a neat bun, glasses, wearing an indigo blouse, typing a message at a realistic desktop computer in a compact university office in Amman. Full side profile, medium-wide 35mm photograph at dusk, warm task lamp, limestone wall, paper reference books, no panoramic skyline or visible screen text. Solo subject, no other people, no curly-haired young adults, no video-call portraits, realistic hands and posture. Natural visible skin texture, genuine age detail, subtle film color grade, believable perspective, documentary realism. No lettering, logos, watermarks, plastic skin or AI-like rendering. Fictional illustrative scene.",
+    "width": 1600,
+    "height": 900
+  }
+]

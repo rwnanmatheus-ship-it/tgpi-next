@@ -191,8 +191,12 @@ test('unreleased Portuguese labs retain authored content in a multilingual curri
 test('released courses cover every instructional field, preserving language exercises and stored checks', () => {
   const { fullyLocalizedAcademyCourses, academyAnswerLanguage } = h.load(resolve('src/lib/localization/academy-coverage.ts'));
   const { marketCourseIds } = h.load(resolve('src/data/courses/academy/markets/listing.ts'));
-  assert.deepEqual([...fullyLocalizedAcademyCourses].sort(), h.academyCourses.filter(course => !marketCourseIds.has(course.id)).map(course => course.id).sort());
+  assert.deepEqual([...fullyLocalizedAcademyCourses].sort(), h.academyCourses.filter(course => !marketCourseIds.has(course.id) && !course.targetLanguage).map(course => course.id).sort());
   assert.equal(fullyLocalizedAcademyCourses.size, 100);
+  for (const course of h.academyCourses.filter(course => course.targetLanguage)) {
+    assert.equal(course.language, 'pt-BR');
+    assert.ok(!fullyLocalizedAcademyCourses.has(course.id), 'Target languages do not imply six translated instructional curricula');
+  }
   for (const id of marketCourseIds) {
     assert.equal(h.getAcademyCourse(id).language, 'pt-BR');
     assert.ok(!fullyLocalizedAcademyCourses.has(id), 'Do not advertise unreviewed translations');

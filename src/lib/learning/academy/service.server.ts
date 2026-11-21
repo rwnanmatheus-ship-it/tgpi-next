@@ -55,16 +55,18 @@ function makeChallenge(course: AcademyCourse, target: string): StoredChallenge {
     const essential = advanced.filter(question => question.essential);
     const practice = advanced.filter(question => !question.essential);
     const foundation = shuffled(bank.filter(q => !advancedIds.has(q.lessonId)));
-    selected = [...essential, ...practice.slice(0, Math.max(0, 32 - essential.length)),
-      ...foundation.slice(0, Math.max(3, 12 - advanced.length))];
+    selected = course.targetLanguage
+      ? [...bank.filter(question => question.essential), ...shuffled(bank.filter(question => !question.essential)).slice(0, 8)]
+      : [...essential, ...practice.slice(0, Math.max(0, 32 - essential.length)),
+        ...foundation.slice(0, Math.max(3, 12 - advanced.length))];
   } else selected = bank.filter(q => q.lessonId === target);
   if (!selected.length) throw new AcademyError('Assessment content is unavailable.', 503);
   const questions = shuffled(selected).map(q => {
     const options = shuffled(q.options).map(o => ({ ...o, originalId: o.id, id: randomUUID() }));
-    return { ...q, id: randomUUID(), correctOptionId: options.find(o => o.originalId === q.correctOptionId)!.id, options: options.map(({ id, label }) => ({ id, label })) };
+    return { ...q, id: randomUUID(), correctOptionId: options.find(o => o.originalId === q.correctOptionId)!.id, options: options.map(({ id, label, language }) => ({ id, label, ...(language ? { language } : {}) })) };
   });
   const challenge: StoredChallenge = { public: { id: randomUUID(), target, createdAt: new Date().toISOString(), questions: questions.map(({ correctOptionId: _key, explanation: _reason, ...q }) => { void _key; void _reason; return q; }) }, questions };
-  if (target === 'final' || target === 'retention') {
+  if ((target === 'final' || target === 'retention') && !course.targetLanguage) {
     const spec = academyCase(course.id), a = randomInt(70, 151), b = randomInt(12, 41), c = randomInt(3, 10);
     const expected = spec.operation === 'remaining' ? (a - b) / c : spec.operation === 'sum' ? a - b - c : spec.operation === 'ratio' ? a / c : b / a * 100;
     challenge.public.calculation = { prompt: spec.prompt.replaceAll('{a}', String(a)).replaceAll('{b}', String(b)).replaceAll('{c}', String(c)), unit: spec.unit };

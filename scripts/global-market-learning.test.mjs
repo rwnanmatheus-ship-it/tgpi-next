@@ -15,8 +15,8 @@ const words = text => text.trim().split(/\s+/u).length;
 test('500 regional courses add distinct authored technical content without replacing existing courses', () => {
   assert.equal(globalCatalog.length, 500);
   assert.equal(globalSpecs.length, 500);
-  assert.equal(h.academyCourses.length, 1000);
-  assert.equal(new Set(h.academyCourses.map(course => course.id)).size, 1000);
+  assert.equal(h.academyCourses.length, 1200);
+  assert.equal(new Set(h.academyCourses.map(course => course.id)).size, 1200);
   for (const field of ['title', 'scenario', 'method', 'workedExample', 'decision']) {
     assert.equal(new Set(globalSpecs.map(spec => spec[field].toLocaleLowerCase('pt-BR'))).size, 500, field);
   }
