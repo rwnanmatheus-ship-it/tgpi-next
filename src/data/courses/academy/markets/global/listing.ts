@@ -16,7 +16,7 @@ export const globalOverview: CourseOverview[] = globalCatalog.map(course => ({
   benefits: ['Aplicar um método técnico a um caso ocupacional específico.', 'Construir seis entregáveis e testar uma variante independente.', 'Revisar evidências, limites e condições de transferência.'],
   duration: `${globalWorkload.hours}h`, lessonCount: globalWorkload.lessons,
   format: '60h estimadas de trabalho autônomo: 12h de fundamentos, 12h de prática técnica, 17h de projeto, 3h de revisão aplicada, 14h de portfólio e 2h de avaliação.',
-  href: `/courses/${course.id}`, image: courseArtwork(course.id), imageAlt: '',
+  href: `/courses/${course.id}`, image: courseArtwork(course.id), imageAlt: `Ilustração fotográfica do curso ${course.title}`,
   level: 'Formação aplicada complementar', releaseLabel: 'Premium · Conteúdo em português', status: 'available',
   learningPolicy: { kind: 'practice', publicationStatus: 'published', accessPolicy: 'premium', assessmentPolicy: 'automatic_assessment', credentialStatus: 'criteria_available', instructionLanguage: 'pt-BR' },
 }));

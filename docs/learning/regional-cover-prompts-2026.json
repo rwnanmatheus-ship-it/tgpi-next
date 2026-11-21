@@ -1,0 +1,4024 @@
+{
+  "generator": "Built-in image generator",
+  "useCase": "photorealistic-natural",
+  "template": "Create ONE original premium academic professional course cover, landscape 1536x1024. Exact course topic: {title}. Profession: {role}. Regional context: {region}. Translate the topic into a concrete, technically appropriate realistic work or university laboratory scene where the precise topic is being practiced. Each cover must be specifically about this subject, with relevant equipment, artifacts, materials and credible professional activities. Apply the indexed composition and lighting variations. International private education editorial quality, high realism, refined natural color, sophisticated academic credibility. Diverse adult professionals appropriate to the context. Make physical objects and hands plausible. No logos, no watermarks, no decorative typography, no readable words. Do not make a poster, collage, or generic futuristic room.",
+  "compositionVariations": [
+    "close documentary detail of the relevant work materials with one professional partially in frame",
+    "wide environmental view showing the relevant workplace and two professionals naturally working",
+    "over-the-shoulder view showing the hands and the specific analytical or practical task",
+    "top-down view of a credible subject-specific workbench and hands",
+    "candid eye-level portrait of a professional performing the course task",
+    "low three-quarter view of relevant equipment in an authentic working environment",
+    "architectural documentary photograph of the relevant operation in progress"
+  ],
+  "lightingVariations": [
+    "natural morning window light",
+    "crisp neutral daylight",
+    "subtle warm afternoon side light",
+    "realistic soft laboratory task lighting",
+    "bright overcast outdoor or window lighting"
+  ],
+  "firstCourseOverride": "Photorealistic editorial photograph of a model reliability analyst in a real university applied statistics laboratory reviewing printed calibration curves, forecast interval charts and scatterplots alongside a laptop, fine natural side light, navy and restrained aged gold accents, rigorous authentic academic atmosphere, sophisticated composition, natural people and hands. No text, no logos, no watermark. Make the calibration analysis the central subject.",
+  "courses": [
+    {
+      "id": "na-calibracao-de-incerteza-em-modelos-preditivos",
+      "title": "Calibração de incerteza em modelos preditivos",
+      "role": "Analista de confiabilidade de modelos",
+      "region": "north-america",
+      "compositionIndex": 0,
+      "lightingIndex": 0
+    },
+    {
+      "id": "na-deteccao-de-contaminacao-em-benchmarks-de-linguagem",
+      "title": "Detecção de contaminação em benchmarks de linguagem",
+      "role": "Curador de benchmarks de IA",
+      "region": "north-america",
+      "compositionIndex": 1,
+      "lightingIndex": 1
+    },
+    {
+      "id": "na-roteamento-de-inferencia-entre-modelos-de-custo-diferente",
+      "title": "Roteamento de inferência entre modelos de custo diferente",
+      "role": "Analista de operações de inferência",
+      "region": "north-america",
+      "compositionIndex": 2,
+      "lightingIndex": 2
+    },
+    {
+      "id": "na-versionamento-de-embeddings-em-indices-vetoriais",
+      "title": "Versionamento de embeddings em índices vetoriais",
+      "role": "Engenheiro de operações de busca vetorial",
+      "region": "north-america",
+      "compositionIndex": 3,
+      "lightingIndex": 3
+    },
+    {
+      "id": "na-avaliacao-de-agentes-por-maquinas-de-estados",
+      "title": "Avaliação de agentes por máquinas de estados",
+      "role": "Analista de testes de agentes",
+      "region": "north-america",
+      "compositionIndex": 4,
+      "lightingIndex": 4
+    },
+    {
+      "id": "na-monitoramento-de-deriva-em-modelos-com-rotulos-atrasados",
+      "title": "Monitoramento de deriva em modelos com rótulos atrasados",
+      "role": "Analista de monitoramento de modelos",
+      "region": "north-america",
+      "compositionIndex": 5,
+      "lightingIndex": 0
+    },
+    {
+      "id": "na-planejamento-de-capacidade-de-gpu-para-inferencia",
+      "title": "Planejamento de capacidade de GPU para inferência",
+      "role": "Planejador de infraestrutura de IA",
+      "region": "north-america",
+      "compositionIndex": 6,
+      "lightingIndex": 1
+    },
+    {
+      "id": "na-testes-de-regressao-de-extracao-estruturada-com-schemas",
+      "title": "Testes de regressão de extração estruturada com schemas",
+      "role": "Analista de qualidade de extração com IA",
+      "region": "north-america",
+      "compositionIndex": 0,
+      "lightingIndex": 2
+    },
+    {
+      "id": "na-desenho-de-testes-contrafactuais-para-decisoes-automatizadas",
+      "title": "Desenho de testes contrafactuais para decisões automatizadas",
+      "role": "Analista de avaliação de equidade algorítmica",
+      "region": "north-america",
+      "compositionIndex": 1,
+      "lightingIndex": 3
+    },
+    {
+      "id": "na-gestao-de-datasets-de-preferencia-para-alinhamento",
+      "title": "Gestão de datasets de preferência para alinhamento",
+      "role": "Curador de dados de alinhamento",
+      "region": "north-america",
+      "compositionIndex": 2,
+      "lightingIndex": 4
+    },
+    {
+      "id": "na-inventario-criptografico-para-migracao-pos-quantica",
+      "title": "Inventário criptográfico para migração pós-quântica",
+      "role": "Analista de agilidade criptográfica",
+      "region": "north-america",
+      "compositionIndex": 3,
+      "lightingIndex": 0
+    },
+    {
+      "id": "na-priorizacao-de-vulnerabilidades-por-exposicao-e-exploracao",
+      "title": "Priorização de vulnerabilidades por exposição e exploração",
+      "role": "Analista de gestão de exposição",
+      "region": "north-america",
+      "compositionIndex": 4,
+      "lightingIndex": 1
+    },
+    {
+      "id": "na-rastreabilidade-de-componentes-por-sbom-em-produtos-digitais",
+      "title": "Rastreabilidade de componentes por SBOM em produtos digitais",
+      "role": "Analista de cadeia de suprimentos de software",
+      "region": "north-america",
+      "compositionIndex": 5,
+      "lightingIndex": 2
+    },
+    {
+      "id": "na-controle-de-identidades-nao-humanas-em-integracoes-saas",
+      "title": "Controle de identidades não humanas em integrações SaaS",
+      "role": "Analista de identidades de máquina",
+      "region": "north-america",
+      "compositionIndex": 6,
+      "lightingIndex": 3
+    },
+    {
+      "id": "na-exercicios-de-restauracao-resistente-a-ransomware",
+      "title": "Exercícios de restauração resistente a ransomware",
+      "role": "Coordenador de exercícios de recuperação",
+      "region": "north-america",
+      "compositionIndex": 0,
+      "lightingIndex": 4
+    },
+    {
+      "id": "na-modelagem-de-autorizacao-em-apis-multiempresa",
+      "title": "Modelagem de autorização em APIs multiempresa",
+      "role": "Analista de segurança de APIs",
+      "region": "north-america",
+      "compositionIndex": 1,
+      "lightingIndex": 0
+    },
+    {
+      "id": "na-verificacao-de-procedencia-de-artefatos-de-compilacao",
+      "title": "Verificação de procedência de artefatos de compilação",
+      "role": "Analista de integridade de builds",
+      "region": "north-america",
+      "compositionIndex": 2,
+      "lightingIndex": 1
+    },
+    {
+      "id": "na-desenho-de-acesso-temporario-para-operacoes-privilegiadas",
+      "title": "Desenho de acesso temporário para operações privilegiadas",
+      "role": "Analista de acesso privilegiado",
+      "region": "north-america",
+      "compositionIndex": 3,
+      "lightingIndex": 2
+    },
+    {
+      "id": "na-avaliacao-de-seguranca-de-webhooks-e-repeticoes",
+      "title": "Avaliação de segurança de webhooks e repetições",
+      "role": "Analista de segurança de integrações",
+      "region": "north-america",
+      "compositionIndex": 4,
+      "lightingIndex": 3
+    },
+    {
+      "id": "na-minimizacao-de-dados-em-registros-de-observabilidade",
+      "title": "Minimização de dados em registros de observabilidade",
+      "role": "Analista de privacidade em observabilidade",
+      "region": "north-america",
+      "compositionIndex": 5,
+      "lightingIndex": 4
+    },
+    {
+      "id": "na-analise-de-sobrevivencia-para-cancelamento-com-censura",
+      "title": "Análise de sobrevivência para cancelamento com censura",
+      "role": "Analista de retenção e sobrevivência",
+      "region": "north-america",
+      "compositionIndex": 6,
+      "lightingIndex": 0
+    },
+    {
+      "id": "na-desenho-de-testes-sequenciais-sem-inflar-falsos-positivos",
+      "title": "Desenho de testes sequenciais sem inflar falsos positivos",
+      "role": "Analista de experimentação sequencial",
+      "region": "north-america",
+      "compositionIndex": 0,
+      "lightingIndex": 1
+    },
+    {
+      "id": "na-reconciliacao-de-receitas-entre-eventos-e-razao-contabil",
+      "title": "Reconciliação de receitas entre eventos e razão contábil",
+      "role": "Analista de reconciliação de dados financeiros",
+      "region": "north-america",
+      "compositionIndex": 1,
+      "lightingIndex": 2
+    },
+    {
+      "id": "na-qualidade-de-dados-em-series-com-mudanca-de-horario",
+      "title": "Qualidade de dados em séries com mudança de horário",
+      "role": "Analista de qualidade temporal de dados",
+      "region": "north-america",
+      "compositionIndex": 2,
+      "lightingIndex": 3
+    },
+    {
+      "id": "na-privacidade-diferencial-para-publicacao-de-contagens",
+      "title": "Privacidade diferencial para publicação de contagens",
+      "role": "Analista de publicação estatística privada",
+      "region": "north-america",
+      "compositionIndex": 3,
+      "lightingIndex": 4
+    },
+    {
+      "id": "na-deteccao-de-anomalias-com-sazonalidade-operacional",
+      "title": "Detecção de anomalias com sazonalidade operacional",
+      "role": "Analista de detecção de anomalias",
+      "region": "north-america",
+      "compositionIndex": 4,
+      "lightingIndex": 0
+    },
+    {
+      "id": "na-validacao-de-modelos-de-previsao-com-janelas-moveis",
+      "title": "Validação de modelos de previsão com janelas móveis",
+      "role": "Analista de validação temporal",
+      "region": "north-america",
+      "compositionIndex": 5,
+      "lightingIndex": 1
+    },
+    {
+      "id": "na-rastreabilidade-de-metricas-em-camadas-semanticas",
+      "title": "Rastreabilidade de métricas em camadas semânticas",
+      "role": "Analista de engenharia de métricas",
+      "region": "north-america",
+      "compositionIndex": 6,
+      "lightingIndex": 2
+    },
+    {
+      "id": "na-amostragem-estratificada-para-auditoria-de-qualidade",
+      "title": "Amostragem estratificada para auditoria de qualidade",
+      "role": "Analista de auditoria amostral",
+      "region": "north-america",
+      "compositionIndex": 0,
+      "lightingIndex": 3
+    },
+    {
+      "id": "na-mapeamento-de-linhagem-para-incidentes-de-dados",
+      "title": "Mapeamento de linhagem para incidentes de dados",
+      "role": "Analista de confiabilidade de pipelines",
+      "region": "north-america",
+      "compositionIndex": 1,
+      "lightingIndex": 4
+    },
+    {
+      "id": "na-analise-de-cargas-coincidentes-para-eletrificacao-predial",
+      "title": "Análise de cargas coincidentes para eletrificação predial",
+      "role": "Analista de planejamento de eletrificação",
+      "region": "north-america",
+      "compositionIndex": 2,
+      "lightingIndex": 0
+    },
+    {
+      "id": "na-monitoramento-de-desempenho-de-bombas-de-calor",
+      "title": "Monitoramento de desempenho de bombas de calor",
+      "role": "Analista de desempenho térmico",
+      "region": "north-america",
+      "compositionIndex": 3,
+      "lightingIndex": 1
+    },
+    {
+      "id": "na-gestao-de-flexibilidade-de-recarga-de-frotas",
+      "title": "Gestão de flexibilidade de recarga de frotas",
+      "role": "Planejador de recarga de frotas",
+      "region": "north-america",
+      "compositionIndex": 4,
+      "lightingIndex": 2
+    },
+    {
+      "id": "na-verificacao-de-economia-energetica-com-baseline-ajustado",
+      "title": "Verificação de economia energética com baseline ajustado",
+      "role": "Analista de medição e verificação",
+      "region": "north-america",
+      "compositionIndex": 5,
+      "lightingIndex": 3
+    },
+    {
+      "id": "na-planejamento-de-resiliencia-com-armazenamento-distribuido",
+      "title": "Planejamento de resiliência com armazenamento distribuído",
+      "role": "Analista de resiliência energética",
+      "region": "north-america",
+      "compositionIndex": 6,
+      "lightingIndex": 4
+    },
+    {
+      "id": "na-conciliacao-de-certificados-de-energia-por-periodo-e-local",
+      "title": "Conciliação de certificados de energia por período e local",
+      "role": "Analista de atributos de energia",
+      "region": "north-america",
+      "compositionIndex": 0,
+      "lightingIndex": 0
+    },
+    {
+      "id": "na-analise-de-risco-climatico-para-continuidade-de-instalacoes",
+      "title": "Análise de risco climático para continuidade de instalações",
+      "role": "Analista de adaptação de instalações",
+      "region": "north-america",
+      "compositionIndex": 1,
+      "lightingIndex": 1
+    },
+    {
+      "id": "na-avaliacao-de-perdas-e-indisponibilidade-em-ativos-solares",
+      "title": "Avaliação de perdas e indisponibilidade em ativos solares",
+      "role": "Analista de operações solares",
+      "region": "north-america",
+      "compositionIndex": 2,
+      "lightingIndex": 2
+    },
+    {
+      "id": "na-planejamento-de-manutencao-eolica-com-janela-meteorologica",
+      "title": "Planejamento de manutenção eólica com janela meteorológica",
+      "role": "Planejador de manutenção eólica",
+      "region": "north-america",
+      "compositionIndex": 3,
+      "lightingIndex": 3
+    },
+    {
+      "id": "na-inventario-de-emissoes-em-redes-de-calor-e-frio",
+      "title": "Inventário de emissões em redes de calor e frio",
+      "role": "Analista de dados de descarbonização",
+      "region": "north-america",
+      "compositionIndex": 4,
+      "lightingIndex": 4
+    },
+    {
+      "id": "na-coordenacao-administrativa-de-atendimento-virtual-em-saude",
+      "title": "Coordenação administrativa de atendimento virtual em saúde",
+      "role": "Coordenador de operações de atendimento virtual",
+      "region": "north-america",
+      "compositionIndex": 5,
+      "lightingIndex": 0
+    },
+    {
+      "id": "na-qualidade-de-cadastros-para-interoperabilidade-de-saude",
+      "title": "Qualidade de cadastros para interoperabilidade de saúde",
+      "role": "Analista de identidade cadastral em saúde",
+      "region": "north-america",
+      "compositionIndex": 6,
+      "lightingIndex": 1
+    },
+    {
+      "id": "na-planejamento-de-capacidade-de-salas-ambulatoriais",
+      "title": "Planejamento de capacidade de salas ambulatoriais",
+      "role": "Analista de capacidade ambulatorial",
+      "region": "north-america",
+      "compositionIndex": 0,
+      "lightingIndex": 2
+    },
+    {
+      "id": "na-monitoramento-administrativo-de-encaminhamentos-pendentes",
+      "title": "Monitoramento administrativo de encaminhamentos pendentes",
+      "role": "Coordenador de encaminhamentos assistenciais",
+      "region": "north-america",
+      "compositionIndex": 1,
+      "lightingIndex": 3
+    },
+    {
+      "id": "na-acessibilidade-operacional-para-pacientes-com-barreira-linguistica",
+      "title": "Acessibilidade operacional para pacientes com barreira linguística",
+      "role": "Coordenador de acesso linguístico em saúde",
+      "region": "north-america",
+      "compositionIndex": 2,
+      "lightingIndex": 4
+    },
+    {
+      "id": "na-gestao-de-inventario-administrativo-de-dispositivos-assistivos",
+      "title": "Gestão de inventário administrativo de dispositivos assistivos",
+      "role": "Analista de operações de tecnologia assistiva",
+      "region": "north-america",
+      "compositionIndex": 3,
+      "lightingIndex": 0
+    },
+    {
+      "id": "na-indicadores-administrativos-de-transicao-de-cuidado",
+      "title": "Indicadores administrativos de transição de cuidado",
+      "role": "Analista de continuidade administrativa do cuidado",
+      "region": "north-america",
+      "compositionIndex": 4,
+      "lightingIndex": 1
+    },
+    {
+      "id": "na-qualidade-de-dados-de-experiencia-do-paciente",
+      "title": "Qualidade de dados de experiência do paciente",
+      "role": "Analista de experiência e dados do paciente",
+      "region": "north-america",
+      "compositionIndex": 5,
+      "lightingIndex": 2
+    },
+    {
+      "id": "na-programacao-de-transporte-nao-emergencial-para-servicos-de-saude",
+      "title": "Programação de transporte não emergencial para serviços de saúde",
+      "role": "Planejador de transporte assistencial não emergencial",
+      "region": "north-america",
+      "compositionIndex": 6,
+      "lightingIndex": 3
+    },
+    {
+      "id": "na-auditoria-de-dados-para-agendas-de-vacinacao-ocupacional",
+      "title": "Auditoria de dados para agendas de vacinação ocupacional",
+      "role": "Analista de operações de saúde ocupacional",
+      "region": "north-america",
+      "compositionIndex": 0,
+      "lightingIndex": 4
+    },
+    {
+      "id": "na-controle-estatistico-de-processos-com-subgrupos-racionais",
+      "title": "Controle estatístico de processos com subgrupos racionais",
+      "role": "Analista de controle estatístico industrial",
+      "region": "north-america",
+      "compositionIndex": 1,
+      "lightingIndex": 0
+    },
+    {
+      "id": "na-analise-de-sistema-de-medicao-para-inspecao-dimensional",
+      "title": "Análise de sistema de medição para inspeção dimensional",
+      "role": "Analista de confiabilidade de medição",
+      "region": "north-america",
+      "compositionIndex": 2,
+      "lightingIndex": 1
+    },
+    {
+      "id": "na-rastreabilidade-de-lotes-na-manufatura-aditiva",
+      "title": "Rastreabilidade de lotes na manufatura aditiva",
+      "role": "Analista de dados de manufatura aditiva",
+      "region": "north-america",
+      "compositionIndex": 3,
+      "lightingIndex": 2
+    },
+    {
+      "id": "na-programacao-de-manutencao-por-criticidade-funcional",
+      "title": "Programação de manutenção por criticidade funcional",
+      "role": "Planejador de confiabilidade industrial",
+      "region": "north-america",
+      "compositionIndex": 4,
+      "lightingIndex": 3
+    },
+    {
+      "id": "na-mapeamento-de-fluxo-de-valor-com-tempo-de-espera",
+      "title": "Mapeamento de fluxo de valor com tempo de espera",
+      "role": "Analista de melhoria de fluxo industrial",
+      "region": "north-america",
+      "compositionIndex": 5,
+      "lightingIndex": 4
+    },
+    {
+      "id": "na-gestao-de-obsolescencia-de-componentes-eletronicos",
+      "title": "Gestão de obsolescência de componentes eletrônicos",
+      "role": "Analista de obsolescência industrial",
+      "region": "north-america",
+      "compositionIndex": 6,
+      "lightingIndex": 0
+    },
+    {
+      "id": "na-planejamento-de-celulas-com-variabilidade-de-ciclo",
+      "title": "Planejamento de células com variabilidade de ciclo",
+      "role": "Analista de balanceamento de células",
+      "region": "north-america",
+      "compositionIndex": 0,
+      "lightingIndex": 1
+    },
+    {
+      "id": "na-controle-de-alteracoes-em-instrucoes-digitais-de-trabalho",
+      "title": "Controle de alterações em instruções digitais de trabalho",
+      "role": "Analista de documentação de operações",
+      "region": "north-america",
+      "compositionIndex": 1,
+      "lightingIndex": 2
+    },
+    {
+      "id": "na-analise-de-rendimento-de-primeira-passagem-e-retrabalho",
+      "title": "Análise de rendimento de primeira passagem e retrabalho",
+      "role": "Analista de qualidade de processo",
+      "region": "north-america",
+      "compositionIndex": 2,
+      "lightingIndex": 3
+    },
+    {
+      "id": "na-governanca-de-dados-de-gemeos-digitais-industriais",
+      "title": "Governança de dados de gêmeos digitais industriais",
+      "role": "Analista de governança de gêmeos digitais",
+      "region": "north-america",
+      "compositionIndex": 3,
+      "lightingIndex": 4
+    },
+    {
+      "id": "na-planejamento-de-cadeia-fria-por-evidencia-de-excursao",
+      "title": "Planejamento de cadeia fria por evidência de excursão",
+      "role": "Analista de monitoramento de cadeia fria",
+      "region": "north-america",
+      "compositionIndex": 4,
+      "lightingIndex": 0
+    },
+    {
+      "id": "na-otimizacao-de-estoque-por-nivel-de-servico-e-variabilidade",
+      "title": "Otimização de estoque por nível de serviço e variabilidade",
+      "role": "Analista de planejamento de estoque",
+      "region": "north-america",
+      "compositionIndex": 5,
+      "lightingIndex": 1
+    },
+    {
+      "id": "na-gestao-de-devolucoes-com-disposicao-rastreavel",
+      "title": "Gestão de devoluções com disposição rastreável",
+      "role": "Analista de operações de devolução",
+      "region": "north-america",
+      "compositionIndex": 6,
+      "lightingIndex": 2
+    },
+    {
+      "id": "na-analise-de-capacidade-portuaria-com-tempo-de-permanencia",
+      "title": "Análise de capacidade portuária com tempo de permanência",
+      "role": "Analista de planejamento de terminais",
+      "region": "north-america",
+      "compositionIndex": 0,
+      "lightingIndex": 3
+    },
+    {
+      "id": "na-validacao-de-dados-mestres-para-classificacao-comercial",
+      "title": "Validação de dados mestres para classificação comercial",
+      "role": "Analista de dados de comércio internacional",
+      "region": "north-america",
+      "compositionIndex": 1,
+      "lightingIndex": 4
+    },
+    {
+      "id": "na-planejamento-de-rotas-com-janelas-e-tempo-de-servico",
+      "title": "Planejamento de rotas com janelas e tempo de serviço",
+      "role": "Planejador de distribuição urbana",
+      "region": "north-america",
+      "compositionIndex": 2,
+      "lightingIndex": 0
+    },
+    {
+      "id": "na-visibilidade-de-remessas-por-eventos-interoperaveis",
+      "title": "Visibilidade de remessas por eventos interoperáveis",
+      "role": "Analista de visibilidade logística",
+      "region": "north-america",
+      "compositionIndex": 3,
+      "lightingIndex": 1
+    },
+    {
+      "id": "na-gestao-de-embalagens-retornaveis-por-ciclo-e-perda",
+      "title": "Gestão de embalagens retornáveis por ciclo e perda",
+      "role": "Analista de ativos logísticos retornáveis",
+      "region": "north-america",
+      "compositionIndex": 4,
+      "lightingIndex": 2
+    },
+    {
+      "id": "na-planejamento-de-suprimentos-com-risco-de-fonte-unica",
+      "title": "Planejamento de suprimentos com risco de fonte única",
+      "role": "Analista de risco de suprimentos",
+      "region": "north-america",
+      "compositionIndex": 5,
+      "lightingIndex": 3
+    },
+    {
+      "id": "na-auditoria-de-frete-por-peso-tarifavel-e-excecoes",
+      "title": "Auditoria de frete por peso tarifável e exceções",
+      "role": "Analista de auditoria de transporte",
+      "region": "north-america",
+      "compositionIndex": 6,
+      "lightingIndex": 4
+    },
+    {
+      "id": "na-avaliacao-de-incerteza-em-inventarios-ambientais",
+      "title": "Avaliação de incerteza em inventários ambientais",
+      "role": "Analista de qualidade de inventários ambientais",
+      "region": "north-america",
+      "compositionIndex": 0,
+      "lightingIndex": 0
+    },
+    {
+      "id": "na-controle-de-cadeia-de-custodia-de-amostras-ambientais",
+      "title": "Controle de cadeia de custódia de amostras ambientais",
+      "role": "Coordenador documental de amostragem ambiental",
+      "region": "north-america",
+      "compositionIndex": 1,
+      "lightingIndex": 1
+    },
+    {
+      "id": "na-rastreabilidade-de-residuos-por-massa-e-destino",
+      "title": "Rastreabilidade de resíduos por massa e destino",
+      "role": "Analista de rastreabilidade de resíduos",
+      "region": "north-america",
+      "compositionIndex": 2,
+      "lightingIndex": 2
+    },
+    {
+      "id": "na-avaliacao-de-desempenho-de-sensores-de-qualidade-do-ar",
+      "title": "Avaliação de desempenho de sensores de qualidade do ar",
+      "role": "Analista de dados de monitoramento atmosférico",
+      "region": "north-america",
+      "compositionIndex": 3,
+      "lightingIndex": 3
+    },
+    {
+      "id": "na-gestao-de-evidencias-para-alegacoes-de-circularidade",
+      "title": "Gestão de evidências para alegações de circularidade",
+      "role": "Analista de evidências de circularidade",
+      "region": "north-america",
+      "compositionIndex": 4,
+      "lightingIndex": 4
+    },
+    {
+      "id": "na-planejamento-de-auditorias-por-risco-de-processo",
+      "title": "Planejamento de auditorias por risco de processo",
+      "role": "Analista de planejamento de auditorias",
+      "region": "north-america",
+      "compositionIndex": 5,
+      "lightingIndex": 0
+    },
+    {
+      "id": "na-controle-de-nao-conformidades-por-eficacia-da-correcao",
+      "title": "Controle de não conformidades por eficácia da correção",
+      "role": "Analista de melhoria de sistemas de qualidade",
+      "region": "north-america",
+      "compositionIndex": 6,
+      "lightingIndex": 1
+    },
+    {
+      "id": "na-qualidade-de-dados-em-declaracoes-de-materiais",
+      "title": "Qualidade de dados em declarações de materiais",
+      "role": "Analista de dados de conformidade de materiais",
+      "region": "north-america",
+      "compositionIndex": 0,
+      "lightingIndex": 2
+    },
+    {
+      "id": "na-validacao-de-limpeza-por-evidencia-documental",
+      "title": "Validação de limpeza por evidência documental",
+      "role": "Analista documental de validação de processos",
+      "region": "north-america",
+      "compositionIndex": 1,
+      "lightingIndex": 3
+    },
+    {
+      "id": "na-analise-de-confiabilidade-de-registros-de-inspecao-remota",
+      "title": "Análise de confiabilidade de registros de inspeção remota",
+      "role": "Analista de evidências de inspeção remota",
+      "region": "north-america",
+      "compositionIndex": 2,
+      "lightingIndex": 4
+    },
+    {
+      "id": "na-modelagem-de-receita-recorrente-por-coortes-contratuais",
+      "title": "Modelagem de receita recorrente por coortes contratuais",
+      "role": "Analista de operações de receita",
+      "region": "north-america",
+      "compositionIndex": 3,
+      "lightingIndex": 0
+    },
+    {
+      "id": "na-planejamento-financeiro-de-assinaturas-com-uso-variavel",
+      "title": "Planejamento financeiro de assinaturas com uso variável",
+      "role": "Analista de unit economics de produtos digitais",
+      "region": "north-america",
+      "compositionIndex": 4,
+      "lightingIndex": 1
+    },
+    {
+      "id": "na-auditoria-operacional-de-programas-de-indicacao",
+      "title": "Auditoria operacional de programas de indicação",
+      "role": "Analista de operações de parcerias",
+      "region": "north-america",
+      "compositionIndex": 5,
+      "lightingIndex": 2
+    },
+    {
+      "id": "na-planejamento-de-onboarding-com-dependencias-e-valor-entregue",
+      "title": "Planejamento de onboarding com dependências e valor entregue",
+      "role": "Analista de operações de sucesso do cliente",
+      "region": "north-america",
+      "compositionIndex": 6,
+      "lightingIndex": 3
+    },
+    {
+      "id": "na-gestao-de-capacidade-de-suporte-por-complexidade",
+      "title": "Gestão de capacidade de suporte por complexidade",
+      "role": "Planejador de operações de suporte",
+      "region": "north-america",
+      "compositionIndex": 0,
+      "lightingIndex": 4
+    },
+    {
+      "id": "na-controle-de-evidencias-em-prestacao-de-contas-de-projetos",
+      "title": "Controle de evidências em prestação de contas de projetos",
+      "role": "Analista de governança de projetos financiados",
+      "region": "north-america",
+      "compositionIndex": 1,
+      "lightingIndex": 0
+    },
+    {
+      "id": "na-comparacao-de-propostas-por-custo-total-de-contratacao",
+      "title": "Comparação de propostas por custo total de contratação",
+      "role": "Analista de contratação de serviços digitais",
+      "region": "north-america",
+      "compositionIndex": 2,
+      "lightingIndex": 1
+    },
+    {
+      "id": "na-mapeamento-de-competencias-por-evidencia-de-tarefa",
+      "title": "Mapeamento de competências por evidência de tarefa",
+      "role": "Analista de inteligência de competências",
+      "region": "north-america",
+      "compositionIndex": 3,
+      "lightingIndex": 2
+    },
+    {
+      "id": "na-analise-de-abandono-em-jornadas-de-inscricao-acessiveis",
+      "title": "Análise de abandono em jornadas de inscrição acessíveis",
+      "role": "Analista de operações de conversão acessível",
+      "region": "north-america",
+      "compositionIndex": 4,
+      "lightingIndex": 3
+    },
+    {
+      "id": "na-planejamento-de-expansao-por-prontidao-operacional-regional",
+      "title": "Planejamento de expansão por prontidão operacional regional",
+      "role": "Analista de operações de expansão internacional",
+      "region": "north-america",
+      "compositionIndex": 5,
+      "lightingIndex": 4
+    },
+    {
+      "id": "na-descricao-de-audio-para-materiais-educacionais-visuais",
+      "title": "Descrição de áudio para materiais educacionais visuais",
+      "role": "Roteirista de audiodescrição educacional",
+      "region": "north-america",
+      "compositionIndex": 6,
+      "lightingIndex": 0
+    },
+    {
+      "id": "na-controle-de-qualidade-de-transcricoes-com-termos-tecnicos",
+      "title": "Controle de qualidade de transcrições com termos técnicos",
+      "role": "Analista de qualidade de transcrição técnica",
+      "region": "north-america",
+      "compositionIndex": 0,
+      "lightingIndex": 1
+    },
+    {
+      "id": "na-arquitetura-de-conteudo-para-documentacao-baseada-em-tarefas",
+      "title": "Arquitetura de conteúdo para documentação baseada em tarefas",
+      "role": "Arquiteto de documentação de produto",
+      "region": "north-america",
+      "compositionIndex": 1,
+      "lightingIndex": 2
+    },
+    {
+      "id": "na-gestao-de-direitos-de-uso-em-acervos-de-midia",
+      "title": "Gestão de direitos de uso em acervos de mídia",
+      "role": "Analista de operações de direitos de mídia",
+      "region": "north-america",
+      "compositionIndex": 2,
+      "lightingIndex": 3
+    },
+    {
+      "id": "na-preparacao-de-dados-para-arquivos-audiovisuais-pesquisaveis",
+      "title": "Preparação de dados para arquivos audiovisuais pesquisáveis",
+      "role": "Analista de metadados audiovisuais",
+      "region": "north-america",
+      "compositionIndex": 3,
+      "lightingIndex": 4
+    },
+    {
+      "id": "na-design-de-avaliacoes-praticas-com-rubricas-analiticas",
+      "title": "Design de avaliações práticas com rubricas analíticas",
+      "role": "Designer de avaliação aplicada",
+      "region": "north-america",
+      "compositionIndex": 4,
+      "lightingIndex": 0
+    },
+    {
+      "id": "na-edicao-de-visualizacoes-para-leitura-em-dispositivos-moveis",
+      "title": "Edição de visualizações para leitura em dispositivos móveis",
+      "role": "Editor de visualização acessível",
+      "region": "north-america",
+      "compositionIndex": 5,
+      "lightingIndex": 1
+    },
+    {
+      "id": "na-planejamento-editorial-de-aprendizagem-por-recuperacao",
+      "title": "Planejamento editorial de aprendizagem por recuperação",
+      "role": "Designer de prática e retenção",
+      "region": "north-america",
+      "compositionIndex": 6,
+      "lightingIndex": 2
+    },
+    {
+      "id": "na-governanca-de-conteudos-gerados-por-ia-em-publicacoes",
+      "title": "Governança de conteúdos gerados por IA em publicações",
+      "role": "Analista de governança editorial de IA",
+      "region": "north-america",
+      "compositionIndex": 0,
+      "lightingIndex": 3
+    },
+    {
+      "id": "na-localizacao-de-interfaces-com-expansao-e-plurais",
+      "title": "Localização de interfaces com expansão e plurais",
+      "role": "Analista de engenharia de localização",
+      "region": "north-america",
+      "compositionIndex": 1,
+      "lightingIndex": 4
+    },
+    {
+      "id": "as-rastreabilidade-de-wafers-em-linhas-terceirizadas-de-semicondutores",
+      "title": "Rastreabilidade de wafers em linhas terceirizadas de semicondutores",
+      "role": "Analista de processos de microeletrônica",
+      "region": "asia",
+      "compositionIndex": 2,
+      "lightingIndex": 0
+    },
+    {
+      "id": "as-analise-de-rendimento-por-etapa-em-encapsulamento-de-chips",
+      "title": "Análise de rendimento por etapa em encapsulamento de chips",
+      "role": "Analista de processos de microeletrônica",
+      "region": "asia",
+      "compositionIndex": 3,
+      "lightingIndex": 1
+    },
+    {
+      "id": "as-controle-de-deriva-em-sensores-de-salas-limpas",
+      "title": "Controle de deriva em sensores de salas limpas",
+      "role": "Analista de processos de microeletrônica",
+      "region": "asia",
+      "compositionIndex": 4,
+      "lightingIndex": 2
+    },
+    {
+      "id": "as-planejamento-de-troca-de-ferramentas-em-montagem-eletronica",
+      "title": "Planejamento de troca de ferramentas em montagem eletrônica",
+      "role": "Analista de processos de microeletrônica",
+      "region": "asia",
+      "compositionIndex": 5,
+      "lightingIndex": 3
+    },
+    {
+      "id": "as-tratamento-de-dados-censurados-em-testes-de-confiabilidade-eletronica",
+      "title": "Tratamento de dados censurados em testes de confiabilidade eletrônica",
+      "role": "Analista de processos de microeletrônica",
+      "region": "asia",
+      "compositionIndex": 6,
+      "lightingIndex": 4
+    },
+    {
+      "id": "as-balanco-de-capacidade-de-inspecao-optica-automatizada",
+      "title": "Balanço de capacidade de inspeção óptica automatizada",
+      "role": "Analista de processos de microeletrônica",
+      "region": "asia",
+      "compositionIndex": 0,
+      "lightingIndex": 0
+    },
+    {
+      "id": "as-qualificacao-documental-de-mudancas-de-resina-em-componentes",
+      "title": "Qualificação documental de mudanças de resina em componentes",
+      "role": "Analista de processos de microeletrônica",
+      "region": "asia",
+      "compositionIndex": 1,
+      "lightingIndex": 1
+    },
+    {
+      "id": "as-programacao-de-manutencao-baseada-em-gargalos-de-producao",
+      "title": "Programação de manutenção baseada em gargalos de produção",
+      "role": "Analista de processos de microeletrônica",
+      "region": "asia",
+      "compositionIndex": 2,
+      "lightingIndex": 2
+    },
+    {
+      "id": "as-gestao-de-receitas-de-teste-em-eletronica-de-potencia",
+      "title": "Gestão de receitas de teste em eletrônica de potência",
+      "role": "Analista de processos de microeletrônica",
+      "region": "asia",
+      "compositionIndex": 3,
+      "lightingIndex": 3
+    },
+    {
+      "id": "as-analise-de-desperdicio-de-agua-em-fabricacao-de-precisao",
+      "title": "Análise de desperdício de água em fabricação de precisão",
+      "role": "Analista de processos de microeletrônica",
+      "region": "asia",
+      "compositionIndex": 4,
+      "lightingIndex": 4
+    },
+    {
+      "id": "as-reconciliacao-de-pagamentos-upi-com-confirmacoes-tardias",
+      "title": "Reconciliação de pagamentos UPI com confirmações tardias",
+      "role": "Analista de operações financeiras digitais",
+      "region": "asia",
+      "compositionIndex": 5,
+      "lightingIndex": 0
+    },
+    {
+      "id": "as-normalizacao-de-qr-de-pagamento-para-comercio-transfronteirico",
+      "title": "Normalização de QR de pagamento para comércio transfronteiriço",
+      "role": "Analista de operações financeiras digitais",
+      "region": "asia",
+      "compositionIndex": 6,
+      "lightingIndex": 1
+    },
+    {
+      "id": "as-deteccao-de-fracionamento-em-carteiras-de-remessas",
+      "title": "Detecção de fracionamento em carteiras de remessas",
+      "role": "Analista de operações financeiras digitais",
+      "region": "asia",
+      "compositionIndex": 0,
+      "lightingIndex": 2
+    },
+    {
+      "id": "as-analise-de-inadimplencia-por-coortes-de-credito-digital",
+      "title": "Análise de inadimplência por coortes de crédito digital",
+      "role": "Analista de operações financeiras digitais",
+      "region": "asia",
+      "compositionIndex": 1,
+      "lightingIndex": 3
+    },
+    {
+      "id": "as-conciliacao-de-estornos-em-marketplaces-asiaticos",
+      "title": "Conciliação de estornos em marketplaces asiáticos",
+      "role": "Analista de operações financeiras digitais",
+      "region": "asia",
+      "compositionIndex": 2,
+      "lightingIndex": 4
+    },
+    {
+      "id": "as-qualidade-de-dados-em-cadastros-empresariais-multilingues",
+      "title": "Qualidade de dados em cadastros empresariais multilíngues",
+      "role": "Analista de operações financeiras digitais",
+      "region": "asia",
+      "compositionIndex": 3,
+      "lightingIndex": 0
+    },
+    {
+      "id": "as-monitoramento-de-liquidez-intradiaria-em-sistemas-de-pagamento",
+      "title": "Monitoramento de liquidez intradiária em sistemas de pagamento",
+      "role": "Analista de operações financeiras digitais",
+      "region": "asia",
+      "compositionIndex": 4,
+      "lightingIndex": 1
+    },
+    {
+      "id": "as-gestao-de-consentimento-em-agregadores-de-financas-abertas",
+      "title": "Gestão de consentimento em agregadores de finanças abertas",
+      "role": "Analista de operações financeiras digitais",
+      "region": "asia",
+      "compositionIndex": 5,
+      "lightingIndex": 2
+    },
+    {
+      "id": "as-analise-de-chargeback-por-canal-em-comercio-de-aplicativos",
+      "title": "Análise de chargeback por canal em comércio de aplicativos",
+      "role": "Analista de operações financeiras digitais",
+      "region": "asia",
+      "compositionIndex": 6,
+      "lightingIndex": 3
+    },
+    {
+      "id": "as-validacao-de-regras-de-arredondamento-em-remessas-multicambiais",
+      "title": "Validação de regras de arredondamento em remessas multicambiais",
+      "role": "Analista de operações financeiras digitais",
+      "region": "asia",
+      "compositionIndex": 0,
+      "lightingIndex": 4
+    },
+    {
+      "id": "as-avaliacao-de-segmentacao-de-texto-em-tailandes",
+      "title": "Avaliação de segmentação de texto em tailandês",
+      "role": "Analista de linguagem e sistemas de IA asiáticos",
+      "region": "asia",
+      "compositionIndex": 1,
+      "lightingIndex": 0
+    },
+    {
+      "id": "as-teste-de-recuperacao-de-informacao-em-documentos-japoneses",
+      "title": "Teste de recuperação de informação em documentos japoneses",
+      "role": "Analista de linguagem e sistemas de IA asiáticos",
+      "region": "asia",
+      "compositionIndex": 2,
+      "lightingIndex": 1
+    },
+    {
+      "id": "as-qualidade-de-ocr-em-documentos-de-escrita-arabe",
+      "title": "Qualidade de OCR em documentos de escrita árabe",
+      "role": "Analista de linguagem e sistemas de IA asiáticos",
+      "region": "asia",
+      "compositionIndex": 3,
+      "lightingIndex": 2
+    },
+    {
+      "id": "as-avaliacao-de-reconhecimento-de-fala-com-alternancia-hindi-ingles",
+      "title": "Avaliação de reconhecimento de fala com alternância hindi-inglês",
+      "role": "Analista de linguagem e sistemas de IA asiáticos",
+      "region": "asia",
+      "compositionIndex": 4,
+      "lightingIndex": 3
+    },
+    {
+      "id": "as-adaptacao-de-taxonomias-de-moderacao-para-indonesio-informal",
+      "title": "Adaptação de taxonomias de moderação para indonésio informal",
+      "role": "Analista de linguagem e sistemas de IA asiáticos",
+      "region": "asia",
+      "compositionIndex": 5,
+      "lightingIndex": 4
+    },
+    {
+      "id": "as-controle-de-terminologia-em-traducao-de-manuais-coreanos",
+      "title": "Controle de terminologia em tradução de manuais coreanos",
+      "role": "Analista de linguagem e sistemas de IA asiáticos",
+      "region": "asia",
+      "compositionIndex": 6,
+      "lightingIndex": 0
+    },
+    {
+      "id": "as-deteccao-de-vazamento-entre-corpora-multilingues-de-avaliacao",
+      "title": "Detecção de vazamento entre corpora multilíngues de avaliação",
+      "role": "Analista de linguagem e sistemas de IA asiáticos",
+      "region": "asia",
+      "compositionIndex": 0,
+      "lightingIndex": 1
+    },
+    {
+      "id": "as-mensuracao-de-custo-de-tokens-em-idiomas-de-baixa-segmentacao",
+      "title": "Mensuração de custo de tokens em idiomas de baixa segmentação",
+      "role": "Analista de linguagem e sistemas de IA asiáticos",
+      "region": "asia",
+      "compositionIndex": 1,
+      "lightingIndex": 2
+    },
+    {
+      "id": "as-validacao-de-assistentes-de-atendimento-em-tagalo",
+      "title": "Validação de assistentes de atendimento em tagalo",
+      "role": "Analista de linguagem e sistemas de IA asiáticos",
+      "region": "asia",
+      "compositionIndex": 2,
+      "lightingIndex": 3
+    },
+    {
+      "id": "as-tratamento-de-variantes-de-nomes-em-busca-de-documentos-asiaticos",
+      "title": "Tratamento de variantes de nomes em busca de documentos asiáticos",
+      "role": "Analista de linguagem e sistemas de IA asiáticos",
+      "region": "asia",
+      "compositionIndex": 3,
+      "lightingIndex": 4
+    },
+    {
+      "id": "as-inventario-de-emissoes-por-contrato-de-eletricidade-em-singapura",
+      "title": "Inventário de emissões por contrato de eletricidade em Singapura",
+      "role": "Analista de transição energética e recursos",
+      "region": "asia",
+      "compositionIndex": 4,
+      "lightingIndex": 0
+    },
+    {
+      "id": "as-analise-de-curtailment-em-parques-solares-indianos",
+      "title": "Análise de curtailment em parques solares indianos",
+      "role": "Analista de transição energética e recursos",
+      "region": "asia",
+      "compositionIndex": 5,
+      "lightingIndex": 1
+    },
+    {
+      "id": "as-planejamento-de-demanda-eletrica-de-centros-de-dados-no-golfo",
+      "title": "Planejamento de demanda elétrica de centros de dados no Golfo",
+      "role": "Analista de transição energética e recursos",
+      "region": "asia",
+      "compositionIndex": 6,
+      "lightingIndex": 2
+    },
+    {
+      "id": "as-rastreabilidade-de-atributos-de-hidrogenio-de-baixo-carbono",
+      "title": "Rastreabilidade de atributos de hidrogênio de baixo carbono",
+      "role": "Analista de transição energética e recursos",
+      "region": "asia",
+      "compositionIndex": 0,
+      "lightingIndex": 3
+    },
+    {
+      "id": "as-avaliacao-de-resposta-da-demanda-em-fabricas-tailandesas",
+      "title": "Avaliação de resposta da demanda em fábricas tailandesas",
+      "role": "Analista de transição energética e recursos",
+      "region": "asia",
+      "compositionIndex": 1,
+      "lightingIndex": 4
+    },
+    {
+      "id": "as-analise-de-reuso-de-agua-em-parques-industriais-chineses",
+      "title": "Análise de reúso de água em parques industriais chineses",
+      "role": "Analista de transição energética e recursos",
+      "region": "asia",
+      "compositionIndex": 2,
+      "lightingIndex": 0
+    },
+    {
+      "id": "as-planejamento-de-troca-de-baterias-para-frotas-de-duas-rodas",
+      "title": "Planejamento de troca de baterias para frotas de duas rodas",
+      "role": "Analista de transição energética e recursos",
+      "region": "asia",
+      "compositionIndex": 3,
+      "lightingIndex": 1
+    },
+    {
+      "id": "as-comparacao-de-intensidade-termica-em-secagem-de-alimentos",
+      "title": "Comparação de intensidade térmica em secagem de alimentos",
+      "role": "Analista de transição energética e recursos",
+      "region": "asia",
+      "compositionIndex": 4,
+      "lightingIndex": 2
+    },
+    {
+      "id": "as-analise-de-perdas-em-redes-de-frio-para-cidades-tropicais",
+      "title": "Análise de perdas em redes de frio para cidades tropicais",
+      "role": "Analista de transição energética e recursos",
+      "region": "asia",
+      "compositionIndex": 5,
+      "lightingIndex": 3
+    },
+    {
+      "id": "as-documentacao-de-descomissionamento-circular-de-paineis-solares",
+      "title": "Documentação de descomissionamento circular de painéis solares",
+      "role": "Analista de transição energética e recursos",
+      "region": "asia",
+      "compositionIndex": 6,
+      "lightingIndex": 4
+    },
+    {
+      "id": "as-analise-de-filas-de-caminhoes-em-portos-de-transbordo",
+      "title": "Análise de filas de caminhões em portos de transbordo",
+      "role": "Analista de cadeias comerciais asiáticas",
+      "region": "asia",
+      "compositionIndex": 0,
+      "lightingIndex": 0
+    },
+    {
+      "id": "as-reconciliacao-de-conhecimento-eletronico-de-embarque",
+      "title": "Reconciliação de conhecimento eletrônico de embarque",
+      "role": "Analista de cadeias comerciais asiáticas",
+      "region": "asia",
+      "compositionIndex": 1,
+      "lightingIndex": 1
+    },
+    {
+      "id": "as-planejamento-de-conteineres-retornaveis-em-cadeias-asean",
+      "title": "Planejamento de contêineres retornáveis em cadeias ASEAN",
+      "role": "Analista de cadeias comerciais asiáticas",
+      "region": "asia",
+      "compositionIndex": 2,
+      "lightingIndex": 2
+    },
+    {
+      "id": "as-gestao-de-dados-de-origem-em-fornecedores-de-vestuario-asiatico",
+      "title": "Gestão de dados de origem em fornecedores de vestuário asiático",
+      "role": "Analista de cadeias comerciais asiáticas",
+      "region": "asia",
+      "compositionIndex": 3,
+      "lightingIndex": 3
+    },
+    {
+      "id": "as-analise-de-confiabilidade-de-corredores-ferroviarios-eurasiaticos",
+      "title": "Análise de confiabilidade de corredores ferroviários eurasiáticos",
+      "role": "Analista de cadeias comerciais asiáticas",
+      "region": "asia",
+      "compositionIndex": 4,
+      "lightingIndex": 4
+    },
+    {
+      "id": "as-controle-de-temperatura-documental-em-exportacao-de-frutas",
+      "title": "Controle de temperatura documental em exportação de frutas",
+      "role": "Analista de cadeias comerciais asiáticas",
+      "region": "asia",
+      "compositionIndex": 5,
+      "lightingIndex": 0
+    },
+    {
+      "id": "as-planejamento-de-fulfillment-em-festivais-de-comercio-eletronico",
+      "title": "Planejamento de fulfillment em festivais de comércio eletrônico",
+      "role": "Analista de cadeias comerciais asiáticas",
+      "region": "asia",
+      "compositionIndex": 6,
+      "lightingIndex": 1
+    },
+    {
+      "id": "as-analise-de-demurrage-e-detention-em-importacoes-asiaticas",
+      "title": "Análise de demurrage e detention em importações asiáticas",
+      "role": "Analista de cadeias comerciais asiáticas",
+      "region": "asia",
+      "compositionIndex": 0,
+      "lightingIndex": 2
+    },
+    {
+      "id": "as-consolidacao-de-carga-para-pequenos-exportadores-nepaleses",
+      "title": "Consolidação de carga para pequenos exportadores nepaleses",
+      "role": "Analista de cadeias comerciais asiáticas",
+      "region": "asia",
+      "compositionIndex": 1,
+      "lightingIndex": 3
+    },
+    {
+      "id": "as-qualidade-de-eventos-de-entrega-em-redes-de-ultima-milha",
+      "title": "Qualidade de eventos de entrega em redes de última milha",
+      "role": "Analista de cadeias comerciais asiáticas",
+      "region": "asia",
+      "compositionIndex": 2,
+      "lightingIndex": 4
+    },
+    {
+      "id": "as-dimensionamento-administrativo-de-centros-de-convivencia-para-idosos",
+      "title": "Dimensionamento administrativo de centros de convivência para idosos",
+      "role": "Coordenador administrativo de serviços de cuidado",
+      "region": "asia",
+      "compositionIndex": 3,
+      "lightingIndex": 0
+    },
+    {
+      "id": "as-controle-de-continuidade-em-visitas-domiciliares-nao-clinicas",
+      "title": "Controle de continuidade em visitas domiciliares não clínicas",
+      "role": "Coordenador administrativo de serviços de cuidado",
+      "region": "asia",
+      "compositionIndex": 4,
+      "lightingIndex": 1
+    },
+    {
+      "id": "as-gestao-de-consentimento-para-comunicacao-com-familiares",
+      "title": "Gestão de consentimento para comunicação com familiares",
+      "role": "Coordenador administrativo de serviços de cuidado",
+      "region": "asia",
+      "compositionIndex": 5,
+      "lightingIndex": 2
+    },
+    {
+      "id": "as-analise-de-faltas-em-programas-comunitarios-de-reabilitacao",
+      "title": "Análise de faltas em programas comunitários de reabilitação",
+      "role": "Coordenador administrativo de serviços de cuidado",
+      "region": "asia",
+      "compositionIndex": 6,
+      "lightingIndex": 3
+    },
+    {
+      "id": "as-acessibilidade-de-portais-de-agendamento-em-alfabetizacao-limitada",
+      "title": "Acessibilidade de portais de agendamento em alfabetização limitada",
+      "role": "Coordenador administrativo de serviços de cuidado",
+      "region": "asia",
+      "compositionIndex": 0,
+      "lightingIndex": 4
+    },
+    {
+      "id": "as-coordenacao-de-interpretes-em-atendimento-administrativo-de-saude",
+      "title": "Coordenação de intérpretes em atendimento administrativo de saúde",
+      "role": "Coordenador administrativo de serviços de cuidado",
+      "region": "asia",
+      "compositionIndex": 1,
+      "lightingIndex": 0
+    },
+    {
+      "id": "as-qualidade-de-cadastros-em-programas-de-cuidado-de-longa-duracao",
+      "title": "Qualidade de cadastros em programas de cuidado de longa duração",
+      "role": "Coordenador administrativo de serviços de cuidado",
+      "region": "asia",
+      "compositionIndex": 2,
+      "lightingIndex": 1
+    },
+    {
+      "id": "as-planejamento-de-voluntariado-para-apoio-intergeracional",
+      "title": "Planejamento de voluntariado para apoio intergeracional",
+      "role": "Coordenador administrativo de serviços de cuidado",
+      "region": "asia",
+      "compositionIndex": 3,
+      "lightingIndex": 2
+    },
+    {
+      "id": "as-analise-de-tempo-de-espera-em-servicos-de-apoio-a-cuidadores",
+      "title": "Análise de tempo de espera em serviços de apoio a cuidadores",
+      "role": "Coordenador administrativo de serviços de cuidado",
+      "region": "asia",
+      "compositionIndex": 4,
+      "lightingIndex": 3
+    },
+    {
+      "id": "as-transferencia-administrativa-entre-equipes-de-apoio-social",
+      "title": "Transferência administrativa entre equipes de apoio social",
+      "role": "Coordenador administrativo de serviços de cuidado",
+      "region": "asia",
+      "compositionIndex": 5,
+      "lightingIndex": 4
+    },
+    {
+      "id": "as-normalizacao-de-rendimento-de-arroz-por-umidade",
+      "title": "Normalização de rendimento de arroz por umidade",
+      "role": "Analista de qualidade agroalimentar e recursos rurais",
+      "region": "asia",
+      "compositionIndex": 6,
+      "lightingIndex": 0
+    },
+    {
+      "id": "as-rastreabilidade-de-lotes-em-cooperativas-de-cha",
+      "title": "Rastreabilidade de lotes em cooperativas de chá",
+      "role": "Analista de qualidade agroalimentar e recursos rurais",
+      "region": "asia",
+      "compositionIndex": 0,
+      "lightingIndex": 1
+    },
+    {
+      "id": "as-analise-de-perdas-pos-colheita-em-manga-tropical",
+      "title": "Análise de perdas pós-colheita em manga tropical",
+      "role": "Analista de qualidade agroalimentar e recursos rurais",
+      "region": "asia",
+      "compositionIndex": 1,
+      "lightingIndex": 2
+    },
+    {
+      "id": "as-controle-documental-de-cadeia-halal-multiforncedor",
+      "title": "Controle documental de cadeia halal multiforncedor",
+      "role": "Analista de qualidade agroalimentar e recursos rurais",
+      "region": "asia",
+      "compositionIndex": 2,
+      "lightingIndex": 3
+    },
+    {
+      "id": "as-amostragem-de-qualidade-em-exportacao-de-especiarias",
+      "title": "Amostragem de qualidade em exportação de especiarias",
+      "role": "Analista de qualidade agroalimentar e recursos rurais",
+      "region": "asia",
+      "compositionIndex": 3,
+      "lightingIndex": 4
+    },
+    {
+      "id": "as-comparacao-de-produtividade-em-aquicultura-com-sobrevivencia",
+      "title": "Comparação de produtividade em aquicultura com sobrevivência",
+      "role": "Analista de qualidade agroalimentar e recursos rurais",
+      "region": "asia",
+      "compositionIndex": 4,
+      "lightingIndex": 0
+    },
+    {
+      "id": "as-conciliacao-de-pesos-em-leiloes-digitais-de-pescado",
+      "title": "Conciliação de pesos em leilões digitais de pescado",
+      "role": "Analista de qualidade agroalimentar e recursos rurais",
+      "region": "asia",
+      "compositionIndex": 5,
+      "lightingIndex": 1
+    },
+    {
+      "id": "as-analise-de-cobertura-de-seguro-parametrico-agricola",
+      "title": "Análise de cobertura de seguro paramétrico agrícola",
+      "role": "Analista de qualidade agroalimentar e recursos rurais",
+      "region": "asia",
+      "compositionIndex": 6,
+      "lightingIndex": 2
+    },
+    {
+      "id": "as-rastreabilidade-documental-de-cafe-com-geolocalizacao",
+      "title": "Rastreabilidade documental de café com geolocalização",
+      "role": "Analista de qualidade agroalimentar e recursos rurais",
+      "region": "asia",
+      "compositionIndex": 0,
+      "lightingIndex": 3
+    },
+    {
+      "id": "as-planejamento-de-janelas-de-colheita-em-cooperativas-de-frutas",
+      "title": "Planejamento de janelas de colheita em cooperativas de frutas",
+      "role": "Analista de qualidade agroalimentar e recursos rurais",
+      "region": "asia",
+      "compositionIndex": 1,
+      "lightingIndex": 4
+    },
+    {
+      "id": "as-seguranca-de-recuperacao-de-conta-em-aplicativos-superapp",
+      "title": "Segurança de recuperação de conta em aplicativos superapp",
+      "role": "Analista de segurança operacional e confiança digital",
+      "region": "asia",
+      "compositionIndex": 2,
+      "lightingIndex": 0
+    },
+    {
+      "id": "as-gestao-de-acesso-temporario-de-fornecedores-em-fabricas-conectadas",
+      "title": "Gestão de acesso temporário de fornecedores em fábricas conectadas",
+      "role": "Analista de segurança operacional e confiança digital",
+      "region": "asia",
+      "compositionIndex": 3,
+      "lightingIndex": 1
+    },
+    {
+      "id": "as-qualidade-de-logs-de-autenticacao-em-fusos-asiaticos",
+      "title": "Qualidade de logs de autenticação em fusos asiáticos",
+      "role": "Analista de segurança operacional e confiança digital",
+      "region": "asia",
+      "compositionIndex": 4,
+      "lightingIndex": 2
+    },
+    {
+      "id": "as-minimizacao-de-dados-em-verificacao-digital-de-identidade",
+      "title": "Minimização de dados em verificação digital de identidade",
+      "role": "Analista de segurança operacional e confiança digital",
+      "region": "asia",
+      "compositionIndex": 5,
+      "lightingIndex": 3
+    },
+    {
+      "id": "as-validacao-de-segmentacao-em-redes-de-edificios-inteligentes",
+      "title": "Validação de segmentação em redes de edifícios inteligentes",
+      "role": "Analista de segurança operacional e confiança digital",
+      "region": "asia",
+      "compositionIndex": 6,
+      "lightingIndex": 4
+    },
+    {
+      "id": "as-analise-de-risco-de-dependencias-em-software-de-exportacao",
+      "title": "Análise de risco de dependências em software de exportação",
+      "role": "Analista de segurança operacional e confiança digital",
+      "region": "asia",
+      "compositionIndex": 0,
+      "lightingIndex": 0
+    },
+    {
+      "id": "as-controle-de-compartilhamento-de-arquivos-em-equipes-offshore",
+      "title": "Controle de compartilhamento de arquivos em equipes offshore",
+      "role": "Analista de segurança operacional e confiança digital",
+      "region": "asia",
+      "compositionIndex": 1,
+      "lightingIndex": 1
+    },
+    {
+      "id": "as-teste-de-revogacao-de-sessoes-em-plataformas-de-ensino",
+      "title": "Teste de revogação de sessões em plataformas de ensino",
+      "role": "Analista de segurança operacional e confiança digital",
+      "region": "asia",
+      "compositionIndex": 2,
+      "lightingIndex": 2
+    },
+    {
+      "id": "as-analise-de-engenharia-social-em-recrutamento-internacional-remoto",
+      "title": "Análise de engenharia social em recrutamento internacional remoto",
+      "role": "Analista de segurança operacional e confiança digital",
+      "region": "asia",
+      "compositionIndex": 3,
+      "lightingIndex": 3
+    },
+    {
+      "id": "as-governanca-de-segredos-em-automacoes-empresariais-low-code",
+      "title": "Governança de segredos em automações empresariais low-code",
+      "role": "Analista de segurança operacional e confiança digital",
+      "region": "asia",
+      "compositionIndex": 4,
+      "lightingIndex": 4
+    },
+    {
+      "id": "as-localizacao-de-interfaces-para-escrita-vertical-japonesa",
+      "title": "Localização de interfaces para escrita vertical japonesa",
+      "role": "Especialista em experiências digitais e patrimônio cultural",
+      "region": "asia",
+      "compositionIndex": 5,
+      "lightingIndex": 0
+    },
+    {
+      "id": "as-adaptacao-cultural-de-tutoriais-de-produtos-para-a-india",
+      "title": "Adaptação cultural de tutoriais de produtos para a Índia",
+      "role": "Especialista em experiências digitais e patrimônio cultural",
+      "region": "asia",
+      "compositionIndex": 6,
+      "lightingIndex": 1
+    },
+    {
+      "id": "as-curadoria-participativa-de-patrimonio-imaterial-no-sudeste-asiatico",
+      "title": "Curadoria participativa de patrimônio imaterial no Sudeste Asiático",
+      "role": "Especialista em experiências digitais e patrimônio cultural",
+      "region": "asia",
+      "compositionIndex": 0,
+      "lightingIndex": 2
+    },
+    {
+      "id": "as-acessibilidade-de-legendas-para-dramas-coreanos",
+      "title": "Acessibilidade de legendas para dramas coreanos",
+      "role": "Especialista em experiências digitais e patrimônio cultural",
+      "region": "asia",
+      "compositionIndex": 1,
+      "lightingIndex": 3
+    },
+    {
+      "id": "as-documentacao-de-procedencia-em-acervos-digitais-de-arte-asiatica",
+      "title": "Documentação de procedência em acervos digitais de arte asiática",
+      "role": "Especialista em experiências digitais e patrimônio cultural",
+      "region": "asia",
+      "compositionIndex": 2,
+      "lightingIndex": 4
+    },
+    {
+      "id": "as-teste-de-economia-de-jogos-com-itens-cosmeticos",
+      "title": "Teste de economia de jogos com itens cosméticos",
+      "role": "Especialista em experiências digitais e patrimônio cultural",
+      "region": "asia",
+      "compositionIndex": 3,
+      "lightingIndex": 0
+    },
+    {
+      "id": "as-planejamento-de-conteudo-turistico-responsavel-em-areas-sagradas",
+      "title": "Planejamento de conteúdo turístico responsável em áreas sagradas",
+      "role": "Especialista em experiências digitais e patrimônio cultural",
+      "region": "asia",
+      "compositionIndex": 4,
+      "lightingIndex": 1
+    },
+    {
+      "id": "as-validacao-de-formularios-com-enderecos-do-japao-e-da-coreia",
+      "title": "Validação de formulários com endereços do Japão e da Coreia",
+      "role": "Especialista em experiências digitais e patrimônio cultural",
+      "region": "asia",
+      "compositionIndex": 5,
+      "lightingIndex": 2
+    },
+    {
+      "id": "as-producao-de-audioguias-multilingues-para-museus-asiaticos",
+      "title": "Produção de audioguias multilíngues para museus asiáticos",
+      "role": "Especialista em experiências digitais e patrimônio cultural",
+      "region": "asia",
+      "compositionIndex": 6,
+      "lightingIndex": 3
+    },
+    {
+      "id": "as-controle-de-continuidade-narrativa-em-series-de-animacao",
+      "title": "Controle de continuidade narrativa em séries de animação",
+      "role": "Especialista em experiências digitais e patrimônio cultural",
+      "region": "asia",
+      "compositionIndex": 0,
+      "lightingIndex": 4
+    },
+    {
+      "id": "as-desenho-de-piloto-de-exportacao-de-servicos-para-mercados-asean",
+      "title": "Desenho de piloto de exportação de serviços para mercados ASEAN",
+      "role": "Analista de expansão e operações empresariais na Ásia",
+      "region": "asia",
+      "compositionIndex": 1,
+      "lightingIndex": 0
+    },
+    {
+      "id": "as-analise-de-custo-total-em-terceirizacao-para-centros-asiaticos",
+      "title": "Análise de custo total em terceirização para centros asiáticos",
+      "role": "Analista de expansão e operações empresariais na Ásia",
+      "region": "asia",
+      "compositionIndex": 2,
+      "lightingIndex": 1
+    },
+    {
+      "id": "as-planejamento-de-atendimento-durante-festivais-e-calendarios-asiaticos",
+      "title": "Planejamento de atendimento durante festivais e calendários asiáticos",
+      "role": "Analista de expansão e operações empresariais na Ásia",
+      "region": "asia",
+      "compositionIndex": 3,
+      "lightingIndex": 2
+    },
+    {
+      "id": "as-avaliacao-de-prontidao-de-fornecedores-para-compras-regionais",
+      "title": "Avaliação de prontidão de fornecedores para compras regionais",
+      "role": "Analista de expansão e operações empresariais na Ásia",
+      "region": "asia",
+      "compositionIndex": 4,
+      "lightingIndex": 3
+    },
+    {
+      "id": "as-analise-de-margem-em-venda-digital-com-multiplos-marketplaces",
+      "title": "Análise de margem em venda digital com múltiplos marketplaces",
+      "role": "Analista de expansão e operações empresariais na Ásia",
+      "region": "asia",
+      "compositionIndex": 5,
+      "lightingIndex": 4
+    },
+    {
+      "id": "as-mapeamento-de-competencias-para-equipes-distribuidas-india-japao",
+      "title": "Mapeamento de competências para equipes distribuídas Índia-Japão",
+      "role": "Analista de expansão e operações empresariais na Ásia",
+      "region": "asia",
+      "compositionIndex": 6,
+      "lightingIndex": 0
+    },
+    {
+      "id": "as-mensuracao-de-adocao-de-ferramentas-digitais-em-pequenas-empresas",
+      "title": "Mensuração de adoção de ferramentas digitais em pequenas empresas",
+      "role": "Analista de expansão e operações empresariais na Ásia",
+      "region": "asia",
+      "compositionIndex": 0,
+      "lightingIndex": 1
+    },
+    {
+      "id": "as-planejamento-de-sucessao-operacional-em-empresas-familiares-asiaticas",
+      "title": "Planejamento de sucessão operacional em empresas familiares asiáticas",
+      "role": "Analista de expansão e operações empresariais na Ásia",
+      "region": "asia",
+      "compositionIndex": 1,
+      "lightingIndex": 2
+    },
+    {
+      "id": "as-analise-de-viabilidade-de-suporte-em-idiomas-de-baixa-cobertura",
+      "title": "Análise de viabilidade de suporte em idiomas de baixa cobertura",
+      "role": "Analista de expansão e operações empresariais na Ásia",
+      "region": "asia",
+      "compositionIndex": 2,
+      "lightingIndex": 3
+    },
+    {
+      "id": "as-desenho-de-avaliacao-pratica-para-contratacao-por-habilidades",
+      "title": "Desenho de avaliação prática para contratação por habilidades",
+      "role": "Analista de expansão e operações empresariais na Ásia",
+      "region": "asia",
+      "compositionIndex": 3,
+      "lightingIndex": 4
+    },
+    {
+      "id": "sa-balanco-de-massa-na-torrefacao-de-cafes-especiais",
+      "title": "Balanço de massa na torrefação de cafés especiais",
+      "role": "Analista de operações agroalimentares",
+      "region": "south-america",
+      "compositionIndex": 4,
+      "lightingIndex": 0
+    },
+    {
+      "id": "sa-planejamento-de-secagem-de-cacau-por-lotes",
+      "title": "Planejamento de secagem de cacau por lotes",
+      "role": "Analista de operações agroalimentares",
+      "region": "south-america",
+      "compositionIndex": 5,
+      "lightingIndex": 1
+    },
+    {
+      "id": "sa-rastreabilidade-de-castanha-amazonica-em-cooperativas",
+      "title": "Rastreabilidade de castanha amazônica em cooperativas",
+      "role": "Analista de operações agroalimentares",
+      "region": "south-america",
+      "compositionIndex": 6,
+      "lightingIndex": 2
+    },
+    {
+      "id": "sa-controle-de-perdas-em-centrais-de-banana",
+      "title": "Controle de perdas em centrais de banana",
+      "role": "Analista de operações agroalimentares",
+      "region": "south-america",
+      "compositionIndex": 0,
+      "lightingIndex": 3
+    },
+    {
+      "id": "sa-custos-de-racao-e-conversao-em-piscicultura-documental",
+      "title": "Custos de ração e conversão em piscicultura documental",
+      "role": "Analista de operações agroalimentares",
+      "region": "south-america",
+      "compositionIndex": 1,
+      "lightingIndex": 4
+    },
+    {
+      "id": "sa-programacao-de-colheita-de-quinoa-por-capacidade",
+      "title": "Programação de colheita de quinoa por capacidade",
+      "role": "Analista de operações agroalimentares",
+      "region": "south-america",
+      "compositionIndex": 2,
+      "lightingIndex": 0
+    },
+    {
+      "id": "sa-reconciliacao-de-solidos-no-beneficiamento-de-leite",
+      "title": "Reconciliação de sólidos no beneficiamento de leite",
+      "role": "Analista de operações agroalimentares",
+      "region": "south-america",
+      "compositionIndex": 3,
+      "lightingIndex": 1
+    },
+    {
+      "id": "sa-documentacao-de-fermentacao-de-frutas-para-bebidas",
+      "title": "Documentação de fermentação de frutas para bebidas",
+      "role": "Analista de operações agroalimentares",
+      "region": "south-america",
+      "compositionIndex": 4,
+      "lightingIndex": 2
+    },
+    {
+      "id": "sa-planejamento-de-beneficiamento-de-mandioca-comunitaria",
+      "title": "Planejamento de beneficiamento de mandioca comunitária",
+      "role": "Analista de operações agroalimentares",
+      "region": "south-america",
+      "compositionIndex": 5,
+      "lightingIndex": 3
+    },
+    {
+      "id": "sa-gestao-de-pedidos-de-sementes-nativas-com-procedencia",
+      "title": "Gestão de pedidos de sementes nativas com procedência",
+      "role": "Analista de operações agroalimentares",
+      "region": "south-america",
+      "compositionIndex": 6,
+      "lightingIndex": 4
+    },
+    {
+      "id": "sa-reconciliacao-de-certificados-de-energia-por-periodo",
+      "title": "Reconciliação de certificados de energia por período",
+      "role": "Analista de planejamento energético",
+      "region": "south-america",
+      "compositionIndex": 0,
+      "lightingIndex": 0
+    },
+    {
+      "id": "sa-analise-de-indisponibilidade-em-parques-eolicos-costeiros",
+      "title": "Análise de indisponibilidade em parques eólicos costeiros",
+      "role": "Analista de planejamento energético",
+      "region": "south-america",
+      "compositionIndex": 1,
+      "lightingIndex": 1
+    },
+    {
+      "id": "sa-planejamento-de-autoconsumo-solar-em-pequenas-industrias",
+      "title": "Planejamento de autoconsumo solar em pequenas indústrias",
+      "role": "Analista de planejamento energético",
+      "region": "south-america",
+      "compositionIndex": 2,
+      "lightingIndex": 2
+    },
+    {
+      "id": "sa-balanco-energetico-de-secagem-industrial-de-graos",
+      "title": "Balanço energético de secagem industrial de grãos",
+      "role": "Analista de planejamento energético",
+      "region": "south-america",
+      "compositionIndex": 3,
+      "lightingIndex": 3
+    },
+    {
+      "id": "sa-analise-documental-de-biogas-em-cooperativas",
+      "title": "Análise documental de biogás em cooperativas",
+      "role": "Analista de planejamento energético",
+      "region": "south-america",
+      "compositionIndex": 4,
+      "lightingIndex": 4
+    },
+    {
+      "id": "sa-planejamento-de-carregamento-de-frotas-municipais-eletricas",
+      "title": "Planejamento de carregamento de frotas municipais elétricas",
+      "role": "Analista de planejamento energético",
+      "region": "south-america",
+      "compositionIndex": 5,
+      "lightingIndex": 0
+    },
+    {
+      "id": "sa-reconciliacao-de-consumo-em-sistemas-de-bombeamento",
+      "title": "Reconciliação de consumo em sistemas de bombeamento",
+      "role": "Analista de planejamento energético",
+      "region": "south-america",
+      "compositionIndex": 6,
+      "lightingIndex": 1
+    },
+    {
+      "id": "sa-orcamento-energetico-de-camaras-frias-de-exportacao",
+      "title": "Orçamento energético de câmaras frias de exportação",
+      "role": "Analista de planejamento energético",
+      "region": "south-america",
+      "compositionIndex": 0,
+      "lightingIndex": 2
+    },
+    {
+      "id": "sa-planejamento-de-manutencao-de-inversores-em-usinas-solares",
+      "title": "Planejamento de manutenção de inversores em usinas solares",
+      "role": "Analista de planejamento energético",
+      "region": "south-america",
+      "compositionIndex": 1,
+      "lightingIndex": 3
+    },
+    {
+      "id": "sa-comparacao-de-contratos-de-eficiencia-por-linha-de-base",
+      "title": "Comparação de contratos de eficiência por linha de base",
+      "role": "Analista de planejamento energético",
+      "region": "south-america",
+      "compositionIndex": 2,
+      "lightingIndex": 4
+    },
+    {
+      "id": "sa-planejamento-de-transbordo-hidroviario-no-corredor-amazonico",
+      "title": "Planejamento de transbordo hidroviário no corredor amazônico",
+      "role": "Analista de cadeias logísticas regionais",
+      "region": "south-america",
+      "compositionIndex": 3,
+      "lightingIndex": 0
+    },
+    {
+      "id": "sa-conciliacao-de-tara-em-transporte-de-concentrados-minerais",
+      "title": "Conciliação de tara em transporte de concentrados minerais",
+      "role": "Analista de cadeias logísticas regionais",
+      "region": "south-america",
+      "compositionIndex": 4,
+      "lightingIndex": 1
+    },
+    {
+      "id": "sa-gestao-de-conteineres-reefer-em-exportacao-de-frutas",
+      "title": "Gestão de contêineres reefer em exportação de frutas",
+      "role": "Analista de cadeias logísticas regionais",
+      "region": "south-america",
+      "compositionIndex": 5,
+      "lightingIndex": 2
+    },
+    {
+      "id": "sa-planejamento-de-rotas-urbanas-com-janelas-de-recebimento",
+      "title": "Planejamento de rotas urbanas com janelas de recebimento",
+      "role": "Analista de cadeias logísticas regionais",
+      "region": "south-america",
+      "compositionIndex": 6,
+      "lightingIndex": 3
+    },
+    {
+      "id": "sa-controle-de-estoque-comprometido-em-distribuicao-hospitalar",
+      "title": "Controle de estoque comprometido em distribuição hospitalar",
+      "role": "Analista de cadeias logísticas regionais",
+      "region": "south-america",
+      "compositionIndex": 0,
+      "lightingIndex": 4
+    },
+    {
+      "id": "sa-calculo-de-ocupacao-cubica-em-exportacao-de-moveis",
+      "title": "Cálculo de ocupação cúbica em exportação de móveis",
+      "role": "Analista de cadeias logísticas regionais",
+      "region": "south-america",
+      "compositionIndex": 1,
+      "lightingIndex": 0
+    },
+    {
+      "id": "sa-reconciliacao-de-transito-aduaneiro-por-marcos-documentais",
+      "title": "Reconciliação de trânsito aduaneiro por marcos documentais",
+      "role": "Analista de cadeias logísticas regionais",
+      "region": "south-america",
+      "compositionIndex": 2,
+      "lightingIndex": 1
+    },
+    {
+      "id": "sa-planejamento-de-abastecimento-em-localidades-andinas",
+      "title": "Planejamento de abastecimento em localidades andinas",
+      "role": "Analista de cadeias logísticas regionais",
+      "region": "south-america",
+      "compositionIndex": 3,
+      "lightingIndex": 2
+    },
+    {
+      "id": "sa-gestao-de-devolucoes-em-marketplaces-regionais",
+      "title": "Gestão de devoluções em marketplaces regionais",
+      "role": "Analista de cadeias logísticas regionais",
+      "region": "south-america",
+      "compositionIndex": 4,
+      "lightingIndex": 3
+    },
+    {
+      "id": "sa-planejamento-de-patio-para-exportacao-de-veiculos",
+      "title": "Planejamento de pátio para exportação de veículos",
+      "role": "Analista de cadeias logísticas regionais",
+      "region": "south-america",
+      "compositionIndex": 5,
+      "lightingIndex": 4
+    },
+    {
+      "id": "sa-deteccao-de-duplicidade-em-cadastros-de-exportadores",
+      "title": "Detecção de duplicidade em cadastros de exportadores",
+      "role": "Analista de dados e interoperabilidade",
+      "region": "south-america",
+      "compositionIndex": 6,
+      "lightingIndex": 0
+    },
+    {
+      "id": "sa-analise-de-precos-regionais-com-conversao-de-unidades",
+      "title": "Análise de preços regionais com conversão de unidades",
+      "role": "Analista de dados e interoperabilidade",
+      "region": "south-america",
+      "compositionIndex": 0,
+      "lightingIndex": 1
+    },
+    {
+      "id": "sa-analise-de-evasao-em-formacao-profissional",
+      "title": "Análise de evasão em formação profissional",
+      "role": "Analista de dados e interoperabilidade",
+      "region": "south-america",
+      "compositionIndex": 1,
+      "lightingIndex": 2
+    },
+    {
+      "id": "sa-paineis-de-atendimento-publico-com-tempos-censurados",
+      "title": "Painéis de atendimento público com tempos censurados",
+      "role": "Analista de dados e interoperabilidade",
+      "region": "south-america",
+      "compositionIndex": 2,
+      "lightingIndex": 3
+    },
+    {
+      "id": "sa-conciliacao-de-indicadores-de-vendas-em-moedas-locais",
+      "title": "Conciliação de indicadores de vendas em moedas locais",
+      "role": "Analista de dados e interoperabilidade",
+      "region": "south-america",
+      "compositionIndex": 3,
+      "lightingIndex": 4
+    },
+    {
+      "id": "sa-amostragem-de-disponibilidade-de-medicamentos-por-estabelecimento",
+      "title": "Amostragem de disponibilidade de medicamentos por estabelecimento",
+      "role": "Analista de dados e interoperabilidade",
+      "region": "south-america",
+      "compositionIndex": 4,
+      "lightingIndex": 0
+    },
+    {
+      "id": "sa-series-temporais-de-emprego-com-revisao-de-dados",
+      "title": "Séries temporais de emprego com revisão de dados",
+      "role": "Analista de dados e interoperabilidade",
+      "region": "south-america",
+      "compositionIndex": 5,
+      "lightingIndex": 1
+    },
+    {
+      "id": "sa-geocodificacao-de-enderecos-informais-em-servicos-urbanos",
+      "title": "Geocodificação de endereços informais em serviços urbanos",
+      "role": "Analista de dados e interoperabilidade",
+      "region": "south-america",
+      "compositionIndex": 6,
+      "lightingIndex": 2
+    },
+    {
+      "id": "sa-reconciliacao-de-dados-de-chuva-por-dia-hidrologico",
+      "title": "Reconciliação de dados de chuva por dia hidrológico",
+      "role": "Analista de dados e interoperabilidade",
+      "region": "south-america",
+      "compositionIndex": 0,
+      "lightingIndex": 3
+    },
+    {
+      "id": "sa-auditoria-de-juncoes-em-bases-de-faturamento-municipal",
+      "title": "Auditoria de junções em bases de faturamento municipal",
+      "role": "Analista de dados e interoperabilidade",
+      "region": "south-america",
+      "compositionIndex": 1,
+      "lightingIndex": 4
+    },
+    {
+      "id": "sa-margem-de-contribuicao-em-turismo-comunitario-andino",
+      "title": "Margem de contribuição em turismo comunitário andino",
+      "role": "Analista de operações comerciais regionais",
+      "region": "south-america",
+      "compositionIndex": 2,
+      "lightingIndex": 0
+    },
+    {
+      "id": "sa-gestao-de-capital-de-giro-para-exportadores-artesanais",
+      "title": "Gestão de capital de giro para exportadores artesanais",
+      "role": "Analista de operações comerciais regionais",
+      "region": "south-america",
+      "compositionIndex": 3,
+      "lightingIndex": 1
+    },
+    {
+      "id": "sa-precificacao-de-servicos-de-traducao-regional-por-escopo",
+      "title": "Precificação de serviços de tradução regional por escopo",
+      "role": "Analista de operações comerciais regionais",
+      "region": "south-america",
+      "compositionIndex": 4,
+      "lightingIndex": 2
+    },
+    {
+      "id": "sa-economia-unitaria-de-assinaturas-educacionais-locais",
+      "title": "Economia unitária de assinaturas educacionais locais",
+      "role": "Analista de operações comerciais regionais",
+      "region": "south-america",
+      "compositionIndex": 5,
+      "lightingIndex": 3
+    },
+    {
+      "id": "sa-avaliacao-de-propostas-b2b-com-prazos-diferentes",
+      "title": "Avaliação de propostas B2B com prazos diferentes",
+      "role": "Analista de operações comerciais regionais",
+      "region": "south-america",
+      "compositionIndex": 6,
+      "lightingIndex": 4
+    },
+    {
+      "id": "sa-planejamento-de-compras-coletivas-para-microvarejo",
+      "title": "Planejamento de compras coletivas para microvarejo",
+      "role": "Analista de operações comerciais regionais",
+      "region": "south-america",
+      "compositionIndex": 0,
+      "lightingIndex": 0
+    },
+    {
+      "id": "sa-controle-de-comissoes-em-vendas-multicanal",
+      "title": "Controle de comissões em vendas multicanal",
+      "role": "Analista de operações comerciais regionais",
+      "region": "south-america",
+      "compositionIndex": 1,
+      "lightingIndex": 1
+    },
+    {
+      "id": "sa-planejamento-comercial-de-safras-de-artesanato",
+      "title": "Planejamento comercial de safras de artesanato",
+      "role": "Analista de operações comerciais regionais",
+      "region": "south-america",
+      "compositionIndex": 2,
+      "lightingIndex": 2
+    },
+    {
+      "id": "sa-gestao-de-descontos-em-contratos-de-suporte-regional",
+      "title": "Gestão de descontos em contratos de suporte regional",
+      "role": "Analista de operações comerciais regionais",
+      "region": "south-america",
+      "compositionIndex": 3,
+      "lightingIndex": 3
+    },
+    {
+      "id": "sa-conciliacao-de-vouchers-em-programas-de-capacitacao",
+      "title": "Conciliação de vouchers em programas de capacitação",
+      "role": "Analista de operações comerciais regionais",
+      "region": "south-america",
+      "compositionIndex": 4,
+      "lightingIndex": 4
+    },
+    {
+      "id": "sa-planejamento-de-setup-em-metalmecanica-de-pequenos-lotes",
+      "title": "Planejamento de setup em metalmecânica de pequenos lotes",
+      "role": "Analista de planejamento e qualidade industrial",
+      "region": "south-america",
+      "compositionIndex": 5,
+      "lightingIndex": 0
+    },
+    {
+      "id": "sa-conciliacao-de-refugo-e-retrabalho-em-autopecas",
+      "title": "Conciliação de refugo e retrabalho em autopeças",
+      "role": "Analista de planejamento e qualidade industrial",
+      "region": "south-america",
+      "compositionIndex": 6,
+      "lightingIndex": 1
+    },
+    {
+      "id": "sa-analise-de-gargalo-em-beneficiamento-mineral-documental",
+      "title": "Análise de gargalo em beneficiamento mineral documental",
+      "role": "Analista de planejamento e qualidade industrial",
+      "region": "south-america",
+      "compositionIndex": 0,
+      "lightingIndex": 2
+    },
+    {
+      "id": "sa-gestao-de-metrologia-em-embalagens-flexiveis",
+      "title": "Gestão de metrologia em embalagens flexíveis",
+      "role": "Analista de planejamento e qualidade industrial",
+      "region": "south-america",
+      "compositionIndex": 1,
+      "lightingIndex": 3
+    },
+    {
+      "id": "sa-planejamento-de-ordens-de-manutencao-por-criticidade",
+      "title": "Planejamento de ordens de manutenção por criticidade",
+      "role": "Analista de planejamento e qualidade industrial",
+      "region": "south-america",
+      "compositionIndex": 2,
+      "lightingIndex": 4
+    },
+    {
+      "id": "sa-conciliacao-de-umidade-na-producao-de-madeira",
+      "title": "Conciliação de umidade na produção de madeira",
+      "role": "Analista de planejamento e qualidade industrial",
+      "region": "south-america",
+      "compositionIndex": 3,
+      "lightingIndex": 0
+    },
+    {
+      "id": "sa-planejamento-de-corte-textil-por-aproveitamento",
+      "title": "Planejamento de corte têxtil por aproveitamento",
+      "role": "Analista de planejamento e qualidade industrial",
+      "region": "south-america",
+      "compositionIndex": 4,
+      "lightingIndex": 1
+    },
+    {
+      "id": "sa-analise-de-capacidade-em-impressao-de-embalagens",
+      "title": "Análise de capacidade em impressão de embalagens",
+      "role": "Analista de planejamento e qualidade industrial",
+      "region": "south-america",
+      "compositionIndex": 5,
+      "lightingIndex": 2
+    },
+    {
+      "id": "sa-rastreabilidade-de-componentes-em-reparacao-de-eletronicos",
+      "title": "Rastreabilidade de componentes em reparação de eletrônicos",
+      "role": "Analista de planejamento e qualidade industrial",
+      "region": "south-america",
+      "compositionIndex": 6,
+      "lightingIndex": 3
+    },
+    {
+      "id": "sa-analise-de-rendimento-em-transformacao-de-plasticos-reciclados",
+      "title": "Análise de rendimento em transformação de plásticos reciclados",
+      "role": "Analista de planejamento e qualidade industrial",
+      "region": "south-america",
+      "compositionIndex": 0,
+      "lightingIndex": 4
+    },
+    {
+      "id": "sa-coordenacao-administrativa-de-teleatendimento-em-zonas-rurais",
+      "title": "Coordenação administrativa de teleatendimento em zonas rurais",
+      "role": "Coordenador de operações de serviços comunitários",
+      "region": "south-america",
+      "compositionIndex": 1,
+      "lightingIndex": 0
+    },
+    {
+      "id": "sa-gestao-de-encaminhamentos-para-reabilitacao-comunitaria",
+      "title": "Gestão de encaminhamentos para reabilitação comunitária",
+      "role": "Coordenador de operações de serviços comunitários",
+      "region": "south-america",
+      "compositionIndex": 2,
+      "lightingIndex": 1
+    },
+    {
+      "id": "sa-planejamento-de-transporte-nao-emergencial-para-idosos",
+      "title": "Planejamento de transporte não emergencial para idosos",
+      "role": "Coordenador de operações de serviços comunitários",
+      "region": "south-america",
+      "compositionIndex": 3,
+      "lightingIndex": 2
+    },
+    {
+      "id": "sa-organizacao-de-agendas-de-apoio-a-cuidadores-familiares",
+      "title": "Organização de agendas de apoio a cuidadores familiares",
+      "role": "Coordenador de operações de serviços comunitários",
+      "region": "south-america",
+      "compositionIndex": 4,
+      "lightingIndex": 3
+    },
+    {
+      "id": "sa-controle-documental-de-emprestimo-de-tecnologias-assistivas",
+      "title": "Controle documental de empréstimo de tecnologias assistivas",
+      "role": "Coordenador de operações de serviços comunitários",
+      "region": "south-america",
+      "compositionIndex": 5,
+      "lightingIndex": 4
+    },
+    {
+      "id": "sa-gestao-de-frequencia-em-centros-de-convivencia",
+      "title": "Gestão de frequência em centros de convivência",
+      "role": "Coordenador de operações de serviços comunitários",
+      "region": "south-america",
+      "compositionIndex": 6,
+      "lightingIndex": 0
+    },
+    {
+      "id": "sa-coordenacao-de-apoio-administrativo-a-migrantes",
+      "title": "Coordenação de apoio administrativo a migrantes",
+      "role": "Coordenador de operações de serviços comunitários",
+      "region": "south-america",
+      "compositionIndex": 0,
+      "lightingIndex": 1
+    },
+    {
+      "id": "sa-planejamento-de-entrega-de-refeicoes-em-programas-sociais",
+      "title": "Planejamento de entrega de refeições em programas sociais",
+      "role": "Coordenador de operações de serviços comunitários",
+      "region": "south-america",
+      "compositionIndex": 1,
+      "lightingIndex": 2
+    },
+    {
+      "id": "sa-gestao-de-visitas-domiciliares-com-consentimento-documentado",
+      "title": "Gestão de visitas domiciliares com consentimento documentado",
+      "role": "Coordenador de operações de serviços comunitários",
+      "region": "south-america",
+      "compositionIndex": 2,
+      "lightingIndex": 3
+    },
+    {
+      "id": "sa-organizacao-de-continuidade-de-cuidado-apos-alta-administrativa",
+      "title": "Organização de continuidade de cuidado após alta administrativa",
+      "role": "Coordenador de operações de serviços comunitários",
+      "region": "south-america",
+      "compositionIndex": 3,
+      "lightingIndex": 4
+    },
+    {
+      "id": "sa-producao-de-guias-bilingues-para-turismo-de-base-comunitaria",
+      "title": "Produção de guias bilíngues para turismo de base comunitária",
+      "role": "Especialista em conteúdo e comunicação regional",
+      "region": "south-america",
+      "compositionIndex": 4,
+      "lightingIndex": 0
+    },
+    {
+      "id": "sa-legendagem-acessivel-de-formacao-tecnica-regional",
+      "title": "Legendagem acessível de formação técnica regional",
+      "role": "Especialista em conteúdo e comunicação regional",
+      "region": "south-america",
+      "compositionIndex": 5,
+      "lightingIndex": 1
+    },
+    {
+      "id": "sa-curadoria-de-mapas-narrativos-sobre-patrimonio-ferroviario",
+      "title": "Curadoria de mapas narrativos sobre patrimônio ferroviário",
+      "role": "Especialista em conteúdo e comunicação regional",
+      "region": "south-america",
+      "compositionIndex": 6,
+      "lightingIndex": 2
+    },
+    {
+      "id": "sa-comunicacao-de-riscos-de-calor-em-servicos-municipais",
+      "title": "Comunicação de riscos de calor em serviços municipais",
+      "role": "Especialista em conteúdo e comunicação regional",
+      "region": "south-america",
+      "compositionIndex": 0,
+      "lightingIndex": 3
+    },
+    {
+      "id": "sa-localizacao-de-interfaces-de-comercio-para-espanhol-regional",
+      "title": "Localização de interfaces de comércio para espanhol regional",
+      "role": "Especialista em conteúdo e comunicação regional",
+      "region": "south-america",
+      "compositionIndex": 1,
+      "lightingIndex": 4
+    },
+    {
+      "id": "sa-edicao-de-relatorios-publicos-com-graficos-verificaveis",
+      "title": "Edição de relatórios públicos com gráficos verificáveis",
+      "role": "Especialista em conteúdo e comunicação regional",
+      "region": "south-america",
+      "compositionIndex": 2,
+      "lightingIndex": 0
+    },
+    {
+      "id": "sa-documentacao-audiovisual-de-oficios-tradicionais-com-consentimento",
+      "title": "Documentação audiovisual de ofícios tradicionais com consentimento",
+      "role": "Especialista em conteúdo e comunicação regional",
+      "region": "south-america",
+      "compositionIndex": 3,
+      "lightingIndex": 1
+    },
+    {
+      "id": "sa-redacao-de-instrucoes-de-uso-para-equipamentos-reparados",
+      "title": "Redação de instruções de uso para equipamentos reparados",
+      "role": "Especialista em conteúdo e comunicação regional",
+      "region": "south-america",
+      "compositionIndex": 4,
+      "lightingIndex": 2
+    },
+    {
+      "id": "sa-planejamento-editorial-de-educacao-financeira-sem-promessas",
+      "title": "Planejamento editorial de educação financeira sem promessas",
+      "role": "Especialista em conteúdo e comunicação regional",
+      "region": "south-america",
+      "compositionIndex": 5,
+      "lightingIndex": 3
+    },
+    {
+      "id": "sa-gestao-de-atualizacao-de-conteudos-de-mobilidade-regional",
+      "title": "Gestão de atualização de conteúdos de mobilidade regional",
+      "role": "Especialista em conteúdo e comunicação regional",
+      "region": "south-america",
+      "compositionIndex": 6,
+      "lightingIndex": 4
+    },
+    {
+      "id": "sa-revisao-de-acessos-de-fornecedores-em-cooperativas-digitais",
+      "title": "Revisão de acessos de fornecedores em cooperativas digitais",
+      "role": "Analista de segurança operacional defensiva",
+      "region": "south-america",
+      "compositionIndex": 0,
+      "lightingIndex": 0
+    },
+    {
+      "id": "sa-recuperacao-testada-de-arquivos-de-escritorios-locais",
+      "title": "Recuperação testada de arquivos de escritórios locais",
+      "role": "Analista de segurança operacional defensiva",
+      "region": "south-america",
+      "compositionIndex": 1,
+      "lightingIndex": 1
+    },
+    {
+      "id": "sa-triagem-defensiva-de-mensagens-de-cobranca-em-microempresas",
+      "title": "Triagem defensiva de mensagens de cobrança em microempresas",
+      "role": "Analista de segurança operacional defensiva",
+      "region": "south-america",
+      "compositionIndex": 2,
+      "lightingIndex": 2
+    },
+    {
+      "id": "sa-gestao-de-autenticacao-multifator-em-escolas-independentes",
+      "title": "Gestão de autenticação multifator em escolas independentes",
+      "role": "Analista de segurança operacional defensiva",
+      "region": "south-america",
+      "compositionIndex": 3,
+      "lightingIndex": 3
+    },
+    {
+      "id": "sa-segregacao-de-funcoes-em-pagamentos-de-associacoes",
+      "title": "Segregação de funções em pagamentos de associações",
+      "role": "Analista de segurança operacional defensiva",
+      "region": "south-america",
+      "compositionIndex": 4,
+      "lightingIndex": 4
+    },
+    {
+      "id": "sa-inventario-de-exposicao-de-documentos-em-portais-municipais",
+      "title": "Inventário de exposição de documentos em portais municipais",
+      "role": "Analista de segurança operacional defensiva",
+      "region": "south-america",
+      "compositionIndex": 5,
+      "lightingIndex": 0
+    },
+    {
+      "id": "sa-planejamento-de-resposta-a-perda-de-celular-corporativo",
+      "title": "Planejamento de resposta a perda de celular corporativo",
+      "role": "Analista de segurança operacional defensiva",
+      "region": "south-america",
+      "compositionIndex": 6,
+      "lightingIndex": 1
+    },
+    {
+      "id": "sa-revisao-de-permissoes-de-planilhas-em-redes-de-saude",
+      "title": "Revisão de permissões de planilhas em redes de saúde",
+      "role": "Analista de segurança operacional defensiva",
+      "region": "south-america",
+      "compositionIndex": 0,
+      "lightingIndex": 2
+    },
+    {
+      "id": "sa-controle-de-dependencias-em-aplicacoes-de-organizacoes-sociais",
+      "title": "Controle de dependências em aplicações de organizações sociais",
+      "role": "Analista de segurança operacional defensiva",
+      "region": "south-america",
+      "compositionIndex": 1,
+      "lightingIndex": 3
+    },
+    {
+      "id": "sa-validacao-de-autorizacoes-em-sistemas-de-inscricao",
+      "title": "Validação de autorizações em sistemas de inscrição",
+      "role": "Analista de segurança operacional defensiva",
+      "region": "south-america",
+      "compositionIndex": 2,
+      "lightingIndex": 4
+    },
+    {
+      "id": "sa-rastreabilidade-documental-de-lotes-de-cobre-reciclado",
+      "title": "Rastreabilidade documental de lotes de cobre reciclado",
+      "role": "Analista de conformidade e rastreabilidade",
+      "region": "south-america",
+      "compositionIndex": 3,
+      "lightingIndex": 0
+    },
+    {
+      "id": "sa-controle-de-evidencias-em-compras-publicas-de-tecnologia",
+      "title": "Controle de evidências em compras públicas de tecnologia",
+      "role": "Analista de conformidade e rastreabilidade",
+      "region": "south-america",
+      "compositionIndex": 4,
+      "lightingIndex": 1
+    },
+    {
+      "id": "sa-analise-de-integridade-de-cadeias-de-custodia-laboratoriais",
+      "title": "Análise de integridade de cadeias de custódia laboratoriais",
+      "role": "Analista de conformidade e rastreabilidade",
+      "region": "south-america",
+      "compositionIndex": 5,
+      "lightingIndex": 2
+    },
+    {
+      "id": "sa-qualificacao-documental-de-fornecedores-de-embalagens",
+      "title": "Qualificação documental de fornecedores de embalagens",
+      "role": "Analista de conformidade e rastreabilidade",
+      "region": "south-america",
+      "compositionIndex": 6,
+      "lightingIndex": 3
+    },
+    {
+      "id": "sa-gestao-de-nao-conformidades-em-servicos-de-transporte-escolar",
+      "title": "Gestão de não conformidades em serviços de transporte escolar",
+      "role": "Analista de conformidade e rastreabilidade",
+      "region": "south-america",
+      "compositionIndex": 0,
+      "lightingIndex": 4
+    },
+    {
+      "id": "sa-reconciliacao-de-requisitos-de-acessibilidade-em-licitacoes",
+      "title": "Reconciliação de requisitos de acessibilidade em licitações",
+      "role": "Analista de conformidade e rastreabilidade",
+      "region": "south-america",
+      "compositionIndex": 1,
+      "lightingIndex": 0
+    },
+    {
+      "id": "sa-auditoria-de-origem-de-fibras-em-marcas-independentes",
+      "title": "Auditoria de origem de fibras em marcas independentes",
+      "role": "Analista de conformidade e rastreabilidade",
+      "region": "south-america",
+      "compositionIndex": 2,
+      "lightingIndex": 1
+    },
+    {
+      "id": "sa-controle-de-versoes-em-procedimentos-de-cooperativas",
+      "title": "Controle de versões em procedimentos de cooperativas",
+      "role": "Analista de conformidade e rastreabilidade",
+      "region": "south-america",
+      "compositionIndex": 3,
+      "lightingIndex": 2
+    },
+    {
+      "id": "sa-conciliacao-de-pesagens-em-reciclagem-de-equipamentos",
+      "title": "Conciliação de pesagens em reciclagem de equipamentos",
+      "role": "Analista de conformidade e rastreabilidade",
+      "region": "south-america",
+      "compositionIndex": 4,
+      "lightingIndex": 3
+    },
+    {
+      "id": "sa-avaliacao-de-completude-em-relatorios-de-impacto-social",
+      "title": "Avaliação de completude em relatórios de impacto social",
+      "role": "Analista de conformidade e rastreabilidade",
+      "region": "south-america",
+      "compositionIndex": 5,
+      "lightingIndex": 4
+    },
+    {
+      "id": "af-balanco-de-massa-na-secagem-de-milho-cooperativo",
+      "title": "Balanço de massa na secagem de milho cooperativo",
+      "role": "Analista de pós-colheita",
+      "region": "africa",
+      "compositionIndex": 6,
+      "lightingIndex": 0
+    },
+    {
+      "id": "af-fila-de-pre-resfriamento-de-hortalicas-de-exportacao",
+      "title": "Fila de pré-resfriamento de hortaliças de exportação",
+      "role": "Planejador de cadeia fria agrícola",
+      "region": "africa",
+      "compositionIndex": 0,
+      "lightingIndex": 1
+    },
+    {
+      "id": "af-amostragem-de-qualidade-em-sacarias-de-sorgo",
+      "title": "Amostragem de qualidade em sacarias de sorgo",
+      "role": "Assistente de controle de grãos",
+      "region": "africa",
+      "compositionIndex": 1,
+      "lightingIndex": 2
+    },
+    {
+      "id": "af-reconciliacao-de-cacau-por-origem-e-fermentacao",
+      "title": "Reconciliação de cacau por origem e fermentação",
+      "role": "Analista de rastreabilidade agrícola",
+      "region": "africa",
+      "compositionIndex": 2,
+      "lightingIndex": 3
+    },
+    {
+      "id": "af-viabilidade-de-caixas-retornaveis-para-tomate",
+      "title": "Viabilidade de caixas retornáveis para tomate",
+      "role": "Analista de operações hortícolas",
+      "region": "africa",
+      "compositionIndex": 3,
+      "lightingIndex": 4
+    },
+    {
+      "id": "af-programacao-de-secadores-solares-de-mandioca",
+      "title": "Programação de secadores solares de mandioca",
+      "role": "Planejador de processamento rural",
+      "region": "africa",
+      "compositionIndex": 4,
+      "lightingIndex": 0
+    },
+    {
+      "id": "af-indice-de-perdas-de-pescado-em-mercados-costeiros",
+      "title": "Índice de perdas de pescado em mercados costeiros",
+      "role": "Analista de perdas alimentares",
+      "region": "africa",
+      "compositionIndex": 5,
+      "lightingIndex": 1
+    },
+    {
+      "id": "af-planejamento-de-coleta-leiteira-com-janelas-rurais",
+      "title": "Planejamento de coleta leiteira com janelas rurais",
+      "role": "Coordenador de coleta de alimentos",
+      "region": "africa",
+      "compositionIndex": 6,
+      "lightingIndex": 2
+    },
+    {
+      "id": "af-custos-de-beneficiamento-de-castanha-por-lote",
+      "title": "Custos de beneficiamento de castanha por lote",
+      "role": "Analista de custos agroindustriais",
+      "region": "africa",
+      "compositionIndex": 0,
+      "lightingIndex": 3
+    },
+    {
+      "id": "af-rastreio-de-sementes-comunitarias-e-germinacao",
+      "title": "Rastreio de sementes comunitárias e germinação",
+      "role": "Assistente de bancos de sementes",
+      "region": "africa",
+      "compositionIndex": 1,
+      "lightingIndex": 4
+    },
+    {
+      "id": "af-perfil-de-demanda-para-minirredes-de-mercados-rurais",
+      "title": "Perfil de demanda para minirredes de mercados rurais",
+      "role": "Analista de minirredes",
+      "region": "africa",
+      "compositionIndex": 2,
+      "lightingIndex": 0
+    },
+    {
+      "id": "af-conciliacao-de-medidores-pre-pagos-de-minirrede",
+      "title": "Conciliação de medidores pré-pagos de minirrede",
+      "role": "Analista de receitas energéticas",
+      "region": "africa",
+      "compositionIndex": 3,
+      "lightingIndex": 1
+    },
+    {
+      "id": "af-autonomia-de-baterias-para-telecomunicacao-rural",
+      "title": "Autonomia de baterias para telecomunicação rural",
+      "role": "Planejador de continuidade energética",
+      "region": "africa",
+      "compositionIndex": 4,
+      "lightingIndex": 2
+    },
+    {
+      "id": "af-comparacao-de-contratos-de-bombeamento-solar",
+      "title": "Comparação de contratos de bombeamento solar",
+      "role": "Analista comercial de energia produtiva",
+      "region": "africa",
+      "compositionIndex": 5,
+      "lightingIndex": 3
+    },
+    {
+      "id": "af-indicadores-de-disponibilidade-de-sistemas-solares-comunitarios",
+      "title": "Indicadores de disponibilidade de sistemas solares comunitários",
+      "role": "Analista de desempenho energético",
+      "region": "africa",
+      "compositionIndex": 6,
+      "lightingIndex": 4
+    },
+    {
+      "id": "af-previsao-de-pecas-de-reposicao-para-kits-solares",
+      "title": "Previsão de peças de reposição para kits solares",
+      "role": "Planejador de assistência solar",
+      "region": "africa",
+      "compositionIndex": 0,
+      "lightingIndex": 0
+    },
+    {
+      "id": "af-analise-de-perdas-por-sombreamento-em-carteiras-fotovoltaicas",
+      "title": "Análise de perdas por sombreamento em carteiras fotovoltaicas",
+      "role": "Analista de dados solares",
+      "region": "africa",
+      "compositionIndex": 1,
+      "lightingIndex": 1
+    },
+    {
+      "id": "af-planejamento-de-consumo-produtivo-em-minirredes",
+      "title": "Planejamento de consumo produtivo em minirredes",
+      "role": "Analista de desenvolvimento de carga",
+      "region": "africa",
+      "compositionIndex": 2,
+      "lightingIndex": 2
+    },
+    {
+      "id": "af-orcamento-de-cozinhas-limpas-por-refeicao-entregue",
+      "title": "Orçamento de cozinhas limpas por refeição entregue",
+      "role": "Analista de programas de energia doméstica",
+      "region": "africa",
+      "compositionIndex": 3,
+      "lightingIndex": 3
+    },
+    {
+      "id": "af-triagem-documental-de-projetos-de-biogas-rural",
+      "title": "Triagem documental de projetos de biogás rural",
+      "role": "Assistente de projetos bioenergéticos",
+      "region": "africa",
+      "compositionIndex": 4,
+      "lightingIndex": 4
+    },
+    {
+      "id": "af-balanco-de-agua-nao-faturada-em-pequenos-operadores",
+      "title": "Balanço de água não faturada em pequenos operadores",
+      "role": "Analista de desempenho hídrico",
+      "region": "africa",
+      "compositionIndex": 5,
+      "lightingIndex": 0
+    },
+    {
+      "id": "af-continuidade-de-abastecimento-por-bairro-e-horario",
+      "title": "Continuidade de abastecimento por bairro e horário",
+      "role": "Analista de serviços de água",
+      "region": "africa",
+      "compositionIndex": 6,
+      "lightingIndex": 1
+    },
+    {
+      "id": "af-prioridade-de-reparo-em-bombas-comunitarias",
+      "title": "Prioridade de reparo em bombas comunitárias",
+      "role": "Coordenador de manutenção hídrica",
+      "region": "africa",
+      "compositionIndex": 0,
+      "lightingIndex": 2
+    },
+    {
+      "id": "af-planejamento-de-rotas-de-esvaziamento-de-fossas",
+      "title": "Planejamento de rotas de esvaziamento de fossas",
+      "role": "Planejador de serviços de saneamento",
+      "region": "africa",
+      "compositionIndex": 1,
+      "lightingIndex": 3
+    },
+    {
+      "id": "af-cobertura-funcional-de-pontos-de-lavagem-em-escolas",
+      "title": "Cobertura funcional de pontos de lavagem em escolas",
+      "role": "Analista de infraestrutura escolar",
+      "region": "africa",
+      "compositionIndex": 2,
+      "lightingIndex": 4
+    },
+    {
+      "id": "af-qualidade-de-dados-de-amostras-de-agua",
+      "title": "Qualidade de dados de amostras de água",
+      "role": "Assistente de monitoramento hídrico",
+      "region": "africa",
+      "compositionIndex": 3,
+      "lightingIndex": 0
+    },
+    {
+      "id": "af-custo-do-abastecimento-por-caminhao-e-ponto-atendido",
+      "title": "Custo do abastecimento por caminhão e ponto atendido",
+      "role": "Analista de operações de abastecimento",
+      "region": "africa",
+      "compositionIndex": 4,
+      "lightingIndex": 1
+    },
+    {
+      "id": "af-dimensionamento-administrativo-de-reservas-de-agua",
+      "title": "Dimensionamento administrativo de reservas de água",
+      "role": "Planejador de continuidade de instalações",
+      "region": "africa",
+      "compositionIndex": 5,
+      "lightingIndex": 2
+    },
+    {
+      "id": "af-monitoramento-de-perdas-em-redes-de-irrigacao-comunitaria",
+      "title": "Monitoramento de perdas em redes de irrigação comunitária",
+      "role": "Analista de eficiência de irrigação",
+      "region": "africa",
+      "compositionIndex": 6,
+      "lightingIndex": 3
+    },
+    {
+      "id": "af-gestao-de-filas-e-acesso-em-quiosques-de-agua",
+      "title": "Gestão de filas e acesso em quiosques de água",
+      "role": "Analista de experiência de serviços essenciais",
+      "region": "africa",
+      "compositionIndex": 0,
+      "lightingIndex": 4
+    },
+    {
+      "id": "af-liquidez-de-agentes-de-dinheiro-movel-em-dias-de-pagamento",
+      "title": "Liquidez de agentes de dinheiro móvel em dias de pagamento",
+      "role": "Analista de redes de agentes financeiros",
+      "region": "africa",
+      "compositionIndex": 1,
+      "lightingIndex": 0
+    },
+    {
+      "id": "af-reconciliacao-de-estornos-em-carteiras-moveis",
+      "title": "Reconciliação de estornos em carteiras móveis",
+      "role": "Analista de operações de pagamentos",
+      "region": "africa",
+      "compositionIndex": 2,
+      "lightingIndex": 1
+    },
+    {
+      "id": "af-deteccao-de-duplicidade-em-pagamentos-offline-de-comerciantes",
+      "title": "Detecção de duplicidade em pagamentos offline de comerciantes",
+      "role": "Analista de integridade transacional",
+      "region": "africa",
+      "compositionIndex": 3,
+      "lightingIndex": 2
+    },
+    {
+      "id": "af-gestao-de-reclamacoes-de-transferencias-moveis-pendentes",
+      "title": "Gestão de reclamações de transferências móveis pendentes",
+      "role": "Coordenador de atendimento financeiro digital",
+      "region": "africa",
+      "compositionIndex": 4,
+      "lightingIndex": 3
+    },
+    {
+      "id": "af-custo-de-aceitacao-digital-para-microcomercios",
+      "title": "Custo de aceitação digital para microcomércios",
+      "role": "Analista de serviços financeiros para pequenos negócios",
+      "region": "africa",
+      "compositionIndex": 5,
+      "lightingIndex": 4
+    },
+    {
+      "id": "af-monitoramento-de-disponibilidade-de-canais-ussd",
+      "title": "Monitoramento de disponibilidade de canais USSD",
+      "role": "Analista de canais financeiros acessíveis",
+      "region": "africa",
+      "compositionIndex": 6,
+      "lightingIndex": 0
+    },
+    {
+      "id": "af-reconciliacao-de-grupos-de-poupanca-comunitaria",
+      "title": "Reconciliação de grupos de poupança comunitária",
+      "role": "Assistente de gestão de poupança coletiva",
+      "region": "africa",
+      "compositionIndex": 0,
+      "lightingIndex": 1
+    },
+    {
+      "id": "af-revisao-de-consentimento-em-aplicativos-de-credito",
+      "title": "Revisão de consentimento em aplicativos de crédito",
+      "role": "Analista de proteção do consumidor digital",
+      "region": "africa",
+      "compositionIndex": 1,
+      "lightingIndex": 2
+    },
+    {
+      "id": "af-qualidade-de-indicadores-de-inclusao-financeira",
+      "title": "Qualidade de indicadores de inclusão financeira",
+      "role": "Analista de monitoramento de inclusão",
+      "region": "africa",
+      "compositionIndex": 2,
+      "lightingIndex": 3
+    },
+    {
+      "id": "af-controle-de-repasses-a-comerciantes-por-lote-de-liquidacao",
+      "title": "Controle de repasses a comerciantes por lote de liquidação",
+      "role": "Analista de liquidação comercial",
+      "region": "africa",
+      "compositionIndex": 3,
+      "lightingIndex": 4
+    },
+    {
+      "id": "af-estudo-de-tempo-de-liberacao-em-corredores-africanos",
+      "title": "Estudo de tempo de liberação em corredores africanos",
+      "role": "Analista de facilitação de comércio",
+      "region": "africa",
+      "compositionIndex": 4,
+      "lightingIndex": 0
+    },
+    {
+      "id": "af-custo-logistico-de-exportacao-para-paises-sem-litoral",
+      "title": "Custo logístico de exportação para países sem litoral",
+      "role": "Analista de corredores de exportação",
+      "region": "africa",
+      "compositionIndex": 5,
+      "lightingIndex": 1
+    },
+    {
+      "id": "af-rastreabilidade-documental-de-origem-preferencial-africana",
+      "title": "Rastreabilidade documental de origem preferencial africana",
+      "role": "Assistente de documentação comercial",
+      "region": "africa",
+      "compositionIndex": 6,
+      "lightingIndex": 2
+    },
+    {
+      "id": "af-programacao-de-conteineres-refrigerados-em-portos",
+      "title": "Programação de contêineres refrigerados em portos",
+      "role": "Planejador de operações de carga perecível",
+      "region": "africa",
+      "compositionIndex": 0,
+      "lightingIndex": 3
+    },
+    {
+      "id": "af-consolidacao-de-cargas-fracionadas-para-comercio-regional",
+      "title": "Consolidação de cargas fracionadas para comércio regional",
+      "role": "Analista de consolidação de embarques",
+      "region": "africa",
+      "compositionIndex": 1,
+      "lightingIndex": 4
+    },
+    {
+      "id": "af-planejamento-de-estoques-em-corredores-sujeitos-a-fronteira",
+      "title": "Planejamento de estoques em corredores sujeitos a fronteira",
+      "role": "Analista de ressuprimento regional",
+      "region": "africa",
+      "compositionIndex": 2,
+      "lightingIndex": 0
+    },
+    {
+      "id": "af-reconciliacao-de-lacres-e-eventos-de-transito-aduaneiro",
+      "title": "Reconciliação de lacres e eventos de trânsito aduaneiro",
+      "role": "Assistente de controle de trânsito",
+      "region": "africa",
+      "compositionIndex": 3,
+      "lightingIndex": 1
+    },
+    {
+      "id": "af-indicadores-de-entrega-em-enderecamento-informal",
+      "title": "Indicadores de entrega em endereçamento informal",
+      "role": "Analista de última milha inclusiva",
+      "region": "africa",
+      "compositionIndex": 4,
+      "lightingIndex": 2
+    },
+    {
+      "id": "af-custo-de-permanencia-de-conteineres-e-janelas-livres",
+      "title": "Custo de permanência de contêineres e janelas livres",
+      "role": "Analista de custos portuários",
+      "region": "africa",
+      "compositionIndex": 5,
+      "lightingIndex": 3
+    },
+    {
+      "id": "af-planejamento-de-abastecimento-de-ilhas-com-servico-intermitente",
+      "title": "Planejamento de abastecimento de ilhas com serviço intermitente",
+      "role": "Planejador de suprimentos insulares",
+      "region": "africa",
+      "compositionIndex": 6,
+      "lightingIndex": 4
+    },
+    {
+      "id": "af-triagem-administrativa-de-excursoes-de-temperatura-vacinal",
+      "title": "Triagem administrativa de excursões de temperatura vacinal",
+      "role": "Assistente de logística de imunização",
+      "region": "africa",
+      "compositionIndex": 0,
+      "lightingIndex": 0
+    },
+    {
+      "id": "af-reconciliacao-de-doses-em-campanhas-de-vacinacao",
+      "title": "Reconciliação de doses em campanhas de vacinação",
+      "role": "Analista de estoques de imunização",
+      "region": "africa",
+      "compositionIndex": 1,
+      "lightingIndex": 1
+    },
+    {
+      "id": "af-roteamento-de-amostras-laboratoriais-com-janelas-de-recebimento",
+      "title": "Roteamento de amostras laboratoriais com janelas de recebimento",
+      "role": "Coordenador de transporte laboratorial",
+      "region": "africa",
+      "compositionIndex": 2,
+      "lightingIndex": 2
+    },
+    {
+      "id": "af-previsao-de-consumo-de-testes-diagnosticos-por-unidade",
+      "title": "Previsão de consumo de testes diagnósticos por unidade",
+      "role": "Analista de suprimentos de saúde",
+      "region": "africa",
+      "compositionIndex": 3,
+      "lightingIndex": 3
+    },
+    {
+      "id": "af-gestao-de-validade-de-insumos-por-fefo",
+      "title": "Gestão de validade de insumos por FEFO",
+      "role": "Assistente de almoxarifado de saúde",
+      "region": "africa",
+      "compositionIndex": 4,
+      "lightingIndex": 4
+    },
+    {
+      "id": "af-qualidade-de-registros-administrativos-de-referencia-de-pacientes",
+      "title": "Qualidade de registros administrativos de referência de pacientes",
+      "role": "Analista de coordenação de atendimento",
+      "region": "africa",
+      "compositionIndex": 5,
+      "lightingIndex": 0
+    },
+    {
+      "id": "af-programacao-de-manutencao-de-equipamentos-de-frio-em-saude",
+      "title": "Programação de manutenção de equipamentos de frio em saúde",
+      "role": "Planejador de manutenção de cadeia fria",
+      "region": "africa",
+      "compositionIndex": 6,
+      "lightingIndex": 1
+    },
+    {
+      "id": "af-indicadores-de-faltas-e-remarcacao-em-servicos-comunitarios",
+      "title": "Indicadores de faltas e remarcação em serviços comunitários",
+      "role": "Analista de agendamento em saúde",
+      "region": "africa",
+      "compositionIndex": 0,
+      "lightingIndex": 2
+    },
+    {
+      "id": "af-rastreio-de-kits-de-assistencia-domiciliar-nao-clinica",
+      "title": "Rastreio de kits de assistência domiciliar não clínica",
+      "role": "Coordenador de suprimentos de cuidado",
+      "region": "africa",
+      "compositionIndex": 1,
+      "lightingIndex": 3
+    },
+    {
+      "id": "af-completude-de-relatorios-de-unidades-de-saude-remotas",
+      "title": "Completude de relatórios de unidades de saúde remotas",
+      "role": "Analista de informação de serviços",
+      "region": "africa",
+      "compositionIndex": 2,
+      "lightingIndex": 4
+    },
+    {
+      "id": "af-sobrevivencia-de-mudas-em-restauracao-do-sahel",
+      "title": "Sobrevivência de mudas em restauração do Sahel",
+      "role": "Analista de monitoramento de restauração",
+      "region": "africa",
+      "compositionIndex": 3,
+      "lightingIndex": 0
+    },
+    {
+      "id": "af-desenho-de-amostragem-para-manguezais-comunitarios",
+      "title": "Desenho de amostragem para manguezais comunitários",
+      "role": "Assistente de monitoramento costeiro",
+      "region": "africa",
+      "compositionIndex": 4,
+      "lightingIndex": 1
+    },
+    {
+      "id": "af-esforco-amostral-em-monitoramento-de-fauna-por-cameras",
+      "title": "Esforço amostral em monitoramento de fauna por câmeras",
+      "role": "Analista de dados de biodiversidade",
+      "region": "africa",
+      "compositionIndex": 5,
+      "lightingIndex": 2
+    },
+    {
+      "id": "af-priorizacao-de-cercas-de-protecao-em-areas-restauradas",
+      "title": "Priorização de cercas de proteção em áreas restauradas",
+      "role": "Planejador de projetos de restauração",
+      "region": "africa",
+      "compositionIndex": 6,
+      "lightingIndex": 3
+    },
+    {
+      "id": "af-balanco-de-materiais-em-viveiros-de-restauracao",
+      "title": "Balanço de materiais em viveiros de restauração",
+      "role": "Analista de operações de viveiros",
+      "region": "africa",
+      "compositionIndex": 0,
+      "lightingIndex": 4
+    },
+    {
+      "id": "af-preparacao-documental-de-projetos-de-creditos-de-natureza",
+      "title": "Preparação documental de projetos de créditos de natureza",
+      "role": "Assistente de integridade de projetos ambientais",
+      "region": "africa",
+      "compositionIndex": 1,
+      "lightingIndex": 0
+    },
+    {
+      "id": "af-monitoramento-de-erosao-com-parcelas-de-referencia",
+      "title": "Monitoramento de erosão com parcelas de referência",
+      "role": "Assistente de avaliação de conservação do solo",
+      "region": "africa",
+      "compositionIndex": 2,
+      "lightingIndex": 1
+    },
+    {
+      "id": "af-planejamento-de-brigadas-comunitarias-por-risco-de-incendio",
+      "title": "Planejamento de brigadas comunitárias por risco de incêndio",
+      "role": "Coordenador administrativo de prevenção ambiental",
+      "region": "africa",
+      "compositionIndex": 3,
+      "lightingIndex": 2
+    },
+    {
+      "id": "af-analise-de-beneficio-comunitario-em-turismo-de-conservacao",
+      "title": "Análise de benefício comunitário em turismo de conservação",
+      "role": "Analista de operações de turismo responsável",
+      "region": "africa",
+      "compositionIndex": 4,
+      "lightingIndex": 3
+    },
+    {
+      "id": "af-rastreabilidade-de-coleta-de-residuos-em-areas-protegidas",
+      "title": "Rastreabilidade de coleta de resíduos em áreas protegidas",
+      "role": "Analista de gestão de resíduos turísticos",
+      "region": "africa",
+      "compositionIndex": 5,
+      "lightingIndex": 4
+    },
+    {
+      "id": "af-balanco-de-agua-em-lavanderias-texteis-industriais",
+      "title": "Balanço de água em lavanderias têxteis industriais",
+      "role": "Analista de produção mais limpa",
+      "region": "africa",
+      "compositionIndex": 6,
+      "lightingIndex": 0
+    },
+    {
+      "id": "af-rendimento-de-corte-em-pequenas-confeccoes",
+      "title": "Rendimento de corte em pequenas confecções",
+      "role": "Analista de planejamento de confecção",
+      "region": "africa",
+      "compositionIndex": 0,
+      "lightingIndex": 1
+    },
+    {
+      "id": "af-controle-de-refugo-em-fabricacao-de-blocos",
+      "title": "Controle de refugo em fabricação de blocos",
+      "role": "Analista de qualidade de produção",
+      "region": "africa",
+      "compositionIndex": 1,
+      "lightingIndex": 2
+    },
+    {
+      "id": "af-intensidade-energetica-de-pequenas-moagens",
+      "title": "Intensidade energética de pequenas moagens",
+      "role": "Analista de eficiência de processos",
+      "region": "africa",
+      "compositionIndex": 2,
+      "lightingIndex": 3
+    },
+    {
+      "id": "af-programacao-de-manutencao-por-criticidade-em-oficinas",
+      "title": "Programação de manutenção por criticidade em oficinas",
+      "role": "Planejador de manutenção industrial",
+      "region": "africa",
+      "compositionIndex": 3,
+      "lightingIndex": 4
+    },
+    {
+      "id": "af-balanco-de-embalagens-em-microindustrias-alimentares",
+      "title": "Balanço de embalagens em microindústrias alimentares",
+      "role": "Analista de materiais de embalagem",
+      "region": "africa",
+      "compositionIndex": 4,
+      "lightingIndex": 0
+    },
+    {
+      "id": "af-custo-de-retrabalho-em-montagem-de-equipamentos",
+      "title": "Custo de retrabalho em montagem de equipamentos",
+      "role": "Analista de custos de qualidade",
+      "region": "africa",
+      "compositionIndex": 5,
+      "lightingIndex": 1
+    },
+    {
+      "id": "af-rastreio-de-pecas-reaproveitadas-em-reparo-de-eletronicos",
+      "title": "Rastreio de peças reaproveitadas em reparo de eletrônicos",
+      "role": "Analista de operações de reparação",
+      "region": "africa",
+      "compositionIndex": 6,
+      "lightingIndex": 2
+    },
+    {
+      "id": "af-perdas-de-materia-prima-em-producao-de-moveis",
+      "title": "Perdas de matéria-prima em produção de móveis",
+      "role": "Analista de produção de mobiliário",
+      "region": "africa",
+      "compositionIndex": 0,
+      "lightingIndex": 3
+    },
+    {
+      "id": "af-avaliacao-documental-de-compras-de-equipamentos-eficientes",
+      "title": "Avaliação documental de compras de equipamentos eficientes",
+      "role": "Analista de compras industriais",
+      "region": "africa",
+      "compositionIndex": 1,
+      "lightingIndex": 4
+    },
+    {
+      "id": "af-cursos-offline-com-sincronizacao-de-progresso-em-baixa-conectividade",
+      "title": "Cursos offline com sincronização de progresso em baixa conectividade",
+      "role": "Analista de tecnologia educacional",
+      "region": "africa",
+      "compositionIndex": 2,
+      "lightingIndex": 0
+    },
+    {
+      "id": "af-producao-de-materiais-educacionais-acessiveis-para-leitores-de-tela",
+      "title": "Produção de materiais educacionais acessíveis para leitores de tela",
+      "role": "Editor de acessibilidade educacional",
+      "region": "africa",
+      "compositionIndex": 3,
+      "lightingIndex": 1
+    },
+    {
+      "id": "af-planejamento-de-radio-educativo-com-avaliacao-por-telefone",
+      "title": "Planejamento de rádio educativo com avaliação por telefone",
+      "role": "Produtor de educação por rádio",
+      "region": "africa",
+      "compositionIndex": 4,
+      "lightingIndex": 2
+    },
+    {
+      "id": "af-localizacao-de-interfaces-educacionais-para-linguas-africanas",
+      "title": "Localização de interfaces educacionais para línguas africanas",
+      "role": "Analista de localização de produtos educacionais",
+      "region": "africa",
+      "compositionIndex": 5,
+      "lightingIndex": 3
+    },
+    {
+      "id": "af-rubricas-de-avaliacao-para-aprendizagem-profissional-por-projetos",
+      "title": "Rubricas de avaliação para aprendizagem profissional por projetos",
+      "role": "Designer de avaliação educacional",
+      "region": "africa",
+      "compositionIndex": 6,
+      "lightingIndex": 4
+    },
+    {
+      "id": "af-catalogos-digitais-de-acervos-culturais-comunitarios",
+      "title": "Catálogos digitais de acervos culturais comunitários",
+      "role": "Catalogador de patrimônio digital",
+      "region": "africa",
+      "compositionIndex": 0,
+      "lightingIndex": 0
+    },
+    {
+      "id": "af-legendas-multilingues-com-controle-de-tempo-para-formacao-tecnica",
+      "title": "Legendas multilíngues com controle de tempo para formação técnica",
+      "role": "Editor de legendagem educacional",
+      "region": "africa",
+      "compositionIndex": 1,
+      "lightingIndex": 1
+    },
+    {
+      "id": "af-pesquisa-de-experiencia-com-alunos-de-aparelhos-compartilhados",
+      "title": "Pesquisa de experiência com alunos de aparelhos compartilhados",
+      "role": "Pesquisador de experiência educacional",
+      "region": "africa",
+      "compositionIndex": 2,
+      "lightingIndex": 2
+    },
+    {
+      "id": "af-preservacao-de-arquivos-de-cursos-com-verificacao-de-integridade",
+      "title": "Preservação de arquivos de cursos com verificação de integridade",
+      "role": "Analista de preservação digital educacional",
+      "region": "africa",
+      "compositionIndex": 3,
+      "lightingIndex": 3
+    },
+    {
+      "id": "af-planejamento-de-tutoria-assincrona-com-filas-de-duvida",
+      "title": "Planejamento de tutoria assíncrona com filas de dúvida",
+      "role": "Coordenador de operações educacionais",
+      "region": "africa",
+      "compositionIndex": 4,
+      "lightingIndex": 4
+    },
+    {
+      "id": "af-sistemas-de-referencia-em-mapas-de-servicos-comunitarios",
+      "title": "Sistemas de referência em mapas de serviços comunitários",
+      "role": "Analista júnior de geoinformação",
+      "region": "africa",
+      "compositionIndex": 5,
+      "lightingIndex": 0
+    },
+    {
+      "id": "af-calculo-de-populacao-atendida-por-areas-de-influencia",
+      "title": "Cálculo de população atendida por áreas de influência",
+      "role": "Analista de planejamento territorial",
+      "region": "africa",
+      "compositionIndex": 6,
+      "lightingIndex": 1
+    },
+    {
+      "id": "af-validacao-de-classificacao-de-cobertura-do-solo",
+      "title": "Validação de classificação de cobertura do solo",
+      "role": "Analista de sensoriamento remoto",
+      "region": "africa",
+      "compositionIndex": 0,
+      "lightingIndex": 2
+    },
+    {
+      "id": "af-completude-de-mapas-comunitarios-de-infraestrutura",
+      "title": "Completude de mapas comunitários de infraestrutura",
+      "role": "Analista de qualidade de dados geográficos",
+      "region": "africa",
+      "compositionIndex": 1,
+      "lightingIndex": 3
+    },
+    {
+      "id": "af-comparacao-temporal-de-areas-agricolas-com-imagens-de-resolucao-distinta",
+      "title": "Comparação temporal de áreas agrícolas com imagens de resolução distinta",
+      "role": "Analista de observação agrícola",
+      "region": "africa",
+      "compositionIndex": 2,
+      "lightingIndex": 4
+    },
+    {
+      "id": "af-acessibilidade-a-mercados-por-rede-viaria-rural",
+      "title": "Acessibilidade a mercados por rede viária rural",
+      "role": "Analista de acessibilidade territorial",
+      "region": "africa",
+      "compositionIndex": 3,
+      "lightingIndex": 0
+    },
+    {
+      "id": "af-paineis-de-seca-com-anomalia-de-chuva-e-base-historica",
+      "title": "Painéis de seca com anomalia de chuva e base histórica",
+      "role": "Analista de indicadores climáticos",
+      "region": "africa",
+      "compositionIndex": 4,
+      "lightingIndex": 1
+    },
+    {
+      "id": "af-deteccao-de-duplicatas-em-inventarios-georreferenciados",
+      "title": "Detecção de duplicatas em inventários georreferenciados",
+      "role": "Analista de integração de cadastros territoriais",
+      "region": "africa",
+      "compositionIndex": 5,
+      "lightingIndex": 2
+    },
+    {
+      "id": "af-publicacao-segura-de-mapas-de-populacoes-vulneraveis",
+      "title": "Publicação segura de mapas de populações vulneráveis",
+      "role": "Analista de governança de dados espaciais",
+      "region": "africa",
+      "compositionIndex": 6,
+      "lightingIndex": 3
+    },
+    {
+      "id": "af-reprodutibilidade-de-analises-espaciais-para-projetos-publicos",
+      "title": "Reprodutibilidade de análises espaciais para projetos públicos",
+      "role": "Analista de processos geoespaciais",
+      "region": "africa",
+      "compositionIndex": 0,
+      "lightingIndex": 4
+    },
+    {
+      "id": "oc-sequenciamento-de-modulos-habitacionais-pre-fabricados",
+      "title": "Sequenciamento de módulos habitacionais pré-fabricados",
+      "role": "Analista de planejamento e informação de construção",
+      "region": "oceania",
+      "compositionIndex": 1,
+      "lightingIndex": 0
+    },
+    {
+      "id": "oc-rastreabilidade-de-revisoes-em-modelos-bim-federados",
+      "title": "Rastreabilidade de revisões em modelos BIM federados",
+      "role": "Analista de planejamento e informação de construção",
+      "region": "oceania",
+      "compositionIndex": 2,
+      "lightingIndex": 1
+    },
+    {
+      "id": "oc-medicao-de-desperdicio-em-corte-de-madeira-engenheirada",
+      "title": "Medição de desperdício em corte de madeira engenheirada",
+      "role": "Analista de planejamento e informação de construção",
+      "region": "oceania",
+      "compositionIndex": 3,
+      "lightingIndex": 2
+    },
+    {
+      "id": "oc-planejamento-de-inspecoes-de-envoltoria-estanque",
+      "title": "Planejamento de inspeções de envoltória estanque",
+      "role": "Analista de planejamento e informação de construção",
+      "region": "oceania",
+      "compositionIndex": 4,
+      "lightingIndex": 3
+    },
+    {
+      "id": "oc-controle-de-umidade-documental-em-materiais-de-obra",
+      "title": "Controle de umidade documental em materiais de obra",
+      "role": "Analista de planejamento e informação de construção",
+      "region": "oceania",
+      "compositionIndex": 5,
+      "lightingIndex": 4
+    },
+    {
+      "id": "oc-estimativa-de-custos-de-retrofit-termico-residencial",
+      "title": "Estimativa de custos de retrofit térmico residencial",
+      "role": "Analista de planejamento e informação de construção",
+      "region": "oceania",
+      "compositionIndex": 6,
+      "lightingIndex": 0
+    },
+    {
+      "id": "oc-coordenacao-de-passagens-de-servicos-em-estruturas-de-madeira",
+      "title": "Coordenação de passagens de serviços em estruturas de madeira",
+      "role": "Analista de planejamento e informação de construção",
+      "region": "oceania",
+      "compositionIndex": 0,
+      "lightingIndex": 1
+    },
+    {
+      "id": "oc-gestao-de-produtividade-em-frentes-de-reconstrucao-pos-ciclone",
+      "title": "Gestão de produtividade em frentes de reconstrução pós-ciclone",
+      "role": "Analista de planejamento e informação de construção",
+      "region": "oceania",
+      "compositionIndex": 1,
+      "lightingIndex": 2
+    },
+    {
+      "id": "oc-quantificacao-de-residuos-de-demolicao-por-fluxo",
+      "title": "Quantificação de resíduos de demolição por fluxo",
+      "role": "Analista de planejamento e informação de construção",
+      "region": "oceania",
+      "compositionIndex": 2,
+      "lightingIndex": 3
+    },
+    {
+      "id": "oc-planejamento-de-manutencao-de-imoveis-comunitarios-remotos",
+      "title": "Planejamento de manutenção de imóveis comunitários remotos",
+      "role": "Analista de planejamento e informação de construção",
+      "region": "oceania",
+      "compositionIndex": 3,
+      "lightingIndex": 4
+    },
+    {
+      "id": "oc-balanco-horario-de-minirredes-solares-insulares",
+      "title": "Balanço horário de minirredes solares insulares",
+      "role": "Analista de eficiência e operação energética",
+      "region": "oceania",
+      "compositionIndex": 4,
+      "lightingIndex": 0
+    },
+    {
+      "id": "oc-priorizacao-de-vazamentos-em-ar-comprimido-industrial",
+      "title": "Priorização de vazamentos em ar comprimido industrial",
+      "role": "Analista de eficiência e operação energética",
+      "region": "oceania",
+      "compositionIndex": 5,
+      "lightingIndex": 1
+    },
+    {
+      "id": "oc-normalizacao-de-consumo-em-camaras-frias-sazonais",
+      "title": "Normalização de consumo em câmaras frias sazonais",
+      "role": "Analista de eficiência e operação energética",
+      "region": "oceania",
+      "compositionIndex": 6,
+      "lightingIndex": 2
+    },
+    {
+      "id": "oc-verificacao-de-faturas-de-demanda-eletrica",
+      "title": "Verificação de faturas de demanda elétrica",
+      "role": "Analista de eficiência e operação energética",
+      "region": "oceania",
+      "compositionIndex": 0,
+      "lightingIndex": 3
+    },
+    {
+      "id": "oc-analise-de-perdas-em-distribuicao-de-agua-quente",
+      "title": "Análise de perdas em distribuição de água quente",
+      "role": "Analista de eficiência e operação energética",
+      "region": "oceania",
+      "compositionIndex": 1,
+      "lightingIndex": 4
+    },
+    {
+      "id": "oc-otimizacao-documental-de-carregamento-de-frotas-eletricas",
+      "title": "Otimização documental de carregamento de frotas elétricas",
+      "role": "Analista de eficiência e operação energética",
+      "region": "oceania",
+      "compositionIndex": 2,
+      "lightingIndex": 0
+    },
+    {
+      "id": "oc-medicao-de-autoconsumo-solar-em-escolas",
+      "title": "Medição de autoconsumo solar em escolas",
+      "role": "Analista de eficiência e operação energética",
+      "region": "oceania",
+      "compositionIndex": 3,
+      "lightingIndex": 1
+    },
+    {
+      "id": "oc-avaliacao-de-substituicao-de-motores-por-regime-de-carga",
+      "title": "Avaliação de substituição de motores por regime de carga",
+      "role": "Analista de eficiência e operação energética",
+      "region": "oceania",
+      "compositionIndex": 4,
+      "lightingIndex": 2
+    },
+    {
+      "id": "oc-monitoramento-de-indisponibilidade-em-sistemas-solares-remotos",
+      "title": "Monitoramento de indisponibilidade em sistemas solares remotos",
+      "role": "Analista de eficiência e operação energética",
+      "region": "oceania",
+      "compositionIndex": 5,
+      "lightingIndex": 3
+    },
+    {
+      "id": "oc-provisao-financeira-de-manutencao-de-minirredes",
+      "title": "Provisão financeira de manutenção de minirredes",
+      "role": "Analista de eficiência e operação energética",
+      "region": "oceania",
+      "compositionIndex": 6,
+      "lightingIndex": 4
+    },
+    {
+      "id": "oc-rastreabilidade-de-lotes-em-exportacao-de-frutas-frescas",
+      "title": "Rastreabilidade de lotes em exportação de frutas frescas",
+      "role": "Analista de rastreabilidade e qualidade de alimentos",
+      "region": "oceania",
+      "compositionIndex": 0,
+      "lightingIndex": 0
+    },
+    {
+      "id": "oc-reconciliacao-de-rendimento-em-filetagem-de-pescado",
+      "title": "Reconciliação de rendimento em filetagem de pescado",
+      "role": "Analista de rastreabilidade e qualidade de alimentos",
+      "region": "oceania",
+      "compositionIndex": 1,
+      "lightingIndex": 1
+    },
+    {
+      "id": "oc-verificacao-de-declaracoes-de-alergenicos-em-receitas",
+      "title": "Verificação de declarações de alergênicos em receitas",
+      "role": "Analista de rastreabilidade e qualidade de alimentos",
+      "region": "oceania",
+      "compositionIndex": 2,
+      "lightingIndex": 2
+    },
+    {
+      "id": "oc-planejamento-de-amostragem-documental-em-linhas-de-envase",
+      "title": "Planejamento de amostragem documental em linhas de envase",
+      "role": "Analista de rastreabilidade e qualidade de alimentos",
+      "region": "oceania",
+      "compositionIndex": 3,
+      "lightingIndex": 3
+    },
+    {
+      "id": "oc-gestao-de-versoes-de-planos-de-controle-de-alimentos",
+      "title": "Gestão de versões de planos de controle de alimentos",
+      "role": "Analista de rastreabilidade e qualidade de alimentos",
+      "region": "oceania",
+      "compositionIndex": 4,
+      "lightingIndex": 4
+    },
+    {
+      "id": "oc-custo-de-nao-qualidade-em-embalagens-de-laticinios",
+      "title": "Custo de não qualidade em embalagens de laticínios",
+      "role": "Analista de rastreabilidade e qualidade de alimentos",
+      "region": "oceania",
+      "compositionIndex": 5,
+      "lightingIndex": 0
+    },
+    {
+      "id": "oc-conciliacao-de-validade-e-giro-em-alimentos-refrigerados",
+      "title": "Conciliação de validade e giro em alimentos refrigerados",
+      "role": "Analista de rastreabilidade e qualidade de alimentos",
+      "region": "oceania",
+      "compositionIndex": 6,
+      "lightingIndex": 1
+    },
+    {
+      "id": "oc-documentacao-de-cadeia-fria-em-rotas-insulares",
+      "title": "Documentação de cadeia fria em rotas insulares",
+      "role": "Analista de rastreabilidade e qualidade de alimentos",
+      "region": "oceania",
+      "compositionIndex": 0,
+      "lightingIndex": 2
+    },
+    {
+      "id": "oc-verificacao-de-balanco-de-ingredientes-em-bebidas-vegetais",
+      "title": "Verificação de balanço de ingredientes em bebidas vegetais",
+      "role": "Analista de rastreabilidade e qualidade de alimentos",
+      "region": "oceania",
+      "compositionIndex": 1,
+      "lightingIndex": 3
+    },
+    {
+      "id": "oc-simulacao-de-retirada-documental-de-mel-exportado",
+      "title": "Simulação de retirada documental de mel exportado",
+      "role": "Analista de rastreabilidade e qualidade de alimentos",
+      "region": "oceania",
+      "compositionIndex": 2,
+      "lightingIndex": 4
+    },
+    {
+      "id": "oc-validacao-de-series-de-chuva-com-dias-ausentes",
+      "title": "Validação de séries de chuva com dias ausentes",
+      "role": "Analista de dados ambientais e territoriais",
+      "region": "oceania",
+      "compositionIndex": 3,
+      "lightingIndex": 0
+    },
+    {
+      "id": "oc-analise-de-captura-por-unidade-de-esforco-na-pesca-costeira",
+      "title": "Análise de captura por unidade de esforço na pesca costeira",
+      "role": "Analista de dados ambientais e territoriais",
+      "region": "oceania",
+      "compositionIndex": 4,
+      "lightingIndex": 1
+    },
+    {
+      "id": "oc-conciliacao-de-coordenadas-em-inventarios-de-ativos-de-agua",
+      "title": "Conciliação de coordenadas em inventários de ativos de água",
+      "role": "Analista de dados ambientais e territoriais",
+      "region": "oceania",
+      "compositionIndex": 5,
+      "lightingIndex": 2
+    },
+    {
+      "id": "oc-indicadores-de-perdas-aparentes-em-redes-comunitarias-de-agua",
+      "title": "Balanço hídrico e perdas totais em redes comunitárias de água",
+      "role": "Analista de dados ambientais e territoriais",
+      "region": "oceania",
+      "compositionIndex": 6,
+      "lightingIndex": 3
+    },
+    {
+      "id": "oc-mapeamento-de-exposicao-de-instalacoes-costeiras",
+      "title": "Mapeamento de exposição de instalações costeiras",
+      "role": "Analista de dados ambientais e territoriais",
+      "region": "oceania",
+      "compositionIndex": 0,
+      "lightingIndex": 4
+    },
+    {
+      "id": "oc-analise-de-regeneracao-de-manguezais-por-parcelas",
+      "title": "Análise de regeneração de manguezais por parcelas",
+      "role": "Analista de dados ambientais e territoriais",
+      "region": "oceania",
+      "compositionIndex": 1,
+      "lightingIndex": 0
+    },
+    {
+      "id": "oc-controle-de-qualidade-de-sensores-de-salinidade",
+      "title": "Controle de qualidade de sensores de salinidade",
+      "role": "Analista de dados ambientais e territoriais",
+      "region": "oceania",
+      "compositionIndex": 2,
+      "lightingIndex": 1
+    },
+    {
+      "id": "oc-amostragem-de-residuos-plasticos-em-praias-insulares",
+      "title": "Amostragem de resíduos plásticos em praias insulares",
+      "role": "Analista de dados ambientais e territoriais",
+      "region": "oceania",
+      "compositionIndex": 3,
+      "lightingIndex": 2
+    },
+    {
+      "id": "oc-deteccao-de-duplicacao-em-cadastros-de-resposta-a-desastres",
+      "title": "Detecção de duplicação em cadastros de resposta a desastres",
+      "role": "Analista de dados ambientais e territoriais",
+      "region": "oceania",
+      "compositionIndex": 4,
+      "lightingIndex": 3
+    },
+    {
+      "id": "oc-paineis-de-acesso-a-servicos-em-ilhas-com-pequenas-populacoes",
+      "title": "Painéis de acesso a serviços em ilhas com pequenas populações",
+      "role": "Analista de dados ambientais e territoriais",
+      "region": "oceania",
+      "compositionIndex": 5,
+      "lightingIndex": 4
+    },
+    {
+      "id": "oc-estoque-de-seguranca-para-abastecimento-entre-ilhas",
+      "title": "Estoque de segurança para abastecimento entre ilhas",
+      "role": "Analista de logística e abastecimento do Pacífico",
+      "region": "oceania",
+      "compositionIndex": 6,
+      "lightingIndex": 0
+    },
+    {
+      "id": "oc-consolidacao-de-cargas-por-massa-e-cubagem",
+      "title": "Consolidação de cargas por massa e cubagem",
+      "role": "Analista de logística e abastecimento do Pacífico",
+      "region": "oceania",
+      "compositionIndex": 0,
+      "lightingIndex": 1
+    },
+    {
+      "id": "oc-planejamento-de-janelas-portuarias-sob-restricao-de-mare",
+      "title": "Planejamento de janelas portuárias sob restrição de maré",
+      "role": "Analista de logística e abastecimento do Pacífico",
+      "region": "oceania",
+      "compositionIndex": 1,
+      "lightingIndex": 2
+    },
+    {
+      "id": "oc-conciliacao-de-documentos-de-biosseguranca-de-importacao",
+      "title": "Conciliação de documentos de biossegurança de importação",
+      "role": "Analista de logística e abastecimento do Pacífico",
+      "region": "oceania",
+      "compositionIndex": 2,
+      "lightingIndex": 3
+    },
+    {
+      "id": "oc-programacao-de-transporte-refrigerado-com-entregas-multiplas",
+      "title": "Programação de transporte refrigerado com entregas múltiplas",
+      "role": "Analista de logística e abastecimento do Pacífico",
+      "region": "oceania",
+      "compositionIndex": 3,
+      "lightingIndex": 4
+    },
+    {
+      "id": "oc-dimensionamento-de-kits-de-continuidade-para-escolas-insulares",
+      "title": "Dimensionamento de kits de continuidade para escolas insulares",
+      "role": "Analista de logística e abastecimento do Pacífico",
+      "region": "oceania",
+      "compositionIndex": 4,
+      "lightingIndex": 0
+    },
+    {
+      "id": "oc-analise-de-custo-total-de-frete-para-microexportadores",
+      "title": "Análise de custo total de frete para microexportadores",
+      "role": "Analista de logística e abastecimento do Pacífico",
+      "region": "oceania",
+      "compositionIndex": 5,
+      "lightingIndex": 1
+    },
+    {
+      "id": "oc-gestao-de-retornos-de-embalagens-em-cadeias-maritimas",
+      "title": "Gestão de retornos de embalagens em cadeias marítimas",
+      "role": "Analista de logística e abastecimento do Pacífico",
+      "region": "oceania",
+      "compositionIndex": 6,
+      "lightingIndex": 2
+    },
+    {
+      "id": "oc-sequenciamento-de-recebimento-de-pecas-para-manutencao-remota",
+      "title": "Sequenciamento de recebimento de peças para manutenção remota",
+      "role": "Analista de logística e abastecimento do Pacífico",
+      "region": "oceania",
+      "compositionIndex": 0,
+      "lightingIndex": 3
+    },
+    {
+      "id": "oc-monitoramento-de-confiabilidade-de-servicos-de-ferry",
+      "title": "Monitoramento de confiabilidade de serviços de ferry",
+      "role": "Analista de logística e abastecimento do Pacífico",
+      "region": "oceania",
+      "compositionIndex": 1,
+      "lightingIndex": 4
+    },
+    {
+      "id": "oc-coordenacao-de-teleatendimento-em-comunidades-com-baixa-conectividade",
+      "title": "Coordenação de teleatendimento em comunidades com baixa conectividade",
+      "role": "Coordenador de operações e acesso a serviços de cuidado",
+      "region": "oceania",
+      "compositionIndex": 2,
+      "lightingIndex": 0
+    },
+    {
+      "id": "oc-gestao-de-transporte-para-acesso-a-consultas-rurais",
+      "title": "Gestão de transporte para acesso a consultas rurais",
+      "role": "Coordenador de operações e acesso a serviços de cuidado",
+      "region": "oceania",
+      "compositionIndex": 3,
+      "lightingIndex": 1
+    },
+    {
+      "id": "oc-reconciliacao-de-encaminhamentos-entre-servicos-comunitarios",
+      "title": "Reconciliação de encaminhamentos entre serviços comunitários",
+      "role": "Coordenador de operações e acesso a serviços de cuidado",
+      "region": "oceania",
+      "compositionIndex": 4,
+      "lightingIndex": 2
+    },
+    {
+      "id": "oc-planejamento-de-cobertura-de-apoio-em-servicos-para-idosos",
+      "title": "Planejamento de cobertura de apoio em serviços para idosos",
+      "role": "Coordenador de operações e acesso a serviços de cuidado",
+      "region": "oceania",
+      "compositionIndex": 5,
+      "lightingIndex": 3
+    },
+    {
+      "id": "oc-acessibilidade-de-comunicacoes-de-agendamento-em-saude",
+      "title": "Acessibilidade de comunicações de agendamento em saúde",
+      "role": "Coordenador de operações e acesso a serviços de cuidado",
+      "region": "oceania",
+      "compositionIndex": 6,
+      "lightingIndex": 4
+    },
+    {
+      "id": "oc-documentacao-de-consentimento-para-pesquisa-comunitaria-nao-clinica",
+      "title": "Documentação de consentimento para pesquisa comunitária não clínica",
+      "role": "Coordenador de operações e acesso a serviços de cuidado",
+      "region": "oceania",
+      "compositionIndex": 0,
+      "lightingIndex": 0
+    },
+    {
+      "id": "oc-gestao-de-filas-de-avaliacao-de-necessidades-de-apoio",
+      "title": "Gestão de filas de avaliação de necessidades de apoio",
+      "role": "Coordenador de operações e acesso a serviços de cuidado",
+      "region": "oceania",
+      "compositionIndex": 1,
+      "lightingIndex": 1
+    },
+    {
+      "id": "oc-operacoes-de-programas-de-alimentacao-escolar-inclusiva",
+      "title": "Operações de programas de alimentação escolar inclusiva",
+      "role": "Coordenador de operações e acesso a serviços de cuidado",
+      "region": "oceania",
+      "compositionIndex": 2,
+      "lightingIndex": 2
+    },
+    {
+      "id": "oc-planejamento-de-acessibilidade-em-atividades-de-primeira-infancia",
+      "title": "Planejamento de acessibilidade em atividades de primeira infância",
+      "role": "Coordenador de operações e acesso a serviços de cuidado",
+      "region": "oceania",
+      "compositionIndex": 3,
+      "lightingIndex": 3
+    },
+    {
+      "id": "oc-indicadores-de-continuidade-em-servicos-domiciliares",
+      "title": "Indicadores de continuidade em serviços domiciliares",
+      "role": "Coordenador de operações e acesso a serviços de cuidado",
+      "region": "oceania",
+      "compositionIndex": 4,
+      "lightingIndex": 4
+    },
+    {
+      "id": "oc-recuperacao-verificavel-de-backups-em-cooperativas-rurais",
+      "title": "Recuperação verificável de backups em cooperativas rurais",
+      "role": "Analista de segurança operacional de pequenas organizações",
+      "region": "oceania",
+      "compositionIndex": 5,
+      "lightingIndex": 0
+    },
+    {
+      "id": "oc-revisao-de-privilegios-em-sistemas-de-reservas-de-turismo",
+      "title": "Revisão de privilégios em sistemas de reservas de turismo",
+      "role": "Analista de segurança operacional de pequenas organizações",
+      "region": "oceania",
+      "compositionIndex": 6,
+      "lightingIndex": 1
+    },
+    {
+      "id": "oc-preparacao-de-resposta-a-phishing-em-organizacoes-insulares",
+      "title": "Preparação de resposta a phishing em organizações insulares",
+      "role": "Analista de segurança operacional de pequenas organizações",
+      "region": "oceania",
+      "compositionIndex": 0,
+      "lightingIndex": 2
+    },
+    {
+      "id": "oc-gestao-de-atualizacoes-com-conectividade-intermitente",
+      "title": "Gestão de atualizações com conectividade intermitente",
+      "role": "Analista de segurança operacional de pequenas organizações",
+      "region": "oceania",
+      "compositionIndex": 1,
+      "lightingIndex": 3
+    },
+    {
+      "id": "oc-separacao-de-redes-para-visitantes-em-pequenos-alojamentos",
+      "title": "Separação de redes para visitantes em pequenos alojamentos",
+      "role": "Analista de segurança operacional de pequenas organizações",
+      "region": "oceania",
+      "compositionIndex": 2,
+      "lightingIndex": 4
+    },
+    {
+      "id": "oc-revisao-de-links-publicos-em-armazenamento-de-projetos",
+      "title": "Revisão de links públicos em armazenamento de projetos",
+      "role": "Analista de segurança operacional de pequenas organizações",
+      "region": "oceania",
+      "compositionIndex": 3,
+      "lightingIndex": 0
+    },
+    {
+      "id": "oc-verificacao-de-autenticacao-multifator-em-equipes-distribuidas",
+      "title": "Verificação de autenticação multifator em equipes distribuídas",
+      "role": "Analista de segurança operacional de pequenas organizações",
+      "region": "oceania",
+      "compositionIndex": 4,
+      "lightingIndex": 1
+    },
+    {
+      "id": "oc-continuidade-de-acesso-administrativo-durante-ciclones",
+      "title": "Continuidade de acesso administrativo durante ciclones",
+      "role": "Analista de segurança operacional de pequenas organizações",
+      "region": "oceania",
+      "compositionIndex": 5,
+      "lightingIndex": 2
+    },
+    {
+      "id": "oc-inventario-de-dados-em-formularios-de-pequenos-servicos",
+      "title": "Inventário de dados em formulários de pequenos serviços",
+      "role": "Analista de segurança operacional de pequenas organizações",
+      "region": "oceania",
+      "compositionIndex": 6,
+      "lightingIndex": 3
+    },
+    {
+      "id": "oc-analise-de-alertas-de-login-em-equipes-transoceanicas",
+      "title": "Análise de alertas de login em equipes transoceânicas",
+      "role": "Analista de segurança operacional de pequenas organizações",
+      "region": "oceania",
+      "compositionIndex": 0,
+      "lightingIndex": 4
+    },
+    {
+      "id": "oc-avaliacao-de-traducao-assistida-para-atendimento-no-pacifico",
+      "title": "Avaliação de tradução assistida para atendimento no Pacífico",
+      "role": "Analista de avaliação de IA em serviços regionais",
+      "region": "oceania",
+      "compositionIndex": 1,
+      "lightingIndex": 0
+    },
+    {
+      "id": "oc-triagem-assistida-de-imagens-de-recifes-com-classe-desconhecida",
+      "title": "Triagem assistida de imagens de recifes com classe desconhecida",
+      "role": "Analista de avaliação de IA em serviços regionais",
+      "region": "oceania",
+      "compositionIndex": 2,
+      "lightingIndex": 1
+    },
+    {
+      "id": "oc-extracao-de-requisitos-de-editais-com-evidencia-textual",
+      "title": "Extração de requisitos de editais com evidência textual",
+      "role": "Analista de avaliação de IA em serviços regionais",
+      "region": "oceania",
+      "compositionIndex": 3,
+      "lightingIndex": 2
+    },
+    {
+      "id": "oc-comparacao-de-custo-por-resposta-revisada-em-assistentes-turisticos",
+      "title": "Comparação de custo por resposta revisada em assistentes turísticos",
+      "role": "Analista de avaliação de IA em serviços regionais",
+      "region": "oceania",
+      "compositionIndex": 4,
+      "lightingIndex": 3
+    },
+    {
+      "id": "oc-controle-de-alucinacao-em-resumos-de-reunioes-comunitarias",
+      "title": "Controle de alucinação em resumos de reuniões comunitárias",
+      "role": "Analista de avaliação de IA em serviços regionais",
+      "region": "oceania",
+      "compositionIndex": 5,
+      "lightingIndex": 4
+    },
+    {
+      "id": "oc-avaliacao-de-assistentes-de-consulta-a-manuais-de-manutencao",
+      "title": "Avaliação de assistentes de consulta a manuais de manutenção",
+      "role": "Analista de avaliação de IA em serviços regionais",
+      "region": "oceania",
+      "compositionIndex": 6,
+      "lightingIndex": 0
+    },
+    {
+      "id": "oc-validacao-de-previsoes-de-demanda-em-turismo-sazonal",
+      "title": "Validação de previsões de demanda em turismo sazonal",
+      "role": "Analista de avaliação de IA em serviços regionais",
+      "region": "oceania",
+      "compositionIndex": 0,
+      "lightingIndex": 1
+    },
+    {
+      "id": "oc-avaliacao-de-anonimizacao-assistida-em-relatos-de-servicos",
+      "title": "Avaliação de anonimização assistida em relatos de serviços",
+      "role": "Analista de avaliação de IA em serviços regionais",
+      "region": "oceania",
+      "compositionIndex": 1,
+      "lightingIndex": 2
+    },
+    {
+      "id": "oc-teste-de-consistencia-de-agentes-de-planejamento-de-viagens",
+      "title": "Teste de consistência de agentes de planejamento de viagens",
+      "role": "Analista de avaliação de IA em serviços regionais",
+      "region": "oceania",
+      "compositionIndex": 2,
+      "lightingIndex": 3
+    },
+    {
+      "id": "oc-governanca-de-conjuntos-de-dados-de-linguas-indigenas",
+      "title": "Governança de conjuntos de dados de línguas indígenas",
+      "role": "Analista de avaliação de IA em serviços regionais",
+      "region": "oceania",
+      "compositionIndex": 3,
+      "lightingIndex": 4
+    },
+    {
+      "id": "oc-capital-de-giro-em-microexportacao-de-artesanato-insular",
+      "title": "Capital de giro em microexportação de artesanato insular",
+      "role": "Analista de operações e desenvolvimento de pequenos negócios",
+      "region": "oceania",
+      "compositionIndex": 4,
+      "lightingIndex": 0
+    },
+    {
+      "id": "oc-precificacao-por-capacidade-em-experiencias-de-ecoturismo",
+      "title": "Precificação por capacidade em experiências de ecoturismo",
+      "role": "Analista de operações e desenvolvimento de pequenos negócios",
+      "region": "oceania",
+      "compositionIndex": 5,
+      "lightingIndex": 1
+    },
+    {
+      "id": "oc-planejamento-de-receitas-de-hospedagem-comunitaria",
+      "title": "Planejamento de receitas de hospedagem comunitária",
+      "role": "Analista de operações e desenvolvimento de pequenos negócios",
+      "region": "oceania",
+      "compositionIndex": 6,
+      "lightingIndex": 2
+    },
+    {
+      "id": "oc-contratacao-de-servicos-com-pagamentos-por-marcos-verificaveis",
+      "title": "Contratação de serviços com pagamentos por marcos verificáveis",
+      "role": "Analista de operações e desenvolvimento de pequenos negócios",
+      "region": "oceania",
+      "compositionIndex": 0,
+      "lightingIndex": 3
+    },
+    {
+      "id": "oc-analise-de-rentabilidade-de-remessas-para-varejo-insular",
+      "title": "Análise de rentabilidade de remessas para varejo insular",
+      "role": "Analista de operações e desenvolvimento de pequenos negócios",
+      "region": "oceania",
+      "compositionIndex": 1,
+      "lightingIndex": 4
+    },
+    {
+      "id": "oc-planejamento-de-capacidade-em-oficinas-de-reparo-de-equipamentos",
+      "title": "Planejamento de capacidade em oficinas de reparo de equipamentos",
+      "role": "Analista de operações e desenvolvimento de pequenos negócios",
+      "region": "oceania",
+      "compositionIndex": 2,
+      "lightingIndex": 0
+    },
+    {
+      "id": "oc-gestao-de-compras-coletivas-de-materiais-em-comunidades",
+      "title": "Gestão de compras coletivas de materiais em comunidades",
+      "role": "Analista de operações e desenvolvimento de pequenos negócios",
+      "region": "oceania",
+      "compositionIndex": 3,
+      "lightingIndex": 1
+    },
+    {
+      "id": "oc-medicao-de-conversao-em-servicos-turisticos-com-multiplos-canais",
+      "title": "Medição de conversão em serviços turísticos com múltiplos canais",
+      "role": "Analista de operações e desenvolvimento de pequenos negócios",
+      "region": "oceania",
+      "compositionIndex": 4,
+      "lightingIndex": 2
+    },
+    {
+      "id": "oc-planejamento-de-receitas-de-servicos-por-assinatura-em-mercados-pequenos",
+      "title": "Planejamento de receitas de serviços por assinatura em mercados pequenos",
+      "role": "Analista de operações e desenvolvimento de pequenos negócios",
+      "region": "oceania",
+      "compositionIndex": 5,
+      "lightingIndex": 3
+    },
+    {
+      "id": "oc-avaliacao-de-dependencia-de-fornecedores-em-negocios-remotos",
+      "title": "Avaliação de dependência de fornecedores em negócios remotos",
+      "role": "Analista de operações e desenvolvimento de pequenos negócios",
+      "region": "oceania",
+      "compositionIndex": 6,
+      "lightingIndex": 4
+    },
+    {
+      "id": "oc-redacao-de-avisos-de-interrupcao-de-servicos-em-ilhas",
+      "title": "Redação de avisos de interrupção de serviços em ilhas",
+      "role": "Especialista em conteúdo acessível e informação pública",
+      "region": "oceania",
+      "compositionIndex": 0,
+      "lightingIndex": 0
+    },
+    {
+      "id": "oc-alternativas-textuais-para-mapas-de-acesso-a-servicos",
+      "title": "Alternativas textuais para mapas de acesso a serviços",
+      "role": "Especialista em conteúdo acessível e informação pública",
+      "region": "oceania",
+      "compositionIndex": 1,
+      "lightingIndex": 1
+    },
+    {
+      "id": "oc-governanca-de-publicacao-de-historias-orais-comunitarias",
+      "title": "Governança de publicação de histórias orais comunitárias",
+      "role": "Especialista em conteúdo acessível e informação pública",
+      "region": "oceania",
+      "compositionIndex": 2,
+      "lightingIndex": 2
+    },
+    {
+      "id": "oc-controle-editorial-de-formularios-bilingues-com-condicoes-de-elegibilidade",
+      "title": "Controle editorial de formulários bilíngues com condições de elegibilidade",
+      "role": "Especialista em conteúdo acessível e informação pública",
+      "region": "oceania",
+      "compositionIndex": 3,
+      "lightingIndex": 3
+    },
+    {
+      "id": "oc-legendas-acessiveis-para-videos-de-orientacao-profissional",
+      "title": "Legendas acessíveis para vídeos de orientação profissional",
+      "role": "Especialista em conteúdo acessível e informação pública",
+      "region": "oceania",
+      "compositionIndex": 4,
+      "lightingIndex": 4
+    },
+    {
+      "id": "oc-estrutura-semantica-de-guias-digitais-de-mobilidade-no-pacifico",
+      "title": "Estrutura semântica de guias digitais de mobilidade no Pacífico",
+      "role": "Especialista em conteúdo acessível e informação pública",
+      "region": "oceania",
+      "compositionIndex": 5,
+      "lightingIndex": 0
+    },
+    {
+      "id": "oc-edicao-de-tabelas-de-taxas-com-moeda-e-vigencia",
+      "title": "Edição de tabelas de taxas com moeda e vigência",
+      "role": "Especialista em conteúdo acessível e informação pública",
+      "region": "oceania",
+      "compositionIndex": 6,
+      "lightingIndex": 1
+    },
+    {
+      "id": "oc-arquitetura-de-conteudo-para-servicos-com-conectividade-limitada",
+      "title": "Arquitetura de conteúdo para serviços com conectividade limitada",
+      "role": "Especialista em conteúdo acessível e informação pública",
+      "region": "oceania",
+      "compositionIndex": 0,
+      "lightingIndex": 2
+    },
+    {
+      "id": "oc-revisao-de-alegacoes-ambientais-em-comunicacao-turistica",
+      "title": "Revisão de alegações ambientais em comunicação turística",
+      "role": "Especialista em conteúdo acessível e informação pública",
+      "region": "oceania",
+      "compositionIndex": 1,
+      "lightingIndex": 3
+    },
+    {
+      "id": "oc-publicacao-responsavel-de-indicadores-em-pequenas-comunidades",
+      "title": "Publicação responsável de indicadores em pequenas comunidades",
+      "role": "Especialista em conteúdo acessível e informação pública",
+      "region": "oceania",
+      "compositionIndex": 2,
+      "lightingIndex": 4
+    }
+  ]
+}
