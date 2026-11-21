@@ -256,5 +256,6 @@ export const progressMessages: Record<string, Record<Locale, string>> = {
     "fr": "Partagez votre niveau sans informations privées du compte.",
     "de": "Teile deine Stufe ohne private Kontoinformationen.",
     "it": "Condividi il tuo livello senza informazioni private dell’account."
-  }
+  },
+  "Complete your preparation": { "en": "Complete your preparation", "pt-BR": "Conclua sua preparação", "es": "Completa tu preparación", "fr": "Complétez votre préparation", "de": "Vervollständige deine Vorbereitung", "it": "Completa la tua preparazione" }
 };

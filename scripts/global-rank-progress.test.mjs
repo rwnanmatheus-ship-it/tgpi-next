@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import { GLOBAL_RANKS, getGlobalRank } from '../src/lib/global-ranks.ts';
-import { getRankReadiness } from '../src/lib/global-rank-progress.ts';
+import { getNextRankAction, getRankReadiness } from '../src/lib/global-rank-progress.ts';
 const base = { activationCompletion: 0, comparisons: 0, documentReviews: 0, learningPaths: 0, planCompletion: 0, profileCompletion: 0, savedCountries: 0 };
 test('points do not show complete readiness while a course requirement is missing', () => {
   const rank = getGlobalRank({ ...base, activationCompletion: 100, planCompletion: 100, comparisons: 4, documentReviews: 4, savedCountries: 8 });
@@ -33,4 +33,23 @@ test('a live update recomputes requirements without changing rank data', () => {
   const updated = getGlobalRank({ ...base, learningPaths: 1, planCompletion: 60 });
   assert.equal(getRankReadiness(updated, GLOBAL_RANKS[2]).eligible, true);
   assert.equal(JSON.stringify(rank), before);
+});
+
+test('the final missing preparation points never recommend already capped research', () => {
+  const rank = getGlobalRank({ ...base, learningPaths: 12, planCompletion: 100, activationCompletion: 80, comparisons: 4, documentReviews: 4, savedCountries: 8 });
+  assert.equal(rank.points, 9900);
+  const action = getNextRankAction(rank);
+  assert.equal(action.id, 'points');
+  assert.equal(action.remaining, 100);
+  assert.equal(action.href, '/profile');
+  assert.equal(action.title, 'Complete your preparation');
+});
+test('recommendations select an unfinished plan, research or learning source and stop at the final rank', () => {
+  const plan = getGlobalRank({ ...base, learningPaths: 12, planCompletion: 90, activationCompletion: 100, comparisons: 4, documentReviews: 4, savedCountries: 8 });
+  assert.equal(getNextRankAction(plan).href, '/plan');
+  const research = getGlobalRank({ ...base, learningPaths: 12, planCompletion: 100, activationCompletion: 100 });
+  assert.equal(getNextRankAction(research).href, '/countries');
+  assert.equal(getNextRankAction(getGlobalRank(base)).href, '/plan');
+  const final = getGlobalRank({ ...base, learningPaths: 12, planCompletion: 100, activationCompletion: 100, comparisons: 4, documentReviews: 4, savedCountries: 8 });
+  assert.equal(getNextRankAction(final), null);
 });

@@ -7,7 +7,7 @@ import { LocalizedElement } from '@/components/localization/LocalizedElement';
 import AreaHero from '@/components/ui/AreaHero';
 import GlobalRankBadge from '@/components/profile/GlobalRankBadge';
 import { GLOBAL_RANKS, GLOBAL_RANK_DISCLAIMER, GLOBAL_RANK_MAX_POINTS, type GlobalRank } from '@/lib/global-ranks';
-import { getRankReadiness } from '@/lib/global-rank-progress';
+import { getNextRankAction, getRankReadiness } from '@/lib/global-rank-progress';
 import styles from './GlobalProgressPanel.module.css';
 
 type Filter = 'all' | 'achieved' | 'upcoming';
@@ -27,10 +27,7 @@ export default function GlobalProgressPanel({ rank, headingLevel = 1 }: { rank: 
   const selectedProgress = getRankReadiness(rank, selected);
   const next = rank.nextRank ? getRankReadiness(rank, rank.nextRank) : null;
   const n = (value: number) => value.toLocaleString(locale, { maximumFractionDigits: 0 });
-  const nextTask = next?.requirements.find(item => item.id === 'courses' && !item.met)
-    ?? next?.requirements.find(item => item.id === 'plan' && !item.met)
-    ?? next?.requirements.find(item => !item.met);
-  const taskTitle = nextTask?.id === 'courses' ? 'Complete your next course' : nextTask?.id === 'plan' ? 'Strengthen your personal plan' : 'Expand your country research';
+  const nextTask = getNextRankAction(rank);
   const pillars = [
     { title: 'Personal plan', points: rank.breakdown.plan, max: 500, href: '/plan', detail: 'Define your priorities and destination strategy.', icon: '◎' },
     { title: 'Preparation', points: rank.breakdown.readiness, max: 500, href: '/profile', detail: 'Connect research, costs, documents and learning.', icon: '◇' },
@@ -56,7 +53,7 @@ export default function GlobalProgressPanel({ rank, headingLevel = 1 }: { rank: 
         <p className={styles.currentHint}>{t('Points, completed courses and your plan are evaluated together.')}</p>
       </section>
 
-      <section className={styles.nextAction} aria-labelledby="next-action-title"><p className={styles.eyebrow}>{t('Your next best action')}</p><span className={styles.actionIcon} aria-hidden="true">{nextTask?.id === 'courses' ? '✧' : '◎'}</span><h2 id="next-action-title">{t(nextTask ? taskTitle : 'Keep building your capabilities')}</h2><p>{nextTask ? t(nextTask.id === 'courses' ? '{count} completed courses still needed for your next rank.' : nextTask.id === 'plan' ? '{count}% of your plan still needed for your next rank.' : '{count} points still needed for your next rank.', { count: n(nextTask.remaining) }) : t('You have reached the highest rank. Continue learning and discover new fields.')}</p><Link href={nextTask?.href ?? '/courses'} className={styles.primary}>{t(nextTask?.id === 'plan' ? 'Review my plan' : nextTask?.id === 'points' ? 'Explore countries' : 'Develop my skills')}</Link><button type="button" className={styles.textButton} onClick={() => { setSelectedId(rank.nextRank?.id ?? rank.id); document.getElementById('rank-requirements')?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth', block: 'center' }); }}>{t('Inspect next rank requirements')}</button></section>
+      <section className={styles.nextAction} aria-labelledby="next-action-title"><p className={styles.eyebrow}>{t('Your next best action')}</p><span className={styles.actionIcon} aria-hidden="true">{nextTask?.id === 'courses' ? '✧' : '◎'}</span><h2 id="next-action-title">{t(nextTask?.title ?? 'Keep building your capabilities')}</h2><p>{nextTask ? t(nextTask.id === 'courses' ? '{count} completed courses still needed for your next rank.' : nextTask.id === 'plan' ? '{count}% of your plan still needed for your next rank.' : '{count} points still needed for your next rank.', { count: n(nextTask.remaining) }) : t('You have reached the highest rank. Continue learning and discover new fields.')}</p><Link href={nextTask?.href ?? '/courses'} className={styles.primary}>{t(nextTask?.label ?? 'Develop my skills')}</Link><button type="button" className={styles.textButton} onClick={() => { setSelectedId(rank.nextRank?.id ?? rank.id); document.getElementById('rank-requirements')?.scrollIntoView({ behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth', block: 'center' }); }}>{t('Inspect next rank requirements')}</button></section>
     </div>
 
     <section aria-labelledby="progress-sources-title"><div className={styles.sectionHeading}><div><p className={styles.kicker}>{t('Every step counts')}</p><h2 id="progress-sources-title">{t('Where your progress comes from')}</h2></div><span className={styles.total}>{n(rank.points)} {t('Points')}</span></div><div className={styles.pillars}>{pillars.map(pillar => <Link key={pillar.title} href={pillar.href} className={styles.pillar}><div className={styles.pillarTop}><span className={styles.pillarIcon} aria-hidden="true">{pillar.icon}</span><strong>{n(pillar.points)} <span>/ {n(pillar.max)}</span></strong></div><h3>{t(pillar.title)}</h3><Meter value={Math.min(100, Math.floor(pillar.points / pillar.max * 100))} label={t(pillar.title)} /><p>{t(pillar.detail)}</p><span className={styles.pillarLink}>{t('Continue')}</span></Link>)}</div></section>

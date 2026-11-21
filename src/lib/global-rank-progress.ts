@@ -20,3 +20,24 @@ export function getRankReadiness(rank: GlobalRank, target: GlobalRankDefinition)
   const percent = Math.floor(requirements.reduce((sum, item) => sum + item.percent, 0) / requirements.length);
   return { requirements, met, percent, eligible: met === requirements.length };
 }
+
+/** Recommend only scoring sources which have not reached their fixed caps. */
+export function getNextRankAction(rank: GlobalRank) {
+  if (!rank.nextRank) return null;
+  const requirements = getRankRequirements(rank, rank.nextRank);
+  const requirement = requirements.find(item => item.id === 'courses' && !item.met)
+    ?? requirements.find(item => item.id === 'plan' && !item.met)
+    ?? requirements.find(item => !item.met);
+  if (!requirement) return null;
+  const courseAction = { href: '/courses', title: 'Complete your next course', label: 'Develop my skills' };
+  const planAction = { href: '/plan', title: 'Strengthen your personal plan', label: 'Review my plan' };
+  if (requirement.id === 'courses') return { ...requirement, ...courseAction };
+  if (requirement.id === 'plan' || rank.breakdown.plan < 500) return { ...requirement, ...planAction };
+  if (rank.breakdown.readiness < 500) {
+    return { ...requirement, href: '/profile', title: 'Complete your preparation', label: 'Open workspace' };
+  }
+  const learningPoints = rank.completedCourses * 650 + Math.round(rank.completedCourses * 200 / 12);
+  const researchPoints = rank.breakdown.activity - learningPoints;
+  if (researchPoints < 1000) return { ...requirement, href: '/countries', title: 'Expand your country research', label: 'Explore countries' };
+  return { ...requirement, ...courseAction };
+}
