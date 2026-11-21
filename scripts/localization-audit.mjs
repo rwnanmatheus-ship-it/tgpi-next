@@ -17,6 +17,7 @@ new Function('exports', ts.transpileModule(fs.readFileSync('src/lib/notification
 for (const locale of ['en', 'pt-BR', 'es', 'fr', 'de', 'it']) exports.registerSupplementalMessages(locale, supplementalFor(locale));
 const interfaceKeys = [
   ['appearance', 'appearanceMessages'],
+  ['rank-progress-copy', 'progressMessages'],
   ['regional-market-copy', 'regionalMarketMessages'],
   ['plan-execution-copy', 'planExecutionMessages'],
   ['credential-sharing-copy', 'credentialSharingMessages'],
