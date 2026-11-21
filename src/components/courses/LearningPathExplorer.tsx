@@ -7,6 +7,7 @@ import { localeOptions } from '@/lib/localization/config';
 import { useLocale } from '@/components/localization/LocaleProvider';
 import Image from 'next/image';
 import { courseArtwork } from '@/lib/cinematic-art';
+import { courseSectors, courseSector, courseSectorCopy } from '@/lib/learning/international-covers';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import ContinueLearning from './ContinueLearning';
@@ -35,7 +36,7 @@ export default function LearningPathExplorer({ courses, initialFilters }: Props)
   const studyLanguage = (course: CourseOverview) => fullyLocalizedAcademyCourses.has(course.id)
     ? academyPracticeCopy(locale, 'availableLanguages')
     : t(courseLearningPolicy(course).instructionLanguage === 'pt-BR' ? 'Instruction: Portuguese' : 'Instruction: English');
-  const eligible = courses.filter(course => (filters.region === 'all' || course.marketRegion === filters.region) && (filters.area === 'all' || course.professionalArea === filters.area) && (filters.goal === 'all' || course.goal === filters.goal) && (filters.series === 'all' || course.series === filters.series) && (filters.availability === 'all' || course.status === filters.availability) && (filters.credential === 'all' || courseLearningPolicy(course).credentialStatus === filters.credential) && (filters.access === 'all' || courseLearningPolicy(course).accessPolicy === filters.access) && (filters.language === 'all' || fullyLocalizedAcademyCourses.has(course.id) || courseLearningPolicy(course).instructionLanguage === filters.language));
+  const eligible = courses.filter(course => (filters.sector === 'all' || courseSector(course.id) === filters.sector) && (filters.region === 'all' || course.marketRegion === filters.region) && (filters.area === 'all' || course.professionalArea === filters.area) && (filters.goal === 'all' || course.goal === filters.goal) && (filters.series === 'all' || course.series === filters.series) && (filters.availability === 'all' || course.status === filters.availability) && (filters.credential === 'all' || courseLearningPolicy(course).credentialStatus === filters.credential) && (filters.access === 'all' || courseLearningPolicy(course).accessPolicy === filters.access) && (filters.language === 'all' || fullyLocalizedAcademyCourses.has(course.id) || courseLearningPolicy(course).instructionLanguage === filters.language));
   const visible = eligible.map(course => ({ course, score: courseSearchScore(course,filters.query,t) })).filter(item => item.score > 0).sort((a,b) => sort === 'shortest' ? courseMinutes(a.course.duration)-courseMinutes(b.course.duration) : sort === 'title' ? t(a.course.title).localeCompare(t(b.course.title),locale) : b.score-a.score).map(item => item.course);
   const selected = courses.filter(course => comparison.includes(course.id));
   const activeFilters = Object.entries(filters).some(([key,value]) => value !== defaultCatalogFilters[key as keyof CatalogFilters]);
@@ -45,16 +46,20 @@ export default function LearningPathExplorer({ courses, initialFilters }: Props)
     <div className={styles.tools}>
       <CourseSearch courses={eligible} query={filters.query} onChange={query => update({query})} />
       <div className={styles.areaFilter}>
-        <label htmlFor="professional-area">{t('Professional area')}<select id="professional-area" value={filters.area} onChange={event => update({area:event.target.value})}>
+        <label htmlFor="professional-area">{t('Professional area')}<select id="professional-area" value={filters.area} onChange={event => update({area:event.target.value,sector:'all'})}>
           <option value="all">{t('All professional areas')}</option>
           {professionalAreas.map(([id, label]) => <option key={id} value={id}>{t(label)} ({courses.filter(course => course.professionalArea === id).length})</option>)}
         </select></label>
-        <p>{t('Explore applied courses across 10 professional areas and five regional markets.')}</p>
+        <label htmlFor="course-sector">{courseSectorCopy(locale, 'sector')}<select id="course-sector" value={filters.sector} onChange={event => update({sector:event.target.value,region:'all'})}>
+          <option value="all">{courseSectorCopy(locale, 'allSectors')}</option>
+          {[...courseSectors].sort((a,b) => a.labels[locale].localeCompare(b.labels[locale],locale)).map(sector => { const count = courses.filter(course => courseSector(course.id) === sector.id && (filters.area === 'all' || course.professionalArea === filters.area)).length; return <option key={sector.id} value={sector.id} disabled={count === 0}>{sector.labels[locale]} ({count})</option>; })}
+        </select></label>
+        <p>{courseSectorCopy(locale, 'expansion')}</p>
       </div>
       <div className={styles.filters} role="group" aria-label={t('Filter by learning goal')}>{goals.map(([value,label]) => <button key={value} type="button" aria-pressed={filters.goal === value} onClick={() => update({goal:value})}>{t(label)}<small>{courses.filter(course => value === 'all' || course.goal === value).length}</small></button>)}</div>
       <div className={styles.filters} role="group" aria-label={t('Access plan')}>{([['all', 'All plans'], ['free_account', 'TGPI Free'], ['premium', 'TGPI Premium']] as const).map(([value, label]) => <button key={value} type="button" aria-pressed={filters.access === value} onClick={() => update({ access: value })}>{t(label)}</button>)}</div>
       <details className={styles.advanced}><summary>{t('Refine your search')}{activeFilters && <span> · {t('Filters active')}</span>}</summary><div className={styles.policyFilters}>
-        <label>{t('Regional market')}<select value={filters.region} onChange={event => update({region:event.target.value})}><option value="all">{t('All regional markets')}</option>{courseRegions.map(([id, label]) => <option key={id} value={id}>{t(label)} ({courses.filter(course => course.marketRegion === id).length})</option>)}</select></label>
+        <label>{t('Regional market')}<select value={filters.region} onChange={event => update({region:event.target.value,sector:'all'})}><option value="all">{t('All regional markets')}</option>{courseRegions.map(([id, label]) => <option key={id} value={id}>{t(label)} ({courses.filter(course => course.marketRegion === id).length})</option>)}</select></label>
         <label>{t('Course series')}<select value={filters.series} onChange={event => update({series:event.target.value})}><option value="all">{t('All series')}</option>{[...new Set(courses.flatMap(course => course.series ? [course.series] : []))].map(series => <option key={series} value={series}>{t(series)}</option>)}</select></label>
         <label>{t('Availability')}<select value={filters.availability} onChange={event => update({availability:event.target.value})}><option value="available">{t('Available now')}</option><option value="all">{t('Full library')}</option><option value="planned">{t('In development')}</option></select></label>
         <label>{t('Course language')}<select value={filters.language} onChange={event => update({language:event.target.value})}><option value="all">{t('All languages')}</option>{localeOptions.map(option => <option key={option.code} value={option.code} lang={option.code}>{option.name}</option>)}</select></label>

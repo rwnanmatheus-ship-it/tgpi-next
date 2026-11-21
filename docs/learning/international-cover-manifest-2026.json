@@ -1,0 +1,3002 @@
+[
+  {
+    "id": "escalas-de-equipes-de-cozinha-institucional",
+    "sector": "alimentacao-coletiva",
+    "path": "public/images/courses/international-covers-2026/escalas-de-equipes-de-cozinha-institucional.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 121118,
+    "sha256": "c1e1524abcf8b97bcb9a29309321f8ca532c8965b87b7ad284b6d1bbb3f666af",
+    "aiGenerated": true
+  },
+  {
+    "id": "dimensionamento-de-porcoes-em-refeitorios",
+    "sector": "alimentacao-coletiva",
+    "path": "public/images/courses/international-covers-2026/dimensionamento-de-porcoes-em-refeitorios.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 134968,
+    "sha256": "6a5448797d4b1242dbd25dc06a29d08dd7285bf717a445192f8d563346ad325c",
+    "aiGenerated": true
+  },
+  {
+    "id": "engenharia-de-cardapio-por-margem",
+    "sector": "alimentacao-coletiva",
+    "path": "public/images/courses/international-covers-2026/engenharia-de-cardapio-por-margem.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 196174,
+    "sha256": "e5dde6e9fac107c8db28a5e67b3c6c95499fdaf537ccac52d840a72c10303030",
+    "aiGenerated": true
+  },
+  {
+    "id": "medicao-de-desperdicio-no-prato",
+    "sector": "alimentacao-coletiva",
+    "path": "public/images/courses/international-covers-2026/medicao-de-desperdicio-no-prato.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 111594,
+    "sha256": "00cc1ac537be901666fdb7fa6cb96fa943e81323ccf52a7b885bd559799d83d6",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-refeicoes-em-eventos-esportivos",
+    "sector": "alimentacao-coletiva",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-refeicoes-em-eventos-esportivos.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 226446,
+    "sha256": "4948b8fb0b2523fa27f4fec99320c34b3cab88f04b4916c23b189e222e9e3ccf",
+    "aiGenerated": true
+  },
+  {
+    "id": "programacao-de-preparo-por-turno-escolar",
+    "sector": "alimentacao-coletiva",
+    "path": "public/images/courses/international-covers-2026/programacao-de-preparo-por-turno-escolar.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 141574,
+    "sha256": "d0413bb0b8ad87a01c3a67bbc2f3581638eeceecc8e0493a820bedda7813b502",
+    "aiGenerated": true
+  },
+  {
+    "id": "controle-de-substituicoes-de-ingredientes-em-fichas",
+    "sector": "alimentacao-coletiva",
+    "path": "public/images/courses/international-covers-2026/controle-de-substituicoes-de-ingredientes-em-fichas.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 156472,
+    "sha256": "cff9a71deb731066bcee850e0451c57dbbc9dd4fd28147a1cf909df977a3f29a",
+    "aiGenerated": true
+  },
+  {
+    "id": "contratacao-de-servicos-de-alimentacao-coletiva",
+    "sector": "alimentacao-coletiva",
+    "path": "public/images/courses/international-covers-2026/contratacao-de-servicos-de-alimentacao-coletiva.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 123510,
+    "sha256": "a8b75a0e53145783aa611a89a5dc4e87d6c3738eb88ff9fbbf5676d5786c5bb0",
+    "aiGenerated": true
+  },
+  {
+    "id": "analise-de-filas-em-pracas-de-alimentacao",
+    "sector": "alimentacao-coletiva",
+    "path": "public/images/courses/international-covers-2026/analise-de-filas-em-pracas-de-alimentacao.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 134626,
+    "sha256": "163720d9545acde73388cd420a185fcca847c5456d527348d918fc502b5ef573",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-recipientes-retornaveis-em-catering",
+    "sector": "alimentacao-coletiva",
+    "path": "public/images/courses/international-covers-2026/gestao-de-recipientes-retornaveis-em-catering.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 145994,
+    "sha256": "ee8c15f7ba1eebd7dc29487a444534134388613f33b61c886f3aeb58930cac85",
+    "aiGenerated": true
+  },
+  {
+    "id": "previsao-de-ocupacao-hoteleira",
+    "sector": "hotelaria",
+    "path": "public/images/courses/international-covers-2026/previsao-de-ocupacao-hoteleira.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 146948,
+    "sha256": "01c4732de29c6dc638d8e4898de409a87a1313190c23c9effe7bc7e00b485b6e",
+    "aiGenerated": true
+  },
+  {
+    "id": "distribuicao-de-tarifas-por-canal",
+    "sector": "hotelaria",
+    "path": "public/images/courses/international-covers-2026/distribuicao-de-tarifas-por-canal.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 91452,
+    "sha256": "2bb9195b7d6ca19cffd57e1b2790161453e5866c9ac13feaf4f5cc3878647509",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-governanca-de-quartos",
+    "sector": "hotelaria",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-governanca-de-quartos.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 165004,
+    "sha256": "64f5b2adce951884822d9e01a1c0fe301e1fb951e27f37dbd14cffe54f01ce7b",
+    "aiGenerated": true
+  },
+  {
+    "id": "auditoria-de-reservas-de-grupos",
+    "sector": "hotelaria",
+    "path": "public/images/courses/international-covers-2026/auditoria-de-reservas-de-grupos.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 106638,
+    "sha256": "80a556b700e86e61a3fc150bbde40a69f452a0fba44981fa4bf8c7991a4a515b",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-lavanderia-de-hotel",
+    "sector": "hotelaria",
+    "path": "public/images/courses/international-covers-2026/gestao-de-lavanderia-de-hotel.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 157434,
+    "sha256": "6a936f2e46e4f650c6c86e0063fed0f13f186d4de3b39d0f6e84979882141aa0",
+    "aiGenerated": true
+  },
+  {
+    "id": "negociacao-de-allotments-turisticos",
+    "sector": "hotelaria",
+    "path": "public/images/courses/international-covers-2026/negociacao-de-allotments-turisticos.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 151158,
+    "sha256": "48a30bd67ee21ea0a4b8214064e8e6accbdfee8fe5f02060e60dbb79a89728dc",
+    "aiGenerated": true
+  },
+  {
+    "id": "coordenacao-de-recepcao-noturna",
+    "sector": "hotelaria",
+    "path": "public/images/courses/international-covers-2026/coordenacao-de-recepcao-noturna.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 103532,
+    "sha256": "98ab62b06504a6c33360505e2d4576aac68cf14522d5cc4f011afba65a8fa1e2",
+    "aiGenerated": true
+  },
+  {
+    "id": "operacoes-de-achados-e-perdidos-em-hoteis",
+    "sector": "hotelaria",
+    "path": "public/images/courses/international-covers-2026/operacoes-de-achados-e-perdidos-em-hoteis.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 120104,
+    "sha256": "d501eb1f6db94a75b57d92a12f4a7a05c2bbfa1e00fa2e615b17baac6daf1ef2",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-bloqueios-para-manutencao",
+    "sector": "hotelaria",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-bloqueios-para-manutencao.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 154452,
+    "sha256": "ae159bf42c5ce5078c5da21ebfa1dfe361d60431f1c7edfeb14d4b81376e907d",
+    "aiGenerated": true
+  },
+  {
+    "id": "recuperacao-de-servico-em-hospedagem",
+    "sector": "hotelaria",
+    "path": "public/images/courses/international-covers-2026/recuperacao-de-servico-em-hospedagem.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 135956,
+    "sha256": "e6b6f44a7b3d9f6673d3a1b75672f4f19780d9fc7c7139223c2e88a19a0b6985",
+    "aiGenerated": true
+  },
+  {
+    "id": "desenho-de-tabelas-horarias-de-onibus",
+    "sector": "transporte-de-passageiros",
+    "path": "public/images/courses/international-covers-2026/desenho-de-tabelas-horarias-de-onibus.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 150762,
+    "sha256": "361f54d0f36d9d391e2718a54dc55259758676b3167671a45c5f1098f770aebd",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-intervalos-em-linhas-de-alta-frequencia",
+    "sector": "transporte-de-passageiros",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-intervalos-em-linhas-de-alta-frequencia.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 146416,
+    "sha256": "685f09bd020a1fbf29a99a2ddcc0021a0c4ca976efa7b62ad9592ce9ea469dde",
+    "aiGenerated": true
+  },
+  {
+    "id": "medicao-de-pontualidade-ferroviaria",
+    "sector": "transporte-de-passageiros",
+    "path": "public/images/courses/international-covers-2026/medicao-de-pontualidade-ferroviaria.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 194354,
+    "sha256": "b17a1a1a9b6beaf53336ab64a5610551fd822c085455f0c5f371ab85ef622a51",
+    "aiGenerated": true
+  },
+  {
+    "id": "integracao-tarifaria-em-redes-metropolitanas",
+    "sector": "transporte-de-passageiros",
+    "path": "public/images/courses/international-covers-2026/integracao-tarifaria-em-redes-metropolitanas.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 157988,
+    "sha256": "bdd45e007982734bcd2de430ea058249a310cf60f7afe80a6a1a29dfbe644930",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-informacao-ao-passageiro",
+    "sector": "transporte-de-passageiros",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-informacao-ao-passageiro.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 189708,
+    "sha256": "aab720abbe3671505c291c9b8cb4aaf7aa607129d99b93151230e42390ed137b",
+    "aiGenerated": true
+  },
+  {
+    "id": "dimensionamento-de-terminais-rodoviarios",
+    "sector": "transporte-de-passageiros",
+    "path": "public/images/courses/international-covers-2026/dimensionamento-de-terminais-rodoviarios.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 202528,
+    "sha256": "6ea185890d1a5e9ecd828bbd9f6214658bea3b18766170e521ad879a49a5e2e5",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-conexoes-perdidas",
+    "sector": "transporte-de-passageiros",
+    "path": "public/images/courses/international-covers-2026/gestao-de-conexoes-perdidas.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 143312,
+    "sha256": "a933f0bce23184aa147dec89c499ee0461d7442406c0de5830134313e624af8c",
+    "aiGenerated": true
+  },
+  {
+    "id": "analise-de-demanda-por-parada",
+    "sector": "transporte-de-passageiros",
+    "path": "public/images/courses/international-covers-2026/analise-de-demanda-por-parada.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 159438,
+    "sha256": "f8d2d8fef8d73a8dd993a0dc29bb27a235b814c7f21df6f1b3eebd8c89896510",
+    "aiGenerated": true
+  },
+  {
+    "id": "escalas-de-atendimento-em-estacoes",
+    "sector": "transporte-de-passageiros",
+    "path": "public/images/courses/international-covers-2026/escalas-de-atendimento-em-estacoes.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 142642,
+    "sha256": "aef36ddf25f66bdca9ae14c601eb5b0c94ee793b4cc52975aad596d3013e01fe",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-transporte-para-eventos",
+    "sector": "transporte-de-passageiros",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-transporte-para-eventos.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 214740,
+    "sha256": "3047c64db044bcdc82fa9b25b90daaf53fa206b5eb8bb9fb0f0c39225c0b0cf8",
+    "aiGenerated": true
+  },
+  {
+    "id": "medicao-de-quantitativos-de-alvenaria",
+    "sector": "construcao",
+    "path": "public/images/courses/international-covers-2026/medicao-de-quantitativos-de-alvenaria.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 275566,
+    "sha256": "bd33d48287e4144ef6e49226d412b44660916cb99c02ad9484cd69622388857c",
+    "aiGenerated": true
+  },
+  {
+    "id": "orcamento-de-acabamentos-por-ambiente",
+    "sector": "construcao",
+    "path": "public/images/courses/international-covers-2026/orcamento-de-acabamentos-por-ambiente.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 146594,
+    "sha256": "cf34df028d5e6095644e73f8955b8249f65baa9c325d68703e5d04b83a95b0ed",
+    "aiGenerated": true
+  },
+  {
+    "id": "programacao-de-entregas-de-concreto",
+    "sector": "construcao",
+    "path": "public/images/courses/international-covers-2026/programacao-de-entregas-de-concreto.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 179812,
+    "sha256": "214267f74d3c0c65e507485e178d7f7885a83a9876018788a4040fad4f667da8",
+    "aiGenerated": true
+  },
+  {
+    "id": "controle-documental-de-mudancas-de-obra",
+    "sector": "construcao",
+    "path": "public/images/courses/international-covers-2026/controle-documental-de-mudancas-de-obra.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 146926,
+    "sha256": "d20f3d24324377a21b32bcd0f252494510dc6548cfbadf4c37e78e1b8f279ba8",
+    "aiGenerated": true
+  },
+  {
+    "id": "compras-por-pacote-de-execucao",
+    "sector": "construcao",
+    "path": "public/images/courses/international-covers-2026/compras-por-pacote-de-execucao.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 193412,
+    "sha256": "0ee3a9e08ca2edc88522077dc1ef9ea11deab87705a67836447328bb47986852",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-amostras-de-revestimentos",
+    "sector": "construcao",
+    "path": "public/images/courses/international-covers-2026/gestao-de-amostras-de-revestimentos.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 185140,
+    "sha256": "14f578fff8a909e71aed4a5561f38865491f340f2785539965e5888776491e8d",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-ocupacao-de-canteiros",
+    "sector": "construcao",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-ocupacao-de-canteiros.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 200158,
+    "sha256": "4b27ed73681e27bd142c3ee75bfa842d7e3cac5137e1f85cb6870309e37204e0",
+    "aiGenerated": true
+  },
+  {
+    "id": "conciliacao-entre-medicao-e-faturamento",
+    "sector": "construcao",
+    "path": "public/images/courses/international-covers-2026/conciliacao-entre-medicao-e-faturamento.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 149550,
+    "sha256": "7247fd551e6c65887a5ca483d3f75f6cfc273c8df71b4a7ad8ae9c84ce0bf55a",
+    "aiGenerated": true
+  },
+  {
+    "id": "inventario-de-componentes-para-reuso",
+    "sector": "construcao",
+    "path": "public/images/courses/international-covers-2026/inventario-de-componentes-para-reuso.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 245810,
+    "sha256": "ff2d2e5a5359e312bed74ee101ec4602e969c349cd80e8ed864d6cddd5e70a38",
+    "aiGenerated": true
+  },
+  {
+    "id": "entrega-documental-de-empreendimentos",
+    "sector": "construcao",
+    "path": "public/images/courses/international-covers-2026/entrega-documental-de-empreendimentos.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 125766,
+    "sha256": "63c268a5e0328165b77744ca28058facca9066281675e48fa6e95d5ff35ff89c",
+    "aiGenerated": true
+  },
+  {
+    "id": "triagem-de-eletrodomesticos-para-reparo",
+    "sector": "economia-da-reparacao",
+    "path": "public/images/courses/international-covers-2026/triagem-de-eletrodomesticos-para-reparo.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 215086,
+    "sha256": "5970e934573e5d708c6878d5cb9c6bb7fc496e133741a2e359979d29ef3d8ca9",
+    "aiGenerated": true
+  },
+  {
+    "id": "orcamento-de-oficinas-de-bicicletas",
+    "sector": "economia-da-reparacao",
+    "path": "public/images/courses/international-covers-2026/orcamento-de-oficinas-de-bicicletas.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 187260,
+    "sha256": "d63bf08e3384958e1af60e365d1036016922c1089f8dc3194d3ed95dc0fc7822",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-garantias-de-moveis",
+    "sector": "economia-da-reparacao",
+    "path": "public/images/courses/international-covers-2026/gestao-de-garantias-de-moveis.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 257036,
+    "sha256": "e93d801c623bfd42cd8266984bd45782fe506b9228c19285d91fbdbd375d20fe",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-coleta-de-equipamentos-usados",
+    "sector": "economia-da-reparacao",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-coleta-de-equipamentos-usados.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 174592,
+    "sha256": "072311f04b1b457a115b7cee7d47fe5ea7f8c2a024840960fd47c83d85f3cbe2",
+    "aiGenerated": true
+  },
+  {
+    "id": "classificacao-comercial-de-eletronicos-recondicionados",
+    "sector": "economia-da-reparacao",
+    "path": "public/images/courses/international-covers-2026/classificacao-comercial-de-eletronicos-recondicionados.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 165128,
+    "sha256": "6f53900e5abf1355c447c847b2225c5ca54f3142ed534b64eb8e668e92163c9b",
+    "aiGenerated": true
+  },
+  {
+    "id": "catalogos-de-compatibilidade-de-pecas",
+    "sector": "economia-da-reparacao",
+    "path": "public/images/courses/international-covers-2026/catalogos-de-compatibilidade-de-pecas.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 205626,
+    "sha256": "cdc8385bd256edebad4971c687c3815976d6ba053368095958734fc5f8d75f30",
+    "aiGenerated": true
+  },
+  {
+    "id": "controle-de-creditos-por-componentes-devolvidos",
+    "sector": "economia-da-reparacao",
+    "path": "public/images/courses/international-covers-2026/controle-de-creditos-por-componentes-devolvidos.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 120322,
+    "sha256": "2bb63bfd38b9f46e8e444157698688ae98d0dafa2cbc4ce15f5f375624363937",
+    "aiGenerated": true
+  },
+  {
+    "id": "precificacao-de-contratos-de-reparo",
+    "sector": "economia-da-reparacao",
+    "path": "public/images/courses/international-covers-2026/precificacao-de-contratos-de-reparo.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 169694,
+    "sha256": "cd41beeb5d1dc562f54b65d1ec7e0537b6a563c832d8176b88abbbeff5f81765",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-oficinas-comunitarias",
+    "sector": "economia-da-reparacao",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-oficinas-comunitarias.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 248326,
+    "sha256": "a011c7a372176ea572155abc689807d71c025cfc6ecaf8cef7014ef301a92d9e",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-pecas-descontinuadas",
+    "sector": "economia-da-reparacao",
+    "path": "public/images/courses/international-covers-2026/gestao-de-pecas-descontinuadas.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 170774,
+    "sha256": "6dc422731e39b3ee8d7fb3a3d0f6ef7335d5e3be310296da6927a84239e319b0",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-grades-de-tamanho",
+    "sector": "vestuario",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-grades-de-tamanho.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 167700,
+    "sha256": "249fde3a44615540624e5f1ec8c15f2d8fc02c5ff64b7a7307d2825afcc3f13d",
+    "aiGenerated": true
+  },
+  {
+    "id": "compras-de-tecidos-por-lote",
+    "sector": "vestuario",
+    "path": "public/images/courses/international-covers-2026/compras-de-tecidos-por-lote.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 236164,
+    "sha256": "fe7cd346fe1f3a17974f20c4a524924345213444551578da29505073d078745a",
+    "aiGenerated": true
+  },
+  {
+    "id": "custeio-de-colecao-capsula",
+    "sector": "vestuario",
+    "path": "public/images/courses/international-covers-2026/custeio-de-colecao-capsula.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 172726,
+    "sha256": "c24294af6acd9086063a15c74a4e8ea6f008b83595509b446e04ccf292a30dfb",
+    "aiGenerated": true
+  },
+  {
+    "id": "fichas-tecnicas-de-confeccao",
+    "sector": "vestuario",
+    "path": "public/images/courses/international-covers-2026/fichas-tecnicas-de-confeccao.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 117982,
+    "sha256": "13ebb14be8b39f28e3de10f4d5da9a407d088ed60733c4623a52a668ae88769f",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-corte-por-encomenda",
+    "sector": "vestuario",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-corte-por-encomenda.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 214026,
+    "sha256": "0aacce775ea1e235bc8d0b7f64a44665b6c9bb53255cba2a4c28359ac402cb58",
+    "aiGenerated": true
+  },
+  {
+    "id": "controle-de-amostras-de-showroom",
+    "sector": "vestuario",
+    "path": "public/images/courses/international-covers-2026/controle-de-amostras-de-showroom.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 140968,
+    "sha256": "2aa01583fb3741568e8d2050c92b18b0f601c921ba11f3b39d16f776e42c20ee",
+    "aiGenerated": true
+  },
+  {
+    "id": "analise-de-devolucoes-por-modelagem",
+    "sector": "vestuario",
+    "path": "public/images/courses/international-covers-2026/analise-de-devolucoes-por-modelagem.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 108128,
+    "sha256": "394731f4bde3f4990e96728518c186ac219fd93a5bb131fb2ceccc8de9ba4eb4",
+    "aiGenerated": true
+  },
+  {
+    "id": "distribuicao-de-colecao-por-loja",
+    "sector": "vestuario",
+    "path": "public/images/courses/international-covers-2026/distribuicao-de-colecao-por-loja.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 126560,
+    "sha256": "ff9cfb05d326db6bf92e80f01f9022625d5ef7cbb152cc00e91db77a2acc20c4",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-acervo-de-figurinos",
+    "sector": "vestuario",
+    "path": "public/images/courses/international-covers-2026/gestao-de-acervo-de-figurinos.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 165410,
+    "sha256": "c5c7d8bb70185eb339ee87c53846c2a62ec454ee72033faede01718ab7afd9f9",
+    "aiGenerated": true
+  },
+  {
+    "id": "programacao-de-aluguel-de-roupas",
+    "sector": "vestuario",
+    "path": "public/images/courses/international-covers-2026/programacao-de-aluguel-de-roupas.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 141760,
+    "sha256": "e510e7b2be478a958b48cb0dc37c656548a47c0e6f8d5d2876f0da532eb6b9ad",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-sortimento-por-numeracao",
+    "sector": "calcados-e-acessorios",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-sortimento-por-numeracao.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 164444,
+    "sha256": "4ef010134859c4be1b8526515b51b3af0c1419bb54b5f4051292029451f331c5",
+    "aiGenerated": true
+  },
+  {
+    "id": "custeio-de-modelos-de-calcado",
+    "sector": "calcados-e-acessorios",
+    "path": "public/images/courses/international-covers-2026/custeio-de-modelos-de-calcado.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 186404,
+    "sha256": "a9e12adb29260be45a896e87bb69cfee0a6e47a58301babba470337cd72b2acb",
+    "aiGenerated": true
+  },
+  {
+    "id": "mapeamento-de-componentes-de-bolsas",
+    "sector": "calcados-e-acessorios",
+    "path": "public/images/courses/international-covers-2026/mapeamento-de-componentes-de-bolsas.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 154430,
+    "sha256": "e4cc6f04879fab5c9c8bc40189f8eb847fb320915043c2ca6ef571620fd25a01",
+    "aiGenerated": true
+  },
+  {
+    "id": "controle-de-pares-incompletos-em-distribuicao",
+    "sector": "calcados-e-acessorios",
+    "path": "public/images/courses/international-covers-2026/controle-de-pares-incompletos-em-distribuicao.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 126568,
+    "sha256": "361714f74e4aa7c86317fc57ec96a3abffdd8a2b909530b2d979948aa5799890",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-mostruarios-de-calcados",
+    "sector": "calcados-e-acessorios",
+    "path": "public/images/courses/international-covers-2026/gestao-de-mostruarios-de-calcados.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 193944,
+    "sha256": "efe7b96abce139a8f976c89290fe6acb6261268873604df1a4e93f6121b2df8a",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-reposicao-de-acessorios",
+    "sector": "calcados-e-acessorios",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-reposicao-de-acessorios.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 172190,
+    "sha256": "39d03c05a56f3ed67a5bff194abc3a113a697d8210d5f948f36ec1ff5a54d302",
+    "aiGenerated": true
+  },
+  {
+    "id": "contratacao-de-oficinas-de-acabamento",
+    "sector": "calcados-e-acessorios",
+    "path": "public/images/courses/international-covers-2026/contratacao-de-oficinas-de-acabamento.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 167534,
+    "sha256": "e8305bec5cbbf983c472eb7c6be44eece9b63022a960c871ae9900783a079d99",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-pedidos-personalizados-de-couro",
+    "sector": "calcados-e-acessorios",
+    "path": "public/images/courses/international-covers-2026/gestao-de-pedidos-personalizados-de-couro.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 176504,
+    "sha256": "2ebeae1719dc547106701076c57f3b192dcfecd62a9d45354dde53a33da49222",
+    "aiGenerated": true
+  },
+  {
+    "id": "catalogos-de-materiais-alternativos",
+    "sector": "calcados-e-acessorios",
+    "path": "public/images/courses/international-covers-2026/catalogos-de-materiais-alternativos.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 242910,
+    "sha256": "54d50fc0f05b933e3f7d27a38af6fe7ff60e02a5306b44951ee8413591070ed2",
+    "aiGenerated": true
+  },
+  {
+    "id": "controle-de-prazos-de-colecoes-licenciadas",
+    "sector": "calcados-e-acessorios",
+    "path": "public/images/courses/international-covers-2026/controle-de-prazos-de-colecoes-licenciadas.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 119152,
+    "sha256": "1aa574d83c2e60dbe3617a553ea80b68b08585f898d2fd3be0e3db55c3c6c19b",
+    "aiGenerated": true
+  },
+  {
+    "id": "reposicao-de-hortifruti-por-maturacao",
+    "sector": "varejo-alimentar",
+    "path": "public/images/courses/international-covers-2026/reposicao-de-hortifruti-por-maturacao.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 186842,
+    "sha256": "02618d77436ca0697d0428a91eb498c2c7e00d161bb858eaa339f085bf78f957",
+    "aiGenerated": true
+  },
+  {
+    "id": "precificacao-de-pereciveis-por-data",
+    "sector": "varejo-alimentar",
+    "path": "public/images/courses/international-covers-2026/precificacao-de-pereciveis-por-data.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 181102,
+    "sha256": "30a71bf366d535a21f464dc5b019839b51e36482d758def8a6c789cf2e2f8902",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-exposicao-refrigerada",
+    "sector": "varejo-alimentar",
+    "path": "public/images/courses/international-covers-2026/gestao-de-exposicao-refrigerada.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 199766,
+    "sha256": "cd5b3efc27fa0d2109c6f2162ce0105f43653315d5898c5921db09e89618abaa",
+    "aiGenerated": true
+  },
+  {
+    "id": "analise-de-ruptura-invisivel-em-gondola",
+    "sector": "varejo-alimentar",
+    "path": "public/images/courses/international-covers-2026/analise-de-ruptura-invisivel-em-gondola.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 175914,
+    "sha256": "774ac7113d320bc177ea6f4a0594ca1af654d07f39535d43286342572a7bba5a",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-cestas-por-assinatura",
+    "sector": "varejo-alimentar",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-cestas-por-assinatura.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 188592,
+    "sha256": "152d6d934705a33931abe179c8ba0ad5ec30f7709f29c179a3a8d8be85a2b11c",
+    "aiGenerated": true
+  },
+  {
+    "id": "distribuicao-de-estoques-promocionais",
+    "sector": "varejo-alimentar",
+    "path": "public/images/courses/international-covers-2026/distribuicao-de-estoques-promocionais.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 203780,
+    "sha256": "676836dd4021b971334cb65c98aedcd27dbe1edac3f45965956303bf8ffd818b",
+    "aiGenerated": true
+  },
+  {
+    "id": "conciliacao-de-descontos-de-fornecedores",
+    "sector": "varejo-alimentar",
+    "path": "public/images/courses/international-covers-2026/conciliacao-de-descontos-de-fornecedores.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 149328,
+    "sha256": "f220392efdf72148322171bc49b272df7cf73c3c14a82f49c90e62d1d28c7d1b",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-compras-de-floricultura",
+    "sector": "varejo-alimentar",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-compras-de-floricultura.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 308824,
+    "sha256": "0cf9d1e39bc92b70d15362dbece774a12fe1de29d323bb495de77b3033e208af",
+    "aiGenerated": true
+  },
+  {
+    "id": "sortimento-para-pequenas-mercearias",
+    "sector": "varejo-alimentar",
+    "path": "public/images/courses/international-covers-2026/sortimento-para-pequenas-mercearias.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 217352,
+    "sha256": "7f0bf133d3dcd4fe4dbdee7e0bc137836de837814b93f323a28260e139d8957c",
+    "aiGenerated": true
+  },
+  {
+    "id": "auditoria-de-substituicoes-em-supermercado-online",
+    "sector": "varejo-alimentar",
+    "path": "public/images/courses/international-covers-2026/auditoria-de-substituicoes-em-supermercado-online.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 147224,
+    "sha256": "248cbdb94c846d8c78a74151616315f57dbe015ff769aba8b65f64415ff0f355",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-capacidade-de-viveiros",
+    "sector": "horticultura-comercial",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-capacidade-de-viveiros.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 353730,
+    "sha256": "abcfa9196144e72782487724b19f7f9de70d97788770fe2cbcfd06871a412a47",
+    "aiGenerated": true
+  },
+  {
+    "id": "programacao-de-colheita-por-pedido",
+    "sector": "horticultura-comercial",
+    "path": "public/images/courses/international-covers-2026/programacao-de-colheita-por-pedido.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 212020,
+    "sha256": "1e86bb4daab748d9979d1027fa0036a68a8626ead3edcf62757edc86f89aa3fe",
+    "aiGenerated": true
+  },
+  {
+    "id": "classificacao-comercial-de-flores-de-corte",
+    "sector": "horticultura-comercial",
+    "path": "public/images/courses/international-covers-2026/classificacao-comercial-de-flores-de-corte.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 280676,
+    "sha256": "1c8f785ef772f0738154fbf6ccdf9415e463d3a312749d01577e55b46df82874",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-caixas-de-hortalicas",
+    "sector": "horticultura-comercial",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-caixas-de-hortalicas.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 230792,
+    "sha256": "62a63283bc6f11d3a23a1c7c27d0597795c498bbb0ad66b3092713406ea9a409",
+    "aiGenerated": true
+  },
+  {
+    "id": "custos-de-substratos-por-bandeja",
+    "sector": "horticultura-comercial",
+    "path": "public/images/courses/international-covers-2026/custos-de-substratos-por-bandeja.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 278670,
+    "sha256": "50da026de4732b5cab09cd828caea179b13706fe1471467bdf7152f9d73df74a",
+    "aiGenerated": true
+  },
+  {
+    "id": "controle-de-perdas-pos-colheita",
+    "sector": "horticultura-comercial",
+    "path": "public/images/courses/international-covers-2026/controle-de-perdas-pos-colheita.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 208340,
+    "sha256": "b7077cb397bf4e75aeabc06622cda584a093eb7eda6191975ff04b23abc10584",
+    "aiGenerated": true
+  },
+  {
+    "id": "coordenacao-de-mercados-de-produtores",
+    "sector": "horticultura-comercial",
+    "path": "public/images/courses/international-covers-2026/coordenacao-de-mercados-de-produtores.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 294372,
+    "sha256": "1865db12001a7745ce3c6c4ffb666cdc9a98d52ecc06d23b85b58f2618017807",
+    "aiGenerated": true
+  },
+  {
+    "id": "programacao-de-expedicao-de-mudas",
+    "sector": "horticultura-comercial",
+    "path": "public/images/courses/international-covers-2026/programacao-de-expedicao-de-mudas.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 305890,
+    "sha256": "322286b7c5845d0ddb34efbfbb0a4489bebd3445606b9124573d4de3c3699878",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-embalagens-de-frutas-frageis",
+    "sector": "horticultura-comercial",
+    "path": "public/images/courses/international-covers-2026/gestao-de-embalagens-de-frutas-frageis.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 279394,
+    "sha256": "7a93e9a5c3c1fe9b835b3037be1e0be5977df1243260059ac3a90cd92fc4b84f",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-contratos-de-abastecimento-local",
+    "sector": "horticultura-comercial",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-contratos-de-abastecimento-local.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 276030,
+    "sha256": "2fc25a6eb1d90ce6e981a3a48b78b79e1ad527d934221f44eabac1e7a7fc3dd5",
+    "aiGenerated": true
+  },
+  {
+    "id": "dimensionamento-de-rotas-de-coleta-seletiva",
+    "sector": "servicos-urbanos",
+    "path": "public/images/courses/international-covers-2026/dimensionamento-de-rotas-de-coleta-seletiva.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 201562,
+    "sha256": "46be60b0dcd6c94778f64f48e1cc708cc16bef7d406bb4cd9626105baa59d934",
+    "aiGenerated": true
+  },
+  {
+    "id": "programacao-de-varricao-por-setor",
+    "sector": "servicos-urbanos",
+    "path": "public/images/courses/international-covers-2026/programacao-de-varricao-por-setor.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 165972,
+    "sha256": "feb07bae18f8b127bf6629af2a608ce29ae18d9afd0b1d0e33457bffe117e27f",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-chamados-de-iluminacao-publica",
+    "sector": "servicos-urbanos",
+    "path": "public/images/courses/international-covers-2026/gestao-de-chamados-de-iluminacao-publica.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 187406,
+    "sha256": "2e15cba9716e1ff85ff7e57042e103ccc573ab8d9cf468d296d1f0ea6f567050",
+    "aiGenerated": true
+  },
+  {
+    "id": "inventario-de-mobiliario-urbano",
+    "sector": "servicos-urbanos",
+    "path": "public/images/courses/international-covers-2026/inventario-de-mobiliario-urbano.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 220378,
+    "sha256": "519a914bda23fc6c3044ca5b4546a054da7ad048143305a8c82e8427c2ad870f",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-zeladoria-em-parques",
+    "sector": "servicos-urbanos",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-zeladoria-em-parques.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 265712,
+    "sha256": "e354be2fa35e054a5967b02015e16db43274007899375b60e40fa28bec2d1034",
+    "aiGenerated": true
+  },
+  {
+    "id": "medicao-de-acessibilidade-em-calcadas",
+    "sector": "servicos-urbanos",
+    "path": "public/images/courses/international-covers-2026/medicao-de-acessibilidade-em-calcadas.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 258884,
+    "sha256": "672b30b079827971f1b02808870a51557addb325b93ed95c3b04011e177167d0",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-permissoes-de-uso-de-pracas",
+    "sector": "servicos-urbanos",
+    "path": "public/images/courses/international-covers-2026/gestao-de-permissoes-de-uso-de-pracas.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 188852,
+    "sha256": "dc85e2472ea9e48ab5ef8dbb636126028a9486b5f1bde4ab1f2962cff4cb342e",
+    "aiGenerated": true
+  },
+  {
+    "id": "analise-de-ocupacao-de-estacionamentos-publicos",
+    "sector": "servicos-urbanos",
+    "path": "public/images/courses/international-covers-2026/analise-de-ocupacao-de-estacionamentos-publicos.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 251870,
+    "sha256": "cac764da96d49561951794db5a132e0dd61f9172b068209d894a7db3675aaec3",
+    "aiGenerated": true
+  },
+  {
+    "id": "operacao-de-centrais-municipais-de-atendimento",
+    "sector": "servicos-urbanos",
+    "path": "public/images/courses/international-covers-2026/operacao-de-centrais-municipais-de-atendimento.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 125342,
+    "sha256": "1714a90395baed906897440efe0ab50f940c19d5621b35babeaa12390a547942",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-pontos-de-entrega-voluntaria",
+    "sector": "servicos-urbanos",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-pontos-de-entrega-voluntaria.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 202210,
+    "sha256": "3cb5015a297751340aaed78208c02f471aa0b5adca4a4bc8688abfc9f826f9c1",
+    "aiGenerated": true
+  },
+  {
+    "id": "reconciliacao-de-leituras-de-hidrometros",
+    "sector": "agua-e-saneamento",
+    "path": "public/images/courses/international-covers-2026/reconciliacao-de-leituras-de-hidrometros.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 292516,
+    "sha256": "26b035f4bf01ab6f2305fc7076ee29c0d59465d066f82725e145741a85868a32",
+    "aiGenerated": true
+  },
+  {
+    "id": "analise-administrativa-de-consumo-atipico",
+    "sector": "agua-e-saneamento",
+    "path": "public/images/courses/international-covers-2026/analise-administrativa-de-consumo-atipico.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 204676,
+    "sha256": "4212ebf8dc5db65ff436ace381f290c134c8f3b93ea99d44c220855f4eaaafd0",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-substituicao-de-medidores",
+    "sector": "agua-e-saneamento",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-substituicao-de-medidores.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 190844,
+    "sha256": "28cce441e2c1c1d30a7abad175a6be58583be1162ac7bcc71e284a667c6682b7",
+    "aiGenerated": true
+  },
+  {
+    "id": "cadastro-geografico-de-ligacoes",
+    "sector": "agua-e-saneamento",
+    "path": "public/images/courses/international-covers-2026/cadastro-geografico-de-ligacoes.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 203330,
+    "sha256": "4720e4a221f64ad6876cf9fd6e7d2a7d5f5272bc86a87b50783d77394a480a29",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-interrupcoes-programadas",
+    "sector": "agua-e-saneamento",
+    "path": "public/images/courses/international-covers-2026/gestao-de-interrupcoes-programadas.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 194062,
+    "sha256": "6f4860b64e2b535b891844e44d260a956681edb7f73abee9782611985a01104f",
+    "aiGenerated": true
+  },
+  {
+    "id": "atendimento-multilingue-em-concessionarias",
+    "sector": "agua-e-saneamento",
+    "path": "public/images/courses/international-covers-2026/atendimento-multilingue-em-concessionarias.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 121384,
+    "sha256": "84874450571ccc12469e5d28835912cbb7b4a31b526bb478e550f973134884d8",
+    "aiGenerated": true
+  },
+  {
+    "id": "controle-de-ordens-de-servico-de-saneamento",
+    "sector": "agua-e-saneamento",
+    "path": "public/images/courses/international-covers-2026/controle-de-ordens-de-servico-de-saneamento.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 154604,
+    "sha256": "0550bc64d12e98f155387d4c568db45b6bde45aa6073e92686e2cdb451353970",
+    "aiGenerated": true
+  },
+  {
+    "id": "inventario-documental-de-estacoes",
+    "sector": "agua-e-saneamento",
+    "path": "public/images/courses/international-covers-2026/inventario-documental-de-estacoes.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 203784,
+    "sha256": "2be522558f75d6bec61806541596dc5394a5688cf9417a263e3ee412d515937f",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-coleta-de-indicadores-de-perdas",
+    "sector": "agua-e-saneamento",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-coleta-de-indicadores-de-perdas.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 171664,
+    "sha256": "a66f561d176ebd8d09aab504b0503f9c98f189f4a74e4e861190a7c8a8c2d5e5",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-solicitacoes-de-novas-ligacoes",
+    "sector": "agua-e-saneamento",
+    "path": "public/images/courses/international-covers-2026/gestao-de-solicitacoes-de-novas-ligacoes.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 240424,
+    "sha256": "6097bb8c842204c971351ff81825d475a30550ea15bd4404ee65e926fd9ee348",
+    "aiGenerated": true
+  },
+  {
+    "id": "conciliacao-de-creditos-de-geracao-compartilhada",
+    "sector": "servicos-de-energia",
+    "path": "public/images/courses/international-covers-2026/conciliacao-de-creditos-de-geracao-compartilhada.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 130582,
+    "sha256": "eef9bcd5ca9fbf38f77801228e29a42cbbe4470b8b9febf9a3087ae2a0341ef5",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-atendimento-a-prosumidores",
+    "sector": "servicos-de-energia",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-atendimento-a-prosumidores.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 108266,
+    "sha256": "792661a2a4e44a559bddb0861ff23dea7e9353853484db7b5b8ac23bfc32936b",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-cadastros-de-unidades-consumidoras",
+    "sector": "servicos-de-energia",
+    "path": "public/images/courses/international-covers-2026/gestao-de-cadastros-de-unidades-consumidoras.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 120970,
+    "sha256": "d9002b3d6b4d321ee93b328f720a917ef87c838c6a89f07d6a0249b05c784fa2",
+    "aiGenerated": true
+  },
+  {
+    "id": "analise-de-demanda-de-ponta-em-comercio",
+    "sector": "servicos-de-energia",
+    "path": "public/images/courses/international-covers-2026/analise-de-demanda-de-ponta-em-comercio.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 159090,
+    "sha256": "3e11a85ceaec3bb5caae73f0a0ceb51ac50808d8d1f4969c7ec94653cbb41424",
+    "aiGenerated": true
+  },
+  {
+    "id": "medicao-de-desempenho-de-contratos-de-iluminacao",
+    "sector": "servicos-de-energia",
+    "path": "public/images/courses/international-covers-2026/medicao-de-desempenho-de-contratos-de-iluminacao.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 208208,
+    "sha256": "f51507344f76d47418c735ff8014dd7aff18bbbb8337fecc6369e9bab632f4df",
+    "aiGenerated": true
+  },
+  {
+    "id": "triagem-documental-de-pedidos-de-conexao",
+    "sector": "servicos-de-energia",
+    "path": "public/images/courses/international-covers-2026/triagem-documental-de-pedidos-de-conexao.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 232550,
+    "sha256": "776a4834e2fa4ed26821d131e75a8f98ac6f0363bd49dbbc0b07e1d7b580c06c",
+    "aiGenerated": true
+  },
+  {
+    "id": "controle-de-garantias-de-modulos-fotovoltaicos",
+    "sector": "servicos-de-energia",
+    "path": "public/images/courses/international-covers-2026/controle-de-garantias-de-modulos-fotovoltaicos.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 108490,
+    "sha256": "75357d938237e01dd47e2c72c6c4fcec3205cdaac67a222f67d06b9ba7c16bf3",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-pecas-para-parques-eolicos",
+    "sector": "servicos-de-energia",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-pecas-para-parques-eolicos.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 180326,
+    "sha256": "fcdb9579b4ec4110c0735a4ee930e51dedc005d563f036a28bc312453f523602",
+    "aiGenerated": true
+  },
+  {
+    "id": "comunicacao-de-obras-de-rede-com-comunidades",
+    "sector": "servicos-de-energia",
+    "path": "public/images/courses/international-covers-2026/comunicacao-de-obras-de-rede-com-comunidades.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 237696,
+    "sha256": "b19dcc67edf6992974310e316c03245d51f984767678f58a587f5cff65570903",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-ativos-de-medicao-inteligente",
+    "sector": "servicos-de-energia",
+    "path": "public/images/courses/international-covers-2026/gestao-de-ativos-de-medicao-inteligente.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 179684,
+    "sha256": "f1a849bcec45ad6071c7fa7fd8b8843645a73a183a0567cfaa99ec54ff57aa5d",
+    "aiGenerated": true
+  },
+  {
+    "id": "orcamento-de-curtas-independentes",
+    "sector": "economia-audiovisual",
+    "path": "public/images/courses/international-covers-2026/orcamento-de-curtas-independentes.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 155668,
+    "sha256": "fbe57d324ba81109e2bfc372ac3e2516aa711c7e8c8d87a9136c2431b36f5f74",
+    "aiGenerated": true
+  },
+  {
+    "id": "coordenacao-de-locacoes-de-filmagem",
+    "sector": "economia-audiovisual",
+    "path": "public/images/courses/international-covers-2026/coordenacao-de-locacoes-de-filmagem.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 153200,
+    "sha256": "1a9885b16f469358c07933499643c9d11de12a39008cfafe4e03fa18ec0e6c3f",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-continuidade-documental",
+    "sector": "economia-audiovisual",
+    "path": "public/images/courses/international-covers-2026/gestao-de-continuidade-documental.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 226294,
+    "sha256": "ee90ad6e5eab57fb3295199792de7dcb9d0bd528c12b450887b4799f695f679b",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-diarias-de-elenco",
+    "sector": "economia-audiovisual",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-diarias-de-elenco.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 133380,
+    "sha256": "78169dc86b92c0e8044001713299b0df4c1cce2c0f71bd81b51545ca3eb6ee07",
+    "aiGenerated": true
+  },
+  {
+    "id": "controle-de-versoes-de-montagem",
+    "sector": "economia-audiovisual",
+    "path": "public/images/courses/international-covers-2026/controle-de-versoes-de-montagem.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 142140,
+    "sha256": "0ffd82bb306b7a003bf2253374706d3b5f88145f48e6d1abb733b3b9949ba3b2",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-autorizacoes-de-imagem",
+    "sector": "economia-audiovisual",
+    "path": "public/images/courses/international-covers-2026/gestao-de-autorizacoes-de-imagem.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 128170,
+    "sha256": "5930437851dede69572bd96e9b386ec3d844fb95fc78bcd1b7735f3b5dd46386",
+    "aiGenerated": true
+  },
+  {
+    "id": "coordenacao-de-entregas-para-festivais",
+    "sector": "economia-audiovisual",
+    "path": "public/images/courses/international-covers-2026/coordenacao-de-entregas-para-festivais.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 167790,
+    "sha256": "4e05bbd2f2ff8e3fc1798de85fd066acff2b80b3763a0c8472d69026661d1310",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-acervos-de-som-ambiente",
+    "sector": "economia-audiovisual",
+    "path": "public/images/courses/international-covers-2026/gestao-de-acervos-de-som-ambiente.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 143020,
+    "sha256": "73ab076a4ce11b6d0f5ba24ca21524a777626953345fe0260a64342bd1756acc",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-distribuicao-de-documentarios",
+    "sector": "economia-audiovisual",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-distribuicao-de-documentarios.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 235544,
+    "sha256": "aa0deab86275e40d72413c40d635d1b35a4ee6a2fa61cabcf0a9e8c75599bd65",
+    "aiGenerated": true
+  },
+  {
+    "id": "operacao-de-catalogos-de-direitos-audiovisuais",
+    "sector": "economia-audiovisual",
+    "path": "public/images/courses/international-covers-2026/operacao-de-catalogos-de-direitos-audiovisuais.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 157590,
+    "sha256": "93eb64cfc104539357649f99bacbd4531e5ff4fbb642cfc95d8e69e9018f4136",
+    "aiGenerated": true
+  },
+  {
+    "id": "cadastro-de-obras-e-fonogramas",
+    "sector": "musica",
+    "path": "public/images/courses/international-covers-2026/cadastro-de-obras-e-fonogramas.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 264196,
+    "sha256": "8d6d550799a2026d7cf246f7f8a314d9aa39fe63296a3751ae61e3cd8fb88e64",
+    "aiGenerated": true
+  },
+  {
+    "id": "conciliacao-de-relatorios-de-royalties",
+    "sector": "musica",
+    "path": "public/images/courses/international-covers-2026/conciliacao-de-relatorios-de-royalties.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 272744,
+    "sha256": "550d3b66ee25f5ed966369952de0321a06c2974e75369357d05747d93129e4c1",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-turnes-de-pequeno-porte",
+    "sector": "musica",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-turnes-de-pequeno-porte.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 406050,
+    "sha256": "72673363e557feac16aa8a7163b442c58a2dea01d694b9fa04d6b54e1d12ceeb",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-agenda-de-estudios-de-gravacao",
+    "sector": "musica",
+    "path": "public/images/courses/international-covers-2026/gestao-de-agenda-de-estudios-de-gravacao.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 159632,
+    "sha256": "dabfebc45815c2addbbbeff904cb236d7516bc0bb6db725d464e85df697aefb7",
+    "aiGenerated": true
+  },
+  {
+    "id": "orcamento-de-lancamentos-independentes",
+    "sector": "musica",
+    "path": "public/images/courses/international-covers-2026/orcamento-de-lancamentos-independentes.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 115208,
+    "sha256": "d0890a73bd885824a4a0b1b13f0e19c6aee61c542779229088f11a02861e80bc",
+    "aiGenerated": true
+  },
+  {
+    "id": "operacoes-de-distribuicao-digital-de-musica",
+    "sector": "musica",
+    "path": "public/images/courses/international-covers-2026/operacoes-de-distribuicao-digital-de-musica.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 137200,
+    "sha256": "9f95100b8bbfc660a55f2f3bc13048b5c4db62b847a792c288ed5243c227d263",
+    "aiGenerated": true
+  },
+  {
+    "id": "metadados-para-catalogos-classicos",
+    "sector": "musica",
+    "path": "public/images/courses/international-covers-2026/metadados-para-catalogos-classicos.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 193044,
+    "sha256": "1e1da9906988bff2e95ac57e4a4a9d951fb2b2b94a385eaa575e32f804e000bf",
+    "aiGenerated": true
+  },
+  {
+    "id": "producao-de-sessoes-musicais-remotas",
+    "sector": "musica",
+    "path": "public/images/courses/international-covers-2026/producao-de-sessoes-musicais-remotas.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 171642,
+    "sha256": "df0fec4f45440dc30c865ed72c070345206e3f72549cd81b3dca61f3dcb0962c",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-pedidos-de-sincronizacao",
+    "sector": "musica",
+    "path": "public/images/courses/international-covers-2026/gestao-de-pedidos-de-sincronizacao.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 255160,
+    "sha256": "37d635409f415c28073210b4f257397ae59837f4762019016ceb17c8f57632c7",
+    "aiGenerated": true
+  },
+  {
+    "id": "coordenacao-de-arquivos-de-partituras",
+    "sector": "musica",
+    "path": "public/images/courses/international-covers-2026/coordenacao-de-arquivos-de-partituras.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 179242,
+    "sha256": "ab57d337aaf58fcc3a5628addaaef4f966ec8ef7015b58470d1d52cdea5ec851",
+    "aiGenerated": true
+  },
+  {
+    "id": "programacao-de-temporadas-teatrais",
+    "sector": "artes-cenicas",
+    "path": "public/images/courses/international-covers-2026/programacao-de-temporadas-teatrais.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 267864,
+    "sha256": "847e7cd98f6de00aedac800155a0709e6ba12bd7c2d645d19edec6d8f5f9e8d9",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-bilheteria-por-sessao",
+    "sector": "artes-cenicas",
+    "path": "public/images/courses/international-covers-2026/gestao-de-bilheteria-por-sessao.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 253278,
+    "sha256": "f4496601a64a0122de826fc471255a523b87cc323fc3b99ae181b9541546e841",
+    "aiGenerated": true
+  },
+  {
+    "id": "orcamento-de-circulacao-de-espetaculos",
+    "sector": "artes-cenicas",
+    "path": "public/images/courses/international-covers-2026/orcamento-de-circulacao-de-espetaculos.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 266882,
+    "sha256": "18fcdd6c16b900e9ee825d64cda06ea50d8203ceab5331edbf09dff18526f4ab",
+    "aiGenerated": true
+  },
+  {
+    "id": "coordenacao-de-transporte-de-cenarios",
+    "sector": "artes-cenicas",
+    "path": "public/images/courses/international-covers-2026/coordenacao-de-transporte-de-cenarios.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 143082,
+    "sha256": "cda98d0591148069d82c420d751555004f461abfa051199ab0b4084f01e419cc",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-reservas-de-salas-de-ensaio",
+    "sector": "artes-cenicas",
+    "path": "public/images/courses/international-covers-2026/gestao-de-reservas-de-salas-de-ensaio.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 138766,
+    "sha256": "ca2ff70517f39769aa24a719a650279f7a1fa714023afba5ecf085012583b959",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-acessibilidade-em-apresentacoes",
+    "sector": "artes-cenicas",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-acessibilidade-em-apresentacoes.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 212776,
+    "sha256": "ca73e93909312ae8ad056998c558b2fc5a4a5e8e83c1005bbfd0a51fc67ed9a9",
+    "aiGenerated": true
+  },
+  {
+    "id": "coordenacao-de-equipes-de-frente-de-sala",
+    "sector": "artes-cenicas",
+    "path": "public/images/courses/international-covers-2026/coordenacao-de-equipes-de-frente-de-sala.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 114090,
+    "sha256": "24a2a43825c967aa227e689526a4f637dc0284513f4bae279f2896b1534d5e7e",
+    "aiGenerated": true
+  },
+  {
+    "id": "controle-de-ocupacao-em-festivais",
+    "sector": "artes-cenicas",
+    "path": "public/images/courses/international-covers-2026/controle-de-ocupacao-em-festivais.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 161702,
+    "sha256": "758594e987b9e5933ee56c833f069b26f6c6ceab11b91869076dae4eb5e01f95",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-contratos-de-coproducao-artistica",
+    "sector": "artes-cenicas",
+    "path": "public/images/courses/international-covers-2026/gestao-de-contratos-de-coproducao-artistica.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 207720,
+    "sha256": "540616013ebf2fb4109ab5a7ba9e6c1f423d78515ff50595b7a139dc374d9d57",
+    "aiGenerated": true
+  },
+  {
+    "id": "medicao-de-recorrencia-de-publico-cultural",
+    "sector": "artes-cenicas",
+    "path": "public/images/courses/international-covers-2026/medicao-de-recorrencia-de-publico-cultural.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 205226,
+    "sha256": "10116ffe50d38279dd1b9826110f1877fcf85a16d6f24be891da968ffc997de0",
+    "aiGenerated": true
+  },
+  {
+    "id": "programacao-de-quadras-e-centros-esportivos",
+    "sector": "esporte",
+    "path": "public/images/courses/international-covers-2026/programacao-de-quadras-e-centros-esportivos.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 312608,
+    "sha256": "5ff07dc8fc3d39762b5e6d48200ad47cbc0d3358bdc38b6cfa2e93170b71024e",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-calendarios-de-ligas-amadoras",
+    "sector": "esporte",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-calendarios-de-ligas-amadoras.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 397176,
+    "sha256": "a1a0f6fe282d93e3e81b6ed20078f3e511fe069c022a0c5946211a8cec840d7f",
+    "aiGenerated": true
+  },
+  {
+    "id": "operacao-de-inscricoes-em-corridas",
+    "sector": "esporte",
+    "path": "public/images/courses/international-covers-2026/operacao-de-inscricoes-em-corridas.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 380274,
+    "sha256": "4c10f2a7744837f5dce08698d7eea868b96dd45ee10d413e86a7637ccfa932d5",
+    "aiGenerated": true
+  },
+  {
+    "id": "logistica-de-materiais-de-competicao",
+    "sector": "esporte",
+    "path": "public/images/courses/international-covers-2026/logistica-de-materiais-de-competicao.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 158612,
+    "sha256": "def126a98e9ca1aeb7daaf622b12fe357a9bf9cb5771375f8abdd20aef9090ec",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-credenciais-de-imprensa-esportiva",
+    "sector": "esporte",
+    "path": "public/images/courses/international-covers-2026/gestao-de-credenciais-de-imprensa-esportiva.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 170122,
+    "sha256": "369a5ba712d86a8a583eb057ae36b466ae98c00ea1a9e47f287123b750a94823",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-voluntariado-esportivo",
+    "sector": "esporte",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-voluntariado-esportivo.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 160478,
+    "sha256": "9be495a332b5aacc0f12820c19e6eda02a2e114a4702091ee8662a985108a3d5",
+    "aiGenerated": true
+  },
+  {
+    "id": "atendimento-a-atletas-internacionais",
+    "sector": "esporte",
+    "path": "public/images/courses/international-covers-2026/atendimento-a-atletas-internacionais.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 214886,
+    "sha256": "c91e4de5df9a272f1a22299528c91aad96566cc53f8fd92709067f40399bb683",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-abertura-de-setores-de-estadio",
+    "sector": "esporte",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-abertura-de-setores-de-estadio.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 184388,
+    "sha256": "8093908899fd3ecb37e9d03e78e9e08464e7ae3f01e5a826c356410210110ae2",
+    "aiGenerated": true
+  },
+  {
+    "id": "analise-de-renovacao-de-socios-de-clubes",
+    "sector": "esporte",
+    "path": "public/images/courses/international-covers-2026/analise-de-renovacao-de-socios-de-clubes.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 153364,
+    "sha256": "6fe78132c3fc0b4217735703b85e4f4cc9ddc56454e9bc93fc9b043d5ae73a11",
+    "aiGenerated": true
+  },
+  {
+    "id": "controle-de-entregas-de-patrocinio-esportivo",
+    "sector": "esporte",
+    "path": "public/images/courses/international-covers-2026/controle-de-entregas-de-patrocinio-esportivo.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 144448,
+    "sha256": "67c4ecd8de9310b141a1f7781682298fe0bf2f7d2fd84155e993cd9de9fffb8f",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-horarios-escolares",
+    "sector": "educacao",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-horarios-escolares.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 213200,
+    "sha256": "720faba6e7ae503549b126d14b85f9678e11e40271a1641fdbd3b9d577e39dbe",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-emprestimo-de-materiais-didaticos",
+    "sector": "educacao",
+    "path": "public/images/courses/international-covers-2026/gestao-de-emprestimo-de-materiais-didaticos.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 195408,
+    "sha256": "5650f62d932e9c9ca308fa1332bbb89918b57506ac8f8e8bfabc8bc4ec551751",
+    "aiGenerated": true
+  },
+  {
+    "id": "operacoes-de-admissao-internacional",
+    "sector": "educacao",
+    "path": "public/images/courses/international-covers-2026/operacoes-de-admissao-internacional.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 394088,
+    "sha256": "3906d428a51e17551c446964b2b8bf5eac2a3ffdd78b1b02d36b05f094c6d303",
+    "aiGenerated": true
+  },
+  {
+    "id": "equivalencia-documental-de-historicos-escolares",
+    "sector": "educacao",
+    "path": "public/images/courses/international-covers-2026/equivalencia-documental-de-historicos-escolares.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 187908,
+    "sha256": "2fb3e778e8ce415c5b02916cf127b5892b72cf081ea7ebe7e3af07774aa11f20",
+    "aiGenerated": true
+  },
+  {
+    "id": "producao-de-bancos-de-itens-educacionais",
+    "sector": "educacao",
+    "path": "public/images/courses/international-covers-2026/producao-de-bancos-de-itens-educacionais.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 130868,
+    "sha256": "1c66b880d3b159d5362c1979061e9b5e4887d91a52df02cec26146a3f30c61be",
+    "aiGenerated": true
+  },
+  {
+    "id": "analise-de-dificuldade-de-questoes",
+    "sector": "educacao",
+    "path": "public/images/courses/international-covers-2026/analise-de-dificuldade-de-questoes.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 185354,
+    "sha256": "19191d4b978882127bca4db696010b560aaf1284eefdc312e0f77987098c485b",
+    "aiGenerated": true
+  },
+  {
+    "id": "desenho-de-rubricas-para-portfolios",
+    "sector": "educacao",
+    "path": "public/images/courses/international-covers-2026/desenho-de-rubricas-para-portfolios.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 158534,
+    "sha256": "7dabe04466df2190be1748d63061199ae891320810f7e3b0147a7aa924b958b0",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-capacidade-de-centros-de-prova",
+    "sector": "educacao",
+    "path": "public/images/courses/international-covers-2026/gestao-de-capacidade-de-centros-de-prova.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 211716,
+    "sha256": "beebdf60b154a5926c37ef96fc0c9b5b4bdd6ce3d87d19ecc678fe3fd273b594",
+    "aiGenerated": true
+  },
+  {
+    "id": "coordenacao-de-tutoria-entre-pares",
+    "sector": "educacao",
+    "path": "public/images/courses/international-covers-2026/coordenacao-de-tutoria-entre-pares.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 170804,
+    "sha256": "53d1135e145aa73cc5b183a9eb353d5d5129096b33fd9c473cd09f70a6e3b2da",
+    "aiGenerated": true
+  },
+  {
+    "id": "analise-de-evasao-em-educacao-continuada",
+    "sector": "educacao",
+    "path": "public/images/courses/international-covers-2026/analise-de-evasao-em-educacao-continuada.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 147134,
+    "sha256": "7bc552703a060f3b36529d50630c88fbefb5157cc17d3da2bf7029d5cf252f81",
+    "aiGenerated": true
+  },
+  {
+    "id": "desenvolvimento-de-colecoes-multilingues",
+    "sector": "bibliotecas",
+    "path": "public/images/courses/international-covers-2026/desenvolvimento-de-colecoes-multilingues.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 195594,
+    "sha256": "e286f574307c1ce584c8d195c4b148b4a378c29f32ed818b0f398b772e0f9bd0",
+    "aiGenerated": true
+  },
+  {
+    "id": "aquisicao-cooperativa-de-periodicos",
+    "sector": "bibliotecas",
+    "path": "public/images/courses/international-covers-2026/aquisicao-cooperativa-de-periodicos.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 303548,
+    "sha256": "18508667adcf655e8c607ff6ee481eb0c372e5b719b8b13f83df960ad34c6aaa",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-emprestimo-entre-bibliotecas",
+    "sector": "bibliotecas",
+    "path": "public/images/courses/international-covers-2026/gestao-de-emprestimo-entre-bibliotecas.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 309974,
+    "sha256": "980f38f47629b2cdd31c642983ceb8cad96814ca658fa8e34ccdf9660b50516c",
+    "aiGenerated": true
+  },
+  {
+    "id": "analise-de-demanda-por-reservas-de-livros",
+    "sector": "bibliotecas",
+    "path": "public/images/courses/international-covers-2026/analise-de-demanda-por-reservas-de-livros.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 121200,
+    "sha256": "5c994076c96748048fa71b3638c0b39356c40fce90f75639aa692368b11e8bd3",
+    "aiGenerated": true
+  },
+  {
+    "id": "catalogacao-de-publicacoes-seriadas",
+    "sector": "bibliotecas",
+    "path": "public/images/courses/international-covers-2026/catalogacao-de-publicacoes-seriadas.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 150868,
+    "sha256": "dc6a156f9c2d925fa3c122810750e655071fa4b5713f0883c4742145a24630d0",
+    "aiGenerated": true
+  },
+  {
+    "id": "controle-de-autoridades-bibliograficas",
+    "sector": "bibliotecas",
+    "path": "public/images/courses/international-covers-2026/controle-de-autoridades-bibliograficas.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 199080,
+    "sha256": "7452f8f6b4d4c2237f03b3bf4f07d32fdebcbc924f5bb4743e68b29cf6841f5f",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-bibliotecas-itinerantes",
+    "sector": "bibliotecas",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-bibliotecas-itinerantes.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 191026,
+    "sha256": "65206e4204b9e7cd08a67f1fc28426326408d01e89975f4dce5d3c8557acb6e6",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-licencas-de-livros-eletronicos",
+    "sector": "bibliotecas",
+    "path": "public/images/courses/international-covers-2026/gestao-de-licencas-de-livros-eletronicos.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 182518,
+    "sha256": "0703e096428c22ab32aa2e3596782543abfa6e7970de5a92cf6f982600ab4d72",
+    "aiGenerated": true
+  },
+  {
+    "id": "organizacao-de-acervos-de-historia-oral",
+    "sector": "bibliotecas",
+    "path": "public/images/courses/international-covers-2026/organizacao-de-acervos-de-historia-oral.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 171754,
+    "sha256": "d5cc74913584f172c171e7ea02adccce36cd3efb779be9bd2baf3d9ff47454e5",
+    "aiGenerated": true
+  },
+  {
+    "id": "indicadores-de-atendimento-de-referencia",
+    "sector": "bibliotecas",
+    "path": "public/images/courses/international-covers-2026/indicadores-de-atendimento-de-referencia.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 173420,
+    "sha256": "da570084cf926ad223603edab1bd45f499df14d1a5d695733255ba80d315445a",
+    "aiGenerated": true
+  },
+  {
+    "id": "cadastro-de-unidades-para-locacao",
+    "sector": "setor-imobiliario",
+    "path": "public/images/courses/international-covers-2026/cadastro-de-unidades-para-locacao.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 202086,
+    "sha256": "56a26469974718cfce31718eef046d42ce692e15b3444387b910838d86f495ea",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-vistoria-de-entrada",
+    "sector": "setor-imobiliario",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-vistoria-de-entrada.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 168090,
+    "sha256": "adfa9ab50e197a1a489cd0138e08d41fccf98e0d4a7f860c0a35fbfb993a6301",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-vacancia-por-tipologia",
+    "sector": "setor-imobiliario",
+    "path": "public/images/courses/international-covers-2026/gestao-de-vacancia-por-tipologia.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 372202,
+    "sha256": "f891c808d6b7caf14708919491579193554b230597c521117939bb0cc99accf6",
+    "aiGenerated": true
+  },
+  {
+    "id": "conciliacao-de-despesas-condominiais",
+    "sector": "setor-imobiliario",
+    "path": "public/images/courses/international-covers-2026/conciliacao-de-despesas-condominiais.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 135762,
+    "sha256": "4774ee656cc9a1c70638555b5e8e237f593e5da2208670150130082d5b1c2f8c",
+    "aiGenerated": true
+  },
+  {
+    "id": "operacoes-de-mudanca-em-edificios-comerciais",
+    "sector": "setor-imobiliario",
+    "path": "public/images/courses/international-covers-2026/operacoes-de-mudanca-em-edificios-comerciais.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 145192,
+    "sha256": "11c96680f931ad3f98045aa97ae81d46601bf913f05d0ea87089404991701857",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-utilizacao-de-escritorios-flexiveis",
+    "sector": "setor-imobiliario",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-utilizacao-de-escritorios-flexiveis.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 152140,
+    "sha256": "3600fafc30b83c1cca59ef2bae3d80c12107279a34fca8206b7719c3485353d5",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-reservas-de-areas-compartilhadas",
+    "sector": "setor-imobiliario",
+    "path": "public/images/courses/international-covers-2026/gestao-de-reservas-de-areas-compartilhadas.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 132994,
+    "sha256": "e38fded9af0637c6b1ebf3759dd6ced92d44c3310fd8f32041d74c7482014da4",
+    "aiGenerated": true
+  },
+  {
+    "id": "coordenacao-de-manutencao-entre-locacoes",
+    "sector": "setor-imobiliario",
+    "path": "public/images/courses/international-covers-2026/coordenacao-de-manutencao-entre-locacoes.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 187490,
+    "sha256": "57145f82e42a8f3533ce4648fddc8e4b534e4e7757b07a06fcb71636b75aac9a",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-inventario-de-imoveis-mobiliados",
+    "sector": "setor-imobiliario",
+    "path": "public/images/courses/international-covers-2026/gestao-de-inventario-de-imoveis-mobiliados.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 193646,
+    "sha256": "c98229fef540870c1a15ec0d87e371aab8a27963b32bec7164253b479d6d53f0",
+    "aiGenerated": true
+  },
+  {
+    "id": "analise-de-renovacao-de-contratos-de-ocupacao",
+    "sector": "setor-imobiliario",
+    "path": "public/images/courses/international-covers-2026/analise-de-renovacao-de-contratos-de-ocupacao.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 114716,
+    "sha256": "3b69d2b0fdd3c2ba5a8a1b5300526cdd9c91aa12a4b265990e7b3961cf9ca589",
+    "aiGenerated": true
+  },
+  {
+    "id": "redistribuicao-de-bicicletas-por-estacao",
+    "sector": "mobilidade-compartilhada",
+    "path": "public/images/courses/international-covers-2026/redistribuicao-de-bicicletas-por-estacao.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 152234,
+    "sha256": "03581823ea0c752bfdd51dcde5ea592b15060ebc6f42db444a0a31b5bbc71590",
+    "aiGenerated": true
+  },
+  {
+    "id": "dimensionamento-de-frota-de-carsharing",
+    "sector": "mobilidade-compartilhada",
+    "path": "public/images/courses/international-covers-2026/dimensionamento-de-frota-de-carsharing.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 267016,
+    "sha256": "0cc0386aab2d4c273b8721a6a064abaccea420dc568270a04aec7d9f182f5de8",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-areas-de-estacionamento-compartilhado",
+    "sector": "mobilidade-compartilhada",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-areas-de-estacionamento-compartilhado.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 379730,
+    "sha256": "559605bc876bf2a3a2e084fae7dde0ed695378cbfc9528b02d7d5fb1896cb876",
+    "aiGenerated": true
+  },
+  {
+    "id": "auditoria-de-disponibilidade-de-veiculos",
+    "sector": "mobilidade-compartilhada",
+    "path": "public/images/courses/international-covers-2026/auditoria-de-disponibilidade-de-veiculos.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 196730,
+    "sha256": "454db69cd61b1d6dc4bd8c0219c56f6268741ff6a2d583e82360870dc40a9287",
+    "aiGenerated": true
+  },
+  {
+    "id": "analise-de-cancelamentos-em-viagens-compartilhadas",
+    "sector": "mobilidade-compartilhada",
+    "path": "public/images/courses/international-covers-2026/analise-de-cancelamentos-em-viagens-compartilhadas.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 176014,
+    "sha256": "b8cf955b6bc4d6091dbcf4fb3016ae2fafc274d5e36f2795b4b588608f3597b9",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-assinaturas-de-mobilidade",
+    "sector": "mobilidade-compartilhada",
+    "path": "public/images/courses/international-covers-2026/gestao-de-assinaturas-de-mobilidade.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 174374,
+    "sha256": "a9a54274d0fe980065491077b4eed8df274ca01b4bce356cb6c25d906d4a7cbb",
+    "aiGenerated": true
+  },
+  {
+    "id": "atendimento-a-objetos-esquecidos-em-frotas",
+    "sector": "mobilidade-compartilhada",
+    "path": "public/images/courses/international-covers-2026/atendimento-a-objetos-esquecidos-em-frotas.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 182050,
+    "sha256": "86ec6b51e63d3729087d33d0096c5dc1d446a518d3434cad79d6c2256e999924",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-oficinas-para-micromobilidade",
+    "sector": "mobilidade-compartilhada",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-oficinas-para-micromobilidade.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 301936,
+    "sha256": "1929d623068db4823a3a3919d9f90cceaa00d0cad5c7bb2f40986abbfb38ab0c",
+    "aiGenerated": true
+  },
+  {
+    "id": "analise-de-sazonalidade-de-ciclovias",
+    "sector": "mobilidade-compartilhada",
+    "path": "public/images/courses/international-covers-2026/analise-de-sazonalidade-de-ciclovias.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 174006,
+    "sha256": "f8ddb21bf4dfc557431c803efa6d4ff4fa8e9d14bf4452507918b68c10d3f181",
+    "aiGenerated": true
+  },
+  {
+    "id": "operacao-de-programas-corporativos-de-mobilidade",
+    "sector": "mobilidade-compartilhada",
+    "path": "public/images/courses/international-covers-2026/operacao-de-programas-corporativos-de-mobilidade.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 201308,
+    "sha256": "8cc0cdb1a2a75ef243dae47930826f5067acafe38aa36f002e8d676f9a5b982b",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-agendas-ambulatoriais",
+    "sector": "saude-administrativa",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-agendas-ambulatoriais.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 119558,
+    "sha256": "9c5f4ef74208ff6b7c05be3f075f9a6ad224e95e3ca5b7dfd6d944f471a9fccf",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-salas-de-consulta",
+    "sector": "saude-administrativa",
+    "path": "public/images/courses/international-covers-2026/gestao-de-salas-de-consulta.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 119342,
+    "sha256": "9e5317bd46efea8eb84bf7774a33b415e54e689cb7b78c105d606329bbdc0742",
+    "aiGenerated": true
+  },
+  {
+    "id": "analise-de-faltas-em-atendimentos",
+    "sector": "saude-administrativa",
+    "path": "public/images/courses/international-covers-2026/analise-de-faltas-em-atendimentos.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 199020,
+    "sha256": "d5b5dcdd15654222a36e4e3cdcfa7e1ee7f440f4dd27e65d8552a4d21f07879f",
+    "aiGenerated": true
+  },
+  {
+    "id": "logistica-administrativa-de-interpretes-em-saude",
+    "sector": "saude-administrativa",
+    "path": "public/images/courses/international-covers-2026/logistica-administrativa-de-interpretes-em-saude.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 120492,
+    "sha256": "1ca538a60d2f764037ef247b8ec51cdac25f6c826ced82330142f73654edc5f5",
+    "aiGenerated": true
+  },
+  {
+    "id": "organizacao-de-arquivos-de-consentimento",
+    "sector": "saude-administrativa",
+    "path": "public/images/courses/international-covers-2026/organizacao-de-arquivos-de-consentimento.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 101090,
+    "sha256": "b5f3373db6a4021426af8b45c22007f841873072f3dc5243f49ccfd10f9d325a",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-filas-de-encaminhamento",
+    "sector": "saude-administrativa",
+    "path": "public/images/courses/international-covers-2026/gestao-de-filas-de-encaminhamento.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 111498,
+    "sha256": "2e455f2159f80d902783376203ead178c20303947dbf90c876cba97ba43db639",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-transporte-eletivo-de-pacientes",
+    "sector": "saude-administrativa",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-transporte-eletivo-de-pacientes.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 192238,
+    "sha256": "df3987cc9e2408b3f5737a6d08b8aef77c3bed69777007eb93d59634e92d2def",
+    "aiGenerated": true
+  },
+  {
+    "id": "conciliacao-de-cadastros-duplicados-de-pacientes",
+    "sector": "saude-administrativa",
+    "path": "public/images/courses/international-covers-2026/conciliacao-de-cadastros-duplicados-de-pacientes.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 149192,
+    "sha256": "58dd37a62f1677942b4e21899950ce5bac581a131ac0a57af6c466793633c6d4",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-chamados-nao-clinicos-em-hospitais",
+    "sector": "saude-administrativa",
+    "path": "public/images/courses/international-covers-2026/gestao-de-chamados-nao-clinicos-em-hospitais.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 95130,
+    "sha256": "f527d261e319da10e468dda63f96f6c23f6b63e8914634f4beff107ee797b0f4",
+    "aiGenerated": true
+  },
+  {
+    "id": "inventario-de-equipamentos-emprestados-em-reabilitacao",
+    "sector": "saude-administrativa",
+    "path": "public/images/courses/international-covers-2026/inventario-de-equipamentos-emprestados-em-reabilitacao.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 206268,
+    "sha256": "fe5d2c67c2d6a0da58d13ff02c6db9dfd63283d4a7c432b3aeb404399e6cf4b9",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-visitas-de-apoio-domiciliar",
+    "sector": "economia-do-cuidado",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-visitas-de-apoio-domiciliar.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 282278,
+    "sha256": "05d92f87caed7e625065a39523dbe9f3bab4d596f68441cdef001bfb079333e8",
+    "aiGenerated": true
+  },
+  {
+    "id": "coordenacao-de-transporte-para-centros-de-convivencia",
+    "sector": "economia-do-cuidado",
+    "path": "public/images/courses/international-covers-2026/coordenacao-de-transporte-para-centros-de-convivencia.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 295750,
+    "sha256": "70652de6014fbab9ea1f0fbf0e40161dcdec8ccbbee279fbb0145855ae3b3f12",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-atividades-em-comunidades-de-idosos",
+    "sector": "economia-do-cuidado",
+    "path": "public/images/courses/international-covers-2026/gestao-de-atividades-em-comunidades-de-idosos.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 346366,
+    "sha256": "be033fb6cbffed786d87568cacd39761c39f3c98676628d581ce25b2f00cf57f",
+    "aiGenerated": true
+  },
+  {
+    "id": "organizacao-documental-de-redes-de-apoio",
+    "sector": "economia-do-cuidado",
+    "path": "public/images/courses/international-covers-2026/organizacao-documental-de-redes-de-apoio.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 180360,
+    "sha256": "5ea5c92e56a3b1a44dd2cb63b8c1b59b9dd977343421269a362cedb40fd60548",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-refeicoes-entregues-em-domicilio",
+    "sector": "economia-do-cuidado",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-refeicoes-entregues-em-domicilio.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 145660,
+    "sha256": "765fa4e3cbb0a60efbdb11d4deda4df3922918d3b729c1350d104c7d3ba31fb0",
+    "aiGenerated": true
+  },
+  {
+    "id": "operacoes-de-emprestimo-de-tecnologia-assistiva",
+    "sector": "economia-do-cuidado",
+    "path": "public/images/courses/international-covers-2026/operacoes-de-emprestimo-de-tecnologia-assistiva.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 241900,
+    "sha256": "f2638f4f6b3b13f90d9941421504f9e00c556f8a1e8c267a998511c78e7b3589",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-agenda-de-acompanhantes",
+    "sector": "economia-do-cuidado",
+    "path": "public/images/courses/international-covers-2026/gestao-de-agenda-de-acompanhantes.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 161530,
+    "sha256": "db7383684b33693e245bd8b85c39e4b30898868e873e5add85dd2bb52ca53397",
+    "aiGenerated": true
+  },
+  {
+    "id": "atendimento-administrativo-a-cuidadores-familiares",
+    "sector": "economia-do-cuidado",
+    "path": "public/images/courses/international-covers-2026/atendimento-administrativo-a-cuidadores-familiares.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 173594,
+    "sha256": "2fa57ac75dce3e745eb21efa3d89302a108f42a6a77e2d3018bfdfaa0a8be364",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-oficinas-intergeracionais",
+    "sector": "economia-do-cuidado",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-oficinas-intergeracionais.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 187152,
+    "sha256": "aef1487506a3be5231e5a891d06b1c7c7228b129b212b600ff80081d9ba799d7",
+    "aiGenerated": true
+  },
+  {
+    "id": "medicao-de-continuidade-em-servicos-de-apoio",
+    "sector": "economia-do-cuidado",
+    "path": "public/images/courses/international-covers-2026/medicao-de-continuidade-em-servicos-de-apoio.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 159838,
+    "sha256": "73f454ff4a38c36985c2e6d7555ca3cca7e2f6e9f0efbdf0f1316c7ddcba0068",
+    "aiGenerated": true
+  },
+  {
+    "id": "orcamento-de-traducao-por-memoria-reutilizavel",
+    "sector": "traducao-profissional",
+    "path": "public/images/courses/international-covers-2026/orcamento-de-traducao-por-memoria-reutilizavel.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 259808,
+    "sha256": "89a96ce06c902884a8dffdf52714200e74be8b6b54d545304aed0d7739720fb2",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-glossarios-de-hotelaria",
+    "sector": "traducao-profissional",
+    "path": "public/images/courses/international-covers-2026/gestao-de-glossarios-de-hotelaria.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 317976,
+    "sha256": "c2825366fa7be0fc3e7ed039bb6fd10f84d268b9cf7de5ffbb1b7961fce64ce2",
+    "aiGenerated": true
+  },
+  {
+    "id": "revisao-de-unidades-em-manuais-traduzidos",
+    "sector": "traducao-profissional",
+    "path": "public/images/courses/international-covers-2026/revisao-de-unidades-em-manuais-traduzidos.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 244042,
+    "sha256": "5369aa75e091b8de7bcd5ee13855213c1e4c81a3d23324e0c406fe9974305cca",
+    "aiGenerated": true
+  },
+  {
+    "id": "preparacao-de-arquivos-para-traducao-assistida",
+    "sector": "traducao-profissional",
+    "path": "public/images/courses/international-covers-2026/preparacao-de-arquivos-para-traducao-assistida.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 186486,
+    "sha256": "0b85ae86eca50785042ea9e06019b6846214762f9d0a910d6e05f8fc569a2467",
+    "aiGenerated": true
+  },
+  {
+    "id": "qualidade-de-dublagem-por-restricao-temporal",
+    "sector": "traducao-profissional",
+    "path": "public/images/courses/international-covers-2026/qualidade-de-dublagem-por-restricao-temporal.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 105728,
+    "sha256": "1e3bf6c528d3aeb4658a38ece11be6c94774031a8970c340e30704f532b48412",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-agenda-de-interpretes-de-conferencia",
+    "sector": "traducao-profissional",
+    "path": "public/images/courses/international-covers-2026/gestao-de-agenda-de-interpretes-de-conferencia.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 203422,
+    "sha256": "1b7049251a337b4bb3c6e12ae584642e16d164c5f008d7b23a6513ce9aae5c63",
+    "aiGenerated": true
+  },
+  {
+    "id": "coordenacao-de-revisao-bilingue-por-pares",
+    "sector": "traducao-profissional",
+    "path": "public/images/courses/international-covers-2026/coordenacao-de-revisao-bilingue-por-pares.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 143474,
+    "sha256": "28dcf5320f9d45830e12340ee1bf6eb450864c38f4e84c8d6d3fc397556ac153",
+    "aiGenerated": true
+  },
+  {
+    "id": "curadoria-de-corpora-de-linguagem-simples",
+    "sector": "traducao-profissional",
+    "path": "public/images/courses/international-covers-2026/curadoria-de-corpora-de-linguagem-simples.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 164592,
+    "sha256": "551c7b070b2bc6cf3c50cad8e677d0ff44f063434d8a25b19752023fcad94d32",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-traducao-de-quadrinhos",
+    "sector": "traducao-profissional",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-traducao-de-quadrinhos.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 245678,
+    "sha256": "1c6dd451bf24225e37fe3b80cf5367cbbd09e46ef924ae0b8b1057a7ec134a6f",
+    "aiGenerated": true
+  },
+  {
+    "id": "controle-de-versoes-de-interfaces-traduzidas",
+    "sector": "traducao-profissional",
+    "path": "public/images/courses/international-covers-2026/controle-de-versoes-de-interfaces-traduzidas.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 249486,
+    "sha256": "408715c8ce546dfd3df66065ab01bda03313b31ebaf81aa91f61e5accdbcb379",
+    "aiGenerated": true
+  },
+  {
+    "id": "conciliacao-de-pedidos-e-listas-de-volumes",
+    "sector": "comercio-exterior",
+    "path": "public/images/courses/international-covers-2026/conciliacao-de-pedidos-e-listas-de-volumes.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 216036,
+    "sha256": "baef701c887a7b0957ac284c086012394d926344e45a624062009700808a53be",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-consolidacao-de-cargas-pequenas",
+    "sector": "comercio-exterior",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-consolidacao-de-cargas-pequenas.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 216312,
+    "sha256": "dfe63f9d878af1e2a128a427555c59c4bbbf767628c9f4f9e28ce23e4b325885",
+    "aiGenerated": true
+  },
+  {
+    "id": "analise-de-custos-de-armazenagem-portuaria",
+    "sector": "comercio-exterior",
+    "path": "public/images/courses/international-covers-2026/analise-de-custos-de-armazenagem-portuaria.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 361790,
+    "sha256": "703c40f23244f8e73b88ad459b5acdb3d14dd833da90807f306ee02e3811dada",
+    "aiGenerated": true
+  },
+  {
+    "id": "comparacao-comercial-de-propostas-de-frete",
+    "sector": "comercio-exterior",
+    "path": "public/images/courses/international-covers-2026/comparacao-comercial-de-propostas-de-frete.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 154434,
+    "sha256": "3062ca7da13a612ce4307d655b374acaf09323baacea9bdc8c350b9a2f09c756",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-amostras-em-feiras-internacionais",
+    "sector": "comercio-exterior",
+    "path": "public/images/courses/international-covers-2026/gestao-de-amostras-em-feiras-internacionais.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 120036,
+    "sha256": "059dd8ff73255cdf8b363c337edc0077e316c6cb537ecbfa45f1ece97210b28f",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-retorno-de-expositores",
+    "sector": "comercio-exterior",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-retorno-de-expositores.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 155150,
+    "sha256": "044269959b037059daaa55c3dd84e6f103c59618de7f8315b214dd9eae51e8c7",
+    "aiGenerated": true
+  },
+  {
+    "id": "controle-de-documentacao-de-origem-declarada",
+    "sector": "comercio-exterior",
+    "path": "public/images/courses/international-covers-2026/controle-de-documentacao-de-origem-declarada.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 187526,
+    "sha256": "6483b23105e3849564e4b447214e9976732148f99a11e6ab86c0fc57914987df",
+    "aiGenerated": true
+  },
+  {
+    "id": "analise-de-avarias-por-rota-comercial",
+    "sector": "comercio-exterior",
+    "path": "public/images/courses/international-covers-2026/analise-de-avarias-por-rota-comercial.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 174878,
+    "sha256": "fba1294587c14301fc1a84927781e250e40d7b1414568597dabce54d65abf316",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-catalogos-multilingues-de-exportacao",
+    "sector": "comercio-exterior",
+    "path": "public/images/courses/international-covers-2026/gestao-de-catalogos-multilingues-de-exportacao.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 179484,
+    "sha256": "06c0b14a62d37a26111e5f0fc1f066856fb27486ac99a61af3ff9347190ffdc7",
+    "aiGenerated": true
+  },
+  {
+    "id": "programacao-de-coletas-de-fornecedores-externos",
+    "sector": "comercio-exterior",
+    "path": "public/images/courses/international-covers-2026/programacao-de-coletas-de-fornecedores-externos.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 197338,
+    "sha256": "983cc2091c9d61f9510a8b55638bcd1d70fed6ad977f20d54f26a1b56786524d",
+    "aiGenerated": true
+  },
+  {
+    "id": "orcamento-de-impressao-por-tiragem",
+    "sector": "industria-grafica",
+    "path": "public/images/courses/international-covers-2026/orcamento-de-impressao-por-tiragem.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 194230,
+    "sha256": "9b5dc726e5b8b15953499342b0b13a134532656cb21584ffbdf56b22fa984feb",
+    "aiGenerated": true
+  },
+  {
+    "id": "imposicao-e-aproveitamento-de-folhas",
+    "sector": "industria-grafica",
+    "path": "public/images/courses/international-covers-2026/imposicao-e-aproveitamento-de-folhas.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 244570,
+    "sha256": "7cc335fb244b2151e61d7e472d111d30f17be10b500c888df9bc8a84be9bcd1b",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-acabamentos-graficos",
+    "sector": "industria-grafica",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-acabamentos-graficos.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 285450,
+    "sha256": "26307b327af2b4fe69e04b48f69f28d58e4d3ca8a0c55fbfee4b60b341d7ef69",
+    "aiGenerated": true
+  },
+  {
+    "id": "controle-de-provas-de-cor-por-versao",
+    "sector": "industria-grafica",
+    "path": "public/images/courses/international-covers-2026/controle-de-provas-de-cor-por-versao.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 129696,
+    "sha256": "e1c01dd3a50a9398736dc034562647f74a82c1cccbf37a849e7f4cdea6d75938",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-reimpressoes-sob-demanda",
+    "sector": "industria-grafica",
+    "path": "public/images/courses/international-covers-2026/gestao-de-reimpressoes-sob-demanda.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 154572,
+    "sha256": "418d34dfef377e147f38099f70c33b287a3b4d72ffc76c0f42354b1ed841f354",
+    "aiGenerated": true
+  },
+  {
+    "id": "programacao-de-encadernacao-por-lote",
+    "sector": "industria-grafica",
+    "path": "public/images/courses/international-covers-2026/programacao-de-encadernacao-por-lote.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 149628,
+    "sha256": "a67a566d60318f0639c21c97e621509e88e67c1875141a2ce830f8d5c87d3a25",
+    "aiGenerated": true
+  },
+  {
+    "id": "previsao-de-consumo-de-papel",
+    "sector": "industria-grafica",
+    "path": "public/images/courses/international-covers-2026/previsao-de-consumo-de-papel.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 100348,
+    "sha256": "a94d9fedf129607c98eeb3585fb8205f2194c245307ed96987835615b758b534",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-arquivos-de-facas-de-corte",
+    "sector": "industria-grafica",
+    "path": "public/images/courses/international-covers-2026/gestao-de-arquivos-de-facas-de-corte.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 205828,
+    "sha256": "d9b7e05091bf2c68bc721867cc363c49ec1a088dc93a96067fb2c2649a7813b2",
+    "aiGenerated": true
+  },
+  {
+    "id": "controle-de-expedicao-de-impressos-personalizados",
+    "sector": "industria-grafica",
+    "path": "public/images/courses/international-covers-2026/controle-de-expedicao-de-impressos-personalizados.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 153122,
+    "sha256": "40a92292c8698bc22b968898a4f8c3025f14615dbab854d5acf65c1209554385",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-campanhas-de-mala-direta-impressa",
+    "sector": "industria-grafica",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-campanhas-de-mala-direta-impressa.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 191166,
+    "sha256": "6460c55dfdc1d8908fe27704b0d544b1ba77c6709155e882e05039fd0898b45c",
+    "aiGenerated": true
+  },
+  {
+    "id": "analise-de-tempo-ate-o-primeiro-valor",
+    "sector": "analitica-de-produto",
+    "path": "public/images/courses/international-covers-2026/analise-de-tempo-ate-o-primeiro-valor.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 83542,
+    "sha256": "640249bf64986550f7c724c5d67a360001af48aa8a2ac21e17d7984f7d320c44",
+    "aiGenerated": true
+  },
+  {
+    "id": "diagnostico-de-abandono-de-onboarding",
+    "sector": "analitica-de-produto",
+    "path": "public/images/courses/international-covers-2026/diagnostico-de-abandono-de-onboarding.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 267834,
+    "sha256": "caf498a8564bfba96040c1fcd02a68fa99f1686f889b2e5df43309dbd1c5f24e",
+    "aiGenerated": true
+  },
+  {
+    "id": "medicao-de-adocao-em-contas-multiusuario",
+    "sector": "analitica-de-produto",
+    "path": "public/images/courses/international-covers-2026/medicao-de-adocao-em-contas-multiusuario.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 209496,
+    "sha256": "24a22528a2afe6a82db4140d7fe4e03f8d22c6cf025f8d073f0ad72b9e9a3827",
+    "aiGenerated": true
+  },
+  {
+    "id": "desenho-de-grupos-de-controle-em-notificacoes",
+    "sector": "analitica-de-produto",
+    "path": "public/images/courses/international-covers-2026/desenho-de-grupos-de-controle-em-notificacoes.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 100852,
+    "sha256": "5d6fedb098d53014e9c6823f8783feeac6c4db478fa89b5d87d3c880991324cc",
+    "aiGenerated": true
+  },
+  {
+    "id": "auditoria-de-eventos-de-ativacao",
+    "sector": "analitica-de-produto",
+    "path": "public/images/courses/international-covers-2026/auditoria-de-eventos-de-ativacao.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 139414,
+    "sha256": "cd7f003934d404bf85540877dcd5ee2ec89c5aab6776b504ea0a516d64f1f88b",
+    "aiGenerated": true
+  },
+  {
+    "id": "analise-de-retencao-por-ocasiao-de-uso",
+    "sector": "analitica-de-produto",
+    "path": "public/images/courses/international-covers-2026/analise-de-retencao-por-ocasiao-de-uso.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 78062,
+    "sha256": "28b90fde309a20039483ec4f6206b114d95f380d3a7019aa292871f2a7e9a540",
+    "aiGenerated": true
+  },
+  {
+    "id": "modelagem-de-expansao-por-assento",
+    "sector": "analitica-de-produto",
+    "path": "public/images/courses/international-covers-2026/modelagem-de-expansao-por-assento.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 237176,
+    "sha256": "cede38a0d83eac4b5446ba7a23e8ed365f062cc922af028c0405222db48eb402",
+    "aiGenerated": true
+  },
+  {
+    "id": "estudo-de-canibalizacao-entre-planos",
+    "sector": "analitica-de-produto",
+    "path": "public/images/courses/international-covers-2026/estudo-de-canibalizacao-entre-planos.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 81138,
+    "sha256": "e15eb8e8e00417bbc778468ec5ab8391f4e316daa4e8f2685ea51e5f0c244cb5",
+    "aiGenerated": true
+  },
+  {
+    "id": "qualidade-de-dados-em-experimentos-de-preco",
+    "sector": "analitica-de-produto",
+    "path": "public/images/courses/international-covers-2026/qualidade-de-dados-em-experimentos-de-preco.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 111988,
+    "sha256": "f4ec1e55204a459bf2767dbabb4bed4599b4867c8097a9a9fc5fe824c53c1402",
+    "aiGenerated": true
+  },
+  {
+    "id": "medicao-de-sucesso-de-migracao-de-funcionalidades",
+    "sector": "analitica-de-produto",
+    "path": "public/images/courses/international-covers-2026/medicao-de-sucesso-de-migracao-de-funcionalidades.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 143690,
+    "sha256": "f2085e37df5700dce94e47c6715811da53bf7cd020002740409f487044a8791c",
+    "aiGenerated": true
+  },
+  {
+    "id": "construcao-de-conjuntos-ouro-para-sumarizacao",
+    "sector": "operacoes-de-ia",
+    "path": "public/images/courses/international-covers-2026/construcao-de-conjuntos-ouro-para-sumarizacao.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 159264,
+    "sha256": "37c40de51116169fda48310b8e4c667f672b361843ed99725ec092dc2c87ee41",
+    "aiGenerated": true
+  },
+  {
+    "id": "avaliacao-de-cobertura-de-respostas-com-fontes",
+    "sector": "operacoes-de-ia",
+    "path": "public/images/courses/international-covers-2026/avaliacao-de-cobertura-de-respostas-com-fontes.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 272856,
+    "sha256": "77fac171bef0f164a3ba53a603bbc097429f825072369153d8efc3d5ee93e5e7",
+    "aiGenerated": true
+  },
+  {
+    "id": "auditoria-de-unidades-em-extracao-de-tabelas",
+    "sector": "operacoes-de-ia",
+    "path": "public/images/courses/international-covers-2026/auditoria-de-unidades-em-extracao-de-tabelas.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 115812,
+    "sha256": "bc0122878f96de36ce6a3565cbaff9094e0382fe70957fbf30c6a0adfee84e47",
+    "aiGenerated": true
+  },
+  {
+    "id": "medicao-de-custo-por-revisao-aceita",
+    "sector": "operacoes-de-ia",
+    "path": "public/images/courses/international-covers-2026/medicao-de-custo-por-revisao-aceita.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 172430,
+    "sha256": "b85bd40e3277639dd10e7ef99cafd23bc3d012720f9bc929ff0ef7f9e38f0ade",
+    "aiGenerated": true
+  },
+  {
+    "id": "avaliacao-de-legibilidade-de-texto-simplificado",
+    "sector": "operacoes-de-ia",
+    "path": "public/images/courses/international-covers-2026/avaliacao-de-legibilidade-de-texto-simplificado.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 267956,
+    "sha256": "1275e0cc6cbbf1535b96b46b447468ccacc619d898584bbc926355d097781882",
+    "aiGenerated": true
+  },
+  {
+    "id": "controle-de-deriva-em-classificacao-de-contatos",
+    "sector": "operacoes-de-ia",
+    "path": "public/images/courses/international-covers-2026/controle-de-deriva-em-classificacao-de-contatos.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 110532,
+    "sha256": "822451ac76463c83a5d93e310cff83c9870629c581233ad4e6071527027b30e3",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-revisao-humana-por-amostragem",
+    "sector": "operacoes-de-ia",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-revisao-humana-por-amostragem.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 236452,
+    "sha256": "7fe07b366470e4a3f23dbbb07e1ab716beb8a4657823b08f4a6b270c06894332",
+    "aiGenerated": true
+  },
+  {
+    "id": "avaliacao-comparativa-de-transcricao-regional",
+    "sector": "operacoes-de-ia",
+    "path": "public/images/courses/international-covers-2026/avaliacao-comparativa-de-transcricao-regional.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 167836,
+    "sha256": "fb4d14f0711cf54b482bf6bc706bd366b251aea290958158ec86a26269d1a283",
+    "aiGenerated": true
+  },
+  {
+    "id": "testes-de-consistencia-de-metadados-gerados",
+    "sector": "operacoes-de-ia",
+    "path": "public/images/courses/international-covers-2026/testes-de-consistencia-de-metadados-gerados.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 131962,
+    "sha256": "2acd00d0f1dbbfb9fbbee9938bf1c79b84b51c788d0091adbdacb018889882dc",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-filas-de-adjudicacao-multilingue",
+    "sector": "operacoes-de-ia",
+    "path": "public/images/courses/international-covers-2026/gestao-de-filas-de-adjudicacao-multilingue.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 151994,
+    "sha256": "ace1150f6bcb63ecf9015ab12518661dfc81dde36eb62e25e71b3abd15abf52f",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-territorios-de-atendimento",
+    "sector": "servicos-de-campo",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-territorios-de-atendimento.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 327898,
+    "sha256": "50e8c5885a67b783315ce97268f2abb9386a86a55a319e010404ed8a09470fdf",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-janelas-de-chegada-de-tecnicos",
+    "sector": "servicos-de-campo",
+    "path": "public/images/courses/international-covers-2026/gestao-de-janelas-de-chegada-de-tecnicos.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 337258,
+    "sha256": "e9b1f7348a7220a04832d2b598349743b013e7115a86c546cdf4fa91fdd9aa27",
+    "aiGenerated": true
+  },
+  {
+    "id": "analise-de-resolucao-na-primeira-visita",
+    "sector": "servicos-de-campo",
+    "path": "public/images/courses/international-covers-2026/analise-de-resolucao-na-primeira-visita.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 261176,
+    "sha256": "b3b9e442047a9117439be9006a50acf96607d349e5e8573cc429d9e3d7539dba",
+    "aiGenerated": true
+  },
+  {
+    "id": "dimensionamento-de-kits-moveis-de-pecas",
+    "sector": "servicos-de-campo",
+    "path": "public/images/courses/international-covers-2026/dimensionamento-de-kits-moveis-de-pecas.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 127742,
+    "sha256": "436358e6eab8bde6e2d300b4d67311f8049e0e5099180295de4419eeca69d5a3",
+    "aiGenerated": true
+  },
+  {
+    "id": "programacao-de-rotas-com-retorno-ao-deposito",
+    "sector": "servicos-de-campo",
+    "path": "public/images/courses/international-covers-2026/programacao-de-rotas-com-retorno-ao-deposito.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 191404,
+    "sha256": "b0b87a6eae799d68fd17edb86ac0d23c92156a27ca98487d8d109408d49dffb9",
+    "aiGenerated": true
+  },
+  {
+    "id": "conciliacao-de-comprovantes-de-visita",
+    "sector": "servicos-de-campo",
+    "path": "public/images/courses/international-covers-2026/conciliacao-de-comprovantes-de-visita.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 139068,
+    "sha256": "7c4bf2be89be343772a0f83b6cb1a29e2dc0c86fd0aa9c95f9da483578eb64e1",
+    "aiGenerated": true
+  },
+  {
+    "id": "analise-de-reagendamento-por-peca-ausente",
+    "sector": "servicos-de-campo",
+    "path": "public/images/courses/international-covers-2026/analise-de-reagendamento-por-peca-ausente.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 140264,
+    "sha256": "751030c44ea375a3d4d9cfde255b5698b22ac1763fc67579f8e755fc65b6686f",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-chaves-de-acesso-a-imoveis-atendidos",
+    "sector": "servicos-de-campo",
+    "path": "public/images/courses/international-covers-2026/gestao-de-chaves-de-acesso-a-imoveis-atendidos.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 185934,
+    "sha256": "ecc478f8032547ec2784834f63c0521ba313a41a3e330e9a10e757b61855fff1",
+    "aiGenerated": true
+  },
+  {
+    "id": "controle-de-emprestimo-de-ferramentas-de-campo",
+    "sector": "servicos-de-campo",
+    "path": "public/images/courses/international-covers-2026/controle-de-emprestimo-de-ferramentas-de-campo.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 166442,
+    "sha256": "df9994686fdc5b37c4c0f5eb1ec1f05a5be343d458e05d3994db322c9ebc0bdd",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-cobertura-em-regioes-rurais",
+    "sector": "servicos-de-campo",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-cobertura-em-regioes-rurais.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 235232,
+    "sha256": "0eaa3fa741e00aed140246f7896ee8d327d54c508ae5be94ef07b4980c5dd244",
+    "aiGenerated": true
+  },
+  {
+    "id": "desenho-de-quotas-para-entrevistas",
+    "sector": "pesquisa-social",
+    "path": "public/images/courses/international-covers-2026/desenho-de-quotas-para-entrevistas.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 286076,
+    "sha256": "dafa341a115e5b3372f2b74ba1d45bacb4437149cb724edbd778f332bf535a35",
+    "aiGenerated": true
+  },
+  {
+    "id": "recrutamento-de-participantes-bilingues",
+    "sector": "pesquisa-social",
+    "path": "public/images/courses/international-covers-2026/recrutamento-de-participantes-bilingues.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 131166,
+    "sha256": "fcc45234bd1c070bab3c3b282f97617fc654e8c4854ff38751cc96bd065bc9c1",
+    "aiGenerated": true
+  },
+  {
+    "id": "codificacao-de-entrevistas-por-dupla-leitura",
+    "sector": "pesquisa-social",
+    "path": "public/images/courses/international-covers-2026/codificacao-de-entrevistas-por-dupla-leitura.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 212872,
+    "sha256": "c270c9e160d2f728d20c7e4bb858f9a8c0ecbf0f32fd4222adb00a4977d3f4bd",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-incentivos-para-paineis-de-pesquisa",
+    "sector": "pesquisa-social",
+    "path": "public/images/courses/international-covers-2026/gestao-de-incentivos-para-paineis-de-pesquisa.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 137844,
+    "sha256": "3d73898673e72b08c70f198452238ad4ed6c856f160965ce9efe41fe76edbc10",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-diarios-de-uso",
+    "sector": "pesquisa-social",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-diarios-de-uso.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 165382,
+    "sha256": "ea8f4542c2152fe3e6ae22aac88030250ded4f2129ba130681cf540dd7b077c7",
+    "aiGenerated": true
+  },
+  {
+    "id": "teste-cognitivo-de-questionarios",
+    "sector": "pesquisa-social",
+    "path": "public/images/courses/international-covers-2026/teste-cognitivo-de-questionarios.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 114968,
+    "sha256": "55d19221a35fa1340ef2afb9c8a56ea5149336a95ea82bc50565ccf7f9d16a31",
+    "aiGenerated": true
+  },
+  {
+    "id": "controle-de-qualidade-de-transcricao-qualitativa",
+    "sector": "pesquisa-social",
+    "path": "public/images/courses/international-covers-2026/controle-de-qualidade-de-transcricao-qualitativa.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 132170,
+    "sha256": "1c872bde9fa3694c71b6d707b32f431628af7718f06c152a7d6c315891e1ae4a",
+    "aiGenerated": true
+  },
+  {
+    "id": "analise-de-nao-resposta-por-canal",
+    "sector": "pesquisa-social",
+    "path": "public/images/courses/international-covers-2026/analise-de-nao-resposta-por-canal.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 164074,
+    "sha256": "138c72b9f557ddd3626221963985d2492b16d6fd4903427b80618368b31ae350",
+    "aiGenerated": true
+  },
+  {
+    "id": "construcao-de-matrizes-de-sintese-tematica",
+    "sector": "pesquisa-social",
+    "path": "public/images/courses/international-covers-2026/construcao-de-matrizes-de-sintese-tematica.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 186130,
+    "sha256": "0f352f22e956e7665a62426c7b3dfce1fccab1564f7953eb8c387263e8cd7b09",
+    "aiGenerated": true
+  },
+  {
+    "id": "preparacao-de-pacotes-de-dados-anonimizados-para-ensino",
+    "sector": "pesquisa-social",
+    "path": "public/images/courses/international-covers-2026/preparacao-de-pacotes-de-dados-anonimizados-para-ensino.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 135706,
+    "sha256": "6fd309454941ed132843cdc1ff28a8c6896093816bbd870ed6c55b02a92391cd",
+    "aiGenerated": true
+  },
+  {
+    "id": "planejamento-de-fornadas-por-janela-de-venda",
+    "sector": "panificacao-comercial",
+    "path": "public/images/courses/international-covers-2026/planejamento-de-fornadas-por-janela-de-venda.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 173072,
+    "sha256": "10e49f8af77f7c7cf56499d23ee2fceb47dbd8064b582ae933ce76d9a7500d83",
+    "aiGenerated": true
+  },
+  {
+    "id": "modelagem-de-rendimento-de-massas",
+    "sector": "panificacao-comercial",
+    "path": "public/images/courses/international-covers-2026/modelagem-de-rendimento-de-massas.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 148112,
+    "sha256": "b83d7ce404a4dec4e65c2cd371a7d0608e6a528a380df2f1078e4cb98c7db3dc",
+    "aiGenerated": true
+  },
+  {
+    "id": "controle-de-perdas-no-balcao",
+    "sector": "panificacao-comercial",
+    "path": "public/images/courses/international-covers-2026/controle-de-perdas-no-balcao.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 261712,
+    "sha256": "851a97ff2da6da0e099da755e5450175d1f777b4d1df2487e85a2cbeb3dda968",
+    "aiGenerated": true
+  },
+  {
+    "id": "compras-sazonais-de-farinha",
+    "sector": "panificacao-comercial",
+    "path": "public/images/courses/international-covers-2026/compras-sazonais-de-farinha.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 141816,
+    "sha256": "4eee9f31d0c88a863086150010290ea2ffb5f2ff6a415ebfc28b5a7ff2466c97",
+    "aiGenerated": true
+  },
+  {
+    "id": "custeio-de-confeitaria-por-encomenda",
+    "sector": "panificacao-comercial",
+    "path": "public/images/courses/international-covers-2026/custeio-de-confeitaria-por-encomenda.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 199322,
+    "sha256": "83d3bd47fc4e769b878050a35036961d75c0abd743b19464ea4bb6b091482f28",
+    "aiGenerated": true
+  },
+  {
+    "id": "programacao-de-fermentacao-em-camara",
+    "sector": "panificacao-comercial",
+    "path": "public/images/courses/international-covers-2026/programacao-de-fermentacao-em-camara.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 165516,
+    "sha256": "74d866d341c61d829360573896ef31d90348f3596d17bb10920e17255f78066f",
+    "aiGenerated": true
+  },
+  {
+    "id": "previsao-de-demanda-para-padarias-de-bairro",
+    "sector": "panificacao-comercial",
+    "path": "public/images/courses/international-covers-2026/previsao-de-demanda-para-padarias-de-bairro.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 156066,
+    "sha256": "aed7c2c6dac09eb4ad75ff0dd041a4da90781fb60d58b0f1896dcbe91e4dcc22",
+    "aiGenerated": true
+  },
+  {
+    "id": "dimensionamento-de-entregas-de-pao-fresco",
+    "sector": "panificacao-comercial",
+    "path": "public/images/courses/international-covers-2026/dimensionamento-de-entregas-de-pao-fresco.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 194354,
+    "sha256": "4e68b55a0fe6026a3a37c5b6229de6fabcedc81d4695ab9c2f2d985f5c8136de",
+    "aiGenerated": true
+  },
+  {
+    "id": "padronizacao-de-fichas-de-producao-de-confeitaria",
+    "sector": "panificacao-comercial",
+    "path": "public/images/courses/international-covers-2026/padronizacao-de-fichas-de-producao-de-confeitaria.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 147140,
+    "sha256": "f89f5e72db592701d99232542b5b9e470c283ef98c8ce7c3d780f1b157abf6dc",
+    "aiGenerated": true
+  },
+  {
+    "id": "gestao-de-devolucoes-de-pao-no-atacado",
+    "sector": "panificacao-comercial",
+    "path": "public/images/courses/international-covers-2026/gestao-de-devolucoes-de-pao-no-atacado.webp",
+    "width": 1536,
+    "height": 1024,
+    "bytes": 167750,
+    "sha256": "17d9929fc410bf280f6687ce4866b90380de3e5fdce7c27cec12b4bb670903d6",
+    "aiGenerated": true
+  }
+]
