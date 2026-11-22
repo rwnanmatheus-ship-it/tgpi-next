@@ -694,7 +694,7 @@ export default function TgpiAccountCenter({
   if (activeSection === "progress") {
     activeScreen = <div className="space-y-5">
       {(progressReadOnly || !rank) && <div role="status" className="rounded-2xl border border-[#D7C68F] bg-[#FBF4DE] p-5 text-[#5C4B24]">
-        <p>{rank ? activationReadOnlyCopy[locale] : t("Unable to load your confirmed TGPI progress. Try again in a moment.")}</p>
+        <p>{activationReadOnlyCopy[locale]}</p>
         <button type="button" className="mt-3 min-h-11 rounded-xl border border-current px-4 font-semibold" onClick={() => router.refresh()}>{t("Try again")}</button>
       </div>}
       {rank ? <GlobalProgressPanel rank={rank} headingLevel={2} /> : <Link href="/profile">{t("Open workspace")}</Link>}
