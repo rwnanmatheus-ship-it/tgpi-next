@@ -1,4 +1,5 @@
 "use client";
+import { activationReadOnlyCopy } from "@/lib/localization/progress-copy";
 import NotificationInboxLink from "@/components/notifications/NotificationInboxLink";
 
 import { LocalizedElement } from "@/components/localization/LocalizedElement";
@@ -75,6 +76,7 @@ type TgpiAccountCenterProps = {
   sessionId: string;
   initialSection?: SettingsSection;
   rank: GlobalRank | null;
+  progressReadOnly?: boolean;
 };
 type SaveState = "idle" | "saving" | "saved" | "error";
 type SettingsSectionDefinition = {
@@ -359,6 +361,7 @@ export default function TgpiAccountCenter({
   initialIdentity,
   initialProfile,
   rank,
+  progressReadOnly = false,
   sessionId,
   initialSection = "overview",
 }: TgpiAccountCenterProps) {
@@ -592,7 +595,7 @@ export default function TgpiAccountCenter({
         <button type="button" className={styles.secondary} onClick={() => selectSection(!profile.legalFullName ? "identity" : !profile.timezone ? "preferences" : "privacy")}>{t("Review")} →</button>
       </div>
       <div><div className={styles.sectionLabel}><span className={styles.eyebrow}>{t("Explore your settings")}</span><small>{t("Account · experience · privacy")}</small></div>
-      <div className={styles.settingsGrid}>{settingsSections.filter(section => section.key !== "overview" && section.key !== "progress").map(section => <button type="button" className={styles.settingCard} onClick={() => selectSection(section.key)} key={section.key}><span className={styles.tileIcon}><SettingsIcon section={section.key} /></span><div><strong>{t(section.label)}</strong><p>{sectionSummaries[section.key as Exclude<SettingsSection, "overview">]}</p></div><span aria-hidden="true">↗</span></button>)}</div></div>
+      <div className={styles.settingsGrid}>{settingsSections.filter(section => section.key !== "overview").map(section => <button type="button" className={styles.settingCard} onClick={() => selectSection(section.key)} key={section.key}><span className={styles.tileIcon}><SettingsIcon section={section.key} /></span><div><strong>{t(section.label)}</strong><p>{sectionSummaries[section.key as Exclude<SettingsSection, "overview">]}</p></div><span aria-hidden="true">↗</span></button>)}</div></div>
       <Link className={styles.relatedLink} href="/profile">{t("Learning, goals and achievements live in your workspace.")} <span>→</span></Link>
     </div>
   );
@@ -689,7 +692,13 @@ export default function TgpiAccountCenter({
   }
 
   if (activeSection === "progress") {
-    activeScreen = rank ? <GlobalProgressPanel rank={rank} headingLevel={2} /> : <p role="status"><LocalizedText text="Unavailable" /></p>;
+    activeScreen = <div className="space-y-5">
+      {(progressReadOnly || !rank) && <div role="status" className="rounded-2xl border border-[#D7C68F] bg-[#FBF4DE] p-5 text-[#5C4B24]">
+        <p>{activationReadOnlyCopy[locale]}</p>
+        <button type="button" className="mt-3 min-h-11 rounded-xl border border-current px-4 font-semibold" onClick={() => router.refresh()}>{t("Try again")}</button>
+      </div>}
+      {rank ? <GlobalProgressPanel rank={rank} headingLevel={2} /> : <Link href="/profile">{t("Open workspace")}</Link>}
+    </div>;
   }
 
   if (activeSection === "public-profile") {
@@ -803,7 +812,7 @@ export default function TgpiAccountCenter({
   }
 
   const editable = ["identity", "global", "preferences", "privacy", "public-profile"].includes(activeSection);
-  const navigation = settingsSections.filter(section => section.key !== "progress");
+  const navigation = settingsSections;
   const renderSearch = (id: string) => <label className={styles.search} htmlFor={id}><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><circle cx="10.5" cy="10.5" r="6.5" /><path d="m16 16 5 5" /></svg><span className="sr-only">{t("Search settings")}</span><input id={id} type="search" value={query} placeholder={t("Search settings")} onChange={event => setQuery(event.target.value)} onKeyDown={event => { if (event.key === "Enter" && filteredSections.length) selectSection(filteredSections[0].key); if (event.key === "Escape") setQuery(""); }} /></label>;
   return (
     <div className={`tgpi-settings-v2 ${styles.root}`}>
@@ -817,7 +826,7 @@ export default function TgpiAccountCenter({
           <button className={styles.sidebarIdentity} onClick={() => selectSection("overview")} type="button"><AccountAvatar imageUrl={account.avatarUrl} initials={initials} label={fullName} size="small" /><span><strong>{fullName}</strong><small>{t("Your account")}</small></span></button>
           {renderSearch("settings-search-desktop")}
           <nav aria-label={t("Account settings")} className={styles.navigation}>{settingsGroups.map(group => {
-            const sections = filteredSections.filter(section => section.group === group && (section.key !== "progress" || Boolean(query) || activeSection === "progress"));
+            const sections = filteredSections.filter(section => section.group === group);
             return sections.length ? <div key={group}><p>{t(group)}</p>{sections.map(section => <button type="button" key={section.key} aria-current={activeSection === section.key ? "page" : undefined} onClick={() => selectSection(section.key)}><SettingsIcon section={section.key} /><span>{t(section.label)}</span></button>)}</div> : null;
           })}</nav>
           {filteredSections.length === 0 && <p role="status" className={styles.empty}>{t("No setting matches this search.")}</p>}

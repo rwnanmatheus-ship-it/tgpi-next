@@ -1,4 +1,4 @@
-import { getUserActivationProgress } from "@/lib/activation-store.server";
+import { getUserActivationView } from "@/lib/activation-store.server";
 import { localizeMetadata } from "@/lib/localization/metadata.server";
 import { getAccountMembershipLabel } from "@/lib/account-membership.server";
 import { ensureMemberNumber } from '@/lib/members/identity.server';
@@ -46,11 +46,12 @@ export default async function SecurityPage({ searchParams }: { searchParams: Pro
   const email = user?.primaryEmailAddress?.emailAddress || "No primary email";
   const emailVerified =
     user?.primaryEmailAddress?.verification?.status === "verified";
-  const [memberIdentity, membership, activation] = await Promise.all([
+  const [memberIdentity, membership, activationView] = await Promise.all([
     ensureMemberNumber(session.userId).catch(() => null),
     getAccountMembershipLabel({ uid: session.userId, email, emailVerified }),
-    getUserActivationProgress(session.userId, user?.privateMetadata).catch(() => null),
+    getUserActivationView(session.userId, user?.privateMetadata).catch(() => null),
   ]);
+  const activation = activationView?.progress ?? null;
   const onboarding = normalizeOnboardingData(
     user?.unsafeMetadata.tgpiOnboarding,
   );
@@ -110,6 +111,7 @@ export default async function SecurityPage({ searchParams }: { searchParams: Pro
         initialIdentity={identity}
         initialProfile={profile}
         rank={rank}
+        progressReadOnly={activationView?.readOnly ?? false}
       >
         <SecurityCenter />
       </TgpiAccountCenter>
