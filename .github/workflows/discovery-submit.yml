@@ -1,6 +1,12 @@
 name: Notify search engines after publication
 on:
   workflow_dispatch:
+    inputs:
+      mode:
+        description: Notify changed routes or the full public sitemap
+        type: choice
+        options: [changed, full]
+        default: changed
   deployment_status:
 permissions:
   contents: read
@@ -19,10 +25,20 @@ jobs:
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
-          ref: fix-deploy-hoje
+          ref: ${{ github.event.deployment.sha || github.sha }}
+          fetch-depth: 2
           persist-credentials: false
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: 24
-      - name: Notify IndexNow of updated public pages
-        run: node scripts/indexnow-submit.mjs
+      - name: Find changed source paths
+        run: git diff --name-only HEAD^ HEAD > changed-public-source.txt
+      - name: Notify IndexNow of changed public pages
+        env:
+          SUBMISSION_MODE: ${{ inputs.mode || 'changed' }}
+        run: |
+          if [ "$SUBMISSION_MODE" = "full" ]; then
+            node scripts/indexnow-submit.mjs --all
+          else
+            node scripts/indexnow-submit.mjs --changed-files changed-public-source.txt
+          fi

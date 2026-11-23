@@ -97,3 +97,49 @@ localized landing page. Sharing happens only after an explicit visitor action.
 The IndexNow workflow verifies the public ownership file before submitting a
 bounded set of updated URLs after production. Successful acceptance does not
 prove indexation. Existing consent and analytics configuration are preserved.
+
+## Crawlable course distribution (second release, 2026-11-23)
+
+`/courses/directory` and its numbered pages expose the production catalogue as
+ordinary, visible HTML links: 40 courses per page with self-canonicals,
+sequential links, page navigation, ItemList and BreadcrumbList. `/1` redirects
+to the directory root; malformed and out-of-range page numbers return 404.
+Draft, early-access, planned, unsafe and noncanonical listing records are
+excluded. The interactive catalogue remains available. Known filter variants
+of `/courses` are noindex/follow and keep the clean catalogue canonical; UTM
+campaign parameters do not trigger that restriction.
+
+Available Academy detail pages link to four published courses sharing the
+same learning goal and back to the directory. The footer also links to it.
+`/courses/feed.xml` exports the public catalogue in RSS format, with XML-escaped
+content and stable item identities. No publication timestamps are invented.
+This feed is publicly available; no third-party syndication is implied.
+
+The daily SEO audit validates every sitemap URL's canonical shape locally,
+then checks all core landing pages and rotates through 40 course pages,
+seven countries and three numbered directory pages. For a stable catalogue
+of 1,200 courses, every course receives a live check within 30 daily runs.
+This replaces fetching every course on every run. The workflow keeps its JSON
+audit artifact and checks the exact deployment source when triggered by a
+deployment. Regression checks exercise pagination coverage and boundaries,
+published-only selection, XML escaping, related links and crawl rotation.
+
+IndexNow notifications now read the published sitemap instead of a fixed list
+of eight URLs. Deployment runs map changed source paths to canonical public
+routes. Shared chrome/localization changes notify the public sitemap; course,
+country, guide and discovery changes notify the corresponding route groups.
+Direct static page paths map to their existing public route. Nonpublic and
+external URLs, queries and fragments are rejected. Deleted routes absent from
+the sitemap are not covered by this mapping. A manual `full` workflow mode or
+`node scripts/indexnow-submit.mjs --all` submits the full public catalogue.
+Protocol batches contain at most 10,000 URLs. Each submission verifies the
+public ownership file first; accepted URLs are not necessarily indexed.
+
+Vercel receives cache and content-type protection headers for public campaign
+artwork. The RSS route has a one-hour public cache. Personalized HTML and member
+routes keep their current access and cache boundaries. Search Console ownership
+verification for the founder-selected official account is preserved.
+
+No advertisements, traffic bots, external posts, new tracking or paid services
+are activated by this release. Measure search clicks, qualified registrations
+and real subscription events after the search engines process the pages.

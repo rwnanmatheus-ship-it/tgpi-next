@@ -1,5 +1,8 @@
 import { localizeMetadata } from "@/lib/localization/metadata.server";
 
+import { getLocale } from "@/lib/localization/server";
+import { catalogVariantNeedsNoindex } from "@/lib/seo/course-directory";
+import CourseDiscoveryLinks from "@/components/courses/CourseDiscoveryLinks";
 import LearningHero from '@/components/courses/LearningHero';
 import type { Metadata } from 'next';
 import CapabilitySystemRail from '@/components/capability/CapabilitySystemRail';
@@ -20,12 +23,13 @@ const featuredCourses = [
 const coursePriority = new Map(featuredCourses.map((id, index) => [id, index]));
 
 const sourceMetadata: Metadata = {
-  alternates: { canonical: "/courses" },
+  alternates: { canonical: "/courses", types: { "application/rss+xml": "/courses/feed.xml" } },
   title: 'TGPI Learning — Practical Skills for a Global Life',
   description: 'Explore practical learning, resume your courses and understand the assessment and credential requirements for each pathway.',
 };
 
 export default async function CoursesPage({ searchParams }: { searchParams: Promise<Record<string, string | string[] | undefined>> }) {
+  const locale = await getLocale();
   const catalog = [...professionalCatalog(process.env.VERCEL_ENV || process.env.NODE_ENV), ...coursesOverview]
     .sort((a, b) => (coursePriority.get(a.id) ?? featuredCourses.length) - (coursePriority.get(b.id) ?? featuredCourses.length));
   const raw = await searchParams;
@@ -33,8 +37,12 @@ export default async function CoursesPage({ searchParams }: { searchParams: Prom
   return <TGPIPageShell width="capability">
     <LearningHero count={catalog.filter(course => course.status === 'available').length} />
     <LearningPathExplorer key={params.toString()} courses={catalog} initialFilters={parseCatalogFilters(params)} />
+    <CourseDiscoveryLinks locale={locale} />
     <CapabilitySystemRail active="learning" />
   </TGPIPageShell>;
 }
 
-export async function generateMetadata() { return localizeMetadata(sourceMetadata); }
+export async function generateMetadata({searchParams}:{searchParams:Promise<Record<string,string|string[]|undefined>>}) {
+  const variants = catalogVariantNeedsNoindex(await searchParams);
+  return localizeMetadata({...sourceMetadata, ...(variants ? {robots:{index:false,follow:true}} : {})});
+}
