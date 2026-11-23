@@ -50,6 +50,7 @@ async function CountryResearch({ filters }: { filters: ExplorerFilterInput }) {
 
   const countries = identities.map(({ slug, name, region, iso2, iso3 }) => ({
     slug, name: aliases.get(slug)?.name ?? name, emoji: aliases.get(slug)?.emoji ?? "", region, iso2, iso3,
+    language: aliases.get(slug)?.language ?? "", capital: aliases.get(slug)?.capital ?? "",
     dossierCount: dossierFor(slug).claims.length,
     observations: indicators.get(slug)?.size ?? 0,
   }));
@@ -86,9 +87,11 @@ export default async function CountriesPage({ searchParams }: { searchParams?: P
           <div className={styles.heroCopy}>
             <p className={styles.heroKicker}><NavigationIcon name="globe" width={16} height={16} /><LocalizedText text="TGPI / Country Intelligence" /></p>
             <h1><LocalizedText text="Countries" /></h1>
-            <p className={styles.heroDescription}><LocalizedText text="Explore 195 destinations. Build a shortlist, understand the evidence and shape your own international plan." /></p>
+            <p className={styles.heroDescription}><LocalizedText text="One world. Your next possibility." /></p>
+            <p className={styles.heroSubline}><LocalizedText text="Explore destinations, learn the language and connect your research to a real plan." /></p>
           </div>
           <div className={styles.heroCount}>
+            <NavigationIcon name="globe" width={24} height={24} />
             <strong>{identities.length}</strong>
             <span><LocalizedText text="Destinations" /></span>
           </div>

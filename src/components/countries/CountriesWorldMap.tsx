@@ -1,651 +1,226 @@
 "use client";
-import CountryFlag from "@/components/ui/CountryFlag";
-import { countryFlagCode } from "@/lib/country-flag";
 
-import { LocalizedElement } from "@/components/localization/LocalizedElement";
-import { useLocale as useInterfaceLocale } from "@/components/localization/LocaleProvider";
-
+import Link from "next/link";
 import Image from "@/components/localization/LocalizedImage";
-import { startTransition, useEffect, useMemo, useRef, useState } from "react";
+import { startTransition, useEffect, useId, useMemo, useRef, useState, type KeyboardEvent } from "react";
 import { useRouter } from "next/navigation";
+import CountryFlag from "@/components/ui/CountryFlag";
+import { LocalizedElement } from "@/components/localization/LocalizedElement";
+import { LocalizedText, useLocale } from "@/components/localization/LocaleProvider";
+import { countryFlagCode } from "@/lib/country-flag";
 import type { CountryExplorerItem } from "@/lib/countries";
-import {
-  COUNTRY_MAP_REGIONS,
-  type CountryMapRegionId,
-} from "@/lib/country-map";
-import { LocalizedText } from "@/components/localization/LocaleProvider";
+import { COUNTRY_MAP_REGIONS, type CountryMapRegionId } from "@/lib/country-map";
+import styles from "./CountriesWorldMap.module.css";
 
-
-type MapCountry = Pick<
-  CountryExplorerItem,
-  "slug" | "name" | "emoji" | "region" | "visual"
->;
-
-type CinematicPhase = "idle" | "locking" | "resolving" | "entering";
-
-type WorldMapFeature = {
-  name: string;
-  isoA3: string;
-  continent: string;
-  label: [number, number];
-  marker: boolean;
-  path: string;
-};
-
-type WorldMapData = {
-  version: number;
-  source: string;
-  sourceUrl: string;
-  license: string;
-  projection: string;
-  viewBox: [number, number, number, number];
-  features: WorldMapFeature[];
-};
-
-type MappedFeature = WorldMapFeature & {
-  country?: MapCountry;
-};
-
-type CountriesWorldMapProps = {
+type MapCountry = Pick<CountryExplorerItem, "slug" | "name" | "emoji" | "region" | "visual"> & { iso3?: string };
+type WorldMapFeature = { name: string; isoA3: string; continent: string; label: [number, number]; marker: boolean; path: string };
+type WorldMapData = { features: WorldMapFeature[] };
+type MappedFeature = WorldMapFeature & { country?: MapCountry };
+type Props = {
   countries: MapCountry[];
   activeRegionId: CountryMapRegionId;
   selectedSlug: string;
   onCountryPreview: (slug: string) => void;
   onRegionChange: (regionId: CountryMapRegionId) => void;
 };
-
 const MAP_DATA_URL = "/maps/tgpi-world-countries-50m.json";
-
-const CINEMATIC_PHASE_COPY: Record<Exclude<CinematicPhase, "idle">, string> = {
-  locking: "Territory acquired",
-  resolving: "Synchronizing evidence layers",
-  entering: "Entering Country Intelligence",
-};
-
 const FEATURE_NAME_TO_SLUG: Readonly<Record<string, string>> = {
-  "the bahamas": "bahamas",
-  "republic of the congo": "congo",
-  "federated states of micronesia": "micronesia",
-  "republic of serbia": "serbia",
-  "united republic of tanzania": "tanzania",
-  "east timor": "timor-leste",
-  "united states of america": "united-states",
-  vatican: "vatican-city",
+  "the bahamas": "bahamas", "republic of the congo": "congo", "federated states of micronesia": "micronesia",
+  "republic of serbia": "serbia", "united republic of tanzania": "tanzania", "east timor": "timor-leste",
+  "united states of america": "united-states", vatican: "vatican-city",
 };
-
+const FEATURE_ISO_ALIASES: Readonly<Record<string, string>> = { PSX: "PSE", SDS: "SSD" };
 function normalizeCountryName(value: string) {
-  return value
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/&/g, "and")
-    .replace(/[^a-zA-Z0-9]+/g, " ")
-    .trim()
-    .toLowerCase();
+  return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/&/g, "and").replace(/[^a-zA-Z0-9]+/g, " ").trim().toLowerCase();
 }
-
 function isWorldMapData(value: unknown): value is WorldMapData {
-  if (!value || typeof value !== "object") return false;
-  const candidate = value as Partial<WorldMapData>;
-
-  return (
-    Array.isArray(candidate.viewBox) &&
-    candidate.viewBox.length === 4 &&
-    Array.isArray(candidate.features) &&
-    candidate.features.every(
-      (feature) =>
-        feature &&
-        typeof feature.name === "string" &&
-        typeof feature.path === "string" &&
-        Array.isArray(feature.label),
-    )
-  );
+  if (!value || typeof value !== "object" || !("features" in value) || !Array.isArray(value.features)) return false;
+  return value.features.length > 0 && value.features.every((feature: unknown) => {
+    if (!feature || typeof feature !== "object") return false;
+    const candidate = feature as Partial<WorldMapFeature>;
+    return typeof candidate.name === "string" && typeof candidate.isoA3 === "string" && typeof candidate.continent === "string"
+      && typeof candidate.path === "string" && Array.isArray(candidate.label) && candidate.label.length === 2 && candidate.label.every(Number.isFinite);
+  });
+}
+function regionTransform(regionId: CountryMapRegionId) {
+  const [x, y, width, height] = (COUNTRY_MAP_REGIONS.find(region => region.id === regionId) ?? COUNTRY_MAP_REGIONS[0]).viewport;
+  const scale = Math.min(1000 / width, 500 / height) * .96;
+  return { scale, x: (1000 - width * scale) / 2 - x * scale, y: (500 - height * scale) / 2 - y * scale };
 }
 
-function getZoomTransform(regionId: CountryMapRegionId) {
-  const region =
-    COUNTRY_MAP_REGIONS.find((candidate) => candidate.id === regionId) ??
-    COUNTRY_MAP_REGIONS[0];
-  const [x, y, width, height] = region.viewport;
-  const scale = Math.min(1000 / width, 500 / height) * 0.92;
-  const translateX = (1000 - width * scale) / 2 - x * scale;
-  const translateY = (500 - height * scale) / 2 - y * scale;
-
-  return { scale, translateX, translateY };
-}
-
-export default function CountriesWorldMap({
-  countries,
-  activeRegionId,
-  selectedSlug,
-  onCountryPreview,
-  onRegionChange,
-}: CountriesWorldMapProps) {
-  const { t: localizeLabel } = useInterfaceLocale();
-
+export default function CountriesWorldMap({ countries, activeRegionId, selectedSlug, onCountryPreview, onRegionChange }: Props) {
+  const { t, locale } = useLocale();
   const router = useRouter();
-  const [zoomLevel, setZoomLevel] = useState(1);
-  const [pan, setPan] = useState({ x: 0, y: 0 });
+  const id = `atlas-${useId().replace(/:/g, "")}`;
+  const svgRef = useRef<SVGSVGElement>(null);
+  const prefetched = useRef(new Set<string>());
   const drag = useRef<{ x: number; y: number; px: number; py: number } | null>(null);
   const moved = useRef(false);
-  const svgRef = useRef<SVGSVGElement>(null);
-  const navigationTimersRef = useRef<number[]>([]);
-  const prefetchedRoutesRef = useRef(new Set<string>());
+  const [navigation, setNavigation] = useState({ region: activeRegionId, scale: 1, x: 0, y: 0 });
   const [mapData, setMapData] = useState<WorldMapData | null>(null);
-  const [mapError, setMapError] = useState("");
-  const [cinematic] = useState<{
-    phase: CinematicPhase;
-    targetSlug: string;
-  }>({ phase: "idle", targetSlug: "" });
+  const [mapError, setMapError] = useState(false);
+  const [contrast, setContrast] = useState(false);
+  const [hoveredSlug, setHoveredSlug] = useState("");
+  const [dragging, setDragging] = useState(false);
+  const current = navigation.region === activeRegionId ? navigation : { region: activeRegionId, scale: 1, x: 0, y: 0 };
+  const base = regionTransform(activeRegionId);
+  const zoom = { scale: base.scale * current.scale, x: 500 + (base.x - 500) * current.scale + current.x, y: 250 + (base.y - 250) * current.scale + current.y };
 
   useEffect(() => {
     const controller = new AbortController();
-
-    async function loadMap() {
-      try {
-        const response = await fetch(MAP_DATA_URL, {
-          cache: "force-cache",
-          signal: controller.signal,
-        });
-        if (!response.ok) throw new Error(`Map request failed: ${response.status}`);
-
-        const data: unknown = await response.json();
-        if (!isWorldMapData(data)) throw new Error("Invalid map data format");
-
-        startTransition(() => setMapData(data));
-      } catch (error) {
-        if (error instanceof DOMException && error.name === "AbortError") return;
-        setMapError("The geographic layer could not be loaded. Use country search to continue.");
-      }
-    }
-
-    void loadMap();
+    void fetch(MAP_DATA_URL, { cache: "force-cache", signal: controller.signal }).then(async response => {
+      if (!response.ok) throw Error("Map unavailable");
+      const data: unknown = await response.json();
+      if (!isWorldMapData(data)) throw Error("Invalid map data");
+      startTransition(() => setMapData(data));
+    }).catch(() => { if (!controller.signal.aborted) setMapError(true); });
     return () => controller.abort();
   }, []);
 
-  useEffect(
-    () => () => {
-      navigationTimersRef.current.forEach((timer) => window.clearTimeout(timer));
-    },
-    [],
-  );
-
-  const countryBySlug = useMemo(
-    () => new Map(countries.map((country) => [country.slug, country])),
-    [countries],
-  );
-
-  const countryByName = useMemo(
-    () =>
-      new Map(
-        countries.map((country) => [normalizeCountryName(country.name), country]),
-      ),
-    [countries],
-  );
-
+  const countryBySlug = useMemo(() => new Map(countries.map(country => [country.slug, country])), [countries]);
   const features = useMemo<MappedFeature[]>(() => {
-    if (!mapData) return [];
-
-    return mapData.features.map((feature) => {
-      const normalizedName = normalizeCountryName(feature.name);
-      const aliasSlug = FEATURE_NAME_TO_SLUG[normalizedName];
-      const country = aliasSlug
-        ? countryBySlug.get(aliasSlug)
-        : countryByName.get(normalizedName);
-
-      return { ...feature, country };
+    const byIso = new Map(countries.filter(country => country.iso3).map(country => [country.iso3, country]));
+    const byName = new Map(countries.map(country => [normalizeCountryName(country.name), country]));
+    return (mapData?.features ?? []).map(feature => {
+      const name = normalizeCountryName(feature.name);
+      return { ...feature, country: byIso.get(FEATURE_ISO_ALIASES[feature.isoA3] ?? feature.isoA3)
+        ?? countryBySlug.get(FEATURE_NAME_TO_SLUG[name] ?? name.replace(/\s+/g, "-")) ?? byName.get(name) };
     });
-  }, [countryByName, countryBySlug, mapData]);
-
-  const interactiveCountries = useMemo(() => {
-    const uniqueCountries = new Map<string, MapCountry>();
-    features.forEach((feature) => {
-      if (feature.country) uniqueCountries.set(feature.country.slug, feature.country);
-    });
-
-    return [...uniqueCountries.values()].sort((first, second) =>
-      first.name.localeCompare(second.name),
-    );
-  }, [features]);
-
+  }, [mapData, countries, countryBySlug]);
+  const interactiveCountries = useMemo(() => [...new Map(features.flatMap(feature => feature.country ? [[feature.country.slug, feature.country] as const] : [])).values()]
+    .sort((a, b) => t(a.name).localeCompare(t(b.name), locale)), [features, t, locale]);
   const keyboardCountries = useMemo(() => {
     if (activeRegionId === "world") return interactiveCountries;
-    const region = COUNTRY_MAP_REGIONS.find(
-      (candidate) => candidate.id === activeRegionId,
-    );
-    if (!region) return interactiveCountries;
-
-    // Map navigation follows the cartographic dataset, not UNSD's broader "Americas" region.
+    const region = COUNTRY_MAP_REGIONS.find(candidate => candidate.id === activeRegionId);
     const continents = new Map(features.map(feature => [feature.country?.slug, feature.continent]));
-    return interactiveCountries.filter((country) =>
-      region.sourceRegions.includes(continents.get(country.slug) ?? country.region),
-    );
+    return interactiveCountries.filter(country => region?.sourceRegions.includes(continents.get(country.slug) ?? country.region));
   }, [activeRegionId, interactiveCountries, features]);
-
   const selectedCountry = countryBySlug.get(selectedSlug);
-  const selectedFeature = features.find(
-    (feature) => feature.country?.slug === selectedSlug,
-  );
-  const baseZoom = getZoomTransform(activeRegionId);
-  const zoom = { scale: baseZoom.scale * zoomLevel, translateX: 500 + (baseZoom.translateX - 500) * zoomLevel + pan.x, translateY: 250 + (baseZoom.translateY - 250) * zoomLevel + pan.y };
-  const selectedFeatureX = selectedFeature
-    ? activeRegionId === "oceania" &&
-      selectedFeature.country?.region === "Oceania" &&
-      selectedFeature.label[0] < 150
-      ? selectedFeature.label[0] + 1000
-      : selectedFeature.label[0]
-    : 0;
+  const selectedFeature = features.find(feature => feature.country?.slug === selectedSlug);
+  const focusSlug = keyboardCountries.some(country => country.slug === selectedSlug) ? selectedSlug : keyboardCountries[0]?.slug;
+  const displayedFeatures = useMemo(() => activeRegionId === "oceania" ? [...features, ...features.filter(feature => feature.country?.region === "Oceania" && feature.label[0] < 150)
+    .map(feature => ({ ...feature, duplicate: true }))] : features, [features, activeRegionId]);
 
-  const mapFocusPoint = useMemo(() => {
-    const targetSlug = cinematic.targetSlug || selectedSlug;
-    const feature = features.find(
-      (candidate) => candidate.country?.slug === targetSlug,
-    );
-    if (!feature) return { x: 50, y: 50 };
-
-    const labelX =
-      activeRegionId === "oceania" &&
-      feature.country?.region === "Oceania" &&
-      feature.label[0] < 150
-        ? feature.label[0] + 1000
-        : feature.label[0];
-    const screenX = labelX * zoom.scale + zoom.translateX;
-    const screenY = feature.label[1] * zoom.scale + zoom.translateY;
-
-    return {
-      x: Math.max(5, Math.min(95, screenX / 10)),
-      y: Math.max(8, Math.min(92, screenY / 5)),
-    };
-  }, [activeRegionId, cinematic.targetSlug, features, selectedSlug, zoom.scale, zoom.translateX, zoom.translateY]);
-
-  function openCountry(slug: string) { router.push(`/countries/${slug}`); }
-  function previewCountry(slug: string) {
+  function previewCountry(slug: string, prefetch = true) {
     onCountryPreview(slug);
     const route = `/countries/${slug}`;
-    if (!prefetchedRoutesRef.current.has(route)) {
-      prefetchedRoutesRef.current.add(route);
-      router.prefetch(route);
-    }
+    if (prefetch && !prefetched.current.has(route)) { prefetched.current.add(route); router.prefetch(route); }
   }
-
-  function focusCountryByOffset(currentSlug: string, offset: number) {
-    if (!keyboardCountries.length) return;
-    const currentIndex = keyboardCountries.findIndex(
-      (country) => country.slug === currentSlug,
-    );
-    const nextIndex =
-      (currentIndex + offset + keyboardCountries.length) %
-      keyboardCountries.length;
-    const nextCountry = keyboardCountries[nextIndex];
-    if (!nextCountry) return;
-    const nextFeature = features.find(
-      (feature) => feature.country?.slug === nextCountry.slug,
-    );
-    const usesPacificDuplicate =
-      activeRegionId === "oceania" &&
-      nextCountry.region === "Oceania" &&
-      (nextFeature?.label[0] ?? 1000) < 150;
-    const selector = usesPacificDuplicate
-      ? `[data-country-slug="${nextCountry.slug}"][data-pacific-duplicate="true"]`
-      : `[data-country-slug="${nextCountry.slug}"]`;
-
-    onCountryPreview(nextCountry.slug);
+  function changeRegion(region: CountryMapRegionId) {
+    setNavigation({ region, scale: 1, x: 0, y: 0 });
+    onRegionChange(region);
+  }
+  function changeZoom(delta: number) {
+    setNavigation({ ...current, scale: Math.max(1, Math.min(6, current.scale + delta)) });
+  }
+  function focusSelection() {
+    if (!selectedFeature) return;
+    const scale = Math.max(base.scale, Math.min(5, base.scale * 2));
+    const x = selectedFeature.label[0] + (activeRegionId === "oceania" && selectedFeature.label[0] < 150 ? 1000 : 0);
+    setNavigation({ region: activeRegionId, scale: scale / base.scale, x: 500 - x * scale - (500 + (base.x - 500) * scale / base.scale), y: 250 - selectedFeature.label[1] * scale - (250 + (base.y - 250) * scale / base.scale) });
+  }
+  function handleCountryKeyDown(event: KeyboardEvent<SVGElement>, slug: string) {
+    if (event.key === "Enter" || event.key === " ") { event.preventDefault(); router.push(`/countries/${slug}`); return; }
+    if (!["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(event.key) || !keyboardCountries.length) return;
+    event.preventDefault();
+    const offset = event.key === "ArrowLeft" || event.key === "ArrowUp" ? -1 : 1;
+    const next = keyboardCountries[(keyboardCountries.findIndex(country => country.slug === slug) + offset + keyboardCountries.length) % keyboardCountries.length];
+    previewCountry(next.slug, false);
     window.requestAnimationFrame(() => {
-      svgRef.current
-        ?.querySelector<SVGPathElement>(selector)
-        ?.focus();
+      const target = svgRef.current?.querySelector<SVGElement>(`[data-country-slug="${next.slug}"][data-map-focus="true"]`);
+      target?.focus();
     });
   }
 
-  function handleCountryKeyDown(
-    event: React.KeyboardEvent<SVGPathElement>,
-    slug: string,
-  ) {
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      openCountry(slug);
-      return;
-    }
-
-    if (event.key === "ArrowRight" || event.key === "ArrowDown") {
-      event.preventDefault();
-      focusCountryByOffset(slug, 1);
-    }
-
-    if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
-      event.preventDefault();
-      focusCountryByOffset(slug, -1);
-    }
-  }
-
-  return (
-    <div className="relative mt-5 country-atlas">
-      <LocalizedElement as="div"
-        role="group"
-        aria-label="Zoom the world map by region"
-        className="flex gap-2 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
-      >
-        {COUNTRY_MAP_REGIONS.map((region) => {
-          const isActive = activeRegionId === region.id;
-          return (
-            <button
-              key={region.id}
-              type="button"
-              aria-pressed={isActive}
-              disabled={cinematic.phase !== "idle"}
-              onClick={() => { onRegionChange(region.id); setZoomLevel(1); setPan({ x: 0, y: 0 }); const first = interactiveCountries.find(c => region.id === "world" || region.sourceRegions.includes(features.find(f => f.country?.slug === c.slug)?.continent ?? "")); if (first) onCountryPreview(first.slug); }}
-              className={`min-h-10 shrink-0 rounded-full border px-4 text-[9px] font-extrabold uppercase tracking-[0.1em] backdrop-blur transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white disabled:cursor-wait disabled:opacity-50 ${
-                isActive
-                  ? "border-[var(--tgpi-gold-light)] bg-[var(--tgpi-gold)] text-[var(--tgpi-navy)]"
-                  : "border-[#b8c9d7] bg-white text-[#183b56] hover:border-[#a67b29] hover:text-[var(--tgpi-navy)]"
-              }`}
-            >
-              <LocalizedText text={region.label} />
-            </button>
-          );
-        })}
+  return <div className={`${styles.atlas} country-atlas`}>
+    <div className={styles.topbar}>
+      <div className={styles.heading}><span className={styles.overline}>{t("TGPI Atlas")}</span><h3>{t("Explore the world")}</h3></div>
+      <LocalizedElement as="div" role="group" aria-label="Zoom the world map by region" className={styles.regions}>
+        {COUNTRY_MAP_REGIONS.map(region => <button key={region.id} type="button" aria-pressed={activeRegionId === region.id} onClick={() => changeRegion(region.id)}>{t(region.label)}</button>)}
       </LocalizedElement>
-
-      <div className="atlas-controls"><label><LocalizedText text={"Locate a destination"} /><LocalizedElement as="select" aria-label="Locate a destination on the atlas" value={selectedSlug} onChange={e => { previewCountry(e.target.value); setZoomLevel(1); setPan({ x: 0, y: 0 }); onRegionChange("world"); }}>{!selectedSlug && <option value="" disabled><LocalizedText text="Select a destination" /></option>}{countries.map(c => <option key={c.slug} value={c.slug}><LocalizedText text={c.name} /></option>)}</LocalizedElement></label><div role="group" aria-label={localizeLabel("Map zoom")}><button type="button" aria-label={localizeLabel("Zoom out")} disabled={zoomLevel <= 1} onClick={() => setZoomLevel(z => Math.max(1, z - .5))}>−</button><span>{Math.round(zoomLevel * 100)}%</span><button type="button" aria-label={localizeLabel("Zoom in")} disabled={zoomLevel >= 4} onClick={() => setZoomLevel(z => Math.min(4, z + .5))}>+</button><button type="button" onClick={() => { setZoomLevel(1); setPan({ x: 0, y: 0 }); onRegionChange("world"); }}><LocalizedText text="Reset" /></button></div></div>
-      <div
-        className="tgpi-map-cinematic-frame relative mt-3 h-[340px] overflow-hidden rounded-[26px] border border-white/12 bg-[var(--tgpi-navy)] shadow-[inset_0_0_110px_rgba(56,113,158,.18),0_24px_70px_rgba(0,0,0,.2)] sm:h-[440px] lg:h-[500px]"
-        data-phase={cinematic.phase}
-        aria-busy={cinematic.phase !== "idle"}
-        style={{
-          "--tgpi-map-focus-x": `${mapFocusPoint.x}%`,
-          "--tgpi-map-focus-y": `${mapFocusPoint.y}%`,
-        } as React.CSSProperties}
-      >
-        <div className={`tgpi-map-canvas absolute inset-0 ${cinematic.phase === "idle" ? "" : "will-change-transform"}`}>
-          <svg
-            ref={svgRef}
-            viewBox="0 0 1000 500"
-            preserveAspectRatio="xMidYMid meet"
-            aria-labelledby="tgpi-world-map-title tgpi-world-map-description"
-            className="h-full w-full"
-            style={{ touchAction: zoomLevel > 1 ? "none" : "pan-y" }}
-            onPointerDown={event => { moved.current = false; if (zoomLevel <= 1) return; drag.current = { x: event.clientX, y: event.clientY, px: pan.x, py: pan.y }; event.currentTarget.setPointerCapture(event.pointerId); }}
-            onPointerMove={event => { if (!drag.current) return; const dx = event.clientX - drag.current.x, dy = event.clientY - drag.current.y; if (Math.abs(dx) + Math.abs(dy) > 8) moved.current = true; const scale = 1000 / event.currentTarget.getBoundingClientRect().width; setPan({ x: Math.max(-1800, Math.min(1800, drag.current.px + dx * scale)), y: Math.max(-900, Math.min(900, drag.current.py + dy * scale)) }); }}
-            onPointerUp={() => { drag.current = null; }} onPointerCancel={() => { drag.current = null; }}
-          >
-          <title id="tgpi-world-map-title"><LocalizedText text={"TGPI interactive country map"} /></title>
-          <desc id="tgpi-world-map-description"><LocalizedText text={"Real country boundaries. Hover or focus a territory to preview it, then select to preview or press Enter to open its country intelligence page. Use arrow keys to move between countries."} /></desc>
-          <defs><linearGradient id="tgpi-land-relief" x1="0" y1="0" x2=".7" y2="1"><stop offset="0" stopColor="#6e9a92"/><stop offset=".35" stopColor="#315f68"/><stop offset=".7" stopColor="#234659"/><stop offset="1" stopColor="#122d45"/></linearGradient>
-            <linearGradient id="tgpi-map-water" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stopColor="#09213B" />
-              <stop offset="0.5" stopColor="#0A2D4D" />
-              <stop offset="1" stopColor="#031426" />
-            </linearGradient>
-            <pattern id="tgpi-map-grid" width="50" height="50" patternUnits="userSpaceOnUse">
-              <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#9CC3DE" strokeOpacity="0.08" strokeWidth="0.7" />
-            </pattern>
-            <filter id="tgpi-map-glow" x="-30%" y="-30%" width="160%" height="160%">
-              <feGaussianBlur stdDeviation="2.2" result="blur" />
-              <feMerge>
-                <feMergeNode in="blur" />
-                <feMergeNode in="SourceGraphic" />
-              </feMerge>
-            </filter>
-          </defs>
-          <rect width="1000" height="500" fill="url(#tgpi-map-water)" />
-          <rect width="1000" height="500" fill="url(#tgpi-map-grid)" />
-          <ellipse cx="500" cy="250" rx="485" ry="235" fill="none" stroke="#B7D5E8" strokeOpacity="0.08" />
-          <ellipse cx="500" cy="250" rx="365" ry="176" fill="none" stroke="#B7D5E8" strokeOpacity="0.045" />
-          <g aria-hidden="true" fill="none" stroke="#F2D997" strokeOpacity="0.16" strokeWidth="1.1" strokeDasharray="5 9">
-            <path d="M176 196 Q356 60 525 191 T820 156" />
-            <path d="M122 318 Q322 215 500 300 T886 286" />
-            <path d="M300 90 Q488 215 714 88" />
-          </g>
-          <g aria-hidden="true" fill="#F2D997" opacity="0.55">
-            <circle cx="176" cy="196" r="2.1" />
-            <circle cx="525" cy="191" r="2.1" />
-            <circle cx="820" cy="156" r="2.1" />
-            <circle cx="500" cy="300" r="2.1" />
-            <circle cx="714" cy="88" r="2.1" />
-          </g>
-
-          <g
-            className="transition-transform duration-700 ease-out"
-            style={{
-              transform: `translate(${zoom.translateX}px, ${zoom.translateY}px) scale(${zoom.scale})`,
-              transformOrigin: "0 0",
-            }}
-          >
-            {features.map((feature) => {
-              const country = feature.country;
-              const isSelected = country?.slug === selectedSlug;
-              const usesPacificDuplicate =
-                activeRegionId === "oceania" &&
-                country?.region === "Oceania" &&
-                feature.label[0] < 150;
-
-              return (
-                <LocalizedElement as="path"
-                  key={`${feature.isoA3}-${feature.name}`}
-                  d={feature.path}
-                  data-country-slug={country?.slug}
-                  role={country ? "button" : undefined}
-                  tabIndex={country && isSelected && !usesPacificDuplicate ? 0 : -1}
-                  aria-label={country ? `Preview ${country.name} on the map` : undefined}
-                  aria-keyshortcuts={country ? "Enter ArrowLeft ArrowRight ArrowUp ArrowDown" : undefined}
-                  onMouseEnter={country ? () => previewCountry(country.slug) : undefined}
-                  onFocus={country ? () => previewCountry(country.slug) : undefined}
-                  onClick={country ? () => { if (!moved.current) previewCountry(country.slug); } : undefined}
-                  onKeyDown={country ? (event) => handleCountryKeyDown(event, country.slug) : undefined}
-                  vectorEffect="non-scaling-stroke"
-                  className={`stroke-[0.72] transition-[fill,stroke,opacity] duration-200 focus-visible:outline-none ${
-                    country
-                      ? "cursor-pointer stroke-[#94BBD5]/45 hover:fill-[var(--tgpi-gold)] hover:stroke-[var(--tgpi-gold-light)] focus-visible:fill-[var(--tgpi-gold)] focus-visible:stroke-white"
-                      : "pointer-events-none fill-[#0D2A45] stroke-white/10"
-                  } ${
-                    country && isSelected
-                      ? "fill-[var(--tgpi-gold)] stroke-[var(--tgpi-gold-light)]"
-                      : country
-                        ? "fill-[url(#tgpi-land-relief)]"
-                        : ""
-                  }`}
-                >
-                  <title>{country ? <LocalizedText text={"{value0} — open profile"} values={{value0: String(country.name)}} /> : feature.name}</title>
-                </LocalizedElement>
-              );
-            })}
-
-            {activeRegionId === "oceania"
-              ? features
-                  .filter(
-                    (feature) =>
-                      feature.country?.region === "Oceania" && feature.label[0] < 150,
-                  )
-                  .map((feature) => {
-                    const country = feature.country;
-                    if (!country) return null;
-                    const isSelected = country.slug === selectedSlug;
-
-                    return (
-                      <LocalizedElement as="path"
-                        key={`pacific-${feature.isoA3}-${feature.name}`}
-                        d={feature.path}
-                        transform="translate(1000 0)"
-                        data-country-slug={country.slug}
-                        data-pacific-duplicate="true"
-                        role="button"
-                        tabIndex={isSelected ? 0 : -1}
-                        aria-label={`Preview ${country.name} on the map`}
-                        aria-keyshortcuts="Enter ArrowLeft ArrowRight ArrowUp ArrowDown"
-                        onMouseEnter={() => previewCountry(country.slug)}
-                        onFocus={() => previewCountry(country.slug)}
-                        onClick={() => { if (!moved.current) previewCountry(country.slug); }}
-                        onKeyDown={(event) => handleCountryKeyDown(event, country.slug)}
-                        vectorEffect="non-scaling-stroke"
-                        className={`cursor-pointer stroke-[0.72] transition-[fill,stroke] duration-200 hover:fill-[var(--tgpi-gold)] hover:stroke-[var(--tgpi-gold-light)] focus-visible:fill-[var(--tgpi-gold)] focus-visible:stroke-white focus-visible:outline-none ${
-                          isSelected
-                            ? "fill-[var(--tgpi-gold)] stroke-[var(--tgpi-gold-light)]"
-                            : "fill-[url(#tgpi-land-relief)] stroke-[#94BBD5]/45"
-                        }`}
-                      >
-                        <title><LocalizedText text={country.name} />{" "}<LocalizedText text={"— open profile"} /></title>
-                      </LocalizedElement>
-                    );
-                  })
-              : null}
-
-            {features.map((feature) => {
-              const country = feature.country;
-              if (!feature.marker || !country) return null;
-              const isSelected = country.slug === selectedSlug;
-              const hitRadius = 5.5 / zoom.scale;
-              const visualRadius = (isSelected ? 2.4 : 1.65) / zoom.scale;
-
-              return (
-                <g
-                  key={`marker-${feature.isoA3}-${feature.name}`}
-                  aria-hidden="true"
-                  className="cursor-pointer"
-                  onMouseEnter={() => previewCountry(country.slug)}
-                  onClick={() => { if (!moved.current) previewCountry(country.slug); }}
-                >
-                  <circle cx={feature.label[0]} cy={feature.label[1]} r={hitRadius} fill="transparent" />
-                  <circle
-                    cx={feature.label[0]}
-                    cy={feature.label[1]}
-                    r={visualRadius}
-                    fill={isSelected ? "#F0D58C" : "#C59632"}
-                    stroke="#FFF7DE"
-                    strokeWidth={0.75 / zoom.scale}
-                    filter={isSelected ? "url(#tgpi-map-glow)" : undefined}
-                  />
-                </g>
-              );
-            })}
-
-            {activeRegionId === "oceania"
-              ? features
-                  .filter(
-                    (feature) =>
-                      feature.marker &&
-                      feature.country?.region === "Oceania" &&
-                      feature.label[0] < 150,
-                  )
-                  .map((feature) => {
-                    const country = feature.country;
-                    if (!country) return null;
-                    const isSelected = country.slug === selectedSlug;
-
-                    return (
-                      <g
-                        key={`pacific-marker-${feature.isoA3}-${feature.name}`}
-                        aria-hidden="true"
-                        className="cursor-pointer"
-                        onMouseEnter={() => previewCountry(country.slug)}
-                        onClick={() => { if (!moved.current) previewCountry(country.slug); }}
-                      >
-                        <circle cx={feature.label[0] + 1000} cy={feature.label[1]} r={5.5 / zoom.scale} fill="transparent" />
-                        <circle
-                          cx={feature.label[0] + 1000}
-                          cy={feature.label[1]}
-                          r={(isSelected ? 2.4 : 1.65) / zoom.scale}
-                          fill={isSelected ? "#F0D58C" : "#C59632"}
-                          stroke="#FFF7DE"
-                          strokeWidth={0.75 / zoom.scale}
-                          filter={isSelected ? "url(#tgpi-map-glow)" : undefined}
-                        />
-                      </g>
-                    );
-                  })
-              : null}
-
-            {selectedFeature ? (
-              <g aria-hidden="true" pointerEvents="none">
-                <circle
-                  cx={selectedFeatureX}
-                  cy={selectedFeature.label[1]}
-                  r={8 / zoom.scale}
-                  fill="none"
-                  stroke="#F2D997"
-                  strokeOpacity="0.7"
-                  strokeWidth={0.8 / zoom.scale}
-                  strokeDasharray={`${2.5 / zoom.scale} ${2 / zoom.scale}`}
-                />
-                <circle
-                  cx={selectedFeatureX}
-                  cy={selectedFeature.label[1]}
-                  r={13 / zoom.scale}
-                  fill="none"
-                  stroke="#F2D997"
-                  strokeOpacity="0.24"
-                  strokeWidth={0.6 / zoom.scale}
-                />
-              </g>
-            ) : null}
-          </g>
-          </svg>
-        </div>
-
-        {!mapData && !mapError ? (
-          <div className="absolute inset-0 grid place-items-center bg-[var(--tgpi-navy)]/70 backdrop-blur-sm" role="status">
-            <div className="text-center">
-              <span className="mx-auto block h-9 w-9 animate-spin rounded-full border-2 border-white/15 border-t-[var(--tgpi-gold)]" />
-              <p className="mt-3 text-[10px] font-extrabold uppercase tracking-[0.16em] text-white/60"><LocalizedText text={"Loading real borders"} /></p>
-            </div>
-          </div>
-        ) : null}
-
-        {mapError ? (
-          <div className="absolute inset-4 grid place-items-center rounded-2xl border border-[var(--tgpi-gold-light)]/25 bg-[#071A32]/95 p-6 text-center" role="status">
-            <p className="max-w-sm text-sm font-bold leading-6 text-white"><LocalizedText text={mapError} /></p>
-          </div>
-        ) : null}
-
-        {selectedCountry && mapData && cinematic.phase === "idle" ? (
-          <div key={selectedCountry.slug} className="tgpi-map-preview absolute bottom-3 left-3 flex max-w-[calc(100%-1.5rem)] items-center gap-3 rounded-2xl border border-white/15 bg-[#041426]/90 p-2 pr-4 text-white shadow-2xl backdrop-blur-md sm:max-w-[330px]">
-            <div className="relative h-14 w-20 shrink-0 overflow-hidden rounded-xl border border-white/10">
-              <Image
-                src={selectedCountry.visual.url}
-                alt=""
-                fill
-                sizes="80px"
-                className="object-cover"
-              />
-            </div>
-            <div className="min-w-0">
-              <p className="text-[8px] font-extrabold uppercase tracking-[0.14em] text-[var(--tgpi-gold-light)]"><LocalizedText text={"Intelligence preview"} /></p>
-              <p className="mt-0.5 truncate text-sm font-extrabold"><CountryFlag iso2={countryFlagCode(selectedCountry.emoji)} width={32} /> <LocalizedText text={selectedCountry.name} /></p>
-              <button type="button" className="atlas-open-country" onClick={() => openCountry(selectedCountry.slug)}><LocalizedText text={"Open country dossier →"} /></button>
-            </div>
-          </div>
-        ) : null}
-
-        {mapData ? (
-          <div className="pointer-events-none absolute right-3 top-3 rounded-full border border-white/10 bg-[#041426]/75 px-3 py-2 text-[9px] font-extrabold uppercase tracking-[0.12em] text-white/65 backdrop-blur">
-            {interactiveCountries.length}/{countries.length}{" "}<LocalizedText text={"profiles mapped"} /></div>
-        ) : null}
-
-        {cinematic.phase !== "idle" ? (
-          <div className="tgpi-map-transition pointer-events-none absolute inset-0 z-20 overflow-hidden bg-[#020A14]/30" role="status" aria-live="polite">
-            <div className="tgpi-map-scan absolute inset-x-0 h-px bg-gradient-to-r from-transparent via-[var(--tgpi-gold-light)] to-transparent shadow-[0_0_18px_rgba(242,217,151,.9)]" />
-            <div className="tgpi-map-reticle absolute h-28 w-28 -translate-x-1/2 -translate-y-1/2 rounded-full border border-[var(--tgpi-gold-light)]/70" style={{ left: `${mapFocusPoint.x}%`, top: `${mapFocusPoint.y}%` }}>
-              <span className="absolute inset-3 rounded-full border border-dashed border-white/55" />
-              <span className="absolute left-1/2 top-[-18px] h-[148px] w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-[var(--tgpi-gold-light)]/70 to-transparent" />
-              <span className="absolute left-[-18px] top-1/2 h-px w-[148px] -translate-y-1/2 bg-gradient-to-r from-transparent via-[var(--tgpi-gold-light)]/70 to-transparent" />
-            </div>
-            <div className="absolute inset-x-4 bottom-4 rounded-2xl border border-[var(--tgpi-gold-light)]/30 bg-[#020A14]/86 p-4 text-white shadow-2xl backdrop-blur-md sm:inset-x-auto sm:bottom-5 sm:left-5 sm:w-[360px]">
-              <div className="flex items-center justify-between gap-3">
-                <p className="text-[9px] font-extrabold uppercase tracking-[0.18em] text-[var(--tgpi-gold-light)]"><LocalizedText text={"TGPI Geospatial Link"} /></p>
-                <span className="font-mono text-[9px] text-white/45">{cinematic.phase === "locking" ? "01" : cinematic.phase === "resolving" ? "02" : "03"}/03</span>
-              </div>
-              <p className="mt-2 font-[var(--tgpi-font-display)] text-xl font-semibold"><LocalizedText text={CINEMATIC_PHASE_COPY[cinematic.phase]} /></p>
-              <div className="mt-3 h-1 overflow-hidden rounded-full bg-white/10">
-                <div className="tgpi-map-progress h-full rounded-full bg-[var(--tgpi-gold-light)]" />
-              </div>
-            </div>
-          </div>
-        ) : null}
-      </div>
-
-      <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[9px] font-bold uppercase tracking-[0.12em] text-[var(--tgpi-muted)]">
-        <span><LocalizedText text={"Select to preview · Zoom to drag"} /></span>
-        <span><LocalizedText text={"Keyboard: arrows + Enter"} /></span>
-      </div>
-      <p className="mt-2 text-xs leading-5 text-[var(--tgpi-muted)]"><LocalizedText text={"Boundary reference: Natural Earth de facto cartography. Disputed areas may vary by legal or political point of view."} /></p>
     </div>
-  );
+    <div className={styles.controls}>
+      <label className={styles.locator}><span>{t("Locate a destination")}</span><LocalizedElement as="select" aria-label="Locate a destination on the atlas" value={selectedSlug} onChange={event => { previewCountry(event.target.value); changeRegion("world"); }}>
+        {!selectedSlug && <option value="" disabled>{t("Select a destination")}</option>}{interactiveCountries.map(country => <option key={country.slug} value={country.slug}>{t(country.name)}</option>)}
+      </LocalizedElement></label>
+      <div className={styles.tools} role="group" aria-label={t("Map zoom")}>
+        <button type="button" aria-pressed={contrast} onClick={() => setContrast(!contrast)}>{t("High contrast")}</button>
+        <button type="button" disabled={!selectedFeature} onClick={focusSelection}>{t("Focus destination")}</button>
+        <button type="button" aria-label={t("Zoom out")} disabled={current.scale <= 1} onClick={() => changeZoom(-.5)}>−</button>
+        <output>{Math.round(current.scale * 100)}%</output>
+        <button type="button" aria-label={t("Zoom in")} disabled={current.scale >= 6} onClick={() => changeZoom(.5)}>+</button>
+        <button type="button" onClick={() => changeRegion("world")}>{t("Reset")}</button>
+      </div>
+    </div>
+    <div className={styles.frame} data-contrast={contrast}>
+      <div className={styles.coordinates} aria-hidden="true"><span>90° N</span><span>0°</span><span>90° S</span></div>
+      <svg ref={svgRef} viewBox="0 0 1000 500" preserveAspectRatio="xMidYMid meet" className={styles.canvas}
+        aria-labelledby={`${id}-title ${id}-description`} style={{ touchAction: current.scale > 1 ? "none" : "pan-y" }}
+        onPointerDown={event => { moved.current = false; if (current.scale > 1) drag.current = { x: event.clientX, y: event.clientY, px: current.x, py: current.y }; }}
+        onPointerMove={event => {
+          if (!drag.current) return;
+          const dx = event.clientX - drag.current.x, dy = event.clientY - drag.current.y;
+          if (Math.abs(dx) + Math.abs(dy) < 7 && !moved.current) return;
+          moved.current = true; setDragging(true); event.currentTarget.setPointerCapture(event.pointerId);
+          const rect = event.currentTarget.getBoundingClientRect();
+          const units = Math.max(1000 / rect.width, 500 / rect.height);
+          setNavigation({ ...current, x: Math.max(-3000, Math.min(3000, drag.current.px + dx * units)), y: Math.max(-1500, Math.min(1500, drag.current.py + dy * units)) });
+        }}
+        onPointerUp={() => { drag.current = null; setDragging(false); }} onPointerCancel={() => { drag.current = null; setDragging(false); }} onPointerLeave={() => { if (!moved.current) drag.current = null; setHoveredSlug(""); }}
+        onKeyDown={event => { if (event.key === "+" || event.key === "=") { event.preventDefault(); changeZoom(.5); } else if (event.key === "-") { event.preventDefault(); changeZoom(-.5); } else if (event.key === "Escape" || event.key === "0") { event.preventDefault(); changeRegion("world"); } }}>
+        <title id={`${id}-title`}>{t("TGPI interactive country map")}</title>
+        <desc id={`${id}-description`}>{t("Real country boundaries. Hover or focus a territory to preview it, then select to preview or press Enter to open its country intelligence page. Use arrow keys to move between countries.")}</desc>
+        <defs>
+          <radialGradient id={`${id}-water`} cx="55%" cy="35%" r="78%"><stop stopColor="#153f60"/><stop offset=".55" stopColor="#09243b"/><stop offset="1" stopColor="#030e1d"/></radialGradient>
+          <linearGradient id={`${id}-land`} x1="0" y1="0" x2=".6" y2="1"><stop stopColor={contrast ? "#b9dbea" : "#638ca3"}/><stop offset=".45" stopColor={contrast ? "#7eb6d0" : "#2e5b75"}/><stop offset="1" stopColor={contrast ? "#5086a4" : "#13334f"}/></linearGradient>
+          <linearGradient id={`${id}-selected`} x1="0" y1="0" x2="1" y2="1"><stop stopColor="#f9e4a8"/><stop offset=".6" stopColor="#d2ae55"/><stop offset="1" stopColor="#94702c"/></linearGradient>
+          <pattern id={`${id}-grid`} width="83.333" height="83.333" patternUnits="userSpaceOnUse"><path d="M83.333 0H0V83.333" fill="none" stroke="#b7d6e8" strokeOpacity=".09" strokeWidth=".55"/></pattern>
+          <pattern id={`${id}-dots`} width="8" height="8" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".45" fill="#d6edfa" fillOpacity=".12"/></pattern>
+        </defs>
+        <rect width="1000" height="500" fill={`url(#${id}-water)`}/>
+        <rect width="1000" height="500" fill={`url(#${id}-grid)`}/>
+        <rect width="1000" height="500" fill={`url(#${id}-dots)`} className={styles.oceanTexture}/>
+        <path d="M0 250H1000" stroke="#d8bf7b" strokeOpacity=".17" strokeWidth=".7" strokeDasharray="3 6" aria-hidden="true"/>
+        <g className={styles.geography} data-dragging={dragging} transform={`translate(${zoom.x} ${zoom.y}) scale(${zoom.scale})`}>
+          {displayedFeatures.map(feature => {
+            const country = feature.country;
+            const duplicate = "duplicate" in feature;
+            const pacific = activeRegionId === "oceania" && country?.region === "Oceania" && feature.label[0] < 150;
+            const active = country?.slug === selectedSlug;
+            const visible = duplicate || !pacific;
+            const x = feature.label[0] + (duplicate ? 1000 : 0);
+            return <g key={`${feature.isoA3}-${feature.name}-${duplicate ? "pacific" : "main"}`}>
+              <LocalizedElement as="path" d={feature.path} transform={duplicate ? "translate(1000 0)" : undefined} data-country-slug={country?.slug}
+                data-map-focus={visible} role={country ? "button" : undefined} tabIndex={country?.slug === focusSlug && visible ? 0 : -1}
+                aria-label={country ? t("Preview {country} on the map", { country: t(country.name) }) : undefined} aria-pressed={country ? active : undefined}
+                aria-keyshortcuts={country ? "Enter ArrowLeft ArrowRight ArrowUp ArrowDown" : undefined}
+                onMouseEnter={country ? () => setHoveredSlug(country.slug) : undefined} onFocus={country ? () => previewCountry(country.slug, false) : undefined}
+                onClick={country ? () => { if (!moved.current) previewCountry(country.slug); } : undefined}
+                onDoubleClick={country ? () => { if (!moved.current) router.push(`/countries/${country.slug}`); } : undefined}
+                onKeyDown={country ? event => handleCountryKeyDown(event, country.slug) : undefined}
+                className={styles.territory} data-interactive={Boolean(country)} data-selected={active} vectorEffect="non-scaling-stroke"
+                fill={active ? `url(#${id}-selected)` : country ? `url(#${id}-land)` : "#122b41"}>
+                <title>{country ? t(country.name) : feature.name}</title>
+              </LocalizedElement>
+              {feature.marker && country && <g className={styles.marker} aria-hidden="true" onClick={() => { if (!moved.current) previewCountry(country.slug); }}>
+                <circle cx={x} cy={feature.label[1]} r={9 / zoom.scale} fill="transparent"/>
+                <circle cx={x} cy={feature.label[1]} r={(active ? 2.7 : 1.8) / zoom.scale} fill={active ? "#fff2c8" : "#b6d3e3"} stroke="#071629" strokeWidth={.6 / zoom.scale}/>
+              </g>}
+            </g>;
+          })}
+          {selectedFeature && <g aria-hidden="true" pointerEvents="none"><circle cx={selectedFeature.label[0] + (activeRegionId === "oceania" && selectedFeature.label[0] < 150 ? 1000 : 0)} cy={selectedFeature.label[1]} r={10 / zoom.scale} fill="none" stroke="#ffe5a1" strokeWidth={.8 / zoom.scale}/><circle cx={selectedFeature.label[0] + (activeRegionId === "oceania" && selectedFeature.label[0] < 150 ? 1000 : 0)} cy={selectedFeature.label[1]} r={17 / zoom.scale} fill="none" stroke="#ffe5a1" strokeOpacity=".32" strokeWidth={.65 / zoom.scale}/></g>}
+        </g>
+      </svg>
+      <div className={styles.seal} aria-label={t("TGPI Atlas")}><Image src="/brand/tgpi-crest-metal-v3-256.png" alt="" width={35} height={42}/><span><strong>TGPI</strong><small>{t("ATLAS")}</small></span></div>
+      {hoveredSlug && countryBySlug.has(hoveredSlug) && <div className={styles.hoverLabel} aria-hidden="true">{t(countryBySlug.get(hoveredSlug)!.name)}</div>}
+      {!mapData && <div className={styles.status} role="status"><span className={styles.loader} aria-hidden="true"/>{t(mapError ? "The geographic layer could not be loaded. Use country search to continue." : "Loading real borders")}</div>}
+      <div className={styles.mapMeta}>{mapData && <span>{interactiveCountries.length}/{countries.length} {t("profiles mapped")}</span>}<span>1:50M · {t("Vector map")}</span></div>
+    </div>
+    <div className={styles.selection}>
+      {selectedCountry ? <><div className={styles.selectionIdentity}><div className={styles.selectionImage}><Image src={selectedCountry.visual.url} alt="" fill sizes="64px" className="object-cover"/></div><CountryFlag iso2={countryFlagCode(selectedCountry.emoji)} width={30}/><div><span>{t("Intelligence preview")}</span><strong>{t(selectedCountry.name)}</strong></div></div><div className={styles.selectionActions}><button type="button" onClick={focusSelection} disabled={!selectedFeature}>{t("Focus destination")}</button><Link href={`/countries/${selectedCountry.slug}`}>{t("Open country dossier")}</Link></div></>
+        : <p>{t("Select a destination")}</p>}
+    </div>
+    <div className={styles.footnote}><span>{t("Select to preview · Zoom to drag")}</span><span>{t("Keyboard: arrows + Enter")}</span></div>
+    <p className={styles.attribution}><LocalizedText text="Boundary reference: Natural Earth de facto cartography. Disputed areas may vary by legal or political point of view." /></p>
+  </div>;
 }

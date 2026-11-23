@@ -37,27 +37,33 @@ export default function CountryDirectoryCard({ country, indicatorTotal, selected
           className={styles.photo}
         />
         <span className={styles.imageCode} translate="no" aria-hidden="true">{country.iso3}</span>
+        <div className={styles.imageActions}>
+          <button type="button" className={styles.compareAction} aria-pressed={selected} aria-label={`${t("Compare")} · ${name}`} title={t("Compare")} onClick={() => onCompare(country.slug)}>
+            <NavigationIcon name={selected ? "check" : "compare"} width={18} height={18} />
+          </button>
+          <SavedCountryButton compact countryName={name} countrySlug={country.slug} />
+        </div>
       </div>
       <div className={styles.cardBody}>
         <div className={styles.identity}>
           <CountryFlag iso2={country.iso2} width={42} />
           <div>
             <p className={styles.location}>{t(country.region)}{compact && <> <span aria-hidden="true">·</span> <span translate="no">{country.iso3}</span></>}</p>
-            <h3>{name}</h3>
+            <h3><Link href={href} prefetch={false}>{name}</Link></h3>
           </div>
         </div>
         <ul className={styles.evidence}>
           <li><NavigationIcon name="graph" width={15} height={15} /><span>{t("National indicators")}</span><strong>{country.observations}/{indicatorTotal}</strong></li>
           <li><NavigationIcon name="file" width={15} height={15} /><span>{t(country.dossierCount > 0 ? "Research summaries" : "Core country profile")}</span>{country.dossierCount > 0 && <strong>{country.dossierCount}</strong>}</li>
         </ul>
+        <Link href={`${href}#country-learning`} prefetch={false} className={styles.learningLink}>
+          <NavigationIcon name="book" width={16} height={16} />
+          <span>{t("Languages & mobility")}</span>
+        </Link>
         <div className={styles.cardActions}>
           <Link href={href} prefetch={false} className={styles.profileAction} aria-label={`${t("Explore evidence")} · ${name}`}>
             {t("Explore evidence")} <NavigationIcon name="arrow" width={16} height={16} />
           </Link>
-          <button type="button" className={styles.compareAction} aria-pressed={selected} aria-label={`${t("Compare")} · ${name}`} title={t("Compare")} onClick={() => onCompare(country.slug)}>
-            <NavigationIcon name={selected ? "check" : "compare"} width={18} height={18} />
-          </button>
-          <SavedCountryButton compact countryName={name} countrySlug={country.slug} />
         </div>
       </div>
     </article>
