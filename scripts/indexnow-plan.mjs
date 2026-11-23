@@ -8,6 +8,7 @@ export function publicSitemapUrls(xml) {
 }
 export function changedPublicUrls(paths, urls) {
  const changed=paths.filter(Boolean);
+ const home=changed.some(path=>/^src\/components\/home\//.test(path)||path==='src/lib/home-content.ts');
  if(changed.some(path=>/^src\/app\/layout\.tsx$|^src\/components\/(GlobalFooter|Navbar)\.tsx$|^src\/lib\/localization\/|^public\/locales\//.test(path)))return urls;
  const learning=changed.some(path=>/^src\/app\/courses\/\[id\]/.test(path)||/^src\/(data\/courses|components\/courses|lib\/(learning|seo\/course-directory))/.test(path));
  const countries=changed.some(path=>/^src\/app\/countries\/\[/.test(path)||/^src\/(data\/countr|components\/countr|lib\/countr)/.test(path));
@@ -22,6 +23,6 @@ export function changedPublicUrls(paths, urls) {
  const discovery=changed.some(path=>/^src\/lib\/discovery|^src\/components\/discovery|^src\/app\/discover/.test(path));
  return urls.filter(url=>{
   const path=new URL(url).pathname;
-  return routes.includes(path)||(learning&&/^\/courses(?:\/|$)/.test(path))||(countries&&/^\/countries(?:\/|$)/.test(path))||(guides&&/^\/guides(?:\/|$)/.test(path))||(directory&&path.startsWith('/courses/directory'))||(discovery&&path.startsWith('/discover/'));
+  return (home&&path==='/')||routes.includes(path)||(learning&&/^\/courses(?:\/|$)/.test(path))||(countries&&/^\/countries(?:\/|$)/.test(path))||(guides&&/^\/guides(?:\/|$)/.test(path))||(directory&&path.startsWith('/courses/directory'))||(discovery&&path.startsWith('/discover/'));
  });
 }

@@ -35,6 +35,8 @@ test('IndexNow consumes only canonical sitemap URLs and maps actual public sourc
  const urls=publicSitemapUrls(xml);
  assert.equal(urls.length,6);assert.ok(!urls.some(u=>u.includes('profile')||u.includes('?')||u.includes('evil')));
  assert.deepEqual(changedPublicUrls(['docs/readme.md'],urls),[]);
+ assert.deepEqual(changedPublicUrls(['src/components/home/v4/InstitutionalHome.tsx'],urls),[origin+'/']);
+ assert.deepEqual(changedPublicUrls(['src/lib/home-content.ts'],urls),[origin+'/']);
  assert.deepEqual(changedPublicUrls(['src/components/courses/Card.tsx'],urls),urls.filter(u=>u.includes('/courses')));
  assert.deepEqual(changedPublicUrls(['src/app/layout.tsx'],urls),urls);
  assert.deepEqual(changedPublicUrls(['src/app/courses/[id]/page.tsx'],urls),urls.filter(u=>u.includes('/courses')));
