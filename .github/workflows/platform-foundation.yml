@@ -12,7 +12,6 @@ permissions:
 
 jobs:
   quality:
-    name: ${{ github.event_name == 'deployment_status' && 'deployment-quality-not-required' || 'quality' }}
     if: github.event_name != 'deployment_status'
     runs-on: ubuntu-latest
     timeout-minutes: 15
