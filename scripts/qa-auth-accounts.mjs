@@ -3,7 +3,7 @@ import { randomBytes } from 'node:crypto';
 import { createInterface } from 'node:readline';
 import { createClerkClient, verifyToken } from '@clerk/backend';
 import { spawn } from 'node:child_process';
-import { createQaRunId } from './helpers/qa-auth-runs.mjs';
+import { createQaRunId, isQaRunId } from './helpers/qa-auth-runs.mjs';
 
 // Credentials arrive over stdin and never appear in arguments, files or reports.
 const lines = createInterface({ input: process.stdin });
@@ -28,6 +28,7 @@ async function call(operation) {
   }
 }
 const run = config.run || createQaRunId();
+assert.ok(isQaRunId(run), 'Use a cleanup-compatible QA run identifier.');
 const count = config.count ?? 100;
 assert.ok(Number.isInteger(count) && count > 0 && count <= 100);
 const concurrency = config.concurrency ?? 5;
@@ -69,10 +70,11 @@ async function checkAccount(index) {
   }));
   created++;
   console.log(JSON.stringify({ created, stage: 'account-created' }));
-  assert.equal((await call(() => client.users.verifyPassword({ userId: user.id, password }))).verified, true);
-  passwordsVerified++;
-  const session = await call(() => client.sessions.createSession({ userId: user.id }));
+  let session, failure;
   try {
+    assert.equal((await call(() => client.users.verifyPassword({ userId: user.id, password }))).verified, true);
+    passwordsVerified++;
+    session = await call(() => client.sessions.createSession({ userId: user.id }));
     const token = await call(() => client.sessions.getToken(session.id));
     const claims = await verifyToken(token.jwt, { secretKey: config.secretKey });
     assert.equal(claims.sub, user.id);
@@ -87,7 +89,7 @@ async function checkAccount(index) {
       httpProfiles++;
       const headers = { Authorization: `Bearer ${token.jwt}`, 'Content-Type': 'application/json', Origin: config.origin, 'X-TGPI-Session': session.id };
       const request = body => fetch(new URL('/api/onboarding', config.origin), { method: 'PATCH', headers, body: JSON.stringify(body) });
-      const first = { schemaVersion: 1, completed: false, currentStep: 1, primaryGoal: 'study', targetCountries: ['portugal'], timeHorizon: '', budgetRange: '', languages: ['English'], profession: `QA ${index}`, educationLevel: '', internationalExperience: '', priorities: [] };
+      const first = { schemaVersion: 1, completed: false, currentStep: 1, primaryGoal: 'study', targetCountries: ['portugal'], timeHorizon: '', budgetRange: '', languages: ['English'], profession: `QA ${index}`, educationLevel: '', internationalExperience: '', priorities: [], updatedAt: user.unsafeMetadata?.tgpiOnboarding?.updatedAt };
       const save = await request(first);
       assert.equal(save.status, 200, `Account ${index}: first plan save: ${await save.clone().text()}`);
       const saved = (await save.json()).onboarding;
@@ -105,15 +107,26 @@ async function checkAccount(index) {
       assert.equal(restored.unsafeMetadata.tgpiAccountProfile.profession, `QA ${index}`);
       savedPlans++;
     }
+  } catch (error) {
+    failure = error;
   } finally {
-    assert.equal((await call(() => client.sessions.revokeSession(session.id))).status, 'revoked');
-    revoked++;
-    if (config.cleanupAfter) {
-      assert.equal(user.privateMetadata.tgpiQa?.run, run);
-      assert.equal(user.privateMetadata.tgpiQa?.synthetic, true);
-      await call(() => client.users.deleteUser(user.id));
-      cleaned++;
-    }
+    const failures = failure ? [failure] : [];
+    try {
+      if (session) {
+        assert.equal((await call(() => client.sessions.revokeSession(session.id))).status, 'revoked');
+        revoked++;
+      }
+    } catch (error) { failures.push(error); }
+    try {
+      if (config.cleanupAfter) {
+        assert.equal(user.privateMetadata.tgpiQa?.run, run);
+        assert.equal(user.privateMetadata.tgpiQa?.synthetic, true);
+        await call(() => client.users.deleteUser(user.id));
+        cleaned++;
+      }
+    } catch (error) { failures.push(error); }
+    if (failures.length === 1) throw failures[0];
+    if (failures.length > 1) throw new AggregateError(failures, 'QA verification and fixture cleanup failed.');
   }
   if (index % 10 === 0 || index === count) console.log(JSON.stringify({ run, created, passwordsVerified, sessionsVerified, revoked }));
 }
