@@ -67,6 +67,7 @@ const credentialFont = localFont({
 const sourceMetadata: Metadata = {
   metadataBase: new URL("https://www.theglobalpolymath.com"),
   applicationName: "TGPI",
+  verification: { google: "ej993u5a_vBdvNXTpL6aNJT39605Xk9lnn5tKlaBQ5M" },
   robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 } },
   title: "TGPI | The Global Polymath Institute",
   description: "Prepare, compare and move globally with strategic clarity using TGPI — a premium education and decision system for international life.",
