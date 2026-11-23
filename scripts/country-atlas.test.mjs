@@ -26,7 +26,7 @@ function harness(options = {}) {
   let hook = 0;
   const region = options.region ?? 'world';
   const navigation = options.navigation ?? { region, scale: 1, x: 0, y: 0 };
-  const states = [navigation, map, false, false, '', false];
+  const states = [navigation, map, false, 'physical', true, true, true, false, 1, false, false, '', false];
   const pushes = [], prefetches = [], previews = [], regions = [];
   const imports = {
     'react/jsx-runtime': { jsx: (type, props) => ({ type, props }), jsxs: (type, props) => ({ type, props }) },
@@ -43,6 +43,8 @@ function harness(options = {}) {
     '@/components/localization/LocaleProvider': { LocalizedText: 'LocalizedText', useLocale: () => ({ locale: 'en', t: (key, values = {}) => key.replace(/\{([^}]+)\}/g, (_, name) => values[name] ?? '') }) },
     '@/lib/country-flag': { countryFlagCode: () => 'BR' },
     '@/lib/country-map': regionModule,
+    '@/data/world-physical.json': JSON.parse(readFileSync(new URL('src/data/world-physical.json', root))),
+    '@/data/country-map-locations.json': JSON.parse(readFileSync(new URL('src/data/country-map-locations.json', root))),
     './CountriesWorldMap.module.css': new Proxy({}, { get: (_target, key) => key }),
   };
   const Component = load('src/components/countries/CountriesWorldMap.tsx', imports).default;
