@@ -32,7 +32,7 @@ export default async function CoursesPage({ searchParams }: { searchParams: Prom
   const params = new URLSearchParams(Object.entries(raw).flatMap(([key,value]) => typeof value === 'string' ? [[key,value]] : []));
   return <TGPIPageShell width="capability">
     <LearningHero count={catalog.filter(course => course.status === 'available').length} />
-    <LearningPathExplorer courses={catalog} initialFilters={parseCatalogFilters(params)} />
+    <LearningPathExplorer key={params.toString()} courses={catalog} initialFilters={parseCatalogFilters(params)} />
     <CapabilitySystemRail active="learning" />
   </TGPIPageShell>;
 }
