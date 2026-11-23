@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import ts from 'typescript';
+import * as jsxRuntime from 'react/jsx-runtime';
 
 const cache = new Map();
 function load(input) {
@@ -73,4 +74,34 @@ test('planned, unpublished and noncanonical course entries never enter recommend
   }));
   assert.deepEqual(path.plans.arrival.mobilityCourseIds, []);
   assert.ok(!path.courses.some(course => ['arrival-playbook', 'housing-abroad', 'relocation-budget'].includes(course.id)));
+});
+
+test('language selection only accepts catalog options and builds a structured catalog URL', () => {
+  const states = ['arrival', 0];
+  let hook = 0;
+  const compiled = ts.transpileModule(readFileSync('src/components/countries/CountryLearningPath.tsx', 'utf8'), {
+    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX, esModuleInterop: true },
+  }).outputText;
+  const imports = {
+    'react/jsx-runtime': jsxRuntime,
+    react: { useId: () => 'learning', useState: () => { const index = hook++; return [states[index], value => { states[index] = value; }]; } },
+    'next/image': { __esModule: true, default: 'img' },
+    'next/link': { __esModule: true, default: 'a' },
+    '@/components/navigation/NavigationIcon': { __esModule: true, default: 'icon' },
+    '@/components/localization/LocaleProvider': { useLocale: () => ({ t: key => key }) },
+    '@/lib/country-learning': load(resolve('src/lib/country-learning')),
+    './CountryLearningPath.module.css': {},
+  };
+  const exports = {};
+  new Function('require', 'exports', compiled)(name => { assert.ok(name in imports, name); return imports[name]; }, exports);
+  const flatten = node => !node || typeof node !== 'object' ? [] : [node, ...[node.props?.children].flat(Infinity).flatMap(flatten)];
+  const path = createCountryLearningPath('English / French', coursesOverview);
+  const render = () => { hook = 0; return flatten(exports.default({ countryName: 'Canada', path })); };
+  const select = render().find(node => node.type === 'select');
+  select.props.onChange({ target: { value: '<img src=x onerror=alert(1)>' } });
+  assert.equal(states[1], 0);
+  select.props.onChange({ target: { value: 'fr' } });
+  assert.equal(states[1], 1);
+  const catalogLink = render().find(node => node.type === 'a' && typeof node.props.href === 'object');
+  assert.deepEqual(catalogLink.props.href, { pathname: '/courses', query: { goal: 'global-mobility', target: 'fr' } });
 });

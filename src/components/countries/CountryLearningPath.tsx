@@ -12,7 +12,8 @@ export default function CountryLearningPath({ countryName, path }: { countryName
   const { t } = useLocale();
   const id = useId();
   const [goal, setGoal] = useState<CountryLearningGoal>('arrival');
-  const [languageCode, setLanguageCode] = useState(path.languages[0]?.code ?? 'en');
+  const [languageIndex, setLanguageIndex] = useState(0);
+  const languageCode = path.languages[languageIndex]?.code ?? 'en';
   const plan = path.plans[goal];
   const courseIds = [plan.languageCourseIds[languageCode], ...plan.mobilityCourseIds].filter(Boolean);
   const courses = courseIds.flatMap(courseId => {
@@ -25,13 +26,16 @@ export default function CountryLearningPath({ countryName, path }: { countryName
         <h2 id={`${id}-heading`}>{t('Prepare for {country}.', { country: t(countryName) })}</h2>
         <p>{t('Connect your destination to practical language, arrival, career and study skills.')}</p>
       </div>
-      <Link href={`/courses?goal=global-mobility&target=${languageCode}`} className={styles.catalogLink}>{t('Explore language courses')}<NavigationIcon name="book" width={16} height={16} /></Link>
+      <Link href={{ pathname: '/courses', query: { goal: 'global-mobility', target: languageCode } }} className={styles.catalogLink}>{t('Explore language courses')}<NavigationIcon name="book" width={16} height={16} /></Link>
     </div>
     <div className={styles.controls}>
       <div className={styles.goals} role="group" aria-label={t('Preparation goal')}>
         {countryLearningGoals.map(item => <button key={item.id} type="button" aria-pressed={goal === item.id} onClick={() => setGoal(item.id)}>{t(item.label)}</button>)}
       </div>
-      {path.languages.length > 0 && <label className={styles.language}><span>{t('Practice language')}</span><select value={languageCode} onChange={event => setLanguageCode(event.target.value)}>
+      {path.languages.length > 0 && <label className={styles.language}><span>{t('Practice language')}</span><select value={languageCode} onChange={event => {
+        const nextIndex = path.languages.findIndex(item => item.code === event.target.value);
+        if (nextIndex >= 0) setLanguageIndex(nextIndex);
+      }}>
         {path.languages.map(item => <option key={item.code} value={item.code}>{t(item.name)} · {item.native}</option>)}
       </select></label>}
     </div>
