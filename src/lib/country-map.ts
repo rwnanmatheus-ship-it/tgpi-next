@@ -25,37 +25,37 @@ export const COUNTRY_MAP_REGIONS: readonly CountryMapRegion[] = [
     id: "north-america",
     label: "North America",
     sourceRegions: ["North America"],
-    viewport: [5, 35, 410, 285],
+    viewport: [20, 15, 440, 220],
   },
   {
     id: "south-america",
     label: "South America",
     sourceRegions: ["South America"],
-    viewport: [245, 230, 215, 265],
+    viewport: [260, 205, 185, 210],
   },
   {
     id: "europe",
     label: "Europe",
     sourceRegions: ["Europe", "Europe / Asia"],
-    viewport: [445, 90, 205, 160],
+    viewport: [430, 50, 220, 110],
   },
   {
     id: "africa",
     label: "Africa",
     sourceRegions: ["Africa", "Africa / Middle East"],
-    viewport: [430, 180, 245, 280],
+    viewport: [440, 140, 230, 225],
   },
   {
     id: "asia",
     label: "Asia",
     sourceRegions: ["Asia", "Asia / Europe"],
-    viewport: [555, 45, 420, 300],
+    viewport: [555, 40, 445, 235],
   },
   {
     id: "oceania",
     label: "Oceania",
     sourceRegions: ["Oceania"],
-    viewport: [690, 220, 470, 250],
+    viewport: [795, 180, 340, 220],
   },
 ] as const;
 

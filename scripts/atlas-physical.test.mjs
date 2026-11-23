@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import sharp from 'sharp';
+import {COUNTRY_MAP_REGIONS} from '../src/lib/country-map.ts';
 const geography = JSON.parse(readFileSync('src/data/world-physical.json', 'utf8'));
 const borders = JSON.parse(readFileSync('public/maps/tgpi-world-countries-50m.json', 'utf8'));
 const identities = JSON.parse(readFileSync('src/data/intelligence/identities.json', 'utf8')).countries;
@@ -39,5 +40,25 @@ test('hydrology contains real major rivers and lakes with finite projected geome
   for (const feature of geography.water) {
     assert.match(feature.path, /^M/);
     assert.doesNotMatch(feature.path, /NaN|Infinity|undefined/);
+  }
+});
+
+
+test('regional zoom centers stay inside their continent rather than adjacent oceans or continents', () => {
+  const bounds = {
+    'north-america': [-130, -60, 30, 65],
+    'south-america': [-70, -40, -30, -5],
+    europe: [-10, 40, 40, 65],
+    africa: [10, 35, -10, 15],
+    asia: [65, 130, 25, 50],
+    oceania: [120, 180, -30, -5],
+  };
+  for (const region of COUNTRY_MAP_REGIONS.filter(region => region.id !== 'world')) {
+    const [x,y,width,height] = region.viewport;
+    const lng = (x + width / 2) / 1000 * 360 - 180;
+    const lat = 90 - (y + height / 2) / 500 * 180;
+    const [west,east,south,north] = bounds[region.id];
+    assert.ok(lng >= west && lng <= east, `${region.id} longitude ${lng}`);
+    assert.ok(lat >= south && lat <= north, `${region.id} latitude ${lat}`);
   }
 });
