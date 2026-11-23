@@ -41,6 +41,8 @@
 .header{margin-bottom:27px;color:var(--tgpi-heading)}
 .header p,.header [role=status]{color:var(--tgpi-muted)}
 .header .eyebrow{--gold:var(--tgpi-gold-strong)}
+.header :is(a,button):focus-visible{outline-color:var(--tgpi-focus)}
+.personal>.feedback,.personal>div[id]>p{color:var(--tgpi-muted)}
 .header>.actions>div>button{background:var(--surface);border-color:var(--line);color:var(--ink)}
 .header h1{font-weight:600;letter-spacing:-.045em;font-size:clamp(28px,3vw,42px)}
 .header .eyebrow{display:flex;align-items:center;gap:11px;font-size:10px}
