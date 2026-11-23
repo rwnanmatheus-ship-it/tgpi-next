@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { courseDiscoveryCopy } from "@/lib/localization/course-discovery-copy";
 import Link from "next/link";
 import BrandCrest from "@/components/BrandCrest";
 import { InstallGuideButton } from "@/components/app-runtime/TgpiInstallGuide";
@@ -26,7 +27,7 @@ const footerGroups = [
     productLink("countries"), productLink("fit"), productLink("compare"), productLink("plan"), productLink("evidence"),
   ] },
   { title: "Learn & prepare", icon: "book", links: [
-    productLink("learning"), productLink("certificates"), productLink("documents"), ["Verify a credential", "/verify"], ["Guides", "/guides"],
+    productLink("learning"), productLink("certificates"), productLink("documents"), ["Verify a credential", "/verify"], ["Guides", "/guides"], ["Course directory", "/courses/directory"],
   ] },
   { title: "Your TGPI", icon: "apps", links: [
     productLink("global-id"), productLink("workspace"), productLink("community"), ["Profile & settings", "/profile/security"],
@@ -55,14 +56,14 @@ function FooterGroup({ group, collapsible = false }: {
   group: typeof footerGroups[number];
   collapsible?: boolean;
 }) {
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
   const heading = <>
     <NavigationIcon name={group.icon} />
     <span>{t(group.title)}</span>
   </>;
   const links = <ul>
     {group.links.map(([label, href]) => (
-      <li key={href}><NavigationLink href={href} prefetch={false}>{t(label)}</NavigationLink></li>
+      <li key={href}><NavigationLink href={href} prefetch={false}>{label === "Course directory" ? courseDiscoveryCopy(locale).directory : t(label)}</NavigationLink></li>
     ))}
   </ul>;
 

@@ -17,6 +17,8 @@ const nextConfig: NextConfig = {
   },
   async headers() {
     return [
+      { source: "/banners/:path*", headers: [{ key: "Cache-Control", value: "public, max-age=3600, stale-while-revalidate=86400" }, { key: "X-Content-Type-Options", value: "nosniff" }] },
+      { source: "/images/discovery/:path*", headers: [{ key: "Cache-Control", value: "public, max-age=86400, stale-while-revalidate=604800" }, { key: "X-Content-Type-Options", value: "nosniff" }] },
       { source: "/images/cinematic-2026/:path*", headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }, { key: "X-Content-Type-Options", value: "nosniff" }] },
       { source: "/admin/:path*", headers: [{ key: "Cache-Control", value: "private, no-store, max-age=0" }] },
       { source: "/member/:path*", headers: [{ key: "Cache-Control", value: "private, no-store, max-age=0" }] },
