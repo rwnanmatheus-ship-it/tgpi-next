@@ -161,3 +161,8 @@ export type DiscoveryLocale = keyof typeof discoveryContent;
 export const discoveryLocales = Object.keys(discoveryContent) as DiscoveryLocale[];
 export function isDiscoveryLocale(value: string): value is DiscoveryLocale { return Object.hasOwn(discoveryContent, value); }
 export const discoveryAlternates = Object.fromEntries([...discoveryLocales.map(locale => [locale, `${discoveryOrigin}/discover/${locale}`]), ["x-default", `${discoveryOrigin}/discover/en`]]);
+
+export function discoveryTransitionRequiresRefresh(previous: string | null, current: string): boolean {
+  const discoveryPath = /^\/discover\/(en|pt-BR|es|fr|de|it)\/?$/;
+  return previous !== null && previous !== current && (discoveryPath.test(previous) || discoveryPath.test(current));
+}

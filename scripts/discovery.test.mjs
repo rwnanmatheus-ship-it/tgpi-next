@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
-import { discoveryContent, discoveryLocales, discoveryAlternates, isDiscoveryLocale, discoveryOrigin } from '../src/lib/discovery.ts';
+import { discoveryContent, discoveryLocales, discoveryAlternates, isDiscoveryLocale, discoveryOrigin, discoveryTransitionRequiresRefresh } from '../src/lib/discovery.ts';
 import sharp from 'sharp';
 const read = path => readFileSync(new URL('../'+path, import.meta.url),'utf8');
 test('international variants have complete copy and reciprocal canonical alternates', () => {
@@ -45,4 +45,14 @@ test('IndexNow verifies production ownership before notifying search engines',()
  assert.ok(source.includes('result.status === 202'));
  assert.ok(source.includes('AbortSignal.timeout'));
  assert.ok(existsSync('.github/workflows/discovery-submit.yml'));
+});
+
+test('shared root refreshes on discovery transitions without looping or refreshing ordinary navigation', () => {
+ assert.equal(discoveryTransitionRequiresRefresh(null, '/discover/en'), false);
+ assert.equal(discoveryTransitionRequiresRefresh('/discover/en', '/discover/en'), false);
+ assert.equal(discoveryTransitionRequiresRefresh('/discover/en', '/discover/fr'), true);
+ assert.equal(discoveryTransitionRequiresRefresh('/discover/fr', '/courses'), true);
+ assert.equal(discoveryTransitionRequiresRefresh('/courses', '/discover/de'), true);
+ assert.equal(discoveryTransitionRequiresRefresh('/courses', '/countries'), false);
+ assert.ok(read('src/app/layout.tsx').includes('<DiscoveryLocaleSync />'));
 });

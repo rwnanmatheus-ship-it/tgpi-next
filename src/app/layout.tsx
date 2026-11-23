@@ -1,3 +1,4 @@
+import DiscoveryLocaleSync from "@/components/discovery/DiscoveryLocaleSync";
 import AppearanceProvider from "@/components/profile/AppearanceProvider";
 import { appearanceBootstrap, themeColors } from "@/lib/appearance";
 import DisplayPreferencesSync from "@/components/profile/DisplayPreferencesSync";
@@ -155,6 +156,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           appearance={tgpiClerkAppearance}
         >
           <AccountLocaleSync />
+          <DiscoveryLocaleSync />
           <DisplayPreferencesSync />
           <NotificationProvider>
           <GlobalProgressSync />
