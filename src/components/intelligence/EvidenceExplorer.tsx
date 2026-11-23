@@ -204,7 +204,7 @@ export default function EvidenceExplorer({ countries, initialFilters, indicatorT
         </div>}
       </div>
 
-      {!savedGuest && <div className={styles.discoveryBar}>
+      {!savedGuest && !showAtlas && <div className={styles.discoveryBar}>
         <span className={styles.discoveryLabel}><NavigationIcon name="compass" width={16} height={16} />{t("Explore by region")}</span>
         <div className={styles.regionChips} role="group" aria-label={t("Statistical region")}>
           {["all", ...sortedRegions].map(value => <button key={value} type="button" aria-pressed={region === value}
