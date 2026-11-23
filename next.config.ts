@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
+      { source: "/courses/directory/1", destination: "/courses/directory", permanent: true },
       { source: "/authority", destination: "/intelligence", permanent: true },
       { source: "/documents", destination: "/passport", permanent: true },
       { source: "/learn", destination: "/courses", permanent: true },

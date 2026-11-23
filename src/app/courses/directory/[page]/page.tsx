@@ -3,6 +3,7 @@ import CourseDirectory, { directoryMetadata } from "@/components/courses/CourseD
 import { publishedDirectory } from "@/lib/seo/course-directory.server";
 import { directoryPageCount, parseDirectoryPage } from "@/lib/seo/course-directory";
 type Props = { params: Promise<{ page: string }> };
+export const dynamicParams = false;
 export function generateStaticParams() { return Array.from({length:directoryPageCount(publishedDirectory.length)-1},(_,index)=>({page:String(index+2)})); }
 async function getPage(params: Props["params"]) {
   const page = parseDirectoryPage((await params).page,publishedDirectory.length);
