@@ -1,3 +1,4 @@
+import { isPrivateSearchPath } from "./indexnow-plan.mjs";
 import { writeFile } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 
@@ -23,6 +24,9 @@ export function inspectPage(html, url, headers = {}) {
       /noindex|none/i.test(headers["x-robots-tag"] || "")) issues.push("Indexable route marked noindex");
   if (!/<h1\b/i.test(html)) issues.push("Missing H1");
   return issues;
+}
+export function rotatingUrls(urls, day, count) {
+  return Array.from({length:Math.min(count,urls.length)},(_,index)=>urls[(day*count+index)%urls.length]);
 }
 export async function audit(fetcher = fetch, now = new Date()) {
   const report = { checkedAt: now.toISOString(), origin: ORIGIN, sitemapCount: 0, checks: [], issues: [] };
@@ -50,15 +54,18 @@ export async function audit(fetcher = fetch, now = new Date()) {
       report.issues.push(`Non-canonical sitemap URL: ${url}`);
       return false;
     }
-    if (/^\/(ranking|authority|profile|sign-in|sign-up|admin|api|country-fit|premium)(\/|$)/.test(parsed.pathname)) report.issues.push(`Private, noindex or redirected URL in sitemap: ${url}`);
+    if (isPrivateSearchPath(parsed.pathname)) report.issues.push(`Private, noindex or redirected URL in sitemap: ${url}`);
     return true;
   });
-  // Check every landing page and rotate through seven country pages per day.
-  // A full pass of all country profiles completes without flooding the live site.
+  // Inspect every canonical sitemap URL locally, then rotate network checks.
+  // Complete course coverage takes 30 days for a stable 1,200-course catalogue.
   const countries = localUrls.filter(url => new URL(url).pathname.startsWith("/countries/"));
-  const pages = localUrls.filter(url => !countries.includes(url));
+  const directory = localUrls.filter(url => /^\/courses\/directory\//.test(new URL(url).pathname));
+  const courses = localUrls.filter(url => /^\/courses\/[^/]+$/.test(new URL(url).pathname) && !url.endsWith("/directory"));
+  const sampled = new Set([...countries,...directory,...courses]);
+  const pages = localUrls.filter(url => !sampled.has(url));
   const day = Math.floor(now.getTime() / 86400000);
-  for (let i = 0; i < Math.min(7, countries.length); i++) pages.push(countries[(day * 7 + i) % countries.length]);
+  pages.push(...rotatingUrls(countries,day,7),...rotatingUrls(courses,day,40),...rotatingUrls(directory,day,3));
   async function inspectUrl(url) {
     try {
       const page = await get(url);
