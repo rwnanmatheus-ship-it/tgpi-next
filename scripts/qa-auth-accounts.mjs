@@ -3,6 +3,7 @@ import { randomBytes } from 'node:crypto';
 import { createInterface } from 'node:readline';
 import { createClerkClient, verifyToken } from '@clerk/backend';
 import { spawn } from 'node:child_process';
+import { createQaRunId } from './helpers/qa-auth-runs.mjs';
 
 // Credentials arrive over stdin and never appear in arguments, files or reports.
 const lines = createInterface({ input: process.stdin });
@@ -26,7 +27,7 @@ async function call(operation) {
     }
   }
 }
-const run = config.run || `tgpi-qa-${Date.now()}`;
+const run = config.run || createQaRunId();
 const count = config.count ?? 100;
 assert.ok(Number.isInteger(count) && count > 0 && count <= 100);
 const concurrency = config.concurrency ?? 5;

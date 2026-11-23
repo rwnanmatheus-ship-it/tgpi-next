@@ -1,12 +1,13 @@
 import assert from 'node:assert/strict';
 import { createInterface } from 'node:readline';
 import { createClerkClient } from '@clerk/backend';
+import { isQaRunId } from './helpers/qa-auth-runs.mjs';
 
 const lines = createInterface({ input: process.stdin });
 const config = JSON.parse(await new Promise(resolve => lines.once('line', resolve)));
 lines.close();
 assert.ok(config.secretKey?.startsWith('sk_test_'), 'Development instance required.');
-assert.ok(Array.isArray(config.runs) && config.runs.length && config.runs.every(run => /^tgpi-qa-\d{8}(?:-[a-z]+)?$/.test(run)));
+assert.ok(Array.isArray(config.runs) && config.runs.length && config.runs.every(isQaRunId));
 const client = createClerkClient({ secretKey: config.secretKey });
 let removed = 0;
 for (const run of config.runs) {
