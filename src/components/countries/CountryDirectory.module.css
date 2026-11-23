@@ -520,8 +520,7 @@
   .results[data-view="gallery"] .cardImage { aspect-ratio: 1.55; }
   .results[data-view="gallery"] .identity h3 { font-size: 1.16rem; }
   .results[data-view="gallery"] .identity { align-items: flex-start; gap: 6px; }
-  .results[data-view="gallery"] .identity > span { width: 27px !important; }
-  .results[data-view="gallery"] .identity { flex-wrap: wrap; }
+  .results[data-view="gallery"] .identity > span { width: 30px !important; height: 22.5px !important; }
   .results[data-view="gallery"] .location { font-size: .7rem; }
   .results[data-view="gallery"] .cardBody { padding: 8px; }
   .results[data-view="gallery"] .evidence li:nth-child(2) { display: none; }
