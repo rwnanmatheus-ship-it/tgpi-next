@@ -81,4 +81,4 @@ YouTube, redes sociais e recomendações de parceiros dependem de publicação, 
 
 ## Limites da entrega
 
-A disponibilidade pública depende também das redes, regras locais e mecanismos de busca. Não foram configurados contornos de bloqueios geográficos. A verificação/cadastro do Search Console não foi concluída nesta etapa. Ausência de propriedade na tela atual não prova ausência em outra conta. A publicação externa e o recebimento IndexNow só devem ser reportados mediante confirmação do serviço.
+A disponibilidade pública depende também das redes, regras locais e mecanismos de busca. Não foram configurados contornos de bloqueios geográficos. A verificação do Search Console foi preparada para a conta oficial indicada pelo fundador. A confirmação de propriedade, o envio do sitemap, a publicação externa e o recebimento IndexNow só devem ser reportados mediante confirmação dos respectivos serviços. A preparação técnica, por si só, não comprova esses resultados.
