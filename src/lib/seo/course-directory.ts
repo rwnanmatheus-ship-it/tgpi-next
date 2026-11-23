@@ -19,7 +19,10 @@ export function parseDirectoryPage(value: string, total: number): number | undef
 export function pageCourses<T>(courses: readonly T[], page: number): readonly T[] { return courses.slice((page-1)*directoryPageSize, page*directoryPageSize); }
 export function relatedPublishedCourses(courses: readonly CourseOverview[], id: string, limit = 4): CourseOverview[] {
   const current = courses.find(course => course.id === id);
-  return current ? courses.filter(course => course.id !== id && course.goal === current.goal).slice(0,limit) : [];
+  if (!current) return [];
+  const group = courses.filter(course => course.goal === current.goal && course.targetLanguage === current.targetLanguage);
+  const position = group.findIndex(course => course.id === id);
+  return Array.from({length:Math.max(0,Math.min(limit,group.length-1))},(_,index)=>group[(position+index+1)%group.length]);
 }
 export function courseListSchema(courses: readonly CourseOverview[], page: number, total: number) {
   return { "@context": "https://schema.org", "@type": "ItemList", name: "TGPI Course directory", numberOfItems: total,

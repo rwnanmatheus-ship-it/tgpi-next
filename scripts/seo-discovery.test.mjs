@@ -58,3 +58,15 @@ test('filtered catalogue variants are excluded from indexing without excluding c
  assert.equal(catalogVariantNeedsNoindex({q:'english'}),true);
  assert.equal(catalogVariantNeedsNoindex({goal:'global-mobility',access:'free_account'}),true);
 });
+
+test('related links distribute visibility across a topic and preserve the chosen target language',()=>{
+ const group=Array.from({length:12},(_,i)=>course(`item-${i}`,{targetLanguage:'en'}));
+ const otherLanguage=course('french',{targetLanguage:'fr'});
+ const counts=new Map(group.map(c=>[c.id,0]));
+ for(const current of group){
+  const links=relatedPublishedCourses([...group,otherLanguage],current.id);
+  assert.equal(links.length,4);assert.ok(!links.some(c=>c.id===current.id||c.targetLanguage!=='en'));
+  for(const linked of links)counts.set(linked.id,counts.get(linked.id)+1);
+ }
+ assert.ok([...counts.values()].every(count=>count===4));
+});
