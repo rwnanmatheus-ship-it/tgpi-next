@@ -204,11 +204,22 @@ export default function EvidenceExplorer({ countries, initialFilters, indicatorT
         </div>}
       </div>
 
+      {!savedGuest && !showAtlas && <div className={styles.discoveryBar}>
+        <span className={styles.discoveryLabel}><NavigationIcon name="compass" width={16} height={16} />{t("Explore by region")}</span>
+        <div className={styles.regionChips} role="group" aria-label={t("Statistical region")}>
+          {["all", ...sortedRegions].map(value => <button key={value} type="button" aria-pressed={region === value}
+            onClick={() => { setMapZoom(undefined); setAtlasFocus(undefined); updateUrl({ region: value, limit: PAGE_SIZE }); }}>
+            {value === "all" ? t("World") : t(value)}
+            <span>{value === "all" ? countries.length : countries.filter(country => country.region === value).length}</span>
+          </button>)}
+        </div>
+      </div>}
+
       <div id="country-atlas-panel" hidden={!showAtlas} className={styles.atlasPanel}>
         {showAtlas && <>
           <div className="atlas-layer-tabs" role="group" aria-label={t("Atlas layers")}>
-            <button type="button" aria-pressed={atlasLayer === "satellite"} onClick={() => setAtlasLayer("satellite")}>{t("Satellite observations")}</button>
             <button type="button" aria-pressed={atlasLayer === "countries"} onClick={() => setAtlasLayer("countries")}>{t("Country boundaries")}</button>
+            <button type="button" aria-pressed={atlasLayer === "satellite"} onClick={() => setAtlasLayer("satellite")}>{t("Satellite observations")}</button>
           </div>
           {atlasLayer === "satellite" ? (
             <SatelliteAtlas countries={countries} selectedSlug={atlasCountry} onCountryPreview={setAtlasCountry} />
@@ -221,6 +232,10 @@ export default function EvidenceExplorer({ countries, initialFilters, indicatorT
               onRegionChange={id => {
                 const nextRegion = id === "world" ? "all" : id.endsWith("america") ? "Americas" : id.charAt(0).toUpperCase() + id.slice(1);
                 setMapZoom({ region: nextRegion, id });
+                setAtlasFocus(current => ({
+                  slug: current?.query === query && current.region === region && current.coverage === coverage ? current.slug : atlasCountry,
+                  query, region: nextRegion, coverage,
+                }));
                 updateUrl({ region: nextRegion, limit: PAGE_SIZE });
               }}
             />

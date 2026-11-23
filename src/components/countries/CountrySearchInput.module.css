@@ -1,0 +1,35 @@
+.root { position: relative; min-width: 0; }
+.root > label { font-size: .8125rem; letter-spacing: .015em; }
+.inputWrap { position: relative; }
+.inputWrap > input { padding-right: 2.8rem; text-overflow: ellipsis; }
+.inputWrap > input::-webkit-search-cancel-button { display: none; }
+.inputWrap .clear { position: absolute; top: 50%; right: .3rem; display: grid; place-items: center; width: 2.5rem; height: 2.5rem; padding: 0; color: #294c70; background: transparent; border: 0; border-radius: .625rem; transform: translateY(-50%); cursor: pointer; }
+.clear:hover { background: #e5edf8; }
+.clear:focus-visible, .panel button:focus-visible { outline: 2px solid #2563eb; outline-offset: -3px; }
+.root .panel { z-index: 65; border: 1px solid #c6d5e8; border-radius: 1rem; background: #fdfefe; box-shadow: 0 20px 50px #04162c30, 0 0 0 4px #e9eff81c; }
+.panelHeading { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .25rem; padding: .875rem 1rem .5rem; color: #274b70; font-size: .75rem; font-weight: 700; }
+.panelHeading small { color: #667a91; font-size: .75rem; font-weight: 500; }
+.root .panel ul { max-height: min(24rem, 52dvh); overflow-y: auto; padding: .25rem .375rem .375rem; overscroll-behavior: contain; }
+.root .panel li { gap: .75rem; min-height: 3.5rem; border: 1px solid transparent; }
+.root .panel li[aria-selected="true"] { background: linear-gradient(105deg, #edf3ff, #f1f6fb); border-color: #ccdbf3; outline: none; }
+.countryName { flex: 1; min-width: 0; display: grid; gap: .2rem; }
+.root .panel .countryName > strong { font-size: .875rem; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+.countryName > span { color: #63748b; font-size: .75rem; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+.root .panel li > small { margin-left: 0; font-size: .75rem; color: #496683; }
+.panel li > svg { color: #315b92; flex-shrink: 0; }
+.panel .allMatches { width: 100%; display: flex; align-items: center; justify-content: space-between; min-height: 2.875rem; padding: .625rem 1rem; background: #f1f5fb; color: #174378; border: 0; border-top: 1px solid #dfE7f1; cursor: pointer; font-size: .8125rem; font-weight: 700; }
+.allMatches > span { min-width: 1.75rem; text-align: center; background: #fff; border: 1px solid #d5e1f0; border-radius: .4rem; padding: .2rem; font-size: .75rem; }
+.discovery { padding: 1rem; }
+.discovery > p { font-size: .8125rem; color: #526c87; margin: 0 0 .625rem; }
+.discovery > div { display: flex; flex-wrap: wrap; gap: .5rem; }
+.discovery button { display: inline-flex; align-items: center; justify-content: center; gap: .375rem; min-height: 2.75rem; padding: .5rem .75rem; border: 1px solid #d6e2ef; border-radius: .625rem; background: #f1f6fc; color: #153c68; font-size: .8125rem; font-weight: 650; cursor: pointer; }
+.discovery button:hover { background: #e4edfa; border-color: #8eacd4; }
+.empty { padding: 1.25rem; color: #496480; text-align: center; }
+.empty > svg { margin: auto; }
+.empty > p { margin: .625rem 0; font-size: .875rem; }
+.empty button { min-height: 2.75rem; padding: .5rem .875rem; border: 1px solid #d0ddef; border-radius: .625rem; background: #edf3fc; color: #1c477c; font-size: .8125rem; font-weight: 700; cursor: pointer; }
+@media(max-width: 599px) {
+  .root .panel li { padding: .5rem; gap: .5rem; }
+  .root .panel li > small { font-size: .6875rem; }
+  .panelHeading { padding: .75rem .875rem .375rem; }
+}
