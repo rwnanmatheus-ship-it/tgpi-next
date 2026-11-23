@@ -17,6 +17,9 @@ export async function getLocaleForAccount(accountLocale?: unknown) {
 
 /** Resolve once per render so metadata, layouts and server pages use the same locale. */
 export const getLocale = cache(async () => {
+  // Public discovery URLs have stable content independent of account/cookie preferences.
+  const publicLocale = (await headers()).get('x-tgpi-discovery-locale');
+  if (isLocale(publicLocale)) { await getSupplementalMessages(publicLocale); return publicLocale; }
   // A saved device choice avoids stale identity metadata and an unnecessary Clerk request.
   const selected = (await cookies()).get(localeCookie)?.value;
   if (isLocale(selected)) { await getSupplementalMessages(selected); return selected; }

@@ -32,7 +32,7 @@ const footerGroups = [
     productLink("global-id"), productLink("workspace"), productLink("community"), ["Profile & settings", "/profile/security"],
   ] },
   { title: "The institute", icon: "globe", links: [
-    productLink("premium"), ["About TGPI", "/about"], ["Company & legal", "/legal"], ["Resources", "/resources"],
+    productLink("premium"), ["About TGPI", "/about"], ["Company & legal", "/legal"], ["Resources", "/resources"], ["TGPI · Global", "/discover/en"],
   ] },
 ] as const;
 

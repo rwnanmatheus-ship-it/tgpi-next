@@ -1,3 +1,4 @@
+import DiscoveryLocaleSync from "@/components/discovery/DiscoveryLocaleSync";
 import AppearanceProvider from "@/components/profile/AppearanceProvider";
 import { appearanceBootstrap, themeColors } from "@/lib/appearance";
 import DisplayPreferencesSync from "@/components/profile/DisplayPreferencesSync";
@@ -66,6 +67,8 @@ const credentialFont = localFont({
 const sourceMetadata: Metadata = {
   metadataBase: new URL("https://www.theglobalpolymath.com"),
   applicationName: "TGPI",
+  verification: { google: "ej993u5a_vBdvNXTpL6aNJT39605Xk9lnn5tKlaBQ5M" },
+  robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-image-preview": "large", "max-snippet": -1, "max-video-preview": -1 } },
   title: "TGPI | The Global Polymath Institute",
   description: "Prepare, compare and move globally with strategic clarity using TGPI — a premium education and decision system for international life.",
   keywords: ["move abroad", "global mobility", "international life", "country comparison", "cost of living", "learn languages", "global education", "international planning", "TGPI", "The Global Polymath Institute"],
@@ -85,6 +88,7 @@ const sourceMetadata: Metadata = {
     email: false,
     telephone: false,
   },
+  alternates: { types: { "application/rss+xml": "https://www.theglobalpolymath.com/feed.xml" } },
   other: {
     "mobile-web-app-capable": "yes",
   },
@@ -153,6 +157,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           appearance={tgpiClerkAppearance}
         >
           <AccountLocaleSync />
+          <DiscoveryLocaleSync />
           <DisplayPreferencesSync />
           <NotificationProvider>
           <GlobalProgressSync />

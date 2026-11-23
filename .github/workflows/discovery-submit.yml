@@ -1,0 +1,28 @@
+name: Notify search engines after publication
+on:
+  workflow_dispatch:
+  deployment_status:
+permissions:
+  contents: read
+concurrency:
+  group: discovery-submit
+  cancel-in-progress: false
+jobs:
+  submit:
+    if: >-
+      github.event_name != 'deployment_status' ||
+      (github.event.deployment_status.state == 'success' &&
+      (startsWith(github.event.deployment.environment, 'Production') ||
+      startsWith(github.event.deployment.environment, 'production')))
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: fix-deploy-hoje
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 24
+      - name: Notify IndexNow of updated public pages
+        run: node scripts/indexnow-submit.mjs

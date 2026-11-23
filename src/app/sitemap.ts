@@ -4,6 +4,10 @@ import { academyManifest } from "@/data/courses/academy/manifest";
 import { publicGuides } from "@/lib/public-guides";
 import { getAllCountrySlugs } from "@/lib/countries";
 
+import { discoveryLocales, discoveryAlternates } from "@/lib/discovery";
+import { courses } from "@/data/courses";
+import { publishedProfessionalCourseIds } from "@/lib/learning/professional-runtime";
+
 const siteUrl = "https://www.theglobalpolymath.com";
 
 const publicRoutes = [
@@ -37,7 +41,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: route.priority,
     ...(route.path === "" ? { images: [
       `${siteUrl}/images/cinematic-2026/global-horizon-1600.webp`,
-      `${siteUrl}/brand/tgpi-crest-metal-v3-256.png`,
+      `${siteUrl}/brand/tgpi-crest-metal-v3-256.jpg`,
     ] } : route.path === "/about" ? { images: [
       `${siteUrl}/images/cinematic-2026/country-research-1600.webp`,
       `${siteUrl}/images/cinematic-2026/learning-atelier-1600.webp`,
@@ -50,14 +54,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.8,
   }));
 
-  const academy: MetadataRoute.Sitemap = Object.keys(academyManifest).map(id => ({
+  const academy: MetadataRoute.Sitemap = [...new Set([...Object.keys(academyManifest), ...courses.map(course => course.id), ...publishedProfessionalCourseIds])].map(id => ({
     url: `${siteUrl}/courses/${id}`,
     images: [`${siteUrl}${courseArtwork(id)}`],
     changeFrequency: "monthly",
     priority: 0.7,
   }));
 
-  return [...pages, ...countries, ...academy, ...publicGuides.map(guide => ({
+  return [...pages, ...countries, ...academy, ...discoveryLocales.map(locale => ({
+    url: `${siteUrl}/discover/${locale}`,
+    alternates: { languages: discoveryAlternates },
+    images: [`${siteUrl}/banners/tgpi-${locale}.jpg`],
+    changeFrequency: "monthly" as const,
+    priority: 0.8,
+  })), ...publicGuides.map(guide => ({
     url: `${siteUrl}/guides/${guide.slug}`,
     lastModified: guide.reviewedAt,
     changeFrequency: "monthly" as const,

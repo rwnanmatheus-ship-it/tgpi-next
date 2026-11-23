@@ -81,7 +81,11 @@ export function LocaleProvider({ locale, messages, children }: { locale: Locale;
       if (!response.ok) throw new Error('Locale preference could not be saved');
       setAppliedLocale(next);
       try { localStorage.setItem(localeSyncKey, JSON.stringify({ locale: next, at: Date.now() })); } catch { /* Storage may be unavailable in private browser modes. */ }
-      startTransition(() => router.refresh());
+      startTransition(() => {
+        // Keep the selected language in the public, indexable discovery URL.
+        if (/^\/discover\/(en|pt-BR|es|fr|de|it)\/?$/.test(window.location.pathname)) router.push(`/discover/${next}`);
+        else router.refresh();
+      });
     } catch {
       setError(true);
     } finally {
