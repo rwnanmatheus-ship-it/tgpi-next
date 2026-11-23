@@ -6,6 +6,9 @@ import { useLocale as useInterfaceLocale } from "@/components/localization/Local
 import { announceProgressSaved } from "@/lib/progress-sync";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useAuth } from "@clerk/nextjs";
+import { onboardingConflictMessage } from "@/lib/onboarding-input";
+import { translateAccountSaveError } from "@/lib/localization/account-save";
 import type {
   OnboardingCountry,
   OnboardingGoal,
@@ -181,6 +184,9 @@ export default function OnboardingFlow({
   const [validationMessage, setValidationMessage] = useState("");
   const [isCompleting, setIsCompleting] = useState(false);
   const savedDraft = useRef(initialData);
+  const savedVersion = useRef(initialData.updatedAt);
+  const { sessionId } = useAuth();
+  const { locale } = useInterfaceLocale();
   const persistenceQueue = useRef(Promise.resolve(true));
   const completing = useRef(false);
 
@@ -188,15 +194,18 @@ export default function OnboardingFlow({
     setSaveStatus("saving");
     const write = async () => {
       try {
+        if (!sessionId) throw new Error("Session expired.");
         const response = await fetch("/api/onboarding", {
           method: "PATCH",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(nextData),
+          headers: { "Content-Type": "application/json", "x-tgpi-session": sessionId },
+          body: JSON.stringify({ ...nextData, updatedAt: savedVersion.current }),
         });
 
+        if (response.status === 409) setValidationMessage(translateAccountSaveError(locale, onboardingConflictMessage) || onboardingConflictMessage);
         if (!response.ok) throw new Error("Save failed");
 
-        await response.json();
+        const result = await response.json() as { onboarding: TgpiOnboardingData };
+        savedVersion.current = result.onboarding.updatedAt;
         savedDraft.current = nextData;
         setSaveStatus("saved");
         return true;
@@ -208,7 +217,7 @@ export default function OnboardingFlow({
     const queued = persistenceQueue.current.then(write);
     persistenceQueue.current = queued;
     return queued;
-  }, []);
+  }, [sessionId, locale]);
 
   useEffect(() => {
     if (explicitSave || isCompleting || data === savedDraft.current) return;
