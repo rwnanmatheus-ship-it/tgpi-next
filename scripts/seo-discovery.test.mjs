@@ -1,8 +1,9 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
-import { selectPublishedCourses, directoryPageCount, directoryHref, parseDirectoryPage, pageCourses, relatedPublishedCourses, courseListSchema, courseRss, catalogVariantNeedsNoindex } from '../src/lib/seo/course-directory.ts';
+import { selectPublishedCourses, directoryPageCount, directoryHref, parseDirectoryPage, pageCourses, relatedPublishedCourses, courseListSchema, courseRss, catalogVariantNeedsNoindex, structuredDataJson } from '../src/lib/seo/course-directory.ts';
 import { publicSitemapUrls, changedPublicUrls } from './indexnow-plan.mjs';
+import { previousProductionSha, comparisonSourcePlan } from './production-source-plan.mjs';
 import { rotatingUrls } from './seo-audit.mjs';
 const course=(id,extra={})=>({id,title:id,href:`/courses/${id}`,status:'available',goal:'future-of-work',desc:'A < B & C',category:'Skills',...extra});
 test('public directory excludes draft, unsafe and noncanonical records and deduplicates deterministically',()=>{
@@ -69,4 +70,22 @@ test('related links distribute visibility across a topic and preserve the chosen
   for(const linked of links)counts.set(linked.id,counts.get(linked.id)+1);
  }
  assert.ok([...counts.values()].every(count=>count===4));
+});
+
+test('structured data escapes script delimiters while preserving the original JSON value',()=>{
+ const value={name:'</script><script>alert(1)</script>'};
+ const json=structuredDataJson(value);
+ assert.ok(!json.includes('<'));assert.ok(json.includes('\\u003c'));assert.deepEqual(JSON.parse(json),value);
+});
+
+test('production comparison chooses the last successful publication and safely handles missing or truncated history',()=>{
+ const a='a'.repeat(40),b='b'.repeat(40),c='c'.repeat(40);
+ const deployments=[{id:1,sha:a,environment:'Production'},{id:2,sha:b,environment:'Preview'},{id:3,sha:c,environment:'Production'}];
+ const statuses={1:[{state:'success',created_at:'2026-11-23T10:00:00Z'}],2:[{state:'success',created_at:'2026-11-23T11:00:00Z'}],3:[{state:'success',created_at:'2026-11-23T12:00:00Z'}]};
+ assert.equal(previousProductionSha(deployments,statuses,3,'2026-11-23T12:00:00Z'),a);
+ assert.equal(previousProductionSha([],{},3,'2026-11-23T12:00:00Z'),undefined);
+ assert.equal(comparisonSourcePlan({status:'behind',files:[]}).mode,'full');
+ assert.equal(comparisonSourcePlan({status:'ahead',files:Array.from({length:300},()=>({filename:'x'}))}).mode,'full');
+ assert.deepEqual(comparisonSourcePlan({status:'ahead',files:[{filename:'src/app/courses/page.tsx'},{filename:'docs/readme.md'}]}).paths,['src/app/courses/page.tsx','docs/readme.md']);
+ assert.deepEqual(comparisonSourcePlan({status:'identical'}),{mode:'changed',paths:[]});
 });

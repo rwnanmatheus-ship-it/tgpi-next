@@ -10,6 +10,7 @@ on:
   deployment_status:
 permissions:
   contents: read
+  deployments: read
 concurrency:
   group: discovery-submit
   cancel-in-progress: false
@@ -31,11 +32,14 @@ jobs:
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
           node-version: 24
-      - name: Find changed source paths
-        run: git diff --name-only HEAD^ HEAD > changed-public-source.txt
+      - name: Compare with the previous successful production deployment
+        id: changes
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/production-source-plan.mjs
       - name: Notify IndexNow of changed public pages
         env:
-          SUBMISSION_MODE: ${{ inputs.mode || 'changed' }}
+          SUBMISSION_MODE: ${{ inputs.mode == 'full' && 'full' || steps.changes.outputs.mode }}
         run: |
           if [ "$SUBMISSION_MODE" = "full" ]; then
             node scripts/indexnow-submit.mjs --all

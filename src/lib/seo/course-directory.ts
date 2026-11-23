@@ -38,3 +38,9 @@ export function catalogVariantNeedsNoindex(params: Record<string, string | strin
   const facets = new Set(["q","goal","series","availability","credential","language","access","area","region","sector","target","sort","view"]);
   return Object.keys(params).some(key => facets.has(key));
 }
+
+export function structuredDataJson(value: unknown): string {
+  const json = JSON.stringify(value);
+  if (json === undefined) throw new Error("Structured data must be JSON serializable");
+  return json.replace(/</g, "\\u003c");
+}

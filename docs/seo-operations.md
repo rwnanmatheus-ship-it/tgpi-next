@@ -125,8 +125,10 @@ deployment. Regression checks exercise pagination coverage and boundaries,
 published-only selection, XML escaping, related links and crawl rotation.
 
 IndexNow notifications now read the published sitemap instead of a fixed list
-of eight URLs. Deployment runs map changed source paths to canonical public
-routes. Shared chrome/localization changes notify the public sitemap; course,
+of eight URLs. Deployment runs compare against the previous successful production deployment
+through the GitHub API and map changed source paths to canonical public routes.
+Unavailable history, rollback/diverged comparisons and truncated file lists
+fall back to a full public submission. Shared chrome/localization changes notify the public sitemap; course,
 country, guide and discovery changes notify the corresponding route groups.
 Direct static page paths map to their existing public route. Nonpublic and
 external URLs, queries and fragments are rejected. Deleted routes absent from

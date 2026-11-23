@@ -7,7 +7,7 @@ import { courseDiscoveryCopy } from "@/lib/localization/course-discovery-copy";
 import { courseLearningPolicy } from "@/lib/learning/catalog-policy";
 import { fullyLocalizedAcademyCourses } from "@/lib/localization/academy-coverage";
 import { publishedDirectory } from "@/lib/seo/course-directory.server";
-import { directoryPageCount, directoryHref, directoryOrigin, pageCourses, courseListSchema } from "@/lib/seo/course-directory";
+import { directoryPageCount, directoryHref, directoryOrigin, pageCourses, courseListSchema, structuredDataJson } from "@/lib/seo/course-directory";
 import styles from "./course-directory.module.css";
 export async function directoryMetadata(page: number): Promise<Metadata> {
   const locale = await getLocale(), copy = courseDiscoveryCopy(locale);
@@ -25,7 +25,7 @@ export default async function CourseDirectory({ page }: { page: number }) {
     ...(page > 1 ? [{ "@type":"ListItem", position:3, name:`${copy.page} ${page}`, item:directoryOrigin+directoryHref(page) }] : []),
   ] };
   return <main className={styles.page}>
-    <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify([schema,breadcrumb]).replace(/</g,"\u003c")}} />
+    <script type="application/ld+json" dangerouslySetInnerHTML={{__html:structuredDataJson([schema,breadcrumb])}} />
     <nav className={styles.breadcrumb} aria-label={copy.navigation}><Link href="/courses">{copy.catalogue}</Link><span>/</span><Link href="/courses/directory">{copy.directory}</Link></nav>
     <header className={styles.header}><p className={styles.eyebrow}>{"TGPI ACADEMY"}</p><h1>{copy.title}</h1><p>{copy.description}</p><p>{publishedDirectory.length} {copy.courses} · {copy.page} {page} {copy.of} {pages}</p><nav className={styles.links}><Link href="/courses">{copy.interactive}</Link><a href="/courses/feed.xml" type="application/rss+xml">{copy.feed}</a></nav></header>
     <p className={styles.intro}>{copy.intro}</p>
