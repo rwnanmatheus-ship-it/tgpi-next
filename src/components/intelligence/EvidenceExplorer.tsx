@@ -232,7 +232,10 @@ export default function EvidenceExplorer({ countries, initialFilters, indicatorT
               onRegionChange={id => {
                 const nextRegion = id === "world" ? "all" : id.endsWith("america") ? "Americas" : id.charAt(0).toUpperCase() + id.slice(1);
                 setMapZoom({ region: nextRegion, id });
-                setAtlasFocus(current => ({ slug: current?.slug ?? atlasCountry, query, region: nextRegion, coverage }));
+                setAtlasFocus(current => ({
+                  slug: current?.query === query && current.region === region && current.coverage === coverage ? current.slug : atlasCountry,
+                  query, region: nextRegion, coverage,
+                }));
                 updateUrl({ region: nextRegion, limit: PAGE_SIZE });
               }}
             />
