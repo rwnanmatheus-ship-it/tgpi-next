@@ -1,8 +1,16 @@
 import { clerkMiddleware } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
+import { isDiscoveryLocale } from "@/lib/discovery";
 
 // Authentication context is attached here. Authorization is intentionally
 // enforced at each protected layout, page and route handler on the server.
-export default clerkMiddleware({
+export default clerkMiddleware((_auth, request) => {
+  const headers = new Headers(request.headers);
+  headers.delete("x-tgpi-discovery-locale");
+  const match = /^\/discover\/([^/]+)\/?$/.exec(request.nextUrl.pathname);
+  if (match && isDiscoveryLocale(match[1])) headers.set("x-tgpi-discovery-locale", match[1]);
+  return NextResponse.next({ request: { headers } });
+}, {
   signInUrl: "/sign-in",
   signUpUrl: "/sign-up",
 });

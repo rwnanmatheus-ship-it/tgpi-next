@@ -86,3 +86,14 @@ landing-page engagement over a meaningful period; do not count this audit’s
 requests as audience growth. This release does not activate analytics, verify
 search ownership or promise traffic. Review sources and guide content when rules
 change. `npm run test:all` checks the editorial registry and discovery wiring.
+
+## International discovery and voluntary sharing (2026-11-23)
+
+See `docs/organic-growth-2026-11.md` for the research, rollout and measurement
+plan. `/discover/{locale}` has six stable localized variants with reciprocal
+hreflang and self-canonicals. This does not localize URLs for the entire site.
+`/feed.xml` publishes existing editorial guides; banners are available from each
+localized landing page. Sharing happens only after an explicit visitor action.
+The IndexNow workflow verifies the public ownership file before submitting a
+bounded set of updated URLs after production. Successful acceptance does not
+prove indexation. Existing consent and analytics configuration are preserved.

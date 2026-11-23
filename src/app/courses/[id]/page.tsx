@@ -38,15 +38,19 @@ export async function generateMetadata({
     }, locale);
   }
   const professional = getProfessionalCourse(id);
-  if (professional && professionalCourseEnabled(id, process.env.VERCEL_ENV || process.env.NODE_ENV)) return { title: `${professional.title} | TGPI Learning`, description: professional.outcomes.join(" ") };
+  if (professional && professionalCourseEnabled(id, process.env.VERCEL_ENV || process.env.NODE_ENV)) return withSocialMetadata({
+    title: `${professional.title} | TGPI Learning`, description: professional.outcomes.join(" "),
+    alternates: { canonical: `/courses/${professional.id}` },
+  }, await getLocale());
   const course = getCourse(id);
 
   if (!course) return { title: "Course not found | TGPI" };
 
-  return {
+  return withSocialMetadata({
     description: course.description,
     title: `${course.title} | TGPI Learning`,
-  };
+    alternates: { canonical: `/courses/${course.id}` },
+  }, await getLocale());
 }
 
 export default async function CoursePage({ params }: CoursePageProps) {

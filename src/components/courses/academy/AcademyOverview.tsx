@@ -31,7 +31,15 @@ export default async function AcademyOverview({ course: original }: { course: Ac
       id, title, objective, deliverable, minutes, project, practiceLab, foundation, language,
     })),
   };
+  const structuredCourse = {
+    "@context": "https://schema.org", "@type": "Course", name: course.title,
+    description: course.description, url: `https://www.theglobalpolymath.com/courses/${course.id}`,
+    image: new URL(course.image, "https://www.theglobalpolymath.com").href,
+    inLanguage: instructionLang, timeRequired: `PT${course.minutes}M`, teaches: course.outcomes,
+    provider: { "@type": "Organization", name: "The Global Polymath Institute", url: "https://www.theglobalpolymath.com" },
+  };
   return <main className={styles.page} lang={locale}>
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredCourse).replace(/</g, "\\u003c") }} />
     <div className={styles.topline}><Link className={styles.breadcrumb} href="/courses">← {t('All courses')}</Link><span className={styles.sectionKicker}>{t('TGPI /')} {t('Learning')}</span></div>
     <header className={styles.hero} data-tgpi-surface="banner" data-tgpi-material="inverse"><div className={styles.heroCopy}><span className={styles.eyebrow}>{t('Your next capability')}</span><h1 lang={instructionLang}>{course.title}</h1><p lang={instructionLang}>{course.description}</p><div className={styles.stats}><span>{Math.floor(course.minutes / 60)}h {course.minutes % 60}m · {t('estimated workload')}</span><span>{course.lessons.length} {t('lessons and laboratories')}</span>{portugueseOnly && <span>{t('Instruction: Portuguese')}</span>}</div><div className={styles.actions}><Link className={styles.button} href={`/courses/${course.id}/study`}>{t('Start or continue learning')} →</Link><a className={styles.heroLink} href="#lesson-preview">{t('Preview a lesson')} <CourseArrow /></a></div><p className={styles.heroFootnote}>{t(premium ? 'TGPI Premium' : 'Free course with certificate')} · {t('Saved progress')}</p></div><div className={styles.heroVisual}><Image src={course.image} alt="" fill preload sizes="(max-width: 760px) 100vw, 50vw" className={styles.heroImage} /><CourseCoverBadges courseId={course.id} /></div></header>
     {course.scopeNotice && <p className={styles.notice}><span lang={instructionLang}>{course.scopeNotice}</span> {!premium && <a className={styles.link} href="https://www.redcross.org/take-a-class/skills-sessions" target="_blank" rel="noreferrer">{t('Find in-person skills training in the US')}</a>}</p>}
