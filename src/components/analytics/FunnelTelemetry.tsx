@@ -10,6 +10,7 @@ export default function FunnelTelemetry() {
       if (!hasFunnelConsent(document.cookie, gpc ? "1" : null)) return;
       void fetch("/api/analytics/funnel", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ event }), keepalive: true }).catch(() => {});
     }
+    if (pathname === "/guia-paises") send("country_guide_view");
     if (pathname.startsWith("/sign-up")) send("signup_started");
     if (["/pricing", "/premium", "/upgrade"].includes(pathname)) send("premium_visit");
     if (/^\/verify\/credentials\/TGPI-[A-Z0-9_-]+$/.test(pathname) && document.querySelector('[data-state="active_verified"]')) send("credential_verification_viewed");
