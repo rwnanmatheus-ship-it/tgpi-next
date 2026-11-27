@@ -1,0 +1,66 @@
+import type { StudyGuide } from './types';
+
+export default {
+  slug: 'mexico',
+  countrySlug: 'mexico',
+  sources: [
+    { label: 'SEP · SIRVOES', url: 'https://sirvoes.sep.gob.mx/sirvoes/mvc/consultas' },
+    { label: 'UNAM · Admisión a Licenciatura', url: 'https://circe.dgae.unam.mx/admision_licenciatura/' },
+    { label: 'UNAM · Instructivo de ingreso 2026', url: 'https://repositorio.dgae.unam.mx/Licenciatura2026/instructivo_licenciatura2026.pdf' },
+    { label: 'UNAM DGIRE · Forma F-69 y revalidación', url: 'https://dgire.unam.mx/media/attachments/2025/07/01/emision-de-f69-epromedioyrevalidacion.pdf' },
+    { label: 'Facultad de Ciencias · Ciencias de la Computación', url: 'https://pagina.fciencias.unam.mx/estudiar-en-ciencias/estudios/licenciaturas/ccomputacion' },
+  ],
+  locales: {
+    en: {
+      country: 'Mexico',
+      title: 'Study in Mexico with a foreign school diploma',
+      description: 'Check private programme recognition, compare a UNAM degree and see how foreign grades, Spanish evidence and exam fees fit into a first-year application.',
+      intro: 'A student comparing a private university with the National Autonomous University of Mexico (UNAM) has two different checks to make. First verify the exact programme and campus. Then follow the admissions rules for the institution and the country where you finished secondary school. Use UNAM’s Computer Science degree as a worked example.',
+      alt: 'Two students adjust a building model on a worktable beside a flowering courtyard.',
+      sections: [
+        { heading: 'Verify the degree a private university advertises', body: 'Mexico’s education ministry publishes a searchable list of private programmes holding official recognition, known as RVOE. Search SIRVOES for the precise degree, location and delivery mode. A listing for an on-campus programme at one branch does not establish that an online version at another branch has the same recognition.', steps: ['Ask for the official programme name, campus address and recognition agreement number before paying a deposit.', 'Check the record against the offer and save a copy. For UNAM, go directly to the university’s own degree and admissions pages.'], sources: [0, 1] },
+        { heading: 'Identify the UNAM selection process', body: 'Choose the first-year call for the degree and mode you want. UNAM lists school-based study, open or distance options and entry into later years separately. In its completed 2026 competition, the university required a secondary-school average of at least 7.0 out of 10 or its equivalent, alongside selection through the entrance competition.', steps: ['Save the degree, faculty, mode and exact dates from the current call.', 'Treat the minimum average and the entrance examination as separate requirements. Plan any additional programme-specific steps.'], sources: [1, 2, 4] },
+        { heading: 'Prepare foreign school records and language evidence', body: 'For completed upper-secondary education abroad, UNAM’s DGIRE describes the F-69 grade equivalence and the separate recognition of studies. The 2026 instructions specified authentication and official Spanish translations as applicable. They also asked foreign applicants whose language differs from Spanish for a proficiency statement issued by CEPE-UNAM.', steps: ['Give DGIRE the issuing country and full qualification name. Confirm the originals, authentication and translation arrangements before commissioning anything.', 'Check the current instructions for your profile and ask CEPE which assessment yields the required statement.'], sources: [2, 3] },
+        { heading: 'Estimate the time and cost of Computer Science', body: 'UNAM’s Faculty of Sciences describes an eight-semester Computer Science degree with 376 local credits and 40 subjects. The plan includes mathematics, computing and English. In 2026 the admission exam and applicant identification together cost MXN 490. Applicants paying from abroad also covered banking charges.', steps: ['Budget for the full eight semesters, housing and transport. Request current tuition and administrative fees for your situation.', 'List the exam, translations and recognition as separate initial expenses. Confirm the next call’s price before transferring money.'], sources: [2, 4] },
+      ],
+      faq: [
+        { question: 'Can I convert my own grades to show I meet the UNAM minimum?', answer: 'A personal conversion can help you plan, but UNAM identifies the official F-69 from DGIRE for applicants who studied abroad. Check which certificate and supporting records the application instructions ask you to deliver.' },
+        { question: 'Does recognition of my secondary diploma transfer my university credits?', answer: 'These are different decisions. DGIRE’s procedure here concerns completed secondary education. Someone wishing to enter a later university year should read the separate DGAE notice for accreditation or revalidation and check whether the degree offers places.' },
+      ],
+    },
+    pt: {
+      country: 'México',
+      title: 'Como fazer graduação no México com diploma estrangeiro',
+      description: 'Verifique o reconhecimento de cursos particulares, a candidatura à UNAM, a equivalência do ensino médio e a comprovação de espanhol.',
+      intro: 'Comparar uma universidade particular com a Universidade Nacional Autônoma do México (UNAM) exige duas verificações. Primeiro, identifique o curso, o campus e a modalidade. Depois, consulte a via de ingresso da instituição para quem concluiu o ensino médio no seu país. A graduação em Ciências da Computação da UNAM mostra como fazer essa comparação.',
+      alt: 'Dois estudantes ajustam uma maquete de edifício em uma bancada ao lado de um pátio florido.',
+      sections: [
+        { heading: 'Confira o reconhecimento de um curso particular', body: 'A Secretaria de Educação Pública do México mantém o SIRVOES, consulta de programas particulares com reconhecimento oficial, o RVOE. Pesquise pela graduação exata, unidade e modalidade. O registro de uma turma presencial em um campus não confirma a situação da oferta a distância em outra unidade.', steps: ['Antes de pagar a reserva, peça o nome oficial do curso, o endereço da unidade e o número do ato de reconhecimento.', 'Compare os dados com o anúncio e guarde o registro. Para a UNAM, consulte diretamente a ficha da graduação e o portal de ingresso.'], sources: [0, 1] },
+        { heading: 'Escolha o processo seletivo certo da UNAM', body: 'A UNAM publica chamadas para primeiro ingresso, modalidades aberta ou a distância e entrada em anos posteriores. No concurso de 2026, já encerrado, exigiu média do ensino médio de pelo menos 7,0 em 10 ou equivalente, além da classificação no processo seletivo.', steps: ['No edital vigente, anote curso, faculdade, modalidade e datas de cada etapa.', 'Separe a média mínima da prova de seleção. Confira se o curso prevê requisitos adicionais.'], sources: [1, 2, 4] },
+        { heading: 'Organize o histórico e o comprovante de espanhol', body: 'Para o ensino médio completo cursado fora do México, a DGIRE da UNAM descreve a equivalência de média F-69 e a revalidação dos estudos. O regulamento de 2026 detalhou autenticação e tradução oficial quando aplicáveis. Para estrangeiros cujo idioma difere do espanhol, pediu uma declaração de proficiência emitida pelo CEPE-UNAM.', steps: ['Informe à DGIRE o país emissor e o nome do diploma. Confirme quais originais, autenticações e traduções serão aceitos antes de contratar o serviço.', 'Leia as regras atuais para seu perfil e pergunte ao CEPE qual avaliação gera o documento solicitado.'], sources: [2, 3] },
+        { heading: 'Calcule o tempo e o custo de Ciências da Computação', body: 'Na Faculdade de Ciências da UNAM, o curso tem oito semestres, 376 créditos locais e 40 disciplinas. A grade reúne computação, matemática e inglês. No concurso de 2026, prova e identificação do candidato custaram juntas 490 pesos mexicanos (MXN). Quem pagou do exterior também arcou com tarifas bancárias.', steps: ['Projete oito semestres de moradia e transporte. Peça à instituição as taxas acadêmicas atualizadas para o seu caso.', 'Separe prova, traduções e revalidação como gastos iniciais. Confira o valor do novo edital antes de fazer uma transferência.'], sources: [2, 4] },
+      ],
+      faq: [
+        { question: 'Posso converter minha nota brasileira para comprovar a média exigida?', answer: 'A conversão própria serve para simular cenários. Para quem estudou fora do México, a UNAM indica a equivalência oficial F-69 emitida pela DGIRE. Confira no edital quais comprovantes e documentos de apoio precisam ser entregues.' },
+        { question: 'A revalidação do ensino médio aproveita disciplinas que fiz na faculdade?', answer: 'São análises diferentes. O procedimento da DGIRE descrito aqui trata do ensino médio completo. Quem já cursou parte de uma graduação deve consultar a chamada da DGAE para ingresso em anos posteriores por aproveitamento ou revalidação e verificar as vagas do curso.' },
+      ],
+    },
+    es: {
+      country: 'México',
+      title: 'Cómo estudiar una licenciatura en México con bachillerato extranjero',
+      description: 'Verifica el RVOE de programas privados, la admisión a la UNAM, la equivalencia de promedio y el español exigido a aspirantes internacionales.',
+      intro: 'Al comparar una institución particular con la Universidad Nacional Autónoma de México (UNAM), conviene hacer dos comprobaciones. Primero identifica la carrera, el plantel y la modalidad. Después consulta las condiciones de ingreso para quien terminó el bachillerato en tu país. La licenciatura en Ciencias de la Computación de la UNAM sirve de ejemplo.',
+      alt: 'Dos estudiantes ajustan una maqueta de edificio en una mesa de trabajo junto a un patio con flores.',
+      sections: [
+        { heading: 'Verifica el RVOE del programa particular', body: 'La Secretaría de Educación Pública publica en el SIRVOES los programas particulares con reconocimiento de validez oficial de estudios (RVOE). Busca la licenciatura, el plantel y la modalidad exactos. Un registro presencial en una sede no confirma la situación del programa en línea que anuncia otra.', steps: ['Pide el nombre oficial, la dirección del plantel y el número de acuerdo antes de pagar una reserva.', 'Compara la ficha con la oferta y guarda el resultado. Para la UNAM, consulta su catálogo oficial y su portal de ingreso.'], sources: [0, 1] },
+        { heading: 'Elige el concurso de ingreso de la UNAM', body: 'La UNAM distingue las convocatorias de primer ingreso, los sistemas abierto y a distancia y el ingreso en años posteriores. En el concurso de 2026, ya concluido, exigió un promedio mínimo de bachillerato de 7,0 sobre 10 o su equivalente, además de obtener un lugar mediante el concurso de selección.', steps: ['Copia de la convocatoria vigente la carrera, facultad, modalidad y fechas de cada trámite.', 'Distingue el promedio mínimo del examen de selección. Revisa si tu carrera exige requisitos adicionales.'], sources: [1, 2, 4] },
+        { heading: 'Reúne los documentos escolares y de español', body: 'Para el bachillerato completo cursado en el extranjero, la DGIRE de la UNAM explica la equivalencia de promedio F-69 y la revalidación de estudios. El instructivo de 2026 detalló la autenticación y la traducción oficial cuando correspondieran. También exigió una constancia del CEPE-UNAM a aspirantes extranjeros de habla distinta al español.', steps: ['Indica a la DGIRE el país emisor y el nombre del título. Confirma originales, autenticación y traducción antes de contratar servicios.', 'Consulta el instructivo vigente para tu perfil y pregunta al CEPE qué evaluación produce la constancia aceptada.'], sources: [2, 3] },
+        { heading: 'Presupuesta Ciencias de la Computación', body: 'En la Facultad de Ciencias, la licenciatura dura ocho semestres y suma 376 créditos locales repartidos en 40 asignaturas. El plan abarca computación, matemáticas e inglés. En el concurso de 2026, los derechos de examen e identificación sumaron 490 pesos mexicanos (MXN). Los pagos desde el extranjero podían añadir comisiones bancarias.', steps: ['Calcula alojamiento y transporte durante ocho semestres. Consulta los cargos académicos vigentes para tu perfil.', 'Separa examen, traducciones y revalidación como gastos iniciales. Verifica el importe de la nueva convocatoria antes de transferir dinero.'], sources: [2, 4] },
+      ],
+      faq: [
+        { question: '¿Puedo convertir mis notas para demostrar que cumplo el promedio?', answer: 'Una estimación propia ayuda a planificar. Para estudios cursados en el extranjero, la UNAM especifica la equivalencia oficial F-69 de la DGIRE. Consulta qué certificados y documentos de respaldo exige la convocatoria.' },
+        { question: '¿La revalidación del bachillerato me reconoce asignaturas universitarias?', answer: 'Son trámites distintos. El procedimiento aquí descrito se refiere al bachillerato completo. Si ya cursaste parte de una licenciatura, busca en la DGAE el ingreso en años posteriores por acreditación o revalidación y comprueba las plazas disponibles.' },
+      ],
+    },
+  },
+} satisfies StudyGuide;

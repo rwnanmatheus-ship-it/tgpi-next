@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync, existsSync } from 'node:fs';
-import { discoveryContent, discoveryLocales, discoveryAlternates, isDiscoveryLocale, discoveryOrigin, discoveryTransitionRequiresRefresh } from '../src/lib/discovery.ts';
+import { discoveryContent, discoveryLocales, discoveryAlternates, isDiscoveryLocale, discoveryOrigin, discoveryTransitionRequiresRefresh, studyRequestLanguage, studyLanguageSwitch } from '../src/lib/discovery.ts';
 import sharp from 'sharp';
 const read = path => readFileSync(new URL('../'+path, import.meta.url),'utf8');
 test('international variants have complete copy and reciprocal canonical alternates', () => {
@@ -55,4 +55,16 @@ test('shared root refreshes on discovery transitions without looping or refreshi
  assert.equal(discoveryTransitionRequiresRefresh('/courses', '/discover/de'), true);
  assert.equal(discoveryTransitionRequiresRefresh('/courses', '/countries'), false);
  assert.ok(read('src/app/layout.tsx').includes('<DiscoveryLocaleSync />'));
+});
+
+test('study edition URLs pin the reading language and preserve destinations when switching', () => {
+  assert.equal(studyRequestLanguage('/guides/study/pt/japan'), 'pt-BR');
+  assert.equal(studyRequestLanguage('/guides/study/es'), 'es');
+  assert.equal(studyRequestLanguage('/guides/study/france'), null);
+  assert.equal(studyRequestLanguage('/guides/study/es/canada/extra'), null);
+  assert.equal(studyLanguageSwitch('/guides/study/en/japan', 'pt-BR'), '/guides/study/pt/japan');
+  assert.equal(studyLanguageSwitch('/guides/study/pt', 'fr'), null);
+  assert.equal(discoveryTransitionRequiresRefresh('/guides/study/pt/japan', '/guides/study/pt/canada'), false);
+  assert.equal(discoveryTransitionRequiresRefresh('/guides/study/en/japan', '/guides/study/es/japan'), true);
+  assert.equal(discoveryTransitionRequiresRefresh('/countries/japan', '/guides/study/pt/japan'), true);
 });

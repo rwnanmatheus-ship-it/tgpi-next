@@ -13,6 +13,12 @@ export function changedPublicUrls(paths, urls) {
  const learning=changed.some(path=>/^src\/app\/courses\/\[id\]/.test(path)||/^src\/(data\/courses|components\/courses|lib\/(learning|seo\/course-directory))/.test(path));
  const countries=changed.some(path=>/^src\/app\/countries\/\[/.test(path)||/^src\/(data\/countr|components\/countr|lib\/countr)/.test(path));
  const guides=changed.some(path=>/^src\/lib\/public-guides|^src\/app\/guides\/\[/.test(path));
+ const studyShared = changed.some(path =>
+   path.startsWith('src/app/guides/study/') || ['src/data/study-guides/index.ts', 'src/data/study-guides/types.ts', 'public/images/study-guides/world-study.webp'].includes(path));
+ const studySlugs = new Set(changed.flatMap(path => {
+   const match = /^(?:src\/data\/study-guides\/([a-z-]+)\.ts|public\/images\/study-guides\/([a-z-]+)\.webp)$/.exec(path);
+   return match ? [match[1] || match[2]] : [];
+ }));
  const worksheet=changed.some(path=>/^src\/app\/guia-paises\/(page\.tsx|copy\.ts|campaign\.ts)$/.test(path)||path==='public/guias/ficha-comparar-paises.pdf');
  const directory=changed.some(path=>/^src\/app\/courses\/directory\//.test(path));
  const routes=changed.flatMap(path=>{
@@ -24,6 +30,10 @@ export function changedPublicUrls(paths, urls) {
  const discovery=changed.some(path=>/^src\/lib\/discovery|^src\/components\/discovery|^src\/app\/discover/.test(path));
  return urls.filter(url=>{
   const path=new URL(url).pathname;
+  if (path.startsWith('/guides/study/')) {
+    const slug = path.split('/')[4];
+    return studyShared || (slug ? studySlugs.has(slug) : studySlugs.size > 0);
+  }
   return (worksheet&&path==='/guia-paises')||(home&&path==='/')||routes.includes(path)||(learning&&/^\/courses(?:\/|$)/.test(path))||(countries&&/^\/countries(?:\/|$)/.test(path))||(guides&&/^\/guides(?:\/|$)/.test(path))||(directory&&path.startsWith('/courses/directory'))||(discovery&&path.startsWith('/discover/'));
  });
 }

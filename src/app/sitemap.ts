@@ -1,3 +1,4 @@
+import { studyGuides, studyLocales, studyOrigin, studyReviewed, studyPath, studyPhoto, studyAlternates } from "@/data/study-guides";
 import { publishedDirectory } from "@/lib/seo/course-directory.server";
 import { directoryPageCount, directoryHref } from "@/lib/seo/course-directory";
 import type { MetadataRoute } from "next";
@@ -74,7 +75,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  return [...pages, ...countries, ...coursePages, ...Array.from({length:directoryPageCount(publishedDirectory.length)},(_,index)=>({
+  const studyPages: MetadataRoute.Sitemap = studyLocales.flatMap(lang => [
+    {
+      url: studyOrigin + studyPath(lang),
+      images: [studyOrigin + "/images/study-guides/world-study.webp"],
+      alternates: { languages: studyAlternates() }, lastModified: studyReviewed,
+    },
+    ...studyGuides.map(guide => ({
+      url: studyOrigin + studyPath(lang, guide.slug),
+      images: [studyOrigin + studyPhoto(guide.countrySlug).src, studyOrigin + `/images/study-guides/${guide.slug}.webp`],
+      alternates: { languages: studyAlternates(guide.slug) }, lastModified: studyReviewed,
+    })),
+  ]);
+  return [...pages, ...countries, ...coursePages, ...studyPages, ...Array.from({length:directoryPageCount(publishedDirectory.length)},(_,index)=>({
     url: `${siteUrl}${directoryHref(index+1)}`, changeFrequency:"weekly" as const, priority:0.7,
   })), ...discoveryLocales.map(locale => ({
     url: `${siteUrl}/discover/${locale}`,

@@ -1,6 +1,7 @@
 'use client';
 
 import { createContext, useContext, useCallback, useMemo, useRef, useState, useEffect, useTransition, type ReactNode } from 'react';
+import { studyLanguageSwitch, studyRequestLanguage } from "@/lib/discovery";
 import { useRouter } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
 import { credentialSharingMessages } from '@/lib/localization/credential-sharing-copy';
@@ -56,7 +57,7 @@ export function LocaleProvider({ locale, messages, children }: { locale: Locale;
     const synchronize = (event: StorageEvent) => {
       if (event.key !== localeSyncKey) return;
       const selected = readLocaleSignal(event.newValue);
-      if (!selected) return;
+      if (!selected || studyRequestLanguage(window.location.pathname)) return;
       void ensureLocaleMessages(selected).then(() => {
         setAppliedLocale(selected);
         startTransition(() => router.refresh());
@@ -79,11 +80,14 @@ export function LocaleProvider({ locale, messages, children }: { locale: Locale;
         method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ locale: next }),
       });
       if (!response.ok) throw new Error('Locale preference could not be saved');
-      setAppliedLocale(next);
+      const pathname = window.location.pathname;
+      const studyVariant = studyLanguageSwitch(pathname, next);
+      setAppliedLocale(studyVariant ? next : studyRequestLanguage(pathname) ?? next);
       try { localStorage.setItem(localeSyncKey, JSON.stringify({ locale: next, at: Date.now() })); } catch { /* Storage may be unavailable in private browser modes. */ }
       startTransition(() => {
         // Keep the selected language in the public, indexable discovery URL.
         if (/^\/discover\/(en|pt-BR|es|fr|de|it)\/?$/.test(window.location.pathname)) router.push(`/discover/${next}`);
+        else if (studyVariant && studyVariant !== pathname) router.push(studyVariant + window.location.search + window.location.hash);
         else router.refresh();
       });
     } catch {
