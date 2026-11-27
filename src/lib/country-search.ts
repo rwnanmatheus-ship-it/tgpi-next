@@ -8,6 +8,7 @@ export type SearchableCountry = {
   language?: string;
   capital?: string;
   subregion?: string;
+  places?: readonly string[];
 };
 
 export const normalizeCountrySearch = (value: string) => value.normalize("NFD")
@@ -49,6 +50,12 @@ const languageCodes: Readonly<Record<string, string>> = {
 };
 const regionCodes: Readonly<Record<string, string>> = {
   Africa: "002", Americas: "019", Asia: "142", Europe: "150", Oceania: "009",
+  "Northern Africa": "015", "Sub-Saharan Africa": "202",
+  "Northern America": "021", "Latin America and the Caribbean": "419",
+  "Central Asia": "143", "Eastern Asia": "030", "South-eastern Asia": "035",
+  "Southern Asia": "034", "Western Asia": "145", "Eastern Europe": "151",
+  "Northern Europe": "154", "Southern Europe": "039", "Western Europe": "155",
+  "Australia and New Zealand": "053", Melanesia: "054", Micronesia: "057", Polynesia: "061",
   "North America": "003", "South America": "005", "Central America": "013", Caribbean: "029",
 };
 const capitalAliases: Readonly<Record<string, string[]>> = {
@@ -88,7 +95,7 @@ export function countrySearchTerms(country: SearchableCountry): string[] {
     country.name, country.slug, country.iso2, country.iso3, country.capital ?? "",
     ...(capitalAliases[country.capital ?? ""] ?? []),
     ...names.map(display => display.of(country.iso2) ?? ""), ...(aliases[country.iso2] ?? []),
-    ...regions, ...translatedLanguages(country.language ?? ""),
+    ...(country.places ?? []), ...regions, ...translatedLanguages(country.language ?? ""),
   ].map(normalizeCountrySearch).filter(Boolean))];
 }
 

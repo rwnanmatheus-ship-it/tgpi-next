@@ -13,12 +13,13 @@ type Props = {
   query: string;
   onChange: (value: string) => void;
   onSelect?: (slug: string) => void;
+  onShowResults?: () => void;
   terms?: ReadonlyMap<string, string[]>;
 };
 
 const discoveryQueries = ["English", "French", "Europe"] as const;
 
-export default function CountrySearchInput({ countries, query, onChange, onSelect, terms }: Props) {
+export default function CountrySearchInput({ countries, query, onChange, onSelect, onShowResults, terms }: Props) {
   const { locale, t } = useLocale();
   const router = useRouter();
   const id = useId();
@@ -27,6 +28,7 @@ export default function CountrySearchInput({ countries, query, onChange, onSelec
   const [active, setActive] = useState<string>();
   const normalizedQuery = normalizeCountrySearch(query);
   const indexedTerms = useMemo(() => terms ?? new Map(countries.map(country => [country.slug, countrySearchTerms(country)])), [countries, terms]);
+  const hasPlaces = countries.some(country => country.places?.length);
   const hasMetadata = countries.some(country => country.language || country.capital);
   const quickQueries = useMemo(() => discoveryQueries.filter(value => rankCountryMatches(countries, value, "en", indexedTerms).length), [countries, indexedTerms]);
   const matches = useMemo(() => normalizedQuery
@@ -64,7 +66,7 @@ export default function CountrySearchInput({ countries, query, onChange, onSelec
         <input ref={input} id={id} type="search" role="combobox" autoComplete="off" spellCheck={false}
           maxLength={120} aria-autocomplete="list" aria-controls={expanded ? `${id}-options` : undefined}
           aria-expanded={expanded} aria-activedescendant={selectedCountry && expanded ? `${id}-${selectedCountry.slug}` : undefined}
-          aria-describedby={`${id}-hint`} value={query} placeholder={t(hasMetadata ? "Country, capital, language or ISO code…" : "Country, translated name or ISO code…")}
+          aria-describedby={`${id}-hint`} value={query} placeholder={t(hasPlaces ? "City, country, language or ISO code…" : hasMetadata ? "Country, capital, language or ISO code…" : "Country, translated name or ISO code…")}
           onFocus={() => setOpen(true)} onClick={() => setOpen(true)}
           onChange={event => search(event.target.value)}
           onKeyDown={event => {
@@ -89,7 +91,7 @@ export default function CountrySearchInput({ countries, query, onChange, onSelec
               const exact = suggestions.find(country => [localizedCountryName(country, locale), country.name, country.iso2, country.iso3, country.slug]
                 .some(value => normalizeCountrySearch(value) === normalizedQuery));
               if (selectedCountry || exact || onSelect) choose((selectedCountry ?? exact ?? suggestions[0]).slug);
-              else setOpen(false);
+              else { setOpen(false); onShowResults?.(); }
             }
           }}
         />
@@ -121,14 +123,14 @@ export default function CountrySearchInput({ countries, query, onChange, onSelec
                 <CountryFlag iso2={country.iso2} width={32} />
                 <span className={styles.countryName}>
                   <strong>{localizedCountryName(country, locale)}</strong>
-                  <span>{t(country.region)}{country.capital ? ` · ${country.capital}` : ""}</span>
+                  <span>{[t(country.region), country.places?.find(place => normalizeCountrySearch(place).includes(normalizedQuery)) ?? country.capital].filter(Boolean).join(" · ")}</span>
                 </span>
                 <small translate="no">{country.iso3}</small>
                 <NavigationIcon name={onSelect ? "check" : "chevron"} width={15} height={15} aria-hidden="true" />
               </li>
             ))}
           </ul>
-          {!onSelect && <button type="button" className={styles.allMatches} onClick={() => { input.current?.focus(); setOpen(false); }}>
+          {!onSelect && <button type="button" className={styles.allMatches} onClick={() => { setOpen(false); if (onShowResults) onShowResults(); else input.current?.focus(); }}>
             {t("Explore all matches")}<span>{matches.length}</span>
           </button>}
         </> : <div className={styles.empty}>
