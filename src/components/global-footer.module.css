@@ -259,3 +259,24 @@ button.utility { cursor: pointer; }
   .utilities { gap: .4rem; }
   .support .backToTop { margin-inline-start: 0; }
 }
+
+.footer {
+  border-top: 3px solid transparent;
+  background:
+    radial-gradient(ellipse at 78% 0, #192f48, #081525 65%) padding-box,
+    var(--institute-rule, linear-gradient(90deg, #92723c, #dac38e, #24425f)) border-box;
+}
+.atlasPanel {
+  border-color: #a992638c;
+  background:
+    linear-gradient(90deg, #081729 5%, #0b1c30ed 38%, #11233bb8 70%, #102137bb),
+    url("/images/cinematic-2026/atlas-intelligence-1200.webp") center 46% / cover;
+}
+.atlasCopy h2, .wordmark strong { font-family: var(--tgpi-font-credential); }
+@media (max-width: 640px) {
+  .atlasPanel {
+    background-image:
+      linear-gradient(90deg, #081729 2%, #0b1c30e6 48%, #102137c2),
+      url("/images/cinematic-2026/atlas-intelligence-800.webp");
+  }
+}

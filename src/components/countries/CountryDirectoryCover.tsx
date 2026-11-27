@@ -24,7 +24,7 @@ export default function CountryDirectoryCover({ count, covers }: { count: number
   const current = covers[index];
   const name = current ? localizedCountryName(current, locale) : "";
   return (
-    <header className={styles.cover}>
+    <header data-tgpi-edition="" className={styles.cover}>
       <div className={styles.intro}>
         <p className={styles.brand}><NavigationIcon name="globe" width={17} height={17} /> TGPI <span aria-hidden="true">/</span> {t("Country atlas")}</p>
         <h1>{t("Find your next destination.")}</h1>
