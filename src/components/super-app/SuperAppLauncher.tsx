@@ -79,7 +79,8 @@ export default function SuperAppLauncher() {
   }, [searchOpen]);
 
   useEffect(() => {
-    if (!searchOpen || directoryLoaded.current) return;
+    if (!searchOpen) return;
+    if (directoryLoaded.current) return;
     const controller = new AbortController();
     async function load() {
       setLoadState('loading');
