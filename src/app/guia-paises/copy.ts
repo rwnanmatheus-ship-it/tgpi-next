@@ -2,6 +2,8 @@ import type { Locale } from "@/lib/localization/config";
 
 export const guideCopy = {
   "pt-BR": {
+    "enemGuide": "ENEM em Portugal e na Espanha: guia para brasileiros (em português)",
+    "enemGuideDescription": "Compare os critérios de ingresso e veja onde confirmar os requisitos de cada universidade.",
     "searchTitle": "Como comparar dois países para morar ou estudar | Ficha gratuita TGPI",
     "title": "Qual país cabe no seu plano?",
     "description": "Baixe a ficha gratuita da TGPI para comparar orçamento, idioma, oportunidades e documentos em dois destinos.",
@@ -28,6 +30,8 @@ export const guideCopy = {
     "privacy": "Privacidade"
   },
   "en": {
+    "enemGuide": "Do universities in Portugal and Spain accept Brazil’s ENEM? (in Portuguese)",
+    "enemGuideDescription": "Compare admission routes and find each university’s requirements.",
     "searchTitle": "Compare Two Countries for Living or Studying Abroad | TGPI Worksheet",
     "title": "Which country fits your plans?",
     "description": "Download a free Portuguese worksheet to compare costs, languages, opportunities and documents across two destinations.",
@@ -54,6 +58,8 @@ export const guideCopy = {
     "privacy": "Privacy"
   },
   "es": {
+    "enemGuide": "¿Se acepta el ENEM brasileño en Portugal y España? (en portugués)",
+    "enemGuideDescription": "Compara las vías de acceso y consulta los requisitos de cada universidad.",
     "searchTitle": "Cómo comparar dos países para vivir o estudiar | Ficha TGPI",
     "title": "¿Qué país encaja con tus planes?",
     "description": "Descarga la ficha gratuita en portugués para comparar gastos, idiomas, oportunidades y documentos de dos destinos.",
@@ -80,6 +86,8 @@ export const guideCopy = {
     "privacy": "Privacidad"
   },
   "fr": {
+    "enemGuide": "L’ENEM brésilien est-il accepté au Portugal et en Espagne ? (en portugais)",
+    "enemGuideDescription": "Comparez les voies d’admission et vérifiez les conditions de chaque université.",
     "searchTitle": "Comparer deux pays pour y vivre ou étudier | Fiche TGPI",
     "title": "Quel pays correspond à votre projet ?",
     "description": "Téléchargez une fiche en portugais pour comparer le budget, la langue, les possibilités et les documents de deux destinations.",
@@ -106,6 +114,8 @@ export const guideCopy = {
     "privacy": "Confidentialité"
   },
   "de": {
+    "enemGuide": "Wird der brasilianische ENEM in Portugal und Spanien anerkannt? (auf Portugiesisch)",
+    "enemGuideDescription": "Vergleichen Sie Zulassungswege und prüfen Sie die Anforderungen der einzelnen Hochschulen.",
     "searchTitle": "Zwei Länder zum Leben oder Studieren vergleichen | TGPI-Arbeitsblatt",
     "title": "Welches Land passt zu Ihren Plänen?",
     "description": "Vergleichen Sie Kosten, Sprachen, Chancen und Unterlagen zweier Reiseziele mit dem kostenlosen Arbeitsblatt auf Portugiesisch.",
@@ -132,6 +142,8 @@ export const guideCopy = {
     "privacy": "Datenschutz"
   },
   "it": {
+    "enemGuide": "L’ENEM brasiliano è accettato in Portogallo e in Spagna? (in portoghese)",
+    "enemGuideDescription": "Confronta le modalità di ammissione e verifica i requisiti dei singoli atenei.",
     "searchTitle": "Confrontare due paesi per vivere o studiare | Scheda TGPI",
     "title": "Quale paese fa per te?",
     "description": "Scarica la scheda gratuita in portoghese per confrontare budget, lingue, opportunità e documenti di due destinazioni.",
