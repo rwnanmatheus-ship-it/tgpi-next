@@ -120,3 +120,77 @@
   :root .tgpi-card-3d[data-tgpi-interactive="true"],
   :root .tgpi-card-3d [data-tgpi-layer] { transform: none !important; }
 }
+
+/* The same engraved edge joins navigation, editorial covers and member tools. */
+@media screen {
+  .tgpi-app-shell {
+    --institute-rule: linear-gradient(90deg, #846124, #ead394 21%, #9d773b 47%, #58799a 78%, #193854);
+    --institute-edge: color-mix(in srgb, var(--tgpi-gold) 38%, var(--tgpi-border-soft));
+  }
+
+  .tgpi-app-shell :is(.tgpi-desktop-navigation, .tgpi-mobile.tgpi-compact-topbar) {
+    border-top-color: transparent;
+    background:
+      linear-gradient(110deg, var(--tgpi-surface), var(--tgpi-surface-strong) 48%, var(--tgpi-blue-soft)) padding-box,
+      var(--institute-rule) border-box;
+  }
+
+  .tgpi-brand-signature .tgpi-brand-symbol {
+    border-radius: 6px 6px 45% 45%;
+    background: radial-gradient(ellipse at 45% 35%, #2d4660, #0b1b30 76%);
+    box-shadow: inset 0 0 0 1px #c1a063, 0 2px 5px #081c3026;
+  }
+
+  .tgpi-brand-symbol img { padding: 3px; }
+  .tgpi-brand-signature .tgpi-brand-wordmark strong {
+    font-family: var(--tgpi-font-credential);
+    letter-spacing: .065em;
+  }
+
+  .tgpi-app-shell .tgpi-desktop-primary-link[aria-current="page"]::after {
+    background: var(--institute-rule);
+  }
+
+  .tgpi-app-shell :is(.tgpi-area-hero, .country-dossier-hero, .compare-hero, .documents-hero,
+      .resources-hero, .plan-hero, .credential-hub-hero, [data-tgpi-surface="banner"]) {
+    outline: 1px solid #f3dba047;
+    outline-offset: -6px;
+    border-color: var(--institute-edge);
+  }
+
+  .tgpi-app-shell :is(.tgpi-area-hero, .product-page-heading, .resources-hero, .credential-hub-hero, [data-tgpi-edition]) h1,
+  .tgpi-app-shell #premium-title {
+    font-family: var(--tgpi-font-credential);
+    font-weight: 600;
+    letter-spacing: -.025em;
+    line-height: 1.08;
+  }
+
+  .tgpi-app-shell .product-sidebar a[aria-current="page"] {
+    background: linear-gradient(110deg, #10253c, #234766);
+    color: #fff9e9;
+    box-shadow: inset 3px 0 #dbba74;
+  }
+
+  @media (min-width: 1024px) {
+    .product-frame[data-collapsed="false"] .product-sidebar-heading {
+      min-height: 86px;
+      align-items: end;
+      padding: 10px;
+      border: 1px solid #99865e;
+      border-radius: 12px;
+      background: linear-gradient(0deg, #071527ef, #07152728),
+        url("/images/cinematic-2026/workspace-observatory-480.webp") center 48% / cover;
+      color: #fff6e0;
+    }
+    .product-frame[data-collapsed="false"] .product-sidebar-heading button {
+      color: #fff6e0;
+      background: #10243deb;
+      border-color: #ceb27c99;
+    }
+  }
+
+  .tgpi-app-shell .tgpi-compact-dock a[aria-current="page"] {
+    box-shadow: inset 0 -2px #d5b577;
+  }
+}

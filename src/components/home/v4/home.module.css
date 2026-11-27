@@ -277,3 +277,21 @@
   .heroImageLabel { inset-inline: 1rem; }
   .ecosystemGrid .ecosystemItem { min-height: 76px; }
 }
+
+.heroCopy h1 em, .sectionIntro h2 em, .splitIntro h2 em {
+  font-family: var(--tgpi-font-credential);
+  font-weight: 600;
+  letter-spacing: -.035em;
+}
+.heroVisual {
+  border: 1px solid #a48950;
+  box-shadow: 0 20px 48px -24px #071b3166;
+}
+.heroPhoto::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: 9px;
+  border: 1px solid #f6deb366;
+  pointer-events: none;
+}

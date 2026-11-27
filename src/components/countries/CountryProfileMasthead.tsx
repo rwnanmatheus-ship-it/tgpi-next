@@ -32,7 +32,7 @@ export default function CountryProfileMasthead({ slug, name, iso2, region, photo
   }
 
   return (
-    <header className={styles.masthead} id="overview" tabIndex={-1}>
+    <header data-tgpi-edition="" className={styles.masthead} id="overview" tabIndex={-1}>
       <div
         className={styles.cover}
         onTouchStart={event => {
