@@ -1,14 +1,11 @@
 import { publishedDirectory } from "@/lib/seo/course-directory.server";
 import { directoryPageCount, directoryHref } from "@/lib/seo/course-directory";
 import type { MetadataRoute } from "next";
-import { courseArtwork } from "@/lib/cinematic-art";
-import { academyManifest } from "@/data/courses/academy/manifest";
 import { publicGuides } from "@/lib/public-guides";
-import { getAllCountrySlugs } from "@/lib/countries";
+import { getAllCountries, getCountryImageUrl } from "@/lib/countries";
+import { getCountryPhotos } from "@/lib/countries/editorial-photography";
 
 import { discoveryLocales, discoveryAlternates } from "@/lib/discovery";
-import { courses } from "@/data/courses";
-import { publishedProfessionalCourseIds } from "@/lib/learning/professional-runtime";
 
 const siteUrl = "https://www.theglobalpolymath.com";
 
@@ -20,6 +17,7 @@ const publicRoutes = [
   { path: "/accessibility", priority: 0.65, changeFrequency: "monthly" },
   { path: "/intelligence", priority: 0.75, changeFrequency: "weekly" },
   { path: "/intelligence/research", priority: 0.75, changeFrequency: "weekly" },
+  { path: "/guia-paises", priority: 0.75, changeFrequency: "monthly" },
   { path: "/guides", priority: 0.7, changeFrequency: "monthly" },
   { path: "/resources", priority: 0.7, changeFrequency: "weekly" },
   { path: "/community", priority: 0.65, changeFrequency: "weekly" },
@@ -36,34 +34,46 @@ const publicRoutes = [
   { path: "/terms", priority: 0.2, changeFrequency: "yearly" },
 ] as const;
 
+const landingImages: Record<string, string[]> = {
+  "": [
+    "/images/cinematic-2026/global-horizon-1600.webp",
+    "/brand/tgpi-crest-metal-v3-256.png",
+  ],
+  "/about": [
+    "/images/cinematic-2026/country-research-1600.webp",
+    "/images/cinematic-2026/learning-atelier-1600.webp",
+  ],
+  "/countries": getCountryPhotos("australia").slice(0, 1).map(photo => photo.src),
+  "/guia-paises": ["/images/home/editorial-v4/decision-desktop.webp"],
+};
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const pages: MetadataRoute.Sitemap = publicRoutes.map((route) => ({
     url: `${siteUrl}${route.path}`,
     changeFrequency: route.changeFrequency,
     priority: route.priority,
-    ...(route.path === "" ? { images: [
-      `${siteUrl}/images/cinematic-2026/global-horizon-1600.webp`,
-      `${siteUrl}/brand/tgpi-crest-metal-v3-256.png`,
-    ] } : route.path === "/about" ? { images: [
-      `${siteUrl}/images/cinematic-2026/country-research-1600.webp`,
-      `${siteUrl}/images/cinematic-2026/learning-atelier-1600.webp`,
-    ] } : {}),
+    images: landingImages[route.path]?.map(path => siteUrl + path),
   }));
 
-  const countries: MetadataRoute.Sitemap = getAllCountrySlugs().map((slug) => ({
-    url: `${siteUrl}/countries/${slug}`,
-    changeFrequency: "weekly",
-    priority: 0.8,
-  }));
+  const countries: MetadataRoute.Sitemap = getAllCountries().map(country => {
+    const photos = getCountryPhotos(country.slug);
+    const images = photos.length ? photos.map(photo => photo.src) : [getCountryImageUrl(country)];
+    return {
+      url: `${siteUrl}/countries/${country.slug}`,
+      images: images.map(path => new URL(path, siteUrl).href),
+      changeFrequency: "weekly",
+      priority: 0.8,
+    };
+  });
 
-  const academy: MetadataRoute.Sitemap = [...new Set([...Object.keys(academyManifest), ...courses.map(course => course.id), ...publishedProfessionalCourseIds])].map(id => ({
-    url: `${siteUrl}/courses/${id}`,
-    images: [`${siteUrl}${courseArtwork(id)}`],
+  const coursePages: MetadataRoute.Sitemap = publishedDirectory.map(course => ({
+    url: siteUrl + course.href,
+    images: [new URL(course.image, siteUrl).href],
     changeFrequency: "monthly",
     priority: 0.7,
   }));
 
-  return [...pages, ...countries, ...academy, ...Array.from({length:directoryPageCount(publishedDirectory.length)},(_,index)=>({
+  return [...pages, ...countries, ...coursePages, ...Array.from({length:directoryPageCount(publishedDirectory.length)},(_,index)=>({
     url: `${siteUrl}${directoryHref(index+1)}`, changeFrequency:"weekly" as const, priority:0.7,
   })), ...discoveryLocales.map(locale => ({
     url: `${siteUrl}/discover/${locale}`,

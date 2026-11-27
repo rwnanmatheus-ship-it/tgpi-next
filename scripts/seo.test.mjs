@@ -25,7 +25,6 @@ test("sitemap excludes known noindex and redirect pages without fake freshness",
   const source = read("src/app/sitemap.ts");
   for (const path of ["/ranking", "/authority", "/country-fit", "/premium"]) assert.ok(!source.includes('path: "' + path + '"'));
   assert.ok(!source.includes("new Date("));
-  assert.ok(source.includes("getAllCountrySlugs().map"));
 });
 test("audit checks all landing pages, detects redirects and stays same-origin", async () => {
   const seen = [];
