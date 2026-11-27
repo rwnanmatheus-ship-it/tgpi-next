@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
+import CountryDirectoryCover from "@/components/countries/CountryDirectoryCover";
 import ActivationProgressProvider from "@/components/activation/ActivationProgressProvider";
 import styles from "@/components/countries/CountryDirectory.module.css";
 import { GraphStatus } from "@/components/intelligence/Evidence";
 import EvidenceExplorer from "@/components/intelligence/EvidenceExplorer";
 import ResearchLoading from "@/components/intelligence/ResearchLoading";
 import { LocalizedText } from "@/components/localization/LocaleProvider";
-import NavigationIcon from "@/components/navigation/NavigationIcon";
+import { getCountryPhotos } from "@/lib/countries/editorial-photography";
 import { getAllCountries } from "@/lib/countries";
 import type { ExplorerFilterInput } from "@/lib/explorer-filters";
 import { INDICATOR_IDS } from "@/lib/intelligence/core";
@@ -27,12 +27,12 @@ const sourceMetadata: Metadata = {
   alternates: { canonical: "https://www.theglobalpolymath.com/countries" },
 };
 
-const shortcuts = [
-  { href: "/compare", label: "Compare countries", icon: "compare" },
-  { href: "/country-fit", label: "Country Fit", icon: "target" },
-  { href: "/plan", label: "My Plan", icon: "file" },
-  { href: "/intelligence", label: "Sources & methodology", icon: "book" },
-] as const;
+const coverSlugs = ["australia", "japan", "portugal", "south-africa", "brazil", "canada"];
+const coverScenes = coverSlugs.flatMap(slug => {
+  const identity = identities.find(country => country.slug === slug);
+  const photo = getCountryPhotos(slug)[0];
+  return identity && photo ? [{ ...identity, photo }] : [];
+});
 
 async function CountryResearch({ filters }: { filters: ExplorerFilterInput }) {
   const [state, context] = await Promise.all([getIntelligence(), getCountryContext()]);
@@ -48,12 +48,16 @@ async function CountryResearch({ filters }: { filters: ExplorerFilterInput }) {
     available.add(indicator);
   }
 
-  const countries = identities.map(({ slug, name, region, iso2, iso3 }) => ({
-    slug, name: aliases.get(slug)?.name ?? name, emoji: aliases.get(slug)?.emoji ?? "", region, iso2, iso3,
-    language: aliases.get(slug)?.language ?? "", capital: aliases.get(slug)?.capital ?? "",
-    dossierCount: dossierFor(slug).claims.length,
-    observations: indicators.get(slug)?.size ?? 0,
-  }));
+  const countries = identities.map(({ slug, name, region, subregion, iso2, iso3 }) => {
+    const profile = aliases.get(slug);
+    const photos = getCountryPhotos(slug);
+    return {
+      slug, name: profile?.name ?? name, emoji: profile?.emoji ?? "", region, subregion, iso2, iso3,
+      capital: profile?.capital ?? "", language: profile?.language ?? "",
+      photo: photos[0], places: [...new Set(photos.map(photo => photo.location))],
+      dossierCount: dossierFor(slug).claims.length, observations: indicators.get(slug)?.size ?? 0,
+    };
+  });
 
   return (
     <>
@@ -74,37 +78,7 @@ export default async function CountriesPage({ searchParams }: { searchParams?: P
   return (
     <main className={`ig-shell country-studio ${styles.page}`}>
       <div className="ig-container">
-        <header className={styles.hero} data-tgpi-surface="banner" data-tgpi-material="inverse">
-          <div className={styles.heroArt}>
-            <Image
-              src="/images/cinematic-2026/countries-orbital-earth-v2.webp"
-              alt=""
-              fill
-              sizes="(max-width: 767px) 100vw, (max-width: 1399px) 66vw, 924px"
-              preload
-            />
-          </div>
-          <div className={styles.heroCopy}>
-            <p className={styles.heroKicker}><NavigationIcon name="globe" width={16} height={16} /><LocalizedText text="TGPI / Country Intelligence" /></p>
-            <h1><LocalizedText text="Countries" /></h1>
-            <p className={styles.heroDescription}><LocalizedText text="One world. Your next possibility." /></p>
-            <p className={styles.heroSubline}><LocalizedText text="Explore destinations, learn the language and connect your research to a real plan." /></p>
-          </div>
-          <div className={styles.heroCount}>
-            <NavigationIcon name="globe" width={24} height={24} />
-            <strong>{identities.length}</strong>
-            <span><LocalizedText text="Destinations" /></span>
-          </div>
-        </header>
-        <nav className={styles.shortcuts} aria-label="TGPI">
-          {shortcuts.map(({ href, label, icon }) => (
-            <Link key={href} href={href}>
-              <NavigationIcon name={icon} width={17} height={17} />
-              <LocalizedText text={label} />
-              <NavigationIcon name="chevron" className={styles.shortcutArrow} width={14} height={14} />
-            </Link>
-          ))}
-        </nav>
+        <CountryDirectoryCover count={identities.length} covers={coverScenes} />
         <Suspense fallback={<ResearchLoading />}><CountryResearch filters={filters} /></Suspense>
         <section className={styles.methodology}>
           <div>
@@ -120,5 +94,9 @@ export default async function CountriesPage({ searchParams }: { searchParams?: P
 }
 
 export async function generateMetadata() {
-  return localizeMetadata(sourceMetadata);
+  const cover = coverScenes[0];
+  return localizeMetadata({
+    ...sourceMetadata,
+    ...(cover && { openGraph: { images: [{ url: cover.photo.src, alt: cover.photo.location }] } }),
+  });
 }

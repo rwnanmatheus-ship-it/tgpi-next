@@ -56,3 +56,12 @@ test('identity-only consumers remain compatible and cannot fabricate language or
   assert.equal(rankCountryMatches(identities, 'inglês', 'pt-BR').length, 0);
   assert.equal(rankCountryMatches(identities, 'Tokyo', 'en').length, 0);
 });
+
+test('localities from photographs and translated UNSD subregions can lead to a country profile', () => {
+  const country = countries.find(item => item.slug === 'australia');
+  const destination = { ...country, places: ['Sydney Harbour', 'Melbourne'] };
+  assert.equal(rankCountryMatches([destination], 'Sydney', 'en')[0]?.slug, 'australia');
+  assert.equal(rankCountryMatches([destination], 'Melbourne', 'pt-BR')[0]?.slug, 'australia');
+  assert.equal(rankCountryMatches([country], 'Melbourne', 'pt-BR').length, 0);
+  assert.ok(search('Europa Ocidental').some(item => item.slug === 'france'));
+});

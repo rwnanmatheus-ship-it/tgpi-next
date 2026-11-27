@@ -1,8 +1,9 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState, useSyncExternalStore } from "react";
+import { useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { useActivationProgress } from "@/components/activation/ActivationProgressProvider";
 import CountryDirectoryCard, { type DirectoryCountry } from "@/components/countries/CountryDirectoryCard";
 import styles from "@/components/countries/CountryDirectory.module.css";
@@ -33,6 +34,9 @@ const modes = [
   { value: "atlas", label: "Interactive atlas", icon: "globe" },
   { value: "saved", label: "Saved", icon: "file" },
 ] as const;
+const regionCovers: Readonly<Record<string, string>> = {
+  Africa: "south-africa", Americas: "brazil", Asia: "japan", Europe: "portugal", Oceania: "australia",
+};
 const FILTERS_CHANGED = "tgpi:explorer-location";
 
 function subscribeLocation(listener: () => void) {
@@ -51,6 +55,7 @@ export default function EvidenceExplorer({ countries, initialFilters, indicatorT
   initialFilters: ExplorerFilterInput;
   indicatorTotal: number;
 }) {
+  const resultsAnchor = useRef<HTMLDivElement>(null);
   const { t, locale } = useLocale();
   // Read the URL when Next restores a cached subtree. The server snapshot keeps hydration deterministic.
   const initialSearch = explorerFiltersToSearch(initialFilters);
@@ -74,7 +79,7 @@ export default function EvidenceExplorer({ countries, initialFilters, indicatorT
     .sort((a, b) => t(a).localeCompare(t(b), locale)), [countries, t, locale]);
   const mapCountries = useMemo(() => countries.map(country => ({
     ...country,
-    visual: { alt: "", hasImage: true, url: `/images/countries/identity/${country.slug}.webp` },
+    visual: { alt: "", hasImage: true, url: country.photo?.src ?? `/images/countries/identity/${country.slug}.webp` },
   })), [countries]);
   const savedCountries = progress.savedCountries;
   const targetCountries = journey.targetCountries;
@@ -141,7 +146,7 @@ export default function EvidenceExplorer({ countries, initialFilters, indicatorT
     <section id="country-explorer" className={styles.explorer} aria-labelledby="countries-heading">
       <div className={styles.toolbar}>
         <div className={styles.toolbarHeading}>
-          <h2 id="countries-heading">{t("Find your next destination.")}</h2>
+          <h2 id="countries-heading">{t("Explore destinations")}</h2>
         </div>
         <div className={styles.modes} role="group" aria-label={t("Display mode")}>
           {modes.map(({ value, label, icon }) => (
@@ -156,7 +161,10 @@ export default function EvidenceExplorer({ countries, initialFilters, indicatorT
           ))}
         </div>
         {!savedGuest && <div className={`country-search-bar ${styles.searchBar}`}>
-          <CountrySearchInput key={locale} countries={candidates} terms={terms} query={query} onChange={value => updateUrl({ query: value, limit: PAGE_SIZE })} />
+          <CountrySearchInput key={locale} countries={candidates} terms={terms} query={query} onChange={value => updateUrl({ query: value, limit: PAGE_SIZE })} onShowResults={() => {
+            resultsAnchor.current?.focus({ preventScroll: true });
+            resultsAnchor.current?.scrollIntoView({ block: "start" });
+          }} />
           <button className={styles.filtersToggle} type="button" aria-expanded={filtersOpen} aria-controls="country-directory-filters"
             onClick={() => setFiltersOpen(!filtersOpen)}>
             <NavigationIcon name="settings" width={17} height={17} />{t("Filters")}
@@ -204,16 +212,24 @@ export default function EvidenceExplorer({ countries, initialFilters, indicatorT
         </div>}
       </div>
 
-      {!savedGuest && !showAtlas && <div className={styles.discoveryBar}>
-        <span className={styles.discoveryLabel}><NavigationIcon name="compass" width={16} height={16} />{t("Explore by region")}</span>
+      {!savedGuest && !showAtlas && <section className={styles.discoveryBar} aria-labelledby="country-region-heading">
+        <h3 className={styles.discoveryLabel} id="country-region-heading">{t("Explore by region")}</h3>
         <div className={styles.regionChips} role="group" aria-label={t("Statistical region")}>
-          {["all", ...sortedRegions].map(value => <button key={value} type="button" aria-pressed={region === value}
-            onClick={() => { setMapZoom(undefined); setAtlasFocus(undefined); updateUrl({ region: value, limit: PAGE_SIZE }); }}>
-            {value === "all" ? t("World") : t(value)}
-            <span>{value === "all" ? countries.length : countries.filter(country => country.region === value).length}</span>
-          </button>)}
+          {["all", ...sortedRegions].map(value => {
+            const photo = bySlug.get(regionCovers[value])?.photo;
+            const count = value === "all" ? countries.length : countries.filter(country => country.region === value).length;
+            return <button key={value} type="button" aria-pressed={region === value}
+              onClick={() => { setMapZoom(undefined); setAtlasFocus(undefined); updateUrl({ region: value, limit: PAGE_SIZE }); }}>
+              <Image alt="" fill sizes="(max-width: 700px) 122px, 16vw"
+                style={{ objectPosition: photo?.position }}
+                src={photo?.src ?? "/images/cinematic-2026/countries-orbital-earth-v2.webp"} />
+              <span className={styles.regionName}>{value === "all" ? t("World") : t(value)}</span>
+              <span className={styles.regionCount}>{t(count === 1 ? "{count} destination" : "{count} destinations", { count })}</span>
+              {region === value && <NavigationIcon name="check" width={16} height={16} />}
+            </button>;
+          })}
         </div>
-      </div>}
+      </section>}
 
       <div id="country-atlas-panel" hidden={!showAtlas} className={styles.atlasPanel}>
         {showAtlas && <>
@@ -243,7 +259,7 @@ export default function EvidenceExplorer({ countries, initialFilters, indicatorT
         </>}
       </div>
 
-      {!savedGuest && !savedLoading && <div className={styles.resultsBar}>
+      {!savedGuest && !savedLoading && <div className={styles.resultsBar} tabIndex={-1} ref={resultsAnchor}>
         <p aria-live="polite">
           <strong>{t(filtered.length === 1 ? "{count} destination" : "{count} destinations", { count: filtered.length })}</strong>
           <span aria-hidden="true"> · </span>{sort === "coverage" ? t("Data coverage") : sort === "relevance" && query.trim() ? t("Best search matches") : "A–Z"}
