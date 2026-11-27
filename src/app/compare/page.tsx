@@ -3,6 +3,8 @@ import { localizeMetadata } from "@/lib/localization/metadata.server";
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { enemGuidePath } from "@/app/guia-paises/campaign";
+import { guideCopy } from "@/app/guia-paises/copy";
 import CinematicImage from "@/components/ui/CinematicImage";
 import ActivationProgressProvider from "@/components/activation/ActivationProgressProvider";
 import CompareCountryPicker from "@/components/compare/CompareCountryPicker";
@@ -41,6 +43,7 @@ export default async function ComparePage({ searchParams }: { searchParams?: Pro
   const selected=slugs.flatMap(slug=>bySlug.get(slug)?[bySlug.get(slug)!]:[]);
   const page=Math.max(1,Math.min(Math.ceil(selected.length/PAGE_SIZE)||1,Math.floor(Number(params?.view))||1));
   const visible=selected.slice((page-1)*PAGE_SIZE,page*PAGE_SIZE);
+  const showEnemGuide = goal === "study" && slugs.length === 2 && slugs.includes("portugal") && slugs.includes("spain");
   const canImportToPlan = explicit && selected.length >= 2 && selected.length <= 5;
   const planHref = canImportToPlan ? comparisonPlanPath(slugs, goal) : "/plan";
   const atlasQuery = new URLSearchParams({ guide: "compare", goal });
@@ -54,6 +57,9 @@ export default async function ComparePage({ searchParams }: { searchParams?: Pro
     {selected.length>=2 ? <><nav className="compare-nav" aria-label={t("Comparison sections")}>{[["#decision-overview","Overview"],["#comparison-matrix","Sources & evidence"],["#decision-details","Detailed comparison"],["#decision-labs","Decision Lab"],["#decision-actions","Next steps"]].map(([href,label],i)=><a href={href} key={href}><span>0{i+2}</span>{t(label)}</a>)}</nav>
     <div id="decision-overview" className="compare-section"><ComparisonNavigation countries={selected} goal={goal} page={page} pageSize={PAGE_SIZE}/><DecisionOverview countries={visible}/></div>
     <section className="compare-lens"><span aria-hidden="true">◎</span><div><p className="compare-kicker">{t("Your decision lens")} / {t(getComparisonGoalConfig(goal).shortLabel)}</p><h2>{t(getComparisonGoalConfig(goal).label)}</h2><p>{t(getComparisonGoalConfig(goal).description)}</p></div><Link href="/profile/security#settings-identity">{t("Personalize my profile")} ↗</Link></section>
+    {showEnemGuide && (
+      <p><Link className="ig-link" href={enemGuidePath} hrefLang="pt-BR">{guideCopy[locale].enemGuide}</Link></p>
+    )}
     <Suspense fallback={<ResearchLoading/>}><ComparisonEvidence visible={visible} selected={selected} goal={goal}/></Suspense>
     <section id="decision-details" className="compare-section"><div className="compare-section-head"><div><p className="compare-kicker">04 / {t("Detailed comparison")}</p><h2>{t("Go beyond the numbers.")}</h2><p>{t("Check legal pathways, education and cost references before committing.")}</p></div><Link className="compare-button" href="/intelligence">{t("Methodology & source coverage")} ↗</Link></div><details className="compare-dossier-disclosure"><summary>{t("Open destination evidence and limitations")}</summary><DossierComparison countries={visible}/></details></section>
     <section id="decision-labs" className="compare-section compare-labs"><div className="compare-section-head"><div><p className="compare-kicker">05 / {t("Decision Lab")}</p><h2>{t("Turn insight into action.")}</h2><p>{t("Build a city budget and a preparation checklist for each destination. Your estimates remain separate from published evidence.")}</p></div><span className="compare-lab-symbol" aria-hidden="true">↗</span></div><DecisionLabs key={visible.map(c=>c.slug).join(",")} countries={visible}/></section>

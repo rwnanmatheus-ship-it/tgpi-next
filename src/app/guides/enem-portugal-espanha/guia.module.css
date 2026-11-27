@@ -1,0 +1,17 @@
+.page { max-width: 940px; }
+.page :is(section[id], h2[id]) { scroll-margin-top: 6.5rem; }
+.page h3 { font-weight: 680; font-size: 1.15rem; line-height: 1.45; margin: 1.4rem 0 .45rem; }
+.page article > section p { margin-block: .65rem; }
+.page dt { font-weight: 650; margin-block: .85rem .25rem; }
+.page dd { margin-inline-start: 0; }
+.contents { margin: 1.6rem 0; border-inline-start: 3px solid var(--tgpi-gold); padding: 1rem 1.3rem; background: var(--tgpi-surface); }
+.contents ul { display: flex; flex-wrap: wrap; gap: .25rem 1.4rem; padding: 0; list-style: none; }
+.contents a { display: inline-block; padding: .36rem 0; }
+.question { border-block-end: 1px solid var(--tgpi-border); }
+.question summary { cursor: pointer; padding: .95rem 0; font-weight: 640; }
+.actions { border-radius: 16px; margin-block: 1.5rem; padding: clamp(1.25rem,4vw,2rem); background: #0c2744; color: #fff; }
+.actions p { max-width: 64ch; }
+.actions a { display: inline-block; padding: .7rem 0; margin-right: 1.25rem; color: #fff; }
+.actions a:first-of-type { font-weight: 700; color: #f7daa4; }
+.page :is(a,summary,button):focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+@media print { .contents,.actions { display: none; } }
