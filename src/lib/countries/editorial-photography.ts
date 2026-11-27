@@ -1,4 +1,5 @@
 import { getGlobalCountryPhotos } from "./global-photography";
+import highResolutionCatalog from "./high-resolution-photography.json";
 
 /** Documentary photography used in country profiles, the directory and presentation view. */
 export type CountryPhoto = {
@@ -318,5 +319,10 @@ const curatedPhotos: Readonly<Record<string, readonly CountryPhoto[]>> = {
 };
 
 export function getCountryPhotos(slug: string): readonly CountryPhoto[] {
-  return Object.hasOwn(curatedPhotos, slug) ? curatedPhotos[slug] : getGlobalCountryPhotos(slug);
+  const gallery = Object.hasOwn(curatedPhotos, slug) ? curatedPhotos[slug] : getGlobalCountryPhotos(slug);
+  const catalog: Readonly<Record<string, { photo: CountryPhoto; replaces: readonly string[] }>> = highResolutionCatalog;
+  const preferred = Object.hasOwn(catalog, slug) ? catalog[slug] : undefined;
+  return preferred
+    ? [preferred.photo, ...gallery.filter(photo => !preferred.replaces.includes(photo.src))]
+    : gallery;
 }
