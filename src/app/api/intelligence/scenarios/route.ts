@@ -1,4 +1,5 @@
 import { requirePremiumApiUser, featureAccessError } from "@/lib/auth/guards";
+import { recordFunnelEvent, requestFunnelConsent } from "@/lib/funnel.server";
 import { auth, clerkClient } from "@clerk/nextjs/server";
 import identities from "@/data/intelligence/identities.json";
 import { RESEARCH_TASKS, validateWorksheet } from "@/lib/intelligence/research-plan";
@@ -39,13 +40,21 @@ export async function PATCH(request: Request) {
     const worksheet = validateWorksheet(body.worksheet, [target.country], tasks);
     if (!worksheet || !(body.revision === null || typeof body.revision === "string" && body.revision.length < 60)) return Response.json({ error: "Check the scenario fields." }, { status: 400, headers });
     if (!isLearningStorageConfigured()) throw Error("Unavailable");
-    const result = await runFirestoreTransaction(async tx => {
-      const current = (await tx.getDocuments<{ revision: string }>([target.path])).get(target.path);
-      if ((current?.data.revision ?? null) !== body.revision) return { writes: [], result: { conflict: true, revision: "" } };
+    const result = await runFirestoreTransaction<{
+      conflict: boolean;
+      revision: string;
+      event: "budget_scenario_created" | "budget_scenario_revised_after_24h" | null;
+    }>(async tx => {
+      const current = (await tx.getDocuments<{ revision: string; updatedAt?: string }>([target.path])).get(target.path);
+      if ((current?.data.revision ?? null) !== body.revision) return { writes: [], result: { conflict: true, revision: "", event: null } };
       const revision = crypto.randomUUID();
-      return { writes: [createFirestoreUpdateWrite(target.path, { worksheet: worksheet as unknown as JsonValue, revision, updatedAt: new Date().toISOString() })], result: { conflict: false, revision } };
+      const now = new Date();
+      const elapsed = current?.data.updatedAt ? now.getTime() - Date.parse(current.data.updatedAt) : NaN;
+      const event = !current ? "budget_scenario_created" : elapsed >= 86_400_000 ? "budget_scenario_revised_after_24h" : null;
+      return { writes: [createFirestoreUpdateWrite(target.path, { worksheet: worksheet as unknown as JsonValue, revision, updatedAt: now.toISOString() })], result: { conflict: false, revision, event } };
     });
     if (result.conflict) return Response.json({ error: "This scenario changed in another tab. Export your draft, then reload to review the saved version." }, { status: 409, headers });
+    if (result.event) recordFunnelEvent(result.event, requestFunnelConsent(request));
     return Response.json({ saved: true, revision: result.revision }, { headers });
   } catch (e) { return Response.json({ error: e instanceof SyntaxError ? "Invalid JSON." : "Cloud save failed. Your draft has not been discarded." }, { status: e instanceof SyntaxError ? 400 : 503, headers }); }
 }

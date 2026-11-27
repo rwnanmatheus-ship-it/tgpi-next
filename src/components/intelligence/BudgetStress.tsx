@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLocale } from "@/components/localization/LocaleProvider";
+import { sendClientFunnelEvent } from "@/lib/funnel.client";
 import { simulateBudget } from "@/lib/intelligence/budget-stress";
 import { formatMoney } from "@/lib/intelligence/dossiers";
 import type { ResearchWorksheet } from "@/lib/intelligence/research-plan";
@@ -23,7 +24,14 @@ export default function BudgetStress({ plan, valid }: { plan: ResearchWorksheet;
   const maxExtra = Math.max(0, Math.min(12, 60 - plan.months));
   const months = Math.min(extension, maxExtra);
   const result = valid ? simulateBudget(plan, increase, months) : null;
-  return <details className="ig-details">
+  const [open, setOpen] = useState(false);
+  const counted = useRef(false);
+  const available = result !== null;
+  useEffect(() => {
+    if (open && available && !counted.current) counted.current = sendClientFunnelEvent("budget_simulation_viewed");
+  }, [open, available]);
+
+  return <details className="ig-details" onToggle={event => setOpen(event.currentTarget.open)}>
     <summary>{labels[0]}</summary>
     <p className="ig-small">{labels[6]}</p>
     <div className="ig-form-grid">

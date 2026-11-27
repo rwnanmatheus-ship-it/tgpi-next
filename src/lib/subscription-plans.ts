@@ -16,7 +16,7 @@ export const TGPI_FREE_PLAN: SubscriptionPlan = {
     "Create your Global Profile and use your Workspace",
     "Explore source-linked country information",
     "Save a research plan and up to 5 countries of interest",
-    "Compare up to 3 countries at a time",
+    "Compare countries across the full catalog",
     "Use Country Fit research planning",
     "Selected courses with assessments and certificates · free previews",
     "One saved scenario per country and worksheet export",

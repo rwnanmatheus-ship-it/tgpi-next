@@ -1,0 +1,35 @@
+.panel {
+  color: var(--tgpi-ink);
+  background: var(--tgpi-surface);
+  border: 1px solid var(--tgpi-border);
+  border-radius: 20px;
+  padding: clamp(20px, 4vw, 40px);
+  scroll-margin-top: 6rem;
+}
+.panel header h2 { color: var(--tgpi-ink); font-size: clamp(1.65rem, 3.5vw, 2.6rem); line-height: 1.12; }
+.panel header p, .shortlist p { color: var(--tgpi-muted); line-height: 1.6; margin: .5rem 0 1rem; }
+.panel summary { cursor: pointer; font-weight: 700; padding-block: .65rem; }
+.editor { display: grid; gap: 1rem; margin-top: .8rem; }
+.criteria { display: grid; gap: .85rem; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); }
+.field { display: grid; gap: .4rem; font-size: .875rem; font-weight: 650; min-width: 0; }
+.field select, .actions button, .actions a, .shortlist li button {
+  border: 1px solid var(--tgpi-border);
+  background: var(--tgpi-surface);
+  color: var(--tgpi-ink);
+  border-radius: .6rem;
+  padding: .65rem .85rem;
+  font: inherit;
+  min-height: 44px;
+}
+.field select { width: 100%; }
+.next, .check, .actions, .shortlist ul { display: flex; gap: .65rem; align-items: center; flex-wrap: wrap; }
+.next { border-inline-start: 3px solid var(--tgpi-gold-strong); padding-inline-start: .8rem; }
+.next a { text-decoration: underline; text-underline-offset: .2em; }
+.check { min-height: 44px; font-weight: 600; cursor: pointer; }
+.check input { width: 1.2rem; height: 1.2rem; }
+.shortlist { border-top: 1px solid var(--tgpi-border); padding-top: 1rem; }
+.shortlist h3 { font-size: 1rem; }
+.shortlist ul { list-style: none; margin: .6rem 0; padding: 0; }
+.shortlist li button[aria-pressed=true] { border-color: var(--tgpi-blue); }
+.actions a { background: var(--tgpi-ink); color: var(--tgpi-surface); font-weight: 700; }
+.actions button:disabled { opacity: .55; }

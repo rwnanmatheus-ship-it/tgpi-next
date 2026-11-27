@@ -75,7 +75,7 @@ const systems = [
 const comparisons = [
   ["Scenario analysis", "One saved scenario per country and worksheet export", "Three saved scenarios per country, scenario comparison and personalized PDF reports"],
   ["Country Fit research planning", "Available", "Available"],
-  ["Country comparisons", "Up to 3 countries at a time", "Up to 3 countries at a time"],
+  ["Country comparisons", "Full catalog with up to four countries per page", "Full catalog with up to four countries per page"],
   ["Countries of interest", "Up to 5", "Up to 5"],
   ["Global Documents", "Document preparation and service requests", "Document preparation and service requests"],
   ["Courses and certificates", "Selected courses with assessments and certificates · free previews", "Full catalog with assessments and certificates"],

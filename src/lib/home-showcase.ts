@@ -44,7 +44,7 @@ export const HOME_PRODUCTS = {
   },
   compare: {
     name: "TGPI Compare", href: "/compare", icon: "compare", tone: "blue", category: "decide",
-    description: "Compare up to three destinations side by side and see where the evidence differs.",
+    description: "Compare countries against your constraints, evidence and priorities before committing to a move.",
   },
   fit: {
     name: "Country Fit", href: HOME_ROUTES.fit, icon: "compass", tone: "gold", category: "decide",
