@@ -300,3 +300,18 @@
   .panel { padding-block: 24px; }
   .story { gap: 200px; }
 }
+
+.brand strong, .storyCopy h2 {
+  font-family: var(--tgpi-font-credential);
+  font-weight: 600;
+}
+.storyCopy h2 { letter-spacing: -.025em; line-height: 1.06; }
+.story::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: 8px;
+  border: 1px solid #ecd19359;
+  border-radius: inherit;
+  pointer-events: none;
+}

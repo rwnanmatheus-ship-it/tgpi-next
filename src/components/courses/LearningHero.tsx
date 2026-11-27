@@ -12,7 +12,7 @@ export default function LearningHero({ count }: { count: number }) {
   const { locale, t } = useLocale();
   const copy = courseSalesCopy(locale);
 
-  return <header className={styles.hero}>
+  return <header data-tgpi-edition="" className={styles.hero}>
     <div className={styles.copy}>
       <p className={styles.kicker}>{catalogCopy(locale).eyebrow}</p>
       <h1>{copy.title}<em>{copy.emphasis}</em></h1>
@@ -24,7 +24,7 @@ export default function LearningHero({ count }: { count: number }) {
       <ul className={styles.proof}>{copy.proof.map(label => <li key={label}><span aria-hidden="true">✓</span>{label}</li>)}</ul>
     </div>
     <div className={styles.art}>
-      <Image src="/images/courses/learning-2026/learning-global.webp" alt="" fill preload sizes="(max-width: 700px) 100vw, 40vw" />
+      <Image src="/images/courses/learning-2026/learning-global.webp" alt="" fill quality={88} preload sizes="(max-width: 700px) 100vw, 40vw" />
       <span className={styles.collection}><strong>{count.toLocaleString(locale)}</strong> {t('Available courses')}</span>
       <div className={styles.offer}>
         <p className={styles.offerLabel}>{TGPI_PREMIUM_PLAN.name}</p>
