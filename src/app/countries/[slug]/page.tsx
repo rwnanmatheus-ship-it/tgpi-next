@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { enemGuidePath } from "@/app/guia-paises/campaign";
+import { guideCopy } from "@/app/guia-paises/copy";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 import ActivationProgressProvider from "@/components/activation/ActivationProgressProvider";
@@ -138,6 +140,9 @@ export default async function CountryPage({ params }: Props) {
       <Link href={documentsHref({ country: slug })}><NavigationIcon name="file" /><span><LocalizedText text="Prepare my documents" /></span><NavigationIcon name="arrow" /></Link>
     </div>
     <CountryLearningPath countryName={country.name} path={learningPath} />
+    {(slug === "portugal" || slug === "spain") && (
+      <p><Link className="ig-link" href={enemGuidePath} hrefLang="pt-BR">{guideCopy[locale].enemGuide}</Link></p>
+    )}
 
     <section id="country-budget" className={styles.chapter}>
       <ChapterArt photo={photos[1]} fallback="/images/cinematic-2026/budget-planning-1200.webp">
