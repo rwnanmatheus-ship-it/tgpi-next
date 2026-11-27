@@ -25,9 +25,10 @@ export function MissingPage({ country = false }: { country?: boolean }) {
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Button href="/countries">{t('Explore countries')}</Button>
-            <Button variant="secondary" onClick={() => {
-              if (document.getElementById('tgpi-super-app-launcher')) window.dispatchEvent(new Event(SUPER_APP_OPEN_EVENT));
-              else window.location.assign('/compare');
+            <Button href="/countries" variant="secondary" onClick={event => {
+              if (!document.getElementById('tgpi-super-app-launcher') || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+              event.preventDefault();
+              window.dispatchEvent(new Event(SUPER_APP_OPEN_EVENT));
             }}>{t('Search countries, tools or actions')}</Button>
             <Button href="/" variant="secondary">{t('Back Home')}</Button>
           </div>
