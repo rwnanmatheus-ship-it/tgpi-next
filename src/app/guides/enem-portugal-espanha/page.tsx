@@ -66,7 +66,7 @@ const copy = {
   madridExample: "Na UC3M, a graduação tem quatro anos e 240 créditos. Confirme o idioma das disciplinas e os requisitos da turma em inglês. Antes de escolher a turma, consulte o caminho de ingresso aplicável ao seu ensino médio. Confira com a universidade se precisa homologar os estudos e se há exigência de acreditação ou de provas para essa via.",
   exercise: "A diferença de duração muda o orçamento total. Para cada curso, some as anuidades de todo o período e estime quantos meses de moradia seriam necessários. Na ficha, abra uma coluna para cada curso. Preencha o requisito que você já cumpre, a próxima pendência e a data limite. Se um valor ou prazo ainda não saiu no edital da sua edição, deixe-o em aberto.",
   compare: "Abrir Portugal e Espanha no comparador de estudos",
-  worksheet: "Baixar a ficha gratuita para preencher a comparação",
+  worksheet: "Baixar a ficha gratuita para preencher a comparação (PDF)",
   references: "Fontes para conferir sua candidatura",
 };
 
@@ -114,7 +114,7 @@ export default function EnemPortugalEspanha() {
           <p>{copy.madridExample}</p>
           <p>{copy.exercise}</p>
           <Link href={exampleComparison} data-funnel-event="editorial_compare_opened" className="guides-next">{copy.compare} →</Link>
-          <a href={worksheetPath} download data-funnel-event="editorial_pdf_clicked">{copy.worksheet} (PDF)</a>
+          <a href={worksheetPath} download data-funnel-event="editorial_pdf_clicked">{copy.worksheet}</a>
         </section>
         <section>
           <h2>{copy.references}</h2>
