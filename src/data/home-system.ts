@@ -40,7 +40,7 @@ export const homeIntents: ReadonlyArray<HomeIntent> = [
   {
     label: "Compare options",
     title: "Expose the trade-offs before committing.",
-    description: "Place up to three countries inside the same transparent decision framework.",
+    description: "Compare countries against your constraints, evidence and priorities before committing to a move.",
     href: "/compare",
     action: "Open TGPI Compare",
   },

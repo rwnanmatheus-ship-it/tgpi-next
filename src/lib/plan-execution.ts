@@ -1,3 +1,4 @@
+import { escapeCalendarText, foldCalendarLine } from './icalendar.ts';
 import { PLAN_CURRENCIES, type PlanningCurrency } from './intelligence/research-plan.ts';
 
 export const milestoneCategories = ['profile', 'compare', 'documents', 'cost', 'learning', 'personal'] as const;
@@ -97,30 +98,13 @@ export function reserveProjection(total: number, reserve: Reserve, today: string
   return { remaining: gap / scale, weekly: days <= 0 && gap ? null : Math.ceil(gap / weeks) / scale };
 }
 
-const escapeText = (value: string) => value.replace(/[\\;,\r\n]/g, char => /[\r\n]/.test(char) ? ' ' : '\\' + char);
-function foldLine(line: string) {
-  const encoder = new TextEncoder();
-  let bytes = 0;
-  let output = '';
-  for (const char of line) {
-    const size = encoder.encode(char).length;
-    if (bytes + size > 75) {
-      output += '\r\n ';
-      bytes = 1;
-    }
-    output += char;
-    bytes += size;
-  }
-  return output;
-}
-
 export function planCalendar(items: Milestone[], now = new Date()) {
   const stamp = now.toISOString().replace(/[-:]|\.\d{3}/g, '');
   return [
     'BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//TGPI//Personal Global Plan//EN', 'CALSCALE:GREGORIAN',
     ...items.filter(item => item.status !== 'done' && isPlanDate(item.due)).flatMap(item => [
       'BEGIN:VEVENT', `UID:${item.id}@theglobalpolymath.com`, `DTSTAMP:${stamp}`,
-      `DTSTART;VALUE=DATE:${item.due.replaceAll('-', '')}`, `SUMMARY:${escapeText(item.title)}`, 'END:VEVENT',
+      `DTSTART;VALUE=DATE:${item.due.replaceAll('-', '')}`, `SUMMARY:${escapeCalendarText(item.title)}`, 'END:VEVENT',
     ]), 'END:VCALENDAR', '',
-  ].map(foldLine).join('\r\n');
+  ].map(foldCalendarLine).join('\r\n');
 }

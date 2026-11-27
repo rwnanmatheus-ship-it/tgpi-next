@@ -44,10 +44,10 @@ const modules = [
     eyebrow: "02 / Decisions with context",
     title: "Make the trade-offs visible.",
     description:
-      "Put up to three countries side by side. Explore the evidence and its gaps without reducing your future to an unsupported score.",
+      "Compare all selected countries with source-linked indicators, reference years, decision lenses and personal planning tools.",
     application:
       "Compare the same question across your shortlist, then use Country Fit to structure your next research steps.",
-    access: "Public comparison · Up to three countries at a time",
+    access: "Full catalog with up to four countries per page",
     href: "/compare",
     cta: "Open comparison",
     nextHref: "/country-fit",
@@ -234,7 +234,7 @@ export default async function ResourcesPage() {
                 <ol>
                   {(item.id === "compare"
                     ? [
-                        "Choose up to three destinations",
+                        "Choose countries to compare",
                         "Compare evidence and reference dates",
                         "Identify gaps to investigate",
                       ]

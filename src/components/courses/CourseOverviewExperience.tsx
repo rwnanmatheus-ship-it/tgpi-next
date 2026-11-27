@@ -2,6 +2,7 @@
 
 import { localizeAuthoredContent } from "@/lib/localization/authored-content";
 import Link from "next/link";
+import StudyCalendar from './StudyCalendar';
 import { useEffect, useMemo, useRef, type ReactNode } from "react";
 import ActivationProgressProvider, {
   useActivationProgress,
@@ -178,6 +179,7 @@ function CourseOverview({ course: originalCourse, workshop }: { course: Course; 
             </aside>
           </div>
         </section>
+        <StudyCalendar courseId={course.id} title={t(course.title)} />
 
         <section className="grid gap-6 py-12 lg:grid-cols-[1.1fr_.9fr] lg:py-16" aria-labelledby="course-outcomes-title">
           <div className="rounded-[28px] border border-[var(--tgpi-border)] bg-[var(--tgpi-surface)] p-7 shadow-[var(--tgpi-shadow-soft)] sm:p-9">

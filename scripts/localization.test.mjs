@@ -422,6 +422,7 @@ test('course overview localizes controls and counts unique lessons without grant
       if (name === '@/components/activation/ActivationProgressProvider') return { __esModule: true, default: ({ children }) => children, useActivationProgress: () => ({ error: '', isAuthenticated: false, isLoading: false, mutate: () => { throw Error('Render cannot write progress'); }, progress: { courseProgress: { [course.id]: { completedLessonIds: [lesson.id, lesson.id, 'removed-lesson'] } } } }) };
       if (name === '@/data/courses') return data;
       if (name === '@/lib/learning-standard') return standards;
+      if (name === './StudyCalendar') return { __esModule: true, default: () => null };
       throw Error(`Unexpected import: ${name}`);
     }, exports);
     const element = React.createElement(exports.default, { course });

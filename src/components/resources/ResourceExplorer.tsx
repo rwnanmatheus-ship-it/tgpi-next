@@ -25,7 +25,7 @@ export const objectives = [
     label: "Compare",
     title: "Understand the trade-offs.",
     description:
-      "Compare up to three countries. Check reference years, evidence gaps and the questions behind your decision.",
+      "Compare all selected countries with source-linked indicators, reference years, decision lenses and personal planning tools.",
     href: "/compare",
     action: "Build a comparison",
     next: "Then structure your research",

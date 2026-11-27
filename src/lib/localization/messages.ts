@@ -1297,7 +1297,7 @@ export const messages = {
   "Country Fit research planning": {"en":"Country Fit research planning","pt-BR":"Planejamento de pesquisa Country Fit","es":"Planificación de investigación Country Fit","fr":"Planification de recherche Country Fit","de":"Rechercheplanung mit Country Fit","it":"Pianificazione della ricerca Country Fit"},
   "Available": {"en":"Available","pt-BR":"Disponível","es":"Disponible","fr":"Disponible","de":"Verfügbar","it":"Disponibile"},
   "Country comparisons": {"en":"Country comparisons","pt-BR":"Comparações de países","es":"Comparaciones de países","fr":"Comparaisons de pays","de":"Ländervergleiche","it":"Confronti tra paesi"},
-  "Up to 3 countries at a time": {"en":"Up to 3 countries at a time","pt-BR":"Até 3 países por vez","es":"Hasta 3 países a la vez","fr":"Jusqu’à 3 pays à la fois","de":"Bis zu 3 Länder gleichzeitig","it":"Fino a 3 paesi alla volta"},
+  "Full catalog with up to four countries per page": {"en": "Full catalog with up to four countries per page", "pt-BR": "Catálogo completo, com até quatro países por página", "es": "Catálogo completo, con hasta cuatro países por página", "fr": "Catalogue complet, avec jusqu’à quatre pays par page", "de": "Gesamter Katalog mit bis zu vier Ländern pro Seite", "it": "Catalogo completo, con un massimo di quattro paesi per pagina"},
   "Up to 5": {"en":"Up to 5","pt-BR":"Até 5","es":"Hasta 5","fr":"Jusqu’à 5","de":"Bis zu 5","it":"Fino a 5"},
   "Member preparation tools": {"en":"Member preparation tools","pt-BR":"Ferramentas de preparação para membros","es":"Herramientas de preparación para miembros","fr":"Outils de préparation pour les membres","de":"Vorbereitungswerkzeuge für Mitglieder","it":"Strumenti di preparazione per i membri"},
   "Current courses": {"en":"Current courses","pt-BR":"Cursos atuais","es":"Cursos actuales","fr":"Cours actuels","de":"Aktuelle Kurse","it":"Corsi attuali"},
@@ -7053,14 +7053,7 @@ export const messages = {
     "de": "Entdecken Sie Länderprofile und Quellenkontext.",
     "it": "Esplora i profili dei paesi e il contesto delle fonti."
   },
-  "Compare up to three countries at a time.": {
-    "en": "Compare up to three countries at a time.",
-    "pt-BR": "Compare até três países por vez.",
-    "es": "Compara hasta tres países a la vez.",
-    "fr": "Comparez jusqu’à trois pays à la fois.",
-    "de": "Vergleichen Sie bis zu drei Länder gleichzeitig.",
-    "it": "Confronta fino a tre paesi alla volta."
-  },
+  "Compare countries across the full catalog": {"en": "Compare countries across the full catalog", "pt-BR": "Compare países de todo o catálogo", "es": "Compara países de todo el catálogo", "fr": "Comparez les pays de tout le catalogue", "de": "Länder aus dem gesamten Katalog vergleichen", "it": "Confronta i paesi di tutto il catalogo"},
   "Try Country Fit and browse available courses.": {
     "en": "Try Country Fit and browse available courses.",
     "pt-BR": "Experimente o País ideal e explore os cursos disponíveis.",
@@ -9677,13 +9670,13 @@ export const messages = {
     "de": "The Global Polymath Institute ist eine Plattform für Menschen, die ein Studium, eine Arbeit oder ein Leben im Ausland erwägen. Sie verbindet Länderrecherche, Vergleich, Vorbereitung und praktische Bildung, damit Sie Ihren nächsten Schritt fundierter planen können.",
     "it": "The Global Polymath Institute è una piattaforma per chi esplora opportunità di studio, lavoro o vita all’estero. Collega ricerca sui paesi, confronto, preparazione e formazione pratica per aiutarti a compiere un prossimo passo più consapevole."
   },
-  "Yes. Explore country profiles, compare up to three countries at a time, try Country Fit and browse the course catalogue without an account. A free account lets you save your research context and a shortlist of up to five countries, continue learning and track your preparation.": {
-    "en": "Yes. Explore country profiles, compare up to three countries at a time, try Country Fit and browse the course catalogue without an account. A free account lets you save your research context and a shortlist of up to five countries, continue learning and track your preparation.",
-    "pt-BR": "Sim. Explore perfis de países, compare até três países por vez, experimente o País ideal e navegue pelo catálogo de cursos sem criar uma conta. Uma conta gratuita permite salvar o contexto da pesquisa e uma lista de até cinco países, continuar aprendendo e acompanhar sua preparação.",
-    "es": "Sí. Explora perfiles de países, compara hasta tres países a la vez, prueba País ideal y consulta el catálogo de cursos sin una cuenta. Una cuenta gratuita permite guardar el contexto de tu investigación y una lista de hasta cinco países, continuar aprendiendo y seguir tu preparación.",
-    "fr": "Oui. Explorez les profils des pays, comparez jusqu’à trois pays à la fois, essayez Pays idéal et consultez le catalogue de cours sans compte. Un compte gratuit permet d’enregistrer le contexte de vos recherches et une sélection de cinq pays maximum, de poursuivre votre apprentissage et de suivre votre préparation.",
-    "de": "Ja. Erkunden Sie Länderprofile, vergleichen Sie bis zu drei Länder gleichzeitig, testen Sie Passendes Land und durchsuchen Sie den Kurskatalog ohne Konto. Mit einem kostenlosen Konto können Sie Ihren Recherchekontext und eine Auswahl von bis zu fünf Ländern speichern, weiterlernen und Ihre Vorbereitung verfolgen.",
-    "it": "Sì. Esplora i profili dei paesi, confronta fino a tre paesi alla volta, prova Paese ideale e consulta il catalogo dei corsi senza un account. Un account gratuito permette di salvare il contesto della ricerca e una selezione di massimo cinque paesi, continuare ad apprendere e seguire la tua preparazione."
+  "Yes. Explore country profiles, compare destinations across the full catalog, try Country Fit and browse the course catalogue without an account. A free account lets you save your research context and a shortlist of up to five countries, continue learning and track your preparation.": {
+    "en": "Yes. Explore country profiles, compare destinations across the full catalog, try Country Fit and browse the course catalogue without an account. A free account lets you save your research context and a shortlist of up to five countries, continue learning and track your preparation.",
+    "pt-BR": "Sim. Explore perfis de países, compare destinos de todo o catálogo, experimente o País ideal e navegue pelo catálogo de cursos sem criar uma conta. Uma conta gratuita permite salvar o contexto da pesquisa e uma lista de até cinco países, continuar aprendendo e acompanhar sua preparação.",
+    "es": "Sí. Explora perfiles de países, compara destinos de todo el catálogo, prueba País ideal y consulta el catálogo de cursos sin una cuenta. Una cuenta gratuita permite guardar el contexto de tu investigación y una lista de hasta cinco países, continuar aprendiendo y seguir tu preparación.",
+    "fr": "Oui. Explorez les profils des pays, comparez les destinations de tout le catalogue, essayez Pays idéal et consultez le catalogue de cours sans compte. Un compte gratuit permet d’enregistrer le contexte de vos recherches et une sélection de cinq pays maximum, de poursuivre votre apprentissage et de suivre votre préparation.",
+    "de": "Ja. Erkunden Sie Länderprofile, vergleichen Sie Ziele aus dem gesamten Katalog, testen Sie Passendes Land und durchsuchen Sie den Kurskatalog ohne Konto. Mit einem kostenlosen Konto können Sie Ihren Recherchekontext und eine Auswahl von bis zu fünf Ländern speichern, weiterlernen und Ihre Vorbereitung verfolgen.",
+    "it": "Sì. Esplora i profili dei paesi, confronta le destinazioni di tutto il catalogo, prova Paese ideale e consulta il catalogo dei corsi senza un account. Un account gratuito permette di salvare il contesto della ricerca e una selezione di massimo cinque paesi, continuare ad apprendere e seguire la tua preparazione."
   },
   "Premium opens the protected Premium Command Center: a consolidated view of your destinations, readiness, preparation and learning, with membership and billing management. Country comparison, research-plan saving and the current learning routes are also available without a paid subscription. Review the membership page before subscribing.": {
     "en": "Premium opens the protected Premium Command Center: a consolidated view of your destinations, readiness, preparation and learning, with membership and billing management. Country comparison, research-plan saving and the current learning routes are also available without a paid subscription. Review the membership page before subscribing.",

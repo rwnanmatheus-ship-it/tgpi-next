@@ -8,6 +8,7 @@ import { LocalizedText, useLocale } from "@/components/localization/LocaleProvid
 const outcomes = [
   {
     id: "move",
+    exercise: { href: "/compare?country=portugal&country=spain&goal=live#decision-overview", label: "Compare countries", regions: ["PT", "ES"] },
     label: "Move abroad",
     eyebrow: "Mobility strategy",
     headline: "Turn a destination into a sequenced move plan.",
@@ -18,6 +19,7 @@ const outcomes = [
   },
   {
     id: "work",
+    exercise: { href: "/compare?country=canada&country=germany&goal=work#decision-overview", label: "Compare countries", regions: ["CA", "DE"] },
     label: "Work globally",
     eyebrow: "Career mobility",
     headline: "Match opportunity with readiness and capability.",
@@ -28,6 +30,7 @@ const outcomes = [
   },
   {
     id: "study",
+    exercise: { href: "/compare?country=france&country=united-kingdom&goal=study#decision-overview", label: "Compare countries", regions: ["FR", "GB"] },
     label: "Study internationally",
     eyebrow: "Education pathway",
     headline: "Build an application-ready global study path.",
@@ -38,6 +41,7 @@ const outcomes = [
   },
   {
     id: "adapt",
+    exercise: { href: "/courses?access=free_account", label: "Explore free courses", regions: [] },
     label: "Build global adaptability",
     eyebrow: "Long-term capability",
     headline: "Develop the operating system for an international life.",
@@ -51,7 +55,16 @@ const outcomes = [
 type OutcomeId = (typeof outcomes)[number]["id"];
 
 export default function PricingOutcomeSelector() {
-  const { t } = useLocale();
+  const { locale, t } = useLocale();
+  const regionNames = new Intl.DisplayNames([locale], { type: "region" });
+  const instructions = {
+    en: "Choose a goal to try a country comparison or explore a free course.",
+    "pt-BR": "Escolha seu objetivo para experimentar uma comparação entre países ou explorar um curso gratuito.",
+    es: "Elige un objetivo para probar una comparación de países o explorar un curso gratuito.",
+    fr: "Choisissez un objectif pour comparer des pays ou découvrir un cours gratuit.",
+    de: "Wählen Sie ein Ziel, um Länder zu vergleichen oder einen kostenlosen Kurs zu entdecken.",
+    it: "Scegli un obiettivo per confrontare i paesi o scoprire un corso gratuito.",
+  };
 
   const [activeId, setActiveId] = useState<OutcomeId>("move");
   const active = outcomes.find((outcome) => outcome.id === activeId) ?? outcomes[0];
@@ -63,7 +76,7 @@ export default function PricingOutcomeSelector() {
           <div className="border-b border-[var(--tgpi-border)] bg-[#F1EBDD] p-7 sm:p-9 lg:border-b-0 lg:border-r">
             <p className="text-[10px] font-extrabold uppercase tracking-[0.24em] text-[#956A13]"><LocalizedText text={"Value built around you"} /></p>
             <h2 id="pricing-outcome-title" className="mt-4 font-[var(--tgpi-font-display)] text-4xl font-semibold leading-[1.02] tracking-[-0.035em] text-[#071A31] sm:text-5xl"><LocalizedText text={"What should Premium help you achieve?"} /></h2>
-            <p className="mt-5 text-sm leading-7 text-[#596576]"><LocalizedText text={"Select the outcome behind your subscription. The TGPI system reorganizes around the decision you need to make."} /></p>
+            <p className="mt-5 text-sm leading-7 text-[#596576]">{instructions[locale]}</p>
 
             <div className="mt-7 grid gap-2" role="group" aria-label={t("Choose your Premium outcome")}>
               {outcomes.map((outcome, index) => {
@@ -124,7 +137,12 @@ export default function PricingOutcomeSelector() {
                   <p className="text-[9px] font-extrabold uppercase tracking-[0.2em] text-[var(--tgpi-gold-light)]"><LocalizedText text="Designed outcome" /></p>
                   <p className="mt-2 text-sm font-bold text-white"><LocalizedText text={active.result} /></p>
                 </div>
-                <Link href="#membership" className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[var(--tgpi-gold-hover)] px-5 text-sm font-extrabold text-[#071A31] transition hover:bg-[#C79B36]"><LocalizedText text={"See membership"} /></Link>
+                <div className="flex flex-wrap items-center gap-4">
+                  <Link href={active.exercise.href} className="inline-flex min-h-11 items-center text-sm font-semibold text-white underline decoration-white/50 underline-offset-4">
+                    {t(active.exercise.label)}{active.exercise.regions.length > 0 && ` · ${active.exercise.regions.map(code => regionNames.of(code)).join(" / ")}`}
+                  </Link>
+                  <Link href="#membership" className="inline-flex min-h-11 items-center justify-center rounded-xl bg-[var(--tgpi-gold-hover)] px-5 text-sm font-extrabold text-[#071A31] transition hover:bg-[#C79B36]"><LocalizedText text={"See membership"} /></Link>
+                </div>
               </div>
             </div>
           </div>
