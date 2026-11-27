@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getLocale } from "@/lib/localization/server";
+import { withSocialMetadata } from "@/lib/localization/social-metadata";
 import { guideCopy } from "./copy";
 import Link from "next/link";
 import GuideSignup from "./GuideSignup";
@@ -10,11 +11,13 @@ const canonical = "https://www.theglobalpolymath.com/guia-paises";
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getLocale();
-  const { title, description } = guideCopy[locale];
-  return {
-    title, description, alternates: { canonical },
-    openGraph: { title, description, url: canonical, locale: locale.replace("-", "_"), images: ["/images/home/editorial-v4/decision-desktop.webp"] },
-  };
+  const { searchTitle, description, title } = guideCopy[locale];
+  return withSocialMetadata({
+    title: searchTitle,
+    description,
+    alternates: { canonical },
+    openGraph: { images: [{ url: "/images/home/editorial-v4/decision-desktop.webp", alt: title }] },
+  }, locale);
 }
 
 type PageProps = { searchParams: Promise<{ utm_source?: string | string[] }> };

@@ -30,7 +30,7 @@ export async function generateMetadata({
     const title = `${localized.title} | TGPI Learning`;
     const description = localized.description;
     const url = `/courses/${academy.id}`;
-    const images = [{ url: academy.image, width: 1536, height: 1024, alt: localized.title }];
+    const images = [{ url: academy.image, alt: localized.title }];
     return withSocialMetadata({
       title, description, alternates: { canonical: url },
       openGraph: { title, description, url, images },

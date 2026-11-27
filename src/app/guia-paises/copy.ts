@@ -2,6 +2,7 @@ import type { Locale } from "@/lib/localization/config";
 
 export const guideCopy = {
   "pt-BR": {
+    "searchTitle": "Como comparar dois países para morar ou estudar | Ficha gratuita TGPI",
     "title": "Qual país cabe no seu plano?",
     "description": "Baixe a ficha gratuita da TGPI para comparar orçamento, idioma, oportunidades e documentos em dois destinos.",
     "kicker": "Guia gratuito da TGPI",
@@ -27,6 +28,7 @@ export const guideCopy = {
     "privacy": "Privacidade"
   },
   "en": {
+    "searchTitle": "Compare Two Countries for Living or Studying Abroad | TGPI Worksheet",
     "title": "Which country fits your plans?",
     "description": "Download a free Portuguese worksheet to compare costs, languages, opportunities and documents across two destinations.",
     "kicker": "Free TGPI guide",
@@ -52,6 +54,7 @@ export const guideCopy = {
     "privacy": "Privacy"
   },
   "es": {
+    "searchTitle": "Cómo comparar dos países para vivir o estudiar | Ficha TGPI",
     "title": "¿Qué país encaja con tus planes?",
     "description": "Descarga la ficha gratuita en portugués para comparar gastos, idiomas, oportunidades y documentos de dos destinos.",
     "kicker": "Guía gratuita de TGPI",
@@ -77,6 +80,7 @@ export const guideCopy = {
     "privacy": "Privacidad"
   },
   "fr": {
+    "searchTitle": "Comparer deux pays pour y vivre ou étudier | Fiche TGPI",
     "title": "Quel pays correspond à votre projet ?",
     "description": "Téléchargez une fiche en portugais pour comparer le budget, la langue, les possibilités et les documents de deux destinations.",
     "kicker": "Guide gratuit de TGPI",
@@ -102,6 +106,7 @@ export const guideCopy = {
     "privacy": "Confidentialité"
   },
   "de": {
+    "searchTitle": "Zwei Länder zum Leben oder Studieren vergleichen | TGPI-Arbeitsblatt",
     "title": "Welches Land passt zu Ihren Plänen?",
     "description": "Vergleichen Sie Kosten, Sprachen, Chancen und Unterlagen zweier Reiseziele mit dem kostenlosen Arbeitsblatt auf Portugiesisch.",
     "kicker": "Kostenloser TGPI-Leitfaden",
@@ -127,6 +132,7 @@ export const guideCopy = {
     "privacy": "Datenschutz"
   },
   "it": {
+    "searchTitle": "Confrontare due paesi per vivere o studiare | Scheda TGPI",
     "title": "Quale paese fa per te?",
     "description": "Scarica la scheda gratuita in portoghese per confrontare budget, lingue, opportunità e documenti di due destinazioni.",
     "kicker": "Guida gratuita TGPI",
