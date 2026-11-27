@@ -3,6 +3,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import CountryDirectoryCover from "@/components/countries/CountryDirectoryCover";
 import ActivationProgressProvider from "@/components/activation/ActivationProgressProvider";
+import CountryAlphabeticalIndex from "@/components/countries/CountryAlphabeticalIndex";
 import styles from "@/components/countries/CountryDirectory.module.css";
 import { GraphStatus } from "@/components/intelligence/Evidence";
 import EvidenceExplorer from "@/components/intelligence/EvidenceExplorer";
@@ -80,6 +81,7 @@ export default async function CountriesPage({ searchParams }: { searchParams?: P
       <div className="ig-container">
         <CountryDirectoryCover count={identities.length} covers={coverScenes} />
         <Suspense fallback={<ResearchLoading />}><CountryResearch filters={filters} /></Suspense>
+        <CountryAlphabeticalIndex />
         <section className={styles.methodology}>
           <div>
             <p className="ig-eyebrow"><LocalizedText text="Responsible intelligence" /></p>
@@ -97,6 +99,6 @@ export async function generateMetadata() {
   const cover = coverScenes[0];
   return localizeMetadata({
     ...sourceMetadata,
-    ...(cover && { openGraph: { images: [{ url: cover.photo.src, alt: cover.photo.location }] } }),
+    ...(cover && { openGraph: { images: [{ url: cover.photo.src, alt: cover.photo.alt }] } }),
   });
 }

@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import test from 'node:test';
 import ts from 'typescript';
 import { resolve } from 'node:path';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { academyLocalizationFixture } from './helpers/academy-localization.mjs';
 
 const h = academyLocalizationFixture();
@@ -74,6 +74,20 @@ test('every course appears in the sitemap independently of whether it has a dedi
   for (const course of h.academyCourses) assert.ok(urls.has(`https://www.theglobalpolymath.com/courses/${course.id}`), course.id);
   assert.equal(urls.size, sitemap.length);
   for (const suffix of ['/study', '/certification', '/history']) assert.ok(!sitemap.some(item => item.url.endsWith(suffix)));
+});
+
+test('canonical public guide and each country have their live cover in the image sitemap', () => {
+  const origin = 'https://www.theglobalpolymath.com';
+  const sitemap = new Map(h.load(resolve('src/app/sitemap.ts')).default().map(row => [row.url, row]));
+  const { getAllCountries, getCountryImageUrl } = h.load(resolve('src/lib/countries.ts'));
+  const { getCountryPhotos } = h.load(resolve('src/lib/countries/editorial-photography.ts'));
+  assert.ok(sitemap.has(origin + '/guia-paises'));
+  for (const country of getAllCountries()) {
+    const images = sitemap.get(origin + '/countries/' + country.slug)?.images;
+    const cover = getCountryPhotos(country.slug)[0]?.src ?? getCountryImageUrl(country);
+    assert.equal(images?.[0], origin + cover);
+    for (const image of images) assert.ok(existsSync('public' + new URL(image).pathname), image);
+  }
 });
 
 test('unknown artwork IDs cannot select inherited object properties', () => {

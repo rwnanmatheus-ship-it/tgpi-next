@@ -43,6 +43,13 @@ test('IndexNow consumes only canonical sitemap URLs and maps actual public sourc
  assert.deepEqual(changedPublicUrls(['src/data/countries.ts'],urls),urls.filter(u=>u.includes('/countries')));
  assert.deepEqual(changedPublicUrls(['src/app/countries/page.tsx'],urls),[origin+'/countries']);
 });
+test('worksheet content changes notify its canonical landing page', () => {
+ const origin = 'https://www.theglobalpolymath.com';
+ const urls = [origin + '/guides', origin + '/guia-paises'];
+ for (const file of ['src/app/guia-paises/copy.ts', 'public/guias/ficha-comparar-paises.pdf']) {
+  assert.deepEqual(changedPublicUrls([file], urls), [origin + '/guia-paises']);
+ }
+});
 test('rotating course audits cover all courses without hitting the entire catalogue each day',()=>{
  const urls=Array.from({length:1200},(_,i)=>`/courses/${i}`);
  const seen=new Set(Array.from({length:30},(_,day)=>rotatingUrls(urls,day,40)).flat());

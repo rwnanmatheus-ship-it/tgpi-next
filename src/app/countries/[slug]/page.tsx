@@ -25,7 +25,8 @@ import { LocalizedText } from "@/components/localization/LocaleProvider";
 import NavigationIcon from "@/components/navigation/NavigationIcon";
 import { coursesOverview } from "@/data/courses-overview";
 import mapLocations from "@/data/country-map-locations.json";
-import { getCountry } from "@/lib/countries";
+import { getCountry, getCountryImageUrl } from "@/lib/countries";
+import { structuredDataJson } from "@/lib/seo/course-directory";
 import { getCountryPhotos, type CountryPhoto } from "@/lib/countries/editorial-photography";
 import { createCountryLearningPath } from "@/lib/country-learning";
 import { documentsHref } from "@/lib/documents-os";
@@ -41,19 +42,30 @@ import type { NavigationIconName } from "@/lib/navigation-system";
 export const dynamic = "force-dynamic";
 export const maxDuration = 60;
 type Props = { params: Promise<{ slug: string }> };
+const countryDirectoryUrl = "https://www.theglobalpolymath.com/countries";
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const country = getCountry(slug);
-  if (!country) return {};
+  if (!country || !identities.some(identity => identity.slug === slug)) notFound();
   const locale = await getLocale();
   const name = translate(locale, country.name);
   const scene = getCountryPhotos(slug)[0];
   return withSocialMetadata({
     title: translate(locale, "{country}: Evidence, Comparison & Research Plan | TGPI", { country: name }),
     description: translate(locale, "Explore {country} through source-linked national statistics, reference years, explicit limitations and a practical personal research plan.", { country: name }),
-    alternates: { canonical: `https://www.theglobalpolymath.com/countries/${slug}` },
-    openGraph: { images: [{ url: scene?.src ?? `/images/countries/identity/${slug}.webp`, alt: scene ? translate(locale, scene.alt) : name }] },
+    alternates: { canonical: `${countryDirectoryUrl}/${country.slug}` },
+    openGraph: {
+      images: [scene ? {
+        url: scene.src,
+        alt: translate(locale, scene.alt),
+      } : {
+        url: getCountryImageUrl(country),
+        width: 1600,
+        height: 900,
+        alt: `${translate(locale, "Country profile")} · ${name} | TGPI`,
+      }],
+    },
   }, locale);
 }
 
@@ -92,10 +104,19 @@ export default async function CountryPage({ params }: Props) {
   const learningPath = createCountryLearningPath(country.language, coursesOverview);
   const [state, context, locale] = await Promise.all([getIntelligence(), getCountryContext(), getLocale()]);
   const countryName = translate(locale, country.name);
+  const breadcrumb = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: translate(locale, "Countries"), item: countryDirectoryUrl },
+      { "@type": "ListItem", position: 2, name: countryName, item: `${countryDirectoryUrl}/${country.slug}` },
+    ],
+  };
   const observations = state.snapshot.observations.filter(observation => observation.country === slug);
   const contextObservations = context.snapshot.observations.filter(observation => observation.country === slug);
 
   return <ActivationProgressProvider><main className={`ig-shell country-studio ${styles.page}`}><div key={slug} className="ig-container">
+    <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: structuredDataJson(breadcrumb) }} />
     <CountryProfileMasthead slug={slug} name={country.name} iso2={identity.iso2} region={identity.region} photos={photos} />
     <div className={styles.factRow}>
       <dl className={styles.facts}>
