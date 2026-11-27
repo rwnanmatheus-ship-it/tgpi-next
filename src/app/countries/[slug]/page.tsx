@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { studyGuides, studyReaderLocale, studyPath } from "@/data/study-guides";
 import { enemGuidePath } from "@/app/guia-paises/campaign";
 import { guideCopy } from "@/app/guia-paises/copy";
 import { notFound } from "next/navigation";
@@ -101,10 +102,12 @@ export default async function CountryPage({ params }: Props) {
   const identity = identities.find(entry => entry.slug === slug);
   if (!country || !identity) notFound();
   const photos = getCountryPhotos(slug);
+  const studyGuide = studyGuides.find(guide => guide.countrySlug === slug);
   const referencePoints: Readonly<Record<string, { lat: number; lng: number }>> = mapLocations;
   const expandedDossier = globalDossier(slug);
   const learningPath = createCountryLearningPath(country.language, coursesOverview);
   const [state, context, locale] = await Promise.all([getIntelligence(), getCountryContext(), getLocale()]);
+  const studyLang = studyReaderLocale(locale);
   const countryName = translate(locale, country.name);
   const breadcrumb = {
     "@context": "https://schema.org",
@@ -140,6 +143,10 @@ export default async function CountryPage({ params }: Props) {
       <Link href={documentsHref({ country: slug })}><NavigationIcon name="file" /><span><LocalizedText text="Prepare my documents" /></span><NavigationIcon name="arrow" /></Link>
     </div>
     <CountryLearningPath countryName={country.name} path={learningPath} />
+    {studyGuide && (
+      <p><Link className="ig-link" href={studyPath(studyLang, studyGuide.slug)} hrefLang={studyLang === "pt" ? "pt-BR" : studyLang}
+        lang={studyLang === "pt" ? "pt-BR" : studyLang}>{studyGuide.locales[studyLang].title}</Link></p>
+    )}
     {(slug === "portugal" || slug === "spain") && (
       <p><Link className="ig-link" href={enemGuidePath} hrefLang="pt-BR">{guideCopy[locale].enemGuide}</Link></p>
     )}

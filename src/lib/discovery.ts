@@ -162,7 +162,21 @@ export const discoveryLocales = Object.keys(discoveryContent) as DiscoveryLocale
 export function isDiscoveryLocale(value: string): value is DiscoveryLocale { return Object.hasOwn(discoveryContent, value); }
 export const discoveryAlternates = Object.fromEntries([...discoveryLocales.map(locale => [locale, `${discoveryOrigin}/discover/${locale}`]), ["x-default", `${discoveryOrigin}/discover/en`]]);
 
+const studyLanguagePath = /^\/guides\/study\/(en|pt|es)(\/[a-z0-9-]+)?\/?$/;
+
+export function studyRequestLanguage(pathname: string): "en" | "pt-BR" | "es" | null {
+  const code = studyLanguagePath.exec(pathname)?.[1];
+  return code === "pt" ? "pt-BR" : code === "en" || code === "es" ? code : null;
+}
+
+export function studyLanguageSwitch(pathname: string, locale: string): string | null {
+  const match = studyLanguagePath.exec(pathname);
+  if (!match || !["en", "pt-BR", "es"].includes(locale)) return null;
+  return `/guides/study/${locale === "pt-BR" ? "pt" : locale}${match[2] ?? ""}`;
+}
+
 export function discoveryTransitionRequiresRefresh(previous: string | null, current: string): boolean {
   const discoveryPath = /^\/discover\/(en|pt-BR|es|fr|de|it)\/?$/;
-  return previous !== null && previous !== current && (discoveryPath.test(previous) || discoveryPath.test(current));
+  if (previous === null || previous === current) return false;
+  return discoveryPath.test(previous) || discoveryPath.test(current) || studyRequestLanguage(previous) !== studyRequestLanguage(current);
 }

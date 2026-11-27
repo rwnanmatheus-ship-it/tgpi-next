@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { enemGuidePath, exampleComparison, worksheetPath } from "@/app/guia-paises/campaign";
 import { structuredDataJson } from "@/lib/seo/course-directory";
 import { Show } from "@clerk/nextjs";
@@ -16,11 +17,13 @@ const canonical = site + enemGuidePath;
 const title = "Posso usar o Enem para estudar em Portugal ou na Espanha?";
 const description = "Compare a nota do Enem em Coimbra com as vias de ingresso na UC3M. Consulte editais, prazos e taxas e calcule o custo da graduação nos dois destinos.";
 const image = {
-  url: site + "/images/home/tgpi-portugal-spain-story.webp",
-  width: 1122,
-  height: 1402,
-  alt: "Portugal e Espanha no comparador da TGPI",
+  url: site + "/images/study-guides/enem-iberia.webp",
+  width: 1536,
+  height: 1024,
+  alt: "Preparação para comparar opções de graduação em Portugal e na Espanha",
 };
+const illustrationNote = "Ilustração editorial criada com IA para a TGPI.";
+const internationalDirectory = "Consultar guias de graduação em outros países";
 const published = "2026-11-27";
 
 export const metadata: Metadata = {
@@ -122,6 +125,10 @@ export default function EnemPortugalEspanha() {
           <h1>{title}</h1>
           <p className="guides-meta">{copy.byline} · <time dateTime={published}>{copy.date}</time></p>
           <p>{copy.answer}</p>
+          <figure className="guides-feature-photo">
+            <Image src="/images/study-guides/enem-iberia.webp" alt={image.alt} width={1536} height={1024} sizes="(max-width: 1000px) 94vw, 950px" />
+            <figcaption>{illustrationNote}</figcaption>
+          </figure>
           <nav aria-label={copy.index} className={styles.contents}>
             <strong>{copy.index}</strong>
             <ul>{copy.options.map(([id, label]) => <li key={id}><a href={`#${id}`}>{label}</a></li>)}</ul>
@@ -161,6 +168,7 @@ export default function EnemPortugalEspanha() {
           <Show when="signed-out"><Link href={`/sign-up?next=${encodeURIComponent(exampleComparison)}`} data-funnel-event="editorial_signup_clicked">{copy.signup} →</Link></Show>
           <a href={worksheetPath} download data-funnel-event="editorial_pdf_clicked">{copy.worksheet}</a>
         </section>
+        <p><Link href="/guides/study/pt">{internationalDirectory} →</Link></p>
         <Partilhar />
         <section>
           <h2>{copy.methodology}</h2>

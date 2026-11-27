@@ -1,3 +1,4 @@
+import { studyGuides, studyLocales, studyPath, studyReviewed } from "@/data/study-guides";
 import { enemGuidePath } from "@/app/guia-paises/campaign";
 import { guideCopy } from "@/app/guia-paises/copy";
 import { publicGuides } from "@/lib/public-guides";
@@ -10,6 +11,10 @@ const escapeXml = (value: string) => value.replace(/[<>&"']/g, char => ({
 export function GET() {
   const portuguese = guideCopy["pt-BR"];
   const guides = [
+    ...studyLocales.flatMap(lang => studyGuides.map(guide => ({
+      path: studyPath(lang, guide.slug), language: lang === "pt" ? "pt-BR" : lang,
+      title: guide.locales[lang].title, description: guide.locales[lang].description, date: studyReviewed,
+    }))),
     { path: enemGuidePath, language: "pt-BR", title: portuguese.enemGuide, description: portuguese.enemGuideDescription, date: "2026-11-27" },
     ...publicGuides.map(guide => ({
       path: `/guides/${guide.slug}`, language: "en", title: guide.title,

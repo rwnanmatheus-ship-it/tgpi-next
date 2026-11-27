@@ -98,3 +98,11 @@ test('production comparison chooses the last successful publication and safely h
  assert.deepEqual(comparisonSourcePlan({status:'ahead',files:[{filename:'src/app/courses/page.tsx'},{filename:'docs/readme.md'}]}).paths,['src/app/courses/page.tsx','docs/readme.md']);
  assert.deepEqual(comparisonSourcePlan({status:'identical'}),{mode:'changed',paths:[]});
 });
+
+test('IndexNow selects only changed international study editions and their indexes for editorial corrections', () => {
+  const root = 'https://www.theglobalpolymath.com';
+  const paths = ['/guides/study/pt', '/guides/study/en', '/guides/study/es/japan', '/guides/study/pt/japan', '/guides/study/pt/canada', '/countries/japan'];
+  const urls = paths.map(path => root + path);
+  assert.deepEqual(changedPublicUrls(['src/data/study-guides/japan.ts'], urls), urls.slice(0, 4));
+  assert.deepEqual(changedPublicUrls(['src/app/guides/study/study.module.css'], urls), urls.slice(0, 5));
+});
