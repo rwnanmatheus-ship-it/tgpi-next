@@ -18,6 +18,7 @@ const publicRoutes = [
   { path: "/intelligence", priority: 0.75, changeFrequency: "weekly" },
   { path: "/intelligence/research", priority: 0.75, changeFrequency: "weekly" },
   { path: "/guia-paises", priority: 0.75, changeFrequency: "monthly" },
+  { path: "/guides/enem-portugal-espanha", priority: 0.7, changeFrequency: "monthly" },
   { path: "/guides", priority: 0.7, changeFrequency: "monthly" },
   { path: "/resources", priority: 0.7, changeFrequency: "weekly" },
   { path: "/community", priority: 0.65, changeFrequency: "weekly" },

@@ -4,7 +4,7 @@ import { withSocialMetadata } from "@/lib/localization/social-metadata";
 import { guideCopy } from "./copy";
 import Link from "next/link";
 import GuideSignup from "./GuideSignup";
-import { exampleComparison, guideChannel, worksheetPath } from "./campaign";
+import { enemGuidePath, exampleComparison, guideChannel, worksheetPath } from "./campaign";
 import styles from "./guia.module.css";
 
 const canonical = "https://www.theglobalpolymath.com/guia-paises";
@@ -42,6 +42,7 @@ export default async function CountryGuidePage({ searchParams }: PageProps) {
       <aside className={styles.example}>
         <h2>{copy.example}</h2>
         <p>{copy.explanation}</p>
+        <p><Link href={enemGuidePath} hrefLang="pt-BR">{copy.enemGuide}</Link></p>
         <Link href={exampleComparison} data-funnel-event="country_guide_compare_opened">{copy.compare} →</Link>
       </aside>
     </main>
