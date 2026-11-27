@@ -1,6 +1,7 @@
 'use client';
 
 import { useLocale , LocalizedText } from '@/components/localization/LocaleProvider';
+import { SUPER_APP_OPEN_EVENT } from '@/lib/super-app';
 import { Button } from './Button';
 import { Container } from './Container';
 import { EditorialCard } from './EditorialCard';
@@ -24,6 +25,10 @@ export function MissingPage({ country = false }: { country?: boolean }) {
           </p>
           <div className="flex flex-wrap justify-center gap-3">
             <Button href="/countries">{t('Explore countries')}</Button>
+            <Button variant="secondary" onClick={() => {
+              if (document.getElementById('tgpi-super-app-launcher')) window.dispatchEvent(new Event(SUPER_APP_OPEN_EVENT));
+              else window.location.assign('/compare');
+            }}>{t('Search countries, tools or actions')}</Button>
             <Button href="/" variant="secondary">{t('Back Home')}</Button>
           </div>
         </EditorialCard>

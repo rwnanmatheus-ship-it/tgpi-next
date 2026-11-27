@@ -36,6 +36,7 @@ export default function SuperAppLauncher() {
   const searchRef = useRef<HTMLInputElement>(null);
   const [openRoute, setOpenRoute] = useState<string | null>(null);
   const [query, setQuery] = useState('');
+  const directoryLoaded = useRef(false);
   const [countries, setCountries] = useState<MobileCountry[]>([]);
   const [loadState, setLoadState] = useState<'idle' | 'loading' | 'ready' | 'error'>('idle');
   const [pinnedTools, setPinnedTools] = useState<SuperAppModuleId[]>([]);
@@ -78,7 +79,7 @@ export default function SuperAppLauncher() {
   }, [searchOpen]);
 
   useEffect(() => {
-    if (!searchOpen) return;
+    if (!searchOpen || directoryLoaded.current) return;
     const controller = new AbortController();
     async function load() {
       setLoadState('loading');
@@ -87,6 +88,8 @@ export default function SuperAppLauncher() {
         if (!response.ok) throw new Error('Country directory unavailable');
         const value: unknown = await response.json();
         if (!Array.isArray(value) || !value.every(item => item && typeof item === 'object' && ['slug','name','capital','region','emoji'].every(key => typeof (item as Record<string, unknown>)[key] === 'string'))) throw new Error('Invalid directory');
+        if (controller.signal.aborted) return;
+        directoryLoaded.current = true;
         setCountries(value as MobileCountry[]); setLoadState('ready');
       } catch { if (!controller.signal.aborted) setLoadState('error'); }
     }
@@ -98,7 +101,7 @@ export default function SuperAppLauncher() {
   if (!search) {
     modules.sort((a, b) => Number(pinnedTools.includes(b.id)) - Number(pinnedTools.includes(a.id)));
   }
-  const countryResults = searchMobileCountries(countries.map(country => ({ ...country, name: t(country.name), region: t(country.region) })), query).slice(0, 6);
+  const countryResults = searchMobileCountries(countries.map(country => ({ ...country, name: t(country.name), capital: t(country.capital), region: t(country.region) })), query).slice(0, 6);
   function togglePinnedTool(id: SuperAppModuleId) {
     const current = pinnedRef.current;
     const next = current.includes(id) ? current.filter(tool => tool !== id) : [...current, id];

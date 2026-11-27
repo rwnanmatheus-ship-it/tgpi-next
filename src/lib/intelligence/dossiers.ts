@@ -8,7 +8,7 @@ export const DOSSIER_VERSION = "3.1.0";
 export const DOSSIER_REVIEW_DATE = "2026-09-03";
 export type EvidenceLayer = "entry" | "education" | "cost";
 export type EvidenceKind = "requirement" | "directory" | "estimate" | "guidance";
-export type Currency = "EUR" | "GBP" | "CAD" | "USD" | "JPY" | "AUD" | "NZD";
+export type Currency = "EUR" | "GBP" | "CAD" | "USD" | "JPY" | "AUD" | "NZD" | "BRL";
 export type SourceReviewIssue = {
   reason: "access-restricted" | "content-mismatch" | "retrieval-limited" | "unconfirmed";
   observedAt: string; reviewBy: string; observation: string; action: string;
@@ -125,7 +125,7 @@ export const COST_REFERENCES: CostReference[] = [
   { id: "mit-2026", country: "united-states", sourceId: "us-mit", title: "MIT standard graduate budget", location: "Cambridge / Greater Boston", currency: "USD", low: 109017, high: 109017, periodMonths: 9, category: "total-study", referencePeriod: "2026/27; September–May", audience: "Standard full-time graduate programme, before aid", includes: "Published tuition, fees, insurance and living categories", excludes: "Summer; non-standard programme differences; personalised family costs", historical: false },
 ];
 export const DOSSIER_COUNTRIES = ["portugal", "spain", "france", "germany", "united-kingdom", "canada", "united-states", "japan", "netherlands", "ireland", "australia", "new-zealand"];
-export const COUNTRY_CURRENCIES: Record<string, Currency> = { portugal: "EUR", spain: "EUR", france: "EUR", germany: "EUR", "united-kingdom": "GBP", canada: "CAD", "united-states": "USD", japan: "JPY", netherlands: "EUR", ireland: "EUR", australia: "AUD", "new-zealand": "NZD" };
+export const COUNTRY_CURRENCIES: Record<string, Currency> = { brazil: "BRL", portugal: "EUR", spain: "EUR", france: "EUR", germany: "EUR", "united-kingdom": "GBP", canada: "CAD", "united-states": "USD", japan: "JPY", netherlands: "EUR", ireland: "EUR", australia: "AUD", "new-zealand": "NZD" };
 export function dossierFor(country: string) { return { claims: DOSSIER_CLAIMS.filter(c => c.country === country), sources: DOSSIER_SOURCES.filter(s => s.country === country), costs: COST_REFERENCES.filter(c => c.country === country) }; }
 export function sourceFor(id: string) { return DOSSIER_SOURCES.find(s => s.id === id); }
 export function referenceReviewState(reference: CostReference, now = new Date()) { const claim = DOSSIER_CLAIMS.find(c => c.sourceId === reference.sourceId && c.layer === "cost"); return claim ? reviewState(claim, now) : "review-due"; }
